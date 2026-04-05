@@ -69,3 +69,7 @@ _이 파일은 append-only로 운영됩니다._
 ## [2026-04-05 14:04] cross-ref | 0개 페이지 연결
 
 ## [2026-04-05 16:00] cross-ref | 0개 페이지 연결
+
+## [2026-04-05 19:04] lint | Wiki 건전성 체크
+- Issues: 36개
+- Orphans: 24, Missing: 12, Contradictions: 0
