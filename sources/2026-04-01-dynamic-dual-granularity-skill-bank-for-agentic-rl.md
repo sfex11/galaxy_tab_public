@@ -1,0 +1,46 @@
+# Dynamic Dual-Granularity Skill Bank for Agentic RL
+
+**타입**: 논문  
+**출처**: arXiv  
+**날짜**: 2026-04-01  
+**링크**: None
+
+## 핵심 요약
+
+D2Skill은 에이전트 강화학습(RL)에서 재사용 가능한 경험을 **이중 세분화(dual-granularity) 스킬 뱅크**로 관리하는 프레임워크이다. 고수준 가이드를 제공하는 **태스크 스킬**과 세밀한 의사결정 및 오류 수정을 지원하는 **스텝 스킬**을 동시에 운용한다. 동일 정책 하에서 기본 롤아웃과 스킬 보강 롤아웃을 쌍으로 생성하고, 성능 차이를 기반으로 스킬의 유용성을 사후 평가(hindsight utility signal)하여 스킬 정제와 정책 업데이트를 동시에 수행한다. 유용성 기반 검색과 자동 가지치기로 스킬 뱅크를 동적으로 유지하며, ALFWorld·WebShop 환경에서 기존 대비 성공률을 10~20%p 향상시켰다.
+
+## 인사이트
+
+1. **이중 세분화 설계**: 태스크 수준(무엇을 할지)과 스텝 수준(어떻게 할지)으로 스킬을 분리함으로써, 고수준 계획과 저수준 실행 오류 수정을 동시에 지원한다.
+2. **Hindsight 유틸리티 신호**: 같은 정책에서 스킬 유무에 따른 쌍대 롤아웃 비교를 통해, 각 스킬의 실질적 기여도를 원칙적으로 측정하고 이를 정책 학습에 직접 반영한다.
+3. **동적 스킬 관리**: 유용성 기반 검색과 자동 가지치기를 통해 스킬 뱅크가 지속적으로 진화하며, 성능이 낮은 스킬은 제거되어 메모리 품질이 유지된다.
+
+## 응용 가능성
+
+1. **LLM 기반 자율 에이전트 (웹 브라우징, 코드 생성 등)**: 복잡한 다단계 태스크에서 과거 성공 경험을 체계적으로 축적·재활용하여 에이전트의 학습 효율과 성공률을 크게 높일 수 있다.
+2. **로봇 제어 및 산업 자동화**: 태스크/스텝 이중 스킬 구조를 물리적 조작 태스크에 적용하면, 새로운 작업 환경으로의 스킬 전이(transferability)를 통해 적응 시간을 단축할 수 있다.
+
+## 추출된 엔티티
+
+- LLM Agent
+
+## 추출된 개념
+
+- Reinforcement Learning
+
+## 원본 파일
+
+/storage/B8AC-56F1/papers/daily/2026-04-01-DynamicDual-GranularitySkillBa.md
+
+## 메모
+
+_마이그레이션됨_
+
+
+## 관련 문서
+
+- [[sources/2026-03-31-dynamic-dual-granularity-skill-bank-for-agentic-rl.md]] (공통 Entity: LLM Agent)
+- [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md]] (공통 Entity: LLM Agent)
+- [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md]] (공통 Entity: LLM Agent)
+- [[sources/2026-03-27-avo-agentic-variation-operators-for-autonomous-evo.md]] (공통 Entity: LLM Agent)
+- [[sources/2026-03-31-learning-to-commit-generating-organic-pull-request.md]] (공통 Entity: LLM Agent)
