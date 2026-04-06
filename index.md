@@ -1,0 +1,1 @@
+- [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md]] - ActionParty: Multi-Subject Action Binding in Generative Video Games
