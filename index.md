@@ -1,1 +1,28 @@
 - [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md]] - ActionParty: Multi-Subject Action Binding in Generative Video Games
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md]] - BAS: A Decision-Theoretic Approach to Evaluating Large Language Model Confidence
+- [[sources/2026-04-07-coupled-control-structured-memory-and-verifiable-a.md]] - Coupled Control, Structured Memory, and Verifiable Action in Agentic AI (SCRAT -- Stochastic Control with Retrieval and Auditable Trajectories): A Comparative Perspective from Squirrel Locomotion and Scatter-Hoarding
+- [[sources/2026-04-07-reflective-context-learning-studying-the-optimizat.md]] - Reflective Context Learning: Studying the Optimization Primitives of Context Space
+- [[sources/2026-04-07-prism-llm-guided-semantic-clustering-for-high-prec.md]] - PRISM: LLM-Guided Semantic Clustering for High-Precision Topics
+- [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md]] - Beyond the Parameters: A Technical Survey of Contextual Enrichment in Large Language Models: From In-Context Prompting to Causal Retrieval-Augmented Generation
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md]] - Detecting and Correcting Reference Hallucinations in Commercial LLMs and Deep Research Agents
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md]] - BibTeX Citation Hallucinations in Scientific Publishing Agents: Evaluation and Mitigation
+- [[sources/2026-04-07-minimal-information-control-invariance-via-vector-.md]] - Minimal Information Control Invariance via Vector Quantization
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md]] - A Systematic Security Evaluation of OpenClaw and Its Variants
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md]] - Understanding the Role of Hallucination in Reinforcement Post-Training of Multimodal Reasoning Models
+- [[entities/transformer]] - Transformer
+- [[sources/2026-04-06-steerable-visual-representations.md]] - Steerable Visual Representations
+- [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md]] - Batched Contextual Reinforcement: A Task-Scaling Law for Efficient Reasoning
+- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md]] - Stop Wandering: Efficient Vision-Language Navigation via Metacognitive Reasoning
+- [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md]] - Beyond the Assistant Turn: User Turn Generation as a Probe of Interaction Awareness in Language Models
+- [[sources/2026-04-06-novel-memory-forgetting-techniques-for-autonomous-.md]] - Novel Memory Forgetting Techniques for Autonomous AI Agents: Balancing Relevance and Efficiency
+- [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md]] - The Self Driving Portfolio: Agentic Architecture for Institutional Asset Management
+- [[sources/2026-04-06-deep-neural-network-based-roadwork-detection-for-a.md]] - Deep Neural Network Based Roadwork Detection for Autonomous Driving
+- [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md]] - De Jure: Iterative LLM Self-Refinement for Structured Extraction of Regulatory Rules
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md]] - SKILL0: In-Context Agentic Reinforcement Learning for Skill Internalization
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-06-model-based-reinforcement-learning-for-control-und.md]] - Model-Based Reinforcement Learning for Control under Time-Varying Dynamics
+- [[sources/2026-04-06-best-arm-identification-with-noisy-actuation.md]] - Best-Arm Identification with Noisy Actuation
