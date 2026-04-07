@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>AMIGO: Agentic Multi-Image Grounding Oracle Benchmark</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-dark: #5A4BD1;
+    --accent: #00CEC9;
+    --accent2: #FD79A8;
+    --bg-dark: #0F0E17;
+    --bg-card: #1A1930;
+    --bg-card2: #232147;
+    --text: #FFFFFE;
+    --text-dim: #A7A9BE;
+    --gradient1: linear-gradient(135deg, #6C5CE7 0%, #00CEC9 100%);
+    --gradient2: linear-gradient(135deg, #FD79A8 0%, #6C5CE7 100%);
+    --gradient3: linear-gradient(135deg, #00CEC9 0%, #6C5CE7 50%, #FD79A8 100%);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%; height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(15,14,23,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(108,92,231,0.3);
+  }
+
+  .nav-btn {
+    min-width: 48px; min-height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: var(--bg-card2);
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:active { transform: scale(0.93); background: var(--primary); }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    margin: 0 16px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+
+  .slide-title .gradient-text {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: clamp(1.2rem, 3.5vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.8vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  /* ===== CARDS & COMPONENTS ===== */
+  .card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(108,92,231,0.15);
+    transition: transform 0.2s;
+  }
+
+  .card:hover { transform: translateY(-2px); }
+
+  .card-accent {
+    border-left: 4px solid;
+    border-image: var(--gradient1) 1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-primary { background: rgba(108,92,231,0.2); color: var(--primary); }
+  .badge-accent { background: rgba(0,206,201,0.15); color: var(--accent); }
+  .badge-pink { background: rgba(253,121,168,0.15); color: var(--accent2); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+  .icon-box {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .flex-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .stat-number {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .divider {
+    width: 60px; height: 4px;
+    border-radius: 2px;
+    background: var(--gradient1);
+    margin-bottom: 20px;
+  }
+
+  ul { list-style: none; padding: 0; }
+  ul li { position: relative; padding-left: 20px; margin-bottom: 10px; }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 10px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  ol { padding-left: 20px; }
+  ol li { margin-bottom: 10px; }
+  ol li::marker { color: var(--primary); font-weight: 700; }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.12) 0%, rgba(0,206,201,0.08) 100%);
+    border: 1px solid rgba(108,92,231,0.25);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 12px 0;
+  }
+
+  .metric-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .metric-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid rgba(108,92,231,0.15);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+  }
+
+  th {
+    background: var(--bg-card2);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-dim);
+  }
+
+  tr:hover td { background: rgba(108,92,231,0.05); }
+
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .flow-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--gradient1);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .comparison-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .model-label {
+    font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+    min-width: 80px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    transition: width 1.2s ease;
+  }
+
+  /* Slide-specific backgrounds */
+  .slide-cover { justify-content: center; align-items: center; text-align: center; }
+
+  .bg-pattern {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.04;
+    background-image:
+      radial-gradient(circle at 20% 30%, var(--primary) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, var(--accent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .glow-1 { width: 300px; height: 300px; background: var(--primary); top: -100px; right: -50px; }
+  .glow-2 { width: 250px; height: 250px; background: var(--accent); bottom: 80px; left: -80px; }
+  .glow-3 { width: 200px; height: 200px; background: var(--accent2); top: 50%; right: 10%; }
+
+  .spacer { flex-shrink: 0; height: 80px; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.3s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.5s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.6s both; }
+  .slide.active .anim-7 { animation: fadeInUp 0.5s 0.7s both; }
+  .slide.active .anim-8 { animation: fadeInUp 0.5s 0.8s both; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .pulse-anim { animation: pulse 2s infinite; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 28px 24px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .card { padding: 18px; }
+    .icon-box { width: 40px; height: 40px; font-size: 1.2rem; }
+    .nav-bar { padding: 8px 14px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 16px; }
+    .slide-title { margin-bottom: 16px; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .card { padding: 14px; margin-bottom: 12px; }
+    .flex-row { flex-direction: column; gap: 10px; }
+    h2 { margin-bottom: 14px; }
+    .nav-btn { min-width: 44px; min-height: 44px; }
+    .highlight-box { padding: 14px; }
+    .model-label { min-width: 60px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 14px 10px; }
+    .card { padding: 10px; border-radius: 10px; }
+    .nav-bar { padding: 6px 8px; }
+    .slide-counter { min-width: 40px; }
+    .badge { padding: 3px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ========== SLIDE 1: COVER ========== -->
+  <div class="slide slide-cover active" data-index="0">
+    <div class="bg-pattern"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div style="position:relative; z-index:1; max-width:600px;">
+      <div class="anim-1 tag-row" style="justify-content:center;">
+        <span class="badge badge-primary">arXiv 2603.28662</span>
+        <span class="badge badge-accent">벤치마크</span>
+      </div>
+      <h1 class="slide-title anim-2" style="font-size:clamp(1.8rem,5vw,3.2rem);">
+        <span class="gradient-text">AMIGO</span>
+      </h1>
+      <p class="anim-3" style="font-size:clamp(1rem,3vw,1.5rem); color:var(--text); font-weight:500; margin-bottom:12px;">
+        Agentic Multi-Image Grounding<br>Oracle Benchmark
+      </p>
+      <p class="slide-subtitle anim-4">
+        에이전틱 비전-언어 모델을 위한<br>장기 지평 다중 이미지 식별 벤치마크
+      </p>
+      <div class="anim-5" style="margin-top:24px;">
+        <p style="font-size:clamp(0.8rem,2vw,0.95rem); color:var(--text-dim);">
+          Min Wang &middot; Ata Mahjoubfar
+        </p>
+      </div>
+      <div class="anim-6" style="margin-top:32px;">
+        <span style="font-size:clamp(0.7rem,1.8vw,0.8rem); color:var(--text-dim); opacity:0.6;">
+          &#x2190; 스와이프하거나 버튼을 눌러 탐색하세요 &#x2192;
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 2: PROBLEM ========== -->
+  <div class="slide" data-index="1">
+    <div class="glow glow-3"></div>
+    <div class="anim-1 tag-row">
+      <span class="badge badge-pink">문제 정의</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">왜 AMIGO가 필요한가?</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-accent anim-2">
+      <h3 style="color:var(--accent2);">기존 평가의 한계</h3>
+      <p>현재 비전-언어 모델 평가는 <strong style="color:var(--text);">단일 이미지, 단일 턴 정확도</strong>에 집중되어 있어, 에이전틱 시스템의 핵심 역량을 측정하지 못합니다.</p>
+    </div>
+
+    <div class="grid-2 anim-3">
+      <div class="card">
+        <div class="icon-box" style="background:rgba(253,121,168,0.15);">&#x1F6AB;</div>
+        <h3 style="margin-top:12px;">기존 방식</h3>
+        <ul>
+          <li>단일 이미지 입력</li>
+          <li>1회 질의-응답</li>
+          <li>전략/기억력 측정 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="icon-box" style="background:rgba(0,206,201,0.15);">&#x2705;</div>
+        <h3 style="margin-top:12px;">AMIGO</h3>
+        <ul>
+          <li>다중 이미지 갤러리</li>
+          <li>장기 다중 턴 상호작용</li>
+          <li>전략 + 상태 추적 평가</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <p style="color:var(--text); font-weight:500;">
+        &#x1F4A1; 핵심 동기: 모델이 정보를 수집하고, 상태를 유지하며, 불확실성 하에서 적응하는 능력 &mdash; 에이전틱 시스템의 근본적 역량을 평가해야 합니다.
+      </p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 3: THREE CORE CHALLENGES ========== -->
+  <div class="slide" data-index="2">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-accent">핵심 도전</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">세 가지 핵심 역량</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2" style="border-left:4px solid var(--primary);">
+      <div class="flex-row">
+        <div class="flow-num">1</div>
+        <div>
+          <h3 style="color:var(--primary);">불확실성 하의 질문 선택</h3>
+          <p>모호성을 효율적으로 줄이는 질문을 선택하여 후보군을 빠르게 좁히는 능력</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-3" style="border-left:4px solid var(--accent);">
+      <div class="flex-row">
+        <div class="flow-num" style="background:linear-gradient(135deg,#00CEC9,#6C5CE7);">2</div>
+        <div>
+          <h3 style="color:var(--accent);">일관된 제약 조건 추적</h3>
+          <p>여러 턴에 걸쳐 수집된 증거를 드리프트 없이 유지하고 적용하는 능력</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="border-left:4px solid var(--accent2);">
+      <div class="flex-row">
+        <div class="flow-num" style="background:linear-gradient(135deg,#FD79A8,#6C5CE7);">3</div>
+        <div>
+          <h3 style="color:var(--accent2);">정밀 판별</h3>
+          <p>증거가 누적됨에 따라 시각적으로 유사한 이미지 간 미세한 차이를 구분하는 능력</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <p style="color:var(--text); font-weight:500; text-align:center;">
+        &#x1F3AF; 이 세 역량은 단일 턴 평가에서는 관찰할 수 없는<br>에이전틱 고유의 도전 과제입니다.
+      </p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 4: PROTOCOL ========== -->
+  <div class="slide" data-index="3">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-primary">프로토콜</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">상호작용 프로토콜</span></h2>
+    <div class="divider anim-2"></div>
+
+    <p class="anim-2" style="margin-bottom:16px;">AMIGO는 엄격한 10가지 규칙 기반 프로토콜로 모델을 평가합니다.</p>
+
+    <div class="card anim-3" style="padding:16px;">
+      <div class="flow-step">
+        <div class="flow-num">Q</div>
+        <div>
+          <p style="color:var(--text); font-weight:500;">턴당 1개 질문</p>
+          <p style="font-size:clamp(0.75rem,1.8vw,0.85rem);">관찰 가능한 속성에 대한 Yes/No/Unsure 질문만 허용</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="padding:16px;">
+      <div class="flow-step" style="margin-bottom:0;">
+        <div class="flow-num" style="background:linear-gradient(135deg,#FD79A8,#e74c3c);">S</div>
+        <div>
+          <p style="color:var(--accent2); font-weight:500;">Skip 페널티 시스템</p>
+          <p style="font-size:clamp(0.75rem,1.8vw,0.85rem);">프로토콜 위반 시 정보 없이 <em>Skip</em> 응답 반환 &mdash; 턴 낭비</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-5">
+      <h3>금지 속성 (고의 제외)</h3>
+      <div class="tag-row" style="margin-top:10px;">
+        <span class="badge badge-pink">소매 길이</span>
+        <span class="badge badge-pink">옷 길이</span>
+        <span class="badge badge-pink">색상</span>
+        <span class="badge badge-pink">프린트/패턴</span>
+        <span class="badge badge-pink">연령대</span>
+        <span class="badge badge-pink">사이즈</span>
+        <span class="badge badge-pink">배경</span>
+      </div>
+      <p style="margin-top:8px;">&#x2192; 미묘한 구조적 디테일(네크라인, 봉제선, 드레이프, 장식)에 의존하도록 유도</p>
+    </div>
+
+    <div class="highlight-box anim-6">
+      <p style="color:var(--text);">&#x1F3C1; 최종 추측: 후보가 정확히 1개일 때만 &mdash; <code style="background:rgba(108,92,231,0.2);padding:2px 6px;border-radius:4px;">"My guess of your favorite dress: #N"</code></p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 5: FRAMEWORK ========== -->
+  <div class="slide" data-index="4">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-accent">프레임워크</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">4개 통합 모듈</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2" style="background:linear-gradient(135deg, rgba(108,92,231,0.15), rgba(108,92,231,0.05));">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(108,92,231,0.25); font-size:1.3rem;">&#x1F916;</div>
+        <div>
+          <h3 style="color:var(--primary);">1. 벤치마크 모델</h3>
+          <p>질문 생성 및 최종 추측 수행</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-3" style="background:linear-gradient(135deg, rgba(253,121,168,0.1), rgba(253,121,168,0.03));">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(253,121,168,0.2); font-size:1.3rem;">&#x1F6E1;</div>
+        <div>
+          <h3 style="color:var(--accent2);">2. 질문 위반 탐지기</h3>
+          <p>LLM 기반 프로토콜 강제 &mdash; 위반 질문에 <em>Skip</em> 부여</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="background:linear-gradient(135deg, rgba(0,206,201,0.1), rgba(0,206,201,0.03));">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(0,206,201,0.2); font-size:1.3rem;">&#x1F464;</div>
+        <div>
+          <h3 style="color:var(--accent);">3. 사용자/오라클 시뮬레이터</h3>
+          <p>VLM 에이전트 + 이미지 줌인 도구로 Yes/No/Unsure 응답</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-5" style="background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(108,92,231,0.05));">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(255,255,255,0.1); font-size:1.3rem;">&#x2705;</div>
+        <div>
+          <h3>4. 검증 모듈</h3>
+          <p>후보 집합 관리, 궤적 감사, 모순 탐지</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-6">
+      <p style="color:var(--text); font-weight:500; text-align:center;">
+        &#x1F504; 모델 질문 &#x2192; 위반 검사 &#x2192; 오라클 응답 &#x2192; 검증 &amp; 후보 축소 &#x2192; 반복
+      </p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 6: TASK & DATASET ========== -->
+  <div class="slide" data-index="5">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-primary">데이터셋</span>
+      <span class="badge badge-accent">태스크</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">"내가 좋아하는 드레스 맞추기"</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="grid-2 anim-2">
+      <div class="card" style="text-align:center;">
+        <div class="stat-number">4,880</div>
+        <div class="stat-label">고유 드레스 이미지</div>
+        <p style="margin-top:8px; font-size:clamp(0.75rem,1.8vw,0.85rem);">Target 온라인 패션 카탈로그 출처</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="stat-number">5</div>
+        <div class="stat-label">유사도 임계값 (&#x03C4;)</div>
+        <p style="margin-top:8px; font-size:clamp(0.75rem,1.8vw,0.85rem);">0.3, 0.4, 0.5, 0.6, 0.8</p>
+      </div>
+    </div>
+
+    <div class="card anim-3">
+      <h3>난이도 제어 메커니즘</h3>
+      <div style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:0.85rem;color:var(--text);">&#x03C4;=0.3 (쉬움, 큰 갤러리)</span>
+          <span class="badge badge-accent">1,000 에피소드</span>
+        </div>
+        <div class="metric-bar"><div class="metric-bar-fill" style="width:100%;background:var(--gradient1);"></div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:0.85rem;color:var(--text);">&#x03C4;=0.5 (중간)</span>
+          <span class="badge badge-accent">1,000 에피소드</span>
+        </div>
+        <div class="metric-bar"><div class="metric-bar-fill" style="width:70%;background:var(--gradient2);"></div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:0.85rem;color:var(--text);">&#x03C4;=0.8 (어려움, 작은 갤러리)</span>
+          <span class="badge badge-pink">587 에피소드</span>
+        </div>
+        <div class="metric-bar"><div class="metric-bar-fill" style="width:40%;background:linear-gradient(135deg,#FD79A8,#e74c3c);"></div></div>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <h3>비대칭 유사도 점수</h3>
+      <div class="highlight-box" style="text-align:center; margin-top:8px;">
+        <code style="font-size:clamp(0.9rem,2.5vw,1.2rem); color:var(--accent); font-weight:700;">
+          Sim(A,B) = |Attr(A) &#x2229; Attr(B)| / |Attr(A)|
+        </code>
+      </div>
+      <p style="margin-top:8px;">타겟과 속성 중복도가 &#x03C4; 이상인 이미지를 교란자로 선택</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 7: LABELING PIPELINE ========== -->
+  <div class="slide" data-index="6">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-primary">파이프라인</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">속성 라벨링 파이프라인</span></h2>
+    <div class="divider anim-2"></div>
+    <p class="anim-2 slide-subtitle">3단계 반자동 프로세스로 고품질 속성 레이블 생성</p>
+
+    <div class="flow-step anim-3">
+      <div class="flow-num">1</div>
+      <div>
+        <p style="color:var(--text); font-weight:700;">속성 발견 및 정규화</p>
+        <p style="font-size:clamp(0.75rem,1.8vw,0.85rem);">카탈로그 주석 수집 &#x2192; 다중 LLM으로 동의어 정규화 &#x2192; 종합 목록 구성</p>
+      </div>
+    </div>
+
+    <div class="flow-step anim-4">
+      <div class="flow-num" style="background:var(--gradient2);">2</div>
+      <div>
+        <p style="color:var(--text); font-weight:700;">이진 질문 템플릿 구성</p>
+        <p style="font-size:clamp(0.75rem,1.8vw,0.85rem);">각 속성 값에 대해 다양한 Yes/No 질문 템플릿 생성</p>
+      </div>
+    </div>
+
+    <div class="flow-step anim-5">
+      <div class="flow-num" style="background:linear-gradient(135deg,#00CEC9,#6C5CE7);">3</div>
+      <div>
+        <p style="color:var(--text); font-weight:700;">VLM 기반 라벨링</p>
+        <p style="font-size:clamp(0.75rem,1.8vw,0.85rem);">3개 오픈소스 VLM의 가중 다수결 투표</p>
+      </div>
+    </div>
+
+    <div class="card anim-6">
+      <h3>품질 보증 체계</h3>
+      <div class="grid-2" style="margin-top:10px;">
+        <div>
+          <ul>
+            <li>앙상블 가중치 적용</li>
+            <li>패러프레이즈 템플릿</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>다중 해상도 증강</li>
+            <li>수동 레이블 감사</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-7">
+      <p style="color:var(--text); font-weight:500;">사용 VLM: <span style="color:var(--accent);">Qwen3-VL-235B-FP8</span> (높은 가중치) + <span style="color:var(--primary);">Intern-S1</span> + <span style="color:var(--accent2);">GLM-4.5V</span></p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 8: METRICS ========== -->
+  <div class="slide" data-index="7">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-accent">평가 지표</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">4축 평가 체계</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2" style="border-left:4px solid var(--primary);">
+      <h3 style="color:var(--primary);">&#x1F3AF; 식별 정확도</h3>
+      <ul>
+        <li><strong style="color:var(--text);">전체 (비검증) 정확도</strong> &mdash; 최종 추측이 타겟과 일치하는 비율</li>
+        <li><strong style="color:var(--text);">검증된 정확도</strong> &mdash; 후보 집합이 정확히 1개(타겟)인 경우만 인정</li>
+        <li><strong style="color:var(--text);">랜덤 추측 정확도</strong> &mdash; 후보 &gt;1인 상태에서 우연히 맞춘 비율</li>
+      </ul>
+    </div>
+
+    <div class="card anim-3" style="border-left:4px solid var(--accent);">
+      <h3 style="color:var(--accent);">&#x23F1; 상호작용 효율성</h3>
+      <p>최종 추측까지의 총 턴 수 (Skip 포함) &mdash; 적을수록 효율적</p>
+    </div>
+
+    <div class="card anim-4" style="border-left:4px solid var(--accent2);">
+      <h3 style="color:var(--accent2);">&#x1F4CB; 프로토콜 준수도</h3>
+      <ul>
+        <li><strong style="color:var(--text);">Skip 비율</strong> &mdash; 규칙 위반 빈도</li>
+        <li><strong style="color:var(--text);">조기 출력 비율</strong> &mdash; 업로드 완료 전 질문 시도</li>
+      </ul>
+    </div>
+
+    <div class="card anim-5" style="border-left:4px solid #f39c12;">
+      <h3 style="color:#f39c12;">&#x1F6E1; 노이즈 강건성</h3>
+      <p>Yes&#x2194;No 응답 뒤집기 또는 Unsure 교란 주입 후 정확도 측정<br>&#x2192; 모델의 재확인 및 복구 능력 진단</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 9: MODELS TESTED ========== -->
+  <div class="slide" data-index="8">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-primary">실험</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">평가 대상 모델</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2">
+      <div class="flex-row" style="align-items:center;">
+        <div class="icon-box" style="background:rgba(108,92,231,0.2);">&#x1F9E0;</div>
+        <div>
+          <h3 style="color:var(--primary); margin-bottom:4px;">Qwen3-VL-235B-Instruct-FP8</h3>
+          <p>235B 파라미터 &middot; 대규모 비전-언어 모델</p>
+          <span class="badge badge-primary" style="margin-top:6px;">위반 탐지기 / 오라클 겸용</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-3">
+      <div class="flex-row" style="align-items:center;">
+        <div class="icon-box" style="background:rgba(0,206,201,0.2);">&#x1F9E0;</div>
+        <div>
+          <h3 style="color:var(--accent); margin-bottom:4px;">Qwen3.5-397B-A17B-FP8</h3>
+          <p>397B 파라미터 (활성 17B) &middot; MoE 아키텍처</p>
+          <span class="badge badge-accent" style="margin-top:6px;">최고 검증 정확도</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <div class="flex-row" style="align-items:center;">
+        <div class="icon-box" style="background:rgba(253,121,168,0.2);">&#x1F9E0;</div>
+        <div>
+          <h3 style="color:var(--accent2); margin-bottom:4px;">Step3-VL-10B</h3>
+          <p>10B 파라미터 &middot; 소형 모델</p>
+          <span class="badge badge-pink" style="margin-top:6px;">&#x03C4;=0.8에서 최고 성능</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <h3 style="margin-bottom:8px;">구성 요소</h3>
+      <ul>
+        <li><strong style="color:var(--text);">위반 탐지기:</strong> Qwen3-VL-235B (few-shot)</li>
+        <li><strong style="color:var(--text);">오라클 시뮬레이터:</strong> Qwen3-VL-235B + Qwen-Agent + 줌인 도구</li>
+      </ul>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 10: ACCURACY RESULTS ========== -->
+  <div class="slide" data-index="9">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-accent">결과</span>
+      <span class="badge badge-primary">정확도</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">정확도 결과 분석</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2">
+      <h3>검증된 정확도 (&#x03C4;=0.3~0.6)</h3>
+      <div style="margin-top:12px;">
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--accent);">Qwen3.5</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:75%;background:var(--gradient1);">최고</div>
+          </div>
+        </div>
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--primary);">Qwen3-VL</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:50%;background:rgba(108,92,231,0.6);"></div>
+          </div>
+        </div>
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--accent2);">Step3-VL</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:40%;background:rgba(253,121,168,0.6);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-3">
+      <h3>검증된 정확도 (&#x03C4;=0.8, 가장 어려움)</h3>
+      <div style="margin-top:12px;">
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--accent2);">Step3-VL</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:80%;background:linear-gradient(135deg,#FD79A8,#6C5CE7);">최고</div>
+          </div>
+        </div>
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--accent);">Qwen3.5</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:55%;background:rgba(0,206,201,0.5);"></div>
+          </div>
+        </div>
+        <div class="comparison-bar">
+          <span class="model-label" style="color:var(--primary);">Qwen3-VL</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:45%;background:rgba(108,92,231,0.5);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <p style="color:var(--accent2); font-weight:700; margin-bottom:6px;">&#x26A0; 핵심 발견</p>
+      <p style="color:var(--text);">높은 최종 정확도가 반드시 더 나은 <strong>근거 기반 추론</strong>을 반영하지는 않습니다.<br>Qwen3-VL의 높은 전체 정확도는 검증된 정확도로 이어지지 않았습니다.</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 11: EFFICIENCY & COMPLIANCE ========== -->
+  <div class="slide" data-index="10">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-pink">효율성</span>
+      <span class="badge badge-primary">준수도</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">효율성 및 프로토콜 준수</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2">
+      <h3>상호작용 효율성 패턴</h3>
+      <div class="table-wrap" style="margin-top:10px;">
+        <table>
+          <thead>
+            <tr><th>모델</th><th>검증 성공</th><th>실패 시</th><th>특성</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--primary); font-weight:600;">Qwen3-VL</td>
+              <td>가장 짧음</td>
+              <td>일찍 중단</td>
+              <td>공격적 조기 추측</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:600;">Qwen3.5</td>
+              <td>일정함</td>
+              <td>가장 길음</td>
+              <td>보수적 질문 전략</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent2); font-weight:600;">Step3-VL</td>
+              <td>가장 길음</td>
+              <td>일찍 중단</td>
+              <td>충분한 증거 수집 후 추측</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2 anim-3">
+      <div class="card">
+        <h3 style="color:var(--accent2);">Skip 비율</h3>
+        <p><strong style="color:var(--accent);">Qwen3.5</strong>: 모든 임계값에서 최고 Skip율</p>
+        <p style="margin-top:6px; font-size:clamp(0.75rem,1.8vw,0.85rem);">&#x2192; 높은 검증 정확도와 프로토콜 준수 어려움이 공존</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--primary);">조기 출력</h3>
+        <p>유사도 임계값이 높아질수록 감소</p>
+        <p style="margin-top:6px; font-size:clamp(0.75rem,1.8vw,0.85rem);">&#x2192; 갤러리 크기가 시각 유사성보다 더 큰 영향</p>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <p style="color:var(--text); font-weight:500;">
+        &#x1F4CA; 조기 질문은 시각적 혼동보다 <strong>갤러리 크기</strong>에 더 큰 영향을 받습니다.
+      </p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 12: FAILURE MODES ========== -->
+  <div class="slide" data-index="11">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-pink">실패 분석</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">주요 실패 모드</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2" style="border-left:4px solid #e74c3c;">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(231,76,60,0.15); font-size:1.3rem;">&#x1F501;</div>
+        <div>
+          <h3 style="color:#e74c3c;">반복 규칙 위반</h3>
+          <p>동일 속성 유형을 여러 턴에 걸쳐 열거하거나 (규칙 5) 금지 속성을 질문 (규칙 4)</p>
+          <p style="margin-top:6px;"><em style="color:var(--text-dim);">예: Qwen3-VL, &#x03C4;=0.8, 6개 후보 &mdash; 9턴 중 4턴이 Skip</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-3" style="border-left:4px solid #f39c12;">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(243,156,18,0.15); font-size:1.3rem;">&#x1F504;</div>
+        <div>
+          <h3 style="color:#f39c12;">재열거 루프</h3>
+          <p>이미 확인된 속성의 조합을 반복 순회 &mdash; 새로운 특징 탐색 실패</p>
+          <p style="margin-top:6px;"><em style="color:var(--text-dim);">예: Qwen3.5, &#x03C4;=0.5, 14개 후보 &mdash; 20턴 중 12턴이 Skip, 9턴 재열거 루프</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="border-left:4px solid var(--accent2);">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(253,121,168,0.15); font-size:1.3rem;">&#x23F0;</div>
+        <div>
+          <h3 style="color:var(--accent2);">조기 추측 & 예산 소진</h3>
+          <p>충분한 증거 없이 일찍 추측하거나, 20턴을 모두 사용하고도 추측하지 못하는 양극단</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-5" style="border-left:4px solid var(--primary);">
+      <div class="flex-row">
+        <div class="icon-box" style="background:rgba(108,92,231,0.15); font-size:1.3rem;">&#x1F9E9;</div>
+        <div>
+          <h3 style="color:var(--primary);">불충분한 제약 조건 통합</h3>
+          <p>유효한 증거를 축적하지만 제약을 통합하여 고유 식별에 실패</p>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 13: KEY INSIGHTS ========== -->
+  <div class="slide" data-index="12">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-accent">핵심 인사이트</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">모델별 행동 특성</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card anim-2" style="background:linear-gradient(135deg, rgba(108,92,231,0.12), transparent);">
+      <h3 style="color:var(--primary);">Qwen3-VL-235B</h3>
+      <div class="tag-row" style="margin-top:8px;">
+        <span class="badge badge-primary">공격적</span>
+        <span class="badge badge-pink">낮은 프로토콜 준수</span>
+      </div>
+      <ul style="margin-top:8px;">
+        <li>큰 갤러리에서 상대적으로 우수</li>
+        <li>충분한 증거 없이 조기 추측 경향</li>
+        <li>높은 전체 정확도 &#x2260; 높은 검증 정확도</li>
+      </ul>
+    </div>
+
+    <div class="card anim-3" style="background:linear-gradient(135deg, rgba(0,206,201,0.1), transparent);">
+      <h3 style="color:var(--accent);">Qwen3.5-397B</h3>
+      <div class="tag-row" style="margin-top:8px;">
+        <span class="badge badge-accent">보수적</span>
+        <span class="badge badge-accent">최고 검증 정확도</span>
+      </div>
+      <ul style="margin-top:8px;">
+        <li>&#x03C4;=0.3~0.6에서 검증 정확도 최고</li>
+        <li>가장 높은 Skip율 &mdash; 프로토콜 준수 어려움</li>
+        <li>실패 시에도 끝까지 질문 지속</li>
+      </ul>
+    </div>
+
+    <div class="card anim-4" style="background:linear-gradient(135deg, rgba(253,121,168,0.1), transparent);">
+      <h3 style="color:var(--accent2);">Step3-VL-10B &#x1F31F;</h3>
+      <div class="tag-row" style="margin-top:8px;">
+        <span class="badge badge-pink">10B 소형</span>
+        <span class="badge badge-pink">&#x03C4;=0.8 최강</span>
+      </div>
+      <ul style="margin-top:8px;">
+        <li>10B 파라미터임에도 가장 어려운 조건에서 최고 성능</li>
+        <li>시각적 혼동이 큰 후보군에서 뛰어난 판별력</li>
+        <li>갤러리 크기 증가에는 민감</li>
+      </ul>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 14: CONTRIBUTIONS & CONCLUSION ========== -->
+  <div class="slide" data-index="13">
+    <div class="anim-1 tag-row">
+      <span class="badge badge-primary">기여</span>
+      <span class="badge badge-accent">결론</span>
+    </div>
+    <h2 class="anim-1"><span class="gradient-text">핵심 기여 및 결론</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-accent anim-2">
+      <h3>&#x2460; 새로운 평가 패러다임</h3>
+      <p>장기 지평 계획과 정밀 교차 이미지 그라운딩을 강조하는 대화형 다중 이미지 숨김 타겟 식별 벤치마크 제안</p>
+    </div>
+
+    <div class="card card-accent anim-3">
+      <h3>&#x2461; 제약 기반 프로토콜</h3>
+      <p>무효 행동 피드백(Skip)이 포함된 제약된 Yes/No 프로토콜로 지속적 지시 따르기 및 에이전틱 실패 모드 진단</p>
+    </div>
+
+    <div class="card card-accent anim-4">
+      <h3>&#x2462; 오라클 불완전성</h3>
+      <p>제어된 오라클 결함 주입을 통한 강건성 테스트 &mdash; 일관되지 않은 피드백 하의 검증 행동 탐침</p>
+    </div>
+
+    <div class="card card-accent anim-5">
+      <h3>&#x2463; 다차원 평가 체계</h3>
+      <p>결과뿐 아니라 상호작용 품질까지 측정하는 포괄적 메트릭 스위트</p>
+    </div>
+
+    <div class="highlight-box anim-6">
+      <h3 style="color:var(--accent); margin-bottom:6px;">&#x1F680; 향후 가능성</h3>
+      <p style="color:var(--text);">잘 정의된 상태-행동-관찰 구조로 <strong>오프라인 강화학습</strong> 기반 멀티모달 정책 훈련을 자연스럽게 지원합니다.</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ========== SLIDE 15: SUMMARY ========== -->
+  <div class="slide slide-cover" data-index="14">
+    <div class="bg-pattern"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div style="position:relative; z-index:1; max-width:600px;">
+      <h2 class="anim-1" style="font-size:clamp(1.5rem,4vw,2.5rem);">
+        <span class="gradient-text">AMIGO 요약</span>
+      </h2>
+      <div class="divider anim-2" style="margin:16px auto;"></div>
+
+      <div class="anim-3" style="text-align:left; max-width:500px; margin:0 auto;">
+        <div class="card" style="margin-bottom:12px;">
+          <p style="color:var(--text);"><strong>&#x1F50D; 무엇을</strong> &mdash; 다중 이미지 갤러리에서 숨겨진 타겟을 찾는 장기 대화형 벤치마크</p>
+        </div>
+        <div class="card" style="margin-bottom:12px;">
+          <p style="color:var(--text);"><strong>&#x2753; 왜</strong> &mdash; 기존 단일 턴 평가로는 에이전틱 역량을 측정할 수 없기 때문</p>
+        </div>
+        <div class="card" style="margin-bottom:12px;">
+          <p style="color:var(--text);"><strong>&#x2699; 어떻게</strong> &mdash; 10개 규칙 기반 Yes/No/Skip 프로토콜 + 4개 모듈 프레임워크</p>
+        </div>
+        <div class="card" style="margin-bottom:12px;">
+          <p style="color:var(--text);"><strong>&#x1F4CA; 결과</strong> &mdash; 모델 크기 &#x2260; 성능; 검증된 추론이 핵심; 실패 모드 다양</p>
+        </div>
+      </div>
+
+      <div class="anim-4" style="margin-top:28px;">
+        <p style="font-size:clamp(0.8rem,2vw,0.95rem); color:var(--text-dim);">
+          Min Wang &middot; Ata Mahjoubfar<br>
+          arXiv: 2603.28662 &middot; CC BY 4.0
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">&#x276E;</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-counter" id="slideCounter">1 / 15</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#x276F;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  const progressFill = document.getElementById('progressFill');
+  const slideCounter = document.getElementById('slideCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function updateUI() {
+    slideCounter.textContent = (current + 1) + ' / ' + total;
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function goTo(index, direction) {
+    if (index < 0 || index >= total || index === current || isAnimating) return;
+    isAnimating = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+
+    prev.classList.remove('active');
+    prev.classList.add(direction === 'next' ? 'exit-left' : '');
+    prev.style.transform = direction === 'next' ? 'translateX(-60px)' : 'translateX(60px)';
+    prev.style.opacity = '0';
+
+    next.style.transform = direction === 'next' ? 'translateX(60px)' : 'translateX(-60px)';
+    next.style.opacity = '0';
+    next.classList.add('active');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        next.style.transform = 'translateX(0)';
+        next.style.opacity = '1';
+      });
+    });
+
+    current = index;
+    updateUI();
+
+    setTimeout(() => {
+      prev.classList.remove('exit-left');
+      isAnimating = false;
+    }, 500);
+  }
+
+  function goNext() { goTo(current + 1, 'next'); }
+  function goPrev() { goTo(current - 1, 'prev'); }
+
+  prevBtn.addEventListener('click', goPrev);
+  nextBtn.addEventListener('click', goNext);
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goNext(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goNext();
+      else goPrev();
+    }
+  }, { passive: true });
+
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

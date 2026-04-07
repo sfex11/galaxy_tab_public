@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bilevel Autoresearch: Meta-Autoresearching Itself</title>
+<style>
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111638;
+    --bg-card: #181d4e;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b9d;
+    --text: #e8e8f0;
+    --text-dim: #8888aa;
+    --text-bright: #ffffff;
+    --glow: rgba(108, 99, 255, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    height: 100%;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(20px, 4vw, 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== Typography ===== */
+  h1 {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.4em;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 0.5em;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-size: clamp(1.05rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    margin-bottom: 0.4em;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.15rem);
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-dim);
+    margin-bottom: 1em;
+  }
+
+  .highlight { color: var(--accent); font-weight: 700; }
+  .highlight2 { color: var(--accent2); font-weight: 700; }
+  .highlight3 { color: var(--accent3); font-weight: 700; }
+
+  /* ===== Cards / Boxes ===== */
+  .card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: clamp(14px, 3vw, 28px);
+    margin-bottom: clamp(10px, 2vw, 18px);
+    border: 1px solid rgba(108, 99, 255, 0.15);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  .card-accent {
+    border-left: 4px solid var(--accent);
+  }
+
+  .card-green {
+    border-left: 4px solid var(--accent2);
+  }
+
+  .card-pink {
+    border-left: 4px solid var(--accent3);
+  }
+
+  .quote-box {
+    background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,212,170,0.08));
+    border-radius: 14px;
+    padding: clamp(16px, 3vw, 30px);
+    margin: clamp(10px, 2vw, 20px) 0;
+    border: 1px solid rgba(108,99,255,0.25);
+    font-style: italic;
+    font-size: clamp(0.95rem, 2.3vw, 1.25rem);
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .quote-box::before {
+    content: '"';
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--accent);
+    position: absolute;
+    top: -5px;
+    left: 12px;
+    opacity: 0.5;
+  }
+
+  /* ===== Grid layouts ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 20px);
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: clamp(10px, 2vw, 16px);
+  }
+
+  /* ===== Table ===== */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: clamp(8px, 1.5vw, 16px) 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+    min-width: 320px;
+  }
+
+  th {
+    background: var(--accent);
+    color: #fff;
+    padding: clamp(8px, 1.5vw, 14px) clamp(6px, 1.2vw, 12px);
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: clamp(6px, 1.2vw, 12px) clamp(6px, 1.2vw, 12px);
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  tr:nth-child(even) td {
+    background: rgba(108,99,255,0.05);
+  }
+
+  .best-cell {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* ===== Diagram Elements ===== */
+  .loop-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 14px);
+    margin: clamp(10px, 2vw, 20px) 0;
+  }
+
+  .loop-box {
+    width: 100%;
+    max-width: 500px;
+    padding: clamp(12px, 2.5vw, 22px);
+    border-radius: 14px;
+    text-align: center;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    position: relative;
+  }
+
+  .loop-outer {
+    background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(255,107,157,0.08));
+    border: 2px solid var(--accent3);
+    color: var(--accent3);
+  }
+
+  .loop-mid {
+    background: linear-gradient(135deg, rgba(0,212,170,0.2), rgba(0,212,170,0.08));
+    border: 2px solid var(--accent2);
+    color: var(--accent2);
+    width: 85%;
+    max-width: 430px;
+  }
+
+  .loop-inner {
+    background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(108,99,255,0.08));
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    width: 70%;
+    max-width: 360px;
+  }
+
+  .arrow-down {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: var(--text-dim);
+    line-height: 1;
+  }
+
+  /* ===== Bar Chart ===== */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 2vw, 16px);
+    margin: clamp(10px, 2vw, 20px) 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 14px);
+  }
+
+  .bar-label {
+    min-width: clamp(60px, 12vw, 90px);
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    text-align: right;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: clamp(28px, 5vw, 40px);
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: clamp(6px, 1vw, 12px);
+    font-weight: 700;
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+  }
+
+  .bar-fill.animate { width: var(--w); }
+
+  .bar-a { background: linear-gradient(90deg, #6c63ff88, #6c63ff); }
+  .bar-b { background: linear-gradient(90deg, #ffb74d88, #ffb74d); }
+  .bar-c { background: linear-gradient(90deg, #00d4aa88, #00d4aa); }
+  .bar-d { background: linear-gradient(90deg, #ff6b9d88, #ff6b9d); }
+
+  /* ===== Mechanism Cards ===== */
+  .mech-icon {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 8px;
+  }
+
+  /* ===== Code Block ===== */
+  .code-block {
+    background: #0d1117;
+    border-radius: 10px;
+    padding: clamp(12px, 2.5vw, 20px);
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    font-size: clamp(0.65rem, 1.5vw, 0.88rem);
+    line-height: 1.6;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid rgba(108,99,255,0.2);
+    white-space: pre;
+    color: #c9d1d9;
+    margin: clamp(8px, 1.5vw, 14px) 0;
+  }
+
+  .code-block .kw { color: #ff7b72; }
+  .code-block .fn { color: #d2a8ff; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .cm { color: #8b949e; }
+  .code-block .num { color: #79c0ff; }
+
+  /* ===== Flow Steps ===== */
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1.2vw, 12px);
+    margin: clamp(8px, 1.5vw, 14px) 0;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(10px, 2vw, 16px);
+  }
+
+  .step-num {
+    min-width: clamp(32px, 6vw, 44px);
+    height: clamp(32px, 6vw, 44px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: clamp(0.8rem, 1.8vw, 1.1rem);
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  /* ===== Tags ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px clamp(8px, 1.5vw, 14px);
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 600;
+    margin: 3px;
+  }
+
+  .tag-purple { background: rgba(108,99,255,0.2); color: var(--accent); }
+  .tag-green { background: rgba(0,212,170,0.2); color: var(--accent2); }
+  .tag-pink { background: rgba(255,107,157,0.2); color: var(--accent3); }
+
+  /* ===== Navigation ===== */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(8px, 1.5vw, 14px) clamp(12px, 3vw, 24px);
+    background: linear-gradient(transparent, rgba(10,14,39,0.95) 30%);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    border: 2px solid rgba(108,99,255,0.4);
+    background: rgba(17,22,56,0.9);
+    color: var(--accent);
+    border-radius: 12px;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0 clamp(14px, 2.5vw, 22px);
+  }
+
+  .nav-btn:active {
+    background: var(--accent);
+    color: #fff;
+    transform: scale(0.95);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin: 0 clamp(10px, 2vw, 18px);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    white-space: nowrap;
+    margin: 0 clamp(6px, 1vw, 12px);
+  }
+
+  /* ===== Animations ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.7s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.85s both; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--glow); }
+    50% { box-shadow: 0 0 20px 4px var(--glow); }
+  }
+
+  .pulse-glow { animation: pulse 3s infinite; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .float { animation: float 4s ease-in-out infinite; }
+
+  /* ===== Title slide special ===== */
+  .title-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .title-bg .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+  }
+
+  .title-bg .orb-1 {
+    width: 400px; height: 400px;
+    background: var(--accent);
+    top: -100px; right: -100px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .title-bg .orb-2 {
+    width: 300px; height: 300px;
+    background: var(--accent2);
+    bottom: -50px; left: -80px;
+    animation: float 6s ease-in-out infinite reverse;
+  }
+
+  .title-bg .orb-3 {
+    width: 200px; height: 200px;
+    background: var(--accent3);
+    top: 40%; left: 50%;
+    animation: float 10s ease-in-out infinite;
+  }
+
+  .slide-title-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .meta-info {
+    font-size: clamp(0.72rem, 1.6vw, 0.92rem);
+    color: var(--text-dim);
+    margin-top: clamp(12px, 2vw, 24px);
+  }
+
+  .meta-info span { margin-right: 1.2em; }
+
+  /* ===== Spacer for nav ===== */
+  .nav-spacer {
+    min-height: 80px;
+    flex-shrink: 0;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .slide { padding: clamp(16px, 3vw, 30px); }
+    .loop-mid { width: 92%; }
+    .loop-inner { width: 84%; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 16px 14px; }
+    .card { padding: 12px 14px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 12px; }
+    .quote-box { padding: 14px 16px; }
+    .code-block { font-size: 0.62rem; padding: 10px 12px; }
+    h1 { margin-bottom: 0.3em; }
+    .title-bg .orb { filter: blur(50px); }
+    .title-bg .orb-1 { width: 200px; height: 200px; }
+    .title-bg .orb-2 { width: 160px; height: 160px; }
+    .title-bg .orb-3 { width: 120px; height: 120px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 12px 10px; }
+    .card { padding: 10px 12px; border-radius: 10px; }
+    .nav-btn { font-size: 0.95rem; }
+    table { font-size: 0.68rem; }
+    th, td { padding: 5px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== SLIDE 1: Title ==================== -->
+<div class="slide active" id="slide-0">
+  <div class="title-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="slide-title-content">
+    <div class="anim-1">
+      <span class="tag tag-purple">arXiv: 2603.23420v1</span>
+      <span class="tag tag-green">cs.AI</span>
+    </div>
+    <h1 class="anim-2" style="margin-top:clamp(12px,2vw,24px);">
+      <span class="highlight">Bilevel Autoresearch</span>:<br>
+      자기 자신을 메타-자동연구하기
+    </h1>
+    <p class="subtitle anim-3">자동연구 루프를 자동연구 루프로 최적화하는 자기참조적 프레임워크</p>
+    <div class="quote-box anim-4">
+      자동연구가 그 자체로 연구의 한 형태라면, 자동연구를 연구 자체에 적용할 수 있다.
+    </div>
+    <div class="meta-info anim-5">
+      <span>Yaonan Qu, Meng Lu</span><br>
+      <span>2026년 3월 24일</span>
+      <span>13p / 5 fig / 3 tbl</span>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 2: Problem ==================== -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-1">기존 자동연구의 <span class="highlight3">한계</span></h2>
+  <p class="subtitle anim-2">기존 시스템들은 왜 한계에 부딪혔는가?</p>
+
+  <div class="card card-accent anim-3">
+    <h3>기존 자동연구 시스템들</h3>
+    <ul style="padding-left:1.2em; margin-top:8px;">
+      <li><strong>Karpathy (2026)</strong> — 단일 트랙 루프: LLM이 코드를 읽고, 변경을 제안하고, 실행하고, 결과를 측정</li>
+      <li><strong>AutoResearchClaw</strong> — 다중 배치 병렬 탐색 확장</li>
+      <li><strong>EvoScientist</strong> — 지속적 경험 메모리 추가</li>
+    </ul>
+  </div>
+
+  <div class="card card-pink anim-4">
+    <h3>공통적 문제점</h3>
+    <p style="margin-top:6px;">
+      모든 개선은 <span class="highlight3">인간 연구자</span>가 직접 코드를 읽고, 병목을 식별하고, 새 코드를 작성해야 했음.
+      자동연구 루프 자체를 개선하는 것은 자동화되지 않았다.
+    </p>
+  </div>
+
+  <div class="quote-box anim-5">
+    외부 루프가 동일한 설계 단계를 자율적으로 수행할 수 있는가?
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 3: Core Idea ==================== -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-1"><span class="highlight">핵심 아이디어</span>: 이중 수준 최적화</h2>
+  <p class="subtitle anim-2">자동연구로 자동연구 자체를 최적화한다</p>
+
+  <div class="loop-diagram anim-3">
+    <div class="loop-box loop-outer pulse-glow">
+      Level 2 (외부) — 메커니즘 연구 &amp; 코드 주입
+      <div style="font-size:clamp(0.7rem,1.5vw,0.85rem); margin-top:6px; opacity:0.8;">
+        Python 코드로 새로운 탐색 메커니즘 생성
+      </div>
+    </div>
+    <div class="arrow-down">&#x25BC;</div>
+    <div class="loop-box loop-mid">
+      Level 1.5 (중간) — 탐색 전략 조정
+      <div style="font-size:clamp(0.7rem,1.5vw,0.85rem); margin-top:6px; opacity:0.8;">
+        5회 반복마다 파라미터 동결/해제, 가이드 문자열
+      </div>
+    </div>
+    <div class="arrow-down">&#x25BC;</div>
+    <div class="loop-box loop-inner">
+      Level 1 (내부) — 작업 최적화
+      <div style="font-size:clamp(0.7rem,1.5vw,0.85rem); margin-top:6px; opacity:0.8;">
+        제안 → 학습 → 평가 → 수락/거부 (30회 반복)
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-green anim-4" style="text-align:center;">
+    <p><strong>핵심 차별점:</strong> Level 2는 파라미터를 조정하는 것이 아니라,<br>
+    <span class="highlight2">메커니즘 전체를 코드로 교체</span>한다</p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 4: Bilevel Optimization ==================== -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-1"><span class="highlight2">수학적 프레임워크</span></h2>
+  <p class="subtitle anim-2">이중 수준 최적화의 형식화</p>
+
+  <div class="card card-accent anim-3">
+    <h3>이중 수준 최적화</h3>
+    <div style="text-align:center; margin:clamp(10px,2vw,20px) 0; font-size:clamp(0.9rem,2.2vw,1.3rem);">
+      <p>상위 수준: <span class="highlight">min<sub>&phi;</sub> F(&phi;, &theta;*(&phi;))</span></p>
+      <p style="margin-top:8px;">하위 수준: <span class="highlight2">&theta;*(&phi;) &isin; arg min<sub>&theta;</sub> f(&theta;, &phi;)</span></p>
+    </div>
+    <ul style="padding-left:1.2em; margin-top:10px;">
+      <li><strong>&phi;</strong> = 탐색 메커니즘 (runner 코드) — 이산적 프로그램</li>
+      <li><strong>&theta;</strong> = 학습 설정 (하이퍼파라미터)</li>
+    </ul>
+  </div>
+
+  <div class="grid-2 anim-4">
+    <div class="card card-green">
+      <h3>기존 방식</h3>
+      <p>상위 수준이 실수값 파라미터를 경사 기반으로 최적화</p>
+    </div>
+    <div class="card card-pink">
+      <h3>본 논문</h3>
+      <p>상위 수준이 <span class="highlight3">코드(프로그램)</span>를 LLM으로 생성하여 메커니즘을 교체</p>
+    </div>
+  </div>
+
+  <div class="card anim-5" style="text-align:center;">
+    <p><strong>동일한 LLM</strong>(DeepSeek deepseek-chat)이 모든 수준에서 사용됨<br>
+    <span class="tag tag-purple">메타 수준에 더 강한 모델 불필요</span></p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 5: Level 2 Dialogue ==================== -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-1">Level 2: <span class="highlight3">4라운드 대화</span></h2>
+  <p class="subtitle anim-2">메커니즘 연구 및 코드 주입 프로세스</p>
+
+  <div class="flow-steps">
+    <div class="flow-step anim-2">
+      <div class="step-num" style="background:rgba(108,99,255,0.2); color:var(--accent);">1</div>
+      <div class="step-content">
+        <h3>탐색 (Explore)</h3>
+        <p>LLM이 runner.py 소스와 탐색 추적을 읽고, 인접 분야(조합 최적화, 온라인 학습, 실험 설계, 베이지안 최적화)의 메커니즘을 조사</p>
+      </div>
+    </div>
+    <div class="flow-step anim-3">
+      <div class="step-num" style="background:rgba(255,107,157,0.2); color:var(--accent3);">2</div>
+      <div class="step-content">
+        <h3>비평 (Critique)</h3>
+        <p>관찰된 실패 모드에 대해 후보를 평가하고 가장 유망한 것을 선택</p>
+      </div>
+    </div>
+    <div class="flow-step anim-4">
+      <div class="step-num" style="background:rgba(0,212,170,0.2); color:var(--accent2);">3</div>
+      <div class="step-content">
+        <h3>명세 (Specify)</h3>
+        <p>클래스명, 생성자 인수, 메서드 시그니처, runner.py 통합 지점을 포함한 인터페이스 명세 작성</p>
+      </div>
+    </div>
+    <div class="flow-step anim-5">
+      <div class="step-num" style="background:rgba(255,183,77,0.2); color:#ffb74d;">4</div>
+      <div class="step-content">
+        <h3>생성 (Generate)</h3>
+        <p>완전하고 실행 가능한 Python 코드 작성 → <code>importlib</code>로 동적 로드 → 검증 성공 시 활성화, 실패 시 자동 복원</p>
+      </div>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 6: Experimental Design ==================== -->
+<div class="slide" id="slide-5">
+  <h2 class="anim-1"><span class="highlight2">실험 설계</span>: 4그룹 제거 실험</h2>
+  <p class="subtitle anim-2">벤치마크: Karpathy의 GPT 사전학습 과제 (50M 파라미터)</p>
+
+  <div class="table-wrap anim-3">
+    <table>
+      <thead>
+        <tr>
+          <th>그룹</th>
+          <th>활성 수준</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="highlight">A</span></td>
+          <td>Level 1만</td>
+          <td style="text-align:left;">순수 자동연구, 외부 개입 없음</td>
+        </tr>
+        <tr>
+          <td><span style="color:#ffb74d; font-weight:700;">B</span></td>
+          <td>Level 1 + 1.5</td>
+          <td style="text-align:left;">내부 루프 + 파라미터 조정</td>
+        </tr>
+        <tr>
+          <td><span class="highlight2">C</span></td>
+          <td>Level 1 + 1.5 + 2</td>
+          <td style="text-align:left;">전체 이중 수준 + 메커니즘 연구</td>
+        </tr>
+        <tr>
+          <td><span class="highlight3">D</span></td>
+          <td>Level 1 + 2</td>
+          <td style="text-align:left;">메커니즘 연구만 (전략 조정 없이)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2 anim-4">
+    <div class="card">
+      <h3>실험 조건</h3>
+      <ul style="padding-left:1.2em; margin-top:6px;">
+        <li>LLM: DeepSeek deepseek-chat</li>
+        <li>GPU: RTX 5090 (32GB) x 3대</li>
+        <li>학습 예산: 300초</li>
+        <li>탐색 예산: 30회 반복</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>측정 지표</h3>
+      <p style="margin-top:6px; text-align:center; font-size:clamp(0.9rem,2vw,1.15rem);">
+        <strong>&Delta;</strong> = 최선 - 기준선<br>
+        <span class="text-dim">(검증 bits-per-byte)</span><br>
+        <span class="highlight2">더 음수 = 더 큰 개선</span>
+      </p>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 7: Results ==================== -->
+<div class="slide" id="slide-6">
+  <h2 class="anim-1"><span class="highlight2">핵심 결과</span>: 5배 성능 향상</h2>
+
+  <div class="table-wrap anim-2">
+    <table>
+      <thead>
+        <tr><th>그룹</th><th>R1</th><th>R2</th><th>R3</th><th>평균 &plusmn; 표준편차</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="highlight">A</span></td>
+          <td>-0.009</td><td>-0.008</td><td>-0.011</td>
+          <td>-0.009 &plusmn; 0.002</td>
+        </tr>
+        <tr>
+          <td><span style="color:#ffb74d;font-weight:700;">B</span></td>
+          <td style="color:#ff6b9d;">-0.000</td><td>-0.010</td><td>-0.009</td>
+          <td>-0.006 &plusmn; 0.006</td>
+        </tr>
+        <tr style="background:rgba(0,212,170,0.08);">
+          <td><span class="highlight2">C</span></td>
+          <td class="best-cell">-0.065</td><td>-0.011</td><td class="best-cell">-0.058</td>
+          <td class="best-cell">-0.045 &plusmn; 0.030</td>
+        </tr>
+        <tr>
+          <td><span class="highlight3">D</span></td>
+          <td>-0.001</td><td class="best-cell">-0.063</td><td>-0.039</td>
+          <td>-0.034 &plusmn; 0.031</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bar-chart anim-3">
+    <div class="bar-row">
+      <div class="bar-label" style="color:var(--accent);">A</div>
+      <div class="bar-track"><div class="bar-fill bar-a" style="--w:20%;">-0.009</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#ffb74d;">B</div>
+      <div class="bar-track"><div class="bar-fill bar-b" style="--w:13%;">-0.006</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:var(--accent2);">C</div>
+      <div class="bar-track"><div class="bar-fill bar-c" style="--w:100%;">-0.045</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:var(--accent3);">D</div>
+      <div class="bar-track"><div class="bar-fill bar-d" style="--w:76%;">-0.034</div></div>
+    </div>
+  </div>
+
+  <div class="card card-green anim-4" style="text-align:center;">
+    <p><span class="highlight2" style="font-size:clamp(1.1rem,2.5vw,1.5rem);">Group C: 5x</span> 향상 (내부 루프 대비) | Level 2가 핵심 동력</p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 8: Generated Mechanisms ==================== -->
+<div class="slide" id="slide-7">
+  <h2 class="anim-1">자율 생성된 <span class="highlight">탐색 메커니즘</span></h2>
+  <p class="subtitle anim-2">인간의 명세 없이 LLM이 자율적으로 발견한 3가지 알고리즘</p>
+
+  <div class="grid-3 anim-3">
+    <div class="card card-accent" style="text-align:center;">
+      <div class="mech-icon">&#x1F6AB;</div>
+      <h3>타부 서치 매니저</h3>
+      <span class="tag tag-purple">조합 최적화</span>
+      <p style="margin-top:8px;">최근 방문한 영역의 타부 리스트를 유지하여 동일한 변경을 반복 제안하는 것을 방지</p>
+    </div>
+    <div class="card card-green" style="text-align:center;">
+      <div class="mech-icon">&#x1F3B0;</div>
+      <h3>다중 스케일 밴딧</h3>
+      <span class="tag tag-green">온라인 학습 / MAB</span>
+      <p style="margin-top:8px;">파라미터 선택을 다중 암드 밴딧으로 처리하여 다양한 스케일에서 탐색/활용 균형 유지</p>
+    </div>
+    <div class="card card-pink" style="text-align:center;">
+      <div class="mech-icon">&#x1F4D0;</div>
+      <h3>체계적 직교 탐색</h3>
+      <span class="tag tag-pink">실험 설계 (DOE)</span>
+      <p style="margin-top:8px;">직교 파라미터 차원 탐색을 강제하여 단일 파라미터에 대한 과도한 집중 방지</p>
+    </div>
+  </div>
+
+  <div class="card anim-4">
+    <h3>코드 생성 품질</h3>
+    <div class="grid-2" style="margin-top:8px;">
+      <div><span class="highlight2" style="font-size:clamp(1.3rem,3vw,2rem);">6/6</span><br><span style="color:var(--text-dim);">첫 시도 생성 성공</span></div>
+      <div><span class="highlight2" style="font-size:clamp(1.3rem,3vw,2rem);">5/6</span><br><span style="color:var(--text-dim);">검증 통과 (1건은 sklearn 미설치로 복원)</span></div>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 9: Code Example ==================== -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-1"><span class="highlight3">코드 예시</span>: 타부 서치 매니저</h2>
+  <p class="subtitle anim-2">Group C R1에서 LLM이 자율 생성한 코드 (발췌)</p>
+
+  <div class="code-block anim-3"><span class="kw">class</span> <span class="fn">TabuSearchManager</span>:
+  <span class="kw">def</span> <span class="fn">__init__</span>(<span class="str">self</span>, tenure=<span class="num">5</span>, thresholds=<span class="kw">None</span>):
+    self.tabu_list = []
+    self.tenure = tenure
+    self.distance_thresholds = thresholds <span class="kw">or</span> {}
+
+  <span class="kw">def</span> <span class="fn">is_tabu</span>(<span class="str">self</span>, config, iteration):
+    <span class="cm"># 만료된 항목 제거</span>
+    self.tabu_list = [e <span class="kw">for</span> e <span class="kw">in</span> self.tabu_list
+        <span class="kw">if</span> iteration <= e[<span class="str">"expires_at"</span>]]
+    <span class="kw">for</span> entry <span class="kw">in</span> self.tabu_list:
+      <span class="kw">for</span> param, tabu_val <span class="kw">in</span> entry[<span class="str">"config"</span>].items():
+        <span class="kw">if</span> param <span class="kw">in</span> config:
+          <span class="kw">try</span>:
+            diff = abs(float(config[param])
+                - float(tabu_val))
+            thresh = self.distance_thresholds.get(
+                param, <span class="num">0.0</span>)
+            <span class="kw">if</span> diff <= thresh:
+              <span class="kw">return</span> <span class="kw">True</span>  <span class="cm"># 너무 가까움, 차단</span>
+          <span class="kw">except</span> (ValueError, TypeError):
+            <span class="kw">if</span> config[param] == tabu_val:
+              <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">return</span> <span class="kw">False</span>  <span class="cm"># 허용됨</span></div>
+
+  <div class="card card-accent anim-4">
+    <p><strong>역할:</strong> 실패한 변경과 유사한 방향을 다시 시도하지 못하게 차단 → LLM이 <span class="highlight">새로운 탐색 방향</span>으로 전환하도록 강제</p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 10: Key Discovery ==================== -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-1">결정적 발견: <span class="highlight2">TOTAL_BATCH_SIZE</span></h2>
+  <p class="subtitle anim-2">5~8배 성능 향상의 원인</p>
+
+  <div class="card card-green anim-3">
+    <h3>발견된 최적화</h3>
+    <p style="margin-top:8px; text-align:center; font-size:clamp(1rem,2.3vw,1.3rem);">
+      TOTAL_BATCH_SIZE를 <span class="highlight3">2<sup>19</sup></span>에서 <span class="highlight2">2<sup>17</sup>~2<sup>18</sup></span>로 감소<br>
+      &rarr; 검증 손실 <span class="highlight2">-0.039 ~ -0.065</span> 향상
+    </p>
+  </div>
+
+  <div class="card card-accent anim-4">
+    <h3>왜 효과적인가?</h3>
+    <p style="margin-top:6px;">더 작은 배치 &rarr; 고정 시간(300초) 내 <span class="highlight">더 많은 경사 스텝</span> &rarr; 50M 파라미터 모델에서 더 나은 수렴.
+    원래 2<sup>19</sup>는 H100에 최적화되었으나, RTX 5090 + SDPA 환경에서는 최적이 아님.</p>
+  </div>
+
+  <div class="grid-2 anim-5">
+    <div class="card card-pink">
+      <h3>Group A/B가 놓친 이유</h3>
+      <p style="margin-top:6px;">DeepSeek의 기본 탐색: 배치 크기 <em>증가</em>를 먼저 시도 ("큰 배치가 더 좋다"는 암묵적 편향).
+      증가가 거부된 후 A는 반복하고, B는 이 파라미터를 동결하여 감소 방향을 완전히 차단.</p>
+    </div>
+    <div class="card card-green">
+      <h3>Group C/D가 발견한 이유</h3>
+      <p style="margin-top:6px;">Level 2 메커니즘이 결정적 역할:
+      <span class="highlight">타부 서치</span>가 실패한 방향 재방문을 차단하고,
+      <span class="highlight2">직교 탐색</span>이 차원 다양성을 강제하여 감소 방향을 시도하게 함.</p>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 11: Hypothesis Testing ==================== -->
+<div class="slide" id="slide-10">
+  <h2 class="anim-1"><span class="highlight">가설 검증</span> 결과</h2>
+
+  <div class="card card-pink anim-2">
+    <h3>H1: Group B >> Group A &nbsp;<span class="tag tag-pink">미지지</span></h3>
+    <p style="margin-top:6px;">Group B 평균(-0.006)이 Group A(-0.009)보다 오히려 수치적으로 나쁨.
+    B의 R1은 개선 없음(-0.000)으로 전체 최악 결과.</p>
+  </div>
+
+  <div class="card card-green anim-3">
+    <h3>H2: Group C >> Group B &nbsp;<span class="tag tag-green">지지됨</span></h3>
+    <p style="margin-top:6px;">Group C 절대 개선(-0.045)이 Group B(-0.006)의 <span class="highlight2">7.5배</span>.
+    두 반복에서 극적 향상(-0.065, -0.058).</p>
+  </div>
+
+  <div class="card card-accent anim-4">
+    <h3>H3: Level 2가 자율적으로 메커니즘 발견 &nbsp;<span class="tag tag-green">지지됨</span></h3>
+    <p style="margin-top:6px;">조합 최적화, 온라인 학습, 실험 설계 분야에서 메커니즘 생성.
+    도메인 명세 없이 코드 첫 시도 성공, 6건 중 5건 검증 통과.</p>
+  </div>
+
+  <div class="card anim-5" style="border-left:4px solid #ffb74d;">
+    <h3>H4: Group D &asymp; Group C &nbsp;<span class="tag" style="background:rgba(255,183,77,0.2);color:#ffb74d;">조건부 지지</span></h3>
+    <p style="margin-top:6px;">D(-0.034)와 C(-0.045) 분산 범위 내. Level 2만으로 충분하나,
+    D의 R1은 개선 없음 → Level 1.5가 약간의 안정성 제공.</p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 12: Search Behavior ==================== -->
+<div class="slide" id="slide-11">
+  <h2 class="anim-1">탐색 행동 <span class="highlight3">비교 분석</span></h2>
+
+  <div class="card card-accent anim-2">
+    <h3>Group A: 거의 결정론적 반복</h3>
+    <p style="margin-top:6px;">3회 반복 모두 거의 동일한 제안 순서. WEIGHT_DECAY 감소(&Delta;&asymp;-0.008) → WINDOW_PATTERN 변경(&Delta;&asymp;-0.002) → <span class="highlight3">22회 연속 거부</span>. LLM이 동일 상태에서 거의 동일한 제안을 생성.</p>
+  </div>
+
+  <div class="card anim-3" style="border-left:4px solid #ffb74d;">
+    <h3>Group B: 방향 전환되지만 한계 존재</h3>
+    <p style="margin-top:6px;">Level 1.5가 정체된 파라미터를 올바르게 식별하고 LR, MATRIX_LR 등으로 리디렉션. 더 많은 파라미터를 탐색하지만 동일한 수락/거부 프레임워크 내에서 유사한 개선.</p>
+  </div>
+
+  <div class="card card-green anim-4">
+    <h3>Group C: Level 2가 새로운 방향 개방</h3>
+    <p style="margin-top:6px;">메커니즘 주입 후 <span class="highlight2">TOTAL_BATCH_SIZE 감소</span> 발견 (2<sup>19</sup> → 2<sup>17</sup>~2<sup>18</sup>).
+    단일 변경으로 <span class="highlight2">-0.039 ~ -0.065</span> — Group A/B 어떤 변경보다 5~8배 큰 효과.</p>
+  </div>
+
+  <div class="card card-pink anim-5">
+    <h3>Group D: Level 2만으로도 가능하지만 불안정</h3>
+    <p style="margin-top:6px;">R2, R3에서 독립적으로 배치 크기 감소 발견. 그러나 R1은 실패(두 메커니즘 모두 import 검증 실패) → 더 높은 분산(&plusmn;0.031).</p>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 13: Limitations ==================== -->
+<div class="slide" id="slide-12">
+  <h2 class="anim-1"><span class="highlight3">한계점</span></h2>
+
+  <div class="card card-pink anim-2">
+    <h3>작은 표본 크기</h3>
+    <p style="margin-top:6px;">그룹당 3회 반복은 엄밀한 비교에 불충분. Group C 표준편차(&plusmn;0.030)가 절대 평균의 67%. 신뢰할 수 있는 추정에는 n&ge;10 필요.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card anim-3">
+      <h3>단일 벤치마크</h3>
+      <p style="margin-top:6px;">모든 결과가 하나의 과제(GPT 50M, 300초, RTX 5090)에서만 검증. 다른 모델 크기, 예산, 과제에 대한 일반화 미입증.</p>
+    </div>
+    <div class="card anim-4">
+      <h3>기준선 변동</h3>
+      <p style="margin-top:6px;">기준선 val bpb가 반복마다 변동(1.094~1.114). &Delta; 사용으로 완화하지만 완전히 제거되지 않음.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card anim-5">
+      <h3>동적 로드 취약성</h3>
+      <p style="margin-top:6px;">예비 실행에서 sys.modules 등록 버그로 모든 메커니즘 주입이 원본으로 조용히 폴백. <span class="highlight3">무음 실패</span>는 위험한 실패 모드.</p>
+    </div>
+    <div class="card anim-6">
+      <h3>프롬프트 유도 편향</h3>
+      <p style="margin-top:6px;">Level 2 프롬프트가 명시적으로 특정 도메인(조합 최적화, RL, 진화 알고리즘 등)을 제안 → 발견 가능 도메인이 제한.</p>
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- ==================== SLIDE 14: Conclusion ==================== -->
+<div class="slide" id="slide-13">
+  <div class="title-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="slide-title-content">
+    <h2 class="anim-1"><span class="highlight">결론</span></h2>
+
+    <div class="card card-green anim-2" style="position:relative; z-index:1;">
+      <h3>검증된 핵심 원리</h3>
+      <p style="margin-top:8px; font-size:clamp(1rem,2.3vw,1.3rem); text-align:center;">
+        <span class="highlight2">자동연구는 자기 자신을 연구할 수 있다</span>
+      </p>
+      <p style="margin-top:8px;">외부 루프가 인간이 설계할 필요 없음 — 내부 루프를 실행하는 동일 모델이 구조적 개선을 자율 생성할 수 있음.</p>
+    </div>
+
+    <div class="grid-2 anim-3" style="position:relative; z-index:1;">
+      <div class="card card-accent">
+        <h3 style="text-align:center;">주요 성과</h3>
+        <ul style="padding-left:1.2em; margin-top:8px;">
+          <li>내부 루프 대비 <span class="highlight">5배</span> 검증 bpb 개선</li>
+          <li>3개 분야에서 <span class="highlight2">자율 메커니즘 발견</span></li>
+          <li>LLM 기본 탐색이 피하는 방향으로 <span class="highlight3">탐색 강제</span></li>
+        </ul>
+      </div>
+      <div class="card card-pink">
+        <h3 style="text-align:center;">향후 연구</h3>
+        <ul style="padding-left:1.2em; margin-top:8px;">
+          <li>n&ge;10 반복 + 고정 시드</li>
+          <li>다양한 벤치마크로 일반화 검증</li>
+          <li>코드 생성 품질 향상을 위한 테스트 하네스</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="anim-4" style="text-align:center; margin-top:clamp(14px,2vw,24px); position:relative; z-index:1;">
+      <span class="tag tag-purple">코드 공개: github.com/EdwardOptimization/Bilevel-Autoresearch</span>
+    </div>
+
+    <div class="quote-box anim-5" style="position:relative; z-index:1;">
+      자동연구가 측정 가능한 목표를 가진 모든 것에 대해 스스로를 메타-자동연구할 수 있다면,
+      원칙적으로 무엇이든 메타-자동연구할 수 있다.
+    </div>
+  </div>
+  <div class="nav-spacer"></div>
+</div>
+
+</div><!-- end slide-container -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">&#x25C0;</button>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="slide-counter" id="slideCounter">1 / 14</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">&#x25B6;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  function showSlide(index, direction) {
+    if (isAnimating || index < 0 || index >= total || index === current) return;
+    isAnimating = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+
+    prev.classList.remove('active');
+    prev.classList.add(direction > 0 ? 'exit-left' : '');
+    if (direction < 0) {
+      prev.style.transform = 'translateX(60px)';
+      prev.style.opacity = '0';
+    }
+
+    next.style.transform = direction > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    next.style.opacity = '0';
+    next.classList.remove('exit-left');
+
+    requestAnimationFrame(() => {
+      next.classList.add('active');
+      next.style.transform = '';
+      next.style.opacity = '';
+      next.scrollTop = 0;
+    });
+
+    current = index;
+    updateUI();
+
+    // Animate bars if on chart slide
+    if (current === 6) {
+      setTimeout(() => {
+        document.querySelectorAll('.bar-fill').forEach(b => b.classList.add('animate'));
+      }, 300);
+    }
+
+    setTimeout(() => {
+      isAnimating = false;
+      prev.classList.remove('exit-left');
+    }, 550);
+  }
+
+  function navigate(dir) {
+    showSlide(current + dir, dir);
+  }
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) navigate(1);
+      else navigate(-1);
+    }
+  }, { passive: true });
+
+  // Expose navigate globally
+  window.navigate = navigate;
+
+  updateUI();
+})();
+</script>
+</body>
+</html>

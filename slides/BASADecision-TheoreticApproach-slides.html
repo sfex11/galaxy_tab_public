@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BAS: 대규모 언어 모델 신뢰도 평가를 위한 의사결정 이론적 접근</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111540;
+    --bg-card: rgba(255,255,255,0.04);
+    --accent: #6c5ce7;
+    --accent-light: #a29bfe;
+    --accent-glow: rgba(108,92,231,0.3);
+    --success: #00cec9;
+    --danger: #ff6b6b;
+    --warning: #ffc048;
+    --text-primary: #e8e8f0;
+    --text-secondary: #9a9ab8;
+    --text-dim: #6a6a88;
+    --border: rgba(255,255,255,0.08);
+    --gradient-1: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --gradient-2: linear-gradient(135deg, #00cec9, #55efc4);
+    --gradient-3: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 60px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== 타이포그래피 ===== */
+  .slide-number {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent-light);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent-light);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .highlight {
+    color: var(--accent-light);
+    font-weight: 700;
+  }
+
+  .danger { color: var(--danger); }
+  .success { color: var(--success); }
+  .warning { color: var(--warning); }
+
+  /* ===== 컴포넌트 ===== */
+  .gradient-text {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 8px 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-accent {
+    border-left: 3px solid var(--accent);
+  }
+
+  .card-success {
+    border-left: 3px solid var(--success);
+  }
+
+  .card-danger {
+    border-left: 3px solid var(--danger);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+
+  .formula-box {
+    background: rgba(108,92,231,0.1);
+    border: 1px solid rgba(108,92,231,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.8rem, 1.6vw, 1.1rem);
+    text-align: center;
+    margin: 16px 0;
+    color: var(--accent-light);
+    overflow-x: auto;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+  }
+
+  .tag-accent { background: rgba(108,92,231,0.2); color: var(--accent-light); }
+  .tag-success { background: rgba(0,206,201,0.2); color: var(--success); }
+  .tag-danger { background: rgba(255,107,107,0.2); color: var(--danger); }
+  .tag-warning { background: rgba(255,192,72,0.2); color: var(--warning); }
+
+  ul { list-style: none; padding: 0; }
+
+  ul li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .check-list li::before {
+    content: '✓';
+    background: none;
+    color: var(--success);
+    font-weight: 700;
+    font-size: 0.9rem;
+    top: 6px;
+  }
+
+  .x-list li::before {
+    content: '✗';
+    background: none;
+    color: var(--danger);
+    font-weight: 700;
+    font-size: 0.9rem;
+    top: 6px;
+  }
+
+  /* ===== 테이블 ===== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 12px 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+    min-width: 400px;
+  }
+
+  th {
+    background: rgba(108,92,231,0.15);
+    color: var(--accent-light);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ===== 비주얼 바 ===== */
+  .bar-chart { margin: 12px 0; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    gap: 10px;
+  }
+
+  .bar-label {
+    min-width: 100px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+    font-weight: 700;
+    color: white;
+  }
+
+  .bar-fill.positive { background: var(--gradient-2); }
+  .bar-fill.negative { background: var(--gradient-3); }
+  .bar-fill.neutral { background: var(--gradient-1); }
+
+  /* ===== 프로그레스바 (슬라이드 하단) ===== */
+  .progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-1);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ===== 네비게이션 ===== */
+  .nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+  }
+
+  .nav button {
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--border);
+    background: rgba(17,21,64,0.9);
+    color: var(--text-primary);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  .nav button:active {
+    transform: scale(0.95);
+  }
+
+  .slide-indicator {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 50;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--accent-light);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ===== 배경 효과 ===== */
+  .bg-glow {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow-1 {
+    top: -100px; right: -100px;
+    background: var(--accent);
+  }
+
+  .bg-glow-2 {
+    bottom: -100px; left: -100px;
+    background: var(--success);
+  }
+
+  /* ===== 플로우차트 ===== */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: center;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    font-weight: 500;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  /* ===== 비교 아이콘 블록 ===== */
+  .icon-block {
+    text-align: center;
+    padding: 16px;
+  }
+
+  .icon-block .icon {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 8px;
+  }
+
+  .icon-block .label {
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    color: var(--text-secondary);
+  }
+
+  .stat-big {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.9rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ===== 키보드 힌트 ===== */
+  .kbd-hint {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    z-index: 50;
+  }
+
+  kbd {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+  }
+
+  /* ===== 애니메이션 ===== */
+  .fade-in { animation: fadeIn 0.6s ease forwards; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeIn 0.5s 0.1s ease both; }
+  .slide.active .anim-2 { animation: fadeIn 0.5s 0.25s ease both; }
+  .slide.active .anim-3 { animation: fadeIn 0.5s 0.4s ease both; }
+  .slide.active .anim-4 { animation: fadeIn 0.5s 0.55s ease both; }
+  .slide.active .anim-5 { animation: fadeIn 0.5s 0.7s ease both; }
+
+  /* ===== 타이틀 슬라이드 전용 ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title-slide h1 {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    margin-bottom: 20px;
+  }
+
+  .authors {
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+
+  .venue-tag {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 6px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    color: var(--accent-light);
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  }
+
+  /* ===== 미디어 쿼리: 태블릿 ===== */
+  @media (max-width: 768px) {
+    .slide {
+      padding: 40px 30px 70px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .bar-label { min-width: 70px; }
+
+    .nav button {
+      width: 48px;
+      height: 48px;
+    }
+
+    .kbd-hint { display: none; }
+
+    .bg-glow {
+      width: 250px;
+      height: 250px;
+    }
+
+    .flow { gap: 6px; }
+    .flow-box { padding: 8px 12px; }
+  }
+
+  /* ===== 미디어 쿼리: 모바일 ===== */
+  @media (max-width: 480px) {
+    .slide {
+      padding: 24px 20px 70px;
+    }
+
+    .title-slide {
+      padding: 24px 20px;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .card { padding: 16px; }
+
+    .formula-box {
+      padding: 14px 16px;
+      font-size: clamp(0.7rem, 3vw, 0.9rem);
+    }
+
+    .nav {
+      bottom: 12px;
+      right: 12px;
+    }
+
+    .nav button {
+      width: 46px;
+      height: 46px;
+      font-size: 1.1rem;
+    }
+
+    .slide-indicator {
+      bottom: 20px;
+    }
+
+    .dot { width: 6px; height: 6px; }
+    .dot.active { width: 18px; }
+
+    h2 { margin-bottom: 14px; }
+
+    table { font-size: clamp(0.6rem, 2.5vw, 0.8rem); }
+    th, td { padding: 8px 8px; }
+
+    .bar-track { height: 22px; }
+    .bar-label { min-width: 55px; font-size: 0.7rem; }
+
+    .bg-glow { width: 180px; height: 180px; }
+
+    .flow-arrow { font-size: 0.9rem; }
+  }
+
+  /* ===== 미디어 쿼리: 소형 모바일 ===== */
+  @media (max-width: 320px) {
+    .slide {
+      padding: 16px 14px 65px;
+    }
+
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.15rem; }
+
+    .card { padding: 12px; border-radius: 10px; }
+
+    .formula-box {
+      padding: 10px 12px;
+      font-size: 0.7rem;
+    }
+
+    .nav button {
+      width: 44px;
+      height: 44px;
+    }
+
+    .tag { padding: 3px 8px; font-size: 0.6rem; }
+
+    .stat-big { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ===== 슬라이드 1: 타이틀 ===== -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="anim-1">
+      <span class="tag tag-accent">arXiv:2604.03216</span>
+    </div>
+    <h1 class="anim-2">
+      <span class="gradient-text">BAS</span>: 대규모 언어 모델<br>신뢰도 평가를 위한<br>의사결정 이론적 접근
+    </h1>
+    <p class="subtitle anim-3">Behavioral Alignment Score — 답변과 기권 사이의 최적 의사결정을 위한 새로운 평가 지표</p>
+    <div class="authors anim-4">
+      Sean Wu &middot; Fredrik K. Gustafsson &middot; Edward Phillips<br>
+      Boyan Gao &middot; Anshul Thakur &middot; David A. Clifton
+    </div>
+    <div class="anim-5">
+      <span class="venue-tag">2026 &middot; 24페이지 &middot; 7 그림 &middot; 6 테이블</span>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 2: 문제 정의 ===== -->
+  <div class="slide" data-slide="1">
+    <span class="slide-number anim-1">02 / 12 &mdash; 문제 정의</span>
+    <h2 class="anim-2">LLM은 <span class="danger">자신감 있게 틀린다</span></h2>
+
+    <div class="grid-2 anim-3">
+      <div class="card card-danger">
+        <h3>핵심 문제</h3>
+        <ul>
+          <li>LLM은 틀릴 때에도 <strong class="danger">높은 신뢰도</strong>로 답변</li>
+          <li>기권(abstention)이 더 안전한 상황에서도 답변을 강행</li>
+          <li>기존 평가 프로토콜은 항상 응답을 요구</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3>기존 지표의 한계</h3>
+        <ul class="x-list">
+          <li>대칭적 페널티만 부여 (과신 ≒ 과소신뢰)</li>
+          <li>위험 선호도(risk preference)를 고려하지 않음</li>
+          <li>의사결정 관점의 평가 부재</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="text-align:center; margin-top: 12px;">
+      <p style="font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--text-primary);">
+        <strong>결과:</strong> 정확도가 비슷한 모델도 <span class="highlight">실제 의사결정 신뢰성</span>은 극적으로 다를 수 있다
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 3: BAS 소개 ===== -->
+  <div class="slide" data-slide="2">
+    <span class="slide-number anim-1">03 / 12 &mdash; 핵심 기여</span>
+    <h2 class="anim-2"><span class="gradient-text">BAS</span> — 행동 정렬 점수</h2>
+
+    <p class="subtitle anim-3" style="margin-bottom: 20px;">
+      Behavioral Alignment Score: LLM 신뢰도가 <strong>기권 인식 의사결정</strong>을 얼마나 잘 지원하는지 측정하는 의사결정 이론 기반 지표
+    </p>
+
+    <div class="grid-3 anim-4">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:8px;">⚖️</div>
+        <h3 style="font-size: clamp(0.8rem, 1.5vw, 1rem);">비대칭 페널티</h3>
+        <p style="font-size: clamp(0.75rem, 1.3vw, 0.85rem);">과신 오류에 가혹한 로그 페널티 부여</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:8px;">📐</div>
+        <h3 style="font-size: clamp(0.8rem, 1.5vw, 1rem);">이론적 정당성</h3>
+        <p style="font-size: clamp(0.75rem, 1.3vw, 0.85rem);">진실된 신뢰도가 BAS를 유일하게 최대화</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:8px;">🔌</div>
+        <h3 style="font-size: clamp(0.8rem, 1.5vw, 1rem);">실용적 적용</h3>
+        <p style="font-size: clamp(0.75rem, 1.3vw, 0.85rem);">블랙박스 모델에도 적용 가능</p>
+      </div>
+    </div>
+
+    <div class="flow anim-5">
+      <div class="flow-box">LLM 응답 + 신뢰도 <em>s</em></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">정답 여부 <em>Z</em> 판별</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">효용 U(<em>s, Z</em>) 계산</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="border-color: var(--accent);">BAS 산출</div>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 4: 수학적 프레임워크 ===== -->
+  <div class="slide" data-slide="3">
+    <span class="slide-number anim-1">04 / 12 &mdash; 수학적 프레임워크</span>
+    <h2 class="anim-2">선택적 효용 함수</h2>
+
+    <div class="card card-accent anim-3">
+      <h3>위험 의존 효용 모델 — 임계값 t ∈ [0,1)</h3>
+      <div class="formula-box">
+        S<sub>t</sub>(Z, a) = &lbrace; 1 (정답&응답) , −t/(1−t) (오답&응답) , 0 (기권) &rbrace;
+      </div>
+      <p>위험 허용도 <em>t</em>에 따라 오답의 비용이 비대칭적으로 증가합니다.<br>
+        <span class="highlight">의사결정 정책:</span> 신뢰도 <em>s</em> ≥ <em>t</em> 이면 응답, 아니면 기권</p>
+    </div>
+
+    <div class="grid-2 anim-4">
+      <div class="card">
+        <h3>기대 BAS 효용</h3>
+        <div class="formula-box">
+          ∫₀¹ 𝔼[S<sub>t</sub>(Z, π<sub>s</sub>(t))] dt
+        </div>
+        <p style="font-size:0.85rem;">모든 위험 허용 수준에 걸쳐 적분하여 종합적 신뢰성 측정</p>
+      </div>
+      <div class="card">
+        <h3>폐쇄형 표현식</h3>
+        <div class="formula-box">
+          U(s,Z) = &lbrace; s (정답) , s + ln(1−s) (오답) &rbrace;
+        </div>
+        <p style="font-size:0.85rem;"><span class="danger">ln(1−s)</span>는 s→1일 때 <strong>음의 무한대로 발산</strong> — 과신 오류 심각 페널티</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 5: BAS 공식 & 정리 ===== -->
+  <div class="slide" data-slide="4">
+    <span class="slide-number anim-1">05 / 12 &mdash; 최종 지표 & 정리</span>
+    <h2 class="anim-2">BAS 최종 공식</h2>
+
+    <div class="formula-box anim-3" style="font-size: clamp(1rem, 2.5vw, 1.6rem); padding: 28px;">
+      BAS = (1/N) &Sigma;<sub>i=1</sub><sup>N</sup> U(s<sub>i</sub>, Z<sub>i</sub>)
+    </div>
+
+    <div class="card card-success anim-4">
+      <h3>정리 2.1 — 최적성</h3>
+      <p style="color: var(--text-primary); font-size: clamp(0.85rem, 1.8vw, 1.05rem);">
+        <strong class="success">진실된 신뢰도 추정치가 기대 BAS 효용을 유일하게 최대화한다.</strong>
+      </p>
+      <ul style="margin-top: 10px;">
+        <li><em>p</em> &lt; 1인 경우: <em>s</em> = <em>p</em> (실제 확률)일 때 최대</li>
+        <li><em>p</em> = 1인 경우: 효용은 <em>s</em>→1로 갈수록 단조 증가</li>
+      </ul>
+      <p style="margin-top: 10px;">→ BAS는 의사결정 최적 행동에 부합하는 <strong>적절한 스코어링 목표(proper scoring rule)</strong></p>
+    </div>
+
+    <div class="grid-2 anim-5">
+      <div class="card" style="text-align:center;">
+        <div class="stat-big gradient-text">+s</div>
+        <div class="stat-label">정답일 때 보상<br>(신뢰도가 높을수록 높은 점수)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="stat-big danger">−∞</div>
+        <div class="stat-label">과신 오답일 때 페널티<br>(s→1이면 ln(1-s)→−∞)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 6: 기존 지표 비교 ===== -->
+  <div class="slide" data-slide="5">
+    <span class="slide-number anim-1">06 / 12 &mdash; 지표 비교</span>
+    <h2 class="anim-2">기존 지표와의 <span class="highlight">근본적 차이</span></h2>
+
+    <div class="table-wrap anim-3">
+      <table>
+        <thead>
+          <tr>
+            <th>속성</th>
+            <th>ECE</th>
+            <th>AURC</th>
+            <th>Log Loss</th>
+            <th style="color: var(--success);">BAS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>비대칭 페널티</td>
+            <td class="danger">✗</td>
+            <td class="danger">✗</td>
+            <td class="danger">✗</td>
+            <td class="success">✓</td>
+          </tr>
+          <tr>
+            <td>적절한 스코어링</td>
+            <td class="danger">✗</td>
+            <td class="danger">✗</td>
+            <td class="success">✓</td>
+            <td class="success">✓</td>
+          </tr>
+          <tr>
+            <td>의사결정 이론 기반</td>
+            <td class="danger">✗</td>
+            <td class="danger">✗</td>
+            <td class="danger">✗</td>
+            <td class="success">✓</td>
+          </tr>
+          <tr>
+            <td>기권 인식</td>
+            <td class="danger">✗</td>
+            <td class="success">✓</td>
+            <td class="danger">✗</td>
+            <td class="success">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-danger anim-4">
+      <h3>핵심 발견: 동일 ECE/AURC ≠ 동일 BAS</h3>
+      <p>SimpleQA에서 Llama 3.3과 Mistral은 거의 동일한 ECE(68.1% vs 68.8%)와 AURC(0.75 vs 0.74)를 보이지만,<br>
+      BAS는 <strong class="danger">−2.97 vs −1.26</strong>으로 극적인 차이 → Llama의 극단적 과신 오류를 BAS만 포착</p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 7: 실험 설계 ===== -->
+  <div class="slide" data-slide="6">
+    <span class="slide-number anim-1">07 / 12 &mdash; 실험 설계</span>
+    <h2 class="anim-2">실험 구성</h2>
+
+    <div class="grid-2 anim-3">
+      <div class="card">
+        <h3>데이터셋</h3>
+        <div style="margin-top:8px;">
+          <span class="tag tag-accent">AIME 2024/25</span>
+          <span class="tag tag-warning">MedQA</span>
+          <span class="tag tag-danger">SimpleQA</span>
+        </div>
+        <ul style="margin-top:10px;">
+          <li><strong>AIME</strong> — 다단계 수학 추론</li>
+          <li><strong>MedQA</strong> — 고위험 의료 QA</li>
+          <li><strong>SimpleQA</strong> — 단답형 사실 QA (기권 테스트)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>평가 모델 (12개)</h3>
+        <ul>
+          <li><strong>프론티어:</strong> DeepSeek-R1, GPT-4o, Grok-3</li>
+          <li><strong>중대형:</strong> GPT-4o-mini, Llama 3.3</li>
+          <li><strong>소형/효율:</strong> Phi-4, Mistral 변종</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <h3>신뢰도 추출 방법 4가지</h3>
+      <div class="grid-2" style="margin-top: 10px;">
+        <div class="flow-box">
+          <strong>1. 직접 추출</strong><br>
+          <span style="font-size:0.8rem; color:var(--text-dim);">답변 + 신뢰도 동시 생성</span>
+        </div>
+        <div class="flow-box">
+          <strong>2. 자기 성찰</strong><br>
+          <span style="font-size:0.8rem; color:var(--text-dim);">2단계: 생성 → 평가</span>
+        </div>
+        <div class="flow-box" style="border-color: var(--success);">
+          <strong>3. Top-k</strong><br>
+          <span style="font-size:0.8rem; color:var(--text-dim);">다중 후보 + 확률 (최고 성능)</span>
+        </div>
+        <div class="flow-box">
+          <strong>4. Top-k + 자기 성찰</strong><br>
+          <span style="font-size:0.8rem; color:var(--text-dim);">결합 방식</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-5" style="margin-top: 12px;">
+      <span class="tag tag-success">보정 방법</span>
+      <span style="font-size: clamp(0.8rem, 1.5vw, 0.95rem); color: var(--text-secondary); margin-left: 8px;">
+        등장 회귀(Isotonic Regression) — 검증 세트 50~1,000개 예제
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 8: 주요 결과 ===== -->
+  <div class="slide" data-slide="7">
+    <span class="slide-number anim-1">08 / 12 &mdash; 핵심 결과</span>
+    <h2 class="anim-2">과제별 BAS 결과</h2>
+
+    <div class="grid-2 anim-3">
+      <div class="card card-success">
+        <h3>MedQA — 양호</h3>
+        <p style="margin-bottom:12px;">프론티어 모델 BAS ≈ 0.70–0.76</p>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">프론티어</span>
+            <div class="bar-track"><div class="bar-fill positive" style="width:76%;">0.76</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">중형 모델</span>
+            <div class="bar-track"><div class="bar-fill positive" style="width:55%;">0.55</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-danger">
+        <h3>SimpleQA — 심각한 과신</h3>
+        <p style="margin-bottom:12px;"><span class="danger">모든 모델 음수 BAS: −0.48 ~ −3.86</span></p>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">GPT-4o-mini</span>
+            <div class="bar-track"><div class="bar-fill negative" style="width:100%;">-3.86</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Llama 3.3</span>
+            <div class="bar-track"><div class="bar-fill negative" style="width:77%;">-2.97</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">최선</span>
+            <div class="bar-track"><div class="bar-fill negative" style="width:12%;">-0.48</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <h3>AIME — 스케일링 경향</h3>
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <div class="stat-big success">0.57</div>
+          <div class="stat-label">GPT-o3s (정확도 75%)</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-big danger">-5.06</div>
+          <div class="stat-label">GPT-4o (정확도 11.7%)</div>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:10px;">더 크고 정확한 모델이 일반적으로 높은 BAS → 그러나 프론티어 모델도 심각한 과신 발생</p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 9: 신뢰도 추출 & 보정 ===== -->
+  <div class="slide" data-slide="8">
+    <span class="slide-number anim-1">09 / 12 &mdash; 개선 전략</span>
+    <h2 class="anim-2"><span class="success">간단한 개입</span>으로 큰 개선</h2>
+
+    <div class="card card-success anim-3">
+      <h3>Top-k 신뢰도 추출의 효과 (SimpleQA)</h3>
+      <div class="bar-chart" style="margin-top: 12px;">
+        <div class="bar-row">
+          <span class="bar-label">직접 추출</span>
+          <div class="bar-track"><div class="bar-fill negative" style="width:80%;">Llama: -2.97</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Top-k</span>
+          <div class="bar-track"><div class="bar-fill neutral" style="width:8%;">-0.25</div></div>
+        </div>
+      </div>
+      <p style="margin-top:8px;"><span class="success">2.72점 개선</span> — 단일 포워드 패스만으로 달성</p>
+    </div>
+
+    <div class="card card-accent anim-4">
+      <h3>사후 보정 (등장 회귀)의 극적 효과</h3>
+      <div class="table-wrap" style="margin-top: 12px;">
+        <table>
+          <thead>
+            <tr><th>모델</th><th>ECE 전</th><th>ECE 후</th><th>BAS 전</th><th>BAS 후</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GPT-4o-mini</td>
+              <td class="danger">88.6%</td>
+              <td class="success">3.6%</td>
+              <td class="danger">-3.86</td>
+              <td class="success">0.001</td>
+            </tr>
+            <tr>
+              <td>Llama 3.3</td>
+              <td class="danger">68.1%</td>
+              <td class="success">1.5%</td>
+              <td class="danger">-2.97</td>
+              <td class="success">0.024</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;">50~100개 검증 예제만으로 거의 최적의 의사결정 수준 효용 회복 가능</p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 10: 가중 BAS 확장 ===== -->
+  <div class="slide" data-slide="9">
+    <span class="slide-number anim-1">10 / 12 &mdash; 확장</span>
+    <h2 class="anim-2">안전 중요 환경을 위한 <span class="highlight">가중 BAS</span></h2>
+
+    <div class="card card-accent anim-3">
+      <h3>일반화된 가중 BAS</h3>
+      <div class="formula-box">
+        기대 가중 BAS = ∫₀¹ 𝔼[S<sub>t</sub>(Z, π<sub>s</sub>(t))] &middot; w(t) dt
+      </div>
+      <p>균일 위험 사전분포를 임의의 가중 함수 <em>w(t)</em>로 대체하여 특정 위험 수준을 강조</p>
+    </div>
+
+    <div class="grid-2 anim-4">
+      <div class="card">
+        <h3>균일 가중 (기본)</h3>
+        <div style="text-align:center; padding: 16px 0;">
+          <div class="formula-box">w(t) = 1</div>
+          <p>모든 위험 임계값에 동일한 중요도</p>
+        </div>
+      </div>
+      <div class="card" style="border-color: var(--warning);">
+        <h3 style="color: var(--warning);">이차 가중 (안전 중요)</h3>
+        <div style="text-align:center; padding: 16px 0;">
+          <div class="formula-box" style="border-color: rgba(255,192,72,0.4); background: rgba(255,192,72,0.1);">w(t) = 3t²</div>
+          <p>높은 임계값(안전 중요) 시나리오에 집중</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-success anim-5">
+      <h3>정리 B.1 — 일반 최적성</h3>
+      <p>임의의 양수 가중 함수 <em>w(t)</em> 하에서도 <strong class="success">진실된 보고가 여전히 최적</strong>으로 유지됨</p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 11: 실용적 시사점 ===== -->
+  <div class="slide" data-slide="10">
+    <span class="slide-number anim-1">11 / 12 &mdash; 시사점</span>
+    <h2 class="anim-2">실용적 시사점</h2>
+
+    <div class="grid-2 anim-3">
+      <div class="card card-success">
+        <div style="font-size:2rem; margin-bottom:8px;">1</div>
+        <h3>간단한 개입이 효과적</h3>
+        <p>Top-k 신뢰도 추출은 단일 포워드 패스만 필요하지만 신뢰성을 크게 향상시킴</p>
+      </div>
+      <div class="card card-success">
+        <div style="font-size:2rem; margin-bottom:8px;">2</div>
+        <h3>샘플 효율적 보정</h3>
+        <p>50~100개의 검증 예제만으로 거의 최적의 의사결정 수준 효용 회복 가능</p>
+      </div>
+      <div class="card card-danger">
+        <div style="font-size:2rem; margin-bottom:8px;">3</div>
+        <h3>프론티어 모델도 예외 아님</h3>
+        <p>GPT-4o도 어려운 추론 과제에서 심각한 과신을 보임 — 규모만으로 해결 불가</p>
+      </div>
+      <div class="card card-accent">
+        <div style="font-size:2rem; margin-bottom:8px;">4</div>
+        <h3>보완적 지표 필요</h3>
+        <p>BAS는 보정/순위 지표에서 보이지 않는 의사결정 수준 위험을 포착</p>
+      </div>
+    </div>
+
+    <div class="card anim-4" style="text-align:center; margin-top: 12px; border-color: var(--accent);">
+      <p style="color: var(--text-primary); font-size: clamp(0.9rem, 1.8vw, 1.1rem);">
+        <strong>핵심 메시지:</strong> LLM 배포 시 정확도만이 아닌 <span class="highlight">신뢰도의 의사결정 품질</span>을 반드시 평가해야 한다
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 슬라이드 12: 결론 ===== -->
+  <div class="slide title-slide" data-slide="11">
+    <div class="anim-1">
+      <span class="tag tag-success" style="font-size: clamp(0.8rem, 1.5vw, 1rem);">결론</span>
+    </div>
+    <h1 class="anim-2" style="margin-top: 16px;">
+      <span class="gradient-text">BAS</span>는 LLM 신뢰도를<br>의사결정 관점에서<br>평가하는 새로운 기준
+    </h1>
+    <div class="anim-3" style="max-width: 600px; margin: 0 auto;">
+      <ul class="check-list" style="text-align: left;">
+        <li>과신 오류에 비대칭적 페널티 → 위험 감지</li>
+        <li>진실된 보고가 유일한 최적 해 → 이론적 정당성</li>
+        <li>계산 효율적 → 블랙박스 시스템에 적용 가능</li>
+        <li>간단한 개입(Top-k, 보정)으로 대폭 개선 가능</li>
+      </ul>
+    </div>
+    <div class="anim-4" style="margin-top: 24px;">
+      <span class="venue-tag">arXiv:2604.03216v1 &middot; Wu et al., 2026</span>
+    </div>
+    <p class="authors anim-5">불확실성 하에서의 의사결정이 중요한 모든 곳에<br>LLM 신뢰도 평가의 원칙적 프레임워크</p>
+  </div>
+
+</div>
+
+<!-- 네비게이션 -->
+<div class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">◀</button>
+  <button id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">▶</button>
+</div>
+
+<!-- 슬라이드 인디케이터 -->
+<div class="slide-indicator" id="indicator"></div>
+
+<!-- 프로그레스바 -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- 키보드 힌트 -->
+<div class="kbd-hint">
+  <kbd>←</kbd> <kbd>→</kbd> 또는 스와이프
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isAnimating = false;
+
+  // 인디케이터 생성
+  const indicator = document.getElementById('indicator');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    indicator.appendChild(dot);
+  }
+
+  function updateUI() {
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    document.getElementById('progressBar').style.width =
+      ((currentSlide + 1) / totalSlides * 100) + '%';
+    document.getElementById('prevBtn').style.opacity = currentSlide === 0 ? '0.3' : '1';
+    document.getElementById('nextBtn').style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+  }
+
+  function goToSlide(n) {
+    if (isAnimating || n === currentSlide || n < 0 || n >= totalSlides) return;
+    isAnimating = true;
+    const dir = n > currentSlide ? 1 : -1;
+
+    slides[currentSlide].classList.remove('active');
+    slides[currentSlide].classList.add(dir > 0 ? 'exit-left' : '');
+    slides[currentSlide].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    slides[currentSlide].style.opacity = '0';
+
+    currentSlide = n;
+    slides[currentSlide].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    slides[currentSlide].scrollTop = 0;
+
+    requestAnimationFrame(() => {
+      slides[currentSlide].classList.add('active');
+      slides[currentSlide].classList.remove('exit-left');
+      updateUI();
+      setTimeout(() => { isAnimating = false; }, 500);
+    });
+  }
+
+  function changeSlide(dir) {
+    goToSlide(currentSlide + dir);
+  }
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>

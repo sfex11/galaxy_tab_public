@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Free-Market Algorithm (FMA) - 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent3: #8b5cf6;
+    --accent4: #f59e0b;
+    --accent5: #10b981;
+    --accent6: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-bright: #f8fafc;
+    --border: rgba(59, 130, 246, 0.2);
+    --glow: rgba(59, 130, 246, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== 배경 장식 ===== */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+    transition: all 1s ease;
+  }
+  .bg-glow.g1 { top: -200px; right: -100px; background: var(--accent); }
+  .bg-glow.g2 { bottom: -200px; left: -100px; background: var(--accent3); }
+
+  /* ===== 타이포그래피 ===== */
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--text-bright), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--text-bright);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 800px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ===== 카드 & 박스 ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+    flex: 1;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .card-text {
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 12px 0;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 20px;
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .stat-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ===== 비교 테이블 ===== */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 12px;
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+  }
+  .compare-table th {
+    background: rgba(59,130,246,0.15);
+    color: var(--accent2);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table th:first-child { border-radius: 12px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 12px 0 0; }
+  .compare-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(59,130,246,0.08);
+    color: var(--text);
+  }
+  .compare-table tr:hover td { background: rgba(59,130,246,0.05); }
+  .tag-yes {
+    display: inline-block;
+    background: rgba(16,185,129,0.2);
+    color: #10b981;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 700;
+  }
+  .tag-no {
+    display: inline-block;
+    background: rgba(239,68,68,0.2);
+    color: #ef4444;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 700;
+  }
+
+  /* ===== 3층 아키텍처 다이어그램 ===== */
+  .arch-layer {
+    padding: 20px 24px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .arch-layer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .arch-layer.l1 {
+    background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04));
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+  .arch-layer.l1::before { background: #f59e0b; }
+  .arch-layer.l2 {
+    background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(59,130,246,0.04));
+    border: 1px solid rgba(59,130,246,0.25);
+  }
+  .arch-layer.l2::before { background: #3b82f6; }
+  .arch-layer.l3 {
+    background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04));
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+  .arch-layer.l3::before { background: #10b981; }
+  .arch-layer-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .arch-layer-title {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+  .arch-layer-desc {
+    font-size: clamp(0.8rem, 1.4vw, 0.9rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .arch-arrow {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    margin: 2px 0;
+    opacity: 0.5;
+  }
+
+  /* ===== 플로우 시각화 ===== */
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .flow-step {
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+  }
+  .flow-step-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .flow-step-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text);
+    font-weight: 500;
+  }
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  /* ===== 물리 연결 ===== */
+  .theory-card {
+    background: rgba(17,24,39,0.6);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .theory-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(59,130,246,0.1);
+  }
+
+  /* ===== 내비게이션 ===== */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10, 14, 26, 0.9);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--accent);
+    padding: 10px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(59,130,246,0.3);
+    border-color: var(--accent);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(59,130,246,0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .progress-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(59,130,246,0.5);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== 리스트 스타일 ===== */
+  .feature-list {
+    list-style: none;
+    padding: 0;
+  }
+  .feature-list li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    border-bottom: 1px solid rgba(59,130,246,0.06);
+  }
+  .feature-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .check-list {
+    list-style: none;
+    padding: 0;
+  }
+  .check-list li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+  }
+  .check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 4px;
+    color: var(--accent5);
+    font-weight: 700;
+  }
+
+  /* ===== 타이틀 슬라이드 ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .title-slide h1 {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    margin-bottom: 20px;
+  }
+  .title-meta {
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: var(--text-dim);
+    margin-top: 24px;
+  }
+  .title-meta span {
+    display: inline-block;
+    margin: 0 8px;
+    padding: 4px 14px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .fma-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    letter-spacing: 4px;
+    color: var(--accent);
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    padding: 8px 24px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== 애니메이션 ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim {
+    animation: fadeUp 0.6s ease forwards;
+  }
+  .slide.active .anim.d1 { animation-delay: 0.1s; opacity: 0; }
+  .slide.active .anim.d2 { animation-delay: 0.2s; opacity: 0; }
+  .slide.active .anim.d3 { animation-delay: 0.3s; opacity: 0; }
+  .slide.active .anim.d4 { animation-delay: 0.4s; opacity: 0; }
+  .slide.active .anim.d5 { animation-delay: 0.5s; opacity: 0; }
+  .slide.active .anim.d6 { animation-delay: 0.6s; opacity: 0; }
+
+  /* ===== 시장 시뮬레이션 애니메이션 ===== */
+  .market-canvas {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 200px;
+    background: rgba(17,24,39,0.4);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-top: 12px;
+  }
+  .agent-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    animation: agentMove 4s ease-in-out infinite alternate;
+  }
+  @keyframes agentMove {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(30px, -20px); }
+    50% { transform: translate(-15px, 25px); }
+    75% { transform: translate(20px, 10px); }
+    100% { transform: translate(-10px, -15px); }
+  }
+  .agent-line {
+    position: absolute;
+    height: 1px;
+    transform-origin: left center;
+    opacity: 0.3;
+  }
+
+  /* ===== 반응형 ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 24px 28px; padding-bottom: 80px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .card { padding: 18px; }
+    .flow-steps { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .compare-table { font-size: clamp(0.7rem, 1.3vw, 0.85rem); }
+    .compare-table th, .compare-table td { padding: 8px 10px; }
+    .theory-card { flex-direction: column; gap: 10px; }
+    .title-meta span { display: block; margin: 4px auto; }
+    h1 { font-size: clamp(1.4rem, 4vw, 2.5rem); }
+    .stat-number { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
+    .nav { padding: 10px 16px; }
+    .nav-btn { padding: 10px 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px; padding-bottom: 76px; }
+    .card { padding: 14px; border-radius: 12px; }
+    h1 { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    h2 { font-size: clamp(1.1rem, 4vw, 1.5rem); margin-bottom: 14px; }
+    .slide-number { font-size: 0.65rem; margin-bottom: 8px; }
+    .subtitle { font-size: clamp(0.82rem, 2vw, 1rem); }
+    .highlight-box { padding: 14px 16px; }
+    .arch-layer { padding: 14px 16px; }
+    .stat-box { padding: 14px; }
+    .nav-btn { padding: 10px 14px; font-size: 0.8rem; }
+    .progress-dot { width: 6px; height: 6px; }
+    .progress-dot.active { width: 18px; }
+    .compare-table th, .compare-table td { padding: 6px 8px; }
+    .fma-badge { letter-spacing: 2px; padding: 6px 16px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 14px; padding-bottom: 72px; }
+    h1 { font-size: clamp(1rem, 5vw, 1.4rem); }
+    h2 { font-size: clamp(0.95rem, 4vw, 1.2rem); }
+    .card { padding: 12px; }
+    .card-icon { font-size: 1.5rem; }
+    .nav-btn { padding: 8px 10px; font-size: 0.75rem; min-width: 44px; }
+    .stat-number { font-size: clamp(1.2rem, 3vw, 2rem); }
+    .arch-layer { padding: 12px 14px; margin-bottom: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ========== 슬라이드 1: 타이틀 ========== -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="fma-badge anim d1">FREE-MARKET ALGORITHM</div>
+    <h1 class="anim d2">자유시장 알고리즘:<br>개방형 복잡계를 위한<br>자기조직화 최적화</h1>
+    <p class="subtitle anim d3">기존 최적화 알고리즘의 한계를 넘어, 자유시장 경제학에서 영감을 받은<br>새로운 메타휴리스틱 알고리즘</p>
+    <div class="title-meta anim d4">
+      <span>📄 Martin Jaraiz</span>
+      <span>📅 2026.03.25</span>
+      <span>🔗 arXiv:2603.24559</span>
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 2: 문제 제기 ========== -->
+  <div class="slide" data-slide="1">
+    <div class="slide-number anim d1">02 — 문제 제기</div>
+    <h2 class="anim d2">기존 최적화 알고리즘의 한계</h2>
+    <p class="subtitle anim d3" style="margin-bottom:20px;">전통적 메타휴리스틱은 세 가지 근본적 제약을 공유합니다</p>
+    <div class="card-grid cols-3 anim d4">
+      <div class="card">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">유전 알고리즘 (GA)</div>
+        <div class="card-text">
+          사전 정의된 적합도 함수 필요<br>
+          고정된 탐색 공간<br>
+          중앙 집중식 평가
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🐦</div>
+        <div class="card-title">입자 군집 최적화 (PSO)</div>
+        <div class="card-text">
+          명시적 목적 함수 의존<br>
+          경계가 정해진 탐색 영역<br>
+          사전 정의된 이웃 구조
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌡️</div>
+        <div class="card-title">담금질 기법 (SA)</div>
+        <div class="card-text">
+          에너지 함수 필수<br>
+          냉각 스케줄 설정 필요<br>
+          단일 해 경로 탐색
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box anim d5" style="margin-top:16px;">
+      <strong style="color:var(--accent4);">핵심 문제:</strong>
+      이 알고리즘들은 <strong>적합도 함수를 사전에 지정</strong>해야 하고,
+      <strong>탐색 공간이 고정</strong>되어 있어 개방형 복잡계에 적용하기 어렵습니다.
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 3: FMA 핵심 아이디어 ========== -->
+  <div class="slide" data-slide="2">
+    <div class="slide-number anim d1">03 — 핵심 아이디어</div>
+    <h2 class="anim d2">자유시장 알고리즘 (FMA)이란?</h2>
+    <div class="card-grid cols-2 anim d3">
+      <div class="card" style="border-color: rgba(6,182,212,0.3);">
+        <div class="card-icon">🏪</div>
+        <div class="card-title">자유시장 경제학에서 영감</div>
+        <div class="card-text">
+          공급과 수요의 분산 역학을 최적화 메커니즘으로 활용합니다.
+          중앙 통제자 없이 자율 에이전트들이 자원을 거래하며 최적 해를 탐색합니다.
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(139,92,246,0.3);">
+        <div class="card-icon">🌿</div>
+        <div class="card-title">창발적 적합도</div>
+        <div class="card-text">
+          적합도 함수를 미리 지정하지 않습니다.
+          시장 역학 속에서 적합도가 <strong>자연스럽게 출현</strong>합니다.
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(16,185,129,0.3);">
+        <div class="card-icon">♾️</div>
+        <div class="card-title">개방형 탐색 공간</div>
+        <div class="card-text">
+          탐색 공간이 고정되지 않고 <strong>동적으로 확장</strong>됩니다.
+          해의 형태는 계층적 경로 네트워크입니다.
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(245,158,11,0.3);">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">자율 에이전트</div>
+        <div class="card-text">
+          에이전트들이 규칙을 발견하고, 상품을 교환하고,
+          기업을 설립·해산하며, 수요를 놓고 경쟁합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 4: 3층 아키텍처 ========== -->
+  <div class="slide" data-slide="3">
+    <div class="slide-number anim d1">04 — 아키텍처</div>
+    <h2 class="anim d2">FMA의 3층 아키텍처</h2>
+    <p class="subtitle anim d3" style="margin-bottom:20px;">시장 메커니즘은 모든 응용에서 동일하며, 행동 규칙만 교체합니다</p>
+
+    <div class="anim d4">
+      <div class="arch-layer l1">
+        <div class="arch-layer-num" style="color:#f59e0b;">LAYER 3 — 관찰</div>
+        <div class="arch-layer-title">도메인 특화 관찰</div>
+        <div class="arch-layer-desc">각 응용 분야에 맞춤화된 모니터링 및 측정 계층</div>
+      </div>
+      <div class="arch-arrow">⬇</div>
+      <div class="arch-layer l2">
+        <div class="arch-layer-num" style="color:#3b82f6;">LAYER 2 — 규칙</div>
+        <div class="arch-layer-title">플러그형 도메인 특화 행동 규칙</div>
+        <div class="arch-layer-desc">응용 분야별로 교체 가능한 에이전트 행동 규칙 세트</div>
+      </div>
+      <div class="arch-arrow">⬇</div>
+      <div class="arch-layer l3">
+        <div class="arch-layer-num" style="color:#10b981;">LAYER 1 — 엔진</div>
+        <div class="arch-layer-title">보편적 시장 메커니즘</div>
+        <div class="arch-layer-desc">공급 · 수요 · 경쟁 · 선택 — 모든 도메인에서 동일하게 작동</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim d5" style="margin-top:16px;">
+      <strong style="color:var(--accent5);">핵심 설계 원칙:</strong>
+      시장 엔진(Layer 1)은 전혀 수정하지 않고, 행동 규칙(Layer 2)만 교체하면
+      <strong>완전히 다른 도메인</strong>에 즉시 적용 가능합니다.
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 5: 작동 방식 ========== -->
+  <div class="slide" data-slide="4">
+    <div class="slide-number anim d1">05 — 작동 메커니즘</div>
+    <h2 class="anim d2">FMA는 어떻게 작동하는가?</h2>
+
+    <div class="flow-steps anim d3">
+      <div class="flow-step">
+        <div class="flow-step-icon">🔍</div>
+        <div class="flow-step-label">규칙 발견</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🔄</div>
+        <div class="flow-step-label">상품 교환</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🏢</div>
+        <div class="flow-step-label">기업 설립/해산</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">⚔️</div>
+        <div class="flow-step-label">수요 경쟁</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">📈</div>
+        <div class="flow-step-label">선택 & 진화</div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 anim d4">
+      <div class="card">
+        <h3>🌐 분산 역학</h3>
+        <ul class="feature-list">
+          <li>중앙 통제자 없이 에이전트가 자율적으로 행동</li>
+          <li>공급-수요 역학이 탐색을 자연스럽게 유도</li>
+          <li>다중 경로 탐색으로 다양한 해 동시 발견</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔗 계층적 경로 네트워크</h3>
+        <ul class="feature-list">
+          <li>해가 단일 점이 아닌 <strong>경로 네트워크</strong> 형태</li>
+          <li>경로가 계층적으로 조합되어 복잡한 구조 생성</li>
+          <li>이벤트 기반 조립 역학으로 구동</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box anim d5" style="margin-top:12px;">
+      <strong style="color:var(--accent2);">이벤트 기반 조립:</strong>
+      에이전트 간의 거래와 경쟁이 이벤트로 발생하며, 이 이벤트들의 연쇄가
+      계층적 경로 네트워크를 자기조직적으로 구축합니다.
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 6: 비교 테이블 ========== -->
+  <div class="slide" data-slide="5">
+    <div class="slide-number anim d1">06 — 비교 분석</div>
+    <h2 class="anim d2">FMA vs 기존 알고리즘</h2>
+    <p class="subtitle anim d3" style="margin-bottom:16px;">FMA가 기존 접근법과 근본적으로 다른 이유</p>
+
+    <div class="anim d4" style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>특성</th>
+            <th>GA / PSO / SA</th>
+            <th>FMA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>적합도 함수</strong></td>
+            <td><span class="tag-no">사전 지정 필요</span></td>
+            <td><span class="tag-yes">자연 창발</span></td>
+          </tr>
+          <tr>
+            <td><strong>탐색 공간</strong></td>
+            <td><span class="tag-no">고정·유한</span></td>
+            <td><span class="tag-yes">개방형·동적 확장</span></td>
+          </tr>
+          <tr>
+            <td><strong>해의 형태</strong></td>
+            <td>점·벡터</td>
+            <td>계층적 경로 네트워크</td>
+          </tr>
+          <tr>
+            <td><strong>제어 방식</strong></td>
+            <td>중앙 집중식</td>
+            <td><span class="tag-yes">완전 분산</span></td>
+          </tr>
+          <tr>
+            <td><strong>에이전트 역할</strong></td>
+            <td>동질적 개체</td>
+            <td>자율적 거래·경쟁 에이전트</td>
+          </tr>
+          <tr>
+            <td><strong>도메인 전환</strong></td>
+            <td>전체 재설계 필요</td>
+            <td><span class="tag-yes">행동 규칙만 교체</span></td>
+          </tr>
+          <tr>
+            <td><strong>다중 해 탐색</strong></td>
+            <td>제한적</td>
+            <td><span class="tag-yes">수백 개 독립 경로</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 7: 실험 1 — 프리바이오틱 화학 ========== -->
+  <div class="slide" data-slide="6">
+    <div class="slide-number anim d1">07 — 실험 검증 ①</div>
+    <h2 class="anim d2">프리바이오틱 화학: 생명의 기원 탐색</h2>
+    <p class="subtitle anim d3" style="margin-bottom:16px;">900개의 원자에서 시작하여 생명의 기본 분자를 발견</p>
+
+    <div class="card-grid cols-2 anim d4">
+      <div class="card">
+        <h3>⚗️ 실험 설정</h3>
+        <ul class="feature-list">
+          <li><strong>시작 물질:</strong> 900개 기본 원자</li>
+          <li><strong>원소:</strong> 탄소(C), 수소(H), 산소(O), 질소(N)</li>
+          <li><strong>환경:</strong> 일반 노트북 컴퓨터</li>
+          <li><strong>소요 시간:</strong> 5분 미만</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🧪 발견 결과</h3>
+        <ul class="check-list">
+          <li><strong>12개</strong> 아미노산 화학식 전체 발견</li>
+          <li><strong>5개</strong> 핵염기 전체 발견</li>
+          <li>포르모스 당 사슬 생성</li>
+          <li>크렙스 회로 중간체 생성</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-grid cols-3 anim d5" style="margin-top:12px;">
+      <div class="stat-box">
+        <div class="stat-number">12</div>
+        <div class="stat-label">아미노산 화학식</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">240</div>
+        <div class="stat-label">제품당 최대 합성 경로</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">&lt;5분</div>
+        <div class="stat-label">노트북 연산 시간</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim d6" style="margin-top:12px;">
+      <strong style="color:var(--accent4);">핵심 성과:</strong>
+      사전 지식이나 목표 분자 지정 없이, 시장 역학만으로 생명의 핵심 구성 요소를
+      <strong>자기조직적으로</strong> 발견했습니다.
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 8: 실험 2 — 거시경제 예측 ========== -->
+  <div class="slide" data-slide="7">
+    <div class="slide-number anim d1">08 — 실험 검증 ②</div>
+    <h2 class="anim d2">거시경제 예측: 33개국 GDP 예측</h2>
+
+    <div class="card-grid cols-2 anim d3">
+      <div class="card">
+        <h3>📊 입력 조건</h3>
+        <ul class="feature-list">
+          <li><strong>입력:</strong> 단일 투입-산출 표</li>
+          <li><strong>추정 매개변수:</strong> 0개 (제로)</li>
+          <li><strong>적용 국가:</strong> 33개국</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🎯 예측 성능</h3>
+        <ul class="feature-list">
+          <li>비위기 GDP 예측 MAE: <strong>0.42%p</strong></li>
+          <li>전문 예측기관과 <strong>동등한 수준</strong></li>
+          <li>추가 조정 없이 <strong>33개국에 이식 가능</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-grid cols-3 anim d4" style="margin-top:12px;">
+      <div class="stat-box">
+        <div class="stat-number">0.42</div>
+        <div class="stat-label">%p MAE (비위기 GDP)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">0</div>
+        <div class="stat-label">추정 매개변수</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">33</div>
+        <div class="stat-label">적용 국가 수</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim d5" style="margin-top:16px;">
+      <strong style="color:var(--accent5);">의미:</strong>
+      동일한 시장 엔진으로 화학과 경제학이라는 <strong>완전히 다른 두 도메인</strong>에서
+      성공적으로 검증되었습니다. 행동 규칙만 교체하면 됩니다.
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 9: 조립 이론 연결 ========== -->
+  <div class="slide" data-slide="8">
+    <div class="slide-number anim d1">09 — 이론적 기반</div>
+    <h2 class="anim d2">조립 이론(Assembly Theory)과의 연결</h2>
+    <p class="subtitle anim d3" style="margin-bottom:16px;">FMA는 자연의 더 깊은 조직 원리를 반영할 수 있습니다</p>
+
+    <div class="anim d4">
+      <div class="theory-card">
+        <div class="theory-icon">🧩</div>
+        <div>
+          <div class="card-title">조립 이론 정렬</div>
+          <div class="card-text">
+            Sharma et al. (Nature, 2023)이 설명한 <strong>선택 서명(selection signatures)</strong>에 대한
+            <strong>최초의 명시적이고 조절 가능한 메커니즘</strong>을 FMA가 제공합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="theory-card">
+        <div class="theory-icon">⚛️</div>
+        <div>
+          <div class="card-title">인과 집합 이론 (Causal Set Theory)</div>
+          <div class="card-text">
+            FMA의 이벤트 기반 역학은 시공간을 이산적 인과 사건의 집합으로 보는
+            인과 집합 이론과 공명합니다. 사건 간의 인과 관계가 구조를 만듭니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="theory-card">
+        <div class="theory-icon">🔬</div>
+        <div>
+          <div class="card-title">관계적 양자역학 (Relational QM)</div>
+          <div class="card-text">
+            관계적 양자역학에서 물리적 실재는 관측자 간의 상호작용으로 정의됩니다.
+            FMA에서도 에이전트 간 거래가 시스템의 상태를 정의합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="theory-card">
+        <div class="theory-icon">🔧</div>
+        <div>
+          <div class="card-title">생성자 이론 (Constructor Theory)</div>
+          <div class="card-text">
+            가능한 변환과 불가능한 변환을 구분하는 생성자 이론의 프레임워크와
+            FMA의 규칙 발견 메커니즘이 깊은 유사성을 보입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 10: 핵심 기여 ========== -->
+  <div class="slide" data-slide="9">
+    <div class="slide-number anim d1">10 — 핵심 기여</div>
+    <h2 class="anim d2">FMA의 주요 혁신점</h2>
+
+    <div class="card-grid cols-2 anim d3">
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <div class="card-icon">💡</div>
+        <div class="card-title">사전 적합도 함수 불필요</div>
+        <div class="card-text">
+          최적화 목표를 미리 정의할 필요가 없습니다.
+          시장 경쟁에서 적합도가 자연스럽게 창발합니다.
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent2);">
+        <div class="card-icon">🔀</div>
+        <div class="card-title">개방형 탐색 공간</div>
+        <div class="card-text">
+          고정된 차원이나 경계 없이 탐색 공간이
+          동적으로 성장하고 확장됩니다.
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent3);">
+        <div class="card-icon">🔌</div>
+        <div class="card-title">플러그 앤 플레이 범용성</div>
+        <div class="card-text">
+          코어 엔진 수정 없이 행동 규칙만 교체하면
+          완전히 다른 도메인에 적용 가능합니다.
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent4);">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">다중 경로 동시 발견</div>
+        <div class="card-text">
+          하나의 최적 해가 아닌 수백 개의 독립적
+          합성 경로를 동시에 발견합니다.
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent5);">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">경량 연산</div>
+        <div class="card-text">
+          일반 노트북에서 5분 이내에 실행 가능.
+          매개변수 추정 없이 0개 파라미터로 동작합니다.
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent6);">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">조립 이론 최초 구현</div>
+        <div class="card-text">
+          선택 서명에 대한 최초의 명시적이고
+          조절 가능한 메커니즘을 제공합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 슬라이드 11: 시사점 & 결론 ========== -->
+  <div class="slide" data-slide="10">
+    <div class="slide-number anim d1">11 — 결론</div>
+    <h2 class="anim d2">시사점 및 결론</h2>
+
+    <div class="highlight-box anim d3" style="border-left-color: var(--accent3); margin-bottom:20px;">
+      <p style="font-size:clamp(0.95rem,2vw,1.15rem); color:var(--text-bright); font-style:italic; line-height:1.8;">
+        "다윈적 시장 역학은 자연 자체의 전개(unfolding)로 이어지는<br>
+        <strong>더 깊은 조직 원리</strong>를 반영하는 것일 수 있다."
+      </p>
+      <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px;">— Martin Jaraiz, 2026</p>
+    </div>
+
+    <div class="card-grid cols-2 anim d4">
+      <div class="card">
+        <h3>🔑 핵심 메시지</h3>
+        <ul class="feature-list">
+          <li>자유시장의 공급-수요 역학은 범용적 최적화 원리</li>
+          <li>적합도가 창발하면 사전 지식 없이도 복잡한 구조 발견 가능</li>
+          <li>화학과 경제학이라는 극단적으로 다른 도메인에서 검증</li>
+          <li>물리학의 근본 이론들과의 깊은 연결 시사</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🚀 향후 가능성</h3>
+        <ul class="feature-list">
+          <li>신약 개발 — 분자 합성 경로 자동 탐색</li>
+          <li>재료 과학 — 새로운 물질 설계</li>
+          <li>복잡 시스템 — 생태계, 사회 시스템 모델링</li>
+          <li>인공지능 — 자기조직화 기반 새로운 학습 패러다임</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:24px;" class="anim d5">
+      <div class="fma-badge" style="font-size:clamp(0.7rem,1.3vw,0.85rem);">
+        논문: arXiv:2603.24559 &nbsp;|&nbsp; 저자: Martin Jaraiz &nbsp;|&nbsp; CC-BY 4.0
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 네비게이션 ===== -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>
+    ◀ <span class="btn-label">이전</span>
+  </button>
+  <div class="progress-bar" id="progressBar"></div>
+  <span class="slide-counter" id="slideCounter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">
+    <span class="btn-label">다음</span> ▶
+  </button>
+</nav>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  // 프로그레스 바 생성
+  const bar = document.getElementById('progressBar');
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    bar.appendChild(dot);
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= total || n === current) return;
+    const dir = n > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'prev' : '');
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+
+    current = n;
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+
+    updateUI();
+  }
+
+  window.navigate = function(dir) {
+    goTo(current + dir);
+  };
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.querySelectorAll('.progress-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  // 키보드
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0, touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+  container.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  container.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>

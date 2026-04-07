@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentVLN: Towards Agentic Vision-and-Language Navigation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-dark: #0a0a1a;
+    --bg-card: rgba(255,255,255,0.04);
+    --accent-1: #6c5ce7;
+    --accent-2: #00cec9;
+    --accent-3: #fd79a8;
+    --accent-4: #fdcb6e;
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0c0;
+    --glow: 0 0 40px rgba(108,92,231,0.3);
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ── Slide Container ── */
+  .slides-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5vmin 8vmin;
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── Background Effects ── */
+  .bg-gradient {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(108,92,231,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(0,206,201,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(253,121,168,0.06) 0%, transparent 60%),
+      var(--bg-dark);
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+
+  @keyframes gridDrift {
+    to { background-position: 60px 60px; }
+  }
+
+  /* ── Floating Orbs ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    animation: orbFloat 12s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 300px; height: 300px; background: rgba(108,92,231,0.2); top: -80px; left: -80px; }
+  .orb-2 { width: 250px; height: 250px; background: rgba(0,206,201,0.15); bottom: -60px; right: -60px; animation-delay: -4s; animation-duration: 15s; }
+  .orb-3 { width: 200px; height: 200px; background: rgba(253,121,168,0.1); top: 50%; left: 60%; animation-delay: -8s; animation-duration: 18s; }
+
+  @keyframes orbFloat {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(30px, -20px) scale(1.1); }
+    100% { transform: translate(-20px, 30px) scale(0.95); }
+  }
+
+  /* ── Typography ── */
+  .slide-tag {
+    font-size: clamp(0.65rem, 1.5vmin, 0.85rem);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  .slide.active .slide-tag,
+  .slide.active .slide-title,
+  .slide.active .slide-body,
+  .slide.active .card,
+  .slide.active .pipeline-step,
+  .slide.active .result-row {
+    animation: fadeUp 0.6s forwards;
+  }
+
+  .slide-title {
+    font-size: clamp(1.6rem, 4.5vmin, 3.2rem);
+    font-weight: 900;
+    line-height: 1.25;
+    text-align: center;
+    margin-bottom: 1.2rem;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-2) 50%, var(--accent-1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.85rem, 2vmin, 1.1rem);
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 700px;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .slide-body {
+    width: 100%;
+    max-width: 960px;
+    opacity: 0;
+  }
+
+  /* ── Cards Grid ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 960px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.8rem 1.5rem;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); }
+  .card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-2), var(--accent-4)); }
+  .card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-3), var(--accent-1)); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: #fff;
+  }
+
+  .card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ── Pipeline ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+  }
+
+  .pipeline::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-1), var(--accent-2), var(--accent-3));
+  }
+
+  .pipeline-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1rem 0;
+    opacity: 0;
+  }
+
+  .step-dot {
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 24px rgba(108,92,231,0.3);
+  }
+
+  .step-dot.c1 { background: linear-gradient(135deg, var(--accent-1), #4834d4); }
+  .step-dot.c2 { background: linear-gradient(135deg, var(--accent-2), #00b894); }
+  .step-dot.c3 { background: linear-gradient(135deg, var(--accent-4), #e17055); }
+  .step-dot.c4 { background: linear-gradient(135deg, var(--accent-3), #e84393); }
+
+  .step-content h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .step-content p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Results Table ── */
+  .results {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .result-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    margin-bottom: 0.8rem;
+    opacity: 0;
+    transition: transform 0.3s;
+  }
+
+  .result-row:hover { transform: translateX(6px); }
+
+  .result-icon { font-size: 1.6rem; }
+
+  .result-label {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .result-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    background: rgba(108,92,231,0.15);
+    color: var(--accent-2);
+  }
+
+  .result-bar {
+    flex: 1;
+    max-width: 200px;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .result-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    width: 0;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+
+  .slide.active .result-bar-fill { width: var(--fill); }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .slide-tag   { animation-delay: 0.1s; }
+  .slide.active .slide-title  { animation-delay: 0.2s; }
+  .slide.active .slide-body   { animation-delay: 0.35s; }
+  .slide.active .card:nth-child(1) { animation-delay: 0.3s; }
+  .slide.active .card:nth-child(2) { animation-delay: 0.45s; }
+  .slide.active .card:nth-child(3) { animation-delay: 0.6s; }
+  .slide.active .pipeline-step:nth-child(1) { animation-delay: 0.2s; }
+  .slide.active .pipeline-step:nth-child(2) { animation-delay: 0.35s; }
+  .slide.active .pipeline-step:nth-child(3) { animation-delay: 0.5s; }
+  .slide.active .pipeline-step:nth-child(4) { animation-delay: 0.65s; }
+  .slide.active .result-row:nth-child(1) { animation-delay: 0.2s; }
+  .slide.active .result-row:nth-child(2) { animation-delay: 0.35s; }
+  .slide.active .result-row:nth-child(3) { animation-delay: 0.5s; }
+  .slide.active .result-row:nth-child(4) { animation-delay: 0.65s; }
+
+  /* ── Title Slide Specific ── */
+  .title-main {
+    font-size: clamp(2rem, 5.5vmin, 3.8rem);
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    background: linear-gradient(135deg, #fff 20%, var(--accent-2) 60%, var(--accent-1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+  }
+
+  .title-sub {
+    font-size: clamp(1rem, 2.5vmin, 1.4rem);
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+  }
+
+  .title-authors {
+    font-size: clamp(0.7rem, 1.5vmin, 0.85rem);
+    color: var(--text-secondary);
+    text-align: center;
+    opacity: 0;
+    line-height: 1.8;
+  }
+
+  .title-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    background: rgba(108,92,231,0.15);
+    border: 1px solid rgba(108,92,231,0.3);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    margin-bottom: 2rem;
+    opacity: 0;
+  }
+
+  .slide.active .title-main    { animation: fadeUp 0.8s 0.15s forwards; }
+  .slide.active .title-sub     { animation: fadeUp 0.8s 0.35s forwards; }
+  .slide.active .title-badge   { animation: fadeUp 0.8s 0.5s forwards; }
+  .slide.active .title-authors { animation: fadeUp 0.8s 0.6s forwards; }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    z-index: 100;
+  }
+
+  /* ── Slide Counter ── */
+  .slide-counter {
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .counter-current {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-2);
+  }
+
+  /* ── Navigation Dots ── */
+  .nav-dots {
+    position: fixed;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.6rem;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-dot.active {
+    background: var(--accent-2);
+    box-shadow: 0 0 10px var(--accent-2);
+    transform: scale(1.3);
+  }
+
+  /* ── Autoplay Indicator ── */
+  .autoplay-indicator {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 100;
+    cursor: pointer;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.3s;
+  }
+
+  .autoplay-indicator:hover { background: rgba(255,255,255,0.08); }
+
+  .autoplay-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    animation: pulse 1.5s infinite;
+  }
+
+  .autoplay-dot.paused {
+    background: var(--text-secondary);
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── Highlight ── */
+  .hl { color: var(--accent-2); font-weight: 700; }
+  .hl2 { color: var(--accent-3); font-weight: 700; }
+  .hl3 { color: var(--accent-4); font-weight: 700; }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .slide { padding: 4vmin 5vmin; }
+    .cards { grid-template-columns: 1fr; gap: 1rem; }
+    .card { padding: 1.2rem; }
+    .pipeline::before { left: 22px; }
+    .step-dot { width: 44px; min-width: 44px; height: 44px; font-size: 1.2rem; }
+    .result-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="slides-wrapper">
+
+  <!-- ════ Slide 1: 타이틀 ════ -->
+  <div class="slide active" data-index="0">
+    <div class="title-badge">📄 arXiv 2603.17670</div>
+    <div class="title-main">AgentVLN</div>
+    <div class="title-sub">에이전틱 비전-언어 내비게이션을 향하여</div>
+    <div class="title-badge">🤖 에지 컴퓨팅 배포 가능한 효율적 체화 내비게이션 프레임워크</div>
+    <div class="title-authors">
+      Zihao Xin · Wentong Li · Yixuan Jiang · Ziyuan Huang<br>
+      Bin Wang · Piji Li · Jianke Zhu · Jie Qin · Shengjun Huang
+    </div>
+  </div>
+
+  <!-- ════ Slide 2: 문제 정의 ════ -->
+  <div class="slide" data-index="1">
+    <div class="slide-tag">Problem Definition</div>
+    <div class="slide-title">기존 VLN 시스템의 한계</div>
+    <div class="cards">
+      <div class="card">
+        <span class="card-icon">🔍</span>
+        <h3>제한된 공간 인지</h3>
+        <p>현재 VLN 시스템은 <span class="hl">공간적 구조를 충분히 이해하지 못해</span> 복잡한 3D 환경에서 강건한 내비게이션이 어렵습니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧩</span>
+        <h3>2D-3D 표현 불일치</h3>
+        <p>VLM이 제공하는 <span class="hl2">2D 시각 이해</span>와 실제 필요한 <span class="hl2">3D 공간 추론</span> 사이의 근본적인 표현 격차가 존재합니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📏</span>
+        <h3>단안 스케일 모호성</h3>
+        <p>단일 카메라 환경에서 <span class="hl3">거리와 깊이에 대한 스케일 불확실성</span>으로 정확한 웨이포인트 추정이 어렵습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Slide 3: 해결책 ════ -->
+  <div class="slide" data-index="2">
+    <div class="slide-tag">Proposed Solution</div>
+    <div class="slide-title">AgentVLN 핵심 기여</div>
+    <div class="cards">
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h3>VLM-as-Brain 패러다임</h3>
+        <p>의미적 추론과 인지를 <span class="hl">모듈형 스킬 라이브러리</span>로 분리하여 VLM을 중앙 두뇌로 활용하는 새로운 아키텍처입니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🗺️</span>
+        <h3>교차 공간 표현 매핑</h3>
+        <p>3D 토폴로지 웨이포인트를 <span class="hl2">픽셀 정렬 시각 프롬프트</span>로 변환하여 2D-3D 간극을 해소합니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span>
+        <h3>QD-PCoT 추론</h3>
+        <p>질의 기반 지각 사고 체인(Query-Driven Perceptual CoT)으로 <span class="hl3">기하학적 깊이 정보를 능동적으로 탐색</span>합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Slide 4: 파이프라인 ════ -->
+  <div class="slide" data-index="3">
+    <div class="slide-tag">Architecture Pipeline</div>
+    <div class="slide-title">AgentVLN 파이프라인</div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-dot c1">👁️</div>
+        <div class="step-content">
+          <h3>1단계 — 인지 레이어</h3>
+          <p>파노라마 관측에서 <span class="hl">3D 토폴로지 웨이포인트</span>를 생성합니다. 깊이 추정과 공간 매핑을 통해 내비게이션 그래프를 구축합니다.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-dot c2">🔄</div>
+        <div class="step-content">
+          <h3>2단계 — 교차 공간 매핑</h3>
+          <p>3D 웨이포인트를 <span class="hl2">2D 픽셀 정렬 시각 프롬프트</span>로 변환합니다. VLM이 이해할 수 있는 형태로 공간 정보를 인코딩합니다.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-dot c3">🧠</div>
+        <div class="step-content">
+          <h3>3단계 — VLM 추론 (QD-PCoT)</h3>
+          <p>VLM이 시각 프롬프트와 자연어 지시를 기반으로 <span class="hl3">질의 기반 지각 사고 체인</span>을 수행하여 최적 행동을 결정합니다.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-dot c4">🎯</div>
+        <div class="step-content">
+          <h3>4단계 — 자기 교정 및 탐색</h3>
+          <p><span class="hl2">맥락 인식 자기 교정</span>과 능동적 탐색으로 경로 오류를 실시간 완화합니다. 폐색 상황에서도 복구가 가능합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Slide 5: 결과 ════ -->
+  <div class="slide" data-index="4">
+    <div class="slide-tag">Experimental Results</div>
+    <div class="slide-title">주요 실험 결과</div>
+    <div class="results">
+      <div class="result-row">
+        <span class="result-icon">🏆</span>
+        <span class="result-label">장거리 VLN 벤치마크에서 <span class="hl">기존 SOTA 일관 능가</span></span>
+        <div class="result-bar"><div class="result-bar-fill" style="--fill:92%"></div></div>
+        <span class="result-value">SOTA</span>
+      </div>
+      <div class="result-row">
+        <span class="result-icon">⚡</span>
+        <span class="result-label"><span class="hl2">에지 컴퓨팅</span> 플랫폼에서의 효율적 배포 달성</span>
+        <div class="result-bar"><div class="result-bar-fill" style="--fill:85%"></div></div>
+        <span class="result-value">효율적</span>
+      </div>
+      <div class="result-row">
+        <span class="result-icon">🔄</span>
+        <span class="result-label">자기 교정으로 <span class="hl3">경로 오류 실시간 복구</span> 성능 향상</span>
+        <div class="result-bar"><div class="result-bar-fill" style="--fill:78%"></div></div>
+        <span class="result-value">강건성↑</span>
+      </div>
+      <div class="result-row">
+        <span class="result-icon">🧠</span>
+        <span class="result-label">QD-PCoT로 <span class="hl">메타인지적 깊이 정보 탐색</span> 능력 입증</span>
+        <div class="result-bar"><div class="result-bar-fill" style="--fill:88%"></div></div>
+        <span class="result-value">검증됨</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Progress -->
+<div class="progress-bar" id="progress"></div>
+
+<!-- Nav Dots -->
+<div class="nav-dots" id="navDots"></div>
+
+<!-- Counter -->
+<div class="slide-counter">
+  <span class="counter-current" id="counterCurrent">1</span>
+  <span>/ 5</span>
+</div>
+
+<!-- Autoplay -->
+<div class="autoplay-indicator" id="autoplayToggle" title="자동 재생 켜기/끄기">
+  <span class="autoplay-dot" id="autoplayDot"></span>
+  <span id="autoplayLabel">자동 재생</span>
+</div>
+
+<script>
+(function () {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let autoplay = true;
+  let timer = null;
+
+  const progress = document.getElementById('progress');
+  const navDots = document.getElementById('navDots');
+  const counterCurrent = document.getElementById('counterCurrent');
+  const autoplayDot = document.getElementById('autoplayDot');
+  const autoplayLabel = document.getElementById('autoplayLabel');
+
+  // Build nav dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    navDots.appendChild(dot);
+  }
+
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === current) s.classList.add('active');
+      else if (i < current) s.classList.add('exit-left');
+    });
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    counterCurrent.textContent = current + 1;
+    navDots.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    current = index;
+    update();
+    resetTimer();
+  }
+
+  function next() { goTo(current < total - 1 ? current + 1 : 0); }
+  function prev() { goTo(current > 0 ? current - 1 : total - 1); }
+
+  function resetTimer() {
+    clearInterval(timer);
+    if (autoplay) timer = setInterval(next, 10000);
+  }
+
+  function toggleAutoplay() {
+    autoplay = !autoplay;
+    autoplayDot.classList.toggle('paused', !autoplay);
+    autoplayLabel.textContent = autoplay ? '자동 재생' : '일시 정지';
+    if (autoplay) resetTimer();
+    else clearInterval(timer);
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
+    else if (e.key === ' ') { e.preventDefault(); toggleAutoplay(); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) next(); else prev();
+    }
+  }, { passive: true });
+
+  // Autoplay toggle click
+  document.getElementById('autoplayToggle').addEventListener('click', toggleAutoplay);
+
+  // Init
+  resetTimer();
+})();
+</script>
+
+</body>
+</html>

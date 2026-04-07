@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>RACE: 창작자와 편집자의 이중 역할 모델링을 통한 세밀한 LLM 생성 텍스트 탐지</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card2: #1a2236;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --accent3: #a5b4fc;
+    --green: #34d399;
+    --green2: #10b981;
+    --orange: #f59e0b;
+    --red: #f87171;
+    --pink: #f472b6;
+    --cyan: #22d3ee;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-bright: #f8fafc;
+    --slide-padding: 60px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ===== SLIDE CONTAINER ===== */
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: var(--slide-padding);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide.exit-left {
+    display: flex;
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan), var(--green));
+    transition: width 0.4s ease;
+    z-index: 1000;
+  }
+
+  /* ===== SLIDE COUNTER ===== */
+  .slide-counter {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-dim);
+    background: rgba(17, 24, 39, 0.8);
+    padding: 6px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  /* ===== NAV BUTTONS ===== */
+  .nav-btn {
+    position: fixed;
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--accent3);
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:hover, .nav-btn:active { background: rgba(99, 102, 241, 0.5); transform: scale(1.1); }
+  .nav-prev { left: 20px; }
+  .nav-next { left: 80px; }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 30px;
+    line-height: 1.3;
+  }
+  .slide-title .gradient {
+    background: linear-gradient(135deg, var(--accent3), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slide-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  h3 {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-bright);
+  }
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ===== CARDS / BOXES ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .card .icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .card .card-title {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-bright);
+  }
+  .card .card-text {
+    font-size: clamp(0.78rem, 1.8vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ===== TAG / BADGE ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .tag-purple { background: rgba(99,102,241,0.2); color: var(--accent3); }
+  .tag-green { background: rgba(52,211,153,0.2); color: var(--green); }
+  .tag-orange { background: rgba(245,158,11,0.2); color: var(--orange); }
+  .tag-red { background: rgba(248,113,113,0.2); color: var(--red); }
+  .tag-cyan { background: rgba(34,211,238,0.2); color: var(--cyan); }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid rgba(99,102,241,0.15);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    font-family: 'JetBrains Mono', monospace;
+    min-width: 500px;
+  }
+  thead { background: rgba(99,102,241,0.15); }
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent3);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(99,102,241,0.08);
+    white-space: nowrap;
+  }
+  tbody tr:hover { background: rgba(99,102,241,0.05); }
+  .highlight-row { background: rgba(99,102,241,0.1) !important; }
+  .val-best { color: var(--green); font-weight: 700; }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: clamp(0.78rem, 1.8vw, 0.95rem);
+    font-weight: 500;
+    min-width: 100px;
+  }
+  .flow-arrow {
+    color: var(--accent2);
+    font-size: 1.4rem;
+  }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart { margin: 10px 0; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  .bar-label {
+    width: 130px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(99,102,241,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #fff;
+    transition: width 1s ease;
+    min-width: 50px;
+  }
+
+  /* ===== FEATURE BOX ===== */
+  .feature-list { list-style: none; }
+  .feature-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(99,102,241,0.08);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ===== EQUATION ===== */
+  .equation {
+    background: var(--bg-card2);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.88rem);
+    margin: 14px 0;
+    overflow-x: auto;
+    color: var(--accent3);
+    line-height: 1.8;
+  }
+
+  /* ===== SPLIT LAYOUT ===== */
+  .split {
+    display: flex;
+    gap: 30px;
+    flex: 1;
+    min-height: 0;
+  }
+  .split > * { flex: 1; min-width: 0; }
+
+  /* ===== RST TREE VISUAL ===== */
+  .tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .tree-label {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 500;
+    color: var(--accent3);
+    text-align: center;
+  }
+  .tree-children {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    position: relative;
+  }
+  .tree-connector {
+    width: 1px;
+    height: 20px;
+    background: var(--accent);
+    margin: 0 auto;
+  }
+
+  /* ===== TITLE SLIDE BG ===== */
+  .title-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .title-bg .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+  }
+  .title-bg .orb:nth-child(1) { width: 400px; height: 400px; background: var(--accent); top: -100px; right: -100px; }
+  .title-bg .orb:nth-child(2) { width: 300px; height: 300px; background: var(--cyan); bottom: -50px; left: -50px; animation-delay: 2s; }
+  .title-bg .orb:nth-child(3) { width: 200px; height: 200px; background: var(--pink); top: 50%; left: 60%; animation-delay: 4s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .title-content { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; flex: 1; }
+
+  /* ===== COMPARISON VISUAL ===== */
+  .vs-container {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+  }
+  .vs-box {
+    flex: 1;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+  }
+  .vs-box.old { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+  .vs-box.new { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3); }
+  .vs-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .vs-box.old .vs-label { color: var(--red); }
+  .vs-box.new .vs-label { color: var(--green); }
+
+  /* ===== METRIC CIRCLE ===== */
+  .metric-circles {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .metric-circle {
+    text-align: center;
+  }
+  .metric-circle .value {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--accent3), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .metric-circle .label {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim-1 { animation: fadeInUp 0.6s ease 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.6s ease 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.6s ease 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.6s ease 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.6s ease 0.7s both; }
+
+  /* ===== MOBILE: TABLET ===== */
+  @media (max-width: 768px) {
+    :root { --slide-padding: 30px; }
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .split { flex-direction: column; gap: 20px; }
+    .vs-container { flex-direction: column; }
+    .flow { gap: 8px; }
+    .flow-box { padding: 10px 14px; min-width: 80px; font-size: clamp(0.7rem, 1.6vw, 0.85rem); }
+    .bar-label { width: 90px; }
+    .nav-btn { width: 48px; height: 48px; }
+    .metric-circles { gap: 20px; }
+    table { min-width: 420px; }
+    th, td { padding: 8px 10px; }
+  }
+
+  /* ===== MOBILE: PHONE ===== */
+  @media (max-width: 480px) {
+    :root { --slide-padding: 20px; }
+    .slide-title { margin-bottom: 20px; }
+    .card { padding: 16px; }
+    .nav-btn { width: 50px; height: 50px; bottom: 14px; font-size: 1.1rem; }
+    .nav-prev { left: 14px; }
+    .nav-next { left: 74px; }
+    .slide-counter { bottom: 14px; right: 14px; padding: 5px 10px; }
+    .bar-label { width: 70px; font-size: 0.65rem; }
+    .bar-fill { min-width: 40px; }
+    .flow-arrow { font-size: 1rem; }
+    .metric-circles { gap: 14px; }
+    .tree-children { gap: 8px; }
+    .equation { padding: 12px 14px; }
+    table { min-width: 360px; font-size: 0.68rem; }
+    th, td { padding: 6px 8px; }
+  }
+
+  /* ===== MOBILE: SMALL ===== */
+  @media (max-width: 320px) {
+    :root { --slide-padding: 14px; }
+    .slide-title { font-size: clamp(1.1rem, 5vw, 1.5rem); margin-bottom: 14px; }
+    .card { padding: 12px; border-radius: 10px; }
+    .card .icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .nav-btn { width: 44px; height: 44px; bottom: 10px; }
+    .nav-prev { left: 10px; }
+    .nav-next { left: 62px; }
+    .slide-counter { bottom: 10px; right: 10px; font-size: 0.6rem; }
+    h3 { font-size: 1rem; }
+    .bar-label { width: 55px; }
+    .flow-box { padding: 8px 10px; min-width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+<button class="nav-btn nav-prev" id="prevBtn" aria-label="이전 슬라이드">&#9664;</button>
+<button class="nav-btn nav-next" id="nextBtn" aria-label="다음 슬라이드">&#9654;</button>
+
+<div class="deck" id="deck">
+
+<!-- ============ SLIDE 1: TITLE ============ -->
+<div class="slide active" data-slide="0">
+  <div class="title-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+  <div class="title-content">
+    <div class="anim-1" style="margin-bottom:20px;">
+      <span class="tag tag-purple">ACL 2026</span>
+      <span class="tag tag-cyan">arXiv: 2604.04932</span>
+    </div>
+    <h1 class="slide-title anim-2" style="font-size:clamp(1.4rem,4.5vw,3rem);">
+      <span class="gradient">최종 행위자를 넘어서:</span><br>
+      세밀한 LLM 생성 텍스트 탐지를 위한<br>
+      창작자-편집자 이중 역할 모델링
+    </h1>
+    <p class="slide-subtitle anim-3">Beyond the Final Actor: Modeling the Dual Roles of Creator and Editor<br>for Fine-Grained LLM-Generated Text Detection</p>
+    <div class="anim-4" style="margin-top:24px; display:flex; gap:8px; flex-wrap:wrap;">
+      <span class="tag tag-green">Yang Li</span>
+      <span class="tag tag-green">Qiang Sheng</span>
+      <span class="tag tag-green">Zhengjia Wang</span>
+      <span class="tag tag-green">Yehan Yang</span>
+      <span class="tag tag-green">Danding Wang</span>
+      <span class="tag tag-green">Juan Cao</span>
+    </div>
+    <p class="anim-5" style="margin-top:18px; color:var(--text-dim); font-size:clamp(0.75rem,1.8vw,0.95rem);">
+      <strong>RACE</strong> &mdash; Rhetorical Analysis for Creator-Editor Modeling
+    </p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 2: PROBLEM ============ -->
+<div class="slide" data-slide="1">
+  <h2 class="slide-title anim-1"><span class="gradient">문제 정의</span></h2>
+  <p class="slide-subtitle anim-2">기존 탐지 방식은 왜 부족한가?</p>
+
+  <div class="vs-container anim-3" style="margin-bottom:24px;">
+    <div class="vs-box old">
+      <div class="vs-label">기존 접근법</div>
+      <ul style="list-style:none; padding:0;">
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--red);">&#10005;</span>&ensp;이진 분류: 인간 vs LLM
+        </li>
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--red);">&#10005;</span>&ensp;삼진 분류: 인간 / LLM / 혼합
+        </li>
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--red);">&#10005;</span>&ensp;규제 정책 구분 불가
+        </li>
+      </ul>
+    </div>
+    <div class="vs-box new">
+      <div class="vs-label">RACE (본 논문)</div>
+      <ul style="list-style:none; padding:0;">
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--green);">&#10003;</span>&ensp;4가지 세밀한 분류
+        </li>
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--green);">&#10003;</span>&ensp;창작자-편집자 역할 구분
+        </li>
+        <li style="padding:6px 0; font-size:clamp(0.78rem,1.8vw,0.95rem);">
+          <span style="color:var(--green);">&#10003;</span>&ensp;정책 기반 규제에 부합
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="anim-4" style="background:var(--bg-card); border-radius:16px; padding:20px; border-left:4px solid var(--orange);">
+    <p style="font-size:clamp(0.85rem,2vw,1.05rem); line-height:1.7;">
+      <strong style="color:var(--orange);">핵심 통찰:</strong>
+      "LLM이 다듬은 인간 텍스트"와 "인간이 다듬은 LLM 텍스트"는<br>
+      서로 다른 정책적 결과를 초래하므로 반드시 구분해야 한다.
+    </p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 3: 4-CLASS ============ -->
+<div class="slide" data-slide="2">
+  <h2 class="slide-title anim-1"><span class="gradient">4가지 텍스트 분류 체계</span></h2>
+  <p class="slide-subtitle anim-2">창작자(Creator)와 편집자(Editor)의 조합</p>
+
+  <div class="card-grid cols-4 anim-3" style="margin-top:10px;">
+    <div class="card" style="border-left: 4px solid var(--green);">
+      <span class="icon">&#9997;</span>
+      <div class="card-title" style="color:var(--green);">인간 작성 텍스트</div>
+      <div class="card-text">
+        <span class="tag tag-green" style="margin-bottom:10px;">창작: 인간 | 편집: 인간</span><br>
+        순수하게 인간이 작성한 텍스트. LLM의 개입 없음.
+      </div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--cyan);">
+      <span class="icon">&#129302;</span>
+      <div class="card-title" style="color:var(--cyan);">LLM 생성 텍스트</div>
+      <div class="card-text">
+        <span class="tag tag-cyan" style="margin-bottom:10px;">창작: LLM | 편집: LLM</span><br>
+        순수하게 LLM이 생성한 텍스트. 인간의 개입 없음.
+      </div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--orange);">
+      <span class="icon">&#128221;</span>
+      <div class="card-title" style="color:var(--orange);">LLM 다듬은 인간 텍스트</div>
+      <div class="card-text">
+        <span class="tag tag-orange" style="margin-bottom:10px;">창작: 인간 | 편집: LLM</span><br>
+        인간이 초안을 작성하고, LLM이 문체를 다듬음.
+      </div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--pink);">
+      <span class="icon">&#128373;</span>
+      <div class="card-title" style="color:var(--pink);">인간화된 LLM 텍스트</div>
+      <div class="card-text">
+        <span class="tag tag-red" style="margin-bottom:10px;">창작: LLM | 편집: 인간</span><br>
+        LLM이 초안을 생성하고, 인간이 탐지 회피를 위해 수정.
+      </div>
+    </div>
+  </div>
+
+  <div class="anim-4" style="margin-top:20px; text-align:center; color:var(--text-dim); font-size:clamp(0.78rem,1.8vw,0.95rem);">
+    &#8594; 창작자가 논리적 흐름을 확립하고, 편집자가 언어적 표현을 제어한다
+  </div>
+</div>
+
+<!-- ============ SLIDE 4: KEY INSIGHT (RST) ============ -->
+<div class="slide" data-slide="3">
+  <h2 class="slide-title anim-1"><span class="gradient">핵심 발견: 수사 구조 분석</span></h2>
+  <p class="slide-subtitle anim-2">Rhetorical Structure Theory (RST)를 통한 창작자 서명 탐지</p>
+
+  <div class="split anim-3">
+    <div>
+      <h3 style="color:var(--green);">&#9997; 인간 창작자 특성</h3>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-text">
+          <strong>Attribution</strong> (출처 인용) 관계 과다 표현<br>
+          <strong>Background</strong> (배경 설명) 관계 과다 표현<br><br>
+          <span style="color:var(--text-dim);">&#8594; 출처를 인용하고, 논거를 근거에 기반하여 전개</span>
+        </div>
+      </div>
+
+      <h3 style="color:var(--cyan);">&#129302; LLM 창작자 특성</h3>
+      <div class="card">
+        <div class="card-text">
+          <strong>Elaboration</strong> (부연) 관계 과다 표현<br>
+          <strong>Evaluation</strong> (평가), <strong>Enablement</strong> (활성화) 과다<br><br>
+          <span style="color:var(--text-dim);">&#8594; 표면적 설명 위주, 깊은 근거 부족</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>코사인 유사도: 편집 후에도 창작자 서명 유지</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">인간&#8594;LLM다듬</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:92%; background: linear-gradient(90deg, var(--green), var(--green2));">0.92</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">LLM&#8594;인간화</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:95%; background: linear-gradient(90deg, var(--cyan), var(--accent));">0.95</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card); border-radius:12px; padding:18px; margin-top:16px; border-left:3px solid var(--accent);">
+        <p style="font-size:clamp(0.8rem,1.8vw,0.95rem); color:var(--accent3);">
+          <strong>핵심:</strong> 편집 과정에서 표현은 바뀌어도, 수사 구조(논리 흐름)는 창작자의 서명을 거의 그대로 유지한다.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 5: RACE FRAMEWORK ============ -->
+<div class="slide" data-slide="4">
+  <h2 class="slide-title anim-1"><span class="gradient">RACE 프레임워크</span></h2>
+  <p class="slide-subtitle anim-2">Rhetorical Analysis for Creator-Editor Modeling</p>
+
+  <div class="flow anim-3">
+    <div class="flow-box" style="border-color:var(--green);">&#128196; 입력 텍스트</div>
+    <span class="flow-arrow">&#10132;</span>
+    <div class="flow-box" style="border-color:var(--orange);">RST 파서</div>
+    <span class="flow-arrow">&#10132;</span>
+    <div class="flow-box" style="border-color:var(--cyan);">EDU + 관계 추출</div>
+    <span class="flow-arrow">&#10132;</span>
+    <div class="flow-box" style="border-color:var(--accent);">논리 그래프 구축</div>
+    <span class="flow-arrow">&#10132;</span>
+    <div class="flow-box" style="border-color:var(--pink);">RGCN</div>
+    <span class="flow-arrow">&#10132;</span>
+    <div class="flow-box" style="border-color:var(--green);">4-클래스 분류</div>
+  </div>
+
+  <div class="card-grid cols-2 anim-4" style="margin-top:10px;">
+    <div class="card">
+      <div class="card-title" style="color:var(--cyan);">1. 이중 흔적 추출</div>
+      <div class="card-text">
+        End-to-end RST 파서로 텍스트를 이진 구성 트리로 변환.<br>
+        <strong>EDU 시퀀스</strong> (편집자 스타일) + <strong>관계 노드</strong> (창작자 논리) 추출.<br>
+        18가지 대분류 수사 관계 레이블 사용.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--orange);">2. 논리 인식 그래프 초기화</div>
+      <div class="card-text">
+        <strong>하위 스팬 풀링:</strong> PLM 임베딩의 평균 풀링으로 EDU 노드 표현.<br>
+        <strong>정보 병목 투영:</strong> d_PLM &#8594; d_feat=128 차원 축소.<br>
+        학습 가능한 노드 타입 임베딩 추가.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--green);">3. 수사 기반 메시지 전달</div>
+      <div class="card-text">
+        <strong>관계별 그래프 합성곱 네트워크 (RGCN)</strong><br>
+        관계별 변환 행렬 W_r, 기저 분해(B=10)로 파라미터 절감.<br>
+        L=2 레이어, 은닉 차원 512.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--pink);">4. 그래프 판독 &amp; 분류</div>
+      <div class="card-text">
+        루트 노드에서 전역 표현 z_G 추출.<br>
+        2층 MLP + Softmax 분류기.<br>
+        <strong>손실 함수:</strong> 지도 대조 손실 + 교차 엔트로피 (&#964;=0.07).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 6: KEY EQUATIONS ============ -->
+<div class="slide" data-slide="5">
+  <h2 class="slide-title anim-1"><span class="gradient">핵심 수식</span></h2>
+
+  <div class="anim-2">
+    <h3>RGCN 메시지 집계 (수사 기반 전파)</h3>
+    <div class="equation">
+      h<sub>i</sub><sup>(l+1)</sup> = &#963;( &#931;<sub>r&#8712;R</sub> &#931;<sub>j&#8712;N<sub>r</sub>(i)</sub> [ h<sub>j</sub><sup>(l)</sup> W<sub>r</sub><sup>(l)</sup> / Z<sub>i,r</sub> ] + h<sub>i</sub><sup>(l)</sup> W<sub>0</sub><sup>(l)</sup> )
+    </div>
+  </div>
+
+  <div class="anim-3" style="margin-top:14px;">
+    <h3>기저 분해 (파라미터 효율화)</h3>
+    <div class="equation">
+      W<sub>r</sub><sup>(l)</sup> = &#931;<sub>k=1</sub><sup>B</sup> &#945;<sub>rk</sub><sup>(l)</sup> V<sub>k</sub><sup>(l)</sup>
+      &emsp;&emsp;(B = 10 공유 기저 행렬)
+    </div>
+  </div>
+
+  <div class="anim-4" style="margin-top:14px;">
+    <h3>최종 손실 함수</h3>
+    <div class="equation">
+      L = L<sub>con</sub> (지도 대조 손실, &#964;=0.07) + L<sub>ce</sub> (교차 엔트로피)
+    </div>
+  </div>
+
+  <div class="card-grid cols-3 anim-5" style="margin-top:20px;">
+    <div class="card" style="text-align:center;">
+      <div class="card-title" style="color:var(--cyan);">RGCN 레이어</div>
+      <div style="font-size:clamp(1.5rem,3.5vw,2.5rem); font-weight:900; color:var(--cyan);">2</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-title" style="color:var(--orange);">은닉 차원</div>
+      <div style="font-size:clamp(1.5rem,3.5vw,2.5rem); font-weight:900; color:var(--orange);">512</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-title" style="color:var(--green);">특성 차원</div>
+      <div style="font-size:clamp(1.5rem,3.5vw,2.5rem); font-weight:900; color:var(--green);">128</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 7: DATASET ============ -->
+<div class="slide" data-slide="6">
+  <h2 class="slide-title anim-1"><span class="gradient">HART 벤치마크 데이터셋</span></h2>
+  <p class="slide-subtitle anim-2">4개 도메인 x 4가지 유형 = 총 16,000개 텍스트</p>
+
+  <div class="anim-3" style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+    <span class="tag tag-purple">ArXiv (학술)</span>
+    <span class="tag tag-green">Essay (에세이)</span>
+    <span class="tag tag-orange">News (뉴스)</span>
+    <span class="tag tag-cyan">Writing (창작글)</span>
+  </div>
+
+  <div class="table-wrap anim-4">
+    <table>
+      <thead>
+        <tr><th>도메인</th><th>인간작성</th><th>LLM다듬</th><th>LLM생성</th><th>인간화</th><th>합계</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ArXiv</td><td>1,000</td><td>1,000</td><td>1,755</td><td>245</td><td>4,000</td></tr>
+        <tr><td>Essay</td><td>1,000</td><td>1,000</td><td>1,744</td><td>256</td><td>4,000</td></tr>
+        <tr><td>News</td><td>1,000</td><td>1,000</td><td>1,758</td><td>242</td><td>4,000</td></tr>
+        <tr><td>Writing</td><td>1,000</td><td>1,000</td><td>1,728</td><td>272</td><td>4,000</td></tr>
+        <tr class="highlight-row" style="font-weight:700;"><td>합계</td><td>4,000</td><td>4,000</td><td>6,985</td><td>1,015</td><td>16,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="anim-5" style="margin-top:16px;">
+    <h3>사용된 LLM 모델</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <span class="tag tag-purple">Claude-3.5-Sonnet</span>
+      <span class="tag tag-green">GPT-3.5-Turbo</span>
+      <span class="tag tag-orange">GPT-4o</span>
+      <span class="tag tag-cyan">Gemini-1.5-Pro</span>
+      <span class="tag tag-red">Llama-3.3-70B</span>
+      <span class="tag tag-purple">Qwen-2.5-72B</span>
+    </div>
+    <p style="margin-top:10px; color:var(--text-dim); font-size:clamp(0.75rem,1.6vw,0.88rem);">
+      분할: Train 70% / Val 20% / Test 10% &mdash; 계층화 분할(Stratified Split)
+    </p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 8: MAIN RESULTS ============ -->
+<div class="slide" data-slide="7">
+  <h2 class="slide-title anim-1"><span class="gradient">주요 실험 결과</span></h2>
+  <p class="slide-subtitle anim-2">12개 베이스라인 대비 RACE의 성능 (TPR@1%FPR)</p>
+
+  <div class="table-wrap anim-3">
+    <table>
+      <thead>
+        <tr><th>방법</th><th>AUROC</th><th>인간작성</th><th>LLM다듬</th><th>LLM생성</th><th>인간화</th><th>평균 TPR</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RoBERTa</td><td>92.22</td><td>99.36</td><td>68.06</td><td>63.14</td><td>70.92</td><td>75.37</td></tr>
+        <tr><td>RoBERTa-DANN</td><td>96.17</td><td>96.88</td><td>75.03</td><td>48.89</td><td>71.78</td><td>73.14</td></tr>
+        <tr><td>CoCo</td><td>97.67</td><td>99.68</td><td>75.77</td><td>63.93</td><td>79.43</td><td>79.70</td></tr>
+        <tr><td>DeTeCtive</td><td>95.74</td><td>98.62</td><td>0.00</td><td>0.00</td><td>77.23</td><td>43.96</td></tr>
+        <tr><td>LF-Motifs</td><td>98.20</td><td>96.68</td><td>69.61</td><td>67.01</td><td>75.62</td><td>77.23</td></tr>
+        <tr><td>Binoculars-MLP</td><td>79.15</td><td>29.49</td><td>7.34</td><td>4.37</td><td>5.50</td><td>11.70</td></tr>
+        <tr><td>F-DetectGPT-MLP</td><td>73.69</td><td>3.12</td><td>3.87</td><td>29.35</td><td>3.96</td><td>10.80</td></tr>
+        <tr class="highlight-row">
+          <td><strong>RACE</strong></td>
+          <td class="val-best">97.99</td>
+          <td class="val-best">99.04</td>
+          <td class="val-best">83.60</td>
+          <td class="val-best">74.18</td>
+          <td>75.41</td>
+          <td class="val-best">83.06</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="metric-circles anim-4">
+    <div class="metric-circle">
+      <div class="value">+3.36%</div>
+      <div class="label">평균 TPR 향상 (vs CoCo)</div>
+    </div>
+    <div class="metric-circle">
+      <div class="value">97.99</div>
+      <div class="label">Macro AUROC</div>
+    </div>
+    <div class="metric-circle">
+      <div class="value">83.06</div>
+      <div class="label">평균 TPR@1%FPR</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 9: VISUAL BAR COMPARISON ============ -->
+<div class="slide" data-slide="8">
+  <h2 class="slide-title anim-1"><span class="gradient">성능 시각 비교: 평균 TPR@1%FPR</span></h2>
+
+  <div class="bar-chart anim-2">
+    <div class="bar-row">
+      <span class="bar-label">RACE</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:83.06%; background:linear-gradient(90deg, var(--accent), var(--cyan));">83.06</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">CoCo</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:79.70%; background:linear-gradient(90deg, #6b7280, #9ca3af);">79.70</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">LF-Motifs</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:77.23%; background:linear-gradient(90deg, #6b7280, #9ca3af);">77.23</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">RoBERTa</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:75.37%; background:linear-gradient(90deg, #6b7280, #9ca3af);">75.37</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">RoBERTa-DANN</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:73.14%; background:linear-gradient(90deg, #6b7280, #9ca3af);">73.14</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">DeTeCtive</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:43.96%; background:linear-gradient(90deg, #6b7280, #9ca3af);">43.96</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Binoculars</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:11.70%; background:linear-gradient(90deg, var(--red), #ef4444);">11.70</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">F-DetectGPT</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:10.80%; background:linear-gradient(90deg, var(--red), #ef4444);">10.80</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anim-3" style="margin-top:16px; background:var(--bg-card); border-radius:12px; padding:16px;">
+    <p style="font-size:clamp(0.8rem,1.8vw,0.95rem); color:var(--text-dim);">
+      <strong style="color:var(--green);">&#9679;</strong> 메트릭 기반 방법(Binoculars, F-DetectGPT)은 다중 클래스 과제에서 크게 실패<br>
+      <strong style="color:var(--accent3);">&#9679;</strong> RACE는 특히 "LLM 다듬은 텍스트" 탐지에서 CoCo 대비 <strong>+7.83%</strong> 향상
+    </p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 10: ABLATION ============ -->
+<div class="slide" data-slide="9">
+  <h2 class="slide-title anim-1"><span class="gradient">절삭 실험 (Ablation Study)</span></h2>
+  <p class="slide-subtitle anim-2">각 구성 요소의 기여도 분석</p>
+
+  <div class="table-wrap anim-3">
+    <table>
+      <thead>
+        <tr><th>변형</th><th>AUROC</th><th>평균 TPR@1%</th><th>성능 하락</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row"><td><strong>전체 RACE</strong></td><td class="val-best">97.99</td><td class="val-best">83.06</td><td>-</td></tr>
+        <tr><td>대조 손실 제거</td><td>97.73</td><td>79.70</td><td style="color:var(--red);">-3.36%</td></tr>
+        <tr><td>관계 타입 제거</td><td>96.78</td><td>78.98</td><td style="color:var(--red);">-4.08%</td></tr>
+        <tr><td>RGCN 제거</td><td>97.91</td><td>80.24</td><td style="color:var(--red);">-2.82%</td></tr>
+        <tr><td>정보 병목 제거</td><td>98.07</td><td>82.45</td><td style="color:var(--orange);">-0.61%</td></tr>
+        <tr><td>기저 분해 제거</td><td>97.22</td><td>82.23</td><td style="color:var(--orange);">-0.83%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-grid cols-2 anim-4" style="margin-top:20px;">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <div class="card-title">가장 큰 영향</div>
+      <div class="card-text">
+        <strong style="color:var(--red);">관계 타입 제거 (-4.08%)</strong><br>
+        수사 관계가 창작자 서명의 핵심. 이를 제거하면 창작자와 편집자를 구분하는 능력이 크게 저하됨.
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <div class="card-title">두 번째 영향</div>
+      <div class="card-text">
+        <strong style="color:var(--orange);">대조 손실 제거 (-3.36%)</strong><br>
+        지도 대조 학습이 클래스 간 특성 분리를 강화하는 데 핵심적 역할.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 11: FURTHER ANALYSIS ============ -->
+<div class="slide" data-slide="10">
+  <h2 class="slide-title anim-1"><span class="gradient">추가 분석</span></h2>
+
+  <div class="split anim-2">
+    <div>
+      <h3>특성 분별력 (Feature Discriminability)</h3>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-text">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <div>
+              <div style="color:var(--text-dim); font-size:0.75rem;">Davies-Bouldin &#8595;</div>
+              <div style="font-family:'JetBrains Mono'; font-size:clamp(1rem,2.5vw,1.4rem);">
+                <span style="color:var(--green);">0.80</span> vs <span style="color:var(--text-dim);">0.93</span>
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">RACE vs CoCo</div>
+            </div>
+            <div>
+              <div style="color:var(--text-dim); font-size:0.75rem;">Calinski-Harabasz &#8593;</div>
+              <div style="font-family:'JetBrains Mono'; font-size:clamp(1rem,2.5vw,1.4rem);">
+                <span style="color:var(--green);">4,333</span> vs <span style="color:var(--text-dim);">2,289</span>
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">RACE vs CoCo (~2배)</div>
+            </div>
+          </div>
+          <p style="color:var(--accent3); font-size:clamp(0.75rem,1.6vw,0.88rem);">
+            &#8594; RACE가 클래스 간 2배 더 나은 분리도를 달성
+          </p>
+        </div>
+      </div>
+
+      <h3>RST 파서 강건성</h3>
+      <div class="card">
+        <div class="card-text">
+          IsaNLP 파서 &#8594; <strong>97.99</strong> AUROC<br>
+          DMRST 파서 &#8594; <strong>97.64</strong> AUROC<br><br>
+          <span style="color:var(--green);">파서 선택에 강건한 성능 유지</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>교차 도메인 일반화</h3>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="table-wrap">
+          <table style="min-width:auto;">
+            <thead><tr><th>테스트 도메인</th><th>AUROC</th><th>평균 TPR</th></tr></thead>
+            <tbody>
+              <tr><td>ArXiv</td><td class="val-best">96.61</td><td class="val-best">76.28</td></tr>
+              <tr><td>Essay</td><td class="val-best">95.88</td><td class="val-best">59.73</td></tr>
+              <tr><td>News</td><td>92.69</td><td>44.30</td></tr>
+              <tr><td>Writing</td><td>86.20</td><td>30.84</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>효율성 비교</h3>
+      <div class="card">
+        <div class="card-text">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <div style="text-align:center; flex:1; min-width:70px;">
+              <div style="font-family:'JetBrains Mono'; color:var(--cyan); font-size:clamp(0.9rem,2vw,1.2rem); font-weight:700;">1.07h</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">학습 시간</div>
+            </div>
+            <div style="text-align:center; flex:1; min-width:70px;">
+              <div style="font-family:'JetBrains Mono'; color:var(--orange); font-size:clamp(0.9rem,2vw,1.2rem); font-weight:700;">90/s</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">추론 속도</div>
+            </div>
+            <div style="text-align:center; flex:1; min-width:70px;">
+              <div style="font-family:'JetBrains Mono'; color:var(--green); font-size:clamp(0.9rem,2vw,1.2rem); font-weight:700;">128.6M</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">파라미터</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 12: CONTRIBUTIONS ============ -->
+<div class="slide" data-slide="11">
+  <h2 class="slide-title anim-1"><span class="gradient">주요 기여 및 한계</span></h2>
+
+  <div class="split">
+    <div class="anim-2">
+      <h3 style="color:var(--green);">&#10003; 핵심 기여</h3>
+      <ul class="feature-list">
+        <li>
+          <div class="feature-dot" style="background:var(--accent);"></div>
+          <div>
+            <strong>과제 정의:</strong> 규제 정책에 부합하는 명시적 4-클래스 분류 과제 설정
+          </div>
+        </li>
+        <li>
+          <div class="feature-dot" style="background:var(--cyan);"></div>
+          <div>
+            <strong>창작자-편집자 프레임워크:</strong> 논리적 기반과 문체 정제를 분리하는 개념적 모델 제안
+          </div>
+        </li>
+        <li>
+          <div class="feature-dot" style="background:var(--green);"></div>
+          <div>
+            <strong>RST 최초 적용:</strong> LLM 탐지 분야에 수사 구조 이론을 최초로 적용
+          </div>
+        </li>
+        <li>
+          <div class="feature-dot" style="background:var(--orange);"></div>
+          <div>
+            <strong>하이브리드 아키텍처:</strong> 의미 내용(하위 풀링)과 관계 토폴로지(RGCN)를 결합
+          </div>
+        </li>
+        <li>
+          <div class="feature-dot" style="background:var(--pink);"></div>
+          <div>
+            <strong>SOTA 달성:</strong> 12개 베이스라인 대비 평균 TPR@1%에서 +3.36% 절대 향상
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="anim-3">
+      <h3 style="color:var(--orange);">&#9888; 한계점</h3>
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--orange);">
+        <div class="card-title">단일 데이터셋</div>
+        <div class="card-text">HART 벤치마크만 사용. 다른 언어 및 도메인에 대한 일반화 미검증.</div>
+      </div>
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--orange);">
+        <div class="card-title">상용화 수준 미달</div>
+        <div class="card-text">절대 성능이 상용 수준에 미치지 못함. 수동 검증 병행 권장.</div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--orange);">
+        <div class="card-title">2단계 편집만 고려</div>
+        <div class="card-text">반복적 다중 행위자 수정(multi-actor revision) 시나리오는 미모델링.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 13: CONCLUSION ============ -->
+<div class="slide" data-slide="12">
+  <div class="title-bg">
+    <div class="orb" style="background:var(--green);"></div>
+    <div class="orb" style="background:var(--accent);"></div>
+    <div class="orb" style="background:var(--orange);"></div>
+  </div>
+  <div class="title-content" style="text-align:center; align-items:center;">
+    <h2 class="slide-title anim-1" style="font-size:clamp(1.4rem,4.5vw,2.8rem);">
+      <span class="gradient">결론</span>
+    </h2>
+
+    <div class="anim-2" style="max-width:700px; margin:0 auto;">
+      <p style="font-size:clamp(0.95rem,2.2vw,1.2rem); line-height:1.8; margin-bottom:30px;">
+        RACE는 <strong style="color:var(--accent3);">수사 구조 이론(RST)</strong>을 활용하여
+        <strong style="color:var(--cyan);">창작자의 논리 흐름</strong>과
+        <strong style="color:var(--green);">편집자의 문체 특성</strong>을 분리함으로써,
+        세밀한 LLM 생성 텍스트 탐지의 새로운 패러다임을 제시합니다.
+      </p>
+    </div>
+
+    <div class="metric-circles anim-3">
+      <div class="metric-circle">
+        <div class="value">4</div>
+        <div class="label">세밀한 분류 체계</div>
+      </div>
+      <div class="metric-circle">
+        <div class="value">+3.36%</div>
+        <div class="label">SOTA 대비 향상</div>
+      </div>
+      <div class="metric-circle">
+        <div class="value">12</div>
+        <div class="label">베이스라인 초과</div>
+      </div>
+    </div>
+
+    <div class="anim-4" style="margin-top:30px; padding:20px; background:rgba(99,102,241,0.1); border-radius:16px; border:1px solid rgba(99,102,241,0.2); max-width:600px;">
+      <p style="font-size:clamp(0.85rem,2vw,1.05rem); color:var(--accent3); font-style:italic;">
+        "텍스트의 최종 형태만 보지 말고,<br>
+        누가 창작하고 누가 편집했는지를 구분해야 한다."
+      </p>
+    </div>
+
+    <div class="anim-5" style="margin-top:30px;">
+      <span class="tag tag-purple" style="font-size:clamp(0.7rem,1.5vw,0.85rem);">ACL 2026</span>
+      <span class="tag tag-cyan" style="font-size:clamp(0.7rem,1.5vw,0.85rem);">arXiv: 2604.04932</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const counter = document.getElementById('slideCounter');
+  const progress = document.getElementById('progressBar');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === current) s.classList.add('active');
+    });
+    counter.textContent = (current + 1) + ' / ' + total;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    prevBtn.style.opacity = current === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function go(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+    current = next;
+    update();
+  }
+
+  prevBtn.addEventListener('click', () => go(-1));
+  nextBtn.addEventListener('click', () => go(1));
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
+  });
+
+  // Touch swipe
+  let startX = 0, startY = 0;
+  document.addEventListener('touchstart', (e) => {
+    startX = e.changedTouches[0].screenX;
+    startY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - startX;
+    const dy = e.changedTouches[0].screenY - startY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      go(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  update();
+})();
+</script>
+</body>
+</html>

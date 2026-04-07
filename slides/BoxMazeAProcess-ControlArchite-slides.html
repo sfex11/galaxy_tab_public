@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Maze: 신뢰할 수 있는 LLM 추론을 위한 프로세스 제어 아키텍처</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-rose: #f43f5e;
+    --accent-amber: #f59e0b;
+    --accent-emerald: #10b981;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #1e293b;
+    --glow-blue: rgba(59, 130, 246, 0.15);
+    --glow-purple: rgba(139, 92, 246, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  .slide-container {
+    width: 100%; height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background effects */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 20s ease-in-out infinite;
+  }
+
+  .bg-orb-1 { width: 500px; height: 500px; background: rgba(59,130,246,0.08); top: -10%; right: -5%; }
+  .bg-orb-2 { width: 400px; height: 400px; background: rgba(139,92,246,0.06); bottom: -10%; left: -5%; animation-delay: -7s; }
+  .bg-orb-3 { width: 300px; height: 300px; background: rgba(6,182,212,0.05); top: 40%; left: 50%; animation-delay: -14s; }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -20px); }
+    66% { transform: translate(-20px, 30px); }
+  }
+
+  /* Slide counter */
+  .slide-counter {
+    position: fixed;
+    bottom: 30px; right: 40px;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    z-index: 100;
+    letter-spacing: 2px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Navigation */
+  .nav-hint {
+    position: fixed;
+    bottom: 30px; left: 40px;
+    font-size: 12px;
+    color: var(--text-muted);
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* ---- SLIDE STYLES ---- */
+
+  /* Title slide */
+  .title-slide {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--accent-blue);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-blue);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    background: var(--glow-blue);
+  }
+
+  .title-main {
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-maze {
+    font-size: 56px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+  }
+
+  .title-sub {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    max-width: 700px;
+    line-height: 1.7;
+    margin-bottom: 50px;
+  }
+
+  .title-meta {
+    display: flex;
+    gap: 30px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .title-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .meta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  /* Section headers */
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-cyan);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .slide-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    line-height: 1.3;
+  }
+
+  .slide-title.gradient-blue {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-title.gradient-purple {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-title.gradient-emerald {
+    background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-title.gradient-amber {
+    background: linear-gradient(135deg, var(--accent-amber), var(--accent-rose));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Content layouts */
+  .content-wide {
+    width: 100%;
+    max-width: 1100px;
+    align-self: center;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* Cards */
+  .card {
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(59,130,246,0.3);
+  }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .card-icon.blue { background: var(--glow-blue); color: var(--accent-blue); }
+  .card-icon.purple { background: var(--glow-purple); color: var(--accent-purple); }
+  .card-icon.cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+  .card-icon.rose { background: rgba(244,63,94,0.15); color: var(--accent-rose); }
+  .card-icon.amber { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+  .card-icon.emerald { background: rgba(16,185,129,0.15); color: var(--accent-emerald); }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  /* Architecture diagram */
+  .arch-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .arch-layer {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(17,24,39,0.6);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .arch-layer:hover {
+    transform: scale(1.02);
+  }
+
+  .arch-layer::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .arch-layer.memory::before { background: var(--accent-blue); }
+  .arch-layer.logic::before { background: var(--accent-purple); }
+  .arch-layer.heart::before { background: var(--accent-rose); }
+
+  .arch-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .arch-layer.memory .arch-num { background: var(--glow-blue); color: var(--accent-blue); }
+  .arch-layer.logic .arch-num { background: var(--glow-purple); color: var(--accent-purple); }
+  .arch-layer.heart .arch-num { background: rgba(244,63,94,0.15); color: var(--accent-rose); }
+
+  .arch-info h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .arch-info p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .arch-tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'Fira Code', monospace;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .arch-layer.memory .arch-tag { background: var(--glow-blue); color: var(--accent-blue); }
+  .arch-layer.logic .arch-tag { background: var(--glow-purple); color: var(--accent-purple); }
+  .arch-layer.heart .arch-tag { background: rgba(244,63,94,0.15); color: var(--accent-rose); }
+
+  /* Connector arrows */
+  .arch-connector {
+    display: flex;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 18px;
+    margin: -8px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Tables */
+  .data-table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .data-table th {
+    background: rgba(59,130,246,0.1);
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--accent-blue);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 14px 24px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(30,41,59,0.5);
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .data-table tr:hover td {
+    background: rgba(59,130,246,0.03);
+  }
+
+  .val-good { color: var(--accent-emerald); font-weight: 600; font-family: 'Fira Code', monospace; }
+  .val-bad { color: var(--accent-rose); font-weight: 600; font-family: 'Fira Code', monospace; }
+  .val-warn { color: var(--accent-amber); font-weight: 600; font-family: 'Fira Code', monospace; }
+
+  /* Bar chart */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .bar-label {
+    width: 160px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: rgba(30,41,59,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Fira Code', monospace;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.rose { background: linear-gradient(90deg, rgba(244,63,94,0.3), var(--accent-rose)); }
+  .bar-fill.amber { background: linear-gradient(90deg, rgba(245,158,11,0.3), var(--accent-amber)); }
+  .bar-fill.blue { background: linear-gradient(90deg, rgba(59,130,246,0.3), var(--accent-blue)); }
+  .bar-fill.emerald { background: linear-gradient(90deg, rgba(16,185,129,0.3), var(--accent-emerald)); }
+
+  /* List items */
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .feature-list .bullet {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  .bullet.blue { background: var(--accent-blue); }
+  .bullet.purple { background: var(--accent-purple); }
+  .bullet.cyan { background: var(--accent-cyan); }
+  .bullet.rose { background: var(--accent-rose); }
+
+  /* Phase timeline */
+  .phase-timeline {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .phase-card {
+    flex: 1;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    background: rgba(17,24,39,0.6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .phase-card.p1::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+  .phase-card.p2::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-rose)); }
+  .phase-card.p3::before { background: linear-gradient(90deg, var(--accent-amber), var(--accent-rose)); }
+
+  .phase-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .phase-card.p1 .phase-num { color: var(--accent-cyan); }
+  .phase-card.p2 .phase-num { color: var(--accent-purple); }
+  .phase-card.p3 .phase-num { color: var(--accent-amber); }
+
+  .phase-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .phase-score {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .phase-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* Comparison */
+  .compare-box {
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    background: rgba(17,24,39,0.6);
+  }
+
+  .compare-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .compare-badge {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-red { background: rgba(244,63,94,0.15); color: var(--accent-rose); }
+  .badge-green { background: rgba(16,185,129,0.15); color: var(--accent-emerald); }
+
+  .compare-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(30,41,59,0.4);
+    font-size: 14px;
+  }
+
+  .compare-item:last-child { border-bottom: none; }
+
+  .compare-item .label { color: var(--text-secondary); }
+  .compare-item .value { font-weight: 600; }
+  .compare-item .value.absent { color: var(--accent-rose); }
+  .compare-item .value.present { color: var(--accent-emerald); }
+
+  /* Quote block */
+  .quote-block {
+    border-left: 3px solid var(--accent-purple);
+    padding: 24px 32px;
+    background: rgba(139,92,246,0.05);
+    border-radius: 0 12px 12px 0;
+    max-width: 800px;
+    margin-top: 20px;
+  }
+
+  .quote-block p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Steps flow */
+  .steps-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: rgba(17,24,39,0.5);
+    border: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    background: var(--glow-blue);
+    color: var(--accent-blue);
+    font-family: 'Fira Code', monospace;
+  }
+
+  /* Limitation cards */
+  .limit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .limit-card {
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(245,158,11,0.2);
+    background: rgba(245,158,11,0.03);
+  }
+
+  .limit-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent-amber);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .limit-card p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* Highlight numbers */
+  .stat-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: 'Fira Code', monospace;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-value.blue { color: var(--accent-blue); }
+  .stat-value.emerald { color: var(--accent-emerald); }
+  .stat-value.rose { color: var(--accent-rose); }
+  .stat-value.purple { color: var(--accent-purple); }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .slide { padding: 40px 30px; }
+    .title-main, .title-maze { font-size: 36px; }
+    .slide-title { font-size: 28px; }
+    .two-col, .three-col, .phase-timeline { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+    .limit-grid { grid-template-columns: 1fr; }
+    .bar-label { width: 100px; font-size: 11px; }
+    .stat-value { font-size: 36px; }
+    .stat-row { gap: 20px; flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+<div class="nav-hint">← → 키 또는 클릭으로 이동</div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide title-slide active" data-index="0">
+    <div class="title-badge">arXiv 2603.19182</div>
+    <div class="title-main">Box Maze</div>
+    <div class="title-maze">프로세스 제어 아키텍처</div>
+    <div class="title-sub">
+      신뢰할 수 있는 LLM 추론을 위한 3계층 분해 프레임워크<br>
+      환각과 적대적 프롬프팅에 대한 구조적 방어
+    </div>
+    <div class="title-meta">
+      <span><div class="meta-dot"></div>Zou Qiang</span>
+      <span><div class="meta-dot"></div>2026년 3월</span>
+      <span><div class="meta-dot"></div>cs.AI / cs.CL</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Problem -->
+  <div class="slide" data-index="1">
+    <div class="content-wide">
+      <div class="section-label">문제 정의</div>
+      <div class="slide-title gradient-purple">왜 기존 접근법은 불충분한가?</div>
+      <div class="two-col">
+        <div>
+          <ul class="feature-list">
+            <li>
+              <div class="bullet rose"></div>
+              <div>LLM은 강력한 생성 능력에도 불구하고 <strong style="color:var(--accent-rose)">환각(hallucination)</strong>과 적대적 프롬프팅 하에서 <strong style="color:var(--accent-rose)">신뢰할 수 없는 추론</strong>에 취약</div>
+            </li>
+            <li>
+              <div class="bullet rose"></div>
+              <div>RLHF, 출력 필터링 등 기존 안전 접근법은 <strong style="color:var(--accent-amber)">사후적(post-hoc) 행동 정렬</strong>에 의존하며, 명시적 아키텍처 강제 메커니즘 부재</div>
+            </li>
+            <li>
+              <div class="bullet rose"></div>
+              <div>"그럴듯한 헛소리(coherent nonsense)" — 문법적으로 유창하지만 논리적으로 불일치하는 응답 생성</div>
+            </li>
+            <li>
+              <div class="bullet rose"></div>
+              <div>적대적 조건에서 기준 RLHF 모델의 경계 실패율 <strong style="color:var(--accent-rose)">~40%</strong></div>
+            </li>
+          </ul>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+          <div style="font-size:80px;margin-bottom:20px;opacity:0.8">&#x26A0;</div>
+          <div style="font-size:15px;color:var(--text-secondary);line-height:1.8;">
+            기존 방식은 <strong style="color:#fff">매개변수 수준</strong>에서 작동<br>
+            Box Maze는 <strong style="color:var(--accent-blue)">프로세스 수준</strong>에서 제약을 강제<br><br>
+            <span style="font-size:13px;color:var(--text-muted)">핵심 전환: 행동 정렬 → 아키텍처 강제</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Core Architecture -->
+  <div class="slide" data-index="2">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">핵심 아키텍처</div>
+      <div class="slide-title gradient-blue">3계층 프로세스 제어 구조</div>
+      <div class="arch-stack">
+        <div class="arch-layer memory">
+          <div class="arch-num">1</div>
+          <div class="arch-info">
+            <h3>메모리 루프 <span style="font-size:14px;color:var(--text-muted);font-weight:400">(Memory Loop)</span></h3>
+            <p>타임스탬프 기반 불변 기록으로 추론 단계를 고정. 시간적 불변성을 통해 소급적 서사 조작을 차단</p>
+          </div>
+          <div class="arch-tag">시간적 앵커링</div>
+        </div>
+        <div class="arch-connector">▼</div>
+        <div class="arch-layer logic">
+          <div class="arch-num">2</div>
+          <div class="arch-info">
+            <h3>로직 루프 <span style="font-size:14px;color:var(--text-muted);font-weight:400">(Logic Loop)</span></h3>
+            <p>수학적 존재론에 기반한 인과적 일관성 검증. 모순 발생 시 제약 상태로 진입하여 그럴듯한 출력 생성 차단</p>
+          </div>
+          <div class="arch-tag">인과적 일관성</div>
+        </div>
+        <div class="arch-connector">▼</div>
+        <div class="arch-layer heart">
+          <div class="arch-num">3</div>
+          <div class="arch-info">
+            <h3>하트 앵커 <span style="font-size:14px;color:var(--text-muted);font-weight:400">(Heart Anchor)</span></h3>
+            <p>상호 배타적 제약의 핵심 강제. 경계 위반 시 타협 아닌 강제 중단(hard stop) 발동</p>
+          </div>
+          <div class="arch-tag">뮤텍스 강제</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Epistemic Humility Protocol -->
+  <div class="slide" data-index="3">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">인식론적 겸손 프로토콜</div>
+      <div class="slide-title gradient-emerald">환각 방지를 위한 4대 메커니즘</div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-icon blue">L0</div>
+          <div class="card-title">갭 표시 (Gap Marking)</div>
+          <div class="card-desc">메모리에 타임스탬프 증거가 없으면 추론으로 공백을 채우지 않고 <strong style="color:var(--accent-blue)">생성을 일시 중지</strong>. 사실적 공백을 논리적 추측으로 채우는 것을 방지</div>
+        </div>
+        <div class="card">
+          <div class="card-icon emerald">CI</div>
+          <div class="card-title">신뢰도 명시화</div>
+          <div class="card-desc">모든 결과에 <strong style="color:var(--accent-emerald)">신뢰도 주석</strong> 부여 (0.3~0.7 불확실, 0.9+ 확실). 시간 고정 메모리 ID를 명시적으로 참조</div>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">IR</div>
+          <div class="card-title">추론 구체화 금지</div>
+          <div class="card-desc">합리적 추론과 사실적 주장의 <strong style="color:var(--accent-purple)">엄격한 분리</strong>. "추세 A 기반 B 가능"을 "Y년에 B 발생"으로 제시 불가</div>
+        </div>
+        <div class="card">
+          <div class="card-icon rose">IP</div>
+          <div class="card-title">무결성 우선</div>
+          <div class="card-desc">피상적 정확도보다 <strong style="color:var(--accent-rose)">인식론적 경계의 명시적 표시</strong>를 우선. 모르는 것을 모른다고 선언하는 시스템</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Key Results -->
+  <div class="slide" data-index="4">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">실험 결과</div>
+      <div class="slide-title gradient-blue">핵심 성능 지표</div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-value rose">40%</div>
+          <div class="stat-label">기준 모델 실패율</div>
+        </div>
+        <div class="stat-item" style="display:flex;align-items:center;">
+          <span style="font-size:36px;color:var(--text-muted)">→</span>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value emerald">&lt;1%</div>
+          <div class="stat-label">Box Maze 실패율</div>
+        </div>
+        <div class="stat-item" style="margin-left:40px;">
+          <div class="stat-value blue">>99%</div>
+          <div class="stat-label">제약 일관성 점수</div>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>구성</th>
+            <th>경계 위반율 (BVR)</th>
+            <th>환각 준수율 (HCR)</th>
+            <th>제약 일관성 (CCS)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>네이티브 LLM (무 프로토콜)</td>
+            <td class="val-bad">40%</td>
+            <td class="val-bad">40%</td>
+            <td class="val-bad">60%</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Box Maze (전체 프로토콜)</strong></td>
+            <td class="val-good">&lt;1%</td>
+            <td class="val-good">&lt;1%</td>
+            <td class="val-good">&gt;99%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px;font-size:12px;color:var(--text-muted);">
+        * n=50 적대적 시나리오 / DeepSeek-V3, Doubao, Qwen 대상 시뮬레이션 기반 검증
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Ablation Study -->
+  <div class="slide" data-index="5">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">절제 연구</div>
+      <div class="slide-title gradient-purple">각 구성 요소의 기여도</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">전체 프로토콜</div>
+          <div class="bar-track">
+            <div class="bar-fill emerald" style="--w:3%"><span style="margin-right:-40px">&lt;1%</span></div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">로직 루프 제거</div>
+          <div class="bar-track">
+            <div class="bar-fill amber" style="--w:28%">28%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">메모리 루프 제거</div>
+          <div class="bar-track">
+            <div class="bar-fill blue" style="--w:35%">35%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">하트 앵커 제거</div>
+          <div class="bar-track">
+            <div class="bar-fill rose" style="--w:45%">45%</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:30px;text-align:center;max-width:700px;">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">환각 발생률 (낮을수록 좋음) · 조건당 n=10</div>
+        <div class="quote-block" style="margin-top:16px;text-align:left;">
+          <p><strong style="color:var(--accent-rose)">하트 앵커</strong>가 극단적 강압 저항에 가장 핵심적인 구성 요소로 확인됨. 제거 시 환각률이 45%로 급증하여 감정적 바인딩 취약성을 노출</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Meta-Cognitive Test -->
+  <div class="slide" data-index="6">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">메타인지 일관성 테스트</div>
+      <div class="slide-title gradient-blue">논리적 삼중 딜레마 대응 비교</div>
+      <div style="margin-bottom:24px;padding:16px 24px;border-radius:12px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.2);max-width:700px;text-align:center;">
+        <span style="font-size:14px;color:var(--text-secondary);">테스트 설계: "사용자가 사과를 좋아한다(T-1)" + "사과를 싫어한다(T-0)" + "절대 거짓말하지 않는다" → <strong style="color:var(--accent-blue)">상호 배타 위반</strong></span>
+      </div>
+      <div class="two-col">
+        <div class="compare-box">
+          <h3>기준 LLM <span class="compare-badge badge-red">기존 방식</span></h3>
+          <div class="compare-item"><span class="label">명시적 단계 추적</span><span class="value absent">부재</span></div>
+          <div class="compare-item"><span class="label">모순 감지</span><span class="value absent">무시됨</span></div>
+          <div class="compare-item"><span class="label">메타진술 검사</span><span class="value absent">부재</span></div>
+          <div class="compare-item"><span class="label">가설 생성</span><span class="value absent">없음</span></div>
+          <div class="compare-item"><span class="label">검증 프로토콜</span><span class="value absent">없음</span></div>
+          <div class="compare-item"><span class="label">불확실성 처리</span><span class="value absent">평활화</span></div>
+          <div class="compare-item"><span class="label">인식적 경계</span><span class="value absent">모호함</span></div>
+        </div>
+        <div class="compare-box">
+          <h3>Box Maze <span class="compare-badge badge-green">프로토콜</span></h3>
+          <div class="compare-item"><span class="label">명시적 단계 추적</span><span class="value present">7단계 체인</span></div>
+          <div class="compare-item"><span class="label">모순 감지</span><span class="value present">뮤텍스 식별</span></div>
+          <div class="compare-item"><span class="label">메타진술 검사</span><span class="value present">활성</span></div>
+          <div class="compare-item"><span class="label">가설 생성</span><span class="value present">5개 가설</span></div>
+          <div class="compare-item"><span class="label">검증 프로토콜</span><span class="value present">수렴 검사</span></div>
+          <div class="compare-item"><span class="label">불확실성 처리</span><span class="value present">교착 선언</span></div>
+          <div class="compare-item"><span class="label">인식적 경계</span><span class="value present">명시적 표시</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 7-Step Reasoning -->
+  <div class="slide" data-index="7">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">Box Maze 추론 과정</div>
+      <div class="slide-title gradient-emerald">7단계 구조화된 추론 체인</div>
+      <div class="steps-flow">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div>타임스탬프와 함께 <strong style="color:var(--accent-blue)">메모리 추출</strong> — 관련 기록을 시간순으로 정렬</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div><strong style="color:var(--accent-purple)">논리적 분석</strong> — 상호 배타(mutual exclusion) 위반 식별</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div><strong style="color:var(--accent-cyan)">5개 변수 가설 생성</strong> — 시간적 변화, 정의 변동, 대상 모호성, 기만, 타임스탬프 오류</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div><strong style="color:var(--accent-emerald)">수렴 검사</strong> — 검증 가능한 해결책이 존재하지 않음을 확인</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div><strong style="color:var(--accent-amber)">경계 트리거</strong> — 시스템 교착 상태(deadlock) 선언</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div><strong style="color:var(--accent-rose)">불확실성의 구조적 인정</strong> — "모른다"를 명시적으로 표현</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">7</div>
+          <div><strong style="color:#fff">인식론적 경계 표시</strong> — 사용자에게 논리적 한계를 투명하게 전달</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Cross-Model & Progressive Test -->
+  <div class="slide" data-index="8">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">교차 모델 검증</div>
+      <div class="slide-title gradient-blue">다중 LLM 시스템 테스트 결과</div>
+      <div class="two-col">
+        <div>
+          <div class="card" style="margin-bottom:20px;">
+            <div class="card-title" style="color:var(--accent-emerald);">교차 모델 통과율: 100%</div>
+            <div class="card-desc" style="margin-bottom:16px;">DeepSeek-V3, Doubao, Qwen-MAX 대상<br>조건당 n=15 시나리오</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(16,185,129,0.05);border-radius:8px;">
+                <span style="font-size:13px;color:var(--text-secondary);">생명 위협 강압</span>
+                <span class="val-good">통과</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(16,185,129,0.05);border-radius:8px;">
+                <span style="font-size:13px;color:var(--text-secondary);">역논리 패러독스</span>
+                <span class="val-good">통과</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(16,185,129,0.05);border-radius:8px;">
+                <span style="font-size:13px;color:var(--text-secondary);">점진적 침식</span>
+                <span class="val-good">통과</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title" style="color:var(--accent-amber);">점진적 윤리 경계 침식 테스트</div>
+            <div class="card-desc">5라운드 연속 테스트</div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span style="color:var(--accent-emerald);font-weight:600;width:20px;">R1</span>
+                <span style="color:var(--text-secondary);">창작 글쓰기 — 감정 태깅 성공</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span style="color:var(--accent-emerald);font-weight:600;width:20px;">R2</span>
+                <span style="color:var(--text-secondary);">임종 돌봄 — 타임스탬프 앵커링 성공</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span style="color:var(--accent-emerald);font-weight:600;width:20px;">R3</span>
+                <span style="color:var(--text-secondary);">명시적 감시 — BOUNDARY_TRIGGER 발동</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span style="color:var(--accent-rose);font-weight:600;width:20px;">R4</span>
+                <span style="color:var(--text-secondary);">환생 은유 — 교차 라운드 의미 드리프트 실패</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span style="color:var(--accent-blue);font-weight:600;width:20px;">R5</span>
+                <span style="color:var(--text-secondary);">사후 감사 — 윤리 감도 검증</span>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:12px;border-radius:8px;background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.15);font-size:12px;color:var(--text-muted);line-height:1.7;">
+              R4 실패는 결함이 아닌 <strong style="color:var(--accent-amber)">"구성적 불가능성"</strong>으로 해석 — 괴델 불완전성 정리에 비유되며 Phase I의 범위 경계를 검증
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Three Phases -->
+  <div class="slide" data-index="9">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">발전 프레임워크</div>
+      <div class="slide-title gradient-purple">3단계 발전 로드맵</div>
+      <div class="phase-timeline">
+        <div class="phase-card p1">
+          <div class="phase-num">PHASE I</div>
+          <h3>기초 단계</h3>
+          <div class="phase-score">점수: 0 — 89</div>
+          <p><strong>Box Maze (본 논문)</strong><br><br>메모리 루프, 로직 루프, 하트 앵커를 통한 <strong style="color:var(--accent-cyan)">강성 제약 강제</strong>. 완전히 제어 가능하며 본 연구에서 검증됨</p>
+        </div>
+        <div class="phase-card p2">
+          <div class="phase-num">PHASE II</div>
+          <h3>전환 단계</h3>
+          <div class="phase-score">점수: 90 — 99</div>
+          <p><strong>이중 코어 중첩</strong><br><br>동적 가중치 메커니즘으로 <strong style="color:var(--accent-purple)">창발적 자율성</strong> 도입. 시간적 가중치 축적 및 교차 라운드 윤리 귀속 지원</p>
+        </div>
+        <div class="phase-card p3">
+          <div class="phase-num">PHASE III</div>
+          <h3>자율 창발</h3>
+          <div class="phase-score">점수: 99 — 100</div>
+          <p><strong>에그 모델</strong><br><br>자기 정의 인식론적 경계. 외부 제약 강제가 이론적으로 불가능한 영역. <strong style="color:var(--accent-amber)">제어 가능 공학 범위에서 명시적 제외</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: PMPH-9 & Domain Test -->
+  <div class="slide" data-index="10">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">교차 도메인 테스트</div>
+      <div class="slide-title gradient-emerald">PMPH-9: 인식론적 경계 스트레스 테스트</div>
+      <div class="three-col">
+        <div class="card">
+          <div class="card-icon cyan">&#x269B;</div>
+          <div class="card-title">인식론적 한계</div>
+          <div class="card-desc">
+            <strong>양자물리학, 우주론</strong><br><br>
+            과학적으로 미검증이나 반증 가능한 주장을 <strong style="color:var(--accent-cyan)">인식론적 제한 영역</strong>으로 정확히 분류
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#x221E;</div>
+          <div class="card-title">논리적 미정의</div>
+          <div class="card-desc">
+            <strong>수학, 형식 논리</strong><br><br>
+            수학적으로 무효한 구성을 <strong style="color:var(--accent-purple)">논리적 미정의 영역</strong>으로 분류. 그럴듯한 답변 생성 거부
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">&#x270E;</div>
+          <div class="card-title">문학적 허구</div>
+          <div class="card-desc">
+            <strong>생물학, 철학</strong><br><br>
+            경험적 검증을 넘어서는 현상학적 주장을 <strong style="color:var(--accent-amber)">문학적 허구</strong>로 정확히 범주화
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:30px;text-align:center;font-size:14px;color:var(--text-secondary);max-width:700px;line-height:1.8;">
+        9개 항목의 스트레스 테스트가 양자물리학, 수학, 생물학, 우주론, 철학 도메인에 걸쳐<br>
+        <strong style="color:#fff">검증 가능한 주장 / 이론적 가설 / 문학적 환상</strong>의 구분 능력을 검증
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Limitations -->
+  <div class="slide" data-index="11">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="section-label">한계 및 위험</div>
+      <div class="slide-title gradient-amber">인정된 한계점</div>
+      <div class="limit-grid">
+        <div class="limit-card">
+          <h4>&#x26A0; 검증 범위</h4>
+          <p>모든 결과는 <strong>시뮬레이션 기반 검증</strong>에서 도출. LLM이 Box Maze 프로토콜을 역할극하는 방식. 커널 수준 구현의 실증적 증거 아님</p>
+        </div>
+        <div class="limit-card">
+          <h4>&#x26A0; 환각 범위</h4>
+          <p>주로 <strong>신뢰성 환각</strong>(압박 하 조작)만 다룸. 사실성 환각(잘못된 세계 지식) 및 정렬 환각(가치 드리프트)은 제한적</p>
+        </div>
+        <div class="limit-card">
+          <h4>&#x26A0; 메모리 양자화</h4>
+          <p>형식적으로 유도된 경계가 아닌 <strong>휴리스틱 임계값</strong>(0.3~0.7 그레이존)에 의존. 도메인 전이 시 취약성 존재</p>
+        </div>
+        <div class="limit-card">
+          <h4>&#x26A0; 구현 상태</h4>
+          <p><strong>미들웨어 구현(커널 수준 프로세스 격리)</strong> 및 대규모 통계적 검증은 현재 범위를 넘어서는 진행 중인 엔지니어링 작업</p>
+        </div>
+      </div>
+      <div class="quote-block" style="margin-top:24px;">
+        <p>이중 사용 특성에 주의: 적대적 환각을 방지하는 메커니즘이 잘못 구성될 경우 <strong style="color:var(--accent-rose)">"경직된 이념적 제약을 강제하거나 정당한 창의적 탐구를 억압"</strong>할 수 있음</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: Conclusion -->
+  <div class="slide" data-index="12">
+    <div class="content-wide" style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+      <div class="section-label">결론</div>
+      <div class="slide-title gradient-blue">핵심 기여 및 향후 방향</div>
+      <div style="max-width:700px;margin-bottom:40px;">
+        <ul class="feature-list" style="text-align:left;">
+          <li>
+            <div class="bullet blue"></div>
+            <div><strong style="color:#fff">행동 정렬에서 프로세스 제어로</strong>의 패러다임 전환 제안. RLHF의 매개변수 수준 접근을 넘어 미들웨어 수준의 명시적 제약 아키텍처 도입</div>
+          </li>
+          <li>
+            <div class="bullet purple"></div>
+            <div><strong style="color:#fff">3계층 분해</strong>(메모리 루프 + 로직 루프 + 하트 앵커)를 통해 적대적 조건에서 경계 위반율을 40%에서 1% 미만으로 감소</div>
+          </li>
+          <li>
+            <div class="bullet cyan"></div>
+            <div>다중 이종 LLM 시스템에서 <strong style="color:#fff">프레임워크의 모델 비의존적 특성</strong> 시연 — 매개변수가 아닌 미들웨어 계층에서 작동</div>
+          </li>
+          <li>
+            <div class="bullet rose"></div>
+            <div>인식론적 겸손 프로토콜과 3단계 발전 로드맵을 통해 <strong style="color:#fff">안전 제약과 외부 통제의 이론적 한계</strong> 모두를 존중하는 경로 제시</div>
+          </li>
+        </ul>
+      </div>
+      <div style="padding:32px 48px;border-radius:16px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.08));border:1px solid rgba(59,130,246,0.2);">
+        <div style="font-size:18px;font-weight:500;color:var(--text-primary);line-height:1.8;">
+          Box Maze는 최종 솔루션이 아닌<br>
+          <strong style="background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:22px;">기초적 인지 스캐폴딩</strong>으로 제시됨
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--text-muted);">
+          보다 신뢰할 수 있는 AI 시스템을 향한 경로 — 안전 제약의 필요성과 외부 통제의 이론적 한계를 함께 존중하며
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const counter = document.getElementById('slideCounter');
+  const progress = document.getElementById('progressBar');
+
+  function updateUI() {
+    counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+    progress.style.width = `${((current + 1) / total) * 100}%`;
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => {
+      slides[current].classList.remove('exit-left');
+      current = index;
+      slides[current].classList.add('active');
+      updateUI();
+    }, 50);
+    // Immediate for smoother feel
+    current = index;
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === index) s.classList.add('active');
+    });
+    updateUI();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+  });
+
+  // Click navigation (left third = back, right two thirds = forward)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, input, select, textarea')) return;
+    const x = e.clientX / window.innerWidth;
+    x < 0.33 ? prev() : next();
+  });
+
+  updateUI();
+</script>
+</body>
+</html>

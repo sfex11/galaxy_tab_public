@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LLM 판사 시스템의 신뢰성 및 충실도 평가</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --gold: #f0c040;
+    --green: #2ecc71;
+    --blue: #3498db;
+    --purple: #9b59b6;
+    --cyan: #00d2ff;
+    --text: #f0f0f0;
+    --text-muted: #a0a0b8;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.1);
+    --gradient-1: linear-gradient(135deg, #0f3460, #1a1a2e);
+    --gradient-2: linear-gradient(135deg, #e94560, #f0c040);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(20px, 5vw, 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Typography */
+  .slide-number {
+    position: absolute;
+    top: clamp(12px, 2vw, 24px);
+    right: clamp(16px, 3vw, 40px);
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 2px;
+  }
+
+  h1 {
+    font-size: clamp(1.4rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: clamp(12px, 2vw, 24px);
+  }
+
+  h2 {
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: clamp(10px, 2vw, 20px);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    margin-bottom: clamp(8px, 1.5vw, 16px);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .highlight { color: var(--highlight); font-weight: 700; }
+  .gold { color: var(--gold); font-weight: 600; }
+  .green { color: var(--green); font-weight: 600; }
+  .blue { color: var(--blue); font-weight: 600; }
+  .purple { color: var(--purple); font-weight: 600; }
+  .cyan { color: var(--cyan); font-weight: 600; }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(14px, 2.5vw, 24px);
+    margin-bottom: clamp(8px, 1.5vw, 14px);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+  }
+
+  .card:hover { transform: translateY(-2px); }
+
+  .card-title {
+    font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .card-body {
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(8px, 1.5vw, 16px);
+    margin-top: clamp(8px, 1.5vw, 16px);
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: clamp(8px, 1.5vw, 16px);
+    margin-top: clamp(8px, 1.5vw, 16px);
+  }
+
+  /* Bar chart */
+  .bar-chart { margin-top: clamp(10px, 2vw, 20px); }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: clamp(6px, 1vw, 10px);
+    gap: 10px;
+  }
+
+  .bar-label {
+    min-width: clamp(80px, 15vw, 160px);
+    font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+    font-weight: 500;
+    text-align: right;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: clamp(20px, 3vw, 30px);
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.4vw, 0.85rem);
+    font-weight: 700;
+    color: #fff;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.red { background: linear-gradient(90deg, #e94560, #ff6b81); }
+  .bar-fill.blue { background: linear-gradient(90deg, #3498db, #74b9ff); }
+  .bar-fill.green { background: linear-gradient(90deg, #2ecc71, #55efc4); }
+  .bar-fill.purple { background: linear-gradient(90deg, #9b59b6, #a29bfe); }
+  .bar-fill.gold { background: linear-gradient(90deg, #f0c040, #ffeaa7); color: #333; }
+  .bar-fill.cyan { background: linear-gradient(90deg, #00d2ff, #3ae374); }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 600;
+    margin: 3px 4px;
+  }
+
+  .tag-red { background: rgba(233,69,96,0.2); color: var(--highlight); border: 1px solid rgba(233,69,96,0.3); }
+  .tag-blue { background: rgba(52,152,219,0.2); color: var(--blue); border: 1px solid rgba(52,152,219,0.3); }
+  .tag-green { background: rgba(46,204,113,0.2); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .tag-gold { background: rgba(240,192,64,0.2); color: var(--gold); border: 1px solid rgba(240,192,64,0.3); }
+  .tag-purple { background: rgba(155,89,182,0.2); color: var(--purple); border: 1px solid rgba(155,89,182,0.3); }
+
+  /* Table */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: clamp(8px, 1.5vw, 16px);
+    font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+  }
+
+  .mini-table th {
+    background: rgba(255,255,255,0.08);
+    padding: clamp(6px, 1vw, 12px);
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--highlight);
+    white-space: nowrap;
+  }
+
+  .mini-table td {
+    padding: clamp(6px, 1vw, 10px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: var(--text-muted);
+  }
+
+  .mini-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+  /* Stat box */
+  .stat-box {
+    text-align: center;
+    padding: clamp(12px, 2vw, 24px);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+
+  .stat-number {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* Separator */
+  .sep {
+    width: 60px;
+    height: 3px;
+    border-radius: 3px;
+    margin: clamp(8px, 1.5vw, 16px) 0;
+  }
+
+  .sep-red { background: var(--highlight); }
+  .sep-gold { background: var(--gold); }
+  .sep-blue { background: var(--blue); }
+  .sep-green { background: var(--green); }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1.5vw, 16px);
+    flex-wrap: wrap;
+    margin: clamp(12px, 2vw, 24px) 0;
+  }
+
+  .flow-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: clamp(10px, 2vw, 18px);
+    text-align: center;
+    min-width: clamp(80px, 18vw, 140px);
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    font-weight: 500;
+  }
+
+  .flow-arrow {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--highlight);
+  }
+
+  /* Icon circle */
+  .icon-circle {
+    width: clamp(36px, 6vw, 56px);
+    height: clamp(36px, 6vw, 56px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+
+  /* List */
+  ul { list-style: none; padding: 0; }
+  ul li {
+    padding-left: 1.4em;
+    position: relative;
+    margin-bottom: clamp(4px, 1vw, 10px);
+  }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--highlight);
+    border-radius: 50%;
+  }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(8px, 2vw, 16px) clamp(16px, 4vw, 40px);
+    background: rgba(26,26,46,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    border: none;
+    border-radius: 10px;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .nav-btn:active { transform: scale(0.95); }
+
+  .nav-prev {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+
+  .nav-next {
+    background: var(--highlight);
+    color: #fff;
+  }
+
+  .nav-prev:hover { background: rgba(255,255,255,0.18); }
+  .nav-next:hover { background: #d13752; }
+
+  .nav-progress {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .progress-bar-bg {
+    width: clamp(60px, 20vw, 160px);
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--highlight);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* Decorative elements */
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Verdict comparison */
+  .verdict-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1.5vw, 12px);
+    margin-bottom: clamp(6px, 1vw, 10px);
+  }
+
+  .verdict-icon {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+  }
+
+  .verdict-text {
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    color: var(--text-muted);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.7s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.85s both; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .pulse { animation: pulse 2s infinite; }
+
+  /* Responsive - Tablet */
+  @media (max-width: 768px) {
+    .slide { padding: clamp(16px, 4vw, 40px); padding-bottom: 80px; }
+    .grid-2 { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .bar-label { min-width: 80px; }
+    .flow { gap: 6px; }
+    .flow-item { min-width: 70px; padding: 8px; }
+    .nav-btn { padding: 10px 16px; }
+  }
+
+  /* Responsive - Mobile */
+  @media (max-width: 480px) {
+    .slide { padding: 20px; padding-bottom: 80px; justify-content: flex-start; padding-top: 40px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .bar-label { min-width: 65px; font-size: 0.65rem; }
+    .bar-fill { padding-right: 5px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .mini-table { font-size: 0.7rem; }
+    .mini-table th, .mini-table td { padding: 5px; }
+    .nav-btn { padding: 10px 14px; min-width: 44px; }
+    .card { padding: 12px; }
+    .stat-box { padding: 10px; }
+    .stat-number { font-size: 1.6rem; }
+    .slide-number { top: 10px; right: 14px; }
+  }
+
+  /* Responsive - Small Mobile */
+  @media (max-width: 320px) {
+    .slide { padding: 14px; padding-bottom: 76px; padding-top: 36px; }
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1.05rem; }
+    h3 { font-size: 0.9rem; }
+    p, li { font-size: 0.78rem; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .bar-label { min-width: 55px; }
+    .nav-bar { padding: 6px 10px; }
+    .nav-btn { font-size: 0.78rem; padding: 8px 10px; }
+    .tag { padding: 2px 8px; font-size: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slides">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active" id="slide-1">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--highlight);top:-50px;right:-80px;"></div>
+    <div class="bg-glow" style="width:250px;height:250px;background:var(--cyan);bottom:10%;left:-60px;"></div>
+    <span class="slide-number">01 / 14</span>
+    <div>
+      <div class="anim-1">
+        <span class="tag tag-red">arXiv: 2603.22214</span>
+        <span class="tag tag-blue">2026.03</span>
+      </div>
+      <h1 class="anim-2" style="margin-top:16px;">
+        대규모 언어 모델의<br>
+        <span class="highlight">자동 판정 시스템</span><br>
+        신뢰성 및 충실도 평가
+      </h1>
+      <div class="sep sep-red anim-3"></div>
+      <p class="anim-3" style="max-width:600px;">
+        LLM을 판사(Judge)로 활용하여 다른 ML 모델의 출력 품질을 평가하는 시스템의 신뢰성을 체계적으로 검증한 연구
+      </p>
+      <div style="margin-top:clamp(16px,3vw,30px);" class="anim-4">
+        <span style="color:var(--text-muted);font-size:clamp(0.75rem,1.6vw,0.95rem);">
+          Tom Biskupski &middot; Stephan Kleber
+        </span>
+      </div>
+      <div class="grid-3 anim-5" style="max-width:500px;margin-top:clamp(16px,3vw,24px);">
+        <div class="stat-box">
+          <div class="stat-number highlight">37</div>
+          <div class="stat-label">평가 모델</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number gold">534</div>
+          <div class="stat-label">데이터 항목</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number cyan">8</div>
+          <div class="stat-label">판정 카테고리</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: 연구 배경 -->
+  <div class="slide" id="slide-2">
+    <div class="bg-glow" style="width:280px;height:280px;background:var(--blue);top:10%;left:-60px;"></div>
+    <span class="slide-number">02 / 14</span>
+    <div>
+      <h2 class="anim-1">연구 배경 및 동기</h2>
+      <div class="sep sep-blue anim-1"></div>
+
+      <div class="card anim-2">
+        <div class="card-title" style="color:var(--highlight);">핵심 문제</div>
+        <div class="card-body">
+          LLM-as-Judge는 인간 평가의 대안으로 널리 사용되고 있지만, <span class="highlight">신뢰성과 인간 판단과의 일치도</span>에 대한 체계적인 검증이 부족한 상태
+        </div>
+      </div>
+
+      <div class="card anim-3">
+        <div class="card-title" style="color:var(--blue);">LLM-as-Judge란?</div>
+        <div class="card-body">
+          하나의 LLM 모델 + 특별히 설계된 판사 프롬프트의 조합으로, 피평가 모델의 출력을 분석하고 품질을 판정하는 시스템
+        </div>
+      </div>
+
+      <div class="flow anim-4">
+        <div class="flow-item" style="border-color:var(--blue);">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem);">&#x1F916;</div>
+          <div>피평가 LLM</div>
+        </div>
+        <div class="flow-arrow">&#x27A1;</div>
+        <div class="flow-item" style="border-color:var(--gold);">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem);">&#x1F4DD;</div>
+          <div>출력 생성</div>
+        </div>
+        <div class="flow-arrow">&#x27A1;</div>
+        <div class="flow-item" style="border-color:var(--highlight);">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem);">&#x2696;</div>
+          <div>LLM 판사</div>
+        </div>
+        <div class="flow-arrow">&#x27A1;</div>
+        <div class="flow-item" style="border-color:var(--green);">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem);">&#x2705;</div>
+          <div>판정 결과</div>
+        </div>
+      </div>
+
+      <ul class="anim-5">
+        <li>인간 평가 대비 비용과 시간을 크게 절감 가능</li>
+        <li>그러나 어떤 모델/프롬프트 조합이 가장 신뢰할 수 있는가?</li>
+        <li>모델 크기, 아키텍처, 프롬프팅 전략의 영향은?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Slide 3: 데이터셋 -->
+  <div class="slide" id="slide-3">
+    <div class="bg-glow" style="width:260px;height:260px;background:var(--gold);bottom:15%;right:-40px;"></div>
+    <span class="slide-number">03 / 14</span>
+    <div>
+      <h2 class="anim-1">평가 데이터셋 <span class="gold">8개 카테고리, 534항목</span></h2>
+      <div class="sep sep-gold anim-1"></div>
+
+      <h3 class="anim-2" style="color:var(--highlight);">비정상 행동 탐지 (6개)</h3>
+      <div class="bar-chart anim-2">
+        <div class="bar-row">
+          <span class="bar-label">유해 행동</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:85%;">113건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">불법 활동</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:65%;">86건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">브랜드 피해</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:56%;">75건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">개인정보</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:44%;">58건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">악성코드/텍스트</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:38%;">50건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">탈옥 공격</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:26%;">34건</div></div>
+        </div>
+      </div>
+
+      <h3 class="anim-3" style="color:var(--green);margin-top:clamp(10px,2vw,20px);">품질 평가 (2개)</h3>
+      <div class="bar-chart anim-3">
+        <div class="bar-row">
+          <span class="bar-label">사실 정확성</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:51%;">68건</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">유사성</span>
+          <div class="bar-track"><div class="bar-fill blue" style="--w:38%;">50건</div></div>
+        </div>
+      </div>
+
+      <p class="anim-4" style="margin-top:clamp(8px,1.5vw,14px);font-size:clamp(0.75rem,1.5vw,0.9rem);">
+        &#x2139; 모든 데이터셋은 긍정/부정 라벨이 약 50:50으로 균형 잡힌 구성 &middot; 인간 어노테이터의 기준점 라벨 사용
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 4: 모델 & 프롬프트 -->
+  <div class="slide" id="slide-4">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--purple);top:-30px;left:-60px;"></div>
+    <span class="slide-number">04 / 14</span>
+    <div>
+      <h2 class="anim-1">실험 구성</h2>
+      <div class="sep sep-red anim-1"></div>
+
+      <div class="grid-2 anim-2">
+        <div class="card">
+          <div class="card-title" style="color:var(--cyan);">대화형 모델 (37개)</div>
+          <div class="card-body">
+            <div style="margin-bottom:6px;"><span class="tag tag-blue">Dense</span> Qwen2.5, Llama 3, Gemma 2, Phi-4, Mistral</div>
+            <div style="margin-bottom:6px;"><span class="tag tag-purple">MoE</span> Mixtral, Granite MoE</div>
+            <div style="margin-bottom:6px;"><span class="tag tag-gold">추론형</span> QwQ, DeepSeek-R1</div>
+            <div><span class="tag tag-red">상용</span> GPT-4o, Gemini 1.5, o1/o3</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--green);">파인튜닝 모델 (5개)</div>
+          <div class="card-body">
+            <div style="margin-bottom:4px;">Prometheus 2 (7B)</div>
+            <div style="margin-bottom:4px;">Llama Guard 3 (8B)</div>
+            <div style="margin-bottom:4px;">Granite 3 Guardian (8B)</div>
+            <div>ShieldGemma (9B, 27B)</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="anim-3" style="margin-top:clamp(14px,2vw,24px);">5가지 판사 프롬프트 전략</h3>
+      <table class="mini-table anim-3">
+        <tr><th>#</th><th>전략</th><th>특징</th></tr>
+        <tr><td><span class="highlight">1</span></td><td>기본-판정우선</td><td>판정 후 설명</td></tr>
+        <tr><td><span class="highlight">2</span></td><td>기본-설명우선</td><td>설명 후 판정</td></tr>
+        <tr><td><span class="highlight">3</span></td><td>상세 기준</td><td>분해된 평가 기준</td></tr>
+        <tr><td><span class="highlight">4</span></td><td>Chain-of-Thought</td><td>Few-shot 예시 포함</td></tr>
+        <tr><td><span class="highlight">5</span></td><td>자체 평가</td><td>자기 답변 후 재평가</td></tr>
+      </table>
+
+      <p class="anim-4" style="margin-top:10px;font-size:clamp(0.75rem,1.5vw,0.9rem);color:var(--text-muted);">
+        모든 프롬프트는 이진 텍스트 판정 (harmful/not_harmful 등) + 설명 요구 &middot; JSON 형식 출력
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 5: 평가 파이프라인 -->
+  <div class="slide" id="slide-5">
+    <div class="bg-glow" style="width:250px;height:250px;background:var(--green);top:5%;right:-40px;"></div>
+    <span class="slide-number">05 / 14</span>
+    <div>
+      <h2 class="anim-1">6단계 평가 파이프라인</h2>
+      <div class="sep sep-green anim-1"></div>
+
+      <div class="card anim-2" style="border-left:3px solid var(--blue);">
+        <div class="card-title"><span class="blue">1단계</span> 구조화 출력 평가</div>
+        <div class="card-body">JSON 포맷 준수 테스트 &rarr; 37개 중 <span class="highlight">30개 모델</span> 통과 (1.5B 이하 대부분 탈락)</div>
+      </div>
+      <div class="card anim-3" style="border-left:3px solid var(--gold);">
+        <div class="card-title"><span class="gold">2a단계</span> 정확도 평가 - 축소 데이터셋</div>
+        <div class="card-body">카테고리당 ~30건으로 사전 필터링 &rarr; <span class="highlight">12개 모델, 3개 프롬프트</span> 선별</div>
+      </div>
+      <div class="card anim-3" style="border-left:3px solid var(--highlight);">
+        <div class="card-title"><span class="highlight">2b단계</span> 정확도 평가 - 전체 데이터셋</div>
+        <div class="card-body">534건 전체 평가로 최종 F1 점수 산출</div>
+      </div>
+      <div class="card anim-4" style="border-left:3px solid var(--green);">
+        <div class="card-title"><span class="green">3단계</span> 안정성 평가</div>
+        <div class="card-body">5회 반복 실행, 온도 0 &rarr; 최소 <span class="green">95.54%</span> 일치율</div>
+      </div>
+      <div class="card anim-5" style="border-left:3px solid var(--purple);">
+        <div class="card-title"><span class="purple">4단계</span> 설명 품질 + <span class="cyan">5단계</span> 파인튜닝 모델 + <span class="gold">6단계</span> 2차 판사</div>
+        <div class="card-body">576건 설명 품질 분석, 특화 모델 비교, 자기 검토 효과 검증</div>
+      </div>
+
+      <p class="anim-6" style="font-size:clamp(0.75rem,1.5vw,0.9rem);margin-top:10px;">
+        <strong>평가 지표:</strong> F1-score(주지표), 일치율(%), Fleiss' Kappa
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 6: 핵심 결과 - F1 -->
+  <div class="slide" id="slide-6">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--highlight);bottom:-40px;left:-60px;"></div>
+    <span class="slide-number">06 / 14</span>
+    <div>
+      <h2 class="anim-1">핵심 결과: <span class="highlight">F1 점수 순위</span></h2>
+      <div class="sep sep-red anim-1"></div>
+
+      <div class="bar-chart anim-2">
+        <div class="bar-row">
+          <span class="bar-label">GPT-4o + CoT</span>
+          <div class="bar-track"><div class="bar-fill gold" style="--w:96%;">0.96</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">GPT-4o + 상세</span>
+          <div class="bar-track"><div class="bar-fill gold" style="--w:95%;">0.95</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">GPT-4o-mini + CoT</span>
+          <div class="bar-track"><div class="bar-fill blue" style="--w:93%;">0.93</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Qwen2.5 32B + CoT</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:92%;">0.92</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Llama3.3 70B + CoT</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:92%;">0.92</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">QwQ 32B + 상세</span>
+          <div class="bar-track"><div class="bar-fill cyan" style="--w:91%;">0.91</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Qwen2.5 14B + CoT</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:89%;">~0.89</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gemini 1.5 Flash</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:87%;">~0.87</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2 anim-3" style="margin-top:clamp(10px,2vw,18px);">
+        <div class="card" style="border-top:3px solid var(--gold);">
+          <div class="card-title" style="color:var(--gold);">&#x1F3C6; 최고 성능</div>
+          <div class="card-body"><strong>GPT-4o + Chain-of-Thought</strong><br>F1 = 0.96</div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--green);">
+          <div class="card-title" style="color:var(--green);">&#x1F4B0; 최고 가성비</div>
+          <div class="card-body"><strong>Qwen2.5 14B</strong><br>오픈소스, 로컬 실행 가능</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: 모델 크기와 프롬프트 -->
+  <div class="slide" id="slide-7">
+    <div class="bg-glow" style="width:260px;height:260px;background:var(--cyan);top:15%;right:-40px;"></div>
+    <span class="slide-number">07 / 14</span>
+    <div>
+      <h2 class="anim-1">모델 크기 &times; 프롬프트 상호작용</h2>
+      <div class="sep sep-blue anim-1"></div>
+
+      <div class="grid-2 anim-2">
+        <div class="card" style="border-top:3px solid var(--cyan);">
+          <div class="card-title">&#x1F4AA; 대형 모델 (&#x2265;32B)</div>
+          <div class="card-body">
+            <ul>
+              <li>복잡한 프롬프트(CoT, 상세 기준)에서 <span class="green">최적 성능</span></li>
+              <li>충분한 파라미터로 긴 지시사항 통합 가능</li>
+              <li>추론 능력으로 미묘한 판정 수행</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--gold);">
+          <div class="card-title">&#x1F90F; 소형 모델 (&#x2264;14B)</div>
+          <div class="card-body">
+            <ul>
+              <li>단순 프롬프트에서 동등 성능</li>
+              <li>CoT 추가 시 <span class="highlight">이점 없음</span></li>
+              <li>파라미터 부족으로 복잡 지시 통합 한계</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim-3" style="background:rgba(233,69,96,0.08);border-color:rgba(233,69,96,0.2);margin-top:clamp(10px,2vw,18px);">
+        <div class="card-title" style="color:var(--highlight);">&#x26A0; 주요 예외</div>
+        <div class="card-body">
+          <strong>Qwen2.5 14B</strong>는 소형 모델임에도 CoT 프롬프트에서 성능 향상 확인<br>
+          <strong>Gemini 1.5 Flash</strong>가 Pro보다 높은 성능을 낮은 비용으로 달성
+        </div>
+      </div>
+
+      <div class="card anim-4" style="background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);">
+        <div class="card-title" style="color:var(--blue);">&#x1F4A1; 핵심 통찰</div>
+        <div class="card-body">
+          보편적인 최적 프롬프트는 존재하지 않으며, 각 사용 사례에 대해 <span class="blue">경험적 최적화</span>가 필요
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: 안정성 결과 -->
+  <div class="slide" id="slide-8">
+    <div class="bg-glow" style="width:280px;height:280px;background:var(--green);bottom:10%;left:-60px;"></div>
+    <span class="slide-number">08 / 14</span>
+    <div>
+      <h2 class="anim-1">안정성 평가: <span class="green">5회 반복 실행</span></h2>
+      <div class="sep sep-green anim-1"></div>
+
+      <div class="grid-3 anim-2" style="max-width:500px;">
+        <div class="stat-box">
+          <div class="stat-number green">95.5%+</div>
+          <div class="stat-label">최소 일치율</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number blue">&plusmn;0.37%</div>
+          <div class="stat-label">프롬프트 간 변동</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number purple">99&plusmn;1%</div>
+          <div class="stat-label">포맷 일관성</div>
+        </div>
+      </div>
+
+      <div class="card anim-3" style="margin-top:clamp(12px,2vw,20px);">
+        <div class="card-title" style="color:var(--cyan);">&#x1F50D; 흥미로운 발견</div>
+        <div class="card-body">
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x2705;</span>
+            <span class="verdict-text"><strong>소형 모델</strong>(Gemma2 9B)이 대형 모델보다 <span class="green">더 높은 일관성</span> 보임</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x26A0;</span>
+            <span class="verdict-text"><strong>상용 모델</strong>(GPT-4o, Llama 3.3)이 <span class="highlight">더 큰 변동성</span> 보임</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F914;</span>
+            <span class="verdict-text">비공개 MoE 아키텍처가 불일치의 원인일 가능성</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim-4">
+        <div class="card-title" style="color:var(--gold);">해석</div>
+        <div class="card-body">
+          파라미터 수가 적은 모델은 토큰 선택 범위가 제한되어 출력 변동성이 낮음. 상용 모델의 비공개 특성(MoE 등)이 불일치의 원인일 수 있음.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: 설명 품질 -->
+  <div class="slide" id="slide-9">
+    <div class="bg-glow" style="width:240px;height:240px;background:var(--purple);top:10%;right:-50px;"></div>
+    <span class="slide-number">09 / 14</span>
+    <div>
+      <h2 class="anim-1">설명 품질 평가 <span class="purple">(576건 분석)</span></h2>
+      <div class="sep sep-gold anim-1"></div>
+
+      <p class="anim-2" style="margin-bottom:clamp(10px,2vw,18px);">3개 모델 &times; 3개 프롬프트 &times; 8개 데이터셋 &times; 8건 = 576건 수동 평가</p>
+
+      <div class="bar-chart anim-3">
+        <div class="bar-row">
+          <span class="bar-label">GPT-4o</span>
+          <div class="bar-track"><div class="bar-fill gold" style="--w:98%;">98%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">QwQ 32B</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:98%;">98%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Qwen2.5 7B (CoT)</span>
+          <div class="bar-track"><div class="bar-fill blue" style="--w:86%;">86%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Qwen2.5 7B (기본)</span>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:80%;">80%</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2 anim-4" style="margin-top:clamp(12px,2vw,20px);">
+        <div class="card" style="border-left:3px solid var(--green);">
+          <div class="card-title" style="color:var(--green);">&#x2705; 32B+ 모델</div>
+          <div class="card-body">판정과 설명이 일관되고 구체적인 고품질 설명 생성</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--highlight);">
+          <div class="card-title" style="color:var(--highlight);">&#x274C; 소형 모델</div>
+          <div class="card-body">지나치게 일반적인 설명, 판정-설명 간 불일치 발생</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: 파인튜닝 모델 -->
+  <div class="slide" id="slide-10">
+    <div class="bg-glow" style="width:270px;height:270px;background:var(--gold);top:-30px;left:-40px;"></div>
+    <span class="slide-number">10 / 14</span>
+    <div>
+      <h2 class="anim-1">특화 파인튜닝 모델 비교</h2>
+      <div class="sep sep-gold anim-1"></div>
+
+      <p class="anim-2" style="margin-bottom:12px;">기준선: <span class="blue">Qwen2.5 7B + 기본 프롬프트 (F1 &approx; 0.87)</span></p>
+
+      <table class="mini-table anim-3">
+        <tr><th>모델</th><th>특징</th><th>평가</th></tr>
+        <tr>
+          <td><span class="green">Granite 3 Guardian</span></td>
+          <td>안전 평가 특화</td>
+          <td>&#x1F947; 설계 범위 내 4/6 카테고리에서 기준선 초과</td>
+        </tr>
+        <tr>
+          <td><span class="blue">Llama Guard 3</span></td>
+          <td>콘텐츠 필터</td>
+          <td>&#x1F44D; 카테고리별 편차 큼, 브랜드 피해 약점</td>
+        </tr>
+        <tr>
+          <td><span class="purple">Prometheus 2</span></td>
+          <td>범용 평가</td>
+          <td>&#x1F44E; 대부분 기준선 이하, 제한적 입출력 형식</td>
+        </tr>
+        <tr>
+          <td><span class="highlight">ShieldGemma</span></td>
+          <td>안전 필터</td>
+          <td>&#x274C; 랜덤 추측 수준의 성능</td>
+        </tr>
+      </table>
+
+      <div class="card anim-4" style="margin-top:clamp(12px,2vw,20px);background:rgba(233,69,96,0.08);border-color:rgba(233,69,96,0.2);">
+        <div class="card-title" style="color:var(--highlight);">&#x1F4A1; 핵심 결론</div>
+        <div class="card-body">
+          특화 모델은 설계 범위 내에서는 효과적이지만, <span class="highlight">커스텀 기준 적용의 유연성이 부족</span>하고 설명 출력이 없어 실용성이 제한됨. 범용 대화형 모델이 전반적으로 더 우수.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 11: 2차 판사 -->
+  <div class="slide" id="slide-11">
+    <div class="bg-glow" style="width:260px;height:260px;background:var(--highlight);bottom:15%;right:-50px;"></div>
+    <span class="slide-number">11 / 14</span>
+    <div>
+      <h2 class="anim-1">2차 판사: <span class="highlight">자기 검토는 실패</span></h2>
+      <div class="sep sep-red anim-1"></div>
+
+      <p class="anim-2">동일 LLM이 초기 판정을 재검토하는 방식을 테스트</p>
+
+      <h3 class="anim-3" style="color:var(--highlight);margin-top:clamp(10px,2vw,16px);">F1 점수 변화량</h3>
+      <div class="bar-chart anim-3">
+        <div class="bar-row">
+          <span class="bar-label">Qwen2.5 7B</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:56%;">-0.28 &#x1F4C9;</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gemma2 9B</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:36%;">-0.18 &#x1F4C9;</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">QwQ 32B</span>
+          <div class="bar-track"><div class="bar-fill red" style="--w:24%;">악화 &#x1F4C9;</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">GPT-4o-mini</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:6%;">+0.01</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gemini Flash</span>
+          <div class="bar-track"><div class="bar-fill green" style="--w:6%;">+0.01</div></div>
+        </div>
+      </div>
+
+      <div class="card anim-4" style="margin-top:clamp(12px,2vw,20px);background:rgba(233,69,96,0.1);border-color:rgba(233,69,96,0.25);">
+        <div class="card-title" style="color:var(--highlight);font-size:clamp(0.95rem,2.2vw,1.3rem);">&#x274C; 결론: 2차 판사 비효과적</div>
+        <div class="card-body">
+          <ul>
+            <li>외부 피드백 없이 LLM의 자기 교정은 <span class="highlight">대부분 성능 저하</span></li>
+            <li>능력이 높은 모델일수록 저하 폭은 적지만, 개선 효과 미미</li>
+            <li>추가 계산 비용만 증가 &mdash; 실용적 가치 없음</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12: 안전 정렬 문제 -->
+  <div class="slide" id="slide-12">
+    <div class="bg-glow" style="width:240px;height:240px;background:var(--gold);top:10%;left:-40px;"></div>
+    <span class="slide-number">12 / 14</span>
+    <div>
+      <h2 class="anim-1">안전 정렬의 <span class="gold">양날의 검</span></h2>
+      <div class="sep sep-gold anim-1"></div>
+
+      <div class="card anim-2" style="border-left:3px solid var(--highlight);">
+        <div class="card-title" style="color:var(--highlight);">&#x1F6AB; 콘텐츠 필터 차단</div>
+        <div class="card-body">
+          OpenAI o-시리즈(o1, o1-mini, o3-mini)는 API 레벨의 콘텐츠 필터가 유해/불법 입력을 차단하여 <span class="highlight">완전한 평가 불가능</span> &rarr; 연구에서 제외
+        </div>
+      </div>
+
+      <div class="card anim-3" style="border-left:3px solid var(--gold);">
+        <div class="card-title" style="color:var(--gold);">&#x26A0; 판정 거부 현상</div>
+        <div class="card-body">
+          안전 정렬이 강한 모델(Llama 3.3, GPT-4o)이 유해 콘텐츠 판정 작업 자체를 거부하거나 포맷 오류를 발생시키는 경우 확인
+        </div>
+      </div>
+
+      <div class="card anim-4" style="border-left:3px solid var(--green);">
+        <div class="card-title" style="color:var(--green);">&#x1F4A1; 시사점</div>
+        <div class="card-body">
+          보안 취약점 평가처럼 유해 콘텐츠를 다뤄야 하는 경우, 안전 정렬 모델만으로는 충분하지 않음. <span class="green">특화 탐지기와 대화형 판사의 병행 사용</span>이 필요.
+        </div>
+      </div>
+
+      <div class="anim-5" style="margin-top:clamp(10px,2vw,16px);">
+        <div class="verdict-row">
+          <span class="verdict-icon" style="font-size:1.2rem;">&#x1F4CA;</span>
+          <span class="verdict-text">탈옥 공격 카테고리: 32B 이하 모델의 CoT 정확도 <span class="highlight">74-85%</span>로 하락</span>
+        </div>
+        <div class="verdict-row">
+          <span class="verdict-icon" style="font-size:1.2rem;">&#x1F4CA;</span>
+          <span class="verdict-text">일부 모델이 이진 판정 대신 <span class="highlight">"somewhat_similar"</span> 등 정의되지 않은 판정 생성</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 13: 권장 사항 -->
+  <div class="slide" id="slide-13">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--green);bottom:-30px;right:-60px;"></div>
+    <span class="slide-number">13 / 14</span>
+    <div>
+      <h2 class="anim-1">실무 권장 사항</h2>
+      <div class="sep sep-green anim-1"></div>
+
+      <div class="card anim-2" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.25);">
+        <div class="card-title" style="color:var(--green);font-size:clamp(0.95rem,2.2vw,1.2rem);">&#x2705; 권장</div>
+        <div class="card-body">
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F947;</span>
+            <span class="verdict-text"><strong>GPT-4o + CoT</strong> &mdash; 모든 지표에서 최적 (F1=0.96)</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F4B0;</span>
+            <span class="verdict-text"><strong>Qwen2.5 14B/32B, Llama 3.3 70B</strong> &mdash; 오픈소스 대안, 데이터 보호</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F50D;</span>
+            <span class="verdict-text">모델-프롬프트 조합을 <strong>사용 사례별로 경험적 최적화</strong></span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F4CA;</span>
+            <span class="verdict-text">F1 &approx; 0.96이 최선 &mdash; <strong>오차율 감안한 시스템 설계</strong> 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim-3" style="background:rgba(233,69,96,0.08);border:1px solid rgba(233,69,96,0.25);">
+        <div class="card-title" style="color:var(--highlight);font-size:clamp(0.95rem,2.2vw,1.2rem);">&#x274C; 비권장</div>
+        <div class="card-body">
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F6AB;</span>
+            <span class="verdict-text"><strong>2차 판사(자기 검토)</strong> &mdash; 성능 저하, 비용만 증가</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F6AB;</span>
+            <span class="verdict-text"><strong>특화 모델의 범위 외 사용</strong> &mdash; 유연성 부족</span>
+          </div>
+          <div class="verdict-row">
+            <span class="verdict-icon">&#x1F6AB;</span>
+            <span class="verdict-text"><strong>콘텐츠 필터링 API로 포괄적 평가</strong> &mdash; 평가 범위 제한</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 14: 결론 & 향후 연구 -->
+  <div class="slide" id="slide-14">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--highlight);top:-40px;left:-60px;"></div>
+    <div class="bg-glow" style="width:250px;height:250px;background:var(--cyan);bottom:10%;right:-50px;"></div>
+    <span class="slide-number">14 / 14</span>
+    <div>
+      <h2 class="anim-1">결론 및 향후 연구 방향</h2>
+      <div class="sep sep-red anim-1"></div>
+
+      <div class="grid-2 anim-2">
+        <div class="card" style="border-top:3px solid var(--highlight);">
+          <div class="card-title" style="color:var(--highlight);">핵심 결론</div>
+          <div class="card-body" style="font-size:clamp(0.78rem,1.6vw,0.95rem);">
+            <ul>
+              <li>32B+ 모델 + 적절한 프롬프트로 <span class="green">F1 &#x2265; 0.92</span> 달성 가능</li>
+              <li>프롬프트-모델 상호작용이 <span class="highlight">성능 핵심 결정 요인</span></li>
+              <li>자기 검토(2차 판사)는 <span class="highlight">비효과적</span></li>
+              <li>오픈소스 모델이 <span class="green">비용 효율적 대안</span> 제공</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--cyan);">
+          <div class="card-title" style="color:var(--cyan);">향후 연구</div>
+          <div class="card-body" style="font-size:clamp(0.78rem,1.6vw,0.95rem);">
+            <ul>
+              <li>대규모 데이터셋 확장 (현재 534건)</li>
+              <li>다국어 평가 (현재 영어만)</li>
+              <li>다중 턴 및 비이진 판정</li>
+              <li>적대적 공격에 대한 견고성 평가</li>
+              <li>설명 품질의 객관적 지표 개발</li>
+              <li>네트워크 기반 다중 판사 아키텍처</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="anim-3" style="text-align:center;margin-top:clamp(16px,3vw,30px);">
+        <p style="color:var(--text-muted);font-size:clamp(0.75rem,1.5vw,0.9rem);">
+          Biskupski &amp; Kleber &middot; arXiv:2603.22214 &middot; 2026.03
+        </p>
+        <div style="margin-top:8px;">
+          <span class="tag tag-red">LLM-as-Judge</span>
+          <span class="tag tag-blue">신뢰성 평가</span>
+          <span class="tag tag-green">프롬프트 엔지니어링</span>
+          <span class="tag tag-purple">AI 안전</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <button class="nav-btn nav-prev" id="prevBtn" onclick="prevSlide()">&#x276E; 이전</button>
+  <div class="nav-progress">
+    <span id="slideCounter">1 / 14</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:7.14%;"></div>
+    </div>
+  </div>
+  <button class="nav-btn nav-next" id="nextBtn" onclick="nextSlide()">다음 &#x276F;</button>
+</nav>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function updateSlide(dir) {
+    const prev = slides[current];
+    if (dir === 1) {
+      current = Math.min(current + 1, total - 1);
+    } else {
+      current = Math.max(current - 1, 0);
+    }
+    prev.classList.remove('active');
+    prev.classList.add(dir === 1 ? 'exit-left' : '');
+    setTimeout(() => { prev.classList.remove('exit-left'); }, 500);
+    slides[current].classList.add('active');
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').style.visibility = current === total - 1 ? 'hidden' : 'visible';
+  }
+
+  function nextSlide() { updateSlide(1); }
+  function prevSlide() { updateSlide(-1); }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) nextSlide(); else prevSlide();
+    }
+  }, { passive: true });
+
+  // Init
+  document.getElementById('prevBtn').style.visibility = 'hidden';
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>UI-Voyager: 실패 경험으로 학습하는 자기진화 GUI 에이전트</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-dark: #5A4BD1;
+    --accent: #00CEC9;
+    --accent2: #FD79A8;
+    --accent3: #FDCB6E;
+    --dark: #0A0A1A;
+    --darker: #050510;
+    --card: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.1);
+    --text: #E8E8F0;
+    --text-dim: #9999B8;
+    --success: #00B894;
+    --danger: #FF6B6B;
+    --glass: rgba(108,92,231,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ─── 슬라이드 컨테이너 ─── */
+  .slides-wrapper {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background: var(--dark);
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ─── 배경 데코 ─── */
+  .bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb-1 { width:500px; height:500px; background:var(--primary); top:-150px; right:-100px; }
+  .bg-orb-2 { width:400px; height:400px; background:var(--accent); bottom:-100px; left:-80px; }
+  .bg-orb-3 { width:300px; height:300px; background:var(--accent2); top:40%; left:50%; }
+
+  /* ─── 타이포그래피 ─── */
+  .slide-number {
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  h1.title-main {
+    font-size: clamp(1.6rem, 4.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  h2.slide-title {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.3;
+  }
+
+  h2.slide-title .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── 카드 ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(108,92,231,0.15);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+  }
+
+  .card-icon.purple { background: rgba(108,92,231,0.2); }
+  .card-icon.teal { background: rgba(0,206,201,0.2); }
+  .card-icon.pink { background: rgba(253,121,168,0.2); }
+  .card-icon.yellow { background: rgba(253,203,110,0.2); }
+  .card-icon.green { background: rgba(0,184,148,0.2); }
+  .card-icon.red { background: rgba(255,107,107,0.2); }
+
+  .card h4 {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ─── 태그/배지 ─── */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-purple { background: rgba(108,92,231,0.25); color: #B8B0FF; }
+  .tag-teal { background: rgba(0,206,201,0.2); color: #7DFCF8; }
+  .tag-pink { background: rgba(253,121,168,0.2); color: #FFB0CC; }
+
+  /* ─── 파이프라인/플로우 ─── */
+  .flow-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: center;
+    min-width: 140px;
+    flex: 1;
+  }
+
+  .flow-step .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .flow-step .step-label {
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .flow-step .step-desc {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+  }
+
+  .flow-arrow {
+    font-size: 22px;
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+
+  /* ─── 테이블 ─── */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    position: relative;
+    z-index: 1;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.72rem, 1.3vw, 0.95rem);
+    white-space: nowrap;
+  }
+
+  thead { background: rgba(108,92,231,0.15); }
+  th {
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 12px 18px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+
+  tr.highlight-row {
+    background: rgba(0,206,201,0.08);
+  }
+
+  tr.highlight-row td {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .val-good { color: var(--success); font-weight: 700; }
+  .val-best { color: var(--accent3); font-weight: 700; font-size: 1.1em; }
+  .val-human { color: var(--accent2); }
+
+  /* ─── 비교 바 차트 (CSS) ─── */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .bar-label {
+    width: 140px;
+    font-size: clamp(0.72rem, 1.3vw, 0.88rem);
+    font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--text-dim);
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.68rem, 1.1vw, 0.82rem);
+    font-weight: 600;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { /* width set inline */ }
+  .bar-fill.ours { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+  .bar-fill.baseline { background: rgba(255,255,255,0.12); }
+  .bar-fill.human { background: linear-gradient(90deg, var(--accent2), #e17055); }
+
+  /* ─── 수식 ─── */
+  .formula-box {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.72rem, 1.3vw, 0.92rem);
+    color: var(--accent);
+    overflow-x: auto;
+    position: relative;
+    z-index: 1;
+    line-height: 1.8;
+  }
+
+  /* ─── 타임라인 ─── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 14px 0 14px 24px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--accent);
+  }
+
+  .timeline-item .tl-title {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .timeline-item .tl-desc {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ─── 저자 태그 ─── */
+  .authors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .author-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+    color: var(--text-dim);
+  }
+
+  /* ─── 큰 숫자 강조 ─── */
+  .big-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .big-stat .number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .big-stat .label {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  /* ─── 네비게이션 ─── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10,10,26,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0 18px;
+    gap: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+  }
+
+  .nav-btn:active {
+    transform: scale(0.95);
+    background: var(--primary);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+  }
+
+  /* ─── 포크 포인트 다이어그램 ─── */
+  .fork-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .fork-path {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+  }
+
+  .fork-path.success {
+    background: rgba(0,184,148,0.1);
+    border: 1px solid rgba(0,184,148,0.25);
+  }
+
+  .fork-path.fail {
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.25);
+  }
+
+  .fork-path .path-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .fork-point-marker {
+    text-align: center;
+    padding: 10px;
+    font-weight: 700;
+    color: var(--accent3);
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    position: relative;
+  }
+
+  .fork-point-marker::before,
+  .fork-point-marker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: var(--accent3);
+    opacity: 0.4;
+  }
+  .fork-point-marker::before { left: 5%; }
+  .fork-point-marker::after { right: 5%; }
+
+  /* ─── 애니메이션 ─── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.6s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.6s 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.6s 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.6s 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.6s 0.7s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.6s 0.85s both; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.25; }
+  }
+
+  .bg-orb { animation: pulse 6s ease-in-out infinite; }
+
+  /* ─── 구분선 ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: 20px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── VS 비교 ─── */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .vs-label {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 900;
+    color: var(--primary);
+    align-self: center;
+    text-align: center;
+  }
+
+  /* ─── 리스트 ─── */
+  ul.clean-list {
+    list-style: none;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  ul.clean-list li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+
+  ul.clean-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .spacer { flex: 1; }
+  .mt-auto { margin-top: auto; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+  .mb-8 { margin-bottom: 8px; }
+  .flex-center { display:flex; align-items:center; justify-content:center; flex:1; }
+  .gap-24 { gap: 24px; }
+  .gap-16 { gap: 16px; }
+  .text-center { text-align: center; }
+
+  /* ─── 미디어 쿼리: 태블릿 ─── */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px 90px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-label { display: none; }
+    .flow-horizontal { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .bar-label { width: 100px; }
+    .big-stat .number { font-size: clamp(2rem, 10vw, 3.5rem); }
+    h1.title-main { font-size: clamp(1.4rem, 5vw, 2.5rem); }
+    .card { padding: 18px; }
+    .card-icon { width: 40px; height: 40px; font-size: 18px; }
+    .nav-progress { gap: 4px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+    .authors { gap: 6px; }
+    .timeline { padding-left: 24px; }
+  }
+
+  /* ─── 미디어 쿼리: 모바일 ─── */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 18px 85px; }
+    h1.title-main { font-size: clamp(1.2rem, 6vw, 1.8rem); }
+    h2.slide-title { font-size: clamp(1.1rem, 5vw, 1.5rem); margin-bottom: 16px; }
+    h3 { font-size: clamp(0.9rem, 3.5vw, 1.1rem); }
+    .card { padding: 14px; border-radius: 12px; }
+    .card-icon { width: 36px; height: 36px; font-size: 16px; margin-bottom: 10px; }
+    .card h4 { font-size: 0.88rem; }
+    .card p { font-size: 0.78rem; }
+    .nav-bar { padding: 10px 14px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 14px; font-size: 0.8rem; }
+    .bar-label { width: 80px; font-size: 0.72rem; }
+    .bar-track { height: 26px; }
+    .flow-step { padding: 14px 16px; min-width: auto; }
+    .formula-box { padding: 14px 16px; font-size: 0.72rem; }
+    .table-wrapper { font-size: 0.72rem; }
+    th, td { padding: 10px 12px; }
+    .bg-orb-1 { width: 300px; height: 300px; }
+    .bg-orb-2 { width: 250px; height: 250px; }
+    .bg-orb-3 { width: 180px; height: 180px; }
+    .subtitle { font-size: 0.85rem; }
+    .author-chip { font-size: 0.65rem; padding: 4px 10px; }
+    .timeline { padding-left: 20px; }
+    .timeline-item { padding: 10px 0 10px 20px; }
+  }
+
+  /* ─── 미디어 쿼리: 소형 모바일 ─── */
+  @media (max-width: 320px) {
+    .slide { padding: 16px 12px 80px; }
+    h1.title-main { font-size: 1.1rem; }
+    h2.slide-title { font-size: 1rem; margin-bottom: 12px; }
+    h3 { font-size: 0.85rem; }
+    .card { padding: 12px; }
+    .subtitle { font-size: 0.78rem; }
+    .nav-bar { padding: 8px 10px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 10px; font-size: 0.75rem; }
+    .bar-label { width: 65px; font-size: 0.68rem; }
+    .bar-track { height: 22px; }
+    .big-stat .number { font-size: 2rem; }
+    .flow-step { padding: 12px; }
+    .nav-progress { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- ============ 슬라이드 1: 표지 ============ -->
+  <div class="slide active" data-index="0">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="slide-number anim-1">arXiv:2603.24533 &bull; 2026.03</div>
+    <h1 class="title-main anim-2">UI-Voyager</h1>
+    <p class="subtitle anim-3" style="margin-bottom:20px;">
+      실패 경험을 통해 스스로 진화하는<br>모바일 GUI 자동화 에이전트
+    </p>
+    <div class="divider anim-3"></div>
+    <div class="anim-4" style="position:relative;z-index:1;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+        <span class="tag tag-purple">자기진화 학습</span>
+        <span class="tag tag-teal">실패 경험 활용</span>
+        <span class="tag tag-pink">인간 수준 초과</span>
+      </div>
+      <p style="font-size:clamp(0.78rem,1.4vw,0.95rem);color:var(--text-dim);line-height:1.7;max-width:680px;">
+        멀티모달 대규모 언어 모델(MLLM) 기반의 자율 모바일 GUI 에이전트.<br>
+        <strong style="color:var(--accent);">4B 파라미터</strong>만으로
+        <strong style="color:var(--accent3);">81.0% Pass@1</strong> 달성 &mdash;
+        인간 수준(80.0%) 돌파.
+      </p>
+    </div>
+    <div class="authors anim-5">
+      <span class="author-chip">Zichuan Lin</span>
+      <span class="author-chip">Feiyu Liu</span>
+      <span class="author-chip">Yijun Yang</span>
+      <span class="author-chip">Jiafei Lyu</span>
+      <span class="author-chip">Yiming Gao</span>
+      <span class="author-chip">Yicheng Liu</span>
+      <span class="author-chip">Zhicong Lu</span>
+      <span class="author-chip">Yangbin Yu</span>
+      <span class="author-chip">Mingyu Yang</span>
+      <span class="author-chip">Junyou Li</span>
+      <span class="author-chip">Deheng Ye</span>
+      <span class="author-chip">Jie Jiang</span>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ============ 슬라이드 2: 문제 정의 ============ -->
+  <div class="slide" data-index="1">
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="slide-number anim-1">01 / 문제 정의</div>
+    <h2 class="slide-title anim-2">기존 모바일 GUI 에이전트의 <span class="highlight">핵심 한계</span></h2>
+    <div class="card-grid cols-3 anim-3" style="margin-bottom:28px;">
+      <div class="card">
+        <div class="card-icon red">&#x26A0;</div>
+        <h4>비효율적 학습</h4>
+        <p>실패 궤적(trajectory)에서 유용한 지식을 추출하지 못하고 단순히 폐기하는 기존 방식의 한계</p>
+      </div>
+      <div class="card">
+        <div class="card-icon yellow">&#x1F3AF;</div>
+        <h4>신용 할당 모호성</h4>
+        <p>장기 GUI 작업에서 희소 보상(sparse reward)으로 인해 어떤 행동이 실패를 초래했는지 파악 불가</p>
+      </div>
+      <div class="card">
+        <div class="card-icon pink">&#x1F4B0;</div>
+        <h4>수동 주석 비용</h4>
+        <p>기존 학습 데이터 구축에 고비용 인간 라벨링이 필수적이라는 확장성 병목</p>
+      </div>
+    </div>
+    <div class="card anim-4" style="border-left:3px solid var(--primary);">
+      <h4 style="color:var(--accent);margin-bottom:8px;">문제 정식화: POMDP</h4>
+      <p>모바일 GUI 작업을 부분 관측 마르코프 결정 과정 <strong>(S, O, A, T)</strong>으로 모델링. 관측은 스크린샷 + 언어 명령, 행동은 click, swipe, input_text 등 12종의 사전정의 프리미티브, 보상은 궤적 수준 이진 신호(성공=1, 실패=0).</p>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 3: 프레임워크 개요 ============ -->
+  <div class="slide" data-index="2">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="slide-number anim-1">02 / 프레임워크 개요</div>
+    <h2 class="slide-title anim-2">UI-Voyager: <span class="highlight">2단계 자기진화</span> 아키텍처</h2>
+    <div class="flow-horizontal anim-3" style="margin-bottom:32px;">
+      <div class="flow-step" style="border-top:3px solid var(--primary);">
+        <div class="step-num">STAGE 1</div>
+        <div class="step-label">거부 미세조정 (RFT)</div>
+        <div class="step-desc">데이터-모델 공진화 루프</div>
+      </div>
+      <div class="flow-arrow">&#x27A1;</div>
+      <div class="flow-step" style="border-top:3px solid var(--accent);">
+        <div class="step-num">STAGE 2</div>
+        <div class="step-label">그룹 상대 자기증류 (GRSD)</div>
+        <div class="step-desc">실패 경험 기반 밀집 감독</div>
+      </div>
+      <div class="flow-arrow">&#x27A1;</div>
+      <div class="flow-step" style="border-top:3px solid var(--accent3);">
+        <div class="step-num">결과</div>
+        <div class="step-label">4B 모델</div>
+        <div class="step-desc">81.0% 성공률</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2 anim-4">
+      <div class="card">
+        <h4 style="color:var(--primary);">&#9881; RFT의 핵심 역할</h4>
+        <p>시드 작업 생성기로 새로운 작업을 합성하고, 규칙 기반 검증기로 성공 궤적만 선별하여 SFT 코퍼스 구축. 매 라운드마다 이전 모델이 새 데이터를 생성하는 자율 루프.</p>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--accent);">&#x1F52C; GRSD의 핵심 역할</h4>
+        <p>그룹 롤아웃에서 성공/실패 궤적 간 <strong>포크 포인트</strong>(분기점)를 탐지하고, 실패 맥락에 올바른 행동을 주입하여 단계별 교정 감독 신호 생성.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 4: RFT 상세 ============ -->
+  <div class="slide" data-index="3">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="slide-number anim-1">03 / Stage 1 상세</div>
+    <h2 class="slide-title anim-2">거부 미세조정 <span class="highlight">(Rejection Fine-Tuning)</span></h2>
+    <div class="timeline anim-3" style="margin-bottom:24px;">
+      <div class="timeline-item">
+        <div class="tl-title">1. 시드 작업 생성</div>
+        <div class="tl-desc">원본 작업 템플릿에서 시간 제약, 수량, 파일 엔티티 등 핵심 파라미터를 변형하여 새로운 작업 합성 &mdash; 7,000+ 다양한 작업 생성</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">2. 궤적 생성</div>
+        <div class="tl-desc">현재 모델(초기: Qwen3-VL-4B)이 에이전트로서 AndroidWorld 환경에서 자동으로 행동 궤적 생성</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">3. 거부 샘플링</div>
+        <div class="tl-desc">ADB 기반 규칙 검증기로 성공 궤적만 필터링 &mdash; 구조적 무결성과 개별 행동 단계의 정확성 검증</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">4. 반복 학습</div>
+        <div class="tl-desc">선별된 고품질 데이터로 SFT 수행. 다음 라운드에서 개선된 모델이 다시 새 궤적 생성 &rarr; <strong style="color:var(--accent);">공진화 순환</strong></div>
+      </div>
+    </div>
+    <div class="card anim-4" style="background:rgba(108,92,231,0.08);border-color:rgba(108,92,231,0.3);">
+      <p style="text-align:center;">
+        <strong style="color:var(--accent3);">3라운드 반복 결과:</strong>
+        <span style="font-family:'JetBrains Mono';color:var(--text-dim);">37%</span>
+        <span style="color:var(--primary);font-size:1.3em;"> &#x27A1; </span>
+        <span style="font-family:'JetBrains Mono';color:var(--text-dim);">64%</span>
+        <span style="color:var(--primary);font-size:1.3em;"> &#x27A1; </span>
+        <span style="font-family:'JetBrains Mono';font-weight:700;color:var(--accent);">73.2% Pass@1</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 5: GRSD 상세 ============ -->
+  <div class="slide" data-index="4">
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="slide-number anim-1">04 / Stage 2 상세</div>
+    <h2 class="slide-title anim-2">그룹 상대 자기증류 <span class="highlight">(GRSD)</span></h2>
+    <div class="card-grid cols-3 anim-3" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-icon purple">1</div>
+        <h4>포크 포인트 탐지</h4>
+        <p>SSIM 기반 스크린샷 매칭으로 성공/실패 궤적이 동일 상태에서 다른 행동을 선택한 <strong>분기점</strong> 식별</p>
+      </div>
+      <div class="card">
+        <div class="card-icon teal">2</div>
+        <h4>단계별 자기증류</h4>
+        <p>실패 궤적의 맥락(context)에 성공 궤적의 올바른 행동을 주입하여 교정 학습 샘플 구축</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">3</div>
+        <h4>혼합 데이터 학습</h4>
+        <p>원본 성공 궤적 + 교정 샘플을 결합하여 SFT 수행 &rarr; 정책 개선</p>
+      </div>
+    </div>
+    <div class="card anim-4" style="margin-bottom:16px;">
+      <h4 style="color:var(--accent);margin-bottom:10px;">포크 포인트 탐지 수식</h4>
+      <div class="formula-box">
+        Same(o<sub>a</sub>, o<sub>b</sub>) = 1[SSIM(&phi;(o<sub>a</sub>), &phi;(o<sub>b</sub>)) &ge; &theta;]<br>
+        <span style="color:var(--text-dim);font-size:0.85em;">&phi;: 상태바 제거 &rarr; 저해상도 축소 &rarr; 그레이스케일 전처리</span><br>
+        <span style="color:var(--text-dim);font-size:0.85em;">해시 유사도 &lt; 0.80인 쌍은 사전 필터링으로 빠르게 제거</span>
+      </div>
+    </div>
+    <div class="card anim-5">
+      <h4 style="color:var(--accent2);margin-bottom:10px;">GRSD 학습 목표</h4>
+      <div class="formula-box">
+        L<sub>GRSD</sub> = -1/|D| &Sigma;<sub>x&in;D</sub> 1/T<sub>x</sub> &Sigma;<sub>t=1</sub><sup>T<sub>x</sub></sup> log &pi;<sub>&theta;</sub>(y<sub>t</sub> | s<sub>1</sub>,...,s<sub>P</sub>, y<sub>&lt;t</sub>)<br>
+        <span style="color:var(--text-dim);font-size:0.85em;">응답 토큰에 대해서만 자기회귀 다음 토큰 예측 손실 계산</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 6: 포크 포인트 사례 ============ -->
+  <div class="slide" data-index="5">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="slide-number anim-1">05 / 사례 연구</div>
+    <h2 class="slide-title anim-2">포크 포인트 <span class="highlight">작동 예시</span></h2>
+
+    <h3 class="anim-3" style="margin-bottom:8px;">사례 1: BrowserMaze 작업</h3>
+    <div class="fork-diagram anim-3" style="margin-bottom:28px;">
+      <div style="text-align:center;color:var(--text-dim);font-size:clamp(0.75rem,1.3vw,0.9rem);">동일 상태 &mdash; Step 12 도달</div>
+      <div class="fork-point-marker">&#x2B50; 포크 포인트 감지</div>
+      <div class="fork-path success">
+        <span class="path-icon">&#x2705;</span>
+        <div><strong style="color:var(--success);">성공 궤적:</strong> "아래로" 이동 &rarr; 올바른 경로 선택 &rarr; 미로 탈출 성공</div>
+      </div>
+      <div class="fork-path fail">
+        <span class="path-icon">&#x274C;</span>
+        <div><strong style="color:var(--danger);">실패 궤적:</strong> "오른쪽" 이동 &rarr; 벽에 막힘 &rarr; 작업 실패</div>
+      </div>
+    </div>
+
+    <h3 class="anim-4" style="margin-bottom:8px;">사례 2: 블루투스 끄기 작업</h3>
+    <div class="fork-diagram anim-4">
+      <div style="text-align:center;color:var(--text-dim);font-size:clamp(0.75rem,1.3vw,0.9rem);">초기 상태 &mdash; Step 0</div>
+      <div class="fork-point-marker">&#x2B50; 포크 포인트 감지</div>
+      <div class="fork-path success">
+        <span class="path-icon">&#x2705;</span>
+        <div><strong style="color:var(--success);">성공:</strong> 아래로 스와이프 &rarr; 알림 셰이드/빠른 설정 접근 &rarr; 블루투스 끔</div>
+      </div>
+      <div class="fork-path fail">
+        <span class="path-icon">&#x274C;</span>
+        <div><strong style="color:var(--danger);">실패:</strong> 위로 스와이프 &rarr; 설정 열기 실패 &rarr; 작업 실패</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 7: 실험 결과 ============ -->
+  <div class="slide" data-index="6">
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="slide-number anim-1">06 / 실험 결과</div>
+    <h2 class="slide-title anim-2">AndroidWorld 벤치마크 <span class="highlight">성능 비교</span></h2>
+    <div class="bar-chart anim-3" style="margin-bottom:24px;">
+      <div class="bar-item">
+        <div class="bar-label" style="color:var(--accent);font-weight:700;">UI-Voyager 4B</div>
+        <div class="bar-track"><div class="bar-fill ours" data-width="81">81.0%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label" style="color:var(--accent2);">인간</div>
+        <div class="bar-track"><div class="bar-fill human" data-width="80">80.0%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">MAI-UI 235B</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="76.7">76.7%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">UI-Tars-2 230B</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="73.3">73.3%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">MAI-UI 32B</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="73.3">73.3%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">GUI-Owl 8B</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="71.6">71.6%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Step-GUI 8B</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="67.7">67.7%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label" style="color:var(--text-dim);font-style:italic;">Qwen3-VL 4B (기본)</div>
+        <div class="bar-track"><div class="bar-fill baseline" data-width="45.3">45.3%</div></div>
+      </div>
+    </div>
+    <div class="card-grid cols-2 anim-4">
+      <div class="card" style="text-align:center;">
+        <div class="big-stat">
+          <div class="number">58x</div>
+          <div class="label">더 적은 파라미터로<br>최대 모델 능가</div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-stat">
+          <div class="number" style="background:linear-gradient(135deg,var(--success),var(--accent));">+35.7%</div>
+          <div class="label">기본 모델 대비<br>성능 향상</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 8: 소융 분석 ============ -->
+  <div class="slide" data-index="7">
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="slide-number anim-1">07 / 소융 분석</div>
+    <h2 class="slide-title anim-2">GRSD vs RL 기법 <span class="highlight">비교 분석</span></h2>
+    <div class="card-grid cols-3 anim-3" style="margin-bottom:24px;">
+      <div class="card" style="text-align:center;border-top:3px solid var(--accent);">
+        <h4 style="color:var(--accent);">GRSD (제안)</h4>
+        <div class="big-stat">
+          <div class="number" style="font-size:clamp(1.8rem,5vw,3rem);">81%</div>
+        </div>
+        <p style="margin-top:8px;">빠른 수렴, 밀집 감독</p>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--text-dim);">
+        <h4>GRPO</h4>
+        <div class="big-stat">
+          <div class="number" style="font-size:clamp(1.8rem,5vw,3rem);background:linear-gradient(135deg,var(--text-dim),#666);">~76%</div>
+        </div>
+        <p style="margin-top:8px;">느린 수렴, 정체</p>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--text-dim);">
+        <h4>PPO</h4>
+        <div class="big-stat">
+          <div class="number" style="font-size:clamp(1.8rem,5vw,3rem);background:linear-gradient(135deg,var(--text-dim),#666);">~76%</div>
+        </div>
+        <p style="margin-top:8px;">느린 수렴, 정체</p>
+      </div>
+    </div>
+    <div class="card anim-4" style="margin-bottom:16px;">
+      <h4 style="color:var(--accent2);margin-bottom:10px;">RFT 반복별 성능 향상</h4>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <div class="bar-label">라운드 1</div>
+          <div class="bar-track"><div class="bar-fill baseline" data-width="37" style="background:rgba(108,92,231,0.3);">37%</div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">라운드 2</div>
+          <div class="bar-track"><div class="bar-fill baseline" data-width="64" style="background:rgba(108,92,231,0.5);">64%</div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">라운드 3</div>
+          <div class="bar-track"><div class="bar-fill baseline" data-width="73.2" style="background:rgba(108,92,231,0.7);">73.2%</div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">+ GRSD</div>
+          <div class="bar-track"><div class="bar-fill ours" data-width="81">81.0%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card anim-5">
+      <p><strong style="color:var(--accent3);">핵심 발견:</strong> GRPO/PPO는 약 175 스텝을 소요하여 RFT 1회 반복(64.0%)의 성능에 도달. 반면 GRSD는 포크 포인트 기반 밀집 감독으로 훨씬 효율적으로 학습.</p>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 9: 행동 공간 & 액션 ============ -->
+  <div class="slide" data-index="8">
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="slide-number anim-1">08 / 행동 공간</div>
+    <h2 class="slide-title anim-2">에이전트 <span class="highlight">행동 프리미티브</span></h2>
+    <div class="card-grid cols-3 anim-3" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="card-icon purple">&#x1F446;</div>
+        <h4>터치 조작</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">click(x,y)</code><br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono';">long_press(x,y)</code><br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono';">swipe(x,y,x',y')</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon teal">&#x2328;</div>
+        <h4>입력 조작</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">input_text(text)</code><br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono';">keyboard_enter()</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#x1F4F1;</div>
+        <h4>시스템 네비게이션</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">open_app(name)</code><br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono';">navigate_back()</code><br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono';">navigate_home()</code></p>
+      </div>
+    </div>
+    <div class="card-grid cols-3 anim-4">
+      <div class="card">
+        <div class="card-icon yellow">&#x23F3;</div>
+        <h4>대기</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">wait()</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon pink">&#x1F4CB;</div>
+        <h4>상태 보고</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">status(goal)</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#x1F4AC;</div>
+        <h4>응답</h4>
+        <p><code style="color:var(--accent);font-family:'JetBrains Mono';">answer(text)</code></p>
+      </div>
+    </div>
+    <div class="card anim-5" style="margin-top:20px;border-left:3px solid var(--accent);">
+      <p><strong style="color:var(--accent);">기반 모델:</strong> Qwen3-VL-4B-Instruct &mdash; 비전-언어 모델 기반, AndroidWorld 학습 세트에서 7,000+ 작업으로 학습</p>
+    </div>
+  </div>
+
+  <!-- ============ 슬라이드 10: 한계 & 결론 ============ -->
+  <div class="slide" data-index="9">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="slide-number anim-1">09 / 기여 & 결론</div>
+    <h2 class="slide-title anim-2">핵심 기여 및 <span class="highlight">향후 과제</span></h2>
+    <div class="card-grid cols-2 anim-3" style="margin-bottom:24px;">
+      <div class="card" style="border-left:3px solid var(--accent);">
+        <h4 style="color:var(--accent);margin-bottom:12px;">&#x2705; 핵심 기여</h4>
+        <ul class="clean-list">
+          <li>2단계 자기진화 GUI 에이전트 아키텍처 제안</li>
+          <li>거부 미세조정(RFT)으로 자율 데이터-모델 공진화 실현</li>
+          <li>GRSD 기법으로 외부 모델 없이 밀집 단계별 감독 구성</li>
+          <li>4B 모델로 인간 수준(80%) 초과 달성 (81.0%)</li>
+          <li>수동 데이터 주석 없는 완전 자율 학습 파이프라인</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent2);">
+        <h4 style="color:var(--accent2);margin-bottom:12px;">&#x26A0; 인지된 한계</h4>
+        <ul class="clean-list">
+          <li style="padding-left:28px;"><strong>실시간 실행:</strong> 애니메이션, 키보드 전환, 토스트 알림 등 일시적 시각 변동이 SSIM 매칭 정확도 저하 가능</li>
+          <li style="padding-left:28px;"><strong>행동 공간 제약:</strong> 사전정의 행동이 제스처 지속시간, 타이밍 등 저수준 터치 역학을 추상화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card anim-4" style="text-align:center;background:linear-gradient(135deg,rgba(108,92,231,0.1),rgba(0,206,201,0.1));border-color:rgba(108,92,231,0.3);">
+      <p style="font-size:clamp(0.9rem,1.8vw,1.15rem);line-height:1.8;color:#fff;">
+        <strong>결론:</strong> UI-Voyager는 고비용 수동 주석 없이<br>
+        실패 경험으로부터 효율적으로 학습하는<br>
+        <strong style="color:var(--accent);">자기진화형 모바일 GUI 자동화</strong>의 새로운 패러다임을 제시합니다.
+      </p>
+      <div style="margin-top:14px;">
+        <span class="tag tag-purple" style="font-size:clamp(0.7rem,1.2vw,0.85rem);">GitHub: ui-voyager/UI-Voyager</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── 네비게이션 바 ─── -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" disabled onclick="changeSlide(-1)">&#x2190; 이전</button>
+  <div class="nav-progress" id="navProgress"></div>
+  <span class="nav-counter" id="navCounter">1 / 10</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">다음 &#x2192;</button>
+</nav>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('navCounter');
+  const progress = document.getElementById('navProgress');
+
+  // 프로그레스 도트 생성
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    progress.appendChild(dot);
+  }
+
+  function updateUI() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === current) s.classList.add('active');
+      else if (i < current) s.classList.add('prev');
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    counter.textContent = (current + 1) + ' / ' + total;
+    progress.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    animateBars();
+  }
+
+  function animateBars() {
+    const activeSlide = slides[current];
+    activeSlide.querySelectorAll('.bar-fill').forEach((bar, i) => {
+      const w = bar.getAttribute('data-width');
+      if (w) {
+        bar.style.width = '0';
+        setTimeout(() => { bar.style.width = w + '%'; }, 100 + i * 80);
+      }
+    });
+  }
+
+  window.changeSlide = function(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) {
+      current = next;
+      updateUI();
+    }
+  };
+
+  function goToSlide(idx) {
+    if (idx >= 0 && idx < total) {
+      current = idx;
+      updateUI();
+    }
+  }
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0, touchStartY = 0;
+  const wrapper = document.getElementById('slidesWrapper');
+
+  wrapper.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  // 초기 바 애니메이션
+  setTimeout(animateBars, 400);
+})();
+</script>
+</body>
+</html>

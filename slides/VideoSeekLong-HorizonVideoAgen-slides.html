@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>VideoSeek: 도구 기반 탐색을 활용한 장시간 비디오 에이전트</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --accent-cyan: #06d6a0;
+    --accent-blue: #4361ee;
+    --accent-purple: #7b2ff7;
+    --accent-orange: #ff6b35;
+    --accent-pink: #f72585;
+    --accent-yellow: #ffd166;
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0aec0;
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.1);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width:100%; height:100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .slide-container {
+    width:100%; height:100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  /* ===== BG Patterns ===== */
+  .bg-mesh {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(67,97,238,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(123,47,247,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(6,214,160,0.1) 0%, transparent 50%);
+  }
+
+  .slide .content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* ===== Typography ===== */
+  .slide-title {
+    font-size: clamp(1.6rem, 3.5vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 0.4em;
+    line-height: 1.3;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 1.5em;
+    line-height: 1.5;
+  }
+
+  .section-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent-cyan);
+    margin-bottom: 1em;
+    font-weight: 700;
+  }
+
+  /* ===== Glass Cards ===== */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .glass-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 1em;
+  }
+
+  .glass-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .glass-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .glass h3 {
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    font-weight: 700;
+    margin-bottom: 0.5em;
+  }
+
+  .glass p, .glass li {
+    font-size: clamp(0.82rem, 1.4vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .glass ul {
+    padding-left: 1.2em;
+  }
+
+  .glass li {
+    margin-bottom: 0.3em;
+  }
+
+  /* ===== Accents & Icons ===== */
+  .icon-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-2 {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-3 {
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .highlight { color: var(--accent-cyan); font-weight: 700; }
+  .highlight-pink { color: var(--accent-pink); font-weight: 700; }
+  .highlight-orange { color: var(--accent-orange); font-weight: 700; }
+  .highlight-yellow { color: var(--accent-yellow); font-weight: 700; }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+    font-weight: 600;
+    margin: 3px;
+  }
+
+  .tag-cyan { background: rgba(6,214,160,0.15); color: var(--accent-cyan); border: 1px solid rgba(6,214,160,0.3); }
+  .tag-blue { background: rgba(67,97,238,0.15); color: var(--accent-blue); border: 1px solid rgba(67,97,238,0.3); }
+  .tag-purple { background: rgba(123,47,247,0.15); color: var(--accent-purple); border: 1px solid rgba(123,47,247,0.3); }
+  .tag-pink { background: rgba(247,37,133,0.15); color: var(--accent-pink); border: 1px solid rgba(247,37,133,0.3); }
+
+  /* ===== Slide 1: Title ===== */
+  .title-slide .content {
+    text-align: center;
+  }
+
+  .title-slide .paper-title {
+    font-size: clamp(2rem, 4.5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0.3em;
+  }
+
+  .title-slide .paper-sub {
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 2em;
+  }
+
+  .title-slide .authors {
+    font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+    color: var(--text-secondary);
+    margin-bottom: 1.5em;
+    line-height: 1.8;
+  }
+
+  .title-slide .meta-tags {
+    margin-top: 1em;
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    font-weight: 600;
+    margin: 4px;
+  }
+
+  .badge-cvpr { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); }
+  .badge-arxiv { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); }
+
+  /* ===== Loop Diagram ===== */
+  .loop-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 1.5em 0;
+    flex-wrap: wrap;
+  }
+
+  .loop-step {
+    padding: 18px 24px;
+    border-radius: 14px;
+    text-align: center;
+    min-width: 140px;
+    position: relative;
+  }
+
+  .loop-step h4 {
+    font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .loop-step p {
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    color: var(--text-secondary);
+  }
+
+  .loop-arrow {
+    font-size: 1.5rem;
+    color: var(--accent-cyan);
+    animation: pulse-arrow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-arrow {
+    0%, 100% { opacity: 0.4; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(4px); }
+  }
+
+  /* ===== Tool Cards ===== */
+  .tool-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .tool-card.overview::before { background: var(--accent-cyan); }
+  .tool-card.skim::before { background: var(--accent-blue); }
+  .tool-card.focus::before { background: var(--accent-purple); }
+
+  .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .tool-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .tool-name {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    font-weight: 700;
+  }
+
+  .tool-desc {
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== Table ===== */
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    font-size: clamp(0.72rem, 1.2vw, 0.95rem);
+  }
+
+  .result-table th {
+    background: rgba(67,97,238,0.2);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent-blue);
+    white-space: nowrap;
+  }
+
+  .result-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+  }
+
+  .result-table tr:hover td {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .result-table .best {
+    color: var(--accent-cyan);
+    font-weight: 700;
+  }
+
+  .result-table .method-ours {
+    background: rgba(6,214,160,0.08);
+  }
+
+  .result-table .method-ours td {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ===== Stat Grid ===== */
+  .stat-box {
+    text-align: center;
+    padding: 24px;
+  }
+
+  .stat-number {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.72rem, 1.2vw, 0.9rem);
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* ===== Bar Chart ===== */
+  .bar-chart {
+    margin-top: 1em;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .bar-label {
+    width: 140px;
+    font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    width: 0;
+    transition: width 1.2s ease;
+  }
+
+  .slide.active .bar-fill { width: var(--bar-w); }
+
+  .bar-fill.cyan { background: linear-gradient(90deg, rgba(6,214,160,0.6), var(--accent-cyan)); }
+  .bar-fill.blue { background: linear-gradient(90deg, rgba(67,97,238,0.6), var(--accent-blue)); }
+  .bar-fill.purple { background: linear-gradient(90deg, rgba(123,47,247,0.6), var(--accent-purple)); }
+  .bar-fill.orange { background: linear-gradient(90deg, rgba(255,107,53,0.6), var(--accent-orange)); }
+  .bar-fill.pink { background: linear-gradient(90deg, rgba(247,37,133,0.6), var(--accent-pink)); }
+
+  /* ===== Flow Diagram ===== */
+  .flow-horizontal {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 1.5em 0;
+    position: relative;
+  }
+
+  .flow-node {
+    flex: 1;
+    padding: 20px 16px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    margin: 0 6px;
+  }
+
+  .flow-node h4 {
+    font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .flow-node p {
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .flow-connector {
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--accent-cyan);
+    z-index: 2;
+  }
+
+  /* ===== Comparison ===== */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+    margin-top: 1em;
+  }
+
+  .vs-badge {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+  }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10,14,26,0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px; min-height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    border: 1px solid var(--glass-border);
+    padding: 0 16px;
+  }
+
+  .nav-btn:hover { background: rgba(255,255,255,0.12); }
+  .nav-btn:active { background: rgba(255,255,255,0.18); }
+
+  .progress-bar {
+    flex: 1;
+    max-width: 300px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    color: var(--text-secondary);
+    min-width: 50px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== Animations ===== */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .slide.active .fade-up {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide.active .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .slide.active .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .slide.active .fade-up:nth-child(4) { transition-delay: 0.3s; }
+  .slide.active .fade-up:nth-child(5) { transition-delay: 0.4s; }
+  .slide.active .fade-up:nth-child(6) { transition-delay: 0.5s; }
+
+  /* ===== Decorative ===== */
+  .deco-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(6,214,160,0.15);
+    pointer-events: none;
+  }
+
+  .title-slide .deco-ring:nth-child(1) {
+    width: 400px; height: 400px;
+    top: -100px; right: -100px;
+    animation: spin-slow 30s linear infinite;
+  }
+
+  .title-slide .deco-ring:nth-child(2) {
+    width: 300px; height: 300px;
+    bottom: -50px; left: -80px;
+    border-color: rgba(123,47,247,0.12);
+    animation: spin-slow 25s linear infinite reverse;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 24px 80px; }
+    .glass { padding: 20px; }
+    .glass-grid.cols-3 { grid-template-columns: 1fr; }
+    .glass-grid.cols-2 { grid-template-columns: 1fr; }
+    .loop-diagram { flex-direction: column; gap: 8px; }
+    .loop-arrow { transform: rotate(90deg); }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-badge { margin: 0 auto; }
+    .flow-horizontal { flex-direction: column; gap: 10px; }
+    .flow-connector { display: none; }
+    .bar-label { width: 100px; }
+    .result-table { font-size: 0.72rem; }
+    .result-table th, .result-table td { padding: 8px 10px; }
+    .stat-box { padding: 16px; }
+    .title-slide .deco-ring { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 24px 16px 76px; }
+    .glass { padding: 16px; border-radius: 12px; }
+    .icon-circle { width: 40px; height: 40px; font-size: 1.2rem; }
+    .tool-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+    .nav-bar { padding: 10px 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; }
+    .progress-bar { max-width: 150px; }
+    .bar-label { width: 80px; font-size: 0.68rem; }
+    .loop-step { padding: 14px 18px; min-width: auto; }
+    .stat-number { font-size: clamp(1.5rem, 8vw, 2.5rem); }
+    .result-table th, .result-table td { padding: 6px 8px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 20px 12px 72px; }
+    .glass { padding: 12px; border-radius: 10px; }
+    .nav-bar { padding: 8px; }
+    .bar-label { width: 60px; }
+    .section-label { letter-spacing: 1px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ============ SLIDE 1: Title ============ -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="deco-ring"></div>
+    <div class="deco-ring"></div>
+    <div class="content">
+      <div class="fade-up">
+        <div class="paper-title"><span class="gradient-text">VideoSeek</span></div>
+      </div>
+      <div class="fade-up">
+        <div class="paper-sub">도구 기반 탐색을 활용한 장시간 비디오 에이전트</div>
+      </div>
+      <div class="fade-up">
+        <div class="authors">
+          Jingyang Lin · Jialian Wu · Jiang Liu · Ximeng Sun · Ze Wang<br>
+          Xiaodong Yu · Jiebo Luo · Zicheng Liu · Emad Barsoum
+        </div>
+      </div>
+      <div class="fade-up meta-tags">
+        <span class="title-badge badge-cvpr">CVPR 2026</span>
+        <span class="title-badge badge-arxiv">arXiv: 2603.20185</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 2: Problem ============ -->
+  <div class="slide" data-slide="1">
+    <div class="content">
+      <div class="fade-up section-label">문제 정의</div>
+      <div class="fade-up slide-title">기존 비디오 에이전트의 <span class="highlight-pink">비효율성</span></div>
+      <div class="fade-up slide-subtitle">전체 비디오를 탐욕적으로 파싱하는 것은 막대한 계산 비용을 초래합니다</div>
+
+      <div class="vs-container fade-up">
+        <div class="glass" style="border-left: 3px solid var(--accent-pink);">
+          <h3 style="color: var(--accent-pink);">❌ 기존 접근법</h3>
+          <ul style="margin-top:10px;">
+            <li>촘촘하게 샘플링된 프레임을 탐욕적으로 파싱</li>
+            <li>수천 개의 프레임을 모두 처리</li>
+            <li>높은 계산 비용과 토큰 소비</li>
+            <li>불필요한 정보까지 모두 처리</li>
+          </ul>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="glass" style="border-left: 3px solid var(--accent-cyan);">
+          <h3 style="color: var(--accent-cyan);">✓ 핵심 통찰</h3>
+          <ul style="margin-top:10px;">
+            <li><span class="highlight">80% 이상</span>의 질문이 전체 비디오의 <span class="highlight">5% 미만</span>만 검사하면 답변 가능</li>
+            <li>인간은 비디오의 <span class="highlight">논리적 흐름</span>을 활용하여 핵심 증거를 탐색</li>
+            <li>선택적 탐색이 핵심</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 3: Core Idea ============ -->
+  <div class="slide" data-slide="2">
+    <div class="content">
+      <div class="fade-up section-label">핵심 아이디어</div>
+      <div class="fade-up slide-title"><span class="gradient-text">비디오 논리 흐름</span> 기반 능동 탐색</div>
+      <div class="fade-up slide-subtitle">VideoSeek는 전체 비디오를 소모적으로 파싱하지 않고, 답변에 핵심적인 증거를 능동적으로 탐색합니다</div>
+
+      <div class="glass fade-up" style="text-align:center; padding: 32px;">
+        <p style="font-size: clamp(1rem, 1.8vw, 1.3rem); color: var(--text-primary); line-height: 1.8;">
+          비디오의 <span class="highlight">시간적·인과적 구조</span>를 활용하여<br>
+          질의와 관련된 핵심 장면만을 <span class="highlight-pink">전략적으로 탐색</span>하는<br>
+          <span class="highlight-orange">모델 비의존적(Model-Agnostic)</span> 에이전트 프레임워크
+        </p>
+      </div>
+
+      <div class="glass-grid cols-3 fade-up">
+        <div class="glass" style="text-align:center;">
+          <div class="icon-circle" style="background: rgba(6,214,160,0.15); margin: 0 auto 12px;">🎯</div>
+          <h3 style="color: var(--accent-cyan);">질의 인식 탐색</h3>
+          <p>질문에 맞는 증거를 능동적으로 추적</p>
+        </div>
+        <div class="glass" style="text-align:center;">
+          <div class="icon-circle" style="background: rgba(67,97,238,0.15); margin: 0 auto 12px;">🔧</div>
+          <h3 style="color: var(--accent-blue);">도구 기반 관찰</h3>
+          <p>다중 해상도 관찰을 위한 특화 툴킷</p>
+        </div>
+        <div class="glass" style="text-align:center;">
+          <div class="icon-circle" style="background: rgba(123,47,247,0.15); margin: 0 auto 12px;">⚡</div>
+          <h3 style="color: var(--accent-purple);">효율적 추론</h3>
+          <p>최소 프레임으로 최대 이해 달성</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 4: Think-Act-Observe Loop ============ -->
+  <div class="slide" data-slide="3">
+    <div class="content">
+      <div class="fade-up section-label">아키텍처</div>
+      <div class="fade-up slide-title"><span class="gradient-text-2">Think-Act-Observe</span> 루프</div>
+      <div class="fade-up slide-subtitle">증거가 충분하거나 최대 턴(20회)에 도달할 때까지 반복합니다</div>
+
+      <div class="loop-diagram fade-up">
+        <div class="loop-step glass" style="border-top: 3px solid var(--accent-cyan);">
+          <h4 style="color: var(--accent-cyan);">💭 Think</h4>
+          <p>질의와 수집 궤적을 분석,<br>관찰 충분성 평가</p>
+        </div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step glass" style="border-top: 3px solid var(--accent-blue);">
+          <h4 style="color: var(--accent-blue);">⚡ Act</h4>
+          <p>답변 생성 또는<br>도구 호출 (구간/질의 지정)</p>
+        </div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step glass" style="border-top: 3px solid var(--accent-purple);">
+          <h4 style="color: var(--accent-purple);">👁 Observe</h4>
+          <p>도구가 반환한 증거를<br>궤적에 추가</p>
+        </div>
+        <div class="loop-arrow" style="color: var(--accent-pink);">↻</div>
+      </div>
+
+      <div class="glass fade-up" style="background: rgba(67,97,238,0.08); border-color: rgba(67,97,238,0.2);">
+        <p style="text-align:center; font-size: clamp(0.85rem, 1.4vw, 1.05rem);">
+          <span class="highlight">기본 모델:</span> GPT-5를 사고 LLM으로 활용 &nbsp;|&nbsp;
+          <span class="highlight">최대 턴:</span> 20 추론 단계 &nbsp;|&nbsp;
+          <span class="highlight">종료 조건:</span> 충분한 증거 수집 시 답변 생성
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 5: Toolkit ============ -->
+  <div class="slide" data-slide="4">
+    <div class="content">
+      <div class="fade-up section-label">툴킷</div>
+      <div class="fade-up slide-title">3단계 <span class="gradient-text-3">다중 해상도</span> 관찰 도구</div>
+      <div class="fade-up slide-subtitle">거시적 개요에서 미시적 분석까지, 계층적으로 비디오를 탐색합니다</div>
+
+      <div class="glass-grid cols-3 fade-up">
+        <div class="glass tool-card overview">
+          <div class="tool-header">
+            <div class="tool-icon" style="background: rgba(6,214,160,0.2);">🌐</div>
+            <div class="tool-name" style="color: var(--accent-cyan);">Overview</div>
+          </div>
+          <div class="tool-desc">
+            전체 타임라인에서 <span class="highlight">균일 샘플링</span>하여 간략한 설명 생성. 거칠지만 완전한 스토리라인 파악.
+          </div>
+          <div style="margin-top:12px;">
+            <span class="tag tag-cyan">α=4 → 64 프레임</span>
+          </div>
+        </div>
+
+        <div class="glass tool-card skim">
+          <div class="tool-header">
+            <div class="tool-icon" style="background: rgba(67,97,238,0.2);">📋</div>
+            <div class="tool-name" style="color: var(--accent-blue);">Skim</div>
+          </div>
+          <div class="tool-desc">
+            후보 구간을 <span style="color:var(--accent-blue);font-weight:700;">거친 스캔</span>. 소수 프레임으로 질의 관련 순간을 하이라이트하여 탐색 범위 축소.
+          </div>
+          <div style="margin-top:12px;">
+            <span class="tag tag-blue">4α 프레임/구간</span>
+          </div>
+        </div>
+
+        <div class="glass tool-card focus">
+          <div class="tool-header">
+            <div class="tool-icon" style="background: rgba(123,47,247,0.2);">🔍</div>
+            <div class="tool-name" style="color: var(--accent-purple);">Focus</div>
+          </div>
+          <div class="tool-desc">
+            짧은 클립을 <span style="color:var(--accent-purple);font-weight:700;">1 FPS</span>로 세밀 분석. 미묘한 디테일 포착 및 정확한 정보 검증.
+          </div>
+          <div style="margin-top:12px;">
+            <span class="tag tag-purple">1FPS / 최대 16초</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-horizontal fade-up">
+        <div class="flow-node glass" style="border-bottom: 3px solid var(--accent-cyan);">
+          <h4 style="color: var(--accent-cyan);">🌐 거시적</h4>
+          <p>전체 개요</p>
+          <div class="flow-connector">→</div>
+        </div>
+        <div class="flow-node glass" style="border-bottom: 3px solid var(--accent-blue);">
+          <h4 style="color: var(--accent-blue);">📋 중시적</h4>
+          <p>구간 축소</p>
+          <div class="flow-connector">→</div>
+        </div>
+        <div class="flow-node glass" style="border-bottom: 3px solid var(--accent-purple);">
+          <h4 style="color: var(--accent-purple);">🔍 미시적</h4>
+          <p>세부 검증</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 6: Results ============ -->
+  <div class="slide" data-slide="5">
+    <div class="content">
+      <div class="fade-up section-label">실험 결과</div>
+      <div class="fade-up slide-title">4개 벤치마크에서 <span class="gradient-text">최고 성능</span></div>
+
+      <div class="glass fade-up" style="overflow-x: auto;">
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>벤치마크</th>
+              <th>방법</th>
+              <th>정확도</th>
+              <th>평균 프레임</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>LVBench (자막O)</td><td>DVD (기존)</td><td>76.0%</td><td>8,074</td></tr>
+            <tr class="method-ours"><td>LVBench (자막O)</td><td><strong>VideoSeek</strong></td><td class="best">76.7%</td><td class="best">27.2</td></tr>
+            <tr><td colspan="4" style="height:4px; padding:0;"></td></tr>
+            <tr class="method-ours"><td>VideoMME (자막O)</td><td><strong>VideoSeek</strong></td><td class="best">81.2%</td><td class="best">15.9</td></tr>
+            <tr class="method-ours"><td>LongVideoBench</td><td><strong>VideoSeek</strong></td><td class="best">73.5%</td><td class="best">29.6</td></tr>
+            <tr class="method-ours"><td>Video-Holmes</td><td><strong>VideoSeek</strong></td><td class="best">47.3%</td><td class="best">42.7</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="glass-grid cols-3 fade-up" style="margin-top: 16px;">
+        <div class="glass stat-box">
+          <div class="stat-number gradient-text">+10.2</div>
+          <div class="stat-label">LVBench 절대 점수 향상<br>(기본 모델 대비)</div>
+        </div>
+        <div class="glass stat-box">
+          <div class="stat-number gradient-text-2">93%</div>
+          <div class="stat-label">프레임 사용량 감소<br>(자막 활용 시)</div>
+        </div>
+        <div class="glass stat-box">
+          <div class="stat-number gradient-text-3">40%</div>
+          <div class="stat-label">토큰 소비량 감소<br>(49K vs 83K)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 7: Efficiency ============ -->
+  <div class="slide" data-slide="6">
+    <div class="content">
+      <div class="fade-up section-label">효율성 분석</div>
+      <div class="fade-up slide-title">더 적은 프레임으로 <span class="gradient-text">더 높은 정확도</span></div>
+
+      <div class="glass fade-up">
+        <h3 style="margin-bottom: 16px;">프레임 사용량 비교</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">DVD (기존)</div>
+            <div class="bar-track">
+              <div class="bar-fill pink" style="--bar-w: 100%;">8,074</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">기본 모델 (384)</div>
+            <div class="bar-track">
+              <div class="bar-fill orange" style="--bar-w: 4.8%;">384</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">VideoSeek (무자막)</div>
+            <div class="bar-track">
+              <div class="bar-fill blue" style="--bar-w: 1.2%;">92.3</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="color: var(--accent-cyan); font-weight: 700;">VideoSeek (자막)</div>
+            <div class="bar-track">
+              <div class="bar-fill cyan" style="--bar-w: 0.5%;">27.2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-grid cols-2 fade-up">
+        <div class="glass">
+          <h3 style="color: var(--accent-cyan);">🎬 자막 효과</h3>
+          <ul>
+            <li>LVBench: <span class="highlight">+10.2점</span> & 프레임 <span class="highlight">70% 감소</span></li>
+            <li>VideoMME: <span class="highlight">+2.2점</span> & 대폭 감소</li>
+            <li>텍스트 스토리라인이 탐색 효율성을 크게 향상</li>
+          </ul>
+        </div>
+        <div class="glass">
+          <h3 style="color: var(--accent-purple);">💡 인간형 탐색 행동</h3>
+          <ul>
+            <li>거칠게 훑어보기 → 세밀 검사로 점진적 정제</li>
+            <li>질의와 관련 없는 구간은 과감히 건너뛰기</li>
+            <li>필요한 증거를 찾으면 즉시 답변</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 8: Ablation ============ -->
+  <div class="slide" data-slide="7">
+    <div class="content">
+      <div class="fade-up section-label">어블레이션 연구</div>
+      <div class="fade-up slide-title">각 도구의 <span class="gradient-text-2">기여도 분석</span></div>
+
+      <div class="glass-grid cols-2 fade-up">
+        <div class="glass">
+          <h3 style="margin-bottom: 16px;">도구별 제거 실험 (LVBench)</h3>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div class="bar-label" style="color: var(--accent-cyan); font-weight:700;">전체 툴킷</div>
+              <div class="bar-track">
+                <div class="bar-fill cyan" style="--bar-w: 89%;">68.4%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Overview 제거</div>
+              <div class="bar-track">
+                <div class="bar-fill pink" style="--bar-w: 72%;">55.1% <span style="font-size:0.7em;opacity:0.7;">(-13.3)</span></div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Skim 제거</div>
+              <div class="bar-track">
+                <div class="bar-fill orange" style="--bar-w: 81%;">62.4% <span style="font-size:0.7em;opacity:0.7;">(-6.0)</span></div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Focus 제거</div>
+              <div class="bar-track">
+                <div class="bar-fill purple" style="--bar-w: 83%;">63.7% <span style="font-size:0.7em;opacity:0.7;">(-4.7)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass">
+          <h3 style="margin-bottom: 16px;">추론 모델 영향 (LVBench)</h3>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div class="bar-label" style="color: var(--accent-cyan); font-weight:700;">GPT-5</div>
+              <div class="bar-track">
+                <div class="bar-fill cyan" style="--bar-w: 89%;">68.4%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">o4-mini</div>
+              <div class="bar-track">
+                <div class="bar-fill blue" style="--bar-w: 76%;">58.5%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">GPT-4.1</div>
+              <div class="bar-track">
+                <div class="bar-fill purple" style="--bar-w: 69%;">53.0%</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:12px; background: rgba(6,214,160,0.08); border-radius: 10px;">
+            <p style="font-size: clamp(0.75rem, 1.2vw, 0.9rem); text-align:center;">
+              <span class="highlight">강력한 추론 능력</span> = 더 나은 도구 활용 판단<br>
+              GPT-5: 4.42턴 | o4-mini: 5.08턴 | GPT-4.1: 2.99턴
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass fade-up" style="text-align: center; margin-top: 8px; background: rgba(247,37,133,0.06); border-color: rgba(247,37,133,0.15);">
+        <p style="font-size: clamp(0.85rem, 1.4vw, 1.05rem);">
+          <span class="highlight-pink">Overview 도구가 가장 핵심적</span> — 전체 비디오의 거시적 이해 없이는 효과적 탐색 불가.
+          GPT-4.1은 턴 수가 적어 증거 수집이 불충분.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 9: Key Contributions ============ -->
+  <div class="slide" data-slide="8">
+    <div class="content">
+      <div class="fade-up section-label">핵심 기여</div>
+      <div class="fade-up slide-title">VideoSeek의 <span class="gradient-text">주요 기여점</span></div>
+
+      <div class="glass-grid cols-2 fade-up">
+        <div class="glass" style="border-left: 3px solid var(--accent-cyan);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <span style="font-size:1.5rem;">🧭</span>
+            <h3 style="color: var(--accent-cyan);">논리 흐름 기반 탐색</h3>
+          </div>
+          <p>비디오의 시간적·인과적 구조를 활용하여 답변에 핵심적인 증거를 <span class="highlight">능동적으로 탐색</span>하는 새로운 패러다임 제시</p>
+        </div>
+
+        <div class="glass" style="border-left: 3px solid var(--accent-blue);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <span style="font-size:1.5rem;">🔧</span>
+            <h3 style="color: var(--accent-blue);">다중 해상도 툴킷</h3>
+          </div>
+          <p>Overview → Skim → Focus의 <span style="color:var(--accent-blue);font-weight:700;">계층적 관찰 도구</span> 설계로 거시에서 미시까지 효율적 탐색 가능</p>
+        </div>
+
+        <div class="glass" style="border-left: 3px solid var(--accent-purple);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <span style="font-size:1.5rem;">🔌</span>
+            <h3 style="color: var(--accent-purple);">모델 비의존적 프레임워크</h3>
+          </div>
+          <p>특정 모델에 종속되지 않는 <span style="color:var(--accent-purple);font-weight:700;">추론 시점 에이전트 프레임워크</span>로, 다양한 LMM에 적용 가능</p>
+        </div>
+
+        <div class="glass" style="border-left: 3px solid var(--accent-orange);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <span style="font-size:1.5rem;">📊</span>
+            <h3 style="color: var(--accent-orange);">압도적 효율성</h3>
+          </div>
+          <p>기존 방법 대비 <span class="highlight-orange">93% 적은 프레임</span>으로 더 높은 정확도 달성, 실용적인 장시간 비디오 이해 실현</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 10: Summary ============ -->
+  <div class="slide" data-slide="9">
+    <div class="content" style="text-align: center;">
+      <div class="fade-up section-label">요약</div>
+      <div class="fade-up slide-title" style="margin-bottom: 0.6em;">
+        <span class="gradient-text">VideoSeek</span>
+      </div>
+      <div class="fade-up slide-subtitle" style="max-width: 700px; margin: 0 auto 1.5em;">
+        "전체를 보지 않고도 이해한다" — 인간처럼 비디오를 탐색하는 지능형 에이전트
+      </div>
+
+      <div class="glass fade-up" style="max-width: 700px; margin: 0 auto 1.5em; padding: 32px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;">
+          <div>
+            <div class="stat-number gradient-text" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem);">76.7%</div>
+            <div class="stat-label">LVBench 정확도</div>
+          </div>
+          <div>
+            <div class="stat-number gradient-text-2" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem);">27</div>
+            <div class="stat-label">평균 프레임 수</div>
+          </div>
+          <div>
+            <div class="stat-number gradient-text-3" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem);">93%↓</div>
+            <div class="stat-label">프레임 절감</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up" style="margin-top: 1em;">
+        <span class="tag tag-cyan">Think-Act-Observe</span>
+        <span class="tag tag-blue">다중 해상도 툴킷</span>
+        <span class="tag tag-purple">비디오 논리 흐름</span>
+        <span class="tag tag-pink">CVPR 2026</span>
+      </div>
+
+      <div class="fade-up" style="margin-top: 2em;">
+        <p style="color: var(--text-secondary); font-size: clamp(0.75rem, 1.2vw, 0.9rem);">
+          arXiv: 2603.20185 &nbsp;|&nbsp; CVPR 2026
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전">◀</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-counter" id="slideCounter">1 / 10</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음">▶</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  function showSlide(index) {
+    if (isAnimating || index < 0 || index >= total) return;
+    isAnimating = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+    const direction = index > current ? 1 : -1;
+
+    prev.classList.remove('active');
+    prev.classList.add(direction > 0 ? 'exit-left' : '');
+    prev.style.transform = direction > 0 ? 'translateX(-80px)' : 'translateX(80px)';
+    prev.style.opacity = '0';
+
+    next.style.transform = direction > 0 ? 'translateX(80px)' : 'translateX(-80px)';
+    next.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      next.classList.add('active');
+      next.classList.remove('exit-left');
+    });
+
+    current = index;
+    updateUI();
+    setTimeout(() => { isAnimating = false; }, 650);
+  }
+
+  function navigate(dir) {
+    showSlide(current + dir);
+  }
+
+  function updateUI() {
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').style.opacity = current === 0 ? '0.3' : '1';
+    document.getElementById('nextBtn').style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  // Touch
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  // Expose
+  window.navigate = navigate;
+  updateUI();
+})();
+</script>
+</body>
+</html>

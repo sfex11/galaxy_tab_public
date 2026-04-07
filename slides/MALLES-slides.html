@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MALLES: Multi-agent LLMs-based Economic Sandbox</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap');
+
+  :root {
+    --bg-deep: #0a0e1a;
+    --bg-card: #111827;
+    --accent-1: #6366f1;
+    --accent-2: #8b5cf6;
+    --accent-3: #06b6d4;
+    --accent-4: #10b981;
+    --accent-5: #f59e0b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --glow-1: rgba(99, 102, 241, 0.3);
+    --glow-2: rgba(139, 92, 246, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4vh 6vw;
+    opacity: 0;
+    transform: translateX(60px) scale(0.97);
+    transition: opacity 0.6s cubic-bezier(.4,0,.2,1),
+                transform 0.6s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.97);
+  }
+
+  /* ── Background Effects ── */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 12s ease-in-out infinite alternate;
+  }
+  .bg-orb.a { width: 400px; height: 400px; background: var(--glow-1); top: -10%; left: -5%; }
+  .bg-orb.b { width: 350px; height: 350px; background: var(--glow-2); bottom: -10%; right: -5%; animation-delay: -4s; }
+  .bg-orb.c { width: 250px; height: 250px; background: rgba(6,182,212,0.15); top: 50%; left: 50%; animation-delay: -8s; }
+
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(30px, -30px); }
+  }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+    transition: width 0.4s ease;
+    z-index: 100;
+    box-shadow: 0 0 12px var(--glow-1);
+  }
+
+  /* ── Page Indicator ── */
+  .page-dots {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+  }
+  .page-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    transition: all 0.35s ease;
+    cursor: pointer;
+  }
+  .page-dots .dot.active {
+    background: var(--accent-1);
+    border-color: var(--accent-1);
+    box-shadow: 0 0 10px var(--glow-1);
+    transform: scale(1.3);
+  }
+
+  /* ── Auto-play Timer ── */
+  .timer-ring {
+    position: fixed;
+    bottom: 22px;
+    right: 24px;
+    width: 32px;
+    height: 32px;
+    z-index: 100;
+    cursor: pointer;
+  }
+  .timer-ring svg circle {
+    fill: none;
+    stroke-width: 2.5;
+  }
+  .timer-ring .track { stroke: rgba(255,255,255,0.1); }
+  .timer-ring .fill {
+    stroke: var(--accent-3);
+    stroke-dasharray: 88;
+    stroke-dashoffset: 88;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.3s linear;
+  }
+  .timer-ring.paused .fill { stroke: var(--accent-5); }
+  .timer-ring .icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+
+  /* ── SLIDE 1 : Title ── */
+  .s1-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: var(--accent-1);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .s1-title {
+    font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.25;
+    max-width: 900px;
+    background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+  .s1-subtitle {
+    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 14px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+  .s1-authors {
+    margin-top: 28px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
+  }
+  .s1-authors span {
+    padding: 6px 18px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  .s1-arxiv {
+    margin-top: 18px;
+    font-size: 0.8rem;
+    color: var(--accent-3);
+    opacity: 0;
+    animation: fadeUp 0.6s 0.8s forwards;
+  }
+  .s1-arxiv a { color: inherit; text-decoration: none; border-bottom: 1px dashed; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SLIDE 2 : Problem ── */
+  .slide-header {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+  .slide-header .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    margin-bottom: 6px;
+  }
+  .slide-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff, #cbd5e1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    width: 100%;
+    max-width: 960px;
+  }
+  .problem-card {
+    background: linear-gradient(135deg, rgba(17,24,39,0.9), rgba(30,41,59,0.6));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+  }
+  .slide.active .problem-card { opacity: 1; transform: translateY(0); }
+  .slide.active .problem-card:nth-child(1) { transition-delay: 0.15s; }
+  .slide.active .problem-card:nth-child(2) { transition-delay: 0.3s; }
+  .slide.active .problem-card:nth-child(3) { transition-delay: 0.45s; }
+  .slide.active .problem-card:nth-child(4) { transition-delay: 0.6s; }
+  .problem-card:hover { border-color: rgba(99,102,241,0.3); }
+  .problem-card .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .icon { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .problem-card:nth-child(2) .icon { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .problem-card:nth-child(3) .icon { background: rgba(168,85,247,0.12); color: #a855f7; }
+  .problem-card:nth-child(4) .icon { background: rgba(236,72,153,0.12); color: #ec4899; }
+  .problem-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #e2e8f0;
+  }
+  .problem-card p {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* ── SLIDE 3 : Solution ── */
+  .solution-layout {
+    display: flex;
+    gap: 28px;
+    width: 100%;
+    max-width: 960px;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+  .sol-main {
+    flex: 1.6;
+    min-width: 300px;
+    background: linear-gradient(160deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05));
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 16px;
+    padding: 28px 24px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s 0.15s ease;
+  }
+  .slide.active .sol-main { opacity: 1; transform: translateX(0); }
+  .sol-main h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #c7d2fe;
+  }
+  .sol-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .sol-feature .num {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    background: var(--accent-1);
+    color: #fff;
+  }
+  .sol-feature .text h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 2px;
+  }
+  .sol-feature .text p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .sol-side {
+    flex: 1;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sol-tag {
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(17,24,39,0.8);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.5s ease;
+  }
+  .slide.active .sol-tag { opacity: 1; transform: translateX(0); }
+  .slide.active .sol-tag:nth-child(1) { transition-delay: 0.3s; }
+  .slide.active .sol-tag:nth-child(2) { transition-delay: 0.45s; }
+  .slide.active .sol-tag:nth-child(3) { transition-delay: 0.6s; }
+  .sol-tag .tag-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .sol-tag:nth-child(1) .tag-label { color: var(--accent-3); }
+  .sol-tag:nth-child(2) .tag-label { color: var(--accent-4); }
+  .sol-tag:nth-child(3) .tag-label { color: var(--accent-5); }
+  .sol-tag p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ── SLIDE 4 : Pipeline Diagram ── */
+  .pipeline-wrap {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .pipe-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .pipe-node {
+    position: relative;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-align: center;
+    min-width: 150px;
+    max-width: 200px;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all 0.5s ease;
+  }
+  .slide.active .pipe-node { opacity: 1; transform: scale(1); }
+  .slide.active .pipe-row:nth-child(1) .pipe-node { transition-delay: 0.1s; }
+  .slide.active .pipe-row:nth-child(3) .pipe-node:nth-child(1) { transition-delay: 0.35s; }
+  .slide.active .pipe-row:nth-child(3) .pipe-node:nth-child(3) { transition-delay: 0.35s; }
+  .slide.active .pipe-row:nth-child(3) .pipe-node:nth-child(5) { transition-delay: 0.35s; }
+  .slide.active .pipe-row:nth-child(5) .pipe-node { transition-delay: 0.6s; }
+  .slide.active .pipe-row:nth-child(7) .pipe-node { transition-delay: 0.85s; }
+
+  .pipe-node.data {
+    background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.05));
+    border: 1.5px solid rgba(6,182,212,0.3);
+  }
+  .pipe-node.agent {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.08));
+    border: 1.5px solid rgba(99,102,241,0.3);
+  }
+  .pipe-node.mf {
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05));
+    border: 1.5px solid rgba(16,185,129,0.3);
+  }
+  .pipe-node.out {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05));
+    border: 1.5px solid rgba(245,158,11,0.3);
+  }
+  .pipe-node .node-icon { font-size: 1.4rem; margin-bottom: 6px; }
+  .pipe-node .node-title { font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+  .pipe-node .node-desc { font-size: 0.68rem; color: var(--text-secondary); margin-top: 3px; }
+
+  .pipe-arrow {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.2);
+    margin: 0 8px;
+    opacity: 0;
+    transition: opacity 0.4s 0.25s ease;
+  }
+  .pipe-arrow.down {
+    font-size: 1.4rem;
+    margin: 6px 0;
+  }
+  .slide.active .pipe-arrow { opacity: 1; }
+
+  .pipe-arrow-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .slide.active .pipe-arrow-row { opacity: 1; transition-delay: 0.25s; }
+
+  /* ── SLIDE 5 : Results ── */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 20px;
+  }
+  .result-metric {
+    text-align: center;
+    padding: 22px 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(17,24,39,0.9), rgba(30,41,59,0.5));
+    border: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.5s ease;
+  }
+  .slide.active .result-metric { opacity: 1; transform: translateY(0); }
+  .slide.active .result-metric:nth-child(1) { transition-delay: 0.15s; }
+  .slide.active .result-metric:nth-child(2) { transition-delay: 0.3s; }
+  .slide.active .result-metric:nth-child(3) { transition-delay: 0.45s; }
+  .result-metric .big {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .result-metric:nth-child(1) .big { color: var(--accent-3); }
+  .result-metric:nth-child(2) .big { color: var(--accent-4); }
+  .result-metric:nth-child(3) .big { color: var(--accent-2); }
+  .result-metric .metric-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
+  .results-apps {
+    width: 100%;
+    max-width: 960px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.5s 0.6s ease;
+  }
+  .slide.active .results-apps { opacity: 1; transform: translateY(0); }
+  .results-apps h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 12px;
+  }
+  .app-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .app-tag {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .app-tag:nth-child(1) { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.25); color: #a5b4fc; }
+  .app-tag:nth-child(2) { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.25); color: #67e8f9; }
+  .app-tag:nth-child(3) { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: #6ee7b7; }
+  .app-tag:nth-child(4) { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); color: #fcd34d; }
+  .app-tag:nth-child(5) { background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.25); color: #f9a8d4; }
+
+  /* ── Keyboard Hint ── */
+  .kbd-hint {
+    position: fixed;
+    bottom: 22px;
+    left: 24px;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.2);
+    z-index: 100;
+  }
+  .kbd-hint kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-family: inherit;
+    font-size: 0.65rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .slide { padding: 3vh 5vw; }
+    .solution-layout { flex-direction: column; }
+    .pipe-row { gap: 4px; }
+    .pipe-node { min-width: 100px; max-width: 140px; padding: 10px 8px; }
+    .pipe-node .node-desc { display: none; }
+    .pipe-arrow { font-size: 0.9rem; margin: 0 4px; }
+    .s1-authors { gap: 10px; }
+    .s1-authors span { font-size: 0.78rem; padding: 4px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-grid"></div>
+<div class="bg-orb a"></div>
+<div class="bg-orb b"></div>
+<div class="bg-orb c"></div>
+
+<!-- Progress -->
+<div class="progress-bar" id="progress"></div>
+
+<!-- Slides -->
+<div class="deck" id="deck">
+
+  <!-- ─── SLIDE 1 : Title ─── -->
+  <div class="slide active" data-index="0">
+    <div class="s1-badge">📄 arXiv 2603.17694</div>
+    <h1 class="s1-title">MALLES: 멀티 에이전트 LLM 기반<br>경제 시뮬레이션 샌드박스</h1>
+    <p class="s1-subtitle">소비자 선호도 정렬을 통한 고차원 경제 환경 의사결정</p>
+    <div class="s1-authors">
+      <span>Yusen Wu</span>
+      <span>Yiran Liu</span>
+      <span>Xiaotie Deng</span>
+    </div>
+    <div class="s1-arxiv"><a href="http://arxiv.org/abs/2603.17694v1" target="_blank">arXiv: 2603.17694v1</a></div>
+  </div>
+
+  <!-- ─── SLIDE 2 : Problem ─── -->
+  <div class="slide" data-index="1">
+    <div class="slide-header">
+      <div class="label">문제 정의</div>
+      <h2>기존 경제 시뮬레이션의 한계</h2>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">⚠️</div>
+        <h3>데이터 희소성</h3>
+        <p>소비자 거래 데이터가 제품 카테고리별로 극도로 희소하여 일반화가 어려움. 크로스 도메인 전이 불가.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🔄</div>
+        <h3>고차원 의사결정 공간</h3>
+        <p>다중 모달 제품 속성(이미지, 텍스트, 수치)이 결합된 고차원 환경에서 안정적 의사결정이 불가능.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🧠</div>
+        <h3>인지적 병목</h3>
+        <p>단일 에이전트가 방대한 제품 정보를 동시에 처리할 때 인지 과부하로 품질 저하 발생.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">📊</div>
+        <h3>확장성 부재</h3>
+        <p>대규모 소비자 집단 간 상호작용을 개별적으로 모델링하면 계산 비용이 기하급수적으로 증가.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 3 : Solution ─── -->
+  <div class="slide" data-index="2">
+    <div class="slide-header">
+      <div class="label">해결책</div>
+      <h2>MALLES 프레임워크</h2>
+    </div>
+    <div class="solution-layout">
+      <div class="sol-main">
+        <h3>핵심 기술 구성</h3>
+        <div class="sol-feature">
+          <div class="num">1</div>
+          <div class="text">
+            <h4>선호도 정렬 학습</h4>
+            <p>이질적 거래 기록으로 LLM을 후속 학습시켜 소비자 선호 패턴을 내면화하고, 카테고리 간 잠재 선호도를 전이</p>
+          </div>
+        </div>
+        <div class="sol-feature">
+          <div class="num">2</div>
+          <div class="text">
+            <h4>Mean-Field 근사 메커니즘</h4>
+            <p>개별 에이전트 대신 집단 평균장으로 환경-소비자 상호작용을 안정화하여 대규모 시뮬레이션 가능</p>
+          </div>
+        </div>
+        <div class="sol-feature">
+          <div class="num">3</div>
+          <div class="text">
+            <h4>멀티 에이전트 협업 토론</h4>
+            <p>전문화된 에이전트들이 구조화된 대화를 통해 제품 정보를 분산 처리하여 인지 병목 해소</p>
+          </div>
+        </div>
+      </div>
+      <div class="sol-side">
+        <div class="sol-tag">
+          <div class="tag-label">크로스 도메인</div>
+          <p>다양한 제품 카테고리에 걸쳐 선호도 패턴을 전이하여 데이터 희소성 문제 극복</p>
+        </div>
+        <div class="sol-tag">
+          <div class="tag-label">안정성</div>
+          <p>Mean-Field 동역학으로 고차원 샘플링을 안정화하고 시뮬레이션 분산 감소</p>
+        </div>
+        <div class="sol-tag">
+          <div class="tag-label">확장성</div>
+          <p>에이전트 수에 무관한 계산 복잡도로 대규모 소비자 집단 모델링</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 4 : Pipeline ─── -->
+  <div class="slide" data-index="3">
+    <div class="slide-header">
+      <div class="label">파이프라인</div>
+      <h2>MALLES 작동 방식</h2>
+    </div>
+    <div class="pipeline-wrap">
+      <!-- Row 1: Input -->
+      <div class="pipe-row">
+        <div class="pipe-node data">
+          <div class="node-icon">📦</div>
+          <div class="node-title">거래 데이터</div>
+          <div class="node-desc">다중 카테고리 구매 이력</div>
+        </div>
+        <span class="pipe-arrow">＋</span>
+        <div class="pipe-node data">
+          <div class="node-icon">🏷️</div>
+          <div class="node-title">제품 속성</div>
+          <div class="node-desc">이미지·텍스트·수치 멀티모달</div>
+        </div>
+        <span class="pipe-arrow">＋</span>
+        <div class="pipe-node data">
+          <div class="node-icon">👤</div>
+          <div class="node-title">소비자 프로필</div>
+          <div class="node-desc">인구통계·구매 패턴</div>
+        </div>
+      </div>
+      <!-- Arrow Down -->
+      <div class="pipe-arrow-row"><span class="pipe-arrow down">▼</span></div>
+      <!-- Row 2: LLM Training -->
+      <div class="pipe-row">
+        <div class="pipe-node agent" style="max-width:360px;">
+          <div class="node-icon">🤖</div>
+          <div class="node-title">LLM 선호도 정렬 학습</div>
+          <div class="node-desc">이질적 거래 기록으로 후속 학습 → 잠재 선호 패턴 내면화</div>
+        </div>
+      </div>
+      <!-- Arrow Down -->
+      <div class="pipe-arrow-row"><span class="pipe-arrow down">▼</span></div>
+      <!-- Row 3: Multi-Agent -->
+      <div class="pipe-row">
+        <div class="pipe-node agent">
+          <div class="node-icon">🔍</div>
+          <div class="node-title">탐색 에이전트</div>
+          <div class="node-desc">제품 속성 분석</div>
+        </div>
+        <span class="pipe-arrow">⇄</span>
+        <div class="pipe-node agent">
+          <div class="node-icon">💬</div>
+          <div class="node-title">토론 에이전트</div>
+          <div class="node-desc">협업적 정보 통합</div>
+        </div>
+        <span class="pipe-arrow">⇄</span>
+        <div class="pipe-node agent">
+          <div class="node-icon">⚖️</div>
+          <div class="node-title">결정 에이전트</div>
+          <div class="node-desc">최종 구매 판단</div>
+        </div>
+      </div>
+      <!-- Arrow Down -->
+      <div class="pipe-arrow-row"><span class="pipe-arrow down">▼</span></div>
+      <!-- Row 4: Mean-Field -->
+      <div class="pipe-row">
+        <div class="pipe-node mf" style="max-width:360px;">
+          <div class="node-icon">🌐</div>
+          <div class="node-title">Mean-Field 집단 동역학</div>
+          <div class="node-desc">개별 상호작용 → 집단 평균장 근사로 안정화 및 확장</div>
+        </div>
+      </div>
+      <!-- Arrow Down -->
+      <div class="pipe-arrow-row"><span class="pipe-arrow down">▼</span></div>
+      <!-- Row 5: Output -->
+      <div class="pipe-row">
+        <div class="pipe-node out">
+          <div class="node-icon">🎯</div>
+          <div class="node-title">제품 선택</div>
+        </div>
+        <span class="pipe-arrow">＋</span>
+        <div class="pipe-node out">
+          <div class="node-icon">📈</div>
+          <div class="node-title">구매량 예측</div>
+        </div>
+        <span class="pipe-arrow">＋</span>
+        <div class="pipe-node out">
+          <div class="node-icon">🔄</div>
+          <div class="node-title">시장 시뮬레이션</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 5 : Results ─── -->
+  <div class="slide" data-index="4">
+    <div class="slide-header">
+      <div class="label">실험 결과</div>
+      <h2>성과 및 응용 가능성</h2>
+    </div>
+    <div class="results-grid">
+      <div class="result-metric">
+        <div class="big">↑ 정확도</div>
+        <div class="metric-label">제품 선택 정확도 향상<br>크로스 도메인 전이 효과</div>
+      </div>
+      <div class="result-metric">
+        <div class="big">↑ 예측력</div>
+        <div class="metric-label">구매 수량 예측 개선<br>선호도 정렬 학습 효과</div>
+      </div>
+      <div class="result-metric">
+        <div class="big">↑ 안정성</div>
+        <div class="metric-label">시뮬레이션 안정성 강화<br>Mean-Field 근사 효과</div>
+      </div>
+    </div>
+    <div class="results-apps">
+      <h3>응용 분야</h3>
+      <div class="app-tags">
+        <span class="app-tag">전자상거래 추천</span>
+        <span class="app-tag">시장 동역학 분석</span>
+        <span class="app-tag">가격 정책 시뮬레이션</span>
+        <span class="app-tag">소비자 행동 예측</span>
+        <span class="app-tag">공급망 최적화</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Page Dots -->
+<div class="page-dots" id="dots"></div>
+
+<!-- Timer Ring -->
+<div class="timer-ring" id="timer" title="클릭하여 자동재생 일시정지/재개">
+  <svg viewBox="0 0 32 32"><circle class="track" cx="16" cy="16" r="14"/><circle class="fill" cx="16" cy="16" r="14"/></svg>
+  <div class="icon" id="timerIcon">▶</div>
+</div>
+
+<!-- Keyboard Hint -->
+<div class="kbd-hint"><kbd>←</kbd> <kbd>→</kbd> 또는 스와이프</div>
+
+<script>
+(function() {
+  const TOTAL = 5;
+  const AUTO_MS = 10000;
+  let cur = 0;
+  let autoTimer = null;
+  let autoElapsed = 0;
+  let autoTick = null;
+  let autoPaused = false;
+
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const dotsEl = document.getElementById('dots');
+  const timerEl = document.getElementById('timer');
+  const timerFill = timerEl.querySelector('.fill');
+  const timerIcon = document.getElementById('timerIcon');
+
+  // Build dots
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+  const dots = dotsEl.querySelectorAll('.dot');
+
+  function goTo(n) {
+    if (n < 0 || n >= TOTAL || n === cur) return;
+    const dir = n > cur ? 1 : -1;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(dir > 0 ? 'prev' : '');
+    slides[cur].classList.remove(dir > 0 ? '' : 'prev');
+    // Remove prev from all
+    setTimeout(() => { slides.forEach(s => s.classList.remove('prev')); }, 650);
+
+    cur = n;
+    slides[cur].classList.add('active');
+
+    // Update dots
+    dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+
+    // Progress bar
+    progress.style.width = ((cur + 1) / TOTAL * 100) + '%';
+
+    // Reset auto
+    resetAuto();
+  }
+
+  function next() { goTo(cur < TOTAL - 1 ? cur + 1 : 0); }
+  function prev() { goTo(cur > 0 ? cur - 1 : TOTAL - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+  });
+
+  // Touch swipe
+  let tx = 0, ty = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  // Auto-play
+  function resetAuto() {
+    clearInterval(autoTimer);
+    clearInterval(autoTick);
+    autoElapsed = 0;
+    if (!autoPaused) startAuto();
+    else updateRing(0);
+  }
+
+  function startAuto() {
+    autoElapsed = 0;
+    updateRing(0);
+    autoTick = setInterval(() => {
+      autoElapsed += 100;
+      updateRing(autoElapsed / AUTO_MS);
+    }, 100);
+    autoTimer = setTimeout(() => {
+      clearInterval(autoTick);
+      next();
+    }, AUTO_MS);
+    timerIcon.textContent = '▶';
+    timerEl.classList.remove('paused');
+  }
+
+  function updateRing(pct) {
+    const offset = 88 - (88 * Math.min(pct, 1));
+    timerFill.style.strokeDashoffset = offset;
+  }
+
+  timerEl.addEventListener('click', () => {
+    autoPaused = !autoPaused;
+    if (autoPaused) {
+      clearTimeout(autoTimer);
+      clearInterval(autoTick);
+      timerIcon.textContent = '⏸';
+      timerEl.classList.add('paused');
+    } else {
+      startAuto();
+    }
+  });
+
+  // Init
+  progress.style.width = (1 / TOTAL * 100) + '%';
+  startAuto();
+})();
+</script>
+</body>
+</html>

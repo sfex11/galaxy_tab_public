@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Differential Privacy in Generative AI Agents</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e8;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5vmin 8vmin;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* === Slide 1: Title === */
+  .slide-1 {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 40%, #0a1628 100%);
+  }
+
+  .slide-1::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+    animation: aurora 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-3%, 2%) rotate(3deg); }
+  }
+
+  .title-badge {
+    position: relative;
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vmin, 0.85rem);
+    color: #a78bfa;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2.5vmin;
+    animation: fadeInDown 0.8s 0.2s both;
+  }
+
+  .title-main {
+    position: relative;
+    font-size: clamp(1.4rem, 4.5vmin, 3rem);
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.35;
+    margin-bottom: 2vmin;
+    background: linear-gradient(135deg, #e0e7ff 0%, #a78bfa 50%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInDown 0.8s 0.4s both;
+  }
+
+  .title-sub {
+    position: relative;
+    font-size: clamp(0.85rem, 2vmin, 1.15rem);
+    font-weight: 300;
+    text-align: center;
+    color: #94a3b8;
+    max-width: 700px;
+    line-height: 1.7;
+    margin-bottom: 3vmin;
+    animation: fadeInDown 0.8s 0.6s both;
+  }
+
+  .title-authors {
+    position: relative;
+    display: flex;
+    gap: 24px;
+    animation: fadeInDown 0.8s 0.8s both;
+  }
+
+  .author-chip {
+    padding: 8px 18px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 10px;
+    font-size: clamp(0.7rem, 1.5vmin, 0.9rem);
+    color: #c4b5fd;
+  }
+
+  .title-meta {
+    position: relative;
+    margin-top: 2vmin;
+    font-size: clamp(0.6rem, 1.2vmin, 0.75rem);
+    color: #64748b;
+    animation: fadeInDown 0.8s 1s both;
+  }
+
+  /* === Slide 2: Problem === */
+  .slide-2 {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1020 50%, #0d1520 100%);
+    align-items: flex-start;
+  }
+
+  .section-label {
+    font-size: clamp(0.6rem, 1.3vmin, 0.75rem);
+    color: #a78bfa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5vmin;
+  }
+
+  .section-title {
+    font-size: clamp(1.3rem, 3.5vmin, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 3vmin;
+    background: linear-gradient(90deg, #e0e7ff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5vmin;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .problem-card {
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 16px;
+    padding: 3vmin;
+    animation: cardIn 0.6s both;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(139, 92, 246, 0.4);
+  }
+
+  .problem-card:nth-child(1) { animation-delay: 0.2s; }
+  .problem-card:nth-child(2) { animation-delay: 0.35s; }
+  .problem-card:nth-child(3) { animation-delay: 0.5s; }
+  .problem-card:nth-child(4) { animation-delay: 0.65s; }
+
+  .card-icon {
+    font-size: clamp(1.4rem, 3vmin, 2rem);
+    margin-bottom: 1.5vmin;
+  }
+
+  .card-title {
+    font-size: clamp(0.8rem, 1.8vmin, 1rem);
+    font-weight: 600;
+    color: #c4b5fd;
+    margin-bottom: 1vmin;
+  }
+
+  .card-desc {
+    font-size: clamp(0.65rem, 1.4vmin, 0.85rem);
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .problem-card.highlight {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.05);
+    grid-column: 1 / -1;
+  }
+
+  .problem-card.highlight .card-title { color: #fca5a5; }
+
+  /* === Slide 3: Solution === */
+  .slide-3 {
+    background: linear-gradient(135deg, #0a0f1a 0%, #0d1a2e 50%, #0a1020 100%);
+    align-items: flex-start;
+  }
+
+  .solution-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3vmin;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .solution-block {
+    animation: cardIn 0.6s both;
+  }
+
+  .solution-block:nth-child(1) { animation-delay: 0.2s; }
+  .solution-block:nth-child(2) { animation-delay: 0.4s; }
+
+  .sol-heading {
+    font-size: clamp(0.75rem, 1.6vmin, 0.95rem);
+    font-weight: 600;
+    color: #818cf8;
+    margin-bottom: 1.5vmin;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sol-item {
+    background: rgba(99, 102, 241, 0.06);
+    border-left: 3px solid rgba(99, 102, 241, 0.3);
+    padding: 1.5vmin 2vmin;
+    margin-bottom: 1.2vmin;
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(0.65rem, 1.3vmin, 0.82rem);
+    color: #cbd5e1;
+    line-height: 1.6;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .sol-item:hover {
+    border-left-color: #818cf8;
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  .sol-item strong { color: #a5b4fc; }
+
+  .formula-box {
+    grid-column: 1 / -1;
+    background: rgba(99, 102, 241, 0.04);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    padding: 2.5vmin 3vmin;
+    text-align: center;
+    animation: cardIn 0.6s 0.6s both;
+  }
+
+  .formula-label {
+    font-size: clamp(0.6rem, 1.2vmin, 0.75rem);
+    color: #818cf8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 1.5vmin;
+  }
+
+  .formula {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.8rem, 2vmin, 1.2rem);
+    color: #e0e7ff;
+    letter-spacing: 1px;
+  }
+
+  .formula-desc {
+    margin-top: 1vmin;
+    font-size: clamp(0.6rem, 1.2vmin, 0.75rem);
+    color: #64748b;
+  }
+
+  /* === Slide 4: Pipeline === */
+  .slide-4 {
+    background: linear-gradient(135deg, #0a0a1a 0%, #10162a 50%, #0a0f1a 100%);
+  }
+
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    gap: 1.5vmin;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 950px;
+    margin-top: 2vmin;
+  }
+
+  .pipe-node {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 14px;
+    padding: 2vmin 2.5vmin;
+    text-align: center;
+    min-width: 130px;
+    animation: nodeIn 0.5s both;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .pipe-node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.15);
+  }
+
+  .pipe-node:nth-child(1) { animation-delay: 0.2s; }
+  .pipe-node:nth-child(3) { animation-delay: 0.4s; }
+  .pipe-node:nth-child(5) { animation-delay: 0.6s; }
+  .pipe-node:nth-child(7) { animation-delay: 0.8s; }
+  .pipe-node:nth-child(9) { animation-delay: 1.0s; }
+
+  .pipe-icon { font-size: clamp(1.2rem, 3vmin, 2rem); margin-bottom: 0.8vmin; }
+  .pipe-label {
+    font-size: clamp(0.6rem, 1.3vmin, 0.8rem);
+    font-weight: 600;
+    color: #c4b5fd;
+  }
+  .pipe-detail {
+    font-size: clamp(0.5rem, 1vmin, 0.65rem);
+    color: #64748b;
+    margin-top: 0.5vmin;
+  }
+
+  .pipe-arrow {
+    font-size: clamp(1rem, 2.5vmin, 1.6rem);
+    color: #4f46e5;
+    animation: pulseArrow 2s infinite;
+  }
+
+  @keyframes pulseArrow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .pipeline-note {
+    margin-top: 3vmin;
+    max-width: 750px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5vmin;
+  }
+
+  .note-item {
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    border-radius: 10px;
+    padding: 1.5vmin 2vmin;
+    font-size: clamp(0.55rem, 1.1vmin, 0.72rem);
+    color: #94a3b8;
+    line-height: 1.5;
+    animation: cardIn 0.5s 1.2s both;
+  }
+
+  .note-item strong { color: #a5b4fc; }
+
+  /* === Slide 5: Results === */
+  .slide-5 {
+    background: linear-gradient(135deg, #0a0d1a 0%, #1a0d28 50%, #0d1a1a 100%);
+    align-items: flex-start;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2vmin;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .result-card {
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 14px;
+    padding: 2.5vmin;
+    text-align: center;
+    animation: cardIn 0.5s both;
+    transition: transform 0.3s;
+  }
+
+  .result-card:hover { transform: translateY(-4px); }
+
+  .result-card:nth-child(1) { animation-delay: 0.2s; }
+  .result-card:nth-child(2) { animation-delay: 0.35s; }
+  .result-card:nth-child(3) { animation-delay: 0.5s; }
+
+  .result-number {
+    font-size: clamp(1.6rem, 4vmin, 2.6rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #818cf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5vmin;
+  }
+
+  .result-label {
+    font-size: clamp(0.6rem, 1.2vmin, 0.75rem);
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+
+  .findings-list {
+    grid-column: 1 / -1;
+    list-style: none;
+    animation: cardIn 0.5s 0.7s both;
+  }
+
+  .findings-list li {
+    position: relative;
+    padding: 1.2vmin 1.2vmin 1.2vmin 3vmin;
+    margin-bottom: 1vmin;
+    background: rgba(99, 102, 241, 0.04);
+    border-radius: 10px;
+    font-size: clamp(0.65rem, 1.3vmin, 0.82rem);
+    color: #cbd5e1;
+    line-height: 1.6;
+    transition: background 0.3s;
+  }
+
+  .findings-list li:hover { background: rgba(99, 102, 241, 0.08); }
+
+  .findings-list li::before {
+    content: '→';
+    position: absolute;
+    left: 1.2vmin;
+    color: #818cf8;
+    font-weight: 700;
+  }
+
+  .conclusion-box {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.08));
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 14px;
+    padding: 2.5vmin 3vmin;
+    text-align: center;
+    animation: cardIn 0.5s 0.9s both;
+  }
+
+  .conclusion-box p {
+    font-size: clamp(0.7rem, 1.4vmin, 0.9rem);
+    color: #c4b5fd;
+    line-height: 1.7;
+  }
+
+  /* === Animations === */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nodeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* === Navigation === */
+  .nav-bar {
+    position: fixed;
+    bottom: 2.5vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(15, 15, 25, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+  }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.25);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+
+  .nav-dot.active {
+    background: #818cf8;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    transform: scale(1.3);
+  }
+
+  .nav-dot:hover { background: rgba(99, 102, 241, 0.5); }
+
+  .slide-counter {
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-left: 8px;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .auto-indicator {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: blink 2s infinite;
+    cursor: pointer;
+    border: none;
+    title: "자동 재생";
+  }
+
+  .auto-indicator.paused {
+    background: #ef4444;
+    animation: none;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* === Progress bar === */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* === Responsive === */
+  @media (max-width: 700px) {
+    .problem-grid, .solution-cols, .pipeline-note { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr 1fr; }
+    .pipeline-flow { flex-direction: column; }
+    .pipe-arrow { transform: rotate(90deg); }
+    .title-authors { flex-direction: column; align-items: center; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- Slide 1: Title -->
+  <div class="slide slide-1 active" data-index="0">
+    <span class="title-badge">arXiv:2603.17902v1 &middot; 2026</span>
+    <h1 class="title-main">생성형 AI 에이전트에서의<br>차분 프라이버시 분석과<br>최적 트레이드오프</h1>
+    <p class="title-sub">
+      LLM 기반 AI 에이전트가 기업 데이터베이스에 접근할 때 발생하는
+      프라이버시 누출을 차분 프라이버시 프레임워크로 분석하고,
+      생성 파라미터의 최적 설계를 제시합니다.
+    </p>
+    <div class="title-authors">
+      <span class="author-chip">Ya-Ting Yang</span>
+      <span class="author-chip">Quanyan Zhu</span>
+    </div>
+    <p class="title-meta">Cryptography and Security (cs.CR) &middot; Artificial Intelligence (cs.AI)</p>
+  </div>
+
+  <!-- Slide 2: Problem -->
+  <div class="slide slide-2" data-index="1">
+    <span class="section-label">Problem Definition</span>
+    <h2 class="section-title">문제 정의: AI 에이전트의 프라이버시 위험</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="card-icon">🏢</div>
+        <div class="card-title">기업 데이터 접근</div>
+        <div class="card-desc">LLM과 AI 에이전트가 내부 데이터베이스에 접근하여 맥락 인식 응답을 생성하는 구조가 확산되고 있습니다.</div>
+      </div>
+      <div class="problem-card">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title">민감 정보 노출 위험</div>
+        <div class="card-desc">모델 출력이 의도치 않게 민감한 기업 데이터를 드러낼 수 있으며, 이에 대한 체계적 분석이 부족합니다.</div>
+      </div>
+      <div class="problem-card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">기존 연구의 한계</div>
+        <div class="card-desc">대부분의 기존 연구는 사용자 프롬프트의 프라이버시 보호에 초점을 맞추고 있어, 기업 데이터 관점의 분석이 미흡합니다.</div>
+      </div>
+      <div class="problem-card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">정량적 프레임워크 부재</div>
+        <div class="card-desc">생성 파라미터(온도, 메시지 길이 등)가 프라이버시 누출에 미치는 영향을 정량화할 수 있는 이론적 도구가 필요합니다.</div>
+      </div>
+      <div class="problem-card highlight">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">핵심 연구 질문</div>
+        <div class="card-desc">AI 에이전트의 응답 생성 메커니즘을 확률적 프로세스로 모델링하고, 차분 프라이버시(Differential Privacy) 기반으로 프라이버시-유용성 간 최적 트레이드오프를 어떻게 달성할 것인가?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Solution -->
+  <div class="slide slide-3" data-index="2">
+    <span class="section-label">Approach</span>
+    <h2 class="section-title">제안하는 해결책</h2>
+    <div class="solution-cols">
+      <div class="solution-block">
+        <div class="sol-heading">🧮 이론적 프레임워크</div>
+        <div class="sol-item"><strong>확률적 메커니즘 모델링</strong> — 응답 생성을 프롬프트와 데이터셋을 토큰 시퀀스 분포로 매핑하는 확률적 메커니즘으로 정의</div>
+        <div class="sol-item"><strong>토큰 수준 DP</strong> — 개별 토큰 생성 단계에서의 차분 프라이버시를 분석하여 미시적 프라이버시 보장 도출</div>
+        <div class="sol-item"><strong>메시지 수준 DP</strong> — 전체 응답 메시지에 대한 차분 프라이버시를 정의하여 거시적 프라이버시 보장 제공</div>
+      </div>
+      <div class="solution-block">
+        <div class="sol-heading">⚙️ 최적화 설계</div>
+        <div class="sol-item"><strong>프라이버시 바운드 도출</strong> — 프라이버시 누출과 온도(temperature), 메시지 길이 간의 관계를 수학적으로 규명</div>
+        <div class="sol-item"><strong>프라이버시-유용성 최적화</strong> — 프라이버시 보호와 응답 품질 사이의 최적 균형점을 찾는 설계 문제 공식화</div>
+        <div class="sol-item"><strong>최적 온도 선택</strong> — 주어진 프라이버시 예산 하에서 유용성을 극대화하는 최적 온도 파라미터 결정</div>
+      </div>
+      <div class="formula-box">
+        <div class="formula-label">핵심 수학적 개념</div>
+        <div class="formula">Pr[M(D, x) ∈ S] ≤ e<sup>ε</sup> · Pr[M(D', x) ∈ S] + δ</div>
+        <div class="formula-desc">(ε, δ)-차분 프라이버시: 인접 데이터셋 D, D'에 대한 메커니즘 M의 출력 분포 차이를 ε로 제한</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Pipeline -->
+  <div class="slide slide-4" data-index="3">
+    <span class="section-label">Pipeline</span>
+    <h2 class="section-title">분석 파이프라인</h2>
+    <div class="pipeline-flow">
+      <div class="pipe-node">
+        <div class="pipe-icon">💬</div>
+        <div class="pipe-label">사용자 프롬프트</div>
+        <div class="pipe-detail">쿼리 입력 x</div>
+      </div>
+      <div class="pipe-arrow">▸</div>
+      <div class="pipe-node">
+        <div class="pipe-icon">🗄️</div>
+        <div class="pipe-label">기업 데이터</div>
+        <div class="pipe-detail">데이터셋 D</div>
+      </div>
+      <div class="pipe-arrow">▸</div>
+      <div class="pipe-node" style="border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.08);">
+        <div class="pipe-icon">🤖</div>
+        <div class="pipe-label">LLM 메커니즘</div>
+        <div class="pipe-detail">M(D, x) → P(y)</div>
+      </div>
+      <div class="pipe-arrow">▸</div>
+      <div class="pipe-node" style="border-color: rgba(234,179,8,0.4); background: rgba(234,179,8,0.06);">
+        <div class="pipe-icon">🌡️</div>
+        <div class="pipe-label">온도 제어</div>
+        <div class="pipe-detail">τ 최적화</div>
+      </div>
+      <div class="pipe-arrow">▸</div>
+      <div class="pipe-node" style="border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.06);">
+        <div class="pipe-icon">🛡️</div>
+        <div class="pipe-label">DP 응답 출력</div>
+        <div class="pipe-detail">(ε, δ)-보장</div>
+      </div>
+    </div>
+    <div class="pipeline-note">
+      <div class="note-item"><strong>토큰 수준 분석:</strong> 각 토큰 생성 단계에서 softmax 확률 분포의 차분 프라이버시를 분석하고, 온도 τ가 프라이버시 보장에 미치는 직접적 영향을 정량화</div>
+      <div class="note-item"><strong>메시지 수준 합성:</strong> 토큰 수준 DP를 조합 정리(composition theorem)를 통해 전체 메시지 수준으로 확장하여, 메시지 길이에 따른 프라이버시 열화를 분석</div>
+      <div class="note-item"><strong>최적화 공식화:</strong> 프라이버시 예산 ε 하에서 유용성 함수를 최대화하는 최적 온도 τ*를 구하는 볼록 최적화 문제로 정의</div>
+      <div class="note-item"><strong>실용적 가이드:</strong> 기업 환경에서 AI 에이전트 배포 시, 프라이버시-유용성 트레이드오프를 체계적으로 관리하기 위한 설계 원칙 제공</div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Results -->
+  <div class="slide slide-5" data-index="4">
+    <span class="section-label">Results</span>
+    <h2 class="section-title">주요 결과 및 시사점</h2>
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-number">τ↑</div>
+        <div class="result-label">온도 상승 시<br>프라이버시 보호 강화</div>
+      </div>
+      <div class="result-card">
+        <div class="result-number">L↑</div>
+        <div class="result-label">메시지 길이 증가 시<br>프라이버시 누출 증가</div>
+      </div>
+      <div class="result-card">
+        <div class="result-number">τ*</div>
+        <div class="result-label">최적 온도로<br>균형점 달성</div>
+      </div>
+      <ul class="findings-list">
+        <li><strong>온도-프라이버시 관계:</strong> 높은 온도(τ)는 출력 분포를 평탄화하여 프라이버시 보호를 강화하지만, 응답 품질(유용성)이 저하됨</li>
+        <li><strong>길이-프라이버시 관계:</strong> 긴 응답은 더 많은 토큰을 생성하므로 조합 효과(composition effect)에 의해 프라이버시 예산이 빠르게 소진됨</li>
+        <li><strong>최적 설계 존재:</strong> 주어진 프라이버시 제약 조건 하에서 유용성을 극대화하는 유일한 최적 온도 τ*가 존재함을 증명</li>
+        <li><strong>실용적 가이드라인:</strong> 기업이 AI 에이전트를 배포할 때, 데이터 민감도에 따라 온도와 응답 길이를 체계적으로 조절할 수 있는 방법론 제시</li>
+      </ul>
+      <div class="conclusion-box">
+        <p>본 연구는 생성형 AI 에이전트의 프라이버시를 차분 프라이버시 프레임워크로 최초 분석하고,<br>
+        <strong>온도와 메시지 길이</strong>라는 실질적 파라미터를 통한 <strong>최적 프라이버시-유용성 트레이드오프</strong> 설계를 가능하게 합니다.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <button class="auto-indicator" id="autoBtn" title="자동 재생 토글"></button>
+  <button class="nav-dot active" data-slide="0"></button>
+  <button class="nav-dot" data-slide="1"></button>
+  <button class="nav-dot" data-slide="2"></button>
+  <button class="nav-dot" data-slide="3"></button>
+  <button class="nav-dot" data-slide="4"></button>
+  <span class="slide-counter" id="counter">1 / 5</span>
+</nav>
+
+<script>
+(() => {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progressBar');
+  const autoBtn = document.getElementById('autoBtn');
+  const total = slides.length;
+  let current = 0;
+  let autoPlay = true;
+  let autoTimer = null;
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total || idx === current) return;
+    const dir = idx > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => slides[current === idx ? current : (current + total) % total].classList.remove('exit-left'), 600);
+
+    const prev = current;
+    current = idx;
+    slides[current].classList.remove('exit-left');
+    slides[current].classList.add('active');
+
+    setTimeout(() => slides[prev].classList.remove('exit-left'), 600);
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    counter.textContent = `${current + 1} / ${total}`;
+    progress.style.width = `${((current + 1) / total) * 100}%`;
+    resetAutoPlay();
+  }
+
+  function next() { goTo(current < total - 1 ? current + 1 : 0); }
+  function prev() { goTo(current > 0 ? current - 1 : total - 1); }
+
+  function resetAutoPlay() {
+    clearInterval(autoTimer);
+    if (autoPlay) autoTimer = setInterval(next, 10000);
+  }
+
+  function toggleAuto() {
+    autoPlay = !autoPlay;
+    autoBtn.classList.toggle('paused', !autoPlay);
+    if (autoPlay) resetAutoPlay();
+    else clearInterval(autoTimer);
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
+    else if (e.key === ' ') { e.preventDefault(); toggleAuto(); }
+  });
+
+  // Dot clicks
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.slide)));
+  autoBtn.addEventListener('click', toggleAuto);
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  // Init
+  progress.style.width = `${(1 / total) * 100}%`;
+  resetAutoPlay();
+})();
+</script>
+
+</body>
+</html>

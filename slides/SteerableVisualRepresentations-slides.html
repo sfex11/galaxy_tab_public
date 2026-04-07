@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SteerViT: 조종 가능한 시각적 표현</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-dark: #0a0e27;
+    --bg-card: #121638;
+    --bg-card2: #1a1f4e;
+    --accent: #6c5ce7;
+    --accent2: #a29bfe;
+    --accent3: #00cec9;
+    --accent4: #fd79a8;
+    --accent5: #fdcb6e;
+    --text: #f0f0f8;
+    --text-dim: #9b9bc0;
+    --gradient1: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --gradient2: linear-gradient(135deg, #00cec9, #81ecec);
+    --gradient3: linear-gradient(135deg, #fd79a8, #fab1c4);
+    --gradient4: linear-gradient(135deg, #fdcb6e, #ffeaa7);
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Slide Container ── */
+  #deck {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 56px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity .45s ease, transform .45s ease;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── Background decorations ── */
+  .slide::before {
+    content: '';
+    position: fixed;
+    top: -40%; right: -30%;
+    width: 80vw; height: 80vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(108,92,231,.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ── Typography ── */
+  .slide-number {
+    font-size: clamp(.65rem, 1.2vw, .85rem);
+    color: var(--accent2);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p, li {
+    font-size: clamp(.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .subtitle {
+    font-size: clamp(.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  .highlight { color: var(--accent2); font-weight: 600; }
+  .highlight-teal { color: var(--accent3); font-weight: 600; }
+  .highlight-pink { color: var(--accent4); font-weight: 600; }
+  .highlight-yellow { color: var(--accent5); font-weight: 600; }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid rgba(108,92,231,.15);
+    transition: transform .2s, border-color .2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(108,92,231,.4);
+  }
+
+  .card .icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 { color: var(--text); }
+
+  /* ── Tag / Badge ── */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(.65rem, 1.3vw, .8rem);
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 6px;
+  }
+  .tag.purple { background: rgba(108,92,231,.2); color: var(--accent2); }
+  .tag.teal { background: rgba(0,206,201,.15); color: var(--accent3); }
+  .tag.pink { background: rgba(253,121,168,.15); color: var(--accent4); }
+  .tag.yellow { background: rgba(253,203,110,.15); color: var(--accent5); }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 16px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(108,92,231,.15);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(.7rem, 1.5vw, .95rem);
+    min-width: 500px;
+  }
+  th {
+    background: var(--bg-card2);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 16px;
+    border-top: 1px solid rgba(255,255,255,.04);
+    color: var(--text-dim);
+  }
+  tr:hover td { background: rgba(108,92,231,.04); }
+  .winner { color: var(--accent3); font-weight: 700; }
+
+  /* ── Bar Chart ── */
+  .bar-chart { margin-top: 16px; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  .bar-label {
+    width: 110px;
+    font-size: clamp(.7rem, 1.4vw, .85rem);
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--text-dim);
+  }
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(.65rem, 1.2vw, .78rem);
+    font-weight: 700;
+    color: #fff;
+    min-width: 40px;
+    transition: width 1s cubic-bezier(.25,.8,.25,1);
+    width: 0;
+  }
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.purple { background: var(--gradient1); }
+  .bar-fill.teal { background: var(--gradient2); color: #0a0e27; }
+  .bar-fill.pink { background: var(--gradient3); }
+  .bar-fill.gray { background: linear-gradient(135deg, #636e8a, #484f6a); }
+
+  /* ── Equation Box ── */
+  .eq-box {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.75rem, 1.5vw, 1rem);
+    color: var(--accent2);
+    border-left: 4px solid var(--accent);
+    overflow-x: auto;
+    line-height: 1.8;
+  }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .flow-box {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: clamp(.72rem, 1.4vw, .9rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    font-size: 1.3rem;
+    color: var(--accent2);
+  }
+  .flow-box.v { background: rgba(108,92,231,.2); color: var(--accent2); border: 1px solid rgba(108,92,231,.3); }
+  .flow-box.t { background: rgba(0,206,201,.15); color: var(--accent3); border: 1px solid rgba(0,206,201,.25); }
+  .flow-box.m { background: rgba(253,121,168,.15); color: var(--accent4); border: 1px solid rgba(253,121,168,.25); }
+  .flow-box.o { background: rgba(253,203,110,.15); color: var(--accent5); border: 1px solid rgba(253,203,110,.25); }
+
+  /* ── Findings List ── */
+  .finding {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .finding-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: .9rem;
+  }
+  .finding-num.p { background: var(--gradient1); }
+  .finding-num.t { background: var(--gradient2); color: #0a0e27; }
+  .finding-num.pk { background: var(--gradient3); }
+  .finding-num.y { background: var(--gradient4); color: #0a0e27; }
+
+  /* ── Progress Bar (bottom) ── */
+  #progress {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--gradient1);
+    transition: width .4s ease;
+    z-index: 100;
+  }
+
+  /* ── Navigation ── */
+  #nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 50;
+  }
+  .nav-btn {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    border: 1px solid rgba(108,92,231,.3);
+    background: rgba(18,22,56,.85);
+    backdrop-filter: blur(10px);
+    color: var(--accent2);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:active { transform: scale(.9); background: rgba(108,92,231,.3); }
+
+  #slide-counter {
+    position: fixed;
+    bottom: 28px;
+    left: 20px;
+    font-size: clamp(.7rem, 1.2vw, .85rem);
+    color: var(--text-dim);
+    z-index: 50;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Fade-in children ── */
+  .slide.active .fade-item {
+    animation: fadeUp .5s ease forwards;
+    opacity: 0;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-item:nth-child(1) { animation-delay: .05s; }
+  .fade-item:nth-child(2) { animation-delay: .12s; }
+  .fade-item:nth-child(3) { animation-delay: .19s; }
+  .fade-item:nth-child(4) { animation-delay: .26s; }
+  .fade-item:nth-child(5) { animation-delay: .33s; }
+  .fade-item:nth-child(6) { animation-delay: .40s; }
+  .fade-item:nth-child(7) { animation-delay: .47s; }
+  .fade-item:nth-child(8) { animation-delay: .54s; }
+  .fade-item:nth-child(9) { animation-delay: .61s; }
+  .fade-item:nth-child(10) { animation-delay: .68s; }
+
+  /* ── Spacer ── */
+  .spacer { height: 12px; }
+  .spacer-lg { height: 24px; }
+  .flex-grow { flex: 1; }
+  .mt-auto { margin-top: auto; }
+
+  /* ── Title Slide Special ── */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .title-slide h1 {
+    font-size: clamp(2rem, 5.5vw, 4rem);
+    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 30%, #00cec9 70%, #81ecec 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+  }
+  .authors {
+    font-size: clamp(.75rem, 1.6vw, 1rem);
+    color: var(--text-dim);
+    margin-top: 8px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    width: 60px; height: 3px;
+    background: var(--gradient1);
+    border-radius: 2px;
+    margin: 16px 0;
+  }
+  .title-slide .divider { margin: 16px auto; }
+
+  /* ── versus layout ── */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .vs-label {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--accent4);
+    text-align: center;
+  }
+
+  /* ── Summary stat ── */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(108,92,231,.12);
+  }
+  .stat-num {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    font-weight: 900;
+  }
+  .stat-label {
+    font-size: clamp(.65rem, 1.2vw, .8rem);
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ── Compact list ── */
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+  ul.clean li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 768px) {
+    .slide { padding: 36px 32px; }
+    .card-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .vs-grid { grid-template-columns: 1fr; gap: 10px; }
+    .vs-label { display: none; }
+    .stat-row { gap: 10px; }
+    .stat-box { min-width: 100px; padding: 16px; }
+    .bar-label { width: 80px; }
+    table { min-width: 420px; }
+    .flow { gap: 6px; }
+    .flow-box { padding: 10px 14px; font-size: clamp(.65rem, 1.3vw, .82rem); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px; }
+    .card-grid.cols-2,
+    .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .card { padding: 18px; }
+    h1 { margin-bottom: 12px; }
+    h2 { margin-bottom: 12px; }
+    .title-slide h1 { font-size: clamp(1.6rem, 7vw, 2.6rem); }
+    .stat-row { flex-direction: column; }
+    .stat-box { min-width: auto; }
+    .bar-label { width: 65px; font-size: .7rem; }
+    .bar-track { height: 24px; }
+    .bar-fill { font-size: .65rem; padding-right: 6px; }
+    .nav-btn { width: 48px; height: 48px; }
+    .finding { gap: 12px; }
+    .eq-box { padding: 14px 18px; font-size: .75rem; }
+    table { min-width: 360px; font-size: .72rem; }
+    th, td { padding: 8px 10px; }
+    .flow-box { padding: 8px 12px; }
+    .flow-arrow { font-size: 1rem; }
+  }
+
+  /* ── Small Mobile ── */
+  @media (max-width: 320px) {
+    .slide { padding: 18px 14px; }
+    .card { padding: 14px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+    #nav { bottom: 14px; right: 14px; gap: 8px; }
+    #slide-counter { bottom: 22px; left: 14px; }
+    .bar-label { width: 55px; }
+    .stat-num { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    .finding-num { width: 30px; height: 30px; font-size: .75rem; }
+    table { min-width: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+<!-- ====== SLIDE 1: Title ====== -->
+<div class="slide title-slide active" id="s1">
+  <div class="fade-item slide-number">arXiv: 2604.02327 &middot; 2026</div>
+  <h1 class="fade-item">SteerViT<br>조종 가능한 시각적 표현</h1>
+  <div class="divider fade-item"></div>
+  <p class="subtitle fade-item" style="text-align:center;max-width:600px;">
+    자연어로 <span class="highlight">시각 인코더를 조종</span>하여<br>
+    원하는 개념에 집중하는 새로운 패러다임
+  </p>
+  <div class="spacer-lg"></div>
+  <div class="authors fade-item">
+    Jona Ruthardt · Manu Gaur · Deva Ramanan<br>
+    Makarand Tapaswi · Yuki M. Asano
+  </div>
+</div>
+
+<!-- ====== SLIDE 2: Problem ====== -->
+<div class="slide" id="s2">
+  <div class="fade-item slide-number">01 &middot; 문제 정의</div>
+  <h2 class="fade-item">기존 ViT의 한계</h2>
+  <p class="fade-item subtitle">DINOv2, MAE 같은 사전학습 모델은 <span class="highlight-pink">가장 두드러진 시각적 단서</span>에만 집중합니다.</p>
+
+  <div class="spacer-lg"></div>
+
+  <div class="card-grid cols-2 fade-item">
+    <div class="card">
+      <span class="icon">🔒</span>
+      <h3>쿼리 무관 인코딩</h3>
+      <p>입력 이미지와 무관하게 항상 같은 방식으로 특징을 추출 — 덜 두드러진 개념을 무시</p>
+    </div>
+    <div class="card">
+      <span class="icon">🔗</span>
+      <h3>후기 융합의 한계</h3>
+      <p>CLIP 같은 모델은 시각과 언어를 독립적으로 인코딩한 후 결합 — 진정한 조종 불가능</p>
+    </div>
+    <div class="card">
+      <span class="icon">💰</span>
+      <h3>대규모 MLLM의 비효율</h3>
+      <p>InternVL3, Qwen3-VL 등은 조종 가능하나 수십억 파라미터 필요</p>
+    </div>
+    <div class="card">
+      <span class="icon">🎯</span>
+      <h3>품질 vs 조종성 트레이드오프</h3>
+      <p>기존에는 표현 품질과 조종 가능성을 동시에 달성한 방법이 없었음</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 3: Core Idea ====== -->
+<div class="slide" id="s3">
+  <div class="fade-item slide-number">02 &middot; 핵심 아이디어</div>
+  <h2 class="fade-item">조기 융합 (Early Fusion)</h2>
+  <p class="fade-item subtitle">텍스트를 시각 인코더 <span class="highlight">내부 레이어에 직접 주입</span>하여 표현 자체를 조종합니다.</p>
+
+  <div class="spacer-lg"></div>
+
+  <div class="vs-grid fade-item">
+    <div class="card" style="border-color:rgba(253,121,168,.25);">
+      <span class="tag pink">기존 방식</span>
+      <h3 style="margin-top:10px;">후기 융합 (Late Fusion)</h3>
+      <p>이미지 → 시각 인코더 → 특징<br>텍스트 → 텍스트 인코더 → 특징<br>→ 이후에 결합</p>
+      <p style="margin-top:10px;color:var(--accent4);">조종 불가능</p>
+    </div>
+    <div class="vs-label">VS</div>
+    <div class="card" style="border-color:rgba(0,206,201,.25);">
+      <span class="tag teal">SteerViT</span>
+      <h3 style="margin-top:10px;">조기 융합 (Early Fusion)</h3>
+      <p>이미지 + 텍스트 → 시각 인코더 내부에서<br>교차 어텐션으로 텍스트 신호 주입<br>→ 조종된 특징 출력</p>
+      <p style="margin-top:10px;color:var(--accent3);">완전한 조종 가능</p>
+    </div>
+  </div>
+
+  <div class="spacer-lg"></div>
+  <div class="fade-item" style="text-align:center;">
+    <span class="tag purple">핵심 통찰</span>
+    <p style="margin-top:8px;">비전을 언어에 맞추는 것이 아닌, <span class="highlight-teal">언어로 비전을 조종</span>하는 새로운 패러다임</p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 4: Architecture ====== -->
+<div class="slide" id="s4">
+  <div class="fade-item slide-number">03 &middot; 아키텍처</div>
+  <h2 class="fade-item">SteerViT 구조</h2>
+
+  <div class="flow fade-item">
+    <div class="flow-box t">🔤 텍스트 프롬프트</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box t">RoBERTa-Large<br><small>(동결)</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box m">MLP 어댑터<br><small>(2-Layer)</small></div>
+    <div class="flow-arrow">↘</div>
+  </div>
+
+  <div class="flow fade-item">
+    <div class="flow-box v">🖼️ 이미지</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box v">ViT (DINOv2)<br><small>(동결)</small></div>
+    <div class="flow-arrow">⊕</div>
+    <div class="flow-box o">게이트 교차<br>어텐션</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box o">조종된<br>특징</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="eq-box fade-item">
+    <div>Ẑ<sub>v</sub><sup>(ℓ)</sup> = CA(Z<sub>v</sub><sup>(ℓ)</sup>, H<sub>t</sub>) = softmax(QK<sup>⊤</sup>/√d<sub>k</sub>) · V</div>
+    <div style="margin-top:8px;">Z<sub>v</sub><sup>(ℓ+1)</sup> = Z<sub>v</sub><sup>(ℓ)</sup> + <span style="color:var(--accent3);">tanh(α<sub>ℓ</sub>)</span> · Ẑ<sub>v</sub><sup>(ℓ)</sup></div>
+  </div>
+
+  <div class="card fade-item" style="margin-top:12px;background:rgba(0,206,201,.06);border-color:rgba(0,206,201,.2);">
+    <p><span class="highlight-teal">영초기화 전략:</span> tanh(0) = 0 이므로 학습 시작 시 원본 ViT와 동일하게 동작 → 안정적 학습</p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 5: Training ====== -->
+<div class="slide" id="s5">
+  <div class="fade-item slide-number">04 &middot; 학습 방법</div>
+  <h2 class="fade-item">학습 설계</h2>
+
+  <div class="card-grid cols-2 fade-item">
+    <div class="card">
+      <span class="icon">🎯</span>
+      <h3>목표: 참조 이미지 분할</h3>
+      <p>패치 단위 이진 분할을 통해 텍스트가 설명하는 영역에 해당하는 패치 학습</p>
+      <div class="spacer"></div>
+      <span class="tag teal">소프트 교차 엔트로피 손실</span>
+    </div>
+    <div class="card">
+      <span class="icon">📊</span>
+      <h3>학습 데이터</h3>
+      <p><span class="highlight">228만</span> 이미지-텍스트 쌍 (16.2만 고유 이미지)</p>
+      <div class="spacer"></div>
+      <span class="tag purple">RefCOCO/+/g</span>
+      <span class="tag teal">Visual Genome</span>
+      <span class="tag pink">LVIS</span>
+      <span class="tag yellow">Mapillary</span>
+    </div>
+  </div>
+
+  <div class="spacer-lg"></div>
+
+  <div class="stat-row fade-item">
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent2);">~21M</div>
+      <div class="stat-label">추가 파라미터</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent3);">84h</div>
+      <div class="stat-label">H100 GPU 시간</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent4);">500K</div>
+      <div class="stat-label">학습 반복 횟수</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent5);">336²</div>
+      <div class="stat-label">입력 해상도</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="fade-item" style="text-align:center;">
+    <p><span class="highlight-teal">효율성:</span> CLIP (~200M) 대비 <span class="highlight">10배 적은</span> 파라미터, MLLM (≥1B) 대비 <span class="highlight">50배 이상 적은</span> 파라미터</p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 6: CORE Benchmark ====== -->
+<div class="slide" id="s6">
+  <div class="fade-item slide-number">05 &middot; 실험 결과 — CORE 벤치마크</div>
+  <h2 class="fade-item">조건부 검색 (CORE)</h2>
+  <p class="fade-item subtitle">제어된 장면에서 <span class="highlight-pink">두드러지지 않은 객체</span>에 대한 1-대-전체 이미지 검색</p>
+
+  <div class="spacer"></div>
+
+  <div class="bar-chart fade-item">
+    <div class="bar-row">
+      <div class="bar-label"><strong>SteerViT</strong></div>
+      <div class="bar-track"><div class="bar-fill purple" style="--w:96%;">96.0%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">FLAIR</div>
+      <div class="bar-track"><div class="bar-fill gray" style="--w:81.3%;">81.3%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">InternVL3-2B</div>
+      <div class="bar-track"><div class="bar-fill gray" style="--w:75.8%;">75.8%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">DINOv2</div>
+      <div class="bar-track"><div class="bar-fill gray" style="--w:43.7%;">43.7%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">CLIP</div>
+      <div class="bar-track"><div class="bar-fill gray" style="--w:43.6%;">43.6%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">SigLIP</div>
+      <div class="bar-track"><div class="bar-fill gray" style="--w:38.3%;">38.3%</div></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="card fade-item" style="background:rgba(108,92,231,.06);border-color:rgba(108,92,231,.25);">
+    <p><span class="highlight">핵심 발견:</span> 쿼리 무관 인코더들은 두드러진 개념에 붕괴하여 43% 수준에 머무는 반면, SteerViT은 <span class="highlight-teal">96%</span>의 정확도를 달성</p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 7: More Results ====== -->
+<div class="slide" id="s7">
+  <div class="fade-item slide-number">06 &middot; 실험 결과 — 다양한 태스크</div>
+  <h2 class="fade-item">다운스트림 태스크 성능</h2>
+
+  <div class="table-wrap fade-item">
+    <table>
+      <thead>
+        <tr>
+          <th>태스크</th>
+          <th>지표</th>
+          <th>SteerViT</th>
+          <th>DINOv2</th>
+          <th>최고 기존 방법</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CORE 검색</td>
+          <td>정확도</td>
+          <td class="winner">96.0%</td>
+          <td>43.7%</td>
+          <td>FLAIR 81.3%</td>
+        </tr>
+        <tr>
+          <td>MOSAIC 위치 추정</td>
+          <td>PR-AUC</td>
+          <td class="winner">50.2%</td>
+          <td>14.3%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>세밀 분류</td>
+          <td>선형 프로브</td>
+          <td class="winner">87.7%</td>
+          <td>87.7%</td>
+          <td>동일</td>
+        </tr>
+        <tr>
+          <td>의미 분할 (ADE20k)</td>
+          <td>평균</td>
+          <td>55.4%</td>
+          <td>~55%</td>
+          <td>동등</td>
+        </tr>
+        <tr>
+          <td>PODS (개인화 객체)</td>
+          <td>PR-AUC</td>
+          <td class="winner">58.1%</td>
+          <td>48.0%*</td>
+          <td>파인튜닝 48.0%</td>
+        </tr>
+        <tr>
+          <td>GeneCIS 검색</td>
+          <td>R@1</td>
+          <td class="winner">25.4%</td>
+          <td>9.6%</td>
+          <td>전문 18.7%</td>
+        </tr>
+        <tr>
+          <td>MVTec 이상탐지</td>
+          <td>PRO</td>
+          <td>82.1</td>
+          <td>—</td>
+          <td>FADE 84.5</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="fade-item" style="text-align:center;">
+    <span class="tag teal">파레토 개선</span>
+    <p style="margin-top:8px;">표현 품질을 <span class="highlight">유지하면서</span> 조종 가능성을 <span class="highlight-teal">대폭 향상</span></p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 8: PODS & Anomaly ====== -->
+<div class="slide" id="s8">
+  <div class="fade-item slide-number">07 &middot; 실험 결과 — 제로샷 전이</div>
+  <h2 class="fade-item">제로샷 일반화 능력</h2>
+
+  <div class="card-grid cols-2 fade-item">
+    <div class="card">
+      <span class="tag pink">개인화 객체 판별 (PODS)</span>
+      <div class="spacer"></div>
+      <h3>텍스트 상세도의 영향</h3>
+      <div class="bar-chart" style="margin-top:12px;">
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">상세 설명</div>
+          <div class="bar-track"><div class="bar-fill teal" style="--w:58.1%;">58.1%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">지도학습 FT</div>
+          <div class="bar-track"><div class="bar-fill gray" style="--w:48%;">48.0%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">간단 설명</div>
+          <div class="bar-track"><div class="bar-fill gray" style="--w:27.9%;">27.9%</div></div>
+        </div>
+      </div>
+      <p style="margin-top:10px;">텍스트 상세도가 높을수록 → 더 세밀한 특징 조종</p>
+    </div>
+
+    <div class="card">
+      <span class="tag yellow">이상 탐지 (MVTec AD)</span>
+      <div class="spacer"></div>
+      <h3>제로샷 결함 탐지</h3>
+      <div class="bar-chart" style="margin-top:12px;">
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">FADE</div>
+          <div class="bar-track"><div class="bar-fill gray" style="--w:84.5%;">84.5</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">SteerViT</div>
+          <div class="bar-track"><div class="bar-fill purple" style="--w:82.1%;">82.1</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">WinCLIP</div>
+          <div class="bar-track"><div class="bar-fill gray" style="--w:64.6%;">64.6</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="width:90px;">SAM3</div>
+          <div class="bar-track"><div class="bar-fill gray" style="--w:54.5%;">54.5</div></div>
+        </div>
+      </div>
+      <p style="margin-top:10px;">전용 모델에 근접하는 제로샷 성능</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 9: Ablations ====== -->
+<div class="slide" id="s9">
+  <div class="fade-item slide-number">08 &middot; 어블레이션 연구</div>
+  <h2 class="fade-item">설계 선택의 효과</h2>
+
+  <div class="card-grid cols-2 fade-item">
+    <div class="card">
+      <h3>아키텍처 구성 요소</h3>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr><th>구성</th><th>분류</th><th>CORE</th><th>PODS</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Full SteerViT</strong></td><td class="winner">87.7</td><td class="winner">96.0</td><td class="winner">58.1</td></tr>
+            <tr><td>후기 융합</td><td>91.8</td><td>93.3</td><td>36.6</td></tr>
+            <tr><td>tanh 게이트 제거</td><td>83.5</td><td>94.6</td><td>47.1</td></tr>
+            <tr><td>선형 프로젝터</td><td>86.7</td><td>95.2</td><td>56.4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;"><span class="highlight-pink">PODS에서 26.5p 차이</span> — 조기 융합이 세밀한 태스크에 필수적</p>
+    </div>
+
+    <div class="card">
+      <h3>백본 일반화</h3>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr><th>백본</th><th>기본</th><th>후기 융합</th><th>SteerViT</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>DINOv2</td><td>43.7%</td><td>93.3%</td><td class="winner">96.0%</td></tr>
+            <tr><td>SigLIP</td><td>38.3%</td><td>75.4%</td><td class="winner">91.3%</td></tr>
+            <tr><td>MAE</td><td>21.8%</td><td>41.0%</td><td class="winner">74.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;">모든 백본에서 <span class="highlight-teal">일관된 개선</span> 달성</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 10: Key Findings ====== -->
+<div class="slide" id="s10">
+  <div class="fade-item slide-number">09 &middot; 주요 발견</div>
+  <h2 class="fade-item">5가지 핵심 발견</h2>
+  <div class="spacer"></div>
+
+  <div class="finding fade-item">
+    <div class="finding-num p">1</div>
+    <div>
+      <h3>텍스트로 시각 특징 조종</h3>
+      <p>SteerViT은 쿼리된 개념 방향으로 시각 특징을 조종하며, 기존 인코더는 두드러진 시각적 단서에 붕괴합니다.</p>
+    </div>
+  </div>
+
+  <div class="finding fade-item">
+    <div class="finding-num t">2</div>
+    <div>
+      <h3>파레토 최적 달성</h3>
+      <p>표현 품질을 희생하지 않으면서 텍스트로 조종 가능한 <span class="highlight-teal">최초의 시각 표현 가족</span>을 구성합니다.</p>
+    </div>
+  </div>
+
+  <div class="finding fade-item">
+    <div class="finding-num pk">3</div>
+    <div>
+      <h3>텍스트 상세도 = 특징 세밀도</h3>
+      <p>텍스트 조건의 상세 수준이 조종 가능한 시각 표현의 <span class="highlight-pink">세밀도를 직접 제어</span>합니다.</p>
+    </div>
+  </div>
+
+  <div class="finding fade-item">
+    <div class="finding-num y">4</div>
+    <div>
+      <h3>임베딩 공간 재구성</h3>
+      <p>텍스트를 사용하여 의미적 추상화 수준과 클러스터링 기준을 모두 제어할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <div class="finding fade-item">
+    <div class="finding-num p">5</div>
+    <div>
+      <h3>OOD 도메인 전이</h3>
+      <p>자연어만으로 태스크별 학습 없이 <span class="highlight">분포 외 도메인으로의 전이</span>가 가능합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 11: Comparison Table ====== -->
+<div class="slide" id="s11">
+  <div class="fade-item slide-number">10 &middot; 방법론 비교</div>
+  <h2 class="fade-item">기존 방법과의 비교</h2>
+
+  <div class="table-wrap fade-item">
+    <table>
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>텍스트 조종</th>
+          <th>표현 품질</th>
+          <th>융합 방식</th>
+          <th>추가 파라미터</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>DINOv2</td><td>✗</td><td>✓</td><td>—</td><td>0M</td></tr>
+        <tr><td>CLIP / SigLIP</td><td>✗</td><td>✓</td><td>후기</td><td>~200M</td></tr>
+        <tr><td>SAM3</td><td>✓</td><td>✗</td><td>후기</td><td>~200M–1B</td></tr>
+        <tr><td>Qwen3-VL</td><td>△</td><td>△</td><td>후기</td><td>≥1B</td></tr>
+        <tr><td>FLAIR</td><td>△</td><td>✓</td><td>후기</td><td>~10M</td></tr>
+        <tr style="background:rgba(108,92,231,.08);">
+          <td><strong style="color:var(--accent2);">SteerViT</strong></td>
+          <td class="winner">✓</td>
+          <td class="winner">✓</td>
+          <td style="color:var(--accent3);font-weight:600;">조기</td>
+          <td class="winner">21M</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="spacer-lg"></div>
+
+  <div class="card fade-item" style="background:rgba(108,92,231,.06);border-color:rgba(108,92,231,.2);text-align:center;">
+    <p style="font-size:clamp(.9rem,1.8vw,1.1rem);color:var(--text);">
+      SteerViT은 <span class="highlight">조종 가능성</span>과 <span class="highlight-teal">표현 품질</span>을 동시에 달성하는<br>
+      <span class="highlight-pink">유일한 경량 방법</span>입니다.
+    </p>
+  </div>
+</div>
+
+<!-- ====== SLIDE 12: Applications ====== -->
+<div class="slide" id="s12">
+  <div class="fade-item slide-number">11 &middot; 응용 분야</div>
+  <h2 class="fade-item">실용적 활용</h2>
+
+  <div class="card-grid cols-3 fade-item">
+    <div class="card">
+      <span class="icon">🔍</span>
+      <h3>조건부 검색</h3>
+      <p>두드러지지 않은 특정 객체를 포함하는 이미지를 정확히 검색</p>
+    </div>
+    <div class="card">
+      <span class="icon">🏷️</span>
+      <h3>개인화 객체 인식</h3>
+      <p>상세한 자연어 설명으로 인스턴스 수준의 객체 판별</p>
+    </div>
+    <div class="card">
+      <span class="icon">🏭</span>
+      <h3>산업 이상 탐지</h3>
+      <p>제조 현장에서 제로샷 결함 탐지 및 위치 추정</p>
+    </div>
+    <div class="card">
+      <span class="icon">🗂️</span>
+      <h3>의미 클러스터링</h3>
+      <p>텍스트로 임베딩 공간의 계층 구조와 클러스터링 기준 제어</p>
+    </div>
+    <div class="card">
+      <span class="icon">🎨</span>
+      <h3>세밀 분류</h3>
+      <p>텍스트 프롬프트를 통해 새로운 도메인에 적응</p>
+    </div>
+    <div class="card">
+      <span class="icon">⚙️</span>
+      <h3>런타임 제어</h3>
+      <p>게이트 스케일링 (ω ∈ [0,1])으로 조종성-품질 균형을 실시간 조절</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 13: Conclusion ====== -->
+<div class="slide title-slide" id="s13">
+  <div class="fade-item slide-number">12 &middot; 결론</div>
+  <h1 class="fade-item" style="font-size:clamp(1.5rem,4vw,2.8rem);">새로운 패러다임</h1>
+  <div class="divider fade-item"></div>
+
+  <p class="subtitle fade-item" style="text-align:center;max-width:650px;">
+    <em>"언어에 비전을 맞추는 것이 아닌,<br>
+    <span class="highlight">언어로 비전을 조건화</span>하는 것이<br>
+    효율적인 멀티모달 시각 이해의 새로운 패러다임이 될 수 있다."</em>
+  </p>
+
+  <div class="spacer-lg"></div>
+
+  <div class="stat-row fade-item" style="justify-content:center;max-width:550px;margin:0 auto;">
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent2);">21M</div>
+      <div class="stat-label">추가 파라미터</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent3);">96%</div>
+      <div class="stat-label">CORE 검색 정확도</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent4);">0</div>
+      <div class="stat-label">품질 손실</div>
+    </div>
+  </div>
+
+  <div class="spacer-lg"></div>
+  <div class="fade-item authors">
+    arXiv: 2604.02327 &middot; 2026<br>
+    Ruthardt, Gaur, Ramanan, Tapaswi, Asano
+  </div>
+</div>
+
+</div><!-- end #deck -->
+
+<!-- Progress bar -->
+<div id="progress" style="width:0%"></div>
+
+<!-- Slide counter -->
+<div id="slide-counter">1 / 13</div>
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" aria-label="이전 슬라이드">◀</button>
+  <button class="nav-btn" id="btn-next" aria-label="다음 슬라이드">▶</button>
+</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  const counter = document.getElementById('slide-counter');
+  const progress = document.getElementById('progress');
+
+  function go(idx){
+    if(idx < 0 || idx >= total || idx === cur) return;
+    const dir = idx > cur ? 1 : -1;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(()=>{ slides[cur === undefined ? 0 : cur].classList.remove('exit-left'); }, 500);
+    const prev = cur;
+    cur = idx;
+    slides[cur].classList.add('active');
+    setTimeout(()=>{ slides[prev].classList.remove('exit-left'); }, 500);
+    counter.textContent = (cur+1)+' / '+total;
+    progress.style.width = ((cur+1)/total*100)+'%';
+  }
+
+  document.getElementById('btn-prev').addEventListener('click', ()=> go(cur-1));
+  document.getElementById('btn-next').addEventListener('click', ()=> go(cur+1));
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur+1); }
+    if(e.key === 'ArrowLeft') { e.preventDefault(); go(cur-1); }
+  });
+
+  // Touch swipe
+  let tx = 0, ty = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive:true});
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)*1.5){
+      if(dx < 0) go(cur+1); else go(cur-1);
+    }
+  }, {passive:true});
+
+  // Init
+  counter.textContent = '1 / '+total;
+  progress.style.width = (1/total*100)+'%';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>SCRAT: 결합된 제어, 구조화된 기억, 검증 가능한 행동</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #121828;
+    --bg-card-alt: #1a2236;
+    --accent-amber: #f59e0b;
+    --accent-emerald: #10b981;
+    --accent-sky: #38bdf8;
+    --accent-rose: #f43f5e;
+    --accent-violet: #8b5cf6;
+    --accent-orange: #fb923c;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-subtle: rgba(148,163,184,0.12);
+    --glass: rgba(18,24,40,0.85);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== SLIDE CONTAINER ===== */
+  .slide-container {
+    position: relative;
+    width: 100%;
+    min-height: 100dvh;
+  }
+
+  .slide {
+    display: none;
+    flex-direction: column;
+    min-height: 100dvh;
+    padding: clamp(20px, 5vw, 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    animation: fadeSlideIn 0.5s ease-out;
+  }
+
+  .slide.active { display: flex; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-number {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: clamp(12px, 2vw, 24px);
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: clamp(10px, 2vw, 20px);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: clamp(8px, 1.5vw, 16px);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 720px;
+  }
+
+  .highlight { color: var(--accent-amber); font-weight: 700; }
+  .highlight-emerald { color: var(--accent-emerald); font-weight: 700; }
+  .highlight-sky { color: var(--accent-sky); font-weight: 700; }
+  .highlight-rose { color: var(--accent-rose); font-weight: 700; }
+  .highlight-violet { color: var(--accent-violet); font-weight: 700; }
+
+  /* ===== GRADIENT TEXTS ===== */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent-amber), var(--accent-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-emerald {
+    background: linear-gradient(135deg, var(--accent-emerald), var(--accent-sky));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-violet {
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-rose));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== CARDS & GRIDS ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(12px, 2vw, 20px);
+  }
+
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(12px, 2vw, 20px);
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: clamp(16px, 3vw, 28px);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .card-icon {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    margin-bottom: 8px;
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+  }
+
+  .card-amber { border-left: 3px solid var(--accent-amber); }
+  .card-emerald { border-left: 3px solid var(--accent-emerald); }
+  .card-sky { border-left: 3px solid var(--accent-sky); }
+  .card-rose { border-left: 3px solid var(--accent-rose); }
+  .card-violet { border-left: 3px solid var(--accent-violet); }
+
+  /* ===== SCRAT LETTERS ===== */
+  .scrat-letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 2vw, 16px);
+    margin: clamp(12px, 3vw, 24px) 0;
+    justify-content: center;
+  }
+
+  .scrat-letter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: clamp(12px, 2.5vw, 24px) clamp(10px, 2vw, 20px);
+    min-width: clamp(56px, 15vw, 110px);
+    text-align: center;
+    transition: transform 0.3s;
+  }
+
+  .scrat-letter:hover { transform: scale(1.05); }
+
+  .scrat-letter .letter {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .scrat-letter .meaning {
+    font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== TAG / BADGE ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .tag-amber { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+  .tag-emerald { background: rgba(16,185,129,0.15); color: var(--accent-emerald); }
+  .tag-sky { background: rgba(56,189,248,0.15); color: var(--accent-sky); }
+  .tag-rose { background: rgba(244,63,94,0.15); color: var(--accent-rose); }
+  .tag-violet { background: rgba(139,92,246,0.15); color: var(--accent-violet); }
+
+  /* ===== FORMULA BOX ===== */
+  .formula-box {
+    background: rgba(56,189,248,0.06);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 12px;
+    padding: clamp(12px, 2.5vw, 20px);
+    margin: clamp(8px, 1.5vw, 14px) 0;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    color: var(--accent-sky);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: clamp(10px, 2vw, 20px) 0;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    min-width: 500px;
+  }
+
+  th {
+    background: var(--bg-card-alt);
+    color: var(--accent-amber);
+    font-weight: 600;
+    padding: clamp(8px, 1.5vw, 14px);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: clamp(8px, 1.5vw, 12px);
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1.5vw, 12px);
+    margin: clamp(10px, 2vw, 18px) 0;
+  }
+
+  .flow-node {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 20px);
+    text-align: center;
+    font-size: clamp(0.72rem, 1.6vw, 0.9rem);
+    font-weight: 500;
+    min-width: clamp(80px, 18vw, 130px);
+  }
+
+  .flow-arrow {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--text-muted);
+  }
+
+  /* ===== STAT ROW ===== */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(12px, 2vw, 20px);
+    margin: clamp(12px, 2vw, 20px) 0;
+    justify-content: center;
+  }
+
+  .stat-item {
+    text-align: center;
+    min-width: clamp(100px, 25vw, 160px);
+  }
+
+  .stat-value {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    position: relative;
+    padding-left: clamp(24px, 5vw, 40px);
+    margin: clamp(12px, 2vw, 20px) 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-amber), var(--accent-emerald), var(--accent-violet));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: clamp(16px, 3vw, 24px);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * clamp(24px, 5vw, 40px) + 4px);
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    border: 2px solid var(--bg-dark);
+  }
+
+  .timeline-item h3 {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item p {
+    font-size: clamp(0.78rem, 1.7vw, 0.92rem);
+  }
+
+  /* ===== COMPARISON BARS ===== */
+  .bar-compare {
+    margin: clamp(8px, 1.5vw, 14px) 0;
+  }
+
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(0.75rem, 1.6vw, 0.88rem);
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+  }
+
+  .bar-track {
+    height: clamp(18px, 3vw, 26px);
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    font-weight: 700;
+    color: var(--bg-dark);
+  }
+
+  /* ===== PULSE DOT ===== */
+  .pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* ===== TITLE SLIDE SPECIAL ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .title-slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 60% 40%, rgba(245,158,11,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 30% 70%, rgba(139,92,246,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .squirrel-hero {
+    font-size: clamp(3rem, 10vw, 7rem);
+    margin-bottom: clamp(8px, 2vw, 16px);
+    filter: drop-shadow(0 4px 12px rgba(245,158,11,0.3));
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .authors {
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    color: var(--text-muted);
+    margin-top: clamp(12px, 2vw, 20px);
+  }
+
+  .arxiv-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.4vw, 0.82rem);
+    color: var(--accent-amber);
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(8px, 2vw, 14px) clamp(12px, 3vw, 24px);
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border-subtle);
+    z-index: 1000;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 18px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 12px;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: var(--accent-amber);
+    color: var(--bg-dark);
+    border-color: var(--accent-amber);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-amber), var(--accent-emerald));
+    transition: width 0.4s ease;
+    z-index: 1001;
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: clamp(12px, 2vw, 20px) 0;
+  }
+
+  /* ===== LIST ===== */
+  .clean-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .clean-list li {
+    padding: clamp(8px, 1.5vw, 12px) 0;
+    padding-left: clamp(18px, 3vw, 24px);
+    position: relative;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .clean-list li:last-child { border-bottom: none; }
+
+  .clean-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: clamp(14px, 2.2vw, 18px);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+  }
+
+  /* ===== SPACER FOR NAV ===== */
+  .slide { padding-bottom: clamp(80px, 12vw, 100px); }
+
+  /* ===== SECTION HEADER ===== */
+  .section-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .big-icon {
+    font-size: clamp(3rem, 8vw, 5rem);
+    margin-bottom: clamp(8px, 2vw, 16px);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: clamp(18px, 4vw, 30px); padding-bottom: 90px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .scrat-letter { min-width: clamp(50px, 16vw, 90px); }
+    table { min-width: 420px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 16px; padding-bottom: 85px; }
+    h1 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+    h2 { font-size: clamp(1.15rem, 5vw, 1.5rem); }
+    .card { padding: 14px; border-radius: 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 8px 14px; }
+    .scrat-letters { gap: 6px; }
+    .scrat-letter { padding: 10px 8px; min-width: 52px; border-radius: 10px; }
+    .scrat-letter .letter { font-size: clamp(1.4rem, 7vw, 2rem); }
+    .stat-value { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+    table { min-width: 360px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 12px; padding-bottom: 80px; }
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.05rem; }
+    .card { padding: 12px; }
+    .subtitle { font-size: 0.82rem; }
+    .scrat-letter { min-width: 46px; padding: 8px 6px; }
+    .scrat-letter .letter { font-size: 1.3rem; }
+    .scrat-letter .meaning { font-size: 0.55rem; }
+    .nav-btn { padding: 8px 10px; font-size: 0.75rem; }
+    .formula-box { font-size: 0.68rem; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ========== SLIDE 1: TITLE ========== -->
+<div class="slide title-slide active" id="slide-1">
+  <div class="squirrel-hero">&#x1F43F;&#xFE0F;</div>
+  <h1>
+    <span class="gradient-text">SCRAT</span>
+  </h1>
+  <p class="subtitle" style="max-width: 640px; margin: 0 auto;">
+    결합된 제어, 구조화된 기억, 검증 가능한 행동<br>
+    <span style="color: var(--text-muted); font-size: clamp(0.78rem, 1.8vw, 1rem);">
+      다람쥐 운동과 분산저장 행동에서 배우는 에이전트 AI
+    </span>
+  </p>
+  <div class="authors">
+    Maximiliano Armesto &middot; Christophe Kolb
+  </div>
+  <div class="arxiv-badge">arXiv: 2604.03201v1 &middot; 2026년 4월</div>
+</div>
+
+<!-- ========== SLIDE 2: PROBLEM ========== -->
+<div class="slide" id="slide-2">
+  <div class="slide-number">01 &mdash; 문제 정의</div>
+  <h2>현대 AI의 <span class="highlight-rose">결합 문제</span></h2>
+  <p class="subtitle">유창한 출력만으로는 부족합니다. 에이전트 AI는 <strong>행동</strong>하고, <strong>기억</strong>하고, <strong>검증</strong>할 수 있어야 합니다.</p>
+
+  <div class="card-grid-3" style="margin-top: clamp(16px, 3vw, 28px);">
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F6A8;</span>
+      <h3>제어 실패</h3>
+      <p>교란으로부터 복구하지 못하고 계획만 실행하는 시스템</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F9E0;</span>
+      <h3>기억 실패</h3>
+      <p>관련 정보를 검색하지만 잘못된 내부 상태에 기반해 행동</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F50D;</span>
+      <h3>검증 실패</h3>
+      <p>표면적 검증기만 만족시키고 실제 목표를 놓치는 경우</p>
+    </div>
+  </div>
+
+  <div style="margin-top: clamp(16px, 3vw, 28px); text-align: center;">
+    <div class="tag tag-amber">핵심 통찰</div>
+    <p style="max-width: 600px; margin: 0 auto; font-size: clamp(0.9rem, 2vw, 1.1rem);">
+      이것은 <span class="highlight">3개의 개별 문제가 아니라 하나의 결합된 문제</span>입니다.<br>
+      로보틱스, 검색 시스템, 감사 시스템이 따로 연구해온 것들을 통합해야 합니다.
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 3: WHY SQUIRRELS ========== -->
+<div class="slide" id="slide-3">
+  <div class="slide-number">02 &mdash; 왜 다람쥐인가?</div>
+  <h2>다람쥐: 자연의 <span class="gradient-text">에이전트 시스템</span></h2>
+  <p class="subtitle">다람쥐의 행동은 제어, 기억, 검증 세 가지 요구를 동시에 구현합니다.</p>
+
+  <div class="card-grid-3">
+    <div class="card card-amber">
+      <span class="card-icon">&#x1F333;</span>
+      <h3>수목 운동 <span class="tag tag-amber" style="font-size: 0.6rem;">제어</span></h3>
+      <ul>
+        <li>불확실한 가지 탄성에 따라 점프 위치 조정</li>
+        <li>낯선 유연한 지지대에 노출되며 학습</li>
+        <li>오류 발생 시 민첩한 복구 기동 수행</li>
+      </ul>
+    </div>
+    <div class="card card-emerald">
+      <span class="card-icon">&#x1F330;</span>
+      <h3>분산저장 <span class="tag tag-emerald" style="font-size: 0.6rem;">기억</span></h3>
+      <ul>
+        <li>지연 후에도 상당한 공간 정밀도로 견과류 회수</li>
+        <li>견과류 종류별로 저장소를 구조화 (청킹)</li>
+        <li>식량 가치와 희소성에 따라 저장 노력 조절</li>
+      </ul>
+    </div>
+    <div class="card card-violet">
+      <span class="card-icon">&#x1F440;</span>
+      <h3>관찰자 인식 <span class="tag tag-violet" style="font-size: 0.6rem;">검증</span></h3>
+      <ul>
+        <li>관찰하는 동족이 있으면 저장소 간격 확대</li>
+        <li>관찰자 반대 방향으로 몸 회전</li>
+        <li>도난 위험이 저장 정책 자체를 변경</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: clamp(12px, 2vw, 20px);">
+    <p style="color: var(--text-muted); font-size: clamp(0.78rem, 1.6vw, 0.88rem);">
+      &#x26A0;&#xFE0F; 기질 유사성이나 도덕적 유추가 아닌, <strong>요구 사항의 결합</strong>에 비교 가치가 있습니다.
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 4: SCRAT ACRONYM ========== -->
+<div class="slide section-slide" id="slide-4">
+  <div class="slide-number">03 &mdash; 프레임워크</div>
+  <h2>
+    <span class="gradient-text">S</span><span class="gradient-emerald">C</span><span class="gradient-violet">R</span><span class="gradient-text">A</span><span class="gradient-emerald">T</span>
+    <span style="font-weight: 300; font-size: clamp(0.9rem, 2.5vw, 1.4rem); display: block; margin-top: 8px; color: var(--text-secondary);">프레임워크</span>
+  </h2>
+
+  <div class="scrat-letters">
+    <div class="scrat-letter" style="border-bottom: 3px solid var(--accent-amber);">
+      <span class="letter gradient-text">S</span>
+      <span class="meaning">확률적<br>제어</span>
+    </div>
+    <div class="scrat-letter" style="border-bottom: 3px solid var(--accent-emerald);">
+      <span class="letter gradient-emerald">C</span>
+      <span class="meaning">결합된<br>시스템</span>
+    </div>
+    <div class="scrat-letter" style="border-bottom: 3px solid var(--accent-violet);">
+      <span class="letter gradient-violet">R</span>
+      <span class="meaning">검색<br>(기억)</span>
+    </div>
+    <div class="scrat-letter" style="border-bottom: 3px solid var(--accent-orange);">
+      <span class="letter gradient-text">A</span>
+      <span class="meaning">감사 가능<br>행동</span>
+    </div>
+    <div class="scrat-letter" style="border-bottom: 3px solid var(--accent-sky);">
+      <span class="letter gradient-emerald">T</span>
+      <span class="meaning">궤적<br>추적</span>
+    </div>
+  </div>
+
+  <p class="subtitle" style="margin: 0 auto; text-align: center;">
+    <strong>Stochastic Control with Retrieval and Auditable Trajectories</strong><br>
+    검색 기반 감사 가능 궤적을 갖춘 확률적 제어
+  </p>
+</div>
+
+<!-- ========== SLIDE 5: FORMAL MODEL ========== -->
+<div class="slide" id="slide-5">
+  <div class="slide-number">04 &mdash; 형식적 모델</div>
+  <h2>상태 구성 및 <span class="highlight-sky">계층적 제어</span></h2>
+
+  <h3 style="margin-top: clamp(10px, 2vw, 18px);">5개 상태 구성요소</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));">
+    <div class="card card-amber" style="padding: clamp(10px, 2vw, 16px);">
+      <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">x<sub>t</sub> &mdash; 체현 상태</h3>
+      <p>자세, 속도, 액추에이터</p>
+    </div>
+    <div class="card card-emerald" style="padding: clamp(10px, 2vw, 16px);">
+      <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">z<sub>t</sub> &mdash; 잠재 역학</h3>
+      <p>지지대 탄성, 마찰, 안정성</p>
+    </div>
+    <div class="card card-sky" style="padding: clamp(10px, 2vw, 16px);">
+      <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">m<sub>t</sub> &mdash; 에피소딕 기억</h3>
+      <p>구조화된 경험 저장소</p>
+    </div>
+    <div class="card card-violet" style="padding: clamp(10px, 2vw, 16px);">
+      <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">b<sub>t</sub> &mdash; 관찰자 신념</h3>
+      <p>경쟁자가 추론 가능한 정보</p>
+    </div>
+    <div class="card card-rose" style="padding: clamp(10px, 2vw, 16px);">
+      <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">e<sub>t</sub> &mdash; 과제/자원</h3>
+      <p>과제, 자원, 권한 상태</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top: clamp(14px, 2.5vw, 22px);">핵심 수식</h3>
+  <div class="formula-box">&#x03B2;<sub>t</sub> = p(s<sub>t</sub> | o<sub>1:t</sub>, a<sub>1:t-1</sub>)  ← 신념 상태
+
+&#x03B2;<sub>t+1</sub> = B(&#x03B2;<sub>t</sub>, o<sub>t+1</sub>, a<sub>t</sub>)    ← 신념 업데이트
+m<sub>t+1</sub> = U(m<sub>t</sub>, o<sub>t+1</sub>, a<sub>t</sub>, v<sub>t+&#x0394;</sub>)  ← 기억 업데이트 (지연된 검증 신호 포함)
+b<sub>t+1</sub> = O(b<sub>t</sub>, a<sub>t</sub>, o<sub>t+1</sub>)    ← 관찰자 모델 업데이트
+v<sub>t+&#x0394;</sub> = V(&#x03C4;<sub>t:t+&#x0394;</sub>, &#x03B7;)      ← 지연된 검증</div>
+</div>
+
+<!-- ========== SLIDE 6: HIERARCHICAL CONTROL ========== -->
+<div class="slide" id="slide-6">
+  <div class="slide-number">05 &mdash; 계층적 제어</div>
+  <h2>옵션 수준 <span class="highlight">행동 구조</span></h2>
+
+  <div class="card" style="margin: clamp(12px, 2vw, 20px) 0;">
+    <h3>2단계 제어 계층</h3>
+    <div class="card-grid">
+      <div class="card card-amber">
+        <span class="tag tag-amber">상위 수준</span>
+        <h3>옵션 (w<sub>t</sub>)</h3>
+        <p>시간적으로 확장된 매크로 행동: 발사, 안정화, 저장, 회수, 은폐</p>
+      </div>
+      <div class="card card-sky">
+        <span class="tag tag-sky">하위 수준</span>
+        <h3>원시 행동 (a<sub>t</sub>)</h3>
+        <p>현재 신념과 검색된 기억에 기반한 로컬 제어기</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>검색 파이프라인</h3>
+  <div class="flow-row">
+    <div class="flow-node" style="border-color: var(--accent-amber);">
+      신념 &#x03B2;<sub>t</sub><br><small style="color: var(--text-muted);">+ 옵션 w<sub>t</sub></small>
+    </div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-emerald);">
+      쿼리 생성<br><small style="color: var(--text-muted);">q<sub>t</sub> = Q(&#x03B2;<sub>t</sub>, w<sub>t</sub>)</small>
+    </div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-sky);">
+      기억 검색<br><small style="color: var(--text-muted);">r<sub>t</sub> = R(m<sub>t</sub>, q<sub>t</sub>)</small>
+    </div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-violet);">
+      행동 실행<br><small style="color: var(--text-muted);">a<sub>t</sub></small>
+    </div>
+  </div>
+
+  <h3 style="margin-top: clamp(14px, 2vw, 20px);">다목적 최적화 비용</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));">
+    <div class="card" style="text-align: center; padding: 12px;">
+      <div style="font-size: 1.3rem;">&#x1F3AF;</div>
+      <p style="font-weight: 600; color: var(--accent-amber);">c<sub>task</sub></p>
+      <p style="font-size: 0.75rem;">과제 비용</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 12px;">
+      <div style="font-size: 1.3rem;">&#x23F1;&#xFE0F;</div>
+      <p style="font-weight: 600; color: var(--accent-emerald);">c<sub>latency</sub></p>
+      <p style="font-size: 0.75rem;">지연 비용</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 12px;">
+      <div style="font-size: 1.3rem;">&#x1F510;</div>
+      <p style="font-weight: 600; color: var(--accent-violet);">c<sub>leak</sub></p>
+      <p style="font-size: 0.75rem;">정보 누출 비용</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 12px;">
+      <div style="font-size: 1.3rem;">&#x1F527;</div>
+      <p style="font-weight: 600; color: var(--accent-rose);">c<sub>repair</sub></p>
+      <p style="font-size: 0.75rem;">수리 비용</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 7: INFERENCE LADDER ========== -->
+<div class="slide" id="slide-7">
+  <div class="slide-number">06 &mdash; 추론 사다리</div>
+  <h2>명시적 <span class="gradient-emerald">증거 계층</span></h2>
+  <p class="subtitle">생물학적 관찰에서 공학적 설계까지, 엄격한 3단계 추론을 거칩니다.</p>
+
+  <div class="timeline" style="margin-top: clamp(16px, 3vw, 28px);">
+    <div class="timeline-item">
+      <h3><span class="highlight">1단계:</span> 경험적 관찰</h3>
+      <p>다람쥐 행동에 대한 직접적 실험 증거. 기질 독립적 문제만 다룸.</p>
+    </div>
+    <div class="timeline-item">
+      <h3><span class="highlight-emerald">2단계:</span> 최소 계산적 추론</h3>
+      <p>관찰이 지지하는 가장 약한 계산적 주장에 먼저 매핑. 부분 관측성, 지연 피드백, 간섭, 관찰자 의존 정책.</p>
+    </div>
+    <div class="timeline-item">
+      <h3><span class="highlight-violet">3단계:</span> AI 설계 추측</h3>
+      <p>아키텍처 선택과 공학적 구현. 반드시 벤치마크, 절제, 실패 모드로 반증 가능해야 함.</p>
+    </div>
+  </div>
+
+  <div class="card card-amber" style="margin-top: clamp(8px, 1.5vw, 14px);">
+    <h3>3가지 허용 조건</h3>
+    <ul>
+      <li><strong>계산적 불변성:</strong> 기질 독립적 문제만 관련</li>
+      <li><strong>최소 추론 우선:</strong> 가장 약한 주장부터 매핑</li>
+      <li><strong>반증 가능한 결과:</strong> 모든 설계 주장에 검증 방법 명시</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== SLIDE 8: HYPOTHESIS H1 ========== -->
+<div class="slide" id="slide-8">
+  <div class="slide-number">07 &mdash; 가설 H1</div>
+  <span class="tag tag-amber">가설 1</span>
+  <h2>빠른 로컬 피드백 + <span class="highlight">예측적 보상</span></h2>
+  <p class="subtitle">
+    짧은 시간 범위의 제어기를 실행에 가깝게 배치한 아키텍처는, 숨겨진 역학 변화에서 <strong>개방 루프 계획</strong>보다 덜 성능이 저하됩니다.
+  </p>
+
+  <div class="card-grid" style="margin-top: clamp(12px, 2vw, 18px);">
+    <div class="card card-amber">
+      <h3>&#x1F333; 다람쥐 근거</h3>
+      <p>탄성 가지에서의 적응적 발사 위치 선택. 불확실한 가지 탄성 하에서 실시간 오류 보정과 숨겨진 역학 추정.</p>
+    </div>
+    <div class="card card-sky">
+      <h3>&#x1F916; AI 설계 함의</h3>
+      <ul>
+        <li>전역 계획 + 로컬 폐루프 보정 결합</li>
+        <li>숨겨진 변수가 빠르게 변할 때 유효</li>
+        <li>체현된 조작 과제에 직접 적용</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top: clamp(12px, 2vw, 18px);">기대 개선 효과</h3>
+  <div class="bar-compare">
+    <div class="bar-label"><span>교란 복구 속도</span><span class="highlight">향상</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 85%; background: linear-gradient(90deg, var(--accent-amber), var(--accent-orange));">85%</div></div>
+  </div>
+  <div class="bar-compare">
+    <div class="bar-label"><span>필요 개입 횟수</span><span class="highlight-emerald">감소</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 70%; background: linear-gradient(90deg, var(--accent-emerald), var(--accent-sky));">-70%</div></div>
+  </div>
+  <div class="bar-compare">
+    <div class="bar-label"><span>수리 비용</span><span class="highlight-emerald">감소</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 60%; background: linear-gradient(90deg, var(--accent-sky), var(--accent-violet));">-60%</div></div>
+  </div>
+
+  <div class="card card-rose" style="margin-top: clamp(10px, 1.5vw, 14px); padding: clamp(10px, 2vw, 16px);">
+    <p><span class="pulse-dot" style="background: var(--accent-rose);"></span><strong>실패 징후:</strong> 단순히 낮은 성공률이 아니라, <em>느린 복구, 더 많은 개입, 교란 후 더 큰 수리 비용</em></p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 9: HYPOTHESIS H2 ========== -->
+<div class="slide" id="slide-9">
+  <div class="slide-number">08 &mdash; 가설 H2</div>
+  <span class="tag tag-emerald">가설 2</span>
+  <h2>구조화된 <span class="gradient-emerald">에피소딕 기억</span></h2>
+  <p class="subtitle">
+    기억은 비구분적 아카이브가 아닌 <strong>인덱싱된 제어 자원</strong>으로 설계되어야 합니다.
+  </p>
+
+  <div class="card-grid-3" style="margin-top: clamp(12px, 2vw, 18px);">
+    <div class="card card-emerald">
+      <span class="card-icon">&#x1F4E6;</span>
+      <h3>유형화된 슬롯</h3>
+      <p>메모리 유형을 구분하여 단서 충돌 감소</p>
+    </div>
+    <div class="card card-emerald">
+      <span class="card-icon">&#x1F578;&#xFE0F;</span>
+      <h3>그래프 구조</h3>
+      <p>관련 에피소드 간 관계로 과제별 탐색 지원</p>
+    </div>
+    <div class="card card-emerald">
+      <span class="card-icon">&#x1F50D;</span>
+      <h3>제어 관련성 우선</h3>
+      <p>검색 정책이 제어에 필요한 에피소드 우선 반환</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top: clamp(14px, 2vw, 20px);">구조화 vs 플랫 아카이브</h3>
+  <div class="bar-compare">
+    <div class="bar-label"><span>항목 간 혼동률</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 30%; background: var(--accent-emerald);">낮음</div></div>
+  </div>
+  <div class="bar-compare">
+    <div class="bar-label"><span>검색 지연 증가율 (메모리 크기별)</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 40%; background: var(--accent-emerald);">완만</div></div>
+  </div>
+  <div class="bar-compare">
+    <div class="bar-label"><span>간섭 시 성능 저하</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width: 35%; background: var(--accent-emerald);">점진적</div></div>
+  </div>
+
+  <div class="card" style="margin-top: clamp(10px, 1.5vw, 14px); background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.2);">
+    <p><strong>&#x1F330; 다람쥐 근거:</strong> 견과류 종류별 공간 청킹은 클러스터링된 조직이 검색에 유리함을 시사. 가치 보정된 저장 노력은 기억 결정이 미래 효용에 결합됨을 보여줌.</p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 10: HYPOTHESIS H3 ========== -->
+<div class="slide" id="slide-10">
+  <div class="slide-number">09 &mdash; 가설 H3</div>
+  <span class="tag tag-violet">가설 3</span>
+  <h2>검증기와 관찰자 모델은 <span class="gradient-violet">행동-기억 루프 내부</span>에 있어야 한다</h2>
+
+  <p class="subtitle">행동이 정보를 누출하고 성공이 부분적으로만 확인 가능하다면, 파이프라인 끝에서만 검증할 수 없습니다.</p>
+
+  <div class="flow-row" style="margin: clamp(16px, 3vw, 24px) 0;">
+    <div class="flow-node" style="border-color: var(--accent-violet);">&#x2705;<br>사전조건 검사</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-violet);">&#x1F4CA;<br>런타임 모니터</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-violet);">&#x1F50D;<br>사후조건 검사</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-violet);">&#x1F4DD;<br>출처 추적</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-violet">
+      <h3>&#x2705; 기대 개선</h3>
+      <ul>
+        <li>조용한 실패 빈도 감소</li>
+        <li>적대자에 대한 정보 누출 감소</li>
+        <li>의사결정 근거의 문서화 향상</li>
+        <li>연쇄 실패 전 개입 기회 증가</li>
+      </ul>
+    </div>
+    <div class="card card-rose">
+      <h3>&#x26A0;&#xFE0F; 한계</h3>
+      <ul>
+        <li>검증기는 불완전할 수 있음</li>
+        <li>거짓 양성/음성 발생 가능</li>
+        <li>프록시 최적화 위험: 검사기만 만족시킴</li>
+        <li>검사기 오명세 &rarr; 체계적 프록시 오류</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: clamp(10px, 1.5vw, 14px); background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.2);">
+    <p><strong>&#x1F440; 다람쥐 유추:</strong> 관찰자 인식 저장은 로컬 성공(저장소 숨기기)이 전역적으로는 비합리적일 수 있음을 보여줌 &mdash; 몸 방향이나 간격 패턴을 통해 정보가 누출되기 때문.</p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: CONJECTURE C1 ========== -->
+<div class="slide" id="slide-11">
+  <div class="slide-number">10 &mdash; 추측 C1</div>
+  <span class="tag tag-rose">약한 근거의 추측</span>
+  <h2>역할 분화: <span class="highlight-rose">제안자/실행자/검사자/적대자</span></h2>
+
+  <p class="subtitle">정보 접근과 검증 부담이 의미있게 다를 때, 분화된 역할이 상관 오류를 줄일 수 있다는 추측입니다.</p>
+
+  <div class="card-grid" style="margin-top: clamp(14px, 2.5vw, 22px);">
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 2rem;">&#x1F4DD;</div>
+      <h3 style="color: var(--accent-amber);">제안자</h3>
+      <p>넓은 맥락을 보고 계획 수립</p>
+    </div>
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 2rem;">&#x2699;&#xFE0F;</div>
+      <h3 style="color: var(--accent-emerald);">실행자</h3>
+      <p>즉각적 상태를 보고 행동 수행</p>
+    </div>
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 2rem;">&#x1F50E;</div>
+      <h3 style="color: var(--accent-sky);">검사자</h3>
+      <p>실행 흔적을 보고 검증 수행</p>
+    </div>
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 2rem;">&#x1F47F;</div>
+      <h3 style="color: var(--accent-rose);">적대자</h3>
+      <p>취약점 탐색과 스트레스 테스트</p>
+    </div>
+  </div>
+
+  <div class="card card-rose" style="margin-top: clamp(12px, 2vw, 18px);">
+    <h3>&#x26A0;&#xFE0F; 핵심 제약</h3>
+    <ul>
+      <li>역할 경계는 <strong>시간 척도, 정보 접근, 검증 부담</strong>을 따라야 함 &mdash; 조직적 미학이 아님</li>
+      <li>이질적 에이전트도 맹점을 공유하거나, 공모하거나, 같은 프록시 오류를 재생산할 수 있음</li>
+      <li>이 요인들이 의미있게 다르지 않으면, 추가 다수성은 지연과 비용만 증가시킴</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== SLIDE 12: EVIDENCE TABLE ========== -->
+<div class="slide" id="slide-12">
+  <div class="slide-number">11 &mdash; 증거 매핑</div>
+  <h2>관찰에서 가설까지: <span class="highlight">신뢰도 평가</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>생물학적 관찰</th>
+          <th>최소 추론</th>
+          <th>AI 가설</th>
+          <th>신뢰도</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>탄성 가지에서의 적응적 발사 위치 선택</td>
+          <td>온라인 숨겨진 역학 추정</td>
+          <td>H1: 빠른 피드백</td>
+          <td><span class="tag tag-emerald">높음</span></td>
+        </tr>
+        <tr>
+          <td>지연 후 랜드마크 기반 저장소 회수</td>
+          <td>일회성 공간 기억, 인덱싱</td>
+          <td>H2: 구조화된 기억</td>
+          <td><span class="tag tag-emerald">높음</span></td>
+        </tr>
+        <tr>
+          <td>견과류 종류별 공간 청킹</td>
+          <td>클러스터링된 조직화 이점</td>
+          <td>유형화 인덱스 우위</td>
+          <td><span class="tag tag-amber">중간</span></td>
+        </tr>
+        <tr>
+          <td>가치 보정된 저장 노력</td>
+          <td>미래 효용에 결합된 저장</td>
+          <td>비용 민감 기억 정책</td>
+          <td><span class="tag tag-amber">중-상</span></td>
+        </tr>
+        <tr>
+          <td>관찰자 인식 저장소 간격</td>
+          <td>관찰자 모델이 정책에 영향</td>
+          <td>H3: 루프 내 관찰자 모델</td>
+          <td><span class="tag tag-emerald">높음</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== SLIDE 13: BENCHMARKS ========== -->
+<div class="slide" id="slide-13">
+  <div class="slide-number">12 &mdash; 벤치마크 의제</div>
+  <h2>4개 <span class="gradient-text">벤치마크 패밀리</span></h2>
+
+  <div class="card-grid">
+    <div class="card card-amber">
+      <span class="tag tag-amber">패밀리 A</span>
+      <h3>숨겨진 역학 제어</h3>
+      <p><strong>조작:</strong> 지지대 탄성, 마찰, 관측 지연, 교란 시점</p>
+      <ul>
+        <li>성공률</li>
+        <li>안정화 시간</li>
+        <li>개입 횟수</li>
+        <li>교란 후 수리 비용</li>
+      </ul>
+    </div>
+    <div class="card card-emerald">
+      <span class="tag tag-emerald">패밀리 B</span>
+      <h3>대규모 에피소딕 검색</h3>
+      <p><strong>조작:</strong> 저장 이벤트 수 (수천), 지연 길이, 랜드마크 이동</p>
+      <ul>
+        <li>재현 정밀도</li>
+        <li>검색 지연</li>
+        <li>항목 간 혼동</li>
+        <li>성능 저하 곡선</li>
+      </ul>
+    </div>
+    <div class="card card-violet">
+      <span class="tag tag-violet">패밀리 C</span>
+      <h3>관찰자 인식 행동</h3>
+      <p><strong>조작:</strong> 관찰자 가시성, 적대자 정교함, 숨겨진 제약</p>
+      <ul>
+        <li>달성 보상</li>
+        <li>정보 누출</li>
+        <li>검증기 누락률</li>
+        <li>사후 수정 비용</li>
+      </ul>
+    </div>
+    <div class="card card-rose">
+      <span class="tag tag-rose">패밀리 D</span>
+      <h3>역할 분화 검증 파이프라인</h3>
+      <p><strong>조작:</strong> 검사기 범위, 공유/분리 기억, 역할 인센티브</p>
+      <ul>
+        <li>조용한 실패 빈도</li>
+        <li>상관 오류</li>
+        <li>계산 오버헤드</li>
+        <li>늦은 감지 후 수리 비용</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 14: CHIRON RESULTS ========== -->
+<div class="slide" id="slide-14">
+  <div class="slide-number">13 &mdash; 예비 증거</div>
+  <h2>Chiron 소프트웨어 딜리버리 <span class="highlight-emerald">벤치마크</span></h2>
+  <p class="subtitle">구조화된 기억 접근법(패밀리 B)을 구현한 소프트웨어 딜리버리 시스템의 실제 결과</p>
+
+  <div class="stat-row" style="margin-top: clamp(16px, 3vw, 28px);">
+    <div class="stat-item">
+      <div class="stat-value gradient-text">3.08&times;</div>
+      <div class="stat-label">프로젝트 기간 단축<br><small style="color: var(--text-muted);">28.6주 &rarr; 9.3주</small></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value gradient-emerald">90.5%</div>
+      <div class="stat-label">첫 출시 커버리지<br><small style="color: var(--text-muted);">기존 52.6%</small></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value gradient-violet">-76%</div>
+      <div class="stat-label">검증 후 이슈<br><small style="color: var(--text-muted);">8.63 &rarr; 2.09/100과제</small></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top: clamp(14px, 2vw, 20px);">Chiron 시스템 아키텍처</h3>
+  <div class="flow-row">
+    <div class="flow-node" style="border-color: var(--accent-amber);">저장소 복제<br>&amp; 문서 수집</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-emerald);">시맨틱 청킹<br>&amp; 메타데이터</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-sky);">그래프 구조<br>기억</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-node" style="border-color: var(--accent-violet);">과제별<br>검색</div>
+  </div>
+
+  <div class="card card-emerald" style="margin-top: clamp(10px, 1.5vw, 14px);">
+    <h3>H2 지지 이유</h3>
+    <ul>
+      <li>기억이 유형화됨 (문서, 코드, 테스트, 명세)</li>
+      <li>검색이 맥락 조건적 (워크플로 단계별 다른 쿼리)</li>
+      <li>인덱싱이 그래프 구조 (모듈 관계, 비즈니스 로직 의존성)</li>
+      <li>단계별 접근으로 단서 충돌 감소</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== SLIDE 15: THREATS ========== -->
+<div class="slide" id="slide-15">
+  <div class="slide-number">14 &mdash; 타당성 위협</div>
+  <h2>명시적 <span class="highlight-rose">한계</span>와 반증 조건</h2>
+
+  <div class="card-grid-3" style="margin-top: clamp(14px, 2.5vw, 22px);">
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F4A5;</span>
+      <h3>위협 1</h3>
+      <p><strong>단일체 우위:</strong> 명시적 제어-기억-검증기 분해 없이도 동등 이상의 성능을 달성하면 아키텍처 주장이 무효화</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F4A5;</span>
+      <h3>위협 2</h3>
+      <p><strong>기억 구조 무관성:</strong> 총 파라미터와 맥락 길이를 통제했을 때 구조화 기억이 측정 가능한 이점 없으면 H2 반증</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-icon">&#x1F4A5;</span>
+      <h3>위협 3</h3>
+      <p><strong>역할 분화 무효:</strong> 역할 전문화가 상관 오류를 줄이지 못하면 C1 근거 상실</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>추가 한계</h3>
+  <ul class="clean-list">
+    <li>다람쥐 성공 ≠ 인간 수용 가능성 &mdash; 생태적 적합성은 규범적 목표가 아님</li>
+    <li>증거는 여러 종에 걸쳐 있으며, 메커니즘 주장은 종별로 특정해야 함</li>
+    <li>신경생물학은 제한된 범위의 기준점을 제공하며, 완전한 회로 설명이 아님</li>
+    <li>검증기 불일치: 공학적 검사가 위해를 과소추정하거나 제약을 과대추정할 수 있음</li>
+  </ul>
+</div>
+
+<!-- ========== SLIDE 16: CONCLUSION ========== -->
+<div class="slide section-slide" id="slide-16">
+  <div class="slide-number">15 &mdash; 결론</div>
+  <div class="big-icon">&#x1F43F;&#xFE0F;&#x1F916;</div>
+  <h2>다람쥐 생태학이 <span class="gradient-text">결합된 공학 문제</span>를 날카롭게 합니다</h2>
+
+  <div style="max-width: 680px; margin: clamp(16px, 3vw, 28px) auto 0; text-align: left;">
+    <div class="card card-amber" style="margin-bottom: clamp(10px, 1.5vw, 14px);">
+      <h3>&#x1F4D6; 핵심 주장</h3>
+      <p>숨겨진 역학 하의 빠른 제어, 미래 옵션을 위한 기억, 지연된 부분 검증은 별개의 관심사가 아니라 &mdash; 많은 실제 과제에서 <span class="highlight">하나의 통합된 문제</span>입니다.</p>
+    </div>
+
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="card card-emerald" style="padding: clamp(12px, 2vw, 18px);">
+        <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">&#x2705; 3개 가설</h3>
+        <p>H1 빠른 피드백, H2 구조화 기억, H3 루프 내 검증</p>
+      </div>
+      <div class="card card-violet" style="padding: clamp(12px, 2vw, 18px);">
+        <h3 style="font-size: clamp(0.85rem, 1.8vw, 1rem);">&#x1F914; 1개 추측</h3>
+        <p>C1 역할 분화는 약한 근거이며 벤치마크 검증 필요</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: clamp(10px, 1.5vw, 14px); text-align: center; background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2);">
+      <p style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+        <strong>전략적 은폐의 계산적 능력</strong>은 AI 시스템에서의 <strong>기만 허가</strong>가 아닙니다.<br>
+        비교는 <span class="highlight">아키텍처적 견고성</span>에 관한 것이지, 윤리적 프레임워크가 아닙니다.
+      </p>
+    </div>
+  </div>
+
+  <div class="authors" style="margin-top: clamp(16px, 3vw, 24px);">
+    <div class="arxiv-badge">arXiv: 2604.03201v1 &middot; Armesto & Kolb &middot; 2026</div>
+  </div>
+</div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">&larr; 이전</button>
+  <span class="nav-progress"><span id="currentSlide">1</span> / <span id="totalSlides">16</span></span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">다음 &rarr;</button>
+</nav>
+
+<script>
+  let current = 1;
+  const total = 16;
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('slide-' + n);
+    if (target) {
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+    document.getElementById('currentSlide').textContent = n;
+    document.getElementById('prevBtn').disabled = (n === 1);
+    document.getElementById('nextBtn').disabled = (n === total);
+    document.getElementById('progressBar').style.width = ((n / total) * 100) + '%';
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 1 && next <= total) {
+      current = next;
+      showSlide(current);
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+      if (dx < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+
+  // Init
+  showSlide(1);
+</script>
+
+</body>
+</html>

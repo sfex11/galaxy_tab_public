@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CAMO: 다목적 다중 외판원 문제를 위한 조건부 신경 솔버</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111640;
+    --bg-card: rgba(25, 32, 72, 0.7);
+    --accent-blue: #4fc3f7;
+    --accent-cyan: #00e5ff;
+    --accent-purple: #b388ff;
+    --accent-pink: #ff80ab;
+    --accent-green: #69f0ae;
+    --accent-orange: #ffab40;
+    --text-primary: #e8eaf6;
+    --text-secondary: #9fa8da;
+    --text-dim: #5c6bc0;
+    --gradient-main: linear-gradient(135deg, #4fc3f7, #b388ff);
+    --gradient-warm: linear-gradient(135deg, #ff80ab, #ffab40);
+    --gradient-cool: linear-gradient(135deg, #00e5ff, #69f0ae);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 50px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background decorations */
+  .slide::before {
+    content: '';
+    position: fixed;
+    top: -50%; right: -30%;
+    width: 80vw; height: 80vw;
+    background: radial-gradient(circle, rgba(79,195,247,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* Slide number */
+  .slide-num {
+    position: fixed;
+    bottom: 20px; right: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* Title slide */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(160deg, var(--bg-primary) 0%, #0d1440 50%, #14103a 100%);
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--accent-cyan);
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0,229,255,0.1); }
+    50% { border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(179,136,255,0.15); }
+  }
+
+  .title-main {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .title-sub {
+    font-size: clamp(0.85rem, 2vw, 1.2rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 700px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  .title-authors {
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.8;
+  }
+
+  .title-meta {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+    color: var(--accent-blue);
+    opacity: 0.7;
+  }
+
+  /* Section headers */
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-tag .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+  }
+
+  h2.slide-title {
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 28px;
+    line-height: 1.3;
+  }
+
+  h2.slide-title .highlight {
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(79,195,247,0.12);
+    border-radius: 14px;
+    padding: 22px;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(79,195,247,0.3);
+  }
+
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--accent-blue);
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card li::before {
+    content: '›';
+    color: var(--accent-cyan);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  .card li + li { margin-top: 4px; }
+
+  /* Equation box */
+  .eq-box {
+    background: rgba(0,229,255,0.04);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.4vw, 0.82rem);
+    color: var(--accent-blue);
+    margin: 10px 0;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Architecture diagram */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .arch-block {
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: clamp(0.68rem, 1.4vw, 0.82rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .arch-block.input { background: rgba(105,240,174,0.15); border: 1px solid rgba(105,240,174,0.4); color: var(--accent-green); }
+  .arch-block.encoder { background: rgba(79,195,247,0.15); border: 1px solid rgba(79,195,247,0.4); color: var(--accent-blue); }
+  .arch-block.decoder { background: rgba(179,136,255,0.15); border: 1px solid rgba(179,136,255,0.4); color: var(--accent-purple); }
+  .arch-block.output { background: rgba(255,128,171,0.15); border: 1px solid rgba(255,128,171,0.4); color: var(--accent-pink); }
+
+  .arch-arrow {
+    color: var(--text-dim);
+    font-size: 1.2rem;
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: clamp(0.62rem, 1.3vw, 0.78rem);
+    margin-top: 12px;
+  }
+
+  .data-table th {
+    background: rgba(79,195,247,0.1);
+    color: var(--accent-blue);
+    font-weight: 600;
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(79,195,247,0.2);
+  }
+
+  .data-table th:first-child { border-radius: 10px 0 0 0; text-align: left; }
+  .data-table th:last-child { border-radius: 0 10px 0 0; }
+
+  .data-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+
+  .data-table td:first-child { text-align: left; font-weight: 500; color: var(--text-primary); }
+
+  .data-table tr.highlight-row td {
+    background: rgba(79,195,247,0.06);
+    color: var(--accent-cyan);
+    font-weight: 700;
+  }
+
+  .data-table tr.highlight-row td:first-child { color: var(--accent-cyan); }
+
+  /* Stat bars */
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    color: var(--text-secondary);
+    min-width: 90px;
+    text-align: right;
+  }
+
+  .stat-bar-bg {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: clamp(0.58rem, 1.1vw, 0.68rem);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #fff;
+  }
+
+  .bar-blue { background: linear-gradient(90deg, #4fc3f7, #29b6f6); }
+  .bar-purple { background: linear-gradient(90deg, #b388ff, #7c4dff); }
+  .bar-green { background: linear-gradient(90deg, #69f0ae, #00e676); }
+  .bar-pink { background: linear-gradient(90deg, #ff80ab, #f50057); }
+  .bar-orange { background: linear-gradient(90deg, #ffab40, #ff6d00); }
+
+  /* Key insight box */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(79,195,247,0.08), rgba(179,136,255,0.08));
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-top: 14px;
+  }
+
+  .insight-box .label {
+    font-size: clamp(0.58rem, 1.2vw, 0.68rem);
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .insight-box p {
+    font-size: clamp(0.75rem, 1.6vw, 0.92rem);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* Pareto chart (CSS-only) */
+  .pareto-chart {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    height: 200px;
+    margin: 16px auto;
+    border-left: 2px solid var(--text-dim);
+    border-bottom: 2px solid var(--text-dim);
+  }
+
+  .pareto-chart .axis-label {
+    position: absolute;
+    font-size: clamp(0.55rem, 1.1vw, 0.65rem);
+    color: var(--text-dim);
+  }
+
+  .pareto-chart .x-label { bottom: -20px; left: 50%; transform: translateX(-50%); }
+  .pareto-chart .y-label { top: 50%; left: -30px; transform: rotate(-90deg) translateX(-50%); transform-origin: top left; }
+
+  .pareto-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    transform: translate(-50%, 50%);
+  }
+
+  .pareto-line {
+    position: absolute;
+    border: none;
+    height: 2px;
+    transform-origin: left center;
+  }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(10,14,39,0.9);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(79,195,247,0.1);
+    z-index: 200;
+  }
+
+  .nav-btn {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    border: 1px solid rgba(79,195,247,0.25);
+    background: rgba(25,32,72,0.6);
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:active {
+    background: rgba(79,195,247,0.15);
+    transform: scale(0.95);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-main);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* Content helpers */
+  .flex-row { display: flex; gap: 16px; }
+  .flex-col { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .mt-auto { margin-top: auto; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-20 { margin-bottom: 20px; }
+  .text-cyan { color: var(--accent-cyan); }
+  .text-purple { color: var(--accent-purple); }
+  .text-pink { color: var(--accent-pink); }
+  .text-green { color: var(--accent-green); }
+  .text-orange { color: var(--accent-orange); }
+  .text-sm { font-size: clamp(0.65rem, 1.3vw, 0.78rem); }
+  .text-xs { font-size: clamp(0.58rem, 1.1vw, 0.68rem); color: var(--text-dim); }
+  .fw-700 { font-weight: 700; }
+
+  .step-list { list-style: none; padding: 0; counter-reset: step; }
+  .step-list li {
+    counter-increment: step;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .step-list li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--gradient-main);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  /* Comparison chips */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .chip.win { border-color: var(--accent-green); color: var(--accent-green); background: rgba(105,240,174,0.08); }
+  .chip.neutral { border-color: var(--text-dim); color: var(--text-dim); background: rgba(92,107,192,0.08); }
+
+  /* Padding for nav bar */
+  .slide { padding-bottom: 80px; }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 28px 30px 80px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .flex-row { flex-direction: column; }
+    .title-main { font-size: clamp(1.5rem, 5vw, 2.6rem); }
+    .arch-flow { gap: 6px; }
+    .arch-block { padding: 8px 12px; font-size: clamp(0.6rem, 1.3vw, 0.75rem); }
+    .pareto-chart { height: 170px; max-width: 280px; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 80px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    h2.slide-title { margin-bottom: 18px; }
+    .card { padding: 16px; }
+    .data-table { font-size: clamp(0.55rem, 2.8vw, 0.7rem); }
+    .data-table th, .data-table td { padding: 6px 6px; }
+    .arch-flow { flex-direction: column; gap: 4px; }
+    .arch-arrow { transform: rotate(90deg); }
+    .stat-label { min-width: 70px; }
+    .nav-btn { width: 48px; height: 48px; }
+    .title-badge { padding: 5px 14px; }
+    .pareto-chart { height: 150px; max-width: 240px; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 14px 14px 75px; }
+    .card { padding: 12px; border-radius: 10px; }
+    h2.slide-title { font-size: clamp(1.1rem, 5vw, 1.4rem); margin-bottom: 14px; }
+    .eq-box { padding: 10px 12px; font-size: clamp(0.55rem, 3vw, 0.68rem); }
+    .nav-btn { width: 44px; height: 44px; font-size: 1rem; }
+    .progress-bar { margin: 0 10px; }
+    .insight-box { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="title-badge">arXiv 2603.19074</div>
+    <div class="title-main">CAMO</div>
+    <div class="title-sub">다목적 다중 외판원 문제를 위한<br>조건부 신경 솔버</div>
+    <div class="title-authors">
+      Fengxiaoxiao Li · Xiao Mao · Mingfeng Fan · Yifeng Zhang<br>
+      Yi Li · Tanishq Duhan · Guillaume Sartoretti
+    </div>
+    <div class="title-meta">March 2026 · 9 pages · 3 figures</div>
+  </div>
+
+  <!-- ==================== SLIDE 2: PROBLEM ==================== -->
+  <div class="slide" data-slide="1">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">문제 정의</span></div>
+    <h2 class="slide-title">다목적 다중 외판원 문제<br><span class="highlight">MOMTSP란 무엇인가?</span></h2>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <span class="card-icon">🤖</span>
+        <h3>문제 설정</h3>
+        <ul>
+          <li>완전 그래프 G(Ξ, E)</li>
+          <li>n<sub>a</sub>개 에이전트(로봇)</li>
+          <li>n<sub>ξ</sub>개 목표 노드 + 1개 기지(depot)</li>
+          <li>모든 노드를 정확히 한 번 방문</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚖️</span>
+        <h3>상충하는 두 목적</h3>
+        <ul>
+          <li><span class="text-cyan fw-700">f₁</span> : 총 이동 거리 최소화</li>
+          <li><span class="text-purple fw-700">f₂</span> : 최대 개별 경로(makespan) 최소화</li>
+          <li>파레토 프론트 근사 필요</li>
+        </ul>
+      </div>
+      <div class="card" style="grid-column: 1 / -1;">
+        <h3>🔢 조합 폭발의 규모</h3>
+        <p>100개 도시 + 4개 에이전트 → 약 <span class="text-pink fw-700">10<sup>163</sup></span>개 후보 솔루션, 파레토 최적 검증에 <span class="text-pink fw-700">O(10<sup>326</sup>)</span> 비교 필요</p>
+      </div>
+    </div>
+
+    <div class="eq-box">
+      분해 스칼라화 (Tchebycheff): &nbsp; min<sub>π</sub> g<sub>tc</sub>(π|λ, z*) = max<sub>j</sub> { λ<sub>j</sub> · |f<sub>j</sub>(π) − z<sub>j</sub>*| }
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: MOTIVATION ==================== -->
+  <div class="slide" data-slide="2">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">연구 배경</span></div>
+    <h2 class="slide-title">기존 연구의 <span class="highlight">한계와 동기</span></h2>
+
+    <div class="card-grid cols-3">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3>전통적 MOEA</h3>
+        <p>NSGA-II/III, MOEA/D, MOGLS 등 — 대규모 문제에서 계산 비용 높음</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h3>신경망 다목적</h3>
+        <p>PMOCO, CNH, WE-CA — 단일 에이전트만 지원, 다중 에이전트 조율 부재</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🤝</span>
+        <h3>신경망 다중 에이전트</h3>
+        <p>PARCO — 단일 목적함수만 지원, 목적 간 균형 불가</p>
+      </div>
+    </div>
+
+    <div class="insight-box" style="margin-top: 20px;">
+      <div class="label">핵심 GAP</div>
+      <p>기존 신경망 방법은 <span class="text-cyan fw-700">다중 에이전트 조율</span>과 <span class="text-purple fw-700">다목적 트레이드오프</span>를 동시에 다루지 못함 → CAMO가 두 복잡성을 통합 해결</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: ARCHITECTURE OVERVIEW ==================== -->
+  <div class="slide" data-slide="3">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">아키텍처</span></div>
+    <h2 class="slide-title">CAMO <span class="highlight">전체 구조</span></h2>
+
+    <div class="arch-flow">
+      <div class="arch-block input">노드 좌표<br>+ 선호도 λ</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-block encoder">조건부<br>인코더</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-block decoder">협력<br>디코더</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-block output">파레토<br>솔루션 집합</div>
+    </div>
+
+    <div class="card-grid cols-2" style="margin-top: 12px;">
+      <div class="card">
+        <h3>🔷 조건부 인코더</h3>
+        <ul>
+          <li>L=6 조건부 어텐션(CA) 레이어</li>
+          <li>Feature-wise Affine (FWA) 변환으로 선호도 조건화</li>
+          <li>게이트 집계(GA)로 잔차 연결 대체</li>
+          <li>8-head 멀티헤드 어텐션</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔷 협력 디코더</h3>
+        <ul>
+          <li><span class="text-green fw-700">에이전트 선택</span> 모듈: 누가 움직일지</li>
+          <li><span class="text-orange fw-700">노드 선택</span> 모듈: 어디로 갈지</li>
+          <li>자기회귀적 순차 구성</li>
+          <li>에이전트/노드 수에 독립적 파라미터</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq-box">
+      FWA 조건화: h'<sub>i</sub><sup>(l-1)</sup> = γ<sup>(l-1)</sup> ∘ h*<sub>i</sub><sup>(l-1)</sup> + β<sup>(l-1)</sup> &nbsp; | &nbsp; GA(X,Y) = X + σ(U<sub>g</sub>X − b<sub>g</sub>) ⊙ Y
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: ENCODER DETAIL ==================== -->
+  <div class="slide" data-slide="4">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">인코더 상세</span></div>
+    <h2 class="slide-title">조건부 어텐션 <span class="highlight">인코더</span></h2>
+
+    <p class="text-sm mb-20" style="color: var(--text-secondary);">선호도 벡터 λ를 노드 임베딩에 직접 융합하여, 서로 다른 목적 간 균형을 명시적으로 제어합니다.</p>
+
+    <ol class="step-list">
+      <li>노드 임베딩 및 선호도 벡터에 <span class="text-cyan fw-700">인스턴스 정규화</span> 적용</li>
+      <li><span class="text-cyan fw-700">Feature-wise Affine (FWA)</span> 변환으로 선호도를 노드 표현에 주입: γ, β 학습 파라미터</li>
+      <li>8-head <span class="text-cyan fw-700">멀티헤드 어텐션(MHA)</span>으로 노드 간 관계 학습</li>
+      <li><span class="text-cyan fw-700">게이트 집계(GA)</span> 모듈이 학습 가능한 게이트로 정보 흐름 제어</li>
+      <li>2-layer MLP (ReLU) <span class="text-cyan fw-700">피드포워드</span> 서브레이어 + 전용 GA 모듈</li>
+      <li>6개 레이어를 거쳐 향상된 노드 임베딩 <span class="text-cyan fw-700">H<sub>ξ</sub><sup>L</sup></span> 출력</li>
+    </ol>
+
+    <div class="insight-box">
+      <div class="label">핵심 혁신</div>
+      <p>기존의 단순 잔차 연결 대신 <span class="text-cyan fw-700">게이트 집계(GA)</span>를 도입 — 학습 가능한 시그모이드 게이트가 어텐션 정보의 유입량을 동적으로 조절합니다.</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6: DECODER DETAIL ==================== -->
+  <div class="slide" data-slide="5">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">디코더 상세</span></div>
+    <h2 class="slide-title">협력 디코더의 <span class="highlight">이중 선택 메커니즘</span></h2>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <h3 class="text-green">🅰 에이전트 선택 모듈</h3>
+        <ul>
+          <li>max pooling으로 에이전트별 집계 임베딩 생성</li>
+          <li>전역 표현: g̃ᵗ = 평균(Ĥᵢᵗ) + g</li>
+          <li>상태 벡터: Cᵢ = (x, y, 누적거리)</li>
+          <li>어텐션 스코어: κ·tanh(…/√d<sub>k</sub>)</li>
+          <li>기지에 있는 에이전트 마스킹</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="text-orange">🅱 노드 선택 모듈</h3>
+        <ul>
+          <li>선택된 에이전트 맥락 + 누적 거리 연결</li>
+          <li>M=8 멀티헤드 어텐션</li>
+          <li>방문 노드에 −∞ 마스킹</li>
+          <li>단일 헤드 어텐션(SHA)으로 최종 노드 선택</li>
+          <li>자기회귀 확률 ∏ p<sub>θ</sub>(aₜ,ξₜ)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq-box">
+      정책 확률: p<sub>θ</sub>(π) = ∏<sub>t=0</sub><sup>T</sup> p<sub>θ</sub>((aₜ, ξₜ) | ℐ, λ, n<sub>a</sub>, n<sub>ξ</sub>, 과거 선택들)
+    </div>
+
+    <div class="insight-box">
+      <div class="label">확장성</div>
+      <p>파라미터가 에이전트 수, 노드 수와 <span class="text-cyan fw-700">독립적</span> → 학습 시 보지 못한 크기의 문제에도 일반화 가능</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7: TRAINING ==================== -->
+  <div class="slide" data-slide="6">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">학습 방법</span></div>
+    <h2 class="slide-title">REINFORCE 기반 <span class="highlight">학습 전략</span></h2>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <h3>📐 맞춤형 샘플링 전략</h3>
+        <ul>
+          <li>에이전트 수: [2, 4]에서 랜덤 샘플링</li>
+          <li>노드 수: [20, 100]에서 랜덤 샘플링</li>
+          <li>선호도 λ: [0,1]에서 샘플 후 정규화</li>
+          <li>혼합 분포로 일반화 능력 강화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚙️ 하이퍼파라미터</h3>
+        <ul>
+          <li>에포크: 400 · 배치: 64</li>
+          <li>에포크당 인스턴스: 100,000</li>
+          <li>학습률: 10⁻⁴ · 감쇠: 10⁻⁶</li>
+          <li>임베딩: 128d · FF: 512d</li>
+          <li>클리핑 κ = 10</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq-box" style="margin-top: 14px;">
+      ∇<sub>θ</sub>J(θ) ≈ (1/BK) Σ<sub>b</sub> Σ<sub>k</sub> [(R(π<sub>b</sub><sup>k</sup>) − R<sub>b</sub>) · ∇<sub>θ</sub> log p<sub>θ</sub>(π<sub>b</sub><sup>k</sup>)]
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <h3>🚀 추론 전략</h3>
+      <p>탐욕적 디코딩 + <span class="text-cyan fw-700">인스턴스 증강(IA)</span>: 8가지 기하 변환(회전/반사) 적용 → 최적 솔루션 선택</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8: MAIN RESULTS ==================== -->
+  <div class="slide" data-slide="7">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">실험 결과</span></div>
+    <h2 class="slide-title">주요 벤치마크 <span class="highlight">성능 비교</span></h2>
+
+    <p class="text-sm mb-12" style="color: var(--text-secondary);">하이퍼볼륨(HV) ↑ — 높을수록 파레토 프론트 근사가 우수</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>N20A2</th>
+          <th>N50A3</th>
+          <th>N100A4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>MOEA/D</td><td>0.201</td><td>0.374</td><td>0.394</td></tr>
+        <tr><td>MOGLS</td><td>0.214</td><td>0.207</td><td>0.227</td></tr>
+        <tr><td>NSGA-II</td><td>0.236</td><td>0.389</td><td>0.416</td></tr>
+        <tr><td>NSGA-III</td><td>0.235</td><td>0.386</td><td>0.402</td></tr>
+        <tr><td>MO-PARCO</td><td>0.229</td><td>0.422</td><td>0.591</td></tr>
+        <tr class="highlight-row"><td>CAMO</td><td>0.240</td><td>0.439</td><td>0.624</td></tr>
+        <tr class="highlight-row"><td>CAMO-IA</td><td><b>0.242</b></td><td><b>0.444</b></td><td><b>0.628</b></td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box" style="margin-top: 14px;">
+      <div class="label">N100A4 기준</div>
+      <p>CAMO-IA는 차선 모델(MO-PARCO) 대비 HV <span class="text-cyan fw-700">+6.3%</span> 향상, 전통적 NSGA-II 대비 <span class="text-cyan fw-700">+51%</span> 향상</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 9: GENERALIZATION ==================== -->
+  <div class="slide" data-slide="8">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">일반화 성능</span></div>
+    <h2 class="slide-title">학습 시 보지 못한 <span class="highlight">규모로의 일반화</span></h2>
+
+    <p class="text-sm mb-20" style="color: var(--text-secondary);">학습: [20-100]노드 × [2-4]에이전트 → 평가: 최대 200노드 × 6에이전트</p>
+
+    <div style="margin-bottom: 16px;">
+      <p class="text-sm fw-700 mb-12" style="color: var(--text-primary);">CAMO-IA vs MO-PARCO 대비 HV 개선율</p>
+
+      <div class="stat-row">
+        <span class="stat-label">N100A6</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-blue" style="width: 55%;">+4.05%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">N150A4</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-purple" style="width: 65%;">+5.2%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">N150A6</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-blue" style="width: 55%;">+4.05%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">N200A4</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-green" style="width: 90%;">+7.55%</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">N200A6</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-purple" style="width: 60%;">+4.71%</div></div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="label">주목할 점</div>
+      <p>N200A4에서 <span class="text-green fw-700">+7.55%</span> 개선 — 학습 범위의 2배 크기에서도 강건한 일반화 달성</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 10: TSPLIB ==================== -->
+  <div class="slide" data-slide="9">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">벤치마크</span></div>
+    <h2 class="slide-title">TSPLIB <span class="highlight">실제 인스턴스 평가</span></h2>
+
+    <p class="text-sm mb-12" style="color: var(--text-secondary);">10개 TSPLIB 벤치마크 인스턴스에서 NSGA-II와 비교 (낮을수록 우수)</p>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <h3>📊 총 거리 (f₁)</h3>
+        <div class="stat-row">
+          <span class="stat-label text-xs">kroA150</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-blue" style="width: 33%;">CAMO 9.49</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">NSGA-II</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-pink" style="width: 100%;">28.76</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">kroB200</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-blue" style="width: 26%;">CAMO 10.99</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">NSGA-II</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-pink" style="width: 100%;">41.83</div>
+          </div>
+        </div>
+        <p class="text-xs" style="margin-top: 8px;">10개 중 <span class="text-cyan fw-700">9개</span> 인스턴스에서 우위</p>
+      </div>
+      <div class="card">
+        <h3>📊 메이크스팬 (f₂)</h3>
+        <div class="stat-row">
+          <span class="stat-label text-xs">br58</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-blue" style="width: 78%;">CAMO 2.06</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">NSGA-II</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-pink" style="width: 80%;">2.07</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">pr76</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-blue" style="width: 85%;">CAMO 2.47</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label text-xs">NSGA-II</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill bar-pink" style="width: 95%;">2.74</div>
+          </div>
+        </div>
+        <p class="text-xs" style="margin-top: 8px;">10개 중 <span class="text-cyan fw-700">6개</span> 인스턴스에서 우위</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 11: ABLATION ==================== -->
+  <div class="slide" data-slide="10">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">절삭 연구</span></div>
+    <h2 class="slide-title">핵심 구성 요소 <span class="highlight">기여도 분석</span></h2>
+
+    <div class="card-grid cols-3">
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🔒</span>
+        <h3>게이트 집계 (GA)</h3>
+        <p>제거 시 모든 문제 크기에서 <span class="text-pink fw-700">성능 대폭 하락</span></p>
+        <div style="margin-top: 10px; padding: 8px; background: rgba(255,128,171,0.08); border-radius: 8px;">
+          <span class="text-xs">잔차 연결로는 불충분</span>
+        </div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🎛️</span>
+        <h3>조건부 어텐션 (CA)</h3>
+        <p>제거 시 선호도 제어 능력 <span class="text-pink fw-700">상실</span></p>
+        <div style="margin-top: 10px; padding: 8px; background: rgba(255,128,171,0.08); border-radius: 8px;">
+          <span class="text-xs">다목적 핵심 메커니즘</span>
+        </div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🎲</span>
+        <h3>맞춤형 샘플링</h3>
+        <p>혼합 분포 학습으로 <span class="text-green fw-700">학습 시간 50%+ 단축</span></p>
+        <div style="margin-top: 10px; padding: 8px; background: rgba(105,240,174,0.08); border-radius: 8px;">
+          <span class="text-xs">성능 유지 + 효율 향상</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>⏱️ 학습 시간 비교</h3>
+      <div class="stat-row" style="margin-top: 10px;">
+        <span class="stat-label">N100A4 전용</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-pink" style="width: 100%;">168.62h</div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">혼합 분포</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-green" style="width: 42%;">70.42h</div></div>
+      </div>
+      <p class="text-xs" style="margin-top: 6px;">혼합 분포 전략: 학습 시간 <span class="text-green fw-700">58% 절감</span> + 다양한 크기로 일반화</p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 12: REAL-WORLD ==================== -->
+  <div class="slide" data-slide="11">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">실제 검증</span></div>
+    <h2 class="slide-title">실제 로봇 플랫폼 <span class="highlight">실험</span></h2>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <span class="card-icon">🏭</span>
+        <h3>실험 설정</h3>
+        <ul>
+          <li><span class="text-cyan fw-700">3대</span>의 이동 로봇</li>
+          <li>실내 환경, <span class="text-cyan fw-700">51개</span> 노드 (1 기지 + 50 작업)</li>
+          <li>2가지 선호도 벡터로 테스트</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">✅</span>
+        <h3>결과</h3>
+        <ul>
+          <li>모든 50개 작업 노드 <span class="text-green fw-700">성공적 방문</span></li>
+          <li>선호도에 따라 경로 패턴 변화 확인</li>
+          <li>실시간 로봇 조율 실현</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>🎛️ 선호도에 따른 행동 변화</h3>
+      <div class="card-grid cols-2" style="margin-top: 12px; gap: 10px;">
+        <div style="background: rgba(79,195,247,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+          <p class="text-cyan fw-700" style="font-size: clamp(0.85rem, 1.8vw, 1rem);">λ = [1, 0]</p>
+          <p class="text-sm" style="margin-top: 6px;">총 거리 최소화 우선</p>
+          <p class="text-xs" style="margin-top: 4px;">에이전트별 경로가 불균등하지만<br>전체 거리 최소</p>
+        </div>
+        <div style="background: rgba(179,136,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+          <p class="text-purple fw-700" style="font-size: clamp(0.85rem, 1.8vw, 1rem);">λ = [0, 1]</p>
+          <p class="text-sm" style="margin-top: 6px;">메이크스팬 최소화 우선</p>
+          <p class="text-xs" style="margin-top: 4px;">에이전트별 경로가 균등하게<br>분배됨</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 13: CONTRIBUTIONS ==================== -->
+  <div class="slide" data-slide="12">
+    <div class="section-tag"><span class="dot"></span><span class="text-cyan">핵심 기여</span></div>
+    <h2 class="slide-title">CAMO의 <span class="highlight">4대 기여</span></h2>
+
+    <div class="card-grid" style="grid-template-columns: 1fr; gap: 14px;">
+      <div class="card" style="border-left: 3px solid var(--accent-cyan);">
+        <h3>1. 이중 복잡성 통합 해결</h3>
+        <p>다중 에이전트 조율 + 다목적 트레이드오프를 <span class="text-cyan fw-700">단일 신경망</span>으로 동시 해결하는 최초의 조건부 솔버</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent-purple);">
+        <h3>2. 명시적 선호도 제어</h3>
+        <p>조건부 인코더를 통해 선호도 벡터 λ로 목적 간 트레이드오프를 <span class="text-purple fw-700">직접 제어</span> — 재학습 불필요</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent-green);">
+        <h3>3. 우수한 파레토 프론트 근사</h3>
+        <p>신경망 및 전통적 휴리스틱 모두를 <span class="text-green fw-700">상회</span>하는 하이퍼볼륨 달성 (최대 +7.55% 개선)</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent-orange);">
+        <h3>4. 실용적 검증</h3>
+        <p>실제 모바일 로봇 플랫폼에서의 <span class="text-orange fw-700">현실 세계 검증</span> — 시뮬레이션에서 현실로의 전이 가능성 입증</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 14: CONCLUSION ==================== -->
+  <div class="slide title-slide" data-slide="13">
+    <div class="title-badge">결론</div>
+    <div class="title-main" style="font-size: clamp(1.5rem, 4vw, 2.8rem);">CAMO</div>
+    <div class="title-sub" style="max-width: 600px;">
+      다중 에이전트 조율과 다목적 최적화를<br>
+      <span class="text-cyan fw-700">하나의 조건부 신경 솔버</span>로 통합하여<br>
+      실용적 로보틱스 응용까지 검증한 연구
+    </div>
+
+    <div class="chip-row" style="justify-content: center;">
+      <span class="chip win">파레토 프론트 근사 SOTA</span>
+      <span class="chip win">일반화 능력 우수</span>
+      <span class="chip win">실세계 검증 완료</span>
+      <span class="chip win">학습 효율 58% 향상</span>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+      <p class="text-xs">arXiv: 2603.19074 · 2026년 3월</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>‹</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 7.14%;"></div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">›</button>
+</div>
+
+<div class="slide-num" id="slideNum">1 / 14</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i < index) s.classList.add('exit-left');
+    });
+    slides[index].classList.add('active');
+    slides[index].scrollTop = 0;
+
+    document.getElementById('slideNum').textContent = (index + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((index + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').disabled = index === 0;
+    document.getElementById('nextBtn').disabled = index === total - 1;
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+    current = next;
+    showSlide(current);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch/swipe navigation
+  let touchStartX = 0, touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The Stochastic Gap - 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-slide: #0f1424;
+    --bg-card: rgba(255,255,255,0.04);
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b8a;
+    --accent4: #ffa726;
+    --text: #e8eaf6;
+    --text-dim: #9ea7c0;
+    --text-bright: #ffffff;
+    --border: rgba(108,99,255,0.2);
+    --glow: rgba(108,99,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(20px, 5vw, 80px);
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background: var(--bg-slide);
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Decorative elements */
+  .slide::before {
+    content: '';
+    position: fixed;
+    top: -50%; right: -30%;
+    width: 80vw; height: 80vw;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* Typography */
+  .slide-number {
+    position: fixed;
+    bottom: clamp(12px, 2vw, 24px);
+    right: clamp(12px, 2vw, 24px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-dim);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: clamp(12px, 2vw, 24px);
+    color: var(--text-bright);
+  }
+
+  h2 {
+    font-size: clamp(1.2rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: clamp(10px, 2vw, 20px);
+    color: var(--text-bright);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.2vw, 1.6rem);
+    font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: clamp(8px, 1.5vw, 16px);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+    font-weight: 500;
+    margin: 4px 4px 4px 0;
+  }
+
+  .tag-purple { background: rgba(108,99,255,0.2); color: #a5a0ff; border: 1px solid rgba(108,99,255,0.3); }
+  .tag-green { background: rgba(0,212,170,0.15); color: #00d4aa; border: 1px solid rgba(0,212,170,0.3); }
+  .tag-pink { background: rgba(255,107,138,0.15); color: #ff6b8a; border: 1px solid rgba(255,107,138,0.3); }
+  .tag-orange { background: rgba(255,167,38,0.15); color: #ffa726; border: 1px solid rgba(255,167,38,0.3); }
+
+  /* Cards and Boxes */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: clamp(14px, 2.5vw, 28px);
+    margin-bottom: clamp(10px, 1.5vw, 16px);
+    backdrop-filter: blur(10px);
+  }
+
+  .card-accent {
+    border-left: 3px solid var(--accent);
+  }
+
+  .card-green {
+    border-left: 3px solid var(--accent2);
+  }
+
+  .card-pink {
+    border-left: 3px solid var(--accent3);
+  }
+
+  .card-orange {
+    border-left: 3px solid var(--accent4);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 20px);
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: clamp(10px, 2vw, 20px);
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 16px);
+  }
+
+  /* Equation styling */
+  .equation {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.8vw, 1.1rem);
+    background: rgba(108,99,255,0.08);
+    border: 1px solid rgba(108,99,255,0.15);
+    border-radius: 8px;
+    padding: clamp(10px, 2vw, 18px);
+    margin: clamp(8px, 1.5vw, 14px) 0;
+    overflow-x: auto;
+    color: #c5cae9;
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  /* Metric bars */
+  .metric-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    margin: 8px 0 14px 0;
+    overflow: hidden;
+  }
+
+  .metric-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+  }
+
+  .fill-purple { background: linear-gradient(90deg, var(--accent), #9c8fff); }
+  .fill-green { background: linear-gradient(90deg, var(--accent2), #5cf5d0); }
+  .fill-pink { background: linear-gradient(90deg, var(--accent3), #ff9eb5); }
+  .fill-orange { background: linear-gradient(90deg, var(--accent4), #ffcc80); }
+
+  .big-number {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .big-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Flow diagram */
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 2vw, 16px);
+    margin-bottom: clamp(8px, 1.5vw, 14px);
+  }
+
+  .flow-icon {
+    width: clamp(36px, 6vw, 52px);
+    height: clamp(36px, 6vw, 52px);
+    min-width: clamp(36px, 6vw, 52px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    margin: 4px 0 4px clamp(14px, 3vw, 24px);
+  }
+
+  /* Lists */
+  ul { list-style: none; padding: 0; }
+
+  ul li {
+    padding-left: clamp(16px, 2.5vw, 24px);
+    position: relative;
+    margin-bottom: clamp(6px, 1vw, 10px);
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: clamp(8px, 1vw, 11px);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+    margin: clamp(8px, 1.5vw, 14px) 0;
+  }
+
+  .data-table th {
+    background: rgba(108,99,255,0.12);
+    color: var(--accent);
+    font-weight: 600;
+    padding: clamp(6px, 1.5vw, 12px) clamp(8px, 1.5vw, 14px);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    padding: clamp(6px, 1.5vw, 10px) clamp(8px, 1.5vw, 14px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+  }
+
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .highlight { color: var(--accent2); font-weight: 700; }
+  .highlight-pink { color: var(--accent3); font-weight: 700; }
+  .highlight-purple { color: var(--accent); font-weight: 700; }
+  .highlight-orange { color: var(--accent4); font-weight: 700; }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 32px);
+    background: linear-gradient(transparent, rgba(10,14,26,0.95));
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px; min-height: 48px;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(108,99,255,0.1);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(108,99,255,0.25);
+    border-color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin: 0 clamp(10px, 2vw, 20px);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* Title slide special */
+  .title-slide { text-align: center; justify-content: center; }
+
+  .title-slide h1 {
+    font-size: clamp(1.6rem, 4.5vw, 3.5rem);
+    background: linear-gradient(135deg, var(--text-bright), var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: clamp(16px, 3vw, 32px);
+  }
+
+  .authors {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-dim);
+    margin-top: clamp(16px, 3vw, 32px);
+  }
+
+  .divider {
+    width: clamp(40px, 10vw, 80px);
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: clamp(12px, 2vw, 24px) auto;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .slide.active .anim:nth-child(1) { animation-delay: 0.1s; }
+  .slide.active .anim:nth-child(2) { animation-delay: 0.2s; }
+  .slide.active .anim:nth-child(3) { animation-delay: 0.3s; }
+  .slide.active .anim:nth-child(4) { animation-delay: 0.4s; }
+  .slide.active .anim:nth-child(5) { animation-delay: 0.5s; }
+  .slide.active .anim:nth-child(6) { animation-delay: 0.6s; }
+  .slide.active .anim:nth-child(7) { animation-delay: 0.7s; }
+
+  /* Markov chain visualization */
+  .markov-node {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(60px, 12vw, 90px);
+    height: clamp(36px, 6vw, 48px);
+    border-radius: 24px;
+    font-size: clamp(0.6rem, 1.3vw, 0.8rem);
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .markov-arrow {
+    display: inline-block;
+    color: var(--text-dim);
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    margin: 0 clamp(2px, 0.5vw, 6px);
+    vertical-align: middle;
+  }
+
+  .markov-chain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(4px, 1vw, 8px);
+    margin: clamp(12px, 2vw, 20px) 0;
+  }
+
+  /* Stacked bar mini-chart */
+  .stacked-bar {
+    display: flex;
+    height: clamp(24px, 4vw, 36px);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .stacked-bar > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+    font-weight: 600;
+    color: #fff;
+    transition: width 1s ease;
+  }
+
+  .separator {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: clamp(10px, 2vw, 20px) 0;
+  }
+
+  .icon-circle {
+    width: clamp(40px, 7vw, 56px);
+    height: clamp(40px, 7vw, 56px);
+    min-width: clamp(40px, 7vw, 56px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+  }
+
+  .flex-row {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2.5vw, 20px);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr; }
+    .slide { padding: clamp(16px, 4vw, 40px); padding-bottom: 80px; }
+    .nav-btn { padding: 10px 16px; }
+    .markov-chain { flex-direction: column; }
+    .markov-arrow { transform: rotate(90deg); }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 16px; padding-bottom: 80px; }
+    h1 { font-size: clamp(1.3rem, 5vw, 2rem); }
+    h2 { font-size: clamp(1.1rem, 4.5vw, 1.6rem); }
+    .card { padding: 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 8px 14px; font-size: 0.85rem; }
+    .big-number { font-size: clamp(1.8rem, 8vw, 3rem); }
+    .equation { font-size: clamp(0.65rem, 2.5vw, 0.9rem); padding: 8px; }
+    .data-table { font-size: clamp(0.6rem, 2.5vw, 0.8rem); }
+    .data-table th, .data-table td { padding: 5px 6px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 12px; padding-bottom: 76px; }
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: 0.9rem; }
+    p, li { font-size: 0.8rem; }
+    .card { padding: 10px; border-radius: 8px; }
+    .nav-btn { padding: 8px 10px; font-size: 0.8rem; }
+    .tag { font-size: 0.6rem; padding: 3px 8px; }
+    .big-number { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- Slide 1: Title -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="anim">
+      <span class="tag tag-purple">arXiv:2603.24582</span>
+      <span class="tag tag-green">2026년 3월</span>
+    </div>
+    <h1 class="anim">확률적 간극<br>(The Stochastic Gap)</h1>
+    <p class="subtitle anim">에이전틱 AI의 사전 배포 신뢰성 및<br>감독 비용 감사를 위한 마르코프 프레임워크</p>
+    <div class="divider anim"></div>
+    <div class="authors anim">
+      <strong>Biplab Pal &amp; Santanu Bhattacharya</strong><br>
+      <span style="font-size:clamp(0.7rem,1.5vw,0.9rem)">Engineering Applications of Artificial Intelligence</span>
+    </div>
+    <div class="anim" style="margin-top:clamp(16px,3vw,32px)">
+      <span class="tag tag-pink">22쪽</span>
+      <span class="tag tag-orange">마르코프 의사결정</span>
+      <span class="tag tag-purple">기업 워크플로우</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Problem -->
+  <div class="slide" data-slide="1">
+    <h2 class="anim">핵심 문제: 확률적 간극이란?</h2>
+    <div class="card card-accent anim">
+      <p style="font-size:clamp(0.9rem,2.2vw,1.2rem);font-style:italic;color:var(--accent2)">
+        "다음 단계가 그럴듯해 보이는가?"가 아니라,<br>
+        "결과 경로가 통계적으로 지지되고, 경제적으로 통제 가능한가?"
+      </p>
+    </div>
+    <div class="grid-2 anim">
+      <div class="card card-green">
+        <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">기존 시스템</h3>
+        <p style="font-size:clamp(0.8rem,1.6vw,1rem)">결정론적 규칙 기반<br>승인 체계, 검증 단계<br><span class="highlight">예측 가능한 경로</span></p>
+      </div>
+      <div class="card card-pink">
+        <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">에이전틱 AI</h3>
+        <p style="font-size:clamp(0.8rem,1.6vw,1rem)">확률적 정책 기반<br>도구 호출, LLM 추론<br><span class="highlight-pink">궤적 분포로 실행</span></p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:clamp(10px,2vw,16px)">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">산업 현장의 실패 사례들</h3>
+      <ul style="font-size:clamp(0.75rem,1.6vw,0.95rem)">
+        <li><strong>Air Canada 챗봇</strong> &mdash; 잘못된 요금 안내, 법적 책임 발생</li>
+        <li><strong>McDonald's-IBM 음성 AI</strong> &mdash; 지속적 주문 오류로 중단</li>
+        <li><strong>Gartner 전망</strong> &mdash; 2027년까지 에이전틱 AI 프로젝트 40% 이상 취소</li>
+        <li><strong>IBM 데이터</strong> &mdash; AI 이니셔티브의 25%만 기대 ROI 달성</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Slide 3: Core Idea -->
+  <div class="slide" data-slide="2">
+    <h2 class="anim">핵심 아이디어: 왜 마르코프인가?</h2>
+    <p class="subtitle anim" style="margin-bottom:clamp(10px,2vw,20px)">기업 워크플로우는 상태-행동 궤적의 순차적 의사결정 문제</p>
+    <div class="card anim">
+      <p style="font-size:clamp(0.8rem,1.6vw,1rem);margin-bottom:10px"><strong>궤적(trajectory) 모델:</strong></p>
+      <div class="equation">
+        &gamma;<sup>c</sup> = (s<sub>0</sub>, a<sub>0</sub>, s<sub>1</sub>, a<sub>1</sub>, &hellip;, s<sub>T</sub>)
+      </div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);color:var(--text-dim)">s<sub>t</sub> = 워크플로우 상태 &nbsp;|&nbsp; a<sub>t</sub> = 다음 행동(결정)</p>
+    </div>
+    <div class="anim" style="margin-top:clamp(8px,1.5vw,14px)">
+      <h3>BPI 2019 구매-결제 프로세스의 상태 표현</h3>
+      <div class="equation">
+        s<sub>t</sub> = (활동, 품목유형, 입고여부, 거래가치구간, 행위자유형)
+      </div>
+    </div>
+    <div class="markov-chain anim">
+      <div class="markov-node" style="background:rgba(108,99,255,0.2);border:1px solid var(--accent)">구매요청<br>생성</div>
+      <span class="markov-arrow">&rarr; 0.99</span>
+      <div class="markov-node" style="background:rgba(0,212,170,0.15);border:1px solid var(--accent2)">구매주문<br>생성</div>
+      <span class="markov-arrow">&rarr; 0.64</span>
+      <div class="markov-node" style="background:rgba(255,167,38,0.15);border:1px solid var(--accent4)">입고<br>기록</div>
+      <span class="markov-arrow">&rarr; 0.66</span>
+      <div class="markov-node" style="background:rgba(255,107,138,0.15);border:1px solid var(--accent3)">송장<br>처리</div>
+    </div>
+    <div class="card anim" style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+      <strong class="highlight">경험적 정책:</strong> &pi;&#770;(a|s) = N(s,a) / N(s) &nbsp;&mdash;&nbsp;
+      <strong>경로 신뢰성:</strong> R(&pi;) = P<sub>&pi;</sub>{&Gamma; &isin; Safe}
+    </div>
+  </div>
+
+  <!-- Slide 4: Dataset -->
+  <div class="slide" data-slide="3">
+    <h2 class="anim">데이터셋: BPI Challenge 2019</h2>
+    <p class="subtitle anim">실제 기업 구매-결제(Purchase-to-Pay) 이벤트 로그</p>
+    <div class="grid-2 anim">
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent)">251,734</div>
+        <div class="big-label">케이스 수</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent2)">1,595,923</div>
+        <div class="big-label">이벤트 수</div>
+      </div>
+    </div>
+    <div class="grid-3 anim">
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent3);font-size:clamp(1.5rem,4vw,3rem)">42</div>
+        <div class="big-label">워크플로우 행동</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent4);font-size:clamp(1.5rem,4vw,3rem)">6.34</div>
+        <div class="big-label">평균 케이스 길이</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent);font-size:clamp(1.5rem,4vw,3rem)">80/20</div>
+        <div class="big-label">시간순 분할</div>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:clamp(8px,1.5vw,14px)">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">상태 추상화 비교 (3단계)</h3>
+      <table class="data-table">
+        <tr><th>추상화 수준</th><th>상태 수</th><th>상태-행동 쌍</th></tr>
+        <tr><td>s<sup>(1)</sup> 활동만</td><td>42</td><td>498</td></tr>
+        <tr><td>s<sup>(2)</sup> + 문맥</td><td>190</td><td>1,217</td></tr>
+        <tr><td>s<sup>(3)</sup> 전체 정제</td><td class="highlight">668</td><td class="highlight">3,262</td></tr>
+      </table>
+    </div>
+    <p class="anim" style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim);margin-top:8px">
+      * 자기 루프(self-loop) 15.7% &mdash; "경로 확장과 재작업은 예외가 아니다"
+    </p>
+  </div>
+
+  <!-- Slide 5: Framework Overview -->
+  <div class="slide" data-slide="4">
+    <h2 class="anim">프레임워크: 4대 핵심 지표</h2>
+    <div class="anim">
+      <div class="flow-step">
+        <div class="icon-circle" style="background:rgba(108,99,255,0.2)">1</div>
+        <div>
+          <strong style="color:var(--accent)">상태 사각지대 질량 B<sub>n</sub>(&tau;)</strong>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">데이터 부족 상태의 비율 측정 &mdash; "어디에 근거가 부족한가?"</p>
+        </div>
+      </div>
+    </div>
+    <div class="anim">
+      <div class="flow-step">
+        <div class="icon-circle" style="background:rgba(0,212,170,0.15)">2</div>
+        <div>
+          <strong style="color:var(--accent2)">상태-행동 사각지대 질량 B<sup>SA</sup><sub>&pi;,n</sub>(&tau;)</strong>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">에이전트의 실제 결정 공간에서의 지지도 &mdash; <strong>가장 핵심적</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="anim">
+      <div class="flow-step">
+        <div class="icon-circle" style="background:rgba(255,107,138,0.15)">3</div>
+        <div>
+          <strong style="color:var(--accent3)">엔트로피 기반 HITL 에스컬레이션 게이트</strong>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">섀넌 엔트로피 + 위험 가중치로 인간 개입 시점 결정</p>
+        </div>
+      </div>
+    </div>
+    <div class="anim">
+      <div class="flow-step">
+        <div class="icon-circle" style="background:rgba(255,167,38,0.15)">4</div>
+        <div>
+          <strong style="color:var(--accent4)">기대 감독 비용 항등식</strong>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">신뢰성과 감독 비용을 동일 통계량으로 연결</p>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent anim" style="font-size:clamp(0.8rem,1.6vw,1rem);font-style:italic;color:var(--accent2)">
+      "자율성 범위를 결정하는 동일한 통계량이 기대 감독 부담도 결정한다."
+    </div>
+  </div>
+
+  <!-- Slide 6: Blind-Spot Mass -->
+  <div class="slide" data-slide="5">
+    <h2 class="anim">핵심 지표 #1: 사각지대 질량</h2>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">상태 사각지대 질량</h3>
+      <div class="equation">B<sub>n</sub>(&tau;) = &Sigma;<sub>s</sub> d&#770;<sub>&pi;</sub>(s) &middot; 1{N<sub>n</sub>(s) &lt; &tau;}</div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);color:var(--text-dim)">지지 임계값 &tau; 미만인 상태의 배포 점유율 합계</p>
+    </div>
+    <div class="card card-pink anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">상태-행동 사각지대 질량 (핵심!)</h3>
+      <div class="equation">B<sup>SA</sup><sub>&pi;,n</sub>(&tau;) = &Sigma;<sub>s,a</sub> d&#770;<sub>&pi;</sub>(s,a) &middot; 1{N<sub>n</sub>(s,a) &lt; &tau;}</div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);color:var(--text-dim)">에이전트가 실제로 내리는 결정(상태-행동 쌍)의 지지도</p>
+    </div>
+    <div class="card anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">커버리지 상한 분해</h3>
+      <div class="equation" style="text-align:left;font-size:clamp(0.65rem,1.5vw,0.9rem)">
+        E[C<sub>t</sub>] = (1-B<sup>SA</sup>) &middot; E[C<sub>t</sub>|지지] + B<sup>SA</sup> &middot; E[C<sub>t</sub>|비지지]
+      </div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);color:var(--accent3);font-weight:600;margin-top:8px">
+        "지지된 전이에서의 강한 성능만으로는 사각지대 전이의 성능을 보장할 수 없다"
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 7: Entropy & Escalation -->
+  <div class="slide" data-slide="6">
+    <h2 class="anim">핵심 지표 #2-3: 엔트로피 &amp; 에스컬레이션</h2>
+    <div class="card card-green anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">섀넌 엔트로피 (분기 모호성)</h3>
+      <div class="equation">H(&pi;&#770;(&middot;|s)) = -&Sigma;<sub>a</sub> &pi;&#770;(a|s) log<sub>2</sub> &pi;&#770;(a|s)</div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">높은 엔트로피 = 다음 행동이 불확실 &rarr; 인간 개입 필요</p>
+    </div>
+    <div class="card card-orange anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">위험 가중 전이 사각지대</h3>
+      <div class="equation" style="font-size:clamp(0.6rem,1.4vw,0.85rem)">
+        w<sub>SA</sub>(s,a) = 0.6 &middot; 거래가치 + 0.4 &middot; 예외활동여부
+      </div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">거래 규모(60%)와 예외 민감 활동(40%)의 가중 결합</p>
+    </div>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">에스컬레이션 게이트 (인간 개입 기준)</h3>
+      <div class="equation" style="font-size:clamp(0.65rem,1.4vw,0.9rem)">
+        G(s) = 1 &nbsp;if&nbsp; {지지부족 &or; 높은엔트로피 &or; 높은위험}
+      </div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">세 조건 중 <span class="highlight-pink">하나라도</span> 충족되면 인간에게 에스컬레이션</p>
+    </div>
+    <div class="card anim" style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+      <strong>자율성 비율:</strong>
+      이벤트 수준 A<sub>event</sub> vs. 케이스 수준 A<sub>case</sub><br>
+      <span style="color:var(--accent3)">차이 = 경로 복합 효과 (한 단계라도 에스컬레이션되면 전체 케이스가 영향)</span>
+    </div>
+  </div>
+
+  <!-- Slide 8: Oversight Cost -->
+  <div class="slide" data-slide="7">
+    <h2 class="anim">핵심 지표 #4: 감독 비용</h2>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">기대 운영 비용 (케이스당)</h3>
+      <div class="equation">
+        C(&pi;;G) = c<sub>A</sub> &middot; E[T] + (c<sub>H</sub> - c<sub>A</sub>) &middot; &Sigma;<sub>s</sub> D<sub>&pi;</sub>(s) &middot; G(s)
+      </div>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">c<sub>A</sub> = 자율 결정 비용 &nbsp;|&nbsp; c<sub>H</sub> = 인간 에스컬레이션 비용</p>
+    </div>
+    <div class="grid-2 anim">
+      <div class="card card-green">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">완전 자율 완료</h3>
+        <div class="equation" style="font-size:clamp(0.6rem,1.3vw,0.8rem);text-align:left">
+          C&#771;<sub>0</sub>(G) = E[&Pi;<sub>t</sub> (1-G(s<sub>t</sub>)) &middot; m(s<sub>t</sub>)]
+        </div>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">에스컬레이션 없이 모든 단계 정확히 수행</p>
+      </div>
+      <div class="card card-pink">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">안전 완료 (폴백 포함)</h3>
+        <div class="equation" style="font-size:clamp(0.6rem,1.3vw,0.8rem);text-align:left">
+          R&#771;<sub>safe</sub> = E[&Pi;<sub>t</sub> (G(s<sub>t</sub>) + (1-G(s<sub>t</sub>))m(s<sub>t</sub>))]
+        </div>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">인간 개입이 에스컬레이션된 단계를 복구</p>
+      </div>
+    </div>
+    <div class="card card-orange anim" style="font-size:clamp(0.8rem,1.6vw,1rem);font-style:italic">
+      <strong style="color:var(--accent4)">핵심 통찰:</strong> 자율성 범위를 한정하는 동일한 통계량(지지도, 엔트로피, 위험)이 기대 감독 부담도 결정한다 &mdash; 신뢰성과 비용은 분리 불가능
+    </div>
+  </div>
+
+  <!-- Slide 9: Key Result 1 -->
+  <div class="slide" data-slide="8">
+    <h2 class="anim">결과 #1: 상태 커버리지 &ne; 충분</h2>
+    <p class="subtitle anim">"큰 워크플로우는 상태 수준에서 잘 지지되어 보이면서도<br>다음 단계 결정에 상당한 사각지대를 유지할 수 있다"</p>
+    <div class="card anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">상태 vs. 상태-행동 사각지대 비교</h3>
+      <table class="data-table">
+        <tr><th>임계값 &tau;</th><th>상태 B<sub>n</sub></th><th>상태-행동 B<sup>SA</sup></th><th>차이</th></tr>
+        <tr><td>50</td><td>0.15%</td><td class="highlight-pink">1.65%</td><td>&times;11</td></tr>
+        <tr><td>200</td><td>1.08%</td><td class="highlight-pink">4.62%</td><td>&times;4.3</td></tr>
+        <tr><td>1,000</td><td>4.60%</td><td class="highlight-pink">12.53%</td><td>&times;2.7</td></tr>
+      </table>
+    </div>
+    <div class="card card-pink anim">
+      <div style="display:flex;align-items:center;gap:clamp(8px,2vw,16px)">
+        <div class="big-number" style="color:var(--accent3);font-size:clamp(2rem,5vw,3.5rem)">12.53%</div>
+        <div>
+          <p style="font-size:clamp(0.8rem,1.6vw,1rem);font-weight:600">전이 질량이 사각지대에 존재</p>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim)">160만 이벤트 로그에서도 &tau;=1000 기준</p>
+        </div>
+      </div>
+    </div>
+    <div class="anim">
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);font-weight:600;color:var(--accent2);margin-top:8px">
+        핵심: <span style="color:var(--text)">행동에 대한 지지도가 자율 실행의 정당성을 결정한다 &mdash; 상태 지지도만으로는 부족</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 10: Key Result 2 - Entropy -->
+  <div class="slide" data-slide="9">
+    <h2 class="anim">결과 #2: 엔트로피가 병목을 집중시킨다</h2>
+    <div class="card anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">최고 엔트로피 상태 (불확실성 최대)</h3>
+      <table class="data-table">
+        <tr><th>상태</th><th>H (bits)</th><th>N</th></tr>
+        <tr><td>승인 변경 (고가치, GR 미검증)</td><td class="highlight-pink">3.07</td><td>1,379</td></tr>
+        <tr><td>배송지표 변경 (저가치, GR 미검증)</td><td class="highlight-pink">3.01</td><td>573</td></tr>
+        <tr><td>가격 변경 (초고가치, GR 미검증)</td><td class="highlight-pink">2.88</td><td>658</td></tr>
+      </table>
+    </div>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">자율성 봉투 (&tau;=50, w<sub>0</sub>=0.6)</h3>
+      <div class="grid-2">
+        <div>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);margin-bottom:8px"><strong>h<sub>0</sub> = 2.0 bits</strong></p>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">이벤트 자율성: <span class="highlight">72.2%</span></p>
+          <div class="metric-bar"><div class="metric-fill fill-green" style="width:72.2%"></div></div>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">케이스 자율성: <span class="highlight">49.6%</span></p>
+          <div class="metric-bar"><div class="metric-fill fill-purple" style="width:49.6%"></div></div>
+        </div>
+        <div>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);margin-bottom:8px"><strong>h<sub>0</sub> = 1.5 bits (엄격)</strong></p>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">이벤트 자율성: <span class="highlight-orange">53.3%</span></p>
+          <div class="metric-bar"><div class="metric-fill fill-orange" style="width:53.3%"></div></div>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">케이스 자율성: <span class="highlight-pink">7.1%</span></p>
+          <div class="metric-bar"><div class="metric-fill fill-pink" style="width:7.1%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-pink anim" style="font-size:clamp(0.8rem,1.6vw,1rem);font-style:italic">
+      "단계별로는 대부분 자율적으로 보이지만, 시작부터 끝까지는 부분적으로만 자율적"<br>
+      <strong style="color:var(--accent3)">경로 효과가 상당하다</strong>
+    </div>
+  </div>
+
+  <!-- Slide 11: Validation -->
+  <div class="slide" data-slide="10">
+    <h2 class="anim">결과 #3: 이론 &harr; 실제 에이전트 검증</h2>
+    <p class="subtitle anim">시간순 홀드아웃 분할로 시뮬레이션 에이전트 검증</p>
+    <div class="card card-green anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">단계별 정확도 대리지표</h3>
+      <div style="display:flex;align-items:center;gap:clamp(12px,3vw,24px);flex-wrap:wrap">
+        <div>
+          <div class="big-number" style="color:var(--accent2);font-size:clamp(2rem,5vw,3.5rem)">3.4pp</div>
+          <div class="big-label">평균 절대 오차</div>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+            이론적 대리지표 m(s) = max<sub>a</sub> &pi;&#770;(a|s)이<br>
+            실현된 자율 단계 정확도를 <strong>3.4 퍼센트 포인트 이내</strong>로 추적
+          </p>
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim);margin-top:6px">
+            h<sub>0</sub>=2.0에서: 이론 67.5% vs. 실현 63.7%
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">케이스 수준 검증 결과</h3>
+      <table class="data-table">
+        <tr><th>h<sub>0</sub></th><th>R&#771;<sub>safe</sub> (이론)</th><th>R<sub>safe</sub> (실현)</th><th>완전자율 C<sub>0</sub></th><th>터치/케이스</th></tr>
+        <tr><td>1.50</td><td>&mdash;</td><td>55.6%</td><td>3.3%</td><td>3.02</td></tr>
+        <tr><td>2.00</td><td>40.4%</td><td class="highlight">49.6%</td><td>16.1%</td><td>2.26</td></tr>
+        <tr><td>2.25</td><td>35.4%</td><td>45.2%</td><td>23.1%</td><td>1.90</td></tr>
+      </table>
+    </div>
+    <div class="card card-accent anim" style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+      이론이 <strong>보수적이지만 방향적으로 정확</strong> &mdash; 독립성 가정으로 인해 R&#771;<sub>safe</sub>는 과소추정
+    </div>
+  </div>
+
+  <!-- Slide 12: Gateway States -->
+  <div class="slide" data-slide="11">
+    <h2 class="anim">결과 #4: 관문 상태의 집중 효과</h2>
+    <div class="grid-2 anim">
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent);font-size:clamp(2rem,5vw,3.5rem)">33</div>
+        <div class="big-label">관문 상태</div>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim);margin-top:6px">
+          1.5 &lt; H &le; 2.0 엔트로피 대역
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-number" style="color:var(--accent2);font-size:clamp(2rem,5vw,3.5rem)">69.1%</div>
+        <div class="big-label">케이스가 이 상태 방문</div>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim);margin-top:6px">
+          비종료 결정의 13.4% 차지
+        </p>
+      </div>
+    </div>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">관문 상태의 자율 허용 효과</h3>
+      <p style="font-size:clamp(0.8rem,1.6vw,1rem);margin-bottom:12px">구매주문 생성, 입고 기록, 송장 기록 등 구매 허브에 집중</p>
+      <div style="display:flex;align-items:center;gap:clamp(10px,3vw,24px);flex-wrap:wrap">
+        <div style="text-align:center">
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim)">h<sub>0</sub>=1.5 (엄격)</p>
+          <div class="big-number" style="color:var(--accent3);font-size:clamp(1.5rem,4vw,2.5rem)">7.1%</div>
+          <p style="font-size:clamp(0.65rem,1.2vw,0.8rem);color:var(--text-dim)">케이스 자율성</p>
+        </div>
+        <div style="font-size:clamp(1.5rem,3vw,2.5rem);color:var(--accent2)">&rarr;</div>
+        <div style="text-align:center">
+          <p style="font-size:clamp(0.7rem,1.4vw,0.85rem);color:var(--text-dim)">h<sub>0</sub>=2.0 (관문 허용)</p>
+          <div class="big-number" style="color:var(--accent2);font-size:clamp(1.5rem,4vw,2.5rem)">49.6%</div>
+          <p style="font-size:clamp(0.65rem,1.2vw,0.8rem);color:var(--text-dim)">케이스 자율성</p>
+        </div>
+        <div style="font-size:clamp(1.5rem,3vw,2.5rem);color:var(--accent4)">&uarr;</div>
+        <div style="text-align:center">
+          <div class="big-number" style="color:var(--accent4);font-size:clamp(1.5rem,4vw,2.5rem)">&times;7</div>
+          <p style="font-size:clamp(0.65rem,1.2vw,0.8rem);color:var(--text-dim)">향상</p>
+        </div>
+      </div>
+    </div>
+    <div class="card card-orange anim" style="font-size:clamp(0.75rem,1.5vw,0.9rem);font-style:italic">
+      "완전 자율 완료(16.1%)와 케이스 자율성(42.3%)의 간극은<br>
+      자율성 확대 시 예측 확실성 개선 없이는 신뢰성이 하락함을 정량화"
+    </div>
+  </div>
+
+  <!-- Slide 13: Reliability-Cost Trade-off -->
+  <div class="slide" data-slide="12">
+    <h2 class="anim">결과 #5: 신뢰성-비용 트레이드오프</h2>
+    <p class="subtitle anim">엄격한 게이트 vs. 관대한 게이트의 비분리적 관계</p>
+    <div class="grid-2 anim">
+      <div class="card card-green">
+        <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">엄격한 게이트 (낮은 h<sub>0</sub>)</h3>
+        <ul style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+          <li>안전 완료율 <span class="highlight">&uarr; 증가</span></li>
+          <li>감독 부담 <span class="highlight-pink">&uarr; 무거움</span></li>
+          <li>h<sub>0</sub>=1.5: 터치 3.02/케이스</li>
+        </ul>
+      </div>
+      <div class="card card-pink">
+        <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">관대한 게이트 (높은 h<sub>0</sub>)</h3>
+        <ul style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+          <li>감독 비용 <span class="highlight">&darr; 감소</span></li>
+          <li>높은 엔트로피 결정 자율화</li>
+          <li>h<sub>0</sub>=2.25: 터치 1.90/케이스</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card card-accent anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">비용-신뢰성 경계선 요약</h3>
+      <div style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0">
+          <span>h<sub>0</sub>=1.50 &mdash; 높은 감독, 높은 안전</span>
+          <span class="highlight">R<sub>safe</sub>=55.6%</span>
+        </div>
+        <div class="stacked-bar">
+          <div style="width:3.3%;background:var(--accent2)">3%</div>
+          <div style="width:52.3%;background:var(--accent)">인간복구</div>
+          <div style="width:44.4%;background:var(--accent3)">실패</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0">
+          <span>h<sub>0</sub>=2.00 &mdash; 균형</span>
+          <span class="highlight">R<sub>safe</sub>=49.6%</span>
+        </div>
+        <div class="stacked-bar">
+          <div style="width:16.1%;background:var(--accent2)">16%</div>
+          <div style="width:33.5%;background:var(--accent)">복구</div>
+          <div style="width:50.4%;background:var(--accent3)">실패</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0">
+          <span>h<sub>0</sub>=2.25 &mdash; 낮은 감독, 낮은 안전</span>
+          <span class="highlight">R<sub>safe</sub>=45.2%</span>
+        </div>
+        <div class="stacked-bar">
+          <div style="width:23.1%;background:var(--accent2)">23%</div>
+          <div style="width:22.1%;background:var(--accent)">복구</div>
+          <div style="width:54.8%;background:var(--accent3)">실패</div>
+        </div>
+      </div>
+      <p style="font-size:clamp(0.65rem,1.3vw,0.8rem);color:var(--text-dim);margin-top:8px">
+        녹색=완전자율 성공 | 보라=인간 개입 복구 | 분홍=실패
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 14: Practical Implications -->
+  <div class="slide" data-slide="13">
+    <h2 class="anim">실무 시사점</h2>
+    <div class="card card-green anim">
+      <div class="flex-row">
+        <div class="icon-circle" style="background:rgba(0,212,170,0.15)">&#x1f50d;</div>
+        <div>
+          <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">배포 전 감사가 먼저</h3>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+            프롬프트 튜닝이나 파인튜닝 전에, 이벤트 로그가 이미 경험적 신뢰성-비용 경계선을 결정한다.
+            어디서 완전 자율이 정당화되지 않는지 먼저 파악해야 한다.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent anim">
+      <div class="flex-row">
+        <div class="icon-circle" style="background:rgba(108,99,255,0.15)">&#x1f4ca;</div>
+        <div>
+          <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">상태가 아닌 상태-행동을 측정</h3>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+            상태 커버리지만으로는 불충분. 에이전트의 실제 결정 공간(상태-행동 쌍)에서의 지지도가 핵심이다.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card card-pink anim">
+      <div class="flex-row">
+        <div class="icon-circle" style="background:rgba(255,107,138,0.15)">&#x26a0;</div>
+        <div>
+          <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">경로 효과를 고려</h3>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+            단계별 자율성 72%도 케이스 전체로는 50% 미만으로 하락할 수 있다.
+            경로 복합 효과를 반드시 고려해야 한다.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card card-orange anim">
+      <div class="flex-row">
+        <div class="icon-circle" style="background:rgba(255,167,38,0.15)">&#x1f4b0;</div>
+        <div>
+          <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">관문 상태에 집중 투자</h3>
+          <p style="font-size:clamp(0.75rem,1.5vw,0.9rem)">
+            33개 관문 상태가 케이스의 69.1%에 영향. 이 허브들의 예측력 개선이 전체 자율성을 7배 향상시킬 수 있다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 15: Limitations -->
+  <div class="slide" data-slide="14">
+    <h2 class="anim">한계점</h2>
+    <div class="grid-4 anim">
+      <div class="card card-accent">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">1. 관찰 데이터 제약</h3>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">
+          BPI 로그는 관찰적이며 에이전트가 생성한 것이 아님. 임의 행동의 반사실적 평가 불가. 사전 배포에 적합하나 온라인 평가를 대체하지 못함.
+        </p>
+      </div>
+      <div class="card card-green">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">2. 상태 표현 가정</h3>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">
+          1차 마르코프 근사 사용. 더 풍부한 상태(도구 상태, 대화 이력 등)는 지지 문제를 악화시킬 수 있음. 보고된 사각지대는 하한.
+        </p>
+      </div>
+      <div class="card card-pink">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">3. 위험 프록시 제한</h3>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">
+          공개 BPI 필드 기반의 재현 가능한 가중치 설계. 실제 배포에서는 정책 중요도, 규정 준수 부담, 하류 오류 비용 등 도메인 특화 필요.
+        </p>
+      </div>
+      <div class="card card-orange">
+        <h3 style="font-size:clamp(0.8rem,1.6vw,1rem)">4. 산업 증거 범위</h3>
+        <p style="font-size:clamp(0.7rem,1.4vw,0.85rem)">
+          동기부여 사례들은 포괄적이지 않음. 핵심은 실제 배포가 신뢰성 실패와 감독 비용이라는 두 압력을 이미 겪고 있다는 것.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 16: Conclusion -->
+  <div class="slide" data-slide="15">
+    <h2 class="anim">결론</h2>
+    <div class="card card-accent anim" style="font-size:clamp(0.9rem,2vw,1.15rem);font-style:italic;text-align:center;color:var(--accent2);padding:clamp(16px,3vw,32px)">
+      "기업 환경의 에이전틱 AI는 프롬프트 문제가 아닌<br>
+      <strong style="color:var(--text-bright)">확률적 제어 문제</strong>로 분석해야 한다"
+    </div>
+    <div class="card anim">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">주요 발견</h3>
+      <ul style="font-size:clamp(0.8rem,1.6vw,1rem)">
+        <li><span class="highlight">상태 커버리지 &ne; 행동 지지도</span> &mdash; 대규모 프로세스도 다음 단계 결정에 상당한 사각지대 유지</li>
+        <li><span class="highlight-pink">이론적 대리지표가 실제 에이전트 행동 예측</span> &mdash; 홀드아웃 검증에서 3.4pp 이내 추적</li>
+        <li><span class="highlight-purple">신뢰성-비용 경계선이 비분리적</span> &mdash; 동일 통계량이 두 차원을 동시에 결정</li>
+        <li><span class="highlight-orange">경로 복합 효과</span> &mdash; 단계별 자율성이 케이스 전체에서 급격히 감소</li>
+      </ul>
+    </div>
+    <div class="card card-green anim" style="text-align:center">
+      <h3 style="font-size:clamp(0.85rem,1.8vw,1.1rem)">운영 권고</h3>
+      <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);color:var(--text-bright);line-height:1.7">
+        기업 에이전트 배포는<br>
+        <strong style="color:var(--accent2);font-size:clamp(1rem,2.2vw,1.3rem)">지지도 &middot; 엔트로피 &middot; 위험 &middot; 감독비용 감사</strong><br>
+        에서 시작해야 하며, 프롬프트 최적화만으로는 안 된다.
+      </p>
+      <div class="divider" style="margin:clamp(12px,2vw,20px) auto"></div>
+      <p style="font-size:clamp(0.8rem,1.6vw,1rem);font-style:italic;color:var(--accent)">
+        "확률적 간극이 측정 가능해지면,<br>정당화할 수 있는 자율성의 양도 측정 가능해진다."
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&larr; 이전</button>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">다음 &rarr;</button>
+</div>
+
+<!-- Slide number -->
+<div class="slide-number" id="slideNumber">1 / 16</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressFill = document.getElementById('progressFill');
+  const slideNumber = document.getElementById('slideNumber');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i < index) s.classList.add('exit-left');
+    });
+    slides[index].classList.add('active');
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === total - 1;
+    progressFill.style.width = ((index + 1) / total * 100) + '%';
+    slideNumber.textContent = (index + 1) + ' / ' + total;
+
+    // Animate metric bars
+    setTimeout(() => {
+      slides[index].querySelectorAll('.metric-fill').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => { bar.style.width = w; }, 50);
+      });
+    }, 300);
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) {
+      current = next;
+      showSlide(current);
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); current = 0; showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); current = total - 1; showSlide(current); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) navigate(1);
+      else navigate(-1);
+    }
+  }, { passive: true });
+
+  // Init
+  showSlide(0);
+</script>
+</body>
+</html>

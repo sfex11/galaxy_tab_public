@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>적대적 환경에서의 최적 경로 계획</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--surface:#111827;--card:#1a2236;
+  --primary:#3b82f6;--accent:#06d6a0;--danger:#ef4444;--warn:#f59e0b;
+  --text:#e2e8f0;--muted:#94a3b8;--dim:#475569;
+  --radius:12px;
+}
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:'Segoe UI','Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ─── Slide Container ─── */
+.deck{position:relative;width:100%;height:100%}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:40px 60px;
+  overflow-y:auto;overflow-x:hidden;
+  opacity:0;pointer-events:none;
+  transition:opacity .45s ease,transform .45s ease;
+  transform:translateX(60px);
+  scrollbar-width:thin;scrollbar-color:var(--dim) transparent;
+}
+.slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+.slide.prev{opacity:0;transform:translateX(-60px)}
+
+/* ─── Typography ─── */
+h1{font-size:clamp(1.6rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:.4em}
+h2{font-size:clamp(1.3rem,3vw,2rem);font-weight:700;line-height:1.3;margin-bottom:.5em}
+h3{font-size:clamp(1rem,2.5vw,1.4rem);font-weight:600;margin-bottom:.4em}
+p,li{font-size:clamp(.85rem,2vw,1.1rem);line-height:1.7}
+.subtitle{font-size:clamp(.9rem,2.2vw,1.2rem);color:var(--muted);margin-bottom:1em}
+.small{font-size:clamp(.75rem,1.8vw,.95rem);color:var(--muted)}
+code{
+  background:rgba(59,130,246,.15);padding:2px 6px;border-radius:4px;
+  font-family:'Fira Code',monospace;font-size:.9em;
+}
+
+/* ─── Common Components ─── */
+.tag{
+  display:inline-block;padding:4px 12px;border-radius:20px;
+  font-size:clamp(.7rem,1.6vw,.85rem);font-weight:600;margin:3px;
+}
+.tag-blue{background:rgba(59,130,246,.2);color:#60a5fa}
+.tag-green{background:rgba(6,214,160,.2);color:#34d399}
+.tag-red{background:rgba(239,68,68,.2);color:#f87171}
+.tag-yellow{background:rgba(245,158,11,.2);color:#fbbf24}
+
+.card{
+  background:var(--card);border-radius:var(--radius);padding:24px;
+  border:1px solid rgba(255,255,255,.06);margin-bottom:16px;
+}
+.card-accent{border-left:4px solid var(--accent)}
+.card-primary{border-left:4px solid var(--primary)}
+.card-danger{border-left:4px solid var(--danger)}
+.card-warn{border-left:4px solid var(--warn)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+.flex-center{display:flex;align-items:center;justify-content:center}
+.flex-col{display:flex;flex-direction:column;gap:12px}
+.gap-sm{gap:8px}
+
+ul{list-style:none;padding:0}
+ul li{position:relative;padding-left:1.4em;margin-bottom:.5em}
+ul li::before{
+  content:'';position:absolute;left:0;top:.55em;
+  width:8px;height:8px;border-radius:50%;background:var(--accent);
+}
+
+ol{padding-left:1.6em}
+ol li{margin-bottom:.5em}
+ol li::marker{color:var(--primary);font-weight:700}
+
+/* ─── Diagram / Visual ─── */
+.graph-visual{
+  position:relative;width:100%;max-width:600px;
+  margin:16px auto;padding:20px;
+}
+.node{
+  display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:50%;
+  font-weight:700;font-size:.85rem;position:absolute;
+  border:2px solid;z-index:2;
+}
+.node-start{background:rgba(59,130,246,.25);border-color:var(--primary);color:#60a5fa}
+.node-target{background:rgba(6,214,160,.25);border-color:var(--accent);color:#34d399}
+.node-trap{background:rgba(239,68,68,.25);border-color:var(--danger);color:#f87171}
+.node-safe{background:rgba(148,163,184,.15);border-color:var(--dim);color:var(--muted)}
+
+.edge-line{
+  position:absolute;height:2px;background:var(--dim);
+  transform-origin:left center;z-index:1;
+}
+
+/* Agent dot */
+.agent-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--warn);position:absolute;z-index:3;
+  box-shadow:0 0 8px rgba(245,158,11,.5);
+}
+
+/* Animated path */
+@keyframes moveDot{
+  0%{left:40px;top:72px}
+  25%{left:140px;top:72px}
+  50%{left:240px;top:72px}
+  75%{left:340px;top:72px}
+  100%{left:440px;top:72px}
+}
+.agent-animate{animation:moveDot 3s ease-in-out infinite}
+
+/* ─── Table ─── */
+table{
+  width:100%;border-collapse:collapse;margin:12px 0;
+  font-size:clamp(.75rem,1.8vw,.95rem);
+}
+th{
+  background:rgba(59,130,246,.15);color:#60a5fa;
+  padding:10px 14px;text-align:left;font-weight:600;
+  border-bottom:2px solid rgba(59,130,246,.3);
+}
+td{
+  padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+tr:hover td{background:rgba(255,255,255,.03)}
+
+/* ─── Progress Bar ─── */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  z-index:100;transition:width .4s ease;
+}
+
+/* ─── Slide Counter ─── */
+.slide-counter{
+  position:fixed;bottom:16px;right:20px;
+  font-size:clamp(.7rem,1.5vw,.85rem);color:var(--dim);
+  z-index:100;font-variant-numeric:tabular-nums;
+}
+
+/* ─── Navigation ─── */
+.nav-btn{
+  position:fixed;top:50%;z-index:100;
+  width:48px;height:48px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.08);color:var(--text);
+  font-size:1.2rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .2s;
+  backdrop-filter:blur(4px);transform:translateY(-50%);
+}
+.nav-btn:hover{background:rgba(59,130,246,.3);transform:translateY(-50%) scale(1.1)}
+.nav-btn:active{transform:translateY(-50%) scale(.95)}
+.nav-prev{left:10px}
+.nav-next{right:10px}
+
+/* ─── Dot navigation ─── */
+.dot-nav{
+  position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:100;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--dim);cursor:pointer;transition:all .3s;
+  border:none;
+}
+.dot.active{background:var(--accent);transform:scale(1.3)}
+
+/* ─── Animations ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .6s ease both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}
+.d4{animation-delay:.4s}.d5{animation-delay:.5s}.d6{animation-delay:.6s}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float{animation:float 3s ease-in-out infinite}
+
+/* ─── Icon boxes ─── */
+.icon-box{
+  font-size:2.2rem;width:64px;height:64px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;margin-bottom:10px;flex-shrink:0;
+}
+.icon-blue{background:rgba(59,130,246,.15)}
+.icon-green{background:rgba(6,214,160,.15)}
+.icon-red{background:rgba(239,68,68,.15)}
+.icon-yellow{background:rgba(245,158,11,.15)}
+
+/* ─── Complexity visual ─── */
+.complexity-bar{
+  height:32px;border-radius:8px;display:flex;align-items:center;
+  padding:0 12px;font-weight:600;font-size:clamp(.7rem,1.6vw,.85rem);
+  margin-bottom:8px;transition:width .8s ease;
+}
+
+/* ─── Flowchart ─── */
+.flow-step{
+  display:flex;align-items:center;gap:12px;margin-bottom:6px;
+}
+.flow-num{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.9rem;flex-shrink:0;
+}
+
+/* ─── Tablet ─── */
+@media(max-width:768px){
+  .slide{padding:30px 36px}
+  .grid2{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .nav-btn{width:44px;height:44px;font-size:1rem}
+  .graph-visual{max-width:100%;padding:12px}
+  .node{width:38px;height:38px;font-size:.75rem}
+  .icon-box{width:52px;height:52px;font-size:1.8rem}
+  h1{margin-bottom:.3em}
+}
+
+/* ─── Mobile ─── */
+@media(max-width:480px){
+  .slide{padding:20px}
+  .grid3{grid-template-columns:1fr}
+  .card{padding:16px}
+  .nav-prev{left:6px}.nav-next{right:6px}
+  .nav-btn{width:44px;height:44px}
+  table{font-size:clamp(.65rem,1.6vw,.8rem)}
+  th,td{padding:8px 10px}
+  .icon-box{width:44px;height:44px;font-size:1.4rem;border-radius:12px}
+  .node{width:32px;height:32px;font-size:.65rem}
+}
+
+/* ─── Small Mobile ─── */
+@media(max-width:320px){
+  .slide{padding:14px}
+  .card{padding:12px;margin-bottom:10px}
+  .nav-btn{width:44px;height:44px;font-size:.9rem}
+  .dot{width:8px;height:8px}
+  .dot-nav{gap:4px}
+  h1{font-size:clamp(1.2rem,5vw,1.6rem)}
+  h2{font-size:clamp(1rem,4vw,1.3rem)}
+  .icon-box{width:40px;height:40px;font-size:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<button class="nav-btn nav-prev" onclick="navigate(-1)" aria-label="이전">&#9664;</button>
+<button class="nav-btn nav-next" onclick="navigate(1)" aria-label="다음">&#9654;</button>
+
+<div class="dot-nav" id="dotNav"></div>
+
+<div class="deck" id="deck">
+
+<!-- ============ SLIDE 1: 표지 ============ -->
+<div class="slide active" data-slide="0">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+    <div class="fade-up" style="margin-bottom:20px">
+      <span class="tag tag-blue">ICAPS 2026</span>
+      <span class="tag tag-green">cs.GT</span>
+      <span class="tag tag-yellow">cs.MA</span>
+    </div>
+    <h1 class="fade-up d1" style="max-width:800px;background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+      적대적 환경에서의<br>최적 경로 계획
+    </h1>
+    <p class="subtitle fade-up d2">Optimal Path Planning in Hostile Environments</p>
+    <div class="fade-up d3" style="margin:20px 0">
+      <svg width="200" height="60" viewBox="0 0 200 60" style="overflow:visible">
+        <circle cx="20" cy="30" r="14" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+        <text x="20" y="35" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="700">S</text>
+        <line x1="36" y1="30" x2="68" y2="30" stroke="#475569" stroke-width="2"/>
+        <circle cx="82" cy="30" r="14" fill="rgba(148,163,184,.12)" stroke="#475569" stroke-width="2"/>
+        <line x1="96" y1="30" x2="118" y2="14" stroke="#475569" stroke-width="2"/>
+        <line x1="96" y1="30" x2="118" y2="46" stroke="#475569" stroke-width="2"/>
+        <circle cx="130" cy="14" r="12" fill="rgba(239,68,68,.25)" stroke="#ef4444" stroke-width="2"/>
+        <text x="130" y="18" text-anchor="middle" fill="#f87171" font-size="9" font-weight="700">T</text>
+        <circle cx="130" cy="46" r="12" fill="rgba(148,163,184,.12)" stroke="#475569" stroke-width="2"/>
+        <line x1="142" y1="14" x2="164" y2="30" stroke="#475569" stroke-width="2"/>
+        <line x1="142" y1="46" x2="164" y2="30" stroke="#475569" stroke-width="2"/>
+        <circle cx="180" cy="30" r="14" fill="rgba(6,214,160,.25)" stroke="#06d6a0" stroke-width="2"/>
+        <text x="180" y="35" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">G</text>
+        <!-- animated agent -->
+        <circle cx="20" cy="30" r="5" fill="#f59e0b" opacity=".9">
+          <animate attributeName="cx" values="20;82;130;180" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;1;.4;1" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="fade-up d4 small" style="margin-top:16px">
+      A. Kaczmarczyk &middot; &Scaron;. Schierreich &middot; N.A. Tanujaya &middot; H. Xu
+    </div>
+    <p class="fade-up d5 small" style="margin-top:6px">arXiv: 2603.18958v1 &middot; 2026년 3월</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 2: 연구 동기 ============ -->
+<div class="slide" data-slide="1">
+  <h2 class="fade-up">연구 동기 및 배경</h2>
+  <p class="subtitle fade-up d1">왜 적대적 환경에서의 경로 계획이 중요한가?</p>
+  <div class="grid2 fade-up d2">
+    <div class="card card-primary">
+      <div class="icon-box icon-blue">&#128681;</div>
+      <h3>분쟁 지역 구호물자 배달</h3>
+      <p class="small">드론이 위험 지역을 통과해 물자를 전달해야 하는 상황에서, 가능한 많은 드론이 목적지에 도달해야 합니다.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="icon-box icon-green">&#129302;</div>
+      <h3>장애물 지대 로봇 배치</h3>
+      <p class="small">현장 로봇이 장애물이 가득한 배치 구역을 횡단하며, 일부 로봇의 희생으로 나머지를 보호하는 전략이 필요합니다.</p>
+    </div>
+    <div class="card card-danger">
+      <div class="icon-box icon-red">&#127963;&#65039;</div>
+      <h3>해적 출몰 해역 화물 운송</h3>
+      <p class="small">위험 해역에서 화물선이 안전하게 목적지에 도달하는 최적 경로를 탐색합니다.</p>
+    </div>
+    <div class="card card-warn">
+      <div class="icon-box icon-yellow">&#128274;</div>
+      <h3>사이버 보안 침투 탐지</h3>
+      <p class="small">네트워크 패킷(에이전트)이 탐지기(트랩)를 회피하여 목적지에 도달하는 문제로 모델링할 수 있습니다.</p>
+    </div>
+  </div>
+  <div class="card fade-up d3" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);margin-top:8px">
+    <p style="text-align:center"><strong>핵심 질문:</strong> 위험 요소가 있는 환경에서 <span style="color:var(--accent)">최대한 많은 에이전트</span>를 출발지에서 목적지까지 안전하게 이동시키는 <span style="color:var(--primary)">최적 계획</span>은 무엇인가?</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 3: 문제 정의 ============ -->
+<div class="slide" data-slide="2">
+  <h2 class="fade-up">문제 정의</h2>
+  <p class="subtitle fade-up d1">이산 시간, 완전 관측, 결정적 환경</p>
+
+  <div class="card card-primary fade-up d2">
+    <h3>그래프 모델</h3>
+    <p>환경은 <strong>비방향 그래프</strong> <code>G = (V, E)</code>로 모델링됩니다.</p>
+    <ul style="margin-top:8px">
+      <li><strong>정점(V)</strong>: 위치를 나타냄, 출발점 <code>s</code>와 목표점 <code>t</code> 지정</li>
+      <li><strong>간선(E)</strong>: 이동 가능한 경로 (1 시간 단위)</li>
+      <li><strong>에이전트(A)</strong>: <code>m</code>개의 동일한 에이전트가 <code>s</code>에서 시작</li>
+    </ul>
+  </div>
+
+  <div class="grid2 fade-up d3">
+    <div class="card card-danger">
+      <h3>트랩 메커니즘</h3>
+      <p><code>R &sube; V \ {s, t}</code></p>
+      <ul>
+        <li>에이전트가 <strong>활성 트랩</strong>에 진입하면 <span style="color:#f87171">제거됨</span></li>
+        <li>트랩은 작동 후 <strong>비활성화</strong>됨</li>
+        <li><strong>재충전 시간</strong> <code>c(r)</code> 이후 재활성화</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h3>유효한 계획 조건</h3>
+      <ol>
+        <li>모든 에이전트는 <code>s</code>에서 출발</li>
+        <li><code>s</code>를 떠나면 복귀 불가</li>
+        <li><code>t</code> 도착 후 이탈 불가</li>
+        <li>비단말 정점에 동시 점유 금지</li>
+        <li>간선을 따라 이동 또는 대기</li>
+        <li>유한 시간 내 완료</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card fade-up d4" style="background:rgba(6,214,160,.08);border:1px solid rgba(6,214,160,.2);text-align:center;padding:16px">
+    <strong>결정 문제:</strong> 주어진 입력 <code>(A, G, s, t, R, c, k)</code>에 대해<br>
+    <span style="color:var(--accent);font-size:clamp(1rem,2.5vw,1.3rem);font-weight:700">&ge; k개 에이전트가 생존하는 유효한 계획이 존재하는가?</span>
+  </div>
+</div>
+
+<!-- ============ SLIDE 4: 트랩 메커니즘 시각화 ============ -->
+<div class="slide" data-slide="3">
+  <h2 class="fade-up">트랩 메커니즘 동작 원리</h2>
+  <p class="subtitle fade-up d1">희생 전략: 앞선 에이전트가 트랩을 흡수하여 후속 에이전트를 보호</p>
+
+  <div class="card fade-up d2" style="overflow-x:auto">
+    <svg width="100%" viewBox="0 0 680 220" style="max-width:680px;display:block;margin:0 auto">
+      <!-- Timeline labels -->
+      <text x="40" y="20" fill="#94a3b8" font-size="12" font-weight="600">t=0</text>
+      <text x="200" y="20" fill="#94a3b8" font-size="12" font-weight="600">t=1</text>
+      <text x="360" y="20" fill="#94a3b8" font-size="12" font-weight="600">t=2</text>
+      <text x="520" y="20" fill="#94a3b8" font-size="12" font-weight="600">t=3</text>
+
+      <!-- t=0 -->
+      <circle cx="40" cy="70" r="18" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="40" y="75" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+      <circle cx="40" cy="70" r="6" fill="#f59e0b"/><circle cx="55" cy="62" r="5" fill="#f59e0b"/><circle cx="55" cy="78" r="5" fill="#f59e0b"/>
+      <line x1="60" y1="70" x2="100" y2="70" stroke="#475569" stroke-width="2"/>
+      <circle cx="120" cy="70" r="18" fill="rgba(239,68,68,.3)" stroke="#ef4444" stroke-width="2"/>
+      <text x="120" y="64" text-anchor="middle" fill="#f87171" font-size="8" font-weight="700">TRAP</text>
+      <text x="120" y="78" text-anchor="middle" fill="#f87171" font-size="8">c=1</text>
+
+      <!-- t=1: agent enters trap -->
+      <circle cx="200" cy="70" r="18" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="200" y="75" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+      <circle cx="215" cy="62" r="5" fill="#f59e0b"/><circle cx="215" cy="78" r="5" fill="#f59e0b"/>
+      <line x1="220" y1="70" x2="260" y2="70" stroke="#475569" stroke-width="2"/>
+      <circle cx="280" cy="70" r="18" fill="rgba(239,68,68,.5)" stroke="#ef4444" stroke-width="2.5"/>
+      <text x="280" y="64" text-anchor="middle" fill="#fca5a5" font-size="8" font-weight="700">BOOM</text>
+      <line x1="274" y1="76" x2="286" y2="76" stroke="#f87171" stroke-width="1.5"/>
+      <circle cx="280" cy="70" r="5" fill="#f59e0b" opacity=".4"/>
+      <text x="280" y="100" text-anchor="middle" fill="#f87171" font-size="9">에이전트 제거!</text>
+
+      <!-- t=2: trap inactive -->
+      <circle cx="360" cy="70" r="18" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="360" y="75" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+      <circle cx="375" cy="62" r="5" fill="#f59e0b"/>
+      <line x1="380" y1="70" x2="420" y2="70" stroke="#475569" stroke-width="2"/>
+      <circle cx="440" cy="70" r="18" fill="rgba(100,100,100,.2)" stroke="#6b7280" stroke-width="2" stroke-dasharray="4,3"/>
+      <text x="440" y="64" text-anchor="middle" fill="#9ca3af" font-size="8">비활성</text>
+      <text x="440" y="78" text-anchor="middle" fill="#9ca3af" font-size="8">c=1</text>
+      <circle cx="440" cy="52" r="4" fill="#f59e0b"/>
+      <text x="440" y="100" text-anchor="middle" fill="#34d399" font-size="9">안전 통과!</text>
+
+      <!-- t=3: second agent passes, trap reloading -->
+      <circle cx="520" cy="70" r="18" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="520" y="75" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+      <line x1="540" y1="70" x2="580" y2="70" stroke="#475569" stroke-width="2"/>
+      <circle cx="600" cy="70" r="18" fill="rgba(6,214,160,.25)" stroke="#06d6a0" stroke-width="2"/>
+      <text x="600" y="75" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">G</text>
+      <circle cx="600" cy="55" r="5" fill="#f59e0b"/>
+      <text x="600" y="100" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">목표 도달!</text>
+
+      <!-- Arrows -->
+      <path d="M155,70 L175,70" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arrowB)"/>
+      <path d="M315,70 L335,70" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arrowB)"/>
+      <path d="M475,70 L495,70" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arrowB)"/>
+      <defs><marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#60a5fa"/></marker></defs>
+    </svg>
+  </div>
+
+  <div class="grid2 fade-up d3" style="margin-top:12px">
+    <div class="card card-danger">
+      <h3>핵심 통찰</h3>
+      <ul>
+        <li><strong>희생 에이전트</strong>가 트랩을 비활성화</li>
+        <li>재충전 시간 <code>c(r)</code> 동안 후속 에이전트 통과 가능</li>
+        <li>전략적 희생으로 전체 생존 수 극대화</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h3>"달리기-대기-희생" 전략</h3>
+      <ul>
+        <li><strong>달리기:</strong> 안전하면 앞으로 이동</li>
+        <li><strong>대기:</strong> 트랩 앞에서 충분한 후속 에이전트 확보 대기</li>
+        <li><strong>희생:</strong> 트랩 비활성화 후 나머지 통과</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 5: 핵심 이론적 결과 ============ -->
+<div class="slide" data-slide="4">
+  <h2 class="fade-up">핵심 이론적 결과</h2>
+  <p class="subtitle fade-up d1">계산 복잡도의 풍부한 지형</p>
+
+  <div class="card card-accent fade-up d2">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <span style="font-size:2rem;flex-shrink:0">&#127942;</span>
+      <div>
+        <h3>정리 1: 다항식 길이 계획</h3>
+        <p>해 공간이 기하급수적으로 크지만, <strong style="color:var(--accent)">최적 계획은 다항식 단계만 필요</strong>합니다.</p>
+        <p class="small" style="margin-top:6px">스냅샷 재구성과 그래프 색칠, 토큰 재구성 결과를 활용하여 증명합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-primary fade-up d3">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <span style="font-size:2rem;flex-shrink:0">&#128218;</span>
+      <div>
+        <h3>정리 2: NP 포함</h3>
+        <p>경로 계획 결정 문제(Routing Plan)는 <strong style="color:var(--primary)">NP에 속합니다</strong>.</p>
+        <p class="small" style="margin-top:6px">정리 1의 직접적 귀결: 다항식 길이 증거를 다항 시간에 검증 가능합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2 fade-up d4">
+    <div class="card card-danger">
+      <h3>정리 4: NP-완전</h3>
+      <p>각 에이전트가 최대 <strong>6개 트랩</strong>만 통과하는 경우에도 NP-완전</p>
+      <p class="small" style="margin-top:6px">제한적 정확 3-집합 덮개(Exact Cover by 3-Sets)로부터 환원</p>
+    </div>
+    <div class="card card-danger">
+      <h3>정리 5: 트리에서도 NP-완전</h3>
+      <p><strong>최대 차수 3</strong>인 트리 구조 그래프에서도 NP-완전</p>
+      <p class="small" style="margin-top:6px">3-분할(3-Partition) 문제로부터 환원</p>
+    </div>
+  </div>
+
+  <div class="card card-warn fade-up d5" style="text-align:center">
+    <h3>정리 6: 근사 불가능성</h3>
+    <p>최대화 변형에 대해 <strong style="color:var(--warn)">다항 시간 상수 근사 비율 알고리즘이 존재하지 않습니다</strong></p>
+    <p class="small">(P &ne; NP 가정 하에, 차수 3 트리에서도 성립)</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 6: 복잡도 지형 ============ -->
+<div class="slide" data-slide="5">
+  <h2 class="fade-up">계산 복잡도 지형도</h2>
+  <p class="subtitle fade-up d1">다루기 쉬운 경우와 어려운 경우의 경계</p>
+
+  <div class="fade-up d2">
+    <table>
+      <thead>
+        <tr><th>그래프 구조</th><th>복잡도</th><th>해결 방법</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-green">P</span> 단일 경로</td>
+          <td style="color:#34d399;font-weight:600">다항 시간</td>
+          <td>달리기-대기-희생 전략</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">P</span> 정점-분리 경로</td>
+          <td style="color:#34d399;font-weight:600">다항 시간</td>
+          <td>동적 프로그래밍</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">P</span> 선형 축약 위상</td>
+          <td style="color:#34d399;font-weight:600">다항 시간</td>
+          <td>분리 경로 변환 + DP</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">P</span> 별 위상 (Star)</td>
+          <td style="color:#34d399;font-weight:600">O(1)</td>
+          <td>닫힌 형태 공식</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">NP-hard</span> 트리 (차수 3)</td>
+          <td style="color:#f87171;font-weight:600">NP-완전</td>
+          <td>3-분할 환원</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">NP-hard</span> 일반 그래프</td>
+          <td style="color:#f87171;font-weight:600">NP-완전</td>
+          <td>정확 3-집합 덮개 환원</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-yellow">Inapprox</span> 최대화 변형</td>
+          <td style="color:#fbbf24;font-weight:600">근사 불가</td>
+          <td>상수 근사 비율 불가</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card fade-up d3" style="margin-top:12px;background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(6,214,160,.08));border:none">
+    <div style="text-align:center">
+      <p style="font-weight:600;margin-bottom:8px">복잡도 스펙트럼</p>
+      <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
+        <div style="flex:1;min-width:80px;height:28px;background:linear-gradient(90deg,#059669,#34d399);border-radius:6px 0 0 6px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600">O(1)</div>
+        <div style="flex:2;min-width:120px;height:28px;background:linear-gradient(90deg,#34d399,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600">다항 시간 (P)</div>
+        <div style="flex:2;min-width:120px;height:28px;background:linear-gradient(90deg,#60a5fa,#f87171);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600">NP-완전</div>
+        <div style="flex:1;min-width:80px;height:28px;background:linear-gradient(90deg,#f87171,#991b1b);border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600">근사 불가</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px">
+        <span class="small">별 그래프</span>
+        <span class="small">경로/분리경로</span>
+        <span class="small">트리/일반</span>
+        <span class="small">최대화</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 7: 다항 시간 알고리즘 ============ -->
+<div class="slide" data-slide="6">
+  <h2 class="fade-up">다항 시간 알고리즘</h2>
+  <p class="subtitle fade-up d1">효율적으로 해결 가능한 특수 구조들</p>
+
+  <div class="card card-accent fade-up d2">
+    <h3>1. 단일 경로: 달리기-대기-희생 (Run-Wait-Sacrifice)</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:12px">
+      <div class="flow-step" style="flex:1;min-width:180px">
+        <div class="flow-num" style="background:rgba(6,214,160,.2);color:#34d399">1</div>
+        <div><strong>달리기</strong><br><span class="small">다음 위치가 비어있고 트랩이 아니면 전진</span></div>
+      </div>
+      <div class="flow-step" style="flex:1;min-width:180px">
+        <div class="flow-num" style="background:rgba(245,158,11,.2);color:#fbbf24">2</div>
+        <div><strong>대기</strong><br><span class="small">트랩 앞에서 후속 에이전트 <code>c(r)</code>개 대기</span></div>
+      </div>
+      <div class="flow-step" style="flex:1;min-width:180px">
+        <div class="flow-num" style="background:rgba(239,68,68,.2);color:#f87171">3</div>
+        <div><strong>희생</strong><br><span class="small">첫 에이전트가 트랩 비활성화, 나머지 통과</span></div>
+      </div>
+    </div>
+    <div class="small" style="margin-top:10px;padding:8px;background:rgba(6,214,160,.06);border-radius:8px">
+      <strong>핵심 주장:</strong> 최적 해에서 에이전트는 오직 전진 또는 대기만 하며, 트랩은 충분한 후속 에이전트가 있을 때만 활성화됩니다.
+    </div>
+  </div>
+
+  <div class="grid2 fade-up d3">
+    <div class="card card-primary">
+      <h3>2. 정점-분리 경로: DP</h3>
+      <p style="margin:8px 0"><code>DP[i, B]</code> = 처음 <code>i</code>개 경로에 <code>B</code>개 에이전트 배분 시 최대 생존 수</p>
+      <div style="background:rgba(59,130,246,.08);padding:10px;border-radius:8px;margin-top:8px">
+        <code style="font-size:clamp(.7rem,1.5vw,.85rem)">DP[i,B] = max<sub>b&le;B</sub>{ DP[i-1, B-b] + survive(path_i, b) }</code>
+      </div>
+      <p class="small" style="margin-top:6px">동전 교환 문제와 유사한 점화식</p>
+    </div>
+    <div class="card card-warn">
+      <h3>3. 별 위상: O(1) 공식</h3>
+      <div style="text-align:center;margin:16px 0">
+        <div style="font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700;color:var(--warn)">
+          k' = m - &#8968;m / (c+1)&#8969;
+        </div>
+      </div>
+      <p class="small"><code>m</code>개 에이전트, 재충전 시간 <code>c</code>인 별 그래프에서 정확히 <code>k'</code>개 생존</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 8: NP-난해성 증명 ============ -->
+<div class="slide" data-slide="7">
+  <h2 class="fade-up">NP-난해성 증명 기법</h2>
+  <p class="subtitle fade-up d1">두 가지 주요 환원을 통한 복잡도 하한 확립</p>
+
+  <div class="card card-danger fade-up d2">
+    <h3>환원 1: 정확 3-집합 덮개 &rarr; 일반 그래프 (정리 4)</h3>
+    <div style="margin-top:10px">
+      <svg width="100%" viewBox="0 0 500 100" style="max-width:500px;display:block;margin:8px auto">
+        <rect x="10" y="10" width="120" height="60" rx="10" fill="rgba(239,68,68,.15)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="70" y="35" text-anchor="middle" fill="#fca5a5" font-size="10" font-weight="600">Exact Cover</text>
+        <text x="70" y="50" text-anchor="middle" fill="#fca5a5" font-size="10">by 3-Sets</text>
+        <path d="M135,40 L195,40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrowG)"/>
+        <text x="165" y="32" text-anchor="middle" fill="#94a3b8" font-size="9">환원</text>
+        <rect x="200" y="10" width="130" height="60" rx="10" fill="rgba(59,130,246,.15)" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="265" y="30" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="600">배치 가젯</text>
+        <text x="265" y="45" text-anchor="middle" fill="#60a5fa" font-size="9">집합/원소 정점</text>
+        <text x="265" y="58" text-anchor="middle" fill="#60a5fa" font-size="9">에이전트 흐름 강제</text>
+        <path d="M335,40 L395,40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrowG)"/>
+        <text x="365" y="32" text-anchor="middle" fill="#94a3b8" font-size="9">결과</text>
+        <rect x="400" y="10" width="90" height="60" rx="10" fill="rgba(239,68,68,.15)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="445" y="35" text-anchor="middle" fill="#fca5a5" font-size="10" font-weight="600">NP-완전</text>
+        <text x="445" y="50" text-anchor="middle" fill="#fca5a5" font-size="9">(&le;6 트랩)</text>
+        <defs><marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker></defs>
+      </svg>
+    </div>
+    <p class="small">에이전트가 최대 6개 트랩만 통과해도 문제는 NP-완전입니다.</p>
+  </div>
+
+  <div class="card card-warn fade-up d3">
+    <h3>환원 2: 3-분할 &rarr; 트리 (정리 5)</h3>
+    <div class="grid3" style="margin-top:12px">
+      <div style="text-align:center;padding:12px;background:rgba(245,158,11,.08);border-radius:8px">
+        <div style="font-size:1.5rem;margin-bottom:4px">&#128163;</div>
+        <strong style="font-size:clamp(.75rem,1.6vw,.9rem)">파괴 가젯</strong>
+        <p class="small">재충전 시간이 감소하는 트랩 시퀀스</p>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(59,130,246,.08);border-radius:8px">
+        <div style="font-size:1.5rem;margin-bottom:4px">&#128230;</div>
+        <strong style="font-size:clamp(.75rem,1.6vw,.9rem)">원소 가젯</strong>
+        <p class="small">에이전트를 저장하는 경로 구조</p>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(6,214,160,.08);border-radius:8px">
+        <div style="font-size:1.5rem;margin-bottom:4px">&#128736;&#65039;</div>
+        <strong style="font-size:clamp(.75rem,1.6vw,.9rem)">인프라</strong>
+        <p class="small">정확한 분할을 강제하는 기반 구조</p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">최대 차수 3인 트리에서도 NP-완전이며, 상수 근사 비율도 달성 불가합니다.</p>
+  </div>
+
+  <div class="card fade-up d4" style="background:rgba(255,255,255,.03);border:1px dashed var(--dim)">
+    <h3>스냅샷 프레임워크 (기술적 혁신)</h3>
+    <ul>
+      <li><strong>보조정리 2 (계획 축약)</strong>: 시작/종료 스냅샷이 일치하면 중간 구간 대체 가능</li>
+      <li><strong>보조정리 3 (트랩 간격)</strong>: 연속 트랩 활성화 간 다항식 이상 간격은 최적화 가능</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SLIDE 9: 비자명 예제 ============ -->
+<div class="slide" data-slide="8">
+  <h2 class="fade-up">비자명 최적해 예제</h2>
+  <p class="subtitle fade-up d1">단순 전략이 실패하는 경우 (예제 3: 8개 에이전트)</p>
+
+  <div class="grid2 fade-up d2">
+    <div class="card card-danger">
+      <h3>단순 전략: 0명 생존</h3>
+      <div style="text-align:center;margin:16px 0">
+        <svg width="100%" viewBox="0 0 200 160" style="max-width:200px">
+          <circle cx="100" cy="20" r="16" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+          <text x="100" y="25" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+          <line x1="100" y1="38" x2="60" y2="65" stroke="#475569" stroke-width="2"/>
+          <line x1="100" y1="38" x2="140" y2="65" stroke="#475569" stroke-width="2"/>
+          <circle cx="60" cy="80" r="14" fill="rgba(239,68,68,.25)" stroke="#ef4444" stroke-width="2"/>
+          <text x="60" y="84" text-anchor="middle" fill="#f87171" font-size="8">T1</text>
+          <circle cx="140" cy="80" r="14" fill="rgba(239,68,68,.25)" stroke="#ef4444" stroke-width="2"/>
+          <text x="140" y="84" text-anchor="middle" fill="#f87171" font-size="8">T2</text>
+          <line x1="60" y1="96" x2="100" y2="120" stroke="#475569" stroke-width="2"/>
+          <line x1="140" y1="96" x2="100" y2="120" stroke="#475569" stroke-width="2"/>
+          <circle cx="100" cy="138" r="16" fill="rgba(6,214,160,.25)" stroke="#06d6a0" stroke-width="2"/>
+          <text x="100" y="143" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">G</text>
+          <text x="100" y="110" text-anchor="middle" fill="#f87171" font-size="9" font-weight="600">&#10060; 실패</text>
+        </svg>
+      </div>
+      <p class="small">달리기-대기-희생을 단순 적용하면 모든 에이전트가 트랩에서 소진됩니다.</p>
+    </div>
+    <div class="card card-accent">
+      <h3>최적 전략: 1명 생존</h3>
+      <div style="text-align:center;margin:16px 0">
+        <svg width="100%" viewBox="0 0 200 160" style="max-width:200px">
+          <circle cx="100" cy="20" r="16" fill="rgba(59,130,246,.3)" stroke="#3b82f6" stroke-width="2"/>
+          <text x="100" y="25" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">S</text>
+          <line x1="100" y1="38" x2="60" y2="65" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="5,3"/>
+          <line x1="100" y1="38" x2="140" y2="65" stroke="#475569" stroke-width="2"/>
+          <circle cx="60" cy="80" r="14" fill="rgba(245,158,11,.2)" stroke="#f59e0b" stroke-width="2"/>
+          <text x="60" y="77" text-anchor="middle" fill="#fbbf24" font-size="7">저장소</text>
+          <text x="60" y="87" text-anchor="middle" fill="#fbbf24" font-size="7">역할</text>
+          <circle cx="140" cy="80" r="14" fill="rgba(239,68,68,.25)" stroke="#ef4444" stroke-width="2"/>
+          <text x="140" y="84" text-anchor="middle" fill="#f87171" font-size="8">T2</text>
+          <line x1="60" y1="96" x2="100" y2="120" stroke="#34d399" stroke-width="2.5"/>
+          <line x1="140" y1="96" x2="100" y2="120" stroke="#475569" stroke-width="2"/>
+          <circle cx="100" cy="138" r="16" fill="rgba(6,214,160,.4)" stroke="#06d6a0" stroke-width="2.5"/>
+          <text x="100" y="143" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">G</text>
+          <text x="100" y="110" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">&#10004; 성공!</text>
+        </svg>
+      </div>
+      <p class="small">상단 트랩을 "저장소"로 활용하여 연속 에이전트를 축적, 하류 트랩을 극복합니다.</p>
+    </div>
+  </div>
+
+  <div class="card fade-up d3" style="background:rgba(6,214,160,.06);border:1px solid rgba(6,214,160,.2)">
+    <p style="text-align:center"><strong>교훈:</strong> 트랩의 <span style="color:var(--warn)">재충전 메커니즘</span>을 전략적으로 활용하면, 단순한 탐욕 전략으로는 불가능한 경로 확보가 가능합니다. 이것이 이 문제를 기존 경로 계획과 구분짓는 핵심 요소입니다.</p>
+  </div>
+</div>
+
+<!-- ============ SLIDE 10: 관련 분야와의 차별점 ============ -->
+<div class="slide" data-slide="9">
+  <h2 class="fade-up">관련 분야와의 차별점</h2>
+  <p class="subtitle fade-up d1">기존 연구와의 비교 및 모델링 선택의 정당성</p>
+
+  <div class="flex-col fade-up d2">
+    <div class="card" style="display:flex;gap:16px;align-items:flex-start">
+      <div style="min-width:48px;height:48px;border-radius:12px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem">&#128269;</div>
+      <div>
+        <h3>추적-회피 (Pursuit-Evasion) 대비</h3>
+        <p class="small">기존: 적대적 에이전트 간 게임. <strong>본 연구:</strong> 환경이 정적이며 재충전 메커니즘을 가진 트랩 모델. 희생 전략이라는 새로운 차원 도입.</p>
+      </div>
+    </div>
+    <div class="card" style="display:flex;gap:16px;align-items:flex-start">
+      <div style="min-width:48px;height:48px;border-radius:12px;background:rgba(6,214,160,.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem">&#128260;</div>
+      <div>
+        <h3>토큰 재구성 (Token Reconfiguration) 대비</h3>
+        <p class="small">기존: 토큰 이동의 도달 가능성. <strong>본 연구:</strong> 토큰(에이전트)이 환경에 의해 제거될 수 있으며, 목적이 재배치가 아닌 <em>최대 생존</em>.</p>
+      </div>
+    </div>
+    <div class="card" style="display:flex;gap:16px;align-items:flex-start">
+      <div style="min-width:48px;height:48px;border-radius:12px;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem">&#127918;</div>
+      <div>
+        <h3>"레밍즈" 게임과의 연결</h3>
+        <p class="small">유사: 에이전트를 목적지로 인도. <strong>차이:</strong> 레밍즈는 간접 제어(스킬 부여), 본 연구는 직접 제어(이동 스케줄 지정).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2 fade-up d3" style="margin-top:8px">
+    <div class="card" style="text-align:center;padding:16px">
+      <h3 style="color:var(--muted);margin-bottom:8px">모델링 선택</h3>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="tag tag-blue" style="display:block">정적 vs 적대적 &rarr; 단일 수평선, 알려진 환경</div>
+        <div class="tag tag-green" style="display:block">결정적 vs 확률적 &rarr; 기본 구조 분리, 최악 분석</div>
+        <div class="tag tag-yellow" style="display:block">알려진 재충전 시간 &rarr; 역사 데이터로 추정 가능</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <h3 style="color:var(--muted);margin-bottom:8px">핵심 혁신</h3>
+      <p style="font-size:clamp(.9rem,2vw,1.1rem);color:var(--accent);font-weight:700;line-height:1.5">
+        "재충전 메커니즘"이<br>
+        기만적 희생 전략을 가능케 하여<br>
+        기존 문제와 근본적으로 다른<br>
+        계산 구조를 만들어냄
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SLIDE 11: 미래 연구 방향 ============ -->
+<div class="slide" data-slide="10">
+  <h2 class="fade-up">결론 및 미래 연구 방향</h2>
+  <p class="subtitle fade-up d1">풍부한 계산 복잡도 지형의 확립과 확장 가능성</p>
+
+  <div class="card card-accent fade-up d2">
+    <h3>주요 기여 요약</h3>
+    <ul>
+      <li>적대적 환경에서의 <strong>새로운 다중 에이전트 경로 계획 문제</strong> 정의</li>
+      <li>최적 계획의 <strong>다항식 길이</strong> 증명 &rarr; NP 포함 확립</li>
+      <li>일반 그래프와 트리에서의 <strong>NP-완전성</strong> 증명</li>
+      <li>특수 구조(경로, 분리경로, 별)에서의 <strong>다항 시간 알고리즘</strong> 제시</li>
+      <li>최대화 변형의 <strong>근사 불가능성</strong> 확립</li>
+    </ul>
+  </div>
+
+  <div class="grid3 fade-up d3">
+    <div class="card card-primary" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">&#127754;</div>
+      <h3 style="font-size:clamp(.85rem,2vw,1rem)">불확실성 도입</h3>
+      <p class="small">트랩 위치, 재충전 시간, 그래프 구조의 불확실성을 모델에 반영</p>
+    </div>
+    <div class="card card-warn" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">&#9889;</div>
+      <h3 style="font-size:clamp(.85rem,2vw,1rem)">휴리스틱 설계</h3>
+      <p class="small">근사 불가능성에도 불구하고 실용적인 휴리스틱과 근사 알고리즘 개발</p>
+    </div>
+    <div class="card card-danger" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">&#128506;</div>
+      <h3 style="font-size:clamp(.85rem,2vw,1rem)">다중 출발/도착</h3>
+      <p class="small">분산 공급 네트워크를 위한 다중 출발점과 목적지로 확장</p>
+    </div>
+  </div>
+
+  <div class="fade-up d4" style="margin-top:16px;text-align:center">
+    <div style="display:inline-block;padding:20px 40px;border-radius:16px;background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(6,214,160,.1));border:1px solid rgba(255,255,255,.08)">
+      <p class="small" style="margin-bottom:6px">논문 정보</p>
+      <p style="font-weight:700;color:var(--accent);font-size:clamp(.9rem,2vw,1.1rem)">Optimal Path Planning in Hostile Environments</p>
+      <p class="small" style="margin-top:4px">Kaczmarczyk, Schierreich, Tanujaya, Xu</p>
+      <p class="small">arXiv: 2603.18958v1 &middot; ICAPS 2026 &middot; 25 pages, 6 figures</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+// Build dot navigation
+const dotNav = document.getElementById('dotNav');
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+  d.onclick = () => goTo(i);
+  dotNav.appendChild(d);
+}
+
+function updateUI() {
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'prev');
+    if (i === current) s.classList.add('active');
+    else if (i < current) s.classList.add('prev');
+  });
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+  document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+}
+
+function goTo(n) {
+  if (n < 0 || n >= total) return;
+  current = n;
+  updateUI();
+}
+
+function navigate(dir) {
+  goTo(current + dir);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+});
+
+// Touch / swipe
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    navigate(dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+updateUI();
+</script>
+</body>
+</html>

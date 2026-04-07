@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>로봇 조작을 위한 하이브리드 프레임워크: RL과 LLM의 통합</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --primary: #0f172a;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --surface: #1e293b;
+    --surface2: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --gradient1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --gradient2: linear-gradient(135deg, #06b6d4, #10b981);
+    --gradient3: linear-gradient(135deg, #f59e0b, #ef4444);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--primary);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== 슬라이드 배경 ===== */
+  .slide::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .bg-grid::before {
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(59,130,246,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 50%);
+  }
+
+  .bg-cyber::before {
+    background-image:
+      radial-gradient(circle at 70% 30%, rgba(6,182,212,0.1) 0%, transparent 40%),
+      radial-gradient(circle at 30% 70%, rgba(16,185,129,0.08) 0%, transparent 40%);
+  }
+
+  /* ===== 타이포그래피 ===== */
+  .slide-number {
+    position: absolute;
+    top: 20px; right: 30px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    font-weight: 300;
+    z-index: 5;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2 .icon {
+    width: clamp(32px, 5vw, 44px);
+    height: clamp(32px, 5vw, 44px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.25rem);
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .highlight {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .highlight2 {
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    font-weight: 500;
+    margin: 3px;
+  }
+
+  .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+  .tag-purple { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+  .tag-cyan { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3); }
+  .tag-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+
+  /* ===== 카드 ===== */
+  .card {
+    background: rgba(30,41,59,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: clamp(16px, 3vw, 28px);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .card-accent {
+    border-left: 3px solid var(--accent);
+  }
+
+  .card-purple {
+    border-left: 3px solid var(--accent2);
+  }
+
+  .card-cyan {
+    border-left: 3px solid var(--accent3);
+  }
+
+  .card-green {
+    border-left: 3px solid var(--success);
+  }
+
+  /* ===== 그리드 ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2vw, 20px);
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: clamp(12px, 2vw, 20px);
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 2vw, 16px);
+    flex: 1;
+  }
+
+  /* ===== 표 ===== */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+  }
+
+  thead th {
+    background: rgba(59,130,246,0.15);
+    padding: clamp(10px, 2vw, 16px);
+    text-align: center;
+    font-weight: 700;
+    color: #60a5fa;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: clamp(10px, 2vw, 16px);
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  tbody tr:hover { background: rgba(59,130,246,0.05); }
+
+  .improve {
+    color: var(--success);
+    font-weight: 700;
+  }
+
+  /* ===== 프로그레스 바 ===== */
+  .bar-group { margin-bottom: clamp(12px, 2vw, 18px); }
+
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .bar-track {
+    height: clamp(16px, 3vw, 26px);
+    background: rgba(255,255,255,0.06);
+    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 13px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.6rem, 1.3vw, 0.75rem);
+    font-weight: 700;
+    color: white;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-blue { background: var(--gradient1); }
+  .bar-cyan { background: var(--gradient2); }
+
+  /* ===== 순서도 / 다이어그램 ===== */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1.5vw, 14px);
+    flex-wrap: wrap;
+    padding: clamp(12px, 2vw, 20px) 0;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: clamp(10px, 2vw, 18px) clamp(14px, 2.5vw, 24px);
+    text-align: center;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-weight: 500;
+    min-width: 80px;
+    position: relative;
+  }
+
+  .flow-node.accent { border-color: var(--accent); box-shadow: 0 0 20px rgba(59,130,246,0.15); }
+  .flow-node.purple { border-color: var(--accent2); box-shadow: 0 0 20px rgba(139,92,246,0.15); }
+  .flow-node.cyan { border-color: var(--accent3); box-shadow: 0 0 20px rgba(6,182,212,0.15); }
+  .flow-node.green { border-color: var(--success); box-shadow: 0 0 20px rgba(16,185,129,0.15); }
+
+  .flow-arrow {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--text-muted);
+  }
+
+  /* ===== 메트릭 카드 ===== */
+  .metric {
+    text-align: center;
+    padding: clamp(16px, 3vw, 30px);
+  }
+
+  .metric-value {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .metric-sub {
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    margin-top: 4px;
+  }
+
+  /* ===== 알고리즘 박스 ===== */
+  .algo-box {
+    background: rgba(15,23,42,0.8);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 12px;
+    padding: clamp(16px, 3vw, 24px);
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .algo-box .kw { color: #c084fc; font-weight: 700; }
+  .algo-box .fn { color: #60a5fa; }
+  .algo-box .cm { color: #6b7280; font-style: italic; }
+  .algo-box .num { color: var(--text-muted); margin-right: 12px; min-width: 20px; display: inline-block; }
+
+  /* ===== 타임라인 ===== */
+  .timeline {
+    position: relative;
+    padding-left: clamp(24px, 4vw, 40px);
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: clamp(8px, 1.5vw, 14px);
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: clamp(16px, 2.5vw, 24px);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: calc(clamp(8px, 1.5vw, 14px) - clamp(24px, 4vw, 40px));
+    top: 6px;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translateX(-4px);
+  }
+
+  .timeline-item:nth-child(2)::before { background: var(--accent2); }
+  .timeline-item:nth-child(3)::before { background: var(--accent3); }
+  .timeline-item:nth-child(4)::before { background: var(--success); }
+  .timeline-item:nth-child(5)::before { background: var(--warning); }
+
+  /* ===== 리스트 ===== */
+  .check-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .check-list li {
+    padding: clamp(8px, 1.5vw, 12px) 0;
+    padding-left: 30px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .check-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 6px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ===== 네비게이션 ===== */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px clamp(16px, 4vw, 30px);
+    background: linear-gradient(to top, rgba(15,23,42,0.95), rgba(15,23,42,0));
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .nav button {
+    pointer-events: auto;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(30,41,59,0.9);
+    color: var(--text);
+    border-radius: 12px;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav button:hover { background: rgba(59,130,246,0.2); border-color: var(--accent); }
+  .nav button:active { transform: scale(0.96); }
+  .nav button:disabled { opacity: 0.3; pointer-events: none; }
+
+  .progress-bar {
+    pointer-events: auto;
+    flex: 1;
+    max-width: 200px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin: 0 16px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .page-info {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    pointer-events: none;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== 애니메이션 ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.6s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.6s 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.6s 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.6s 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.6s 0.7s both; }
+
+  .floating { animation: float 3s ease-in-out infinite; }
+
+  /* ===== 장식 요소 ===== */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .deco-1 {
+    width: clamp(200px, 40vw, 500px);
+    height: clamp(200px, 40vw, 500px);
+    background: var(--accent);
+    top: -15%; right: -10%;
+  }
+
+  .deco-2 {
+    width: clamp(150px, 30vw, 350px);
+    height: clamp(150px, 30vw, 350px);
+    background: var(--accent2);
+    bottom: -10%; left: -5%;
+  }
+
+  /* ===== 구분선 ===== */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--gradient1);
+    border-radius: 2px;
+    margin: 12px 0;
+  }
+
+  /* ===== 미디어 쿼리 ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 35px 30px 80px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .flow { gap: 6px; }
+    .flow-node { padding: 8px 14px; min-width: 60px; }
+    h1 { margin-bottom: 8px; }
+    h2 { margin-bottom: 14px; }
+    .nav { padding: 10px 16px; }
+    .nav button { padding: 10px 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 25px 20px 80px; }
+    .card { padding: 14px; }
+    .slide-number { top: 10px; right: 16px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .metric-value { font-size: clamp(1.6rem, 10vw, 2.5rem); }
+    .nav button { min-width: 44px; min-height: 44px; padding: 8px 12px; font-size: 0.85rem; }
+    .progress-bar { max-width: 100px; }
+    .algo-box { padding: 12px; font-size: 0.68rem; }
+    table { font-size: 0.72rem; }
+    thead th, tbody td { padding: 8px 6px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 20px 14px 75px; }
+    .card { padding: 12px; border-radius: 10px; }
+    h2 { gap: 8px; }
+    h2 .icon { width: 28px; height: 28px; border-radius: 8px; font-size: 0.85rem; }
+    .nav button { padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; }
+    .flow-node { font-size: 0.7rem; padding: 6px 10px; }
+    .bar-track { height: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ==================== 슬라이드 1: 표지 ==================== -->
+  <div class="slide active bg-grid" data-slide="0">
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="slide-number">01 / 12</div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+      <div class="anim-1" style="margin-bottom: 20px;">
+        <span class="tag tag-blue">cs.RO</span>
+        <span class="tag tag-purple">cs.AI</span>
+        <span class="tag tag-cyan">arXiv: 2603.30022</span>
+      </div>
+      <h1 class="anim-2" style="font-size: clamp(1.6rem, 4.5vw, 3.2rem);">
+        로봇 조작을 위한<br>
+        <span class="highlight">하이브리드 프레임워크</span>
+      </h1>
+      <p class="subtitle anim-3" style="margin-top:12px; max-width: 700px;">
+        강화학습(RL)과 대규모 언어모델(LLM)의 통합을 통한<br>로봇 매니퓰레이션 성능 혁신
+      </p>
+      <div class="divider anim-4" style="margin-top:24px;"></div>
+      <div class="anim-4" style="margin-top: 20px;">
+        <p style="font-size: clamp(0.8rem, 1.8vw, 1rem); color: var(--text-muted);">
+          Md Saad &middot; Sajjad Hussain &middot; Mohd Suhaib
+        </p>
+        <p style="font-size: clamp(0.7rem, 1.5vw, 0.85rem); color: var(--text-muted); margin-top:6px;">
+          2026년 3월 31일 &middot; CC BY 4.0
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 2: 핵심 성과 ==================== -->
+  <div class="slide bg-cyber" data-slide="1">
+    <div class="slide-number">02 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:var(--gradient2);">&#9733;</span>
+      핵심 성과 요약
+    </h2>
+    <div class="grid-3 anim-2" style="flex:1; align-content:center;">
+      <div class="card metric">
+        <div class="metric-value" style="color: #60a5fa;">33.5%</div>
+        <div class="divider" style="margin: 10px auto;"></div>
+        <div class="metric-label">작업 완료 시간 단축</div>
+        <div class="metric-sub" style="color:#60a5fa;">18.5s → 12.3s</div>
+      </div>
+      <div class="card metric">
+        <div class="metric-value" style="color: #a78bfa;">18.1%</div>
+        <div class="divider" style="margin: 10px auto; background:var(--gradient1);"></div>
+        <div class="metric-label">정확도 향상</div>
+        <div class="metric-sub" style="color:#a78bfa;">78.4% → 92.6%</div>
+      </div>
+      <div class="card metric">
+        <div class="metric-value" style="color: #34d399;">36.4%</div>
+        <div class="divider" style="margin: 10px auto; background:var(--gradient2);"></div>
+        <div class="metric-label">적응성 향상</div>
+        <div class="metric-sub" style="color:#34d399;">65.2% → 88.9%</div>
+      </div>
+    </div>
+    <p class="anim-3 subtitle" style="text-align:center; margin-top:16px;">
+      PyBullet 시뮬레이션 &middot; Franka Emika Panda 로봇팔 기반 실험
+    </p>
+  </div>
+
+  <!-- ==================== 슬라이드 3: 연구 동기 ==================== -->
+  <div class="slide bg-grid" data-slide="2">
+    <div class="slide-number">03 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(245,158,11,0.2); color:#fbbf24;">?</span>
+      연구 동기 및 문제 정의
+    </h2>
+    <div class="grid-2 anim-2" style="flex:1;">
+      <div class="card card-accent">
+        <h3>강화학습(RL)의 한계</h3>
+        <ul class="check-list">
+          <li>저수준 조작 제어에 탁월</li>
+          <li>의미론적 이해 능력 부족</li>
+          <li>자연어 명령 처리 불가</li>
+          <li>동적 환경 적응 어려움</li>
+        </ul>
+      </div>
+      <div class="card card-purple">
+        <h3>대규모 언어모델(LLM)의 한계</h3>
+        <ul class="check-list">
+          <li>고수준 추론 및 계획 가능</li>
+          <li>물리적 작업 직접 실행 불가</li>
+          <li>로봇 제어 신호 생성 미흡</li>
+          <li>실시간 환경 상호작용 부재</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card anim-3" style="margin-top:16px; text-align:center; background:rgba(59,130,246,0.06); border-color:rgba(59,130,246,0.15);">
+      <p style="font-weight:500;">
+        "RL과 LLM을 결합하여 보다 지능적이고 적응력 있는<br>로봇 시스템을 개발할 기회는 아직 완전히 탐구되지 않았다"
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 4: 관련 연구 ==================== -->
+  <div class="slide bg-cyber" data-slide="3">
+    <div class="slide-number">04 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(6,182,212,0.2); color:#22d3ee;">&#9776;</span>
+      관련 연구
+    </h2>
+    <div class="flex-col" style="flex:1;">
+      <div class="grid-2 anim-2">
+        <div class="card card-accent">
+          <h3>RL 기반 조작</h3>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.9rem);">
+            <li><strong>Gomes et al.</strong> — Deep RL 픽앤플레이스, 84% 정확도</li>
+            <li><strong>Shahid et al.</strong> — PPO/SAC로 100% 그래스핑 성공</li>
+          </ul>
+        </div>
+        <div class="card card-purple">
+          <h3>LLM 통합 접근법</h3>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.9rem);">
+            <li><strong>Lafite-RL</strong> — LLM 피드백으로 RL 훈련 가속</li>
+            <li><strong>Liu et al.</strong> — 자기교정 멀티모달 LLM (79% 정확도)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-cyan anim-3">
+        <h3>최근 하이브리드 접근법</h3>
+        <div class="grid-2" style="margin-top:8px;">
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.9rem);">
+            <li><strong>SayCan</strong> — 실현 가능성 점수로 LLM 계획 근거 확보</li>
+            <li><strong>InnerMonologue</strong> — 내부 과제 추론 메커니즘</li>
+          </ul>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.9rem);">
+            <li><strong>ROS-LLM</strong> — LLM과 ROS 연결</li>
+            <li><strong>PromptIRL</strong> — 언어 프롬프트로 보상 함수 추론</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 5: 프레임워크 아키텍처 ==================== -->
+  <div class="slide bg-grid" data-slide="4">
+    <div class="slide-number">05 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:var(--gradient1);">&#9881;</span>
+      프레임워크 아키텍처
+    </h2>
+    <div class="grid-3 anim-2" style="margin-bottom:20px;">
+      <div class="card" style="text-align:center; border-top:3px solid var(--accent);">
+        <div style="font-size:clamp(1.5rem,3vw,2rem); margin-bottom:8px;">&#129504;</div>
+        <h3 style="color:var(--accent);">작업 계획기</h3>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">
+          LLM 기반<br>자연어 해석<br>작업 분해
+        </p>
+      </div>
+      <div class="card" style="text-align:center; border-top:3px solid var(--accent2);">
+        <div style="font-size:clamp(1.5rem,3vw,2rem); margin-bottom:8px;">&#129302;</div>
+        <h3 style="color:var(--accent2);">스킬 실행기</h3>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">
+          RL 기반<br>정밀 하위작업 실행<br>정책 최적화
+        </p>
+      </div>
+      <div class="card" style="text-align:center; border-top:3px solid var(--accent3);">
+        <div style="font-size:clamp(1.5rem,3vw,2rem); margin-bottom:8px;">&#127759;</div>
+        <h3 style="color:var(--accent3);">시뮬레이션 환경</h3>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">
+          PyBullet 플랫폼<br>Franka Panda<br>센서 시뮬레이션
+        </p>
+      </div>
+    </div>
+    <div class="flow anim-3">
+      <div class="flow-node accent">자연어 입력</div>
+      <div class="flow-arrow">&#10142;</div>
+      <div class="flow-node purple">LLM 작업 분해</div>
+      <div class="flow-arrow">&#10142;</div>
+      <div class="flow-node cyan">RL 실행</div>
+      <div class="flow-arrow">&#10142;</div>
+      <div class="flow-node green">결과 피드백</div>
+      <div class="flow-arrow" style="color:var(--warning);">&#8635;</div>
+      <div class="flow-node" style="border-color:var(--warning); font-size:clamp(0.7rem,1.5vw,0.85rem);">적응적 재계획</div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 6: RL 모듈 상세 ==================== -->
+  <div class="slide bg-cyber" data-slide="5">
+    <div class="slide-number">06 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(59,130,246,0.2); color:#60a5fa;">&#9889;</span>
+      강화학습 모듈
+    </h2>
+    <div class="grid-2 anim-2" style="flex:1;">
+      <div class="flex-col">
+        <div class="card card-accent">
+          <h3>알고리즘</h3>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <span class="tag tag-blue" style="font-size:clamp(0.8rem,1.8vw,1rem); padding:8px 18px;">PPO</span>
+            <span class="tag tag-purple" style="font-size:clamp(0.8rem,1.8vw,1rem); padding:8px 18px;">SAC</span>
+          </div>
+          <p style="margin-top:10px; font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-muted);">
+            Proximal Policy Optimization &<br>Soft Actor-Critic
+          </p>
+        </div>
+        <div class="card card-accent">
+          <h3>상태 표현</h3>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.85rem);">
+            <li>관절 위치 및 속도</li>
+            <li>객체 위치 정보</li>
+            <li>환경 인지 데이터</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex-col">
+        <div class="card card-accent">
+          <h3>행동 선택</h3>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-muted);">
+            정책 기반 최적 행동 결정을 통한 객체 조작. 에피소드별 학습으로 정책을 지속적으로 개선합니다.
+          </p>
+        </div>
+        <div class="card card-accent">
+          <h3>보상 함수</h3>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-muted);">
+            효율적이고 정확한 작업 완료를 유도하도록 맞춤 설계된 보상 체계
+          </p>
+        </div>
+        <div class="card card-accent">
+          <h3>센서 입력</h3>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.85rem);">
+            <li>깊이 카메라</li>
+            <li>힘/토크 센서</li>
+            <li>관절 피드백</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 7: LLM 모듈 상세 ==================== -->
+  <div class="slide bg-grid" data-slide="6">
+    <div class="slide-number">07 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(139,92,246,0.2); color:#a78bfa;">&#128172;</span>
+      대규모 언어모델 모듈
+    </h2>
+    <div class="flex-col anim-2" style="flex:1;">
+      <div class="card card-purple">
+        <h3>GPT 기반 아키텍처</h3>
+        <p style="font-size:clamp(0.8rem,1.8vw,1rem); color:var(--text-muted);">자연어 명령을 구조화된 로봇 작업 시퀀스로 변환</p>
+      </div>
+      <div class="card" style="background:rgba(139,92,246,0.05); border:1px solid rgba(139,92,246,0.15);">
+        <h3 style="color:var(--accent2);">작업 분해 예시</h3>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
+          <div style="background:rgba(139,92,246,0.08); border-radius:10px; padding:clamp(10px,2vw,16px); border-left:3px solid var(--accent2);">
+            <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); font-weight:500; color:#a78bfa;">입력</p>
+            <p style="font-size:clamp(0.8rem,1.8vw,1rem);">"빨간 큐브를 집어서 파란 플랫폼 위에 올려놓으세요"</p>
+          </div>
+          <div style="text-align:center; font-size:1.3rem; color:var(--text-muted);">&#8595;</div>
+          <div class="grid-3" style="gap:8px;">
+            <div style="background:var(--surface); border-radius:10px; padding:clamp(8px,1.5vw,14px); text-align:center; border:1px solid rgba(59,130,246,0.2);">
+              <p style="font-size:clamp(0.65rem,1.3vw,0.75rem); color:var(--accent); font-weight:700;">STEP 1</p>
+              <p style="font-size:clamp(0.75rem,1.6vw,0.85rem);">큐브로 이동</p>
+            </div>
+            <div style="background:var(--surface); border-radius:10px; padding:clamp(8px,1.5vw,14px); text-align:center; border:1px solid rgba(139,92,246,0.2);">
+              <p style="font-size:clamp(0.65rem,1.3vw,0.75rem); color:var(--accent2); font-weight:700;">STEP 2</p>
+              <p style="font-size:clamp(0.75rem,1.6vw,0.85rem);">큐브 잡기</p>
+            </div>
+            <div style="background:var(--surface); border-radius:10px; padding:clamp(8px,1.5vw,14px); text-align:center; border:1px solid rgba(16,185,129,0.2);">
+              <p style="font-size:clamp(0.65rem,1.3vw,0.75rem); color:var(--success); font-weight:700;">STEP 3</p>
+              <p style="font-size:clamp(0.75rem,1.6vw,0.85rem);">목표 위치 이동</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-3 anim-3">
+        <div class="card" style="text-align:center; padding:clamp(12px,2vw,18px);">
+          <p style="font-size:clamp(1.2rem,2.5vw,1.6rem);">&#128483;</p>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); font-weight:600;">작업 해석</p>
+        </div>
+        <div class="card" style="text-align:center; padding:clamp(12px,2vw,18px);">
+          <p style="font-size:clamp(1.2rem,2.5vw,1.6rem);">&#128256;</p>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); font-weight:600;">작업 분해</p>
+        </div>
+        <div class="card" style="text-align:center; padding:clamp(12px,2vw,18px);">
+          <p style="font-size:clamp(1.2rem,2.5vw,1.6rem);">&#128221;</p>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); font-weight:600;">명령 시퀀스 생성</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 8: 알고리즘 ==================== -->
+  <div class="slide bg-cyber" data-slide="7">
+    <div class="slide-number">08 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(16,185,129,0.2); color:#34d399;">&#9998;</span>
+      통합 알고리즘
+    </h2>
+    <div class="anim-2" style="flex:1; display:flex; flex-direction:column; gap:16px;">
+      <div class="algo-box">
+        <div><span class="num">1</span><span class="kw">초기화</span> LLM, RL 에이전트</div>
+        <div><span class="num">2</span><span class="kw">초기화</span> 시뮬레이션 환경 (PyBullet)</div>
+        <div><span class="num">3</span><span class="kw">while</span> 작업 미완료 <span class="kw">do</span></div>
+        <div><span class="num">4</span>&nbsp;&nbsp;<span class="fn">자연어 명령 파싱</span> ← LLM</div>
+        <div><span class="num">5</span>&nbsp;&nbsp;<span class="fn">하위작업 시퀀스 생성</span></div>
+        <div><span class="num">6</span>&nbsp;&nbsp;<span class="kw">for all</span> 하위작업 <span class="kw">do</span></div>
+        <div><span class="num">7</span>&nbsp;&nbsp;&nbsp;&nbsp;RL 에이전트에 <span class="fn">하위작업 실행 쿼리</span></div>
+        <div><span class="num">8</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">환경 상태 모니터링</span></div>
+        <div><span class="num">9</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> 환경 변화 감지 <span class="kw">then</span></div>
+        <div><span class="num">10</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLM을 통해 <span class="fn">작업 계획 갱신</span></div>
+        <div><span class="num">11</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">end if</span></div>
+        <div><span class="num">12</span>&nbsp;&nbsp;<span class="kw">end for</span></div>
+        <div><span class="num">13</span><span class="kw">end while</span></div>
+        <div><span class="num">14</span><span class="kw">return</span> 완료 상태</div>
+      </div>
+      <div class="card anim-3" style="background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15);">
+        <p style="font-size:clamp(0.8rem,1.8vw,0.95rem);">
+          <strong style="color:var(--success);">핵심 특징:</strong>
+          LLM이 환경 변화를 지속적으로 모니터링하고, 변화 감지 시 즉시 작업 계획을 재수립하는 <strong>적응적 피드백 루프</strong>를 구현
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 9: 실험 환경 ==================== -->
+  <div class="slide bg-grid" data-slide="8">
+    <div class="slide-number">09 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(245,158,11,0.2); color:#fbbf24;">&#128300;</span>
+      실험 환경
+    </h2>
+    <div class="grid-2 anim-2" style="flex:1;">
+      <div class="flex-col">
+        <div class="card card-cyan">
+          <h3 style="color:var(--accent3);">시뮬레이션 플랫폼</h3>
+          <p style="font-size:clamp(0.8rem,1.8vw,1rem); font-weight:700; margin:8px 0;">PyBullet</p>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">물리 기반 시뮬레이션 환경으로 현실적인 로봇 조작 시나리오 구현</p>
+        </div>
+        <div class="card card-cyan">
+          <h3 style="color:var(--accent3);">로봇 하드웨어</h3>
+          <p style="font-size:clamp(0.8rem,1.8vw,1rem); font-weight:700; margin:8px 0;">Franka Emika Panda</p>
+          <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">7자유도 협동 로봇팔. 정밀성과 유연성으로 선정</p>
+        </div>
+      </div>
+      <div class="flex-col">
+        <div class="card card-green">
+          <h3 style="color:var(--success);">작업 카테고리</h3>
+          <ul class="check-list">
+            <li>픽앤플레이스 (Pick-and-Place)</li>
+            <li>객체 정렬 (Object Sorting)</li>
+            <li>동적 장애물 회피</li>
+          </ul>
+        </div>
+        <div class="card card-green">
+          <h3 style="color:var(--success);">센서 시뮬레이션</h3>
+          <ul class="check-list">
+            <li>깊이 카메라 (Depth Camera)</li>
+            <li>힘/토크 센서 (Force Sensor)</li>
+            <li>관절 위치/속도 피드백</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 10: 실험 결과 ==================== -->
+  <div class="slide bg-cyber" data-slide="9">
+    <div class="slide-number">10 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:var(--gradient1);">&#128200;</span>
+      실험 결과
+    </h2>
+    <div class="anim-2" style="margin-bottom:20px;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>평가 지표</th>
+              <th>RL 단독</th>
+              <th>LLM + RL</th>
+              <th>개선율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:left; font-weight:500;">작업 완료 시간 (초)</td>
+              <td>18.5</td>
+              <td style="font-weight:700;">12.3</td>
+              <td class="improve">&#9660; 33.5%</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; font-weight:500;">정확도 (%)</td>
+              <td>78.4</td>
+              <td style="font-weight:700;">92.6</td>
+              <td class="improve">&#9650; 18.1%</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; font-weight:500;">적응성 (%)</td>
+              <td>65.2</td>
+              <td style="font-weight:700;">88.9</td>
+              <td class="improve">&#9650; 36.4%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="anim-3" style="flex:1;">
+      <div class="bar-group">
+        <div class="bar-label"><span>작업 완료 시간</span><span style="color:#60a5fa;">12.3s vs 18.5s</span></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-cyan" style="--w:66.5%;">RL+LLM</div>
+        </div>
+        <div class="bar-track" style="margin-top:4px;">
+          <div class="bar-fill bar-blue" style="--w:100%; opacity:0.4;">RL Only</div>
+        </div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>정확도</span><span style="color:#a78bfa;">92.6% vs 78.4%</span></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-cyan" style="--w:92.6%;">RL+LLM</div>
+        </div>
+        <div class="bar-track" style="margin-top:4px;">
+          <div class="bar-fill bar-blue" style="--w:78.4%; opacity:0.4;">RL Only</div>
+        </div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>적응성</span><span style="color:#34d399;">88.9% vs 65.2%</span></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-cyan" style="--w:88.9%;">RL+LLM</div>
+        </div>
+        <div class="bar-track" style="margin-top:4px;">
+          <div class="bar-fill bar-blue" style="--w:65.2%; opacity:0.4;">RL Only</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 11: 안정성 & 학습 ==================== -->
+  <div class="slide bg-grid" data-slide="10">
+    <div class="slide-number">11 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:rgba(6,182,212,0.2); color:#22d3ee;">&#128202;</span>
+      안정성 및 학습 진행
+    </h2>
+    <div class="grid-2 anim-2" style="flex:1;">
+      <div class="card card-accent">
+        <h3>작업 완료 시간 안정성</h3>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-muted); margin-bottom:14px;">
+          10회 실험 결과
+        </p>
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+          <div style="flex:1; text-align:center; padding:12px; background:rgba(59,130,246,0.08); border-radius:10px;">
+            <p style="font-size:clamp(0.65rem,1.3vw,0.75rem); color:var(--text-muted);">RL 단독</p>
+            <p style="font-size:clamp(1.1rem,2.5vw,1.5rem); font-weight:700; color:#60a5fa;">17.5~19s</p>
+            <p style="font-size:clamp(0.6rem,1.2vw,0.7rem); color:var(--danger);">높은 변동성</p>
+          </div>
+          <div style="flex:1; text-align:center; padding:12px; background:rgba(16,185,129,0.08); border-radius:10px;">
+            <p style="font-size:clamp(0.65rem,1.3vw,0.75rem); color:var(--text-muted);">LLM + RL</p>
+            <p style="font-size:clamp(1.1rem,2.5vw,1.5rem); font-weight:700; color:#34d399;">~12s</p>
+            <p style="font-size:clamp(0.6rem,1.2vw,0.7rem); color:var(--success);">일관된 성능</p>
+          </div>
+        </div>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted);">
+          하이브리드 시스템은 안정적이고 신뢰할 수 있는 성능을 보임
+        </p>
+      </div>
+      <div class="card card-purple">
+        <h3>누적 보상 학습 곡선</h3>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-muted); margin-bottom:14px;">
+          100 에피소드 기준
+        </p>
+        <div style="position:relative; height:140px; background:rgba(15,23,42,0.5); border-radius:10px; padding:12px; overflow:hidden;">
+          <!-- 간이 차트 -->
+          <svg viewBox="0 0 300 100" style="width:100%; height:100%;" preserveAspectRatio="none">
+            <!-- RL Only -->
+            <polyline fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.5"
+              points="0,90 30,82 60,75 90,68 120,62 150,58 180,54 210,51 240,49 270,47 300,46"/>
+            <!-- LLM+RL -->
+            <polyline fill="none" stroke="#22d3ee" stroke-width="2.5"
+              points="0,88 30,72 60,58 90,45 120,35 150,27 180,21 210,16 240,13 270,11 300,8"/>
+            <!-- 범례 배경 -->
+            <rect x="180" y="68" width="115" height="32" rx="4" fill="rgba(15,23,42,0.8)"/>
+            <line x1="188" y1="78" x2="208" y2="78" stroke="#22d3ee" stroke-width="2"/>
+            <text x="214" y="82" fill="#94a3b8" font-size="9" font-family="sans-serif">LLM + RL</text>
+            <line x1="188" y1="92" x2="208" y2="92" stroke="#3b82f6" stroke-width="2" opacity="0.5"/>
+            <text x="214" y="96" fill="#94a3b8" font-size="9" font-family="sans-serif">RL Only</text>
+          </svg>
+        </div>
+        <p style="font-size:clamp(0.75rem,1.6vw,0.85rem); color:var(--text-muted); margin-top:10px;">
+          LLM+RL 시스템이 더 빠르고 높은 누적 보상 달성
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 슬라이드 12: 한계 & 결론 ==================== -->
+  <div class="slide bg-cyber" data-slide="11">
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="slide-number">12 / 12</div>
+    <h2 class="anim-1">
+      <span class="icon" style="background:var(--gradient2);">&#127919;</span>
+      결론 및 향후 연구
+    </h2>
+    <div class="grid-2 anim-2" style="flex:1;">
+      <div class="flex-col">
+        <div class="card card-green">
+          <h3 style="color:var(--success);">핵심 결론</h3>
+          <ul class="check-list">
+            <li>RL과 LLM의 결합이 로봇 조작 성능을 <strong>크게 향상</strong></li>
+            <li>자연어 명령을 처리하면서 <strong>정밀한 물리적 실행</strong> 가능</li>
+            <li>양방향 피드백으로 <strong>동적 환경 적응</strong> 달성</li>
+            <li>모든 평가 지표에서 <strong>일관된 성능 개선</strong> 확인</li>
+          </ul>
+        </div>
+        <div class="card" style="background:rgba(245,158,11,0.05); border:1px solid rgba(245,158,11,0.15);">
+          <h3 style="color:var(--warning);">한계점</h3>
+          <ul class="check-list" style="font-size:clamp(0.75rem,1.6vw,0.85rem);">
+            <li>시뮬레이션 환경에서만 검증</li>
+            <li>단일 로봇 플랫폼 (Franka Panda)</li>
+            <li>명시적 제거 실험(Ablation) 미수행</li>
+            <li>실패 사례 분석 미흡</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex-col">
+        <div class="card card-cyan">
+          <h3 style="color:var(--accent3);">향후 연구 방향</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <p style="font-weight:600; font-size:clamp(0.8rem,1.8vw,0.95rem);">실세계 전이 (Sim-to-Real)</p>
+              <p style="font-size:clamp(0.7rem,1.5vw,0.8rem); color:var(--text-muted);">시뮬레이션에서 실제 로봇으로의 전이 학습</p>
+            </div>
+            <div class="timeline-item">
+              <p style="font-weight:600; font-size:clamp(0.8rem,1.8vw,0.95rem);">다중 로봇 시스템</p>
+              <p style="font-size:clamp(0.7rem,1.5vw,0.8rem); color:var(--text-muted);">여러 로봇의 협업 조작으로 확장</p>
+            </div>
+            <div class="timeline-item">
+              <p style="font-weight:600; font-size:clamp(0.8rem,1.8vw,0.95rem);">확장성 개선</p>
+              <p style="font-size:clamp(0.7rem,1.5vw,0.8rem); color:var(--text-muted);">더 복잡한 작업 도메인으로 확대</p>
+            </div>
+            <div class="timeline-item">
+              <p style="font-weight:600; font-size:clamp(0.8rem,1.8vw,0.95rem);">실용성 향상</p>
+              <p style="font-size:clamp(0.7rem,1.5vw,0.8rem); color:var(--text-muted);">실제 배포를 위한 프레임워크 최적화</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== 네비게이션 ===== -->
+<nav class="nav">
+  <button id="prevBtn" onclick="navigate(-1)" disabled>&#8592; 이전</button>
+  <div class="progress-bar" id="progressBar" onclick="jumpToSlide(event)">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="page-info" id="pageInfo">1 / 12</span>
+  <button id="nextBtn" onclick="navigate(1)">다음 &#8594;</button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function show(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(idx > current ? 'prev' : '');
+    current = idx;
+    slides[current].className = slides[current].className.replace(/\bprev\b/g, '');
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('pageInfo').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  window.navigate = function(dir) { show(current + dir); };
+
+  window.jumpToSlide = function(e) {
+    var bar = document.getElementById('progressBar');
+    var rect = bar.getBoundingClientRect();
+    var ratio = (e.clientX - rect.left) / rect.width;
+    show(Math.min(total - 1, Math.max(0, Math.floor(ratio * total))));
+  };
+
+  // 키보드 + 터치 제스처
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? navigate(1) : navigate(-1);
+    }
+  }, { passive: true });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

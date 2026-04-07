@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>De Jure: 규제 규칙의 구조화된 추출을 위한 반복적 LLM 자기 개선</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg-primary:#0a0e1a;
+    --bg-card:rgba(20,28,58,0.85);
+    --accent:#4fc3f7;
+    --accent2:#7c4dff;
+    --accent3:#00e5ff;
+    --gold:#ffd54f;
+    --text:#e8eaf6;
+    --text-dim:#90a4ae;
+    --gradient:linear-gradient(135deg,#1a237e,#0d47a1,#006064);
+    --card-border:rgba(79,195,247,0.25);
+    --shadow:0 8px 32px rgba(0,0,0,0.4);
+  }
+  html{font-size:16px;scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg-primary);
+    color:var(--text);
+    overflow-x:hidden;
+    overflow-y:hidden;
+    height:100vh;width:100vw;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .slide-container{
+    position:relative;width:100%;height:100vh;overflow:hidden;
+  }
+  .slide{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    display:flex;flex-direction:column;
+    padding:clamp(20px,4vh,60px) clamp(20px,4vw,80px);
+    opacity:0;transform:translateX(60px);
+    transition:opacity 0.5s ease,transform 0.5s ease;
+    pointer-events:none;
+    overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  .slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+  .slide.prev{opacity:0;transform:translateX(-60px)}
+
+  /* Background effects */
+  .bg-mesh{
+    position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+    background:
+      radial-gradient(ellipse at 20% 50%,rgba(26,35,126,0.4) 0%,transparent 60%),
+      radial-gradient(ellipse at 80% 20%,rgba(0,96,100,0.3) 0%,transparent 50%),
+      radial-gradient(ellipse at 50% 80%,rgba(124,77,255,0.2) 0%,transparent 50%),
+      var(--bg-primary);
+  }
+  .slide{z-index:1;position:absolute;}
+
+  /* Typography */
+  .slide-number{
+    font-size:clamp(0.65rem,1.2vw,0.8rem);color:var(--accent);
+    font-weight:700;letter-spacing:3px;text-transform:uppercase;
+    margin-bottom:clamp(6px,1vh,12px);
+  }
+  h1{
+    font-size:clamp(1.6rem,4.5vw,3.2rem);font-weight:800;
+    line-height:1.15;margin-bottom:clamp(10px,2vh,24px);
+    background:linear-gradient(135deg,#fff,var(--accent),var(--accent3));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  h2{
+    font-size:clamp(1.3rem,3.5vw,2.4rem);font-weight:700;
+    line-height:1.2;margin-bottom:clamp(8px,1.5vh,20px);
+    color:#fff;
+  }
+  h3{
+    font-size:clamp(1rem,2.5vw,1.5rem);font-weight:600;
+    color:var(--accent);margin-bottom:clamp(6px,1vh,14px);
+  }
+  p,.desc{
+    font-size:clamp(0.85rem,2vw,1.1rem);line-height:1.65;
+    color:var(--text-dim);max-width:800px;
+  }
+  .highlight{color:var(--accent);font-weight:600}
+  .highlight2{color:var(--accent2);font-weight:600}
+  .highlight3{color:var(--gold);font-weight:600}
+
+  /* Cards */
+  .card-grid{
+    display:grid;gap:clamp(10px,2vw,20px);
+    margin-top:clamp(10px,2vh,20px);flex:1;
+    align-content:start;
+  }
+  .card-grid.cols-2{grid-template-columns:repeat(2,1fr)}
+  .card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .card-grid.cols-4{grid-template-columns:repeat(4,1fr)}
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--card-border);
+    border-radius:clamp(10px,1.5vw,16px);
+    padding:clamp(14px,2.5vw,28px);
+    backdrop-filter:blur(12px);
+    transition:transform 0.3s,border-color 0.3s;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .card .icon{
+    font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:clamp(6px,1vh,12px);
+    display:block;
+  }
+  .card h3{margin-bottom:clamp(4px,0.8vh,10px)}
+  .card p{font-size:clamp(0.78rem,1.8vw,0.95rem);line-height:1.55}
+
+  /* Pipeline */
+  .pipeline{
+    display:flex;flex-direction:column;gap:clamp(10px,1.5vh,16px);
+    margin-top:clamp(10px,2vh,20px);flex:1;
+  }
+  .pipe-step{
+    display:flex;align-items:flex-start;gap:clamp(12px,2vw,24px);
+    background:var(--bg-card);border:1px solid var(--card-border);
+    border-radius:clamp(10px,1.5vw,16px);
+    padding:clamp(12px,2vw,24px);
+    position:relative;
+    animation:fadeSlideUp 0.5s ease both;
+  }
+  .pipe-step:nth-child(1){animation-delay:0.1s}
+  .pipe-step:nth-child(2){animation-delay:0.2s}
+  .pipe-step:nth-child(3){animation-delay:0.3s}
+  .pipe-step:nth-child(4){animation-delay:0.4s}
+  .pipe-num{
+    min-width:clamp(36px,5vw,52px);height:clamp(36px,5vw,52px);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:clamp(1rem,2.5vw,1.4rem);
+    background:linear-gradient(135deg,var(--accent2),var(--accent));
+    color:#fff;flex-shrink:0;
+  }
+  .pipe-content h3{margin-bottom:4px}
+  .pipe-content p{font-size:clamp(0.78rem,1.8vw,0.92rem)}
+
+  /* Metrics bar */
+  .metric-bar{
+    display:flex;flex-direction:column;gap:clamp(8px,1.2vh,14px);
+    margin-top:clamp(10px,2vh,20px);
+  }
+  .metric-row{display:flex;align-items:center;gap:clamp(8px,1.5vw,16px)}
+  .metric-label{
+    min-width:clamp(80px,15vw,140px);
+    font-size:clamp(0.78rem,1.8vw,0.95rem);
+    font-weight:600;color:var(--text);
+  }
+  .metric-track{
+    flex:1;height:clamp(22px,3vh,32px);
+    background:rgba(255,255,255,0.08);
+    border-radius:20px;overflow:hidden;position:relative;
+  }
+  .metric-fill{
+    height:100%;border-radius:20px;
+    display:flex;align-items:center;justify-content:flex-end;
+    padding-right:clamp(8px,1vw,14px);
+    font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;color:#fff;
+    transition:width 1.2s ease;
+  }
+  .fill-blue{background:linear-gradient(90deg,#1565c0,var(--accent))}
+  .fill-purple{background:linear-gradient(90deg,#4527a0,var(--accent2))}
+  .fill-teal{background:linear-gradient(90deg,#00695c,var(--accent3))}
+  .fill-gold{background:linear-gradient(90deg,#e65100,var(--gold))}
+
+  /* Tag */
+  .tag{
+    display:inline-block;
+    padding:clamp(3px,0.5vh,6px) clamp(10px,1.5vw,16px);
+    border-radius:20px;font-size:clamp(0.7rem,1.6vw,0.82rem);
+    font-weight:600;margin:3px;
+  }
+  .tag-blue{background:rgba(79,195,247,0.15);color:var(--accent);border:1px solid rgba(79,195,247,0.3)}
+  .tag-purple{background:rgba(124,77,255,0.15);color:var(--accent2);border:1px solid rgba(124,77,255,0.3)}
+  .tag-gold{background:rgba(255,213,79,0.15);color:var(--gold);border:1px solid rgba(255,213,79,0.3)}
+
+  /* Table */
+  .data-table{
+    width:100%;border-collapse:collapse;
+    margin-top:clamp(10px,2vh,20px);
+    font-size:clamp(0.75rem,1.7vw,0.92rem);
+  }
+  .data-table th{
+    background:rgba(79,195,247,0.12);color:var(--accent);
+    padding:clamp(8px,1.2vh,14px) clamp(10px,1.5vw,18px);
+    text-align:left;font-weight:700;
+    border-bottom:2px solid var(--card-border);
+  }
+  .data-table td{
+    padding:clamp(8px,1vh,12px) clamp(10px,1.5vw,18px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    color:var(--text-dim);
+  }
+  .data-table tr:hover td{background:rgba(79,195,247,0.05)}
+  .best{color:var(--accent3);font-weight:700}
+
+  /* Iteration chart */
+  .iter-chart{
+    display:flex;align-items:flex-end;gap:clamp(6px,1.5vw,16px);
+    height:clamp(140px,25vh,220px);
+    margin-top:clamp(14px,2vh,24px);
+    padding:clamp(10px,1.5vw,20px);
+    background:var(--bg-card);border:1px solid var(--card-border);
+    border-radius:16px;
+  }
+  .iter-col{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:flex-end;height:100%;position:relative;
+  }
+  .iter-bar{
+    width:100%;max-width:60px;border-radius:8px 8px 0 0;
+    transition:height 1s ease;position:relative;
+  }
+  .iter-bar .val{
+    position:absolute;top:-24px;left:50%;transform:translateX(-50%);
+    font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;color:#fff;
+    white-space:nowrap;
+  }
+  .iter-label{
+    margin-top:8px;
+    font-size:clamp(0.65rem,1.4vw,0.8rem);
+    color:var(--text-dim);text-align:center;
+  }
+
+  /* Dimension grid */
+  .dim-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(130px,20vw,180px),1fr));
+    gap:clamp(6px,1vw,10px);margin-top:clamp(10px,1.5vh,16px);
+  }
+  .dim-item{
+    background:var(--bg-card);border:1px solid var(--card-border);
+    border-radius:10px;padding:clamp(8px,1.2vw,14px);
+    font-size:clamp(0.7rem,1.6vw,0.85rem);
+    color:var(--text-dim);display:flex;align-items:center;gap:8px;
+  }
+  .dim-item .num{
+    color:var(--accent);font-weight:800;
+    font-size:clamp(0.7rem,1.5vw,0.82rem);min-width:22px;
+  }
+
+  /* Nav */
+  .nav{
+    position:fixed;bottom:clamp(14px,3vh,30px);left:50%;transform:translateX(-50%);
+    z-index:100;display:flex;align-items:center;gap:clamp(8px,2vw,16px);
+    background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);
+    border:1px solid var(--card-border);
+    border-radius:clamp(24px,4vw,40px);
+    padding:clamp(8px,1.2vh,12px) clamp(14px,3vw,28px);
+  }
+  .nav-btn{
+    min-width:44px;min-height:44px;
+    border:none;border-radius:50%;cursor:pointer;
+    background:rgba(79,195,247,0.12);color:var(--accent);
+    font-size:clamp(1.1rem,2.5vw,1.4rem);
+    display:flex;align-items:center;justify-content:center;
+    transition:background 0.2s,transform 0.15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .nav-btn:active{transform:scale(0.92);background:rgba(79,195,247,0.25)}
+  .nav-btn:hover{background:rgba(79,195,247,0.2)}
+  .nav-dots{display:flex;gap:clamp(5px,1vw,8px);align-items:center}
+  .dot{
+    width:clamp(8px,1.2vw,10px);height:clamp(8px,1.2vw,10px);
+    border-radius:50%;background:rgba(255,255,255,0.15);
+    transition:background 0.3s,transform 0.3s;cursor:pointer;
+    min-width:8px;min-height:8px;
+  }
+  .dot.active{background:var(--accent);transform:scale(1.3)}
+  .progress-text{
+    font-size:clamp(0.7rem,1.5vw,0.82rem);
+    color:var(--text-dim);font-weight:600;min-width:40px;text-align:center;
+  }
+
+  /* Title slide special */
+  .title-slide{justify-content:center;align-items:center;text-align:center}
+  .title-slide h1{font-size:clamp(1.8rem,5vw,3.6rem);max-width:900px}
+  .title-slide .subtitle{
+    font-size:clamp(0.95rem,2.5vw,1.3rem);
+    color:var(--text-dim);margin-top:clamp(8px,1.5vh,16px);
+    max-width:700px;line-height:1.6;
+  }
+  .title-slide .authors{
+    font-size:clamp(0.78rem,1.8vw,0.95rem);
+    color:var(--accent);margin-top:clamp(14px,2vh,24px);
+    font-weight:500;
+  }
+  .title-slide .meta{
+    font-size:clamp(0.7rem,1.5vw,0.82rem);
+    color:var(--text-dim);margin-top:clamp(6px,1vh,12px);
+  }
+  .glow-orb{
+    position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;
+    pointer-events:none;
+  }
+
+  /* Flow diagram */
+  .flow{
+    display:flex;align-items:center;gap:clamp(4px,1vw,12px);
+    flex-wrap:wrap;justify-content:center;
+    margin:clamp(10px,2vh,20px) 0;
+  }
+  .flow-box{
+    background:var(--bg-card);border:1px solid var(--card-border);
+    border-radius:12px;padding:clamp(10px,1.5vw,18px) clamp(14px,2vw,24px);
+    font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:600;
+    text-align:center;color:var(--text);
+  }
+  .flow-arrow{
+    font-size:clamp(1rem,2.5vw,1.6rem);color:var(--accent);font-weight:700;
+  }
+
+  /* Deontic badge */
+  .deontic{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:clamp(38px,6vw,52px);height:clamp(38px,6vw,52px);
+    border-radius:50%;font-weight:900;
+    font-size:clamp(1rem,2.5vw,1.4rem);
+    border:2px solid;
+  }
+  .deontic-o{background:rgba(79,195,247,0.15);color:var(--accent);border-color:var(--accent)}
+  .deontic-p{background:rgba(0,229,255,0.15);color:var(--accent3);border-color:var(--accent3)}
+  .deontic-f{background:rgba(255,82,82,0.15);color:#ff5252;border-color:#ff5252}
+
+  /* Animations */
+  @keyframes fadeSlideUp{
+    from{opacity:0;transform:translateY(24px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes pulse{
+    0%,100%{opacity:0.6}50%{opacity:1}
+  }
+  .fade-in{animation:fadeSlideUp 0.6s ease both}
+  .fade-in-d1{animation-delay:0.1s}
+  .fade-in-d2{animation-delay:0.2s}
+  .fade-in-d3{animation-delay:0.3s}
+  .fade-in-d4{animation-delay:0.4s}
+  .fade-in-d5{animation-delay:0.5s}
+
+  /* Two-col layout */
+  .two-col{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:clamp(14px,3vw,32px);flex:1;align-content:start;
+    margin-top:clamp(10px,1.5vh,16px);
+  }
+
+  /* Quote */
+  .quote-box{
+    border-left:4px solid var(--accent2);
+    padding:clamp(12px,2vw,24px);
+    background:rgba(124,77,255,0.08);
+    border-radius:0 12px 12px 0;
+    font-style:italic;
+    font-size:clamp(0.85rem,2vw,1.05rem);
+    color:var(--text);line-height:1.7;
+    margin:clamp(10px,2vh,20px) 0;
+  }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .card-grid.cols-2,.card-grid.cols-3,.card-grid.cols-4{grid-template-columns:1fr}
+    .two-col{grid-template-columns:1fr}
+    .slide{padding:clamp(16px,3vw,24px) clamp(16px,3vw,24px) 80px}
+    .flow{flex-direction:column}
+    .flow-arrow{transform:rotate(90deg)}
+    .dim-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+    .data-table{font-size:clamp(0.68rem,1.6vw,0.82rem)}
+    .data-table th,.data-table td{padding:8px 10px}
+  }
+  @media(max-width:480px){
+    .slide{padding:16px 16px 76px}
+    h1{font-size:clamp(1.4rem,6vw,1.8rem)}
+    h2{font-size:clamp(1.15rem,5vw,1.5rem)}
+    .title-slide h1{font-size:clamp(1.5rem,6.5vw,2rem)}
+    .card{padding:clamp(12px,3vw,16px)}
+    .nav{
+      padding:6px 12px;gap:6px;
+      bottom:10px;border-radius:20px;
+    }
+    .nav-btn{min-width:40px;min-height:40px}
+    .iter-chart{height:clamp(110px,22vh,160px)}
+    .dim-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+    .pipe-step{flex-direction:column;align-items:center;text-align:center}
+  }
+  @media(max-width:320px){
+    .slide{padding:12px 12px 72px}
+    h1{font-size:1.3rem}
+    h2{font-size:1.1rem}
+    .card{padding:10px}
+    .nav{padding:5px 10px}
+    .dim-grid{grid-template-columns:1fr 1fr}
+    .iter-chart{height:100px}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- Slide 1: Title -->
+<div class="slide title-slide active" data-slide="0">
+  <div class="glow-orb" style="width:400px;height:400px;background:var(--accent2);top:-100px;right:-100px"></div>
+  <div class="glow-orb" style="width:300px;height:300px;background:var(--accent);bottom:-50px;left:-50px"></div>
+  <div class="slide-number fade-in">arXiv:2604.02276v1</div>
+  <h1 class="fade-in fade-in-d1">De Jure</h1>
+  <p class="subtitle fade-in fade-in-d2">규제 규칙의 구조화된 추출을 위한<br>반복적 LLM 자기 개선 파이프라인</p>
+  <p class="authors fade-in fade-in-d3">Keerat Guliani &middot; Deepkamal Gill &middot; David Landsman<br>Nima Eshraghi &middot; Krishna Kumar &middot; Lovedeep Gondara</p>
+  <p class="meta fade-in fade-in-d4">2026년 4월 2일 &middot; CC BY-NC-SA 4.0</p>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap" class="fade-in fade-in-d5">
+    <span class="tag tag-blue">금융</span>
+    <span class="tag tag-purple">의료</span>
+    <span class="tag tag-gold">AI 거버넌스</span>
+  </div>
+</div>
+
+<!-- Slide 2: Problem & Motivation -->
+<div class="slide" data-slide="1">
+  <div class="slide-number fade-in">01 &mdash; 문제 정의</div>
+  <h2 class="fade-in fade-in-d1">왜 규제 규칙 추출이 어려운가?</h2>
+  <div class="card-grid cols-2" style="margin-top:clamp(10px,2vh,24px)">
+    <div class="card fade-in fade-in-d1">
+      <span class="icon">&#x1F4DC;</span>
+      <h3>밀집된 법률 텍스트</h3>
+      <p>규제 문서는 계층적으로 구조화된 복잡한 법적 의무사항을 포함하며, 기계가 읽을 수 있는 형태로 변환하기 매우 어려움</p>
+    </div>
+    <div class="card fade-in fade-in-d2">
+      <span class="icon">&#x1F4B0;</span>
+      <h3>높은 비용</h3>
+      <p>전문가 기반 수동 주석 작업은 비용이 많이 들고 시간이 오래 걸리며 확장이 불가능</p>
+    </div>
+    <div class="card fade-in fade-in-d3">
+      <span class="icon">&#x1F310;</span>
+      <h3>도메인 다양성</h3>
+      <p>금융, 의료, AI 거버넌스 등 각 도메인마다 고유한 규제 체계와 용어를 사용</p>
+    </div>
+    <div class="card fade-in fade-in-d4">
+      <span class="icon">&#x26A0;&#xFE0F;</span>
+      <h3>정확성 요구</h3>
+      <p>법적 구속력이 있는 의무사항이므로 LLM 기반 시스템은 반드시 이를 정확히 준수해야 함</p>
+    </div>
+  </div>
+  <div class="quote-box fade-in fade-in-d5">
+    "명시적이고 해석 가능한 평가 기준이 복잡한 규제 도메인에서 인간 주석을 대체할 수 있다"
+  </div>
+</div>
+
+<!-- Slide 3: De Jure Overview -->
+<div class="slide" data-slide="2">
+  <div class="slide-number fade-in">02 &mdash; 시스템 개요</div>
+  <h2 class="fade-in fade-in-d1">De Jure: 핵심 특징</h2>
+  <p class="desc fade-in fade-in-d2">완전 자동화된 도메인 비의존적 파이프라인으로, <span class="highlight">인간 주석 없이</span> 규제 텍스트에서 구조화된 규칙을 추출합니다.</p>
+  <div class="card-grid cols-3" style="margin-top:clamp(14px,2vh,24px)">
+    <div class="card fade-in fade-in-d2" style="border-color:rgba(79,195,247,0.4)">
+      <span class="icon">&#x1F916;</span>
+      <h3>완전 자동화</h3>
+      <p>인간 주석, 도메인별 프롬프팅, 골드 데이터 불필요</p>
+    </div>
+    <div class="card fade-in fade-in-d3" style="border-color:rgba(124,77,255,0.4)">
+      <span class="icon">&#x1F504;</span>
+      <h3>반복적 자기 개선</h3>
+      <p>LLM이 스스로 평가하고 개선하는 자기 참조 루프</p>
+    </div>
+    <div class="card fade-in fade-in-d4" style="border-color:rgba(0,229,255,0.4)">
+      <span class="icon">&#x2696;&#xFE0F;</span>
+      <h3>의무 논리 (Deontic Logic)</h3>
+      <p style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">
+        <span class="deontic deontic-o">O</span>
+        <span class="deontic deontic-p">P</span>
+        <span class="deontic deontic-f">F</span>
+      </p>
+      <p style="margin-top:8px">의무(O) &middot; 허가(P) &middot; 금지(F) 연산자 활용</p>
+    </div>
+  </div>
+  <div class="flow fade-in fade-in-d5">
+    <div class="flow-box">규제 문서<br>(PDF)</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-box">정규화</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-box">의미 분해</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-box">다기준 평가</div>
+    <span class="flow-arrow">&rarr;</span>
+    <div class="flow-box" style="border-color:var(--accent3)">구조화된<br>규칙</div>
+  </div>
+</div>
+
+<!-- Slide 4: 4-Stage Pipeline -->
+<div class="slide" data-slide="3">
+  <div class="slide-number fade-in">03 &mdash; 파이프라인</div>
+  <h2 class="fade-in fade-in-d1">4단계 파이프라인 아키텍처</h2>
+  <div class="pipeline">
+    <div class="pipe-step fade-in fade-in-d1">
+      <div class="pipe-num">1</div>
+      <div class="pipe-content">
+        <h3>문서 정규화</h3>
+        <p><span class="highlight">Docling</span>을 활용하여 PDF 규제 문서를 구조화된 마크다운으로 변환. 문서 계층 구조와 관계를 보존하며 다양한 서식과 레이아웃 복잡성 처리</p>
+      </div>
+    </div>
+    <div class="pipe-step fade-in fade-in-d2">
+      <div class="pipe-num">2</div>
+      <div class="pipe-content">
+        <h3>의미적 분해</h3>
+        <p>LLM 기반 규제 규칙 식별 및 구조화된 규칙 단위로 분해. <span class="highlight2">주체, 행위, 조건, 제약</span>을 포착하여 초기 규칙 후보 생성</p>
+      </div>
+    </div>
+    <div class="pipe-step fade-in fade-in-d3">
+      <div class="pipe-num">3</div>
+      <div class="pipe-content">
+        <h3>다기준 평가</h3>
+        <p><span class="highlight3">19개 차원</span>에 걸친 LLM-as-Judge 평가 &mdash; 메타데이터, 정의, 규칙 의미론을 아우르는 포괄적 품질 검증</p>
+      </div>
+    </div>
+    <div class="pipe-step fade-in fade-in-d4">
+      <div class="pipe-num">4</div>
+      <div class="pipe-content">
+        <h3>반복적 수선</h3>
+        <p>낮은 점수의 추출 결과를 <span class="highlight">제한된 재생성 예산</span> 내에서 개선. 규칙 평가 전에 상위 구성 요소를 먼저 수선하는 계단식 수정 방식</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: 19 Evaluation Dimensions -->
+<div class="slide" data-slide="4">
+  <div class="slide-number fade-in">04 &mdash; 평가 기준</div>
+  <h2 class="fade-in fade-in-d1">19개 평가 차원</h2>
+  <p class="desc fade-in fade-in-d2">메타데이터, 정의, 규칙 의미론을 포괄하는 다차원 품질 프레임워크</p>
+  <div class="dim-grid fade-in fade-in-d3">
+    <div class="dim-item"><span class="num">01</span> 완전성</div>
+    <div class="dim-item"><span class="num">02</span> 정확성</div>
+    <div class="dim-item"><span class="num">03</span> 명확성</div>
+    <div class="dim-item"><span class="num">04</span> 논리 일관성</div>
+    <div class="dim-item"><span class="num">05</span> 의무 정확성</div>
+    <div class="dim-item"><span class="num">06</span> 범위 정의</div>
+    <div class="dim-item"><span class="num">07</span> 시간 유효성</div>
+    <div class="dim-item"><span class="num">08</span> 개체 인식</div>
+    <div class="dim-item"><span class="num">09</span> 조건 정밀성</div>
+    <div class="dim-item"><span class="num">10</span> 예외 처리</div>
+    <div class="dim-item"><span class="num">11</span> 교차참조</div>
+    <div class="dim-item"><span class="num">12</span> 프레임워크 정합</div>
+    <div class="dim-item"><span class="num">13</span> 실행 가능성</div>
+    <div class="dim-item"><span class="num">14</span> 세부 수준</div>
+    <div class="dim-item"><span class="num">15</span> 중복 탐지</div>
+    <div class="dim-item"><span class="num">16</span> 규범 강도</div>
+    <div class="dim-item"><span class="num">17</span> 이해관계자</div>
+    <div class="dim-item"><span class="num">18</span> 준수 검증성</div>
+    <div class="dim-item"><span class="num">19</span> 의미 일관성</div>
+  </div>
+</div>
+
+<!-- Slide 6: Iterative Refinement -->
+<div class="slide" data-slide="5">
+  <div class="slide-number fade-in">05 &mdash; 반복적 개선</div>
+  <h2 class="fade-in fade-in-d1">반복 횟수에 따른 성능 향상</h2>
+  <p class="desc fade-in fade-in-d2"><span class="highlight">3회 반복</span> 내에 최고 성능 도달 &mdash; 일관된 단조 증가 패턴</p>
+  <div class="iter-chart fade-in fade-in-d3" id="iterChart">
+    <div class="iter-col">
+      <div class="iter-bar fill-blue" style="width:100%;height:0%" data-target="72"><span class="val">~72%</span></div>
+      <div class="iter-label">기준선</div>
+    </div>
+    <div class="iter-col">
+      <div class="iter-bar fill-purple" style="width:100%;height:0%" data-target="84"><span class="val">~84%</span></div>
+      <div class="iter-label">2회 반복</div>
+    </div>
+    <div class="iter-col">
+      <div class="iter-bar fill-teal" style="width:100%;height:0%" data-target="89"><span class="val">~89%</span></div>
+      <div class="iter-label">3회 반복</div>
+    </div>
+    <div class="iter-col">
+      <div class="iter-bar fill-gold" style="width:100%;height:0%" data-target="91"><span class="val">~91%</span></div>
+      <div class="iter-label">4회 반복</div>
+    </div>
+  </div>
+  <div class="two-col fade-in fade-in-d4" style="margin-top:clamp(14px,2vh,24px)">
+    <div class="card">
+      <h3>핵심 통찰</h3>
+      <p>4회 이상 반복 시 <span class="highlight3">수확 체감</span> (&lt;2% 향상). 3회 반복이 비용 대비 최적 지점</p>
+    </div>
+    <div class="card">
+      <h3>계단식 수선</h3>
+      <p>상위 구성 요소(메타데이터, 정의)를 <span class="highlight">먼저 수선</span>한 후 규칙 의미론 평가 &mdash; 오류 전파 방지</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: Model Comparison -->
+<div class="slide" data-slide="6">
+  <div class="slide-number fade-in">06 &mdash; 모델 비교</div>
+  <h2 class="fade-in fade-in-d1">모델별 성능 비교</h2>
+  <p class="desc fade-in fade-in-d2">오픈소스 및 폐쇄형 모델 4종 평가</p>
+  <div class="metric-bar fade-in fade-in-d3">
+    <div class="metric-row">
+      <span class="metric-label">Claude 3.5 Sonnet</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-teal" style="width:0%" data-target="89">89%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">Llama 70B</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-blue" style="width:0%" data-target="85">85%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">Qwen 3</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-purple" style="width:0%" data-target="84">84%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">GPT-5 Mini</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-gold" style="width:0%" data-target="78">78%</div>
+      </div>
+    </div>
+  </div>
+  <table class="data-table fade-in fade-in-d4" style="margin-top:clamp(14px,2vh,24px)">
+    <thead>
+      <tr><th>데이터셋</th><th>HIPAA</th><th>SEC 규정</th><th>EU AI Act</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>추출 정확도</td><td class="best">91%</td><td>81%</td><td>85%</td></tr>
+      <tr><td>복잡도</td><td>중간</td><td>높음</td><td>다양</td></tr>
+      <tr><td>주요 난점</td><td>의료 용어</td><td>복잡한 규칙</td><td>다국어 규제</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Slide 8: RAG Evaluation -->
+<div class="slide" data-slide="7">
+  <div class="slide-number fade-in">07 &mdash; RAG 평가</div>
+  <h2 class="fade-in fade-in-d1">다운스트림 RAG 기반 컴플라이언스 QA</h2>
+  <p class="desc fade-in fade-in-d2">De Jure 추출 결과를 활용한 규정 준수 질의응답 평가</p>
+  <div class="card-grid cols-2 fade-in fade-in-d3">
+    <div class="card" style="text-align:center">
+      <span style="font-size:clamp(2.5rem,7vw,4rem);font-weight:900;color:var(--accent3);display:block">73.8%</span>
+      <h3 style="margin-top:8px">단일 규칙 검색</h3>
+      <p>단일 규칙 검색 시 De Jure 추출 결과가 선호됨</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <span style="font-size:clamp(2.5rem,7vw,4rem);font-weight:900;color:var(--accent2);display:block">84.0%</span>
+      <h3 style="margin-top:8px">확장 검색</h3>
+      <p>더 넓은 범위의 검색에서 선호도 상승</p>
+    </div>
+  </div>
+  <div class="card-grid cols-3 fade-in fade-in-d4" style="margin-top:clamp(10px,1.5vh,16px)">
+    <div class="card">
+      <h3 style="color:var(--accent3)">&#x2713; 환각 감소</h3>
+      <p>환각 비율 <span class="highlight">&lt;3%</span>로 감소</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent3)">&#x2713; 정확도 향상</h3>
+      <p>비-RAG 대비 <span class="highlight">6~12%</span> 향상</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent3)">&#x2713; 출처 추적</h3>
+      <p>인용 체인을 통한 감사 가능성 확보</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Ablation Study -->
+<div class="slide" data-slide="8">
+  <div class="slide-number fade-in">08 &mdash; 절삭 연구</div>
+  <h2 class="fade-in fade-in-d1">구성 요소별 기여도 분석</h2>
+  <p class="desc fade-in fade-in-d2">각 핵심 구성 요소 제거 시 성능 변화</p>
+  <div class="metric-bar fade-in fade-in-d3" style="margin-top:clamp(14px,2vh,24px)">
+    <div class="metric-row">
+      <span class="metric-label">전체 시스템</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-teal" style="width:0%" data-target="100">100%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">반복 개선 제거</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-blue" style="width:0%" data-target="86">-14%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">RAG 컨텍스트 제거</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-purple" style="width:0%" data-target="91">-9%</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">헌법적 AI 제거</span>
+      <div class="metric-track">
+        <div class="metric-fill fill-gold" style="width:0%" data-target="93">-7%</div>
+      </div>
+    </div>
+  </div>
+  <div class="card fade-in fade-in-d4" style="margin-top:clamp(14px,2vh,24px)">
+    <h3>주요 발견</h3>
+    <p><span class="highlight">반복적 자기 개선</span>이 가장 큰 기여도(12~15%)를 보이며, 이는 De Jure의 핵심 혁신입니다. 다중 모델 앙상블은 단일 모델 대비 5~7%의 추가 향상을 제공합니다.</p>
+  </div>
+</div>
+
+<!-- Slide 10: Contributions & Limitations -->
+<div class="slide" data-slide="9">
+  <div class="slide-number fade-in">09 &mdash; 기여 및 한계</div>
+  <h2 class="fade-in fade-in-d1">주요 기여 및 한계점</h2>
+  <div class="two-col fade-in fade-in-d2">
+    <div>
+      <h3 style="color:var(--accent3);margin-bottom:clamp(10px,1.5vh,16px)">&#x2714; 주요 기여</h3>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p><span class="highlight">반복적 자기 개선</span>이 추출 품질을 유의미하게 향상시킴을 실증</p>
+      </div>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p><span class="highlight2">19개 차원</span>의 포괄적 평가 프레임워크 제안</p>
+      </div>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p>실제 규제 문서에 대한 <span class="highlight3">실용적 적용 가능성</span> 입증</p>
+      </div>
+      <div class="card">
+        <p>의무 논리 인식 추출 접근법 &mdash; <span class="deontic deontic-o" style="width:28px;height:28px;font-size:0.8rem">O</span> <span class="deontic deontic-p" style="width:28px;height:28px;font-size:0.8rem">P</span> <span class="deontic deontic-f" style="width:28px;height:28px;font-size:0.8rem">F</span></p>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:#ff5252;margin-bottom:clamp(10px,1.5vh,16px)">&#x26A0; 한계점</h3>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p>새로운 규제 도메인에 대해 도메인별 미세조정 필요</p>
+      </div>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p>매우 긴 문서에서 컨텍스트 윈도우 제한</p>
+      </div>
+      <div class="card" style="margin-bottom:clamp(8px,1vh,12px)">
+        <p>다중 모델 평가의 리소스 집약성</p>
+      </div>
+      <div class="card">
+        <p>핵심 규정 준수 규칙에는 여전히 인간 검토 필요</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Future Work & Conclusion -->
+<div class="slide" data-slide="10">
+  <div class="slide-number fade-in">10 &mdash; 결론</div>
+  <h2 class="fade-in fade-in-d1">결론 및 향후 연구</h2>
+  <div class="quote-box fade-in fade-in-d2">
+    De Jure는 명시적이고 해석 가능한 평가 기준이 복잡한 규제 도메인에서 인간 주석을 대체할 수 있음을 보여주며, 확장 가능하고 감사 가능한 LLM 정렬 접근법을 제시합니다.
+  </div>
+  <div class="card-grid cols-2 fade-in fade-in-d3">
+    <div class="card">
+      <span class="icon">&#x1F30D;</span>
+      <h3>교차 관할권 규제 조화</h3>
+      <p>서로 다른 법적 관할권 간의 규제 규칙 통합 및 비교</p>
+    </div>
+    <div class="card">
+      <span class="icon">&#x26A1;</span>
+      <h3>실시간 규제 변경 추적</h3>
+      <p>규제 문서의 변경사항을 자동으로 감지하고 규칙을 업데이트</p>
+    </div>
+    <div class="card">
+      <span class="icon">&#x1F91D;</span>
+      <h3>대화형 개선 워크플로</h3>
+      <p>전문가와 LLM 간의 상호작용적 규칙 검증 및 수정 프로세스</p>
+    </div>
+    <div class="card">
+      <span class="icon">&#x1F6E1;&#xFE0F;</span>
+      <h3>자동 규정 준수 모니터링</h3>
+      <p>추출된 규칙을 기반으로 조직의 규정 준수 상태를 지속적으로 감시</p>
+    </div>
+  </div>
+  <p class="desc fade-in fade-in-d4" style="margin-top:clamp(14px,2vh,24px);text-align:center;color:var(--text-dim);width:100%;max-width:100%">
+    <span class="tag tag-blue">arXiv:2604.02276v1</span>
+    <span class="tag tag-purple">CC BY-NC-SA 4.0</span>
+  </p>
+</div>
+
+</div><!-- end slide-container -->
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">&#x276E;</button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="progress-text" id="progressText">1/11</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#x276F;</button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const dotsContainer = document.getElementById('navDots');
+  const progressText = document.getElementById('progressText');
+
+  // Create dots
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsContainer.appendChild(d);
+  }
+  const dots = dotsContainer.querySelectorAll('.dot');
+
+  function goTo(n){
+    if(n<0||n>=total||n===current)return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(n>current?'prev':'');
+    slides[current].classList.remove(n>current?'':'prev');
+    dots[current].classList.remove('active');
+    current=n;
+    slides[current].className='slide active';
+    dots[current].classList.add('active');
+    progressText.textContent=(current+1)+'/'+total;
+    animateBars();
+  }
+
+  document.getElementById('prevBtn').addEventListener('click',()=>goTo(current-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>goTo(current+1));
+
+  // Keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')goTo(current+1);
+    if(e.key==='ArrowLeft')goTo(current-1);
+  });
+
+  // Touch swipe
+  let tx=0,ty=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    const dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){
+      dx<0?goTo(current+1):goTo(current-1);
+    }
+  },{passive:true});
+
+  // Animate bars on slide enter
+  function animateBars(){
+    const active=slides[current];
+    // Metric fills
+    active.querySelectorAll('.metric-fill').forEach(el=>{
+      const t=el.dataset.target;
+      if(t) setTimeout(()=>{el.style.width=t+'%'},100);
+    });
+    // Iter bars
+    active.querySelectorAll('.iter-bar').forEach(el=>{
+      const t=el.dataset.target;
+      if(t) setTimeout(()=>{el.style.height=t+'%'},100);
+    });
+  }
+  animateBars();
+})();
+</script>
+</body>
+</html>

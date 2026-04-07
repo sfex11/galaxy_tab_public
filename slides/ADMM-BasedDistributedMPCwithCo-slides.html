@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ADMM 기반 분산 MPC + CBF: 안전한 다중 로봇 사족 보행</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0a0e27;--surface:#111640;--card:#1a1f4e;
+    --accent:#00d4ff;--accent2:#7c3aed;--accent3:#f59e0b;--accent4:#10b981;
+    --text:#e2e8f0;--text-dim:#94a3b8;--danger:#ef4444;
+    --radius:16px;
+  }
+  html{font-size:16px;scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);color:var(--text);
+    overflow:hidden;height:100dvh;width:100vw;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* ── Slide Container ── */
+  .deck{position:relative;width:100%;height:100dvh;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    padding:clamp(20px,4vw,60px);
+    overflow-y:auto;overflow-x:hidden;
+    opacity:0;pointer-events:none;
+    transition:opacity .5s ease,transform .5s ease;
+    transform:translateX(60px);
+    scrollbar-width:thin;scrollbar-color:var(--accent) transparent;
+  }
+  .slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+  .slide.prev{opacity:0;transform:translateX(-60px)}
+
+  /* ── Typography ── */
+  h1{font-size:clamp(1.6rem,4vw,3rem);font-weight:800;line-height:1.2;margin-bottom:.5em}
+  h2{font-size:clamp(1.3rem,3vw,2.2rem);font-weight:700;line-height:1.25;margin-bottom:.5em}
+  h3{font-size:clamp(1.05rem,2.5vw,1.5rem);font-weight:600;margin-bottom:.4em}
+  p,.desc{font-size:clamp(.9rem,2vw,1.15rem);line-height:1.7;color:var(--text-dim)}
+  .small{font-size:clamp(.75rem,1.6vw,.95rem)}
+
+  /* ── Utility ── */
+  .accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.accent4{color:var(--accent4)}
+  .danger{color:var(--danger)}
+  .bold{font-weight:700}
+  .center{text-align:center}
+  .mt1{margin-top:.5em}.mt2{margin-top:1em}.mt3{margin-top:1.5em}
+  .flex-center{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1em}
+  .flex-col{display:flex;flex-direction:column;gap:.8em}
+  .grow{flex:1}
+
+  /* ── Cards / Boxes ── */
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    padding:clamp(14px,2.5vw,28px);
+    border:1px solid rgba(255,255,255,.06);
+    transition:transform .2s;
+  }
+  .card:hover{transform:translateY(-2px)}
+  .card-grid{display:grid;gap:clamp(10px,2vw,20px)}
+  .col2{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+  .col3{grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))}
+
+  .highlight-box{
+    background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(124,58,237,.12));
+    border-left:4px solid var(--accent);
+    border-radius:0 var(--radius) var(--radius) 0;
+    padding:clamp(12px,2vw,24px);margin:1em 0;
+  }
+
+  /* ── Tags ── */
+  .tag{
+    display:inline-block;padding:4px 14px;border-radius:20px;
+    font-size:clamp(.7rem,1.5vw,.85rem);font-weight:600;
+    background:rgba(0,212,255,.15);color:var(--accent);
+    margin:3px;
+  }
+  .tag.purple{background:rgba(124,58,237,.18);color:var(--accent2)}
+  .tag.amber{background:rgba(245,158,11,.18);color:var(--accent3)}
+  .tag.green{background:rgba(16,185,129,.18);color:var(--accent4)}
+
+  /* ── Lists ── */
+  ul.styled{list-style:none;padding:0}
+  ul.styled li{
+    position:relative;padding-left:1.6em;margin-bottom:.6em;
+    font-size:clamp(.88rem,2vw,1.1rem);line-height:1.6;
+  }
+  ul.styled li::before{
+    content:'▸';position:absolute;left:0;color:var(--accent);font-weight:700;
+  }
+
+  /* ── Diagram / Visual Elements ── */
+  .diagram{
+    background:var(--surface);border-radius:var(--radius);
+    padding:clamp(16px,3vw,32px);margin:1em 0;
+    border:1px solid rgba(255,255,255,.05);
+    overflow-x:auto;
+  }
+  .flow-row{
+    display:flex;align-items:center;justify-content:center;
+    gap:clamp(6px,1.5vw,16px);flex-wrap:wrap;
+  }
+  .flow-box{
+    background:linear-gradient(135deg,var(--card),rgba(0,212,255,.08));
+    border:1px solid rgba(0,212,255,.25);border-radius:12px;
+    padding:clamp(10px,2vw,20px) clamp(14px,2.5vw,28px);
+    text-align:center;font-weight:600;
+    font-size:clamp(.78rem,1.8vw,1rem);
+    min-width:80px;
+  }
+  .flow-box.purple{border-color:rgba(124,58,237,.4);background:linear-gradient(135deg,var(--card),rgba(124,58,237,.1))}
+  .flow-box.amber{border-color:rgba(245,158,11,.4);background:linear-gradient(135deg,var(--card),rgba(245,158,11,.1))}
+  .flow-box.green{border-color:rgba(16,185,129,.4);background:linear-gradient(135deg,var(--card),rgba(16,185,129,.1))}
+  .arrow{font-size:clamp(1rem,2.5vw,1.6rem);color:var(--accent);flex-shrink:0}
+
+  /* ── Equation block ── */
+  .eq{
+    font-family:'Courier New',monospace;
+    background:rgba(0,0,0,.35);border-radius:10px;
+    padding:clamp(12px,2vw,20px);margin:.8em 0;
+    font-size:clamp(.8rem,1.8vw,1.05rem);
+    overflow-x:auto;white-space:pre-wrap;
+    border:1px solid rgba(0,212,255,.12);
+    line-height:1.8;color:var(--accent);
+  }
+
+  /* ── Robot icon SVG ── */
+  .robot-icon{
+    width:clamp(40px,8vw,80px);height:clamp(40px,8vw,80px);
+    margin:0 auto;
+  }
+
+  /* ── Stats ── */
+  .stat{text-align:center;padding:clamp(10px,2vw,20px)}
+  .stat-num{
+    font-size:clamp(1.8rem,5vw,3.5rem);font-weight:800;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .stat-label{font-size:clamp(.75rem,1.6vw,.95rem);color:var(--text-dim);margin-top:.3em}
+
+  /* ── Comparison bar ── */
+  .bar-wrap{margin:.6em 0}
+  .bar-label{font-size:clamp(.78rem,1.6vw,.92rem);margin-bottom:4px;display:flex;justify-content:space-between}
+  .bar-track{background:rgba(255,255,255,.08);border-radius:8px;height:clamp(16px,2.5vw,24px);overflow:hidden}
+  .bar-fill{height:100%;border-radius:8px;transition:width 1.2s ease}
+
+  /* ── Timeline ── */
+  .timeline{position:relative;padding-left:2em}
+  .timeline::before{content:'';position:absolute;left:.6em;top:0;bottom:0;width:2px;background:var(--accent);opacity:.3}
+  .timeline-item{position:relative;margin-bottom:1.2em}
+  .timeline-item::before{
+    content:'';position:absolute;left:-1.65em;top:.45em;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--accent);border:2px solid var(--bg);
+  }
+
+  /* ── Navigation ── */
+  .nav{
+    position:fixed;bottom:0;left:0;right:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(8px,1.5vw,14px) clamp(12px,3vw,30px);
+    background:linear-gradient(transparent,rgba(10,14,39,.95) 30%);
+    z-index:100;
+    pointer-events:none;
+  }
+  .nav>*{pointer-events:auto}
+  .nav-btn{
+    min-width:44px;min-height:44px;
+    padding:10px 18px;border:none;border-radius:12px;
+    background:rgba(0,212,255,.15);color:var(--accent);
+    font-size:clamp(.85rem,2vw,1rem);font-weight:600;
+    cursor:pointer;transition:all .2s;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .nav-btn:hover{background:rgba(0,212,255,.3)}
+  .nav-btn:active{transform:scale(.95)}
+  .nav-btn:disabled{opacity:.3;cursor:default}
+  .progress{
+    display:flex;align-items:center;gap:clamp(3px,.6vw,6px);
+  }
+  .dot{
+    width:clamp(6px,1vw,10px);height:clamp(6px,1vw,10px);
+    border-radius:50%;background:rgba(255,255,255,.15);
+    transition:all .3s;cursor:pointer;
+    min-width:6px;min-height:6px;
+  }
+  .dot.active{background:var(--accent);transform:scale(1.4)}
+
+  /* ── Animations ── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .anim-up{animation:fadeUp .6s ease both}
+  .anim-d1{animation-delay:.1s}.anim-d2{animation-delay:.2s}.anim-d3{animation-delay:.3s}
+  .anim-d4{animation-delay:.4s}.anim-d5{animation-delay:.5s}.anim-d6{animation-delay:.6s}
+  .floating{animation:float 3s ease-in-out infinite}
+
+  /* particle bg */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .particle{
+    position:absolute;width:3px;height:3px;border-radius:50%;
+    background:var(--accent);opacity:.15;
+    animation:floatParticle linear infinite;
+  }
+  @keyframes floatParticle{
+    0%{transform:translateY(100vh) scale(0)}
+    50%{opacity:.3}
+    100%{transform:translateY(-10vh) scale(1);opacity:0}
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:768px){
+    .slide{padding:clamp(16px,3vw,30px);padding-bottom:80px}
+    .card{padding:clamp(12px,2.5vw,20px)}
+    .col2,.col3{grid-template-columns:1fr}
+    .flow-row{gap:8px}
+    .flow-box{padding:8px 14px;min-width:60px}
+    .nav-btn{padding:8px 14px}
+  }
+  @media(max-width:480px){
+    .slide{padding:16px;padding-bottom:76px}
+    h1{font-size:clamp(1.3rem,5vw,1.8rem)}
+    .card{padding:12px}
+    .flow-box{padding:6px 10px;font-size:.75rem}
+    .arrow{font-size:1rem}
+    .eq{font-size:.78rem;padding:10px}
+    .stat-num{font-size:clamp(1.5rem,8vw,2.5rem)}
+    .nav-btn{min-width:44px;min-height:44px;padding:8px 12px;font-size:.85rem}
+  }
+  @media(max-width:320px){
+    .slide{padding:12px;padding-bottom:72px}
+    h1{font-size:1.2rem}
+    h2{font-size:1.05rem}
+    .card{padding:10px}
+    .tag{padding:3px 10px;font-size:.65rem}
+    .nav-btn{padding:6px 10px;font-size:.8rem;border-radius:8px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════════ SLIDE 0: Title ═══════════════ -->
+<div class="slide active" data-slide="0">
+  <div class="grow flex-center" style="flex-direction:column;text-align:center">
+    <!-- Robot quad icon -->
+    <svg class="robot-icon floating" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="25" y="20" width="50" height="35" rx="8" stroke="var(--accent)" stroke-width="2.5" fill="rgba(0,212,255,.08)"/>
+      <circle cx="40" cy="35" r="5" fill="var(--accent)" opacity=".6"/>
+      <circle cx="60" cy="35" r="5" fill="var(--accent)" opacity=".6"/>
+      <line x1="25" y1="55" x2="15" y2="80" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="35" y1="55" x2="28" y2="80" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="65" y1="55" x2="72" y2="80" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="75" y1="55" x2="85" y2="80" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="15" cy="82" r="3" fill="var(--accent2)" opacity=".5"/>
+      <circle cx="28" cy="82" r="3" fill="var(--accent2)" opacity=".5"/>
+      <circle cx="72" cy="82" r="3" fill="var(--accent2)" opacity=".5"/>
+      <circle cx="85" cy="82" r="3" fill="var(--accent2)" opacity=".5"/>
+    </svg>
+
+    <div class="mt2 anim-up">
+      <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:1em">
+        <span class="tag">ADMM</span><span class="tag purple">분산 MPC</span><span class="tag amber">CBF</span><span class="tag green">다중 로봇</span>
+      </div>
+      <h1>ADMM 기반 분산 MPC와<br>제어 장벽 함수를 활용한<br><span class="accent">안전한 다중 로봇 사족 보행</span></h1>
+      <p class="mt1 anim-up anim-d2" style="max-width:600px;margin:0 auto">
+        Yicheng Zeng, Ruturaj S. Sambhus, Basit Muhammad Imran,<br>
+        Jeeseop Kim, Vittorio Pastore, Kaveh Akbari Hamed
+      </p>
+      <p class="small mt1 anim-up anim-d3" style="color:var(--accent);opacity:.7">arXiv:2603.19170v1 · 2026년 3월</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 1: Problem ═══════════════ -->
+<div class="slide" data-slide="1">
+  <h2 class="anim-up">🎯 <span class="accent">문제 정의</span></h2>
+  <p class="anim-up anim-d1">다중 사족 로봇 시스템의 안전한 궤적 계획은 왜 어려운가?</p>
+
+  <div class="card-grid col2 mt2">
+    <div class="card anim-up anim-d2">
+      <h3 class="danger">❌ 중앙 집중식의 한계</h3>
+      <ul class="styled mt1">
+        <li>로봇 수 증가 → 계산 비용 <span class="bold">기하급수적 증가</span></li>
+        <li>단일 장애점(Single Point of Failure)</li>
+        <li>통신 대역폭 병목</li>
+        <li>실시간 제어 불가능</li>
+      </ul>
+    </div>
+    <div class="card anim-up anim-d3">
+      <h3 class="accent3">⚠️ 안전성 결합 문제</h3>
+      <ul class="styled mt1">
+        <li>CBF 제약조건 → <span class="bold">에이전트 간 명시적 결합</span> 발생</li>
+        <li>충돌 회피를 위한 상호 의존성</li>
+        <li>기존 분산 방식으로는 직접 분해 불가</li>
+        <li>안전 보장과 분산화의 동시 달성 난제</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box mt2 anim-up anim-d4">
+    <h3>핵심 질문</h3>
+    <p style="color:var(--text)">안전성(CBF)을 보장하면서도 <span class="accent bold">완전 분산화</span>된 MPC를 어떻게 구현할 수 있을까?</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 2: Contributions ═══════════════ -->
+<div class="slide" data-slide="2">
+  <h2 class="anim-up">💡 <span class="accent2">핵심 기여</span></h2>
+
+  <div class="flex-col mt2">
+    <div class="card anim-up anim-d1" style="border-left:3px solid var(--accent)">
+      <h3><span class="accent">01</span> &nbsp;노드-에지 분할 기법</h3>
+      <p>ADMM 기반의 새로운 <span class="bold">노드-에지 분할(Node-Edge Splitting)</span> 공식화로 CBF 결합 문제를 해결. 전역 문제를 독립적인 노드-로컬 및 에지-로컬 QP로 분해</p>
+    </div>
+    <div class="card anim-up anim-d2" style="border-left:3px solid var(--accent2)">
+      <h3><span class="accent2">02</span> &nbsp;완전 분산 MPC 프레임워크</h3>
+      <p>이웃 간 통신만으로 독립적 병렬 QP 풀이 가능. <span class="bold">대칭적 계산 분배</span>로 확장성 확보</p>
+    </div>
+    <div class="card anim-up anim-d3" style="border-left:3px solid var(--accent3)">
+      <h3><span class="accent3">03</span> &nbsp;3단계 계층적 아키텍처</h3>
+      <p>분산 궤적 계획(상위) + 비선형 MPC(중위) + 전신 제어(하위)의 <span class="bold">3단계 계층 구조</span> 설계</p>
+    </div>
+    <div class="card anim-up anim-d4" style="border-left:3px solid var(--accent4)">
+      <h3><span class="accent4">04</span> &nbsp;실제 하드웨어 검증</h3>
+      <p>Unitree Go2 사족 로봇 2대에서 <span class="bold">실시간 분산 제어</span> 구현 및 검증. 시뮬레이션에서 최대 4대 로봇으로 확장</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 3: Architecture ═══════════════ -->
+<div class="slide" data-slide="3">
+  <h2 class="anim-up">🏗️ <span class="accent">3단계 계층적 아키텍처</span></h2>
+
+  <div class="diagram mt2 anim-up anim-d1">
+    <div class="flow-row" style="flex-direction:column;gap:clamp(12px,2vw,24px)">
+      <!-- Level 1 -->
+      <div class="flow-box" style="width:min(100%,500px)">
+        <div class="small" style="color:var(--accent);margin-bottom:4px">🔵 상위 계층</div>
+        <div class="bold">분산 궤적 계획기</div>
+        <div class="small" style="color:var(--text-dim)">ADMM 기반 분산 MPC + CBF</div>
+      </div>
+      <div class="arrow">⬇</div>
+      <!-- Level 2 -->
+      <div class="flow-box purple" style="width:min(100%,500px)">
+        <div class="small" style="color:var(--accent2);margin-bottom:4px">🟣 중위 계층</div>
+        <div class="bold">비선형 MPC</div>
+        <div class="small" style="color:var(--text-dim)">단일 강체 동역학(SRBD) 모델</div>
+      </div>
+      <div class="arrow">⬇</div>
+      <!-- Level 3 -->
+      <div class="flow-box green" style="width:min(100%,500px)">
+        <div class="small" style="color:var(--accent4);margin-bottom:4px">🟢 하위 계층</div>
+        <div class="bold">전신 제어기 (WBC)</div>
+        <div class="small" style="color:var(--text-dim)">전체 차수 로봇 동역학 적용</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid col3 mt2">
+    <div class="card anim-up anim-d2 center">
+      <div class="accent bold">상위</div>
+      <p class="small mt1">다중 에이전트 간<br>안전한 기준 궤적 생성</p>
+    </div>
+    <div class="card anim-up anim-d3 center">
+      <div class="accent2 bold">중위</div>
+      <p class="small mt1">각 로봇의 발 접촉력<br>및 몸체 궤적 최적화</p>
+    </div>
+    <div class="card anim-up anim-d4 center">
+      <div class="accent4 bold">하위</div>
+      <p class="small mt1">관절 토크 계산<br>실시간 모터 제어</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 4: MPC + CBF ═══════════════ -->
+<div class="slide" data-slide="4">
+  <h2 class="anim-up">🛡️ <span class="accent3">MPC + CBF 공식화</span></h2>
+
+  <div class="card mt2 anim-up anim-d1">
+    <h3>모델 예측 제어 (MPC)</h3>
+    <div class="eq">
+min  Σₖ [ ‖xₖ - x*ₖ‖²_Q + ‖uₖ‖²_R ]
+s.t.  xₖ₊₁ = Aₖxₖ + Bₖuₖ       (선형화된 동역학)
+      xₖ ∈ 𝒳,  uₖ ∈ 𝒰           (상태/입력 제약)
+    </div>
+    <p class="small">각 로봇의 무게중심(CoM) 궤적을 예측 구간에 걸쳐 최적화</p>
+  </div>
+
+  <div class="card mt2 anim-up anim-d2">
+    <h3>제어 장벽 함수 (CBF) 제약</h3>
+    <div class="eq">
+h(xᵢ, xⱼ) = ‖pᵢ - pⱼ‖² - d²_safe ≥ 0
+
+Δh(xᵢ, xⱼ) + γ · h(xᵢ, xⱼ) ≥ 0,   γ ∈ (0, 1]
+    </div>
+    <p class="small">로봇 i와 j 사이의 안전 거리 d_safe를 보장하는 <span class="accent3 bold">명시적 안전 제약</span></p>
+  </div>
+
+  <div class="highlight-box anim-up anim-d3">
+    <h3>⚡ 핵심 문제</h3>
+    <p style="color:var(--text)">CBF 제약이 <span class="bold">xᵢ</span>와 <span class="bold">xⱼ</span>를 동시에 포함 → <span class="danger bold">에이전트 간 결합</span> 발생<br>→ 이것이 바로 분산화를 어렵게 만드는 원인!</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 5: ADMM ═══════════════ -->
+<div class="slide" data-slide="5">
+  <h2 class="anim-up">⚙️ <span class="accent">ADMM 기반 분산 최적화</span></h2>
+  <p class="anim-up anim-d1">교대방향 승수법(ADMM)으로 결합 문제를 분해</p>
+
+  <div class="card mt2 anim-up anim-d2">
+    <h3>노드-에지 분할 (Node-Edge Splitting)</h3>
+    <div class="diagram" style="margin:1em 0">
+      <div class="flow-row">
+        <div class="flow-box">
+          <div class="small accent">노드 QP</div>
+          <div class="bold" style="font-size:clamp(.8rem,1.8vw,1rem)">로봇 i<br>로컬 최적화</div>
+        </div>
+        <div class="arrow">⟷</div>
+        <div class="flow-box amber">
+          <div class="small accent3">에지 QP</div>
+          <div class="bold" style="font-size:clamp(.8rem,1.8vw,1rem)">에지 (i,j)<br>CBF 제약</div>
+        </div>
+        <div class="arrow">⟷</div>
+        <div class="flow-box">
+          <div class="small accent">노드 QP</div>
+          <div class="bold" style="font-size:clamp(.8rem,1.8vw,1rem)">로봇 j<br>로컬 최적화</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt2 anim-up anim-d3">
+    <h3>ADMM 반복 과정</h3>
+    <div class="timeline mt1">
+      <div class="timeline-item">
+        <h3 class="small"><span class="accent bold">Step 1</span> — 노드 업데이트</h3>
+        <p class="small">각 로봇이 자신의 로컬 QP를 <span class="bold">독립적으로 병렬</span> 풀이</p>
+      </div>
+      <div class="timeline-item">
+        <h3 class="small"><span class="accent bold">Step 2</span> — 에지 업데이트</h3>
+        <p class="small">인접 로봇 쌍의 CBF 제약을 포함한 에지 QP 풀이</p>
+      </div>
+      <div class="timeline-item">
+        <h3 class="small"><span class="accent bold">Step 3</span> — 이중 변수 업데이트</h3>
+        <p class="small">라그랑주 승수(λ) 갱신 → 합의(consensus) 유도</p>
+      </div>
+      <div class="timeline-item">
+        <h3 class="small"><span class="accent bold">수렴까지</span> 반복</h3>
+        <p class="small">이웃 간 통신만으로 전역 최적해에 수렴</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 6: Communication ═══════════════ -->
+<div class="slide" data-slide="6">
+  <h2 class="anim-up">📡 <span class="accent2">통신 구조와 분산성</span></h2>
+
+  <div class="card-grid col2 mt2">
+    <div class="card anim-up anim-d1">
+      <h3 class="center">중앙 집중식</h3>
+      <div class="diagram center">
+        <svg viewBox="0 0 200 160" width="100%" style="max-width:280px;margin:0 auto;display:block">
+          <!-- Center node -->
+          <circle cx="100" cy="80" r="22" fill="rgba(239,68,68,.2)" stroke="var(--danger)" stroke-width="2"/>
+          <text x="100" y="85" text-anchor="middle" fill="var(--danger)" font-size="11" font-weight="700">서버</text>
+          <!-- Agent nodes -->
+          <circle cx="40" cy="30" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="40" y="34" text-anchor="middle" fill="var(--accent)" font-size="9">R1</text>
+          <circle cx="160" cy="30" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="160" y="34" text-anchor="middle" fill="var(--accent)" font-size="9">R2</text>
+          <circle cx="40" cy="130" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="40" y="134" text-anchor="middle" fill="var(--accent)" font-size="9">R3</text>
+          <circle cx="160" cy="130" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="160" y="134" text-anchor="middle" fill="var(--accent)" font-size="9">R4</text>
+          <!-- Lines -->
+          <line x1="54" y1="37" x2="80" y2="68" stroke="var(--danger)" stroke-width="1" opacity=".5"/>
+          <line x1="146" y1="37" x2="120" y2="68" stroke="var(--danger)" stroke-width="1" opacity=".5"/>
+          <line x1="54" y1="123" x2="80" y2="92" stroke="var(--danger)" stroke-width="1" opacity=".5"/>
+          <line x1="146" y1="123" x2="120" y2="92" stroke="var(--danger)" stroke-width="1" opacity=".5"/>
+        </svg>
+      </div>
+      <p class="small center mt1"><span class="danger bold">병목</span>: 모든 정보가 중앙 서버를 경유</p>
+    </div>
+
+    <div class="card anim-up anim-d2">
+      <h3 class="center accent">분산식 (제안 방법)</h3>
+      <div class="diagram center">
+        <svg viewBox="0 0 200 160" width="100%" style="max-width:280px;margin:0 auto;display:block">
+          <circle cx="40" cy="30" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="40" y="34" text-anchor="middle" fill="var(--accent)" font-size="9" font-weight="700">R1</text>
+          <circle cx="160" cy="30" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="160" y="34" text-anchor="middle" fill="var(--accent)" font-size="9" font-weight="700">R2</text>
+          <circle cx="40" cy="130" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="40" y="134" text-anchor="middle" fill="var(--accent)" font-size="9" font-weight="700">R3</text>
+          <circle cx="160" cy="130" r="14" fill="rgba(0,212,255,.15)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="160" y="134" text-anchor="middle" fill="var(--accent)" font-size="9" font-weight="700">R4</text>
+          <!-- Edges -->
+          <line x1="54" y1="30" x2="146" y2="30" stroke="var(--accent4)" stroke-width="2" opacity=".6"/>
+          <line x1="40" y1="44" x2="40" y2="116" stroke="var(--accent4)" stroke-width="2" opacity=".6"/>
+          <line x1="160" y1="44" x2="160" y2="116" stroke="var(--accent4)" stroke-width="2" opacity=".6"/>
+          <line x1="54" y1="130" x2="146" y2="130" stroke="var(--accent4)" stroke-width="2" opacity=".6"/>
+          <!-- Edge labels -->
+          <rect x="85" y="18" width="30" height="16" rx="4" fill="rgba(245,158,11,.2)" stroke="var(--accent3)" stroke-width="1"/>
+          <text x="100" y="30" text-anchor="middle" fill="var(--accent3)" font-size="8">에지</text>
+        </svg>
+      </div>
+      <p class="small center mt1"><span class="accent4 bold">이웃 간 통신만</span> 필요, 중앙 서버 없음</p>
+    </div>
+  </div>
+
+  <div class="highlight-box mt2 anim-up anim-d3">
+    <p style="color:var(--text)"><span class="bold">대칭적 계산 분배</span>: 각 로봇이 동일한 양의 노드 QP를 풀고, 인접 에지 QP만 추가로 처리 → <span class="accent bold">확장 가능한 아키텍처</span></p>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 7: Results ═══════════════ -->
+<div class="slide" data-slide="7">
+  <h2 class="anim-up">📊 <span class="accent4">실험 결과</span></h2>
+
+  <div class="card-grid col3 mt2">
+    <div class="card anim-up anim-d1 stat">
+      <div class="stat-num">51%</div>
+      <div class="stat-label">계획 시간 단축<br>(4 에이전트 기준)</div>
+    </div>
+    <div class="card anim-up anim-d2 stat">
+      <div class="stat-num">4대</div>
+      <div class="stat-label">동시 로봇 제어<br>(시뮬레이션)</div>
+    </div>
+    <div class="card anim-up anim-d3 stat">
+      <div class="stat-num">2대</div>
+      <div class="stat-label">실제 하드웨어<br>(Unitree Go2)</div>
+    </div>
+  </div>
+
+  <div class="card mt2 anim-up anim-d4">
+    <h3>계획 시간 비교: 중앙 집중식 vs 분산식</h3>
+    <div class="mt1">
+      <div class="bar-wrap">
+        <div class="bar-label"><span>중앙 집중식 (2 로봇)</span><span class="text-dim">100%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,var(--danger),#ff6b6b)" id="bar1"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span class="accent">분산식 (2 로봇)</span><span class="accent">~78%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:78%;background:linear-gradient(90deg,var(--accent),#38bdf8)" id="bar2"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>중앙 집중식 (4 로봇)</span><span class="text-dim">100%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,var(--danger),#ff6b6b)" id="bar3"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span class="accent">분산식 (4 로봇)</span><span class="accent bold">~49%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:49%;background:linear-gradient(90deg,var(--accent4),#34d399)" id="bar4"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="small mt1 anim-up anim-d5 center" style="color:var(--text-dim)">로봇 수가 증가할수록 분산식의 효율 이점이 더 커짐</p>
+</div>
+
+<!-- ═══════════════ SLIDE 8: Experiments Detail ═══════════════ -->
+<div class="slide" data-slide="8">
+  <h2 class="anim-up">🤖 <span class="accent3">실험 환경과 시나리오</span></h2>
+
+  <div class="card-grid col2 mt2">
+    <div class="card anim-up anim-d1">
+      <h3>🔧 하드웨어 플랫폼</h3>
+      <div class="mt1">
+        <div style="display:flex;align-items:center;gap:.8em;margin-bottom:.8em">
+          <svg viewBox="0 0 50 50" width="40" height="40">
+            <rect x="10" y="8" width="30" height="20" rx="5" stroke="var(--accent)" stroke-width="1.5" fill="rgba(0,212,255,.1)"/>
+            <line x1="12" y1="28" x2="8" y2="42" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="20" y1="28" x2="17" y2="42" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="30" y1="28" x2="33" y2="42" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="38" y1="28" x2="42" y2="42" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="bold">Unitree Go2</div>
+            <div class="small" style="color:var(--text-dim)">사족 보행 로봇</div>
+          </div>
+        </div>
+        <ul class="styled">
+          <li>실제 2대 로봇 실험</li>
+          <li>시뮬레이션 최대 4대</li>
+          <li>거친 지형 환경</li>
+          <li>외부 교란 테스트</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card anim-up anim-d2">
+      <h3>🧪 테스트 시나리오</h3>
+      <ul class="styled mt1">
+        <li><span class="bold accent">시나리오 1</span>: 좁은 통로에서 교차 이동</li>
+        <li><span class="bold accent2">시나리오 2</span>: 거친 지형 위 동시 보행</li>
+        <li><span class="bold accent3">시나리오 3</span>: 외부 교란 하 안전 유지</li>
+        <li><span class="bold accent4">시나리오 4</span>: 4대 로봇 밀집 환경 탐색</li>
+      </ul>
+      <div class="highlight-box mt1">
+        <p class="small" style="color:var(--text)">모든 시나리오에서 <span class="accent4 bold">충돌 없이</span> 목표 지점 도달 성공</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt2 anim-up anim-d3">
+    <h3>주요 검증 결과</h3>
+    <div class="card-grid col3 mt1">
+      <div class="center">
+        <div class="accent bold" style="font-size:clamp(1rem,2.5vw,1.4rem)">✓ 안전성</div>
+        <p class="small">CBF 제약 항상 만족<br>로봇 간 최소 거리 유지</p>
+      </div>
+      <div class="center">
+        <div class="accent2 bold" style="font-size:clamp(1rem,2.5vw,1.4rem)">✓ 성능</div>
+        <p class="small">중앙 집중식과<br>동등한 궤적 품질</p>
+      </div>
+      <div class="center">
+        <div class="accent4 bold" style="font-size:clamp(1rem,2.5vw,1.4rem)">✓ 실시간</div>
+        <p class="small">분산 구현으로<br>실시간 제어 달성</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 9: Algorithm Flow ═══════════════ -->
+<div class="slide" data-slide="9">
+  <h2 class="anim-up">🔄 <span class="accent">알고리즘 전체 흐름</span></h2>
+
+  <div class="diagram mt2 anim-up anim-d1">
+    <div style="display:flex;flex-direction:column;gap:clamp(8px,1.5vw,16px);align-items:center">
+      <div class="flow-box" style="width:min(100%,420px)">
+        <span class="accent bold">① 초기화</span><br>
+        <span class="small">각 로봇: 현재 상태 측정, 목표 궤적 설정</span>
+      </div>
+      <div class="arrow">⬇</div>
+      <div class="flow-box" style="width:min(100%,420px)">
+        <span class="accent bold">② 노드 QP 풀기</span> <span class="tag small" style="margin:0">병렬</span><br>
+        <span class="small">각 로봇이 자신의 로컬 MPC 문제를 독립 풀이</span>
+      </div>
+      <div class="arrow">⬇</div>
+      <div class="flow-box amber" style="width:min(100%,420px)">
+        <span class="accent3 bold">③ 이웃 간 통신</span><br>
+        <span class="small">인접 로봇끼리 최적화 변수 교환</span>
+      </div>
+      <div class="arrow">⬇</div>
+      <div class="flow-box amber" style="width:min(100%,420px)">
+        <span class="accent3 bold">④ 에지 QP 풀기</span> <span class="tag small purple" style="margin:0">CBF</span><br>
+        <span class="small">에지 로컬 QP로 안전 제약(CBF) 처리</span>
+      </div>
+      <div class="arrow">⬇</div>
+      <div class="flow-box purple" style="width:min(100%,420px)">
+        <span class="accent2 bold">⑤ 이중 변수 갱신</span><br>
+        <span class="small">라그랑주 승수 업데이트 → 합의 유도</span>
+      </div>
+      <div class="arrow">⬇</div>
+      <div class="flow-box green" style="width:min(100%,420px)">
+        <span class="accent4 bold">⑥ 수렴 확인</span><br>
+        <span class="small">수렴 시 궤적 적용, 아니면 ②로 복귀</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 10: Conclusion ═══════════════ -->
+<div class="slide" data-slide="10">
+  <h2 class="anim-up">🏁 <span class="accent">결론 및 의의</span></h2>
+
+  <div class="card mt2 anim-up anim-d1" style="background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(124,58,237,.08))">
+    <h3>핵심 성과 요약</h3>
+    <ul class="styled mt1">
+      <li>CBF를 포함한 <span class="bold accent">최초의 완전 분산 MPC 프레임워크</span> 제시</li>
+      <li>노드-에지 분할로 <span class="bold">결합 문제를 우아하게 해결</span></li>
+      <li>4대 로봇 기준 <span class="bold accent4">51% 계획 시간 단축</span></li>
+      <li>실제 사족 로봇(Unitree Go2)에서 <span class="bold">실시간 검증 완료</span></li>
+    </ul>
+  </div>
+
+  <div class="card-grid col2 mt2">
+    <div class="card anim-up anim-d2">
+      <h3>📈 학술적 기여</h3>
+      <ul class="styled mt1">
+        <li>ADMM + CBF의 새로운 결합 방식</li>
+        <li>분산 로봇 제어 이론 발전</li>
+        <li>확장 가능한 안전 보장 프레임워크</li>
+      </ul>
+    </div>
+    <div class="card anim-up anim-d3">
+      <h3>🚀 실용적 의의</h3>
+      <ul class="styled mt1">
+        <li>창고 물류 다중 로봇 시스템</li>
+        <li>재난 현장 탐색 로봇 팀</li>
+        <li>군사/보안 다중 에이전트 순찰</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box mt2 anim-up anim-d4 center">
+    <p class="small" style="color:var(--text-dim);margin-bottom:.3em">논문 정보</p>
+    <p style="color:var(--text)"><span class="bold">arXiv:2603.19170v1</span> · 2026년 3월<br>
+    <span class="small">Zeng, Sambhus, Imran, Kim, Pastore, Hamed</span></p>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ═══════════════ Navigation ═══════════════ -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>◀ 이전</button>
+  <div class="progress" id="progress"></div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">다음 ▶</button>
+</nav>
+
+<script>
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const total=slides.length;
+  let cur=0;
+
+  // Build dots
+  const prog=document.getElementById('progress');
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.onclick=()=>goTo(i);
+    prog.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=total)return;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(n>cur?'prev':'');
+    slides[cur].classList.remove(n<cur?'prev':'');
+    cur=n;
+    slides[cur].classList.add('active');
+    slides[cur].classList.remove('prev');
+    // reset scroll
+    slides[cur].scrollTop=0;
+    // dots
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+    // buttons
+    document.getElementById('prevBtn').disabled=cur===0;
+    document.getElementById('nextBtn').disabled=cur===total-1;
+    // trigger bar animations on slide 7
+    if(cur===7) animateBars();
+  }
+
+  window.go=function(dir){goTo(cur+dir)};
+
+  // Keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')go(1);
+    if(e.key==='ArrowLeft')go(-1);
+  });
+
+  // Touch swipe
+  let tx=0,ty=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    const dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){
+      go(dx<0?1:-1);
+    }
+  },{passive:true});
+
+  // Particles
+  const pc=document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(8+Math.random()*12)+'s';
+    p.style.animationDelay=Math.random()*10+'s';
+    p.style.width=p.style.height=(1+Math.random()*3)+'px';
+    pc.appendChild(p);
+  }
+
+  // Bar animation
+  function animateBars(){
+    ['bar1','bar2','bar3','bar4'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      const w=el.style.width;
+      el.style.width='0';
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{el.style.width=w});
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

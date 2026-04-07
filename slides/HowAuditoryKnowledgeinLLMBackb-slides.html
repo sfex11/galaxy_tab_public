@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 백본의 청각 지식이 오디오 언어 모델에 미치는 영향</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-orange: #f59e0b;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background decorations */
+  .bg-gradient {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ===== SLIDE 1: Title ===== */
+  .slide-title {
+    text-align: center;
+    background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(139,92,246,0.1) 0%, transparent 60%),
+                var(--bg-dark);
+  }
+
+  .slide-title .icon-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    font-size: 48px;
+  }
+
+  .slide-title h1 {
+    font-size: clamp(28px, 3.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.35;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #3b82f6 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-title .subtitle {
+    font-size: clamp(16px, 1.6vw, 22px);
+    color: var(--text-secondary);
+    max-width: 800px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .meta-pills {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pill {
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+  }
+
+  .pill.highlight {
+    background: rgba(59,130,246,0.15);
+    border-color: rgba(59,130,246,0.3);
+    color: var(--accent-blue);
+  }
+
+  /* ===== Common heading ===== */
+  .slide-header {
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 40px;
+    text-align: left;
+  }
+
+  .slide-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+
+  .slide-header h2 {
+    font-size: clamp(24px, 2.8vw, 42px);
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .slide-header p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+    max-width: 700px;
+  }
+
+  /* ===== Cards grid ===== */
+  .cards-grid {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .card .card-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .card p, .card li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li::before {
+    content: '→ ';
+    color: var(--accent-blue);
+    font-weight: 700;
+  }
+
+  /* Accent top borders */
+  .card.accent-blue { border-top: 3px solid var(--accent-blue); }
+  .card.accent-cyan { border-top: 3px solid var(--accent-cyan); }
+  .card.accent-purple { border-top: 3px solid var(--accent-purple); }
+  .card.accent-pink { border-top: 3px solid var(--accent-pink); }
+  .card.accent-orange { border-top: 3px solid var(--accent-orange); }
+  .card.accent-green { border-top: 3px solid var(--accent-green); }
+
+  /* ===== Table styles ===== */
+  .table-wrap {
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: rgba(59,130,246,0.1);
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(59,130,246,0.3);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--glass-border);
+    white-space: nowrap;
+  }
+
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+  td.model-name {
+    text-align: left;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  .best-score {
+    color: var(--accent-green);
+    font-weight: 700;
+  }
+
+  .worst-score {
+    color: var(--accent-red);
+    font-weight: 500;
+  }
+
+  .proprietary-row { background: rgba(139,92,246,0.06); }
+
+  /* ===== Chart bars ===== */
+  .bar-chart {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .bar-label {
+    min-width: 160px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.blue { background: linear-gradient(90deg, rgba(59,130,246,0.7), var(--accent-blue)); }
+  .bar-fill.cyan { background: linear-gradient(90deg, rgba(6,182,212,0.7), var(--accent-cyan)); }
+  .bar-fill.purple { background: linear-gradient(90deg, rgba(139,92,246,0.7), var(--accent-purple)); }
+  .bar-fill.pink { background: linear-gradient(90deg, rgba(236,72,153,0.7), var(--accent-pink)); }
+  .bar-fill.orange { background: linear-gradient(90deg, rgba(245,158,11,0.7), var(--accent-orange)); }
+  .bar-fill.green { background: linear-gradient(90deg, rgba(16,185,129,0.7), var(--accent-green)); }
+  .bar-fill.red { background: linear-gradient(90deg, rgba(239,68,68,0.7), var(--accent-red)); }
+
+  /* ===== Correlation visual ===== */
+  .corr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .corr-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px 24px;
+    text-align: center;
+  }
+
+  .corr-value {
+    font-size: 56px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+  }
+
+  .corr-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== Finding boxes ===== */
+  .finding-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .finding-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    border-left: 4px solid var(--accent-blue);
+  }
+
+  .finding-num {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 18px;
+    background: rgba(59,130,246,0.15);
+    color: var(--accent-blue);
+  }
+
+  .finding-text h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .finding-text p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== Pipeline diagram ===== */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    max-width: 1100px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pipeline-node {
+    padding: 20px 28px;
+    border-radius: 14px;
+    text-align: center;
+    min-width: 150px;
+  }
+
+  .pipeline-node h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .pipeline-node p {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .pipeline-arrow {
+    font-size: 28px;
+    color: var(--text-muted);
+    padding: 0 8px;
+  }
+
+  .node-audio { background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3); }
+  .node-encoder { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.3); }
+  .node-connector { background: rgba(236,72,153,0.12); border: 1px solid rgba(236,72,153,0.3); }
+  .node-llm { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); }
+  .node-output { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); }
+
+  /* ===== Stat highlight ===== */
+  .stat-row {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 20px 30px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    min-width: 160px;
+  }
+
+  .stat-box .num {
+    font-size: 36px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat-box .label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  /* ===== Weakness chart ===== */
+  .weakness-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .weakness-item {
+    text-align: center;
+    padding: 24px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+  }
+
+  .weakness-item .score {
+    font-size: 32px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+  }
+
+  .weakness-item .topic {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    z-index: 999;
+  }
+
+  .nav-bar .slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .nav-bar .progress-track {
+    flex: 1;
+    max-width: 500px;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    margin: 0 24px;
+    overflow: hidden;
+  }
+
+  .nav-bar .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .nav-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* ===== Comparison two-col ===== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .col-box {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+  }
+
+  .col-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .col-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .col-box li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .col-box li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .slide { padding: 40px 24px; }
+    .cards-grid.cols-3, .cards-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+    .corr-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .weakness-grid { grid-template-columns: repeat(3, 1fr); }
+    .pipeline { flex-direction: column; }
+    .pipeline-arrow { transform: rotate(90deg); }
+  }
+
+  @media (max-width: 600px) {
+    .cards-grid.cols-3, .cards-grid.cols-2, .cards-grid.cols-4 { grid-template-columns: 1fr; }
+    .weakness-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Keyframes for entrance */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .animate-in {
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .slide.active .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .slide.active .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .slide.active .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .slide.active .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  .slide.active .delay-5 { animation-delay: 0.5s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ========== SLIDE 1: 타이틀 ========== -->
+<div class="slide slide-title active" data-index="0">
+  <div class="bg-gradient" style="width:600px;height:600px;background:var(--accent-blue);top:-10%;left:-10%"></div>
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-purple);bottom:-10%;right:-5%"></div>
+
+  <div class="icon-row animate-in delay-1">
+    <span>🔊</span><span>🧠</span><span>📊</span>
+  </div>
+  <h1 class="animate-in delay-2">LLM 백본의 청각 지식이<br>오디오 언어 모델에 미치는 영향</h1>
+  <p class="subtitle animate-in delay-3">
+    텍스트 전용 사전학습으로 습득한 청각 지식이 LALM 성능에 미치는 영향을 체계적으로 분석한 종합 평가 연구
+  </p>
+  <div class="meta-pills animate-in delay-4">
+    <span class="pill highlight">arXiv: 2603.19195</span>
+    <span class="pill">Ke-Han Lu 외 16인</span>
+    <span class="pill">2026년 3월</span>
+    <span class="pill">CC BY 4.0</span>
+  </div>
+</div>
+
+<!-- ========== SLIDE 2: 연구 동기 ========== -->
+<div class="slide" data-index="1">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-cyan);top:10%;right:-10%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan)">연구 동기</span>
+    <h2 class="animate-in delay-2">왜 LLM 백본의 청각 지식을 연구하는가?</h2>
+  </div>
+  <div class="cards-grid cols-3 animate-in delay-3">
+    <div class="card accent-cyan">
+      <div class="card-icon">🤔</div>
+      <h3>핵심 질문</h3>
+      <p>LLM이 텍스트 전용 학습만으로 얼마나 많은 청각적 지식을 보유하고 있는가?</p>
+    </div>
+    <div class="card accent-blue">
+      <div class="card-icon">🔗</div>
+      <h3>지식과 성능의 관계</h3>
+      <p>텍스트 기반 청각 지식이 실제 오디오 작업 성능과 어떤 상관관계를 가지는가?</p>
+    </div>
+    <div class="card accent-purple">
+      <div class="card-icon">⚙️</div>
+      <h3>설계 결정의 영향</h3>
+      <p>LLM 백본 선택만으로 LALM 성능에 <strong style="color:var(--accent-purple)">10% 이상</strong>의 절대적 차이가 발생할 수 있다</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 3: 평가 프레임워크 ========== -->
+<div class="slide" data-index="2">
+  <div class="bg-gradient" style="width:600px;height:600px;background:var(--accent-purple);bottom:-15%;left:20%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(139,92,246,0.15);color:var(--accent-purple)">방법론</span>
+    <h2 class="animate-in delay-2">3단계 종합 평가 프레임워크</h2>
+    <p class="animate-in delay-2">텍스트 전용 → 캐스케이드 → 오디오 기반의 체계적 분석</p>
+  </div>
+  <div class="pipeline animate-in delay-3">
+    <div class="pipeline-node node-audio">
+      <h4>① 직접 프로빙</h4>
+      <p>AKB-2000 벤치마크<br>텍스트 전용 평가</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-encoder">
+      <h4>② 캐스케이드 평가</h4>
+      <p>오디오 캡셔닝 +<br>텍스트 기반 추론</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-connector">
+      <h4>③ 오디오 기반 평가</h4>
+      <p>LALM으로 파인튜닝<br>종단간 평가</p>
+    </div>
+  </div>
+  <div class="stat-row animate-in delay-4" style="margin-top:36px">
+    <div class="stat-box">
+      <div class="num" style="color:var(--accent-blue)">12</div>
+      <div class="label">오픈소스 LLM</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" style="color:var(--accent-purple)">5</div>
+      <div class="label">독점 모델</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" style="color:var(--accent-cyan)">4</div>
+      <div class="label">모델 패밀리</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" style="color:var(--accent-green)">2</div>
+      <div class="label">H100 GPU</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 4: AKB-2000 벤치마크 ========== -->
+<div class="slide" data-index="3">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-orange);top:-5%;right:5%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(245,158,11,0.15);color:var(--accent-orange)">벤치마크</span>
+    <h2 class="animate-in delay-2">AKB-2000: 청각 지식 벤치마크</h2>
+    <p class="animate-in delay-2">2,000개 4지선다 문항 · 6개 대분류 · 48개 세부 분류</p>
+  </div>
+  <div class="cards-grid cols-3 animate-in delay-3">
+    <div class="card accent-cyan">
+      <div class="card-icon">🔉</div>
+      <h3>소리 (Sound)</h3>
+      <p>환경음, 음향 이벤트, 소리 특성에 대한 지식 평가</p>
+    </div>
+    <div class="card accent-blue">
+      <div class="card-icon">🗣️</div>
+      <h3>준언어 (Paralinguistic)</h3>
+      <p>감정, 톤, 발화 스타일 등 언어 외적 음성 특성</p>
+    </div>
+    <div class="card accent-purple">
+      <div class="card-icon">🔤</div>
+      <h3>음성학 (Phonetic)</h3>
+      <p>음소, 발음, 음운론적 지식 평가</p>
+    </div>
+    <div class="card accent-pink">
+      <div class="card-icon">🎵</div>
+      <h3>음악 (Music)</h3>
+      <p>음악 이론, 악기, 장르, 음악적 구조 이해</p>
+    </div>
+    <div class="card accent-orange">
+      <div class="card-icon">📡</div>
+      <h3>오디오 품질</h3>
+      <p>음질, 녹음 조건, 오디오 처리 기술</p>
+    </div>
+    <div class="card accent-green">
+      <div class="card-icon">🛠️</div>
+      <h3>기술 지식</h3>
+      <p>오디오 엔지니어링, 신호 처리 등 전문 지식</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5: AKB-2000 성능 비교 ========== -->
+<div class="slide" data-index="4">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-green);bottom:0;left:-5%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(16,185,129,0.15);color:var(--accent-green)">실험 결과</span>
+    <h2 class="animate-in delay-2">AKB-2000 텍스트 전용 성능 비교</h2>
+  </div>
+  <div class="bar-chart animate-in delay-3">
+    <div class="bar-row">
+      <span class="bar-label">Gemini-2.5-Pro</span>
+      <div class="bar-track"><div class="bar-fill purple" style="--w:96.05%">96.1%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Claude-Sonnet-4.5</span>
+      <div class="bar-track"><div class="bar-fill purple" style="--w:95.70%">95.7%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">GPT-5</span>
+      <div class="bar-track"><div class="bar-fill purple" style="--w:94.35%">94.4%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-orange)">Phi-4-14B</span>
+      <div class="bar-track"><div class="bar-fill blue" style="--w:86.35%">86.4%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-orange)">Qwen3-14B</span>
+      <div class="bar-track"><div class="bar-fill blue" style="--w:85.05%">85.1%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-cyan)">Qwen2.5-7B</span>
+      <div class="bar-track"><div class="bar-fill cyan" style="--w:80.70%">80.7%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-cyan)">OLMo-3-7B</span>
+      <div class="bar-track"><div class="bar-fill cyan" style="--w:69.05%">69.1%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-cyan)">Llama-3.1-8B</span>
+      <div class="bar-track"><div class="bar-fill orange" style="--w:68.10%">68.1%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label" style="color:var(--accent-red)">Llama-2-7B</span>
+      <div class="bar-track"><div class="bar-fill red" style="--w:45.90%">45.9%</div></div>
+    </div>
+  </div>
+  <p class="animate-in delay-4" style="font-size:13px;color:var(--text-muted);margin-top:20px;text-align:center">
+    <span style="color:var(--accent-purple)">■</span> 독점 모델 &nbsp;&nbsp;
+    <span style="color:var(--accent-blue)">■</span> 오픈소스 (대형) &nbsp;&nbsp;
+    <span style="color:var(--accent-cyan)">■</span> 오픈소스 (7-8B) &nbsp;&nbsp;
+    <span style="color:var(--accent-red)">■</span> 구세대 모델
+  </p>
+</div>
+
+<!-- ========== SLIDE 6: 취약 영역 ========== -->
+<div class="slide" data-index="5">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-red);top:10%;left:50%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(239,68,68,0.15);color:var(--accent-red)">취약점 분석</span>
+    <h2 class="animate-in delay-2">LLM의 체계적 약점: 음운론적 지식</h2>
+    <p class="animate-in delay-2">12개 오픈소스 모델 평균 정확도 — 가장 어려운 5개 하위 카테고리</p>
+  </div>
+  <div class="weakness-grid animate-in delay-3">
+    <div class="weakness-item">
+      <div class="score" style="color:var(--accent-red)">48.7%</div>
+      <div class="topic">운율<br>(Rhyme)</div>
+    </div>
+    <div class="weakness-item">
+      <div class="score" style="color:var(--accent-red)">49.1%</div>
+      <div class="topic">음절 & 강세<br>(Syllable & Stress)</div>
+    </div>
+    <div class="weakness-item">
+      <div class="score" style="color:var(--accent-orange)">52.9%</div>
+      <div class="topic">음악 이론<br>(Music Theory)</div>
+    </div>
+    <div class="weakness-item">
+      <div class="score" style="color:var(--accent-orange)">58.3%</div>
+      <div class="topic">강세 & 강조<br>(Stress & Emphasis)</div>
+    </div>
+    <div class="weakness-item">
+      <div class="score" style="color:var(--accent-orange)">60.2%</div>
+      <div class="topic">음성학 & 음운론<br>(Phonetics)</div>
+    </div>
+  </div>
+  <div class="card animate-in delay-4" style="max-width:800px;margin-top:30px;border-left:4px solid var(--accent-red);text-align:center">
+    <p style="font-size:15px;color:var(--text-secondary);line-height:1.8">
+      <strong style="color:var(--accent-red)">핵심 발견:</strong> 음운론적 과제는 다른 카테고리 대비
+      <strong style="color:var(--text-primary)">10~15%p</strong> 낮은 성능을 보임<br>
+      → 텍스트 전용 사전학습의 근본적 한계를 드러냄
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 7: 캐스케이드 평가 결과 ========== -->
+<div class="slide" data-index="6">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-cyan);bottom:-10%;right:10%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan)">캐스케이드 평가</span>
+    <h2 class="animate-in delay-2">캐스케이드 파이프라인 성능 비교</h2>
+    <p class="animate-in delay-2">Gemini-2.5-Pro 캡셔너 + 각 LLM 추론기 조합</p>
+  </div>
+  <div class="table-wrap animate-in delay-3">
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left">모델</th>
+          <th>MMAU (텍스트)</th>
+          <th>MMAR (텍스트)</th>
+          <th>격차</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="proprietary-row">
+          <td class="model-name">Gemini-2.5-Pro</td>
+          <td class="best-score">70.9%</td>
+          <td class="best-score">71.8%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="model-name">Qwen3-14B</td>
+          <td>66.2%</td>
+          <td>64.3%</td>
+          <td style="color:var(--accent-orange)">-4.7%</td>
+        </tr>
+        <tr>
+          <td class="model-name">Qwen2.5-7B</td>
+          <td>64.5%</td>
+          <td>61.4%</td>
+          <td style="color:var(--accent-orange)">-6.4%</td>
+        </tr>
+        <tr>
+          <td class="model-name">Llama-3.1-8B</td>
+          <td class="worst-score">53.6%</td>
+          <td class="worst-score">51.6%</td>
+          <td style="color:var(--accent-red)">-17.3%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card animate-in delay-4" style="max-width:800px;margin-top:24px;border-left:4px solid var(--accent-cyan);text-align:center">
+    <p style="font-size:14px;color:var(--text-secondary);line-height:1.7">
+      단순 캐스케이드 파이프라인이 여러 최신 종단간 LALM과 <strong style="color:var(--accent-cyan)">동등하거나 우수한</strong> 성능을 달성
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 8: 오디오 기반 파인튜닝 결과 ========== -->
+<div class="slide" data-index="7">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-pink);top:5%;left:-5%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(236,72,153,0.15);color:var(--accent-pink)">오디오 기반 평가</span>
+    <h2 class="animate-in delay-2">LALM 파인튜닝 후 성능</h2>
+    <p class="animate-in delay-2">DeSTA 프레임워크 · Whisper-large-v3 인코더 · Q-Former 커넥터</p>
+  </div>
+  <div class="two-col animate-in delay-3">
+    <div class="col-box" style="border-top:3px solid var(--accent-blue)">
+      <h3><span style="color:var(--accent-blue)">●</span> MMAU (test-mini)</h3>
+      <table>
+        <tbody>
+          <tr><td class="model-name">Qwen2.5-7B</td><td class="best-score">66.6%</td></tr>
+          <tr><td class="model-name">Qwen3-14B</td><td>66.2%</td></tr>
+          <tr><td class="model-name">Qwen3-8B</td><td>61.7%</td></tr>
+          <tr><td class="model-name">Phi-4-14B</td><td>61.1%</td></tr>
+          <tr><td class="model-name">OLMo-3-7B</td><td>56.9%</td></tr>
+          <tr><td class="model-name">Llama-3.1-8B</td><td class="worst-score">56.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-box" style="border-top:3px solid var(--accent-purple)">
+      <h3><span style="color:var(--accent-purple)">●</span> MMAR</h3>
+      <table>
+        <tbody>
+          <tr><td class="model-name">Qwen3-8B</td><td class="best-score">53.0%</td></tr>
+          <tr><td class="model-name">Qwen3-14B</td><td>52.9%</td></tr>
+          <tr><td class="model-name">Phi-4-14B</td><td>52.5%</td></tr>
+          <tr><td class="model-name">Llama-3.1-8B</td><td>47.7%</td></tr>
+          <tr><td class="model-name">Qwen2.5-7B</td><td>47.3%</td></tr>
+          <tr><td class="model-name">OLMo-3-7B</td><td class="worst-score">44.9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="animate-in delay-4" style="font-size:13px;color:var(--text-muted);margin-top:16px;text-align:center">
+    최고-최저 모델 간 MMAU <strong>10%p+</strong>, MMAR <strong>8%p+</strong> 차이 — 백본 선택이 핵심 설계 결정
+  </p>
+</div>
+
+<!-- ========== SLIDE 9: 상관관계 분석 ========== -->
+<div class="slide" data-index="8">
+  <div class="bg-gradient" style="width:600px;height:600px;background:var(--accent-blue);top:20%;left:30%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(59,130,246,0.15);color:var(--accent-blue)">상관관계</span>
+    <h2 class="animate-in delay-2">텍스트 지식 ↔ 오디오 성능의 상관관계</h2>
+    <p class="animate-in delay-2">피어슨 상관계수 (r) 기반 분석</p>
+  </div>
+  <div class="corr-grid animate-in delay-3">
+    <div class="corr-card" style="border-top:3px solid var(--accent-green)">
+      <div class="corr-value" style="color:var(--accent-green)">0.94</div>
+      <div class="corr-label"><strong>AKB-2000 ↔ 캐스케이드</strong><br>텍스트 전용 지표 간<br>매우 강한 상관</div>
+    </div>
+    <div class="corr-card" style="border-top:3px solid var(--accent-blue)">
+      <div class="corr-value" style="color:var(--accent-blue)">0.82</div>
+      <div class="corr-label"><strong>텍스트 → 오디오</strong><br>텍스트 지식이 오디오<br>성능을 강하게 예측</div>
+    </div>
+    <div class="corr-card" style="border-top:3px solid var(--accent-orange)">
+      <div class="corr-value" style="color:var(--accent-orange)">0.40</div>
+      <div class="corr-label"><strong>MMAU ↔ MMAR</strong><br>학습 데이터 커버리지 차이로<br>약한 상관</div>
+    </div>
+  </div>
+  <div class="card animate-in delay-4" style="max-width:700px;margin-top:30px;border-left:4px solid var(--accent-green);text-align:center">
+    <p style="font-size:15px;color:var(--text-secondary);line-height:1.8">
+      텍스트 전용 벤치마크가 비용이 큰 멀티모달 학습 <strong style="color:var(--text-primary)">이전에</strong><br>
+      LLM 백본 선택의 <strong style="color:var(--accent-green)">신뢰할 수 있는 프록시</strong>로 활용 가능
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 10: 주요 발견 ========== -->
+<div class="slide" data-index="9">
+  <div class="bg-gradient" style="width:600px;height:600px;background:var(--accent-purple);bottom:-5%;right:-5%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(139,92,246,0.15);color:var(--accent-purple)">핵심 발견</span>
+    <h2 class="animate-in delay-2">6가지 핵심 연구 결과</h2>
+  </div>
+  <div class="finding-list animate-in delay-3">
+    <div class="finding-item" style="border-left-color:var(--accent-blue)">
+      <div class="finding-num">1</div>
+      <div class="finding-text">
+        <h4>청각 지식의 모델 간 큰 편차</h4>
+        <p>동일 규모(7-8B)에서도 Qwen2.5-7B(80.7%)가 Llama-3.1-8B(68.1%)를 <strong>12.6%p</strong> 앞섬</p>
+      </div>
+    </div>
+    <div class="finding-item" style="border-left-color:var(--accent-green)">
+      <div class="finding-num">2</div>
+      <div class="finding-text">
+        <h4>강한 백본이 학습 데이터 부족을 보상</h4>
+        <p>Qwen2.5-7B는 10배 많은 학습 데이터를 사용한 DeSTA2.5-Audio(Llama-3.1-8B)와 동등한 성능 달성</p>
+      </div>
+    </div>
+    <div class="finding-item" style="border-left-color:var(--accent-red)">
+      <div class="finding-num">3</div>
+      <div class="finding-text">
+        <h4>음운론적 추론의 체계적 실패</h4>
+        <p>운율 인식과 동음이의어 식별에서 모든 LLM이 체계적으로 실패 — 텍스트 전용 학습의 근본적 한계</p>
+      </div>
+    </div>
+    <div class="finding-item" style="border-left-color:var(--accent-cyan)">
+      <div class="finding-num">4</div>
+      <div class="finding-text">
+        <h4>오디오 인코더 병목현상</h4>
+        <p>캐스케이드 성능이 종단간 LALM을 초과하는 경우 존재 → 현재 시스템이 오디오 인코더에 의해 제한됨</p>
+      </div>
+    </div>
+    <div class="finding-item" style="border-left-color:var(--accent-orange)">
+      <div class="finding-num">5</div>
+      <div class="finding-text">
+        <h4>모델 업데이트 ≠ 청각 지식 향상</h4>
+        <p>Llama-3.1-8B가 전작 Llama-3-8B보다 낮은 성능 — 버전 업그레이드가 청각 지식 향상을 보장하지 않음</p>
+      </div>
+    </div>
+    <div class="finding-item" style="border-left-color:var(--accent-purple)">
+      <div class="finding-num">6</div>
+      <div class="finding-text">
+        <h4>스케일링의 비선형성</h4>
+        <p>Qwen3-4B와 Qwen3-8B가 유사한 성능 → 파라미터 수 증가가 반드시 청각 지식 향상으로 이어지지 않음</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: 실험 설정 상세 ========== -->
+<div class="slide" data-index="10">
+  <div class="bg-gradient" style="width:500px;height:500px;background:var(--accent-orange);top:-5%;left:60%"></div>
+  <div class="slide-header">
+    <span class="tag animate-in delay-1" style="background:rgba(245,158,11,0.15);color:var(--accent-orange)">실험 설정</span>
+    <h2 class="animate-in delay-2">LALM 파인튜닝 아키텍처</h2>
+  </div>
+  <div class="pipeline animate-in delay-3" style="margin-bottom:36px">
+    <div class="pipeline-node node-audio">
+      <h4>오디오 입력</h4>
+      <p>877시간<br>음성/소리/음악</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-encoder">
+      <h4>오디오 인코더</h4>
+      <p>Whisper-large-v3<br>(동결)</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-connector">
+      <h4>모달리티 커넥터</h4>
+      <p>6-layer Q-Former<br>(학습 대상)</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-llm">
+      <h4>LLM 백본</h4>
+      <p>12개 모델 비교<br>(동결)</p>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-node node-output">
+      <h4>응답 생성</h4>
+      <p>MMAU · MMAR<br>평가</p>
+    </div>
+  </div>
+  <div class="cards-grid cols-4 animate-in delay-4">
+    <div class="card" style="text-align:center;padding:20px">
+      <h3 style="font-size:15px;color:var(--accent-cyan)">학습 데이터</h3>
+      <p style="font-size:13px">DeSTA-AQA500K<br>877시간</p>
+    </div>
+    <div class="card" style="text-align:center;padding:20px">
+      <h3 style="font-size:15px;color:var(--accent-blue)">에폭</h3>
+      <p style="font-size:13px">10 에폭<br>LR: 1e-4</p>
+    </div>
+    <div class="card" style="text-align:center;padding:20px">
+      <h3 style="font-size:15px;color:var(--accent-purple)">배치 크기</h3>
+      <p style="font-size:13px">글로벌 96<br>2× H100 GPU</p>
+    </div>
+    <div class="card" style="text-align:center;padding:20px">
+      <h3 style="font-size:15px;color:var(--accent-green)">평가 방식</h3>
+      <p style="font-size:13px">GPT-4o<br>심사관</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 12: 결론 ========== -->
+<div class="slide" data-index="11">
+  <div class="bg-gradient" style="width:700px;height:700px;background:var(--accent-blue);top:20%;left:30%"></div>
+  <div class="bg-gradient" style="width:400px;height:400px;background:var(--accent-purple);bottom:0;right:10%"></div>
+  <div class="slide-header" style="text-align:center">
+    <span class="tag animate-in delay-1" style="background:rgba(59,130,246,0.15);color:var(--accent-blue)">결론</span>
+    <h2 class="animate-in delay-2" style="text-align:center">결론 및 시사점</h2>
+  </div>
+  <div class="cards-grid cols-2 animate-in delay-3" style="max-width:1000px">
+    <div class="card accent-blue" style="padding:32px">
+      <div class="card-icon">🎯</div>
+      <h3>핵심 메시지</h3>
+      <p style="font-size:15px;line-height:1.8">LLM 백본 선택은 LALM 개발의 <strong style="color:var(--accent-blue)">1차적 설계 결정</strong>이다. 텍스트 전용 벤치마크를 통해 비용이 큰 멀티모달 학습 전에 최적의 백본을 선별할 수 있다.</p>
+    </div>
+    <div class="card accent-purple" style="padding:32px">
+      <div class="card-icon">🔮</div>
+      <h3>향후 과제</h3>
+      <ul>
+        <li>더 나은 오디오 모듈 설계 필요</li>
+        <li>음운론적 추론 능력 향상 방안</li>
+        <li>인코더 병목현상 해결</li>
+        <li>도메인별 학습 데이터 확충</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stat-row animate-in delay-4" style="margin-top:30px">
+    <div class="stat-box" style="border:1px solid rgba(16,185,129,0.3)">
+      <div class="num" style="color:var(--accent-green);font-size:28px">r = 0.94</div>
+      <div class="label">텍스트↔오디오 상관</div>
+    </div>
+    <div class="stat-box" style="border:1px solid rgba(239,68,68,0.3)">
+      <div class="num" style="color:var(--accent-red);font-size:28px">10%p+</div>
+      <div class="label">백본 선택의 영향</div>
+    </div>
+    <div class="stat-box" style="border:1px solid rgba(59,130,246,0.3)">
+      <div class="num" style="color:var(--accent-blue);font-size:28px">2,000</div>
+      <div class="label">AKB 벤치마크 문항</div>
+    </div>
+  </div>
+  <div class="meta-pills animate-in delay-5" style="margin-top:30px">
+    <span class="pill">코드 · 벤치마크 · 체크포인트 공개</span>
+    <span class="pill highlight">kehanlu.github.io/AKB</span>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <span class="slide-counter" id="slideCounter">1 / 12</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:8.33%"></div>
+  </div>
+  <div class="nav-btns">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&#8592;</button>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">&#8594;</button>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('slideCounter');
+  const progress = document.getElementById('progressFill');
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i < idx) s.classList.add('exit-left');
+    });
+    slides[idx].classList.add('active');
+    counter.textContent = `${idx + 1} / ${total}`;
+    progress.style.width = `${((idx + 1) / total) * 100}%`;
+  }
+
+  function changeSlide(dir) {
+    current = Math.max(0, Math.min(total - 1, current + dir));
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    if (e.key === 'Home') { e.preventDefault(); current = 0; showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); current = total - 1; showSlide(current); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+  });
+</script>
+
+</body>
+</html>

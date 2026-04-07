@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RAD-AI: AI 증강 생태계를 위한 아키텍처 문서화 재구상</title>
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --text: #eaeaea;
+    --text-dim: #a0a0b8;
+    --card-bg: rgba(255,255,255,0.06);
+    --success: #00d2a0;
+    --warning: #ffc107;
+    --gradient1: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --gradient2: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+    --gradient3: linear-gradient(135deg, #00d2a0 0%, #00b4d8 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(20px, 5vw, 60px);
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 10;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  /* ===== TITLE SLIDE ===== */
+  .slide-title { background: var(--gradient1); text-align: center; }
+  .slide-title .badge {
+    display: inline-block;
+    background: var(--gradient2);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+  }
+  .slide-title h1 {
+    font-size: clamp(1.6rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #fff, #e94560, #00d2a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slide-title .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .slide-title .authors {
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .slide-title .venue {
+    font-size: clamp(0.65rem, 1.4vw, 0.85rem);
+    color: var(--highlight);
+    font-weight: 600;
+  }
+
+  /* ===== COMMON ===== */
+  .slide h2 {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: clamp(12px, 2vw, 24px);
+    line-height: 1.3;
+  }
+  .slide h2 .num {
+    display: inline-block;
+    background: var(--gradient2);
+    color: #fff;
+    width: clamp(28px, 4vw, 40px);
+    height: clamp(28px, 4vw, 40px);
+    line-height: clamp(28px, 4vw, 40px);
+    border-radius: 50%;
+    text-align: center;
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .slide h3 {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--highlight);
+    margin: clamp(8px, 1.5vw, 16px) 0 clamp(6px, 1vw, 10px);
+    font-weight: 600;
+  }
+  .slide p, .slide li {
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+  .slide ul { padding-left: 1.2em; }
+  .slide li { margin-bottom: 6px; }
+  .slide li strong { color: var(--text); }
+
+  .highlight-text { color: var(--highlight); font-weight: 700; }
+  .success-text { color: var(--success); font-weight: 700; }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    gap: clamp(8px, 1.5vw, 16px);
+    margin-top: clamp(8px, 1.5vw, 16px);
+  }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: clamp(12px, 2vw, 20px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: var(--highlight); }
+  .card .card-icon {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .card .card-title {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .card .card-desc {
+    font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin-top: 12px; -webkit-overflow-scrolling: touch; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+    min-width: 320px;
+  }
+  th, td {
+    padding: clamp(6px, 1vw, 12px) clamp(8px, 1.2vw, 16px);
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  th {
+    background: rgba(233,69,96,0.15);
+    color: var(--highlight);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  td { color: var(--text-dim); }
+
+  /* Stat boxes */
+  .stat-row {
+    display: flex;
+    gap: clamp(8px, 2vw, 20px);
+    flex-wrap: wrap;
+    margin: clamp(10px, 2vw, 20px) 0;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: clamp(12px, 2vw, 20px);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat-box .stat-num {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 800;
+    display: block;
+  }
+  .stat-box .stat-num.red { color: var(--highlight); }
+  .stat-box .stat-num.green { color: var(--success); }
+  .stat-box .stat-num.blue { color: #00b4d8; }
+  .stat-box .stat-label {
+    font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    height: 28px;
+    position: relative;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1s ease;
+  }
+  .progress-fill.red { background: var(--gradient2); }
+  .progress-fill.green { background: var(--gradient3); }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .flow-item {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: clamp(8px, 1.5vw, 14px) clamp(12px, 2vw, 20px);
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    text-align: center;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 80px;
+  }
+  .flow-item.highlight-card {
+    border-color: var(--highlight);
+    background: rgba(233,69,96,0.1);
+  }
+  .flow-item.success-card {
+    border-color: var(--success);
+    background: rgba(0,210,160,0.1);
+  }
+  .flow-arrow {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--text-dim);
+  }
+
+  /* Quote */
+  .quote {
+    border-left: 4px solid var(--highlight);
+    padding: clamp(10px, 2vw, 20px);
+    margin: clamp(10px, 2vw, 20px) 0;
+    background: rgba(233,69,96,0.05);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: clamp(0.6rem, 1.3vw, 0.75rem);
+    font-weight: 600;
+    margin: 2px;
+  }
+  .tag.red { background: rgba(233,69,96,0.2); color: var(--highlight); }
+  .tag.green { background: rgba(0,210,160,0.2); color: var(--success); }
+  .tag.blue { background: rgba(0,180,216,0.2); color: #00b4d8; }
+
+  /* Ecosystem diagram */
+  .eco-diagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+    position: relative;
+  }
+  .eco-node {
+    background: var(--card-bg);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: clamp(10px, 1.5vw, 16px);
+    text-align: center;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    font-weight: 600;
+  }
+  .eco-node.ml { border-color: var(--highlight); color: var(--highlight); }
+  .eco-node.monitor { border-color: var(--warning); color: var(--warning); }
+  .eco-node.feature { border-color: var(--success); color: var(--success); }
+  .eco-node.human { border-color: #00b4d8; color: #00b4d8; }
+  .eco-node .eco-label {
+    display: block;
+    font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+    opacity: 0.7;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(8px, 1.5vw, 14px) clamp(16px, 3vw, 30px);
+    background: rgba(26,26,46,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 100;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 0;
+    width: clamp(44px, 8vw, 56px);
+    height: clamp(44px, 8vw, 56px);
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:hover, .nav-btn:active { background: rgba(233,69,96,0.2); border-color: var(--highlight); }
+  .nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+  .nav-progress {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    font-weight: 600;
+    min-width: 60px;
+    text-align: center;
+  }
+  .nav-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-dot.active { background: var(--highlight); transform: scale(1.3); }
+
+  /* Decorative elements */
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Animations */
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.35s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.5s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.65s both; }
+
+  /* Section label */
+  .section-label {
+    font-size: clamp(0.6rem, 1.3vw, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--highlight);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* Checklist */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: clamp(0.78rem, 1.8vw, 1rem);
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+  .check-item .icon { font-size: clamp(0.9rem, 2vw, 1.1rem); flex-shrink: 0; margin-top: 2px; }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+    .eco-diagram { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-row { gap: 8px; }
+    .stat-box { min-width: 80px; }
+    .nav-dot { width: 6px; height: 6px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px; padding-bottom: 80px; }
+    .card-grid.cols-2 { grid-template-columns: 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .eco-diagram { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; gap: 8px; }
+    .stat-box { min-width: auto; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .nav-dot { width: 5px; height: 5px; }
+    .nav { padding: 8px 12px; }
+    table { font-size: clamp(0.6rem, 1.4vw, 0.75rem); }
+    th, td { padding: 6px 8px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 14px; padding-bottom: 72px; }
+    .slide h2 { font-size: 1.15rem; }
+    .card { padding: 10px; }
+    .stat-box { padding: 10px; }
+    .nav-btn { width: 44px; height: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ============ SLIDE 1: TITLE ============ -->
+  <div class="slide slide-title active" data-slide="0">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--highlight);top:-50px;right:-80px;"></div>
+    <div class="bg-glow" style="width:250px;height:250px;background:#00d2a0;bottom:-60px;left:-80px;"></div>
+    <div class="anim-1 badge">ANGE 2026 @ IEEE ICSA 2026</div>
+    <h1 class="anim-2">RAD-AI</h1>
+    <p class="subtitle anim-3">AI 증강 생태계를 위한<br>아키텍처 문서화 재구상</p>
+    <p class="authors anim-4">Oliver Aleksander Larsen &amp; Mahyar T. Moghaddam</p>
+    <p class="venue anim-5">arXiv: 2603.28735v1 &bull; 2026년 3월</p>
+  </div>
+
+  <!-- ============ SLIDE 2: PROBLEM ============ -->
+  <div class="slide" data-slide="1">
+    <div class="bg-glow" style="width:200px;height:200px;background:var(--highlight);top:10%;right:5%;"></div>
+    <div class="section-label anim-1">문제 정의</div>
+    <h2 class="anim-1">기존 문서화 프레임워크의 <span class="highlight-text">한계</span></h2>
+    <p class="anim-2" style="margin-bottom:16px;">arc42, C4 모델 등 기존 프레임워크는 <strong class="highlight-text">결정적(deterministic) 시스템</strong>을 전제로 설계되었습니다.</p>
+
+    <div class="card-grid cols-2 anim-3">
+      <div class="card">
+        <span class="card-icon">&#x26A0;&#xFE0F;</span>
+        <div class="card-title">확률적 출력 표현 불가</div>
+        <div class="card-desc">신뢰 구간, 성능 저하 프로파일을 표현할 표기법 부재</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F504;</span>
+        <div class="card-title">데이터 의존 진화</div>
+        <div class="card-desc">코드 커밋이 아닌 데이터 분포 변화로 동작이 변경됨</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F503;</span>
+        <div class="card-title">이중 생명주기</div>
+        <div class="card-desc">ML 학습/서빙 주기와 소프트웨어 릴리스 주기가 비동기적으로 운영</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x2696;&#xFE0F;</span>
+        <div class="card-title">EU AI Act 규제</div>
+        <div class="card-desc">2026.08.02 시행 &mdash; Annex IV 기술 문서화 의무</div>
+      </div>
+    </div>
+
+    <div class="quote anim-4">
+      &ldquo;결정적 시스템을 위해 설계된 아키텍처 문서화 프레임워크는<br>AI 증강 생태계에 <strong>부적합</strong>하다.&rdquo;
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 3: BACKGROUND ============ -->
+  <div class="slide" data-slide="2">
+    <div class="section-label anim-1">배경</div>
+    <h2 class="anim-1">arc42 &amp; C4 모델의 <span class="highlight-text">구조적 공백</span></h2>
+
+    <div class="card-grid cols-2 anim-2">
+      <div class="card">
+        <div class="card-title" style="color:var(--highlight);">arc42</div>
+        <div class="card-desc">12개 실용적 섹션으로 구성된 아키텍처 문서화 템플릿. 소개, 제약사항, 컨텍스트, 빌딩블록뷰, 런타임뷰, 배포뷰 등을 포함하나 <strong>AI 컴포넌트 전용 섹션 없음</strong></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#00b4d8;">C4 모델</div>
+        <div class="card-desc">계층적 시각화: System Context, Container, Component, Code 레벨. 모든 컨테이너가 <strong>안정적 인터페이스를 가진 결정적 코드 모듈</strong>로 취급됨</div>
+      </div>
+    </div>
+
+    <h3 class="anim-3">5가지 문서화 공백 (G1&ndash;G5)</h3>
+    <div class="anim-4" style="display:grid;gap:6px;">
+      <div class="check-item"><span class="icon" style="color:var(--highlight);">&#x2718;</span><span><strong>G1:</strong> 모델 생명주기, 데이터 파이프라인, 드리프트 전용 arc42 섹션 부재</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--highlight);">&#x2718;</span><span><strong>G2:</strong> ML 컴포넌트 및 비결정성 경계를 위한 C4 다이어그램 타입 부재</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--highlight);">&#x2718;</span><span><strong>G3:</strong> EU AI Act Annex IV와 arc42/C4 간 매핑 부재</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--highlight);">&#x2718;</span><span><strong>G4:</strong> AI 전용 아키텍처 결정 기록(ADR) 템플릿 부재</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--highlight);">&#x2718;</span><span><strong>G5:</strong> Model/Data Cards의 아키텍처 문서 통합 부재</span></div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 4: RAD-AI OVERVIEW ============ -->
+  <div class="slide" data-slide="3">
+    <div class="bg-glow" style="width:250px;height:250px;background:var(--success);bottom:15%;right:0;"></div>
+    <div class="section-label anim-1">RAD-AI 프레임워크</div>
+    <h2 class="anim-1">RAD-AI: <span class="success-text">하위 호환</span> 확장 프레임워크</h2>
+
+    <div class="stat-row anim-2">
+      <div class="stat-box"><span class="stat-num red">8</span><span class="stat-label">arc42 확장 섹션</span></div>
+      <div class="stat-box"><span class="stat-num blue">3</span><span class="stat-label">C4 다이어그램 확장</span></div>
+      <div class="stat-box"><span class="stat-num green">93%</span><span class="stat-label">규제 대응률</span></div>
+    </div>
+
+    <h3 class="anim-3">3가지 설계 원칙</h3>
+    <div class="card-grid cols-3 anim-4">
+      <div class="card" style="border-left:3px solid var(--highlight);">
+        <div class="card-title">하위 호환성</div>
+        <div class="card-desc">기존 문서를 무효화하지 않고 확장</div>
+      </div>
+      <div class="card" style="border-left:3px solid #00b4d8;">
+        <div class="card-title">최소 혼란</div>
+        <div class="card-desc">관련성에 따라 점진적 채택 가능</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--success);">
+        <div class="card-title">추적 가능성</div>
+        <div class="card-desc">각 확장이 식별된 공백(G1-G5)에 매핑</div>
+      </div>
+    </div>
+
+    <div class="flow anim-5">
+      <div class="flow-item">기존 arc42/C4</div>
+      <span class="flow-arrow">&#x27A1;&#xFE0F;</span>
+      <div class="flow-item highlight-card">+ RAD-AI 확장</div>
+      <span class="flow-arrow">&#x27A1;&#xFE0F;</span>
+      <div class="flow-item success-card">AI-Ready 문서</div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 5: 8 EXTENSIONS (1/2) ============ -->
+  <div class="slide" data-slide="4">
+    <div class="section-label anim-1">arc42 확장 (1/2)</div>
+    <h2 class="anim-1">8개 AI 전용 섹션 &mdash; <span class="highlight-text">E1&ndash;E4</span></h2>
+
+    <div class="card-grid cols-2 anim-2">
+      <div class="card">
+        <span class="card-icon">&#x1F50D;</span>
+        <div class="card-title">E1: AI 경계 구분</div>
+        <div class="card-desc"><span class="tag blue">Context &amp; Scope 확장</span><br>결정적 vs 비결정적 시스템 경계를 명시. 출력 유형, 신뢰도 사양, 업데이트 빈도, 폴백 동작의 4-부분 계약 정의</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F4CB;</span>
+        <div class="card-title">E2: 모델 레지스트리 뷰</div>
+        <div class="card-desc"><span class="tag blue">Building Block 확장</span><br>AI 모델을 1급 빌딩 블록으로 격상. 모델 ID, ML 프레임워크, 학습 데이터 해시, 배포 상태 등 기록</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F4CA;</span>
+        <div class="card-title">E3: 데이터 파이프라인 뷰</div>
+        <div class="card-desc"><span class="tag blue">Runtime View 확장</span><br>수집 &rarr; 전처리 &rarr; 피처 엔지니어링 &rarr; 학습 &rarr; 추론 &rarr; 피드백 루프. 각 단계별 품질 게이트 주석</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x2696;&#xFE0F;</span>
+        <div class="card-title">E4: 책임 있는 AI 개념</div>
+        <div class="card-desc"><span class="tag blue">Cross-Cutting 확장</span><br>공정성, 설명가능성, 인간 감독, 프라이버시, 안전성의 5개 카테고리 &times; AI 컴포넌트 매트릭스</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 6: 8 EXTENSIONS (2/2) ============ -->
+  <div class="slide" data-slide="5">
+    <div class="section-label anim-1">arc42 확장 (2/2)</div>
+    <h2 class="anim-1">8개 AI 전용 섹션 &mdash; <span class="highlight-text">E5&ndash;E8</span></h2>
+
+    <div class="card-grid cols-2 anim-2">
+      <div class="card">
+        <span class="card-icon">&#x1F4DD;</span>
+        <div class="card-title">E5: AI 결정 기록 (AI-ADR)</div>
+        <div class="card-desc"><span class="tag red">Architecture Decisions 확장</span><br>모델 대안, 데이터셋 사양, 공정성 모니터링, 모델 수명, 재학습 트리거, 설명가능성 방법, 규제 분류 등 7개 필드 추가</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F3AF;</span>
+        <div class="card-title">E6: AI 품질 시나리오</div>
+        <div class="card-desc"><span class="tag red">Quality Requirements 확장</span><br>데이터 드리프트, 모델 노후화, 적대적 입력 등 AI 특화 소스-자극-응답 시나리오. 정량적 트리거와 측정 가능한 응답</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F4B3;</span>
+        <div class="card-title">E7: AI 부채 레지스터</div>
+        <div class="card-desc"><span class="tag red">Risks &amp; Tech Debt 확장</span><br>경계 침식, 얽힘, 숨겨진 피드백 루프, 데이터 의존성, 파이프라인 부채 등 ML 특화 부채 체계적 추적</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F6E0;&#xFE0F;</span>
+        <div class="card-title">E8: 운영 AI 뷰 (신규)</div>
+        <div class="card-desc"><span class="tag green">완전히 새로운 섹션</span><br>모니터링, 재학습 정책, 배포 전략(카나리/블루-그린/섀도), 롤백 정책의 4개 필수 하위 섹션</div>
+      </div>
+    </div>
+
+    <div class="quote anim-3" style="margin-top:12px;">
+      E8 운영 AI 뷰는 기존 arc42에 <strong>동등한 섹션이 전혀 없는</strong> 완전히 새로운 확장입니다.
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 7: C4 EXTENSIONS ============ -->
+  <div class="slide" data-slide="6">
+    <div class="section-label anim-1">C4 모델 확장</div>
+    <h2 class="anim-1">3가지 C4 다이어그램 <span style="color:#00b4d8;">확장</span></h2>
+
+    <div class="card-grid anim-2" style="grid-template-columns:1fr;gap:12px;">
+      <div class="card" style="border-left:4px solid var(--highlight);">
+        <div class="card-title" style="font-size:clamp(0.9rem,2vw,1.1rem);">C4-E1: AI 컴포넌트 스테레오타입</div>
+        <div class="card-desc" style="margin-top:8px;">5개 새로운 스테레오타입으로 AI 컴포넌트를 시각적으로 구별:</div>
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag red">&laquo;ML Model&raquo;</span>
+          <span class="tag blue">&laquo;Data Pipeline&raquo;</span>
+          <span class="tag green">&laquo;Feature Store&raquo;</span>
+          <span class="tag" style="background:rgba(255,193,7,0.2);color:var(--warning);">&laquo;Monitor&raquo;</span>
+          <span class="tag blue">&laquo;Human-in-the-Loop&raquo;</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--success);">
+        <div class="card-title" style="font-size:clamp(0.9rem,2vw,1.1rem);">C4-E2: 데이터 계보 오버레이</div>
+        <div class="card-desc" style="margin-top:8px;">데이터 출처에서 변환, 모델 소비까지의 계보 추적 보조 다이어그램 레이어. 스키마 기대값, 데이터 신선도 제약, 프라이버시 분류를 주석으로 표시</div>
+      </div>
+      <div class="card" style="border-left:4px solid #00b4d8;">
+        <div class="card-title" style="font-size:clamp(0.9rem,2vw,1.1rem);">C4-E3: 비결정성 경계 다이어그램</div>
+        <div class="card-desc" style="margin-top:8px;">아키텍처를 결정적/비결정적 영역으로 분할. 각 경계에 신뢰도 사양, 폴백 전략, 성능 저하 프로파일의 3-속성 계약 주석</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 8: EU AI ACT ============ -->
+  <div class="slide" data-slide="7">
+    <div class="section-label anim-1">EU AI Act 규제 대응</div>
+    <h2 class="anim-1">Annex IV <span class="highlight-text">준수 매핑</span></h2>
+
+    <p class="anim-2" style="margin-bottom:12px;">EU AI Act Annex IV의 10개 요구 카테고리를 RAD-AI 섹션에 체계적으로 매핑:</p>
+
+    <div class="table-wrap anim-3">
+      <table>
+        <thead>
+          <tr><th>요구 카테고리</th><th>RAD-AI 매핑</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>시스템 일반 설명</td><td>arc42 &sect;1, &sect;3 + <strong>E1</strong></td></tr>
+          <tr><td>시스템 요소 &amp; 개발</td><td>&sect;5 + <strong>E2</strong> 모델 레지스트리</td></tr>
+          <tr><td>설계 &amp; 아키텍처</td><td>&sect;5-7 + <strong>C4-E1</strong></td></tr>
+          <tr><td>데이터 거버넌스</td><td><strong>E3</strong> + <strong>C4-E2</strong></td></tr>
+          <tr><td>학습 방법론</td><td><strong>E5</strong> AI-ADR + 보충</td></tr>
+          <tr><td>위험 관리</td><td>&sect;11 + <strong>E7</strong></td></tr>
+          <tr><td>생명주기 변경</td><td><strong>E2</strong> + <strong>E8</strong></td></tr>
+          <tr><td>성능 지표</td><td><strong>E6</strong> + <strong>C4-E3</strong></td></tr>
+          <tr><td>인간 감독</td><td><strong>E4</strong> + HitL</td></tr>
+          <tr><td>시판 후 모니터링</td><td><strong>E8</strong> 운영 AI 뷰</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quote anim-4" style="margin-top:12px;font-size:clamp(0.75rem,1.7vw,0.95rem);">
+      Annex IV &sect;2(c): &ldquo;소프트웨어 구성 요소가 서로 어떻게 연결되고 전체 처리에 통합되는지에 대한 설명&rdquo; &mdash; <strong>직접적인 아키텍처 문서화 의무</strong>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 9: COMPLIANCE RESULTS ============ -->
+  <div class="slide" data-slide="8">
+    <div class="section-label anim-1">평가 결과</div>
+    <h2 class="anim-1">규제 대응률: <span class="highlight-text">36%</span> &#x2192; <span class="success-text">93%</span></h2>
+
+    <p class="anim-2" style="margin-bottom:12px;">6명의 소프트웨어 아키텍처 전문가가 독립적으로 평가 (Fleiss' &kappa; &asymp; 0.68, 상당한 일치도)</p>
+
+    <div class="anim-3">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:600;">기존 arc42</span>
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:700;color:var(--highlight);">36%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill red" style="width:36%;">7.3/20</div></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;margin-top:10px;">
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:600;">기존 C4</span>
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:700;color:var(--highlight);">26%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill red" style="width:26%;">5.2/20</div></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;margin-top:10px;">
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:600;">RAD-AI arc42</span>
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:700;color:var(--success);">93%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill green" style="width:93%;">18.5/20</div></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;margin-top:10px;">
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:600;">RAD-AI C4</span>
+        <span style="font-size:clamp(0.75rem,1.7vw,0.9rem);font-weight:700;color:#00b4d8;">73%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:73%;background:linear-gradient(135deg,#00b4d8,#0096c7);">14.6/20</div></div>
+    </div>
+
+    <div class="anim-4" style="margin-top:14px;">
+      <p style="font-size:clamp(0.75rem,1.7vw,0.9rem);"><strong>기존 프레임워크에서 완전히 대응 불가능한 3개 영역:</strong></p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="tag red">데이터 거버넌스</span>
+        <span class="tag red">학습 방법론</span>
+        <span class="tag red">인간 감독</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 10: CASE STUDY - UBER & NETFLIX ============ -->
+  <div class="slide" data-slide="9">
+    <div class="section-label anim-1">비교 분석</div>
+    <h2 class="anim-1">Uber &amp; Netflix: <span class="highlight-text">동일한 공백 패턴</span></h2>
+
+    <div class="card-grid cols-2 anim-2">
+      <div class="card" style="border-top:3px solid var(--highlight);">
+        <div class="card-title">Uber Michelangelo</div>
+        <div class="card-desc">
+          5,000+ 프로덕션 모델<br>
+          초당 1,000만 예측<br>
+          20,000+ 피처<br>
+          <strong style="color:var(--highlight);">기존: 0/10 완전 포착</strong>
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid #00b4d8;">
+        <div class="card-title">Netflix Metaflow</div>
+        <div class="card-desc">
+          3,000+ ML 프로젝트<br>
+          15,000+ Flink 작업<br>
+          이벤트 기반 워크플로<br>
+          <strong style="color:#00b4d8;">기존: 0/10 완전 포착</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap anim-3">
+      <table>
+        <thead><tr><th>AI 특화 관심사</th><th>기존</th><th>RAD-AI</th></tr></thead>
+        <tbody>
+          <tr><td>모델 버전 관리 &amp; 생명주기</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+          <tr><td>피처 스토어 아키텍처</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+          <tr><td>드리프트 감지 &amp; 모니터링</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+          <tr><td>재학습 트리거 &amp; 자동화</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+          <tr><td>비결정적 경계</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+          <tr><td>데이터 계보 &amp; 출처</td><td style="color:var(--highlight);">&#x2718;</td><td style="color:var(--success);">&#x2714;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quote anim-4" style="font-size:clamp(0.72rem,1.6vw,0.9rem);">
+      두 조직 모두 문서화 결함이 동일 &rarr; <strong>도메인이 아닌 프레임워크의 구조적 속성</strong>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 11: ECOSYSTEM CASE STUDY ============ -->
+  <div class="slide" data-slide="10">
+    <div class="bg-glow" style="width:200px;height:200px;background:#00d2a0;top:20%;left:0;"></div>
+    <div class="section-label anim-1">생태계 사례 연구</div>
+    <h2 class="anim-1">스마트 도시 모빌리티 <span class="success-text">생태계</span></h2>
+
+    <div class="eco-diagram anim-2">
+      <div class="eco-node ml">&#x1F916; 경로 최적화<span class="eco-label">&laquo;ML Model&raquo;</span></div>
+      <div class="eco-node ml">&#x1F4C8; 수요 예측<span class="eco-label">&laquo;ML Model&raquo;</span></div>
+      <div class="eco-node monitor">&#x26A0;&#xFE0F; 이상 탐지<span class="eco-label">&laquo;Monitor&raquo; 고위험</span></div>
+      <div class="eco-node feature">&#x1F4BE; 연합 피처 스토어<span class="eco-label">&laquo;Feature Store&raquo;</span></div>
+    </div>
+
+    <h3 class="anim-3">RAD-AI가 발견한 생태계 수준 문제</h3>
+    <div class="card-grid anim-4" style="grid-template-columns:1fr;gap:8px;">
+      <div class="card" style="border-left:3px solid var(--highlight);padding:10px 14px;">
+        <div class="card-title" style="font-size:clamp(0.78rem,1.8vw,0.95rem);">&#x1F300; 연쇄 드리프트 (Cascading Drift)</div>
+        <div class="card-desc">이상 탐지 드리프트 &rarr; 거짓 안전 경보 &rarr; 불필요한 경로 재계산 &rarr; UX 저하. 데이터 계보 오버레이로 의존성 체인 시각화</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--warning);padding:10px 14px;">
+        <div class="card-title" style="font-size:clamp(0.78rem,1.8vw,0.95rem);">&#x2696;&#xFE0F; 차별화된 규제 준수</div>
+        <div class="card-desc">AI 경계 구분으로 고위험/제한위험 컴포넌트를 구별, 법적으로 필요한 곳에만 Annex IV 문서 집중 적용</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--success);padding:10px 14px;">
+        <div class="card-title" style="font-size:clamp(0.78rem,1.8vw,0.95rem);">&#x1F91D; 연합 거버넌스</div>
+        <div class="card-desc">공유 피처 스토어 소유권, 교차 운영자 데이터 협약, 책임 경계를 책임 있는 AI 개념 섹션에서 문서화</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 12: ADOPTION ROADMAP ============ -->
+  <div class="slide" data-slide="11">
+    <div class="section-label anim-1">실무 적용</div>
+    <h2 class="anim-1">3단계 <span class="highlight-text">점진적 채택</span> 전략</h2>
+
+    <div class="anim-2" style="display:grid;gap:16px;margin-top:12px;">
+      <div class="card" style="border-left:4px solid var(--highlight);position:relative;">
+        <div style="position:absolute;top:-10px;left:14px;background:var(--highlight);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;">1</div>
+        <div class="card-title" style="margin-top:8px;">컴포넌트 가시성 확보</div>
+        <div class="card-desc"><strong>E1</strong> AI 경계 구분 + <strong>E2</strong> 모델 레지스트리<br>AI 컴포넌트의 존재와 범위를 아키텍처에서 명시적으로 드러냄</div>
+      </div>
+      <div class="card" style="border-left:4px solid #00b4d8;position:relative;">
+        <div style="position:absolute;top:-10px;left:14px;background:#00b4d8;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;">2</div>
+        <div class="card-title" style="margin-top:8px;">결정 근거 &amp; 품질 약속</div>
+        <div class="card-desc"><strong>E5</strong> AI-ADR + <strong>E6</strong> AI 품질 시나리오<br>왜 이 모델을 선택했는지, 어떤 품질 기준으로 운영하는지 기록</div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--success);position:relative;">
+        <div style="position:absolute;top:-10px;left:14px;background:var(--success);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;">3</div>
+        <div class="card-title" style="margin-top:8px;">운영 성숙도 달성</div>
+        <div class="card-desc"><strong>E8</strong> 운영 AI 뷰 + <strong>E7</strong> AI 부채 레지스터<br>모니터링, 재학습, 배포, 롤백 정책과 ML 기술 부채 체계적 관리</div>
+      </div>
+    </div>
+
+    <div class="quote anim-3" style="margin-top:14px;font-size:clamp(0.72rem,1.6vw,0.9rem);">
+      Annex IV 시행 기한에 직면한 조직은 Table V의 위험 분류 매핑을 활용해 확장을 <strong>우선순위화</strong>할 수 있습니다.
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 13: FUTURE WORK ============ -->
+  <div class="slide" data-slide="12">
+    <div class="section-label anim-1">향후 과제</div>
+    <h2 class="anim-1">한계점 &amp; <span style="color:#00b4d8;">향후 연구 방향</span></h2>
+
+    <div class="card-grid cols-2 anim-2">
+      <div class="card">
+        <span class="card-icon">&#x1F9EA;</span>
+        <div class="card-title">대규모 실증 검증</div>
+        <div class="card-desc">10&ndash;15명의 아키텍트 대상 통제 연구. 완전성, 문서화 시간, 인지된 유용성 측정 계획</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F527;</span>
+        <div class="card-title">도구 지원</div>
+        <div class="card-desc">Structurizr DSL 확장, 자동화된 규제 준수 검사 도구 개발</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F4AC;</span>
+        <div class="card-title">LLM/기반 모델 확장</div>
+        <div class="card-desc">프롬프트 버전 관리, RAG 파이프라인, 가드레일 문서화로 확장</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#x1F4DC;</span>
+        <div class="card-title">표준화 조화</div>
+        <div class="card-desc">prEN 18286 (CEN-CENELEC) 조화 표준 개발 모니터링 및 통합</div>
+      </div>
+    </div>
+
+    <h3 class="anim-3">타당성 위협</h3>
+    <div class="anim-4" style="display:grid;gap:6px;">
+      <div class="check-item"><span class="icon" style="color:var(--warning);">&#x25CF;</span><span><strong>내적:</strong> 공백 분석(G1-G5)이 설계와 평가 모두에 사용 &mdash; 설계 과학 연구 고유의 순환성</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--warning);">&#x25CF;</span><span><strong>외적:</strong> 2개 도메인 + 1개 합성 생태계로 일반화 제한 (n=6, &kappa;&asymp;0.68)</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--warning);">&#x25CF;</span><span><strong>규제:</strong> 조화 표준(prEN 18286) 개발 중 &mdash; 추가 요구사항 가능성</span></div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 14: CONCLUSION ============ -->
+  <div class="slide" data-slide="13" style="text-align:center;">
+    <div class="bg-glow" style="width:300px;height:300px;background:var(--highlight);top:-50px;right:-80px;"></div>
+    <div class="bg-glow" style="width:250px;height:250px;background:#00d2a0;bottom:-60px;left:-80px;"></div>
+    <div class="section-label anim-1">결론</div>
+    <h2 class="anim-1" style="font-size:clamp(1.4rem,4vw,2.6rem);">RAD-AI: AI 시대의<br><span class="highlight-text">아키텍처 문서화 표준</span></h2>
+
+    <div class="stat-row anim-2" style="justify-content:center;">
+      <div class="stat-box"><span class="stat-num red">8</span><span class="stat-label">arc42 확장</span></div>
+      <div class="stat-box"><span class="stat-num blue">3</span><span class="stat-label">C4 확장</span></div>
+      <div class="stat-box"><span class="stat-num green">93%</span><span class="stat-label">Annex IV 대응</span></div>
+    </div>
+
+    <div class="anim-3" style="display:grid;gap:10px;text-align:left;max-width:600px;margin:16px auto;">
+      <div class="check-item"><span class="icon" style="color:var(--success);">&#x2714;</span><span><strong>하위 호환:</strong> 기존 arc42/C4 투자를 보존하며 확장</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--success);">&#x2714;</span><span><strong>구조적 공백 해소:</strong> 도메인이 아닌 프레임워크 차원의 근본 문제 해결</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--success);">&#x2714;</span><span><strong>규제 준비:</strong> EU AI Act 2026.08 시행 대비 체계적 문서화</span></div>
+      <div class="check-item"><span class="icon" style="color:var(--success);">&#x2714;</span><span><strong>생태계 시야:</strong> 연쇄 드리프트, 차별 규제, 연합 거버넌스 가시화</span></div>
+    </div>
+
+    <div class="anim-4" style="margin-top:20px;">
+      <p style="font-size:clamp(0.7rem,1.5vw,0.85rem);color:var(--text-dim);">
+        Larsen &amp; Moghaddam &bull; ANGE 2026 @ IEEE ICSA &bull; arXiv:2603.28735
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">&#x276E;</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-progress" id="navProgress">1 / 14</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">&#x276F;</button>
+</nav>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotsContainer = document.getElementById('navDots');
+  const progress = document.getElementById('navProgress');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // Create dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => slides[current === index ? current : (current + total) % total].classList.remove('exit-left'), 500);
+
+    const prev = current;
+    current = index;
+    slides[current].style.transform = dir > 0 ? 'translateX(80px)' : 'translateX(-80px)';
+    requestAnimationFrame(() => {
+      slides[prev].classList.remove('active', 'exit-left');
+      slides[current].classList.add('active');
+      slides[current].scrollTop = 0;
+    });
+
+    updateNav();
+  }
+
+  function navigate(dir) { goTo(current + dir); }
+
+  function updateNav() {
+    progress.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    document.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateNav();
+</script>
+</body>
+</html>

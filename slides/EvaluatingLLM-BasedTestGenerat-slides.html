@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LLM 기반 테스트 생성의 소프트웨어 진화 환경 평가</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2236;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-red: #ef4444;
+    --accent-orange: #f59e0b;
+    --accent-green: #10b981;
+    --accent-pink: #ec4899;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --glow-blue: rgba(59,130,246,0.3);
+    --glow-purple: rgba(139,92,246,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  .slide-inner {
+    max-width: 960px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-tag {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent-cyan);
+    margin-bottom: 12px;
+  }
+
+  .slide-title {
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .slide-text {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .highlight { color: var(--accent-cyan); font-weight: 700; }
+  .highlight-red { color: var(--accent-red); font-weight: 700; }
+  .highlight-green { color: var(--accent-green); font-weight: 700; }
+  .highlight-orange { color: var(--accent-orange); font-weight: 700; }
+  .highlight-purple { color: var(--accent-purple); font-weight: 700; }
+  .highlight-pink { color: var(--accent-pink); font-weight: 700; }
+
+  /* ===== CARDS & GRIDS ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .card-value {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .card-desc {
+    font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+    color: var(--text-secondary);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ===== STAT BAR ===== */
+  .stat-bar-group { margin-top: 16px; }
+  .stat-bar-item { margin-bottom: 14px; }
+  .stat-bar-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  }
+  .stat-bar-label { color: var(--text-secondary); }
+  .stat-bar-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .stat-bar-track {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    width: 0;
+  }
+  .slide.active .stat-bar-fill { width: var(--bar-width); }
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 16px;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  }
+  .compare-table th {
+    background: var(--bg-card-alt);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    border-bottom: 2px solid rgba(59,130,246,0.3);
+  }
+  .compare-table th:first-child { border-radius: 12px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 12px 0 0; }
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+  .compare-table tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+  .compare-table tr:last-child td:last-child { border-radius: 0 0 12px 0; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+  }
+  .flow-arrow {
+    color: var(--accent-cyan);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  /* ===== RQ ITEM ===== */
+  .rq-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border-left: 4px solid var(--accent-blue);
+  }
+  .rq-badge {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .rq-content {
+    font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== DELTA INDICATOR ===== */
+  .delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(0.75rem, 1.5vw, 0.88rem);
+    padding: 3px 10px;
+    border-radius: 8px;
+  }
+  .delta-down {
+    color: var(--accent-red);
+    background: rgba(239,68,68,0.12);
+  }
+  .delta-up {
+    color: var(--accent-green);
+    background: rgba(16,185,129,0.12);
+  }
+
+  /* ===== FINDING BOX ===== */
+  .finding-box {
+    background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.08));
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 16px;
+  }
+  .finding-box .finding-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .finding-box p {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== MODEL RANK ===== */
+  .model-rank-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .model-rank-pos {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+  .model-rank-name {
+    font-weight: 600;
+    font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+    flex: 1;
+  }
+  .model-rank-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+  }
+
+  /* ===== QUOTE ===== */
+  .quote-block {
+    border-left: 4px solid var(--accent-purple);
+    padding: 20px 24px;
+    background: rgba(139,92,246,0.06);
+    border-radius: 0 14px 14px 0;
+    margin: 16px 0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: linear-gradient(to top, rgba(10,14,26,0.97), rgba(10,14,26,0.8));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 14px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0 18px;
+    gap: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+  }
+  .nav-btn:active {
+    transform: scale(0.95);
+    background: var(--accent-blue);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+  }
+  .nav-dot.active {
+    background: var(--accent-blue);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== BG DECORATIONS ===== */
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .bg-glow-1 {
+    width: 400px; height: 400px;
+    top: -100px; right: -100px;
+    background: var(--glow-blue);
+    opacity: 0.3;
+  }
+  .bg-glow-2 {
+    width: 350px; height: 350px;
+    bottom: -80px; left: -80px;
+    background: var(--glow-purple);
+    opacity: 0.2;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim-1 { animation: fadeInUp 0.6s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.6s 0.25s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.6s 0.4s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.6s 0.55s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.6s 0.7s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.6s 0.85s both; }
+
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(59,130,246,0); }
+    100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  }
+  .pulse { animation: pulse-ring 2s infinite; }
+
+  /* ===== SEPARATOR ===== */
+  .sep { width: 60px; height: 3px; background: var(--accent-blue); border-radius: 2px; margin: 16px 0; }
+
+  /* ===== TAG PILLS ===== */
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--bg-card);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px; padding-bottom: 90px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .compare-table { font-size: clamp(0.7rem, 2vw, 0.85rem); }
+    .compare-table th, .compare-table td { padding: 10px 12px; }
+    .rq-item { flex-direction: column; gap: 10px; padding: 14px 16px; }
+    .nav-bar { padding: 10px 16px; }
+    .bg-glow-1 { width: 250px; height: 250px; }
+    .bg-glow-2 { width: 200px; height: 200px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 18px; padding-bottom: 85px; }
+    .slide-title { margin-bottom: 14px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-grid { gap: 10px; }
+    .rq-item { margin-bottom: 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 14px; font-size: 0.95rem; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+    .finding-box { padding: 16px; }
+    .quote-block { padding: 14px 16px; }
+    .model-rank-item { padding: 10px 12px; gap: 10px; }
+    .stat-bar-track { height: 8px; }
+    .sep { margin: 10px 0; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 14px 12px; padding-bottom: 80px; }
+    .slide-title { font-size: clamp(1.1rem, 5vw, 1.5rem); }
+    .card { padding: 12px; }
+    .compare-table th, .compare-table td { padding: 8px 8px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 10px; }
+    .rq-badge { width: 36px; height: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== SLIDE 1: TITLE ==================== -->
+<div class="slide active" id="slide-0">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">arXiv: 2603.23443v1 &bull; 2026</div>
+  <h1 class="slide-title anim-2">LLM 기반 테스트 생성의<br>소프트웨어 진화 환경 평가</h1>
+  <div class="sep anim-3"></div>
+  <p class="slide-subtitle anim-3">LLM이 생성한 테스트는 진정한 프로그램 이해에 기반하는가,<br>아니면 표면적 패턴의 재현에 불과한가?</p>
+  <div class="tag-row anim-4">
+    <span class="tag" style="border-color: var(--accent-blue);">8개 LLM 모델</span>
+    <span class="tag" style="border-color: var(--accent-purple);">22,374개 프로그램 변형</span>
+    <span class="tag" style="border-color: var(--accent-cyan);">돌연변이 기반 분석</span>
+  </div>
+  <div style="margin-top: 28px;" class="anim-5">
+    <p class="slide-text" style="font-size: clamp(0.75rem, 1.5vw, 0.88rem); color: var(--text-dim);">
+      Sabaat Haroon &bull; Mohammad Taha Khan &bull; Muhammad Ali Gulzar
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 2: MOTIVATION ==================== -->
+<div class="slide" id="slide-1">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">연구 동기</div>
+  <h1 class="slide-title anim-2">왜 이 연구가 필요한가?</h1>
+  <div class="sep anim-2"></div>
+  <div class="card-grid grid-2 anim-3">
+    <div class="card" style="border-left: 3px solid var(--accent-green);">
+      <span class="card-icon">&#x2705;</span>
+      <div class="card-label">현재 상태</div>
+      <div class="card-desc">LLM은 원본 코드에서 <span class="highlight-green">79% 라인 커버리지</span>, <span class="highlight-green">76% 브랜치 커버리지</span>로 우수한 기본 성능 달성</div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-red);">
+      <span class="card-icon">&#x2753;</span>
+      <div class="card-label">핵심 의문</div>
+      <div class="card-desc">이 성능이 <span class="highlight-red">진정한 코드 이해</span>에서 비롯되는가, 아니면 <span class="highlight-red">훈련 데이터 패턴 암기</span>에 불과한가?</div>
+    </div>
+  </div>
+  <div class="quote-block anim-4">
+    코드가 지속적으로 변화하고 리팩토링되는 CI/CD 환경에서, LLM 기반 테스트 생성은 여전히 매우 신뢰하기 어려운 도구로 남아있다.
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 3: RQs ==================== -->
+<div class="slide" id="slide-2">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">연구 질문</div>
+  <h1 class="slide-title anim-2">5가지 핵심 연구 질문</h1>
+  <div class="sep anim-2"></div>
+  <div class="anim-3">
+    <div class="rq-item">
+      <div class="rq-badge" style="background: rgba(59,130,246,0.15); color: var(--accent-blue);">RQ1</div>
+      <div class="rq-content"><strong>기본 성능</strong> &mdash; 원본 프로그램에서의 테스트 생성 능력은?</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-purple);">
+      <div class="rq-badge" style="background: rgba(139,92,246,0.15); color: var(--accent-purple);">RQ2</div>
+      <div class="rq-content"><strong>의미 변경 민감도</strong> &mdash; 기능적 코드 변경(SAC)에 대한 반응은?</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-cyan);">
+      <div class="rq-badge" style="background: rgba(6,182,212,0.15); color: var(--accent-cyan);">RQ3</div>
+      <div class="rq-content"><strong>구문 변경 복원력</strong> &mdash; 의미 보존 리팩토링(SPC)에 대한 회복력은?</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-orange);">
+      <div class="rq-badge" style="background: rgba(245,158,11,0.15); color: var(--accent-orange);">RQ4</div>
+      <div class="rq-content"><strong>실패 원인 분석</strong> &mdash; 의미 변경 시 테스트 실패의 근본 원인은?</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-pink);">
+      <div class="rq-badge" style="background: rgba(236,72,153,0.15); color: var(--accent-pink);">RQ5</div>
+      <div class="rq-content"><strong>회귀 인식</strong> &mdash; 진화하는 테스트 스위트의 회귀 테스트 인식 수준은?</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 4: METHODOLOGY ==================== -->
+<div class="slide" id="slide-3">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">연구 방법론</div>
+  <h1 class="slide-title anim-2">실험 설계</h1>
+  <div class="sep anim-2"></div>
+  <div class="flow-row anim-3">
+    <div class="flow-box" style="border-color: var(--accent-blue);">
+      <div style="font-size: 1.3rem; margin-bottom: 4px;">&#128218;</div>
+      <strong>Project CodeNet</strong><br>
+      <span style="font-size: 0.82rem; color: var(--text-dim);">5,723개 후보 프로그램<br>Java 3,231 / Python 2,492</span>
+    </div>
+    <div class="flow-arrow">&#10140;</div>
+    <div class="flow-box" style="border-color: var(--accent-purple);">
+      <div style="font-size: 1.3rem; margin-bottom: 4px;">&#129516;</div>
+      <strong>돌연변이 적용</strong><br>
+      <span style="font-size: 0.82rem; color: var(--text-dim);">SAC 5종 + SPC 7종<br>체계적 변형 생성</span>
+    </div>
+    <div class="flow-arrow">&#10140;</div>
+    <div class="flow-box" style="border-color: var(--accent-cyan);">
+      <div style="font-size: 1.3rem; margin-bottom: 4px;">&#129302;</div>
+      <strong>8개 LLM 평가</strong><br>
+      <span style="font-size: 0.82rem; color: var(--text-dim);">22,374개 변형에 대한<br>테스트 생성 및 분석</span>
+    </div>
+  </div>
+  <div class="card-grid grid-2 anim-4" style="margin-top: 24px;">
+    <div class="card">
+      <div class="card-label" style="color: var(--accent-red);">의미 변경(SAC) 연산자</div>
+      <div class="card-desc">
+        &#x2022; 경계값 이동 (루프 범위)<br>
+        &#x2022; 불리언 논리 변경<br>
+        &#x2022; 산술 연산자 교환<br>
+        &#x2022; 인자 순서 재배치<br>
+        &#x2022; 변수 역할 재바인딩
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color: var(--accent-green);">의미 보존(SPC) 연산자</div>
+      <div class="card-desc">
+        &#x2022; 무효 루프/조건 삽입<br>
+        &#x2022; 중복 else 블록 추가<br>
+        &#x2022; 동등 비교 재작성<br>
+        &#x2022; 미사용 매개변수 추가<br>
+        &#x2022; 변수명 변경 / 주석 수정<br>
+        &#x2022; 다국어 오해 유도 주석
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 5: MODELS ==================== -->
+<div class="slide" id="slide-4">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">평가 대상</div>
+  <h1 class="slide-title anim-2">8개 LLM 모델</h1>
+  <div class="sep anim-2"></div>
+  <div class="card-grid grid-2 anim-3">
+    <div class="card" style="border-top: 3px solid var(--accent-green);">
+      <div class="card-label">오픈소스</div>
+      <div class="model-rank-item" style="background: var(--bg-card-alt);">
+        <div class="model-rank-pos" style="background: rgba(16,185,129,0.15); color: var(--accent-green);">1</div>
+        <div class="model-rank-name">GPT-OSS</div>
+        <div class="model-rank-score" style="color: var(--text-dim);">20B</div>
+      </div>
+      <div class="model-rank-item" style="background: var(--bg-card-alt);">
+        <div class="model-rank-pos" style="background: rgba(16,185,129,0.15); color: var(--accent-green);">2</div>
+        <div class="model-rank-name">Nemotron-3-Nano</div>
+        <div class="model-rank-score" style="color: var(--text-dim);">30B</div>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent-purple);">
+      <div class="card-label">클로즈드소스</div>
+      <div class="model-rank-item" style="background: var(--bg-card-alt);">
+        <div class="model-rank-name">GPT-5 / GPT-5.2</div>
+      </div>
+      <div class="model-rank-item" style="background: var(--bg-card-alt);">
+        <div class="model-rank-name">Claude 4.5 Haiku / 4.6 Sonnet</div>
+      </div>
+      <div class="model-rank-item" style="background: var(--bg-card-alt);">
+        <div class="model-rank-name">Gemini 2.5 Flash / 3.1 Pro</div>
+      </div>
+    </div>
+  </div>
+  <div class="finding-box anim-4">
+    <p><strong style="color: var(--accent-orange);">&#9888; 언어 차이 발견:</strong> Python은 Java 대비 훨씬 더 많은 생성 시도가 필요함. 예: Gemini 2.5 Flash &mdash; Python 2,155회 vs Java 323회. 동적 타이핑의 복잡성이 원인.</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 6: BASELINE RESULTS (RQ1) ==================== -->
+<div class="slide" id="slide-5">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">RQ1 결과</div>
+  <h1 class="slide-title anim-2">기본 성능: 인상적인 출발점</h1>
+  <div class="sep anim-2"></div>
+  <div class="card-grid grid-3 anim-3">
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-blue);">
+      <div class="card-label">평균 라인 커버리지</div>
+      <div class="card-value" style="color: var(--accent-blue);">79.3%</div>
+    </div>
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-cyan);">
+      <div class="card-label">평균 브랜치 커버리지</div>
+      <div class="card-value" style="color: var(--accent-cyan);">76.1%</div>
+    </div>
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-green);">
+      <div class="card-label">프로그램당 평균 테스트</div>
+      <div class="card-value" style="color: var(--accent-green);">13.2</div>
+    </div>
+  </div>
+  <div class="stat-bar-group anim-4">
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">라인 커버리지</span>
+        <span class="stat-bar-value" style="color: var(--accent-blue);">79.3%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 79.3%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">브랜치 커버리지</span>
+        <span class="stat-bar-value" style="color: var(--accent-cyan);">76.1%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 76.1%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">테스트 통과율</span>
+        <span class="stat-bar-value" style="color: var(--accent-green);">100%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399);"></div>
+      </div>
+    </div>
+  </div>
+  <p class="slide-text anim-5" style="margin-top: 16px; font-size: clamp(0.78rem, 1.5vw, 0.88rem); text-align: center; color: var(--text-dim);">
+    &#10003; 원본 프로그램에서 완벽한 테스트 통과 &mdash; 하지만 코드가 변하면 어떻게 될까?
+  </p>
+</div>
+</div>
+
+<!-- ==================== SLIDE 7: SAC RESULTS (RQ2) ==================== -->
+<div class="slide" id="slide-6">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">RQ2 결과</div>
+  <h1 class="slide-title anim-2">의미 변경(SAC) 시 성능 하락</h1>
+  <div class="sep anim-2"></div>
+  <p class="slide-text anim-2">기능적으로 코드가 변경되었을 때, LLM 테스트는 급격히 무너진다.</p>
+  <div class="stat-bar-group anim-3">
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">테스트 통과율</span>
+        <span class="stat-bar-value">
+          <span style="color: var(--text-dim); text-decoration: line-through;">100%</span>
+          &rarr; <span style="color: var(--accent-red);">66.5%</span>
+          <span class="delta delta-down">&#x25BC; 33.5%p</span>
+        </span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 66.5%; background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">라인 커버리지</span>
+        <span class="stat-bar-value">
+          <span style="color: var(--text-dim); text-decoration: line-through;">79.3%</span>
+          &rarr; <span style="color: var(--accent-orange);">67.4%</span>
+          <span class="delta delta-down">&#x25BC; 11.9%p</span>
+        </span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 67.4%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">브랜치 커버리지</span>
+        <span class="stat-bar-value">
+          <span style="color: var(--text-dim); text-decoration: line-through;">76.1%</span>
+          &rarr; <span style="color: var(--accent-red);">60.6%</span>
+          <span class="delta delta-down">&#x25BC; 15.5%p</span>
+        </span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 60.6%; background: linear-gradient(90deg, var(--accent-red), #dc2626);"></div>
+      </div>
+    </div>
+  </div>
+  <div class="finding-box anim-4">
+    <p><strong style="color: var(--accent-orange);">&#128161; 핵심 발견:</strong> 브랜치 커버리지가 라인 커버리지보다 더 크게 하락 &mdash; 변경된 <span class="highlight-red">제어 흐름 추론에 어려움</span>을 겪고 있음. 테스트 수는 오히려 13.2 &rarr; 13.9로 증가하여 "산탄식 테스트(scattershot testing)" 양상을 보임.</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 8: SPC RESULTS (RQ3) ==================== -->
+<div class="slide" id="slide-7">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">RQ3 결과</div>
+  <h1 class="slide-title anim-2">의미 보존(SPC) 변경의 역설</h1>
+  <div class="sep anim-2"></div>
+  <p class="slide-text anim-2">의미는 전혀 바뀌지 않았는데, 테스트는 왜 실패하는가?</p>
+  <div class="card-grid grid-2 anim-3">
+    <div class="card" style="border-left: 3px solid var(--accent-red);">
+      <div class="card-label">SAC (의미 변경)</div>
+      <div class="card-desc">
+        평균 <span class="highlight">1.0줄</span> 수정<br>
+        <span class="highlight-red">높은</span> 의미적 영향<br>
+        <span class="highlight-green">낮은</span> 구문적 변화
+      </div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-orange);">
+      <div class="card-label">SPC (의미 보존)</div>
+      <div class="card-desc">
+        평균 <span class="highlight">2.4줄</span> 수정<br>
+        <span class="highlight-green">없음</span> 의미적 영향<br>
+        <span class="highlight-red">높은</span> 구문적 변화
+      </div>
+    </div>
+  </div>
+  <div class="stat-bar-group anim-4">
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">SPC 테스트 통과율</span>
+        <span class="stat-bar-value">
+          <span style="color: var(--accent-orange);">78.9%</span>
+          <span class="delta delta-down">&#x25BC; 21.0%p</span>
+        </span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 78.9%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">SPC 브랜치 커버리지</span>
+        <span class="stat-bar-value">
+          <span style="color: var(--accent-orange);">69.2%</span>
+          <span class="delta delta-down">&#x25BC; 6.9%p</span>
+        </span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 69.2%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));"></div>
+      </div>
+    </div>
+  </div>
+  <div class="finding-box anim-5">
+    <p><strong style="color: var(--accent-purple);">&#128270; 핵심 역설:</strong> 구문적으로 더 큰 변화(2.4줄)가 의미적으로 더 작은 영향(0)을 가짐에도, LLM은 기존 테스트를 <span class="highlight-red">1.2배 더 많이 폐기</span>. "미사용 매개변수" 변경만으로 테스트가 8.1개로 급감 &mdash; <strong>구문 민감성</strong>의 명확한 증거.</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 9: RQ4 FAILURE ANALYSIS ==================== -->
+<div class="slide" id="slide-8">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">RQ4 결과</div>
+  <h1 class="slide-title anim-2">실패 원인: 99%의 진실</h1>
+  <div class="sep anim-2"></div>
+  <div class="card-grid grid-3 anim-3">
+    <div class="card" style="text-align: center;">
+      <div class="card-label">총 SAC 테스트</div>
+      <div class="card-value" style="color: var(--accent-blue); font-size: clamp(1.2rem, 3vw, 1.8rem);">119,163</div>
+    </div>
+    <div class="card" style="text-align: center;">
+      <div class="card-label">변형 코드 실패 테스트</div>
+      <div class="card-value" style="color: var(--accent-red); font-size: clamp(1.2rem, 3vw, 1.8rem);">23,977</div>
+    </div>
+    <div class="card" style="text-align: center;">
+      <div class="card-label">원본 코드 재통과</div>
+      <div class="card-value" style="color: var(--accent-green); font-size: clamp(1.2rem, 3vw, 1.8rem);">23,737</div>
+    </div>
+  </div>
+  <div style="text-align: center; margin: 24px 0;" class="anim-4">
+    <div style="display: inline-flex; align-items: center; gap: 12px; background: rgba(239,68,68,0.08); padding: 16px 28px; border-radius: 16px; border: 1px solid rgba(239,68,68,0.2);">
+      <span style="font-size: 2rem;">&#128680;</span>
+      <div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900; color: var(--accent-red);">99%+</div>
+        <div style="font-size: clamp(0.78rem, 1.5vw, 0.9rem); color: var(--text-secondary);">실패한 SAC 테스트가 원본 코드에서는 통과</div>
+      </div>
+    </div>
+  </div>
+  <div class="quote-block anim-5">
+    LLM은 의미적 코드 변경을 추론할 정밀성이 부족하며, 대신 <strong>훈련 중 관찰된 패턴에 크게 의존</strong>한다. 모든 SAC 카테고리에서 98.6~100%의 잔류 정렬률을 보인다.
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 10: RQ5 REGRESSION ==================== -->
+<div class="slide" id="slide-9">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">RQ5 결과</div>
+  <h1 class="slide-title anim-2">회귀 인식의 부재</h1>
+  <div class="sep anim-2"></div>
+  <p class="slide-text anim-2">LLM은 기존 테스트를 유지하지 않고 매번 새로 생성한다.</p>
+  <table class="compare-table anim-3">
+    <thead>
+      <tr>
+        <th>지표</th>
+        <th>SAC 환경</th>
+        <th>SPC 환경</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>평가 프로그램 수</td>
+        <td>8,585</td>
+        <td>10,563</td>
+      </tr>
+      <tr>
+        <td>새로 생성된 테스트</td>
+        <td><span class="highlight-orange">9.7개</span></td>
+        <td><span class="highlight-orange">11.8개</span></td>
+      </tr>
+      <tr>
+        <td>폐기된 기존 테스트</td>
+        <td><span class="highlight-red">8.8개</span></td>
+        <td><span class="highlight-red">10.9개</span></td>
+      </tr>
+      <tr>
+        <td>총 테스트 변동</td>
+        <td><span class="highlight-red">18.5개</span></td>
+        <td><span class="highlight-red">22.7개</span></td>
+      </tr>
+      <tr>
+        <td>테스트 일치율</td>
+        <td><span class="highlight">29.3%</span></td>
+        <td><span class="highlight-red">18.1%</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="finding-box anim-4">
+    <p><strong style="color: var(--accent-pink);">&#9888; 심각한 문제:</strong> 폐기된 테스트가 새로 생성된 테스트보다 <span class="highlight-red">더 높은 커버리지 효과</span>를 가지고 있었음. LLM은 기존 고효율 테스트를 적응시키지 못하고, 처음부터 스위트를 재생성.</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 11: MODEL COMPARISON ==================== -->
+<div class="slide" id="slide-10">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">모델 비교</div>
+  <h1 class="slide-title anim-2">모델별 복원력 순위</h1>
+  <div class="sep anim-2"></div>
+  <div class="anim-3">
+    <div class="model-rank-item" style="border-left: 4px solid var(--accent-green);">
+      <div class="model-rank-pos" style="background: rgba(16,185,129,0.2); color: var(--accent-green);">1</div>
+      <div>
+        <div class="model-rank-name">GPT-5 Mini</div>
+        <div style="font-size: 0.78rem; color: var(--text-dim);">높은 복원력</div>
+      </div>
+      <div class="model-rank-score" style="color: var(--accent-green);">SAC 82.9% / SPC 90.9%</div>
+    </div>
+    <div class="model-rank-item" style="border-left: 4px solid var(--accent-orange);">
+      <div class="model-rank-pos" style="background: rgba(245,158,11,0.2); color: var(--accent-orange);">&#9888;</div>
+      <div>
+        <div class="model-rank-name">GPT-5.2</div>
+        <div style="font-size: 0.78rem; color: var(--text-dim);">높은 기본 성능, 높은 민감도</div>
+      </div>
+      <div class="model-rank-score" style="color: var(--accent-orange);">기본 85.6% &rarr; SAC 56.2%</div>
+    </div>
+    <div class="model-rank-item" style="border-left: 4px solid var(--accent-red);">
+      <div class="model-rank-pos" style="background: rgba(239,68,68,0.2); color: var(--accent-red);">&#x25BC;</div>
+      <div>
+        <div class="model-rank-name">Nemotron-3-Nano</div>
+        <div style="font-size: 0.78rem; color: var(--text-dim);">제한적 역량</div>
+      </div>
+      <div class="model-rank-score" style="color: var(--accent-red);">SAC 40.7% / SPC 55.9%</div>
+    </div>
+  </div>
+  <div class="stat-bar-group anim-4" style="margin-top: 20px;">
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">GPT-5 Mini (SAC)</span>
+        <span class="stat-bar-value" style="color: var(--accent-green);">82.9%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 82.9%; background: var(--accent-green);"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">GPT-5.2 (SAC)</span>
+        <span class="stat-bar-value" style="color: var(--accent-orange);">56.2%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 56.2%; background: var(--accent-orange);"></div>
+      </div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-header">
+        <span class="stat-bar-label">Nemotron-3-Nano (SAC)</span>
+        <span class="stat-bar-value" style="color: var(--accent-red);">40.7%</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill" style="--bar-width: 40.7%; background: var(--accent-red);"></div>
+      </div>
+    </div>
+  </div>
+  <p class="slide-text anim-5" style="font-size: clamp(0.75rem, 1.5vw, 0.85rem); color: var(--text-dim); text-align: center; margin-top: 12px;">
+    GPT-5.2: 기본 성능이 가장 높지만, SAC에서 44%p 하락으로 가장 큰 성능 저하
+  </p>
+</div>
+</div>
+
+<!-- ==================== SLIDE 12: KEY FINDINGS ==================== -->
+<div class="slide" id="slide-11">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">핵심 발견</div>
+  <h1 class="slide-title anim-2">5가지 핵심 결론</h1>
+  <div class="sep anim-2"></div>
+  <div class="anim-3">
+    <div class="rq-item" style="border-color: var(--accent-red);">
+      <div class="rq-badge" style="background: rgba(239,68,68,0.15); color: var(--accent-red);">1</div>
+      <div class="rq-content"><strong>잔류 정렬</strong> &mdash; 실패한 SAC 테스트의 99%+가 원본 코드에서 통과. 훈련 데이터 패턴 암기의 증거.</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-orange);">
+      <div class="rq-badge" style="background: rgba(245,158,11,0.15); color: var(--accent-orange);">2</div>
+      <div class="rq-content"><strong>구문 민감성</strong> &mdash; SPC가 SAC보다 더 큰 테스트 스위트 혼란을 야기. 기능적 동등성에도 불구하고 표면 패턴에 의존.</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-purple);">
+      <div class="rq-badge" style="background: rgba(139,92,246,0.15); color: var(--accent-purple);">3</div>
+      <div class="rq-content"><strong>커버리지 저하</strong> &mdash; 브랜치 커버리지가 라인 커버리지보다 일관적으로 더 크게 하락. 제어 흐름 추론의 한계.</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-pink);">
+      <div class="rq-badge" style="background: rgba(236,72,153,0.15); color: var(--accent-pink);">4</div>
+      <div class="rq-content"><strong>테스트 불안정</strong> &mdash; 구조적 노이즈 발생 시 1.2~1.4배 더 많은 테스트 생성, 동시에 기존 효과적 테스트 높은 비율 폐기.</div>
+    </div>
+    <div class="rq-item" style="border-color: var(--accent-cyan);">
+      <div class="rq-badge" style="background: rgba(6,182,212,0.15); color: var(--accent-cyan);">5</div>
+      <div class="rq-content"><strong>언어 차이</strong> &mdash; Python의 동적 타이핑이 Java의 정적 타이핑 대비 훨씬 큰 기본 과제를 부과.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 13: IMPLICATIONS ==================== -->
+<div class="slide" id="slide-12">
+<div class="slide-inner">
+  <div class="slide-tag anim-1">시사점 및 제안</div>
+  <h1 class="slide-title anim-2">개선을 위한 방향</h1>
+  <div class="sep anim-2"></div>
+  <p class="slide-text anim-2">연구진이 제안하는 전처리 전략과 향후 방향:</p>
+  <div class="card-grid grid-3 anim-3">
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-blue);">
+      <span class="card-icon">&#128269;</span>
+      <div class="card-label">코드 차이 강조</div>
+      <div class="card-desc">명시적 코드 diff 하이라이팅을 통한 변경 지점 인식 향상</div>
+    </div>
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-purple);">
+      <span class="card-icon">&#128221;</span>
+      <div class="card-label">자연어 변경 요약</div>
+      <div class="card-desc">코드 변경 사항의 자연어 요약을 프롬프트에 포함</div>
+    </div>
+    <div class="card" style="text-align: center; border-top: 3px solid var(--accent-cyan);">
+      <span class="card-icon">&#128202;</span>
+      <div class="card-label">정적 분석 통합</div>
+      <div class="card-desc">제어 흐름/데이터 흐름 차이의 정적 분석 결과 활용</div>
+    </div>
+  </div>
+  <div class="quote-block anim-4">
+    현재 LLM 기반 테스트 생성은 <strong>표면적 패턴과 암기된 구조에 크게 의존</strong>하며, 진화하는 코드를 이해하고 적응하는 능력은 제한적이다. 22,374개 변형에 대한 평가는, 기본 성능이 강해 보여도 <strong>동적 개발 환경에서의 실용성은 심각하게 저하</strong>됨을 입증한다.
+  </div>
+</div>
+</div>
+
+<!-- ==================== SLIDE 14: CLOSING ==================== -->
+<div class="slide" id="slide-13">
+<div class="slide-inner" style="text-align: center;">
+  <div class="anim-1" style="font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 16px;">&#129302; &#x2194; &#128270;</div>
+  <h1 class="slide-title anim-2" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)); -webkit-background-clip: text; background-clip: text;">
+    패턴 인식 vs 코드 이해
+  </h1>
+  <div class="sep anim-3" style="margin: 16px auto;"></div>
+  <p class="slide-subtitle anim-3" style="max-width: 600px; margin: 0 auto;">
+    LLM 기반 테스트 생성의 <span class="highlight">진정한 코드 이해</span>를 향한 여정은 이제 시작이다
+  </p>
+  <div class="tag-row anim-4" style="justify-content: center; margin-top: 24px;">
+    <span class="tag" style="border-color: var(--accent-blue);">8개 모델</span>
+    <span class="tag" style="border-color: var(--accent-purple);">22,374개 변형</span>
+    <span class="tag" style="border-color: var(--accent-red);">99%+ 잔류 정렬</span>
+    <span class="tag" style="border-color: var(--accent-orange);">33.5%p 성능 하락</span>
+  </div>
+  <div class="anim-5" style="margin-top: 32px;">
+    <p style="font-size: clamp(0.75rem, 1.5vw, 0.85rem); color: var(--text-dim);">
+      Haroon, Khan, Gulzar &bull; arXiv: 2603.23443v1 &bull; 2026<br>
+      <span style="color: var(--accent-cyan);">CC BY 4.0</span>
+    </p>
+  </div>
+</div>
+</div>
+
+</div><!-- /slide-container -->
+
+<!-- ===== NAVIGATION ===== -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전">
+    &#9664; <span class="nav-btn-label">이전</span>
+  </button>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+    <div class="nav-progress" id="navDots"></div>
+    <div class="nav-counter" id="navCounter">1 / 14</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음">
+    <span class="nav-btn-label">다음</span> &#9654;
+  </button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  // Build dots
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    document.getElementById('navCounter').textContent = (current + 1) + ' / ' + totalSlides;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === totalSlides - 1;
+    const dots = dotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function goToSlide(idx) {
+    if (idx === current || isAnimating || idx < 0 || idx >= totalSlides) return;
+    isAnimating = true;
+    const dir = idx > current ? 1 : -1;
+    const prev = slides[current];
+    const next = slides[idx];
+
+    prev.classList.remove('active');
+    prev.classList.add(dir > 0 ? 'exit-left' : '');
+    prev.style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+
+    next.style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    next.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      next.classList.add('active');
+      next.style.transform = '';
+      next.style.opacity = '';
+      next.scrollTop = 0;
+    });
+
+    current = idx;
+    updateUI();
+    setTimeout(() => {
+      prev.classList.remove('exit-left');
+      prev.style.transform = '';
+      isAnimating = false;
+    }, 550);
+  }
+
+  window.changeSlide = function(dir) {
+    goToSlide(current + dir);
+  };
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    const dx = touchStartX - touchEndX;
+    const dy = touchStartY - touchEndY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx > 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>

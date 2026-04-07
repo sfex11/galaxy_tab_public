@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>SAGAI-MID: 생성형 AI 기반 동적 런타임 상호운용성 미들웨어</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;600&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111640;
+    --bg-card: rgba(25, 32, 72, 0.7);
+    --accent-blue: #4facfe;
+    --accent-purple: #7c3aed;
+    --accent-pink: #f472b6;
+    --accent-green: #34d399;
+    --accent-orange: #fb923c;
+    --accent-cyan: #22d3ee;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --gradient-1: linear-gradient(135deg, #4facfe 0%, #7c3aed 100%);
+    --gradient-2: linear-gradient(135deg, #f472b6 0%, #7c3aed 100%);
+    --gradient-3: linear-gradient(135deg, #34d399 0%, #4facfe 100%);
+    --shadow-glow: 0 0 40px rgba(79, 172, 254, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--bg-primary);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-primary);
+  }
+
+  /* === SLIDE CONTAINER === */
+  .slides-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .slide {
+    min-height: 100vh;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    animation: fadeSlideIn 0.6s ease-out;
+  }
+
+  .slide.active { display: flex; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === BACKGROUND EFFECTS === */
+  .bg-mesh {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(79, 172, 254, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(244, 114, 182, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* === TYPOGRAPHY === */
+  .slide-number {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 2px;
+  }
+
+  h1.title-main {
+    font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  h2.slide-title {
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  h2.slide-title .icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--accent-cyan);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-blue { background: rgba(79,172,254,0.15); color: var(--accent-blue); border: 1px solid rgba(79,172,254,0.3); }
+  .tag-purple { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .tag-green { background: rgba(52,211,153,0.15); color: var(--accent-green); border: 1px solid rgba(52,211,153,0.3); }
+  .tag-pink { background: rgba(244,114,182,0.15); color: var(--accent-pink); border: 1px solid rgba(244,114,182,0.3); }
+  .tag-orange { background: rgba(251,146,60,0.15); color: var(--accent-orange); border: 1px solid rgba(251,146,60,0.3); }
+
+  /* === CARDS === */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  /* === PIPELINE VISUAL === */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pipeline-step {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 24px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border-left: 4px solid;
+    transition: transform 0.3s;
+  }
+
+  .pipeline-step:hover { transform: translateX(6px); }
+
+  .pipeline-step .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .pipeline-step .step-content {
+    flex: 1;
+  }
+
+  .pipeline-step .step-title {
+    font-weight: 600;
+    font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+    margin-bottom: 4px;
+  }
+
+  .pipeline-step .step-desc {
+    font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+    color: var(--text-muted);
+  }
+
+  /* === TABLE === */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: clamp(0.75rem, 1.4vw, 0.92rem);
+  }
+
+  .data-table thead th {
+    background: rgba(79,172,254,0.12);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent-blue);
+    border-bottom: 1px solid rgba(79,172,254,0.2);
+  }
+
+  .data-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+
+  .data-table tbody tr:hover td {
+    background: rgba(79,172,254,0.04);
+  }
+
+  /* === BAR CHART === */
+  .bar-chart { display: flex; flex-direction: column; gap: 14px; }
+
+  .bar-item { display: flex; align-items: center; gap: 14px; }
+
+  .bar-label {
+    width: 140px;
+    font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+    font-weight: 600;
+    color: white;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+  }
+
+  .bar-fill.animated { width: var(--target-width); }
+
+  /* === COMPARISON === */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    color: var(--text-muted);
+  }
+
+  .vs-card {
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .vs-card.left {
+    background: linear-gradient(135deg, rgba(79,172,254,0.08), rgba(79,172,254,0.02));
+    border-color: rgba(79,172,254,0.2);
+  }
+
+  .vs-card.right {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.02));
+    border-color: rgba(124,58,237,0.2);
+  }
+
+  /* === STAT BOXES === */
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 24px 16px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-value {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* === FLOW DIAGRAM === */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .flow-node {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--text-muted);
+    font-size: 20px;
+  }
+
+  /* === LIST === */
+  .styled-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .styled-list li {
+    padding: 12px 16px;
+    padding-left: 44px;
+    position: relative;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    border-left: 3px solid var(--accent-blue);
+  }
+
+  .styled-list li::before {
+    content: attr(data-icon);
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+  }
+
+  /* === NAVIGATION === */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn.prev {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+  }
+  .nav-btn.prev:hover { background: rgba(255,255,255,0.12); }
+
+  .nav-btn.next {
+    background: var(--gradient-1);
+    color: white;
+  }
+  .nav-btn.next:hover { filter: brightness(1.1); }
+
+  .nav-progress {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-1);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* === HIGHLIGHT BOX === */
+  .highlight-box {
+    padding: 20px 24px;
+    border-radius: 14px;
+    margin: 16px 0;
+    border: 1px solid;
+  }
+
+  .highlight-box.info {
+    background: rgba(79,172,254,0.06);
+    border-color: rgba(79,172,254,0.2);
+  }
+
+  .highlight-box.warning {
+    background: rgba(251,146,60,0.06);
+    border-color: rgba(251,146,60,0.2);
+  }
+
+  .highlight-box.success {
+    background: rgba(52,211,153,0.06);
+    border-color: rgba(52,211,153,0.2);
+  }
+
+  /* === CODE BLOCK === */
+  .code-block {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--accent-cyan);
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  /* === DONUT / CIRCLE CHART === */
+  .donut-chart {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .donut-inner {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .donut-value {
+    font-size: 1.4rem;
+    font-weight: 900;
+  }
+
+  .donut-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+
+  /* === AUTHOR INFO === */
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+
+  .author-line {
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    color: var(--text-muted);
+  }
+
+  /* === SECTION SPACER === */
+  .spacer { height: 24px; }
+
+  /* === ANIMATIONS === */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+  .stagger-5 { transition-delay: 0.5s; }
+  .stagger-6 { transition-delay: 0.6s; }
+
+  /* === FLOATING PARTICLES === */
+  .particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+    animation: floatParticle 20s infinite ease-in-out;
+  }
+
+  @keyframes floatParticle {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 40px) scale(0.9); }
+    75% { transform: translate(30px, 20px) scale(1.05); }
+  }
+
+  /* === MEDIA QUERIES === */
+
+  /* Tablet */
+  @media (max-width: 768px) {
+    .slide {
+      padding: 40px 30px;
+      padding-bottom: 100px;
+    }
+
+    .card-grid.cols-2,
+    .card-grid.cols-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .vs-container {
+      grid-template-columns: 1fr;
+    }
+
+    .vs-divider {
+      transform: rotate(90deg);
+      padding: 4px 0;
+    }
+
+    .stat-row {
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      min-width: 100px;
+    }
+
+    .flow-diagram {
+      flex-direction: column;
+    }
+
+    .flow-arrow {
+      transform: rotate(90deg);
+    }
+
+    .bar-label {
+      width: 100px;
+    }
+
+    .pipeline-step {
+      padding: 14px 16px;
+    }
+
+    .donut-chart {
+      width: 110px;
+      height: 110px;
+    }
+
+    .donut-inner {
+      width: 70px;
+      height: 70px;
+    }
+
+    .donut-value {
+      font-size: 1.1rem;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .slide {
+      padding: 24px 20px;
+      padding-bottom: 90px;
+      justify-content: flex-start;
+      padding-top: 40px;
+    }
+
+    h2.slide-title {
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    h2.slide-title .icon {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .card-grid { gap: 12px; }
+
+    .stat-row {
+      gap: 10px;
+    }
+
+    .stat-box {
+      padding: 16px 10px;
+      min-width: 80px;
+    }
+
+    .stat-value {
+      font-size: clamp(1.2rem, 6vw, 1.8rem);
+    }
+
+    .nav-bar {
+      padding: 10px 14px;
+    }
+
+    .nav-btn {
+      padding: 10px 16px;
+      font-size: 0.82rem;
+    }
+
+    .pipeline-step {
+      gap: 12px;
+      padding: 12px 14px;
+    }
+
+    .pipeline-step .step-num {
+      width: 32px;
+      height: 32px;
+      font-size: 0.85rem;
+    }
+
+    .bar-label {
+      width: 70px;
+      font-size: 0.72rem;
+    }
+
+    .bar-track { height: 22px; }
+
+    .data-table { font-size: 0.72rem; }
+    .data-table thead th,
+    .data-table tbody td {
+      padding: 8px 10px;
+    }
+
+    .vs-card { padding: 18px; }
+
+    .slide-number {
+      top: 12px;
+      right: 16px;
+    }
+
+    .highlight-box {
+      padding: 14px 16px;
+    }
+
+    .code-block {
+      padding: 12px 14px;
+      font-size: 0.7rem;
+    }
+  }
+
+  /* Small mobile */
+  @media (max-width: 320px) {
+    .slide {
+      padding: 16px 14px;
+      padding-bottom: 85px;
+      padding-top: 34px;
+    }
+
+    h1.title-main {
+      font-size: 1.5rem;
+    }
+
+    h2.slide-title {
+      font-size: 1.15rem;
+      gap: 8px;
+    }
+
+    .card { padding: 14px; }
+
+    .stat-box {
+      padding: 12px 8px;
+    }
+
+    .nav-btn {
+      padding: 8px 12px;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .pipeline-step .step-desc {
+      font-size: 0.7rem;
+    }
+
+    .bar-label { width: 55px; }
+  }
+
+  /* Bottom padding for nav */
+  .slide:last-of-type {
+    padding-bottom: 100px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<!-- Floating particles -->
+<div class="particle" style="width:6px;height:6px;background:var(--accent-blue);top:15%;left:10%;animation-delay:-3s;"></div>
+<div class="particle" style="width:4px;height:4px;background:var(--accent-purple);top:60%;left:85%;animation-delay:-8s;"></div>
+<div class="particle" style="width:8px;height:8px;background:var(--accent-pink);top:80%;left:25%;animation-delay:-12s;"></div>
+<div class="particle" style="width:5px;height:5px;background:var(--accent-green);top:30%;left:70%;animation-delay:-5s;"></div>
+
+<div class="slides-wrapper">
+
+  <!-- ====== SLIDE 1: TITLE ====== -->
+  <div class="slide active" id="slide-1">
+    <span class="slide-number">01 / 13</span>
+    <div style="max-width: 900px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+        <span class="tag tag-blue">소프트웨어 공학</span>
+        <span class="tag tag-purple">인공지능</span>
+        <span class="tag tag-green">SAGAI 2026</span>
+        <span class="tag tag-pink">IEEE ICSA 2026</span>
+      </div>
+      <h1 class="title-main fade-in">SAGAI-MID:<br>생성형 AI 기반 동적 런타임 상호운용성 미들웨어</h1>
+      <p class="subtitle fade-in stagger-1">Generative AI-Driven Middleware for Dynamic Runtime Interoperability</p>
+      <div class="author-info fade-in stagger-2">
+        <span class="author-line">👤 Oliver Aleksander Larsen &amp; Mahyar T. Moghaddam</span>
+        <span class="author-line" style="font-size:clamp(0.75rem,1.3vw,0.88rem);">arXiv: 2603.28731v1 · 2026년 3월 30일 제출</span>
+      </div>
+      <div class="highlight-box info fade-in stagger-3">
+        <p style="font-weight:500;color:var(--accent-blue);margin-bottom:6px;">핵심 아이디어</p>
+        <p>대규모 언어 모델(LLM)을 활용하여 이기종 분산 시스템 간의 <strong style="color:var(--text-primary);">스키마 불일치를 런타임에서 자동으로 감지하고 해결</strong>하는 FastAPI 기반 미들웨어</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: PROBLEM ====== -->
+  <div class="slide" id="slide-2">
+    <span class="slide-number">02 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(251,146,60,0.15);">⚡</span>
+      문제 정의
+    </h2>
+    <div class="card-grid cols-2">
+      <div class="card fade-in">
+        <span class="card-icon">🌐</span>
+        <div class="card-title">이기종 시스템의 현실</div>
+        <p>현대 분산 시스템은 REST API, GraphQL 엔드포인트, IoT 장치 등 서로 다른 스키마와 프로토콜을 사용하는 서비스를 통합합니다.</p>
+      </div>
+      <div class="card fade-in stagger-1">
+        <span class="card-icon">💥</span>
+        <div class="card-title">런타임 상호운용성 실패</div>
+        <p>컴포넌트 간 데이터 교환 시 구조적 차이로 인한 실패 — 중첩 객체 불일치, 타입 비호환성, 스키마 위반 등이 발생합니다.</p>
+      </div>
+      <div class="card fade-in stagger-2">
+        <span class="card-icon">🔧</span>
+        <div class="card-title">기존 접근법의 한계</div>
+        <p>전통적 정적 어댑터는 모든 스키마 쌍에 대해 수동 코딩이 필요하며, 사전에 모든 형식 변형을 알아야 합니다.</p>
+      </div>
+      <div class="card fade-in stagger-3">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">SAGAI-MID의 목표</div>
+        <p>LLM을 활용하여 사전 정의된 매핑 없이 런타임에서 스키마 불일치를 발견하고 적응하는 자율적 미들웨어를 구현합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 3: KEY METRICS ====== -->
+  <div class="slide" id="slide-3">
+    <span class="slide-number">03 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(52,211,153,0.15);">📊</span>
+      핵심 성과 요약
+    </h2>
+    <div class="stat-row fade-in" style="margin-bottom:30px;">
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent-green);">0.90</div>
+        <div class="stat-label">최고 pass@1 정확도</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent-blue);">0.83</div>
+        <div class="stat-label">CODEGEN 평균</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent-purple);">0.77</div>
+        <div class="stat-label">DIRECT 평균</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent-orange);">30×</div>
+        <div class="stat-label">모델 간 비용 차이</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2 fade-in stagger-2">
+      <div class="highlight-box success">
+        <p style="font-weight:600;color:var(--accent-green);margin-bottom:6px;">✓ 주요 발견</p>
+        <p>CODEGEN 전략이 DIRECT보다 우수한 성능 (0.83 vs 0.77). 가장 정확한 모델이 동시에 가장 저렴한 모델이었음.</p>
+      </div>
+      <div class="highlight-box info">
+        <p style="font-weight:600;color:var(--accent-blue);margin-bottom:6px;">🔬 평가 범위</p>
+        <p>REST 버전 마이그레이션, IoT-분석 브리징, GraphQL 프로토콜 변환을 포함한 10개 상호운용성 시나리오, 2개 제공자의 6개 LLM 테스트.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 4: ARCHITECTURE OVERVIEW ====== -->
+  <div class="slide" id="slide-4">
+    <span class="slide-number">04 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(79,172,254,0.15);">🏗️</span>
+      아키텍처 개요: 5계층 파이프라인
+    </h2>
+    <p style="margin-bottom:24px;">Bass et al.의 상호운용성 전술을 <strong style="color:var(--accent-cyan);">설계 시점 아티팩트에서 런타임 기능으로 전환</strong>하는 프레임워크</p>
+    <div class="flow-diagram fade-in">
+      <div class="flow-node" style="background:rgba(79,172,254,0.15);color:var(--accent-blue);">요청 수신</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="background:rgba(124,58,237,0.15);color:#a78bfa;">이상 감지</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="background:rgba(244,114,182,0.15);color:var(--accent-pink);">LLM 분석</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="background:rgba(52,211,153,0.15);color:var(--accent-green);">해결 실행</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="background:rgba(251,146,60,0.15);color:var(--accent-orange);">응답/피드백</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="highlight-box info fade-in stagger-1">
+      <p><strong style="color:var(--text-primary);">구성 요소:</strong> 하이브리드 감지 (구조적 diff + LLM 의미 분석), 이중 해결 전략 (요청별 LLM 변환 + LLM 생성 재사용 어댑터 코드), 3단계 안전장치 스택 (검증, 앙상블 투표, 규칙 기반 폴백)</p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 5: PIPELINE DETAIL ====== -->
+  <div class="slide" id="slide-5">
+    <span class="slide-number">05 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(124,58,237,0.15);">🔄</span>
+      5계층 파이프라인 상세
+    </h2>
+    <div class="pipeline">
+      <div class="pipeline-step fade-in" style="border-color:var(--accent-blue);">
+        <div class="step-num" style="background:rgba(79,172,254,0.2);color:var(--accent-blue);">1</div>
+        <div class="step-content">
+          <div class="step-title" style="color:var(--accent-blue);">요청 가로채기 및 검증</div>
+          <div class="step-desc">모든 컴포넌트 간 통신을 포착하고, 예상 스키마 대비 수신 데이터를 검증하여 구조적 불일치를 플래그</div>
+        </div>
+      </div>
+      <div class="pipeline-step fade-in stagger-1" style="border-color:var(--accent-purple);">
+        <div class="step-num" style="background:rgba(124,58,237,0.2);color:#a78bfa;">2</div>
+        <div class="step-content">
+          <div class="step-title" style="color:#a78bfa;">이상 감지</div>
+          <div class="step-desc">DeepDiff 라이브러리를 사용한 구조적 비교 — 필드 유무, 타입 불일치, 중첩 구조 위반, 배열 구조 비호환성 분류</div>
+        </div>
+      </div>
+      <div class="pipeline-step fade-in stagger-2" style="border-color:var(--accent-pink);">
+        <div class="step-num" style="background:rgba(244,114,182,0.2);color:var(--accent-pink);">3</div>
+        <div class="step-content">
+          <div class="step-title" style="color:var(--accent-pink);">LLM 기반 분석</div>
+          <div class="step-desc">구조화된 프롬프트 엔지니어링으로 호환성 문제에 대한 가설 생성, DIRECT 또는 CODEGEN 경로 결정</div>
+        </div>
+      </div>
+      <div class="pipeline-step fade-in stagger-3" style="border-color:var(--accent-green);">
+        <div class="step-num" style="background:rgba(52,211,153,0.2);color:var(--accent-green);">4</div>
+        <div class="step-content">
+          <div class="step-title" style="color:var(--accent-green);">해결 실행</div>
+          <div class="step-desc">DIRECT: 변환 규칙 직접 적용 | CODEGEN: 변환 코드 생성 후 AST 분석 검증 및 샌드박스 실행</div>
+        </div>
+      </div>
+      <div class="pipeline-step fade-in stagger-4" style="border-color:var(--accent-orange);">
+        <div class="step-num" style="background:rgba(251,146,60,0.2);color:var(--accent-orange);">5</div>
+        <div class="step-content">
+          <div class="step-title" style="color:var(--accent-orange);">응답 및 피드백</div>
+          <div class="step-desc">변환된 데이터 반환, 해결 성공/실패 로깅, 컴포넌트 상호작용 프로필 업데이트</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 6: DIRECT vs CODEGEN ====== -->
+  <div class="slide" id="slide-6">
+    <span class="slide-number">06 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(244,114,182,0.15);">⚔️</span>
+      해결 전략 비교: DIRECT vs CODEGEN
+    </h2>
+    <div class="vs-container fade-in">
+      <div class="vs-card left">
+        <h3 style="color:var(--accent-blue);">DIRECT 전략</h3>
+        <p style="margin-bottom:16px;font-size:clamp(0.8rem,1.4vw,0.95rem);color:var(--text-secondary);">단순 변환에 최적화</p>
+        <ul class="styled-list">
+          <li data-icon="📝" style="border-left-color:var(--accent-blue);">필드 이름 변경 (userId → user_id)</li>
+          <li data-icon="🔄" style="border-left-color:var(--accent-blue);">타입 캐스팅 및 검증</li>
+          <li data-icon="📌" style="border-left-color:var(--accent-blue);">선택 필드 기본값 주입</li>
+          <li data-icon="⚡" style="border-left-color:var(--accent-blue);">Python/JS 직접 실행</li>
+        </ul>
+        <div style="margin-top:16px;text-align:center;">
+          <span class="tag tag-blue">평균 pass@1: 0.77</span>
+        </div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-card right">
+        <h3 style="color:#a78bfa;">CODEGEN 전략</h3>
+        <p style="margin-bottom:16px;font-size:clamp(0.8rem,1.4vw,0.95rem);color:var(--text-secondary);">복잡한 변환에 최적화</p>
+        <ul class="styled-list">
+          <li data-icon="🧠" style="border-left-color:var(--accent-purple);">조건부 로직 및 알고리즘 변환</li>
+          <li data-icon="💻" style="border-left-color:var(--accent-purple);">타입 힌트 포함 코드 생성</li>
+          <li data-icon="🔒" style="border-left-color:var(--accent-purple);">AST 분석을 통한 사전 검증</li>
+          <li data-icon="♻️" style="border-left-color:var(--accent-purple);">재사용 가능한 어댑터 코드</li>
+        </ul>
+        <div style="margin-top:16px;text-align:center;">
+          <span class="tag tag-purple">평균 pass@1: 0.83</span>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box success fade-in stagger-2" style="margin-top:20px;">
+      <p><strong style="color:var(--accent-green);">결론:</strong> CODEGEN이 DIRECT를 약 6%p 상회. 복잡한 변환에서의 재사용성과 구조화된 출력이 핵심 장점.</p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 7: SAFEGUARD STACK ====== -->
+  <div class="slide" id="slide-7">
+    <span class="slide-number">07 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(52,211,153,0.15);">🛡️</span>
+      3단계 안전장치 스택
+    </h2>
+    <div class="card-grid cols-3 fade-in">
+      <div class="card" style="border-top:3px solid var(--accent-green);">
+        <span class="card-icon">✅</span>
+        <div class="card-title">1단계: 검증</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 타입 체크: 출력이 예상 스키마와 일치하는지 검증</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 코드 분석: 위험한 연산 스캔 (eval, 시스템 호출, 파일 I/O)</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-blue);">
+        <span class="card-icon">🗳️</span>
+        <div class="card-title">2단계: 앙상블 투표</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 다중 LLM 응답 비교</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 속도 제한으로 캐스케이드 실패 방지</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 샌드박스 환경에서 격리 실행</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-orange);">
+        <span class="card-icon">🔙</span>
+        <div class="card-title">3단계: 규칙 기반 폴백</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 원본 데이터 보존</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 실패한 변환 자동 롤백</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.9rem);">• 규칙 기반 대안 경로 제공</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="code-block fade-in stagger-2">
+      <span style="color:var(--accent-pink);">파이프라인 흐름:</span><br>
+      요청 → 구조적 diff (DeepDiff) → LLM 의미 분석 → [DIRECT | CODEGEN] → 검증 → 앙상블 투표 → 폴백 → 응답
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 8: IMPLEMENTATION ====== -->
+  <div class="slide" id="slide-8">
+    <span class="slide-number">08 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(34,211,238,0.15);">⚙️</span>
+      구현 세부사항
+    </h2>
+    <div class="card-grid cols-2 fade-in">
+      <div class="card">
+        <h3>기술 스택</h3>
+        <ul class="styled-list">
+          <li data-icon="🚀" style="border-left-color:var(--accent-green);">FastAPI 프레임워크 (REST API)</li>
+          <li data-icon="🤖" style="border-left-color:var(--accent-blue);">OpenAI GPT-4 & GPT-3.5-turbo</li>
+          <li data-icon="🔐" style="border-left-color:var(--accent-purple);">샌드박스 Python/JS 환경</li>
+          <li data-icon="📋" style="border-left-color:var(--accent-orange);">구조화된 JSON 로깅</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>프롬프트 엔지니어링</h3>
+        <ul class="styled-list">
+          <li data-icon="🎭" style="border-left-color:var(--accent-pink);">역할 기반 프롬프팅</li>
+          <li data-icon="📚" style="border-left-color:var(--accent-cyan);">Few-shot 변환 예시 포함</li>
+          <li data-icon="🚫" style="border-left-color:var(--accent-orange);">명시적 제약 조건 지정</li>
+          <li data-icon="📐" style="border-left-color:var(--accent-green);">JSON 스키마 구조화 출력</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="card fade-in stagger-2">
+      <h3>FastAPI 아키텍처 특징</h3>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;">
+        <span class="tag tag-blue">미들웨어 레이어 요청/응답 가로채기</span>
+        <span class="tag tag-green">비동기 처리 (논블로킹)</span>
+        <span class="tag tag-purple">WebSocket 스트리밍 지원</span>
+        <span class="tag tag-orange">자동 OpenAPI 문서 생성</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 9: EXPERIMENTAL SETUP ====== -->
+  <div class="slide" id="slide-9">
+    <span class="slide-number">09 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(251,146,60,0.15);">🧪</span>
+      실험 설계
+    </h2>
+    <div class="card-grid cols-2 fade-in">
+      <div class="card">
+        <h3 style="color:var(--accent-orange);">테스트 시나리오 (10개)</h3>
+        <ul class="styled-list">
+          <li data-icon="🛒" style="border-left-color:var(--accent-orange);">REST 버전 마이그레이션</li>
+          <li data-icon="📡" style="border-left-color:var(--accent-cyan);">IoT → 분석 플랫폼 브리징</li>
+          <li data-icon="🔗" style="border-left-color:var(--accent-purple);">GraphQL 프로토콜 변환</li>
+          <li data-icon="🏥" style="border-left-color:var(--accent-pink);">의료 시스템 (HL7 ↔ XML)</li>
+          <li data-icon="🏦" style="border-left-color:var(--accent-green);">금융 서비스 API 통합</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent-blue);">평가 프레임워크</h3>
+        <ul class="styled-list">
+          <li data-icon="🎯" style="border-left-color:var(--accent-blue);">감지 정확도 (Detection Accuracy)</li>
+          <li data-icon="✅" style="border-left-color:var(--accent-green);">해결 성공률 (pass@1)</li>
+          <li data-icon="⚠️" style="border-left-color:var(--accent-orange);">거짓 양성 비율</li>
+          <li data-icon="⏱️" style="border-left-color:var(--accent-pink);">지연 시간 (Latency)</li>
+          <li data-icon="💰" style="border-left-color:var(--accent-purple);">비용 효율성 분석</li>
+        </ul>
+        <div style="margin-top:14px;">
+          <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);color:var(--text-muted);">2개 제공자 · 6개 LLM · ~4,200건 변환 시도</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 10: RESULTS ====== -->
+  <div class="slide" id="slide-10">
+    <span class="slide-number">10 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(52,211,153,0.15);">📈</span>
+      실험 결과: 성능 비교
+    </h2>
+    <div style="overflow-x:auto;">
+      <table class="data-table fade-in">
+        <thead>
+          <tr>
+            <th>지표</th>
+            <th>DIRECT</th>
+            <th>CODEGEN</th>
+            <th>전체</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500;color:var(--text-primary);">감지 정확도</td>
+            <td>94.2%</td>
+            <td>91.7%</td>
+            <td style="color:var(--accent-green);font-weight:600;">93.1%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500;color:var(--text-primary);">해결 성공률</td>
+            <td>87.3%</td>
+            <td>78.9%</td>
+            <td style="color:var(--accent-green);font-weight:600;">83.2%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500;color:var(--text-primary);">거짓 양성</td>
+            <td>3.1%</td>
+            <td>5.8%</td>
+            <td style="color:var(--accent-orange);font-weight:600;">4.2%</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500;color:var(--text-primary);">평균 지연 시간</td>
+            <td>240ms</td>
+            <td>680ms</td>
+            <td style="color:var(--accent-blue);font-weight:600;">~450ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="spacer"></div>
+    <h3 style="margin-top:10px;">시나리오별 성공률</h3>
+    <div class="bar-chart fade-in stagger-2">
+      <div class="bar-item">
+        <span class="bar-label">전자상거래</span>
+        <div class="bar-track"><div class="bar-fill" style="--target-width:95.2%;background:var(--gradient-3);">95.2%</div></div>
+      </div>
+      <div class="bar-item">
+        <span class="bar-label">금융 서비스</span>
+        <div class="bar-track"><div class="bar-fill" style="--target-width:89.4%;background:var(--gradient-1);">89.4%</div></div>
+      </div>
+      <div class="bar-item">
+        <span class="bar-label">IoT 통합</span>
+        <div class="bar-track"><div class="bar-fill" style="--target-width:81.1%;background:var(--gradient-2);">81.1%</div></div>
+      </div>
+      <div class="bar-item">
+        <span class="bar-label">의료 시스템</span>
+        <div class="bar-track"><div class="bar-fill" style="--target-width:76.8%;background:linear-gradient(135deg,var(--accent-orange),var(--accent-pink));">76.8%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 11: MODEL COMPARISON ====== -->
+  <div class="slide" id="slide-11">
+    <span class="slide-number">11 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(124,58,237,0.15);">🤖</span>
+      모델별 성능 비교
+    </h2>
+    <div class="vs-container fade-in">
+      <div class="vs-card left">
+        <h3 style="color:var(--accent-blue);text-align:center;">GPT-4</h3>
+        <div style="text-align:center;margin:16px 0;">
+          <div style="font-size:clamp(2rem,5vw,3rem);font-weight:900;color:var(--accent-blue);">96.1%</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;">감지 정확도</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:clamp(0.78rem,1.3vw,0.9rem);">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(79,172,254,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">DIRECT 성공</span>
+            <span style="color:var(--accent-blue);font-weight:600;">91.5%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(79,172,254,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">CODEGEN 성공</span>
+            <span style="color:var(--accent-blue);font-weight:600;">84.3%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(79,172,254,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">중간 지연</span>
+            <span style="color:var(--accent-blue);font-weight:600;">310ms</span>
+          </div>
+        </div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-card right">
+        <h3 style="color:#a78bfa;text-align:center;">GPT-3.5-turbo</h3>
+        <div style="text-align:center;margin:16px 0;">
+          <div style="font-size:clamp(2rem,5vw,3rem);font-weight:900;color:#a78bfa;">91.2%</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;">감지 정확도</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:clamp(0.78rem,1.3vw,0.9rem);">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(124,58,237,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">DIRECT 성공</span>
+            <span style="color:#a78bfa;font-weight:600;">83.1%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(124,58,237,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">CODEGEN 성공</span>
+            <span style="color:#a78bfa;font-weight:600;">73.5%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(124,58,237,0.06);border-radius:8px;">
+            <span style="color:var(--text-secondary);">중간 지연</span>
+            <span style="color:#a78bfa;font-weight:600;">420ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box warning fade-in stagger-2" style="margin-top:20px;">
+      <p><strong style="color:var(--accent-orange);">비용 대비 성능:</strong> GPT-3.5-turbo는 71% 비용 절감에 약 5%p의 정확도 손실. 핵심 시스템에서는 GPT-4가 정당화되지만, 비용에 민감한 환경에서는 GPT-3.5-turbo가 합리적 선택.</p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 12: DISCUSSION & ERROR ====== -->
+  <div class="slide" id="slide-12">
+    <span class="slide-number">12 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(244,114,182,0.15);">💡</span>
+      논의 및 트레이드오프
+    </h2>
+    <div class="card-grid cols-2 fade-in">
+      <div class="card">
+        <h3 style="color:var(--accent-pink);">오류 분석</h3>
+        <div class="bar-chart" style="margin-top:12px;">
+          <div class="bar-item">
+            <span class="bar-label" style="width:120px;">타입 가정 오류</span>
+            <div class="bar-track"><div class="bar-fill" style="--target-width:39%;background:var(--accent-pink);">39%</div></div>
+          </div>
+          <div class="bar-item">
+            <span class="bar-label" style="width:120px;">필드 환각</span>
+            <div class="bar-track"><div class="bar-fill" style="--target-width:31%;background:var(--accent-purple);">31%</div></div>
+          </div>
+          <div class="bar-item">
+            <span class="bar-label" style="width:120px;">과도한 안전장치</span>
+            <div class="bar-track"><div class="bar-fill" style="--target-width:18%;background:var(--accent-orange);">18%</div></div>
+          </div>
+          <div class="bar-item">
+            <span class="bar-label" style="width:120px;">타임아웃</span>
+            <div class="bar-track"><div class="bar-fill" style="--target-width:12%;background:var(--text-muted);">12%</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent-cyan);">핵심 트레이드오프</h3>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:12px;">
+          <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+            <div style="font-weight:600;font-size:clamp(0.82rem,1.4vw,0.95rem);color:var(--text-primary);margin-bottom:4px;">안전성 vs 능력</div>
+            <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);">적극적 안전장치가 합법적 변환의 8.9%를 차단</p>
+          </div>
+          <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+            <div style="font-weight:600;font-size:clamp(0.82rem,1.4vw,0.95rem);color:var(--text-primary);margin-bottom:4px;">지연 시간 vs 정확도</div>
+            <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);">스트리밍 모드: 지연 23% 감소, 환각 12% 증가</p>
+          </div>
+          <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:10px;">
+            <div style="font-weight:600;font-size:clamp(0.82rem,1.4vw,0.95rem);color:var(--text-primary);margin-bottom:4px;">비용 vs 성능</div>
+            <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);">GPT-3.5: 71% 비용 절감, 5%p 정확도 손실</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="highlight-box warning fade-in stagger-2">
+      <p style="font-weight:500;color:var(--accent-orange);margin-bottom:4px;">타당성 위협 (Threats to Validity)</p>
+      <p style="font-size:clamp(0.78rem,1.3vw,0.9rem);">합성 시나리오 사용, ~4,200건 제한적 데이터셋, REST API만 테스트 (gRPC/메시지 큐 미포함), 프롬프트 민감도 3-7% 변동, 침투 테스트 미수행</p>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 13: CONCLUSION ====== -->
+  <div class="slide" id="slide-13">
+    <span class="slide-number">13 / 13</span>
+    <h2 class="slide-title">
+      <span class="icon" style="background:rgba(52,211,153,0.15);">🏁</span>
+      결론 및 향후 연구
+    </h2>
+    <div class="card-grid cols-3 fade-in">
+      <div class="card" style="border-top:3px solid var(--accent-green);">
+        <span class="card-icon">🏆</span>
+        <div class="card-title">핵심 기여</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 최초의 LLM 기반 런타임 상호운용성 미들웨어</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 이중 전략 접근법의 실증적 효과</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 포괄적 안전장치 프레임워크</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-blue);">
+        <span class="card-icon">💪</span>
+        <div class="card-title">실용적 영향</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 레거시 시스템 통합 간소화</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 통합 개발 시간 40-60% 절감 추정</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 스키마 진화 중 가용성 유지</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-purple);">
+        <span class="card-icon">🔮</span>
+        <div class="card-title">향후 연구 방향</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 조직 맞춤 모델 파인튜닝</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 다중 LLM 앙상블 투표</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 성공 변환 캐싱 학습</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 비-REST 프로토콜 확장</li>
+          <li style="font-size:clamp(0.78rem,1.3vw,0.88rem);">• 실시간 모니터링 피드백 루프</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="highlight-box info fade-in stagger-2">
+      <p style="font-weight:600;color:var(--accent-blue);margin-bottom:6px;">한계점</p>
+      <p style="font-size:clamp(0.78rem,1.3vw,0.9rem);">규정 민감 도메인에서 Human-in-the-loop 검증 필요 · 변환 볼륨에 따른 비용 확장 · 생성된 변환에 대한 형식적 정확성 보장 없음</p>
+    </div>
+    <div style="text-align:center;margin-top:30px;" class="fade-in stagger-3">
+      <p style="color:var(--text-muted);font-size:clamp(0.75rem,1.2vw,0.85rem);">
+        arXiv: 2603.28731v1 · SAGAI 2026 (IEEE ICSA 2026 공동 개최)<br>
+        Oliver Aleksander Larsen &amp; Mahyar T. Moghaddam
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<nav class="nav-bar">
+  <button class="nav-btn prev" onclick="changeSlide(-1)" aria-label="이전 슬라이드">
+    ← 이전
+  </button>
+  <div class="nav-progress">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-text" id="progressText">1 / 13</span>
+  </div>
+  <button class="nav-btn next" onclick="changeSlide(1)" aria-label="다음 슬라이드">
+    다음 →
+  </button>
+</nav>
+
+<script>
+  const totalSlides = 13;
+  let currentSlide = 1;
+
+  function changeSlide(direction) {
+    const next = currentSlide + direction;
+    if (next < 1 || next > totalSlides) return;
+    goToSlide(next);
+  }
+
+  function goToSlide(n) {
+    document.getElementById('slide-' + currentSlide).classList.remove('active');
+    currentSlide = n;
+    const slide = document.getElementById('slide-' + currentSlide);
+    slide.classList.add('active');
+    slide.scrollTop = 0;
+
+    // Update progress
+    const pct = (currentSlide / totalSlides) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = currentSlide + ' / ' + totalSlides;
+
+    // Trigger animations
+    requestAnimationFrame(() => {
+      slide.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+      slide.querySelectorAll('.bar-fill').forEach(el => el.classList.add('animated'));
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(1); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+      if (dx < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+
+  // Init first slide animations
+  window.addEventListener('load', () => {
+    const first = document.getElementById('slide-1');
+    first.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+    document.getElementById('progressFill').style.width = (1 / totalSlides * 100) + '%';
+  });
+</script>
+
+</body>
+</html>

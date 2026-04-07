@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDAD: Test-Driven Agentic Development</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-deep: #080c14;
+            --bg-mid: #0e1525;
+            --green-pass: #22c55e;
+            --red-fail: #ef4444;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --violet: #8b5cf6;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.7);
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ── Animated grid background ── */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridPulse 8s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ── Floating nodes ── */
+        .node-particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Slides ── */
+        .slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 50px 60px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
+            transform: translateX(60px);
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        .slide.exit-left {
+            opacity: 0;
+            visibility: visible;
+            transform: translateX(-60px);
+        }
+
+        /* ── Slide 1: Title ── */
+        .slide-title {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .slide-title .badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border: 1px solid var(--cyan);
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6,182,212,0.3); }
+            50% { box-shadow: 0 0 20px 4px rgba(6,182,212,0.15); }
+        }
+        .slide-title h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .slide-title .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+        .title-metrics {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .title-metric {
+            text-align: center;
+            padding: 16px 24px;
+            background: var(--glass);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            min-width: 140px;
+        }
+        .title-metric .val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .title-metric .val.green { color: var(--green-pass); }
+        .title-metric .val.red { color: var(--red-fail); }
+        .title-metric .val.cyan { color: var(--cyan); }
+        .title-metric .label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* ── Slide 2: Problem ── */
+        .slide-problem { gap: 24px; }
+        .slide-problem h2 { font-size: 1.8rem; color: var(--red-fail); margin-bottom: 4px; }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            align-content: center;
+        }
+        .problem-card {
+            background: var(--glass);
+            border: 1px solid rgba(239,68,68,0.15);
+            border-radius: 14px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .slide.active .problem-card {
+            animation: cardIn 0.5s ease-out forwards;
+        }
+        .slide.active .problem-card:nth-child(1) { animation-delay: 0.15s; }
+        .slide.active .problem-card:nth-child(2) { animation-delay: 0.30s; }
+        .slide.active .problem-card:nth-child(3) { animation-delay: 0.45s; }
+        .slide.active .problem-card:nth-child(4) { animation-delay: 0.60s; }
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .problem-card .icon { font-size: 1.5rem; margin-bottom: 10px; }
+        .problem-card h3 { font-size: 1rem; color: var(--amber); margin-bottom: 8px; }
+        .problem-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
+
+        /* ── Slide 3: Framework ── */
+        .slide-framework { gap: 20px; }
+        .slide-framework h2 { font-size: 1.8rem; color: var(--cyan); }
+        .framework-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .fw-step {
+            background: var(--glass);
+            border-radius: 14px;
+            padding: 22px 18px;
+            text-align: center;
+            width: 160px;
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: scale(0.85);
+            position: relative;
+        }
+        .slide.active .fw-step {
+            animation: stepPop 0.4s ease-out forwards;
+        }
+        .slide.active .fw-step:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .fw-step:nth-child(2) { animation-delay: 0.25s; }
+        .slide.active .fw-step:nth-child(3) { animation-delay: 0.4s; }
+        .slide.active .fw-step:nth-child(4) { animation-delay: 0.55s; }
+        .slide.active .fw-step:nth-child(5) { animation-delay: 0.7s; }
+        @keyframes stepPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+        .fw-step .step-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.2rem;
+        }
+        .fw-step h4 { font-size: 0.85rem; margin-bottom: 6px; }
+        .fw-step p { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+        .fw-arrow {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--cyan);
+            font-size: 1.3rem;
+            opacity: 0;
+        }
+        .slide.active .fw-arrow { animation: arrowFade 0.3s ease-out forwards; }
+        .slide.active .fw-arrow:nth-of-type(2) { animation-delay: 0.2s; }
+        .slide.active .fw-arrow:nth-of-type(4) { animation-delay: 0.35s; }
+        .slide.active .fw-arrow:nth-of-type(6) { animation-delay: 0.5s; }
+        .slide.active .fw-arrow:nth-of-type(8) { animation-delay: 0.65s; }
+        @keyframes arrowFade { to { opacity: 1; } }
+
+        /* ── Slide 4: Pipeline (AST Graph) ── */
+        .slide-pipeline { gap: 16px; }
+        .slide-pipeline h2 { font-size: 1.8rem; color: var(--violet); }
+        .pipeline-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            align-content: center;
+        }
+        .pipe-col {
+            background: var(--glass);
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid rgba(139,92,246,0.12);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .slide.active .pipe-col { animation: cardIn 0.5s ease-out forwards; }
+        .slide.active .pipe-col:nth-child(1) { animation-delay: 0.15s; }
+        .slide.active .pipe-col:nth-child(2) { animation-delay: 0.35s; }
+        .slide.active .pipe-col:nth-child(3) { animation-delay: 0.55s; }
+        .pipe-col h3 {
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .pipe-col h3 .num {
+            display: inline-block;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: var(--violet);
+            color: #fff;
+            font-size: 0.7rem;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 8px;
+        }
+        .graph-node {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+        .graph-node.code-node {
+            background: rgba(6,182,212,0.08);
+            border-left: 3px solid var(--cyan);
+        }
+        .graph-node.test-node {
+            background: rgba(34,197,94,0.08);
+            border-left: 3px solid var(--green-pass);
+        }
+        .graph-node.impact-node {
+            background: rgba(245,158,11,0.08);
+            border-left: 3px solid var(--amber);
+        }
+        .pipe-desc {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        /* ── Slide 5: Results ── */
+        .slide-results { gap: 16px; }
+        .slide-results h2 { font-size: 1.8rem; color: var(--green-pass); }
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            align-content: center;
+        }
+        .result-box {
+            background: var(--glass);
+            border-radius: 14px;
+            padding: 28px;
+            border: 1px solid rgba(34,197,94,0.12);
+            backdrop-filter: blur(12px);
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .slide.active .result-box { animation: stepPop 0.5s ease-out forwards; }
+        .slide.active .result-box:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .result-box:nth-child(2) { animation-delay: 0.25s; }
+        .slide.active .result-box:nth-child(3) { animation-delay: 0.4s; }
+        .slide.active .result-box:nth-child(4) { animation-delay: 0.55s; }
+        .result-box .big-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .result-box .detail {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+        .result-box .desc {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        /* Bar chart */
+        .bar-compare {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 20px;
+            height: 100px;
+            margin: 12px 0;
+        }
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .bar {
+            width: 50px;
+            border-radius: 6px 6px 0 0;
+            transition: height 1s cubic-bezier(0.4,0,0.2,1);
+        }
+        .bar.before { background: var(--red-fail); }
+        .bar.after { background: var(--green-pass); }
+        .bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+
+        /* ── Slide 6: Insight ── */
+        .slide-insight { gap: 20px; justify-content: center; }
+        .slide-insight h2 { font-size: 1.8rem; color: var(--amber); }
+        .insight-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+        }
+        .insight-card {
+            background: var(--glass);
+            border-radius: 14px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .insight-card.wrong {
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+        .insight-card.right {
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+        .slide.active .insight-card { animation: cardIn 0.5s ease-out forwards; }
+        .slide.active .insight-card:nth-child(1) { animation-delay: 0.2s; }
+        .slide.active .insight-card:nth-child(2) { animation-delay: 0.4s; }
+        .insight-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .insight-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .insight-card li {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            padding: 6px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        .insight-card.wrong li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: var(--red-fail);
+            font-weight: 700;
+        }
+        .insight-card.right li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--green-pass);
+            font-weight: 700;
+        }
+        .insight-quote {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(6,182,212,0.06), rgba(139,92,246,0.06));
+            border-radius: 14px;
+            border: 1px solid rgba(6,182,212,0.12);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--cyan);
+            line-height: 1.6;
+            opacity: 0;
+        }
+        .slide.active .insight-quote { animation: cardIn 0.6s ease-out 0.6s forwards; }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            z-index: 10;
+            background: linear-gradient(transparent, rgba(8,12,20,0.95));
+            padding-bottom: 8px;
+        }
+        .nav-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .nav-dot.active {
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+            width: 24px;
+            border-radius: 4px;
+        }
+        .slide-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+        .auto-indicator {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: none;
+            transition: all 0.3s;
+        }
+        .auto-indicator.active {
+            color: var(--green-pass);
+            border-color: rgba(34,197,94,0.3);
+        }
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--violet));
+            z-index: 10;
+            transition: width 0.3s;
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+            .slide { padding: 30px 24px; }
+            .slide-title h1 { font-size: 1.6rem; }
+            .slide-title .subtitle { font-size: 0.9rem; }
+            .title-metrics { gap: 16px; }
+            .title-metric { min-width: 100px; padding: 12px 16px; }
+            .title-metric .val { font-size: 1.2rem; }
+            .problem-grid, .results-grid, .insight-main { grid-template-columns: 1fr; }
+            .pipeline-visual { grid-template-columns: 1fr; }
+            .framework-flow { flex-direction: column; }
+            .fw-arrow { transform: rotate(90deg); }
+            h2 { font-size: 1.4rem !important; }
+            .result-box .big-num { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slides-container">
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active" data-index="0">
+            <div class="badge">arXiv 2603.17973</div>
+            <h1>TDAD: Test-Driven<br>Agentic Development</h1>
+            <p class="subtitle">
+                그래프 기반 영향 분석을 통해<br>
+                AI 코딩 에이전트의 코드 회귀를 줄이다
+            </p>
+            <div class="title-metrics">
+                <div class="title-metric">
+                    <div class="val red">70%↓</div>
+                    <div class="label">회귀 감소</div>
+                </div>
+                <div class="title-metric">
+                    <div class="val green">24→32%</div>
+                    <div class="label">해결률 향상</div>
+                </div>
+                <div class="title-metric">
+                    <div class="val cyan">AST</div>
+                    <div class="label">의존성 그래프</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem -->
+        <div class="slide slide-problem" data-index="1">
+            <h2>문제 정의: 왜 AI 에이전트는 회귀를 만드는가?</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">🔴</div>
+                    <h3>벤치마크의 맹점</h3>
+                    <p>SWE-bench는 "문제 해결 여부"만 측정하고 기존 테스트의 회귀(regression)는 무시한다. 패치가 통과해도 다른 곳이 깨질 수 있다.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">💥</div>
+                    <h3>높은 회귀율</h3>
+                    <p>기존 에이전트의 6.08%가 회귀를 유발한다. 실패한 시도의 33%에서 기존 테스트가 깨진다 — 실제 배포 시 큰 위험.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🧪</div>
+                    <h3>전체 테스트 실행 불가</h3>
+                    <p>대규모 프로젝트에서 모든 테스트를 실행하면 시간/비용이 폭증. 영향받는 테스트만 선택적으로 실행해야 한다.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">📋</div>
+                    <h3>TDD 프롬프팅의 역설</h3>
+                    <p>"TDD를 따르라"는 절차적 지시만으로는 오히려 회귀가 증가. 에이전트는 절차보다 구체적 컨텍스트가 필요하다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Framework -->
+        <div class="slide slide-framework" data-index="2">
+            <h2>TDAD 프레임워크 개요</h2>
+            <div class="framework-flow">
+                <div class="fw-step">
+                    <div class="step-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)">📝</div>
+                    <h4>코드 변경</h4>
+                    <p>에이전트가 이슈 해결을 위해 코드를 수정</p>
+                </div>
+                <div class="fw-arrow">→</div>
+                <div class="fw-step">
+                    <div class="step-icon" style="background:rgba(139,92,246,0.15);color:var(--violet)">🌳</div>
+                    <h4>AST 파싱</h4>
+                    <p>변경된 파일의 Abstract Syntax Tree 분석</p>
+                </div>
+                <div class="fw-arrow">→</div>
+                <div class="fw-step">
+                    <div class="step-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)">🔗</div>
+                    <h4>그래프 구축</h4>
+                    <p>코드↔테스트 의존성 그래프 생성</p>
+                </div>
+                <div class="fw-arrow">→</div>
+                <div class="fw-step">
+                    <div class="step-icon" style="background:rgba(239,68,68,0.15);color:var(--red-fail)">⚖️</div>
+                    <h4>영향 분석</h4>
+                    <p>가중치 기반 영향받을 테스트 식별</p>
+                </div>
+                <div class="fw-arrow">→</div>
+                <div class="fw-step">
+                    <div class="step-icon" style="background:rgba(34,197,94,0.15);color:var(--green-pass)">✅</div>
+                    <h4>선택적 실행</h4>
+                    <p>위험 테스트를 에이전트에 전달</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Pipeline Detail -->
+        <div class="slide slide-pipeline" data-index="3">
+            <h2>파이프라인: AST 그래프 → 영향 분석 → 테스트 선택</h2>
+            <div class="pipeline-visual">
+                <div class="pipe-col">
+                    <h3><span class="num">1</span>AST 의존성 그래프</h3>
+                    <div class="graph-node code-node">def calculate_tax()</div>
+                    <div class="graph-node code-node">class InvoiceService</div>
+                    <div class="graph-node code-node">def validate_input()</div>
+                    <p class="pipe-desc">
+                        코드의 AST를 파싱하여 함수, 클래스, 모듈 간 호출/임포트 관계를 그래프로 구축. 변경된 노드에서 출발하여 연결된 테스트를 탐색.
+                    </p>
+                </div>
+                <div class="pipe-col">
+                    <h3><span class="num">2</span>가중 영향 점수</h3>
+                    <div class="graph-node impact-node">직접 호출: w = 1.0</div>
+                    <div class="graph-node impact-node">간접 의존: w = 0.5</div>
+                    <div class="graph-node impact-node">동일 모듈: w = 0.3</div>
+                    <p class="pipe-desc">
+                        의존 관계의 유형과 거리에 따라 가중치를 부여. 직접 호출하는 테스트가 더 높은 위험도를 가짐. 임계값 이상만 선택.
+                    </p>
+                </div>
+                <div class="pipe-col">
+                    <h3><span class="num">3</span>테스트 선택 및 전달</h3>
+                    <div class="graph-node test-node">test_tax_calculation ⚠️</div>
+                    <div class="graph-node test-node">test_invoice_total ⚠️</div>
+                    <div class="graph-node test-node">test_validation ○</div>
+                    <p class="pipe-desc">
+                        "이 테스트들이 깨질 위험이 있다"는 컨텍스트를 에이전트에 직접 전달. 절차 지시 없이 <strong>무엇을</strong> 확인할지 알려줌.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Results -->
+        <div class="slide slide-results" data-index="4">
+            <h2>실험 결과: SWE-bench Verified</h2>
+            <div class="results-grid">
+                <div class="result-box">
+                    <div class="big-num" style="color:var(--green-pass)">-70%</div>
+                    <div class="detail">6.08% → 1.82%</div>
+                    <div class="desc">회귀율 (Regression Rate)</div>
+                    <div class="bar-compare">
+                        <div class="bar-item">
+                            <div class="bar before" id="bar1" style="height:0"></div>
+                            <span class="bar-label">기존</span>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar after" id="bar2" style="height:0"></div>
+                            <span class="bar-label">TDAD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <div class="big-num" style="color:var(--cyan)">+33%</div>
+                    <div class="detail">24% → 32%</div>
+                    <div class="desc">해결률 (Resolve Rate)</div>
+                    <div class="bar-compare">
+                        <div class="bar-item">
+                            <div class="bar before" id="bar3" style="height:0"></div>
+                            <span class="bar-label">기존</span>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar after" id="bar4" style="height:0"></div>
+                            <span class="bar-label">TDAD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <div class="big-num" style="color:var(--amber)">3x</div>
+                    <div class="detail">TDD 프롬프팅 대비</div>
+                    <div class="desc">TDD 절차 지시만 했을 때보다<br>TDAD가 3배 더 효과적</div>
+                </div>
+                <div class="result-box">
+                    <div class="big-num" style="color:var(--violet)">0</div>
+                    <div class="detail">추가 LLM 호출 불필요</div>
+                    <div class="desc">정적 분석 기반이므로<br>추가 비용/지연 없음</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Insight -->
+        <div class="slide slide-insight" data-index="5">
+            <h2>핵심 통찰: 컨텍스트 > 절차</h2>
+            <div class="insight-main">
+                <div class="insight-card wrong">
+                    <h3><span style="color:var(--red-fail);font-size:1.3rem">✗</span> 절차적 지시 (How)</h3>
+                    <ul>
+                        <li>"TDD를 따르세요"</li>
+                        <li>"테스트를 먼저 작성하세요"</li>
+                        <li>"변경 후 테스트를 실행하세요"</li>
+                        <li>에이전트가 절차에 갇혀 오히려 회귀 증가</li>
+                    </ul>
+                </div>
+                <div class="insight-card right">
+                    <h3><span style="color:var(--green-pass);font-size:1.3rem">✓</span> 구체적 컨텍스트 (What)</h3>
+                    <ul>
+                        <li>"test_calculate_tax가 깨질 수 있습니다"</li>
+                        <li>"InvoiceService에 의존하는 테스트 3개"</li>
+                        <li>영향 분석 결과를 직접 전달</li>
+                        <li>에이전트가 자율적으로 최적의 전략 선택</li>
+                    </ul>
+                </div>
+                <div class="insight-quote">
+                    "무엇을(어떤 테스트가 위험한지) 알려주는 것이<br>어떻게(TDD 절차)를 지시하는 것보다 훨씬 효과적이다"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <span class="slide-counter" id="counter">1 / 6</span>
+        <div class="nav-dots" id="navDots"></div>
+        <button class="auto-indicator active" id="autoBtn" onclick="toggleAuto()">AUTO 10s</button>
+    </div>
+
+    <script>
+        const TOTAL = 6;
+        const AUTO_INTERVAL = 10000;
+        let current = 0;
+        let autoPlay = true;
+        let autoTimer = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Build nav dots
+        const dotsEl = document.getElementById('navDots');
+        for (let i = 0; i < TOTAL; i++) {
+            const d = document.createElement('button');
+            d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+            d.onclick = () => goTo(i);
+            dotsEl.appendChild(d);
+        }
+
+        function goTo(idx) {
+            if (idx === current || idx < 0 || idx >= TOTAL) return;
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.nav-dot');
+
+            slides[current].classList.remove('active');
+            slides[current].classList.add('exit-left');
+            setTimeout(() => slides[current === idx ? current : (current)].classList.remove('exit-left'), 600);
+
+            const prev = current;
+            current = idx;
+
+            slides[current].classList.add('active');
+
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            document.getElementById('counter').textContent = `${current + 1} / ${TOTAL}`;
+            document.getElementById('progressBar').style.width = `${((current + 1) / TOTAL) * 100}%`;
+
+            // Animate bars on results slide
+            if (current === 4) animateBars();
+
+            // Clean up previous exit class
+            setTimeout(() => slides[prev].classList.remove('exit-left'), 700);
+
+            resetAutoTimer();
+        }
+
+        function next() { goTo(current < TOTAL - 1 ? current + 1 : 0); }
+        function prev() { goTo(current > 0 ? current - 1 : TOTAL - 1); }
+
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+        });
+
+        // Touch swipe
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].screenX - touchStartX;
+            const dy = e.changedTouches[0].screenY - touchStartY;
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+                dx < 0 ? next() : prev();
+            }
+        }, { passive: true });
+
+        // Auto-play
+        function toggleAuto() {
+            autoPlay = !autoPlay;
+            const btn = document.getElementById('autoBtn');
+            btn.classList.toggle('active', autoPlay);
+            btn.textContent = autoPlay ? 'AUTO 10s' : 'AUTO OFF';
+            if (autoPlay) startAutoTimer(); else clearInterval(autoTimer);
+        }
+        function startAutoTimer() {
+            clearInterval(autoTimer);
+            autoTimer = setInterval(next, AUTO_INTERVAL);
+        }
+        function resetAutoTimer() {
+            if (autoPlay) startAutoTimer();
+        }
+        startAutoTimer();
+
+        // Bar animation
+        function animateBars() {
+            setTimeout(() => {
+                document.getElementById('bar1').style.height = '80px';
+                document.getElementById('bar2').style.height = '24px';
+                document.getElementById('bar3').style.height = '50px';
+                document.getElementById('bar4').style.height = '80px';
+            }, 300);
+        }
+
+        // Floating particles
+        function createParticles() {
+            const colors = ['var(--cyan)', 'var(--violet)', 'var(--green-pass)', 'var(--amber)'];
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'node-particle';
+                const size = 3 + Math.random() * 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                Object.assign(p.style, {
+                    width: size + 'px',
+                    height: size + 'px',
+                    background: color,
+                    left: Math.random() * 100 + 'vw',
+                    top: Math.random() * 100 + 'vh',
+                    opacity: 0.15 + Math.random() * 0.2,
+                    animation: `float${i % 3} ${8 + Math.random() * 12}s ease-in-out infinite`
+                });
+                document.body.appendChild(p);
+            }
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float0 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-40px)} }
+                @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-25px,35px)} }
+                @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,25px)} }
+            `;
+            document.head.appendChild(style);
+        }
+        createParticles();
+
+        // Initial progress bar
+        document.getElementById('progressBar').style.width = `${(1 / TOTAL) * 100}%`;
+    </script>
+</body>
+</html>

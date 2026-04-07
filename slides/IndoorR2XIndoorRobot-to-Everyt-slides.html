@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IndoorR2X: 실내 로봇-사물 간 협조 시스템</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --primary: #00d4ff;
+    --secondary: #7c3aed;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --bg-dark: #0a0e1a;
+    --bg-card: rgba(255,255,255,0.06);
+    --text: #e8ecf4;
+    --text-dim: #8892a8;
+    --glass: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.12);
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+    --gradient-3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Slide Container ── */
+  .slides-wrapper {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── Background Decorations ── */
+  .bg-grid {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    animation: floatGlow 12s ease-in-out infinite alternate;
+  }
+
+  .bg-glow.g1 { width:500px; height:500px; top:-100px; right:-100px; background:#7c3aed; }
+  .bg-glow.g2 { width:400px; height:400px; bottom:-80px; left:-80px; background:#00d4ff; }
+  .bg-glow.g3 { width:300px; height:300px; top:40%; left:50%; background:#f59e0b; opacity:0.08; animation-delay:-4s; }
+
+  @keyframes floatGlow {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(30px, -20px) scale(1.15); }
+  }
+
+  /* ── Typography ── */
+  .slide-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--primary);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* ── Glass Cards ── */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .card-text {
+    font-size: clamp(0.78rem, 1.3vw, 0.92rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── Tags / Badges ── */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+    font-weight: 600;
+    margin: 3px 4px;
+  }
+  .tag.blue { background: rgba(0,212,255,0.15); color: var(--primary); border: 1px solid rgba(0,212,255,0.3); }
+  .tag.purple { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .tag.amber { background: rgba(245,158,11,0.15); color: var(--accent); border: 1px solid rgba(245,158,11,0.3); }
+  .tag.green { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+  .tag.red { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 12px;
+    font-size: clamp(0.72rem, 1.3vw, 0.9rem);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .data-table thead th {
+    background: rgba(124,58,237,0.2);
+    padding: 12px 14px;
+    text-align: center;
+    font-weight: 700;
+    color: #c4b5fd;
+    border-bottom: 1px solid var(--glass-border);
+    white-space: nowrap;
+  }
+
+  .data-table tbody td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+
+  .data-table tbody tr:hover {
+    background: rgba(0,212,255,0.06);
+  }
+
+  .data-table .highlight-row {
+    background: rgba(0,212,255,0.08);
+    font-weight: 700;
+  }
+
+  .data-table .highlight-row td { color: var(--primary); }
+
+  /* ── Bar Chart ── */
+  .bar-chart { margin-top: 16px; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+
+  .bar-label {
+    min-width: 100px;
+    font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+    font-weight: 500;
+    text-align: right;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: clamp(0.7rem, 1.1vw, 0.82rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.grad1 { background: var(--gradient-1); }
+  .bar-fill.grad2 { background: var(--gradient-2); }
+  .bar-fill.grad3 { background: var(--gradient-3); }
+  .bar-fill.green { background: linear-gradient(135deg, #10b981, #059669); }
+  .bar-fill.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .bar-fill.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .flow-node {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 120px;
+    transition: transform 0.3s;
+  }
+
+  .flow-node:hover { transform: scale(1.05); }
+
+  .flow-node .fn-icon { font-size: 1.5rem; margin-bottom: 6px; display: block; }
+  .flow-node .fn-label { font-size: clamp(0.72rem, 1.2vw, 0.88rem); font-weight: 600; color: #fff; }
+  .flow-node .fn-sub { font-size: clamp(0.65rem, 1vw, 0.78rem); color: var(--text-dim); margin-top: 3px; }
+
+  .flow-arrow {
+    font-size: 1.4rem;
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+
+  /* ── Equation Box ── */
+  .eq-box {
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.82rem, 1.4vw, 1rem);
+    color: #c4b5fd;
+    text-align: center;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  /* ── Metric Highlight ── */
+  .metric-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .metric {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 20px 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+  }
+
+  .metric-value {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .metric-label {
+    font-size: clamp(0.72rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  /* ── Comparison Columns ── */
+  .compare-cols {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-top: 16px;
+  }
+
+  .compare-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    padding-top: 40px;
+  }
+
+  /* ── List ── */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .styled-list li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    font-size: clamp(0.82rem, 1.4vw, 0.98rem);
+  }
+
+  .styled-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* ── Progress / Timeline ── */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-top: 16px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gradient-2);
+    border-radius: 1px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--bg-dark);
+  }
+
+  .timeline-item .tl-title {
+    font-weight: 700;
+    font-size: clamp(0.88rem, 1.4vw, 1rem);
+    color: #fff;
+  }
+
+  .timeline-item .tl-text {
+    font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 8px 16px;
+  }
+
+  .nav-btn {
+    width: 48px; height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: var(--glass);
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:hover { background: rgba(0,212,255,0.2); }
+  .nav-btn:active { transform: scale(0.92); }
+
+  .nav-counter {
+    font-size: clamp(0.75rem, 1.2vw, 0.88rem);
+    color: var(--text-dim);
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--gradient-2);
+    z-index: 100;
+    transition: width 0.5s ease;
+  }
+
+  /* ── Slide number badge ── */
+  .slide-num {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    font-size: clamp(0.65rem, 1vw, 0.78rem);
+    color: var(--text-dim);
+    font-weight: 600;
+    opacity: 0.5;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-2);
+    border-radius: 2px;
+    margin: 12px 0 20px;
+  }
+
+  /* ── Special: Title slide ── */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title-slide .main-title {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .title-slide .main-sub {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 28px;
+    max-width: 700px;
+  }
+
+  .title-slide .authors {
+    font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+    color: var(--text-dim);
+    max-width: 640px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .title-slide .meta-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ── Robot animation ── */
+  .robot-orbit {
+    position: relative;
+    width: 160px; height: 160px;
+    margin: 0 auto 24px;
+  }
+
+  .robot-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 2.6rem;
+    z-index: 2;
+  }
+
+  .orbit-item {
+    position: absolute;
+    font-size: 1.4rem;
+    animation: orbitSpin 8s linear infinite;
+  }
+
+  .orbit-item:nth-child(2) { animation-delay: 0s; }
+  .orbit-item:nth-child(3) { animation-delay: -2s; }
+  .orbit-item:nth-child(4) { animation-delay: -4s; }
+  .orbit-item:nth-child(5) { animation-delay: -6s; }
+
+  @keyframes orbitSpin {
+    0% { top: 0; left: 50%; transform: translate(-50%,-50%); }
+    25% { top: 50%; left: 100%; transform: translate(-50%,-50%); }
+    50% { top: 100%; left: 50%; transform: translate(-50%,-50%); }
+    75% { top: 50%; left: 0; transform: translate(-50%,-50%); }
+    100% { top: 0; left: 50%; transform: translate(-50%,-50%); }
+  }
+
+  /* ── Pulse dot ── */
+  .pulse-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .pulse-dot.green { background: var(--success); box-shadow: 0 0 8px var(--success); }
+  .pulse-dot.blue { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+  .pulse-dot.red { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  /* ── Section header variant ── */
+  .section-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-slide .section-number {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .section-slide .section-label {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .section-slide .section-desc {
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    color: var(--text-dim);
+    margin-top: 12px;
+    max-width: 500px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 32px 100px; }
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .compare-cols { grid-template-columns: 1fr; gap: 12px; }
+    .compare-vs { padding-top: 0; }
+    .flow { gap: 6px; }
+    .flow-node { min-width: 90px; padding: 10px 12px; }
+    .flow-arrow { font-size: 1rem; }
+    .metric-row { gap: 10px; }
+    .metric { min-width: 90px; padding: 14px 8px; }
+    .bar-label { min-width: 75px; }
+    .nav { bottom: 16px; padding: 6px 12px; }
+    .data-table { font-size: clamp(0.65rem, 1.2vw, 0.82rem); }
+    .data-table thead th, .data-table tbody td { padding: 8px 8px; }
+    .robot-orbit { width: 120px; height: 120px; }
+    .robot-center { font-size: 2rem; }
+    .orbit-item { font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 96px; }
+    .glass { padding: 16px; }
+    .card { padding: 14px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 1rem; }
+    .slide-title { margin-bottom: 8px; }
+    .slide-subtitle { margin-bottom: 20px; }
+    .divider { margin: 8px 0 14px; }
+    .metric-row { flex-direction: column; gap: 8px; }
+    .bar-row { flex-direction: column; align-items: stretch; gap: 4px; }
+    .bar-label { text-align: left; min-width: auto; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .eq-box { padding: 12px 14px; font-size: clamp(0.7rem, 1.3vw, 0.88rem); }
+    .data-table thead th, .data-table tbody td { padding: 6px 5px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 18px 14px 90px; }
+    .glass { padding: 12px; }
+    .card { padding: 10px; }
+    .nav { gap: 6px; padding: 5px 8px; }
+    .nav-btn { width: 40px; height: 40px; font-size: 0.9rem; }
+    .card-icon { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+<div class="bg-glow g3"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- ========== SLIDE 1: Title ========== -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="robot-orbit">
+      <div class="robot-center">🤖</div>
+      <div class="orbit-item">📡</div>
+      <div class="orbit-item">📷</div>
+      <div class="orbit-item">🌐</div>
+      <div class="orbit-item">💡</div>
+    </div>
+    <div class="main-title">IndoorR2X</div>
+    <div class="main-sub">실내 로봇-사물 간 협조 시스템과<br>LLM 기반 계획 수립</div>
+    <div class="authors">Fan Yang, Soumya Teotia, Shaunak A. Mehta, Prajit KrisshnaKumar,<br>Quanting Xie, Jun Liu, Yueqi Song, Li Wenkai, Atsunori Moteki,<br>Kanji Uchino, Yonatan Bisk</div>
+    <div class="meta-tags">
+      <span class="tag blue">cs.RO</span>
+      <span class="tag purple">cs.MA</span>
+      <span class="tag amber">arXiv:2603.20182</span>
+      <span class="tag green">2026</span>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 2: Problem ========== -->
+  <div class="slide" data-slide="1">
+    <span class="slide-num">02 / 12</span>
+    <div class="slide-title">연구 배경 및 문제 정의</div>
+    <div class="divider"></div>
+    <div class="slide-subtitle">기존 로봇 간(R2R) 통신만으로는 실내 환경의 부분 관측성을 극복하기 어렵습니다</div>
+
+    <div class="compare-cols">
+      <div class="glass" style="border-color: rgba(239,68,68,0.3);">
+        <h3 style="color: var(--danger);">❌ 기존 문제</h3>
+        <ul class="styled-list">
+          <li>로봇 간 통신(R2R)만으로는 탐색 오버헤드 과다</li>
+          <li>팀 규모 확장 없이 관측 범위 확대 한계</li>
+          <li>대부분의 LLM 프레임워크가 전지적 상태 가정</li>
+          <li>기존 IoT 센서 자원이 체계적으로 미활용</li>
+        </ul>
+      </div>
+      <div class="compare-vs">VS</div>
+      <div class="glass" style="border-color: rgba(16,185,129,0.3);">
+        <h3 style="color: var(--success);">✅ 핵심 관찰</h3>
+        <ul class="styled-list">
+          <li>실내 환경에는 이미 저비용 IoT 센서 존재</li>
+          <li>CCTV, 스마트홈 기기 등 인프라 활용 가능</li>
+          <li>R2X 통신으로 부분 관측성 극복 가능</li>
+          <li>추가 하드웨어 없이 성능 향상 기대</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq-box" style="margin-top: 20px;">
+      💡 핵심 질문: "실내 로봇 함대가 IoT 센서를 활용하여 LLM 기반 추론으로<br>부분 관측성 하에서 어떻게 신뢰성 있게 협조할 수 있는가?"
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 3: Core Contributions ========== -->
+  <div class="slide" data-slide="2">
+    <span class="slide-num">03 / 12</span>
+    <div class="slide-title">핵심 기여</div>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-left: 3px solid var(--primary);">
+        <span class="card-icon">🏗️</span>
+        <div class="card-title">최초의 R2X 벤치마크</div>
+        <div class="card-text">LLM 기반 다중 로봇 작업 계획과 R2X 통신을 결합한 최초의 벤치마크 및 시뮬레이션 프레임워크 제시</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--secondary);">
+        <span class="card-icon">📡</span>
+        <div class="card-title">IoT 센서 통합</div>
+        <div class="card-text">건물 내 기존 저비용 센서(CCTV 등)를 활용하여 부분 관측성 극복, 추가 하드웨어 없이 성능 향상</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--success);">
+        <span class="card-icon">📊</span>
+        <div class="card-title">체계적 평가</div>
+        <div class="card-text">85개 다중 방 환경, 구성 가능한 센서 배치, 로봇 팀 구성, 작업 모음으로 협조 전략 평가</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <span class="card-icon">🤖</span>
+        <div class="card-title">실제 로봇 검증</div>
+        <div class="card-text">Stretch 모바일 매니퓰레이터로 실제 환경 배포 완료, 시뮬레이션 결과와의 일관성 확인</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 4: Architecture ========== -->
+  <div class="slide" data-slide="3">
+    <span class="slide-num">04 / 12</span>
+    <div class="slide-title">시스템 아키텍처</div>
+    <div class="divider"></div>
+    <div class="slide-subtitle">조율 허브 중심의 감지-계획-실행 루프</div>
+
+    <div class="flow">
+      <div class="flow-node" style="border-color: rgba(0,212,255,0.4);">
+        <span class="fn-icon">🤖📷</span>
+        <span class="fn-label">로봇 관측</span>
+        <span class="fn-sub">이동 로봇 시야</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: rgba(245,158,11,0.4);">
+        <span class="fn-icon">📡🏠</span>
+        <span class="fn-label">IoT 센서</span>
+        <span class="fn-sub">CCTV / 스마트 기기</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: rgba(124,58,237,0.5); background: rgba(124,58,237,0.15);">
+        <span class="fn-icon">🧠</span>
+        <span class="fn-label">조율 허브</span>
+        <span class="fn-sub">글로벌 시맨틱 상태</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: rgba(16,185,129,0.4);">
+        <span class="fn-icon">🗺️</span>
+        <span class="fn-label">LLM 플래너</span>
+        <span class="fn-sub">작업 DAG 생성</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: rgba(239,68,68,0.4);">
+        <span class="fn-icon">⚡</span>
+        <span class="fn-label">병렬 실행</span>
+        <span class="fn-sub">로봇 배정 및 수행</span>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2" style="margin-top: 20px;">
+      <div class="glass">
+        <h3>🌐 글로벌 시맨틱 상태</h3>
+        <div class="eq-box">W<sub>t</sub> = (S<sup>R</sup><sub>r</sub>, S<sup>O</sup><sub>o</sub>, S<sup>A</sup><sub>a</sub>)</div>
+        <ul class="styled-list">
+          <li><strong>로봇 상태:</strong> 위치, 방향, 상태, 인벤토리, 스킬</li>
+          <li><strong>객체 상태:</strong> 유형, 위치, 포함관계, 동적 속성</li>
+          <li><strong>영역 상태:</strong> 방 정보 및 공간 구성</li>
+        </ul>
+      </div>
+      <div class="glass">
+        <h3>📋 LLM 계획 생성</h3>
+        <div class="eq-box">Π = (V, E) ← f<sub>LLM</sub>(P(T, W<sub>t</sub>))</div>
+        <ul class="styled-list">
+          <li><strong>DAG 구조:</strong> 병렬 실행 가능한 의존성 그래프</li>
+          <li><strong>동적 배정:</strong> 런타임 중 로봇-작업 매칭</li>
+          <li><strong>비동기 모니터:</strong> ActionDone, IoTUpdate, 타임아웃</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 5: Key Components ========== -->
+  <div class="slide" data-slide="4">
+    <span class="slide-num">05 / 12</span>
+    <div class="slide-title">핵심 구성 요소</div>
+    <div class="divider"></div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-title">🗄️ 월드 모델 (수식 1-5)</div>
+        <div class="tl-text">객체와 수납공간의 위상적 계층 구조 유지. IoT/로봇 관측으로 실시간 갱신<br>
+        <span class="tag blue">W<sub>t+1</sub> = F(W<sub>t</sub>, u<sub>t</sub>)</span> — 픽업 시 소유권 이전, 배치 시 수납공간 재배정</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">🧠 LLM 기반 온라인 플래너 (수식 6-7)</div>
+        <div class="tl-text">작업과 현재 월드 상태를 입력받아 DAG 형태의 실행 계획 생성<br>
+        각 노드: <span class="tag purple">v = (행동, 매개변수, 필요 스킬, 선호 로봇)</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">⚙️ 병렬 행동 오케스트레이터</div>
+        <div class="tl-text">공간적 근접성과 스킬 휴리스틱을 사용하여 행동 노드를 로봇에 매칭<br>
+        <span class="tag green">의존성 충족된 행동 → 유휴 로봇에 즉시 배정</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">📡 IoT 융합 메커니즘</div>
+        <div class="tl-text">CCTV가 집 면적의 약 50% 커버, Qwen-VL로 영상 → 텍스트 이벤트 로그 변환<br>
+        <span class="tag amber">실시간 스트리밍으로 조율 허브에 지속 공급</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">🔄 비동기 이벤트 모니터</div>
+        <div class="tl-text">탐색 정체, IoT 업데이트, 행동 실패 감지 시 재계획 자동 트리거<br>
+        <span class="tag red">예상치 못한 상황에 대한 회복력 확보</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 6: Simulation Environment ========== -->
+  <div class="slide" data-slide="5">
+    <span class="slide-num">06 / 12</span>
+    <div class="slide-title">시뮬레이션 환경</div>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-3">
+      <div class="card">
+        <span class="card-icon">🏠</span>
+        <div class="card-title">85개 다중 방 환경</div>
+        <div class="card-text">
+          <strong>10개</strong> 아티스트 큐레이션 주택 (ArchitecTHOR) — 조작 작업<br>
+          <strong>75개</strong> 모듈형 아파트 (RoboTHOR) — 내비게이션 작업
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">👁️</span>
+        <div class="card-title">부분 관측성</div>
+        <div class="card-text">
+          로봇의 환경 지식은 <strong>이전 방문 영역</strong>과 <strong>현재 시야</strong>로 엄격히 제한<br>
+          전지적 시뮬레이터 상태 접근 불가
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">📷</span>
+        <div class="card-title">IoT 구성</div>
+        <div class="card-text">
+          정적 CCTV가 집 면적의 <strong>~50%</strong> 커버<br>
+          나머지 50%는 로봇 직접 탐색 필요
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 24px;">🎯 작업 유형</h3>
+    <div class="card-grid cols-4" style="margin-top: 4px;">
+      <div class="card" style="text-align: center; padding: 14px;">
+        <span class="card-icon">🧹</span>
+        <div class="card-title">가사 청소</div>
+        <div class="card-text">쓰레기 처리 및 영역 정리</div>
+      </div>
+      <div class="card" style="text-align: center; padding: 14px;">
+        <span class="card-icon">📺</span>
+        <div class="card-title">가전 관리</div>
+        <div class="card-text">기기 조작 (TV 끄기 등)</div>
+      </div>
+      <div class="card" style="text-align: center; padding: 14px;">
+        <span class="card-icon">🍎</span>
+        <div class="card-title">객체 조작</div>
+        <div class="card-text">부패성 식품 처리 등</div>
+      </div>
+      <div class="card" style="text-align: center; padding: 14px;">
+        <span class="card-icon">🚚</span>
+        <div class="card-title">협동 운반</div>
+        <div class="card-text">다중 로봇 객체 배달</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 7: Main Results ========== -->
+  <div class="slide" data-slide="6">
+    <span class="slide-num">07 / 12</span>
+    <div class="slide-title">핵심 실험 결과</div>
+    <div class="divider"></div>
+    <div class="slide-subtitle">GPT-4.1 기반, 로봇 3대 구성 (Table II)</div>
+
+    <div class="glass" style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>구성</th>
+            <th>성공률</th>
+            <th>평균 행동 수</th>
+            <th>평균 경로 길이</th>
+            <th>LLM 토큰 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left; font-weight:600;">SMART-LLM (적용)</td>
+            <td>88%</td>
+            <td>124</td>
+            <td>119 m</td>
+            <td>43,397</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:600;">EMOS (적용)</td>
+            <td>88%</td>
+            <td>135</td>
+            <td>122 m</td>
+            <td>51,394</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:600;">IR (독립 로봇)</td>
+            <td>66%</td>
+            <td>186</td>
+            <td>137 m</td>
+            <td>54,572</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:600;">R2R (로봇 간)</td>
+            <td>92%</td>
+            <td>116</td>
+            <td>99 m</td>
+            <td>47,875</td>
+          </tr>
+          <tr class="highlight-row">
+            <td style="text-align:left;">🏆 R2X (본 연구)</td>
+            <td>92%</td>
+            <td>108</td>
+            <td>88 m</td>
+            <td>42,438</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="metric-value">-7%</div>
+        <div class="metric-label">행동 수 감소<br>(vs R2R)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">-11%</div>
+        <div class="metric-label">경로 길이 감소<br>(vs R2R)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">-11%</div>
+        <div class="metric-label">토큰 사용 감소<br>(vs R2R)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">-26%</div>
+        <div class="metric-label">경로 감소<br>(vs SMART-LLM)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 8: LLM Scale Impact ========== -->
+  <div class="slide" data-slide="7">
+    <span class="slide-num">08 / 12</span>
+    <div class="slide-title">LLM 모델 규모의 영향</div>
+    <div class="divider"></div>
+    <div class="slide-subtitle">R2X 구성, 로봇 3대 (Table III)</div>
+
+    <div class="card-grid cols-2">
+      <div>
+        <h3>📊 성공률 비교</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Llama-3.1-8b</div>
+            <div class="bar-track">
+              <div class="bar-fill red" style="--w: 6%;">6%</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Gemma-3-27b</div>
+            <div class="bar-track">
+              <div class="bar-fill amber" style="--w: 64%;">64%</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">GPT-4.1</div>
+            <div class="bar-track">
+              <div class="bar-fill green" style="--w: 92%;">92%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="eq-box" style="margin-top: 20px;">
+          성공률 범위: <strong>6% ~ 92%</strong><br>
+          모델 능력이 계획 품질을 근본적으로 제약
+        </div>
+      </div>
+
+      <div class="glass">
+        <h3>📋 상세 비교</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>모델</th><th>성공률</th><th>행동 수</th><th>경로</th><th>토큰</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Llama-8b</td><td><span class="tag red">6%</span></td><td>47</td><td>55m</td><td>50.5K</td></tr>
+            <tr><td>Gemma-27b</td><td><span class="tag amber">64%</span></td><td>113</td><td>94m</td><td>26.8K</td></tr>
+            <tr class="highlight-row"><td>GPT-4.1</td><td><span class="tag green">92%</span></td><td>108</td><td>88m</td><td>42.4K</td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top: 16px;">
+          <h3>💡 핵심 인사이트</h3>
+          <ul class="styled-list">
+            <li>소형 모델(8B)은 복잡한 협조 계획에 부적합</li>
+            <li>중형 모델(27B)은 2/3 수준 달성 가능</li>
+            <li>프론티어 모델이 고수준 협조에 필수적</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 9: IoT Latency & Scalability ========== -->
+  <div class="slide" data-slide="8">
+    <span class="slide-num">09 / 12</span>
+    <div class="slide-title">IoT 지연시간 및 확장성 분석</div>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-2">
+      <div class="glass">
+        <h3>⏱️ IoT 지연시간 영향 (Table IV)</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>지연 (스텝)</th><th>성공률</th><th>행동 수</th><th>경로</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row"><td>0 (무지연)</td><td>92%</td><td>108</td><td>88m</td></tr>
+            <tr><td>5</td><td>90%</td><td>111</td><td>95m</td></tr>
+            <tr><td>10</td><td>87%</td><td>116</td><td>101m</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 12px;">
+          <ul class="styled-list">
+            <li>5스텝 지연: 성공률 2% 하락 (우아한 성능 저하)</li>
+            <li>10스텝 지연: 성공률 5% 하락, 경로 15% 증가</li>
+            <li>시스템이 적당한 지연에 대해 견고함 입증</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="glass">
+        <h3>👥 팀 규모 확장성 (Figure 3)</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">2대</div>
+            <div class="bar-track">
+              <div class="bar-fill grad2" style="--w: 92%;"><span class="pulse-dot green"></span>90%+</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">3대</div>
+            <div class="bar-track">
+              <div class="bar-fill grad2" style="--w: 92%;">92%</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">4대</div>
+            <div class="bar-track">
+              <div class="bar-fill grad2" style="--w: 91%;">90%+</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">5대</div>
+            <div class="bar-track">
+              <div class="bar-fill grad1" style="--w: 90%;">90%+</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">6대</div>
+            <div class="bar-track">
+              <div class="bar-fill grad3" style="--w: 82%;">↓ 오버헤드</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <ul class="styled-list">
+            <li>2~5대: 성공률 90% 이상 안정 유지</li>
+            <li>6대부터 협조 오버헤드 증가 관찰</li>
+            <li>경로 길이는 팀 규모에 따라 비례 증가</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 10: Robustness Analysis ========== -->
+  <div class="slide" data-slide="9">
+    <span class="slide-num">10 / 12</span>
+    <div class="slide-title">견고성 분석: 실패 모드</div>
+    <div class="divider"></div>
+    <div class="slide-subtitle">정보 누락 vs 의미적 오염 — 비대칭적 영향</div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-top: 3px solid var(--success);">
+        <h3 style="color: var(--success);">✅ 감지 누락 (Omission)</h3>
+        <div class="metric-row" style="margin-top: 8px;">
+          <div class="metric" style="flex: 1;">
+            <div class="metric-value" style="font-size: clamp(1.2rem,2.5vw,1.8rem);">92%</div>
+            <div class="metric-label">CCTV 100% 손실에도<br>성공률 유지</div>
+          </div>
+        </div>
+        <ul class="styled-list" style="margin-top: 12px;">
+          <li>누락된 정보 → 로봇이 탐색 재개</li>
+          <li>경로 길이 증가하지만 작업 완수 가능</li>
+          <li><strong>없는 정보는 안전하게 대체 가능</strong></li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-top: 3px solid var(--danger);">
+        <h3 style="color: var(--danger);">⚠️ 의미적 오염 (Corruption)</h3>
+        <div class="metric-row" style="margin-top: 8px;">
+          <div class="metric" style="flex: 1;">
+            <div class="metric-value" style="font-size: clamp(1.2rem,2.5vw,1.8rem); background: var(--gradient-3); -webkit-background-clip: text;">선형 하락</div>
+            <div class="metric-label">거짓 상태 보고에 따른<br>성공률 감소</div>
+          </div>
+        </div>
+        <ul class="styled-list" style="margin-top: 12px;">
+          <li>잘못된 보고: "꺼짐" ↔ "켜짐" 혼동</li>
+          <li>전제조건 불일치 → 복구 불가능한 계획 오류</li>
+          <li><strong>거짓 정보가 누락보다 훨씬 더 치명적</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq-box" style="margin-top: 20px; border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08);">
+      🔑 핵심 발견: <strong>"거짓 양성은 복구 불가능한 계획 오류를 유발"</strong><br>
+      → 신뢰할 수 없는 IoT 신호에 대한 검증 메커니즘이 필수적
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 11: Real-world & Baselines ========== -->
+  <div class="slide" data-slide="10">
+    <span class="slide-num">11 / 12</span>
+    <div class="slide-title">실제 환경 검증 및 베이스라인 비교</div>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-2">
+      <div class="glass" style="border-color: rgba(16,185,129,0.3);">
+        <h3>🤖 실제 로봇 배포</h3>
+        <div style="text-align: center; font-size: 3rem; margin: 12px 0;">🦾🏠📷</div>
+        <ul class="styled-list">
+          <li><strong>플랫폼:</strong> Stretch 모바일 매니퓰레이터</li>
+          <li><strong>환경:</strong> 3개 방 실내 공간</li>
+          <li><strong>IoT:</strong> 2대 웹캠 + Qwen-VL 처리</li>
+          <li><strong>작업:</strong> 목표물 탐색 및 수거 (쇼핑백, 로봇 강아지)</li>
+        </ul>
+        <div class="eq-box" style="margin-top: 12px;">
+          "두 Stretch 로봇이 탐색 단계를 완전히 건너뛰고<br>목표물로 직접 이동하여 조작 및 배달 수행"
+        </div>
+      </div>
+
+      <div class="glass">
+        <h3>📈 SOTA 비교</h3>
+        <div style="margin-top: 12px;">
+          <div class="card-title" style="margin-bottom: 8px;">vs SMART-LLM (IROS 2024)</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div class="bar-label" style="min-width: 60px;">행동 수</div>
+              <div class="bar-track">
+                <div class="bar-fill grad2" style="--w: 87%;">-13%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label" style="min-width: 60px;">경로</div>
+              <div class="bar-track">
+                <div class="bar-fill green" style="--w: 74%;">-26%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 16px;">
+          <div class="card-title" style="margin-bottom: 8px;">vs EMOS (ICLR 2025)</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div class="bar-label" style="min-width: 60px;">행동 수</div>
+              <div class="bar-track">
+                <div class="bar-fill grad1" style="--w: 80%;">-20%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label" style="min-width: 60px;">경로</div>
+              <div class="bar-track">
+                <div class="bar-fill green" style="--w: 72%;">-28%</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label" style="min-width: 60px;">토큰</div>
+              <div class="bar-track">
+                <div class="bar-fill amber" style="--w: 83%;">-17%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 12: Conclusion ========== -->
+  <div class="slide" data-slide="11">
+    <span class="slide-num">12 / 12</span>
+    <div class="slide-title">결론 및 미래 연구 방향</div>
+    <div class="divider"></div>
+
+    <div class="glass" style="margin-bottom: 20px; border-color: rgba(0,212,255,0.3);">
+      <h3>🎯 핵심 결론</h3>
+      <div class="card-grid cols-2" style="margin-top: 8px;">
+        <div>
+          <ul class="styled-list">
+            <li><strong>정보 계층 구조:</strong> R2R 통신은 부분 관측성 하에서 성공의 핵심이지만, IoT 증강이 행동·경로·토큰 모두 추가 절감</li>
+            <li><strong>실패 모드 비대칭:</strong> 누락 데이터는 탐색 유발, 거짓 데이터는 계획 실패 유발</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="styled-list">
+            <li><strong>모델 능력 임계:</strong> 프론티어 LLM이 고수준 협조에 필수적 (6%→92%)</li>
+            <li><strong>확장성 한계:</strong> 5대까지 안정, 그 이상에서 협조 오버헤드 증가</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3>🔮 미래 연구 방향</h3>
+    <div class="card-grid cols-3">
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🛡️</span>
+        <div class="card-title">IoT 신호 검증</div>
+        <div class="card-text">신뢰할 수 없는 센서 데이터의 검증 메커니즘 개발</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🧩</span>
+        <div class="card-title">효율적 LLM</div>
+        <div class="card-text">소형·효율적 LLM 대안 탐색으로 비용 절감</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <span class="card-icon">🔀</span>
+        <div class="card-title">이종 로봇 팀</div>
+        <div class="card-text">다양한 능력의 로봇 조합 탐구</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 24px;">
+      <span class="tag blue">arXiv:2603.20182</span>
+      <span class="tag purple">Yang et al., 2026</span>
+      <span class="tag green">IndoorR2X</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">◀</button>
+  <span class="nav-counter" id="navCounter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">▶</button>
+  <button class="nav-btn" id="playBtn" aria-label="자동 재생" style="font-size: 0.9rem;">▶️</button>
+</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let autoPlay = null;
+  const counter = document.getElementById('navCounter');
+  const progress = document.getElementById('progressBar');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const playBtn = document.getElementById('playBtn');
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total || idx === current) return;
+    const dir = idx > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => {
+      slides[current === idx ? current : (current + total) % total]; // no-op guard
+      slides.forEach(s => { s.classList.remove('exit-left'); });
+    }, 600);
+    current = idx;
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+    counter.textContent = (current + 1) + ' / ' + total;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function next() { goTo(current + 1 < total ? current + 1 : 0); }
+  function prev() { goTo(current - 1 >= 0 ? current - 1 : total - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  playBtn.addEventListener('click', function() {
+    if (autoPlay) {
+      clearInterval(autoPlay);
+      autoPlay = null;
+      playBtn.textContent = '▶️';
+    } else {
+      autoPlay = setInterval(next, 10000);
+      playBtn.textContent = '⏸️';
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  // Init
+  progress.style.width = (1 / total * 100) + '%';
+})();
+</script>
+</body>
+</html>

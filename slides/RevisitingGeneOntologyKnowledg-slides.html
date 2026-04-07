@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Gene Ontology 지식 발견 재고찰 — 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-dark: #0a0e27;
+    --bg-card: #111638;
+    --accent-1: #00d2ff;
+    --accent-2: #7b2ff7;
+    --accent-3: #ff6b6b;
+    --accent-4: #51cf66;
+    --accent-5: #ffd43b;
+    --text-primary: #e8ecf5;
+    --text-secondary: #8892b0;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.1);
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ─── Slide Container ─── */
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(20px, 4vw, 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ─── Background decorations ─── */
+  .slide::before {
+    content: '';
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,210,255,0.08), transparent 70%);
+    top: -150px; right: -150px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ─── Typography ─── */
+  .slide-number {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    color: var(--accent-1);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 4.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  h3 {
+    font-size: clamp(0.95rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent-1);
+  }
+
+  p, li {
+    font-size: clamp(0.82rem, 2vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  strong { color: var(--text-primary); font-weight: 700; }
+  em { color: var(--accent-5); font-style: normal; font-weight: 500; }
+
+  /* ─── Cards / Boxes ─── */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: clamp(14px, 3vw, 24px);
+    margin-bottom: 14px;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: var(--accent-1); }
+
+  .card-grid {
+    display: grid;
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .icon-card {
+    text-align: center;
+    padding: clamp(12px, 2.5vw, 20px);
+  }
+  .icon-card .icon {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .icon-card .label {
+    font-size: clamp(0.72rem, 1.8vw, 0.9rem);
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .icon-card .label strong {
+    display: block;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  /* ─── Tags ─── */
+  .tag {
+    display: inline-block;
+    background: rgba(0,210,255,0.12);
+    color: var(--accent-1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+    margin: 3px 4px 3px 0;
+    font-weight: 500;
+  }
+  .tag.purple { background: rgba(123,47,247,0.15); color: var(--accent-2); }
+  .tag.red { background: rgba(255,107,107,0.15); color: var(--accent-3); }
+  .tag.green { background: rgba(81,207,102,0.15); color: var(--accent-4); }
+  .tag.yellow { background: rgba(255,212,59,0.15); color: var(--accent-5); }
+
+  /* ─── List styles ─── */
+  ul { list-style: none; padding: 0; }
+  ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+  }
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-1);
+    font-weight: 700;
+  }
+
+  /* ─── Architecture Diagram ─── */
+  .arch-layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .arch-box {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: clamp(10px, 2vw, 16px) clamp(14px, 3vw, 24px);
+    text-align: center;
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    min-width: 0;
+    flex: 1;
+    max-width: 260px;
+  }
+  .arch-box.highlight {
+    border-color: var(--accent-1);
+    box-shadow: 0 0 20px rgba(0,210,255,0.15);
+  }
+  .arch-box.accent2 { border-color: var(--accent-2); box-shadow: 0 0 20px rgba(123,47,247,0.15); }
+  .arch-box.accent3 { border-color: var(--accent-5); box-shadow: 0 0 20px rgba(255,212,59,0.15); }
+  .arch-arrow {
+    text-align: center;
+    color: var(--accent-1);
+    font-size: clamp(1rem, 3vw, 1.6rem);
+    margin: 4px 0;
+  }
+  .arch-label {
+    font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 4px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ─── Organism table ─── */
+  .org-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: clamp(0.7rem, 1.8vw, 0.88rem);
+  }
+  .org-table th, .org-table td {
+    padding: clamp(8px, 1.5vw, 14px);
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .org-table th {
+    color: var(--accent-1);
+    font-weight: 700;
+    font-size: clamp(0.65rem, 1.6vw, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .org-table td { color: var(--text-secondary); }
+  .org-table tr:hover td { color: var(--text-primary); }
+
+  /* ─── Result bars ─── */
+  .result-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .result-bar .bar-label {
+    font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+    color: var(--text-secondary);
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+  .result-bar .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--glass);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .result-bar .bar-fill {
+    height: 100%;
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1s ease;
+  }
+
+  /* ─── Highlight box ─── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(0,210,255,0.1), rgba(123,47,247,0.1));
+    border-left: 4px solid var(--accent-1);
+    border-radius: 0 12px 12px 0;
+    padding: clamp(12px, 2.5vw, 20px);
+    margin: 14px 0;
+    font-size: clamp(0.82rem, 2vw, 1rem);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    margin: 16px 0;
+  }
+
+  /* ─── Navigation ─── */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px clamp(12px, 3vw, 24px);
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px 16px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .nav-btn:active {
+    background: rgba(0,210,255,0.15);
+    border-color: var(--accent-1);
+    transform: scale(0.95);
+  }
+
+  .progress-wrap {
+    flex: 1;
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--glass);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: clamp(0.6rem, 1.4vw, 0.72rem);
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+  }
+
+  /* ─── Slide-specific ─── */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .title-slide h1 {
+    font-size: clamp(1.4rem, 5vw, 3rem);
+    margin-bottom: 20px;
+  }
+  .title-slide .authors {
+    font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .title-slide .venue {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+    color: var(--accent-1);
+    margin-bottom: 24px;
+  }
+
+  .spacer { flex-shrink: 0; height: 80px; }
+
+  /* ─── Fade-in children animation ─── */
+  .slide.active .fade-in {
+    animation: fadeUp 0.5s ease forwards;
+    opacity: 0;
+  }
+  .slide.active .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .slide.active .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .slide.active .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .slide.active .fade-in:nth-child(4) { animation-delay: 0.35s; }
+  .slide.active .fade-in:nth-child(5) { animation-delay: 0.4s; }
+  .slide.active .fade-in:nth-child(6) { animation-delay: 0.45s; }
+  .slide.active .fade-in:nth-child(7) { animation-delay: 0.5s; }
+  .slide.active .fade-in:nth-child(8) { animation-delay: 0.55s; }
+  .slide.active .fade-in:nth-child(9) { animation-delay: 0.6s; }
+  .slide.active .fade-in:nth-child(10) { animation-delay: 0.65s; }
+  .slide.active .fade-in:nth-child(11) { animation-delay: 0.7s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Pulsing glow for key items ─── */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(0,210,255,0.2); }
+    50% { box-shadow: 0 0 24px rgba(0,210,255,0.35); }
+  }
+  .glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .arch-box { font-size: clamp(0.6rem, 2.5vw, 0.8rem); padding: 8px 10px; }
+    .org-table { font-size: clamp(0.62rem, 2vw, 0.78rem); }
+    .org-table th, .org-table td { padding: 8px 6px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px; padding-bottom: 90px; }
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 {
+      grid-template-columns: 1fr;
+    }
+    h2 { font-size: clamp(1.1rem, 5vw, 1.6rem); }
+    .arch-layer { flex-direction: column; gap: 6px; }
+    .arch-box { max-width: 100%; }
+    .nav-btn { min-width: 52px; min-height: 52px; font-size: 1.1rem; }
+    .result-bar { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .result-bar .bar-label { min-width: auto; }
+    .result-bar .bar-track { width: 100%; }
+    .org-table th:nth-child(3), .org-table td:nth-child(3) { display: none; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 14px; padding-bottom: 85px; }
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1rem; }
+    .card { padding: 10px; }
+    .nav { padding: 8px 10px; }
+    .tag { font-size: 0.6rem; padding: 3px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 1: 표지 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="fade-in">
+      <div class="slide-number">arXiv: 2603.20132v1</div>
+    </div>
+    <h1 class="fade-in">유전자 온톨로지 지식 발견 재고찰:<br>계층적 특징 선택과<br>AI 에이전트 가상 연구 그룹</h1>
+    <div class="fade-in authors">Cen Wan &amp; Alex A. Freitas</div>
+    <div class="fade-in venue">cs.LG · 2026년 3월 · CC BY-NC-ND 4.0</div>
+    <div class="fade-in" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
+      <span class="tag">LLM</span>
+      <span class="tag purple">에이전트 AI</span>
+      <span class="tag green">유전자 온톨로지</span>
+      <span class="tag yellow">노화 연구</span>
+      <span class="tag red">지식 발견</span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 2: 연구 배경 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="1">
+    <div class="slide-number fade-in">02 / 12</div>
+    <h2 class="fade-in">연구 배경 및 동기</h2>
+    <div class="card fade-in">
+      <h3>핵심 문제</h3>
+      <ul>
+        <li>LLM은 복잡한 과제에서 뛰어나지만, <strong>환각(hallucination)</strong>과 <strong>해석 가능성 부족</strong> 문제 존재</li>
+        <li>노화 관련 유전자 예측 시 <strong>제한된 생물학적 지식</strong>이 모델 신뢰성을 저해</li>
+        <li>유전자 온톨로지(GO) 용어 간 <strong>계층적 관계</strong>가 충분히 활용되지 않음</li>
+      </ul>
+    </div>
+    <div class="card fade-in">
+      <h3>제안된 해결책</h3>
+      <p><strong>다중 AI 에이전트가 인간의 학술 토론을 모방</strong>하는 가상 연구 그룹(VSG)을 구축하여, 계층적 특징 선택으로 추출한 GO 용어로부터 노화 관련 생물학적 지식을 발견합니다.</p>
+    </div>
+    <div class="highlight-box fade-in">
+      "LLM 기반 에이전트 AI 프레임워크로 여러 LLM이 인간의 상호작용을 모방하도록 하여, 과학적 발견 파이프라인을 혁신합니다."
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 3: GO & 계층적 특징 선택 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="2">
+    <div class="slide-number fade-in">03 / 12</div>
+    <h2 class="fade-in">유전자 온톨로지 &amp; 계층적 특징 선택</h2>
+
+    <div class="card fade-in">
+      <h3>유전자 온톨로지(GO) 데이터베이스</h3>
+      <ul>
+        <li>유전자 기능을 설명하는 <strong>보편적 어휘 체계</strong></li>
+        <li>세 가지 도메인: <em>생물학적 과정</em>, <em>분자 기능</em>, <em>세포 구성요소</em></li>
+        <li>계층 구조: 상위 = 일반적 정의, 하위 = 구체적 정의</li>
+      </ul>
+    </div>
+
+    <div class="card fade-in">
+      <h3>계층적 특징 선택 방법</h3>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+        <div style="flex:1; min-width:120px;">
+          <span class="tag">HIP</span>
+          <p style="margin-top:6px; font-size:clamp(0.7rem,1.6vw,0.85rem);">계층적 정보 보존 선택 — 고빈도 GO 용어 선별</p>
+        </div>
+        <div style="flex:1; min-width:120px;">
+          <span class="tag purple">MR</span>
+          <p style="margin-top:6px; font-size:clamp(0.7rem,1.6vw,0.85rem);">가장 관련성 높은 용어 선택</p>
+        </div>
+        <div style="flex:1; min-width:120px;">
+          <span class="tag green">HIP-MR</span>
+          <p style="margin-top:6px; font-size:clamp(0.7rem,1.6vw,0.85rem);">두 방법의 하이브리드 접근</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-in">
+      GO:0050789 (생물학적 과정 조절) → GO:0009894 (이화 과정 조절)<br>
+      <span style="font-size:clamp(0.7rem,1.6vw,0.85rem); color:var(--text-secondary);">상위 용어가 하위 용어를 포괄하는 계층적 관계를 활용합니다.</span>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 4: 4개 모델 생물 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="3">
+    <div class="slide-number fade-in">04 / 12</div>
+    <h2 class="fade-in">4개 모델 생물 &amp; 입력 GO 용어</h2>
+
+    <table class="org-table fade-in">
+      <thead>
+        <tr><th>생물</th><th>GO 용어</th><th>도메인</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>🪱 예쁜꼬마선충</strong><br><span style="font-size:0.75em; color:var(--text-secondary);">C. elegans</span></td>
+          <td>GO:0000003 (생식)<br>GO:0016209 (항산화 활성)</td>
+          <td><span class="tag" style="margin:2px 0;">생물학적 과정</span><br><span class="tag purple" style="margin:2px 0;">분자 기능</span></td>
+        </tr>
+        <tr>
+          <td><strong>🪰 초파리</strong><br><span style="font-size:0.75em; color:var(--text-secondary);">Drosophila</span></td>
+          <td>GO:0009055 (전자 운반 활성)<br>GO:0005198 (구조 분자 활성)</td>
+          <td><span class="tag purple" style="margin:2px 0;">분자 기능</span><br><span class="tag purple" style="margin:2px 0;">분자 기능</span></td>
+        </tr>
+        <tr>
+          <td><strong>🐭 생쥐</strong><br><span style="font-size:0.75em; color:var(--text-secondary);">Mus musculus</span></td>
+          <td>GO:0005198 (구조 분자 활성)<br>GO:0016209 (항산화 활성)</td>
+          <td><span class="tag purple" style="margin:2px 0;">분자 기능</span><br><span class="tag purple" style="margin:2px 0;">분자 기능</span></td>
+        </tr>
+        <tr>
+          <td><strong>🍞 효모</strong><br><span style="font-size:0.75em; color:var(--text-secondary);">S. cerevisiae</span></td>
+          <td>GO:0004872 (수용체 활성)<br>GO:0022414 (생식 과정)</td>
+          <td><span class="tag purple" style="margin:2px 0;">분자 기능</span><br><span class="tag" style="margin:2px 0;">생물학적 과정</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box fade-in" style="margin-top:16px;">
+      각 생물의 두 GO 용어는 계층 구조상 <strong>서로 연결되지 않은</strong> 독립적 용어입니다.
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 5: VSG 아키텍처 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="4">
+    <div class="slide-number fade-in">05 / 12</div>
+    <h2 class="fade-in">가상 연구 그룹(VSG) 아키텍처</h2>
+    <p class="subtitle fade-in">3계층 구조 · 다중 에이전트 협력 시스템</p>
+
+    <div class="fade-in">
+      <div class="arch-label">3계층 — 수석 연구자 (PI)</div>
+      <div class="arch-layer">
+        <div class="arch-box accent3 glow">
+          👨‍🔬 <strong>가상 수석 연구자</strong><br>
+          <span style="font-size:clamp(0.6rem,1.4vw,0.72rem); color:var(--text-secondary);">glm-4.7-flash · 노화 분야 교수 역할</span>
+        </div>
+      </div>
+      <div class="arch-arrow">⬆</div>
+
+      <div class="arch-label">2계층 — 선임 연구자 (4명)</div>
+      <div class="arch-layer">
+        <div class="arch-box accent2">🧬 선충</div>
+        <div class="arch-box accent2">🧬 초파리</div>
+        <div class="arch-box accent2">🧬 생쥐</div>
+        <div class="arch-box accent2">🧬 효모</div>
+      </div>
+      <div style="text-align:center; font-size:clamp(0.6rem,1.4vw,0.7rem); color:var(--text-secondary); margin:4px 0;">gpt-oss · 박사후 연구원 역할 · 결과 통합</div>
+      <div class="arch-arrow">⬆</div>
+
+      <div class="arch-label">1계층 — 주니어 연구자 (4쌍 = 8명)</div>
+      <div class="arch-layer" style="flex-wrap:wrap;">
+        <div class="arch-box highlight" style="max-width:48%;">
+          🔬 <strong>연구자 A</strong><br>
+          <span style="font-size:clamp(0.58rem,1.3vw,0.68rem); color:var(--text-secondary);">deepseek-r1 · 1차 조사관</span>
+        </div>
+        <div style="color:var(--accent-3); font-size:1.2rem; align-self:center;">⚔</div>
+        <div class="arch-box" style="border-color:var(--accent-3); max-width:48%;">
+          🔍 <strong>연구자 B</strong><br>
+          <span style="font-size:clamp(0.58rem,1.3vw,0.68rem); color:var(--text-secondary);">qwen3-vl · 비판적 검토자</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-in" style="margin-top:14px;">
+      <h3>정보 흐름</h3>
+      <p>상향식(bottom-up) 통합 + 각 계층에서의 비판적 검토 메커니즘 내장</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 6: 구현 세부사항 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="5">
+    <div class="slide-number fade-in">06 / 12</div>
+    <h2 class="fade-in">기술 스택 &amp; 구현</h2>
+
+    <div class="card-grid cols-2 fade-in">
+      <div class="card icon-card">
+        <span class="icon">🛠</span>
+        <div class="label">
+          <strong>CrewAI</strong>
+          에이전트 오케스트레이션 프레임워크
+        </div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">🦙</span>
+        <div class="label">
+          <strong>Ollama</strong>
+          오픈소스 LLM 호스팅
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>에이전트별 모델 배정</h3>
+      <table class="org-table">
+        <thead><tr><th>역할</th><th>모델</th><th>특성</th></tr></thead>
+        <tbody>
+          <tr><td>주니어 연구자 A</td><td><strong>deepseek-r1</strong></td><td>1차 조사 · 확신 있는 어조</td></tr>
+          <tr><td>주니어 연구자 B</td><td><strong>qwen3-vl</strong></td><td>비판적 검토 · 반론 제시</td></tr>
+          <tr><td>선임 연구자</td><td><strong>gpt-oss</strong></td><td>결과 통합 · 연구 격차 식별</td></tr>
+          <tr><td>수석 연구자</td><td><strong>glm-4.7-flash</strong></td><td>범생물 패턴 식별 · 최종 통합</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h3>내부 토론 메커니즘</h3>
+      <ul>
+        <li>연구자 A: 객관적 증거를 종합하는 <em>확신적 어조</em></li>
+        <li>연구자 B: "과도하게 단순화", "과장", "과일반화"의 <em>비판적 언어</em></li>
+        <li>선임 연구자: <strong>B의 비판을 주로 수용</strong>하며 뉘앙스 있게 재구성</li>
+      </ul>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 7: 주요 검증 결과 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="6">
+    <div class="slide-number fade-in">07 / 12</div>
+    <h2 class="fade-in">주장 검증 결과</h2>
+    <p class="subtitle fade-in">기존 문헌 대비 AI 생성 주장의 정확도 평가</p>
+
+    <div class="fade-in">
+      <div class="result-bar">
+        <span class="bar-label">🪱 예쁜꼬마선충</span>
+        <div class="bar-track"><div class="bar-fill" style="width:92%;">92%</div></div>
+      </div>
+      <div class="result-bar">
+        <span class="bar-label">🪰 초파리</span>
+        <div class="bar-track"><div class="bar-fill" style="width:90%;">90%</div></div>
+      </div>
+      <div class="result-bar">
+        <span class="bar-label">🐭 생쥐</span>
+        <div class="bar-track"><div class="bar-fill" style="width:88%;">88%</div></div>
+      </div>
+      <div class="result-bar">
+        <span class="bar-label">🍞 효모</span>
+        <div class="bar-track"><div class="bar-fill" style="width:85%;">85%</div></div>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <strong>대다수의 AI 에이전트 생성 과학적 주장이 기존 문헌에 의해 뒷받침됨</strong>
+    </div>
+
+    <div class="card-grid cols-2 fade-in">
+      <div class="card" style="border-left: 3px solid var(--accent-4);">
+        <h3 style="color:var(--accent-4);">✓ 검증 성공 예시</h3>
+        <ul>
+          <li>SOD/카탈라아제의 항산화 방어 역할</li>
+          <li>미토콘드리아 UPR<sup>mt</sup> 보상 메커니즘</li>
+          <li>Nrf2 신호전달의 산화 스트레스 대응</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent-3);">
+        <h3 style="color:var(--accent-3);">✗ 환각 사례</h3>
+        <ul>
+          <li>효모 연구자 B: Hog1 결실 돌연변이에 대한 <strong>부정확한 주장</strong></li>
+          <li>생쥐 연구자 B: <strong>존재하지 않는 인용</strong> 포함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 8: 생물학적 발견 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="7">
+    <div class="slide-number fade-in">08 / 12</div>
+    <h2 class="fade-in">핵심 생물학적 발견</h2>
+    <p class="subtitle fade-in">범생물(Cross-Organism) 공통 패턴</p>
+
+    <div class="card fade-in">
+      <h3>1. 산화 스트레스의 이중성</h3>
+      <p>활성산소종(ROS)은 손상 유발제이자 <strong>적응적 신호 분자</strong>로 기능 — 조직별 반응이 결정적</p>
+    </div>
+    <div class="card fade-in">
+      <h3>2. 생식-체세포 트레이드오프</h3>
+      <p>특정 맥락에서 생식이 자원을 전용하지만, <strong>보편적 트레이드오프는 의문</strong> — 일회용 체세포(Disposable Soma) 이론과 연결</p>
+    </div>
+    <div class="card fade-in">
+      <h3>3. 미토콘드리아 가소성</h3>
+      <p>세포는 UPR<sup>mt</sup>, 해당작용 전환 등 <strong>보상 메커니즘</strong>으로 전자전달계 기능 저하를 완화</p>
+    </div>
+    <div class="card fade-in">
+      <h3>4. 조직 특이적 조절</h3>
+      <p>항산화 효소 발현이 조직별로 상이 — <strong>일반적 주장이 국소적 역학을 은폐</strong></p>
+    </div>
+    <div class="card fade-in">
+      <h3>5. 하류 vs. 1차 원인</h3>
+      <p>산화 스트레스는 종종 구조적 붕괴의 <strong>결과</strong>이지 노화의 1차 원인이 아닐 수 있음</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 9: 생물별 상세 발견 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="8">
+    <div class="slide-number fade-in">09 / 12</div>
+    <h2 class="fade-in">생물별 주요 발견</h2>
+
+    <div class="card-grid cols-2 fade-in">
+      <div class="card">
+        <h3>🪱 예쁜꼬마선충</h3>
+        <ul>
+          <li>SOD-3의 진피 노화 관련 조절</li>
+          <li>생식선 없는 돌연변이의 수명 연장</li>
+          <li>DAF-16/FOXO 활성화는 <em>맥락 의존적</em></li>
+          <li>ROS는 감수분열 재조합에 필수</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🪰 초파리</h3>
+        <ul>
+          <li>복합체 I 억제 → HIF-1α 경유 수명 연장</li>
+          <li>지방체 조직의 해당작용 적응</li>
+          <li>라민 돌연변이의 핵 무결성 영향</li>
+          <li>실험실 계통(w1118)의 생리적 관련성 부족</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🐭 생쥐</h3>
+        <ul>
+          <li>라미노병증의 조로증 표현형 기여</li>
+          <li>Nrf2 신호전달의 핵심 역할</li>
+          <li>Foxo3a 돌연변이의 계통 특이적 영향</li>
+          <li>항산화 효소의 조직별 발현 패턴</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🍞 효모</h3>
+        <ul>
+          <li>α-인자 GPCR → 세포주기 정지 &amp; 교배</li>
+          <li>TOR 경로와 노화 결정인자 교차</li>
+          <li>Sir2 시르투인 &amp; 미토콘드리아 기능</li>
+          <li>정지기 세포 대사가 시간적 노화 주도</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 10: 수석연구자 통찰 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="9">
+    <div class="slide-number fade-in">10 / 12</div>
+    <h2 class="fade-in">수석 연구자(PI)의 통합 통찰</h2>
+
+    <div class="highlight-box fade-in glow">
+      "무척추동물 기반 지식을 포유류로 일반화하는 것에 대한 <strong>일반화 가능성</strong>이 가장 가치 있는 연구 방향입니다."
+    </div>
+
+    <div class="card fade-in">
+      <h3>범생물 통합 관점</h3>
+      <ul>
+        <li>ROS 경로는 모든 생물에서 중요하지만, <strong>진화적 맥락</strong>에 따라 다르게 작용</li>
+        <li>조직 특이적 ROS 조절 장애 → <strong>전신 단백질 항상성 조절 허브</strong></li>
+        <li>생식-노화 연관성은 <strong>진화적 관점</strong>으로 확장 필요</li>
+        <li>무척추동물에서 포유류로의 복잡성 차이가 <strong>일반화의 핵심 도전</strong></li>
+      </ul>
+    </div>
+
+    <div class="card-grid cols-3 fade-in">
+      <div class="card icon-card">
+        <span class="icon">🔬</span>
+        <div class="label"><strong>내부 토론</strong>다층 비판적 검토로 뉘앙스 확보</div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">🧩</span>
+        <div class="label"><strong>교차 통합</strong>4개 생물 발견의 종합</div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">⚖️</span>
+        <div class="label"><strong>균형 잡힌 시각</strong>선임 연구자가 비판 수용</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 11: 한계 및 향후 연구 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="10">
+    <div class="slide-number fade-in">11 / 12</div>
+    <h2 class="fade-in">한계점 &amp; 향후 연구</h2>
+
+    <div class="card-grid cols-2 fade-in">
+      <div class="card" style="border-left: 3px solid var(--accent-3);">
+        <h3 style="color:var(--accent-3);">한계점</h3>
+        <ul>
+          <li>다층 구조에도 <strong>환각 문제 지속</strong></li>
+          <li>구체적 GO 용어에 대한 프레임워크 능력 <strong>미검증</strong></li>
+          <li>문헌이 존재하는 일반적 수준의 GO 용어에 <strong>검증 제한</strong></li>
+          <li>기존 생물학에 제한 — <strong>진정한 새로운 지식 발견 불가</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent-4);">
+        <h3 style="color:var(--accent-4);">향후 연구 방향</h3>
+        <ul>
+          <li>에이전트 능력을 <strong>미지의 생물학적 지식 발견</strong>으로 확장</li>
+          <li>더 <strong>구체적인 GO 용어</strong> 주석에 대한 프레임워크 평가</li>
+          <li>환각 완화를 위한 <strong>추가 검증 계층</strong> 개발</li>
+          <li>더 많은 모델 생물과 <strong>다양한 GO 도메인</strong> 포괄</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-in">
+      에이전트 AI 프레임워크가 "계층적 특징 선택에서 도출된 GO 용어로부터 <strong>의미 있는 노화 관련 생물학적 지식을 성공적으로 추출</strong>"했음을 입증하였습니다.
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 12: 결론 -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="slide" data-slide="11">
+    <div class="slide-number fade-in">12 / 12</div>
+    <h2 class="fade-in">결론 &amp; 핵심 기여</h2>
+
+    <div class="card-grid cols-2 fade-in">
+      <div class="card icon-card glow">
+        <span class="icon">🏗</span>
+        <div class="label"><strong>기여 1</strong>3계층 가상 연구 그룹(VSG) 아키텍처 제안</div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">🧬</span>
+        <div class="label"><strong>기여 2</strong>계층적 특징 선택과 에이전트 AI의 결합</div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">✅</span>
+        <div class="label"><strong>기여 3</strong>4개 모델 생물에서 문헌 대비 높은 검증률</div>
+      </div>
+      <div class="card icon-card">
+        <span class="icon">⚔️</span>
+        <div class="label"><strong>기여 4</strong>내부 토론 메커니즘으로 환각 완화 실증</div>
+      </div>
+    </div>
+
+    <div class="divider fade-in"></div>
+
+    <div class="highlight-box fade-in" style="text-align:center;">
+      <span style="font-size:clamp(1rem, 2.5vw, 1.3rem); font-weight:700; color:var(--accent-1);">
+        다중 AI 에이전트의 협력적 토론이<br>
+        과학적 지식 발견의 신뢰성을 향상시킨다
+      </span>
+    </div>
+
+    <div class="fade-in" style="text-align:center; margin-top:18px;">
+      <span class="tag">Cen Wan &amp; Alex A. Freitas</span>
+      <span class="tag purple">arXiv: 2603.20132</span>
+      <span class="tag green">2026년 3월</span>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+</div><!-- .deck -->
+
+<!-- ─── Navigation ─── -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드" onclick="go(-1)">◀</button>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1 / 12</span>
+  </div>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드" onclick="go(1)">▶</button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  function show(idx) {
+    if (idx < 0 || idx >= total) return;
+    const prev = cur;
+    cur = idx;
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === cur) s.classList.add('active');
+      else if (i === prev && prev < cur) s.classList.add('exit-left');
+    });
+    document.getElementById('progressFill').style.width = ((cur + 1) / total * 100) + '%';
+    document.getElementById('progressText').textContent = (cur + 1) + ' / ' + total;
+  }
+
+  window.go = function(d) { show(cur + d); };
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+  });
+
+  // Swipe
+  let sx = 0, sy = 0;
+  document.addEventListener('touchstart', function(e) {
+    sx = e.changedTouches[0].screenX;
+    sy = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - sx;
+    const dy = e.changedTouches[0].screenY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      dx < 0 ? go(1) : go(-1);
+    }
+  }, { passive: true });
+
+  show(0);
+})();
+</script>
+</body>
+</html>

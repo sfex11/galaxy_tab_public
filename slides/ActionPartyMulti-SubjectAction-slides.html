@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ActionParty: 생성형 비디오 게임에서의 다중 주체 행동 바인딩</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0a1a;
+    --bg-card: #12122a;
+    --bg-card-alt: #1a1a3e;
+    --accent: #6c5ce7;
+    --accent2: #00cec9;
+    --accent3: #fd79a8;
+    --accent4: #fdcb6e;
+    --text-primary: #f0f0f8;
+    --text-secondary: #a0a0c0;
+    --text-dim: #6060a0;
+    --gradient1: linear-gradient(135deg, #6c5ce7, #a855f7);
+    --gradient2: linear-gradient(135deg, #00cec9, #0984e3);
+    --gradient3: linear-gradient(135deg, #fd79a8, #e17055);
+    --gradient4: linear-gradient(135deg, #fdcb6e, #e17055);
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  /* ===== TITLE SLIDE ===== */
+  .slide-title { text-align: center; justify-content: center; align-items: center; }
+
+  .title-badge {
+    display: inline-block;
+    background: var(--gradient2);
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .main-title {
+    font-size: clamp(1.8rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff 0%, #a0a0ff 50%, #00cec9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .main-title .highlight {
+    background: var(--gradient3);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.4rem);
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    font-weight: 300;
+    max-width: 700px;
+  }
+
+  .authors {
+    font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .venue-tag {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 4px 14px;
+    border: 1px solid var(--text-dim);
+    border-radius: 20px;
+    font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-num {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .slide h2 {
+    font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .slide h3 {
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent2);
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid-4 { grid-template-columns: 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid rgba(108,92,231,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .card-text {
+    font-size: clamp(0.72rem, 1.4vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== LISTS ===== */
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 900px;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(0.78rem, 1.6vw, 1rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .feature-list li .bullet {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+  }
+
+  .bullet-purple { background: var(--accent); }
+  .bullet-teal { background: var(--accent2); }
+  .bullet-pink { background: var(--accent3); }
+  .bullet-yellow { background: var(--accent4); }
+
+  /* ===== DIAGRAM ===== */
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .pipe-block {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,92,231,0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .pipe-block-accent {
+    background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(168,85,247,0.2));
+    border-color: var(--accent);
+  }
+
+  .pipe-block .block-title {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .pipe-block .block-desc {
+    font-size: clamp(0.6rem, 1.1vw, 0.72rem);
+    color: var(--text-secondary);
+  }
+
+  .pipe-arrow {
+    font-size: 1.5rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    width: 100%;
+    max-width: 1000px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 16px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.65rem, 1.3vw, 0.88rem);
+  }
+
+  th {
+    background: var(--bg-card-alt);
+    padding: 12px 14px;
+    text-align: center;
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(108,92,231,0.1);
+    white-space: nowrap;
+  }
+
+  tr:hover td { background: rgba(108,92,231,0.05); }
+
+  .best { color: var(--accent2); font-weight: 700; }
+
+  /* ===== METRIC BARS ===== */
+  .metric-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  }
+
+  .metric-label {
+    min-width: 100px;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .metric-bar-bg {
+    flex: 1;
+    height: 28px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .metric-bar {
+    height: 100%;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-weight: 700;
+    font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+    color: #fff;
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  .slide.active .metric-bar { width: var(--w); }
+
+  .bar-purple { background: var(--gradient1); }
+  .bar-teal { background: var(--gradient2); }
+  .bar-pink { background: var(--gradient3); }
+  .bar-yellow { background: var(--gradient4); }
+
+  /* ===== EQUATION / CODE ===== */
+  .equation-box {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent);
+    padding: 16px 24px;
+    border-radius: 0 12px 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+    color: var(--accent2);
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+
+  /* ===== STAT BOXES ===== */
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border-top: 3px solid var(--accent);
+  }
+
+  .stat-box:nth-child(2) { border-top-color: var(--accent2); }
+  .stat-box:nth-child(3) { border-top-color: var(--accent3); }
+  .stat-box:nth-child(4) { border-top-color: var(--accent4); }
+
+  .stat-number {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-number.c1 { color: var(--accent); }
+  .stat-number.c2 { color: var(--accent2); }
+  .stat-number.c3 { color: var(--accent3); }
+  .stat-number.c4 { color: var(--accent4); }
+
+  .stat-label {
+    font-size: clamp(0.65rem, 1.2vw, 0.82rem);
+    color: var(--text-secondary);
+  }
+
+  /* ===== COMPARISON ===== */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+    max-width: 900px;
+  }
+
+  .vs-box {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent3);
+    padding-top: 40px;
+  }
+
+  /* ===== ABLATION CHART ===== */
+  .ablation-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 10px 16px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    font-size: clamp(0.68rem, 1.3vw, 0.85rem);
+  }
+
+  .ablation-name {
+    min-width: 160px;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .ablation-bar-bg {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 11px;
+    overflow: hidden;
+  }
+
+  .ablation-bar {
+    height: 100%;
+    border-radius: 11px;
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  .slide.active .ablation-bar { width: var(--w); }
+
+  .ablation-val {
+    min-width: 50px;
+    text-align: right;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 12px 0 12px 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-primary);
+  }
+
+  .timeline-item:nth-child(even)::before { background: var(--accent2); }
+
+  .timeline-item .tl-title {
+    font-weight: 700;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item .tl-desc {
+    font-size: clamp(0.68rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10,10,26,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(108,92,231,0.15);
+    z-index: 1000;
+  }
+
+  .nav-btn {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,92,231,0.3);
+    color: var(--text-primary);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active { transform: scale(0.95); background: var(--accent); }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    height: 4px;
+    background: var(--bg-card);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== DECORATIVE ===== */
+  .bg-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glow-purple { background: #6c5ce7; top: -100px; right: -100px; }
+  .glow-teal { background: #00cec9; bottom: -100px; left: -100px; }
+  .glow-pink { background: #fd79a8; top: 50%; right: -150px; }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: clamp(0.6rem, 1.1vw, 0.72rem);
+    font-weight: 600;
+  }
+
+  .tag-purple { background: rgba(108,92,231,0.2); color: #a78bfa; }
+  .tag-teal { background: rgba(0,206,201,0.2); color: #00cec9; }
+  .tag-pink { background: rgba(253,121,168,0.2); color: #fd79a8; }
+
+  .text-gradient {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-accent2 { color: var(--accent2); }
+  .text-accent3 { color: var(--accent3); }
+  .text-accent { color: var(--accent); }
+  .fw700 { font-weight: 700; }
+  .mb8 { margin-bottom: 8px; }
+  .mb16 { margin-bottom: 16px; }
+  .mb24 { margin-bottom: 24px; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeUp 0.5s 0.3s both; }
+  .slide.active .anim-4 { animation: fadeUp 0.5s 0.4s both; }
+  .slide.active .anim-5 { animation: fadeUp 0.5s 0.5s both; }
+  .slide.active .anim-6 { animation: fadeUp 0.5s 0.6s both; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .pulse { animation: pulse 2s infinite; }
+
+  /* ===== RESPONSIVE: TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px; padding-bottom: 80px; }
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    .card-grid-4 { grid-template-columns: 1fr; }
+    .stat-row { gap: 12px; }
+    .stat-box { min-width: 120px; padding: 16px; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-divider { padding: 0; transform: rotate(90deg); }
+    .pipeline-flow { gap: 8px; }
+    .pipe-block { min-width: 100px; padding: 12px 14px; }
+    .metric-label { min-width: 80px; font-size: clamp(0.6rem, 1.2vw, 0.75rem); }
+    .ablation-name { min-width: 120px; }
+    .bg-glow { width: 250px; height: 250px; }
+  }
+
+  /* ===== RESPONSIVE: MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 16px; padding-bottom: 76px; }
+    .nav-bar { padding: 10px 12px; }
+    .nav-btn { padding: 10px 16px; border-radius: 10px; }
+    .card { padding: 16px; }
+    .stat-row { flex-direction: column; gap: 10px; }
+    .stat-box { min-width: auto; }
+    .pipeline-flow { flex-direction: column; }
+    .pipe-arrow { transform: rotate(90deg); }
+    .metric-row { flex-direction: column; gap: 4px; }
+    .metric-label { text-align: left; min-width: auto; }
+    .ablation-row { flex-direction: column; gap: 6px; align-items: stretch; }
+    .ablation-name { min-width: auto; }
+    .ablation-val { text-align: left; }
+    .timeline { padding-left: 24px; }
+    .authors { font-size: clamp(0.6rem, 2.5vw, 0.78rem); }
+    .equation-box { padding: 12px 16px; font-size: clamp(0.6rem, 2.5vw, 0.82rem); }
+    th, td { padding: 8px 8px; font-size: clamp(0.58rem, 2.2vw, 0.78rem); }
+    .bg-glow { width: 180px; height: 180px; filter: blur(80px); }
+  }
+
+  /* ===== RESPONSIVE: SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 14px 10px; padding-bottom: 72px; }
+    .slide h2 { margin-bottom: 16px; }
+    .card { padding: 12px; }
+    .nav-btn { padding: 8px 12px; font-size: 0.75rem; }
+    .stat-number { font-size: clamp(1.4rem, 8vw, 2rem); }
+    th, td { padding: 6px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <div class="slide slide-title active" data-index="0">
+    <div class="bg-glow glow-purple"></div>
+    <div class="bg-glow glow-teal"></div>
+    <div class="title-badge anim-1">arXiv 2604.02330</div>
+    <h1 class="main-title anim-2">ActionParty</h1>
+    <p class="subtitle anim-3">생성형 비디오 게임에서의<br><strong class="text-accent2">다중 주체 행동 바인딩</strong></p>
+    <p class="authors anim-4">
+      Alexander Pondaven &middot; Ziyi Wu &middot; Igor Gilitschenski<br>
+      Philip Torr &middot; Sergey Tulyakov &middot; Fabio Pizzati &middot; Aliaksandr Siarohin
+    </p>
+    <span class="venue-tag anim-5">CS.CV &middot; CS.AI &middot; CS.LG</span>
+  </div>
+
+  <!-- ===== SLIDE 2: PROBLEM ===== -->
+  <div class="slide" data-index="1">
+    <div class="bg-glow glow-pink"></div>
+    <div class="section-num anim-1">01 &mdash; 문제 정의</div>
+    <h2 class="anim-2">비디오 월드 모델의<br><span class="text-accent3">핵심 한계</span></h2>
+    <ul class="feature-list anim-3">
+      <li>
+        <span class="bullet bullet-pink"></span>
+        <span>현재 비디오 확산 모델은 <strong class="text-accent3">단일 에이전트</strong> 설정에 제한되어, 장면 내 여러 에이전트를 동시에 제어할 수 없음</span>
+      </li>
+      <li>
+        <span class="bullet bullet-purple"></span>
+        <span><strong class="text-accent">행동 바인딩(Action Binding)</strong> 문제: 특정 행동을 해당 주체에 올바르게 연결하지 못함</span>
+      </li>
+      <li>
+        <span class="bullet bullet-teal"></span>
+        <span>Veo 3 같은 최신 모델도 "삼각형은 아래로, 사각형은 왼쪽으로" 같은 <strong class="text-accent2">기본적인 다중 주체 조합</strong>에 실패</span>
+      </li>
+      <li>
+        <span class="bullet bullet-yellow"></span>
+        <span>기존 멀티뷰 접근법(Multiverse, Solaris)은 에이전트별 별도 스트림 생성 → <strong style="color:var(--accent4)">선형적 비용 증가</strong></span>
+      </li>
+    </ul>
+    <div class="equation-box anim-4" style="margin-top:24px; border-left-color: var(--accent3);">
+      핵심 질문: 하나의 통합된 장면에서 N명의 주체를 각각 독립적으로 제어할 수 있는가?
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 3: SOLUTION OVERVIEW ===== -->
+  <div class="slide" data-index="2">
+    <div class="bg-glow glow-purple"></div>
+    <div class="section-num anim-1">02 &mdash; 핵심 아이디어</div>
+    <h2 class="anim-2"><span class="text-gradient">ActionParty</span> 솔루션</h2>
+    <div class="card-grid card-grid-3 anim-3">
+      <div class="card" style="border-top: 3px solid var(--accent);">
+        <span class="card-icon">🎯</span>
+        <div class="card-title text-accent">주체 상태 토큰</div>
+        <div class="card-text">각 주체의 상태를 나타내는 잠재 변수 z<sub>t</sub><sup>i</sup> 도입. 2D 좌표(h, w)로 공간 위치 추적</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--accent2);">
+        <span class="card-icon">🔗</span>
+        <div class="card-title text-accent2">공간 바이어싱</div>
+        <div class="card-text">3D RoPE(회전 위치 임베딩)로 주체 토큰을 비디오의 공간적 위치에 연결</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--accent3);">
+        <span class="card-icon">🛡️</span>
+        <div class="card-title text-accent3">어텐션 마스킹</div>
+        <div class="card-text">엄격한 마스크로 행동-주체 바인딩을 보장하고 주체 간 정보 누출을 방지</div>
+      </div>
+    </div>
+    <div class="equation-box anim-4">
+      x<sub>t+1</sub>, z<sub>t+1</sub> ~ f<sub>θ</sub>(x<sub>t+1</sub>, z<sub>t+1</sub> | x<sub>0:t</sub>, a<sub>0:t</sub>, z<sub>0:t</sub>)
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 4: ARCHITECTURE ===== -->
+  <div class="slide" data-index="3">
+    <div class="bg-glow glow-teal"></div>
+    <div class="section-num anim-1">03 &mdash; 아키텍처</div>
+    <h2 class="anim-2"><span class="text-accent2">업데이트-렌더링</span> 패러다임</h2>
+    <div class="pipeline-flow anim-3">
+      <div class="pipe-block">
+        <div class="block-title">비디오 토큰</div>
+        <div class="block-desc">x<sub>0:t</sub></div>
+      </div>
+      <span class="pipe-arrow">+</span>
+      <div class="pipe-block">
+        <div class="block-title">주체 상태 토큰</div>
+        <div class="block-desc">z<sub>0:t</sub></div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-block pipe-block-accent">
+        <div class="block-title">DiT 블록</div>
+        <div class="block-desc">확산 트랜스포머</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-block">
+        <div class="block-title">x<sub>t+1</sub>, z<sub>t+1</sub></div>
+        <div class="block-desc">다음 프레임 + 상태</div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2 anim-4" style="max-width:900px;">
+      <div class="card" style="border-left: 3px solid var(--accent2); border-radius: 0 16px 16px 0;">
+        <div class="card-title">📡 셀프 어텐션 (렌더링)</div>
+        <div class="card-text">
+          &bull; 마스크 M<sub>SA</sub> 적용<br>
+          &bull; 주체 토큰 → 비디오 정보 읽기 가능<br>
+          &bull; 주체 ↔ 주체 간 통신 차단<br>
+          &bull; <strong>RoPE 공간 바이어싱</strong>으로 위치 연결
+        </div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent3); border-radius: 0 16px 16px 0;">
+        <div class="card-title">🎮 크로스 어텐션 (업데이트)</div>
+        <div class="card-text">
+          &bull; 마스크 M<sub>CA</sub> 적용<br>
+          &bull; 주체 i는 <strong>오직 행동 a<sub>i</sub></strong>에만 어텐드<br>
+          &bull; 행동-주체 잘못된 연결 원천 차단<br>
+          &bull; 환경 텍스트 설명과 함께 처리
+        </div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:16px; font-size:clamp(0.68rem,1.3vw,0.85rem); color:var(--text-dim);">
+      💡 7명 추가 시 토큰 6%만 증가 (40 vs 수천 개의 비디오 토큰) — 멀티뷰 방식 대비 월등히 효율적
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 5: RoPE DETAIL ===== -->
+  <div class="slide" data-index="4">
+    <div class="bg-glow glow-purple"></div>
+    <div class="section-num anim-1">04 &mdash; 핵심 메커니즘</div>
+    <h2 class="anim-2">3D <span class="text-gradient">RoPE</span> 공간 바이어싱</h2>
+    <ul class="feature-list anim-3">
+      <li>
+        <span class="bullet bullet-teal"></span>
+        <span>비디오 토큰 위치 (h,w): 회전 R(t, h, w) 적용</span>
+      </li>
+      <li>
+        <span class="bullet bullet-purple"></span>
+        <span>주체 토큰 z<sub>t</sub><sup>i</sup>: <strong>이전</strong> 시점의 위치 사용 → R(t, h<sub>t-1</sub><sup>i</sup>, w<sub>t-1</sub><sup>i</sup>)</span>
+      </li>
+      <li>
+        <span class="bullet bullet-pink"></span>
+        <span>주체를 현재 공간 영역에 고정 → <strong class="text-accent3">전역 탐색을 지역 정밀화로 축소</strong></span>
+      </li>
+      <li>
+        <span class="bullet bullet-yellow"></span>
+        <span>연속 프레임 간 주체는 비교적 정적이라는 가정 활용</span>
+      </li>
+    </ul>
+    <div class="equation-box anim-4">
+      주체 토큰 z<sub>t</sub><sup>i</sup> ← R(t, h<sub>t-1</sub><sup>i</sup>, w<sub>t-1</sub><sup>i</sup>) &nbsp;&nbsp;|&nbsp;&nbsp; 비디오 토큰 x(h,w) ← R(t, h, w)
+    </div>
+    <div class="card anim-5" style="margin-top:16px; border-top: 3px solid var(--accent4); max-width: 700px;">
+      <div class="card-title" style="color:var(--accent4);">왜 이전 시점 위치를 사용하는가?</div>
+      <div class="card-text">현재 시점의 위치는 아직 예측되지 않았으므로, 이전 시점의 알려진 위치를 앵커로 사용하여 공간적 접지(grounding)를 수행합니다.</div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 6: TRAINING ===== -->
+  <div class="slide" data-index="5">
+    <div class="bg-glow glow-teal"></div>
+    <div class="section-num anim-1">05 &mdash; 학습 전략</div>
+    <h2 class="anim-2"><span class="text-accent2">2단계</span> 학습 파이프라인</h2>
+    <div class="timeline anim-3">
+      <div class="timeline-item">
+        <div class="tl-title">베이스 모델: Wan2.1-1.3B</div>
+        <div class="tl-desc">오픈소스 텍스트-비디오 DiT 기반</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">1단계: 자기회귀 사전학습</div>
+        <div class="tl-desc">행동 제어 없이 원시 게임 비디오로 학습 &bull; 22.5k 스텝, 배치 64 &bull; 텍스트 조건부만 사용 &bull; 자기회귀 생성 적응</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">2단계: 행동 제어 미세조정</div>
+        <div class="tl-desc">전체 ActionParty 아키텍처 활성화 &bull; 65k 스텝, 배치 64 &bull; 컨텍스트 윈도우 T=5 &bull; Flow Matching 손실 + Adam 옵티마이저</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-title">추론</div>
+        <div class="tl-desc">초기 프레임 x<sub>0</sub>와 주체 위치 z<sub>0</sub>으로 시작 &bull; 20 샘플링 스텝 &bull; 슬라이딩 컨텍스트 윈도우 (최대 T-1)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 7: EXPERIMENT SETUP ===== -->
+  <div class="slide" data-index="6">
+    <div class="bg-glow glow-pink"></div>
+    <div class="section-num anim-1">06 &mdash; 실험 설정</div>
+    <h2 class="anim-2">Melting Pot <span class="text-accent3">벤치마크</span></h2>
+    <div class="stat-row anim-3">
+      <div class="stat-box">
+        <div class="stat-number c1">46</div>
+        <div class="stat-label">게임 환경</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number c2">7</div>
+        <div class="stat-label">최대 동시 플레이어</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number c3">25</div>
+        <div class="stat-label">행동 공간 크기</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number c4">2K</div>
+        <div class="stat-label">게임당 학습 영상</div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2 anim-4" style="max-width:800px; margin-top:16px;">
+      <div class="card">
+        <div class="card-title">🎮 행동 공간</div>
+        <div class="card-text">
+          <strong>7개 기본 행동</strong>: 정지, 전진/후진, 좌/우 이동, 좌/우 회전<br>
+          <strong>18개 게임별 상호작용</strong>: 빔 발사, 문 열기 등<br>
+          <em style="color:var(--accent4)">행동은 방향 상대적 (전진 = 바라보는 방향)</em>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 평가 지표</div>
+        <div class="card-text">
+          <span class="tag tag-purple">MA</span> 이동 정확도<br>
+          <span class="tag tag-teal">EA</span> 효과 정확도<br>
+          <span class="tag tag-pink">SP</span> 주체 보존률<br>
+          + DR, z<sub>t</sub> 오류, LPIPS, PSNR, FVD
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 8: MAIN RESULTS ===== -->
+  <div class="slide" data-index="7">
+    <div class="bg-glow glow-purple"></div>
+    <div class="section-num anim-1">07 &mdash; 주요 결과</div>
+    <h2 class="anim-2">정량적 비교 <span class="text-gradient">결과</span></h2>
+    <div class="table-wrap anim-3">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left;">방법</th>
+            <th>MA ↑</th>
+            <th>SP ↑</th>
+            <th>DR ↑</th>
+            <th>LPIPS ↓</th>
+            <th>PSNR ↑</th>
+            <th>FVD ↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left;">사전학습 AR</td>
+            <td>0.065</td><td>0.571</td><td>0.330</td><td>0.0494</td><td>26.98</td><td>59.30</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;">Zero-shot I2V</td>
+            <td>0.027</td><td>0.422</td><td>0.440</td><td>0.0906</td><td>23.17</td><td>281.55</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;">텍스트-행동</td>
+            <td>0.158</td><td>0.668</td><td>0.433</td><td>0.0353</td><td>29.14</td><td>56.74</td>
+          </tr>
+          <tr style="background: rgba(108,92,231,0.08);">
+            <td style="text-align:left; font-weight:700;">ActionParty</td>
+            <td class="best">0.779</td>
+            <td class="best">0.903</td>
+            <td class="best">0.886</td>
+            <td class="best">0.0102</td>
+            <td class="best">36.35</td>
+            <td class="best">17.16</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="anim-4" style="margin-top:16px;">
+      <div class="metric-row">
+        <span class="metric-label">이동 정확도</span>
+        <div class="metric-bar-bg">
+          <div class="metric-bar bar-purple" style="--w:77.9%;">77.9%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">주체 보존</span>
+        <div class="metric-bar-bg">
+          <div class="metric-bar bar-teal" style="--w:90.3%;">90.3%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">감지율</span>
+        <div class="metric-bar-bg">
+          <div class="metric-bar bar-pink" style="--w:88.6%;">88.6%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 9: EFFECT ACCURACY ===== -->
+  <div class="slide" data-index="8">
+    <div class="bg-glow glow-teal"></div>
+    <div class="section-num anim-1">08 &mdash; 효과 정확도</div>
+    <h2 class="anim-2">행동 유형별 <span class="text-accent2">효과 정확도</span></h2>
+    <div class="table-wrap anim-3">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left;">방법</th>
+            <th>정지</th>
+            <th>이동</th>
+            <th>회전</th>
+            <th>상호작용</th>
+            <th>전체</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left;">사전학습 AR</td>
+            <td>0.399</td><td>0.414</td><td>0.462</td><td>0.346</td><td>0.412</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;">Zero-shot I2V</td>
+            <td>0.000</td><td>0.101</td><td>0.150</td><td>0.000</td><td>0.126</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;">텍스트-행동</td>
+            <td>0.357</td><td>0.420</td><td>0.553</td><td>0.326</td><td>0.433</td>
+          </tr>
+          <tr style="background: rgba(0,206,201,0.08);">
+            <td style="text-align:left; font-weight:700;">ActionParty</td>
+            <td class="best">0.899</td>
+            <td class="best">0.867</td>
+            <td class="best">0.914</td>
+            <td class="best">0.774</td>
+            <td class="best">0.861</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="stat-row anim-4" style="margin-top:20px;">
+      <div class="stat-box" style="border-top-color: var(--accent2);">
+        <div class="stat-number c2">~5x</div>
+        <div class="stat-label">이동 정확도 향상<br>(vs 텍스트 기반)</div>
+      </div>
+      <div class="stat-box" style="border-top-color: var(--accent3);">
+        <div class="stat-number c3">~2x</div>
+        <div class="stat-label">전체 효과 정확도 향상<br>(vs 최고 베이스라인)</div>
+      </div>
+      <div class="stat-box" style="border-top-color: var(--accent);">
+        <div class="stat-number c1">91.4%</div>
+        <div class="stat-label">회전 행동<br>최고 정확도</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 10: SCALABILITY ===== -->
+  <div class="slide" data-index="9">
+    <div class="bg-glow glow-pink"></div>
+    <div class="section-num anim-1">09 &mdash; 확장성</div>
+    <h2 class="anim-2">플레이어 수에 따른 <span class="text-accent3">견고성</span></h2>
+    <div class="card-grid card-grid-3 anim-3">
+      <div class="card" style="text-align:center; border-top: 3px solid var(--accent2);">
+        <div class="card-icon">👥</div>
+        <div class="card-title">희소 (2~3명)</div>
+        <div style="margin:12px 0;">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem); font-weight:900; color:var(--accent2);">78.1%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">MA</div>
+        </div>
+        <div>
+          <div style="font-size:clamp(1rem,2.5vw,1.4rem); font-weight:700; color:var(--accent);">88.7%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">EA</div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center; border-top: 3px solid var(--accent);">
+        <div class="card-icon">👥👥</div>
+        <div class="card-title">밀집 (4~5명)</div>
+        <div style="margin:12px 0;">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem); font-weight:900; color:var(--accent2);">77.2%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">MA</div>
+        </div>
+        <div>
+          <div style="font-size:clamp(1rem,2.5vw,1.4rem); font-weight:700; color:var(--accent);">86.1%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">EA</div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center; border-top: 3px solid var(--accent3);">
+        <div class="card-icon">👥👥👥</div>
+        <div class="card-title">혼잡 (6~7명)</div>
+        <div style="margin:12px 0;">
+          <div style="font-size:clamp(1.2rem,3vw,1.8rem); font-weight:900; color:var(--accent2);">79.7%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">MA</div>
+        </div>
+        <div>
+          <div style="font-size:clamp(1rem,2.5vw,1.4rem); font-weight:700; color:var(--accent);">83.5%</div>
+          <div style="font-size:clamp(0.6rem,1.1vw,0.72rem); color:var(--text-dim);">EA</div>
+        </div>
+      </div>
+    </div>
+    <div class="card anim-4" style="margin-top:20px; max-width:800px; border-left: 3px solid var(--accent2); border-radius: 0 16px 16px 0;">
+      <div class="card-text">
+        <strong class="text-accent2">핵심 발견:</strong> 베이스라인들은 주체 수가 증가하면 성능이 크게 하락하지만, ActionParty는 2명에서 7명까지 <strong>안정적인 성능</strong>을 유지합니다. 자기회귀 롤아웃 20스텝에 걸쳐 MA ~0.75 이상을 유지하는 반면, 텍스트-행동 모델은 3~4스텝 만에 ~0.05까지 하락합니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 11: ABLATION ===== -->
+  <div class="slide" data-index="10">
+    <div class="bg-glow glow-purple"></div>
+    <div class="section-num anim-1">10 &mdash; 절제 연구</div>
+    <h2 class="anim-2">각 구성요소의 <span class="text-gradient">기여도</span></h2>
+    <p class="anim-3" style="color:var(--text-secondary); font-size:clamp(0.7rem,1.3vw,0.88rem); margin-bottom:20px;">
+      Coins 게임 (2명) &bull; 2.5k 샘플 &bull; 256×256 &bull; 이동 정확도(MA) 기준
+    </p>
+    <div class="anim-4">
+      <div class="ablation-row">
+        <span class="ablation-name">전체 ActionParty</span>
+        <div class="ablation-bar-bg">
+          <div class="ablation-bar bar-teal" style="--w:87.2%;"></div>
+        </div>
+        <span class="ablation-val text-accent2">0.872</span>
+      </div>
+      <div class="ablation-row">
+        <span class="ablation-name">M<sub>SA</sub> 제거</span>
+        <div class="ablation-bar-bg">
+          <div class="ablation-bar bar-purple" style="--w:58.0%;"></div>
+        </div>
+        <span class="ablation-val">0.580</span>
+      </div>
+      <div class="ablation-row">
+        <span class="ablation-name">M<sub>CA</sub> 제거</span>
+        <div class="ablation-bar-bg">
+          <div class="ablation-bar bar-pink" style="--w:5.2%;"></div>
+        </div>
+        <span class="ablation-val text-accent3">0.052</span>
+      </div>
+      <div class="ablation-row">
+        <span class="ablation-name">프레임별 M<sub>CA</sub></span>
+        <div class="ablation-bar-bg">
+          <div class="ablation-bar bar-pink" style="--w:5.2%;"></div>
+        </div>
+        <span class="ablation-val text-accent3">0.052</span>
+      </div>
+      <div class="ablation-row">
+        <span class="ablation-name">SA에서 RoPE 제거</span>
+        <div class="ablation-bar-bg">
+          <div class="ablation-bar bar-pink" style="--w:3.2%;"></div>
+        </div>
+        <span class="ablation-val text-accent3">0.032</span>
+      </div>
+    </div>
+    <div class="card anim-5" style="margin-top:16px; max-width:700px; border-top: 3px solid var(--accent4);">
+      <div class="card-text">
+        <strong style="color:var(--accent4);">결론:</strong> RoPE 공간 바이어싱이 가장 중요 (제거 시 MA 3.2%로 하락). 크로스 어텐션 마스크 없이는 행동-주체 바인딩 자체가 불가능.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 12: LIMITATIONS ===== -->
+  <div class="slide" data-index="11">
+    <div class="bg-glow glow-pink"></div>
+    <div class="section-num anim-1">11 &mdash; 한계 및 향후 과제</div>
+    <h2 class="anim-2"><span class="text-accent3">한계점</span></h2>
+    <div class="card-grid card-grid-2 anim-3" style="max-width:900px;">
+      <div class="card">
+        <span class="card-icon">📍</span>
+        <div class="card-title">좌표 드리프트</div>
+        <div class="card-text">예측된 z<sub>t</sub> 좌표가 실제 위치에서 벗어날 수 있음. 공간 바이어싱이 약간의 오정렬은 허용</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">👻</span>
+        <div class="card-title">주체 소실</div>
+        <div class="card-text">주체가 장면에서 사라질 수 있으며, 이후 상호작용이 불가능해짐</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">⏱️</span>
+        <div class="card-title">실시간 미달</div>
+        <div class="card-text">완전한 실시간은 아님. 증류(distillation)와 확산 강제(diffusion forcing)로 해결 가능</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎲</span>
+        <div class="card-title">2D 환경 제한</div>
+        <div class="card-text">2D 타일 기반 게임에 한정. 3D 장면의 가려짐(occlusion)은 미해결</div>
+      </div>
+    </div>
+    <div class="card anim-4" style="margin-top:16px; max-width:900px; border-left:3px solid var(--accent2); border-radius:0 16px 16px 0;">
+      <div class="card-text">
+        <strong class="text-accent2">필요 조건:</strong> 초기 프레임과 주체 위치가 필수 — 처음부터 주체를 자동 발견하는 것은 불가능합니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 13: CONCLUSION ===== -->
+  <div class="slide slide-title" data-index="12">
+    <div class="bg-glow glow-purple"></div>
+    <div class="bg-glow glow-teal"></div>
+    <div class="section-num anim-1">12 &mdash; 결론</div>
+    <h2 class="anim-2" style="font-size:clamp(1.6rem,4vw,3rem);">
+      <span class="text-gradient">ActionParty</span>의 기여
+    </h2>
+    <div class="anim-3" style="max-width:700px; text-align:left; margin-top:20px;">
+      <ul class="feature-list">
+        <li>
+          <span class="bullet bullet-teal"></span>
+          <span><strong class="text-accent2">최초의 다중 주체 비디오 월드 모델</strong> — 최대 7명의 플레이어를 46개 환경에서 동시 제어</span>
+        </li>
+        <li>
+          <span class="bullet bullet-purple"></span>
+          <span><strong class="text-accent">주체 상태 토큰 + 공간 바이어싱</strong> — 프레임 렌더링과 주체 업데이트의 우아한 분리</span>
+        </li>
+        <li>
+          <span class="bullet bullet-pink"></span>
+          <span><strong class="text-accent3">이동 정확도 5배 향상</strong> — 텍스트 기반 대비 압도적 성능, 뛰어난 시각적 품질</span>
+        </li>
+        <li>
+          <span class="bullet bullet-yellow"></span>
+          <span><strong style="color:var(--accent4)">확장 가능한 아키텍처</strong> — 주체 수 증가에도 토큰 6%만 추가, 안정적 성능 유지</span>
+        </li>
+      </ul>
+    </div>
+    <div class="anim-4" style="margin-top:32px;">
+      <span class="tag tag-teal" style="font-size:clamp(0.7rem,1.3vw,0.85rem); padding:6px 16px;">
+        action-party.github.io
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">◀</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-counter" id="slideCounter">1 / 13</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">▶</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(index, direction) {
+    if (index < 0 || index >= total) return;
+    const prev = slides[current];
+    prev.classList.remove('active');
+    prev.classList.add(direction > 0 ? 'exit-left' : '');
+    setTimeout(() => { prev.classList.remove('exit-left'); }, 500);
+
+    current = index;
+    const next = slides[current];
+    next.style.transform = direction > 0 ? 'translateX(80px)' : 'translateX(-80px)';
+    requestAnimationFrame(() => {
+      next.classList.add('active');
+      next.style.transform = '';
+    });
+    updateUI();
+  }
+
+  function navigate(dir) {
+    const target = current + dir;
+    if (target >= 0 && target < total) showSlide(target, dir);
+  }
+
+  function updateUI() {
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').style.opacity = current === 0 ? '0.3' : '1';
+    document.getElementById('nextBtn').style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  window.navigate = navigate;
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

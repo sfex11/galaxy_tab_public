@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>동적 신념 그래프 학습을 통한 마음이론 추론</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2236;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-bright: #f8fafc;
+    --green: #34d399;
+    --orange: #fb923c;
+    --pink: #f472b6;
+    --cyan: #22d3ee;
+    --red: #f87171;
+    --yellow: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Slide number */
+  .slide-num {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    z-index: 100;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Navigation */
+  .nav-btn {
+    position: fixed;
+    bottom: 16px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(99,102,241,0.4);
+    background: rgba(17,24,39,0.9);
+    color: var(--accent-light);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn:active { background: var(--accent); color: #fff; transform: scale(0.92); }
+  .nav-prev { left: 20px; }
+  .nav-next { left: 80px; }
+
+  /* ---- TITLE SLIDE ---- */
+  .slide-title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.12) 0%, transparent 70%);
+  }
+  .slide-title .icon-brain {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 16px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:0.9} 50%{transform:scale(1.08);opacity:1} }
+
+  .slide-title h1 {
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .slide-title .subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .slide-title .meta {
+    margin-top: 24px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .slide-title .authors {
+    margin-top: 12px;
+    font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+    color: var(--text-dim);
+  }
+
+  /* ---- SECTION HEADERS ---- */
+  h2.section-title {
+    font-size: clamp(1.15rem, 2.8vw, 1.7rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2.section-title .emoji { font-size: clamp(1.2rem, 2.8vw, 1.6rem); }
+  h2.section-title .gradient {
+    background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---- CONTENT BLOCKS ---- */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .card-alt {
+    background: var(--bg-card-alt);
+  }
+
+  .card h3 {
+    font-size: clamp(0.88rem, 2vw, 1.05rem);
+    font-weight: 600;
+    color: var(--accent-light);
+    margin-bottom: 8px;
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 5px; }
+  .card li::marker { color: var(--accent-light); }
+
+  .highlight {
+    color: var(--cyan);
+    font-weight: 500;
+  }
+  .hl-pink { color: var(--pink); font-weight: 500; }
+  .hl-green { color: var(--green); font-weight: 500; }
+  .hl-orange { color: var(--orange); font-weight: 500; }
+  .hl-yellow { color: var(--yellow); font-weight: 500; }
+
+  /* Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* Code / math block */
+  .math-block {
+    background: rgba(0,0,0,0.4);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.68rem, 1.5vw, 0.82rem);
+    color: var(--cyan);
+    margin: 10px 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Tags / badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+    font-weight: 500;
+    margin: 3px 2px;
+  }
+  .badge-accent { background: rgba(99,102,241,0.2); color: var(--accent-light); border: 1px solid rgba(99,102,241,0.3); }
+  .badge-green { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-pink { background: rgba(244,114,182,0.15); color: var(--pink); border: 1px solid rgba(244,114,182,0.3); }
+  .badge-cyan { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+  .badge-orange { background: rgba(251,146,60,0.15); color: var(--orange); border: 1px solid rgba(251,146,60,0.3); }
+
+  /* Table */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+    margin: 10px 0;
+  }
+  .tbl th {
+    background: rgba(99,102,241,0.15);
+    color: var(--accent-light);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(99,102,241,0.3);
+  }
+  .tbl td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .tbl tr:hover { background: rgba(99,102,241,0.05); }
+
+  /* Diagram / Flow */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .flow-node {
+    background: var(--bg-card);
+    border: 1.5px solid var(--accent);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+    transition: transform 0.2s;
+  }
+  .flow-node:hover { transform: translateY(-2px); }
+  .flow-arrow {
+    color: var(--accent-light);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+  }
+
+  /* Belief node visualization */
+  .belief-graph {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 16px 0;
+  }
+  .belief-node {
+    width: clamp(90px, 18vw, 130px);
+    background: var(--bg-card);
+    border: 1.5px solid;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+    position: relative;
+    transition: all 0.3s;
+  }
+  .belief-node:hover { transform: scale(1.05); }
+  .bn-1 { border-color: var(--red); }
+  .bn-2 { border-color: var(--orange); }
+  .bn-3 { border-color: var(--yellow); }
+  .bn-4 { border-color: var(--pink); }
+  .bn-5 { border-color: var(--green); }
+  .bn-6 { border-color: var(--cyan); }
+
+  .belief-node .b-icon { font-size: clamp(1rem, 2.5vw, 1.4rem); margin-bottom: 4px; }
+
+  /* Animated connections */
+  .connections-svg {
+    width: 100%;
+    height: 40px;
+    margin: -6px 0;
+  }
+  .connections-svg line {
+    stroke: var(--accent);
+    stroke-width: 1;
+    opacity: 0.3;
+    stroke-dasharray: 4 4;
+    animation: dash 2s linear infinite;
+  }
+  @keyframes dash { to { stroke-dashoffset: -16; } }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin: 16px 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    opacity: 0.4;
+  }
+  .tl-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0 4px;
+  }
+  .tl-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin: 14px auto 10px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .tl-label {
+    font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  /* Comparison bars */
+  .bar-chart { margin: 10px 0; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    gap: 8px;
+  }
+  .bar-label {
+    min-width: 100px;
+    font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+    text-align: right;
+    color: var(--text-dim);
+  }
+  .bar-track {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+    font-weight: 600;
+    color: #fff;
+  }
+  .bar-fill.accent { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+  .bar-fill.dim { background: rgba(148,163,184,0.3); }
+  .bar-fill.green-bar { background: linear-gradient(90deg, #059669, var(--green)); }
+  .bar-fill.pink-bar { background: linear-gradient(90deg, #be185d, var(--pink)); }
+
+  /* Quote */
+  .quote {
+    border-left: 3px solid var(--pink);
+    padding: 10px 16px;
+    margin: 12px 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: clamp(0.78rem, 1.7vw, 0.9rem);
+    background: rgba(244,114,182,0.05);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Spacer */
+  .spacer { height: 12px; }
+
+  /* Fade-in animation for children */
+  .slide.active .fade-in {
+    animation: fadeUp 0.5s ease forwards;
+    opacity: 0;
+  }
+  .slide.active .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .slide.active .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .slide.active .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .slide.active .fade-in:nth-child(4) { animation-delay: 0.4s; }
+  .slide.active .fade-in:nth-child(5) { animation-delay: 0.5s; }
+  .slide.active .fade-in:nth-child(6) { animation-delay: 0.6s; }
+  .slide.active .fade-in:nth-child(7) { animation-delay: 0.7s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .nav-btn { width: 48px; height: 48px; }
+    .bar-label { min-width: 75px; }
+    .flow { gap: 6px; }
+    .flow-node { padding: 8px 12px; min-width: 70px; }
+    .belief-node { width: clamp(80px, 25vw, 110px); }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 22px 18px; padding-bottom: 80px; }
+    .card { padding: 14px 14px; margin-bottom: 10px; }
+    .nav-btn { width: 46px; height: 46px; bottom: 12px; }
+    .nav-prev { left: 14px; }
+    .nav-next { left: 68px; }
+    .slide-num { bottom: 12px; right: 14px; }
+    .belief-node { width: clamp(70px, 28vw, 100px); padding: 8px; }
+    .timeline { flex-direction: column; align-items: stretch; }
+    .timeline::before {
+      top: 0; bottom: 0;
+      left: 20px; right: auto;
+      width: 2px; height: auto;
+    }
+    .tl-step { text-align: left; padding: 4px 0 4px 46px; }
+    .tl-dot { position: absolute; left: 14px; margin: 0; top: 6px; }
+    .bar-label { min-width: 60px; font-size: clamp(0.62rem, 1.3vw, 0.72rem); }
+    .math-block { font-size: clamp(0.6rem, 1.3vw, 0.75rem); padding: 10px 12px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 12px; padding-bottom: 76px; }
+    .card { padding: 10px 10px; border-radius: 8px; }
+    .belief-node { width: clamp(62px, 30vw, 85px); padding: 6px; }
+    .flow-node { padding: 6px 8px; min-width: 55px; font-size: 0.65rem; }
+  }
+
+  /* Keyboard hint */
+  .kb-hint {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+    z-index: 100;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .kb-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-num" id="slideNum"></div>
+<button class="nav-btn nav-prev" onclick="prevSlide()" aria-label="이전">&#9664;</button>
+<button class="nav-btn nav-next" onclick="nextSlide()" aria-label="다음">&#9654;</button>
+<div class="kb-hint">← → 방향키 또는 스와이프</div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ==================== SLIDE 1: 표지 ==================== -->
+  <div class="slide slide-title active" data-slide="0">
+    <div class="icon-brain">🧠</div>
+    <h1>동적 신념 그래프 학습을 통한<br>마음이론(ToM) 추론</h1>
+    <div class="subtitle">
+      LLM 기반 마음이론 추론에서 사람들의 잠재적·진화하는 신념을<br>
+      <span class="highlight">에너지 기반 팩터 그래프</span>로 구조화하여 행동을 예측하는 프레임워크
+    </div>
+    <div class="authors">
+      Ruxiao Chen · Xilei Zhao · Thomas J. Cova · Frank A. Drews · Susu Xu
+    </div>
+    <div class="meta">arXiv: 2603.20170v1 · 2026.03</div>
+  </div>
+
+  <!-- ==================== SLIDE 2: 문제 정의 ==================== -->
+  <div class="slide" data-slide="1">
+    <h2 class="section-title fade-in"><span class="emoji">🎯</span><span class="gradient">문제: 왜 마음이론이 어려운가?</span></h2>
+
+    <div class="quote fade-in">
+      "신념은 상호의존적이고 시간에 따라 축적되지만, 행동은 희소하고 지연된다."
+    </div>
+
+    <div class="card fade-in">
+      <h3>마음이론 (Theory of Mind) 추론의 핵심 과제</h3>
+      <ul>
+        <li>사람들의 <span class="highlight">암묵적 신념</span>이 불확실성 하에서 어떻게 행동을 결정하는지 추론</li>
+        <li>재난 대응, 응급의료, 인간-자율시스템 협업 등 <span class="hl-pink">고위험 상황</span>에서 필수</li>
+        <li>신념은 <span class="hl-orange">비선형적</span>으로 업데이트되며, 여러 신념이 서로 영향</li>
+      </ul>
+    </div>
+
+    <div class="grid-2 fade-in">
+      <div class="card card-alt">
+        <h3>❌ 기존 접근법의 한계</h3>
+        <ul>
+          <li>LLM 직접 프롬프팅 → 환각 문제</li>
+          <li>잠재 상태 모델 → 신념을 <span class="hl-orange">정적·독립적</span>으로 취급</li>
+          <li>비일관적 정신 모델 생성</li>
+        </ul>
+      </div>
+      <div class="card card-alt">
+        <h3>✅ 본 논문의 목표</h3>
+        <ul>
+          <li>신념 간 <span class="highlight">상호의존성</span> 모델링</li>
+          <li><span class="hl-green">시간적 진화</span> 추적</li>
+          <li>신념 → 행동 연결의 구조화</li>
+          <li>신념 레벨 감독 <span class="hl-pink">불필요</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: 핵심 기여 ==================== -->
+  <div class="slide" data-slide="2">
+    <h2 class="section-title fade-in"><span class="emoji">💡</span><span class="gradient">3가지 핵심 기여</span></h2>
+
+    <div class="card fade-in" style="border-left: 3px solid var(--cyan);">
+      <h3>1️⃣ 의미-포텐셜 투영 (Semantic-to-Potential Projection)</h3>
+      <p>LLM의 텍스트 확률적 진술을 <span class="highlight">그래픽 모델 업데이트</span>로 매핑</p>
+      <div class="math-block">h_{t,i} = p(b_{t-1,i}=1) · h^Yes + (1-p(b_{t-1,i}=1)) · h^No</div>
+    </div>
+
+    <div class="card fade-in" style="border-left: 3px solid var(--pink);">
+      <h3>2️⃣ 에너지 기반 팩터 그래프 (Energy-Based Factor Graph)</h3>
+      <p>신념 간 <span class="hl-pink">상호의존성</span>을 깁스 분포의 에너지 함수로 표현</p>
+      <div class="math-block">E(b_t) = Σᵢ log φᵢ(b_{t,i}) + Σᵢ&lt;ⱼ log φᵢⱼ(b_{t,i}, b_{t,j})</div>
+    </div>
+
+    <div class="card fade-in" style="border-left: 3px solid var(--green);">
+      <h3>3️⃣ ELBO 기반 학습 목표</h3>
+      <p>신념 축적과 지연된 의사결정을 포착하는 <span class="hl-green">변분 학습</span></p>
+      <div class="math-block">ℒ = -Σₜ (ℒ^act_t - ℒ^KL_t)</div>
+      <p style="margin-top:6px;font-size:clamp(0.72rem,1.5vw,0.85rem);">
+        <span class="badge badge-cyan">ℒ^act</span> 행동 우도 &nbsp;
+        <span class="badge badge-pink">ℒ^KL</span> 추론-전이 일관성
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: 모델 아키텍처 개요 ==================== -->
+  <div class="slide" data-slide="3">
+    <h2 class="section-title fade-in"><span class="emoji">🏗️</span><span class="gradient">모델 아키텍처 개요</span></h2>
+
+    <div class="card fade-in">
+      <h3>구조적 인지 궤적 모델링</h3>
+      <p>각 타임스텝 <span class="highlight">t</span>에서 4가지 핵심 변수:</p>
+    </div>
+
+    <div class="flow fade-in">
+      <div class="flow-node" style="border-color:var(--green);">
+        <div style="font-size:1.1rem;">🌍</div>
+        <div><strong>s_t</strong></div>
+        <div style="font-size:0.7rem;color:var(--text-dim);">환경 상태</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--cyan);">
+        <div style="font-size:1.1rem;">👁️</div>
+        <div><strong>o_t</strong></div>
+        <div style="font-size:0.7rem;color:var(--text-dim);">관측 (텍스트)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--pink);">
+        <div style="font-size:1.1rem;">💭</div>
+        <div><strong>b_t</strong></div>
+        <div style="font-size:0.7rem;color:var(--text-dim);">잠재 신념</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--orange);">
+        <div style="font-size:1.1rem;">🏃</div>
+        <div><strong>a_t</strong></div>
+        <div style="font-size:0.7rem;color:var(--text-dim);">행동</div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>생성 모델 분해</h3>
+      <div class="math-block">p(a_{1:T}, b_{1:T} | o_{1:T}) = Πₜ p_θ(aₜ | bₜ) · p_θ(bₜ | b_{t-1}, oₜ)</div>
+      <p style="margin-top:8px;">
+        <span class="badge badge-accent">bₜ ∈ {0,1}^K</span>
+        <span class="badge badge-green">K = 6 이진 신념</span>
+        <span class="badge badge-orange">T = 3 타임스텝</span>
+      </p>
+    </div>
+
+    <div class="card card-alt fade-in">
+      <h3>🔧 구현</h3>
+      <p>
+        <span class="badge badge-cyan">Qwen-8B</span> 동결(frozen) LLM 임베딩 사용 &nbsp;|&nbsp;
+        K=6이므로 <span class="highlight">정확한 열거(exact enumeration)</span>로 신념 주변확률 계산 가능
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: 신념 그래프 구조 ==================== -->
+  <div class="slide" data-slide="4">
+    <h2 class="section-title fade-in"><span class="emoji">🔮</span><span class="gradient">동적 신념 그래프</span></h2>
+
+    <p class="fade-in" style="font-size:clamp(0.8rem,1.8vw,0.95rem);color:var(--text-dim);margin-bottom:14px;">
+      산불 대피 시나리오에서의 6가지 이진 신념 차원:
+    </p>
+
+    <div class="belief-graph fade-in">
+      <div class="belief-node bn-1">
+        <div class="b-icon">🏠</div>
+        <div>집 피해/파괴</div>
+      </div>
+      <div class="belief-node bn-2">
+        <div class="b-icon">🏘️</div>
+        <div>동네 피해/파괴</div>
+      </div>
+      <div class="belief-node bn-3">
+        <div class="b-icon">🤕</div>
+        <div>본인 부상</div>
+      </div>
+      <div class="belief-node bn-4">
+        <div class="b-icon">💀</div>
+        <div>본인 사망</div>
+      </div>
+      <div class="belief-node bn-5">
+        <div class="b-icon">🐾</div>
+        <div>타인/반려동물 부상</div>
+      </div>
+      <div class="belief-node bn-6">
+        <div class="b-icon">⚠️</div>
+        <div>타인/반려동물 사망</div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>포텐셜 함수의 구성</h3>
+      <div class="grid-2">
+        <div>
+          <p><span class="badge badge-accent">단항 포텐셜 (Unary)</span></p>
+          <div class="math-block" style="font-size:clamp(0.6rem,1.3vw,0.75rem);">φᵢ = τ(cos(h, h^Yes) - cos(h, h^No)) + wᵤᵀReLU(h) + βᵤ</div>
+          <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">대조적 정렬 앵커링 + 학습 가능 보정</p>
+        </div>
+        <div>
+          <p><span class="badge badge-pink">쌍 포텐셜 (Pairwise)</span></p>
+          <div class="math-block" style="font-size:clamp(0.6rem,1.3vw,0.75rem);">φᵢⱼ = wₚᵀReLU(hᵢⱼ) + βₚ</div>
+          <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">신념 간 상호작용 포착</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-alt fade-in">
+      <h3>🧩 추론 모델 (비대칭 설계)</h3>
+      <p style="font-size:clamp(0.78rem,1.7vw,0.9rem);">
+        추론 시: <span class="highlight">q(bₜ | oₜ, aₜ)</span> — 행동 정보를 조건으로 포함<br>
+        사전 분포: <span class="hl-pink">p(bₜ | b_{t-1}, oₜ)</span> — 행동 정보 미포함<br>
+        → 이 비대칭이 학습 중 <span class="hl-green">행동이 신념 추론을 안내</span>하도록 함
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6: 시간적 진화 ==================== -->
+  <div class="slide" data-slide="5">
+    <h2 class="section-title fade-in"><span class="emoji">⏳</span><span class="gradient">신념의 시간적 진화</span></h2>
+
+    <div class="timeline fade-in">
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--green);"></div>
+        <div class="tl-label">
+          <strong style="color:var(--green);">t₁</strong><br>
+          초기 인지<br>
+          <span style="font-size:0.7rem;">위험 정보 수신</span>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--orange);"></div>
+        <div class="tl-label">
+          <strong style="color:var(--orange);">t₂</strong><br>
+          신념 업데이트<br>
+          <span style="font-size:0.7rem;">추가 관측/경고</span>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--red);"></div>
+        <div class="tl-label">
+          <strong style="color:var(--red);">t₃</strong><br>
+          행동 결정<br>
+          <span style="font-size:0.7rem;">대피/잔류 선택</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>📊 신념 궤적 클러스터링 (K-means, k=3)</h3>
+      <div class="grid-3">
+        <div style="text-align:center;padding:8px;">
+          <div style="font-size:1.4rem;">📈</div>
+          <div style="font-weight:600;color:var(--red);font-size:clamp(0.78rem,1.6vw,0.9rem);">공황형</div>
+          <div style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">단조 증가</div>
+        </div>
+        <div style="text-align:center;padding:8px;">
+          <div style="font-size:1.4rem;">📉</div>
+          <div style="font-weight:600;color:var(--orange);font-size:clamp(0.78rem,1.6vw,0.9rem);">회복형</div>
+          <div style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">증가 후 감소</div>
+        </div>
+        <div style="text-align:center;padding:8px;">
+          <div style="font-size:1.4rem;">➡️</div>
+          <div style="font-weight:600;color:var(--green);font-size:clamp(0.78rem,1.6vw,0.9rem);">안정형</div>
+          <div style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">일정 유지</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-alt fade-in">
+      <h3>🔬 주목할 발견</h3>
+      <ul>
+        <li>신념 2·3 (개인 부상/사망 위험): <span class="hl-pink">긴 꼬리 분포</span> 관찰</li>
+        <li>재난 심리학에서 문서화된 <span class="highlight">낙관적 편향</span>과 일치</li>
+        <li>신념 업데이트는 <span class="hl-orange">고도로 비선형적</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7: 실험 설정 ==================== -->
+  <div class="slide" data-slide="6">
+    <h2 class="section-title fade-in"><span class="emoji">🔬</span><span class="gradient">실험 설정</span></h2>
+
+    <div class="grid-2 fade-in">
+      <div class="card">
+        <h3>🔥 데이터셋</h3>
+        <p>실제 산불 대피 설문조사</p>
+        <div class="spacer"></div>
+        <div>
+          <span class="badge badge-orange">Kincade Fire</span>
+          <span class="badge badge-red" style="background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.3);">Marshall Fire</span>
+        </div>
+        <div class="spacer"></div>
+        <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">
+          구조화/비구조화 응답 포함:<br>
+          위험 인식, 준비 상태, 경고 수신, 대피 행동
+        </p>
+      </div>
+      <div class="card">
+        <h3>⚙️ 실험 파라미터</h3>
+        <table class="tbl">
+          <tr><td>신념 차원 K</td><td><span class="highlight">6</span> (이진)</td></tr>
+          <tr><td>타임스텝 T</td><td><span class="highlight">3</span></td></tr>
+          <tr><td>중간 행동</td><td>4가지</td></tr>
+          <tr><td>최종 결정</td><td>2가지 (대피/잔류)</td></tr>
+          <tr><td>LLM 백본</td><td><span class="badge badge-cyan">Qwen-8B</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>🏁 베이스라인</h3>
+      <div class="grid-3">
+        <div class="card card-alt" style="margin:0;">
+          <p style="font-weight:600;color:var(--orange);">AutoToM</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">LLM 가설 샘플링 + 베이지안 추론</p>
+        </div>
+        <div class="card card-alt" style="margin:0;">
+          <p style="font-weight:600;color:var(--pink);">Model Reconciliation</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">LLM 사후 인과적 설명</p>
+        </div>
+        <div class="card card-alt" style="margin:0;">
+          <p style="font-weight:600;color:var(--green);">FLARE</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">이론 안내 Chain-of-Thought</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h3>📏 평가 지표</h3>
+      <span class="badge badge-accent">Spearman 상관</span>
+      <span class="badge badge-green">Cohen's d</span>
+      <span class="badge badge-pink">DTW 거리</span>
+      <span class="badge badge-cyan">쌍 신념 구조</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8: 실험 결과 ==================== -->
+  <div class="slide" data-slide="7">
+    <h2 class="section-title fade-in"><span class="emoji">📊</span><span class="gradient">실험 결과</span></h2>
+
+    <div class="card fade-in">
+      <h3>개별 신념 Spearman 상관 (설문 보고 신념 대비)</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label"><strong style="color:var(--accent-light);">제안 모델</strong></div>
+          <div class="bar-track"><div class="bar-fill accent" style="width:88%;">최고</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">FLARE</div>
+          <div class="bar-track"><div class="bar-fill dim" style="width:58%;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">AutoToM</div>
+          <div class="bar-track"><div class="bar-fill dim" style="width:48%;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Reconciliation</div>
+          <div class="bar-track"><div class="bar-fill dim" style="width:42%;"></div></div>
+        </div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.4vw,0.8rem);color:var(--text-dim);margin-top:6px;">
+        6개 신념 차원 대부분에서 <span class="highlight">유의미하게 높은 상관</span> 달성
+      </p>
+    </div>
+
+    <div class="grid-2 fade-in">
+      <div class="card">
+        <h3>📈 쌍 신념 구조 복원</h3>
+        <p style="font-size:clamp(0.78rem,1.7vw,0.88rem);">
+          인간 데이터에서 강하게 상관하는 신념 쌍의 순위를 가장 잘 복원<br><br>
+          <span class="hl-green">→ 신념 간 공변동 구조를 정확히 포착</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3>📉 학습 역학</h3>
+        <p style="font-size:clamp(0.78rem,1.7vw,0.88rem);">
+          <span class="hl-orange">KL 항</span>: 초반에 높다가 급격히 감소 → 안정화<br><br>
+          추론 모델과 사전 분포의 <span class="highlight">정렬</span>을 나타냄
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 9: 절삭 연구 ==================== -->
+  <div class="slide" data-slide="8">
+    <h2 class="section-title fade-in"><span class="emoji">🧪</span><span class="gradient">절삭 연구 (Ablation Study)</span></h2>
+
+    <div class="card fade-in">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>변형</th>
+            <th>신념별 Spearman</th>
+            <th>쌍 구조</th>
+            <th>Cohen's d</th>
+            <th>DTW</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:rgba(99,102,241,0.1);">
+            <td><strong style="color:var(--accent-light);">전체 모델</strong></td>
+            <td><span class="hl-green">강함</span></td>
+            <td><span class="hl-green">최고</span></td>
+            <td><span class="hl-green">최고</span></td>
+            <td><span class="hl-green">최저</span></td>
+          </tr>
+          <tr>
+            <td>쌍 제거 (No φᵢⱼ)</td>
+            <td>유사</td>
+            <td><span class="hl-pink">크게 저하</span></td>
+            <td><span class="hl-orange">저하</span></td>
+            <td><span class="hl-orange">저하</span></td>
+          </tr>
+          <tr>
+            <td>시간 제거 (No b_{t-1})</td>
+            <td>유사</td>
+            <td><span class="hl-pink">저하</span></td>
+            <td><span class="hl-orange">저하</span></td>
+            <td><span class="hl-orange">저하</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in" style="border-left:3px solid var(--yellow);">
+      <h3>🔑 핵심 통찰</h3>
+      <div class="grid-3" style="margin-top:10px;">
+        <div style="text-align:center;padding:10px;">
+          <div style="font-size:1.6rem;">🎯</div>
+          <p style="font-weight:600;color:var(--cyan);font-size:clamp(0.78rem,1.6vw,0.88rem);">ELBO 학습</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">어떤 신념이 존재하는지 결정</p>
+        </div>
+        <div style="text-align:center;padding:10px;">
+          <div style="font-size:1.6rem;">🔗</div>
+          <p style="font-weight:600;color:var(--pink);font-size:clamp(0.78rem,1.6vw,0.88rem);">쌍 구성요소</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">신념이 어떻게 상호작용하는지 학습</p>
+        </div>
+        <div style="text-align:center;padding:10px;">
+          <div style="font-size:1.6rem;">⏰</div>
+          <p style="font-weight:600;color:var(--orange);font-size:clamp(0.78rem,1.6vw,0.88rem);">시간 구성요소</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">신념이 시간에 따라 어떻게 진화하는지 포착</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote fade-in">
+      "각 구성요소가 서로 보완적인 역할을 하며, 전체 모델이 가장 풍부한 신념 표현을 달성한다."
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 10: 의의 및 확장 ==================== -->
+  <div class="slide" data-slide="9">
+    <h2 class="section-title fade-in"><span class="emoji">🌐</span><span class="gradient">의의 및 확장 가능성</span></h2>
+
+    <div class="card fade-in" style="border-left:3px solid var(--accent);">
+      <h3>🧭 왜 ELBO가 필수적인가?</h3>
+      <p>
+        신념 변수가 관측과 행동을 <span class="highlight">공동으로 설명</span>하도록 강제 →<br>
+        사후적 표현이 아닌 <span class="hl-green">매개 잠재 계층</span>으로 위치시킴<br>
+        <strong>신념 레벨 감독 없이도</strong> 의미 있는 신념 추론 가능
+      </p>
+    </div>
+
+    <div class="card fade-in">
+      <h3>🔄 다른 도메인으로의 확장</h3>
+      <div class="grid-3">
+        <div style="text-align:center;padding:12px;">
+          <div style="font-size:1.6rem;">🏥</div>
+          <p style="font-weight:600;font-size:clamp(0.78rem,1.6vw,0.88rem);">의료 추론</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">
+            임상 기록 → 잠재적 질환 상태 추론
+          </p>
+        </div>
+        <div style="text-align:center;padding:12px;">
+          <div style="font-size:1.6rem;">⚖️</div>
+          <p style="font-weight:600;font-size:clamp(0.78rem,1.6vw,0.88rem);">법률 추론</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">
+            증거 → 판단 지원
+          </p>
+        </div>
+        <div style="text-align:center;padding:12px;">
+          <div style="font-size:1.6rem;">🤖</div>
+          <p style="font-weight:600;font-size:clamp(0.78rem,1.6vw,0.88rem);">자율 시스템</p>
+          <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-dim);">
+            인간-AI 협업 의사결정
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-alt fade-in">
+      <h3>💎 LLM에 대한 시사점</h3>
+      <ul>
+        <li><span class="hl-orange">RLHF</span> (불투명)와 <span class="hl-green">규칙 기반</span> (비유연) 사이의 <span class="highlight">원칙적 중간 지대</span></li>
+        <li>시간적 생성 사전분포 = 장기 작업에서 <span class="hl-pink">문맥 드리프트를 방지</span>하는 "안정화된 인지 기억"</li>
+        <li>명시적 신념 그래프 → <span class="hl-green">투명한 개인화</span> 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 11: 결론 ==================== -->
+  <div class="slide" data-slide="10">
+    <h2 class="section-title fade-in"><span class="emoji">✨</span><span class="gradient">결론</span></h2>
+
+    <div class="card fade-in" style="border:1.5px solid var(--accent);background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(34,211,238,0.05));">
+      <h3 style="font-size:clamp(0.95rem,2.2vw,1.15rem);">동적 신념 그래프: 데이터 기반 마음이론 프레임워크</h3>
+      <div class="spacer"></div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">1️⃣</span>
+          <p style="font-size:clamp(0.8rem,1.8vw,0.92rem);">
+            <strong>텍스트-그래프 투영:</strong> LLM 임베딩을 팩터 그래프 포텐셜로 변환
+          </p>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">2️⃣</span>
+          <p style="font-size:clamp(0.8rem,1.8vw,0.92rem);">
+            <strong>에너지 기반 팩터 그래프:</strong> 신념 간 상호의존성의 구조적 표현
+          </p>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">3️⃣</span>
+          <p style="font-size:clamp(0.8rem,1.8vw,0.92rem);">
+            <strong>ELBO 기반 학습:</strong> 신념 감독 없이 해석 가능한 신념 궤적 학습
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2 fade-in">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:6px;">🎯</div>
+        <p style="font-weight:600;font-size:clamp(0.85rem,1.8vw,1rem);color:var(--green);">해석 가능한 신념 궤적</p>
+        <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">신념이 어떻게, 왜 변하는지 추적 가능</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:6px;">📐</div>
+        <p style="font-weight:600;font-size:clamp(0.85rem,1.8vw,1rem);color:var(--cyan);">의미 있는 구조 복원</p>
+        <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">인간의 신념 공변동 패턴을 정확히 재현</p>
+      </div>
+    </div>
+
+    <div class="grid-2 fade-in">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:6px;">🏆</div>
+        <p style="font-weight:600;font-size:clamp(0.85rem,1.8vw,1rem);color:var(--orange);">향상된 행동 예측</p>
+        <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">모든 베이스라인을 능가</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:6px;">🔓</div>
+        <p style="font-weight:600;font-size:clamp(0.85rem,1.8vw,1rem);color:var(--pink);">신념 감독 불필요</p>
+        <p style="font-size:clamp(0.72rem,1.5vw,0.82rem);color:var(--text-dim);">행동 데이터만으로 학습</p>
+      </div>
+    </div>
+
+    <div class="fade-in" style="text-align:center;margin-top:16px;">
+      <span class="badge badge-accent" style="font-size:clamp(0.72rem,1.5vw,0.82rem);">arXiv: 2603.20170</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function updateSlide(newIdx, direction) {
+    if (newIdx < 0 || newIdx >= total || newIdx === current) return;
+    const oldSlide = slides[current];
+    const newSlide = slides[newIdx];
+
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(direction > 0 ? 'exit-left' : '');
+    oldSlide.style.transform = direction > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    oldSlide.style.opacity = '0';
+
+    setTimeout(() => {
+      oldSlide.classList.remove('exit-left');
+      oldSlide.style.transform = '';
+    }, 500);
+
+    newSlide.style.transform = direction > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    newSlide.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      newSlide.classList.add('active');
+      newSlide.scrollTop = 0;
+    });
+
+    current = newIdx;
+    document.getElementById('progressBar').style.width = ((current / (total - 1)) * 100) + '%';
+    document.getElementById('slideNum').textContent = (current + 1) + ' / ' + total;
+  }
+
+  window.nextSlide = function() { updateSlide(current + 1, 1); };
+  window.prevSlide = function() { updateSlide(current - 1, -1); };
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / Swipe
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const diffX = touchStartX - touchEndX;
+    const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+    if (Math.abs(diffX) > 50 && diffY < 100) {
+      if (diffX > 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+
+  // Init
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('slideNum').textContent = '1 / ' + total;
+})();
+</script>
+</body>
+</html>

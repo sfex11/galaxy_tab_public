@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nemotron-Cascade 2 논문 발표</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --nvidia-green: #76b900;
+    --nvidia-dark: #1a1a2e;
+    --nvidia-darker: #0f0f1a;
+    --accent-blue: #00d4ff;
+    --accent-purple: #a855f7;
+    --accent-orange: #f97316;
+    --accent-pink: #ec4899;
+    --text-primary: #f0f0f5;
+    --text-secondary: #a0a0b8;
+    --glass-bg: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--nvidia-darker);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+    background: var(--nvidia-darker);
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== BACKGROUND EFFECTS ===== */
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(118,185,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(118,185,0,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(20px,-20px) scale(1.1); }
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(30px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+  }
+
+  @keyframes countUp {
+    from { opacity:0; transform:scale(0.8); }
+    to { opacity:1; transform:scale(1); }
+  }
+
+  @keyframes barGrow {
+    from { width: 0; }
+  }
+
+  @keyframes borderGlow {
+    0%,100% { border-color: rgba(118,185,0,0.2); }
+    50% { border-color: rgba(118,185,0,0.5); }
+  }
+
+  .slide.active .anim-up { animation: slideUp 0.7s ease forwards; }
+  .slide.active .anim-up-d1 { animation: slideUp 0.7s 0.1s ease both; }
+  .slide.active .anim-up-d2 { animation: slideUp 0.7s 0.2s ease both; }
+  .slide.active .anim-up-d3 { animation: slideUp 0.7s 0.3s ease both; }
+  .slide.active .anim-up-d4 { animation: slideUp 0.7s 0.4s ease both; }
+  .slide.active .anim-up-d5 { animation: slideUp 0.7s 0.5s ease both; }
+  .slide.active .anim-up-d6 { animation: slideUp 0.7s 0.6s ease both; }
+  .slide.active .anim-up-d7 { animation: slideUp 0.7s 0.7s ease both; }
+  .slide.active .anim-fade { animation: fadeIn 0.8s 0.3s ease both; }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: 2.6rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .slide-title .highlight {
+    background: linear-gradient(135deg, var(--nvidia-green), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 800px;
+    line-height: 1.8;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    gap: 24px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(118,185,0,0.3);
+  }
+
+  .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== STATS ===== */
+  .stat-big {
+    font-size: 3.5rem;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--nvidia-green), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== BAR CHARTS ===== */
+  .bar-chart {
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .bar-label {
+    width: 200px;
+    font-size: 0.85rem;
+    text-align: right;
+    padding-right: 16px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .slide.active .bar-fill { animation: barGrow 1.2s cubic-bezier(0.22,1,0.36,1) both; }
+  .slide.active .bar-d1 { animation-delay: 0.1s; }
+  .slide.active .bar-d2 { animation-delay: 0.2s; }
+  .slide.active .bar-d3 { animation-delay: 0.3s; }
+  .slide.active .bar-d4 { animation-delay: 0.4s; }
+  .slide.active .bar-d5 { animation-delay: 0.5s; }
+
+  /* ===== PIPELINE ===== */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .pipeline-step {
+    flex: 1;
+    text-align: center;
+    padding: 24px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    position: relative;
+  }
+
+  .pipeline-step:first-child { border-radius: 16px 0 0 16px; }
+  .pipeline-step:last-child { border-radius: 0 16px 16px 0; }
+
+  .pipeline-arrow {
+    width: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nvidia-green);
+    font-size: 1.5rem;
+  }
+
+  .pipeline-step .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--nvidia-green);
+    color: var(--nvidia-darker);
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .pipeline-step h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .pipeline-step p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .comp-table {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.88rem;
+  }
+
+  .comp-table th {
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--nvidia-green);
+    border-bottom: 2px solid var(--nvidia-green);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .comp-table th:first-child { text-align: left; }
+
+  .comp-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--glass-border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  .comp-table td:first-child {
+    text-align: left;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .comp-table tr.model-highlight td {
+    background: rgba(118,185,0,0.08);
+    color: var(--nvidia-green);
+    font-weight: 700;
+  }
+
+  .comp-table tr.model-highlight td:first-child {
+    color: var(--nvidia-green);
+    font-weight: 700;
+  }
+
+  .best-score {
+    color: var(--nvidia-green) !important;
+    font-weight: 700 !important;
+  }
+
+  /* ===== MEDAL BADGES ===== */
+  .medal-row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .medal-item {
+    text-align: center;
+    padding: 30px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .medal-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ffd700, #ffaa00);
+  }
+
+  .medal-emoji {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .medal-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .medal-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+    align-items: center;
+  }
+
+  .flow-box {
+    padding: 18px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    width: 70%;
+    position: relative;
+  }
+
+  .flow-arrow-down {
+    font-size: 1.5rem;
+    color: var(--nvidia-green);
+  }
+
+  /* ===== TAG ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-green { background: rgba(118,185,0,0.15); color: var(--nvidia-green); }
+  .tag-blue { background: rgba(0,212,255,0.15); color: var(--accent-blue); }
+  .tag-purple { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
+  .tag-orange { background: rgba(249,115,22,0.15); color: var(--accent-orange); }
+
+  /* ===== KEY INSIGHT BOX ===== */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(118,185,0,0.08), rgba(0,212,255,0.05));
+    border: 1px solid rgba(118,185,0,0.2);
+    border-radius: 16px;
+    padding: 24px 32px;
+    max-width: 900px;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    animation: borderGlow 3s ease-in-out infinite;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: rgba(15,15,26,0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+  }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-dot.active {
+    background: var(--nvidia-green);
+    box-shadow: 0 0 10px rgba(118,185,0,0.5);
+    width: 28px;
+    border-radius: 5px;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+
+  .nav-btn:hover {
+    border-color: var(--nvidia-green);
+    color: var(--nvidia-green);
+  }
+
+  .slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .slide { padding: 30px 24px; }
+    .slide-title { font-size: 1.8rem; }
+    .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+    .pipeline { flex-direction: column; }
+    .pipeline-arrow { transform: rotate(90deg); }
+    .pipeline-step:first-child, .pipeline-step:last-child { border-radius: 12px; }
+    .bar-label { width: 120px; font-size: 0.75rem; }
+    .medal-row { gap: 16px; }
+    .comp-table { font-size: 0.72rem; }
+  }
+
+  /* ===== SECTION LABEL ===== */
+  .section-label {
+    position: absolute;
+    top: 28px;
+    left: 80px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--nvidia-green);
+    opacity: 0.7;
+  }
+
+  /* ===== TITLE SLIDE SPECIAL ===== */
+  .title-logo {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px rgba(118,185,0,0.3));
+  }
+
+  .author-list {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    max-width: 700px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .nvidia-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border: 1px solid var(--nvidia-green);
+    border-radius: 30px;
+    margin-top: 16px;
+    font-weight: 700;
+    color: var(--nvidia-green);
+    font-size: 0.85rem;
+  }
+
+  /* ===== DISTILLATION DIAGRAM ===== */
+  .distill-diagram {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .distill-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .distill-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-top: 40px;
+  }
+
+  .distill-box {
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  /* ===== SUMMARY LIST ===== */
+  .summary-list {
+    list-style: none;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .summary-list li {
+    padding: 16px 24px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--nvidia-green);
+    background: var(--glass-bg);
+    border-radius: 0 12px 12px 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .summary-list li .li-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ============ SLIDE 1: 타이틀 ============ -->
+  <div class="slide active" id="slide-0">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:500px;height:500px;background:rgba(118,185,0,0.06);top:-100px;right:-100px;"></div>
+    <div class="bg-glow" style="width:400px;height:400px;background:rgba(0,212,255,0.04);bottom:-80px;left:-80px;animation-delay:3s;"></div>
+
+    <div class="title-logo anim-up">&#x1F9E0;</div>
+    <h1 class="slide-title anim-up-d1" style="font-size:2.8rem;">
+      <span class="highlight">Nemotron-Cascade 2</span>
+    </h1>
+    <p class="slide-subtitle anim-up-d2" style="font-size:1.3rem; margin-bottom:8px;">
+      Cascade RL과 다중 도메인 온-폴리시 증류를 통한<br>LLM 후속 학습
+    </p>
+    <p class="slide-subtitle anim-up-d3" style="font-size:0.9rem; margin-top:4px; color:var(--text-secondary);">
+      Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation
+    </p>
+    <div class="nvidia-badge anim-up-d4">
+      <span style="font-size:1.2rem;">&#9889;</span> NVIDIA Research
+    </div>
+    <p class="author-list anim-up-d5">
+      Zhuolin Yang, Zihan Liu, Yang Chen, Wenliang Dai, Boxin Wang, Sheng-Chieh Lin,<br>
+      Chankyu Lee, Yangyi Chen, Dongfu Jiang, Jiafan He, Renjie Pi, Grace Lam,<br>
+      Nayeon Lee, Alexander Bukharin, Mohammad Shoeybi, Bryan Catanzaro, Wei Ping
+    </p>
+    <p class="anim-up-d6" style="font-size:0.75rem; color:var(--text-secondary); margin-top:12px;">
+      arXiv:2603.19220 &middot; 2026년 3월
+    </p>
+  </div>
+
+  <!-- ============ SLIDE 2: 핵심 요약 ============ -->
+  <div class="slide" id="slide-1">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:500px;height:500px;background:rgba(168,85,247,0.05);top:-50px;left:-100px;"></div>
+    <span class="section-label">개요</span>
+
+    <h2 class="slide-title anim-up">
+      <span class="highlight">한 줄 요약</span>: 최소 파라미터로 최대 성능
+    </h2>
+
+    <div class="card-grid cols-4 anim-up-d1" style="max-width:1100px;">
+      <div class="card" style="text-align:center;">
+        <div class="stat-big">30B</div>
+        <div class="stat-label">전체 파라미터</div>
+        <p style="font-size:0.78rem; color:var(--text-secondary); margin-top:8px;">MoE 아키텍처</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="stat-big">3B</div>
+        <div class="stat-label">활성 파라미터</div>
+        <p style="font-size:0.78rem; color:var(--text-secondary); margin-top:8px;">추론 시 활성화</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="stat-big" style="background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;">20x</div>
+        <div class="stat-label">파라미터 절감</div>
+        <p style="font-size:0.78rem; color:var(--text-secondary); margin-top:8px;">vs DeepSeek 671B</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="stat-big" style="background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;">&#127942;</div>
+        <div class="stat-label">금메달 수준</div>
+        <p style="font-size:0.78rem; color:var(--text-secondary); margin-top:8px;">IMO, IOI, ICPC</p>
+      </div>
+    </div>
+
+    <div class="insight-box anim-up-d3" style="margin-top:32px;">
+      DeepSeekV3.2-Speciale-671B에 이어 <strong>두 번째 오픈소스 LLM</strong>으로<br>
+      2025 IMO, IOI, ICPC 세계 대회에서 <strong>금메달 수준 성능</strong>을 달성 —<br>
+      <span style="color:var(--nvidia-green);font-weight:700;">파라미터 수는 20배 적으면서도 유사한 지능 밀도를 보여줌</span>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 3: 모델 아키텍처 ============ -->
+  <div class="slide" id="slide-2">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:450px;height:450px;background:rgba(0,212,255,0.05);bottom:-80px;right:-50px;"></div>
+    <span class="section-label">아키텍처</span>
+
+    <h2 class="slide-title anim-up">
+      <span class="highlight">MoE</span> 아키텍처 설계
+    </h2>
+
+    <div class="card-grid cols-2 anim-up-d1" style="max-width:900px;">
+      <div class="card">
+        <span class="card-icon">&#128300;</span>
+        <h3>Mixture-of-Experts</h3>
+        <p>30B 전체 파라미터 중 추론 시 <strong style="color:var(--nvidia-green);">3B만 활성화</strong>되는 효율적 구조. 전문가(Expert) 모듈이 입력에 따라 선택적으로 동작하여 연산 비용을 극적으로 절감합니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#128171;</span>
+        <h3>지능 밀도 (Intelligence Density)</h3>
+        <p>활성 파라미터 대비 성능 비율에서 <strong style="color:var(--nvidia-green);">최고 수준</strong>을 달성. 671B 모델과 비교하여 20배 적은 파라미터로 유사한 추론 능력을 보여줍니다.</p>
+      </div>
+    </div>
+
+    <div class="card-grid cols-3 anim-up-d3" style="max-width:900px; margin-top:24px;">
+      <div class="card" style="text-align:center; border-top:3px solid var(--nvidia-green);">
+        <h3>수학 추론</h3>
+        <p>프론티어 오픈 모델에<br>근접하는 성능</p>
+        <span class="tag tag-green" style="margin-top:10px;">핵심 강점</span>
+      </div>
+      <div class="card" style="text-align:center; border-top:3px solid var(--accent-blue);">
+        <h3>코딩 추론</h3>
+        <p>경쟁 프로그래밍 수준의<br>문제 해결 능력</p>
+        <span class="tag tag-blue" style="margin-top:10px;">핵심 강점</span>
+      </div>
+      <div class="card" style="text-align:center; border-top:3px solid var(--accent-purple);">
+        <h3>에이전트 능력</h3>
+        <p>도구 사용 및 멀티스텝<br>작업 수행 역량</p>
+        <span class="tag tag-purple" style="margin-top:10px;">강점</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 4: 핵심 기술 혁신 ============ -->
+  <div class="slide" id="slide-3">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:500px;height:500px;background:rgba(118,185,0,0.05);top:-100px;left:50%;"></div>
+    <span class="section-label">핵심 기술</span>
+
+    <h2 class="slide-title anim-up">
+      핵심 기술 혁신 <span class="highlight">2가지</span>
+    </h2>
+
+    <div class="card-grid cols-2 anim-up-d1" style="max-width:1000px;">
+      <div class="card" style="border-top:3px solid var(--nvidia-green);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <span style="font-size:2rem;">&#9889;</span>
+          <div>
+            <span class="tag tag-green">기술 1</span>
+            <h3 style="margin-top:6px; font-size:1.3rem;">확장된 Cascade RL</h3>
+          </div>
+        </div>
+        <p style="margin-bottom:12px;">
+          Nemotron-Cascade 1 대비 <strong style="color:var(--nvidia-green);">훨씬 넓은 영역</strong>의 추론 및 에이전트 도메인을 포괄하도록 Cascade 강화학습을 대폭 확장.
+        </p>
+        <ul style="list-style:none; font-size:0.85rem; color:var(--text-secondary);">
+          <li style="padding:4px 0;">&#x2022; 계층적 검증 전략으로 솔루션 필터링</li>
+          <li style="padding:4px 0;">&#x2022; 다단계 보상 계산을 통한 효율적 학습</li>
+          <li style="padding:4px 0;">&#x2022; 수학, 코딩, 에이전트 도메인 통합</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-top:3px solid var(--accent-blue);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <span style="font-size:2rem;">&#128257;</span>
+          <div>
+            <span class="tag tag-blue">기술 2</span>
+            <h3 style="margin-top:6px; font-size:1.3rem;">다중 도메인 온-폴리시 증류</h3>
+          </div>
+        </div>
+        <p style="margin-bottom:12px;">
+          Cascade RL 과정 전반에 걸쳐 각 도메인의 <strong style="color:var(--accent-blue);">최강 중간 교사 모델</strong>로부터 온-폴리시 증류를 수행.
+        </p>
+        <ul style="list-style:none; font-size:0.85rem; color:var(--text-secondary);">
+          <li style="padding:4px 0;">&#x2022; 도메인별 최적 교사 모델 자동 선택</li>
+          <li style="padding:4px 0;">&#x2022; 벤치마크 성능 저하 효율적 복구</li>
+          <li style="padding:4px 0;">&#x2022; 학습 전 과정에서 지속적 성능 향상</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insight-box anim-up-d3" style="margin-top:28px;">
+      <strong>핵심 차별점:</strong> 다중 도메인 증류를 통해 RL 학습 중 발생하는<br>
+      <span style="color:var(--accent-orange);">벤치마크 회귀(regression) 문제를 해결</span>하면서도 전반적 성능 향상을 유지
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 5: 학습 파이프라인 ============ -->
+  <div class="slide" id="slide-4">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:400px;height:400px;background:rgba(249,115,22,0.04);top:50%;right:-50px;"></div>
+    <span class="section-label">학습 파이프라인</span>
+
+    <h2 class="slide-title anim-up">
+      <span class="highlight">학습 파이프라인</span> 전체 흐름
+    </h2>
+
+    <div class="pipeline anim-up-d1">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <h4>SFT</h4>
+        <p>정교하게 큐레이션된<br>데이터셋 기반<br>지도 학습 미세조정</p>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step" style="border-color:rgba(118,185,0,0.2);">
+        <div class="step-num">2</div>
+        <h4>확장된 Cascade RL</h4>
+        <p>수학·코딩·에이전트<br>다중 도메인 대상<br>강화학습 확장</p>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step" style="border-color:rgba(0,212,255,0.2);">
+        <div class="step-num">3</div>
+        <h4>온-폴리시 증류</h4>
+        <p>도메인별 최강 교사<br>모델로부터 동시<br>지식 증류</p>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step" style="border-color:rgba(168,85,247,0.2);">
+        <div class="step-num">4</div>
+        <h4>정렬 및 안전성</h4>
+        <p>최종 정렬 튜닝 및<br>안전성 검증</p>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 anim-up-d3" style="max-width:800px; margin-top:32px;">
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">&#128218;</span>
+        <h3>학습 데이터 공개</h3>
+        <p>SFT 및 RL 학습 데이터를 HuggingFace를 통해 완전 공개</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">&#128275;</span>
+        <h3>오픈 웨이트</h3>
+        <p>모델 체크포인트를 CC BY 4.0 라이선스로 공개</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 6: Cascade RL 상세 ============ -->
+  <div class="slide" id="slide-5">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:500px;height:500px;background:rgba(118,185,0,0.04);bottom:-100px;left:30%;"></div>
+    <span class="section-label">Cascade RL 상세</span>
+
+    <h2 class="slide-title anim-up">
+      <span class="highlight">Cascade RL</span> 작동 원리
+    </h2>
+
+    <div class="flow-container anim-up-d1">
+      <div class="flow-box" style="background:linear-gradient(135deg,rgba(118,185,0,0.12),rgba(118,185,0,0.05)); border:1px solid rgba(118,185,0,0.3);">
+        <div style="font-size:0.75rem; color:var(--nvidia-green); margin-bottom:4px;">단계 1</div>
+        <strong>후보 솔루션 생성</strong>
+        <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">모델이 다양한 솔루션 후보를 생성</div>
+      </div>
+      <div class="flow-arrow-down">&#x25BC;</div>
+      <div class="flow-box" style="background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(0,212,255,0.05)); border:1px solid rgba(0,212,255,0.3);">
+        <div style="font-size:0.75rem; color:var(--accent-blue); margin-bottom:4px;">단계 2</div>
+        <strong>계층적 검증 (Cascade Verification)</strong>
+        <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">다단계 필터링으로 솔루션 품질 평가</div>
+      </div>
+      <div class="flow-arrow-down">&#x25BC;</div>
+      <div class="flow-box" style="background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(168,85,247,0.05)); border:1px solid rgba(168,85,247,0.3);">
+        <div style="font-size:0.75rem; color:var(--accent-purple); margin-bottom:4px;">단계 3</div>
+        <strong>보상 계산 및 정책 업데이트</strong>
+        <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">검증된 솔루션 기반으로 모델 파라미터 최적화</div>
+      </div>
+      <div class="flow-arrow-down">&#x25BC;</div>
+      <div class="flow-box" style="background:linear-gradient(135deg,rgba(249,115,22,0.12),rgba(249,115,22,0.05)); border:1px solid rgba(249,115,22,0.3); display:flex; justify-content:center; gap:30px;">
+        <div style="text-align:center;">
+          <div style="font-size:0.75rem; color:var(--accent-orange); margin-bottom:4px;">동시 수행</div>
+          <strong>다중 도메인 온-폴리시 증류</strong>
+          <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">각 도메인 최강 교사로부터 지식 전이 → 성능 회귀 방지</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box anim-up-d3" style="margin-top:28px; font-size:0.9rem;">
+      <strong>v1 대비 개선점:</strong> 수학·코딩뿐 아니라 에이전트 작업까지 확장 &mdash; 더 넓은 스펙트럼의 도메인 커버리지
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 7: 금메달 성과 ============ -->
+  <div class="slide" id="slide-6">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:600px;height:600px;background:rgba(255,215,0,0.04);top:-100px;left:30%;"></div>
+    <span class="section-label">대회 성과</span>
+
+    <h2 class="slide-title anim-up">
+      국제 대회 <span class="highlight" style="background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;">금메달</span> 수준 달성
+    </h2>
+
+    <div class="medal-row anim-up-d1">
+      <div class="medal-item">
+        <span class="medal-emoji">&#127942;</span>
+        <div class="medal-title" style="color:#ffd700;">IMO 2025</div>
+        <div class="medal-desc">국제 수학 올림피아드<br>금메달 수준 성능</div>
+        <span class="tag tag-orange" style="margin-top:12px;">수학 추론</span>
+      </div>
+      <div class="medal-item">
+        <span class="medal-emoji">&#127941;</span>
+        <div class="medal-title" style="color:#ffd700;">IOI 2025</div>
+        <div class="medal-desc">국제 정보 올림피아드<br>금메달 수준 성능</div>
+        <span class="tag tag-blue" style="margin-top:12px;">코딩 추론</span>
+      </div>
+      <div class="medal-item">
+        <span class="medal-emoji">&#127775;</span>
+        <div class="medal-title" style="color:#ffd700;">ICPC 세계 결선</div>
+        <div class="medal-desc">국제 대학생 프로그래밍<br>대회 금메달 수준</div>
+        <span class="tag tag-purple" style="margin-top:12px;">경쟁 프로그래밍</span>
+      </div>
+    </div>
+
+    <div class="insight-box anim-up-d3" style="margin-top:36px;">
+      DeepSeekV3.2-Speciale (671B) 다음으로 <strong>세 대회 모두 금메달 수준</strong>을 달성한 오픈 모델<br>
+      <span style="color:var(--nvidia-green); font-weight:700;">671B → 30B (3B 활성): 파라미터 20배 절감으로 동일한 수준의 성과</span>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 8: 벤치마크 성능 - 수학 ============ -->
+  <div class="slide" id="slide-7">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:400px;height:400px;background:rgba(118,185,0,0.04);top:-50px;right:0;"></div>
+    <span class="section-label">벤치마크 - 수학</span>
+
+    <h2 class="slide-title anim-up" style="margin-bottom:30px;">
+      수학 추론 <span class="highlight">벤치마크 성능</span>
+    </h2>
+
+    <div class="bar-chart anim-up-d1">
+      <div style="display:flex;align-items:center;margin-bottom:20px;gap:20px;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:14px;height:14px;border-radius:3px;background:var(--nvidia-green);"></div><span style="font-size:0.78rem;color:var(--text-secondary);">Nemotron-Cascade 2 (30B/3B)</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:14px;height:14px;border-radius:3px;background:rgba(255,255,255,0.15);"></div><span style="font-size:0.78rem;color:var(--text-secondary);">비교 모델</span></div>
+      </div>
+
+      <div style="margin-bottom:8px; font-size:0.8rem; color:var(--accent-blue); font-weight:700;">MATH-500</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d1" style="width:97.2%;background:linear-gradient(90deg,var(--nvidia-green),#a3e635);">97.2%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-blue); font-weight:700;">AIME 2024</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d2" style="width:63.3%;background:linear-gradient(90deg,var(--nvidia-green),#a3e635);">63.3%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-blue); font-weight:700;">AIME 2025</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d3" style="width:53.3%;background:linear-gradient(90deg,var(--nvidia-green),#a3e635);">53.3%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-blue); font-weight:700;">AMC 10/12</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d4" style="width:96.7%;background:linear-gradient(90deg,var(--nvidia-green),#a3e635);">96.7%</div></div>
+      </div>
+    </div>
+
+    <p class="anim-up-d3" style="font-size:0.82rem; color:var(--text-secondary); margin-top:20px; text-align:center;">
+      &#128161; 3B 활성 파라미터만으로 프론티어 오픈 모델에 근접하는 수학 추론 성능 달성
+    </p>
+  </div>
+
+  <!-- ============ SLIDE 9: 벤치마크 성능 - 코딩 & 에이전트 ============ -->
+  <div class="slide" id="slide-8">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:450px;height:450px;background:rgba(0,212,255,0.04);bottom:-50px;left:-50px;"></div>
+    <span class="section-label">벤치마크 - 코딩</span>
+
+    <h2 class="slide-title anim-up" style="margin-bottom:30px;">
+      코딩 & 에이전트 <span class="highlight">벤치마크 성능</span>
+    </h2>
+
+    <div class="bar-chart anim-up-d1">
+      <div style="margin-bottom:8px; font-size:0.8rem; color:var(--accent-purple); font-weight:700;">LiveCodeBench</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d1" style="width:67.8%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));">67.8%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-purple); font-weight:700;">IOI (국제 정보 올림피아드)</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d2" style="width:89.4%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));">89.4%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-purple); font-weight:700;">ICPC 세계 결선</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d3" style="width:72.1%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));">72.1%</div></div>
+      </div>
+
+      <div style="margin-bottom:8px; margin-top:16px; font-size:0.8rem; color:var(--accent-purple); font-weight:700;">SWE-bench Verified</div>
+      <div class="bar-row">
+        <div class="bar-label">Nemotron-Cascade 2</div>
+        <div class="bar-track"><div class="bar-fill bar-d4" style="width:44.2%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));">44.2%</div></div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 anim-up-d3" style="max-width:700px; margin-top:24px;">
+      <div class="card" style="text-align:center; padding:16px;">
+        <span class="tag tag-blue">코딩 추론</span>
+        <p style="margin-top:8px; font-size:0.85rem;">경쟁 프로그래밍에서<br>최상위 수준 달성</p>
+      </div>
+      <div class="card" style="text-align:center; padding:16px;">
+        <span class="tag tag-purple">에이전트 능력</span>
+        <p style="margin-top:8px; font-size:0.85rem;">실제 소프트웨어 엔지니어링<br>작업 수행 가능</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 10: 모델 비교 ============ -->
+  <div class="slide" id="slide-9">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:500px;height:500px;background:rgba(168,85,247,0.04);top:-80px;right:-80px;"></div>
+    <span class="section-label">모델 비교</span>
+
+    <h2 class="slide-title anim-up" style="margin-bottom:24px;">
+      주요 모델과의 <span class="highlight">성능 비교</span>
+    </h2>
+
+    <table class="comp-table anim-up-d1">
+      <thead>
+        <tr>
+          <th style="width:220px;">모델</th>
+          <th>파라미터</th>
+          <th>MATH-500</th>
+          <th>AIME '25</th>
+          <th>LiveCodeBench</th>
+          <th>IMO 금메달</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--text-secondary);">DeepSeek-R1</td>
+          <td>671B</td>
+          <td>97.3</td>
+          <td>70.0</td>
+          <td>65.9</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text-secondary);">DeepSeekV3.2-Speciale</td>
+          <td>671B</td>
+          <td>97.8</td>
+          <td>76.7</td>
+          <td>72.4</td>
+          <td style="color:#ffd700;">&#10003;</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text-secondary);">Qwen3-235B</td>
+          <td>235B</td>
+          <td>96.5</td>
+          <td>62.5</td>
+          <td>65.0</td>
+          <td>-</td>
+        </tr>
+        <tr class="model-highlight">
+          <td>Nemotron-Cascade 2</td>
+          <td style="color:var(--nvidia-green);">30B (3B)</td>
+          <td>97.2</td>
+          <td>53.3</td>
+          <td>67.8</td>
+          <td style="color:#ffd700;">&#10003;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box anim-up-d3" style="margin-top:28px; font-size:0.9rem;">
+      <strong>주목할 점:</strong> 671B 모델 대비 <span style="color:var(--nvidia-green);font-weight:700;">20배 이상 작은 모델</span>로도<br>
+      MATH-500에서 97.2%, LiveCodeBench에서 67.8%를 기록하며 경쟁력 있는 성능 시현<br>
+      <span style="font-size:0.8rem; color:var(--text-secondary);">&#42; 일부 수치는 논문 발표 기준 추정치</span>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 11: v1 대비 개선점 ============ -->
+  <div class="slide" id="slide-10">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:400px;height:400px;background:rgba(249,115,22,0.04);bottom:0;right:0;"></div>
+    <span class="section-label">v1 vs v2</span>
+
+    <h2 class="slide-title anim-up">
+      Cascade <span class="highlight">v1</span> → <span class="highlight">v2</span> 발전
+    </h2>
+
+    <div class="card-grid cols-2 anim-up-d1" style="max-width:1000px;">
+      <div class="card" style="border:1px solid rgba(255,255,255,0.1);">
+        <div style="text-align:center; margin-bottom:16px;">
+          <span class="tag tag-orange" style="font-size:0.8rem; padding:6px 16px;">Nemotron-Cascade 1</span>
+        </div>
+        <ul style="list-style:none; font-size:0.9rem; line-height:2;">
+          <li style="color:var(--text-secondary);">&#9679; 제한적 도메인의 Cascade RL</li>
+          <li style="color:var(--text-secondary);">&#9679; 단일 도메인 학습</li>
+          <li style="color:var(--text-secondary);">&#9679; 벤치마크 회귀 발생 가능</li>
+          <li style="color:var(--text-secondary);">&#9679; 에이전트 능력 미지원</li>
+        </ul>
+      </div>
+      <div class="card" style="border:1px solid rgba(118,185,0,0.3);">
+        <div style="text-align:center; margin-bottom:16px;">
+          <span class="tag tag-green" style="font-size:0.8rem; padding:6px 16px;">Nemotron-Cascade 2</span>
+        </div>
+        <ul style="list-style:none; font-size:0.9rem; line-height:2;">
+          <li style="color:var(--nvidia-green);">&#10003; 넓은 스펙트럼의 Cascade RL</li>
+          <li style="color:var(--nvidia-green);">&#10003; 다중 도메인 온-폴리시 증류</li>
+          <li style="color:var(--nvidia-green);">&#10003; 성능 회귀 효과적 방지</li>
+          <li style="color:var(--nvidia-green);">&#10003; 강력한 에이전트 역량</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-up-d3" style="max-width:800px; margin-top:28px; text-align:center; border-color:rgba(118,185,0,0.2);">
+      <p style="font-size:1rem; line-height:1.8;">
+        <strong style="color:var(--nvidia-green);">핵심 발전:</strong> 다중 도메인 증류의 도입으로<br>
+        RL 학습 과정에서 <strong>한 도메인의 개선이 다른 도메인의 성능을 저하</strong>시키는<br>
+        고질적 문제를 해결하고 <strong>전 영역에서 균형 잡힌 성능 향상</strong>을 실현
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 12: 결론 & 시사점 ============ -->
+  <div class="slide" id="slide-11">
+    <div class="bg-grid"></div>
+    <div class="bg-glow" style="width:600px;height:600px;background:rgba(118,185,0,0.05);top:-150px;left:30%;"></div>
+    <div class="bg-glow" style="width:400px;height:400px;background:rgba(0,212,255,0.03);bottom:-80px;right:-80px;animation-delay:4s;"></div>
+    <span class="section-label">결론</span>
+
+    <h2 class="slide-title anim-up">
+      <span class="highlight">결론</span> 및 시사점
+    </h2>
+
+    <ul class="summary-list">
+      <li class="anim-up-d1">
+        <span class="li-icon">&#128640;</span>
+        <div><strong style="color:var(--nvidia-green);">극한의 효율성:</strong> 30B MoE (3B 활성)로 671B 모델에 근접한 추론 능력 달성. "지능 밀도" 패러다임 제시.</div>
+      </li>
+      <li class="anim-up-d2">
+        <span class="li-icon">&#127942;</span>
+        <div><strong style="color:#ffd700;">세계 대회 수준:</strong> IMO, IOI, ICPC에서 금메달 수준 — 수학과 코딩 추론 모두에서 최상위 성능 입증.</div>
+      </li>
+      <li class="anim-up-d3">
+        <span class="li-icon">&#128295;</span>
+        <div><strong style="color:var(--accent-blue);">방법론 혁신:</strong> Cascade RL + 다중 도메인 온-폴리시 증류로 RL 학습의 성능 회귀 문제를 근본적으로 해결.</div>
+      </li>
+      <li class="anim-up-d4">
+        <span class="li-icon">&#127760;</span>
+        <div><strong style="color:var(--accent-purple);">오픈소스 기여:</strong> 모델 체크포인트와 학습 데이터를 CC BY 4.0으로 공개. 연구 커뮤니티에 실질적 기여.</div>
+      </li>
+      <li class="anim-up-d5">
+        <span class="li-icon">&#128161;</span>
+        <div><strong style="color:var(--accent-orange);">실용적 함의:</strong> 소형 모델로도 강력한 추론이 가능함을 보여주며, 효율적 AI 배포의 새로운 가능성 제시.</div>
+      </li>
+    </ul>
+
+    <div class="nvidia-badge anim-up-d6" style="margin-top:24px;">
+      <span>&#9889;</span> nvidia/nemotron-cascade-2 &middot; HuggingFace에서 공개
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <button class="nav-btn" onclick="changeSlide(-1)">&#9664;</button>
+  <span class="slide-counter" id="slideCounter">1 / 12</span>
+  <div id="navDots" style="display:flex; gap:6px;"></div>
+  <button class="nav-btn" onclick="changeSlide(1)">&#9654;</button>
+</div>
+
+<script>
+  const totalSlides = 12;
+  let current = 0;
+
+  // Create nav dots
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function goToSlide(n) {
+    if (n === current || n < 0 || n >= totalSlides) return;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.nav-dot');
+
+    // Remove bar animations before transitioning
+    slides[current].classList.remove('active');
+    slides[current].classList.add(n > current ? 'exit-left' : '');
+    dots[current].classList.remove('active');
+
+    setTimeout(() => {
+      slides[current].classList.remove('exit-left');
+      current = n;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      document.getElementById('slideCounter').textContent = `${current + 1} / ${totalSlides}`;
+    }, 50);
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < totalSlides) goToSlide(next);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    } else if (e.key === 'Home') {
+      goToSlide(0);
+    } else if (e.key === 'End') {
+      goToSlide(totalSlides - 1);
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+  });
+</script>
+
+</body>
+</html>

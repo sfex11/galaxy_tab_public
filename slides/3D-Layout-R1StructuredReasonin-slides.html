@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>3D-Layout-R1: 언어 지시 기반 공간 편집을 위한 구조적 추론</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2235;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: rgba(255,255,255,0.08);
+    --glow-blue: rgba(59,130,246,0.3);
+    --glow-purple: rgba(139,92,246,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 50px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== SLIDE 1: TITLE ===== */
+  .slide-title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a1040 50%, #0a0e1a 100%);
+    position: relative;
+  }
+
+  .slide-title::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(139,92,246,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(59,130,246,0.1) 0%, transparent 50%);
+    animation: bgPulse 8s ease-in-out infinite;
+  }
+
+  @keyframes bgPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.05) rotate(2deg); }
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    background: rgba(139,92,246,0.15);
+    border: 1px solid rgba(139,92,246,0.3);
+    color: var(--accent-purple);
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-main {
+    font-size: clamp(1.5rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, #93c5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-sub {
+    font-size: clamp(0.95rem, 2vw, 1.5rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-authors {
+    font-size: clamp(0.7rem, 1.3vw, 0.95rem);
+    color: var(--text-muted);
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-meta {
+    margin-top: 24px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .meta-chip {
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 500;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  /* ===== SLIDE HEADERS ===== */
+  .slide-header {
+    margin-bottom: 28px;
+    flex-shrink: 0;
+  }
+
+  .slide-number {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    color: var(--accent-purple);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .slide-heading {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.3;
+    background: linear-gradient(90deg, #fff, #c4b5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-heading-bar {
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+    border-radius: 2px;
+    margin-top: 10px;
+  }
+
+  /* ===== CARDS & CONTENT ===== */
+  .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    transition: transform 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .card-text {
+    font-size: clamp(0.78rem, 1.4vw, 0.92rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ===== HIGHLIGHT BOXES ===== */
+  .highlight-box {
+    padding: 16px 20px;
+    border-radius: 12px;
+    border-left: 3px solid;
+  }
+
+  .highlight-blue { background: rgba(59,130,246,0.08); border-color: var(--accent-blue); }
+  .highlight-purple { background: rgba(139,92,246,0.08); border-color: var(--accent-purple); }
+  .highlight-green { background: rgba(16,185,129,0.08); border-color: var(--accent-green); }
+  .highlight-orange { background: rgba(245,158,11,0.08); border-color: var(--accent-orange); }
+  .highlight-cyan { background: rgba(6,182,212,0.08); border-color: var(--accent-cyan); }
+  .highlight-pink { background: rgba(236,72,153,0.08); border-color: var(--accent-pink); }
+
+  /* ===== STAT CARDS ===== */
+  .stat-card {
+    text-align: center;
+    padding: 18px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+
+  .stat-value {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .stat-sub {
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ===== TABLES ===== */
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.3vw, 0.88rem);
+  }
+
+  th {
+    background: rgba(139,92,246,0.1);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent-purple);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .td-bold {
+    font-weight: 700;
+    color: var(--accent-green);
+  }
+
+  .td-highlight {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ===== PIPELINE / FLOW ===== */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pipeline-step {
+    padding: 12px 18px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    font-weight: 600;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .pipeline-arrow {
+    font-size: 20px;
+    color: var(--text-muted);
+  }
+
+  /* ===== CODE BLOCK ===== */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.82rem);
+    color: #e6edf3;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+
+  .code-keyword { color: #ff7b72; }
+  .code-string { color: #a5d6ff; }
+  .code-number { color: #79c0ff; }
+  .code-comment { color: #8b949e; }
+  .code-func { color: #d2a8ff; }
+
+  /* ===== TAG / BADGE ===== */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+    font-weight: 600;
+  }
+
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+  .tag-purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+  .tag-green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .tag-orange { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+  .tag-cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+
+  /* ===== LIST STYLES ===== */
+  .item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .item-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: clamp(0.78rem, 1.4vw, 0.92rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:active {
+    transform: scale(0.92);
+    background: var(--accent-purple);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .nav-dot.active {
+    background: var(--accent-purple);
+    box-shadow: 0 0 8px var(--glow-purple);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav-counter {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in { animation: fadeIn 0.6s ease both; }
+  .fade-in-d1 { animation: fadeIn 0.6s 0.1s ease both; }
+  .fade-in-d2 { animation: fadeIn 0.6s 0.2s ease both; }
+  .fade-in-d3 { animation: fadeIn 0.6s 0.3s ease both; }
+  .fade-in-d4 { animation: fadeIn 0.6s 0.4s ease both; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim { animation: fadeIn 0.5s ease both; }
+  .slide.active .anim-d1 { animation: fadeIn 0.5s 0.08s ease both; }
+  .slide.active .anim-d2 { animation: fadeIn 0.5s 0.16s ease both; }
+  .slide.active .anim-d3 { animation: fadeIn 0.5s 0.24s ease both; }
+  .slide.active .anim-d4 { animation: fadeIn 0.5s 0.32s ease both; }
+  .slide.active .anim-d5 { animation: fadeIn 0.5s 0.40s ease both; }
+
+  /* ===== SPECIAL ELEMENTS ===== */
+  .scene-graph-visual {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+
+  .sg-node {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid;
+  }
+
+  .sg-edge {
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .reward-eq {
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    color: var(--text-primary);
+    line-height: 2;
+  }
+
+  /* ===== RESPONSIVE: TABLET ===== */
+  @media (max-width: 768px) {
+    .slide {
+      padding: 28px 28px 80px;
+    }
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+    .grid-3 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pipeline {
+      flex-direction: column;
+    }
+    .pipeline-arrow {
+      transform: rotate(90deg);
+    }
+    .title-main {
+      font-size: clamp(1.3rem, 4vw, 2.2rem);
+    }
+    .nav-bar {
+      padding: 10px 16px;
+    }
+  }
+
+  /* ===== RESPONSIVE: MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide {
+      padding: 20px 20px 76px;
+    }
+    .slide-header {
+      margin-bottom: 18px;
+    }
+    .card {
+      padding: 14px 16px;
+    }
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+    .content-area {
+      gap: 12px;
+    }
+    .stat-card {
+      padding: 14px 10px;
+    }
+    .nav-dots {
+      gap: 4px;
+    }
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+    }
+    .nav-dot.active {
+      width: 18px;
+    }
+    .code-block {
+      padding: 12px 14px;
+    }
+    th, td {
+      padding: 7px 10px;
+    }
+  }
+
+  /* ===== RESPONSIVE: SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide {
+      padding: 14px 14px 72px;
+    }
+    .card {
+      padding: 12px 14px;
+      border-radius: 10px;
+    }
+    .slide-heading {
+      font-size: clamp(1.1rem, 5vw, 1.5rem);
+    }
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+    }
+    .title-meta {
+      gap: 8px;
+    }
+  }
+
+  /* Smooth scrollbar */
+  .slide::-webkit-scrollbar {
+    width: 4px;
+  }
+  .slide::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .slide::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ====== SLIDE 1: TITLE ====== -->
+  <div class="slide slide-title active" data-slide="0">
+    <div class="title-badge fade-in">arXiv 2603.22279 · 2026</div>
+    <h1 class="title-main fade-in-d1">3D-Layout-R1</h1>
+    <p class="title-sub fade-in-d2">언어 지시 기반 공간 편집을 위한<br>구조적 추론 프레임워크</p>
+    <p class="title-authors fade-in-d3">
+      Haoyu Zhen · Xiaolong Li · Yilin Zhao · Han Zhang<br>
+      Sifei Liu · Kaichun Mo · Chuang Gan · Subhashree Radhakrishnan
+    </p>
+    <div class="title-meta fade-in-d4">
+      <span class="meta-chip">📐 3D 장면 그래프</span>
+      <span class="meta-chip">🧠 구조적 추론</span>
+      <span class="meta-chip">🎯 강화 학습</span>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: PROBLEM ====== -->
+  <div class="slide" data-slide="1">
+    <div class="slide-header anim">
+      <div class="slide-number">01 · 문제 정의</div>
+      <h2 class="slide-heading">LLM의 공간 추론 한계</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="highlight-box highlight-purple anim-d1" style="margin-bottom:8px;">
+        <div style="font-size:clamp(0.85rem,1.5vw,1rem); font-weight:600; margin-bottom:8px;">핵심 문제</div>
+        <div class="card-text">LLM/VLM은 뛰어난 추론 능력에도 불구하고, <strong style="color:#c4b5fd">세밀한 공간 이해</strong>와 <strong style="color:#c4b5fd">레이아웃 일관성 유지</strong>에서 어려움을 겪는다.</div>
+      </div>
+      <div class="grid-2 anim-d2">
+        <div class="card">
+          <div class="card-icon" style="background:rgba(239,68,68,0.12); color:var(--accent-red);">✗</div>
+          <div class="card-title">기존 접근법의 한계</div>
+          <ul class="item-list">
+            <li><span class="item-dot" style="background:var(--accent-red);"></span><span>Zero-shot LLM은 충돌 및 제약조건 위반 발생</span></li>
+            <li><span class="item-dot" style="background:var(--accent-red);"></span><span>비구조적 CoT는 다단계 편집에서 오류 누적</span></li>
+            <li><span class="item-dot" style="background:var(--accent-red);"></span><span>235B 파라미터 모델도 정밀한 3D 배치 실패</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:rgba(16,185,129,0.12); color:var(--accent-green);">✓</div>
+          <div class="card-title">제안 솔루션</div>
+          <ul class="item-list">
+            <li><span class="item-dot" style="background:var(--accent-green);"></span><span>장면 그래프 기반 구조적 추론</span></li>
+            <li><span class="item-dot" style="background:var(--accent-green);"></span><span>단계별 그래프 편집 체인</span></li>
+            <li><span class="item-dot" style="background:var(--accent-green);"></span><span>기하학적 보상을 활용한 강화학습</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card anim-d3" style="background:linear-gradient(135deg, rgba(139,92,246,0.06), rgba(59,130,246,0.06)); text-align:center;">
+        <div style="font-size:clamp(0.85rem,1.5vw,1.05rem); color:var(--text-secondary); line-height:1.8;">
+          <strong style="color:var(--text-primary);">목표:</strong> 자연어 지시를 받아 3D 장면 그래프를 단계별로 편집하여<br>공간적 일관성을 유지하는 프레임워크 구축
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 3: KEY CONTRIBUTIONS ====== -->
+  <div class="slide" data-slide="2">
+    <div class="slide-header anim">
+      <div class="slide-number">02 · 핵심 기여</div>
+      <h2 class="slide-heading">4가지 주요 기여</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="grid-2">
+        <div class="card anim-d1" style="border-left:3px solid var(--accent-purple);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:22px;">🏗️</span>
+            <span class="tag tag-purple">기여 1</span>
+          </div>
+          <div class="card-title">3D-Layout-R1 프레임워크</div>
+          <div class="card-text">언어 지시 기반 다단계 3D 장면 편집을 위한 해석 가능한 그래프 편집 체인 추론 접근법</div>
+        </div>
+        <div class="card anim-d2" style="border-left:3px solid var(--accent-blue);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:22px;">📊</span>
+            <span class="tag tag-blue">기여 2</span>
+          </div>
+          <div class="card-title">새로운 벤치마크 데이터셋</div>
+          <div class="card-text">정렬·배열·방 편집을 포함하는 <strong>15,000개</strong> 3D 장면 + 자연어 지시 + 추론 과정 포함</div>
+        </div>
+        <div class="card anim-d3" style="border-left:3px solid var(--accent-green);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:22px;">🎯</span>
+            <span class="tag tag-green">기여 3</span>
+          </div>
+          <div class="card-title">기하학적 보상 함수</div>
+          <div class="card-text">3D IoU 기반 보상 함수로 RL 정책 최적화에 연속적이고 기하학적으로 충실한 감독 신호 제공</div>
+        </div>
+        <div class="card anim-d4" style="border-left:3px solid var(--accent-orange);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:22px;">🏆</span>
+            <span class="tag tag-orange">기여 4</span>
+          </div>
+          <div class="card-title">최첨단 성능 달성</div>
+          <div class="card-text">7-8B 모델로 235B 규모 모델 대비 <strong>최대 20% IoU 향상</strong>, 25% 중심거리 오차 감소</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 4: SCENE GRAPH ====== -->
+  <div class="slide" data-slide="3">
+    <div class="slide-header anim">
+      <div class="slide-number">03 · 장면 표현</div>
+      <h2 class="slide-heading">장면 그래프 구조</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="card anim-d1" style="text-align:center;">
+        <div class="card-title" style="margin-bottom:14px;">방향 장면 그래프 (Directed Scene Graph)</div>
+        <div class="scene-graph-visual">
+          <div class="sg-node" style="background:rgba(139,92,246,0.1); border-color:var(--accent-purple); color:var(--accent-purple);">🏠 방</div>
+          <div class="sg-edge">→</div>
+          <div class="sg-node" style="background:rgba(59,130,246,0.1); border-color:var(--accent-blue); color:var(--accent-blue);">🛋️ 소파</div>
+          <div class="sg-edge">→</div>
+          <div class="sg-node" style="background:rgba(16,185,129,0.1); border-color:var(--accent-green); color:var(--accent-green);">📦 쿠션</div>
+        </div>
+        <div style="font-size:clamp(0.72rem,1.2vw,0.85rem); color:var(--text-muted); margin-top:8px;">
+          노드 = 객체/지지면 &nbsp;|&nbsp; 엣지 = 접촉/포함 관계
+        </div>
+      </div>
+      <div class="card anim-d2">
+        <div class="card-title" style="margin-bottom:10px;">JSON 직렬화 속성</div>
+        <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="code-string">"node_type"</span>: <span class="code-string">"object"</span>,<br>
+&nbsp;&nbsp;<span class="code-string">"center_location"</span>: [<span class="code-number">1.2</span>, <span class="code-number">0.5</span>, <span class="code-number">0.8</span>], &nbsp;<span class="code-comment">// 3D 위치</span><br>
+&nbsp;&nbsp;<span class="code-string">"dimension"</span>: [<span class="code-number">0.6</span>, <span class="code-number">0.4</span>, <span class="code-number">0.3</span>], &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 길이/너비/높이</span><br>
+&nbsp;&nbsp;<span class="code-string">"rotation"</span>: [<span class="code-number">0</span>, <span class="code-number">0</span>, <span class="code-number">45</span>], &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 롤/피치/요</span><br>
+&nbsp;&nbsp;<span class="code-string">"caption"</span>: <span class="code-string">"빨간색 의자"</span><br>
+}
+        </div>
+      </div>
+      <div class="highlight-box highlight-cyan anim-d3">
+        <div class="card-text">
+          <strong style="color:var(--accent-cyan);">핵심 아이디어:</strong> 3D 장면을 구조화된 JSON 그래프로 표현하여 LLM이 이해하고 편집할 수 있는 형식으로 변환
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 5: TRAINING PIPELINE ====== -->
+  <div class="slide" data-slide="4">
+    <div class="slide-header anim">
+      <div class="slide-number">04 · 학습 파이프라인</div>
+      <h2 class="slide-heading">2단계 학습 전략</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="pipeline anim-d1" style="margin-bottom:16px;">
+        <div class="pipeline-step" style="background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); color:var(--accent-blue);">
+          📥 입력<br><small style="opacity:0.7">장면 그래프 + 지시문</small>
+        </div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" style="background:rgba(139,92,246,0.12); border:1px solid rgba(139,92,246,0.3); color:var(--accent-purple);">
+          Stage 1<br><small style="opacity:0.7">CoT-SFT</small>
+        </div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" style="background:rgba(236,72,153,0.12); border:1px solid rgba(236,72,153,0.3); color:var(--accent-pink);">
+          Stage 2<br><small style="opacity:0.7">GRPO RL</small>
+        </div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:var(--accent-green);">
+          📤 출력<br><small style="opacity:0.7">편집된 장면 그래프</small>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card anim-d2">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span class="tag tag-purple">Stage 1</span>
+            <span class="card-title" style="margin:0;">CoT-SFT</span>
+          </div>
+          <div class="card-text" style="margin-bottom:10px;">DeepSeek-R1이 생성한 구조적 사고 경로로 지도 미세조정</div>
+          <ul class="item-list" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+            <li><span class="item-dot" style="background:var(--accent-purple);"></span><span>5 에폭, 16x A100 GPU</span></li>
+            <li><span class="item-dot" style="background:var(--accent-purple);"></span><span>학습률: 2×10⁻⁷, AdamW</span></li>
+            <li><span class="item-dot" style="background:var(--accent-purple);"></span><span>최대 시퀀스: 10,240 토큰</span></li>
+            <li><span class="item-dot" style="background:var(--accent-purple);"></span><span>bfloat16 + ZeRO-3 샤딩</span></li>
+          </ul>
+        </div>
+        <div class="card anim-d3">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span class="tag tag-pink">Stage 2</span>
+            <span class="card-title" style="margin:0;">GRPO 강화학습</span>
+          </div>
+          <div class="card-text" style="margin-bottom:10px;">CoT-SFT 체크포인트에서 초기화 후 보상 기반 정책 최적화</div>
+          <ul class="item-list" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+            <li><span class="item-dot" style="background:var(--accent-pink);"></span><span>15 에폭, 8 GPU</span></li>
+            <li><span class="item-dot" style="background:var(--accent-pink);"></span><span>학습률: 1×10⁻⁶</span></li>
+            <li><span class="item-dot" style="background:var(--accent-pink);"></span><span>응답 최대: 16,384 토큰</span></li>
+            <li><span class="item-dot" style="background:var(--accent-pink);"></span><span>KL 계수: λ = 0.01</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight-box highlight-blue anim-d4">
+        <div class="card-text"><strong style="color:var(--accent-blue);">기본 모델:</strong> Qwen2.5-VL-7B-Instruct (VLM) / Qwen3-8B-Instruct (LLM) — 비전 백본(ViT)은 동결, 언어 부분만 학습</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 6: REWARD FUNCTION ====== -->
+  <div class="slide" data-slide="5">
+    <div class="slide-header anim">
+      <div class="slide-number">05 · 보상 함수</div>
+      <h2 class="slide-heading">3요소 보상 설계</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="reward-eq anim-d1" style="margin-bottom:16px;">
+        <strong>r</strong> = <span style="color:var(--accent-blue);">IoU(G<sub>pred</sub>, G*)</span> + λ₁ · <span style="color:var(--accent-green);">Coll(G<sub>pred</sub>)</span> + λ₂ · <span style="color:var(--accent-orange);">Fmt(G<sub>pred</sub>)</span>
+      </div>
+      <div class="grid-3">
+        <div class="card anim-d2" style="border-top:3px solid var(--accent-blue);">
+          <div style="text-align:center; font-size:28px; margin-bottom:8px;">📐</div>
+          <div class="card-title" style="text-align:center; color:var(--accent-blue);">IoU 보상</div>
+          <div class="card-text" style="text-align:center;">매칭된 객체 쌍의 평균 3D IoU 계산</div>
+          <div class="code-block" style="margin-top:10px; text-align:center; font-size:clamp(0.6rem,1.1vw,0.75rem);">
+            r<sub>iou</sub> = (1/N) Σ IoU(b<sub>i</sub>, b<sub>j</sub>)
+          </div>
+        </div>
+        <div class="card anim-d3" style="border-top:3px solid var(--accent-green);">
+          <div style="text-align:center; font-size:28px; margin-bottom:8px;">🛡️</div>
+          <div class="card-title" style="text-align:center; color:var(--accent-green);">충돌 방지 보상</div>
+          <div class="card-text" style="text-align:center;">비컨테이너 객체 간 관통 페널티</div>
+          <div class="code-block" style="margin-top:10px; text-align:center; font-size:clamp(0.6rem,1.1vw,0.75rem);">
+            Coll(G) = 1 − |C|/N
+          </div>
+        </div>
+        <div class="card anim-d4" style="border-top:3px solid var(--accent-orange);">
+          <div style="text-align:center; font-size:28px; margin-bottom:8px;">📋</div>
+          <div class="card-title" style="text-align:center; color:var(--accent-orange);">포맷 보상</div>
+          <div class="card-text" style="text-align:center;">&lt;think&gt; 태그 + 유효한 JSON 출력 확인</div>
+          <div class="code-block" style="margin-top:10px; text-align:center; font-size:clamp(0.6rem,1.1vw,0.75rem);">
+            Fmt = 1 (유효) | 0 (무효)
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box highlight-green anim-d5" style="margin-top:8px;">
+        <div class="card-text">
+          <strong style="color:var(--accent-green);">GRPO 목적함수:</strong> 그룹 내 정규화된 보상 편차를 이점(advantage)으로 사용하여, PPO 스타일 클리핑과 KL 정규화로 안정적 정책 업데이트
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 7: DATASET ====== -->
+  <div class="slide" data-slide="6">
+    <div class="slide-header anim">
+      <div class="slide-number">06 · 데이터셋</div>
+      <h2 class="slide-heading">15K 장면 벤치마크</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="grid-3 anim-d1" style="margin-bottom:14px;">
+        <div class="stat-card" style="border-top:3px solid var(--accent-purple);">
+          <div class="stat-value" style="color:var(--accent-purple);">10K</div>
+          <div class="stat-label">정렬 태스크</div>
+          <div class="stat-sub">합성 3D 장면</div>
+        </div>
+        <div class="stat-card" style="border-top:3px solid var(--accent-blue);">
+          <div class="stat-value" style="color:var(--accent-blue);">1K</div>
+          <div class="stat-label">공간 정렬</div>
+          <div class="stat-sub">Blender 렌더링</div>
+        </div>
+        <div class="stat-card" style="border-top:3px solid var(--accent-cyan);">
+          <div class="stat-value" style="color:var(--accent-cyan);">4K</div>
+          <div class="stat-label">방 편집</div>
+          <div class="stat-sub">InstructScene 기반</div>
+        </div>
+      </div>
+      <div class="card anim-d2">
+        <div class="card-title" style="margin-bottom:12px;">태스크별 상세 설명</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>태스크</th><th>설명</th><th>특징</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-highlight">정렬 (Sorting)</td>
+                <td>의미 속성별 그룹핑, 기하 속성별 정렬, 좌→우 배치</td>
+                <td>고정 간격/간극, 지지면 스냅</td>
+              </tr>
+              <tr>
+                <td class="td-highlight">공간 정렬 (Alignment)</td>
+                <td>N×M 그리드 목표, 무작위 교란된 초기 장면 복원</td>
+                <td>위치 + 방향 복원</td>
+              </tr>
+              <tr>
+                <td class="td-highlight">방 편집 (Room)</td>
+                <td>객체 간 기하학적 거리 제약으로 고유 목표 구성 결정</td>
+                <td>유클리드 거리 제약</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="highlight-box highlight-purple anim-d3">
+        <div class="card-text">
+          <strong style="color:var(--accent-purple);">데이터 형식:</strong> 각 샘플은 (렌더링 이미지, 초기 그래프, 목표 그래프, 자연어 지시, 추론 과정) 튜플로 구성. DeepSeek-R1이 구조적 추론 경로 생성.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 8: RESULTS - OVERVIEW ====== -->
+  <div class="slide" data-slide="7">
+    <div class="slide-header anim">
+      <div class="slide-number">07 · 실험 결과</div>
+      <h2 class="slide-heading">성능 요약</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="grid-3 anim-d1" style="margin-bottom:14px;">
+        <div class="stat-card" style="background:linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02));">
+          <div class="stat-value" style="color:var(--accent-green);">+15%</div>
+          <div class="stat-label">평균 IoU 향상</div>
+          <div class="stat-sub">CoT 베이스라인 대비</div>
+        </div>
+        <div class="stat-card" style="background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02));">
+          <div class="stat-value" style="color:var(--accent-blue);">−25%</div>
+          <div class="stat-label">중심 거리 오차 감소</div>
+          <div class="stat-sub">CoT 베이스라인 대비</div>
+        </div>
+        <div class="stat-card" style="background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.02));">
+          <div class="stat-value" style="color:var(--accent-purple);">+20%</div>
+          <div class="stat-label">IoU 향상</div>
+          <div class="stat-sub">Zero-shot 대비</div>
+        </div>
+      </div>
+      <div class="card anim-d2">
+        <div class="card-title" style="margin-bottom:12px;">정렬 태스크 결과</div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>모델</th><th>Mean IoU ↑</th><th>충돌 없음 ↑</th><th>중심 거리 ↓</th></tr></thead>
+            <tbody>
+              <tr style="background:rgba(16,185,129,0.04);">
+                <td class="td-highlight">Qwen3-8B (제안)</td>
+                <td class="td-bold">0.924</td>
+                <td class="td-bold">1.000</td>
+                <td class="td-bold">0.145</td>
+              </tr>
+              <tr><td>Qwen2.5-7B (제안)</td><td>0.879</td><td>1.000</td><td>0.179</td></tr>
+              <tr><td>Qwen3-235B-Thinking</td><td>0.708</td><td>—</td><td>0.856</td></tr>
+              <tr><td>DeepSeek-R1</td><td style="color:var(--text-muted);">낮음</td><td>—</td><td style="color:var(--text-muted);">높음</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="highlight-box highlight-green anim-d3">
+        <div class="card-text"><strong style="color:var(--accent-green);">핵심:</strong> 7-8B 파라미터 모델이 <strong>30배 큰</strong> 235B 모델을 능가하는 놀라운 효율성</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 9: DETAILED RESULTS ====== -->
+  <div class="slide" data-slide="8">
+    <div class="slide-header anim">
+      <div class="slide-number">08 · 세부 결과</div>
+      <h2 class="slide-heading">태스크별 성능 비교</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="grid-2">
+        <div class="card anim-d1">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span class="tag tag-blue">공간 정렬</span>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>모델</th><th>IoU</th><th>IoU@0.5</th><th>거리</th></tr></thead>
+              <tbody>
+                <tr style="background:rgba(16,185,129,0.04);">
+                  <td class="td-highlight">Qwen2.5-7B</td>
+                  <td class="td-bold">0.809</td>
+                  <td class="td-bold">0.803</td>
+                  <td class="td-bold">0.176</td>
+                </tr>
+                <tr><td>Qwen3-VL-235B</td><td>0.623</td><td>—</td><td>0.189</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card anim-d2">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span class="tag tag-cyan">방 편집</span>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>모델</th><th>IoU</th><th>중심 거리</th></tr></thead>
+              <tbody>
+                <tr style="background:rgba(16,185,129,0.04);">
+                  <td class="td-highlight">Qwen3-8B</td>
+                  <td class="td-bold">0.983</td>
+                  <td class="td-bold">0.031</td>
+                </tr>
+                <tr><td>Qwen2.5-7B</td><td>0.974</td><td>0.033</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card anim-d3" style="margin-top:4px;">
+        <div class="card-title" style="margin-bottom:12px;">그라운딩/편집 (캡션 없음 & 노이즈 입력)</div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>설정</th><th>모델</th><th>IoU</th><th>충돌 없음</th></tr></thead>
+            <tbody>
+              <tr><td>캡션 없음</td><td>Qwen2.5-VL (제안)</td><td class="td-bold">0.787</td><td>0.979</td></tr>
+              <tr><td>노이즈 입력</td><td>Qwen2.5-VL (제안)</td><td class="td-bold">0.822</td><td>0.980</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card anim-d4" style="background:linear-gradient(135deg, rgba(245,158,11,0.06), rgba(245,158,11,0.02));">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:18px;">🔬</span>
+          <span class="card-title" style="margin:0;">절삭 연구 (Ablation)</span>
+        </div>
+        <div class="card-text">포맷 보상 + IoU 보상은 <strong>필수 구성 요소</strong>이며, 충돌 방지 보상은 일관된 추가 향상을 제공</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 10: GENERALIZATION ====== -->
+  <div class="slide" data-slide="9">
+    <div class="slide-header anim">
+      <div class="slide-number">09 · 일반화 능력</div>
+      <h2 class="slide-heading">도메인 외 전이 & 실세계 적용</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="grid-2">
+        <div class="card anim-d1" style="border:1px solid rgba(6,182,212,0.3); background:linear-gradient(135deg, rgba(6,182,212,0.04), transparent);">
+          <div style="text-align:center; font-size:48px; margin-bottom:14px;">🏭</div>
+          <div class="card-title" style="text-align:center;">창고 시뮬레이션</div>
+          <div class="card-text" style="text-align:center;">
+            추가 학습 없이 창고 환경에서의 물체 배치 지시를 성공적으로 수행
+          </div>
+          <div style="text-align:center; margin-top:12px;">
+            <span class="tag tag-cyan">도메인 외 일반화</span>
+          </div>
+        </div>
+        <div class="card anim-d2" style="border:1px solid rgba(236,72,153,0.3); background:linear-gradient(135deg, rgba(236,72,153,0.04), transparent);">
+          <div style="text-align:center; font-size:48px; margin-bottom:14px;">🤖</div>
+          <div class="card-title" style="text-align:center;">실세계 로봇 배치</div>
+          <div class="card-text" style="text-align:center;">
+            Qwen3-VL로 바운딩 박스를 추출하여 테이블 위 물체 재배열 및 픽앤플레이스 수행
+          </div>
+          <div style="text-align:center; margin-top:12px;">
+            <span class="tag tag-purple">실세계 적용</span>
+          </div>
+        </div>
+      </div>
+      <div class="card anim-d3" style="margin-top:4px;">
+        <div class="card-title" style="margin-bottom:12px;">비교 모델 (Zero-shot 베이스라인)</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span class="tag tag-blue">Qwen3-235B</span>
+          <span class="tag tag-blue">DeepSeek-V3</span>
+          <span class="tag tag-blue">DeepSeek-R1</span>
+          <span class="tag tag-blue">DeepSeek-R1-0528</span>
+          <span class="tag tag-blue">Gemini 2.5 Flash</span>
+          <span class="tag tag-blue">Gemini 2.5 Pro</span>
+        </div>
+        <div class="card-text" style="margin-top:10px;">
+          모든 대규모 Zero-shot 모델 대비 제안 방법(7-8B)이 우수한 성능을 보임. 구조적 CoT + GRPO가 각 개별 구성 요소보다 일관되게 높은 성능 달성.
+        </div>
+      </div>
+      <div class="highlight-box highlight-pink anim-d4">
+        <div class="card-text"><strong style="color:var(--accent-pink);">정성적 비교:</strong> 제안 방법은 정답(Ground Truth)과 거의 일치하는 반면, 베이스라인(Qwen3-235B, DeepSeek)은 충돌 발생 및 제약 조건 위반</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 11: CONCLUSION ====== -->
+  <div class="slide" data-slide="10">
+    <div class="slide-header anim">
+      <div class="slide-number">10 · 결론</div>
+      <h2 class="slide-heading">요약 및 시사점</h2>
+      <div class="slide-heading-bar"></div>
+    </div>
+    <div class="content-area">
+      <div class="card anim-d1" style="background:linear-gradient(135deg, rgba(139,92,246,0.06), rgba(59,130,246,0.06)); border:1px solid rgba(139,92,246,0.2);">
+        <div style="text-align:center; margin-bottom:16px;">
+          <div style="font-size:clamp(1rem,2vw,1.4rem); font-weight:800; background:linear-gradient(90deg,#c4b5fd,#93c5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
+            3D-Layout-R1
+          </div>
+        </div>
+        <ul class="item-list">
+          <li><span class="item-dot" style="background:var(--accent-purple);"></span><span><strong>구조적 추론:</strong> JSON 장면 그래프를 통한 해석 가능한 단계별 편집 체인</span></li>
+          <li><span class="item-dot" style="background:var(--accent-blue);"></span><span><strong>2단계 학습:</strong> CoT-SFT → GRPO RL로 점진적 성능 향상</span></li>
+          <li><span class="item-dot" style="background:var(--accent-green);"></span><span><strong>기하학적 보상:</strong> 3D IoU + 충돌 방지 + 포맷 검증의 복합 보상</span></li>
+          <li><span class="item-dot" style="background:var(--accent-cyan);"></span><span><strong>효율성:</strong> 7-8B 모델이 235B 모델을 최대 20% IoU로 능가</span></li>
+          <li><span class="item-dot" style="background:var(--accent-pink);"></span><span><strong>일반화:</strong> 창고 시뮬레이션, 실세계 로봇 배치로 전이 가능</span></li>
+        </ul>
+      </div>
+      <div class="grid-2 anim-d2">
+        <div class="highlight-box highlight-green">
+          <div style="font-weight:700; margin-bottom:6px; color:var(--accent-green);">💡 핵심 통찰</div>
+          <div class="card-text">구조화된 추론 + 도메인 특화 보상이 모델 크기보다 중요하다</div>
+        </div>
+        <div class="highlight-box highlight-orange">
+          <div style="font-weight:700; margin-bottom:6px; color:var(--accent-orange);">🔮 향후 방향</div>
+          <div class="card-text">더 복잡한 장면, 동적 환경, 다양한 로봇 플랫폼으로 확장 가능</div>
+        </div>
+      </div>
+      <div class="anim-d3" style="text-align:center; margin-top:16px; padding:14px;">
+        <div style="font-size:clamp(0.7rem,1.2vw,0.85rem); color:var(--text-muted);">
+          📄 arXiv: 2603.22279 &nbsp;|&nbsp; 2026년 3월 &nbsp;|&nbsp; CS.CV · CS.AI
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">◀</button>
+  <div class="nav-progress">
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-counter" id="navCounter">1 / 11</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isTransitioning = false;
+
+  // Build nav dots
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateNav() {
+    document.getElementById('navCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+    document.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.className = 'nav-dot' + (i === currentSlide ? ' active' : '');
+    });
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlide || isTransitioning) return;
+    isTransitioning = true;
+    const direction = index > currentSlide ? 1 : -1;
+    const current = slides[currentSlide];
+    const next = slides[index];
+
+    current.classList.remove('active');
+    current.classList.add(direction > 0 ? 'exit-left' : '');
+    current.style.transform = direction > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+
+    next.style.transform = direction > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    next.classList.add('active');
+
+    requestAnimationFrame(() => {
+      next.style.transform = 'translateX(0)';
+    });
+
+    currentSlide = index;
+    updateNav();
+
+    setTimeout(() => {
+      current.classList.remove('exit-left');
+      current.style.transform = '';
+      isTransitioning = false;
+    }, 500);
+  }
+
+  function changeSlide(dir) {
+    const next = currentSlide + dir;
+    if (next >= 0 && next < totalSlides) goToSlide(next);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateNav();
+</script>
+</body>
+</html>

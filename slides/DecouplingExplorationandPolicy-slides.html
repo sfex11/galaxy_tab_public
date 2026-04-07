@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>탐색과 정책 최적화의 분리 — 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;600&display=swap');
+
+  :root {
+    --bg-dark: #0a0e27;
+    --bg-card: #121633;
+    --accent: #00d4ff;
+    --accent2: #7b61ff;
+    --accent3: #ff6b9d;
+    --accent4: #00e68a;
+    --text: #e8eaf6;
+    --text-dim: #8b8fb0;
+    --grad1: linear-gradient(135deg, #00d4ff, #7b61ff);
+    --grad2: linear-gradient(135deg, #7b61ff, #ff6b9d);
+    --grad3: linear-gradient(135deg, #00e68a, #00d4ff);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background decoration */
+  .slide::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    right: -30%;
+    width: 80vw;
+    height: 80vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(123,97,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* Typography */
+  .slide-number {
+    position: absolute;
+    top: 24px; right: 32px;
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .gradient-text {
+    background: var(--grad1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-2 {
+    background: var(--grad2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-3 {
+    background: var(--grad3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 6px;
+  }
+
+  .tag-blue { background: rgba(0,212,255,0.15); color: var(--accent); border: 1px solid rgba(0,212,255,0.3); }
+  .tag-purple { background: rgba(123,97,255,0.15); color: var(--accent2); border: 1px solid rgba(123,97,255,0.3); }
+  .tag-pink { background: rgba(255,107,157,0.15); color: var(--accent3); border: 1px solid rgba(255,107,157,0.3); }
+  .tag-green { background: rgba(0,230,138,0.15); color: var(--accent4); border: 1px solid rgba(0,230,138,0.3); }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.2s;
+  }
+
+  .card:hover { transform: translateY(-2px); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Lists */
+  ul { list-style: none; padding: 0; }
+
+  ul li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--grad1);
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: center;
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .flow-box.highlight {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0,212,255,0.15);
+  }
+
+  .flow-box.highlight2 {
+    border-color: var(--accent2);
+    box-shadow: 0 0 20px rgba(123,97,255,0.15);
+  }
+
+  .flow-box.highlight3 {
+    border-color: var(--accent4);
+    box-shadow: 0 0 20px rgba(0,230,138,0.15);
+  }
+
+  .flow-box .label {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .flow-box .title {
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-weight: 700;
+  }
+
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+  }
+
+  .compare-table th {
+    background: rgba(123,97,255,0.12);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(123,97,255,0.3);
+  }
+
+  .compare-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .compare-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .win { color: var(--accent4); font-weight: 700; }
+  .lose { color: var(--text-dim); }
+
+  /* Bar chart */
+  .bar-chart {
+    margin: 20px 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+
+  .bar-label {
+    min-width: 120px;
+    font-size: clamp(0.72rem, 1.3vw, 0.9rem);
+    text-align: right;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+    font-weight: 600;
+    color: #fff;
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.b1 { background: var(--grad1); }
+  .bar-fill.b2 { background: var(--grad2); }
+  .bar-fill.b3 { background: var(--grad3); }
+  .bar-fill.b4 { background: linear-gradient(135deg, #ff6b9d, #ffb347); }
+
+  /* Diagram: Tree search */
+  .tree-svg { width: 100%; max-width: 600px; margin: 16px auto; display: block; }
+
+  /* Highlight box */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,97,255,0.08));
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  .highlight-box p {
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    color: var(--text);
+  }
+
+  /* Two-column */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 16px;
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(18,22,51,0.9);
+    backdrop-filter: blur(12px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(0,212,255,0.15);
+    border-color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(0,212,255,0.5);
+    transform: scale(1.3);
+  }
+
+  /* Progress bar */
+  .progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--grad1);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Keyboard hint */
+  .kbd-hint {
+    position: fixed;
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    opacity: 0.4;
+    z-index: 99;
+  }
+
+  /* Stagger animation */
+  .stagger > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .slide.active .stagger > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.1s; }
+  .slide.active .stagger > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.2s; }
+  .slide.active .stagger > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.3s; }
+  .slide.active .stagger > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.4s; }
+  .slide.active .stagger > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.5s; }
+  .slide.active .stagger > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.6s; }
+  .slide.active .stagger > *:nth-child(7) { opacity: 1; transform: none; transition-delay: 0.7s; }
+  .slide.active .stagger > *:nth-child(8) { opacity: 1; transform: none; transition-delay: 0.8s; }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+  .pulse { animation: pulse 2s infinite; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 36px 100px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; gap: 20px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .bar-label { min-width: 80px; }
+    .compare-table { font-size: clamp(0.68rem, 1.4vw, 0.85rem); }
+    .compare-table th, .compare-table td { padding: 8px 10px; }
+    .kbd-hint { display: none; }
+    .nav-dots { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 28px 20px 96px; }
+    h1 { margin-bottom: 16px; }
+    h2 { margin-bottom: 14px; }
+    .card { padding: 18px; border-radius: 12px; }
+    .flow-box { padding: 14px 16px; min-width: 100px; }
+    .highlight-box { padding: 14px 16px; }
+    .bar-row { gap: 8px; }
+    .bar-label { min-width: 65px; font-size: 0.7rem; }
+    .bar-track { height: 22px; }
+    .nav { padding: 6px 12px; gap: 10px; bottom: 16px; }
+    .nav-btn { width: 44px; height: 44px; }
+    .slide-number { top: 12px; right: 16px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 20px 14px 90px; }
+    .card { padding: 14px; }
+    .flow-box { padding: 10px 12px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 1rem; }
+    .compare-table th, .compare-table td { padding: 6px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ===== SLIDE 1: Title ===== -->
+<div class="slide-container" id="slideContainer">
+
+<div class="slide active" data-slide="0">
+  <span class="slide-number">01 / 12</span>
+  <div class="stagger">
+    <div style="margin-bottom:16px;">
+      <span class="tag tag-blue">arXiv: 2603.22273</span>
+      <span class="tag tag-purple">강화학습</span>
+      <span class="tag tag-pink">탐색</span>
+    </div>
+    <h1>탐색과 정책 최적화의 <span class="gradient-text">분리</span></h1>
+    <h2 style="font-weight:400; font-size:clamp(1rem,2.5vw,1.6rem); color:var(--text-dim);">
+      불확실성 기반 트리 탐색을 활용한<br>어려운 탐색 문제 해결
+    </h2>
+    <p style="margin-top:32px; color:var(--text-dim); font-size:clamp(0.8rem,1.4vw,1rem);">
+      Zakaria Mhammedi &amp; James Cohan &nbsp;·&nbsp; 2026
+    </p>
+    <div class="highlight-box" style="margin-top:28px; max-width:700px;">
+      <p>정책 최적화(RL) 없이 트리 탐색만으로 효율적 탐색을 달성하고, 발견된 궤적을 지도학습으로 정책에 증류하는 새로운 패러다임을 제안합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 2: 문제 제기 ===== -->
+<div class="slide" data-slide="1">
+  <span class="slide-number">02 / 12</span>
+  <div class="stagger">
+    <h3>배경</h3>
+    <h2>강화학습 탐색의 <span class="gradient-text-2">근본적 한계</span></h2>
+    <div class="card-grid cols-2" style="margin-top:12px;">
+      <div class="card">
+        <span class="card-icon">🔍</span>
+        <h3 style="color:var(--accent3);">기존 접근법</h3>
+        <p>내재적 동기부여(Intrinsic Motivation)를 사용하여 RL 에이전트를 훈련 — 외재적 보상 + 내재적 보상의 복합 목적함수를 최적화</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚠️</span>
+        <h3 style="color:var(--accent3);">핵심 문제</h3>
+        <p>정책 최적화 장치(경사 업데이트, 가치 함수 근사, 리플레이 버퍼)는 정밀한 작업 수행에 필요하지만, 단순 상태 범위 확장에는 <strong>과도한 오버헤드</strong></p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:20px;">
+      <p><strong>핵심 통찰:</strong> 탐색(Exploration)과 활용(Exploitation)은 근본적으로 다른 문제 — 탐색에는 더 직접적이고 단순한 메커니즘이 적합하다</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 3: 핵심 아이디어 ===== -->
+<div class="slide" data-slide="2">
+  <span class="slide-number">03 / 12</span>
+  <div class="stagger">
+    <h3>핵심 제안</h3>
+    <h2>탐색과 활용의 <span class="gradient-text">명시적 분리</span></h2>
+    <div class="flow" style="margin:32px 0;">
+      <div class="flow-box highlight">
+        <div class="title" style="color:var(--accent);">1단계: 탐색</div>
+        <div class="label">RL 없이 트리 탐색</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight2">
+        <div class="title" style="color:var(--accent2);">궤적 발견</div>
+        <div class="label">정보가 풍부한 경로</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight3">
+        <div class="title" style="color:var(--accent4);">2단계: 증류</div>
+        <div class="label">지도학습으로 정책화</div>
+      </div>
+    </div>
+    <ul>
+      <li><strong>탐색 단계:</strong> 정책 경사도, 가치 함수, 보상 구성 없이 순수 트리 탐색으로 상태 공간 확장</li>
+      <li><strong>증류 단계:</strong> 발견된 궤적을 역방향 지도학습(Backward Learning)으로 배포 가능한 정책에 학습</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== SLIDE 4: GWTW 알고리즘 ===== -->
+<div class="slide" data-slide="3">
+  <span class="slide-number">04 / 12</span>
+  <div class="stagger">
+    <h3>탐색 알고리즘</h3>
+    <h2><span class="gradient-text">Go-With-The-Winner</span> 트리 탐색</h2>
+    <p class="subtitle" style="margin-bottom:20px;">GWTW(Aldous & Vazirani, 1994)에서 영감을 받은 집단 기반 확률적 탐색</p>
+    <div class="card-grid cols-3">
+      <div class="card" style="border-top:3px solid var(--accent);">
+        <h3 style="color:var(--accent);">1. 집단 유지</h3>
+        <p>여러 부분 궤적(partial trajectories)의 집단을 동시에 유지·확장</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent2);">
+        <h3 style="color:var(--accent2);">2. 평가 & 선별</h3>
+        <p>인식론적 불확실성(epistemic uncertainty)으로 각 궤적의 정보 가치를 평가</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent4);">
+        <h3 style="color:var(--accent4);">3. 복제 & 가지치기</h3>
+        <p>"승자" 궤적을 복제·분기하고, 유망하지 않은 궤적은 제거</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:20px;">
+      <p>정책 최적화의 노이즈(정책 경사도 분산, 가치 함수 근사 오차, 보상 신호 혼합)를 완전히 제거 → <strong>탐색 효율 10배 향상</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 5: 불확실성 가이드 ===== -->
+<div class="slide" data-slide="4">
+  <span class="slide-number">05 / 12</span>
+  <div class="stagger">
+    <h3>탐색 신호</h3>
+    <h2><span class="gradient-text-2">인식론적 불확실성</span> 기반 탐색 유도</h2>
+    <div class="two-col">
+      <div>
+        <ul>
+          <li><strong>인식론적 불확실성(Epistemic Uncertainty)</strong>: 데이터 부족으로 인한 모델의 불확실성 — 새로운 데이터 수집으로 줄일 수 있음</li>
+          <li><strong>측정 방법:</strong> 신경망 앙상블(ensemble)의 예측 불일치를 통해 추정</li>
+          <li><strong>탐색 기준:</strong> 불확실성이 높은 상태로 이어지는 궤적 = 가장 정보가 풍부한 경로</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card" style="border-left:3px solid var(--accent2); background:rgba(123,97,255,0.06);">
+          <h3 style="color:var(--accent2);">기존 내재적 보상과의 차이</h3>
+          <p style="margin-bottom:8px;">RND, ICM 등의 내재적 보상은 RL 목적함수에 혼합되어 최적화 복잡도를 증가시킴</p>
+          <p>본 방법의 불확실성 측정은 트리 탐색의 <strong>가지치기 기준</strong>으로만 사용 — 경사도 계산 불필요</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 6: 역방향 학습 ===== -->
+<div class="slide" data-slide="5">
+  <span class="slide-number">06 / 12</span>
+  <div class="stagger">
+    <h3>정책 증류</h3>
+    <h2>역방향 <span class="gradient-text-3">지도학습</span>으로 정책 추출</h2>
+    <div class="flow">
+      <div class="flow-box">
+        <div class="title">발견된 궤적</div>
+        <div class="label">트리 탐색 결과</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight2">
+        <div class="title" style="color:var(--accent2);">역방향 학습</div>
+        <div class="label">Backward Learning</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box highlight3">
+        <div class="title" style="color:var(--accent4);">배포 가능한 정책</div>
+        <div class="label">Deployable Policy</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2" style="margin-top:12px;">
+      <div class="card">
+        <h3 style="color:var(--accent4);">역방향 학습이란?</h3>
+        <p>목표 상태에서 시작 상태 방향으로 점진적으로 모방 학습을 확장하는 지도학습 기법 (Salimans & Chen, 2018)</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent4);">장점</h3>
+        <p>RL 미세 조정의 불안정성과 샘플 비효율성을 완전히 회피 — 깨끗한 분리: 먼저 좋은 궤적을 찾고, 그 다음 모방</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 7: 기존 방법 비교 ===== -->
+<div class="slide" data-slide="6">
+  <span class="slide-number">07 / 12</span>
+  <div class="stagger">
+    <h3>비교 분석</h3>
+    <h2>기존 <span class="gradient-text">탐색 방법</span>과의 차이</h2>
+    <table class="compare-table">
+      <thead>
+        <tr><th>특성</th><th>내재적 동기부여 (RND 등)</th><th>Go-Explore</th><th class="win">본 논문 (UGTS)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>탐색에 RL 사용</td><td>예 (필수)</td><td>아니오</td><td class="win">아니오</td></tr>
+        <tr><td>탐색 메커니즘</td><td>보상 혼합</td><td>아카이브 기반 셀</td><td class="win">불확실성 트리 탐색</td></tr>
+        <tr><td>탐색 신호</td><td>예측 오차/카운트</td><td>셀 방문 횟수</td><td class="win">인식론적 불확실성</td></tr>
+        <tr><td>도메인 지식 필요</td><td>최소</td><td>셀 설계 필요</td><td class="win">불필요</td></tr>
+        <tr><td>연속 행동 공간</td><td>가능</td><td>제한적</td><td class="win">가능 (이미지 입력)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SLIDE 8: Atari 결과 ===== -->
+<div class="slide" data-slide="7">
+  <span class="slide-number">08 / 12</span>
+  <div class="stagger">
+    <h3>실험 결과 — Atari</h3>
+    <h2>어려운 탐색 <span class="gradient-text-2">벤치마크 성과</span></h2>
+    <p class="subtitle" style="margin-bottom:8px;">도메인 지식 없이 SOTA 달성 (큰 차이로 기존 기록 갱신)</p>
+    <div class="bar-chart">
+      <p style="font-size:clamp(0.75rem,1.3vw,0.9rem); color:var(--text-dim); margin-bottom:16px; font-weight:600;">Montezuma's Revenge</p>
+      <div class="bar-row">
+        <div class="bar-label">RND</div>
+        <div class="bar-track"><div class="bar-fill b2" style="--w:22%;">~11K</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Go-Explore</div>
+        <div class="bar-track"><div class="bar-fill b4" style="--w:55%;">~43K</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Agent57</div>
+        <div class="bar-track"><div class="bar-fill b4" style="--w:60%;">~47K</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:var(--accent); font-weight:700;">본 논문</div>
+        <div class="bar-track"><div class="bar-fill b1" style="--w:95%;">SOTA ↑↑</div></div>
+      </div>
+    </div>
+    <div class="card-grid cols-2" style="margin-top:8px;">
+      <div class="card" style="text-align:center; border:1px solid rgba(255,107,157,0.2);">
+        <h3 style="color:var(--accent3);">Pitfall!</h3>
+        <p><span class="win" style="font-size:1.3rem;">SOTA</span> 큰 차이로 달성</p>
+      </div>
+      <div class="card" style="text-align:center; border:1px solid rgba(0,230,138,0.2);">
+        <h3 style="color:var(--accent4);">Venture</h3>
+        <p><span class="win" style="font-size:1.3rem;">SOTA</span> 큰 차이로 달성</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 9: 탐색 효율성 ===== -->
+<div class="slide" data-slide="8">
+  <span class="slide-number">09 / 12</span>
+  <div class="stagger">
+    <h3>핵심 결과</h3>
+    <h2>탐색 효율 <span class="gradient-text-3">10배 향상</span></h2>
+    <div class="card" style="max-width:650px; margin:20px auto; text-align:center; border:1px solid rgba(0,230,138,0.2); padding:32px;">
+      <div style="font-size:clamp(2.5rem,6vw,4.5rem); font-weight:900; background:var(--grad3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">10×</div>
+      <p style="font-size:clamp(1rem,2vw,1.3rem); margin-top:12px;">내재적 동기부여 기반 방법 대비<br><strong>탐색 효율 향상</strong></p>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card">
+        <h3 style="color:var(--accent);">왜 더 효율적인가?</h3>
+        <ul>
+          <li>정책 경사도 분산 제거</li>
+          <li>가치 함수 근사 오차 없음</li>
+          <li>보상 신호 혼합 불필요</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent2);">직접적 장점</h3>
+        <ul>
+          <li>더 적은 환경 상호작용</li>
+          <li>더 빠른 상태 공간 탐색</li>
+          <li>계산 자원 절약</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 10: 연속 제어 결과 ===== -->
+<div class="slide" data-slide="9">
+  <span class="slide-number">10 / 12</span>
+  <div class="stagger">
+    <h3>실험 결과 — 연속 제어</h3>
+    <h2>MuJoCo <span class="gradient-text-2">최초 달성</span> 기록</h2>
+    <p class="subtitle" style="margin-bottom:20px;">고차원 연속 행동 공간에서의 범용성 검증</p>
+    <div class="card-grid cols-2">
+      <div class="card" style="border-top:3px solid var(--accent2);">
+        <span class="card-icon">🤖</span>
+        <h3 style="color:var(--accent2);">Adroit 손재주 조작</h3>
+        <p>24-DOF 로봇 손으로 펜 회전, 문 열기, 망치질 등 고난도 조작 과제 해결</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent4);">
+        <span class="card-icon">🐜</span>
+        <h3 style="color:var(--accent4);">AntMaze 미로 탐색</h3>
+        <p>개미 로봇이 복잡한 미로를 탐색하여 목표 지점 도달</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:16px;">
+      <p><strong>최초 달성:</strong> 다음 조건을 모두 만족하며 해결 — 이전에 달성된 적 없음</p>
+    </div>
+    <div class="card-grid cols-2" style="margin-top:8px;">
+      <div class="card" style="text-align:center; padding:14px;">
+        <p style="font-weight:700; color:var(--accent);">희소 보상</p>
+        <p style="font-size:0.85rem; color:var(--text-dim);">이진 성공/실패만</p>
+      </div>
+      <div class="card" style="text-align:center; padding:14px;">
+        <p style="font-weight:700; color:var(--accent2);">이미지 관측</p>
+        <p style="font-size:0.85rem; color:var(--text-dim);">고유 수용감각 아닌 시각</p>
+      </div>
+      <div class="card" style="text-align:center; padding:14px;">
+        <p style="font-weight:700; color:var(--accent3);">전문가 시연 없음</p>
+        <p style="font-size:0.85rem; color:var(--text-dim);">처음부터 스스로 학습</p>
+      </div>
+      <div class="card" style="text-align:center; padding:14px;">
+        <p style="font-weight:700; color:var(--accent4);">오프라인 데이터 없음</p>
+        <p style="font-size:0.85rem; color:var(--text-dim);">사전 수집 데이터 불필요</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 11: 기여 요약 ===== -->
+<div class="slide" data-slide="10">
+  <span class="slide-number">11 / 12</span>
+  <div class="stagger">
+    <h3>기여 요약</h3>
+    <h2>5가지 <span class="gradient-text">핵심 기여</span></h2>
+    <div style="margin-top:16px;">
+      <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent); display:flex; gap:16px; align-items:flex-start;">
+        <span style="font-size:1.5rem; font-weight:900; color:var(--accent); flex-shrink:0;">01</span>
+        <p><strong>새로운 패러다임:</strong> 탐색에 RL을 사용하는 것에 반대를 주장하고, 트리 탐색이 더 자연스러운 방법임을 제안</p>
+      </div>
+      <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent2); display:flex; gap:16px; align-items:flex-start;">
+        <span style="font-size:1.5rem; font-weight:900; color:var(--accent2); flex-shrink:0;">02</span>
+        <p><strong>GWTW + 불확실성:</strong> Go-With-The-Winner 집단 기반 탐색과 신경망 인식론적 불확실성 추정의 새로운 결합</p>
+      </div>
+      <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent3); display:flex; gap:16px; align-items:flex-start;">
+        <span style="font-size:1.5rem; font-weight:900; color:var(--accent3); flex-shrink:0;">03</span>
+        <p><strong>10배 효율 향상:</strong> 어려운 Atari 탐색 벤치마크에서 내재적 동기부여 방법 대비 한 차수 높은 탐색 효율 달성</p>
+      </div>
+      <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent4); display:flex; gap:16px; align-items:flex-start;">
+        <span style="font-size:1.5rem; font-weight:900; color:var(--accent4); flex-shrink:0;">04</span>
+        <p><strong>Atari SOTA:</strong> Montezuma's Revenge, Pitfall!, Venture에서 도메인 지식 없이 큰 차이로 최고 성능 달성</p>
+      </div>
+      <div class="card" style="margin-bottom:12px; border-left:4px solid var(--text-dim); display:flex; gap:16px; align-items:flex-start;">
+        <span style="font-size:1.5rem; font-weight:900; color:var(--text-dim); flex-shrink:0;">05</span>
+        <p><strong>연속 제어 최초 달성:</strong> Adroit & AntMaze에서 희소 보상 + 이미지 관측 + 데모/데이터 없이 해결 (역사상 최초)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 12: 결론 ===== -->
+<div class="slide" data-slide="11">
+  <span class="slide-number">12 / 12</span>
+  <div class="stagger">
+    <h3>결론 및 시사점</h3>
+    <h2><span class="gradient-text-3">탐색의 미래</span></h2>
+    <div class="highlight-box" style="margin:20px 0; border-left-color:var(--accent4);">
+      <p style="font-size:clamp(1rem,2vw,1.3rem); font-weight:500;">"효율적 자율 탐색은 여전히 미해결 문제이다. 우리는 이 문제를 해결하기 위해 RL이 아닌 트리 탐색이 더 적합하다는 것을 실증적으로 보여주었다."</p>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card">
+        <h3 style="color:var(--accent);">핵심 메시지</h3>
+        <ul>
+          <li>탐색 ≠ 정책 최적화</li>
+          <li>단순한 접근이 복잡한 RL보다 효과적</li>
+          <li>불확실성이 강력한 탐색 신호</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent2);">향후 영향</h3>
+        <ul>
+          <li>로봇 공학에서의 자율 탐색</li>
+          <li>과학적 발견 자동화</li>
+          <li>범용 AI 에이전트의 탐색 능력</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:28px; text-align:center; color:var(--text-dim); font-size:clamp(0.75rem,1.3vw,0.9rem);">
+      논문 전문: <span style="color:var(--accent);">arXiv:2603.22273</span> &nbsp;·&nbsp; Zakaria Mhammedi & James Cohan, 2026
+    </p>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<!-- Navigation -->
+<div class="kbd-hint">← → 또는 스와이프로 탐색</div>
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>‹</button>
+  <div class="nav-dots" id="navDots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">›</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotsContainer = document.getElementById('navDots');
+  const progress = document.getElementById('progress');
+
+  // Create dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === current) s.classList.add('active');
+      else if (i < current) s.classList.add('exit-left');
+    });
+    document.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) { current = next; updateUI(); }
+  }
+
+  function goToSlide(i) {
+    current = i; updateUI();
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch / Swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+</script>
+</body>
+</html>

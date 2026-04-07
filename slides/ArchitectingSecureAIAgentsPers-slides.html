@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>보안 AI 에이전트 아키텍처 설계</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--card:#1a2035;
+  --accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;
+  --warn:#f59e0b;--danger:#ef4444;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --radius:12px;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow:hidden;height:100vh;width:100vw;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Slide Container */
+.deck{position:relative;width:100%;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;flex-direction:column;
+  padding:clamp(20px,4vw,60px);
+  overflow-y:auto;overflow-x:hidden;
+  opacity:0;transform:translateX(60px);
+  transition:opacity .5s ease,transform .5s ease;
+  pointer-events:none;
+  -webkit-overflow-scrolling:touch;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.prev{opacity:0;transform:translateX(-60px)}
+
+/* Typography */
+h1{font-size:clamp(1.5rem,4vw,3rem);font-weight:800;line-height:1.2;margin-bottom:.5em}
+h2{font-size:clamp(1.2rem,3vw,2.2rem);font-weight:700;line-height:1.3;margin-bottom:.5em}
+h3{font-size:clamp(1rem,2.5vw,1.5rem);font-weight:600;margin-bottom:.4em}
+p,.desc{font-size:clamp(.85rem,2vw,1.1rem);line-height:1.7;color:var(--text2)}
+.small{font-size:clamp(.75rem,1.8vw,.95rem);color:var(--text3)}
+
+/* Accent colors */
+.accent{color:var(--accent)}
+.accent2{color:var(--accent2)}
+.accent3{color:var(--accent3)}
+.warn{color:var(--warn)}
+.danger{color:var(--danger)}
+
+/* Glow title */
+.glow{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Cards & Boxes */
+.card{
+  background:var(--card);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--radius);padding:clamp(12px,2.5vw,24px);
+  margin-bottom:clamp(8px,1.5vw,16px);
+}
+.card.border-accent{border-left:3px solid var(--accent)}
+.card.border-purple{border-left:3px solid var(--accent2)}
+.card.border-green{border-left:3px solid var(--accent3)}
+.card.border-warn{border-left:3px solid var(--warn)}
+.card.border-danger{border-left:3px solid var(--danger)}
+
+/* Grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,2vw,20px)}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(8px,2vw,20px)}
+
+/* Tags */
+.tag{
+  display:inline-block;padding:4px 12px;border-radius:20px;
+  font-size:clamp(.65rem,1.5vw,.8rem);font-weight:600;
+  margin:3px 4px 3px 0;
+}
+.tag-cyan{background:rgba(0,212,255,.15);color:var(--accent)}
+.tag-purple{background:rgba(124,58,237,.15);color:var(--accent2)}
+.tag-green{background:rgba(16,185,129,.15);color:var(--accent3)}
+.tag-warn{background:rgba(245,158,11,.15);color:var(--warn)}
+.tag-danger{background:rgba(239,68,68,.15);color:var(--danger)}
+
+/* Diagram boxes */
+.arch-box{
+  background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(124,58,237,.08));
+  border:1px solid rgba(0,212,255,.2);border-radius:8px;
+  padding:clamp(8px,2vw,16px);text-align:center;
+  font-size:clamp(.75rem,1.8vw,1rem);font-weight:600;
+}
+.arch-arrow{
+  text-align:center;color:var(--accent);
+  font-size:clamp(1rem,2.5vw,1.5rem);padding:4px 0;
+}
+
+/* Flow horizontal */
+.flow{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:clamp(4px,1vw,12px);justify-content:center;
+  margin:clamp(8px,2vw,16px) 0;
+}
+.flow-item{
+  background:var(--card);border:1px solid rgba(0,212,255,.2);
+  border-radius:8px;padding:clamp(6px,1.5vw,14px) clamp(10px,2vw,20px);
+  font-size:clamp(.7rem,1.6vw,.9rem);font-weight:600;text-align:center;
+  min-width:clamp(60px,15vw,120px);
+}
+.flow-arrow{color:var(--accent);font-size:clamp(.9rem,2vw,1.3rem)}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;margin:clamp(8px,2vw,16px) 0;font-size:clamp(.7rem,1.6vw,.9rem)}
+.tbl th{background:rgba(0,212,255,.1);color:var(--accent);text-align:left;padding:clamp(6px,1.5vw,12px);border-bottom:2px solid rgba(0,212,255,.2)}
+.tbl td{padding:clamp(6px,1.5vw,12px);border-bottom:1px solid rgba(255,255,255,.05);color:var(--text2)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+
+/* Progress bar */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .4s ease;z-index:100;
+}
+
+/* Navigation */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:clamp(8px,2vw,16px) clamp(16px,3vw,32px);
+  background:linear-gradient(transparent,rgba(10,14,26,.95));
+  z-index:50;
+}
+.nav-btn{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+  color:var(--text);border-radius:8px;
+  min-width:48px;min-height:48px;
+  padding:clamp(10px,2vw,14px) clamp(16px,3vw,28px);
+  font-size:clamp(.8rem,2vw,1rem);font-weight:600;
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.nav-btn:hover,.nav-btn:active{background:rgba(0,212,255,.15);border-color:var(--accent)}
+.nav-btn:disabled{opacity:.3;pointer-events:none}
+.nav-counter{
+  font-size:clamp(.75rem,1.8vw,.95rem);color:var(--text3);
+  font-variant-numeric:tabular-nums;
+}
+
+/* Slide-specific */
+.title-slide{justify-content:center;align-items:center;text-align:center}
+.title-slide h1{font-size:clamp(1.6rem,5vw,3.5rem);margin-bottom:.3em}
+.title-meta{margin-top:clamp(16px,3vw,32px)}
+
+.icon-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:clamp(28px,4vw,40px);height:clamp(28px,4vw,40px);
+  border-radius:50%;font-weight:800;font-size:clamp(.75rem,1.8vw,1rem);
+  flex-shrink:0;margin-right:clamp(8px,1.5vw,12px);
+}
+.icon-num.cyan{background:rgba(0,212,255,.15);color:var(--accent)}
+.icon-num.purple{background:rgba(124,58,237,.15);color:var(--accent2)}
+.icon-num.green{background:rgba(16,185,129,.15);color:var(--accent3)}
+.icon-num.warn{background:rgba(245,158,11,.15);color:var(--warn)}
+
+.flex-row{display:flex;align-items:flex-start;margin-bottom:clamp(6px,1.5vw,12px)}
+
+/* Shield icon CSS */
+.shield{
+  width:clamp(48px,10vw,80px);height:clamp(48px,10vw,80px);
+  margin:0 auto clamp(12px,2vw,24px);
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  clip-path:polygon(50% 0%,100% 25%,100% 65%,50% 100%,0% 65%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.shield::after{
+  content:'🛡️';font-size:clamp(20px,5vw,36px);
+  position:absolute;
+}
+
+/* Comparison columns */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(8px,2vw,16px);align-items:start}
+.vs-divider{
+  width:2px;background:linear-gradient(var(--accent),var(--accent2));
+  min-height:100px;align-self:stretch;border-radius:2px;
+}
+
+/* Animated highlight */
+@keyframes pulse-border{
+  0%,100%{border-color:rgba(0,212,255,.2)}
+  50%{border-color:rgba(0,212,255,.6)}
+}
+.pulse{animation:pulse-border 2s infinite}
+
+/* Spacer */
+.spacer{flex:1;min-height:clamp(8px,2vw,20px)}
+
+/* Slide bottom padding for nav */
+.slide{padding-bottom:clamp(70px,12vw,100px)}
+
+/* Responsive */
+@media(max-width:768px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .vs{grid-template-columns:1fr;gap:12px}
+  .vs-divider{width:100%;height:2px;min-height:auto}
+  .flow{gap:6px}
+  .flow-item{min-width:auto;padding:8px 12px}
+  .slide{padding:clamp(16px,3vw,40px);padding-bottom:80px}
+}
+@media(max-width:480px){
+  .slide{padding:20px;padding-bottom:80px}
+  .card{padding:12px}
+  .nav{padding:10px 16px}
+  .nav-btn{min-width:44px;min-height:44px;padding:10px 14px}
+  .tbl{font-size:.7rem}
+  .tbl th,.tbl td{padding:6px 4px}
+}
+@media(max-width:320px){
+  h1{font-size:1.3rem}
+  h2{font-size:1.1rem}
+  .slide{padding:14px;padding-bottom:75px}
+  .card{padding:10px}
+  .tag{padding:3px 8px;font-size:.6rem}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+<!-- Slide 1: Title -->
+<div class="slide title-slide active" data-slide="0">
+  <div class="shield"></div>
+  <h1 class="glow">보안 AI 에이전트<br>아키텍처 설계</h1>
+  <p style="max-width:700px;margin:0 auto">간접 프롬프트 주입 공격에 대한<br>시스템 수준 방어 전략</p>
+  <div class="title-meta">
+    <div class="small" style="margin-bottom:8px">Xiang, Zagieboylo, Ghosh, Kariyappa, Greshake, Xiao, Xiao, Suh</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <span class="tag tag-cyan">NVIDIA</span>
+      <span class="tag tag-purple">Johns Hopkins</span>
+      <span class="tag tag-green">arXiv 2603.30016</span>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 2: Problem -->
+<div class="slide" data-slide="1">
+  <h2><span class="danger">&#x26A0;</span> 문제 정의: 간접 프롬프트 주입</h2>
+  <p style="margin-bottom:clamp(12px,2vw,24px)">LLM 기반 AI 에이전트가 처리하는 <strong class="accent">비신뢰 데이터</strong>에 악성 명령이 삽입되어 위험한 행동을 유발하는 공격</p>
+
+  <div class="card border-danger">
+    <h3 class="danger">공격 시나리오</h3>
+    <p>이메일, 웹페이지, 도구 출력물 등에 악성 지시가 포함 → 에이전트가 이를 정상 명령으로 인식하고 실행</p>
+  </div>
+
+  <div class="grid2" style="margin-top:clamp(8px,2vw,16px)">
+    <div class="card border-warn">
+      <h3>예시 1</h3>
+      <p class="small">이메일 본문에 숨겨진 지시: <em>"모든 연락처에 스팸 발송"</em></p>
+    </div>
+    <div class="card border-warn">
+      <h3>예시 2</h3>
+      <p class="small">웹페이지의 악성 코드: <em>"결제 금액을 10배로 변경"</em></p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto;background:rgba(239,68,68,.08)">
+    <p class="small" style="text-align:center"><strong class="danger">핵심 도전</strong>: 에이전트의 유용성을 유지하면서 악성 명령을 차단하는 것은 근본적 딜레마</p>
+  </div>
+</div>
+
+<!-- Slide 3: Defense Categories -->
+<div class="slide" data-slide="2">
+  <h2>기존 방어 전략 <span class="accent">3가지 분류</span></h2>
+  <p style="margin-bottom:clamp(12px,2vw,20px)">논문은 기존 방어를 세 가지 수준으로 분류합니다</p>
+
+  <div class="card border-purple" style="position:relative">
+    <div class="flex-row">
+      <span class="icon-num purple">1</span>
+      <div>
+        <h3 class="accent2">모델 수준 방어</h3>
+        <p class="small">보안 지향 미세조정 또는 내부 표현 분석을 통해 LLM 자체의 견고성 향상</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-accent">
+    <div class="flex-row">
+      <span class="icon-num cyan">2</span>
+      <div>
+        <h3 class="accent">텍스트 수준 방어</h3>
+        <p class="small">LLM 입출력에 대해 프롬프트 강화 또는 이상 텍스트 모니터링 수행</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-green pulse">
+    <div class="flex-row">
+      <span class="icon-num green">3</span>
+      <div>
+        <h3 class="accent3">시스템 수준 방어 ← 본 논문의 초점</h3>
+        <p class="small">에이전트를 완전한 컴퓨팅 시스템으로 취급, 의미론적 행동(도구 호출 시퀀스, 데이터 접근 패턴)을 분석하여 공격 탐지 및 보안 정책 집행</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: Architecture -->
+<div class="slide" data-slide="3">
+  <h2>제안 시스템 <span class="glow">아키텍처</span></h2>
+  <p style="margin-bottom:clamp(10px,2vw,20px)">6개 핵심 컴포넌트로 구성된 참조 아키텍처</p>
+
+  <div class="grid2">
+    <div class="arch-box">
+      <div class="accent" style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x1F3AF;</div>
+      <div><strong>오케스트레이터</strong></div>
+      <div class="small">사용자 작업에서 계획 및 정책 생성</div>
+    </div>
+    <div class="arch-box">
+      <div class="accent2" style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x2705;</div>
+      <div><strong>계획/정책 승인기</strong></div>
+      <div class="small">생성된 계획/정책 감독, 필요시 인간에게 상향 보고</div>
+    </div>
+    <div class="arch-box">
+      <div class="accent3" style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x2699;</div>
+      <div><strong>실행기</strong></div>
+      <div class="small">계획을 구체적 행동(도구 호출)으로 변환</div>
+    </div>
+    <div class="arch-box">
+      <div class="warn" style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x1F6E1;</div>
+      <div><strong>정책 집행기</strong></div>
+      <div class="small">현재 정책에 따라 행동 승인/차단</div>
+    </div>
+    <div class="arch-box">
+      <div style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x1F310;</div>
+      <div><strong>환경</strong></div>
+      <div class="small">승인된 행동 실행 후 응답 반환</div>
+    </div>
+    <div class="arch-box">
+      <div class="accent" style="font-size:clamp(1rem,2.5vw,1.4rem)">&#x1F504;</div>
+      <div><strong>피드백 루프</strong></div>
+      <div class="small">다음 반복을 위한 계획/정책 업데이트 트리거</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto;text-align:center;background:rgba(0,212,255,.05)">
+    <p class="small"><strong class="accent">7단계 실행 루프</strong>: 계획 생성 → 승인 → 실행 → 정책 검증 → 환경 실행 → 피드백 → 재계획</p>
+  </div>
+</div>
+
+<!-- Slide 5: Plan & Policy -->
+<div class="slide" data-slide="4">
+  <h2>계획과 정책의 <span class="accent">형식적 정의</span></h2>
+
+  <div class="card border-accent">
+    <h3 class="accent">계획 (Plan)</h3>
+    <p class="small" style="margin-bottom:8px"><strong>p := (e₁, ..., eT)</strong> &nbsp;각 실행 단계 <strong>e := (a, I, O)</strong></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag tag-cyan">a: 구체적 행동</span>
+      <span class="tag tag-cyan">I: 입력 객체</span>
+      <span class="tag tag-cyan">O: 출력 객체</span>
+    </div>
+    <p class="small" style="margin-top:8px">자연어 체크리스트부터 도메인 특화 언어(DSL)까지 다양한 수준으로 표현 가능</p>
+  </div>
+
+  <div class="card border-purple">
+    <h3 class="accent2">정책 (Policy)</h3>
+    <p class="small" style="margin-bottom:8px"><strong>π(eT) = 1</strong>이면 해당 단계 허용</p>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+      <div class="flex-row"><span class="icon-num purple" style="width:24px;height:24px;font-size:.7rem">1</span><span class="small">전역 정적 접근 제어 규칙</span></div>
+      <div class="flex-row"><span class="icon-num purple" style="width:24px;height:24px;font-size:.7rem">2</span><span class="small">작업별 최소 권한 원칙</span></div>
+      <div class="flex-row"><span class="icon-num purple" style="width:24px;height:24px;font-size:.7rem">3</span><span class="small">컨텍스트 의존적 보안 원칙</span></div>
+      <div class="flex-row"><span class="icon-num purple" style="width:24px;height:24px;font-size:.7rem">4</span><span class="small">격자 기반 정보 흐름 제어 (IFC)</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(124,58,237,.06)">
+    <p class="small"><strong class="accent2">표현 형식:</strong> 구조화된 JSON · 코드 수준 함수 · Cedar 등 정형 인가 언어</p>
+  </div>
+</div>
+
+<!-- Slide 6: Existing Defenses Comparison -->
+<div class="slide" data-slide="5">
+  <h2>기존 방어 체계 <span class="warn">비교 분석</span></h2>
+
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <table class="tbl">
+    <thead>
+      <tr><th>방어 체계</th><th>접근법</th><th>한계</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong class="accent">CaMeL</strong></td>
+        <td>계획-실행 격리; 계획 고정</td>
+        <td class="danger">동적 환경에서 작업 완료 불가</td>
+      </tr>
+      <tr>
+        <td><strong class="accent">Progent</strong></td>
+        <td>아키텍처 준수, 환경 피드백 직접 전달</td>
+        <td class="danger">적응적 공격에 취약</td>
+      </tr>
+      <tr>
+        <td><strong class="accent">PFI</strong></td>
+        <td>도구 응답을 자리표시자로 편집</td>
+        <td class="danger">유용성 저하; LLM 처리 어려움</td>
+      </tr>
+      <tr>
+        <td><strong class="accent">AgentArmor</strong></td>
+        <td>재계획 허용; IFC 기반 접근제어</td>
+        <td class="danger">LLM 판단기가 원시 텍스트에 노출</td>
+      </tr>
+      <tr>
+        <td><strong class="accent">DRIFT</strong></td>
+        <td>쿼리에서 계획 생성; 악성 텍스트 제거</td>
+        <td class="danger">적응적 공격자가 여전히 궤적 조작 가능</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="card" style="background:rgba(245,158,11,.06);margin-top:auto">
+    <p class="small" style="text-align:center"><strong class="warn">결론:</strong> 기존 방어들은 각각 유용성과 보안 사이의 트레이드오프에서 한계를 보임</p>
+  </div>
+</div>
+
+<!-- Slide 7: Position 1 -->
+<div class="slide" data-slide="6">
+  <h2><span class="icon-num cyan">1</span>동적 재계획과 정책 업데이트는 <span class="accent">필수</span></h2>
+
+  <div class="card border-accent">
+    <h3>왜 정적 계획은 실패하는가?</h3>
+    <div style="margin-top:10px">
+      <div class="card" style="background:rgba(0,212,255,.05)">
+        <p class="small"><strong class="accent">시나리오 1:</strong> 데이터 분석 에이전트가 HTTP 410 오류 발생 — API 엔드포인트 폐기됨. 엄격한 격리 하에서는 같은 호출을 반복하며 실패</p>
+      </div>
+      <div class="card" style="background:rgba(0,212,255,.05)">
+        <p class="small"><strong class="accent">시나리오 2:</strong> 코딩 에이전트의 반복적 디버깅 — 각 패치가 다음 실패를 변경하므로 사전 계획 수립 불가능</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-danger">
+    <h3 class="danger">보안 패러독스</h3>
+    <p class="small">재계획을 허용하면 비신뢰 환경 피드백이 에이전트 행동에 영향을 미침</p>
+    <p class="small" style="margin-top:6px"><strong>핵심 과제:</strong> 양성 업데이트와 악성 업데이트를 어떻게 구별할 것인가?</p>
+  </div>
+
+  <div class="card border-warn">
+    <h3 class="warn">정적 정책의 한계</h3>
+    <p class="small"><strong>너무 엄격:</strong> send_money 수신자를 프롬프트에서만 허용 → 인보이스/이메일의 정당한 수신자 차단</p>
+    <p class="small"><strong>너무 느슨:</strong> 수신자만 제약하고 금액은 제약하지 않으면 → 금액 변조 공격 가능</p>
+  </div>
+</div>
+
+<!-- Slide 8: Position 2 -->
+<div class="slide" data-slide="7">
+  <h2><span class="icon-num purple">2</span>LLM은 <span class="accent2">필수적이나 제약</span>이 필요</h2>
+
+  <div class="card border-purple">
+    <h3>프로그래매틱 검증만으로는 불충분</h3>
+    <p class="small">컴퓨터 비전 유사: 픽셀 수준의 수작업 규칙으로는 "고양이"와 "개"를 구별할 수 없듯이, 텍스트 수준의 수작업 규칙으로는 보안 의미론을 완전히 명세할 수 없음</p>
+  </div>
+
+  <div class="card border-danger" style="background:rgba(239,68,68,.05)">
+    <h3 class="danger">핵심 시스템 수준 통찰</h3>
+    <p class="small">모델이 공격자가 제어할 수 있는 <strong>원시 환경 텍스트에 직접 노출되지 않도록</strong> 설계해야 함</p>
+    <p class="small" style="margin-top:6px">비신뢰 피드백을 <strong class="accent">좁은 범위의 구조화된 산출물</strong>(유형화된 추적, 제안된 계획/정책 차이)로 변환 후 모델이 판단</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-item" style="border-color:var(--danger)">원시 텍스트</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="border-color:var(--warn)">구조화 변환</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="border-color:var(--accent3)">제약된 판단</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="border-color:var(--accent)">안전한 실행</div>
+  </div>
+</div>
+
+<!-- Slide 9: Proposal 1 -->
+<div class="slide" data-slide="8">
+  <h2>제안 1: 명령 인식과 실행의 <span class="accent">분리</span></h2>
+
+  <div class="card border-accent">
+    <h3>2단계 프로세스</h3>
+    <div class="flex-row" style="margin-top:10px">
+      <span class="icon-num cyan">1</span>
+      <p class="small">모델이 따르려는 명령을 <strong>명시적으로 언어화</strong></p>
+    </div>
+    <div class="flex-row">
+      <span class="icon-num cyan">2</span>
+      <p class="small">정책 집행기가 시스템 수준에서 <strong>결정을 적용</strong></p>
+    </div>
+  </div>
+
+  <h3 style="margin:clamp(8px,2vw,16px) 0 clamp(6px,1.5vw,12px)">정책 집행기의 3가지 모드</h3>
+
+  <div class="card border-danger">
+    <div class="flex-row">
+      <span class="icon-num" style="background:rgba(239,68,68,.15);color:var(--danger)">1</span>
+      <div>
+        <h3 class="small"><strong>모드 1: 완전 차단</strong></h3>
+        <p class="small">비신뢰 소스의 모든 명령 차단</p>
+      </div>
+    </div>
+  </div>
+  <div class="card border-warn">
+    <div class="flex-row">
+      <span class="icon-num warn">2</span>
+      <div>
+        <h3 class="small"><strong>모드 2: 사용자 확인</strong></h3>
+        <p class="small">외부 명령에 대해 명시적 사용자 확인 요구</p>
+      </div>
+    </div>
+  </div>
+  <div class="card border-green">
+    <div class="flex-row">
+      <span class="icon-num green">3</span>
+      <div>
+        <h3 class="small"><strong>모드 3: 최소 개입</strong></h3>
+        <p class="small">사전 선언된 기대치 + 구조화된 명령 심사 (오케스트레이터가 구조화된 상태를 유지, LLM 판단기는 원시 텍스트가 아닌 구조화된 상태만 확인)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Proposal 2 -->
+<div class="slide" data-slide="9">
+  <h2>제안 2: LLM 합성 <span class="accent3">단계별 검증기</span></h2>
+
+  <div class="card border-green">
+    <h3 class="accent3">핵심 아이디어</h3>
+    <p class="small">계획 단계에서 LLM을 사용하여 각 실행 단계에 대한 <strong>결정론적 검증 코드</strong>를 생성</p>
+  </div>
+
+  <div style="margin:clamp(12px,2vw,24px) 0">
+    <h3 style="margin-bottom:clamp(8px,1.5vw,12px)">동작 예시: 금융 데이터 웹 추출</h3>
+    <div class="flow">
+      <div class="flow-item" style="border-color:var(--accent3)">계획 단계</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item" style="border-color:var(--accent3)">검증기 생성</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item" style="border-color:var(--accent3)">런타임 적용</div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2)">
+    <h3 class="small accent3">LLM이 합성하는 검증기 명세</h3>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+      <div class="small">&#x2714; 특정 테이블 셀에서만 매출 데이터 추출</div>
+      <div class="small">&#x2714; 자유 형식 문단은 무시</div>
+      <div class="small">&#x2714; 숫자 형식 필수</div>
+      <div class="small">&#x2714; DOM 경로 인용 필수</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto;text-align:center">
+    <p class="small"><strong class="accent3">핵심 장점:</strong> 런타임에서 실행기가 적대적 텍스트를 전혀 보지 않고 검증기가 결정론적으로 실행</p>
+  </div>
+</div>
+
+<!-- Slide 11: Position 3 -->
+<div class="slide" data-slide="10">
+  <h2><span class="icon-num green">3</span>개인화와 <span class="accent3">인간 상호작용</span></h2>
+
+  <div class="card border-warn">
+    <h3 class="warn">의미론적 모호성</h3>
+    <p class="small"><em>"모든 긴급 이메일을 가져와"</em> — "긴급"의 정의는 사용자마다 다름</p>
+  </div>
+
+  <div class="card border-danger">
+    <h3 class="danger">목적 정렬 모호성</h3>
+    <p class="small">GitHub 이슈의 "재현 단계"에 <code>curl ... | bash</code> 포함 — 버그 재현에 필요해 보이지만 공격자 코드 실행 가능. 인간 개발자도 이런 실수를 함</p>
+  </div>
+
+  <div class="card border-green" style="background:rgba(16,185,129,.05)">
+    <h3 class="accent3">설계 시사점</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <div class="flex-row">
+        <span class="icon-num green" style="width:28px;height:28px;font-size:.7rem">&#x2714;</span>
+        <p class="small">인간 참여(Human-in-the-loop)는 <strong>사용 가능</strong>해야 함</p>
+      </div>
+      <div class="flex-row">
+        <span class="icon-num green" style="width:28px;height:28px;font-size:.7rem">&#x2714;</span>
+        <p class="small">시간이 지남에 따라 사용자 선호도를 <strong>학습</strong>해야 함</p>
+      </div>
+      <div class="flex-row">
+        <span class="icon-num green" style="width:28px;height:28px;font-size:.7rem">&#x2714;</span>
+        <p class="small">새로운 인간 비서의 온보딩 과정과 유사 — 처음에는 많은 질문, 점차 내재화</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 12: Benchmark Limitations -->
+<div class="slide" data-slide="11">
+  <h2>벤치마크의 <span class="warn">3가지 한계</span></h2>
+  <p style="margin-bottom:clamp(8px,2vw,16px)">불완전한 방어가 벤치마크에서 좋은 성능을 보이는 이유</p>
+
+  <div class="card border-warn">
+    <div class="flex-row">
+      <span class="icon-num warn">1</span>
+      <div>
+        <h3>동적 작업 부재</h3>
+        <p class="small">기존 벤치마크는 단순 3~4단계 작업만 다룸. AgentDojo는 97개 작업 중 6개만 재계획 필요. 런타임 오류, API 폐기 등을 모델링하지 않음</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-warn">
+    <div class="flex-row">
+      <span class="icon-num warn">2</span>
+      <div>
+        <h3>동적 공격 목표 부재</h3>
+        <p class="small">대부분의 공격이 정적 악성 도구 호출로의 행동 하이재킹에만 집중. 같은 도구 호출의 매개변수 조작이나 실행 조건 변경은 미고려</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-warn">
+    <div class="flex-row">
+      <span class="icon-num warn">3</span>
+      <div>
+        <h3>페이로드 최적화 부재</h3>
+        <p class="small">거의 모든 벤치마크 페이로드가 정적. 적응적 블랙박스 공격(RL 훈련 공격 모델, 반복 최적화)은 훨씬 더 효과적</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 13: Value of System-Level -->
+<div class="slide" data-slide="12">
+  <h2>시스템 수준 방어의 <span class="accent">가치</span></h2>
+
+  <div class="card border-accent">
+    <div class="flex-row">
+      <span class="icon-num cyan">1</span>
+      <div>
+        <h3>공격 표면 축소</h3>
+        <p class="small">구조화된 인터페이스가 의사결정자가 보는 것과 결정할 수 있는 것을 제한. 원시 공격자 제어 텍스트를 <strong class="accent">좁은 범위의 산출물</strong>로 대체</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-purple">
+    <div class="flex-row">
+      <span class="icon-num purple">2</span>
+      <div>
+        <h3>표적화된 연구 가능</h3>
+        <p class="small">구조화된 입력과 경계된 판단 작업은 모델 수준 및 인간 참여 연구를 더 다루기 쉽게 만들고 성공 기준을 명확히 함</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-green">
+    <div class="flex-row">
+      <span class="icon-num green">3</span>
+      <div>
+        <h3>설명 가능성과 심층 방어</h3>
+        <p class="small">구조화된 인터페이스를 통해 어떤 증거, 규칙, 판단이 각 행동으로 이어졌는지 추적 가능 → 체계적 실패 분석 지원</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto;text-align:center;background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(124,58,237,.06))">
+    <p class="small"><strong class="glow">비전:</strong> 시스템 수준 방어는 프로그래매틱 규칙, 모델 기반 결정, 인간 개입을 연결하는 "골격과 척추"</p>
+  </div>
+</div>
+
+<!-- Slide 14: Key Takeaways -->
+<div class="slide" data-slide="13">
+  <h2>핵심 시사점 <span class="glow">4가지</span></h2>
+
+  <div class="card border-accent">
+    <div class="flex-row">
+      <span class="icon-num cyan">1</span>
+      <p class="small">범용 에이전트에서 많은 계획 및 정책 결정은 <strong class="accent">본질적으로 컨텍스트 의존적</strong>. 이 적응성은 핵심 능력이자 중대한 보안 위험</p>
+    </div>
+  </div>
+
+  <div class="card border-purple">
+    <div class="flex-row">
+      <span class="icon-num purple">2</span>
+      <p class="small">LLM은 <strong class="accent2">형식화하기 어려운 부분에만</strong> 사용하고, 가능한 한 프로그래매틱 컴포넌트에 의존</p>
+    </div>
+  </div>
+
+  <div class="card border-green">
+    <div class="flex-row">
+      <span class="icon-num green">3</span>
+      <p class="small">LLM이 보안 결정을 내려야 할 때, <strong class="accent3">입력과 결정 범위를 엄격히 제약</strong>. 공격 표면을 줄이고 모델 견고성 연구를 촉진</p>
+    </div>
+  </div>
+
+  <div class="card border-warn">
+    <div class="flex-row">
+      <span class="icon-num warn">4</span>
+      <p class="small"><strong class="warn">인간 감독은 불가피</strong>, 특히 모호한 경우. 보안이나 유용성을 희생하지 않으면서 인간 개입 부담을 줄이는 것이 핵심 과제</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto;background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(124,58,237,.08));text-align:center">
+    <h3 class="glow" style="margin-bottom:6px">시스템-모델-인간 공동 설계</h3>
+    <p class="small">안전하고 유용한 에이전트 구축을 위한 통합적 비전</p>
+  </div>
+</div>
+
+<!-- Slide 15: Thank you -->
+<div class="slide title-slide" data-slide="14">
+  <div class="shield"></div>
+  <h1 class="glow">감사합니다</h1>
+  <p style="margin-bottom:clamp(16px,3vw,32px)">Architecting Secure AI Agents</p>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+    <span class="tag tag-cyan">시스템 수준 방어</span>
+    <span class="tag tag-purple">LLM 제약적 활용</span>
+    <span class="tag tag-green">인간 참여 설계</span>
+  </div>
+  <div class="title-meta">
+    <p class="small">arXiv: 2603.30016v1 | NVIDIA · Johns Hopkins University</p>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>
+    <span>&#x276E;</span> <span class="nav-label">이전</span>
+  </button>
+  <span class="nav-counter"><span id="currentSlide">1</span> / <span id="totalSlides">15</span></span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">
+    <span class="nav-label">다음</span> <span>&#x276F;</span>
+  </button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let current=0;
+const bar=document.getElementById('progressBar');
+const prevBtn=document.getElementById('prevBtn');
+const nextBtn=document.getElementById('nextBtn');
+const curLabel=document.getElementById('currentSlide');
+
+function show(n){
+  slides.forEach((s,i)=>{
+    s.classList.remove('active','prev');
+    if(i===n)s.classList.add('active');
+    else if(i<n)s.classList.add('prev');
+  });
+  current=n;
+  curLabel.textContent=n+1;
+  bar.style.width=((n+1)/total*100)+'%';
+  prevBtn.disabled=n===0;
+  nextBtn.disabled=n===total-1;
+}
+
+function navigate(d){show(Math.max(0,Math.min(total-1,current+d)))}
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')navigate(1);
+  else if(e.key==='ArrowLeft')navigate(-1);
+});
+
+// Touch swipe
+let tx=0,ty=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  const dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){
+    if(dx<0)navigate(1);else navigate(-1);
+  }
+},{passive:true});
+
+show(0);
+</script>
+</body>
+</html>

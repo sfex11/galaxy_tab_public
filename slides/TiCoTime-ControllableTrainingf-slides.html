@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>TiCo: Time-Controllable Training for Spoken Dialogue Models</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: #1a2235;
+    --accent: #38bdf8;
+    --accent2: #818cf8;
+    --accent3: #f472b6;
+    --accent4: #34d399;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --gradient1: linear-gradient(135deg, #38bdf8, #818cf8);
+    --gradient2: linear-gradient(135deg, #818cf8, #f472b6);
+    --gradient3: linear-gradient(135deg, #34d399, #38bdf8);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--gradient1);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ===== SLIDE COUNTER ===== */
+  .slide-counter {
+    position: fixed;
+    top: 16px; right: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    font-weight: 500;
+    z-index: 100;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-buttons {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(56,189,248,0.3);
+    background: rgba(17,24,39,0.85);
+    backdrop-filter: blur(10px);
+    color: var(--accent);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+  }
+
+  .nav-btn:hover { background: rgba(56,189,248,0.15); border-color: var(--accent); }
+  .nav-btn:active { transform: scale(0.92); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .gradient-text {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text2 {
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text3 {
+    background: var(--gradient3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.15rem);
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 750px;
+  }
+
+  .section-label {
+    font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(56,189,248,0.1);
+    border-radius: 14px;
+    padding: 22px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56,189,248,0.3);
+  }
+
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .card-text {
+    font-size: clamp(0.75rem, 1.4vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    width: 100%;
+    max-width: 850px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid rgba(56,189,248,0.12);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.4vw, 0.88rem);
+  }
+
+  thead { background: rgba(56,189,248,0.08); }
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+  tr:hover td { background: rgba(56,189,248,0.03); }
+
+  .highlight-row td {
+    color: var(--text-primary);
+    font-weight: 600;
+    background: rgba(56,189,248,0.06);
+  }
+
+  .best-val { color: var(--accent4) !important; font-weight: 700 !important; }
+
+  /* ===== PIPELINE / FLOW ===== */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 850px;
+  }
+
+  .pipe-step {
+    background: var(--bg-card);
+    border: 1px solid rgba(56,189,248,0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 120px;
+    flex: 1;
+  }
+
+  .pipe-step .step-num {
+    font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .pipe-step .step-title {
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .pipe-step .step-desc {
+    font-size: clamp(0.68rem, 1.2vw, 0.78rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .pipe-arrow {
+    font-size: 1.4rem;
+    color: var(--accent);
+  }
+
+  /* ===== FORMULA ===== */
+  .formula-box {
+    background: rgba(56,189,248,0.05);
+    border: 1px solid rgba(56,189,248,0.15);
+    border-radius: 12px;
+    padding: 18px 26px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: var(--accent);
+    text-align: center;
+    margin: 12px 0;
+    max-width: 800px;
+    width: 100%;
+    word-break: break-all;
+  }
+
+  /* ===== TAGS ===== */
+  .tag-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 12px 0;
+  }
+
+  .tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .tag-blue { color: var(--accent); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
+  .tag-purple { color: var(--accent2); border-color: rgba(129,140,248,0.3); background: rgba(129,140,248,0.08); }
+  .tag-pink { color: var(--accent3); border-color: rgba(244,114,182,0.3); background: rgba(244,114,182,0.08); }
+  .tag-green { color: var(--accent4); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); }
+
+  /* ===== STAT ROW ===== */
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .stat-value {
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 900;
+  }
+
+  .stat-label {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ===== STM DEMO ===== */
+  .stm-demo {
+    background: var(--bg-card);
+    border: 1px solid rgba(56,189,248,0.12);
+    border-radius: 14px;
+    padding: 20px 26px;
+    max-width: 800px;
+    width: 100%;
+    margin: 14px 0;
+    font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+    line-height: 2;
+    color: var(--text-secondary);
+  }
+
+  .stm-marker {
+    display: inline-block;
+    background: rgba(56,189,248,0.12);
+    color: var(--accent);
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin: 0 2px;
+  }
+
+  /* ===== LIST ===== */
+  .content-list {
+    list-style: none;
+    max-width: 750px;
+    width: 100%;
+  }
+
+  .content-list li {
+    padding: 10px 0;
+    padding-left: 24px;
+    position: relative;
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .content-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gradient1);
+  }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .bar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    min-width: 120px;
+    font-size: clamp(0.7rem, 1.3vw, 0.82rem);
+    text-align: right;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+    font-weight: 700;
+    color: var(--bg-primary);
+  }
+
+  .bar-fill.tico { background: var(--gradient1); }
+  .bar-fill.baseline { background: rgba(148,163,184,0.3); color: var(--text-secondary); }
+
+  /* ===== SLIDE 1: COVER ===== */
+  .cover-decoration {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .cover-decoration.d1 { background: var(--accent); top: -100px; right: -100px; }
+  .cover-decoration.d2 { background: var(--accent3); bottom: -100px; left: -100px; }
+
+  .cover-logo {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    letter-spacing: -3px;
+    margin-bottom: 8px;
+  }
+
+  .cover-full-title {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-bottom: 28px;
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .authors {
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .venue {
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== INSIGHT BOX ===== */
+  .insight-box {
+    background: rgba(52,211,153,0.06);
+    border-left: 3px solid var(--accent4);
+    padding: 14px 20px;
+    border-radius: 0 10px 10px 0;
+    max-width: 750px;
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .insight-box p {
+    font-size: clamp(0.78rem, 1.4vw, 0.9rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ===== REWARD LIST ===== */
+  .reward-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .reward-item {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .reward-item:nth-child(2) { border-left-color: var(--accent2); }
+  .reward-item:nth-child(3) { border-left-color: var(--accent3); }
+  .reward-item:nth-child(4) { border-left-color: var(--accent4); }
+  .reward-item:nth-child(5) { border-left-color: var(--accent); }
+
+  .reward-name {
+    font-size: clamp(0.75rem, 1.4vw, 0.88rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .reward-desc {
+    font-size: clamp(0.68rem, 1.2vw, 0.78rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 30px 80px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .reward-grid { grid-template-columns: 1fr; }
+    .pipeline { flex-direction: column; gap: 8px; }
+    .pipe-arrow { transform: rotate(90deg); }
+    .stat-row { gap: 16px; }
+    .stat-item { min-width: 80px; }
+    .bar-label { min-width: 90px; }
+    .nav-btn { width: 50px; height: 50px; font-size: 1.3rem; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 30px 20px 80px; }
+    .slide-title { margin-bottom: 16px; }
+    .card { padding: 16px; }
+    .stm-demo { padding: 14px 16px; }
+    .formula-box { padding: 14px 16px; }
+    .nav-btn { width: 52px; height: 52px; }
+    .stat-row { gap: 12px; }
+    .cover-logo { letter-spacing: -2px; }
+    th, td { padding: 8px 10px; }
+    .bar-label { min-width: 70px; font-size: clamp(0.6rem, 1.2vw, 0.72rem); }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 20px 14px 76px; }
+    .card { padding: 12px; }
+    .pipe-step { padding: 10px 12px; min-width: auto; }
+    .nav-buttons { gap: 8px; }
+  }
+
+  /* ===== KEYBOARD HINT ===== */
+  .key-hint {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+    z-index: 100;
+  }
+
+  @media (max-width: 768px) { .key-hint { display: none; } }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim {
+    animation: fadeUp 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .slide.active .anim.d1 { animation-delay: 0.1s; }
+  .slide.active .anim.d2 { animation-delay: 0.2s; }
+  .slide.active .anim.d3 { animation-delay: 0.3s; }
+  .slide.active .anim.d4 { animation-delay: 0.4s; }
+  .slide.active .anim.d5 { animation-delay: 0.5s; }
+  .slide.active .anim.d6 { animation-delay: 0.6s; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+<div class="key-hint">← → 키 또는 스와이프로 이동</div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ========== SLIDE 1: COVER ========== -->
+  <div class="slide active" data-slide="0">
+    <div class="cover-decoration d1"></div>
+    <div class="cover-decoration d2"></div>
+    <div class="section-label anim d1">arXiv 2603.22267</div>
+    <div class="cover-logo anim d2"><span class="gradient-text">TiCo</span></div>
+    <div class="cover-full-title anim d3">음성 대화 모델을 위한 시간 제어 가능 학습</div>
+    <div class="slide-subtitle anim d4" style="margin-bottom:24px">
+      시간 제약 지시를 따르고 제어 가능한 길이의 응답을 생성하는<br>간단하면서도 효과적인 후속 학습 방법
+    </div>
+    <div class="tag-row anim d5">
+      <span class="tag tag-blue">음성 대화</span>
+      <span class="tag tag-purple">시간 제어</span>
+      <span class="tag tag-pink">강화 학습</span>
+      <span class="tag tag-green">후속 학습</span>
+    </div>
+    <div class="authors anim d6">Kai-Wei Chang, Wei-Chih Chen, En-Pei Hu, Hung-yi Lee, James Glass</div>
+    <div class="venue anim d6">2026</div>
+  </div>
+
+  <!-- ========== SLIDE 2: PROBLEM ========== -->
+  <div class="slide" data-slide="1">
+    <div class="section-label anim d1">문제 정의</div>
+    <div class="slide-title anim d2">왜 <span class="gradient-text2">시간 제어</span>가 필요한가?</div>
+    <div class="card-grid cols-2 anim d3">
+      <div class="card">
+        <div class="card-icon">&#128483;</div>
+        <div class="card-title">실시간 음성 시스템</div>
+        <div class="card-text">음성 비서와 대화형 에이전트는 응답 시간 제약이 필수적입니다. "15초 안에 답해줘"와 같은 지시를 따라야 합니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#9888;&#65039;</div>
+        <div class="card-title">기존 모델의 한계</div>
+        <div class="card-text">현재 상용 및 오픈소스 SDM은 시간 인식 능력이 없어 목표 길이를 맞추지 못합니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128172;</div>
+        <div class="card-title">텍스트 ≠ 음성</div>
+        <div class="card-text">단어 수는 실제 발화 시간의 근사치일 뿐입니다. 같은 단어도 음소 구성과 운율에 따라 시간이 달라집니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#127919;</div>
+        <div class="card-title">핵심 목표</div>
+        <div class="card-text">응답 품질은 유지하면서 목표 시간에 맞는 음성 응답을 생성하는 것이 과제입니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 3: KEY IDEA ========== -->
+  <div class="slide" data-slide="2">
+    <div class="section-label anim d1">핵심 아이디어</div>
+    <div class="slide-title anim d2"><span class="gradient-text3">Spoken Time Markers</span> (STM)</div>
+    <div class="slide-subtitle anim d3">생성 과정 중간에 누적 발화 시간을 나타내는 특수 토큰을 삽입하여<br>모델이 실시간으로 시간을 추적하고 남은 내용을 조절합니다</div>
+    <div class="stm-demo anim d4">
+      한국의 수도는 서울이며, <span class="stm-marker">&lt;3.2초&gt;</span> 인구는 약 천만 명이 넘는 대도시입니다. <span class="stm-marker">&lt;6.8초&gt;</span> 서울은 경복궁, 남산타워 등 다양한 관광지가 있고, <span class="stm-marker">&lt;10.6초&gt;</span> 현대적인 도시와 전통 문화가 조화를 이루고 있습니다. <span class="stm-marker">&lt;14.2초&gt;</span>
+    </div>
+    <div class="insight-box anim d5">
+      <p>"STM은 중간 의미 계획(z)과 실현된 음성 응답(y_sp) 사이의 이산화된 정렬 신호 역할을 합니다."</p>
+    </div>
+    <ul class="content-list anim d6">
+      <li>문장 부호(쉼표, 마침표 등) 뒤에 마커 삽입</li>
+      <li>누적 시간을 추적하여 목표 시간까지 내용 조절</li>
+      <li>음성 합성 전 정규식으로 마커 제거</li>
+    </ul>
+  </div>
+
+  <!-- ========== SLIDE 4: ARCHITECTURE ========== -->
+  <div class="slide" data-slide="3">
+    <div class="section-label anim d1">모델 구조</div>
+    <div class="slide-title anim d2"><span class="gradient-text">Thinker-Talker</span> 아키텍처</div>
+    <div class="slide-subtitle anim d3">Qwen-2.5-Omni 7B 기반, Thinker만 학습하고 Talker는 동결</div>
+    <div class="pipeline anim d4">
+      <div class="pipe-step">
+        <div class="step-num">입력</div>
+        <div class="step-title">음성 질문</div>
+        <div class="step-desc">x_sp + 시간 지시</div>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step" style="border-color: rgba(129,140,248,0.3);">
+        <div class="step-num" style="color:var(--accent2);">Thinker</div>
+        <div class="step-title">의미 계획 + STM</div>
+        <div class="step-desc">중간 표현 z~ 생성<br>(학습 대상)</div>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step" style="border-color: rgba(244,114,182,0.3);">
+        <div class="step-num" style="color:var(--accent3);">Talker</div>
+        <div class="step-title">음성 합성</div>
+        <div class="step-desc">z~에서 마커 제거 후<br>음성 생성 (동결)</div>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step" style="border-color: rgba(52,211,153,0.3);">
+        <div class="step-num" style="color:var(--accent4);">출력</div>
+        <div class="step-title">음성 응답</div>
+        <div class="step-desc">목표 시간에 맞는<br>자연스러운 음성</div>
+      </div>
+    </div>
+    <div class="tag-row anim d5">
+      <span class="tag tag-blue">LoRA r=8, &alpha;=16</span>
+      <span class="tag tag-purple">bfloat16 정밀도</span>
+      <span class="tag tag-green">4x NVIDIA A6000</span>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 5: TRAINING STAGE 1 ========== -->
+  <div class="slide" data-slide="4">
+    <div class="section-label anim d1">학습 파이프라인</div>
+    <div class="slide-title anim d2">1단계: <span class="gradient-text">시간 인식 학습</span> (SFT)</div>
+    <div class="pipeline anim d3" style="margin-bottom: 20px;">
+      <div class="pipe-step">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">자가 생성</div>
+        <div class="step-desc">모델이 자유롭게<br>중간 표현 + 음성 생성</div>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">ASR 정렬</div>
+        <div class="step-desc">Whisper Medium으로<br>시간 대응 추정</div>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step">
+        <div class="step-num">Step 3</div>
+        <div class="step-title">SFT 학습</div>
+        <div class="step-desc">STM이 삽입된<br>시퀀스로 미세조정</div>
+      </div>
+    </div>
+    <div class="formula-box anim d4">
+      L_SFT = -E[ &sum; log p&theta;( z&#771;_n | z&#771;_&lt;n, x_sp, p ) ]
+    </div>
+    <div class="card-grid cols-3 anim d5" style="max-width: 700px;">
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="color:var(--accent); font-size:clamp(1.2rem,3vw,1.6rem);">4,000</div>
+        <div class="card-text">학습 음성 질문<br>(InstructS2S)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="color:var(--accent2); font-size:clamp(1.2rem,3vw,1.6rem);">5</div>
+        <div class="card-text">에포크</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="color:var(--accent4); font-size:clamp(1.2rem,3vw,1.6rem);">5e-5</div>
+        <div class="card-text">최대 학습률</div>
+      </div>
+    </div>
+    <div class="insight-box anim d6">
+      <p>"자가 생성은 추가적인 질의-응답 쌍 없이 모델 자체의 출력 분포를 따르므로 학습 안정성이 향상됩니다."</p>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 6: TRAINING STAGE 2 ========== -->
+  <div class="slide" data-slide="5">
+    <div class="section-label anim d1">학습 파이프라인</div>
+    <div class="slide-title anim d2">2단계: <span class="gradient-text2">시간 제어 학습</span> (RL)</div>
+    <div class="slide-subtitle anim d3">GRPO + CHORD 정규화를 사용한 강화 학습</div>
+    <div class="formula-box anim d4">
+      R_main = exp( -(t_inst - t_last)&sup2; / (2&sigma;&sup2;) ), &nbsp; &sigma; = 5
+    </div>
+    <div class="reward-grid anim d5">
+      <div class="reward-item">
+        <div class="reward-name">R_main (메인 보상)</div>
+        <div class="reward-desc">목표 시간과 실제 시간의 차이를 가우시안으로 측정</div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-name">R_pres (존재 보상)</div>
+        <div class="reward-desc">최소 1개 이상의 마커 생성 보장</div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-name">R_mono (단조 보상)</div>
+        <div class="reward-desc">연속 마커의 단조 증가 비율</div>
+      </div>
+      <div class="reward-item">
+        <div class="reward-name">R_rep (반복 패널티)</div>
+        <div class="reward-desc">중복 마커 생성 억제</div>
+      </div>
+      <div class="reward-item" style="grid-column: 1 / -1;">
+        <div class="reward-name">R_copy (복사 패널티)</div>
+        <div class="reward-desc">마지막이 아닌 마커가 지시 시간을 그대로 복사하는 것을 방지</div>
+      </div>
+    </div>
+    <div class="tag-row anim d6">
+      <span class="tag tag-blue">G=4 후보/프롬프트</span>
+      <span class="tag tag-purple">&epsilon;=0.2 클리핑</span>
+      <span class="tag tag-pink">&beta;=0.04 KL</span>
+      <span class="tag tag-green">CHORD &mu;: 0.8&rarr;0.3</span>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 7: BENCHMARK ========== -->
+  <div class="slide" data-slide="6">
+    <div class="section-label anim d1">평가 프레임워크</div>
+    <div class="slide-title anim d2"><span class="gradient-text3">TiCo-Bench</span></div>
+    <div class="slide-subtitle anim d3">음성 및 텍스트 질의에 대한 시간 제어 능력 종합 평가</div>
+    <div class="card-grid cols-3 anim d4" style="margin-bottom: 16px;">
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">&#128214;</div>
+        <div class="card-title">InstructS2S</div>
+        <div class="card-text">180 샘플<br>음성 질의</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">&#127760;</div>
+        <div class="card-title">UROBench</div>
+        <div class="card-text">180 샘플<br>음성+텍스트</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">&#127793;</div>
+        <div class="card-title">LIFEBench</div>
+        <div class="card-text">180 샘플<br>텍스트 질의</div>
+      </div>
+    </div>
+    <div class="stat-row anim d5">
+      <div class="stat-item">
+        <div class="stat-value gradient-text">1,440</div>
+        <div class="stat-label">총 평가 샘플</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value gradient-text2">10-30s</div>
+        <div class="stat-label">단시간 범위</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value gradient-text3">30-60s</div>
+        <div class="stat-label">장시간 범위</div>
+      </div>
+    </div>
+    <div class="tag-row anim d6">
+      <span class="tag tag-blue">MAE (절대 오차)</span>
+      <span class="tag tag-purple">MAPE (상대 오차)</span>
+      <span class="tag tag-green">GPT-score (품질)</span>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 8: RESULTS TABLE ========== -->
+  <div class="slide" data-slide="7">
+    <div class="section-label anim d1">실험 결과</div>
+    <div class="slide-title anim d2">음성 질의 <span class="gradient-text">성능 비교</span></div>
+    <div class="table-wrap anim d3">
+      <table>
+        <thead>
+          <tr><th>모델</th><th>MAE (s) &darr;</th><th>MAPE (%) &darr;</th><th>GPT-score &uarr;</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td>TiCo (Ours)</td>
+            <td class="best-val">4.54</td>
+            <td class="best-val">14.9%</td>
+            <td>3.56</td>
+          </tr>
+          <tr>
+            <td>Qwen2.5-Omni-7B</td>
+            <td>13.01</td>
+            <td>42.3%</td>
+            <td>3.57</td>
+          </tr>
+          <tr>
+            <td>Cascade (GPT)</td>
+            <td>10.41</td>
+            <td>29.0%</td>
+            <td class="best-val">4.15</td>
+          </tr>
+          <tr>
+            <td>Cascade (Qwen)</td>
+            <td>17.50</td>
+            <td>50.0%</td>
+            <td>3.39</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 20px; width:100%; max-width:850px;" class="anim d4">
+      <div class="card-grid cols-2">
+        <div class="card" style="text-align:center;">
+          <div class="card-text" style="color:var(--accent); font-weight:600; margin-bottom:4px;">단시간 (10-30s)</div>
+          <div class="card-title" style="font-size:clamp(1.2rem,3vw,1.6rem);">MAE <span class="gradient-text">3.16s</span></div>
+          <div class="card-text">MAPE 15.6%</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-text" style="color:var(--accent2); font-weight:600; margin-bottom:4px;">장시간 (30-60s)</div>
+          <div class="card-title" style="font-size:clamp(1.2rem,3vw,1.6rem);">MAE <span class="gradient-text2">5.16s</span></div>
+          <div class="card-text">MAPE 11.3%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 9: BAR CHART ========== -->
+  <div class="slide" data-slide="8">
+    <div class="section-label anim d1">시각적 비교</div>
+    <div class="slide-title anim d2">MAPE <span class="gradient-text2">오차율 비교</span></div>
+    <div class="slide-subtitle anim d3">낮을수록 좋음 - TiCo가 모든 기준선을 크게 앞섬</div>
+    <div class="bar-chart anim d4">
+      <div class="bar-item">
+        <div class="bar-label"><strong>TiCo</strong></div>
+        <div class="bar-track"><div class="bar-fill tico" style="width: 29.8%;">14.9%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Cascade (GPT)</div>
+        <div class="bar-track"><div class="bar-fill baseline" style="width: 58%;">29.0%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Qwen2.5-Omni</div>
+        <div class="bar-track"><div class="bar-fill baseline" style="width: 84.6%;">42.3%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Cascade (Qwen)</div>
+        <div class="bar-track"><div class="bar-fill baseline" style="width: 100%;">50.0%</div></div>
+      </div>
+    </div>
+    <div style="height:20px;"></div>
+    <div class="slide-subtitle anim d5" style="font-weight:600;">텍스트 질의로의 일반화</div>
+    <div class="bar-chart anim d5">
+      <div class="bar-item">
+        <div class="bar-label"><strong>TiCo</strong></div>
+        <div class="bar-track"><div class="bar-fill tico" style="width: 36.8%;">18.0%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Cascade (GPT)</div>
+        <div class="bar-track"><div class="bar-fill baseline" style="width: 57.5%;">28.1%</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label">Qwen2.5-Omni</div>
+        <div class="bar-track"><div class="bar-fill baseline" style="width: 100%;">48.9%</div></div>
+      </div>
+    </div>
+    <div class="insight-box anim d6">
+      <p>음성 질의로만 학습했음에도 텍스트 질의에서도 우수한 시간 제어 능력을 보여줌</p>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 10: KEY FINDINGS ========== -->
+  <div class="slide" data-slide="9">
+    <div class="section-label anim d1">핵심 발견</div>
+    <div class="slide-title anim d2">주요 <span class="gradient-text3">인사이트</span></div>
+    <div class="card-grid cols-2 anim d3">
+      <div class="card">
+        <div class="card-icon">&#9201;</div>
+        <div class="card-title">단-장시간 모두 안정적</div>
+        <div class="card-text">대부분의 SDM은 단시간에서 상대 오차가 크지만, TiCo는 모든 범위에서 낮은 오차를 유지합니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128640;</div>
+        <div class="card-title">외삽 능력</div>
+        <div class="card-text">학습 시 최대 41초였지만, 추론 시 45-60초 범위까지 성공적으로 외삽합니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128176;</div>
+        <div class="card-title">품질 유지</div>
+        <div class="card-text">GPT-score 3.56으로 기본 모델(3.57)과 동등한 응답 품질을 유지합니다.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#9889;</div>
+        <div class="card-title">효율적 학습</div>
+        <div class="card-text">4대의 A6000 GPU로 하루 이내에 전체 2단계 파이프라인 학습이 완료됩니다.</div>
+      </div>
+    </div>
+    <div class="insight-box anim d4">
+      <p>"캐스케이드 시스템은 강력한 LLM을 사용하더라도 텍스트 수준의 시간 계획만으로는 불충분합니다. 최종 시간은 발화 속도와 음성 실현에 의존하기 때문입니다."</p>
+    </div>
+  </div>
+
+  <!-- ========== SLIDE 11: CONTRIBUTIONS ========== -->
+  <div class="slide" data-slide="10">
+    <div class="section-label anim d1">기여</div>
+    <div class="slide-title anim d2">TiCo의 <span class="gradient-text">주요 기여</span></div>
+    <ul class="content-list anim d3">
+      <li><strong>STM (Spoken Time Markers)</strong> - 음성 생성 과정에서 실시간 시간 추적을 가능하게 하는 새로운 메커니즘 제안</li>
+      <li><strong>2단계 학습 파이프라인</strong> - SFT로 시간 인식을 부여하고, GRPO+CHORD로 정밀한 시간 제어를 학습하는 효율적 방법</li>
+      <li><strong>TiCo-Bench</strong> - 음성 및 텍스트 질의, 단-장시간 범위를 포괄하는 1,440개 샘플의 종합 벤치마크 구축</li>
+      <li><strong>최소 데이터 학습</strong> - 단 4,000개의 음성 질문만으로 추가 QA 데이터 없이 학습 가능</li>
+      <li><strong>도메인 간 일반화</strong> - 음성 질의로만 학습했음에도 텍스트 질의에서도 우수한 성능 달성</li>
+      <li><strong>보상 해킹 방지</strong> - 5가지 보상 함수의 조합으로 안정적인 강화 학습 실현</li>
+    </ul>
+  </div>
+
+  <!-- ========== SLIDE 12: CONCLUSION ========== -->
+  <div class="slide" data-slide="11">
+    <div class="cover-decoration d1"></div>
+    <div class="cover-decoration d2"></div>
+    <div class="section-label anim d1">결론</div>
+    <div class="cover-logo anim d2" style="font-size:clamp(2.4rem,8vw,4.5rem);"><span class="gradient-text">TiCo</span></div>
+    <div class="slide-subtitle anim d3" style="max-width:650px; margin-bottom:28px;">
+      음성 대화 모델이 시간 제약 지시를 따르도록 하는<br>간단하면서도 강력한 후속 학습 방법
+    </div>
+    <div class="stat-row anim d4">
+      <div class="stat-item">
+        <div class="stat-value" style="color:var(--accent);">65%</div>
+        <div class="stat-label">MAPE 감소<br>(vs Cascade GPT)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color:var(--accent4);">3.56</div>
+        <div class="stat-label">GPT-score<br>(품질 유지)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color:var(--accent3);">&lt;1일</div>
+        <div class="stat-label">학습 시간<br>(4x A6000)</div>
+      </div>
+    </div>
+    <div class="tag-row anim d5">
+      <span class="tag tag-blue">STM 시간 추적</span>
+      <span class="tag tag-purple">SFT + RL 학습</span>
+      <span class="tag tag-pink">TiCo-Bench 벤치마크</span>
+      <span class="tag tag-green">도메인 간 일반화</span>
+    </div>
+    <div class="authors anim d6" style="margin-top:24px;">
+      Chang, Chen, Hu, Lee, Glass &middot; arXiv 2603.22267
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-buttons">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전">&#10094;</button>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음">&#10095;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  function updateUI() {
+    document.getElementById('slideCounter').textContent = `${current + 1} / ${totalSlides}`;
+    document.getElementById('progressBar').style.width = `${((current + 1) / totalSlides) * 100}%`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === totalSlides - 1;
+  }
+
+  function navigate(dir) {
+    if (isAnimating) return;
+    const next = current + dir;
+    if (next < 0 || next >= totalSlides) return;
+
+    isAnimating = true;
+    const currentSlide = slides[current];
+    const nextSlide = slides[next];
+
+    currentSlide.classList.remove('active');
+    currentSlide.classList.add(dir > 0 ? 'exit-left' : '');
+    if (dir < 0) {
+      currentSlide.style.transform = 'translateX(60px)';
+      currentSlide.style.opacity = '0';
+    }
+
+    nextSlide.style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    nextSlide.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      nextSlide.classList.add('active');
+      nextSlide.style.transform = '';
+      nextSlide.style.opacity = '';
+      nextSlide.scrollTop = 0;
+    });
+
+    current = next;
+    updateUI();
+
+    setTimeout(() => {
+      currentSlide.classList.remove('exit-left');
+      currentSlide.style.transform = '';
+      currentSlide.style.opacity = '';
+      isAnimating = false;
+    }, 550);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+  });
+
+  // Touch / swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>

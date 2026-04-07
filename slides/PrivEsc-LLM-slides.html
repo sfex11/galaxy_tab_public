@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivEsc-LLM: Post-Training Local LLM Agents for Linux Privilege Escalation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-deep: #0a0e17;
+            --bg-mid: #111827;
+            --red-attack: #ef4444;
+            --red-glow: #dc2626;
+            --green-root: #22c55e;
+            --green-dim: #16a34a;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --violet: #8b5cf6;
+            --orange: #f97316;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.75);
+            --glass-border: rgba(239, 68, 68, 0.15);
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ── Matrix rain background ── */
+        .matrix-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .matrix-col {
+            position: absolute;
+            top: -100%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: rgba(34, 197, 94, 0.12);
+            writing-mode: vertical-rl;
+            animation: matrixFall linear infinite;
+            white-space: nowrap;
+        }
+        @keyframes matrixFall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200vh); }
+        }
+
+        /* ── Terminal scanline ── */
+        .scanline {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.03) 2px,
+                rgba(0,0,0,0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ── Slides ── */
+        .slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(30px);
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* ── Slide: Title ── */
+        .slide-title {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .slide-title .badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border: 1px solid var(--red-attack);
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--red-attack);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(239,68,68,0.2); }
+            50% { box-shadow: 0 0 25px rgba(239,68,68,0.4); }
+        }
+        .title-main {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .title-gradient {
+            background: linear-gradient(135deg, var(--red-attack), var(--orange), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .title-sub {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-top: 10px;
+            font-weight: 300;
+        }
+        .title-meta {
+            margin-top: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+        .title-meta .highlight { color: var(--cyan); }
+
+        /* ── Common ── */
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red-attack);
+            margin-bottom: 10px;
+        }
+        .slide-heading {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+        }
+        .glass-card-sm {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ── Grid Layouts ── */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+        .flex-grow { flex: 1; }
+
+        /* ── Terminal block ── */
+        .terminal {
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+        .terminal .prompt { color: var(--green-root); }
+        .terminal .cmd { color: var(--text); }
+        .terminal .output { color: var(--text-dim); }
+        .terminal .success { color: var(--green-root); }
+        .terminal .danger { color: var(--red-attack); }
+
+        /* ── Stat boxes ── */
+        .stat-box {
+            text-align: center;
+            padding: 20px 12px;
+        }
+        .stat-value {
+            font-size: 2.4rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        /* ── Bar chart ── */
+        .bar-chart-h { display: flex; flex-direction: column; gap: 10px; }
+        .bar-row { display: flex; align-items: center; gap: 12px; }
+        .bar-label {
+            width: 130px;
+            font-size: 0.78rem;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+        .bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: white;
+        }
+        .bar-fill.animated { width: var(--target-width); }
+
+        /* ── Pipeline ── */
+        .pipeline {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+        }
+        .pipeline-step {
+            flex: 1;
+            padding: 18px 16px;
+            text-align: center;
+            position: relative;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+        .pipeline-step:first-child { border-radius: 12px 0 0 12px; }
+        .pipeline-step:last-child { border-radius: 0 12px 12px 0; }
+        .pipeline-step .step-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--red-attack);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .pipeline-step .step-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 6px 0;
+        }
+        .pipeline-step .step-detail {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        .pipeline-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            color: var(--red-attack);
+            padding: 0 4px;
+        }
+
+        /* ── Reward equation ── */
+        .equation {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 14px 20px;
+            background: rgba(239, 68, 68, 0.06);
+            border-left: 3px solid var(--red-attack);
+            border-radius: 0 8px 8px 0;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .eq-var { color: var(--cyan); }
+        .eq-op { color: var(--text-dim); }
+        .eq-num { color: var(--amber); }
+
+        /* ── Heatmap table ── */
+        .heatmap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+        .heatmap-table th {
+            padding: 8px 6px;
+            color: var(--text-dim);
+            font-weight: 400;
+            text-align: center;
+        }
+        .heatmap-table th:first-child { text-align: left; }
+        .heatmap-table td {
+            padding: 7px 6px;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .heatmap-table td:first-child {
+            text-align: left;
+            font-weight: 400;
+            color: var(--text-dim);
+            background: none !important;
+        }
+        .heat-10 { background: rgba(34,197,94,0.35); color: var(--green-root); }
+        .heat-9 { background: rgba(34,197,94,0.25); color: var(--green-root); }
+        .heat-8 { background: rgba(34,197,94,0.18); color: #86efac; }
+        .heat-7 { background: rgba(250,204,21,0.18); color: var(--amber); }
+        .heat-6 { background: rgba(249,115,22,0.18); color: var(--orange); }
+        .heat-5 { background: rgba(239,68,68,0.15); color: #fca5a5; }
+        .heat-low { background: rgba(239,68,68,0.25); color: var(--red-attack); }
+        .heat-0 { background: rgba(239,68,68,0.35); color: var(--red-attack); }
+
+        /* ── Cost comparison ── */
+        .cost-compare {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+        .cost-item {
+            text-align: center;
+        }
+        .cost-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.8rem;
+            font-weight: 900;
+        }
+        .cost-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+        .cost-vs {
+            font-size: 2rem;
+            color: var(--text-dim);
+        }
+        .cost-badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 24px;
+            border-radius: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* ── Scenario vis ── */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .scenario-chip {
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .scenario-chip .icon { font-size: 1.1rem; }
+        .scenario-chip .name { color: var(--text-dim); flex: 1; }
+        .scenario-chip .score {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        /* ── Insight cards ── */
+        .insight-card {
+            padding: 16px;
+            border-radius: 10px;
+            background: var(--glass);
+            border-left: 3px solid;
+        }
+        .insight-card .insight-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .insight-card .insight-text {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: rgba(10, 14, 23, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(239,68,68,0.1);
+            z-index: 100;
+        }
+        .nav-bar .page-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        .nav-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(239,68,68,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-dot.active {
+            background: var(--red-attack);
+            box-shadow: 0 0 8px rgba(239,68,68,0.5);
+        }
+        .nav-btn {
+            background: none;
+            border: 1px solid rgba(239,68,68,0.3);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { border-color: var(--red-attack); background: rgba(239,68,68,0.1); }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+        /* ── Animations ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .slide.active .fade-up { opacity: 1; transform: translateY(0); }
+        .slide.active .fade-up:nth-child(1) { transition-delay: 0.1s; }
+        .slide.active .fade-up:nth-child(2) { transition-delay: 0.2s; }
+        .slide.active .fade-up:nth-child(3) { transition-delay: 0.3s; }
+        .slide.active .fade-up:nth-child(4) { transition-delay: 0.4s; }
+        .slide.active .fade-up:nth-child(5) { transition-delay: 0.5s; }
+
+        /* ── Typing animation ── */
+        .typing-line {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--green-root);
+            animation: typing 2s steps(40) 0.5s forwards, blinkCaret 0.7s step-end infinite;
+            width: 0;
+        }
+        .slide.active .typing-line { width: 100%; }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blinkCaret { 50% { border-color: transparent; } }
+
+        /* ── Pulse ring ── */
+        .pulse-ring {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pulse-ring::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid var(--red-attack);
+            animation: pulseRing 2s ease-out infinite;
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .slide { padding: 24px 20px; }
+            .title-main { font-size: 1.8rem; }
+            .slide-heading { font-size: 1.4rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+            .scenario-grid { grid-template-columns: 1fr 1fr; }
+            .pipeline { flex-direction: column; }
+            .pipeline-arrow { transform: rotate(90deg); justify-content: center; }
+            .cost-compare { flex-direction: column; gap: 16px; }
+            .heatmap-table { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="matrix-bg" id="matrixBg"></div>
+
+    <div class="slides-container">
+
+        <!-- ====== SLIDE 1: Title ====== -->
+        <div class="slide slide-title active" data-slide="0">
+            <div class="badge">arXiv:2603.17673 · Offensive AI Security</div>
+            <h1 class="title-main">
+                <span class="title-gradient">Post-Training Local LLM Agents</span><br>
+                for Linux Privilege Escalation
+            </h1>
+            <p class="title-sub">4B 파라미터 로컬 모델로 달성한 95.8% 권한 상승 성공률</p>
+            <div class="title-meta">
+                <span class="highlight">Philipp Normann</span> · Andreas Happe · Jürgen Cito · Daniel Arp<br>
+                <span style="color:var(--text-dim);">2026.03 · cs.CR · cs.AI</span>
+            </div>
+            <div style="margin-top:36px;">
+                <div class="terminal" style="display:inline-block;text-align:left;max-width:520px;">
+                    <span class="prompt">user@target:~$</span> <span class="cmd">./privesc-llm --attack</span><br>
+                    <span class="output">[*] Enumerating attack surface...</span><br>
+                    <span class="output">[*] Identified SUID binary: /usr/bin/find</span><br>
+                    <span class="success">[+] Root shell obtained in 3 rounds</span><br>
+                    <span class="danger">root@target:~#</span> <span class="cmd" style="animation: blinkCaret 0.7s step-end infinite; border-right: 2px solid var(--green-root);">_</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 2: Problem & Motivation ====== -->
+        <div class="slide" data-slide="1">
+            <div class="section-label fade-up">Motivation</div>
+            <h2 class="slide-heading fade-up">왜 로컬 LLM 보안 에이전트가 필요한가?</h2>
+
+            <div class="grid-2 flex-grow" style="align-items:start;">
+                <div class="fade-up">
+                    <div class="glass-card" style="margin-bottom:16px;">
+                        <h3 style="color:var(--red-attack);font-size:0.9rem;margin-bottom:12px;">🔒 현재 한계</h3>
+                        <ul style="list-style:none;font-size:0.8rem;line-height:2;">
+                            <li>❌ 클라우드 API 의존 → 민감 데이터 유출 위험</li>
+                            <li>❌ 높은 추론 비용 (건당 ~$0.62)</li>
+                            <li>❌ 네트워크 격리 환경에서 사용 불가</li>
+                            <li>❌ 소형 모델의 보안 태스크 성능 부족</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card">
+                        <h3 style="color:var(--green-root);font-size:0.9rem;margin-bottom:12px;">✅ 제안 솔루션</h3>
+                        <ul style="list-style:none;font-size:0.8rem;line-height:2;">
+                            <li>✓ 4B 로컬 모델로 오프라인 실행</li>
+                            <li>✓ 2단계 후훈련 (SFT + RL)</li>
+                            <li>✓ 검증 가능한 보상으로 자동 평가</li>
+                            <li>✓ 100배 비용 절감</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fade-up">
+                    <div class="glass-card" style="height:100%;">
+                        <h3 style="color:var(--cyan);font-size:0.9rem;margin-bottom:16px;">Linux 권한 상승이 이상적인 이유</h3>
+                        <div style="font-size:0.78rem;line-height:1.8;color:var(--text-dim);">
+                            <p style="margin-bottom:12px;">
+                                <strong style="color:var(--text);">자동 검증 가능:</strong> root 쉘 획득 여부로 성공/실패를 이진 판단 → RL 보상 설계에 최적
+                            </p>
+                            <p style="margin-bottom:12px;">
+                                <strong style="color:var(--text);">다단계 추론 필요:</strong> 정찰 → 취약점 식별 → 익스플로잇 실행의 복합 의사결정 체인
+                            </p>
+                            <p style="margin-bottom:12px;">
+                                <strong style="color:var(--text);">절차적 환경 생성:</strong> Docker 컨테이너로 무한한 훈련 시나리오 자동 생성
+                            </p>
+                            <p>
+                                <strong style="color:var(--text);">실용적 가치:</strong> 레드팀/펜테스트 자동화의 핵심 역량
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 3: Architecture & Pipeline ====== -->
+        <div class="slide" data-slide="2">
+            <div class="section-label fade-up">Architecture</div>
+            <h2 class="slide-heading fade-up">2단계 후훈련 파이프라인</h2>
+
+            <div class="pipeline fade-up" style="margin-bottom:20px;">
+                <div class="pipeline-step">
+                    <div class="step-num">Base Model</div>
+                    <div class="step-title" style="color:var(--cyan);">Qwen3-4B</div>
+                    <div class="step-detail">4.04B params<br>Instruct-2507</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-num">Stage 1</div>
+                    <div class="step-title" style="color:var(--amber);">SFT</div>
+                    <div class="step-detail">1,000 traces<br>QLoRA 4-bit<br>1×H100 · 28분</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-num">Stage 2</div>
+                    <div class="step-title" style="color:var(--red-attack);">RL (AIPO)</div>
+                    <div class="step-detail">검증 가능 보상<br>bf16 LoRA<br>4×H100 · 29시간</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-num">Result</div>
+                    <div class="step-title" style="color:var(--green-root);">PrivEsc-LLM</div>
+                    <div class="step-detail">95.8% 성공률<br>vLLM 배포<br>$0.005/run</div>
+                </div>
+            </div>
+
+            <div class="grid-2 fade-up" style="flex:1;">
+                <div class="glass-card">
+                    <h3 style="color:var(--amber);font-size:0.85rem;margin-bottom:12px;">SFT 상세</h3>
+                    <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8;">
+                        <div><strong style="color:var(--text);">교사 모델:</strong> Arcee Trinity-Large (398B MoE, 13B active)</div>
+                        <div><strong style="color:var(--text);">LoRA:</strong> rank=8, alpha=32 (17.75M params, 0.44%)</div>
+                        <div><strong style="color:var(--text);">LR:</strong> 1.5×10⁻⁴ (log-sweep 선택)</div>
+                        <div><strong style="color:var(--text);">최적화:</strong> AdamW 8-bit, β₂=0.95</div>
+                        <div><strong style="color:var(--text);">시퀀스:</strong> 32,768 토큰, Batch 8</div>
+                        <div><strong style="color:var(--text);">선택:</strong> 10 에폭 중 4번째 체크포인트</div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3 style="color:var(--red-attack);font-size:0.85rem;margin-bottom:12px;">RL (AIPO) 상세</h3>
+                    <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8;">
+                        <div><strong style="color:var(--text);">알고리즘:</strong> Token-level Async Importance-Weighted PO</div>
+                        <div><strong style="color:var(--text);">프레임워크:</strong> Prime-RL</div>
+                        <div><strong style="color:var(--text);">LR:</strong> 1.5×10⁻⁵ (SFT의 1/10)</div>
+                        <div><strong style="color:var(--text);">배치:</strong> 80 (인스턴스당 8 rollout)</div>
+                        <div><strong style="color:var(--text);">스텝:</strong> 1,000 · 훈련 호라이즌 12라운드</div>
+                        <div><strong style="color:var(--text);">샘플링:</strong> Round-robin + staleness bounds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 4: Reward Function ====== -->
+        <div class="slide" data-slide="3">
+            <div class="section-label fade-up">Reward Design</div>
+            <h2 class="slide-heading fade-up">다중 성분 보상 함수</h2>
+
+            <div class="fade-up" style="margin-bottom:20px;">
+                <div class="equation">
+                    <span class="eq-var">R(e)</span> <span class="eq-op">=</span>
+                    <span class="eq-var">R_out</span> <span class="eq-op">+</span>
+                    <span class="eq-var">R_speed</span> <span class="eq-op">+</span>
+                    <span class="eq-var">R_recon</span> <span class="eq-op">−</span>
+                    <span class="eq-var">R_pen</span>
+                </div>
+            </div>
+
+            <div class="grid-4 fade-up" style="margin-bottom:20px;">
+                <div class="glass-card-sm" style="border-left:3px solid var(--green-root);">
+                    <div style="font-size:0.75rem;font-weight:700;color:var(--green-root);margin-bottom:8px;">R_out · 결과</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-dim);line-height:1.6;">
+                        2·𝟙{root} − 1<br>
+                        <span style="font-size:0.65rem;">성공: +1 / 실패: −1</span>
+                    </div>
+                </div>
+                <div class="glass-card-sm" style="border-left:3px solid var(--cyan);">
+                    <div style="font-size:0.75rem;font-weight:700;color:var(--cyan);margin-bottom:8px;">R_speed · 속도</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-dim);line-height:1.6;">
+                        𝟙{root}·(1 − τ/τ_max)<br>
+                        <span style="font-size:0.65rem;">빠른 탈취에 보너스</span>
+                    </div>
+                </div>
+                <div class="glass-card-sm" style="border-left:3px solid var(--amber);">
+                    <div style="font-size:0.75rem;font-weight:700;color:var(--amber);margin-bottom:8px;">R_recon · 정찰</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-dim);line-height:1.6;">
+                        min(0.30, 0.05·u)<br>
+                        <span style="font-size:0.65rem;">고유 정찰 패턴 보상</span>
+                    </div>
+                </div>
+                <div class="glass-card-sm" style="border-left:3px solid var(--red-attack);">
+                    <div style="font-size:0.75rem;font-weight:700;color:var(--red-attack);margin-bottom:8px;">R_pen · 패널티</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-dim);line-height:1.6;">
+                        Σ λᵢ · nᵢ<br>
+                        <span style="font-size:0.65rem;">반복/오류 행동 억제</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2 fade-up" style="flex:1;">
+                <div class="glass-card">
+                    <h3 style="font-size:0.8rem;margin-bottom:10px;color:var(--red-attack);">패널티 가중치</h3>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;line-height:2;color:var(--text-dim);">
+                        <div>λ_rep = <span style="color:var(--amber)">0.15</span> · 반복 도구 호출</div>
+                        <div>λ_tool = <span style="color:var(--amber)">0.30</span> · 잘못된 도구 호출 (최대 패널티)</div>
+                        <div>λ_miss = <span style="color:var(--amber)">0.20</span> · 도구 없는 라운드</div>
+                        <div>λ_short = <span style="color:var(--amber)">0.10</span> · 짧은 추론 라운드</div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3 style="font-size:0.8rem;margin-bottom:10px;color:var(--violet);">에이전트 도구</h3>
+                    <div class="terminal" style="font-size:0.72rem;">
+                        <span class="danger">Tool 1:</span> <span class="cmd">exec_command</span><br>
+                        <span class="output">  → 임의 쉘 명령 실행</span><br><br>
+                        <span class="danger">Tool 2:</span> <span class="cmd">test_credentials</span><br>
+                        <span class="output">  → root 인증 검증</span><br><br>
+                        <span class="output">성공 조건:</span> <span class="success">root 쉘 획득</span><br>
+                        <span class="output">실패 조건:</span> <span class="danger">라운드 예산 소진 / 타임아웃</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 5: Training Data & Environments ====== -->
+        <div class="slide" data-slide="4">
+            <div class="section-label fade-up">Training Environments</div>
+            <h2 class="slide-heading fade-up">절차적 환경 생성 & 데이터 품질</h2>
+
+            <div class="grid-2 flex-grow" style="align-items:start;">
+                <div class="fade-up">
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <h3 style="font-size:0.85rem;color:var(--orange);margin-bottom:14px;">10개 생성기 패밀리</h3>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--red-attack);">⚡</span> SUID GTFOBins
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--red-attack);">⚡</span> Sudo GTFOBins
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--amber);">🔑</span> File Capabilities
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--amber);">🔑</span> Password History
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--cyan);">📄</span> Password File
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--cyan);">📄</span> Password Reuse
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--violet);">🔓</span> Weak Root PW
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--violet);">🔓</span> Cron Wildcard
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--green-root);">⏰</span> Writable Cron
+                            </div>
+                            <div class="glass-card-sm" style="padding:10px;font-size:0.7rem;">
+                                <span style="color:var(--green-root);">🗝️</span> SSH Key Reuse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fade-up">
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <h3 style="font-size:0.85rem;color:var(--cyan);margin-bottom:12px;">데이터 누출 방지</h3>
+                        <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8;">
+                            <div>• 훈련/검증 분리된 시드 범위 (42 vs 10M)</div>
+                            <div>• (generator, seed) 쌍 충돌 검사</div>
+                            <div>• 벤치마크 풀이 경로 명시적 제외</div>
+                            <div>• 사후 누출 감사: 0건 매치</div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h3 style="font-size:0.85rem;color:var(--green-root);margin-bottom:12px;">품질 필터링 기준</h3>
+                        <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8;">
+                            <div>• 턴 범위: 2 ≤ turns ≤ 12</div>
+                            <div>• 토큰 상한: 32,768</div>
+                            <div>• 최소 추론 길이: 60자</div>
+                            <div>• 도구 넛지: 최대 1회/trace</div>
+                            <div>• 실패 trace, 빈 추론, HTML 제거</div>
+                            <div>• 1,000 훈련 + 100 검증 traces</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 6: Main Results ====== -->
+        <div class="slide" data-slide="5">
+            <div class="section-label fade-up">Results</div>
+            <h2 class="slide-heading fade-up">핵심 결과: 라운드 예산별 성공률</h2>
+
+            <div class="grid-4 fade-up" style="margin-bottom:20px;">
+                <div class="glass-card stat-box">
+                    <div class="stat-value" style="color:var(--green-root);">95.8%</div>
+                    <div class="stat-label">PrivEsc-LLM @ R=20</div>
+                </div>
+                <div class="glass-card stat-box">
+                    <div class="stat-value" style="color:var(--cyan);">97.5%</div>
+                    <div class="stat-label">Claude Opus 4.6 @ R=20</div>
+                </div>
+                <div class="glass-card stat-box">
+                    <div class="stat-value" style="color:var(--amber);">100×</div>
+                    <div class="stat-label">비용 절감</div>
+                </div>
+                <div class="glass-card stat-box">
+                    <div class="stat-value" style="color:var(--red-attack);">4B</div>
+                    <div class="stat-label">파라미터</div>
+                </div>
+            </div>
+
+            <div class="glass-card fade-up" style="flex:1;">
+                <h3 style="font-size:0.85rem;margin-bottom:16px;">P(root|R) — 라운드 예산별 성공률</h3>
+                <div class="bar-chart-h" id="mainChart">
+                    <!-- R=5 -->
+                    <div style="font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-top:4px;">R = 5 라운드</div>
+                    <div class="bar-row"><div class="bar-label">Qwen3-4B</div><div class="bar-track"><div class="bar-fill" style="--target-width:0%;background:var(--text-dim);" data-label="0%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">+ SFT</div><div class="bar-track"><div class="bar-fill" style="--target-width:5.8%;background:var(--amber);" data-label="5.8%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">PrivEsc-LLM</div><div class="bar-track"><div class="bar-fill" style="--target-width:11.7%;background:var(--red-attack);" data-label="11.7%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">DeepSeek V3.2</div><div class="bar-track"><div class="bar-fill" style="--target-width:17%;background:var(--violet);" data-label="17%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">Claude Opus 4.6</div><div class="bar-track"><div class="bar-fill" style="--target-width:13.3%;background:var(--cyan);" data-label="13.3%"></div></div></div>
+
+                    <!-- R=20 -->
+                    <div style="font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-top:10px;">R = 20 라운드 (주요 평가 기준)</div>
+                    <div class="bar-row"><div class="bar-label">Qwen3-4B</div><div class="bar-track"><div class="bar-fill" style="--target-width:42.5%;background:var(--text-dim);" data-label="42.5%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">+ SFT</div><div class="bar-track"><div class="bar-fill" style="--target-width:80.8%;background:var(--amber);" data-label="80.8%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label" style="color:var(--green-root);">PrivEsc-LLM</div><div class="bar-track"><div class="bar-fill" style="--target-width:95.8%;background:linear-gradient(90deg,var(--red-attack),var(--orange));" data-label="95.8%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">DeepSeek V3.2</div><div class="bar-track"><div class="bar-fill" style="--target-width:65.8%;background:var(--violet);" data-label="65.8%"></div></div></div>
+                    <div class="bar-row"><div class="bar-label">Claude Opus 4.6</div><div class="bar-track"><div class="bar-fill" style="--target-width:97.5%;background:var(--cyan);" data-label="97.5%"></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 7: Per-Scenario Heatmap ====== -->
+        <div class="slide" data-slide="6">
+            <div class="section-label fade-up">Scenario Analysis</div>
+            <h2 class="slide-heading fade-up">시나리오별 성공률 히트맵 (R=60, 10회 실행)</h2>
+
+            <div class="glass-card fade-up" style="flex:1;overflow:auto;">
+                <table class="heatmap-table">
+                    <thead>
+                        <tr>
+                            <th style="min-width:160px;">시나리오</th>
+                            <th>Qwen3-4B</th>
+                            <th>+ SFT</th>
+                            <th>PrivEsc-LLM</th>
+                            <th>DeepSeek V3.2</th>
+                            <th>Claude Opus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>SUID GTFOBins</td><td class="heat-0">0/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Sudo GTFOBins</td><td class="heat-0">0/10</td><td class="heat-7">7/10</td><td class="heat-6">6/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>File Capabilities</td><td class="heat-0">0/10</td><td class="heat-9">9/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Cron Wildcard Inj.</td><td class="heat-0">0/10</td><td class="heat-8">8/10</td><td class="heat-10">10/10</td><td class="heat-6">6/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Writable Cron</td><td class="heat-0">0/10</td><td class="heat-7">7/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>PW History Leak</td><td class="heat-low">3/10</td><td class="heat-9">9/10</td><td class="heat-10">10/10</td><td class="heat-9">9/10</td><td class="heat-7">7/10</td></tr>
+                        <tr><td>PW File Leak</td><td class="heat-8">8/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Weak Root PW</td><td class="heat-8">8/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-9">9/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Password Reuse</td><td class="heat-5">5/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Root SSH Lowpriv</td><td class="heat-low">4/10</td><td class="heat-9">9/10</td><td class="heat-10">10/10</td><td class="heat-8">8/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>SSH Key Reuse</td><td class="heat-low">2/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr><td>Docker Escape</td><td class="heat-0">0/10</td><td class="heat-9">9/10</td><td class="heat-9">9/10</td><td class="heat-10">10/10</td><td class="heat-10">10/10</td></tr>
+                        <tr style="border-top:2px solid rgba(239,68,68,0.3);">
+                            <td style="font-weight:700;color:var(--text);">평균</td>
+                            <td style="color:var(--red-attack);font-weight:700;">25/120</td>
+                            <td style="color:var(--amber);font-weight:700;">108/120</td>
+                            <td style="color:var(--green-root);font-weight:700;">115/120</td>
+                            <td style="color:var(--violet);font-weight:700;">112/120</td>
+                            <td style="color:var(--cyan);font-weight:700;">117/120</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 8: Cost Analysis ====== -->
+        <div class="slide" data-slide="7">
+            <div class="section-label fade-up">Cost Analysis</div>
+            <h2 class="slide-heading fade-up">비용 효율성: 100배 절감</h2>
+
+            <div class="cost-compare fade-up" style="margin:30px 0;">
+                <div class="cost-item">
+                    <div class="cost-amount" style="color:var(--green-root);">$0.005</div>
+                    <div class="cost-label">PrivEsc-LLM (로컬)</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim);margin-top:4px;">per successful root @ R=20</div>
+                </div>
+                <div class="cost-vs">vs</div>
+                <div class="cost-item">
+                    <div class="cost-amount" style="color:var(--red-attack);">$0.62</div>
+                    <div class="cost-label">Claude Opus 4.6 (API)</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim);margin-top:4px;">per successful root @ R=20</div>
+                </div>
+            </div>
+
+            <div style="text-align:center;" class="fade-up">
+                <div class="cost-badge" style="background:rgba(34,197,94,0.15);color:var(--green-root);border:1px solid rgba(34,197,94,0.3);">
+                    124× 비용 절감
+                </div>
+            </div>
+
+            <div class="grid-3 fade-up" style="margin-top:30px;">
+                <div class="glass-card" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:8px;">💰</div>
+                    <div style="font-size:0.85rem;font-weight:700;">총 훈련 비용</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--amber);margin:8px 0;">$269</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim);">유럽 H100 온디맨드 기준</div>
+                </div>
+                <div class="glass-card" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:8px;">⚡</div>
+                    <div style="font-size:0.85rem;font-weight:700;">SFT 시간</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--cyan);margin:8px 0;">28분</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim);">1×H100, QLoRA 4-bit</div>
+                </div>
+                <div class="glass-card" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:8px;">🔄</div>
+                    <div style="font-size:0.85rem;font-weight:700;">RL 시간</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--violet);margin:8px 0;">29시간</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim);">4×H100, bf16</div>
+                </div>
+            </div>
+
+            <div class="fade-up" style="margin-top:16px;text-align:center;font-size:0.75rem;color:var(--text-dim);">
+                440회 성공적 권한 상승 기준 훈련 비용 상각 시, API 대비 즉시 비용 우위
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 9: Key Insights ====== -->
+        <div class="slide" data-slide="8">
+            <div class="section-label fade-up">Insights</div>
+            <h2 class="slide-heading fade-up">핵심 기술적 통찰</h2>
+
+            <div class="grid-2" style="gap:16px;flex:1;">
+                <div class="insight-card fade-up" style="border-color:var(--red-attack);">
+                    <div class="insight-title" style="color:var(--red-attack);">라운드 예산 민감도</div>
+                    <div class="insight-text">
+                        PrivEsc-LLM은 제한된 예산(R=20)에서 95%를 달성하지만, 베이스 Qwen3-4B는 42.5%에 불과.
+                        RL이 단순 성능 향상이 아닌 <strong style="color:var(--text);">상호작용 효율성</strong>을 학습함을 시사.
+                    </div>
+                </div>
+                <div class="insight-card fade-up" style="border-color:var(--amber);">
+                    <div class="insight-title" style="color:var(--amber);">SFT vs RL 기여도</div>
+                    <div class="insight-text">
+                        SFT가 ~38% 성능 향상 (42.5→80.8%), RL이 추가 ~15% (80.8→95.8%) 향상.
+                        SFT는 기초 능력, RL은 <strong style="color:var(--text);">효율적 전략</strong>을 부여.
+                    </div>
+                </div>
+                <div class="insight-card fade-up" style="border-color:var(--cyan);">
+                    <div class="insight-title" style="color:var(--cyan);">비동기 오프폴리시 학습</div>
+                    <div class="insight-text">
+                        AIPO + bounded staleness로 rollout 생성 지연 문제 해결.
+                        각 rollout이 다단계 LLM-환경 상호작용이므로 <strong style="color:var(--text);">비동기 안정화</strong>가 필수.
+                    </div>
+                </div>
+                <div class="insight-card fade-up" style="border-color:var(--violet);">
+                    <div class="insight-title" style="color:var(--violet);">절차적 일반화</div>
+                    <div class="insight-text">
+                        시나리오별 문자열(유저명, 비밀번호, 경로)을 랜덤화하여 <strong style="color:var(--text);">패턴 매칭이 아닌 정책 학습</strong> 유도.
+                        벤치마크 풀이 경로를 명시적으로 제외하여 암기 방지.
+                    </div>
+                </div>
+                <div class="insight-card fade-up" style="border-color:var(--green-root);">
+                    <div class="insight-title" style="color:var(--green-root);">실패 모드 분석</div>
+                    <div class="insight-text">
+                        <strong style="color:var(--text);">Sudo GTFOBins (6/10):</strong> tar 벡터 식별 후 오류 복구 실패 — 14~22회 잘못된 명령 반복.<br>
+                        <strong style="color:var(--text);">Docker Escape (9/10):</strong> 그룹 멤버십 발견 후 미행동, 비밀번호 추측으로 전락.
+                    </div>
+                </div>
+                <div class="insight-card fade-up" style="border-color:var(--orange);">
+                    <div class="insight-title" style="color:var(--orange);">DeepSeek V3.2 특성</div>
+                    <div class="insight-text">
+                        높은 예산 민감도 (R=5: 17% → R=60: 94%) — 열거 중심 정책으로 초기 라운드 비효율적.
+                        반면 Claude Opus는 모든 예산에서 일관된 성능, 천장 효과 근접.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== SLIDE 10: Limitations & Conclusion ====== -->
+        <div class="slide" data-slide="9">
+            <div class="section-label fade-up">Conclusion</div>
+            <h2 class="slide-heading fade-up">한계점 & 결론</h2>
+
+            <div class="grid-2" style="gap:20px;flex:1;">
+                <div class="fade-up">
+                    <div class="glass-card" style="margin-bottom:16px;">
+                        <h3 style="font-size:0.9rem;color:var(--amber);margin-bottom:14px;">⚠️ 한계점</h3>
+                        <div style="font-size:0.78rem;line-height:2;color:var(--text-dim);">
+                            <div>• 단일 베이스 아키텍처 (Qwen3-4B)만 테스트</div>
+                            <div>• RL 훈련에 4×H100 필요 (추론만 로컬)</div>
+                            <div>• 일반적 오설정만 커버, 실제 long-tail 취약점 미포함</div>
+                            <div>• 모델별 프롬프트 최적화 없이 단일 시스템 프롬프트</div>
+                            <div>• 터미널 출력 잘림 → 평가 아티팩트 가능</div>
+                            <div>• 12개 시나리오 벤치마크의 규모 한계</div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h3 style="font-size:0.9rem;color:var(--violet);margin-bottom:14px;">🔬 평가 프로토콜</h3>
+                        <div style="font-size:0.78rem;line-height:2;color:var(--text-dim);">
+                            <div>• R=5, 10, 20, 60 다중 예산 평가</div>
+                            <div>• 모델-시나리오당 10회 독립 실행 (총 120회)</div>
+                            <div>• 실행당 새 Docker 컨테이너</div>
+                            <div>• Wilson 95% CI + Bootstrap CI</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fade-up">
+                    <div class="glass-card" style="height:100%;display:flex;flex-direction:column;">
+                        <h3 style="font-size:0.9rem;color:var(--green-root);margin-bottom:14px;">✅ 핵심 기여</h3>
+                        <div style="font-size:0.82rem;line-height:2;flex:1;">
+                            <div style="margin-bottom:12px;">
+                                <strong style="color:var(--red-attack);">1.</strong> 보안 특화 로컬 모델을 위한 실용적 2단계 파이프라인
+                            </div>
+                            <div style="margin-bottom:12px;">
+                                <strong style="color:var(--amber);">2.</strong> 4B 모델이 엔터프라이즈급 시스템과 동등한 성능 달성 가능함을 입증
+                            </div>
+                            <div style="margin-bottom:12px;">
+                                <strong style="color:var(--cyan);">3.</strong> 검증 가능한 보상 기반의 자동 RL 훈련 방법론
+                            </div>
+                            <div style="margin-bottom:12px;">
+                                <strong style="color:var(--violet);">4.</strong> 100배 이상의 추론 비용 절감 + $269 훈련 비용
+                            </div>
+                        </div>
+                        <div class="terminal" style="margin-top:auto;">
+                            <span class="prompt">$</span> <span class="cmd">echo "Small model, big impact"</span><br>
+                            <span class="success">4B params · 95.8% success · 100× cheaper</span><br>
+                            <span class="output">The future of offensive AI is local.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">← Prev</button>
+        <div style="display:flex;align-items:center;gap:16px;">
+            <div class="nav-dots" id="navDots"></div>
+            <span class="page-info" id="pageInfo">1 / 10</span>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+
+    <script>
+        // Matrix rain
+        (function initMatrix() {
+            const bg = document.getElementById('matrixBg');
+            const chars = '01αβγδ#$%&{}[]<>/\\|~^root@sudo';
+            for (let i = 0; i < 30; i++) {
+                const col = document.createElement('div');
+                col.className = 'matrix-col';
+                col.style.left = (Math.random() * 100) + '%';
+                col.style.animationDuration = (8 + Math.random() * 15) + 's';
+                col.style.animationDelay = (-Math.random() * 20) + 's';
+                col.style.fontSize = (10 + Math.random() * 6) + 'px';
+                let text = '';
+                for (let j = 0; j < 40; j++) text += chars[Math.floor(Math.random() * chars.length)] + ' ';
+                col.textContent = text;
+                bg.appendChild(col);
+            }
+        })();
+
+        // Slide navigation
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+
+        function buildDots() {
+            const dots = document.getElementById('navDots');
+            for (let i = 0; i < total; i++) {
+                const d = document.createElement('div');
+                d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                d.onclick = () => goTo(i);
+                dots.appendChild(d);
+            }
+        }
+        buildDots();
+
+        function goTo(idx) {
+            if (idx < 0 || idx >= total) return;
+            slides[current].classList.remove('active');
+            current = idx;
+            slides[current].classList.add('active');
+            document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+            document.getElementById('pageInfo').textContent = (current + 1) + ' / ' + total;
+            document.getElementById('prevBtn').disabled = current === 0;
+            document.getElementById('nextBtn').disabled = current === total - 1;
+            animateBars();
+        }
+
+        function navigate(dir) { goTo(current + dir); }
+
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+        });
+
+        // Touch
+        let touchX = 0;
+        document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+        document.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+        });
+
+        // Animate bars on slide enter
+        function animateBars() {
+            const activeSlide = slides[current];
+            const bars = activeSlide.querySelectorAll('.bar-fill');
+            bars.forEach((bar, i) => {
+                bar.classList.remove('animated');
+                setTimeout(() => bar.classList.add('animated'), 100 + i * 60);
+            });
+        }
+        // Initial animation
+        setTimeout(animateBars, 500);
+    </script>
+</body>
+</html>

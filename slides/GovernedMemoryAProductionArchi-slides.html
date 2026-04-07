@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governed Memory: Multi-Agent Workflows 논문 발표</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap');
+  body{font-family:'Noto Sans KR',sans-serif;background:#0a0a1a;color:#e0e0f0;overflow:hidden;height:100vh;width:100vw}
+
+  /* Slide Container */
+  .slides-wrapper{display:flex;transition:transform 0.7s cubic-bezier(.77,0,.18,1);height:100vh;width:500vw}
+  .slide{width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:5vmin;position:relative;overflow:hidden}
+
+  /* Backgrounds */
+  .slide:nth-child(1){background:linear-gradient(135deg,#0d0d2b 0%,#1a1a4e 40%,#2d1b69 70%,#0d0d2b 100%)}
+  .slide:nth-child(2){background:linear-gradient(135deg,#1a0a2e 0%,#2d1545 40%,#4a1942 70%,#1a0a2e 100%)}
+  .slide:nth-child(3){background:linear-gradient(135deg,#0a1628 0%,#132e4a 40%,#1a4a5e 70%,#0a1628 100%)}
+  .slide:nth-child(4){background:linear-gradient(135deg,#0d1f0d 0%,#1a3a2a 40%,#2a4a3a 70%,#0d1f0d 100%)}
+  .slide:nth-child(5){background:linear-gradient(135deg,#1f1a0a 0%,#3a2a10 40%,#4a3a1a 70%,#1f1a0a 100%)}
+
+  /* Animated Background Orbs */
+  .slide::before,.slide::after{content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:.25;animation:float 8s ease-in-out infinite}
+  .slide::before{width:40vmin;height:40vmin;top:-10%;left:-10%;background:radial-gradient(circle,#6c63ff,transparent)}
+  .slide::after{width:35vmin;height:35vmin;bottom:-10%;right:-10%;background:radial-gradient(circle,#00d2ff,transparent);animation-delay:-4s}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3vmin,3vmin) scale(1.15)}}
+
+  /* Content Styling */
+  .slide-content{position:relative;z-index:2;max-width:900px;width:100%;text-align:center}
+
+  /* Slide 1 - Title */
+  .title-badge{display:inline-block;padding:6px 20px;border:1px solid rgba(108,99,255,.5);border-radius:20px;font-size:clamp(11px,1.5vmin,14px);color:#a8a3ff;margin-bottom:3vmin;letter-spacing:2px;text-transform:uppercase;animation:fadeDown .8s ease-out both}
+  .title-main{font-size:clamp(28px,5.5vmin,56px);font-weight:900;line-height:1.2;margin-bottom:2vmin;background:linear-gradient(135deg,#ffffff 0%,#c8c3ff 50%,#6c63ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeDown .8s .2s ease-out both}
+  .title-sub{font-size:clamp(16px,2.5vmin,24px);font-weight:300;color:#a0a0c0;margin-bottom:4vmin;animation:fadeDown .8s .4s ease-out both}
+  .title-author{font-size:clamp(13px,1.8vmin,16px);color:#7878a0;animation:fadeDown .8s .6s ease-out both}
+  .title-author span{color:#8b85ff;font-weight:600}
+  .title-meta{display:flex;gap:2vmin;justify-content:center;margin-top:2vmin;animation:fadeDown .8s .8s ease-out both}
+  .meta-tag{padding:5px 14px;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25);border-radius:8px;font-size:clamp(10px,1.3vmin,13px);color:#b0abff}
+
+  /* Slide 2 - Problems */
+  .section-label{font-size:clamp(11px,1.4vmin,13px);text-transform:uppercase;letter-spacing:3px;color:#ff6b9d;margin-bottom:1.5vmin;animation:fadeDown .6s ease-out both}
+  .section-title{font-size:clamp(24px,4vmin,42px);font-weight:700;margin-bottom:4vmin;animation:fadeDown .6s .15s ease-out both}
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:2vmin;text-align:left;width:100%}
+  .problem-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:clamp(12px,2vmin,20px);backdrop-filter:blur(10px);transition:transform .3s,border-color .3s;animation:fadeUp .5s ease-out both}
+  .problem-card:hover{transform:translateY(-3px);border-color:rgba(255,107,157,.3)}
+  .problem-card:nth-child(1){animation-delay:.2s}.problem-card:nth-child(2){animation-delay:.3s}
+  .problem-card:nth-child(3){animation-delay:.4s}.problem-card:nth-child(4){animation-delay:.5s}
+  .problem-card:nth-child(5){animation-delay:.6s;grid-column:1/3;max-width:50%;justify-self:center}
+  .problem-icon{font-size:clamp(20px,3vmin,30px);margin-bottom:1vmin}
+  .problem-title{font-size:clamp(13px,1.7vmin,16px);font-weight:600;color:#ff9dc4;margin-bottom:.5vmin}
+  .problem-desc{font-size:clamp(11px,1.4vmin,13px);color:#a0a0b8;line-height:1.5}
+
+  /* Slide 3 - Solution */
+  .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5vmin;text-align:left;width:100%}
+  .solution-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:clamp(14px,2.5vmin,24px);position:relative;overflow:hidden;animation:fadeUp .5s ease-out both;transition:transform .3s,border-color .3s}
+  .solution-card:hover{transform:translateY(-3px);border-color:rgba(0,210,255,.3)}
+  .solution-card:nth-child(1){animation-delay:.2s}.solution-card:nth-child(2){animation-delay:.3s}
+  .solution-card:nth-child(3){animation-delay:.4s}.solution-card:nth-child(4){animation-delay:.5s}
+  .solution-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00d2ff,#6c63ff);opacity:.7}
+  .solution-num{font-size:clamp(28px,4vmin,40px);font-weight:900;color:rgba(0,210,255,.15);position:absolute;top:8px;right:14px}
+  .solution-name{font-size:clamp(14px,1.8vmin,17px);font-weight:700;color:#6ce0ff;margin-bottom:.8vmin}
+  .solution-desc{font-size:clamp(11px,1.4vmin,13px);color:#b0b0c8;line-height:1.6}
+
+  /* Slide 4 - Pipeline */
+  .pipeline-flow{display:flex;flex-direction:column;gap:1.5vmin;width:100%;max-width:750px;align-items:center}
+  .pipeline-step{display:flex;align-items:center;gap:2vmin;width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:clamp(10px,1.8vmin,18px) clamp(14px,2.5vmin,24px);animation:fadeRight .5s ease-out both;transition:transform .3s,border-color .3s}
+  .pipeline-step:hover{transform:translateX(5px);border-color:rgba(100,255,180,.3)}
+  .pipeline-step:nth-child(1){animation-delay:.2s}.pipeline-step:nth-child(2){animation-delay:.3s}
+  .pipeline-step:nth-child(3){animation-delay:.4s}.pipeline-step:nth-child(4){animation-delay:.5s}
+  .pipeline-step:nth-child(5){animation-delay:.6s}
+  .step-icon{font-size:clamp(24px,3.5vmin,36px);flex-shrink:0}
+  .step-body{flex:1}
+  .step-label{font-size:clamp(13px,1.7vmin,16px);font-weight:700;color:#7dffb3;margin-bottom:.3vmin}
+  .step-detail{font-size:clamp(11px,1.3vmin,13px);color:#90a8a0;line-height:1.4}
+  .pipeline-arrow{font-size:clamp(16px,2vmin,22px);color:rgba(125,255,179,.3);animation:pulse 1.5s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+  /* Slide 5 - Results */
+  .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2vmin;width:100%}
+  .result-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:clamp(12px,2vmin,20px);text-align:center;animation:scaleIn .4s ease-out both;transition:transform .3s,border-color .3s}
+  .result-card:hover{transform:scale(1.04);border-color:rgba(255,200,50,.3)}
+  .result-card:nth-child(1){animation-delay:.15s}.result-card:nth-child(2){animation-delay:.25s}
+  .result-card:nth-child(3){animation-delay:.35s}.result-card:nth-child(4){animation-delay:.45s}
+  .result-card:nth-child(5){animation-delay:.55s}.result-card:nth-child(6){animation-delay:.65s}
+  .result-value{font-size:clamp(26px,4.5vmin,44px);font-weight:900;background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .result-label{font-size:clamp(11px,1.3vmin,13px);color:#c0b890;margin-top:.5vmin;line-height:1.4}
+  .result-highlight{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.05)}
+
+  /* Navigation */
+  .nav-bar{position:fixed;bottom:3vmin;left:50%;transform:translateX(-50%);display:flex;gap:1vmin;z-index:100;background:rgba(10,10,30,.7);backdrop-filter:blur(12px);padding:8px 16px;border-radius:30px;border:1px solid rgba(255,255,255,.1)}
+  .nav-dot{width:clamp(8px,1.2vmin,12px);height:clamp(8px,1.2vmin,12px);border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s}
+  .nav-dot.active{background:#6c63ff;box-shadow:0 0 10px rgba(108,99,255,.5);transform:scale(1.3)}
+  .nav-arrow{position:fixed;top:50%;z-index:100;width:clamp(36px,5vmin,50px);height:clamp(36px,5vmin,50px);border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#a0a0c0;font-size:clamp(16px,2.2vmin,22px);transition:all .3s;backdrop-filter:blur(8px)}
+  .nav-arrow:hover{background:rgba(108,99,255,.2);border-color:rgba(108,99,255,.4);color:#fff}
+  .nav-prev{left:2vmin;transform:translateY(-50%)}
+  .nav-next{right:2vmin;transform:translateY(-50%)}
+
+  /* Progress Bar */
+  .progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#6c63ff,#00d2ff,#ff6b9d);z-index:100;transition:width .7s cubic-bezier(.77,0,.18,1)}
+
+  /* Autoplay indicator */
+  .autoplay-indicator{position:fixed;top:12px;right:16px;z-index:100;padding:4px 12px;border-radius:14px;font-size:11px;background:rgba(10,10,30,.6);border:1px solid rgba(255,255,255,.1);color:#888;cursor:pointer;backdrop-filter:blur(8px);transition:all .3s}
+  .autoplay-indicator.playing{color:#6c63ff;border-color:rgba(108,99,255,.3)}
+
+  /* Slide counter */
+  .slide-counter{position:fixed;top:12px;left:16px;z-index:100;padding:4px 12px;border-radius:14px;font-size:11px;background:rgba(10,10,30,.6);border:1px solid rgba(255,255,255,.1);color:#888;backdrop-filter:blur(8px)}
+
+  /* Animations */
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeRight{from{opacity:0;transform:translateX(-25px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+  /* Re-trigger animations */
+  .slide:not(.active) .slide-content *{animation:none!important;opacity:0}
+  .slide.active .slide-content *{opacity:1}
+
+  /* Responsive */
+  @media(max-width:600px){
+    .problem-grid,.solution-grid{grid-template-columns:1fr}
+    .problem-card:nth-child(5){grid-column:1;max-width:100%}
+    .results-grid{grid-template-columns:1fr 1fr}
+    .pipeline-step{flex-direction:column;text-align:center;gap:1vmin}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="slide-counter" id="counter">1 / 5</div>
+<div class="autoplay-indicator playing" id="autoplay" onclick="toggleAutoplay()">&#9654; 자동재생</div>
+
+<div class="nav-arrow nav-prev" onclick="go(-1)">&#10094;</div>
+<div class="nav-arrow nav-next" onclick="go(1)">&#10095;</div>
+
+<div class="nav-bar" id="navBar">
+  <div class="nav-dot active" onclick="goTo(0)"></div>
+  <div class="nav-dot" onclick="goTo(1)"></div>
+  <div class="nav-dot" onclick="goTo(2)"></div>
+  <div class="nav-dot" onclick="goTo(3)"></div>
+  <div class="nav-dot" onclick="goTo(4)"></div>
+</div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content">
+      <div class="title-badge">arXiv:2603.17787v1</div>
+      <h1 class="title-main">Governed Memory</h1>
+      <p class="title-sub">멀티 에이전트 워크플로우를 위한<br>프로덕션 아키텍처</p>
+      <p class="title-author">저자: <span>Hamed Taheri</span></p>
+      <div class="title-meta">
+        <span class="meta-tag">18 페이지</span>
+        <span class="meta-tag">11 테이블</span>
+        <span class="meta-tag">4 피겨</span>
+        <span class="meta-tag">Personize.ai</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Problems -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="section-label">Problem Definition</div>
+      <h2 class="section-title">메모리 거버넌스 갭: 5가지 구조적 문제</h2>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">🧱</div>
+          <div class="problem-title">메모리 사일로</div>
+          <div class="problem-desc">에이전트 워크플로우 간 공유 메모리가 없어 동일한 엔티티에 대해 각 에이전트가 독립된 컨텍스트를 보유</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">🔀</div>
+          <div class="problem-title">거버넌스 파편화</div>
+          <div class="problem-desc">팀과 도구 간 거버넌스 정책이 분산되어 일관성 없는 데이터 관리 및 품질 기준 적용</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">📄</div>
+          <div class="problem-title">비구조화된 메모리</div>
+          <div class="problem-desc">다운스트림 시스템이 활용할 수 없는 비정형 메모리로 인해 자동화된 처리가 불가능</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">🔄</div>
+          <div class="problem-title">중복 컨텍스트 전달</div>
+          <div class="problem-desc">자율적 다단계 실행에서 동일한 컨텍스트가 반복 전달되어 토큰 낭비 및 비용 증가</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">📉</div>
+          <div class="problem-title">무감지 품질 저하</div>
+          <div class="problem-desc">피드백 루프 부재로 메모리 품질이 조용히 저하되며 오류가 축적됨</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Solution -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="section-label">Solution Architecture</div>
+      <h2 class="section-title">Governed Memory: 4가지 핵심 메커니즘</h2>
+      <div class="solution-grid">
+        <div class="solution-card">
+          <div class="solution-num">01</div>
+          <div class="solution-name">이중 메모리 모델</div>
+          <div class="solution-desc">개방형 원자적 사실(Atomic Facts)과 스키마 기반 타입 프로퍼티를 결합하여 구조화와 유연성을 동시에 확보</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">02</div>
+          <div class="solution-name">계층적 거버넌스 라우팅</div>
+          <div class="solution-desc">거버넌스 수준에 따른 점진적 컨텍스트 전달로 에이전트별 최적 정보량 제공</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">03</div>
+          <div class="solution-name">반영 경계 검색</div>
+          <div class="solution-desc">엔티티 범위 격리를 통해 교차 엔티티 데이터 유출을 원천 방지하는 검색 메커니즘</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">04</div>
+          <div class="solution-name">폐쇄 루프 스키마 생명주기</div>
+          <div class="solution-desc">AI 기반 스키마 작성과 프로퍼티별 자동 개선을 통한 지속적 스키마 진화</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Pipeline -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="section-label">System Pipeline</div>
+      <h2 class="section-title">프로덕션 파이프라인 흐름</h2>
+      <div class="pipeline-flow">
+        <div class="pipeline-step">
+          <div class="step-icon">📥</div>
+          <div class="step-body">
+            <div class="step-label">1단계: 데이터 수집 및 추출</div>
+            <div class="step-detail">다양한 소스에서 엔티티별 원시 데이터를 수집하고 원자적 사실(Atomic Facts)을 추출</div>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-icon">🏗️</div>
+          <div class="step-body">
+            <div class="step-label">2단계: 이중 모달리티 저장</div>
+            <div class="step-detail">개방형 사실 저장소와 스키마 기반 타입 프로퍼티에 동시 저장 — 99.6% 사실 리콜 달성</div>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-icon">🛡️</div>
+          <div class="step-body">
+            <div class="step-label">3단계: 거버넌스 적용</div>
+            <div class="step-detail">계층적 라우팅으로 92% 정밀도의 거버넌스 분류, 엔티티 격리로 데이터 유출 제로</div>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-icon">⚡</div>
+          <div class="step-body">
+            <div class="step-label">4단계: 점진적 컨텍스트 전달</div>
+            <div class="step-detail">에이전트별 필요 수준에 맞는 정보만 전달하여 50% 토큰 감소 효과</div>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-icon">🔁</div>
+          <div class="step-body">
+            <div class="step-label">5단계: 피드백 및 스키마 진화</div>
+            <div class="step-detail">에이전트 출력 평가를 통한 자동 스키마 개선 — 폐쇄 루프 생명주기 완성</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Results -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="section-label">Experimental Results</div>
+      <h2 class="section-title">주요 실험 결과 (N=250, 5개 콘텐츠 유형)</h2>
+      <div class="results-grid">
+        <div class="result-card result-highlight">
+          <div class="result-value">99.6%</div>
+          <div class="result-label">사실 리콜<br>(이중 모달리티)</div>
+        </div>
+        <div class="result-card">
+          <div class="result-value">92%</div>
+          <div class="result-label">거버넌스 라우팅<br>정밀도</div>
+        </div>
+        <div class="result-card result-highlight">
+          <div class="result-value">50%</div>
+          <div class="result-label">토큰 감소<br>(점진적 전달)</div>
+        </div>
+        <div class="result-card">
+          <div class="result-value">0건</div>
+          <div class="result-label">교차 엔티티 유출<br>(500 적대적 쿼리)</div>
+        </div>
+        <div class="result-card">
+          <div class="result-value">100%</div>
+          <div class="result-label">적대적 거버넌스<br>컴플라이언스</div>
+        </div>
+        <div class="result-card">
+          <div class="result-value">74.8%</div>
+          <div class="result-label">LoCoMo 벤치마크<br>정확도</div>
+        </div>
+      </div>
+      <p style="margin-top:3vmin;font-size:clamp(11px,1.4vmin,14px);color:#a09870;animation:fadeUp .6s .8s ease-out both">
+        엔티티당 약 7개의 거버넌스 메모리에서 출력 포화 도달 &nbsp;|&nbsp; Personize.ai 프로덕션 배포 완료
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let current = 0;
+  const total = 5;
+  const wrapper = document.getElementById('slidesWrapper');
+  const dots = document.querySelectorAll('.nav-dot');
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const autoplayBtn = document.getElementById('autoplay');
+  let autoplayOn = true;
+  let timer = null;
+
+  function update(){
+    wrapper.style.transform = `translateX(-${current * 100}vw)`;
+    dots.forEach((d,i) => d.classList.toggle('active', i === current));
+    slides.forEach((s,i) => {
+      s.classList.toggle('active', i === current);
+      if(i === current){
+        // Re-trigger animations
+        s.querySelectorAll('.slide-content *').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight; // reflow
+          el.style.animation = '';
+        });
+      }
+    });
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    resetTimer();
+  }
+
+  function goTo(i){ current = Math.max(0, Math.min(total - 1, i)); update(); }
+  function go(d){ goTo(current + d); }
+
+  function resetTimer(){
+    clearInterval(timer);
+    if(autoplayOn) timer = setInterval(() => go(current < total - 1 ? 1 : -current), 10000);
+  }
+
+  function toggleAutoplay(){
+    autoplayOn = !autoplayOn;
+    autoplayBtn.classList.toggle('playing', autoplayOn);
+    autoplayBtn.innerHTML = autoplayOn ? '&#9654; 자동재생' : '&#9646;&#9646; 일시정지';
+    resetTimer();
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') go(1);
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+    else if(e.key === 'Home') goTo(0);
+    else if(e.key === 'End') goTo(total - 1);
+    else if(e.key === 'p' || e.key === 'P') toggleAutoplay();
+  });
+
+  // Touch swipe
+  let tx = 0, ty = 0, swiping = false;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; swiping = true; });
+  document.addEventListener('touchend', e => {
+    if(!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+      go(dx < 0 ? 1 : -1);
+    }
+  });
+
+  // Expose
+  window.go = go;
+  window.goTo = goTo;
+  window.toggleAutoplay = toggleAutoplay;
+
+  // Init
+  resetTimer();
+})();
+</script>
+</body>
+</html>

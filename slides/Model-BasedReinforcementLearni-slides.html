@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>시변 동역학 하의 모델 기반 강화학습</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111640;
+    --bg-card: rgba(25, 32, 72, 0.7);
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b9d;
+    --accent4: #ffa726;
+    --text: #e8eaf6;
+    --text-dim: #9fa8da;
+    --text-bright: #ffffff;
+    --border: rgba(108, 99, 255, 0.3);
+    --glow: rgba(108, 99, 255, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background animated elements */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 20s ease-in-out infinite;
+  }
+  .bg-orb.orb1 { width: 400px; height: 400px; background: rgba(108,99,255,0.08); top: -100px; right: -100px; }
+  .bg-orb.orb2 { width: 300px; height: 300px; background: rgba(0,212,170,0.06); bottom: -50px; left: -50px; animation-delay: -7s; }
+  .bg-orb.orb3 { width: 250px; height: 250px; background: rgba(255,107,157,0.05); top: 50%; left: 50%; animation-delay: -14s; }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -20px); }
+    66% { transform: translate(-20px, 30px); }
+  }
+
+  /* Typography */
+  .slide-number {
+    position: absolute;
+    top: 20px; right: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--accent);
+    opacity: 0.6;
+    z-index: 10;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    margin-bottom: 12px;
+    padding: 4px 14px;
+    border: 1px solid rgba(0,212,170,0.3);
+    border-radius: 20px;
+    background: rgba(0,212,170,0.08);
+  }
+
+  h1.title {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+
+  h1.title .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.25rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: var(--accent); }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .card-text {
+    font-size: clamp(0.78rem, 1.5vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Math / Code blocks */
+  .math-block {
+    background: rgba(108,99,255,0.08);
+    border: 1px solid rgba(108,99,255,0.2);
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    color: var(--accent2);
+    text-align: center;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .math-block .label {
+    display: block;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: normal;
+  }
+
+  /* Flow / Process */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  .flow-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Tags / Badges */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    margin: 3px 4px;
+  }
+  .badge.purple { background: rgba(108,99,255,0.15); color: #a29bfe; border: 1px solid rgba(108,99,255,0.3); }
+  .badge.green { background: rgba(0,212,170,0.12); color: #00d4aa; border: 1px solid rgba(0,212,170,0.3); }
+  .badge.pink { background: rgba(255,107,157,0.12); color: #ff6b9d; border: 1px solid rgba(255,107,157,0.3); }
+  .badge.orange { background: rgba(255,167,38,0.12); color: #ffa726; border: 1px solid rgba(255,167,38,0.3); }
+
+  /* Comparison */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .vs-divider {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent3);
+    text-align: center;
+  }
+
+  /* Timeline */
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .timeline-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 6px;
+    box-shadow: 0 0 12px rgba(108,99,255,0.5);
+  }
+  .timeline-line {
+    position: relative;
+  }
+  .timeline-line::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 20px;
+    width: 2px;
+    height: calc(100% + 16px);
+    background: var(--border);
+  }
+
+  /* Bar chart simulation */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    height: 160px;
+    padding: 0 20px;
+    margin: 16px 0;
+    border-bottom: 2px solid var(--border);
+  }
+  .bar-group {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+    flex: 1;
+    text-align: center;
+  }
+  .bar {
+    flex: 1;
+    border-radius: 6px 6px 0 0;
+    min-width: 20px;
+    position: relative;
+    transition: height 0.8s ease;
+  }
+  .bar.sombrl { background: linear-gradient(to top, #ff6b9d, #ff8ab5); }
+  .bar.r-ombrl { background: linear-gradient(to top, #6c63ff, #9b94ff); }
+  .bar.sw-ombrl { background: linear-gradient(to top, #00d4aa, #4de8c8); }
+  .bar-label {
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+  }
+  .legend-color {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+  }
+
+  /* Highlight box */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(0,212,170,0.08));
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+  }
+
+  .highlight-box.warn {
+    border-left-color: var(--accent4);
+    background: linear-gradient(135deg, rgba(255,167,38,0.08), rgba(255,107,157,0.05));
+  }
+
+  /* Author list */
+  .author-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .author {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 6px 16px;
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text);
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(10, 14, 39, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    padding: 12px 24px;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(108,99,255,0.2);
+    border-color: var(--accent);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(108,99,255,0.15);
+    border-radius: 2px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-indicator {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* Animations */
+  .fade-in { animation: fadeIn 0.6s ease forwards; }
+  .fade-in-up { animation: fadeInUp 0.6s ease forwards; }
+  .fade-in-delay-1 { animation-delay: 0.15s; opacity: 0; }
+  .fade-in-delay-2 { animation-delay: 0.3s; opacity: 0; }
+  .fade-in-delay-3 { animation-delay: 0.45s; opacity: 0; }
+  .fade-in-delay-4 { animation-delay: 0.6s; opacity: 0; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(108,99,255,0.1); }
+    50% { box-shadow: 0 0 40px rgba(108,99,255,0.25); }
+  }
+
+  /* Diagram: Bias-Variance */
+  .tradeoff-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .tradeoff-bar {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 600;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0 16px;
+    white-space: nowrap;
+  }
+
+  /* Spacer */
+  .spacer { flex: 1; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+  .mt-auto { margin-top: auto; }
+  .text-center { text-align: center; }
+
+  /* Scrollbar */
+  .slide::-webkit-scrollbar { width: 4px; }
+  .slide::-webkit-scrollbar-track { background: transparent; }
+  .slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 30px 80px 30px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-divider { transform: rotate(90deg); padding: 8px 0; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .bar-chart { height: 120px; gap: 12px; }
+    .card { padding: 18px; }
+    .nav { padding: 10px 16px; }
+    .nav-btn { padding: 10px 18px; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 75px 20px; }
+    h1.title { margin-bottom: 12px; }
+    h2 { margin-bottom: 14px; }
+    .card { padding: 14px; margin-bottom: 12px; border-radius: 12px; }
+    .card-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .math-block { padding: 12px 14px; font-size: clamp(0.65rem, 3vw, 0.85rem); }
+    .author-list { gap: 6px; }
+    .author { padding: 4px 12px; font-size: 0.75rem; }
+    .bar-chart { height: 100px; gap: 8px; padding: 0 8px; }
+    .nav-btn { padding: 10px 14px; font-size: 0.85rem; border-radius: 10px; }
+    .progress-bar { margin: 0 10px; }
+    .slide-number { top: 10px; right: 16px; }
+    .section-tag { letter-spacing: 1.5px; padding: 3px 10px; margin-bottom: 8px; }
+    .highlight-box { padding: 12px 14px; }
+    .flow-item { padding: 12px 14px; min-width: 100px; }
+    .legend { gap: 12px; }
+    .badge { padding: 3px 8px; margin: 2px; }
+    .tradeoff-bar { height: 40px; padding: 0 10px; }
+    .bg-orb.orb1 { width: 200px; height: 200px; }
+    .bg-orb.orb2 { width: 150px; height: 150px; }
+    .bg-orb.orb3 { width: 120px; height: 120px; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 14px 14px 70px 14px; }
+    .card { padding: 10px; }
+    .math-block { padding: 8px 10px; }
+    .nav-btn { padding: 8px 10px; min-width: 44px; }
+    .nav { padding: 8px 10px; }
+    .bar-chart { height: 80px; }
+    .author { font-size: 0.7rem; padding: 3px 8px; }
+    .legend { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <div class="slide active" data-slide="0">
+    <div class="slide-number">01 / 12</div>
+    <div class="spacer"></div>
+    <div class="text-center">
+      <span class="section-tag fade-in">arXiv: 2604.02260</span>
+      <h1 class="title fade-in-up" style="margin-top: 8px;">
+        <span class="highlight">시변 동역학</span> 하의<br>모델 기반 강화학습
+      </h1>
+      <p class="subtitle fade-in-up fade-in-delay-1" style="max-width: 700px; margin: 0 auto;">
+        변화하는 시스템 동역학 환경에서 최적의 제어 정책을 학습하기 위한<br>이론적 프레임워크와 실용적 알고리즘
+      </p>
+      <div class="author-list fade-in-up fade-in-delay-2" style="justify-content: center; margin-top: 24px;">
+        <span class="author">K. Iten</span>
+        <span class="author">B. Lee</span>
+        <span class="author">C. Li</span>
+        <span class="author">L. Treven</span>
+        <span class="author">A. Krause</span>
+        <span class="author">B. Sukhija</span>
+      </div>
+      <div class="fade-in-up fade-in-delay-3" style="margin-top: 16px;">
+        <span class="badge purple">cs.LG</span>
+        <span class="badge green">cs.RO</span>
+        <span class="badge orange">IEEE 투고</span>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <p class="text-center fade-in-up fade-in-delay-4" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem); color: var(--text-dim);">
+      ← → 키 또는 하단 버튼으로 이동
+    </p>
+  </div>
+
+  <!-- ==================== SLIDE 2: PROBLEM ==================== -->
+  <div class="slide" data-slide="1">
+    <div class="slide-number">02 / 12</div>
+    <span class="section-tag">문제 정의</span>
+    <h2>실세계 시스템은 <span style="color: var(--accent3);">변한다</span></h2>
+
+    <div class="card-grid cols-2" style="margin-top: 8px;">
+      <div class="card pulse-glow">
+        <span class="card-icon">⚠️</span>
+        <div class="card-title">기존 접근의 한계</div>
+        <div class="card-text">
+          대부분의 강화학습 알고리즘은 <strong style="color: var(--accent3);">정상(stationary) 동역학</strong>을 가정합니다.
+          하지만 실제 시스템에서는 마모, 드리프트, 운용 조건 변화 등으로 동역학이 지속적으로 변합니다.
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">본 논문의 목표</div>
+        <div class="card-text">
+          <strong style="color: var(--accent2);">시변(time-varying) 동역학</strong> 하에서도 잘 작동하는
+          모델 기반 강화학습(MBRL) 프레임워크를 설계하고 이론적 보장을 제공합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="math-block" style="margin-top: 16px;">
+      <span class="label">에피소드 n에서의 시스템 동역학</span>
+      x<sub>n,t+1</sub> = f*<sub>n</sub>(x<sub>n,t</sub>, u<sub>n,t</sub>) + w<sub>n,t</sub>
+    </div>
+
+    <div class="highlight-box">
+      <p style="font-size: clamp(0.8rem, 1.5vw, 1rem);">
+        <strong style="color: var(--accent);">핵심 통찰:</strong> f*<sub>n</sub>이 에피소드마다 달라지면,
+        과거 데이터가 현재 시스템을 정확히 반영하지 못해 <strong>모델 보정(calibration)이 깨집니다.</strong>
+      </p>
+    </div>
+
+    <div class="flow-row" style="margin-top: auto;">
+      <div class="flow-item">
+        <div style="font-size: 1.5rem;">🔧</div>
+        <div style="font-size: clamp(0.75rem, 1.3vw, 0.9rem); color: var(--text-dim); margin-top: 4px;">기계적 마모</div>
+      </div>
+      <div class="flow-item">
+        <div style="font-size: 1.5rem;">🌡️</div>
+        <div style="font-size: clamp(0.75rem, 1.3vw, 0.9rem); color: var(--text-dim); margin-top: 4px;">온도 변화</div>
+      </div>
+      <div class="flow-item">
+        <div style="font-size: 1.5rem;">⚡</div>
+        <div style="font-size: clamp(0.75rem, 1.3vw, 0.9rem); color: var(--text-dim); margin-top: 4px;">배터리 소모</div>
+      </div>
+      <div class="flow-item">
+        <div style="font-size: 1.5rem;">💨</div>
+        <div style="font-size: clamp(0.75rem, 1.3vw, 0.9rem); color: var(--text-dim); margin-top: 4px;">공기역학 변화</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: THEORETICAL FRAMEWORK ==================== -->
+  <div class="slide" data-slide="2">
+    <div class="slide-number">03 / 12</div>
+    <span class="section-tag">이론적 프레임워크</span>
+    <h2>비정상성 모델링: <span style="color: var(--accent2);">변동 예산</span></h2>
+
+    <div class="card mb-16">
+      <div class="card-title">변동 예산 (Variation Budget)</div>
+      <div class="card-text mb-8">
+        재생핵 힐베르트 공간(RKHS)에서 에피소드 간 누적 동역학 변화량에 상한을 둡니다.
+      </div>
+      <div class="math-block">
+        <span class="label">N 에피소드에 걸친 총 변동량 제약</span>
+        Σ<sub>n=1</sub><sup>N-1</sup> ‖f*<sub>n+1</sub> - f*<sub>n</sub>‖<sub>H<sub>k</sub></sub> ≤ P<sub>N</sub>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <div class="card-title" style="color: var(--accent3);">동적 리그렛 (Dynamic Regret)</div>
+        <div class="card-text mb-8">정적 리그렛 대신, 매 에피소드마다 변하는 최적 정책과 비교합니다.</div>
+        <div class="math-block">
+          R<sub>N</sub> = Σ<sub>n=1</sub><sup>N</sup> [J(π*<sub>n</sub>, f*<sub>n</sub>) - J(π<sub>n</sub>, f*<sub>n</sub>)]
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color: var(--accent);">가우시안 프로세스 모델</div>
+        <div class="card-text">
+          각 상태 차원을 독립적인 GP로 모델링합니다. GP의 사후 평균과 분산이 불확실성을 정량화하지만,
+          비정상 환경에서는 <strong style="color: var(--accent3);">시간적 편향</strong>이 추가로 발생합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box warn" style="margin-top: 16px;">
+      <p style="font-size: clamp(0.8rem, 1.5vw, 0.95rem);">
+        <strong style="color: var(--accent4);">주의:</strong>
+        GP 분산은 정상 함수 가정 하의 통계적 불확실성만 반영합니다.
+        시간에 따른 동역학 변화(temporal mismatch)는 포착하지 못합니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: CALIBRATION ==================== -->
+  <div class="slide" data-slide="3">
+    <div class="slide-number">04 / 12</div>
+    <span class="section-tag">핵심 이론</span>
+    <h2>드리프트 하의 <span style="color: var(--accent);">보정 (Lemma 1)</span></h2>
+
+    <div class="card mb-16">
+      <div class="card-text mb-8" style="font-size: clamp(0.85rem, 1.6vw, 1rem);">
+        비정상 환경에서 GP 신뢰 구간을 확장한 핵심 보조정리:
+      </div>
+      <div class="math-block" style="text-align: left; white-space: normal; line-height: 2;">
+        |f*<sub>n,j</sub>(z) - μ<sub>m:n-1,j</sub>(z)| ≤
+        <span style="color: #a29bfe;">β<sub>n</sub>(δ, n-m) · σ<sub>m:n-1,j</sub>(z)</span> +
+        <span style="color: #ff6b9d;">ξ<sub>n-m</sub> · Σ<sub>s=m</sub><sup>n-1</sup> ‖f*<sub>s+1,j</sub> - f*<sub>s,j</sub>‖<sub>H<sub>k</sub></sub></span>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-color: rgba(108,99,255,0.5);">
+        <div class="card-title" style="color: #a29bfe;">인식론적 불확실성 항</div>
+        <div class="math-block" style="font-size: clamp(0.7rem, 1.3vw, 0.9rem);">
+          β<sub>n</sub>(δ, n-m) · σ<sub>m:n-1,j</sub>(z)
+        </div>
+        <div class="card-text">
+          표준 통계적 오차입니다. 데이터가 많아지면 감소합니다.
+          정상 환경에서의 기존 GP 신뢰 구간과 동일합니다.
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(255,107,157,0.5);">
+        <div class="card-title" style="color: #ff6b9d;">시간적 편향 항 (신규)</div>
+        <div class="math-block" style="font-size: clamp(0.7rem, 1.3vw, 0.9rem);">
+          ξ<sub>n-m</sub> · Σ ‖f*<sub>s+1</sub> - f*<sub>s</sub>‖<sub>H<sub>k</sub></sub>
+        </div>
+        <div class="card-text">
+          비정상성으로 인한 <strong>새로운 오차항</strong>입니다.
+          버퍼 길이(n-m)가 길수록, 누적 드리프트가 클수록 증가합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 16px;">
+      <p style="font-size: clamp(0.82rem, 1.5vw, 0.95rem);">
+        <strong style="color: var(--accent);">핵심 함의:</strong>
+        시간적 편향 항은 버퍼 길이에 따라 증가하므로,
+        <strong>오래된 데이터의 영향을 명시적으로 제한</strong>해야 합니다.
+        → 이것이 망각 메커니즘의 이론적 근거입니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: FORGETTING MECHANISMS ==================== -->
+  <div class="slide" data-slide="4">
+    <div class="slide-number">05 / 12</div>
+    <span class="section-tag">알고리즘 설계</span>
+    <h2>두 가지 <span style="color: var(--accent2);">망각 메커니즘</span></h2>
+
+    <div class="vs-container" style="flex: 1;">
+      <div class="card" style="border-color: rgba(108,99,255,0.5); height: 100%;">
+        <div style="text-align: center; margin-bottom: 12px;">
+          <span class="badge purple" style="font-size: clamp(0.8rem, 1.3vw, 0.95rem);">R-OMBRL</span>
+        </div>
+        <h3 style="text-align: center; color: #a29bfe;">완전 초기화</h3>
+        <div class="card-text" style="margin-bottom: 12px;">
+          매 <strong>H</strong> 에피소드마다 데이터 버퍼를 <strong>완전히 비웁니다.</strong>
+        </div>
+        <div style="display: flex; gap: 4px; margin: 12px 0;">
+          <div style="flex: 1; height: 30px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">에피소드 1~H</div>
+          <div style="width: 3px; background: var(--accent3);"></div>
+          <div style="flex: 1; height: 30px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">H+1~2H</div>
+          <div style="width: 3px; background: var(--accent3);"></div>
+          <div style="flex: 1; height: 30px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">2H+1~3H</div>
+        </div>
+        <div class="card-text" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem); margin-top: 8px;">
+          ✅ 구현 단순<br>
+          ✅ 분석 용이<br>
+          ⚠️ 초기화 직후 데이터 부족
+        </div>
+      </div>
+
+      <div class="vs-divider">VS</div>
+
+      <div class="card" style="border-color: rgba(0,212,170,0.5); height: 100%;">
+        <div style="text-align: center; margin-bottom: 12px;">
+          <span class="badge green" style="font-size: clamp(0.8rem, 1.3vw, 0.95rem);">SW-OMBRL</span>
+        </div>
+        <h3 style="text-align: center; color: var(--accent2);">슬라이딩 윈도우</h3>
+        <div class="card-text" style="margin-bottom: 12px;">
+          가장 최근 <strong>w</strong> 에피소드의 데이터만 <strong>유지합니다.</strong>
+        </div>
+        <div style="position: relative; margin: 12px 0;">
+          <div style="display: flex; gap: 2px;">
+            <div style="flex: 1; height: 30px; background: rgba(108,99,255,0.15); border-radius: 4px; opacity: 0.3;"></div>
+            <div style="flex: 1; height: 30px; background: rgba(108,99,255,0.15); border-radius: 4px; opacity: 0.3;"></div>
+            <div style="flex: 1; height: 30px; background: linear-gradient(90deg, rgba(0,212,170,0.3), var(--accent2)); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">윈도우 w</div>
+          </div>
+          <div style="text-align: right; font-size: 0.65rem; color: var(--text-dim); margin-top: 4px;">→ 시간</div>
+        </div>
+        <div class="card-text" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem); margin-top: 8px;">
+          ✅ 연속적 데이터 유지<br>
+          ✅ 급격한 데이터 손실 없음<br>
+          ⚠️ 구현이 약간 더 복잡
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6: OPTIMISTIC FRAMEWORK ==================== -->
+  <div class="slide" data-slide="5">
+    <div class="slide-number">06 / 12</div>
+    <span class="section-tag">낙관적 탐색</span>
+    <h2>낙관적 MBRL <span style="color: var(--accent);">프레임워크</span></h2>
+
+    <div class="card mb-16">
+      <div class="card-title">성능 차이 상한 (Lemma 2)</div>
+      <div class="math-block" style="white-space: normal; line-height: 2; text-align: left;">
+        |J(π, f*<sub>n</sub>) - J(π, μ<sub>m:n-1</sub>)| ≤
+        <span style="color: var(--accent3);">B<sub>n,m</sub></span> +
+        <span style="color: var(--accent);">λ<sub>n,m</sub></span> · Σ<sub>m:n-1</sub>(π, μ<sub>m:n-1</sub>)
+      </div>
+      <div style="display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 150px;">
+          <span class="badge pink">B<sub>n,m</sub></span>
+          <p class="card-text" style="margin-top: 4px;">시간적 드리프트 (정책 독립적)</p>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <span class="badge purple">λ<sub>n,m</sub> · Σ</span>
+          <p class="card-text" style="margin-top: 4px;">인식론적 불확실성 (탐색 유도)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">낙관적 정책 합성</div>
+      <div class="math-block" style="margin: 12px 0;">
+        <span class="label">불확실성을 보상으로 활용하여 탐색 유도</span>
+        π<sub>n</sub> = argmax<sub>π</sub> [ J(π, μ<sub>m:n-1</sub>) + λ<sub>n,m</sub> · Σ<sub>m:n-1</sub>(π, μ<sub>m:n-1</sub>) ]
+      </div>
+      <div class="card-text">
+        불확실성 항 Σ<sub>m:n-1</sub>이 <strong style="color: var(--accent2);">내재적 보상(intrinsic reward)</strong>으로 작동하여,
+        모델이 불확실한 영역을 탐색하도록 유도합니다.
+        SOMBRL을 비정상 환경으로 확장한 것입니다.
+      </div>
+    </div>
+
+    <div class="flow-row" style="margin-top: auto;">
+      <div class="flow-item" style="border-color: rgba(0,212,170,0.5);">
+        <div style="font-weight: 600; color: var(--accent2); font-size: clamp(0.8rem, 1.3vw, 0.95rem);">데이터 수집</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item" style="border-color: rgba(108,99,255,0.5);">
+        <div style="font-weight: 600; color: var(--accent); font-size: clamp(0.8rem, 1.3vw, 0.95rem);">모델 업데이트</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item" style="border-color: rgba(255,107,157,0.5);">
+        <div style="font-weight: 600; color: var(--accent3); font-size: clamp(0.8rem, 1.3vw, 0.95rem);">낙관적 정책</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item" style="border-color: rgba(255,167,38,0.5);">
+        <div style="font-weight: 600; color: var(--accent4); font-size: clamp(0.8rem, 1.3vw, 0.95rem);">망각 적용</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7: REGRET BOUND ==================== -->
+  <div class="slide" data-slide="6">
+    <div class="slide-number">07 / 12</div>
+    <span class="section-tag">주요 정리</span>
+    <h2>동적 리그렛 <span style="color: var(--accent2);">상한 (Theorem 1)</span></h2>
+
+    <div class="card pulse-glow mb-16" style="border-color: rgba(0,212,170,0.5);">
+      <div class="card-title" style="text-align: center; font-size: clamp(1rem, 2vw, 1.3rem);">핵심 결과</div>
+      <div class="math-block" style="font-size: clamp(0.85rem, 1.8vw, 1.15rem); margin: 16px 0;">
+        R<sub>N</sub> = Õ( N√(γ³<sub>p</sub>/p) + γ<sub>p</sub> · p<sup>3/2</sup> · P<sub>N</sub> )
+      </div>
+      <div class="card-text text-center">
+        p = H (초기화 주기) 또는 p = w (윈도우 크기), γ<sub>p</sub> = 최대 정보 이득
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-color: rgba(108,99,255,0.4);">
+        <div class="card-title" style="color: #a29bfe;">학습 항</div>
+        <div class="math-block" style="font-size: clamp(0.75rem, 1.3vw, 0.9rem);">
+          N · √(γ³<sub>H</sub> / H)
+        </div>
+        <div class="card-text">
+          H가 커지면 <strong style="color: var(--accent2);">감소</strong><br>
+          → 데이터가 많을수록 학습이 개선됨
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(255,107,157,0.4);">
+        <div class="card-title" style="color: #ff6b9d;">드리프트 항</div>
+        <div class="math-block" style="font-size: clamp(0.75rem, 1.3vw, 0.9rem);">
+          γ<sub>H</sub> · H<sup>3/2</sup> · P<sub>N</sub>
+        </div>
+        <div class="card-text">
+          H가 커지면 <strong style="color: var(--accent3);">증가</strong><br>
+          → 오래된 데이터가 편향을 키움
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <div class="card-title" style="color: var(--accent4);">편향-분산 트레이드오프</div>
+      <div class="tradeoff-diagram">
+        <div class="tradeoff-bar" style="background: linear-gradient(90deg, #6c63ff, #9b94ff); flex: 2; border-radius: 8px 0 0 8px;">
+          ← 작은 H: 적응적
+        </div>
+        <div class="tradeoff-bar" style="background: linear-gradient(90deg, #9b94ff, #b0aaff); flex: 1;">
+          최적 H*
+        </div>
+        <div class="tradeoff-bar" style="background: linear-gradient(90deg, #ff8ab5, #ff6b9d); flex: 2; border-radius: 0 8px 8px 0;">
+          큰 H: 데이터 풍부 →
+        </div>
+      </div>
+      <div class="card-text text-center" style="margin-top: 8px;">
+        최적 초기화 주기: H ∝ γ<sub>N</sub><sup>1/4</sup> · N<sup>1/2</sup>
+        → R<sub>N</sub> = O(γ<sub>N</sub><sup>11/8</sup> · N<sup>3/4</sup> · log N)
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8: ALGORITHMS ==================== -->
+  <div class="slide" data-slide="7">
+    <div class="slide-number">08 / 12</div>
+    <span class="section-tag">알고리즘</span>
+    <h2>R-OMBRL & SW-OMBRL <span style="color: var(--accent2);">알고리즘</span></h2>
+
+    <div class="card-grid cols-2" style="flex: 1;">
+      <div class="card" style="border-color: rgba(108,99,255,0.5);">
+        <div class="card-title" style="color: #a29bfe;">Algorithm 1: R-OMBRL</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: clamp(0.65rem, 1.2vw, 0.8rem); line-height: 1.9; color: var(--text-dim);">
+          <div>정책 π<sub>θ</sub>, 모델 M<sub>0</sub>, 버퍼 D 초기화</div>
+          <div style="margin-top: 6px;"><strong style="color: var(--accent);">for</strong> n = 1 <strong style="color: var(--accent);">to</strong> N:</div>
+          <div style="padding-left: 16px;">
+            <div><strong style="color: var(--accent3);">if</strong> n mod H == 0: D ← ∅</div>
+            <div>π<sub>θ</sub>로 궤적 τ<sub>n</sub> 수집</div>
+            <div>D ← D ∪ τ<sub>n</sub></div>
+            <div>D로 모델 M<sub>φ</sub> 업데이트</div>
+            <div>(M<sub>φ</sub>, D)로 π<sub>θ</sub> 업데이트</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-color: rgba(0,212,170,0.5);">
+        <div class="card-title" style="color: var(--accent2);">Algorithm 2: SW-OMBRL</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: clamp(0.65rem, 1.2vw, 0.8rem); line-height: 1.9; color: var(--text-dim);">
+          <div>정책 π<sub>θ</sub>, 모델 M<sub>0</sub>, 버퍼 D 초기화</div>
+          <div style="margin-top: 6px;"><strong style="color: var(--accent);">for</strong> n = 1 <strong style="color: var(--accent);">to</strong> N:</div>
+          <div style="padding-left: 16px;">
+            <div>π<sub>θ</sub>로 궤적 τ<sub>n</sub> 수집</div>
+            <div>D ← D ∪ τ<sub>n</sub></div>
+            <div style="color: var(--accent2);"><strong>w보다 오래된 데이터 제거</strong></div>
+            <div>D로 모델 M<sub>φ</sub> 업데이트</div>
+            <div>(M<sub>φ</sub>, D)로 π<sub>θ</sub> 업데이트</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 16px;">
+      <h3 style="color: var(--accent); margin-bottom: 8px;">실용적 구현 수정사항</h3>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 140px;">
+          <span class="badge purple">딥 앙상블</span>
+          <p class="card-text" style="margin-top: 4px;">GP를 신경망 앙상블로 대체</p>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <span class="badge green">MBPO</span>
+          <p class="card-text" style="margin-top: 4px;">정책 학습에 MBPO 알고리즘 사용</p>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <span class="badge orange">소프트 리셋</span>
+          <p class="card-text" style="margin-top: 4px;">φ ← (1-α₁)φ + α₁φ₀</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 9: EXPERIMENTS SETUP ==================== -->
+  <div class="slide" data-slide="8">
+    <div class="slide-number">09 / 12</div>
+    <span class="section-tag">실험 설계</span>
+    <h2>실험 <span style="color: var(--accent3);">환경 및 설정</span></h2>
+
+    <div class="card-grid cols-3" style="margin-bottom: 16px;">
+      <div class="card text-center">
+        <span class="card-icon">🔄</span>
+        <div class="card-title">Pendulum</div>
+        <div class="card-text">저차원 연속 제어<br>기본 벤치마크</div>
+        <span class="badge green" style="margin-top: 8px;">저차원</span>
+      </div>
+      <div class="card text-center">
+        <span class="card-icon">🏃</span>
+        <div class="card-title">HalfCheetah</div>
+        <div class="card-text">고차원 보행<br>MuJoCo 물리엔진</div>
+        <span class="badge purple" style="margin-top: 8px;">고차원</span>
+      </div>
+      <div class="card text-center">
+        <span class="card-icon">🦘</span>
+        <div class="card-title">Hopper</div>
+        <div class="card-text">불안정 보행<br>균형 유지 필수</div>
+        <span class="badge orange" style="margin-top: 8px;">고차원</span>
+      </div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="card-title" style="color: var(--accent3);">비정상성 도입 방법: 액추에이터 강도 감쇄</div>
+      <div class="math-block">
+        <span class="label">에피소드 n에서의 최대 액추에이터 출력</span>
+        ū<sub>n</sub> = exp(-an) · (u<sub>max</sub> - u<sub>min</sub>) + u<sub>min</sub>
+      </div>
+      <div class="card-text" style="margin-top: 8px;">
+        에피소드가 진행될수록 액추에이터 출력이 지수적으로 감소하여,
+        에이전트가 <strong>점점 약해지는 구동력</strong>에 적응해야 합니다.
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <div class="card-title">베이스라인</div>
+        <div class="card-text">
+          <strong style="color: var(--accent3);">SOMBRL</strong>: 데이터 버퍼 제한 없는 정상 MBRL<br>
+          (모든 과거 데이터를 계속 축적)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">평가 지표</div>
+        <div class="card-text">
+          <strong style="color: var(--accent2);">누적 동적 리그렛</strong><br>
+          30 에피소드, 6개 랜덤 시드 평균
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 10: RESULTS ==================== -->
+  <div class="slide" data-slide="9">
+    <div class="slide-number">10 / 12</div>
+    <span class="section-tag">실험 결과</span>
+    <h2>시뮬레이션 <span style="color: var(--accent2);">결과</span></h2>
+
+    <div class="legend" style="margin-bottom: 12px;">
+      <div class="legend-item"><div class="legend-color" style="background: #ff6b9d;"></div> SOMBRL (기존)</div>
+      <div class="legend-item"><div class="legend-color" style="background: #6c63ff;"></div> R-OMBRL (초기화)</div>
+      <div class="legend-item"><div class="legend-color" style="background: #00d4aa;"></div> SW-OMBRL (슬라이딩)</div>
+    </div>
+
+    <div class="card mb-16">
+      <div class="card-title text-center">누적 동적 리그렛 비교 (낮을수록 좋음)</div>
+      <div class="bar-chart" id="barChart">
+        <div class="bar-group">
+          <div class="bar sombrl" style="height: 90%;"></div>
+          <div class="bar r-ombrl" style="height: 40%;"></div>
+          <div class="bar sw-ombrl" style="height: 35%;"></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar sombrl" style="height: 85%;"></div>
+          <div class="bar r-ombrl" style="height: 45%;"></div>
+          <div class="bar sw-ombrl" style="height: 38%;"></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar sombrl" style="height: 95%;"></div>
+          <div class="bar r-ombrl" style="height: 50%;"></div>
+          <div class="bar sw-ombrl" style="height: 42%;"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-around; margin-top: 8px;">
+        <span class="bar-label">Pendulum</span>
+        <span class="bar-label">HalfCheetah</span>
+        <span class="bar-label">Hopper</span>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-color: rgba(0,212,170,0.5);">
+        <div class="card-title" style="color: var(--accent2);">주요 발견</div>
+        <ul style="list-style: none; padding: 0;">
+          <li class="card-text" style="margin-bottom: 6px;">✅ 두 망각 메커니즘 모두 리그렛을 <strong>크게 감소</strong></li>
+          <li class="card-text" style="margin-bottom: 6px;">✅ SOMBRL 대비 리그렛 <strong>50~60% 이상 감소</strong></li>
+          <li class="card-text">✅ 고차원 MuJoCo 태스크에서도 <strong>일관된 개선</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-color: rgba(255,107,157,0.5);">
+        <div class="card-title" style="color: var(--accent3);">SOMBRL의 실패 원인</div>
+        <ul style="list-style: none; padding: 0;">
+          <li class="card-text" style="margin-bottom: 6px;">❌ 과거 데이터 축적으로 <strong>모델 편향 증가</strong></li>
+          <li class="card-text" style="margin-bottom: 6px;">❌ 현재와 다른 동역학 데이터가 <strong>학습을 방해</strong></li>
+          <li class="card-text">❌ 리그렛이 시간에 따라 <strong>가속적으로 증가</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 11: HARDWARE ==================== -->
+  <div class="slide" data-slide="10">
+    <div class="slide-number">11 / 12</div>
+    <span class="section-tag">하드웨어 실험</span>
+    <h2>RC 카 <span style="color: var(--accent4);">실세계 검증</span></h2>
+
+    <div class="card mb-16" style="border-color: rgba(255,167,38,0.5);">
+      <div class="card-title" style="color: var(--accent4);">실험 플랫폼: RC 카 동적 주차</div>
+      <div class="card-text" style="margin-bottom: 12px;">
+        RC 카가 회전 후 목표 지점에 주차하는 동적 기동 과제입니다.
+        에피소드가 진행되면서 스로틀 출력이 감소하여 최적 행동이 변합니다.
+      </div>
+      <div class="flow-row">
+        <div class="flow-item" style="border-color: rgba(255,167,38,0.5);">
+          <div style="font-weight: 600; color: var(--accent4);">초기</div>
+          <div class="card-text" style="font-size: clamp(0.7rem, 1.2vw, 0.8rem);">높은 스로틀<br>드리프트 주차</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item" style="border-color: rgba(108,99,255,0.5);">
+          <div style="font-weight: 600; color: var(--accent);">중간</div>
+          <div class="card-text" style="font-size: clamp(0.7rem, 1.2vw, 0.8rem);">감소하는 출력<br>전략 전환 필요</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item" style="border-color: rgba(0,212,170,0.5);">
+          <div style="font-weight: 600; color: var(--accent2);">후기</div>
+          <div class="card-text" style="font-size: clamp(0.7rem, 1.2vw, 0.8rem);">낮은 스로틀<br>일반 주차</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2">
+      <div class="card" style="border-color: rgba(255,107,157,0.4);">
+        <div style="text-align: center; margin-bottom: 8px;">
+          <span class="badge pink" style="font-size: clamp(0.8rem, 1.3vw, 0.95rem);">SOMBRL</span>
+        </div>
+        <div class="card-text text-center" style="margin-bottom: 12px;">
+          스로틀 감소 후 주차 기동 <strong style="color: var(--accent3);">실패</strong>
+        </div>
+        <div style="text-align: center; font-size: 3rem; opacity: 0.7;">✗</div>
+        <div class="card-text text-center" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem); margin-top: 8px;">
+          과거 고출력 시절 데이터에<br>모델이 고착되어 적응 실패
+        </div>
+      </div>
+      <div class="card" style="border-color: rgba(108,99,255,0.4);">
+        <div style="text-align: center; margin-bottom: 8px;">
+          <span class="badge purple" style="font-size: clamp(0.8rem, 1.3vw, 0.95rem);">R-OMBRL</span>
+        </div>
+        <div class="card-text text-center" style="margin-bottom: 12px;">
+          주차 기동 <strong style="color: var(--accent2);">성공</strong> & 높은 리턴
+        </div>
+        <div style="text-align: center; font-size: 3rem; opacity: 0.7;">✓</div>
+        <div class="card-text text-center" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem); margin-top: 8px;">
+          데이터 초기화로 현재 동역학에<br>맞는 새로운 전략 학습 성공
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 16px;">
+      <p style="font-size: clamp(0.82rem, 1.5vw, 0.95rem);">
+        <strong style="color: var(--accent);">의의:</strong>
+        시뮬레이션 결과가 <strong>실제 하드웨어</strong>에서도 재현됨을 확인.
+        이론적 통찰이 실용적 가치를 가짐을 입증했습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 12: CONCLUSION ==================== -->
+  <div class="slide" data-slide="11">
+    <div class="slide-number">12 / 12</div>
+    <span class="section-tag">결론</span>
+    <h2><span class="highlight" style="background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">핵심 기여</span> 및 향후 과제</h2>
+
+    <div class="card-grid cols-2" style="margin-bottom: 16px;">
+      <div class="card" style="border-color: rgba(108,99,255,0.5);">
+        <span class="card-icon">📐</span>
+        <div class="card-title">이론적 분석</div>
+        <div class="card-text">비정상 연속 공간에서의 MBRL에 대한 <strong>최초의 동적 리그렛 보장</strong> 제공</div>
+      </div>
+      <div class="card" style="border-color: rgba(0,212,170,0.5);">
+        <span class="card-icon">⚙️</span>
+        <div class="card-title">알고리즘 프레임워크</div>
+        <div class="card-text">이론에 근거한 <strong>데이터 버퍼 적응 메커니즘</strong> (초기화/슬라이딩 윈도우) 설계</div>
+      </div>
+      <div class="card" style="border-color: rgba(255,107,157,0.5);">
+        <span class="card-icon">🔬</span>
+        <div class="card-title">핵심 통찰</div>
+        <div class="card-text">지속적 비정상성에서는 오래된 데이터를 <strong>명시적으로 제한</strong>해야 보정이 유지됨</div>
+      </div>
+      <div class="card" style="border-color: rgba(255,167,38,0.5);">
+        <span class="card-icon">🏎️</span>
+        <div class="card-title">실험적 검증</div>
+        <div class="card-text">시뮬레이션 + <strong>실제 RC 카 하드웨어</strong>에서 일관된 성능 향상 확인</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color: rgba(255,167,38,0.4);">
+      <div class="card-title" style="color: var(--accent4);">미해결 과제 및 향후 연구 방향</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+        <div class="card-text">• 초기화 주기 H의 <strong>적응적 선택</strong> 방법</div>
+        <div class="card-text">• 급격한 변화 및 <strong>주기적 변동</strong> 시나리오</div>
+        <div class="card-text">• <strong>비에피소드</strong>(continuous) 환경으로의 확장</div>
+        <div class="card-text">• <strong>분포 이동</strong>(domain shift) 상황 대응</div>
+      </div>
+    </div>
+
+    <div class="text-center" style="margin-top: auto; padding-top: 16px;">
+      <p style="font-size: clamp(0.75rem, 1.3vw, 0.9rem); color: var(--text-dim);">
+        Iten, Lee, Li, Treven, Krause, Sukhija — arXiv:2604.02260 (2026)
+      </p>
+      <div style="margin-top: 8px;">
+        <span class="badge purple">모델 기반 RL</span>
+        <span class="badge green">시변 동역학</span>
+        <span class="badge pink">가우시안 프로세스</span>
+        <span class="badge orange">동적 리그렛</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>
+    ← 이전
+  </button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 8.33%;"></div>
+  </div>
+  <span class="slide-indicator" id="slideIndicator">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+    다음 →
+  </button>
+</nav>
+
+<script>
+  const totalSlides = 12;
+  let currentSlide = 0;
+  let isAnimating = false;
+
+  function changeSlide(dir) {
+    if (isAnimating) return;
+    const next = currentSlide + dir;
+    if (next < 0 || next >= totalSlides) return;
+
+    isAnimating = true;
+    const slides = document.querySelectorAll('.slide');
+    const current = slides[currentSlide];
+    const target = slides[next];
+
+    current.classList.remove('active');
+    current.classList.add(dir > 0 ? 'prev' : '');
+    if (dir < 0) current.style.transform = 'translateX(60px)';
+
+    target.classList.remove('prev');
+    target.classList.add('active');
+    target.scrollTop = 0;
+
+    currentSlide = next;
+    updateNav();
+
+    setTimeout(() => {
+      isAnimating = false;
+      current.classList.remove('prev');
+      current.style.transform = '';
+    }, 500);
+  }
+
+  function goToSlide(n) {
+    if (n === currentSlide || isAnimating) return;
+    const dir = n > currentSlide ? 1 : -1;
+    const slides = document.querySelectorAll('.slide');
+    slides[currentSlide].classList.remove('active', 'prev');
+    slides[currentSlide].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    currentSlide = n;
+    slides[currentSlide].classList.add('active');
+    slides[currentSlide].scrollTop = 0;
+    updateNav();
+    setTimeout(() => {
+      slides.forEach((s, i) => { if (i !== currentSlide) s.style.transform = ''; });
+    }, 500);
+  }
+
+  function updateNav() {
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+    document.getElementById('slideIndicator').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+    document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goToSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goToSlide(totalSlides - 1);
+    }
+  });
+
+  // Touch swipe navigation
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const dx = touchStartX - touchEndX;
+    const dy = Math.abs(touchStartY - touchEndY);
+
+    // Only trigger if horizontal swipe is dominant and exceeds threshold
+    if (Math.abs(dx) > 50 && Math.abs(dx) > dy * 1.5) {
+      if (dx > 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+</script>
+
+</body>
+</html>

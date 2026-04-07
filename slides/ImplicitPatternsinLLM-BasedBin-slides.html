@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LLM 기반 바이너리 분석의 암묵적 패턴</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background effects */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+    transition: all 1s ease;
+  }
+
+  .glow-1 { background: var(--accent-blue); top: -200px; right: -200px; }
+  .glow-2 { background: var(--accent-purple); bottom: -200px; left: -200px; }
+
+  /* Typography */
+  .slide-number {
+    position: fixed;
+    bottom: 20px; right: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    color: var(--text-muted);
+    z-index: 100;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .highlight { color: var(--accent-cyan); font-weight: 700; }
+  .highlight-purple { color: var(--accent-purple); font-weight: 700; }
+  .highlight-emerald { color: var(--accent-emerald); font-weight: 700; }
+  .highlight-amber { color: var(--accent-amber); font-weight: 700; }
+  .highlight-rose { color: var(--accent-rose); font-weight: 700; }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 500;
+    margin: 4px 4px 4px 0;
+  }
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.3); }
+  .tag-purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); border: 1px solid rgba(139,92,246,0.3); }
+  .tag-cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); border: 1px solid rgba(6,182,212,0.3); }
+
+  /* Cards */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 8px 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-4 { grid-template-columns: 1fr 1fr; }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Stat boxes */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Bar chart */
+  .bar-chart { margin: 16px 0; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    gap: 10px;
+  }
+
+  .bar-label {
+    min-width: 90px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.1vw, 0.75rem);
+    color: white;
+    font-weight: 700;
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.blue { background: linear-gradient(90deg, var(--accent-blue), #60a5fa); }
+  .bar-fill.purple { background: linear-gradient(90deg, var(--accent-purple), #a78bfa); }
+  .bar-fill.cyan { background: linear-gradient(90deg, var(--accent-cyan), #22d3ee); }
+  .bar-fill.emerald { background: linear-gradient(90deg, var(--accent-emerald), #34d399); }
+  .bar-fill.amber { background: linear-gradient(90deg, var(--accent-amber), #fbbf24); }
+  .bar-fill.rose { background: linear-gradient(90deg, var(--accent-rose), #fb7185); }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-secondary);
+  }
+
+  .data-table tr:hover { background: rgba(255,255,255,0.02); }
+
+  /* Flow diagram */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .flow-node {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    text-align: center;
+    min-width: 60px;
+  }
+
+  .flow-arrow {
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    margin: 20px 0;
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), var(--accent-emerald));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-cyan);
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple));
+    z-index: 200;
+    transition: width 0.4s ease;
+  }
+
+  /* Navigation */
+  .nav-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: rgba(17,24,39,0.9);
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(59,130,246,0.2);
+    border-color: var(--accent-blue);
+    transform: scale(1.05);
+  }
+
+  /* Pattern color coding */
+  .p1-color { color: var(--accent-blue); }
+  .p2-color { color: var(--accent-purple); }
+  .p3-color { color: var(--accent-emerald); }
+  .p4-color { color: var(--accent-amber); }
+
+  .p1-bg { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25); }
+  .p2-bg { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25); }
+  .p3-bg { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); }
+  .p4-bg { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); }
+
+  /* Divider */
+  .divider {
+    width: 60px; height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    margin: 16px 0;
+  }
+
+  /* Lists */
+  ul { list-style: none; padding: 0; }
+  ul li { padding: 6px 0; padding-left: 20px; position: relative; }
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+    font-weight: bold;
+  }
+
+  /* Heatmap mini */
+  .heatmap-row {
+    display: flex;
+    gap: 3px;
+    margin: 4px 0;
+    align-items: center;
+  }
+
+  .heatmap-label {
+    min-width: 30px;
+    font-size: clamp(0.6rem, 1vw, 0.72rem);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    text-align: right;
+    margin-right: 6px;
+  }
+
+  .heatmap-cell {
+    flex: 1;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.55rem, 0.9vw, 0.68rem);
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.8);
+    transition: transform 0.2s;
+  }
+  .heatmap-cell:hover { transform: scale(1.08); }
+
+  /* Subtitle label */
+  .section-label {
+    font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent-cyan);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  /* Transition flow */
+  .transition-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .transition-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .transition-card .route {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.8rem, 1.4vw, 1rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .transition-card .pct {
+    font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+    color: var(--text-muted);
+  }
+
+  /* Conclusion card */
+  .conclusion-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin: 12px 0;
+  }
+
+  .conclusion-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    flex-shrink: 0;
+  }
+
+  /* ===== RESPONSIVE ===== */
+
+  @media (max-width: 768px) {
+    .slide { padding: 40px 36px 80px; }
+    .card { padding: 18px; }
+    .card-grid-2, .card-grid-4 { grid-template-columns: 1fr; }
+    .stat-row { gap: 10px; }
+    .stat-box { padding: 12px; min-width: 80px; }
+    .nav-btn { width: 48px; height: 48px; }
+    .bar-label { min-width: 70px; }
+    .flow-diagram { gap: 6px; }
+    .flow-node { padding: 8px 14px; }
+    .transition-grid { grid-template-columns: repeat(2, 1fr); }
+    .bg-glow { width: 350px; height: 350px; }
+    h1 { margin-bottom: 14px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 80px; justify-content: flex-start; padding-top: 36px; }
+    .card { padding: 14px; border-radius: 12px; }
+    .card-grid-2, .card-grid-4 { grid-template-columns: 1fr; gap: 10px; }
+    .stat-row { flex-direction: column; gap: 8px; }
+    .stat-box { min-width: 0; }
+    .nav-btn { width: 46px; height: 46px; font-size: 16px; }
+    .bar-track { height: 24px; }
+    .bar-label { min-width: 60px; font-size: 0.68rem; }
+    .timeline { padding-left: 24px; }
+    .transition-grid { grid-template-columns: 1fr; }
+    .flow-diagram { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .heatmap-cell { height: 22px; }
+    .data-table { font-size: 0.68rem; }
+    .data-table th, .data-table td { padding: 7px 6px; }
+    .divider { margin: 10px 0; }
+    h1 { margin-bottom: 10px; }
+    h2 { margin-bottom: 10px; }
+    .conclusion-item { gap: 10px; }
+    .slide-number { bottom: 14px; right: 16px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 76px; padding-top: 28px; }
+    .card { padding: 10px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 14px; }
+    .stat-box { padding: 10px; }
+    .flow-node { padding: 6px 10px; font-size: 0.7rem; }
+    .bar-track { height: 20px; }
+    .bar-label { min-width: 50px; }
+    .heatmap-cell { height: 18px; font-size: 0.5rem; }
+    .conclusion-num { width: 30px; height: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active" data-slide="0">
+    <div class="section-label">arXiv:2603.19138 · 2026</div>
+    <h1>LLM 기반 바이너리 분석의<br><span class="highlight">암묵적 패턴</span></h1>
+    <div class="divider"></div>
+    <h3>대규모 언어 모델이 바이너리 취약점 분석 시<br>어떤 추론 패턴을 보이는가?</h3>
+    <div style="margin-top: 20px;">
+      <span class="tag tag-blue">cs.AI</span>
+      <span class="tag tag-purple">cs.CR</span>
+      <span class="tag tag-cyan">cs.SE</span>
+    </div>
+    <p style="margin-top: 24px; color: var(--text-muted); font-size: clamp(0.75rem, 1.3vw, 0.9rem);">
+      Qiang Li · XiangRui Zhang · Haining Wang
+    </p>
+  </div>
+
+  <!-- Slide 2: Research Question -->
+  <div class="slide" data-slide="1">
+    <div class="section-label">연구 질문</div>
+    <h2>LLM 에이전트는 수백 단계의 추론에서<br><span class="highlight">어떻게 탐색을 조직하는가?</span></h2>
+    <div class="divider"></div>
+    <div class="card" style="margin-top: 16px;">
+      <p style="font-size: clamp(0.9rem, 1.8vw, 1.1rem); color: var(--text-primary);">
+        LLM 기반 에이전트는 반복적·다중 패스 방식으로 바이너리 취약점을 분석합니다.
+        하지만 제한된 컨텍스트 윈도우 속에서 <span class="highlight">탐색 경로의 선택, 고착, 수정</span>이
+        어떻게 이루어지는지는 거의 알려지지 않았습니다.
+      </p>
+    </div>
+    <div class="card-grid card-grid-2" style="margin-top: 12px;">
+      <div class="card">
+        <div class="card-title">핵심 발견</div>
+        <div class="card-desc">다중 패스 LLM 추론은 <span class="highlight">구조화된 토큰 수준의 암묵적 패턴</span>을 발생시킨다</div>
+      </div>
+      <div class="card">
+        <div class="card-title">분석 방법</div>
+        <div class="card-desc">외부 관찰 가능한 추론 트레이스에서 행동 패턴을 귀납적으로 추출</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Dataset -->
+  <div class="slide" data-slide="2">
+    <div class="section-label">데이터셋 구성</div>
+    <h2>대규모 바이너리 코퍼스 <span class="highlight">분석</span></h2>
+    <div class="divider"></div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-cyan);">521</div>
+        <div class="stat-label">바이너리 수</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-purple);">99,563</div>
+        <div class="stat-label">추론 단계</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-emerald);">191</div>
+        <div class="stat-label">평균 세션 길이</div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-title">아키텍처 분포</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label">ARM</span>
+            <div class="bar-track"><div class="bar-fill blue" style="--w: 63%;">328</div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">MIPS</span>
+            <div class="bar-track"><div class="bar-fill purple" style="--w: 37%;">193</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">사용 LLM 모델</div>
+        <ul>
+          <li>DeepSeek-V3</li>
+          <li>GPT-5</li>
+          <li>Claude 3.5 Sonnet</li>
+          <li>Gemini 3.0</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 12px; font-size: clamp(0.72rem, 1.2vw, 0.82rem); color: var(--text-muted);">
+      Karonte 펌웨어 데이터셋 30,195개 → Mango 정적 분석 → 3,500개 보안 관련 → 중복 제거 521개
+    </p>
+  </div>
+
+  <!-- Slide 4: Four Patterns Overview -->
+  <div class="slide" data-slide="3">
+    <div class="section-label">핵심 발견</div>
+    <h2><span class="highlight">4가지 암묵적 패턴</span> 개요</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-4">
+      <div class="card p1-bg">
+        <div class="card-icon" style="background: rgba(59,130,246,0.2);">
+          <span style="color: var(--accent-blue);">✂</span>
+        </div>
+        <div class="card-title p1-color">P1: 조기 가지치기</div>
+        <div class="card-desc">후보 경로를 초기에 제거하고 거의 재방문하지 않음. 탐색 공간을 빠르게 축소.</div>
+        <div style="margin-top: 8px;"><span class="tag tag-blue">83.5% 세션</span></div>
+      </div>
+      <div class="card p2-bg">
+        <div class="card-icon" style="background: rgba(139,92,246,0.2);">
+          <span style="color: var(--accent-purple);">🔒</span>
+        </div>
+        <div class="card-title p2-color">P2: 경로 의존적 고착</div>
+        <div class="card-desc">선택된 경로에 집중하며 지속적 문맥 일관성 유지. 대안 경로 탐색 최소화.</div>
+        <div style="margin-top: 8px;"><span class="tag tag-purple">97.6% 세션</span></div>
+      </div>
+      <div class="card p3-bg">
+        <div class="card-icon" style="background: rgba(16,185,129,0.2);">
+          <span style="color: var(--accent-emerald);">↩</span>
+        </div>
+        <div class="card-title p3-color">P3: 표적 역추적</div>
+        <div class="card-desc">분석 정체 시 이전에 보류한 후보 경로를 재방문. 제한적 복구 메커니즘.</div>
+        <div style="margin-top: 8px;"><span class="tag tag-cyan">93.8% 세션</span></div>
+      </div>
+      <div class="card p4-bg">
+        <div class="card-icon" style="background: rgba(245,158,11,0.2);">
+          <span style="color: var(--accent-amber);">🧠</span>
+        </div>
+        <div class="card-title p4-color">P4: 지식 기반 우선순위화</div>
+        <div class="card-desc">사전학습 지식을 활용하여 위험 함수·구조적 단서로 경로 순위 결정.</div>
+        <div style="margin-top: 8px;"><span class="tag tag-purple">97.6% 세션</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: P1 Deep Dive -->
+  <div class="slide" data-slide="4">
+    <div class="section-label">패턴 상세</div>
+    <h2><span class="p1-color">P1: 조기 가지치기</span> (Early Pruning)</h2>
+    <div class="divider"></div>
+    <div class="card p1-bg">
+      <p>초기 탐색에서 여러 후보 경로를 식별한 뒤, 진단적 관찰을 기반으로 <span class="highlight">대안을 조기에 제거</span>합니다. 이후 추론은 보존된 경로에만 집중됩니다.</p>
+    </div>
+    <div class="stat-row" style="margin-top: 12px;">
+      <div class="stat-box">
+        <div class="stat-value p1-color">19.9</div>
+        <div class="stat-label">평균 경로 길이</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p1-color">5.96</div>
+        <div class="stat-label">명령 다양성</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p1-color">0.175</div>
+        <div class="stat-label">역추적 비율</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p1-color">0.118</div>
+        <div class="stat-label">가지치기율</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 8px;">
+      <div class="card-title">예시: pptp-ondemand 바이너리</div>
+      <div class="card-desc">에이전트가 3개의 호출 사이트를 검토한 뒤, 단일 유망 취약점 경로에 고착하여 나머지 후보를 포기함.</div>
+    </div>
+  </div>
+
+  <!-- Slide 6: P2 Deep Dive -->
+  <div class="slide" data-slide="5">
+    <div class="section-label">패턴 상세</div>
+    <h2><span class="p2-color">P2: 경로 의존적 고착</span> (Lock-in)</h2>
+    <div class="divider"></div>
+    <div class="card p2-bg">
+      <p>선택된 경로에 대해 <span class="highlight-purple">지속적인 문맥 일관성</span>을 유지하며 분석합니다. 대안 경로가 언급되더라도 실제 탐색은 최소화됩니다.</p>
+    </div>
+    <div class="stat-row" style="margin-top: 12px;">
+      <div class="stat-box">
+        <div class="stat-value p2-color">7.0</div>
+        <div class="stat-label">중앙값 경로 길이</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p2-color">92.5%</div>
+        <div class="stat-label">도구 사용 순환율</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p2-color">0.039</div>
+        <div class="stat-label">역추적 비율</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p2-color">1.0</div>
+        <div class="stat-label">전방 커밋 중앙값</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 8px;">
+      <div class="card-title">특성: 추론의 "척추" 역할</div>
+      <div class="card-desc">세션 초기(1단계)에 24% 집중 분포. 가장 높은 도구 사용 반복 패턴과 가장 강한 전방 진행 커밋을 보임.</div>
+    </div>
+  </div>
+
+  <!-- Slide 7: P3 Deep Dive -->
+  <div class="slide" data-slide="6">
+    <div class="section-label">패턴 상세</div>
+    <h2><span class="p3-color">P3: 표적 역추적</span> (Backtracking)</h2>
+    <div class="divider"></div>
+    <div class="card p3-bg">
+      <p>분석이 정체되거나 모순이 발생하면, <span class="highlight-emerald">이전에 보류했던 후보 경로를 다시 방문</span>합니다. 불완전한 경로로부터의 제한적 복구 메커니즘입니다.</p>
+    </div>
+    <div class="stat-row" style="margin-top: 12px;">
+      <div class="stat-box">
+        <div class="stat-value p3-color">3.0</div>
+        <div class="stat-label">중앙값 경로 길이</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p3-color">1.0</div>
+        <div class="stat-label">필수 역추적</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p3-color">0.23</div>
+        <div class="stat-label">전이 엔트로피</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p3-color">46.5%</div>
+        <div class="stat-label">10단계 분포</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 8px;">
+      <div class="card-title">특성: 후기 단계에 집중</div>
+      <div class="card-desc">가장 짧은 경로, 가장 낮은 명령 다양성(2.68), 결정론적 도구 선택. 세션 최종 단계(phase 10)에서 46.5% 발생.</div>
+    </div>
+  </div>
+
+  <!-- Slide 8: P4 Deep Dive -->
+  <div class="slide" data-slide="7">
+    <div class="section-label">패턴 상세</div>
+    <h2><span class="p4-color">P4: 지식 기반 우선순위화</span></h2>
+    <div class="divider"></div>
+    <div class="card p4-bg">
+      <p><span class="highlight-amber">사전학습 지식</span>을 활용하여 위험 함수, 라이브러리 호출, 구조적 단서를 기반으로 경로에 우선순위를 부여합니다.</p>
+    </div>
+    <div class="stat-row" style="margin-top: 12px;">
+      <div class="stat-box">
+        <div class="stat-value p4-color">27.03</div>
+        <div class="stat-label">세션당 평균 인스턴스</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p4-color">6.0</div>
+        <div class="stat-label">평균/중앙값 경로</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p4-color">278</div>
+        <div class="stat-label">최대 인스턴스</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value p4-color">82.6%</div>
+        <div class="stat-label">순환율</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 8px;">
+      <div class="card-title">예시: doSystemCmd 분석</div>
+      <div class="card-desc">에이전트가 명령 인젝션 위험에 대한 사전학습 지식을 활용해 doSystemCmd를 위험 싱크로 식별하고 집중 분석.</div>
+    </div>
+  </div>
+
+  <!-- Slide 9: Temporal Distribution -->
+  <div class="slide" data-slide="8">
+    <div class="section-label">시간적 분포</div>
+    <h2>패턴의 <span class="highlight">시간축 히트맵</span></h2>
+    <div class="divider"></div>
+    <p style="margin-bottom: 16px;">세션을 10개 단계로 정규화했을 때, 각 패턴은 고유한 시간적 역할을 가집니다.</p>
+
+    <!-- P2 heatmap -->
+    <div class="heatmap-row">
+      <div class="heatmap-label">P2</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.7);">24%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.45);">14%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.25);">8%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.2);">7%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.2);">7%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.2);">7%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.18);">6%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.18);">6%</div>
+      <div class="heatmap-cell" style="background: rgba(139,92,246,0.3);">11%</div>
+    </div>
+    <!-- P1 heatmap -->
+    <div class="heatmap-row">
+      <div class="heatmap-label">P1</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.2);">6%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.25);">8%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.35);">11%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.4);">12%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.45);">13%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.4);">12%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.35);">11%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(59,130,246,0.2);">7%</div>
+    </div>
+    <!-- P4 heatmap -->
+    <div class="heatmap-row">
+      <div class="heatmap-label">P4</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.15);">5%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.2);">7%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.35);">11%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.38);">12%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.38);">12%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.38);">12%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.35);">11%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(245,158,11,0.3);">10%</div>
+    </div>
+    <!-- P3 heatmap -->
+    <div class="heatmap-row">
+      <div class="heatmap-label">P3</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.08);">2%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.08);">2%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.1);">3%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.1);">4%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.15);">5%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.18);">6%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.22);">8%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.3);">10%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.42);">14%</div>
+      <div class="heatmap-cell" style="background: rgba(16,185,129,0.85);">46%</div>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-top: 6px; padding: 0 36px;">
+      <span style="font-size: clamp(0.55rem, 0.9vw, 0.68rem); color: var(--text-muted);">Phase 1 (초기)</span>
+      <span style="font-size: clamp(0.55rem, 0.9vw, 0.68rem); color: var(--text-muted);">Phase 10 (후기)</span>
+    </div>
+    <div class="card" style="margin-top: 16px;">
+      <div class="card-desc">
+        <span class="p2-color">P2</span>는 초기에 집중, <span class="p1-color">P1</span>은 중반에 정점, <span class="p4-color">P4</span>는 균일 분포, <span class="p3-color">P3</span>는 후기에 급증
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Pattern Transitions -->
+  <div class="slide" data-slide="9">
+    <div class="section-label">패턴 간 관계</div>
+    <h2>패턴 <span class="highlight">전이 구조</span></h2>
+    <div class="divider"></div>
+    <p style="margin-bottom: 12px;">패턴 전환의 79.4%가 P2↔P1 양방향 루프로 구성됩니다.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-node p2-bg" style="border-radius: 12px;"><span class="p2-color">P2</span></div>
+      <div class="flow-arrow">⇄ <span style="font-size: 0.7em;">79.4%</span></div>
+      <div class="flow-node p1-bg" style="border-radius: 12px;"><span class="p1-color">P1</span></div>
+    </div>
+
+    <div class="transition-grid">
+      <div class="transition-card">
+        <div class="route"><span class="p2-color">P2</span> → <span class="p1-color">P1</span></div>
+        <div class="pct">40.0% (1,947회)</div>
+      </div>
+      <div class="transition-card">
+        <div class="route"><span class="p1-color">P1</span> → <span class="p2-color">P2</span></div>
+        <div class="pct">39.4% (1,918회)</div>
+      </div>
+      <div class="transition-card">
+        <div class="route"><span class="p3-color">P3</span> → <span class="p4-color">P4</span></div>
+        <div class="pct">10.1% (492회)</div>
+      </div>
+      <div class="transition-card">
+        <div class="route"><span class="p4-color">P4</span> → <span class="p2-color">P2</span></div>
+        <div class="pct">9.6% (467회)</div>
+      </div>
+      <div class="transition-card">
+        <div class="route"><span class="p4-color">P4</span> → <span class="p1-color">P1</span></div>
+        <div class="pct">0.8% (40회)</div>
+      </div>
+      <div class="transition-card">
+        <div class="route"><span class="p3-color">P3</span> → <span class="p2-color">P2</span></div>
+        <div class="pct">0.02% (1회)</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 8px;">
+      <div class="card-title">핵심 상관관계</div>
+      <div class="card-desc">P2와 P4는 강한 음의 상관 (r = <span class="highlight">−0.845</span>): 상호 보완적 자원 배분 관계</div>
+    </div>
+  </div>
+
+  <!-- Slide 11: Behavioral Metrics -->
+  <div class="slide" data-slide="10">
+    <div class="section-label">행동 특성</div>
+    <h2>패턴별 <span class="highlight">정량적 비교</span></h2>
+    <div class="divider"></div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>지표</th>
+          <th><span class="p1-color">P1</span></th>
+          <th><span class="p2-color">P2</span></th>
+          <th><span class="p3-color">P3</span></th>
+          <th><span class="p4-color">P4</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color: var(--text-primary);">경로 길이</td>
+          <td>19.9</td><td>8.9</td><td>5.3</td><td>6.0</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">분기 계수</td>
+          <td>1.035</td><td>1.051</td><td>1.040</td><td>1.063</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">전방 비율</td>
+          <td>0.869</td><td>0.944</td><td>0.860</td><td>0.878</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">역추적</td>
+          <td>0.175</td><td>0.039</td><td>1.000</td><td>0.060</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">명령 다양성</td>
+          <td>5.96</td><td>4.49</td><td>2.68</td><td>3.29</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">순환율 (%)</td>
+          <td>70.9</td><td>92.5</td><td>51.4</td><td>82.6</td>
+        </tr>
+        <tr>
+          <td style="color: var(--text-primary);">엔트로피</td>
+          <td>0.60</td><td>0.51</td><td>0.23</td><td>0.35</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card" style="margin-top: 12px;">
+      <div class="card-desc">
+        <span class="p1-color">P1</span>은 가장 긴 경로와 높은 다양성, <span class="p2-color">P2</span>는 최고 순환율, <span class="p3-color">P3</span>는 필수 역추적, <span class="p4-color">P4</span>는 최고 분기 계수
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12: Vulnerability Findings -->
+  <div class="slide" data-slide="11">
+    <div class="section-label">취약점 발견</div>
+    <h2>발견된 <span class="highlight-rose">취약점</span> 분석</h2>
+    <div class="divider"></div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-rose);">38%</div>
+        <div class="stat-label">취약점 발견 세션</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-rose);">306</div>
+        <div class="stat-label">총 취약점 수</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent-rose);">198</div>
+        <div class="stat-label">취약점 보유 세션</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 16px;">상위 CWE 유형</h3>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <span class="bar-label">CWE-78</span>
+        <div class="bar-track"><div class="bar-fill rose" style="--w: 76%;">OS 명령 인젝션 · 37.6%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">CWE-120</span>
+        <div class="bar-track"><div class="bar-fill amber" style="--w: 43%;">버퍼 오버플로 · 16.7%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">CWE-121</span>
+        <div class="bar-track"><div class="bar-fill purple" style="--w: 32%;">스택 오버플로 · 12.2%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">CWE-134</span>
+        <div class="bar-track"><div class="bar-fill cyan" style="--w: 20%;">포맷 스트링 · 7.2%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">CWE-20</span>
+        <div class="bar-track"><div class="bar-fill emerald" style="--w: 14%;">입력 검증 · 5.3%</div></div>
+      </div>
+    </div>
+    <p style="margin-top: 8px; color: var(--text-muted); font-size: clamp(0.72rem, 1.2vw, 0.82rem);">상위 5개 CWE 유형이 전체 취약점의 66.5%를 차지</p>
+  </div>
+
+  <!-- Slide 13: Key Takeaways -->
+  <div class="slide" data-slide="12">
+    <div class="section-label">핵심 시사점</div>
+    <h2>연구의 <span class="highlight">주요 발견</span></h2>
+    <div class="divider"></div>
+
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background: rgba(59,130,246,0.2); color: var(--accent-blue);">1</div>
+      <div>
+        <div class="card-title">패턴은 안정적 구성 요소</div>
+        <div class="card-desc">4가지 패턴은 산발적 아티팩트가 아닌 <span class="highlight">고유한 운영 역할을 가진 안정적·반복적 구성 요소</span>입니다.</div>
+      </div>
+    </div>
+
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background: rgba(139,92,246,0.2); color: var(--accent-purple);">2</div>
+      <div>
+        <div class="card-title">조율된 시스템</div>
+        <div class="card-desc">패턴들은 예측 가능한 구조적 관계로 <span class="highlight-purple">조율된 추론 시스템</span>을 형성합니다.</div>
+      </div>
+    </div>
+
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald);">3</div>
+      <div>
+        <div class="card-title">의미론적 탐색</div>
+        <div class="card-desc">LLM의 탐색은 <span class="highlight-emerald">의미론적으로 유도</span>되며, 구조적 유사성보다 의미적 관련성을 우선합니다.</div>
+      </div>
+    </div>
+
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background: rgba(245,158,11,0.2); color: var(--accent-amber);">4</div>
+      <div>
+        <div class="card-title">창발적 속성</div>
+        <div class="card-desc">탐색 제어는 명시적 구현이 아닌 토큰 수준 추론의 <span class="highlight-amber">창발적 속성</span>으로 나타납니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 14: Conclusion -->
+  <div class="slide" data-slide="13">
+    <div class="section-label">결론</div>
+    <h2>요약 및 <span class="highlight">향후 방향</span></h2>
+    <div class="divider"></div>
+
+    <div class="card" style="border-left: 3px solid var(--accent-cyan); margin-bottom: 16px;">
+      <p style="font-size: clamp(0.9rem, 1.8vw, 1.1rem); color: var(--text-primary); font-style: italic;">
+        "다중 패스 LLM 추론은 장기간 바이너리 분석을 지배하는 구조화된 토큰 수준의 암묵적 패턴을 발생시킨다."
+      </p>
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-title">연구 기여</div>
+        <ul>
+          <li>LLM 바이너리 분석의 첫 대규모 트레이스 수준 연구</li>
+          <li>4가지 핵심 암묵적 패턴 식별 및 정량화</li>
+          <li>패턴 간 조율 메커니즘 규명</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">한계 및 향후 과제</div>
+        <ul>
+          <li>취약점 분석 태스크에 한정</li>
+          <li>외부 관찰 트레이스 기반 (내부 상태 미확인)</li>
+          <li>다른 순차적 증거 축적 태스크로의 일반화 필요</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <p style="color: var(--text-muted); font-size: clamp(0.7rem, 1.1vw, 0.82rem);">
+        코드 &amp; 트레이스: github.com/bjtu-SecurityLab/pattern-tl
+      </p>
+      <p style="color: var(--text-muted); font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 4px;">
+        arXiv:2603.19138v1 · CC BY-NC-ND 4.0
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">◀</button>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">▶</button>
+</div>
+<div class="slide-number" id="slideNumber">1 / 14</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progressBar = document.getElementById('progressBar');
+  const slideNumber = document.getElementById('slideNumber');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function updateProgress() {
+    const pct = ((current + 1) / total) * 100;
+    progressBar.style.width = pct + '%';
+    slideNumber.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= total || n === current) return;
+    const dir = n > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => {
+      slides[current].classList.remove('exit-left');
+      slides[current].scrollTop = 0;
+    }, 500);
+    current = n;
+    slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    requestAnimationFrame(() => {
+      slides[current].classList.add('active');
+      slides[current].style.transform = '';
+    });
+    updateProgress();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  // Swipe support
+  let startX = 0, startY = 0, diffX = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function(e) {
+    diffX = startX - e.changedTouches[0].clientX;
+    const diffY = Math.abs(startY - e.changedTouches[0].clientY);
+    if (Math.abs(diffX) > 50 && diffY < 100) {
+      diffX > 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>

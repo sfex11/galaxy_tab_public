@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>멀티 에이전트 비디오 추천 시스템: 진화, 패턴, 미해결 과제</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111640;
+    --bg-card: rgba(255,255,255,0.05);
+    --accent-1: #6c5ce7;
+    --accent-2: #00cec9;
+    --accent-3: #fd79a8;
+    --accent-4: #ffeaa7;
+    --accent-5: #55efc4;
+    --text-primary: #f0f0f5;
+    --text-secondary: #a0a0c0;
+    --text-dim: #6c6c8a;
+    --gradient-1: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --gradient-2: linear-gradient(135deg, #00cec9, #81ecec);
+    --gradient-3: linear-gradient(135deg, #fd79a8, #fab1a0);
+    --gradient-4: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    --gradient-5: linear-gradient(135deg, #55efc4, #00b894);
+    --shadow-glow: 0 0 40px rgba(108,92,231,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Slide Container ===== */
+  .slide-deck {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== Background Decorations ===== */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-orb-1 { width: 500px; height: 500px; background: var(--accent-1); top: -150px; right: -100px; }
+  .bg-orb-2 { width: 400px; height: 400px; background: var(--accent-2); bottom: -100px; left: -100px; }
+  .bg-orb-3 { width: 300px; height: 300px; background: var(--accent-3); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+  /* ===== Typography ===== */
+  .slide-number {
+    position: absolute;
+    top: 20px; right: 30px;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    z-index: 10;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ===== Gradient Text ===== */
+  .gradient-text {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-2 {
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-3 {
+    background: var(--gradient-3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-4 {
+    background: var(--gradient-4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-5 {
+    background: var(--gradient-5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== Cards ===== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .card h3 { margin-bottom: 8px; }
+  .card p { font-size: clamp(0.75rem, 1.5vw, 0.95rem); }
+
+  /* ===== Accent Borders ===== */
+  .border-accent-1 { border-left: 3px solid var(--accent-1); }
+  .border-accent-2 { border-left: 3px solid var(--accent-2); }
+  .border-accent-3 { border-left: 3px solid var(--accent-3); }
+  .border-accent-4 { border-left: 3px solid var(--accent-4); }
+  .border-accent-5 { border-left: 3px solid var(--accent-5); }
+
+  /* ===== Tags ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+    font-weight: 500;
+    margin: 3px;
+    background: rgba(108,92,231,0.2);
+    color: var(--accent-1);
+    border: 1px solid rgba(108,92,231,0.3);
+  }
+  .tag-teal { background: rgba(0,206,201,0.15); color: var(--accent-2); border-color: rgba(0,206,201,0.3); }
+  .tag-pink { background: rgba(253,121,168,0.15); color: var(--accent-3); border-color: rgba(253,121,168,0.3); }
+  .tag-yellow { background: rgba(255,234,167,0.15); color: #e0c95a; border-color: rgba(255,234,167,0.3); }
+
+  /* ===== Timeline ===== */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-top: 20px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-5));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-1);
+    box-shadow: 0 0 12px rgba(108,92,231,0.5);
+  }
+  .timeline-item:nth-child(2)::before { background: var(--accent-2); box-shadow: 0 0 12px rgba(0,206,201,0.5); }
+  .timeline-item:nth-child(3)::before { background: #a29bfe; box-shadow: 0 0 12px rgba(162,155,254,0.5); }
+  .timeline-item:nth-child(4)::before { background: var(--accent-4); box-shadow: 0 0 12px rgba(255,234,167,0.5); }
+  .timeline-item:nth-child(5)::before { background: var(--accent-3); box-shadow: 0 0 12px rgba(253,121,168,0.5); }
+  .timeline-item:nth-child(6)::before { background: var(--accent-5); box-shadow: 0 0 12px rgba(85,239,196,0.5); }
+  .timeline-era {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  /* ===== Flow Diagram ===== */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    min-width: 120px;
+  }
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--accent-2);
+  }
+
+  /* ===== Table ===== */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+    min-width: 500px;
+  }
+  th {
+    background: rgba(108,92,231,0.2);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+  }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+
+  /* ===== Metric Bar ===== */
+  .metric-bar {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 12px;
+  }
+  .metric-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    font-weight: 500;
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+  .metric-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .metric-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  /* ===== Highlight Box ===== */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.15), rgba(0,206,201,0.1));
+    border: 1px solid rgba(108,92,231,0.25);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .highlight-box p {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* ===== List Styles ===== */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 12px;
+  }
+  .styled-list li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+  .styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--accent-1);
+    transform: rotate(45deg);
+  }
+  .styled-list li:nth-child(2)::before { background: var(--accent-2); }
+  .styled-list li:nth-child(3)::before { background: var(--accent-3); }
+  .styled-list li:nth-child(4)::before { background: var(--accent-4); }
+  .styled-list li:nth-child(5)::before { background: var(--accent-5); }
+  .styled-list li:nth-child(6)::before { background: var(--accent-1); }
+
+  /* ===== Navigation ===== */
+  .nav-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10,14,39,0.9);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:active {
+    transform: scale(0.92);
+    background: rgba(108,92,231,0.3);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== Title Slide Special ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+  }
+  .title-slide h1 {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    margin-bottom: 24px;
+  }
+  .title-meta {
+    margin-top: 30px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 2;
+  }
+  .title-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 30px;
+    background: var(--gradient-1);
+    color: white;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    margin-bottom: 24px;
+  }
+
+  /* ===== Architecture Diagram ===== */
+  .arch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .arch-layer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .arch-node {
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 500;
+    text-align: center;
+    min-width: 100px;
+    flex: 1;
+    max-width: 200px;
+  }
+  .arch-connector {
+    font-size: 1.2rem;
+    color: var(--accent-2);
+    text-align: center;
+  }
+
+  /* ===== Animations ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.3s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.5s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.6s both; }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(108,92,231,0.3); }
+    50% { box-shadow: 0 0 40px rgba(108,92,231,0.6); }
+  }
+  .pulse { animation: pulse-glow 3s infinite; }
+
+  /* ===== Spacer for nav ===== */
+  .nav-spacer { min-height: 80px; flex-shrink: 0; }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 35px 30px; }
+    .card-grid-3, .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 18px; }
+    .flow-box { min-width: 90px; padding: 10px 14px; }
+    .title-slide { padding: 30px; }
+    .metric-label { min-width: 110px; }
+    .timeline { padding-left: 24px; }
+    .bg-orb-1 { width: 300px; height: 300px; }
+    .bg-orb-2 { width: 250px; height: 250px; }
+    .bg-orb-3 { width: 200px; height: 200px; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 18px; }
+    .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .nav-controls { padding: 10px 16px; }
+    .nav-btn { width: 48px; height: 48px; border-radius: 12px; }
+    .progress-bar { margin: 0 12px; }
+    .title-slide h1 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+    .flow-row { gap: 6px; }
+    .flow-box { min-width: 70px; padding: 8px 10px; font-size: clamp(0.65rem, 1.3vw, 0.8rem); }
+    .flow-arrow { font-size: 1.1rem; }
+    .highlight-box { padding: 14px 16px; }
+    .arch-node { min-width: 70px; padding: 8px 10px; }
+    .slide-number { top: 12px; right: 16px; }
+    .timeline-item { margin-bottom: 14px; }
+    table { min-width: 400px; }
+    th, td { padding: 8px 10px; }
+    .metric-label { min-width: 90px; font-size: clamp(0.7rem, 1.3vw, 0.8rem); }
+    .bg-orb { display: none; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 14px 12px; }
+    h1 { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    h2 { font-size: clamp(1rem, 4vw, 1.4rem); }
+    h3 { font-size: clamp(0.85rem, 3vw, 1.1rem); }
+    .nav-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+    .card { padding: 12px; }
+    .title-badge { padding: 6px 16px; font-size: clamp(0.7rem, 1.3vw, 0.85rem); }
+    .nav-spacer { min-height: 70px; }
+    table { min-width: 320px; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<div class="slide-deck" id="deck">
+
+  <!-- ==================== SLIDE 1: Title ==================== -->
+  <div class="slide title-slide active" data-slide="0">
+    <div class="anim-1 title-badge">WSDM 2026 Survey</div>
+    <h1 class="anim-2">
+      <span class="gradient-text">멀티 에이전트</span><br>
+      비디오 추천 시스템
+    </h1>
+    <p class="subtitle anim-3" style="max-width:600px;">진화, 패턴, 그리고 미해결 과제</p>
+    <div class="title-meta anim-4">
+      <div style="margin-top:16px;">
+        <span class="tag">정보 검색</span>
+        <span class="tag tag-teal">인공지능</span>
+        <span class="tag tag-pink">멀티에이전트 시스템</span>
+      </div>
+      <div style="margin-top:16px; color: var(--text-dim);">
+        Ranganathan, Dharmaratnakar, Sinha, Das &middot; Google LLC<br>
+        arXiv: 2604.02211 &middot; 2026년 4월
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 2: 문제 정의 ==================== -->
+  <div class="slide" data-slide="1">
+    <span class="slide-number">2 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-3">왜 멀티 에이전트인가?</span></h2>
+    <p class="subtitle anim-2" style="margin-bottom:20px;">기존 단일 모델 추천의 한계와 새로운 접근</p>
+
+    <div class="highlight-box anim-3">
+      <p>비디오는 <strong style="color:var(--accent-2)">고차원 &middot; 시간적 &middot; 다중모달</strong> 데이터이다. 단일 파운데이션 모델은 장기 시청 이력을 픽셀 수준에서 처리할 수 없다. 멀티 에이전트 시스템은 <strong style="color:var(--accent-1)">인지와 추론을 분리</strong>하여 이 문제를 해결한다.</p>
+    </div>
+
+    <div class="card-grid card-grid-2 anim-4">
+      <div class="card border-accent-3">
+        <span class="card-icon">&#x26A0;</span>
+        <h3 style="color:var(--accent-3)">기존 접근의 한계</h3>
+        <ul class="styled-list">
+          <li>정적 참여 지표만 최적화</li>
+          <li>콜드 스타트 문제</li>
+          <li>데이터 희소성</li>
+          <li>동적 사용자 의도 포착 실패</li>
+        </ul>
+      </div>
+      <div class="card border-accent-5">
+        <span class="card-icon">&#x2728;</span>
+        <h3 style="color:var(--accent-5)">멀티 에이전트 해결책</h3>
+        <ul class="styled-list">
+          <li>전문 에이전트 간 역할 분담</li>
+          <li>비디오 이해 + 추론 + 메모리 분리</li>
+          <li>설명 가능한 추천</li>
+          <li>동적 피드백 통합</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 3: 진화 타임라인 ==================== -->
+  <div class="slide" data-slide="2">
+    <span class="slide-number">3 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-2">추천 시스템의 진화</span></h2>
+    <p class="subtitle anim-2" style="margin-bottom:10px;">고전적 방법에서 자기 개선 시스템까지</p>
+
+    <div class="timeline anim-3">
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:var(--accent-1)">고전 시대</div>
+        <p>협업 필터링(CF) &amp; 콘텐츠 기반(CB) 방법 &mdash; 동질성 원리 기반 유사 취향 매칭</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:var(--accent-2)">초기 MARS</div>
+        <p>분산 AI 기반 다중 에이전트: 인터페이스, 필터링, 학습, 중재자 에이전트 (Selmi et al., 2014)</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:#a29bfe">딥 RL 시대</div>
+        <p>DQN이 촉발한 다중 에이전트 강화학습(MARL) &mdash; 주의 기반 메시지 패싱으로 협업 최적화</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:var(--accent-4)">파운데이션 모델 통합</div>
+        <p>LLM을 특징 추출기, 생성 엔진, 자율 추론 핵심으로 활용하는 3가지 패러다임 등장</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:var(--accent-3)">현재 (2024-2026)</div>
+        <p>LLM 기반 MAVRS &mdash; 계층적, 파이프라인, 앙상블 패턴의 성숙</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-era" style="color:var(--accent-5)">미래 방향</div>
+        <p>하이브리드 RL-LLM, 평생 개인화, 자기 개선 추천 시스템</p>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 4: FM 통합 패러다임 ==================== -->
+  <div class="slide" data-slide="3">
+    <span class="slide-number">4 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-4">파운데이션 모델 통합 패러다임</span></h2>
+    <p class="subtitle anim-2">LLM/멀티모달 트랜스포머의 추천 시스템 적용 방식</p>
+
+    <div class="card-grid card-grid-3 anim-3">
+      <div class="card border-accent-1">
+        <span class="card-icon">&#x1F9E9;</span>
+        <h3 style="color:var(--accent-1)">특징 기반</h3>
+        <p>FM을 임베딩 추출기로 활용하여 사용자/아이템 표현 생성</p>
+        <div style="margin-top:12px"><span class="tag">임베딩</span><span class="tag">표현 학습</span></div>
+      </div>
+      <div class="card border-accent-2">
+        <span class="card-icon">&#x270D;</span>
+        <h3 style="color:var(--accent-2)">생성 기반</h3>
+        <p>추천을 텍스트/시퀀스 생성으로 재정의 &mdash; 프롬팅 또는 미세조정</p>
+        <div style="margin-top:12px"><span class="tag tag-teal">프롬팅</span><span class="tag tag-teal">미세조정</span></div>
+      </div>
+      <div class="card border-accent-3">
+        <span class="card-icon">&#x1F916;</span>
+        <h3 style="color:var(--accent-3)">에이전트 기반</h3>
+        <p>LLM이 자율 추론 주체로 기능: 계획, 기억, 도구 사용, 에이전트 협업</p>
+        <div style="margin-top:12px"><span class="tag tag-pink">계획</span><span class="tag tag-pink">자율성</span></div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4" style="margin-top:20px;">
+      <p style="text-align:center;">에이전트 기반 패러다임이 본 논문의 핵심 &mdash; <strong style="color:var(--accent-3)">MACRec</strong>, <strong style="color:var(--accent-2)">Agent4Rec</strong>, <strong style="color:var(--accent-1)">EmotionRec</strong> 등이 감정 인식과 협력 추론으로 참여도와 신뢰를 향상</p>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 5: 분류체계 개요 ==================== -->
+  <div class="slide" data-slide="4">
+    <span class="slide-number">5 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text">협력 패턴 분류 체계</span></h2>
+    <p class="subtitle anim-2">4가지 핵심 멀티 에이전트 협력 패턴</p>
+
+    <div class="card-grid card-grid-2 anim-3" style="margin-top:20px;">
+      <div class="card pulse" style="border:1px solid rgba(108,92,231,0.4);">
+        <span class="card-icon">&#x1F3DB;</span>
+        <h3 style="color:var(--accent-1)">1. 계층적 오케스트레이션</h3>
+        <p>중앙 조정 에이전트가 전문 하위 에이전트를 지휘</p>
+        <div style="margin-top:8px"><span class="tag">MMRF</span><span class="tag">MMAgentRec</span></div>
+      </div>
+      <div class="card" style="border:1px solid rgba(0,206,201,0.4);">
+        <span class="card-icon">&#x1F527;</span>
+        <h3 style="color:var(--accent-2)">2. 파이프라인 모듈 협력</h3>
+        <p>에이전트가 순차적으로 작동, 각 출력이 다음 입력</p>
+        <div style="margin-top:8px"><span class="tag tag-teal">VRAgent-R1</span><span class="tag tag-teal">MACRec</span></div>
+      </div>
+      <div class="card" style="border:1px solid rgba(253,121,168,0.4);">
+        <span class="card-icon">&#x1F4AC;</span>
+        <h3 style="color:var(--accent-3)">3. 사용자-에이전트 협력</h3>
+        <p>다중 에이전트가 사용자 대면 대화형 인터페이스 지원</p>
+        <div style="margin-top:8px"><span class="tag tag-pink">TKGPT</span></div>
+      </div>
+      <div class="card" style="border:1px solid rgba(85,239,196,0.4);">
+        <span class="card-icon">&#x1F465;</span>
+        <h3 style="color:var(--accent-5)">4. 사용자 시뮬레이션 앙상블</h3>
+        <p>에이전트가 시뮬레이션 사용자 집단으로 기능</p>
+        <div style="margin-top:8px"><span class="tag" style="background:rgba(85,239,196,0.15);color:var(--accent-5);border-color:rgba(85,239,196,0.3)">Agent4Rec</span></div>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 6: 패턴 1 - 계층적 ==================== -->
+  <div class="slide" data-slide="5">
+    <span class="slide-number">6 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text">패턴 1: 계층적 오케스트레이션</span></h2>
+
+    <div class="anim-2">
+      <h3 style="color:var(--accent-1); margin-top:10px;">MMRF (모델 기반 다중 에이전트 랭킹 프레임워크)</h3>
+      <p style="margin-bottom:16px;">숏폼 비디오 플랫폼의 시청시간(WatchTime) 최적화</p>
+    </div>
+
+    <div class="arch-container anim-3">
+      <div class="arch-layer">
+        <div class="arch-node" style="background:rgba(108,92,231,0.25); border:1px solid var(--accent-1); flex:2; max-width:300px;">
+          &#x1F451; 메인 에이전트<br><small style="color:var(--text-dim)">WatchTime 최적화</small>
+        </div>
+      </div>
+      <div class="arch-connector">&#x2B07; 주의 기반 협력 메커니즘 &#x2B07;</div>
+      <div class="arch-layer">
+        <div class="arch-node" style="background:rgba(0,206,201,0.2); border:1px solid var(--accent-2);">
+          &#x2764; 좋아요<br>에이전트
+        </div>
+        <div class="arch-node" style="background:rgba(253,121,168,0.2); border:1px solid var(--accent-3);">
+          &#x1F464; 팔로우<br>에이전트
+        </div>
+        <div class="arch-node" style="background:rgba(255,234,167,0.2); border:1px solid var(--accent-4);">
+          &#x1F4AC; 댓글<br>에이전트
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-4 border-accent-4" style="margin-top:20px;">
+      <h3 style="color:var(--accent-4)">MMAgentRec (관광 도메인)</h3>
+      <p>단일 LLM이 다수의 전문가 페르소나(자연과학, 사회과학, 인문학)를 시뮬레이션하며 <strong style="color:var(--accent-2)">자기 반성 메커니즘</strong>을 통해 의사결정을 개선</p>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 7: 패턴 2 - 파이프라인 ==================== -->
+  <div class="slide" data-slide="6">
+    <span class="slide-number">7 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-2">패턴 2: 파이프라인 모듈 협력</span></h2>
+
+    <h3 class="anim-2" style="color:var(--accent-2); margin-top:10px;">VRAgent-R1: 2단계 파이프라인</h3>
+
+    <div class="flow-row anim-3">
+      <div class="flow-box" style="border:1px solid var(--accent-1); background:rgba(108,92,231,0.15);">
+        &#x1F3AC; 원본 비디오
+      </div>
+      <span class="flow-arrow">&#x27A1;</span>
+      <div class="flow-box" style="border:1px solid var(--accent-2); background:rgba(0,206,201,0.15);">
+        &#x1F441; IP 에이전트<br><small>아이템 인지</small>
+      </div>
+      <span class="flow-arrow">&#x27A1;</span>
+      <div class="flow-box" style="border:1px solid var(--accent-3); background:rgba(253,121,168,0.15);">
+        &#x1F464; US 에이전트<br><small>사용자 시뮬레이션</small>
+      </div>
+      <span class="flow-arrow">&#x27A1;</span>
+      <div class="flow-box" style="border:1px solid var(--accent-5); background:rgba(85,239,196,0.15);">
+        &#x2705; 추천 결과
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2 anim-4">
+      <div class="card border-accent-2">
+        <h3 style="color:var(--accent-2)">IP 에이전트 (아이템 인지)</h3>
+        <p>다중모달 비디오 콘텐츠를 처리하여 <strong>인간 유사 점진적 사고</strong>로 깊은 의미론적 요약 생성</p>
+      </div>
+      <div class="card border-accent-3">
+        <h3 style="color:var(--accent-3)">US 에이전트 (사용자 시뮬레이션)</h3>
+        <p>GRPO 기반 강화학습으로 사용자 결정 시뮬레이션 &mdash; <strong>사고의 연쇄(CoT)</strong> 추론 활용</p>
+      </div>
+    </div>
+
+    <div class="card anim-5 border-accent-1" style="margin-top:12px;">
+      <h3 style="color:var(--accent-1)">MACRec: 대화형 추천 에이전트 체계</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+        <span class="tag">&#x1F4CB; 매니저</span>
+        <span class="tag tag-teal">&#x1F50D; 검색기</span>
+        <span class="tag tag-pink">&#x1F914; 반성기</span>
+        <span class="tag tag-yellow">&#x1F4CA; 분석기</span>
+        <span class="tag" style="background:rgba(85,239,196,0.15);color:var(--accent-5);border-color:rgba(85,239,196,0.3)">&#x1F5E3; 해석기</span>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 8: 패턴 3 & 4 ==================== -->
+  <div class="slide" data-slide="7">
+    <span class="slide-number">8 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-3">패턴 3 &amp; 4</span></h2>
+
+    <div class="card anim-2 border-accent-3" style="margin-bottom:16px;">
+      <h3 style="color:var(--accent-3)">&#x1F4AC; 패턴 3: 사용자-에이전트 협력 &mdash; TKGPT</h3>
+      <p style="margin-bottom:12px;">TikTok "For You" 페이지를 자연어로 제어하는 LLM 챗봇</p>
+      <div class="flow-row" style="margin:12px 0;">
+        <div class="flow-box" style="border-color:var(--accent-3);">
+          &#x1F5E3; 사용자 요청
+        </div>
+        <span class="flow-arrow">&#x27A1;</span>
+        <div class="flow-box" style="border-color:var(--accent-1);">
+          &#x1F3AF; 추천 어시스턴트<br><small>키워드 추출</small>
+        </div>
+        <span class="flow-arrow">&#x27A1;</span>
+        <div class="flow-box" style="border-color:var(--accent-2);">
+          &#x2696; 정렬 어시스턴트<br><small>가중치 할당</small>
+        </div>
+        <span class="flow-arrow">&#x27A1;</span>
+        <div class="flow-box" style="border-color:var(--accent-5);">
+          &#x1F4F1; 32개 비디오 배치
+        </div>
+      </div>
+      <p style="font-size:clamp(0.75rem,1.4vw,0.85rem); color:var(--accent-4);">핵심: 사용자의 "주체성(agency)" 강화 &mdash; 자연어 의도를 알고리즘 조정으로 변환</p>
+    </div>
+
+    <div class="card anim-3 border-accent-5">
+      <h3 style="color:var(--accent-5)">&#x1F465; 패턴 4: 사용자 시뮬레이션 앙상블 &mdash; Agent4Rec</h3>
+      <p style="margin-bottom:12px;">수천 개의 LLM 기반 생성 에이전트로 구성된 시뮬레이터</p>
+      <div class="card-grid card-grid-2" style="margin-top:10px;">
+        <div style="padding:10px;">
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem); color:var(--accent-1);">Agent4Rec 방식</h3>
+          <ul class="styled-list">
+            <li>실제 데이터셋 기반 정적 프로파일링</li>
+            <li>고유 취향 &amp; 사회적 특성 부여</li>
+            <li>"필터 버블" 등 창발 현상 재현</li>
+          </ul>
+        </div>
+        <div style="padding:10px;">
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem); color:var(--accent-2);">VRAgent-R1 방식</h3>
+          <ul class="styled-list">
+            <li>동적 인루프 훈련 방법론</li>
+            <li>GRPO로 지속적 행동 정렬</li>
+            <li>실제 사용자 결정과 실시간 동기화</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 9: 시스템 비교 테이블 ==================== -->
+  <div class="slide" data-slide="8">
+    <span class="slide-number">9 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-4">대표 시스템 비교</span></h2>
+    <p class="subtitle anim-2">각 시스템의 도메인, 패턴, 핵심 혁신</p>
+
+    <div class="table-wrap anim-3">
+      <table>
+        <thead>
+          <tr>
+            <th>시스템</th>
+            <th>도메인</th>
+            <th>패턴</th>
+            <th>핵심 혁신</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--accent-1)">MMRF</strong></td>
+            <td>숏폼 비디오</td>
+            <td>계층적 오케스트레이션</td>
+            <td>주의 기반 보조 메트릭 가중치 조절</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent-4)">MMAgentRec</strong></td>
+            <td>관광</td>
+            <td>계층적 오케스트레이션</td>
+            <td>다중 전문가 페르소나 + 반성 메커니즘</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent-2)">VRAgent-R1</strong></td>
+            <td>비디오</td>
+            <td>파이프라인 모듈</td>
+            <td>IP + US 에이전트, GRPO 정렬</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent-3)">MACRec</strong></td>
+            <td>대화형</td>
+            <td>파이프라인 모듈</td>
+            <td>5가지 역할 분담 에이전트 체계</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent-5)">TKGPT</strong></td>
+            <td>TikTok FYP</td>
+            <td>사용자-에이전트 협력</td>
+            <td>자연어 피드 제어 인터페이스</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#a29bfe">Agent4Rec</strong></td>
+            <td>범용 시뮬레이션</td>
+            <td>시뮬레이션 앙상블</td>
+            <td>수천 LLM 에이전트 정적 프로파일링</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap anim-4" style="margin-top:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>패턴</th>
+            <th>평가 초점</th>
+            <th>주요 리스크</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>계층적</td>
+            <td>중앙 오케스트레이션 효과성</td>
+            <td>조정자 병목, 목표 충돌</td>
+          </tr>
+          <tr>
+            <td>파이프라인</td>
+            <td>종단간 태스크 품질</td>
+            <td>오류 누적, 취약성</td>
+          </tr>
+          <tr>
+            <td>사용자-에이전트</td>
+            <td>사용자 체감 주체성</td>
+            <td>의도 오해석</td>
+          </tr>
+          <tr>
+            <td>시뮬레이션</td>
+            <td>행동 충실도</td>
+            <td>일반화 부족, 높은 비용</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 10: 에이전트 중심 평가 ==================== -->
+  <div class="slide" data-slide="9">
+    <span class="slide-number">10 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-5">에이전트 중심 평가 프레임워크</span></h2>
+    <p class="subtitle anim-2">기존 Precision@K, NDCG를 넘어서는 5가지 평가 차원</p>
+
+    <div class="card-grid card-grid-3 anim-3" style="margin-top:16px;">
+      <div class="card border-accent-1">
+        <span class="card-icon">&#x1F3AF;</span>
+        <h3 style="color:var(--accent-1)">태스크별 품질</h3>
+        <p>인지 에이전트: ROUGE, BERTScore<br>추론 에이전트: 논리 일관성, 자기수정 능력</p>
+      </div>
+      <div class="card border-accent-2">
+        <span class="card-icon">&#x1F91D;</span>
+        <h3 style="color:var(--accent-2)">협력 효율성</h3>
+        <p>통신 오버헤드 (토큰 수)<br>지연시간<br>기여도 정렬</p>
+      </div>
+      <div class="card border-accent-3">
+        <span class="card-icon">&#x1F300;</span>
+        <h3 style="color:var(--accent-3)">시스템 창발 속성</h3>
+        <p>견고성 &amp; 장애 허용<br>적응성<br>창발 행동 정확도 (KL 발산)</p>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2 anim-4">
+      <div class="card border-accent-4">
+        <span class="card-icon">&#x1F9D1;</span>
+        <h3 style="color:var(--accent-4)">인간 정렬 지표</h3>
+        <ul class="styled-list">
+          <li>제어 가능성 &amp; 주체성 (SUS 점수)</li>
+          <li>설명 가능성 (사용자 연구)</li>
+          <li>신뢰도 (종단적 측정)</li>
+          <li>공정성 (Gini, Jain 지수)</li>
+        </ul>
+      </div>
+      <div class="card border-accent-5">
+        <span class="card-icon">&#x1F4B0;</span>
+        <h3 style="color:var(--accent-5)">확장성 &amp; 경제성</h3>
+        <ul class="styled-list">
+          <li>LLM: 요청당 토큰 비용</li>
+          <li>RL: GPU 시간, 실사용자 데이터</li>
+          <li>시뮬레이션: 배포 실현 가능성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 11: 미해결 과제 ==================== -->
+  <div class="slide" data-slide="10">
+    <span class="slide-number">11 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-3">미해결 과제</span></h2>
+    <p class="subtitle anim-2">MAVRS 실용화를 가로막는 5가지 핵심 과제</p>
+
+    <div style="margin-top:16px;">
+      <div class="card anim-2 border-accent-1" style="margin-bottom:12px;">
+        <h3 style="color:var(--accent-1)">&#x26A1; 1. 계산 비용 &amp; 확장성</h3>
+        <p>Agent4Rec(수천 에이전트)은 대부분의 연구소에 비용 면에서 비실용적. 실시간 프로덕션 추천에는 <strong style="color:var(--accent-2)">경량 증류 에이전트</strong> 또는 효율적 토큰 공유 메커니즘 필요</p>
+      </div>
+
+      <div class="card anim-3 border-accent-2" style="margin-bottom:12px;">
+        <h3 style="color:var(--accent-2)">&#x1F3AC; 2. 다중모달 그라운딩 &amp; 추론</h3>
+        <p>현재 텍스트 중심 LLM은 풍부한 다중모달 데이터에 대한 추론이 어려움. IP 에이전트의 의미 요약은 <strong style="color:var(--accent-3)">손실 압축</strong>이며, 비디오 스트림에 대한 직접적 교차 모달 추론이 필요</p>
+      </div>
+
+      <div class="card anim-4 border-accent-3" style="margin-bottom:12px;">
+        <h3 style="color:var(--accent-3)">&#x1F4CA; 3. 평가의 어려움</h3>
+        <p>오프라인 메트릭(nDCG, MRR)은 대화형 추천의 이점을 포착 불가. 시뮬레이션 기반 평가의 <strong style="color:var(--accent-4)">행동 충실도 검증</strong> 문제 미해결</p>
+      </div>
+
+      <div class="card anim-5 border-accent-4" style="margin-bottom:12px;">
+        <h3 style="color:var(--accent-4)">&#x1F6E1; 4. 제어 가능성 &amp; 신뢰성</h3>
+        <p>에이전트 자율성 증가에 따른 인간 가치 정렬 보장 과제. 하위 에이전트의 목표 이탈 및 <strong style="color:var(--accent-1)">조용한 오류 전파</strong> 위험</p>
+      </div>
+
+      <div class="card anim-6 border-accent-5" style="margin-bottom:12px;">
+        <h3 style="color:var(--accent-5)">&#x2696; 5. 인센티브 정렬</h3>
+        <p>에이전트 간 목표 충돌(예: WatchTime vs Likes). <strong style="color:var(--accent-2)">계산 경제학</strong>(경매, 계약 이론) 차용한 명시적 협력 메커니즘 설계 필요</p>
+      </div>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 12: 미래 방향 ==================== -->
+  <div class="slide" data-slide="11">
+    <span class="slide-number">12 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-5">미래 연구 방향</span></h2>
+
+    <div class="card-grid card-grid-2 anim-2" style="margin-top:16px;">
+      <div class="card border-accent-1" style="padding:20px;">
+        <span class="card-icon">&#x1F504;</span>
+        <h3 style="color:var(--accent-1)">하이브리드 RL-LLM 아키텍처</h3>
+        <p>LLM은 고수준 추론/계획을, RL은 세밀한 정책 최적화를 담당. LLM이 "플래너"로서 보상 형성 함수를 생성하고 하위 RL 에이전트가 실행하는 구조</p>
+        <div style="margin-top:10px;">
+          <span class="tag">계획</span><span class="tag tag-teal">보상 형성</span>
+        </div>
+      </div>
+      <div class="card border-accent-2" style="padding:20px;">
+        <span class="card-icon">&#x1F9E0;</span>
+        <h3 style="color:var(--accent-2)">평생 개인화 &amp; 에이전트 메모리</h3>
+        <p>세션을 넘어선 장기 선호도 메모리 구축. 상호작용 이력에 대한 추론, 과거 가정의 자기 수정, 사용자 여정에 적응적 변화</p>
+        <div style="margin-top:10px;">
+          <span class="tag tag-teal">장기 기억</span><span class="tag tag-teal">자기 수정</span>
+        </div>
+      </div>
+      <div class="card border-accent-3" style="padding:20px;">
+        <span class="card-icon">&#x1F64B;</span>
+        <h3 style="color:var(--accent-3)">휴먼 인 더 루프 검증</h3>
+        <p>크라우드소싱 피드백으로 지속적 감독. 추론 및 공정성 트레이드오프를 시각화하는 <strong>인터랙티브 대시보드</strong> 제공</p>
+        <div style="margin-top:10px;">
+          <span class="tag tag-pink">크라우드소싱</span><span class="tag tag-pink">투명성</span>
+        </div>
+      </div>
+      <div class="card border-accent-5" style="padding:20px;">
+        <span class="card-icon">&#x1F680;</span>
+        <h3 style="color:var(--accent-5)">자기 개선 추천 시스템</h3>
+        <p>메타 에이전트가 추론 품질을 평가하고 분포 이동을 감지하여 자율적으로 정책 업데이트를 제안하는 <strong>자기 통치 생태계</strong></p>
+        <div style="margin-top:10px;">
+          <span class="tag" style="background:rgba(85,239,196,0.15);color:var(--accent-5);border-color:rgba(85,239,196,0.3)">메타 에이전트</span>
+          <span class="tag" style="background:rgba(85,239,196,0.15);color:var(--accent-5);border-color:rgba(85,239,196,0.3)">자기 진화</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-3" style="margin-top:16px;">
+      <p style="text-align:center;"><strong style="color:var(--accent-5)">연합 협업:</strong> 온디바이스 "사용자 프로파일 에이전트"가 개인 데이터를 보호하면서 온라인 추천 에이전트와 상호작용 &mdash; <strong style="color:var(--accent-3)">프라이버시 &amp; 웰빙</strong> 최적화</p>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 13: 핵심 기술 혁신 ==================== -->
+  <div class="slide" data-slide="12">
+    <span class="slide-number">13 / 14</span>
+    <h2 class="anim-1"><span class="gradient-text-4">핵심 기술 혁신 요약</span></h2>
+
+    <div class="anim-2" style="margin-top:16px;">
+      <div class="metric-bar">
+        <span class="metric-label" style="color:var(--accent-1)">주의 기반 협력</span>
+        <div class="metric-track"><div class="metric-fill" style="width:90%; background:var(--gradient-1);"></div></div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.3vw,0.8rem); margin-left:152px; margin-bottom:12px;">MMRF의 보조 에이전트 기여도 동적 가중치 조절</p>
+
+      <div class="metric-bar">
+        <span class="metric-label" style="color:var(--accent-2)">점진적 사고</span>
+        <div class="metric-track"><div class="metric-fill" style="width:85%; background:var(--gradient-2);"></div></div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.3vw,0.8rem); margin-left:152px; margin-bottom:12px;">VRAgent-R1 IP 에이전트의 인간 유사 추론</p>
+
+      <div class="metric-bar">
+        <span class="metric-label" style="color:var(--accent-3)">GRPO 정렬</span>
+        <div class="metric-track"><div class="metric-fill" style="width:80%; background:var(--gradient-3);"></div></div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.3vw,0.8rem); margin-left:152px; margin-bottom:12px;">그룹 상대 정책 최적화로 동적 사용자 행동 정렬</p>
+
+      <div class="metric-bar">
+        <span class="metric-label" style="color:var(--accent-4)">반성 메커니즘</span>
+        <div class="metric-track"><div class="metric-fill" style="width:88%; background:var(--gradient-4);"></div></div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.3vw,0.8rem); margin-left:152px; margin-bottom:12px;">자기 비판과 반복적 개선으로 의사결정 품질 향상</p>
+
+      <div class="metric-bar">
+        <span class="metric-label" style="color:var(--accent-5)">토큰 최적화 검색</span>
+        <div class="metric-track"><div class="metric-fill" style="width:75%; background:var(--gradient-5);"></div></div>
+      </div>
+      <p style="font-size:clamp(0.7rem,1.3vw,0.8rem); margin-left:152px; margin-bottom:12px;">MACRec 검색기의 검색-요약 패턴으로 매니저 토큰 소비 절감</p>
+    </div>
+
+    <div class="highlight-box anim-3" style="margin-top:20px;">
+      <p style="text-align:center;">이러한 혁신들은 <strong style="color:var(--accent-1)">인지와 추론의 분리</strong>, <strong style="color:var(--accent-2)">동적 협력</strong>, <strong style="color:var(--accent-3)">자기 개선</strong>이라는 공통된 설계 원칙을 따름</p>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ==================== SLIDE 14: 결론 ==================== -->
+  <div class="slide" data-slide="13">
+    <span class="slide-number">14 / 14</span>
+    <h2 class="anim-1" style="text-align:center;"><span class="gradient-text">핵심 시사점</span></h2>
+
+    <div class="anim-2" style="max-width:700px; margin:0 auto;">
+      <div class="highlight-box" style="margin-top:20px; text-align:center;">
+        <p style="font-size:clamp(1rem,2.2vw,1.3rem); font-weight:600; color:var(--text-primary);">멀티 에이전트 비디오 추천 시스템은<br>콘텐츠 전달 도구에서<br><span class="gradient-text-5" style="font-size:clamp(1.2rem,2.5vw,1.6rem);">인간 가치에 정렬된 추천자</span>로<br>진화하고 있다</p>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-3 anim-3" style="margin-top:24px;">
+      <div class="card" style="text-align:center; border:1px solid rgba(108,92,231,0.3);">
+        <div style="font-size:2.5rem; margin-bottom:8px;">&#x1F3D7;</div>
+        <h3 style="color:var(--accent-1); font-size:clamp(0.85rem,1.6vw,1.1rem);">4가지 협력 패턴</h3>
+        <p>계층적, 파이프라인, 사용자-에이전트, 시뮬레이션</p>
+      </div>
+      <div class="card" style="text-align:center; border:1px solid rgba(0,206,201,0.3);">
+        <div style="font-size:2.5rem; margin-bottom:8px;">&#x1F50D;</div>
+        <h3 style="color:var(--accent-2); font-size:clamp(0.85rem,1.6vw,1.1rem);">5차원 평가</h3>
+        <p>태스크, 협력, 창발, 인간정렬, 경제성</p>
+      </div>
+      <div class="card" style="text-align:center; border:1px solid rgba(253,121,168,0.3);">
+        <div style="font-size:2.5rem; margin-bottom:8px;">&#x1F52E;</div>
+        <h3 style="color:var(--accent-3); font-size:clamp(0.85rem,1.6vw,1.1rem);">미래 비전</h3>
+        <p>하이브리드 RL-LLM, 평생 개인화, 자기 개선</p>
+      </div>
+    </div>
+
+    <div class="anim-4" style="text-align:center; margin-top:30px;">
+      <div style="margin-bottom:12px;">
+        <span class="tag">cs.IR</span>
+        <span class="tag tag-teal">cs.AI</span>
+        <span class="tag tag-pink">cs.MA</span>
+      </div>
+      <p style="color:var(--text-dim); font-size:clamp(0.7rem,1.3vw,0.85rem);">
+        Ranganathan, Dharmaratnakar, Sinha, Das &middot; Google LLC<br>
+        WSDM 2026 Companion &middot; arXiv: 2604.02211
+      </p>
+    </div>
+    <div class="nav-spacer"></div>
+  </div>
+
+</div>
+
+<!-- ===== Navigation ===== -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">&#x276E;</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-counter" id="slideCounter">1 / 14</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">&#x276F;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  function showSlide(index) {
+    if (isAnimating || index < 0 || index >= total) return;
+    isAnimating = true;
+
+    const prev = current;
+    current = index;
+
+    slides[prev].classList.remove('active');
+    slides[prev].classList.add(index > prev ? 'prev' : '');
+
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+
+    // Scroll to top
+    slides[current].scrollTop = 0;
+
+    // Update UI
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+
+    setTimeout(function() {
+      slides[prev].classList.remove('prev');
+      isAnimating = false;
+    }, 500);
+  }
+
+  window.navigate = function(dir) {
+    showSlide(current + dir);
+  };
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      navigate(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigate(-1);
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = Math.abs(touchStartY - touchEndY);
+
+    // Only trigger if horizontal swipe is dominant
+    if (Math.abs(diffX) > 50 && diffY < Math.abs(diffX) * 0.7) {
+      if (diffX > 0) navigate(1);
+      else navigate(-1);
+    }
+  }, { passive: true });
+
+  // Initialize
+  showSlide(0);
+})();
+</script>
+</body>
+</html>

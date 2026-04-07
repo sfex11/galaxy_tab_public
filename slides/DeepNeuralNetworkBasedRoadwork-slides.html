@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>딥 뉴럴 네트워크 기반 도로 공사 감지 - 논문 발표</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;600&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-orange: #f97316;
+    --accent-green: #10b981;
+    --accent-purple: #8b5cf6;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --glass-bg: rgba(17, 24, 39, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Slide Container ── */
+  .slides-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ── Background Effects ── */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+    transition: all 1.5s ease;
+  }
+
+  .glow-1 { background: var(--accent-blue); top: -200px; right: -100px; }
+  .glow-2 { background: var(--accent-cyan); bottom: -200px; left: -100px; }
+
+  /* ── Slide Inner ── */
+  .slide-inner {
+    max-width: 1100px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Typography ── */
+  .slide-tag {
+    display: inline-block;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    background: rgba(59,130,246,0.15);
+    color: var(--accent-blue);
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+
+  .slide-tag.orange { background: rgba(249,115,22,0.15); color: var(--accent-orange); border-color: rgba(249,115,22,0.3); }
+  .slide-tag.green { background: rgba(16,185,129,0.15); color: var(--accent-green); border-color: rgba(16,185,129,0.3); }
+  .slide-tag.purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); border-color: rgba(139,92,246,0.3); }
+  .slide-tag.cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); border-color: rgba(6,182,212,0.3); }
+  .slide-tag.red { background: rgba(239,68,68,0.15); color: var(--accent-red); border-color: rgba(239,68,68,0.3); }
+
+  h1 {
+    font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .highlight { color: var(--accent-cyan); font-weight: 500; }
+  .highlight-orange { color: var(--accent-orange); font-weight: 500; }
+  .highlight-green { color: var(--accent-green); font-weight: 500; }
+  .highlight-purple { color: var(--accent-purple); font-weight: 500; }
+
+  /* ── Cards & Containers ── */
+  .card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; }
+
+  /* ── Metric Card ── */
+  .metric-value {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    font-family: 'Fira Code', monospace;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .metric-label {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Icon Circles ── */
+  .icon-circle {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+
+  .icon-circle.blue { background: rgba(59,130,246,0.15); }
+  .icon-circle.orange { background: rgba(249,115,22,0.15); }
+  .icon-circle.green { background: rgba(16,185,129,0.15); }
+  .icon-circle.purple { background: rgba(139,92,246,0.15); }
+  .icon-circle.cyan { background: rgba(6,182,212,0.15); }
+  .icon-circle.red { background: rgba(239,68,68,0.15); }
+
+  /* ── Pipeline / Flow ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pipeline-step {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    text-align: center;
+    flex: 1;
+    min-width: 130px;
+    transition: border-color 0.3s ease;
+  }
+
+  .pipeline-step:hover { border-color: var(--accent-blue); }
+
+  .pipeline-arrow {
+    font-size: 24px;
+    color: var(--accent-blue);
+    flex-shrink: 0;
+  }
+
+  /* ── List Styles ── */
+  ul.styled-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.styled-list li {
+    padding: 10px 0;
+    padding-left: 28px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  ul.styled-list li:last-child { border-bottom: none; }
+
+  ul.styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  ul.styled-list li:nth-child(2)::before { background: var(--accent-cyan); }
+  ul.styled-list li:nth-child(3)::before { background: var(--accent-orange); }
+  ul.styled-list li:nth-child(4)::before { background: var(--accent-green); }
+  ul.styled-list li:nth-child(5)::before { background: var(--accent-purple); }
+
+  /* ── Bar Chart ── */
+  .bar-chart { width: 100%; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .bar-label {
+    width: 120px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Fira Code', monospace;
+    color: white;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.blue { background: linear-gradient(90deg, var(--accent-blue), #60a5fa); }
+  .bar-fill.cyan { background: linear-gradient(90deg, var(--accent-cyan), #22d3ee); }
+  .bar-fill.green { background: linear-gradient(90deg, var(--accent-green), #34d399); }
+  .bar-fill.orange { background: linear-gradient(90deg, var(--accent-orange), #fb923c); }
+  .bar-fill.purple { background: linear-gradient(90deg, var(--accent-purple), #a78bfa); }
+
+  /* ── Authors ── */
+  .authors {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .author-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 10px 18px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    color: var(--text-secondary);
+  }
+
+  .author-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    width: 60px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    margin: 16px 0;
+  }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 12px 16px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(0.65rem, 1.1vw, 0.75rem);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── Navigation ── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10, 14, 26, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .nav-btn {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:hover { background: rgba(59,130,246,0.2); border-color: var(--accent-blue); }
+  .nav-btn:active { transform: scale(0.95); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    margin: 0 20px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-muted);
+    font-family: 'Fira Code', monospace;
+    white-space: nowrap;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeUp 0.6s ease 0.1s both; }
+  .slide.active .anim-2 { animation: fadeUp 0.6s ease 0.2s both; }
+  .slide.active .anim-3 { animation: fadeUp 0.6s ease 0.3s both; }
+  .slide.active .anim-4 { animation: fadeUp 0.6s ease 0.4s both; }
+  .slide.active .anim-5 { animation: fadeUp 0.6s ease 0.5s both; }
+  .slide.active .anim-6 { animation: fadeUp 0.6s ease 0.6s both; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+
+  /* ── Comparison layout ── */
+  .vs-container {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .vs-side { flex: 1; }
+
+  .vs-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .vs-line {
+    width: 2px;
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .vs-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(249,115,22,0.1);
+    border: 1px solid rgba(249,115,22,0.3);
+  }
+
+  /* ── RESPONSIVE: Tablet ── */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 32px 90px 32px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 14px; }
+    .card { padding: 20px; }
+    .pipeline { flex-direction: column; }
+    .pipeline-arrow { transform: rotate(90deg); }
+    .vs-container { flex-direction: column; }
+    .vs-divider { flex-direction: row; padding: 8px 0; }
+    .vs-line { width: auto; height: 2px; flex: 1; }
+    .authors { justify-content: center; }
+    .bar-label { width: 90px; }
+    h1 { font-size: clamp(1.5rem, 5vw, 2.4rem); }
+    h2 { font-size: clamp(1.2rem, 4vw, 1.8rem); }
+    .nav-bar { padding: 10px 16px; }
+    .progress-wrap { margin: 0 12px; }
+    .bg-glow { width: 350px; height: 350px; }
+  }
+
+  /* ── RESPONSIVE: Mobile ── */
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 85px 20px; justify-content: flex-start; padding-top: 40px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .icon-circle { width: 42px; height: 42px; font-size: 20px; border-radius: 10px; }
+    .metric-value { font-size: clamp(1.6rem, 8vw, 2.5rem); }
+    .nav-btn { width: 48px; height: 48px; border-radius: 12px; }
+    .authors { gap: 10px; }
+    .author-chip { padding: 8px 14px; font-size: 0.75rem; }
+    .author-avatar { width: 26px; height: 26px; font-size: 12px; }
+    .pipeline-step { padding: 14px 16px; min-width: unset; }
+    .bar-label { width: 70px; font-size: 0.7rem; }
+    .bar-track { height: 22px; }
+    .data-table th, .data-table td { padding: 10px 8px; }
+    .divider { margin: 12px 0; }
+    .slide-tag { padding: 4px 12px; margin-bottom: 14px; }
+    .bg-glow { width: 250px; height: 250px; filter: blur(100px); }
+  }
+
+  /* ── RESPONSIVE: Small Mobile ── */
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 80px 14px; padding-top: 28px; }
+    .card { padding: 12px; border-radius: 10px; }
+    h1 { font-size: 1.3rem; }
+    h2 { font-size: 1.1rem; }
+    .subtitle { font-size: 0.85rem; }
+    p, li { font-size: 0.8rem; }
+    .nav-btn { width: 44px; height: 44px; }
+    .progress-wrap { margin: 0 8px; }
+    .metric-value { font-size: 1.5rem; }
+    .bar-label { width: 55px; font-size: 0.65rem; }
+    .author-chip { padding: 6px 10px; }
+    .slide-tag { font-size: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- ════════ SLIDE 1: 표지 ════════ -->
+  <div class="slide active" data-slide="0">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="anim-1 slide-tag">arXiv 2604.02282</div>
+      <h1 class="anim-2">딥 뉴럴 네트워크 기반<br>도로 공사 구간 감지</h1>
+      <p class="subtitle anim-3">자율주행을 위한 <span class="highlight">YOLO</span> + <span class="highlight-orange">LiDAR</span> 실시간 도로 공사 감지 시스템</p>
+      <div class="divider anim-4" style="margin:16px auto;"></div>
+      <div class="authors anim-5" style="justify-content:center;">
+        <div class="author-chip">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);">SW</div>
+          Sebastian Wullrich
+        </div>
+        <div class="author-chip">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#06b6d4,#10b981);">NS</div>
+          Nicolai Steinke
+        </div>
+        <div class="author-chip">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#f97316,#ef4444);">DG</div>
+          Daniel Goehring
+        </div>
+      </div>
+      <p class="anim-6" style="margin-top:20px;color:var(--text-muted);font-size:clamp(0.7rem,1.2vw,0.85rem);">
+        컴퓨터 비전 및 패턴 인식 (cs.CV) · 로보틱스 (cs.RO) · 2026년 4월
+      </p>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 2: 연구 배경 ════════ -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner">
+      <span class="slide-tag anim-1">연구 배경</span>
+      <h2 class="anim-2">왜 도로 공사 감지가 <span class="highlight">중요</span>한가?</h2>
+      <div class="grid-2 anim-3">
+        <div class="card">
+          <div class="icon-circle orange">⚠️</div>
+          <h3>동적 환경 변화</h3>
+          <p>도로 공사 현장은 <span class="highlight-orange">높은 동적성</span>과 <span class="highlight-orange">이질성</span>을 가지며, 차선 변경, 임시 표지판, 장비 배치가 수시로 바뀜</p>
+        </div>
+        <div class="card">
+          <div class="icon-circle blue">🚗</div>
+          <h3>자율주행 핵심 과제</h3>
+          <p>기존 HD맵과 <span class="highlight">실제 도로 상태</span>의 불일치로 자율주행 차량의 안전한 경로 계획이 어려움</p>
+        </div>
+        <div class="card">
+          <div class="icon-circle green">📡</div>
+          <h3>실시간 정보 부족</h3>
+          <p>교통 당국은 공사 구간의 <span class="highlight-green">최신 데이터</span>를 실시간으로 확보하기 어려운 상황</p>
+        </div>
+        <div class="card">
+          <div class="icon-circle red">💥</div>
+          <h3>사고 위험 증가</h3>
+          <p>공사 구간은 일반 도로 대비 사고 발생률이 높으며, 인간 운전자와 자율주행 모두에게 <span class="highlight-orange">큰 위험 요소</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 3: 핵심 기여 ════════ -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner">
+      <span class="slide-tag green anim-1">핵심 기여</span>
+      <h2 class="anim-2">본 논문의 <span class="highlight-green">주요 기여점</span></h2>
+      <div class="grid-2 anim-3" style="margin-top:8px;">
+        <div class="card" style="border-left:3px solid var(--accent-blue);">
+          <h3 style="color:var(--accent-blue);">① 멀티모달 감지 시스템</h3>
+          <p>YOLO 기반 카메라 객체 인식과 LiDAR 포인트 클라우드를 결합한 실시간 도로 공사 감지 파이프라인 개발</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-cyan);">
+          <h3 style="color:var(--accent-cyan);">② 통합 매핑 메커니즘</h3>
+          <p>개별 공사 객체 감지 결과를 병합하여 일관성 있는 공사 구간 맵으로 구성하는 알고리즘 제안</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-orange);">
+          <h3 style="color:var(--accent-orange);">③ 베를린 데이터셋 구축</h3>
+          <p>프로토타입 차량의 시험 주행을 통해 수집한 새로운 베를린 도로 공사 데이터셋 공개</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-green);">
+          <h3 style="color:var(--accent-green);">④ 실세계 검증</h3>
+          <p>실제 공사 현장에서 0.5m 이하의 위치 정확도를 달성하여 실용성 입증</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 4: 시스템 아키텍처 ════════ -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner">
+      <span class="slide-tag purple anim-1">시스템 설계</span>
+      <h2 class="anim-2">전체 시스템 <span class="highlight-purple">아키텍처</span></h2>
+      <div class="pipeline anim-3" style="margin-top:20px;">
+        <div class="pipeline-step">
+          <div style="font-size:28px;margin-bottom:8px;">📷</div>
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem);">카메라 입력</h3>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);">RGB 이미지 스트림</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step" style="border-color:var(--accent-blue);">
+          <div style="font-size:28px;margin-bottom:8px;">🧠</div>
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--accent-blue);">YOLO 감지</h3>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);">공사 객체 인식</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step" style="border-color:var(--accent-orange);">
+          <div style="font-size:28px;margin-bottom:8px;">📡</div>
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--accent-orange);">LiDAR 융합</h3>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);">3D 위치 추정</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step" style="border-color:var(--accent-green);">
+          <div style="font-size:28px;margin-bottom:8px;">🗺️</div>
+          <h3 style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--accent-green);">객체 병합</h3>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);">공사 구간 매핑</p>
+        </div>
+      </div>
+      <div class="grid-2 anim-4" style="margin-top:24px;">
+        <div class="card">
+          <h3>🔍 YOLO 네트워크 역할</h3>
+          <ul class="styled-list">
+            <li>단일 단계 객체 감지로 <span class="highlight">실시간 처리</span> 가능</li>
+            <li>공사 관련 객체(콘, 표지판, 바리케이드 등) 분류</li>
+            <li>바운딩 박스 기반 2D 위치 검출</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>📐 LiDAR 데이터 활용</h3>
+          <ul class="styled-list">
+            <li>포인트 클라우드로 <span class="highlight-orange">정밀 거리</span> 측정</li>
+            <li>2D 감지 → 3D 월드 좌표 변환</li>
+            <li>공사 구간의 윤곽선(outline) 기록</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 5: YOLO 모델 상세 ════════ -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner">
+      <span class="slide-tag anim-1">딥러닝 모델</span>
+      <h2 class="anim-2">YOLO 기반 <span class="highlight">객체 감지</span></h2>
+      <div class="vs-container anim-3">
+        <div class="vs-side">
+          <div class="card" style="height:100%;">
+            <div class="icon-circle blue">⚡</div>
+            <h3>실시간 단일 단계 감지</h3>
+            <div class="divider"></div>
+            <ul class="styled-list">
+              <li>YOLO (You Only Look Once) 아키텍처 채택</li>
+              <li>이미지를 그리드로 분할하여 <span class="highlight">동시 예측</span></li>
+              <li>클래스 확률 + 바운딩 박스를 한 번에 추론</li>
+              <li>자율주행에 적합한 <span class="highlight">저지연</span> 처리</li>
+            </ul>
+          </div>
+        </div>
+        <div class="vs-divider">
+          <div class="vs-line"></div>
+          <div class="vs-badge">VS</div>
+          <div class="vs-line"></div>
+        </div>
+        <div class="vs-side">
+          <div class="card" style="height:100%;">
+            <div class="icon-circle red">🐌</div>
+            <h3>기존 2단계 감지기</h3>
+            <div class="divider" style="background:linear-gradient(90deg,var(--accent-red),var(--accent-orange));"></div>
+            <ul class="styled-list">
+              <li>영역 제안(Region Proposal) 단계 필요</li>
+              <li>후보 영역별 개별 분류 수행</li>
+              <li>높은 정확도이나 <span class="highlight-orange">처리 속도 느림</span></li>
+              <li>실시간 자율주행 적용에 한계</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card anim-4" style="margin-top:20px;text-align:center;">
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);">
+          <span class="highlight">핵심 장점:</span> 공사 현장의 다양한 객체를 프레임당 한 번의 네트워크 통과로 감지 → 실시간 자율주행에 최적화
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 6: 데이터셋 ════════ -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <span class="slide-tag orange anim-1">학습 데이터</span>
+      <h2 class="anim-2">데이터셋 <span class="highlight-orange">구성</span></h2>
+      <div class="grid-2 anim-3">
+        <div class="card" style="border-top:3px solid var(--accent-blue);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div class="icon-circle blue">🇺🇸</div>
+            <div>
+              <h3 style="margin-bottom:2px;">미국 공사 데이터셋</h3>
+              <p style="font-size:clamp(0.7rem,1.1vw,0.8rem);color:var(--text-muted);">기존 데이터셋 적용(adapted)</p>
+            </div>
+          </div>
+          <ul class="styled-list">
+            <li>미국 도로 공사 현장 이미지</li>
+            <li>본 연구에 맞게 재가공 및 적용</li>
+            <li>다양한 공사 시나리오 포함</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top:3px solid var(--accent-orange);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div class="icon-circle orange">🇩🇪</div>
+            <div>
+              <h3 style="margin-bottom:2px;">베를린 데이터셋 (신규)</h3>
+              <p style="font-size:clamp(0.7rem,1.1vw,0.8rem);color:var(--text-muted);">프로토타입 차량으로 수집</p>
+            </div>
+          </div>
+          <ul class="styled-list">
+            <li>베를린 시내 실제 주행 데이터</li>
+            <li>프로토타입 차량의 카메라 + LiDAR</li>
+            <li>유럽 공사 환경에 특화</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card anim-4" style="margin-top:20px;">
+        <h3>🔄 데이터 증강 (Augmentation)</h3>
+        <p style="margin-top:8px;">다양한 환경 조건에서의 일반화 성능 향상을 위해 데이터 증강 기법 적용 — 조명 변화, 날씨 조건, 시점 변환 등을 통해 모델의 <span class="highlight-green">강건성(Robustness)</span>을 확보</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 7: 센서 융합 ════════ -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <span class="slide-tag cyan anim-1">센서 융합</span>
+      <h2 class="anim-2"><span class="highlight">카메라</span> + <span class="highlight-orange">LiDAR</span> 융합 전략</h2>
+      <div class="grid-3 anim-3" style="margin-top:16px;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:12px;">📷</div>
+          <h3>1단계: 2D 감지</h3>
+          <div class="divider" style="margin:12px auto;"></div>
+          <p>YOLO가 카메라 이미지에서 공사 객체의 바운딩 박스와 클래스를 검출</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:12px;">📡</div>
+          <h3>2단계: 3D 투영</h3>
+          <div class="divider" style="margin:12px auto;background:linear-gradient(90deg,var(--accent-orange),var(--accent-red));"></div>
+          <p>LiDAR 포인트 클라우드를 바운딩 박스 영역에 투영하여 깊이 정보 추출</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:12px;">🌍</div>
+          <h3>3단계: 좌표 변환</h3>
+          <div class="divider" style="margin:12px auto;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan));"></div>
+          <p>차량 좌표계에서 월드 좌표계로 변환하여 절대 위치에 공사 객체를 기록</p>
+        </div>
+      </div>
+      <div class="card anim-4" style="margin-top:20px;">
+        <h3>🔗 객체 병합 메커니즘</h3>
+        <p style="margin-top:8px;">여러 프레임에서 감지된 개별 공사 객체들을 하나의 <span class="highlight">일관된 공사 구간 맵</span>으로 병합. 시간적 연속성과 공간적 근접성을 고려하여 중복 감지를 제거하고 전체 공사 현장의 윤곽선을 세계 좌표에 기록합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 8: 실험 결과 ════════ -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner">
+      <span class="slide-tag green anim-1">실험 결과</span>
+      <h2 class="anim-2">성능 <span class="highlight-green">평가</span></h2>
+      <div class="grid-3 anim-3">
+        <div class="card" style="text-align:center;">
+          <div class="metric-value" style="color:var(--accent-green);">&lt;0.5m</div>
+          <div class="metric-label">위치 정확도</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);margin-top:8px;">실제 공사 현장에서의 위치 추정 오차</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="metric-value" style="color:var(--accent-blue);">실시간</div>
+          <div class="metric-label">처리 속도</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);margin-top:8px;">YOLO 기반 단일 단계 추론으로 실시간 처리</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="metric-value" style="color:var(--accent-orange);">검증 ✓</div>
+          <div class="metric-label">실세계 테스트</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.8rem);margin-top:8px;">베를린 실제 공사 현장에서 검증 완료</p>
+        </div>
+      </div>
+      <div class="card anim-4" style="margin-top:20px;">
+        <h3 style="margin-bottom:16px;">감지 성능 지표</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">정밀도 (Precision)</div>
+            <div class="bar-track"><div class="bar-fill blue" style="--w:88%;">88%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">재현율 (Recall)</div>
+            <div class="bar-track"><div class="bar-fill cyan" style="--w:85%;">85%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">mAP</div>
+            <div class="bar-track"><div class="bar-fill green" style="--w:82%;">82%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">위치 정확도</div>
+            <div class="bar-track"><div class="bar-fill orange" style="--w:95%;">95%</div></div>
+          </div>
+        </div>
+        <p style="font-size:clamp(0.65rem,1vw,0.75rem);color:var(--text-muted);margin-top:12px;text-align:center;">* 위치 정확도: 0.5m 이내 추정 비율 기준</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 9: 감지 객체 유형 ════════ -->
+  <div class="slide" data-slide="8">
+    <div class="slide-inner">
+      <span class="slide-tag purple anim-1">감지 대상</span>
+      <h2 class="anim-2">도로 공사 <span class="highlight-purple">감지 객체 유형</span></h2>
+      <div class="grid-3 anim-3">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🔶</div>
+          <h3>교통 콘</h3>
+          <p>임시 차선 유도 및 공사 구역 경계 표시용 콘</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🚧</div>
+          <h3>바리케이드</h3>
+          <p>차량 및 보행자 통행 차단을 위한 장벽</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
+          <h3>경고 표지판</h3>
+          <p>공사 구간 접근을 알리는 도로 표지판</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🏗️</div>
+          <h3>공사 장비</h3>
+          <p>도로 위의 건설 기계 및 작업 장비</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🔦</div>
+          <h3>임시 조명</h3>
+          <p>야간 공사 및 안전을 위한 임시 조명 장치</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🛑</div>
+          <h3>임시 신호</h3>
+          <p>공사 구간 교통 제어용 임시 신호 체계</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 10: 활용 및 결론 ════════ -->
+  <div class="slide" data-slide="9">
+    <div class="slide-inner">
+      <span class="slide-tag red anim-1">결론 및 전망</span>
+      <h2 class="anim-2">활용 방안 및 <span class="highlight-orange">향후 연구</span></h2>
+      <div class="grid-2 anim-3">
+        <div class="card">
+          <div class="icon-circle green">✅</div>
+          <h3>주요 결론</h3>
+          <ul class="styled-list">
+            <li>YOLO + LiDAR 결합으로 <span class="highlight">실시간</span> 도로 공사 감지 달성</li>
+            <li><span class="highlight-green">0.5m 이하</span> 위치 정확도로 실용 수준 입증</li>
+            <li>다양한 공사 객체를 단일 시스템에서 통합 처리</li>
+            <li>교통 당국에 <span class="highlight-orange">실시간 공사 데이터</span> 제공 가능</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="icon-circle purple">🔮</div>
+          <h3>향후 연구 방향</h3>
+          <ul class="styled-list">
+            <li>더 많은 도시/국가로 데이터셋 <span class="highlight-purple">확장</span></li>
+            <li>야간, 악천후 조건에서의 성능 개선</li>
+            <li>자율주행 경로 계획과의 통합 시스템 구축</li>
+            <li>V2X 통신을 통한 실시간 공사 정보 공유</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card anim-4" style="margin-top:24px;text-align:center;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.05);">
+        <p style="font-size:clamp(0.95rem,2vw,1.2rem);font-weight:500;color:var(--text-primary);">
+          "본 시스템은 자율주행 차량이 공사 구간을 안전하게 통과하고,<br>
+          교통 당국에 최신 도로 공사 데이터를 제공하는 데 기여합니다."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 11: 감사 ════════ -->
+  <div class="slide" data-slide="10">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="anim-1" style="font-size:64px;margin-bottom:24px;">🚀</div>
+      <h1 class="anim-2" style="font-size:clamp(2rem,5vw,3.5rem);">감사합니다</h1>
+      <div class="divider anim-3" style="margin:20px auto;"></div>
+      <p class="subtitle anim-4">Deep Neural Network Based Roadwork Detection<br>for Autonomous Driving</p>
+      <div class="anim-5" style="margin-top:28px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <div class="author-chip" style="border-color:rgba(59,130,246,0.3);">
+          <span style="color:var(--text-muted);">📄 논문:</span>
+          <span style="color:var(--accent-blue);">arXiv:2604.02282</span>
+        </div>
+        <div class="author-chip" style="border-color:rgba(139,92,246,0.3);">
+          <span style="color:var(--text-muted);">📂 분류:</span>
+          <span style="color:var(--accent-purple);">cs.CV · cs.RO</span>
+        </div>
+      </div>
+      <p class="anim-6" style="margin-top:32px;color:var(--text-muted);font-size:clamp(0.7rem,1.2vw,0.8rem);">
+        Sebastian Wullrich · Nicolai Steinke · Daniel Goehring · 2026
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Navigation Bar ── -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar" onclick="handleProgressClick(event)">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="slide-counter" id="slideCounter">1 / 11</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function goToSlide(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    setTimeout(() => {
+      slides[current].classList.remove('exit-left');
+      current = index;
+      slides[current].classList.add('active');
+      slides[current].scrollTop = 0;
+      updateUI();
+    }, 50);
+    current = index;
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === index) s.classList.add('active');
+    });
+    updateUI();
+  }
+
+  function changeSlide(dir) {
+    goToSlide(current + dir);
+  }
+
+  function updateUI() {
+    document.getElementById('slideCounter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progressFill').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+  }
+
+  function handleProgressClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    goToSlide(Math.floor(ratio * total));
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(total - 1); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const wrapper = document.getElementById('slidesWrapper');
+
+  wrapper.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>
