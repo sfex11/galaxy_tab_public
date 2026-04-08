@@ -46,3 +46,5 @@
 ## [2026-04-07 00:40] ingest | Model-Based Reinforcement Learning for Control under Time-Varying Dynamics
 
 ## [2026-04-07 00:40] ingest | Best-Arm Identification with Noisy Actuation
+
+## [2026-04-08 10:30] ingest | FrontierFinance: A Long-Horizon Computer-Use Benchmark of Real-World Financial Tasks

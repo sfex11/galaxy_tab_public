@@ -26,3 +26,4 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-04-06-model-based-reinforcement-learning-for-control-und.md]] - Model-Based Reinforcement Learning for Control under Time-Varying Dynamics
 - [[sources/2026-04-06-best-arm-identification-with-noisy-actuation.md]] - Best-Arm Identification with Noisy Actuation
+- [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md]] - FrontierFinance: A Long-Horizon Computer-Use Benchmark of Real-World Financial Tasks
