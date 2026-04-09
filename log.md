@@ -48,3 +48,27 @@
 ## [2026-04-07 00:40] ingest | Best-Arm Identification with Noisy Actuation
 
 ## [2026-04-08 10:30] ingest | FrontierFinance: A Long-Horizon Computer-Use Benchmark of Real-World Financial Tasks
+
+## [2026-04-09 10:30] ingest | Paper Circle: An Open-source Multi-agent Research Discovery and Analysis Framework
+
+## [2026-04-09 10:30] ingest | In-Place Test-Time Training
+
+## [2026-04-09 10:30] ingest | Toward Consistent World Models with Multi-Token Prediction and Latent Semantic Enhancement
+
+## [2026-04-09 10:30] ingest | Exclusive Unlearning
+
+## [2026-04-09 10:30] ingest | Who Governs the Machine? A Machine Identity Governance Taxonomy (MIGT) for AI Systems Operating Across Enterprise and Geopolitical Boundaries
+
+## [2026-04-09 10:30] ingest | MAESTRO: Adapting GUIs and Guiding Navigation with User Preferences in Conversational Agents with GUIs
+
+## [2026-04-09 10:30] ingest | Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agents
+
+## [2026-04-09 10:30] ingest | Gym-Anything: Turn any Software into an Agent Environment
+
+## [2026-04-09 10:30] ingest | ACE-Bench: Agent Configurable Evaluation with Scalable Horizons and Controllable Difficulty under Lightweight Environments
+
+## [2026-04-09 10:30] ingest | Artificial Intelligence and the Structure of Mathematics
+
+## [2026-04-09 10:30] ingest | Social Dynamics as Critical Vulnerabilities that Undermine Objective Decision-Making in LLM Collectives
+
+## [2026-04-09 10:30] ingest | MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control

@@ -27,3 +27,19 @@
 - [[sources/2026-04-06-model-based-reinforcement-learning-for-control-und.md]] - Model-Based Reinforcement Learning for Control under Time-Varying Dynamics
 - [[sources/2026-04-06-best-arm-identification-with-noisy-actuation.md]] - Best-Arm Identification with Noisy Actuation
 - [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md]] - FrontierFinance: A Long-Horizon Computer-Use Benchmark of Real-World Financial Tasks
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md]] - Paper Circle: An Open-source Multi-agent Research Discovery and Analysis Framework
+- [[sources/2026-04-09-in-place-test-time-training.md]] - In-Place Test-Time Training
+- [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md]] - Toward Consistent World Models with Multi-Token Prediction and Latent Semantic Enhancement
+- [[sources/2026-04-09-exclusive-unlearning.md]] - Exclusive Unlearning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md]] - Who Governs the Machine? A Machine Identity Governance Taxonomy (MIGT) for AI Systems Operating Across Enterprise and Geopolitical Boundaries
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md]] - MAESTRO: Adapting GUIs and Guiding Navigation with User Preferences in Conversational Agents with GUIs
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md]] - Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agents
+- [[sources/2026-04-09-gym-anything-turn-any-software-into-an-agent-envir.md]] - Gym-Anything: Turn any Software into an Agent Environment
+- [[sources/2026-04-09-ace-bench-agent-configurable-evaluation-with-scala.md]] - ACE-Bench: Agent Configurable Evaluation with Scalable Horizons and Controllable Difficulty under Lightweight Environments
+- [[sources/2026-04-09-artificial-intelligence-and-the-structure-of-mathe.md]] - Artificial Intelligence and the Structure of Mathematics
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md]] - Social Dynamics as Critical Vulnerabilities that Undermine Objective Decision-Making in LLM Collectives
+- [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md]] - MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control

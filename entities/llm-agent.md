@@ -29,3 +29,7 @@ _자동 생성됨_
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md]]
 
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md]]
+
+- [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md]]
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md]]
