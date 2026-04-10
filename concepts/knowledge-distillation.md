@@ -14,3 +14,9 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-22)
 
 - [[sources/2026-03-23-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-23)
+
+- [[sources/2026-03-25-revisiting-quantum-code-generation-where-should-do.md|Revisiting Quantum Code Generation: Where Should Domain Know]] (2026-03-25)
+
+- [[sources/2026-03-25-spa-a-simple-but-tough-to-beat-baseline-for-knowle.md|SPA: A Simple but Tough-to-Beat Baseline for Knowledge Injec]] (2026-03-25)
+
+- [[sources/2026-04-11-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-11)

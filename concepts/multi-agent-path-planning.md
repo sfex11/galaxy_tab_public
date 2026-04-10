@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-optimal-path-planning-in-hostile-environments.md|Optimal Path Planning in Hostile Environments]]
 
 - [[sources/2026-03-23-optimal-path-planning-in-hostile-environments.md|Optimal Path Planning in Hostile Environments]] (2026-03-23)
+
+- [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-11)

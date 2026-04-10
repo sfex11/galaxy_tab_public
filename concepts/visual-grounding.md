@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-22)
 
 - [[sources/2026-03-23-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-23)
+
+- [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)

@@ -83,3 +83,9 @@ _자동 생성됨_
 - [[sources/2026-03-24-revisiting-gene-ontology-knowledge-discovery-with-.md|Revisiting Gene Ontology Knowledge Discovery with Hierarchic]] (2026-03-24)
 
 - [[sources/2026-03-25-chimera-latency--and-performance-aware-multi-agent.md|Chimera: Latency- and Performance-Aware Multi-agent Serving ]] (2026-03-25)
+
+- [[sources/2026-03-26-beyond-preset-identities-how-agents-form-stances-a.md|Beyond Preset Identities: How Agents Form Stances and Bounda]] (2026-03-26)
+
+- [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
+
+- [[sources/2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-11)

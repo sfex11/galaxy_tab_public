@@ -24,3 +24,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-23-navtrust-benchmarking-trustworthiness-for-embodied.md|NavTrust: Benchmarking Trustworthiness for Embodied Navigati]] (2026-03-23)
 
 - [[sources/2026-03-25-3d-layout-r1-structured-reasoning-for-language-ins.md|3D-Layout-R1: Structured Reasoning for Language-Instructed S]] (2026-03-25)
+
+- [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]] (2026-03-25)
+
+- [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|3DCity-LLM: Empowering Multi-modality Large Language Models ]] (2026-03-26)
+
+- [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)

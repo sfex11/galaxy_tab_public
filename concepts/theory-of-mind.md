@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-24-learning-dynamic-belief-graphs-for-theory-of-mind-.md|Learning Dynamic Belief Graphs for Theory-of-mind Reasoning]]
+
+- [[sources/2026-03-26-beyond-preset-identities-how-agents-form-stances-a.md|Beyond Preset Identities: How Agents Form Stances and Bounda]] (2026-03-26)
+
+- [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)

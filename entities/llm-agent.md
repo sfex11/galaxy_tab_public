@@ -121,3 +121,21 @@ _자동 생성됨_
 - [[sources/2026-03-24-videoseek-long-horizon-video-agent-with-tool-guide.md|VideoSeek: Long-Horizon Video Agent with Tool-Guided Seeking]] (2026-03-24)
 
 - [[sources/2026-03-25-chimera-latency--and-performance-aware-multi-agent.md|Chimera: Latency- and Performance-Aware Multi-agent Serving ]] (2026-03-25)
+
+- [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]] (2026-03-25)
+
+- [[sources/2026-03-26-beyond-preset-identities-how-agents-form-stances-a.md|Beyond Preset Identities: How Agents Form Stances and Bounda]] (2026-03-26)
+
+- [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
+
+- [[sources/2026-03-26-bilevel-autoresearch-meta-autoresearching-itself.md|Bilevel Autoresearch: Meta-Autoresearching Itself]] (2026-03-26)
+
+- [[sources/2026-03-26-code-review-agent-benchmark.md|Code Review Agent Benchmark]] (2026-03-26)
+
+- [[sources/2026-03-26-mecha-nudges-for-machines.md|Mecha-nudges for Machines]] (2026-03-26)
+
+- [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-11)
+
+- [[sources/2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-11)

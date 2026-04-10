@@ -103,3 +103,16 @@
 
 ## [2026-04-10 16:30] llm-ingest | 1편 분석, 엔티티 3개, 개념 4개
 - 2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md
+
+## [2026-04-11 04:14] llm-ingest | 11편 분석, 엔티티 13개, 개념 138개
+- 2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md
+- 2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md
+- 2026-04-11-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md
+- 2026-04-11-what-drives-representation-steering-a-mechanistic-.md
+- 2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md
+- 2026-04-11-cram-less-to-fit-more-training-data-pruning-improv.md
+- 2026-04-11-what-do-language-models-learn-and-when-the-implici.md
+- 2026-04-11-fail2drive-benchmarking-closed-loop-driving-genera.md
+- 2026-04-11-visually-grounded-humanoid-agents.md
+- 2026-04-11-density-driven-optimal-control-convergence-guarant.md
+- 2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md

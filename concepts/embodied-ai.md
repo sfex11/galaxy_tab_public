@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-23-navtrust-benchmarking-trustworthiness-for-embodied.md|NavTrust: Benchmarking Trustworthiness for Embodied Navigati]] (2026-03-23)
 
 - [[sources/2026-03-24-indoorr2x-indoor-robot-to-everything-coordination-.md|IndoorR2X: Indoor Robot-to-Everything Coordination with LLM-]] (2026-03-24)
+
+- [[sources/2026-03-25-human-inspired-pavlovian-and-instrumental-learning.md|Human-Inspired Pavlovian and Instrumental Learning for Auton]] (2026-03-25)
+
+- [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)

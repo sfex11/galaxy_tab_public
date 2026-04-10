@@ -12,3 +12,9 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-camo-a-conditional-neural-solver-for-the-multi-obj.md|CAMO: A Conditional Neural Solver for the Multi-objective Mu]]
 
 - [[sources/2026-03-22-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-22)
+
+- [[sources/2026-03-26-beyond-preset-identities-how-agents-form-stances-a.md|Beyond Preset Identities: How Agents Form Stances and Bounda]] (2026-03-26)
+
+- [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
+
+- [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-11)

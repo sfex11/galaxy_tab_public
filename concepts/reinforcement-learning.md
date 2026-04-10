@@ -91,3 +91,13 @@ _자동 생성됨_
 - [[sources/2026-03-25-chimera-latency--and-performance-aware-multi-agent.md|Chimera: Latency- and Performance-Aware Multi-agent Serving ]] (2026-03-25)
 
 - [[sources/2026-03-25-decoupling-exploration-and-policy-optimization-unc.md|Decoupling Exploration and Policy Optimization: Uncertainty ]] (2026-03-25)
+
+- [[sources/2026-03-25-human-inspired-pavlovian-and-instrumental-learning.md|Human-Inspired Pavlovian and Instrumental Learning for Auton]] (2026-03-25)
+
+- [[sources/2026-03-26-bilevel-autoresearch-meta-autoresearching-itself.md|Bilevel Autoresearch: Meta-Autoresearching Itself]] (2026-03-26)
+
+- [[sources/2026-04-11-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-11)
+
+- [[sources/2026-04-11-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-11)
+
+- [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)

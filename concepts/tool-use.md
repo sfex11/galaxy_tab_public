@@ -50,3 +50,17 @@ _Wiki 축적 중_
 - [[sources/2026-03-24-an-agentic-multi-agent-architecture-for-cybersecur.md|An Agentic Multi-Agent Architecture for Cybersecurity Risk M]] (2026-03-24)
 
 - [[sources/2026-03-24-videoseek-long-horizon-video-agent-with-tool-guide.md|VideoSeek: Long-Horizon Video Agent with Tool-Guided Seeking]] (2026-03-24)
+
+- [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]] (2026-03-25)
+
+- [[sources/2026-03-25-revisiting-quantum-code-generation-where-should-do.md|Revisiting Quantum Code Generation: Where Should Domain Know]] (2026-03-25)
+
+- [[sources/2026-03-26-code-review-agent-benchmark.md|Code Review Agent Benchmark]] (2026-03-26)
+
+- [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-11)
+
+- [[sources/2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-11)
+
+- [[sources/2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-11)

@@ -32,3 +32,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-24-measuring-faithfulness-depends-on-how-you-measure-.md|Measuring Faithfulness Depends on How You Measure: Classifie]] (2026-03-24)
 
 - [[sources/2026-03-24-revisiting-gene-ontology-knowledge-discovery-with-.md|Revisiting Gene Ontology Knowledge Discovery with Hierarchic]] (2026-03-24)
+
+- [[sources/2026-03-26-evaluating-llm-based-test-generation-under-softwar.md|Evaluating LLM-Based Test Generation Under Software Evolutio]] (2026-03-26)

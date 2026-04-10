@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-how-auditory-knowledge-in-llm-backbones-shapes-aud.md|How Auditory Knowledge in LLM Backbones Shapes Audio Languag]] (2026-03-22)
 
 - [[sources/2026-03-23-how-auditory-knowledge-in-llm-backbones-shapes-aud.md|How Auditory Knowledge in LLM Backbones Shapes Audio Languag]] (2026-03-23)
+
+- [[sources/2026-03-25-tico-time-controllable-training-for-spoken-dialogu.md|TiCo: Time-Controllable Training for Spoken Dialogue Models]] (2026-03-25)

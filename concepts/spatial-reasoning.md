@@ -30,3 +30,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-24-indoorr2x-indoor-robot-to-everything-coordination-.md|IndoorR2X: Indoor Robot-to-Everything Coordination with LLM-]] (2026-03-24)
 
 - [[sources/2026-03-25-3d-layout-r1-structured-reasoning-for-language-ins.md|3D-Layout-R1: Structured Reasoning for Language-Instructed S]] (2026-03-25)
+
+- [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|3DCity-LLM: Empowering Multi-modality Large Language Models ]] (2026-03-26)

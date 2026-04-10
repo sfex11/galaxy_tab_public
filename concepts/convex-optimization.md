@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-19-rhyme-xt-a-neural-operator-for-spatiotemporal-cont.md|RHYME-XT: A Neural Operator for Spatiotemporal Control Syste]] (2026-03-19)
 
 - [[sources/2026-03-22-camo-a-conditional-neural-solver-for-the-multi-obj.md|CAMO: A Conditional Neural Solver for the Multi-objective Mu]] (2026-03-22)
+
+- [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-11)

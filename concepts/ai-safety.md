@@ -72,3 +72,25 @@ _Wiki 축적 중_
 - [[sources/2026-03-24-measuring-faithfulness-depends-on-how-you-measure-.md|Measuring Faithfulness Depends on How You Measure: Classifie]] (2026-03-24)
 
 - [[sources/2026-03-25-causal-evidence-that-language-models-use-confidenc.md|Causal Evidence that Language Models use Confidence to Drive]] (2026-03-25)
+
+- [[sources/2026-03-25-evaluating-the-reliability-and-fidelity-of-automat.md|Evaluating the Reliability and Fidelity of Automated Judgmen]] (2026-03-25)
+
+- [[sources/2026-03-25-greater-accessibility-can-amplify-discrimination-i.md|Greater accessibility can amplify discrimination in generati]] (2026-03-25)
+
+- [[sources/2026-03-25-human-inspired-pavlovian-and-instrumental-learning.md|Human-Inspired Pavlovian and Instrumental Learning for Auton]] (2026-03-25)
+
+- [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
+
+- [[sources/2026-03-26-code-review-agent-benchmark.md|Code Review Agent Benchmark]] (2026-03-26)
+
+- [[sources/2026-03-26-evaluating-llm-based-test-generation-under-softwar.md|Evaluating LLM-Based Test Generation Under Software Evolutio]] (2026-03-26)
+
+- [[sources/2026-03-26-mecha-nudges-for-machines.md|Mecha-nudges for Machines]] (2026-03-26)
+
+- [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-04-11-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-11)
+
+- [[sources/2026-04-11-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-11)
+
+- [[sources/2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-11)

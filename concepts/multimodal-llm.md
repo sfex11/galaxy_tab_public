@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-19-universal-skeleton-understanding-via-differentiabl.md|Universal Skeleton Understanding via Differentiable Renderin]]
+
+- [[sources/2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-11)
