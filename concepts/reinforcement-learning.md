@@ -101,3 +101,25 @@ _자동 생성됨_
 - [[sources/2026-04-11-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-11)
 
 - [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)
+
+- [[sources/2026-03-27-avo-agentic-variation-operators-for-autonomous-evo.md|AVO: Agentic Variation Operators for Autonomous Evolutionary]] (2026-03-27)
+
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)
+
+- [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md|MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucinati]] (2026-03-27)
+
+- [[sources/2026-03-27-the-stochastic-gap-a-markovian-framework-for-pre-d.md|The Stochastic Gap: A Markovian Framework for Pre-Deployment]] (2026-03-27)
+
+- [[sources/2026-03-27-ui-voyager-a-self-evolving-gui-agent-learning-via-.md|UI-Voyager: A Self-Evolving GUI Agent Learning via Failed Ex]] (2026-03-27)
+
+- [[sources/2026-03-31-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-03-31)
+
+- [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)
+
+- [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
+
+- [[sources/2026-04-02-extending-mona-in-camera-dropbox-reproduction-lear.md|Extending MONA in Camera Dropbox: Reproduction, Learned Appr]] (2026-04-02)
+
+- [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)
+
+- [[sources/2026-04-02-reward-based-online-llm-routing-via-neuralucb.md|Reward-Based Online LLM Routing via NeuralUCB]] (2026-04-02)

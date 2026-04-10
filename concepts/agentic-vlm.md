@@ -12,3 +12,13 @@ _Wiki 축적 중_
 - [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]]
 
 - [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-03-26-speceyes-accelerating-agentic-multimodal-llms-via-.md|SpecEyes: Accelerating Agentic Multimodal LLMs via Speculati]] (2026-03-26)
+
+- [[sources/2026-03-27-lenswalk-agentic-video-understanding-by-planning-h.md|LensWalk: Agentic Video Understanding by Planning How You Se]] (2026-03-27)
+
+- [[sources/2026-03-27-ui-voyager-a-self-evolving-gui-agent-learning-via-.md|UI-Voyager: A Self-Evolving GUI Agent Learning via Failed Ex]] (2026-03-27)
+
+- [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-03-31)
+
+- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)

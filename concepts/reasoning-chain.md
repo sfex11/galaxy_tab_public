@@ -34,3 +34,15 @@ _Wiki 축적 중_
 - [[sources/2026-03-24-revisiting-gene-ontology-knowledge-discovery-with-.md|Revisiting Gene Ontology Knowledge Discovery with Hierarchic]] (2026-03-24)
 
 - [[sources/2026-03-26-evaluating-llm-based-test-generation-under-softwar.md|Evaluating LLM-Based Test Generation Under Software Evolutio]] (2026-03-26)
+
+- [[sources/2026-03-26-reqfusion-a-multi-provider-framework-for-automated.md|ReqFusion: A Multi-Provider Framework for Automated PEGS Ana]] (2026-03-26)
+
+- [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
+
+- [[sources/2026-04-02-bethe-ansatz-with-a-large-language-model.md|Bethe Ansatz with a Large Language Model]] (2026-04-02)
+
+- [[sources/2026-04-02-enhancing-structural-mapping-with-llm-derived-abst.md|Enhancing Structural Mapping with LLM-derived Abstractions f]] (2026-04-02)
+
+- [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
+
+- [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)

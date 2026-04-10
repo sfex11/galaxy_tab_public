@@ -32,3 +32,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|3DCity-LLM: Empowering Multi-modality Large Language Models ]] (2026-03-26)
 
 - [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
+
+- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)

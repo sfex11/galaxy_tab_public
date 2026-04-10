@@ -64,3 +64,25 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-11)
 
 - [[sources/2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-11)
+
+- [[sources/2026-03-26-reqfusion-a-multi-provider-framework-for-automated.md|ReqFusion: A Multi-Provider Framework for Automated PEGS Ana]] (2026-03-26)
+
+- [[sources/2026-03-26-speceyes-accelerating-agentic-multimodal-llms-via-.md|SpecEyes: Accelerating Agentic Multimodal LLMs via Speculati]] (2026-03-26)
+
+- [[sources/2026-03-27-avo-agentic-variation-operators-for-autonomous-evo.md|AVO: Agentic Variation Operators for Autonomous Evolutionary]] (2026-03-27)
+
+- [[sources/2026-03-30-vision2web-a-hierarchical-benchmark-for-visual-web.md|Vision2Web: A Hierarchical Benchmark for Visual Website Deve]] (2026-03-30)
+
+- [[sources/2026-03-31-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-03-31)
+
+- [[sources/2026-03-31-sagai-mid-a-generative-ai-driven-middleware-for-dy.md|SAGAI-MID: A Generative AI-Driven Middleware for Dynamic Run]] (2026-03-31)
+
+- [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)
+
+- [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)
+
+- [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)
+
+- [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)
+
+- [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)

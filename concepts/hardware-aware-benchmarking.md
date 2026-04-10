@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-22-sol-execbench-speed-of-light-benchmarking-for-real.md|SOL-ExecBench: Speed-of-Light Benchmarking for Real-World GP]]
+
+- [[sources/2026-03-30-sustainability-is-not-linear-quantifying-performan.md|Sustainability Is Not Linear: Quantifying Performance, Energ]] (2026-03-30)

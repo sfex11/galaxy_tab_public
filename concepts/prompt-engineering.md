@@ -34,3 +34,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-26-failure-of-contextual-invariance-in-gender-inferen.md|Failure of contextual invariance in gender inference with la]] (2026-03-26)
 
 - [[sources/2026-03-26-mecha-nudges-for-machines.md|Mecha-nudges for Machines]] (2026-03-26)
+
+- [[sources/2026-03-27-avo-agentic-variation-operators-for-autonomous-evo.md|AVO: Agentic Variation Operators for Autonomous Evolutionary]] (2026-03-27)
+
+- [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)
+
+- [[sources/2026-04-02-enhancing-structural-mapping-with-llm-derived-abst.md|Enhancing Structural Mapping with LLM-derived Abstractions f]] (2026-04-02)
+
+- [[sources/2026-04-03-adams-law-textual-frequency-law-on-large-language-.md|Adam's Law: Textual Frequency Law on Large Language Models]] (2026-04-03)

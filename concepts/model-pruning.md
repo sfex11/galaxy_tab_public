@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-23-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]]
 
 - [[sources/2026-04-11-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-11)
+
+- [[sources/2026-03-30-sustainability-is-not-linear-quantifying-performan.md|Sustainability Is Not Linear: Quantifying Performance, Energ]] (2026-03-30)

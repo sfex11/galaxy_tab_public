@@ -30,3 +30,13 @@ _Wiki 축적 중_
 - [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]] (2026-03-25)
 
 - [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|3DCity-LLM: Empowering Multi-modality Large Language Models ]] (2026-03-26)
+
+- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)
+
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)
+
+- [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-03-31)
+
+- [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-03-31)
+
+- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)

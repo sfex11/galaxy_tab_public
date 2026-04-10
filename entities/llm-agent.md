@@ -139,3 +139,29 @@ _자동 생성됨_
 - [[sources/2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-11)
 
 - [[sources/2026-04-11-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-11)
+
+- [[sources/2026-03-26-speceyes-accelerating-agentic-multimodal-llms-via-.md|SpecEyes: Accelerating Agentic Multimodal LLMs via Speculati]] (2026-03-26)
+
+- [[sources/2026-03-27-avo-agentic-variation-operators-for-autonomous-evo.md|AVO: Agentic Variation Operators for Autonomous Evolutionary]] (2026-03-27)
+
+- [[sources/2026-03-27-the-stochastic-gap-a-markovian-framework-for-pre-d.md|The Stochastic Gap: A Markovian Framework for Pre-Deployment]] (2026-03-27)
+
+- [[sources/2026-03-27-ui-voyager-a-self-evolving-gui-agent-learning-via-.md|UI-Voyager: A Self-Evolving GUI Agent Learning via Failed Ex]] (2026-03-27)
+
+- [[sources/2026-03-30-deception-and-communication-in-autonomous-multi-ag.md|Deception and Communication in Autonomous Multi-Agent System]] (2026-03-30)
+
+- [[sources/2026-03-30-learning-to-commit-generating-organic-pull-request.md|Learning to Commit: Generating Organic Pull Requests via Onl]] (2026-03-30)
+
+- [[sources/2026-03-30-vision2web-a-hierarchical-benchmark-for-visual-web.md|Vision2Web: A Hierarchical Benchmark for Visual Website Deve]] (2026-03-30)
+
+- [[sources/2026-03-31-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-03-31)
+
+- [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)
+
+- [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)
+
+- [[sources/2026-04-02-extending-mona-in-camera-dropbox-reproduction-lear.md|Extending MONA in Camera Dropbox: Reproduction, Learned Appr]] (2026-04-02)
+
+- [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)
+
+- [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)

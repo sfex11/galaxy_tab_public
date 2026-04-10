@@ -16,3 +16,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-22)
 
 - [[sources/2026-03-23-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-23)
+
+- [[sources/2026-03-27-evaluating-chunking-strategies-for-retrieval-augme.md|Evaluating Chunking Strategies For Retrieval-Augmented Gener]] (2026-03-27)
+
+- [[sources/2026-03-27-representation-learning-to-study-temporal-dynamics.md|Representation Learning to Study Temporal Dynamics in Tutori]] (2026-03-27)

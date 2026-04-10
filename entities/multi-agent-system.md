@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
 
 - [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-11)
+
+- [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md|MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucinati]] (2026-03-27)
+
+- [[sources/2026-03-30-deception-and-communication-in-autonomous-multi-ag.md|Deception and Communication in Autonomous Multi-Agent System]] (2026-03-30)

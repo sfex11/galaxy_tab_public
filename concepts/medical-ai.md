@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS: An agentic, multimodal vision-language model for car]]
+
+- [[sources/2026-04-03-blinded-radiologist-and-llm-based-evaluation-of-ll.md|Blinded Radiologist and LLM-Based Evaluation of LLM-Generate]] (2026-04-03)

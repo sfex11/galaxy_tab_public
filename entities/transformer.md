@@ -59,3 +59,7 @@ _자동 생성됨_
 - [[sources/2026-03-22-sol-execbench-speed-of-light-benchmarking-for-real.md|SOL-ExecBench: Speed-of-Light Benchmarking for Real-World GP]] (2026-03-22)
 
 - [[sources/2026-03-25-chimera-latency--and-performance-aware-multi-agent.md|Chimera: Latency- and Performance-Aware Multi-agent Serving ]] (2026-03-25)
+
+- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)
+
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)

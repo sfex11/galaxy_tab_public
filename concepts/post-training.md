@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-25-tico-time-controllable-training-for-spoken-dialogu.md|TiCo: Time-Controllable Training for Spoken Dialogue Models]] (2026-03-25)
 
 - [[sources/2026-04-11-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-11)
+
+- [[sources/2026-03-27-tuneshift-kd-knowledge-distillation-and-transfer-f.md|TuneShift-KD: Knowledge Distillation and Transfer for Fine-t]] (2026-03-27)
+
+- [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)

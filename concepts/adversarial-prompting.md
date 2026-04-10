@@ -18,3 +18,17 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-11)
 
 - [[sources/2026-04-11-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-11)
+
+- [[sources/2026-03-27-analysing-the-safety-pitfalls-of-steering-vectors.md|Analysing the Safety Pitfalls of Steering Vectors]] (2026-03-27)
+
+- [[sources/2026-03-27-claudini-autoresearch-discovers-state-of-the-art-a.md|Claudini: Autoresearch Discovers State-of-the-Art Adversaria]] (2026-03-27)
+
+- [[sources/2026-03-27-comparing-developer-and-llm-biases-in-code-evaluat.md|Comparing Developer and LLM Biases in Code Evaluation]] (2026-03-27)
+
+- [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md|MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucinati]] (2026-03-27)
+
+- [[sources/2026-03-30-deception-and-communication-in-autonomous-multi-ag.md|Deception and Communication in Autonomous Multi-Agent System]] (2026-03-30)
+
+- [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
+
+- [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)

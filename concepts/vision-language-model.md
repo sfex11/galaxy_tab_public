@@ -32,3 +32,17 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
 
 - [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)
+
+- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)
+
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)
+
+- [[sources/2026-03-27-lenswalk-agentic-video-understanding-by-planning-h.md|LensWalk: Agentic Video Understanding by Planning How You Se]] (2026-03-27)
+
+- [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-03-31)
+
+- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)
+
+- [[sources/2026-04-01-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-04-01)
+
+- [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)

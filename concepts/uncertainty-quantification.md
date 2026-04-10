@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-24-semantic-token-clustering-for-efficient-uncertaint.md|Semantic Token Clustering for Efficient Uncertainty Quantifi]]
+
+- [[sources/2026-03-31-adapttoken-entropy-based-adaptive-token-selection-.md|AdaptToken: Entropy-based Adaptive Token Selection for MLLM ]] (2026-03-31)
+
+- [[sources/2026-04-02-better-than-average-spatially-aware-aggregation-of.md|Better than Average: Spatially-Aware Aggregation of Segmenta]] (2026-04-02)

@@ -20,3 +20,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-25-spa-a-simple-but-tough-to-beat-baseline-for-knowle.md|SPA: A Simple but Tough-to-Beat Baseline for Knowledge Injec]] (2026-03-25)
 
 - [[sources/2026-04-11-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-11)
+
+- [[sources/2026-03-27-tuneshift-kd-knowledge-distillation-and-transfer-f.md|TuneShift-KD: Knowledge Distillation and Transfer for Fine-t]] (2026-03-27)
+
+- [[sources/2026-03-30-memboost-a-memory-boosted-framework-for-cost-aware.md|MemBoost: A Memory-Boosted Framework for Cost-Aware LLM Infe]] (2026-03-30)

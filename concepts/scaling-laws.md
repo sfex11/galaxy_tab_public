@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-11-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]]
+
+- [[sources/2026-04-03-adams-law-textual-frequency-law-on-large-language-.md|Adam's Law: Textual Frequency Law on Large Language Models]] (2026-04-03)

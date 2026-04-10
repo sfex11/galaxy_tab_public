@@ -26,3 +26,13 @@ _Wiki 축적 중_
 - [[sources/2026-03-25-human-inspired-pavlovian-and-instrumental-learning.md|Human-Inspired Pavlovian and Instrumental Learning for Auton]] (2026-03-25)
 
 - [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)
+
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)
+
+- [[sources/2026-03-27-lenswalk-agentic-video-understanding-by-planning-h.md|LensWalk: Agentic Video Understanding by Planning How You Se]] (2026-03-27)
+
+- [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-03-31)
+
+- [[sources/2026-04-01-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-04-01)
+
+- [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)

@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-11-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]]
+
+- [[sources/2026-04-02-better-than-average-spatially-aware-aggregation-of.md|Better than Average: Spatially-Aware Aggregation of Segmenta]] (2026-04-02)

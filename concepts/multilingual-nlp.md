@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-22-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-22)
 
 - [[sources/2026-03-23-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-23)
+
+- [[sources/2026-04-03-blinded-radiologist-and-llm-based-evaluation-of-ll.md|Blinded Radiologist and LLM-Based Evaluation of LLM-Generate]] (2026-04-03)

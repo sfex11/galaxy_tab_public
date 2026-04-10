@@ -16,3 +16,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-21-nemotron-cascade-2-post-training-llms-with-cascade.md|Nemotron-Cascade 2: Post-Training LLMs with Cascade RL and M]] (2026-03-21)
 
 - [[sources/2026-03-25-decoupling-exploration-and-policy-optimization-unc.md|Decoupling Exploration and Policy Optimization: Uncertainty ]] (2026-03-25)
+
+- [[sources/2026-03-27-tuneshift-kd-knowledge-distillation-and-transfer-f.md|TuneShift-KD: Knowledge Distillation and Transfer for Fine-t]] (2026-03-27)
+
+- [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)

@@ -89,3 +89,15 @@ _자동 생성됨_
 - [[sources/2026-03-26-biased-error-attribution-in-multi-agent-human-ai-s.md|Biased Error Attribution in Multi-Agent Human-AI Systems Und]] (2026-03-26)
 
 - [[sources/2026-04-11-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-11)
+
+- [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md|MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucinati]] (2026-03-27)
+
+- [[sources/2026-03-27-the-free-market-algorithm-self-organizing-optimiza.md|The Free-Market Algorithm: Self-Organizing Optimization for ]] (2026-03-27)
+
+- [[sources/2026-03-30-deception-and-communication-in-autonomous-multi-ag.md|Deception and Communication in Autonomous Multi-Agent System]] (2026-03-30)
+
+- [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-03-31)
+
+- [[sources/2026-03-31-bace-llm-based-code-generation-through-bayesian-an.md|BACE: LLM-based Code Generation through Bayesian Anchored Co]] (2026-03-31)
+
+- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)
