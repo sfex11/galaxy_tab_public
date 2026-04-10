@@ -27,3 +27,5 @@ _자동 수집 중_
 _자동 생성됨_
 
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md]]
+
+- [[sources/2026-03-19-toward-scalable-automated-repository-level-dataset.md|Toward Scalable Automated Repository-Level Datasets for Soft]] (2026-03-19)

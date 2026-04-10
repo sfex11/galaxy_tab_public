@@ -1,13 +1,44 @@
 # Interpretable Traffic Responsibility from Dashcam Video via Legal Multi Agent Reasoning
 
-**타입**: 논문  
-**출처**: arXiv  
-**날짜**: 2026-03-19  
+**타입**: 논문
+**출처**: arXiv
+**날짜**: 2026-03-19
 **링크**: http://arxiv.org/abs/2603.17930v1
 
-## 핵심 요약
+## 💡 핵심 인사이트
 
-The widespread adoption of dashcams has made video evidence in traffic accidents increasingly abundant, yet transforming "what happened in the video" into "who is responsible under which legal provisions" still relies heavily on human experts. Existing ego-view traffic accident studies mainly focus on perception and semantic understanding, while LLM-based legal methods are mostly built on textual case descriptions and rarely incorporate video evidence, leaving a clear gap between the two. We fir...
+블랙박스 영상에서 법적 책임 판단까지의 전 과정을 멀티 에이전트 LLM 협업으로 연결함으로써, 시각 이해와 법률 추론 사이의 공백을 최초로 메운 연구이다.
+
+## 📖 분석
+
+## Interpretable Traffic Responsibility from Dashcam Video via Legal Multi-Agent Reasoning
+
+본 논문은 블랙박스(dashcam) 영상으로부터 교통사고 책임을 법적 근거와 함께 자동으로 판단하는 멀티 에이전트 프레임워크를 제안한다. 기존 연구들이 영상 기반 사고 인식(perception)과 텍스트 기반 법률 추론(legal reasoning)을 각각 독립적으로 다뤘던 반면, 이 연구는 두 영역을 연결하는 최초의 시도로 볼 수 있다.
+
+### 핵심 접근법
+
+시스템은 여러 LLM 에이전트가 각기 다른 역할—영상 해석, 교통법규 매칭, 책임 비율 산정—을 수행하며 협업하는 구조를 갖는다. 블랙박스 영상을 입력으로 받아 (1) 시각적 장면 이해를 통해 사고 상황을 구조화하고, (2) 관련 법률 조항을 검색·적용하며, (3) 최종적으로 해석 가능한(interpretable) 책임 판단을 출력한다. 단순한 "누가 잘못했는가"를 넘어 "어떤 법 조항에 근거하여 왜 책임이 있는가"까지 설명할 수 있다는 점이 차별화된다.
+
+### 기존 연구와의 연결
+
+이 연구는 **멀티 에이전트 시스템(Multi-Agent System)** 패러다임을 법률 도메인에 적용한 사례로, [[concepts/multi-agent-system]]의 실제 응용 범위를 확장한다. 또한 각 에이전트가 LLM 기반으로 동작하므로 [[entities/llm-agent]]의 도메인 특화 활용 사례에 해당한다. 영상→텍스트→법률 추론이라는 멀티모달 파이프라인 구조는 최근 활발한 비전-언어 모델 연구 흐름과도 맞닿아 있다.
+
+### 의의
+
+법률 AI 분야에서 영상 증거를 직접 처리하는 연구가 드물었다는 점에서, 비전 이해와 법적 추론의 간극(gap)을 메우는 중요한 기여를 한다. 특히 해석 가능성(interpretability)을 강조하여 실무 적용 가능성을 높였다.
+
+## 🔗 관련 논문
+
+- 2026 04 09 social dynamics as critical vulnerabilities that u
+- 2026 04 09 paper circle an open source multi agent research d
+
+## 🏷️ 엔티티
+
+- [[entities/llm-agent.md|llm-agent]]
+
+## 📐 개념
+
+- [[concepts/multi-agent-system.md|multi-agent-system]]
 
 ---
-_자동 생성됨_
+_LLM 분석으로 재생성됨_

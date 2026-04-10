@@ -1,13 +1,46 @@
 # A Creative Agent is Worth a 64-Token Template
 
-**타입**: 논문  
-**출처**: arXiv  
-**날짜**: 2026-03-19  
+**타입**: 논문
+**출처**: arXiv
+**날짜**: 2026-03-19
 **링크**: http://arxiv.org/abs/2603.17895v1
 
-## 핵심 요약
+## 💡 핵심 인사이트
 
-Text-to-image (T2I) models have substantially improved image fidelity and prompt adherence, yet their creativity remains constrained by reliance on discrete natural language prompts. When presented with fuzzy prompts such as ``a creative vinyl record-inspired skyscraper'', these models often fail to infer the underlying creative intent, leaving creative ideation and prompt design largely to human users. Recent reasoning- or agent-driven approaches iteratively augment prompts but incur high compu...
+복잡한 반복적 프롬프트 확장 없이 64토큰 경량 템플릿만으로도 T2I 모델의 창의적 의도 추론이 가능하며, 이는 에이전트 설계에서 효율성과 창의성이 반드시 트레이드오프 관계가 아님을 보여준다.
+
+## 📖 분석
+
+## A Creative Agent is Worth a 64-Token Template
+
+**arXiv**: http://arxiv.org/abs/2603.17895v1  
+**날짜**: 2026-03-19
+
+### 개요
+
+본 논문은 Text-to-Image(T2I) 모델의 창의성 한계를 극복하기 위한 경량 에이전트 기반 접근법을 제안한다. 기존 T2I 모델은 이미지 품질과 프롬프트 충실도에서 큰 발전을 이루었으나, "비닐 레코드에서 영감받은 창의적인 마천루"와 같은 모호한(fuzzy) 프롬프트가 주어졌을 때 창의적 의도를 추론하는 데 실패하는 경우가 많다. 최근의 추론 기반 또는 에이전트 기반 접근법은 프롬프트를 반복적으로 보강하지만, 높은 연산 비용이 발생한다.
+
+### 핵심 기여
+
+이 연구의 핵심 아이디어는 단 64개의 토큰으로 구성된 템플릿을 활용하는 창의적 에이전트가, 복잡한 반복적 프롬프트 확장 방식과 비교하여 동등하거나 우수한 창의적 결과물을 생성할 수 있다는 것이다. 이는 창의적 이미지 생성에서 **효율성과 창의성 사이의 트레이드오프**를 재정의하며, 경량화된 에이전트 설계가 과도한 연산 없이도 충분한 창의적 추론을 수행할 수 있음을 시사한다.
+
+### 연구 맥락
+
+이 연구는 LLM 에이전트([[entities/llm-agent]])의 활용 범위를 텍스트-이미지 생성의 창의적 영역으로 확장한다. 기존 에이전트 연구가 주로 코드 생성, 웹 탐색, 도구 사용 등 **작업 수행 효율성**에 초점을 맞춘 반면, 본 연구는 **창의적 의도 추론**이라는 새로운 차원을 탐구한다. 또한 프롬프트 엔지니어링의 효율성 관점에서, 최소한의 구조화된 템플릿이 장황한 프롬프트 확장보다 효과적일 수 있다는 발견은 LLM 활용 전반에 시사점을 제공한다.
+
+## 🔗 관련 논문
+
+- 2026 04 08 filegram grounding agent personalization in file s
+- 2026 04 10 how much llm does a self revising agent actually n
+
+## 🏷️ 엔티티
+
+- [[entities/llm-agent.md|llm-agent]]
+
+## 📐 개념
+
+- [[concepts/prompt-engineering.md|prompt-engineering]]
+- [[concepts/text-to-image.md|text-to-image]]
 
 ---
-_자동 생성됨_
+_LLM 분석으로 재생성됨_
