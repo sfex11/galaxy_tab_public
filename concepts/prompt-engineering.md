@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-19-the-unreasonable-effectiveness-of-text-embedding-i.md|The Unreasonable Effectiveness of Text Embedding Interpolati]] (2026-03-19)
 
 - [[sources/2026-03-20-agentfactory-a-self-evolving-framework-through-exe.md|AgentFactory: A Self-Evolving Framework Through Executable S]] (2026-03-20)
+
+- [[sources/2026-03-24-an-agentic-approach-to-generating-xai-narratives.md|An Agentic Approach to Generating XAI-Narratives]] (2026-03-24)
+
+- [[sources/2026-03-24-memori-a-persistent-memory-layer-for-efficient-con.md|Memori: A Persistent Memory Layer for Efficient, Context-Awa]] (2026-03-24)

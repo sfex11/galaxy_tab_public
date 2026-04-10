@@ -53,3 +53,33 @@ _자동 생성됨_
 - [[sources/2026-03-20-malles-a-multi-agent-llms-based-economic-sandbox-w.md|MALLES: A Multi-agent LLMs-based Economic Sandbox with Consu]] (2026-03-20)
 
 - [[sources/2026-03-20-multi-source-evidence-fusion-for-audio-question-an.md|Multi-Source Evidence Fusion for Audio Question Answering]] (2026-03-20)
+
+- [[sources/2026-03-21-os-themis-a-scalable-critic-framework-for-generali.md|OS-Themis: A Scalable Critic Framework for Generalist GUI Re]] (2026-03-21)
+
+- [[sources/2026-03-22-agentic-business-process-management-a-research-man.md|Agentic Business Process Management: A Research Manifesto]] (2026-03-22)
+
+- [[sources/2026-03-22-camo-a-conditional-neural-solver-for-the-multi-obj.md|CAMO: A Conditional Neural Solver for the Multi-objective Mu]] (2026-03-22)
+
+- [[sources/2026-03-22-nemotron-cascade-2-post-training-llms-with-cascade.md|Nemotron-Cascade 2: Post-Training LLMs with Cascade RL and M]] (2026-03-22)
+
+- [[sources/2026-03-22-os-themis-a-scalable-critic-framework-for-generali.md|OS-Themis: A Scalable Critic Framework for Generalist GUI Re]] (2026-03-22)
+
+- [[sources/2026-03-23-agentic-business-process-management-a-research-man.md|Agentic Business Process Management: A Research Manifesto]] (2026-03-23)
+
+- [[sources/2026-03-23-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-23)
+
+- [[sources/2026-03-23-os-themis-a-scalable-critic-framework-for-generali.md|OS-Themis: A Scalable Critic Framework for Generalist GUI Re]] (2026-03-23)
+
+- [[sources/2026-03-24-an-agentic-approach-to-generating-xai-narratives.md|An Agentic Approach to Generating XAI-Narratives]] (2026-03-24)
+
+- [[sources/2026-03-24-an-agentic-multi-agent-architecture-for-cybersecur.md|An Agentic Multi-Agent Architecture for Cybersecurity Risk M]] (2026-03-24)
+
+- [[sources/2026-03-24-indoorr2x-indoor-robot-to-everything-coordination-.md|IndoorR2X: Indoor Robot-to-Everything Coordination with LLM-]] (2026-03-24)
+
+- [[sources/2026-03-24-learning-dynamic-belief-graphs-for-theory-of-mind-.md|Learning Dynamic Belief Graphs for Theory-of-mind Reasoning]] (2026-03-24)
+
+- [[sources/2026-03-24-memori-a-persistent-memory-layer-for-efficient-con.md|Memori: A Persistent Memory Layer for Efficient, Context-Awa]] (2026-03-24)
+
+- [[sources/2026-03-24-revisiting-gene-ontology-knowledge-discovery-with-.md|Revisiting Gene Ontology Knowledge Discovery with Hierarchic]] (2026-03-24)
+
+- [[sources/2026-03-25-chimera-latency--and-performance-aware-multi-agent.md|Chimera: Latency- and Performance-Aware Multi-agent Serving ]] (2026-03-25)

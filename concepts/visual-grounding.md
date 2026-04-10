@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-19-loc3r-vlm-language-based-localization-and-3d-reaso.md|Loc3R-VLM: Language-based Localization and 3D Reasoning with]]
 
 - [[sources/2026-03-20-loc3r-vlm-language-based-localization-and-3d-reaso.md|Loc3R-VLM: Language-based Localization and 3D Reasoning with]] (2026-03-20)
+
+- [[sources/2026-03-22-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-22)
+
+- [[sources/2026-03-23-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements: Multi-Agent Probabilistic Groundi]] (2026-03-23)

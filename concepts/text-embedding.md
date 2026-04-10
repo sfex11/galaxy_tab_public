@@ -10,3 +10,9 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-19-the-unreasonable-effectiveness-of-text-embedding-i.md|The Unreasonable Effectiveness of Text Embedding Interpolati]]
+
+- [[sources/2026-03-21-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-21)
+
+- [[sources/2026-03-22-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-22)
+
+- [[sources/2026-03-23-f2llm-v2-inclusive-performant-and-efficient-embedd.md|F2LLM-v2: Inclusive, Performant, and Efficient Embeddings fo]] (2026-03-23)

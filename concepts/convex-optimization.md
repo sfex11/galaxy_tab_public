@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-19-a-convex-formulation-of-the-multi-commodity-dynami.md|A Convex Formulation of the Multi-Commodity Dynamic Traffic ]]
 
 - [[sources/2026-03-19-rhyme-xt-a-neural-operator-for-spatiotemporal-cont.md|RHYME-XT: A Neural Operator for Spatiotemporal Control Syste]] (2026-03-19)
+
+- [[sources/2026-03-22-camo-a-conditional-neural-solver-for-the-multi-obj.md|CAMO: A Conditional Neural Solver for the Multi-objective Mu]] (2026-03-22)
