@@ -43,3 +43,19 @@
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md]] - Social Dynamics as Critical Vulnerabilities that Undermine Objective Decision-Making in LLM Collectives
 - [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md]] - MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control
+- [[sources/2026-04-10-personalized-rewardbench-evaluating-reward-models-.md]] - Personalized RewardBench: Evaluating Reward Models with Human Aligned Personalization
+- [[sources/2026-04-10-appear2meaning-a-cross-cultural-benchmark-for-stru.md]] - Appear2Meaning: A Cross-Cultural Benchmark for Structured Cultural Metadata Inference from Images
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md]] - Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation
+- [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md]] - Evaluating In-Context Translation with Synchronous Context-Free Grammar Transduction
+- [[sources/2026-04-10-chatbot-based-assessment-of-code-understanding-in-.md]] - Chatbot-Based Assessment of Code Understanding in Automated Programming Assessment Systems
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md]] - Android Coach: Improve Online Agentic Training Efficiency with Single State Multiple Actions
+- [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md]] - A Systematic Study of Retrieval Pipeline Design for Retrieval-Augmented Medical Question Answering
+- [[sources/2026-04-10-joint-optimization-of-reasoning-and-dual-memory-fo.md]] - Joint Optimization of Reasoning and Dual-Memory for Self-Learning Diagnostic Agent
+- [[sources/2026-04-10-cadence-context-adaptive-depth-estimation-for-navi.md]] - CADENCE: Context-Adaptive Depth Estimation for Navigation and Computational Efficiency
+- [[sources/2026-04-10-how-much-llm-does-a-self-revising-agent-actually-n.md]] - How Much LLM Does a Self-Revising Agent Actually Need?
+- [[sources/2026-04-10-intertemporal-demand-allocation-for-inventory-cont.md]] - Intertemporal Demand Allocation for Inventory Control in Online Marketplaces
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md]] - Robust Quadruped Locomotion via Evolutionary Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]] - TraceSafe: A Systematic Assessment of LLM Guardrails on Multi-Step Tool-Calling Trajectories

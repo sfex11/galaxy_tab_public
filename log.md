@@ -72,3 +72,34 @@
 ## [2026-04-09 10:30] ingest | Social Dynamics as Critical Vulnerabilities that Undermine Objective Decision-Making in LLM Collectives
 
 ## [2026-04-09 10:30] ingest | MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control
+
+## [2026-04-10 15:56] ingest | Personalized RewardBench: Evaluating Reward Models with Human Aligned Personalization
+
+## [2026-04-10 15:56] ingest | Appear2Meaning: A Cross-Cultural Benchmark for Structured Cultural Metadata Inference from Images
+
+## [2026-04-10 15:56] ingest | Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation
+
+## [2026-04-10 15:56] ingest | Evaluating In-Context Translation with Synchronous Context-Free Grammar Transduction
+
+## [2026-04-10 15:56] ingest | Chatbot-Based Assessment of Code Understanding in Automated Programming Assessment Systems
+
+## [2026-04-10 15:56] ingest | Android Coach: Improve Online Agentic Training Efficiency with Single State Multiple Actions
+
+## [2026-04-10 15:56] ingest | A Systematic Study of Retrieval Pipeline Design for Retrieval-Augmented Medical Question Answering
+
+## [2026-04-10 15:56] ingest | Joint Optimization of Reasoning and Dual-Memory for Self-Learning Diagnostic Agent
+
+## [2026-04-10 15:56] ingest | CADENCE: Context-Adaptive Depth Estimation for Navigation and Computational Efficiency
+
+## [2026-04-10 15:56] ingest | How Much LLM Does a Self-Revising Agent Actually Need?
+
+## [2026-04-10 15:56] ingest | Intertemporal Demand Allocation for Inventory Control in Online Marketplaces
+
+## [2026-04-10 15:56] ingest | Robust Quadruped Locomotion via Evolutionary Reinforcement Learning
+
+## [2026-04-10 15:56] ingest | TraceSafe: A Systematic Assessment of LLM Guardrails on Multi-Step Tool-Calling Trajectories
+
+## [2026-04-10 16:28] llm-ingest | 0편 분석, 엔티티 3개, 개념 2개
+
+## [2026-04-10 16:30] llm-ingest | 1편 분석, 엔티티 3개, 개념 4개
+- 2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md

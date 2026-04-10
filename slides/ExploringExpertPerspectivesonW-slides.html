@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EmBot: 웨어러블 기반 LLM 스트레스 관리 대화 지원 시스템</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-dark: #5A4BD1;
+    --secondary: #00CEC9;
+    --accent: #FD79A8;
+    --warning: #FDCB6E;
+    --dark: #1a1a2e;
+    --darker: #0f0f23;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.1);
+    --text: #e8e8f0;
+    --text-muted: #a0a0b8;
+    --gradient-1: linear-gradient(135deg, #6C5CE7, #a29bfe);
+    --gradient-2: linear-gradient(135deg, #00CEC9, #81ecec);
+    --gradient-3: linear-gradient(135deg, #FD79A8, #fab1d0);
+    --gradient-4: linear-gradient(135deg, #FDCB6E, #ffeaa7);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== Background Effects ===== */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-orb-1 { width: 500px; height: 500px; background: var(--primary); top: -150px; right: -100px; }
+  .bg-orb-2 { width: 400px; height: 400px; background: var(--secondary); bottom: -100px; left: -100px; }
+  .bg-orb-3 { width: 300px; height: 300px; background: var(--accent); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+  /* ===== Slide 0: Title ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(108,92,231,0.15), transparent 70%);
+  }
+
+  .title-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(108,92,231,0.2);
+    border: 1px solid rgba(108,92,231,0.4);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    color: #a29bfe;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .title-main {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.3;
+    max-width: 900px;
+    background: linear-gradient(135deg, #fff 0%, #a29bfe 50%, #81ecec 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-sub {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    color: var(--text-muted);
+    max-width: 700px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .title-authors {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.8;
+    opacity: 0.7;
+  }
+
+  .title-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .meta-chip {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    color: var(--text-muted);
+  }
+
+  /* ===== Section Headers ===== */
+  .section-num {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 750px;
+    margin-bottom: 30px;
+    font-weight: 300;
+  }
+
+  /* ===== Cards ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .card-text {
+    font-size: clamp(0.75rem, 1.5vw, 0.88rem);
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ===== Flow / Pipeline ===== */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .pipe-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+
+  .pipe-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  .pipe-content { flex: 1; }
+  .pipe-title {
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .pipe-desc {
+    font-size: clamp(0.75rem, 1.4vw, 0.85rem);
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ===== Quote ===== */
+  .quote-block {
+    background: linear-gradient(135deg, rgba(108,92,231,0.1), rgba(0,206,201,0.05));
+    border-left: 3px solid var(--primary);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 24px;
+    margin: 12px 0;
+    font-style: italic;
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    line-height: 1.7;
+    color: #c8c8e0;
+  }
+
+  .quote-block .quote-src {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* ===== Tension bars ===== */
+  .tension-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .tension-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 12px;
+  }
+
+  .tension-pole {
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .tension-line {
+    flex: 1;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .tension-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  }
+
+  /* ===== Dimension cards ===== */
+  .dim-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+
+  .dim-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.78rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .dim-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .dim-tag {
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ===== Stats row ===== */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.82rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ===== Navigation ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(15,15,35,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active {
+    transform: scale(0.92);
+    background: rgba(108,92,231,0.3);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-dot.active {
+    background: var(--primary);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav-counter {
+    font-size: clamp(0.7rem, 1.3vw, 0.82rem);
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== Highlight colors ===== */
+  .c-purple { color: #a29bfe; }
+  .c-teal { color: #81ecec; }
+  .c-pink { color: #fab1d0; }
+  .c-yellow { color: #ffeaa7; }
+  .c-green { color: #55efc4; }
+
+  .bg-purple { background: var(--gradient-1); }
+  .bg-teal { background: var(--gradient-2); }
+  .bg-pink { background: var(--gradient-3); }
+  .bg-yellow { background: var(--gradient-4); }
+  .bg-green { background: linear-gradient(135deg, #00b894, #55efc4); }
+
+  .border-l-purple { border-left: 3px solid #a29bfe; }
+  .border-l-teal { border-left: 3px solid #81ecec; }
+  .border-l-pink { border-left: 3px solid #fab1d0; }
+  .border-l-yellow { border-left: 3px solid #ffeaa7; }
+
+  /* ===== List ===== */
+  .clean-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .clean-list li {
+    padding: 8px 0 8px 20px;
+    position: relative;
+    font-size: clamp(0.8rem, 1.5vw, 0.92rem);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .clean-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    opacity: 0.6;
+  }
+
+  /* ===== Animation ===== */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .slide.active .fade-up {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide.active .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .slide.active .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .slide.active .fade-up:nth-child(4) { transition-delay: 0.3s; }
+  .slide.active .fade-up:nth-child(5) { transition-delay: 0.35s; }
+  .slide.active .fade-up:nth-child(6) { transition-delay: 0.4s; }
+  .slide.active .fade-up:nth-child(7) { transition-delay: 0.45s; }
+  .slide.active .fade-up:nth-child(8) { transition-delay: 0.5s; }
+
+  /* ===== Scrollbar ===== */
+  .slide::-webkit-scrollbar { width: 4px; }
+  .slide::-webkit-scrollbar-track { background: transparent; }
+  .slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* ===== Keyboard hint ===== */
+  .kbd-hint {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    z-index: 50;
+  }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 35px 30px 90px; }
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    .title-main { font-size: clamp(1.4rem, 5vw, 2.2rem); }
+    .stats-row { gap: 10px; }
+    .stat-box { min-width: 100px; padding: 16px; }
+    .tension-bar { flex-direction: column; gap: 6px; }
+    .tension-line { width: 100%; }
+    .kbd-hint { display: none; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 90px; }
+    .section-title { font-size: clamp(1.2rem, 6vw, 1.7rem); margin-bottom: 12px; }
+    .section-desc { margin-bottom: 16px; font-size: clamp(0.8rem, 3.5vw, 0.92rem); }
+    .card { padding: 18px; border-radius: 12px; }
+    .pipe-step { padding: 16px; gap: 12px; flex-direction: column; }
+    .pipe-num { width: 34px; height: 34px; font-size: 0.85rem; }
+    .nav-bar { padding: 10px 16px; }
+    .nav-btn { width: 50px; height: 50px; font-size: 20px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+    .title-meta { gap: 8px; }
+    .meta-chip { padding: 4px 10px; }
+    .stats-row { flex-direction: column; gap: 8px; }
+    .stat-box { min-width: unset; }
+    .dim-card { padding: 14px 16px; }
+    .quote-block { padding: 14px 18px; }
+    .bg-orb { opacity: 0.08; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 18px 14px 85px; }
+    .section-title { font-size: clamp(1rem, 7vw, 1.3rem); }
+    .card { padding: 14px; }
+    .card-icon { width: 36px; height: 36px; font-size: 16px; margin-bottom: 10px; }
+    .nav-bar { padding: 8px 12px; }
+    .title-badge { padding: 6px 14px; }
+    .title-authors { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ====== SLIDE 0: Title ====== -->
+  <div class="slide title-slide active" data-index="0">
+    <div class="title-badge fade-up">arXiv:2604.04915 &middot; IH '26</div>
+    <h1 class="title-main fade-up">웨어러블 기반 LLM 대화형<br>일상 스트레스 관리 지원에 대한<br>전문가 관점 탐색</h1>
+    <p class="title-sub fade-up">웨어러블 스트레스 감지와 대규모 언어 모델(LLM) 대화 지원을 통합한 <strong class="c-teal">EmBot</strong> 시스템을 디자인 프로브로 활용하여, 정신건강 전문가 15명의 관점을 분석한 연구</p>
+    <p class="title-authors fade-up">Poorvesh Dongre &middot; Sameer Neupane &middot; Priyanka Jadhav &middot; Nikitha Donekal Chandrashekar &middot; Christian Webb &middot; Denis Gra&#269;anin</p>
+    <div class="title-meta fade-up">
+      <span class="meta-chip">HCI (cs.HC)</span>
+      <span class="meta-chip">2026.04.06</span>
+      <span class="meta-chip">CC BY 4.0</span>
+      <span class="meta-chip">포르투갈 포르투</span>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 1: Background ====== -->
+  <div class="slide" data-index="1">
+    <div class="fade-up">
+      <div class="section-num c-purple">01 &mdash; 배경</div>
+      <h2 class="section-title">왜 이 연구가 필요한가?</h2>
+      <p class="section-desc">만성 스트레스는 기분 장애, 우울증, 삶의 질 저하와 직결됩니다. 웨어러블과 LLM이 각각 발전해왔지만, 이 둘의 유기적 통합은 아직 미지의 영역입니다.</p>
+    </div>
+    <div class="card-grid card-grid-3 fade-up">
+      <div class="card border-l-purple">
+        <div class="card-icon bg-purple">&#9201;</div>
+        <div class="card-title">웨어러블 기기의 한계</div>
+        <div class="card-text">오탐(false positive), 알림 피로, 맥락적 모호성 등 실시간 스트레스 감지에는 여전히 제약이 존재</div>
+      </div>
+      <div class="card border-l-teal">
+        <div class="card-icon bg-teal">&#128172;</div>
+        <div class="card-title">LLM의 독립적 운영</div>
+        <div class="card-text">기존 LLM 기반 정신건강 시스템은 웨어러블 데이터와 분리되어 작동, 생태학적 기반 부족</div>
+      </div>
+      <div class="card border-l-pink">
+        <div class="card-icon bg-pink">&#128105;&#8205;&#9877;&#65039;</div>
+        <div class="card-title">전문가 관점 부재</div>
+        <div class="card-text">임상 및 연구 전문가의 관점이 통합 시스템 설계에 거의 반영되지 않은 상태 &mdash; 안전성과 임상 적절성 확보 필수</div>
+      </div>
+    </div>
+    <div class="quote-block fade-up" style="margin-top:18px;">
+      "웨어러블 트리거 기반 LLM 대화 지원의 실제 설계 요구사항에 대한 이해가 부족하며, 특히 정신건강 전문가의 입력이 크게 결여되어 있다."
+      <span class="quote-src">&mdash; 논문 서론 中</span>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: EmBot System ====== -->
+  <div class="slide" data-index="2">
+    <div class="fade-up">
+      <div class="section-num c-teal">02 &mdash; 시스템</div>
+      <h2 class="section-title">EmBot: 4단계 상호작용 설계</h2>
+      <p class="section-desc">EmBot은 웨어러블 스트레스 감지와 LLM 대화를 결합한 모바일 애플리케이션 디자인 프로브입니다. 4단계의 체계적 상호작용 흐름을 통해 사용자를 지원합니다.</p>
+    </div>
+    <div class="pipeline fade-up">
+      <div class="pipe-step">
+        <div class="pipe-num bg-purple">1</div>
+        <div class="pipe-content">
+          <div class="pipe-title">&#128308; 감지 단계 (Detection)</div>
+          <div class="pipe-desc">웨어러블 기기가 심박변이도, 움직임 패턴 등 생리적 신호를 모니터링하고, 스트레스 이벤트 감지 시 알림을 전송합니다.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num bg-teal">2</div>
+        <div class="pipe-content">
+          <div class="pipe-title">&#128221; 피드백 단계 (Feedback)</div>
+          <div class="pipe-desc">사용자가 감지된 스트레스 이벤트를 확인/거부/맥락화할 수 있는 동의 척도를 제공하여 사용자 주도권을 보장합니다.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num bg-pink">3</div>
+        <div class="pipe-content">
+          <div class="pipe-title">&#128488;&#65039; 지원 단계 (Support)</div>
+          <div class="pipe-desc">LLM이 감지 데이터와 사용자 입력을 기반으로 대화를 시작합니다. 반성적 프롬프트와 대처 지향적 대화를 제공합니다.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num bg-yellow">4</div>
+        <div class="pipe-content">
+          <div class="pipe-title">&#128200; 성찰 단계 (Reflection)</div>
+          <div class="pipe-desc">스트레스 감지 이력과 이전 대화 기록을 검토할 수 있어 패턴 식별과 지속적 참여를 지원합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 3: Methodology ====== -->
+  <div class="slide" data-index="3">
+    <div class="fade-up">
+      <div class="section-num c-pink">03 &mdash; 연구 방법</div>
+      <h2 class="section-title">디자인 프로브 기반 전문가 인터뷰</h2>
+    </div>
+    <div class="stats-row fade-up">
+      <div class="stat-box">
+        <div class="stat-num c-purple">15</div>
+        <div class="stat-label">정신건강 전문가</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-teal">45-60</div>
+        <div class="stat-label">분 / 세션</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-pink">2</div>
+        <div class="stat-label">단계 프로토콜</div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2 fade-up">
+      <div class="card border-l-purple">
+        <div class="card-title">&#127919; 프로브 전 단계 (15-25분)</div>
+        <div class="card-text">
+          <ul class="clean-list">
+            <li>웨어러블/LLM 관련 전문가 경험 논의</li>
+            <li>웨어러블 트리거 LLM 시스템에 대한 사전 관점 수집</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card border-l-teal">
+        <div class="card-title">&#128270; 프로브 후 단계 (30-40분)</div>
+        <div class="card-text">
+          <ul class="clean-list">
+            <li>EmBot 가이드 워크스루 및 실습 상호작용</li>
+            <li>설계 시사점, 위험, 안전성, 개인화 논의</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up" style="margin-top:14px;">
+      <div class="card-title">&#128300; 분석 방법: 반성적 주제 분석 (Braun &amp; Clarke)</div>
+      <div class="card-text">2명의 연구자가 독립적으로 1차 개방 코딩 수행 &rarr; 합의를 통한 불일치 해결 &rarr; 반복적 코드북 정제 &rarr; 상위 범주 통합 &rarr; 설계 긴장과 고려사항을 포착하는 주제 도출. IRB 승인 하에 수행.</div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 4: Pre-probe finding ====== -->
+  <div class="slide" data-index="4">
+    <div class="fade-up">
+      <div class="section-num c-yellow">04 &mdash; 핵심 발견</div>
+      <h2 class="section-title">프로브 전: 분리된 사고 모델</h2>
+      <p class="section-desc">EmBot 체험 전, 전문가들은 웨어러블과 LLM을 <strong>별도의 도구</strong>로 인식하며 통합 시스템에 대한 일관된 멘탈 모델을 갖추지 못한 것으로 나타났습니다.</p>
+    </div>
+    <div class="card fade-up" style="max-width:600px;">
+      <div style="display:flex; align-items:center; gap:40px; justify-content:center; flex-wrap:wrap; padding:20px 0;">
+        <div style="text-align:center;">
+          <div style="font-size:2.5rem;">&#9201;</div>
+          <div style="font-size:clamp(0.8rem,1.5vw,0.95rem); font-weight:600; margin-top:8px;">웨어러블</div>
+          <div style="font-size:clamp(0.7rem,1.2vw,0.8rem); color:var(--text-muted);">스트레스 감지</div>
+        </div>
+        <div style="font-size:2rem; color:var(--accent);">&#10060;</div>
+        <div style="text-align:center;">
+          <div style="font-size:2.5rem;">&#129302;</div>
+          <div style="font-size:clamp(0.8rem,1.5vw,0.95rem); font-weight:600; margin-top:8px;">LLM</div>
+          <div style="font-size:clamp(0.7rem,1.2vw,0.8rem); color:var(--text-muted);">대화 지원</div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block fade-up" style="margin-top:20px;">
+      "전문가들은 통합 시스템에 대해 질문받았을 때, 대부분 웨어러블과 LLM에 대한 기존 생각을 반복했다."
+      <span class="quote-src">&mdash; 논문 결과 中</span>
+    </div>
+    <div class="card fade-up" style="margin-top:16px; border-left:3px solid var(--secondary);">
+      <div class="card-title c-teal">&#128161; 시사점</div>
+      <div class="card-text">추상적 논의를 넘어 구체적인 상호작용 수준의 설계 고려사항으로 전환하기 위해서는 <strong>디자인 프로브를 통한 직접 체험</strong>이 필수적입니다.</div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 5: Theme 1 & 2 ====== -->
+  <div class="slide" data-index="5">
+    <div class="fade-up">
+      <div class="section-num c-teal">05 &mdash; 주제 1-2</div>
+      <h2 class="section-title">맥락적 대화 & 감지 투명성</h2>
+    </div>
+    <div class="card-grid card-grid-2 fade-up">
+      <div class="card border-l-teal">
+        <div class="card-icon bg-teal">&#127793;</div>
+        <div class="card-title">주제 1: 수동적 모니터링에서 맥락적 대화로</div>
+        <div class="card-text" style="margin-bottom:12px;">웨어러블 트리거 LLM 대화는 수동적 데이터 수집을 <strong>공감적 참여</strong>로 전환합니다. 위치, 활동 이력, 수면 패턴 등의 맥락 정보 통합이 대화의 의미를 강화합니다.</div>
+        <div class="quote-block">
+          "챗봇이 당신이 스트레스를 받고 있다고 판단해서 먼저 다가오는 점이 마음에 듭니다."
+          <span class="quote-src">&mdash; 전문가 E6</span>
+        </div>
+      </div>
+      <div class="card border-l-yellow">
+        <div class="card-icon bg-yellow">&#128276;</div>
+        <div class="card-title">주제 2: 감지 투명성과 알림 보정</div>
+        <div class="card-text" style="margin-bottom:12px;">전문가들은 감지 메커니즘의 <strong>명시적 설명</strong>과 <strong>알림 피로 관리</strong>를 핵심 설계 요소로 강조했습니다.</div>
+        <div class="quote-block">
+          "채팅이 이렇게 말할 수 있으면 좋겠어요 &mdash; 약간의 스트레스를 감지했는데, 심박수가 올라간 것 같아요."
+          <span class="quote-src">&mdash; 전문가 E1</span>
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up" style="margin-top:14px;">
+      <div class="card-text" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <strong class="c-yellow">권장 전략:</strong>
+        <span class="dim-tag">알림 임계값 제한</span>
+        <span class="dim-tag">적응적 속도 조절</span>
+        <span class="dim-tag">이탈 감지 메커니즘</span>
+        <span class="dim-tag">감지 소스 조회 기능</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 6: Theme 3 & 4 ====== -->
+  <div class="slide" data-index="6">
+    <div class="fade-up">
+      <div class="section-num c-pink">06 &mdash; 주제 3-4</div>
+      <h2 class="section-title">적응형 대화 & 성찰 지원</h2>
+    </div>
+    <div class="card-grid card-grid-2 fade-up">
+      <div class="card border-l-pink">
+        <div class="card-icon bg-pink">&#128483;&#65039;</div>
+        <div class="card-title">주제 3: 구조화된 적응형 대화 지원</div>
+        <div class="card-text" style="margin-bottom:12px;">범용적 응답이 아닌, <strong>타겟 대화 시퀀스</strong>와 <strong>톤 개인화</strong>가 핵심입니다. 웨어러블 트리거 대화는 사용자의 명시적 표현 없이 시작되므로 빠른 신뢰 구축이 필수적입니다.</div>
+        <div class="quote-block">
+          "무슨 일 있었어요? 누구와 다투었나요?... 그런 다음 작은 질문으로 넘어가야 합니다."
+          <span class="quote-src">&mdash; 전문가 E14</span>
+        </div>
+      </div>
+      <div class="card border-l-purple">
+        <div class="card-icon bg-purple">&#128218;</div>
+        <div class="card-title">주제 4: 부담 없는 성찰 지원</div>
+        <div class="card-text" style="margin-bottom:12px;">LLM이 웨어러블 데이터의 패턴을 <strong>해석 가능한 서사</strong>로 압축하여 사용자와 임상의 모두에게 도움을 줄 수 있습니다. 임상 대체가 아닌 <strong>중개자 역할</strong>이 핵심입니다.</div>
+        <div class="quote-block">
+          "치료사와 이야기를 나누었다고 알려주면서... 그것을 후속 조치하고 있는지 물어보는 겁니다."
+          <span class="quote-src">&mdash; 전문가 E1</span>
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up" style="margin-top:14px;">
+      <div class="card-text" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <strong class="c-pink">상호작용 개선안:</strong>
+        <span class="dim-tag">타이핑 인디케이터</span>
+        <span class="dim-tag">음성 상호작용</span>
+        <span class="dim-tag">간결한 요약 제공</span>
+        <span class="dim-tag">사용자-임상의 협업</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 7: Theme 5 - Safety ====== -->
+  <div class="slide" data-index="7">
+    <div class="fade-up">
+      <div class="section-num c-pink">07 &mdash; 주제 5</div>
+      <h2 class="section-title">투명성, 안전성, 프라이버시</h2>
+      <p class="section-desc">웨어러블 감지와 생성형 대화가 결합될 때, 위험은 독립 시스템 대비 <strong>복합적으로 증폭</strong>됩니다.</p>
+    </div>
+    <div class="card-grid card-grid-3 fade-up">
+      <div class="card border-l-yellow">
+        <div class="card-icon bg-yellow">&#128736;&#65039;</div>
+        <div class="card-title">온보딩 명확성</div>
+        <div class="card-text">"이것은 할 수 있고... 이것은 할 수 없습니다." &mdash; 시스템 한계, 감지 정확도, 적절한 사용 사례의 명시적 고지 필수</div>
+      </div>
+      <div class="card border-l-teal">
+        <div class="card-icon bg-teal">&#128274;</div>
+        <div class="card-title">데이터 통제권</div>
+        <div class="card-text">생리적 데이터와 심리적 데이터가 수렴할 때 프라이버시 우려 심화 &mdash; 감지 이벤트 및 대화 기록 삭제 기능 보장</div>
+      </div>
+      <div class="card border-l-pink">
+        <div class="card-icon bg-pink">&#127384;</div>
+        <div class="card-title">위기 에스컬레이션</div>
+        <div class="card-text">고위험 이벤트 감지 시 위기 자원 연결 및 전문가 에스컬레이션 경로 필수 &mdash; 안전망 메커니즘</div>
+      </div>
+    </div>
+    <div class="quote-block fade-up" style="margin-top:16px;">
+      "고위험 이벤트를 감지할 수 있는 방법이 있다면... 사람들을 적절한 곳으로 안내할 수 있어야 합니다."
+      <span class="quote-src">&mdash; 전문가 E18</span>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 8: Design Tensions ====== -->
+  <div class="slide" data-index="8">
+    <div class="fade-up">
+      <div class="section-num c-purple">08 &mdash; 설계 긴장</div>
+      <h2 class="section-title">핵심 설계 긴장 (Design Tensions)</h2>
+      <p class="section-desc">전문가들의 EmBot 체험에서 반복적으로 드러난 4가지 핵심 설계 딜레마입니다.</p>
+    </div>
+    <div class="fade-up">
+      <div class="tension-item">
+        <div class="card-title">&#9878;&#65039; 침습성 vs. 맥락 기반</div>
+        <div class="tension-bar">
+          <span class="tension-pole" style="background:rgba(0,206,201,0.15); color:#81ecec;">침습 최소화</span>
+          <div class="tension-line"></div>
+          <span class="tension-pole" style="background:rgba(108,92,231,0.15); color:#a29bfe;">맥락적 통찰</span>
+        </div>
+      </div>
+      <div class="tension-item">
+        <div class="card-title">&#128149; 공감적 지원 vs. 트리거 보정</div>
+        <div class="tension-bar">
+          <span class="tension-pole" style="background:rgba(253,121,168,0.15); color:#fab1d0;">공감적 접근</span>
+          <div class="tension-line"></div>
+          <span class="tension-pole" style="background:rgba(253,203,110,0.15); color:#ffeaa7;">정확한 트리거</span>
+        </div>
+      </div>
+      <div class="tension-item">
+        <div class="card-title">&#128269; 해석가능성 vs. 데이터 모호성</div>
+        <div class="tension-bar">
+          <span class="tension-pole" style="background:rgba(85,239,196,0.15); color:#55efc4;">명확한 해석</span>
+          <div class="tension-line"></div>
+          <span class="tension-pole" style="background:rgba(162,155,254,0.15); color:#a29bfe;">신중한 응답</span>
+        </div>
+      </div>
+      <div class="tension-item">
+        <div class="card-title">&#127891; 인식된 권위 vs. 적절한 의존</div>
+        <div class="tension-bar">
+          <span class="tension-pole" style="background:rgba(253,203,110,0.15); color:#ffeaa7;">시스템 신뢰</span>
+          <div class="tension-line"></div>
+          <span class="tension-pole" style="background:rgba(253,121,168,0.15); color:#fab1d0;">과의존 방지</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 9: Design Dimensions ====== -->
+  <div class="slide" data-index="9">
+    <div class="fade-up">
+      <div class="section-num c-green">09 &mdash; 설계 차원</div>
+      <h2 class="section-title">5가지 설계 차원 공간</h2>
+      <p class="section-desc">전문가 논의에서 도출된, 웨어러블-LLM 통합 시스템 설계를 위한 다차원적 프레임워크입니다.</p>
+    </div>
+    <div class="fade-up">
+      <div class="dim-card">
+        <div class="dim-label c-purple">&#9312; 웨어러블 기능</div>
+        <div class="dim-options">
+          <span class="dim-tag" style="border-color:#a29bfe;">수동적 모니터링 (데이터 수집)</span>
+          <span class="dim-tag" style="border-color:#a29bfe;">능동적 트리거 (대화 개시)</span>
+        </div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-label c-teal">&#9313; 트리거 메커니즘</div>
+        <div class="dim-options">
+          <span class="dim-tag" style="border-color:#81ecec;">웨어러블 주도 (생리적 임계값)</span>
+          <span class="dim-tag" style="border-color:#81ecec;">시간 기반 (예약 상호작용)</span>
+          <span class="dim-tag" style="border-color:#81ecec;">하이브리드</span>
+        </div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-label c-pink">&#9314; LLM 역할</div>
+        <div class="dim-options">
+          <span class="dim-tag" style="border-color:#fab1d0;">센스메이커 (데이터 요약)</span>
+          <span class="dim-tag" style="border-color:#fab1d0;">대화 에이전트 (성찰 대화)</span>
+          <span class="dim-tag" style="border-color:#fab1d0;">중개자 (사용자-임상의)</span>
+        </div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-label c-yellow">&#9315; 사용자 상호작용 제어</div>
+        <div class="dim-options">
+          <span class="dim-tag" style="border-color:#ffeaa7;">웨어러블 트리거 (시스템 주도)</span>
+          <span class="dim-tag" style="border-color:#ffeaa7;">사용자 주도 (수동 활성화)</span>
+          <span class="dim-tag" style="border-color:#ffeaa7;">하이브리드</span>
+        </div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-label c-green">&#9316; 시스템 범위</div>
+        <div class="dim-options">
+          <span class="dim-tag" style="border-color:#55efc4;">일상 자기 성찰</span>
+          <span class="dim-tag" style="border-color:#55efc4;">임상 상호작용 증강</span>
+          <span class="dim-tag" style="border-color:#55efc4;">공식 임상 워크플로 통합</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 10: Limitations & Future ====== -->
+  <div class="slide" data-index="10">
+    <div class="fade-up">
+      <div class="section-num c-yellow">10 &mdash; 한계 및 향후 연구</div>
+      <h2 class="section-title">연구 한계 및 미래 방향</h2>
+    </div>
+    <div class="card-grid card-grid-2 fade-up">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">&#9888;&#65039; 연구 한계</div>
+        <ul class="clean-list">
+          <li>대면 vs. 원격 참여 간 피드백 깊이 차이 가능성</li>
+          <li>스트레스 감지는 시뮬레이션 기반 &mdash; 실증적 검증 미완</li>
+          <li>다양한 전문가 배경에 따른 가정 차이</li>
+          <li>초기 설계 탐색 단계로 공식 프레임워크 미확정</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--secondary);">&#128640; 향후 연구 방향</div>
+        <ul class="clean-list">
+          <li>실세계 배포를 통한 스트레스 감지/참여/유용성 평가</li>
+          <li>적응적 속도 조절 전략의 장기 평가</li>
+          <li>대화 적응 및 개인화 효과 검증</li>
+          <li>기존 임상 워크플로와의 통합 연구</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 11: Conclusion ====== -->
+  <div class="slide" data-index="11" style="justify-content:center; align-items:center; text-align:center; background:radial-gradient(ellipse at 50% 50%, rgba(0,206,201,0.1), transparent 70%);">
+    <div class="fade-up">
+      <div class="section-num c-teal" style="letter-spacing:4px;">결론</div>
+      <h2 class="section-title" style="max-width:800px; margin:10px auto 24px; font-size:clamp(1.3rem,3.5vw,2.2rem);">디자인 프로브를 통한<br>통합 시스템 설계의 새로운 관점</h2>
+    </div>
+    <div class="card fade-up" style="max-width:700px; text-align:left; margin:0 auto 20px;">
+      <div class="card-text" style="font-size:clamp(0.85rem,1.6vw,1rem); line-height:1.8;">
+        EmBot은 기능적 디자인 프로브로서, 웨어러블과 LLM에 대한 <strong>추상적 논의를 넘어</strong> 구체적인 상호작용 수준의 설계 고려사항을 도출하는 데 성공했습니다.
+      </div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:650px;" class="fade-up">
+      <span class="dim-tag" style="border-color:#a29bfe; font-size:clamp(0.75rem,1.3vw,0.85rem);">웨어러블 + LLM 통합 설계</span>
+      <span class="dim-tag" style="border-color:#81ecec; font-size:clamp(0.75rem,1.3vw,0.85rem);">정신건강 전문가 관점 중심</span>
+      <span class="dim-tag" style="border-color:#fab1d0; font-size:clamp(0.75rem,1.3vw,0.85rem);">5가지 설계 긴장 도출</span>
+      <span class="dim-tag" style="border-color:#ffeaa7; font-size:clamp(0.75rem,1.3vw,0.85rem);">5차원 설계 프레임워크</span>
+      <span class="dim-tag" style="border-color:#55efc4; font-size:clamp(0.75rem,1.3vw,0.85rem);">안전성과 임상 적절성 확보</span>
+    </div>
+    <div class="fade-up" style="margin-top:30px;">
+      <p style="font-size:clamp(0.7rem,1.2vw,0.8rem); color:var(--text-muted); opacity:0.5;">
+        Dongre et al. &middot; IH '26 &middot; arXiv:2604.04915
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">&#10094;</button>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div class="nav-progress" id="navDots"></div>
+    <div class="nav-counter" id="navCounter">1 / 12</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">&#10095;</button>
+</nav>
+
+<div class="kbd-hint">&#8592; &#8594; 키보드로 이동</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let animating = false;
+
+  const dotsContainer = document.getElementById('navDots');
+  const counter = document.getElementById('navCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // Create dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    const dots = dotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].className = 'nav-dot' + (i === current ? ' active' : '');
+    }
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  function goTo(index) {
+    if (animating || index === current || index < 0 || index >= total) return;
+    animating = true;
+
+    const dir = index > current ? 1 : -1;
+    const prev = slides[current];
+    const next = slides[index];
+
+    // Reset scroll position
+    next.scrollTop = 0;
+
+    // Set initial position for incoming slide
+    next.style.transition = 'none';
+    next.style.transform = 'translateX(' + (dir * 60) + 'px)';
+    next.style.opacity = '0';
+    next.offsetHeight; // force reflow
+
+    // Animate
+    next.style.transition = '';
+    prev.classList.remove('active');
+    prev.classList.add(dir > 0 ? 'exit-left' : '');
+    prev.style.transform = 'translateX(' + (-dir * 60) + 'px)';
+    prev.style.opacity = '0';
+
+    next.classList.add('active');
+    next.style.transform = 'translateX(0)';
+    next.style.opacity = '1';
+
+    current = index;
+    updateUI();
+
+    setTimeout(() => {
+      prev.classList.remove('exit-left');
+      animating = false;
+    }, 500);
+  }
+
+  window.changeSlide = function(dir) {
+    goTo(current + dir);
+  };
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>

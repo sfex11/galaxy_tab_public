@@ -33,3 +33,7 @@ _자동 생성됨_
 - [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md]]
 
 - [[sources/2026-04-06-model-based-reinforcement-learning-for-control-und.md]]
+
+- [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md]]
+
+- [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md]]

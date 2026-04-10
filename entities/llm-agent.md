@@ -33,3 +33,5 @@ _자동 생성됨_
 - [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md]]
 
 - [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md]]
+
+- [[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]]
