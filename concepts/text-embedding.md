@@ -20,3 +20,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-evaluating-chunking-strategies-for-retrieval-augme.md|Evaluating Chunking Strategies For Retrieval-Augmented Gener]] (2026-03-27)
 
 - [[sources/2026-03-27-representation-learning-to-study-temporal-dynamics.md|Representation Learning to Study Temporal Dynamics in Tutori]] (2026-03-27)
+
+- [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)

@@ -32,3 +32,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
 
 - [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)
+
+- [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)

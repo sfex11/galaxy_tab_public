@@ -1,0 +1,12 @@
+# instrumental-convergence
+
+**분야**: 미분류
+**생성일**: 2026-04-03
+
+## 정의
+
+_Wiki 축적 중_
+
+## 관련 논문
+
+- [[sources/2026-04-03-quantifying-self-preservation-bias-in-large-langua.md|Quantifying Self-Preservation Bias in Large Language Models]]

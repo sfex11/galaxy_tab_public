@@ -24,3 +24,13 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-03-neuro-rit-neuron-guided-instruction-tuning-for-rob.md|Neuro-RIT: Neuron-Guided Instruction Tuning for Robust Retri]] (2026-04-03)
+
+- [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)
+
+- [[sources/2026-04-04-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-04)
+
+- [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
+
+- [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-06)

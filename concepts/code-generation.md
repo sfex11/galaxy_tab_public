@@ -28,3 +28,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-bethe-ansatz-with-a-large-language-model.md|Bethe Ansatz with a Large Language Model]] (2026-04-02)
 
 - [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
+
+- [[sources/2026-04-03-cliffsearch-structured-agentic-co-evolution-over-t.md|CliffSearch: Structured Agentic Co-Evolution over Theory and]] (2026-04-03)

@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-ui-voyager-a-self-evolving-gui-agent-learning-via-.md|UI-Voyager: A Self-Evolving GUI Agent Learning via Failed Ex]] (2026-03-27)
 
 - [[sources/2026-03-30-vision2web-a-hierarchical-benchmark-for-visual-web.md|Vision2Web: A Hierarchical Benchmark for Visual Website Deve]] (2026-03-30)
+
+- [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)

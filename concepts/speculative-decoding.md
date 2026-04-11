@@ -24,3 +24,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-reward-based-online-llm-routing-via-neuralucb.md|Reward-Based Online LLM Routing via NeuralUCB]] (2026-04-02)
 
 - [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
+
+- [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)
+
+- [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)

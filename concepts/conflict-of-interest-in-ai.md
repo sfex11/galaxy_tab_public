@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-11-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]]
+
+- [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md|Multi-Agent Video Recommenders: Evolution, Patterns, and Ope]] (2026-04-03)

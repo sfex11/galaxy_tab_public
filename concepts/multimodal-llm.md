@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-11)
 
 - [[sources/2026-03-26-speceyes-accelerating-agentic-multimodal-llms-via-.md|SpecEyes: Accelerating Agentic Multimodal LLMs via Speculati]] (2026-03-26)
+
+- [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
+
+- [[sources/2026-04-06-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-06)

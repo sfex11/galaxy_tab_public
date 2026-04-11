@@ -63,3 +63,11 @@ _자동 생성됨_
 - [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)
 
 - [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon: Episodic Memory for Long-Horizon Robotic Manipula]] (2026-03-27)
+
+- [[sources/2026-04-03-leo-graph-attention-network-based-hybrid-multi-sen.md|LEO: Graph Attention Network based Hybrid Multi Sensor Exten]] (2026-04-03)
+
+- [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)
+
+- [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)

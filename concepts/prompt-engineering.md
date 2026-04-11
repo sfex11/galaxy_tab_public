@@ -42,3 +42,11 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-enhancing-structural-mapping-with-llm-derived-abst.md|Enhancing Structural Mapping with LLM-derived Abstractions f]] (2026-04-02)
 
 - [[sources/2026-04-03-adams-law-textual-frequency-law-on-large-language-.md|Adam's Law: Textual Frequency Law on Large Language Models]] (2026-04-03)
+
+- [[sources/2026-04-04-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-04)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]] (2026-04-07)

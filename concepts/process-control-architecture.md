@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-04-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-04)
+
+- [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-06)

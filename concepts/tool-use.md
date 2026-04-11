@@ -86,3 +86,13 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
+
+- [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
+
+- [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variant]] (2026-04-07)

@@ -86,3 +86,39 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-blinded-radiologist-and-llm-based-evaluation-of-ll.md|Blinded Radiologist and LLM-Based Evaluation of LLM-Generate]] (2026-04-03)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-03-mti-a-behavior-based-temperament-profiling-system-.md|MTI: A Behavior-Based Temperament Profiling System for AI Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-neuro-rit-neuron-guided-instruction-tuning-for-rob.md|Neuro-RIT: Neuron-Guided Instruction Tuning for Robust Retri]] (2026-04-03)
+
+- [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-quantifying-self-preservation-bias-in-large-langua.md|Quantifying Self-Preservation Bias in Large Language Models]] (2026-04-03)
+
+- [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)
+
+- [[sources/2026-04-03-the-expert-strikes-back-interpreting-mixture-of-ex.md|The Expert Strikes Back: Interpreting Mixture-of-Experts Lan]] (2026-04-03)
+
+- [[sources/2026-04-03-towards-position-robust-talent-recommendation-via-.md|Towards Position-Robust Talent Recommendation via Large Lang]] (2026-04-03)
+
+- [[sources/2026-04-04-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-04)
+
+- [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
+
+- [[sources/2026-04-04-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-04)
+
+- [[sources/2026-04-05-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-05)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
+
+- [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
+
+- [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
+
+- [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-06)
+
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
+
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+- [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]] (2026-04-07)

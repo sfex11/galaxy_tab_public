@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-30-sustainability-is-not-linear-quantifying-performan.md|Sustainability Is Not Linear: Quantifying Performance, Energ]]
+
+- [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)

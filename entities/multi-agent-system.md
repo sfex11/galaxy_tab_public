@@ -22,3 +22,15 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-march-multi-agent-reinforced-self-check-for-llm-ha.md|MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucinati]] (2026-03-27)
 
 - [[sources/2026-03-30-deception-and-communication-in-autonomous-multi-ag.md|Deception and Communication in Autonomous Multi-Agent System]] (2026-03-30)
+
+- [[sources/2026-04-03-cliffsearch-structured-agentic-co-evolution-over-t.md|CliffSearch: Structured Agentic Co-Evolution over Theory and]] (2026-04-03)
+
+- [[sources/2026-04-03-collaborative-task-and-path-planning-for-heterogen.md|Collaborative Task and Path Planning for Heterogeneous Robot]] (2026-04-03)
+
+- [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md|Multi-Agent Video Recommenders: Evolution, Patterns, and Ope]] (2026-04-03)
+
+- [[sources/2026-04-04-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-04)
+
+- [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
+
+- [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)

@@ -16,3 +16,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-23-implicit-patterns-in-llm-based-binary-analysis.md|Implicit Patterns in LLM-Based Binary Analysis]] (2026-03-23)
 
 - [[sources/2026-03-24-measuring-faithfulness-depends-on-how-you-measure-.md|Measuring Faithfulness Depends on How You Measure: Classifie]] (2026-03-24)
+
+- [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)

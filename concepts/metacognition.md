@@ -36,3 +36,29 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
+
+- [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-04)
+
+- [[sources/2026-04-04-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-04)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
+
+- [[sources/2026-04-05-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-05)
+
+- [[sources/2026-04-05-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-05)
+
+- [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
+
+- [[sources/2026-04-06-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-06)
+
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
+
+- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)
+
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)

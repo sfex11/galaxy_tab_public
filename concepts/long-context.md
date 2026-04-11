@@ -28,3 +28,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-30-beyond-code-snippets-benchmarking-llms-on-reposito.md|Beyond Code Snippets: Benchmarking LLMs on Repository-Level ]] (2026-03-30)
 
 - [[sources/2026-03-31-adapttoken-entropy-based-adaptive-token-selection-.md|AdaptToken: Entropy-based Adaptive Token Selection for MLLM ]] (2026-03-31)
+
+- [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)

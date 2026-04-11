@@ -26,3 +26,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-tuneshift-kd-knowledge-distillation-and-transfer-f.md|TuneShift-KD: Knowledge Distillation and Transfer for Fine-t]] (2026-03-27)
 
 - [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)

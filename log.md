@@ -116,3 +116,5 @@
 - 2026-04-11-visually-grounded-humanoid-agents.md
 - 2026-04-11-density-driven-optimal-control-convergence-guarant.md
 - 2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md
+
+## [2026-04-11 08:50] ingest | OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for Multi-domain Visual Tasks

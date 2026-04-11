@@ -112,3 +112,13 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-extending-mona-in-camera-dropbox-reproduction-lear.md|Extending MONA in Camera Dropbox: Reproduction, Learned Appr]] (2026-04-02)
 
 - [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)
+
+- [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
+
+- [[sources/2026-04-03-mti-a-behavior-based-temperament-profiling-system-.md|MTI: A Behavior-Based Temperament Profiling System for AI Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-quantifying-self-preservation-bias-in-large-langua.md|Quantifying Self-Preservation Bias in Large Language Models]] (2026-04-03)
+
+- [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variant]] (2026-04-07)
+
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)

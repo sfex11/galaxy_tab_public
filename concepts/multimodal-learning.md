@@ -34,3 +34,9 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-11)
 
 - [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISion On Request: Enhanced VLLM efficiency with sparse, dyn]] (2026-03-26)
+
+- [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
+
+- [[sources/2026-04-03-leo-graph-attention-network-based-hybrid-multi-sen.md|LEO: Graph Attention Network based Hybrid Multi Sensor Exten]] (2026-04-03)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)

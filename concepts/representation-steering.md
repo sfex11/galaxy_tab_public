@@ -14,3 +14,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-analysing-the-safety-pitfalls-of-steering-vectors.md|Analysing the Safety Pitfalls of Steering Vectors]] (2026-03-27)
 
 - [[sources/2026-04-02-aligned-orthogonal-or-in-conflict-when-can-we-safe.md|Aligned, Orthogonal or In-conflict: When can we safely optim]] (2026-04-02)
+
+- [[sources/2026-04-03-the-expert-strikes-back-interpreting-mixture-of-ex.md|The Expert Strikes Back: Interpreting Mixture-of-Experts Lan]] (2026-04-03)
+
+- [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-06-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-06)

@@ -165,3 +165,27 @@ _자동 생성됨_
 - [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)
 
 - [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|The Triadic Cognitive Architecture: Bounding Autonomous Acti]] (2026-04-02)
+
+- [[sources/2026-04-03-cliffsearch-structured-agentic-co-evolution-over-t.md|CliffSearch: Structured Agentic Co-Evolution over Theory and]] (2026-04-03)
+
+- [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
+
+- [[sources/2026-04-03-mti-a-behavior-based-temperament-profiling-system-.md|MTI: A Behavior-Based Temperament Profiling System for AI Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
+
+- [[sources/2026-04-04-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-04)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-04-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-04)
+
+- [[sources/2026-04-05-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-05)
+
+- [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
+
+- [[sources/2026-04-06-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-06)
+
+- [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)

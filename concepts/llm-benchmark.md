@@ -48,3 +48,17 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-blinded-radiologist-and-llm-based-evaluation-of-ll.md|Blinded Radiologist and LLM-Based Evaluation of LLM-Generate]] (2026-04-03)
 
 - [[sources/2026-04-03-brief-is-better-non-monotonic-chain-of-thought-bud.md|Brief Is Better: Non-Monotonic Chain-of-Thought Budget Effec]] (2026-04-03)
+
+- [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
+
+- [[sources/2026-04-03-towards-position-robust-talent-recommendation-via-.md|Towards Position-Robust Talent Recommendation via Large Lang]] (2026-04-03)
+
+- [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
+
+- [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
+
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)

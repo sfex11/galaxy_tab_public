@@ -101,3 +101,15 @@ _자동 생성됨_
 - [[sources/2026-03-31-bace-llm-based-code-generation-through-bayesian-an.md|BACE: LLM-based Code Generation through Bayesian Anchored Co]] (2026-03-31)
 
 - [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)
+
+- [[sources/2026-04-03-cliffsearch-structured-agentic-co-evolution-over-t.md|CliffSearch: Structured Agentic Co-Evolution over Theory and]] (2026-04-03)
+
+- [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md|Multi-Agent Video Recommenders: Evolution, Patterns, and Ope]] (2026-04-03)
+
+- [[sources/2026-04-05-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-05)
+
+- [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
+
+- [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-06)
+
+- [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)

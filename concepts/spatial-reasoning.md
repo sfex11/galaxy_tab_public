@@ -40,3 +40,11 @@ _Wiki 축적 중_
 - [[sources/2026-04-01-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-04-01)
 
 - [[sources/2026-04-02-better-than-average-spatially-aware-aggregation-of.md|Better than Average: Spatially-Aware Aggregation of Segmenta]] (2026-04-02)
+
+- [[sources/2026-04-03-unidrivevla-unifying-understanding-perception-and-.md|UniDriveVLA: Unifying Understanding, Perception, and Action ]] (2026-04-03)
+
+- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-04)
+
+- [[sources/2026-04-05-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-05)
+
+- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)

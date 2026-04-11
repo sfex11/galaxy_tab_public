@@ -20,3 +20,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-lenswalk-agentic-video-understanding-by-planning-h.md|LensWalk: Agentic Video Understanding by Planning How You Se]] (2026-03-27)
 
 - [[sources/2026-03-31-adapttoken-entropy-based-adaptive-token-selection-.md|AdaptToken: Entropy-based Adaptive Token Selection for MLLM ]] (2026-03-31)
+
+- [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)
+
+- [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-06-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-06)

@@ -123,3 +123,23 @@ _자동 생성됨_
 - [[sources/2026-04-02-hybrid-framework-for-robotic-manipulation-integrat.md|Hybrid Framework for Robotic Manipulation: Integrating Reinf]] (2026-04-02)
 
 - [[sources/2026-04-02-reward-based-online-llm-routing-via-neuralucb.md|Reward-Based Online LLM Routing via NeuralUCB]] (2026-04-02)
+
+- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md]]
+
+- [[sources/2026-04-03-collaborative-task-and-path-planning-for-heterogen.md|Collaborative Task and Path Planning for Heterogeneous Robot]] (2026-04-03)
+
+- [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
+
+- [[sources/2026-04-04-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-04)
+
+- [[sources/2026-04-04-model-based-reinforcement-learning-for-control-und.md|Model-Based Reinforcement Learning for Control under Time-Va]] (2026-04-04)
+
+- [[sources/2026-04-04-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-04)
+
+- [[sources/2026-04-05-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-05)
+
+- [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
+
+- [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)

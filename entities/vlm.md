@@ -40,3 +40,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav: Directional Reasoning, Inspection, and Verificati]] (2026-03-31)
 
 - [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-04-01)
+
+- [[sources/2026-04-03-unidrivevla-unifying-understanding-perception-and-.md|UniDriveVLA: Unifying Understanding, Perception, and Action ]] (2026-04-03)
+
+- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-04)
+
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)

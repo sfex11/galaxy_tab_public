@@ -20,3 +20,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO: Agentic Multi-Image Grounding Oracle Benchmark]] (2026-03-31)
 
 - [[sources/2026-04-02-enhancing-structural-mapping-with-llm-derived-abst.md|Enhancing Structural Mapping with LLM-derived Abstractions f]] (2026-04-02)
+
+- [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)

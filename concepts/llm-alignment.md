@@ -16,3 +16,11 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-comparing-developer-and-llm-biases-in-code-evaluat.md|Comparing Developer and LLM Biases in Code Evaluation]] (2026-03-27)
 
 - [[sources/2026-04-02-extending-mona-in-camera-dropbox-reproduction-lear.md|Extending MONA in Camera Dropbox: Reproduction, Learned Appr]] (2026-04-02)
+
+- [[sources/2026-04-03-quantifying-self-preservation-bias-in-large-langua.md|Quantifying Self-Preservation Bias in Large Language Models]] (2026-04-03)
+
+- [[sources/2026-04-03-towards-position-robust-talent-recommendation-via-.md|Towards Position-Robust Talent Recommendation via Large Lang]] (2026-04-03)
+
+- [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
+
+- [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)

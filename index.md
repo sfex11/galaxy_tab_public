@@ -59,3 +59,5 @@
 - [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md]] - Robust Quadruped Locomotion via Evolutionary Reinforcement Learning
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]] - TraceSafe: A Systematic Assessment of LLM Guardrails on Multi-Step Tool-Calling Trajectories
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md]] - OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for Multi-domain Visual Tasks
