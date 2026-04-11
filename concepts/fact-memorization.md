@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-11-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]]
+
+- [[sources/2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-12)

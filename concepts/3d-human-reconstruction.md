@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-19-ahoy-animatable-humans-under-occlusion-from-youtub.md|AHOY! Animatable Humans under Occlusion from YouTube Videos ]]
 
 - [[sources/2026-04-11-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-11)
+
+- [[sources/2026-04-12-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-12)

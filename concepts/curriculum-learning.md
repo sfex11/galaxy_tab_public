@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)
 
 - [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)
+
+- [[sources/2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-12)
+
+- [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-12)

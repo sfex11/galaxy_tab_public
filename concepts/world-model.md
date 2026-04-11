@@ -24,3 +24,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-06)
 
 - [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)
+
+- [[sources/2026-04-12-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-12)

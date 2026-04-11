@@ -209,3 +209,5 @@ _자동 생성됨_
 - [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)
 
 - [[sources/2026-04-10-how-much-llm-does-a-self-revising-agent-actually-n.md|How Much LLM Does a Self-Revising Agent Actually Need?]] (2026-04-10)
+
+- [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)

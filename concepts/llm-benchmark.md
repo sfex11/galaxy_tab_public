@@ -82,3 +82,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
 
 - [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)
+
+- [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)
+
+- [[sources/2026-04-12-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-12)

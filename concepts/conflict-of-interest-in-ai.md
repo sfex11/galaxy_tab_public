@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md|Multi-Agent Video Recommenders: Evolution, Patterns, and Ope]] (2026-04-03)
 
 - [[sources/2026-04-08-how-ai-aggregation-affects-knowledge.md|How AI Aggregation Affects Knowledge]] (2026-04-08)
+
+- [[sources/2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-12)

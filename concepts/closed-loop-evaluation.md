@@ -24,3 +24,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-gym-anything-turn-any-software-into-an-agent-envir.md|Gym-Anything: Turn any Software into an Agent Environment]] (2026-04-09)
 
 - [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md|Robust Quadruped Locomotion via Evolutionary Reinforcement L]] (2026-04-10)
+
+- [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)
+
+- [[sources/2026-04-12-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-12)

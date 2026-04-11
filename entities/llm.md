@@ -146,3 +146,13 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
 
 - [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)
+
+- [[sources/2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-12)
+
+- [[sources/2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-12)
+
+- [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-12)
+
+- [[sources/2026-04-12-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-12)
+
+- [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)

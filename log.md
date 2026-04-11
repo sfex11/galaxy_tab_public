@@ -118,3 +118,18 @@
 - 2026-04-11-figures-as-interfaces-toward-llm-native-artifacts-.md
 
 ## [2026-04-11 08:50] ingest | OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for Multi-domain Visual Tasks
+
+## [2026-04-12 02:41] llm-ingest | 13편 분석, 엔티티 14개, 개념 270개
+- 2026-04-12-act-wisely-cultivating-meta-cognitive-tool-use-in-.md
+- 2026-04-12-psi-shared-state-as-the-missing-layer-for-coherent.md
+- 2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md
+- 2026-04-12-what-drives-representation-steering-a-mechanistic-.md
+- 2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md
+- 2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md
+- 2026-04-12-what-do-language-models-learn-and-when-the-implici.md
+- 2026-04-12-fail2drive-benchmarking-closed-loop-driving-genera.md
+- 2026-04-12-visually-grounded-humanoid-agents.md
+- 2026-04-12-density-driven-optimal-control-convergence-guarant.md
+- 2026-04-12-figures-as-interfaces-toward-llm-native-artifacts-.md
+- 2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md
+- 2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md

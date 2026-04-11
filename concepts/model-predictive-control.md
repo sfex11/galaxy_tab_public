@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-11)
 
 - [[sources/2026-04-04-model-based-reinforcement-learning-for-control-und.md|Model-Based Reinforcement Learning for Control under Time-Va]] (2026-04-04)
+
+- [[sources/2026-04-12-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-12)

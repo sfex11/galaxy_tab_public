@@ -28,3 +28,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
 
 - [[sources/2026-04-07-prism-llm-guided-semantic-clustering-for-high-prec.md|PRISM: LLM-Guided Semantic Clustering for High-Precision Top]] (2026-04-07)
+
+- [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)

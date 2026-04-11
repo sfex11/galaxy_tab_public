@@ -68,3 +68,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md|MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-]] (2026-04-09)
 
 - [[sources/2026-04-10-how-much-llm-does-a-self-revising-agent-actually-n.md|How Much LLM Does a Self-Revising Agent Actually Need?]] (2026-04-10)
+
+- [[sources/2026-04-12-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-12)

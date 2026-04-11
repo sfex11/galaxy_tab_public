@@ -22,3 +22,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-05)
 
 - [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-06)
+
+- [[sources/2026-04-12-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-12)

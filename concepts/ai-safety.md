@@ -142,3 +142,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md|Who Governs the Machine? A Machine Identity Governance Taxon]] (2026-04-09)
 
 - [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)
+
+- [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)

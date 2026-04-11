@@ -24,3 +24,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
 
 - [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]] (2026-04-07)
+
+- [[sources/2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-12)
+
+- [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-12)

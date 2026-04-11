@@ -18,3 +18,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-neuro-rit-neuron-guided-instruction-tuning-for-rob.md|Neuro-RIT: Neuron-Guided Instruction Tuning for Robust Retri]] (2026-04-03)
 
 - [[sources/2026-04-09-exclusive-unlearning.md|Exclusive Unlearning]] (2026-04-09)
+
+- [[sources/2026-04-12-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-12)

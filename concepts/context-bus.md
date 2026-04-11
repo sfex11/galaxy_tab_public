@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-04-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-04)
 
 - [[sources/2026-04-05-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-05)
+
+- [[sources/2026-04-12-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-12)
