@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PSI: 개인 AI 에이전트의 일관된 도구를 위한 공유 상태 아키텍처</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: #1a2235;
+    --bg-card-alt: #1e293b;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.15);
+    --orange: #fb923c;
+    --orange-dim: rgba(251, 146, 60, 0.15);
+    --pink: #f472b6;
+    --pink-dim: rgba(244, 114, 182, 0.15);
+    --cyan: #22d3ee;
+    --cyan-dim: rgba(34, 211, 238, 0.15);
+    --yellow: #fbbf24;
+    --yellow-dim: rgba(251, 191, 36, 0.15);
+    --red: #f87171;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --border: rgba(99, 102, 241, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 56px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    transition: width 0.4s ease;
+    z-index: 100;
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 90;
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 48px;
+  }
+
+  .nav-btn {
+    width: 48px; height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+    border: 1px solid var(--border);
+  }
+
+  .nav-btn:active {
+    transform: scale(0.92);
+    background: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+    min-width: 56px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Dot indicators */
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    transition: all 0.3s;
+    cursor: pointer;
+    min-width: 8px;
+    min-height: 8px;
+  }
+
+  .dot.active {
+    background: var(--accent-light);
+    box-shadow: 0 0 8px var(--accent-glow);
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  /* Slide Typography */
+  .slide-number {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    color: var(--accent-light);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  .highlight {
+    color: var(--accent-light);
+  }
+
+  .highlight-green { color: var(--green); }
+  .highlight-orange { color: var(--orange); }
+  .highlight-pink { color: var(--pink); }
+  .highlight-cyan { color: var(--cyan); }
+  .highlight-yellow { color: var(--yellow); }
+
+  /* Card grid */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+    flex: 1;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.2s, border-color 0.3s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-light);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    margin-bottom: 8px;
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li::before {
+    content: '>';
+    color: var(--accent-light);
+    margin-right: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8em;
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+    font-weight: 500;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  .tag-accent { background: var(--accent-glow); color: var(--accent-light); }
+  .tag-green { background: var(--green-dim); color: var(--green); }
+  .tag-orange { background: var(--orange-dim); color: var(--orange); }
+  .tag-pink { background: var(--pink-dim); color: var(--pink); }
+  .tag-cyan { background: var(--cyan-dim); color: var(--cyan); }
+  .tag-yellow { background: var(--yellow-dim); color: var(--yellow); }
+
+  /* List items */
+  .item-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 12px;
+  }
+
+  .item-list li {
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    margin-bottom: 10px;
+    background: var(--bg-card);
+    border-radius: 0 12px 12px 0;
+    font-size: clamp(0.82rem, 2vw, 1rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .item-list li strong {
+    color: var(--text-primary);
+  }
+
+  /* Architecture diagram */
+  .arch-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    flex: 1;
+  }
+
+  .arch-layer {
+    border-radius: 16px;
+    padding: 20px 24px;
+    position: relative;
+    border: 1px solid;
+  }
+
+  .arch-layer-title {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .arch-layer-desc {
+    font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .layer-gen { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.3); }
+  .layer-ctx { background: rgba(34,211,238,0.08); border-color: rgba(34,211,238,0.3); }
+  .layer-int { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.3); }
+
+  .arrow-down {
+    text-align: center;
+    font-size: 20px;
+    color: var(--text-dim);
+    line-height: 1;
+  }
+
+  /* Metric bar */
+  .metric-group {
+    margin-top: 16px;
+  }
+
+  .metric-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .metric-label {
+    font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+    color: var(--text-secondary);
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+
+  .metric-bar-bg {
+    flex: 1;
+    height: 28px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .metric-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.7rem, 1.6vw, 0.82rem);
+    font-weight: 700;
+    color: white;
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  .slide.active .metric-bar-fill {
+    width: var(--fill);
+  }
+
+  .fill-accent { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+  .fill-orange { background: linear-gradient(90deg, #ea580c, var(--orange)); }
+  .fill-dim { background: linear-gradient(90deg, #475569, #64748b); }
+  .fill-green { background: linear-gradient(90deg, #059669, var(--green)); }
+  .fill-cyan { background: linear-gradient(90deg, #0891b2, var(--cyan)); }
+
+  /* Compare table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: clamp(0.7rem, 1.6vw, 0.88rem);
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .compare-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(99,102,241,0.1);
+    color: var(--text-secondary);
+  }
+
+  .compare-table tr:last-child {
+    background: rgba(99,102,241,0.08);
+    border-radius: 8px;
+  }
+
+  .compare-table tr:last-child td {
+    color: var(--accent-light);
+    font-weight: 600;
+    border-bottom: none;
+  }
+
+  .check { color: var(--green); }
+  .cross { color: var(--red); opacity: 0.5; }
+  .partial { color: var(--yellow); }
+
+  /* Code block */
+  .code-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(0.68rem, 1.6vw, 0.82rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    overflow-x: auto;
+    margin-top: 12px;
+  }
+
+  .code-block .kw { color: var(--accent-light); }
+  .code-block .fn { color: var(--green); }
+  .code-block .str { color: var(--orange); }
+  .code-block .cm { color: var(--text-dim); font-style: italic; }
+  .code-block .tp { color: var(--cyan); }
+
+  /* Scenario box */
+  .scenario {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .scenario::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.05), transparent);
+    pointer-events: none;
+  }
+
+  .chat-bubble {
+    display: inline-block;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 12px 12px 12px 4px;
+    padding: 10px 16px;
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    max-width: 90%;
+  }
+
+  .chat-response {
+    display: inline-block;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 12px 12px 4px 12px;
+    padding: 10px 16px;
+    font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    max-width: 90%;
+    margin-left: auto;
+  }
+
+  .chat-row { display: flex; margin-bottom: 8px; }
+  .chat-row.right { justify-content: flex-end; }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-node {
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+  }
+
+  /* Module grid */
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .module-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+
+  .module-item:hover { border-color: var(--accent-light); }
+
+  .module-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .module-name {
+    font-size: clamp(0.68rem, 1.5vw, 0.82rem);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .module-desc {
+    font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Divider */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+
+  /* Flex helpers */
+  .flex-grow { flex: 1; }
+  .mt-auto { margin-top: auto; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mb-8 { margin-bottom: 8px; }
+  .text-center { text-align: center; }
+  .text-sm { font-size: clamp(0.72rem, 1.6vw, 0.85rem); }
+  .text-xs { font-size: clamp(0.65rem, 1.4vw, 0.78rem); }
+
+  /* Title slide special */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.12), transparent 70%);
+  }
+
+  .title-slide h1 {
+    font-size: clamp(1.8rem, 5vw, 3.4rem);
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    max-width: 800px;
+  }
+
+  .title-meta {
+    margin-top: 24px;
+    font-size: clamp(0.78rem, 1.8vw, 1rem);
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .psi-badge {
+    display: inline-block;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 8px;
+    margin-bottom: 16px;
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px var(--accent-glow)); }
+    50% { filter: drop-shadow(0 0 20px var(--accent-glow)); }
+  }
+
+  /* End slide */
+  .end-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.1), transparent 70%);
+  }
+
+  /* Keyboard hint */
+  .kbd-hint {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    z-index: 80;
+  }
+
+  .kbd {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+  }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 36px 32px; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .module-grid { grid-template-columns: repeat(3, 1fr); }
+    .compare-table { font-size: clamp(0.62rem, 1.5vw, 0.78rem); }
+    .compare-table th, .compare-table td { padding: 8px 8px; }
+    .nav { padding: 8px 16px; gap: 10px; }
+    .dots { display: none; }
+    .kbd-hint { display: none; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 28px 20px; padding-bottom: 100px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .module-grid { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 16px; }
+    .card-icon { font-size: 22px; margin-bottom: 8px; }
+    .nav { bottom: 12px; padding: 8px 14px; gap: 8px; border-radius: 40px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 18px; }
+    .flow { gap: 6px; }
+    .flow-node { padding: 8px 12px; font-size: clamp(0.65rem, 1.5vw, 0.78rem); }
+    .metric-label { min-width: 80px; }
+    .arch-layer { padding: 14px 16px; }
+    .title-slide h1 { font-size: clamp(1.4rem, 5vw, 2.2rem); }
+    .psi-badge { font-size: clamp(2rem, 8vw, 3.5rem); letter-spacing: 4px; }
+    .scenario { padding: 16px; }
+    .code-block { padding: 12px 14px; }
+    h2 { font-size: clamp(1.1rem, 3vw, 1.6rem); }
+    .compare-table th, .compare-table td { padding: 6px 5px; font-size: 0.65rem; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 20px 14px; padding-bottom: 100px; }
+    .module-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .module-item { padding: 10px; }
+    .card { padding: 12px; border-radius: 12px; }
+    h1 { font-size: clamp(1.2rem, 5vw, 1.6rem); }
+    h2 { font-size: clamp(1rem, 3vw, 1.3rem); }
+    .nav { gap: 6px; padding: 6px 12px; }
+    .psi-badge { letter-spacing: 2px; }
+    .flow-node { padding: 6px 10px; }
+    .metric-label { min-width: 64px; font-size: 0.65rem; }
+    .metric-bar-bg { height: 22px; }
+  }
+
+  /* Touch swipe visual feedback */
+  .slide-container.swiping { cursor: grabbing; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- SLIDE 0: Title -->
+  <div class="slide title-slide active" data-index="0">
+    <div class="psi-badge">PSI</div>
+    <h1>개인 AI 에이전트의 일관된 도구를 위한 공유 상태 아키텍처</h1>
+    <div class="divider" style="margin:16px auto;"></div>
+    <p class="subtitle" style="text-align:center; max-width:600px;">
+      독립적으로 생성된 AI 모듈들을 <span class="highlight">일관된 도구(Instrument)</span>로 통합하는 공유 상태 계층
+    </p>
+    <div class="title-meta">
+      Zhiyuan Wang, Erzhen Hu, Mark Rucker, Laura E. Barnes<br>
+      <span style="color:var(--accent-light)">arXiv:2604.08529</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Problem -->
+  <div class="slide" data-index="1">
+    <div class="slide-number">01 / 문제 정의</div>
+    <h2>AI가 도구를 만들 수 있지만,<br><span class="highlight-orange">통합은 여전히 불가능하다</span></h2>
+    <div class="divider"></div>
+    <p class="subtitle">자연어 요청으로 개인화된 앱을 생성할 수 있지만, 생성된 도구들은 서로 고립된 사일로로 남습니다.</p>
+
+    <div class="scenario mt-16">
+      <h3 style="color:var(--orange)">실제 상황</h3>
+      <p class="text-sm" style="color:var(--text-secondary); margin-top:8px;">
+        "왜 요즘 이렇게 피곤할까?"라는 질문에 답하려면<br>
+        <span class="highlight-cyan">운동 데이터</span> +
+        <span class="highlight-green">수면 품질</span> +
+        <span class="highlight-pink">일정 부하</span> +
+        <span class="highlight-yellow">심박수</span>를 통합해야 합니다.
+      </p>
+      <p class="text-sm mt-8" style="color:var(--text-dim);">
+        하지만 이 데이터는 <strong style="color:var(--red);">각각 다른 앱에 분산</strong>되어 있습니다.
+      </p>
+    </div>
+
+    <div class="card-grid cols-3 mt-16">
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">📱</div>
+        <h3>앱 A</h3>
+        <p>건강 데이터</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">📱</div>
+        <h3>앱 B</h3>
+        <p>운동 기록</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon">📱</div>
+        <h3>앱 C</h3>
+        <p>일정 관리</p>
+      </div>
+    </div>
+    <p class="text-xs mt-8 text-center" style="color:var(--red);">서로 연결되지 않는 독립된 사일로</p>
+  </div>
+
+  <!-- SLIDE 2: Core Idea -->
+  <div class="slide" data-index="2">
+    <div class="slide-number">02 / 핵심 아이디어</div>
+    <h2><span class="highlight">공유 상태</span>: 누락된 시스템 계층</h2>
+    <div class="divider"></div>
+    <p class="subtitle">PSI는 독립적으로 생성된 모듈을 <strong>도구(Instrument)</strong>로 전환합니다.</p>
+
+    <div class="card-grid cols-3 mt-24">
+      <div class="card" style="border-color: rgba(99,102,241,0.4);">
+        <div class="card-icon">💾</div>
+        <h3 class="highlight">영속적 (Persistent)</h3>
+        <p>재생성 없이 지속적으로 사용 가능한 아티팩트</p>
+      </div>
+      <div class="card" style="border-color: rgba(34,211,238,0.4);">
+        <div class="card-icon">🔗</div>
+        <h3 class="highlight-cyan">연결됨 (Connected)</h3>
+        <p>공유 개인 맥락 버스에 상태를 게시하고 쓰기 기능 노출</p>
+      </div>
+      <div class="card" style="border-color: rgba(52,211,153,0.4);">
+        <div class="card-icon">💬</div>
+        <h3 class="highlight-green">채팅 보완적</h3>
+        <p>GUI 모니터링과 채팅 추론이 동일한 상태를 공유</p>
+      </div>
+    </div>
+
+    <div class="scenario mt-24">
+      <p class="text-sm" style="color:var(--text-secondary);">
+        <strong style="color:var(--accent-light);">핵심 원리:</strong>
+        영속적 GUI 도구와 범용 채팅 에이전트(Facai)가 <span class="highlight-cyan">동일한 공유 맥락 버스</span> 위에서 동작합니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Architecture -->
+  <div class="slide" data-index="3">
+    <div class="slide-number">03 / 아키텍처</div>
+    <h2>PSI의 <span class="highlight">3계층 아키텍처</span></h2>
+    <div class="divider"></div>
+
+    <div class="arch-diagram">
+      <div class="arch-layer layer-gen">
+        <div class="arch-layer-title" style="color:var(--accent-light);">1. 생성 계층 (Generation Layer)</div>
+        <div class="arch-layer-desc">
+          에이전틱 코딩 워크플로우를 통한 모듈 작성<br>
+          <span class="tag tag-accent">명세</span>
+          <span class="tag tag-accent">코드 생성</span>
+          <span class="tag tag-accent">자동 수정</span>
+          <span class="tag tag-accent">컴파일 검증</span>
+        </div>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="arch-layer layer-ctx">
+        <div class="arch-layer-title" style="color:var(--cyan);">2. 공유 개인 맥락 계층 (Personal-Context Bus)</div>
+        <div class="arch-layer-desc">
+          모든 등록 모듈의 현재 상태 스냅샷을 수집하는 중앙 레지스트리<br>
+          <span class="tag tag-cyan">개인 범위</span>
+          <span class="tag tag-cyan">기기 내 영속</span>
+          <span class="tag tag-cyan">태그된 텍스트 형식</span>
+        </div>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="arch-layer layer-int">
+        <div class="arch-layer-title" style="color:var(--green);">3. 상호작용 계층 (Interaction Layer)</div>
+        <div class="arch-layer-desc">
+          두 개의 동기화된 인터페이스가 동일한 변경 가능한 상태에 접근<br>
+          <span class="tag tag-green">영속 GUI 대시보드</span>
+          <span class="tag tag-green">범용 채팅 에이전트 (Facai)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Provider Contract -->
+  <div class="slide" data-index="4">
+    <div class="slide-number">04 / 프로바이더 계약</div>
+    <h2><span class="highlight-cyan">통합을 지역적 의무로</span> 전환</h2>
+    <div class="divider"></div>
+    <p class="subtitle">단일 Swift 프로토콜이 플러그 앤 플레이 모듈 통합을 가능하게 합니다.</p>
+
+    <div class="code-block mt-16">
+      <span class="kw">protocol</span> <span class="tp">ToolkitDataProvider</span> {<br>
+      &nbsp;&nbsp;<span class="kw">var</span> <span class="fn">toolkitIdentifier</span>: <span class="tp">String</span><br>
+      &nbsp;&nbsp;<span class="kw">var</span> <span class="fn">relevanceKeywords</span>: [<span class="tp">String</span>]<br>
+      &nbsp;&nbsp;<span class="kw">func</span> <span class="fn">buildContextSummary</span>() -> <span class="tp">String?</span><br>
+      }
+    </div>
+
+    <div class="card-grid cols-2 mt-16">
+      <div class="card">
+        <h3 class="highlight-green">출력 형식</h3>
+        <div class="code-block" style="margin-top:8px;">
+          <span class="str">[Health Data]</span><br>
+          오늘: 1030 cal, 62g 단백질<br>
+          운동: 12분, 65 cal 소모<br>
+          <span class="str">[End Health Data]</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="highlight-orange">설계 원칙</h3>
+        <ul class="item-list" style="margin-top:8px;">
+          <li>통합 복잡도: <strong>O(n)</strong> (쌍별 O(n&sup2;) 아님)</li>
+          <li>빈 모듈은 <strong>자동 생략</strong></li>
+          <li>모듈 간 직접 통신 <strong>없음</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="text-xs mt-16" style="color:var(--text-dim);">
+      전체 핵심 메커니즘: 4개 파일, 173줄 (프로토콜 38줄 + 조립 60줄 + 레지스트리 59줄 + 부트스트랩 16줄)
+    </p>
+  </div>
+
+  <!-- SLIDE 5: How it works - Scenario -->
+  <div class="slide" data-index="5">
+    <div class="slide-number">05 / 동작 시나리오</div>
+    <h2>PSI가 <span class="highlight-green">실제로 동작하는 방식</span></h2>
+    <div class="divider"></div>
+
+    <div class="scenario">
+      <div class="chat-row">
+        <div class="chat-bubble">"왜 요즘 이렇게 지치는 걸까?"</div>
+      </div>
+      <div style="margin: 12px 0;">
+        <div class="flow">
+          <div class="flow-node" style="background:var(--cyan-dim); color:var(--cyan);">BoBo<br><span class="text-xs">심박수, 수면</span></div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-node" style="background:var(--green-dim); color:var(--green);">Health<br><span class="text-xs">운동, 식단</span></div>
+          <div class="flow-arrow">+</div>
+          <div class="flow-node" style="background:var(--pink-dim); color:var(--pink);">Calendar<br><span class="text-xs">일정 부하</span></div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node" style="background:var(--accent-glow); color:var(--accent-light);">Facai<br><span class="text-xs">통합 추론</span></div>
+        </div>
+      </div>
+      <div class="chat-row right">
+        <div class="chat-response">
+          회의와 면접이 연이어 있어 이동이 잦고, 운동량이 과도하며, 수면의 질이 낮습니다. 오늘은 운동을 건너뛰고 일찍 취침하시길 권합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 mt-16">
+      <div class="card">
+        <h3>GUI 역할</h3>
+        <p>한눈에 보는 모니터링, 일상적 제어, 종단적 타임라인 시각화</p>
+      </div>
+      <div class="card">
+        <h3>채팅 역할</h3>
+        <p>교차 모듈 합성, 모호성 해소, 상태 변경 액션 수행</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Modules -->
+  <div class="slide" data-index="6">
+    <div class="slide-number">06 / 구현된 모듈</div>
+    <h2>RyanHub: <span class="highlight-pink">14개 모듈</span> 에코시스템</h2>
+    <div class="divider"></div>
+    <p class="subtitle">SwiftUI iOS 앱 (94 Swift 파일, 36,517 LOC) + Python 서버</p>
+
+    <div class="module-grid mt-16">
+      <div class="module-item" style="border-color: rgba(34,211,238,0.4);">
+        <div class="module-icon">🤖</div>
+        <div class="module-name">BoBo</div>
+        <div class="module-desc">행동 관찰 봇</div>
+      </div>
+      <div class="module-item" style="border-color: rgba(52,211,153,0.4);">
+        <div class="module-icon">🏃</div>
+        <div class="module-name">Health</div>
+        <div class="module-desc">식단/활동 추적</div>
+      </div>
+      <div class="module-item" style="border-color: rgba(244,114,182,0.4);">
+        <div class="module-icon">📅</div>
+        <div class="module-name">Calendar</div>
+        <div class="module-desc">일정 관리</div>
+      </div>
+      <div class="module-item" style="border-color: rgba(251,146,60,0.4);">
+        <div class="module-icon">🅿️</div>
+        <div class="module-name">Parking</div>
+        <div class="module-desc">자동 주차 예약</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">📚</div>
+        <div class="module-name">BookFactory</div>
+        <div class="module-desc">독서 추적</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">🗣️</div>
+        <div class="module-name">Fluent</div>
+        <div class="module-desc">어휘 학습</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">😴</div>
+        <div class="module-name">Sleep</div>
+        <div class="module-desc">수면 추적</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">💊</div>
+        <div class="module-name">Medication</div>
+        <div class="module-desc">약 복용 추적</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">💰</div>
+        <div class="module-name">Spending</div>
+        <div class="module-desc">지출 추적</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">😊</div>
+        <div class="module-name">Mood</div>
+        <div class="module-desc">감정 일지</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">💧</div>
+        <div class="module-name">Hydration</div>
+        <div class="module-desc">수분 섭취</div>
+      </div>
+      <div class="module-item">
+        <div class="module-icon">✅</div>
+        <div class="module-name">Habit</div>
+        <div class="module-desc">습관 추적</div>
+      </div>
+    </div>
+
+    <p class="text-xs mt-8 text-center" style="color:var(--text-dim);">
+      쌍별 통합 없이 이종(異種) 도구 에코시스템을 구현 &mdash; 동일한 프로바이더 계약으로 자동 통합
+    </p>
+  </div>
+
+  <!-- SLIDE 7: Evaluation -->
+  <div class="slide" data-index="7">
+    <div class="slide-number">07 / 평가 결과</div>
+    <h2><span class="highlight-green">추론 성능</span>: 공유 맥락의 우위</h2>
+    <div class="divider"></div>
+    <p class="subtitle">3주간 자전적 배포 연구, 50개 합성 질의로 평가</p>
+
+    <h3 class="mt-24">충족도 (Fulfillment, 0-1)</h3>
+    <div class="metric-group">
+      <div class="metric-row">
+        <div class="metric-label">공유 맥락</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-accent" style="--fill: 88%;">0.88</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">검색 전용</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-orange" style="--fill: 63%;">0.63</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">단일 모듈</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-dim" style="--fill: 27%;">0.27</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mt-16">작업 성공률 (Task Success, 엄격 기준)</h3>
+    <div class="metric-group">
+      <div class="metric-row">
+        <div class="metric-label">공유 맥락</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-accent" style="--fill: 68%;">68%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">검색 전용</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-orange" style="--fill: 32%;">32%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">단일 모듈</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-dim" style="--fill: 8%;">8%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Write-back results -->
+  <div class="slide" data-index="8">
+    <div class="slide-number">08 / 쓰기 작업 평가</div>
+    <h2><span class="highlight-orange">쓰기 액션</span>: 양방향 상태 접근</h2>
+    <div class="divider"></div>
+
+    <h3 class="mt-16">쓰기 작업 성공률 (20개 작업, 5개 도메인)</h3>
+    <div class="metric-group">
+      <div class="metric-row">
+        <div class="metric-label">공유 맥락</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-green" style="--fill: 95%;">95%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">단일 모듈</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-cyan" style="--fill: 95%;">95%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">검색 전용</div>
+        <div class="metric-bar-bg">
+          <div class="metric-bar-fill fill-dim" style="--fill: 40%;">40%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 mt-24">
+      <div class="card">
+        <h3 style="color:var(--green);">쓰기 작업 예시</h3>
+        <ul style="list-style:none; padding:0;">
+          <li class="text-sm" style="color:var(--text-secondary); padding:4px 0;">"내일 주차 건너뛰기" <span class="check">&#10003;</span></li>
+          <li class="text-sm" style="color:var(--text-secondary); padding:4px 0;">"점심 기록: 계란 카레와 밥" <span class="check">&#10003;</span></li>
+          <li class="text-sm" style="color:var(--text-secondary); padding:4px 0;">"물 8잔 기록" <span class="check">&#10003;</span></li>
+          <li class="text-sm" style="color:var(--text-secondary); padding:4px 0;">"비타민D 복용 기록" <span class="check">&#10003;</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--cyan);">핵심 발견</h3>
+        <p>공유 맥락은 채팅이 개인 상태를 <strong>읽고</strong>(근거 추론) <strong>쓸 수</strong>(상태 변경 액션) 있게 합니다.</p>
+        <p class="mt-8">검색 기반은 쓰기 경로 발견에 실패하여 <span style="color:var(--red);">40%</span>에 그쳤습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Comparison -->
+  <div class="slide" data-index="9">
+    <div class="slide-number">09 / 기존 시스템 비교</div>
+    <h2>PSI vs <span class="highlight-pink">기존 시스템</span></h2>
+    <div class="divider"></div>
+
+    <div style="overflow-x:auto; margin-top:16px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>시스템</th>
+            <th>대화</th>
+            <th>생성</th>
+            <th>맥락</th>
+            <th>교차 합성</th>
+            <th>쓰기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ChatGPT / Claude</td>
+            <td class="check">&#10003;</td>
+            <td class="partial">&#9675;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+          </tr>
+          <tr>
+            <td>Siri / Google 어시스턴트</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="partial">&#9675;</td>
+            <td class="cross">&#10007;</td>
+            <td class="partial">&#9675;</td>
+          </tr>
+          <tr>
+            <td>Shortcuts / IFTTT</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="partial">&#9675;</td>
+            <td class="partial">&#9675;</td>
+          </tr>
+          <tr>
+            <td>Home Assistant</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td>v0 / Lovable</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+          </tr>
+          <tr>
+            <td>M365 Copilot</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="partial">&#9675;</td>
+            <td class="check">&#10003;</td>
+            <td class="partial">&#9675;</td>
+          </tr>
+          <tr>
+            <td><strong>PSI</strong></td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-xs mt-16 text-center" style="color:var(--text-dim);">
+      &#10003; 완전 지원 &nbsp;&nbsp; &#9675; 부분 지원 &nbsp;&nbsp; &#10007; 미지원
+    </p>
+  </div>
+
+  <!-- SLIDE 10: Design Tradeoffs -->
+  <div class="slide" data-index="10">
+    <div class="slide-number">10 / 설계 트레이드오프</div>
+    <h2>공유 상태의 <span class="highlight-yellow">장점과 도전</span></h2>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-2 mt-16">
+      <div class="card" style="border-color: rgba(52,211,153,0.4);">
+        <div class="card-icon">&#x2714;</div>
+        <h3 class="highlight-green">장점</h3>
+        <ul class="item-list">
+          <li>교차 모듈 합성으로 <strong>단일 모듈의 8배</strong> 작업 성공률</li>
+          <li>새 모듈은 프로토콜만 구현하면 <strong>자동 통합</strong></li>
+          <li>읽기(추론)와 쓰기(액션) <strong>양방향 지원</strong></li>
+          <li>LLM 매개 통신으로 <strong>결합도 최소화</strong></li>
+        </ul>
+      </div>
+      <div class="card" style="border-color: rgba(251,191,36,0.4);">
+        <div class="card-icon">&#x26A0;</div>
+        <h3 class="highlight-yellow">도전 과제</h3>
+        <ul class="item-list">
+          <li><strong>맥락 오염</strong>: 오래되거나 중복된 요약이 시스템 전체 응답 품질 저하</li>
+          <li><strong>확장성</strong>: 모듈 수 증가 시 프롬프트 길이 증가</li>
+          <li><strong>시스템 수준 실패</strong>: 사일로 앱의 국소 실패 vs 공유 상태의 전역 실패</li>
+          <li><strong>라우팅 필요</strong>: 대규모 모듈에서 선택적 맥락 주입 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Contributions & Future -->
+  <div class="slide" data-index="11">
+    <div class="slide-number">11 / 기여 및 향후 연구</div>
+    <h2>논문의 <span class="highlight">핵심 기여</span></h2>
+    <div class="divider"></div>
+
+    <div class="card-grid cols-3 mt-16">
+      <div class="card" style="border-color: rgba(99,102,241,0.4);">
+        <div class="card-icon">🏗️</div>
+        <h3>아키텍처 기여</h3>
+        <p>독립 생성 모듈을 GUI와 채팅 모두에서 접근 가능한 일관된 도구로 전환하는 공유 상태 아키텍처 제안</p>
+      </div>
+      <div class="card" style="border-color: rgba(52,211,153,0.4);">
+        <div class="card-icon">📊</div>
+        <h3>실증적 증거</h3>
+        <p>공유 상태가 개인 AI의 추론과 액션 모두를 개선한다는 실증적 증거 제시 (검색 및 단일 모듈 기준선 대비)</p>
+      </div>
+      <div class="card" style="border-color: rgba(244,114,182,0.4);">
+        <div class="card-icon">📦</div>
+        <h3>오픈소스 아티팩트</h3>
+        <p>PSI, RyanHub iOS 앱, 대표 모듈을 포함한 아티팩트를 논문 수락 시 공개 예정</p>
+      </div>
+    </div>
+
+    <h3 class="mt-24">향후 연구 방향</h3>
+    <div class="card-grid cols-2 mt-8">
+      <div class="card">
+        <h3 class="highlight-cyan">대규모 라우팅</h3>
+        <p>모듈 수 증가 시 관련 맥락을 선택적으로 주입하는 메커니즘</p>
+      </div>
+      <div class="card">
+        <h3 class="highlight-orange">프라이버시 & 권한</h3>
+        <p>다중 사용자 시나리오에서의 개인 범위 액션 보호</p>
+      </div>
+      <div class="card">
+        <h3 class="highlight-pink">접근성 확대</h3>
+        <p>비프로그래머도 규격 준수 모듈을 작성할 수 있도록 지원</p>
+      </div>
+      <div class="card">
+        <h3 class="highlight-green">맥락 오염 방지</h3>
+        <p>중복, 오래된 요약으로 인한 시스템 수준 오류 완화</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Conclusion -->
+  <div class="slide end-slide" data-index="12">
+    <div class="psi-badge" style="font-size:clamp(2rem,6vw,4rem);">PSI</div>
+    <h2 style="max-width:600px;">
+      공유 상태는 AI 생성 개인 소프트웨어를<br>
+      <span class="highlight">고립된 앱</span>에서<br>
+      <span class="highlight-green">일관된 개인 컴퓨팅 환경</span>으로<br>
+      전환하는 누락된 시스템 계층이다
+    </h2>
+    <div class="divider" style="margin: 24px auto;"></div>
+    <p class="text-sm" style="color:var(--text-dim);">
+      Wang, Hu, Rucker, Barnes &mdash; arXiv:2604.08529
+    </p>
+    <p class="text-xs mt-8" style="color:var(--text-dim);">
+      생성만으로는 충분하지 않다. 통합이 핵심이다.
+    </p>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">&#x276E;</button>
+  <div class="dots" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#x276F;</button>
+</nav>
+
+<div class="kbd-hint">
+  <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> 또는 스와이프로 이동
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsContainer = document.getElementById('dots');
+  const container = document.getElementById('slideContainer');
+
+  // Create dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    const dots = dotsContainer.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.className = 'dot' + (i === current ? ' active' : ''));
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].className = 'slide' + (dir > 0 ? ' exit-left' : '');
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    current = index;
+    slides[current].className = 'slide active';
+    slides[current].scrollTop = 0;
+    updateUI();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  // Touch swipe
+  let startX = 0, startY = 0, dragging = false;
+  container.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = true;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    if (!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
