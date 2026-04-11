@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
 
 - [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-08-how-ai-aggregation-affects-knowledge.md|How AI Aggregation Affects Knowledge]] (2026-04-08)

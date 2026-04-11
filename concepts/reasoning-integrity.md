@@ -34,3 +34,15 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
 
 - [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-06)
+
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md|BibTeX Citation Hallucinations in Scientific Publishing Agen]] (2026-04-07)
+
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md|Detecting and Correcting Reference Hallucinations in Commerc]] (2026-04-07)
+
+- [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md|Understanding the Role of Hallucination in Reinforcement Pos]] (2026-04-07)
+
+- [[sources/2026-04-08-beyond-the-final-actor-modeling-the-dual-roles-of-.md|Beyond the Final Actor: Modeling the Dual Roles of Creator a]] (2026-04-08)
+
+- [[sources/2026-04-08-triattention-efficient-long-reasoning-with-trigono.md|TriAttention: Efficient Long Reasoning with Trigonometric KV]] (2026-04-08)
+
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)

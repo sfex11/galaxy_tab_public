@@ -24,3 +24,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
 
 - [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-07-prism-llm-guided-semantic-clustering-for-high-prec.md|PRISM: LLM-Guided Semantic Clustering for High-Precision Top]] (2026-04-07)
+
+- [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md|MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-]] (2026-04-09)

@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-11)
 
 - [[sources/2026-04-03-orbit-scalable-and-verifiable-data-generation-for-.md|ORBIT: Scalable and Verifiable Data Generation for Search Ag]] (2026-04-03)
+
+- [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)

@@ -18,3 +18,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
 
 - [[sources/2026-04-06-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-06)
+
+- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-11)

@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-20-post-training-local-llm-agents-for-linux-privilege.md|Post-Training Local LLM Agents for Linux Privilege Escalatio]]
 
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variant]] (2026-04-07)
+
+- [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md|Who Governs the Machine? A Machine Identity Governance Taxon]] (2026-04-09)

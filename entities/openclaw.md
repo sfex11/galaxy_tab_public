@@ -31,3 +31,5 @@ _자동 생성됨_
 - [[sources/2026-03-19-toward-scalable-automated-repository-level-dataset.md|Toward Scalable Automated Repository-Level Datasets for Soft]] (2026-03-19)
 
 - [[sources/2026-03-26-bilevel-autoresearch-meta-autoresearching-itself.md|Bilevel Autoresearch: Meta-Autoresearching Itself]] (2026-03-26)
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agent]] (2026-04-09)

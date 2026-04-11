@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-26-rectify-dont-regret-avoiding-pitfalls-of-different.md|Rectify, Don't Regret: Avoiding Pitfalls of Differentiable S]]
+
+- [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md|Understanding the Role of Hallucination in Reinforcement Pos]] (2026-04-07)

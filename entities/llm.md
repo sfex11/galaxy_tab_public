@@ -122,3 +122,27 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
 
 - [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]] (2026-04-07)
+
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md|BibTeX Citation Hallucinations in Scientific Publishing Agen]] (2026-04-07)
+
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md|Detecting and Correcting Reference Hallucinations in Commerc]] (2026-04-07)
+
+- [[sources/2026-04-07-prism-llm-guided-semantic-clustering-for-high-prec.md|PRISM: LLM-Guided Semantic Clustering for High-Precision Top]] (2026-04-07)
+
+- [[sources/2026-04-08-beyond-the-final-actor-modeling-the-dual-roles-of-.md|Beyond the Final Actor: Modeling the Dual Roles of Creator a]] (2026-04-08)
+
+- [[sources/2026-04-08-triattention-efficient-long-reasoning-with-trigono.md|TriAttention: Efficient Long Reasoning with Trigonometric KV]] (2026-04-08)
+
+- [[sources/2026-04-09-exclusive-unlearning.md|Exclusive Unlearning]] (2026-04-09)
+
+- [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)
+
+- [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)
+
+- [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md|A Systematic Study of Retrieval Pipeline Design for Retrieva]] (2026-04-10)
+
+- [[sources/2026-04-10-chatbot-based-assessment-of-code-understanding-in-.md|Chatbot-Based Assessment of Code Understanding in Automated ]] (2026-04-10)
+
+- [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
+
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)

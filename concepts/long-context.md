@@ -32,3 +32,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)
 
 - [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
+
+- [[sources/2026-04-08-triattention-efficient-long-reasoning-with-trigono.md|TriAttention: Efficient Long Reasoning with Trigonometric KV]] (2026-04-08)
+
+- [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)

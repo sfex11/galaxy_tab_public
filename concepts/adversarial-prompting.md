@@ -34,3 +34,9 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-architecting-secure-ai-agents-perspectives-on-syst.md|Architecting Secure AI Agents: Perspectives on System-Level ]] (2026-04-02)
 
 - [[sources/2026-04-03-reasoning-shift-how-context-silently-shortens-llm-.md|Reasoning Shift: How Context Silently Shortens LLM Reasoning]] (2026-04-03)
+
+- [[sources/2026-04-08-beyond-the-final-actor-modeling-the-dual-roles-of-.md|Beyond the Final Actor: Modeling the Dual Roles of Creator a]] (2026-04-08)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)
+
+- [[sources/2026-04-10-chatbot-based-assessment-of-code-understanding-in-.md|Chatbot-Based Assessment of Code Understanding in Automated ]] (2026-04-10)

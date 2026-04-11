@@ -122,3 +122,23 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variant]] (2026-04-07)
 
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md|BibTeX Citation Hallucinations in Scientific Publishing Agen]] (2026-04-07)
+
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md|Detecting and Correcting Reference Hallucinations in Commerc]] (2026-04-07)
+
+- [[sources/2026-04-08-analyzing-symbolic-properties-for-drl-agents-in-sy.md|Analyzing Symbolic Properties for DRL Agents in Systems and ]] (2026-04-08)
+
+- [[sources/2026-04-08-beyond-the-final-actor-modeling-the-dual-roles-of-.md|Beyond the Final Actor: Modeling the Dual Roles of Creator a]] (2026-04-08)
+
+- [[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md|Comparing Human Oversight Strategies for Computer-Use Agents]] (2026-04-08)
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agent]] (2026-04-09)
+
+- [[sources/2026-04-09-exclusive-unlearning.md|Exclusive Unlearning]] (2026-04-09)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)
+
+- [[sources/2026-04-09-who-governs-the-machine-a-machine-identity-governa.md|Who Governs the Machine? A Machine Identity Governance Taxon]] (2026-04-09)
+
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)

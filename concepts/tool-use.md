@@ -96,3 +96,17 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
 
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variant]] (2026-04-07)
+
+- [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md|FrontierFinance: A Long-Horizon Computer-Use Benchmark of Re]] (2026-04-08)
+
+- [[sources/2026-04-09-ace-bench-agent-configurable-evaluation-with-scala.md|ACE-Bench: Agent Configurable Evaluation with Scalable Horiz]] (2026-04-09)
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agent]] (2026-04-09)
+
+- [[sources/2026-04-09-gym-anything-turn-any-software-into-an-agent-envir.md|Gym-Anything: Turn any Software into an Agent Environment]] (2026-04-09)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)
+
+- [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
+
+- [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)

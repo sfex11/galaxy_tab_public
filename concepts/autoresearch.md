@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
 
 - [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
+
+- [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)

@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-24-semantic-token-clustering-for-efficient-uncertaint.md|Semantic Token Clustering for Efficient Uncertainty Quantifi]]
+
+- [[sources/2026-04-07-prism-llm-guided-semantic-clustering-for-high-prec.md|PRISM: LLM-Guided Semantic Clustering for High-Precision Top]] (2026-04-07)

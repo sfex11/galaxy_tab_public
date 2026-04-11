@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-05)
 
 - [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
+
+- [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)
+
+- [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)

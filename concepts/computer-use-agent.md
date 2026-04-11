@@ -1,0 +1,14 @@
+# computer-use-agent
+
+**분야**: 미분류
+**생성일**: 2026-04-08
+
+## 정의
+
+_Wiki 축적 중_
+
+## 관련 논문
+
+- [[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md|Comparing Human Oversight Strategies for Computer-Use Agents]]
+
+- [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)

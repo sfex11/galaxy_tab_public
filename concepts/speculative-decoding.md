@@ -28,3 +28,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)
 
 - [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
+
+- [[sources/2026-04-08-triattention-efficient-long-reasoning-with-trigono.md|TriAttention: Efficient Long Reasoning with Trigonometric KV]] (2026-04-08)

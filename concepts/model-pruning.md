@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-03-30-sustainability-is-not-linear-quantifying-performan.md|Sustainability Is Not Linear: Quantifying Performance, Energ]] (2026-03-30)
 
 - [[sources/2026-04-03-neuro-rit-neuron-guided-instruction-tuning-for-rob.md|Neuro-RIT: Neuron-Guided Instruction Tuning for Robust Retri]] (2026-04-03)
+
+- [[sources/2026-04-09-exclusive-unlearning.md|Exclusive Unlearning]] (2026-04-09)

@@ -30,3 +30,11 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
 
 - [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]] (2026-04-07)
+
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md|BibTeX Citation Hallucinations in Scientific Publishing Agen]] (2026-04-07)
+
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md|Detecting and Correcting Reference Hallucinations in Commerc]] (2026-04-07)
+
+- [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
+
+- [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md|A Systematic Study of Retrieval Pipeline Design for Retrieva]] (2026-04-10)

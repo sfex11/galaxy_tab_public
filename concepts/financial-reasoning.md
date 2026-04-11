@@ -20,3 +20,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-05)
 
 - [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md|FrontierFinance: A Long-Horizon Computer-Use Benchmark of Re]] (2026-04-08)

@@ -189,3 +189,23 @@ _자동 생성됨_
 - [[sources/2026-04-06-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-06)
 
 - [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-07-coupled-control-structured-memory-and-verifiable-a.md|Coupled Control, Structured Memory, and Verifiable Action in]] (2026-04-07)
+
+- [[sources/2026-04-08-agentic-federated-learning-the-future-of-distribut.md|Agentic Federated Learning: The Future of Distributed Traini]] (2026-04-08)
+
+- [[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md|Comparing Human Oversight Strategies for Computer-Use Agents]] (2026-04-08)
+
+- [[sources/2026-04-09-ace-bench-agent-configurable-evaluation-with-scala.md|ACE-Bench: Agent Configurable Evaluation with Scalable Horiz]] (2026-04-09)
+
+- [[sources/2026-04-09-gym-anything-turn-any-software-into-an-agent-envir.md|Gym-Anything: Turn any Software into an Agent Environment]] (2026-04-09)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)
+
+- [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)
+
+- [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)
+
+- [[sources/2026-04-10-how-much-llm-does-a-self-revising-agent-actually-n.md|How Much LLM Does a Self-Revising Agent Actually Need?]] (2026-04-10)

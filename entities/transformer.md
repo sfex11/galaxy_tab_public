@@ -71,3 +71,7 @@ _자동 생성됨_
 - [[sources/2026-04-04-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-04)
 
 - [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)
+
+- [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)

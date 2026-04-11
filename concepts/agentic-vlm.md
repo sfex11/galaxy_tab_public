@@ -28,3 +28,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-06)
 
 - [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)

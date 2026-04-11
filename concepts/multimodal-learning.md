@@ -40,3 +40,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-leo-graph-attention-network-based-hybrid-multi-sen.md|LEO: Graph Attention Network based Hybrid Multi Sensor Exten]] (2026-04-03)
 
 - [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+
+- [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md|Understanding the Role of Hallucination in Reinforcement Pos]] (2026-04-07)
+
+- [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md|MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-]] (2026-04-09)

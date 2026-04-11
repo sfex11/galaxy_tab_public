@@ -24,3 +24,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-04-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-04)
 
 - [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)

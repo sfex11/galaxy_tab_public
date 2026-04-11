@@ -62,3 +62,9 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)
 
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)
+
+- [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md|MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-]] (2026-04-09)
+
+- [[sources/2026-04-10-how-much-llm-does-a-self-revising-agent-actually-n.md|How Much LLM Does a Self-Revising Agent Actually Need?]] (2026-04-10)

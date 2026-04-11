@@ -18,3 +18,11 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-multi-agent-video-recommenders-evolution-patterns-.md|Multi-Agent Video Recommenders: Evolution, Patterns, and Ope]] (2026-04-03)
 
 - [[sources/2026-04-03-towards-position-robust-talent-recommendation-via-.md|Towards Position-Robust Talent Recommendation via Large Lang]] (2026-04-03)
+
+- [[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md|Comparing Human Oversight Strategies for Computer-Use Agents]] (2026-04-08)
+
+- [[sources/2026-04-08-how-ai-aggregation-affects-knowledge.md|How AI Aggregation Affects Knowledge]] (2026-04-08)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)

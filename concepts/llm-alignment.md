@@ -24,3 +24,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-05)
 
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+- [[sources/2026-04-08-beyond-the-final-actor-modeling-the-dual-roles-of-.md|Beyond the Final Actor: Modeling the Dual Roles of Creator a]] (2026-04-08)
+
+- [[sources/2026-04-09-exclusive-unlearning.md|Exclusive Unlearning]] (2026-04-09)

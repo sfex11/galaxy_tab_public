@@ -48,3 +48,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
 
 - [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering: Efficient Vision-Language Navigation via Met]] (2026-04-06)
+
+- [[sources/2026-04-10-appear2meaning-a-cross-cultural-benchmark-for-stru.md|Appear2Meaning: A Cross-Cultural Benchmark for Structured Cu]] (2026-04-10)
+
+- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-11)

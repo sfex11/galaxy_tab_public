@@ -18,3 +18,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-enhancing-structural-mapping-with-llm-derived-abst.md|Enhancing Structural Mapping with LLM-derived Abstractions f]] (2026-04-02)
 
 - [[sources/2026-04-03-adams-law-textual-frequency-law-on-large-language-.md|Adam's Law: Textual Frequency Law on Large Language Models]] (2026-04-03)
+
+- [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|Social Dynamics as Critical Vulnerabilities that Undermine O]] (2026-04-09)

@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-03-mti-a-behavior-based-temperament-profiling-system-.md|MTI: A Behavior-Based Temperament Profiling System for AI Ag]]
+
+- [[sources/2026-04-07-coupled-control-structured-memory-and-verifiable-a.md|Coupled Control, Structured Memory, and Verifiable Action in]] (2026-04-07)

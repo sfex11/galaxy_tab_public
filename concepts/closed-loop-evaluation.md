@@ -14,3 +14,13 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-textttyc-bench-benchmarking-ai-agents-for-long-ter.md|$\texttt{YC-Bench}$: Benchmarking AI Agents for Long-Term Pl]] (2026-04-03)
 
 - [[sources/2026-04-03-unidrivevla-unifying-understanding-perception-and-.md|UniDriveVLA: Unifying Understanding, Perception, and Action ]] (2026-04-03)
+
+- [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md|FrontierFinance: A Long-Horizon Computer-Use Benchmark of Re]] (2026-04-08)
+
+- [[sources/2026-04-09-ace-bench-agent-configurable-evaluation-with-scala.md|ACE-Bench: Agent Configurable Evaluation with Scalable Horiz]] (2026-04-09)
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agent]] (2026-04-09)
+
+- [[sources/2026-04-09-gym-anything-turn-any-software-into-an-agent-envir.md|Gym-Anything: Turn any Software into an Agent Environment]] (2026-04-09)
+
+- [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md|Robust Quadruped Locomotion via Evolutionary Reinforcement L]] (2026-04-10)

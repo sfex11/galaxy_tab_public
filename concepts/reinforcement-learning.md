@@ -143,3 +143,9 @@ _자동 생성됨_
 - [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
 
 - [[sources/2026-04-06-skill0-in-context-agentic-reinforcement-learning-f.md|SKILL0: In-Context Agentic Reinforcement Learning for Skill ]] (2026-04-06)
+
+- [[sources/2026-04-07-coupled-control-structured-memory-and-verifiable-a.md|Coupled Control, Structured Memory, and Verifiable Action in]] (2026-04-07)
+
+- [[sources/2026-04-08-analyzing-symbolic-properties-for-drl-agents-in-sy.md|Analyzing Symbolic Properties for DRL Agents in Systems and ]] (2026-04-08)
+
+- [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)

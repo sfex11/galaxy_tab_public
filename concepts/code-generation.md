@@ -30,3 +30,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-think-anywhere-in-code-generation.md|Think Anywhere in Code Generation]] (2026-04-02)
 
 - [[sources/2026-04-03-cliffsearch-structured-agentic-co-evolution-over-t.md|CliffSearch: Structured Agentic Co-Evolution over Theory and]] (2026-04-03)
+
+- [[sources/2026-04-10-chatbot-based-assessment-of-code-understanding-in-.md|Chatbot-Based Assessment of Code Understanding in Automated ]] (2026-04-10)
+
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)

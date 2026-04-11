@@ -22,3 +22,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-05-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-05)
 
 - [[sources/2026-04-06-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-06)
+
+- [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)

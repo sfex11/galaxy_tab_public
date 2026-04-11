@@ -62,3 +62,23 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-beyond-the-assistant-turn-user-turn-generation-as-.md|Beyond the Assistant Turn: User Turn Generation as a Probe o]] (2026-04-06)
 
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+- [[sources/2026-04-07-bibtex-citation-hallucinations-in-scientific-publi.md|BibTeX Citation Hallucinations in Scientific Publishing Agen]] (2026-04-07)
+
+- [[sources/2026-04-07-detecting-and-correcting-reference-hallucinations-.md|Detecting and Correcting Reference Hallucinations in Commerc]] (2026-04-07)
+
+- [[sources/2026-04-08-frontierfinance-a-long-horizon-computer-use-benchm.md|FrontierFinance: A Long-Horizon Computer-Use Benchmark of Re]] (2026-04-08)
+
+- [[sources/2026-04-09-ace-bench-agent-configurable-evaluation-with-scala.md|ACE-Bench: Agent Configurable Evaluation with Scalable Horiz]] (2026-04-09)
+
+- [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agent]] (2026-04-09)
+
+- [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md|A Systematic Study of Retrieval Pipeline Design for Retrieva]] (2026-04-10)
+
+- [[sources/2026-04-10-appear2meaning-a-cross-cultural-benchmark-for-stru.md|Appear2Meaning: A Cross-Cultural Benchmark for Structured Cu]] (2026-04-10)
+
+- [[sources/2026-04-10-chatbot-based-assessment-of-code-understanding-in-.md|Chatbot-Based Assessment of Code Understanding in Automated ]] (2026-04-10)
+
+- [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
+
+- [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)

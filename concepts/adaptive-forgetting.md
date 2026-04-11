@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-04-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]]
 
 - [[sources/2026-04-05-novel-memory-forgetting-techniques-for-autonomous-.md|Novel Memory Forgetting Techniques for Autonomous AI Agents:]] (2026-04-05)
+
+- [[sources/2026-04-07-coupled-control-structured-memory-and-verifiable-a.md|Coupled Control, Structured Memory, and Verifiable Action in]] (2026-04-07)
