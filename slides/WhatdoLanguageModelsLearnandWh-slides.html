@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>언어 모델은 무엇을, 언제 배우는가? — 암묵적 교육과정 가설</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-deep: #0a0e1a;
+    --bg-card: #111827;
+    --bg-glass: rgba(17, 24, 39, 0.7);
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --gradient-2: linear-gradient(135deg, #06b6d4, #3b82f6);
+    --gradient-3: linear-gradient(135deg, #8b5cf6, #ec4899);
+    --gradient-4: linear-gradient(135deg, #10b981, #06b6d4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    width: 100%; height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 56px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(60px);
+    transition: opacity .5s ease, transform .5s ease, visibility .5s;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide.active {
+    opacity: 1; visibility: visible; transform: translateX(0);
+  }
+  .slide.prev {
+    opacity: 0; visibility: hidden; transform: translateX(-60px);
+  }
+
+  /* ── Background Effects ── */
+  .bg-grid {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(59,130,246,.06) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+  .bg-orb {
+    position: fixed; border-radius: 50%; filter: blur(100px);
+    pointer-events: none; z-index: 0; opacity: .25;
+  }
+  .bg-orb.o1 { width: 500px; height: 500px; background: var(--accent-blue); top: -150px; right: -100px; }
+  .bg-orb.o2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -100px; left: -100px; }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ── Typography ── */
+  .slide-number {
+    font-size: clamp(.65rem, 1.2vw, .8rem);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1.hero {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  h2.title {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  h3.subtitle {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  p.body, li {
+    font-size: clamp(.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.75rem, 1.4vw, .95rem);
+  }
+
+  /* ── Cards & Boxes ── */
+  .card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card.glow-blue  { border-color: rgba(59,130,246,.3); box-shadow: 0 0 30px rgba(59,130,246,.08); }
+  .card.glow-purple{ border-color: rgba(139,92,246,.3); box-shadow: 0 0 30px rgba(139,92,246,.08); }
+  .card.glow-cyan  { border-color: rgba(6,182,212,.3);  box-shadow: 0 0 30px rgba(6,182,212,.08); }
+  .card.glow-green { border-color: rgba(16,185,129,.3); box-shadow: 0 0 30px rgba(16,185,129,.08); }
+  .card.glow-pink  { border-color: rgba(236,72,153,.3); box-shadow: 0 0 30px rgba(236,72,153,.08); }
+  .card.glow-orange{ border-color: rgba(245,158,11,.3); box-shadow: 0 0 30px rgba(245,158,11,.08); }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(.9rem, 1.6vw, 1.15rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .card-desc {
+    font-size: clamp(.78rem, 1.4vw, .95rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Badge / Tag ── */
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: clamp(.65rem, 1.2vw, .8rem);
+    font-weight: 600;
+    letter-spacing: .5px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .badge.blue   { background: rgba(59,130,246,.15); color: var(--accent-blue); }
+  .badge.purple { background: rgba(139,92,246,.15); color: var(--accent-purple); }
+  .badge.cyan   { background: rgba(6,182,212,.15);  color: var(--accent-cyan); }
+  .badge.green  { background: rgba(16,185,129,.15); color: var(--accent-green); }
+  .badge.orange { background: rgba(245,158,11,.15); color: var(--accent-orange); }
+  .badge.pink   { background: rgba(236,72,153,.15); color: var(--accent-pink); }
+
+  /* ── Metric Highlight ── */
+  .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px;
+  }
+  .metric-value {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+  }
+  .metric-label {
+    font-size: clamp(.7rem, 1.3vw, .85rem);
+    color: var(--text-muted);
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 16px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -25px; top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-cyan);
+    background: var(--bg-deep);
+  }
+  .timeline-item:nth-child(2)::before { border-color: var(--accent-blue); }
+  .timeline-item:nth-child(3)::before { border-color: var(--accent-purple); }
+  .timeline-item:nth-child(4)::before { border-color: var(--accent-pink); }
+  .timeline-item:nth-child(5)::before { border-color: var(--accent-orange); }
+  .timeline-item:nth-child(6)::before { border-color: var(--accent-red); }
+
+  .timeline-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.7rem, 1.2vw, .82rem);
+    color: var(--accent-cyan);
+    font-weight: 600;
+  }
+  .timeline-item:nth-child(2) .timeline-time { color: var(--accent-blue); }
+  .timeline-item:nth-child(3) .timeline-time { color: var(--accent-purple); }
+  .timeline-item:nth-child(4) .timeline-time { color: var(--accent-pink); }
+  .timeline-item:nth-child(5) .timeline-time { color: var(--accent-orange); }
+  .timeline-item:nth-child(6) .timeline-time { color: var(--accent-red); }
+
+  .timeline-label {
+    font-size: clamp(.82rem, 1.5vw, 1rem);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-top: 2px;
+  }
+
+  /* ── Bar Chart ── */
+  .bar-chart { margin-top: 16px; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+  .bar-label {
+    min-width: 90px;
+    font-size: clamp(.72rem, 1.3vw, .88rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: rgba(255,255,255,.04);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 12px;
+    transition: width 1.2s cubic-bezier(.22,1,.36,1);
+    width: 0;
+  }
+  .bar-fill.animated { /* JS will set width */ }
+  .bar-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.68rem, 1.1vw, .8rem);
+    color: var(--text-muted);
+    min-width: 44px;
+    flex-shrink: 0;
+  }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: clamp(.75rem, 1.4vw, .92rem);
+  }
+  .data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: clamp(.68rem, 1.2vw, .82rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .data-table td {
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* ── Equation Box ── */
+  .equation-box {
+    background: rgba(139,92,246,.08);
+    border: 1px solid rgba(139,92,246,.2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.82rem, 1.6vw, 1.1rem);
+    color: var(--accent-purple);
+    text-align: center;
+    margin: 16px 0;
+    letter-spacing: .5px;
+    overflow-x: auto;
+  }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .flow-node {
+    background: var(--bg-glass);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: clamp(.78rem, 1.4vw, .95rem);
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+  }
+  .flow-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+    margin: 20px 0;
+  }
+
+  /* ── Highlight text ── */
+  .hl-blue   { color: var(--accent-blue); }
+  .hl-cyan   { color: var(--accent-cyan); }
+  .hl-purple { color: var(--accent-purple); }
+  .hl-pink   { color: var(--accent-pink); }
+  .hl-green  { color: var(--accent-green); }
+  .hl-orange { color: var(--accent-orange); }
+
+  /* ── Spacer ── */
+  .sp-8  { height: 8px; }
+  .sp-16 { height: 16px; }
+  .sp-24 { height: 24px; }
+  .sp-32 { height: 32px; }
+  .flex-grow { flex: 1; }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(10,14,26,.85);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255,255,255,.06);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:active { background: rgba(59,130,246,.2); transform: scale(.95); }
+  .nav-btn:disabled { opacity: .25; }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.15);
+    transition: all .3s;
+    cursor: pointer;
+  }
+  .nav-dot.active {
+    background: var(--accent-blue);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.7rem, 1.2vw, .82rem);
+    color: var(--text-muted);
+  }
+
+  /* Padding bottom for nav bar */
+  .slide { padding-bottom: 90px; }
+
+  /* ── Animations ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .anim {
+    animation: fadeInUp .6s ease forwards;
+    opacity: 0;
+  }
+  .slide.active .anim.d1 { animation-delay: .1s; }
+  .slide.active .anim.d2 { animation-delay: .2s; }
+  .slide.active .anim.d3 { animation-delay: .3s; }
+  .slide.active .anim.d4 { animation-delay: .4s; }
+  .slide.active .anim.d5 { animation-delay: .5s; }
+  .slide.active .anim.d6 { animation-delay: .6s; }
+  .slide.active .anim.d7 { animation-delay: .7s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .slide { padding: 32px 28px 90px; }
+    .card { padding: 18px; }
+    .card-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .metric { padding: 14px 12px; }
+    .bar-label { min-width: 70px; }
+    .flow { gap: 6px; }
+    .flow-node { padding: 10px 14px; min-width: 60px; }
+    .timeline { padding-left: 24px; }
+    .data-table { font-size: clamp(.7rem, 1.3vw, .85rem); }
+    .data-table th, .data-table td { padding: 8px 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 16px 86px; }
+    .card { padding: 14px; border-radius: 12px; margin-bottom: 12px; }
+    .card-grid.cols-2,
+    .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .card-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .metric { padding: 12px 8px; }
+    .metric-value { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+    .bar-row { gap: 8px; }
+    .bar-label { min-width: 55px; font-size: clamp(.65rem, 3vw, .78rem); }
+    .bar-track { height: 18px; }
+    .flow-node { padding: 8px 10px; font-size: clamp(.7rem, 3vw, .85rem); min-width: auto; }
+    .flow-arrow { font-size: .9rem; }
+    .timeline-item { margin-bottom: 16px; }
+    .equation-box { padding: 14px 16px; font-size: clamp(.72rem, 3.5vw, .95rem); }
+    .nav { padding: 10px 14px; }
+    .nav-btn { width: 48px; height: 48px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+    h1.hero { margin-bottom: 12px; }
+    h2.title { margin-bottom: 14px; }
+    .divider { margin: 14px 0; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 12px 82px; }
+    .card { padding: 12px; border-radius: 10px; }
+    h1.hero { font-size: clamp(1.3rem, 6vw, 1.6rem); }
+    h2.title { font-size: clamp(1.05rem, 5vw, 1.3rem); }
+    .nav-btn { width: 44px; height: 44px; border-radius: 10px; }
+    .metric-value { font-size: clamp(1.3rem, 9vw, 1.8rem); }
+    .bar-label { min-width: 45px; }
+    .timeline { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb o1"></div>
+<div class="bg-orb o2"></div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════ SLIDE 1: Title ═══════════ -->
+<div class="slide active" data-slide="0">
+  <div class="flex-grow" style="display:flex;flex-direction:column;justify-content:center;">
+    <div class="anim d1">
+      <span class="badge blue">arXiv 2604.08510</span>
+      <span class="badge purple">2026년 4월</span>
+    </div>
+    <div class="sp-16"></div>
+    <h1 class="hero anim d2">언어 모델은 무엇을,<br>언제 배우는가?</h1>
+    <h3 class="subtitle anim d3" style="background:var(--gradient-3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">암묵적 교육과정 가설</h3>
+    <div class="sp-16"></div>
+    <p class="body anim d4" style="max-width:600px;">
+      사전학습 과정에서 능력이 <strong style="color:var(--text-primary)">구성적이고 예측 가능한 순서</strong>로 출현한다는 것을 밝혀낸 연구
+    </p>
+    <div class="sp-24"></div>
+    <div class="anim d5" style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span class="badge cyan">Emmy Liu</span>
+      <span class="badge cyan">Kaiser Sun</span>
+      <span class="badge cyan">Millicent Li</span>
+      <span class="badge cyan">Isabelle Lee</span>
+      <span class="badge cyan">Lindia Tjuatja</span>
+      <span class="badge cyan">Jen-tse Huang</span>
+      <span class="badge cyan">Graham Neubig</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 2: Problem / Motivation ═══════════ -->
+<div class="slide" data-slide="1">
+  <div class="slide-number anim d1">02 — 연구 동기</div>
+  <h2 class="title anim d2">스케일링 법칙이<br>알려주지 <span class="hl-pink">않는</span> 것</h2>
+
+  <div class="card glow-blue anim d3">
+    <div class="card-title">기존 접근: 검증 손실(Validation Loss)</div>
+    <div class="card-desc">
+      스케일링 법칙은 추가 연산량에 따른 <strong style="color:var(--text-primary)">전반적 성능 향상</strong>을 알려주지만,<br>
+      <em>어떤 능력</em>이 <em>언제</em> 습득되는지는 설명하지 못합니다.
+    </div>
+  </div>
+
+  <div class="card-grid cols-2 anim d4">
+    <div class="card glow-purple">
+      <span class="card-icon">🔍</span>
+      <div class="card-title">알 수 있는 것</div>
+      <div class="card-desc">모델이 <span class="hl-blue">얼마나</span> 좋아지는가 (loss ↓)</div>
+    </div>
+    <div class="card glow-pink">
+      <span class="card-icon">❓</span>
+      <div class="card-title">알 수 없는 것</div>
+      <div class="card-desc">모델이 <span class="hl-pink">무엇을</span> 배우고 있는가</div>
+    </div>
+  </div>
+
+  <div class="card glow-green anim d5" style="margin-top:16px;">
+    <div class="card-desc" style="text-align:center;font-size:clamp(.9rem,1.8vw,1.1rem);">
+      "사전학습은 손실 곡선이 드러내는 것보다<br>
+      <strong style="color:var(--accent-green)">훨씬 더 구조적이다</strong>"
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 3: Core Hypothesis ═══════════ -->
+<div class="slide" data-slide="2">
+  <div class="slide-number anim d1">03 — 핵심 가설</div>
+  <h2 class="title anim d2">암묵적 교육과정 가설<br><span class="hl-cyan">Implicit Curriculum Hypothesis</span></h2>
+
+  <div class="card glow-cyan anim d3" style="border-width:2px;">
+    <div class="card-desc" style="font-size:clamp(.95rem,2vw,1.2rem);line-height:1.8;text-align:center;color:var(--text-primary);">
+      사전학습은 <span class="hl-cyan">구성적</span>이고 <span class="hl-blue">예측 가능한</span> 교육과정을 따르며,<br>
+      이 순서는 모델과 데이터 혼합에 걸쳐 <span class="hl-purple">일관적</span>이다.
+    </div>
+  </div>
+
+  <div class="sp-8"></div>
+  <div class="card-grid cols-3 anim d4">
+    <div class="card glow-blue">
+      <div class="card-title" style="color:var(--accent-blue);">H1</div>
+      <div class="card-desc">구성적 과제는 구성요소 과제 <strong style="color:var(--text-primary)">이후에</strong> 출현한다</div>
+    </div>
+    <div class="card glow-purple">
+      <div class="card-title" style="color:var(--accent-purple);">H2</div>
+      <div class="card-desc">출현 순서가 모델 간에 <strong style="color:var(--text-primary)">일관적</strong>이다</div>
+    </div>
+    <div class="card glow-green">
+      <div class="card-title" style="color:var(--accent-green);">H3</div>
+      <div class="card-desc">표현 유사성으로 학습 궤적을 <strong style="color:var(--text-primary)">예측</strong>할 수 있다</div>
+    </div>
+  </div>
+
+  <div class="anim d5" style="margin-top:20px;">
+    <p class="body" style="text-align:center;">
+      3가지 기존 프레임워크를 통합: <span class="badge blue">스케일링 법칙</span> <span class="badge purple">단순성 편향</span> <span class="badge green">구성적 기술 구조</span>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 4: Methodology ═══════════ -->
+<div class="slide" data-slide="3">
+  <div class="slide-number anim d1">04 — 연구 방법론</div>
+  <h2 class="title anim d2">실험 설계</h2>
+
+  <div class="card-grid cols-2 anim d3">
+    <div class="card glow-blue">
+      <span class="card-icon">🧪</span>
+      <div class="card-title">과제 수트</div>
+      <div class="card-desc">
+        <strong style="color:var(--text-primary)">91개 과제</strong><br>
+        기본 과제 53개 + 구성 과제 38개<br><br>
+        문자열 조작, 형태 변환, 번역, 세계 지식, 산술, 논리, 독해
+      </div>
+    </div>
+    <div class="card glow-purple">
+      <span class="card-icon">🤖</span>
+      <div class="card-title">모델 범위</div>
+      <div class="card-desc">
+        <strong style="color:var(--text-primary)">4개 모델 가족, 9개 모델</strong><br><br>
+        OLMo-2 (1B, 7B, 13B)<br>
+        OLMo-3 (7B)<br>
+        LLM360 (Crystal 7B, Amber 7B)<br>
+        Pythia (410M, 1.4B, 12B)
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid cols-2 anim d4">
+    <div class="card glow-cyan">
+      <span class="card-icon">📍</span>
+      <div class="card-title">체크포인트</div>
+      <div class="card-desc">모델당 ~20개 체크포인트<br>첫 1조 토큰 범위<br>~200억 토큰 간격</div>
+    </div>
+    <div class="card glow-green">
+      <span class="card-icon">📏</span>
+      <div class="card-title">출현 측정</div>
+      <div class="card-desc">절대 임계값 (θ=0.80)<br>정확도 초과 첫 체크포인트<br>문맥 내 학습 평가</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 5: Task Suite Detail ═══════════ -->
+<div class="slide" data-slide="4">
+  <div class="slide-number anim d1">05 — 과제 수트</div>
+  <h2 class="title anim d2">91개 과제의 구조</h2>
+
+  <div class="anim d3">
+    <div class="flow">
+      <div class="flow-node" style="border-color:rgba(6,182,212,.4);color:var(--accent-cyan);">기본 과제 A</div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-node" style="border-color:rgba(139,92,246,.4);color:var(--accent-purple);">기본 과제 B</div>
+      <div class="flow-arrow">=</div>
+      <div class="flow-node" style="border-color:rgba(236,72,153,.4);color:var(--accent-pink);">구성 과제 AB</div>
+    </div>
+  </div>
+
+  <div class="anim d4" style="overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>카테고리</th>
+          <th>기본 과제 예시</th>
+          <th>구성 과제 예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="hl-cyan">문자열 조작</span></td>
+          <td>복사, 뒤집기, 대문자, 소문자</td>
+          <td>gerund + 대문자화</td>
+        </tr>
+        <tr>
+          <td><span class="hl-blue">형태 변환</span></td>
+          <td>단수→복수, 현재→동명사</td>
+          <td>복수 + 소문자화</td>
+        </tr>
+        <tr>
+          <td><span class="hl-purple">번역</span></td>
+          <td>영↔불, 영↔스페인</td>
+          <td>불→영 + 대문자화</td>
+        </tr>
+        <tr>
+          <td><span class="hl-green">세계 지식</span></td>
+          <td>국가→수도, 국가→통화</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><span class="hl-orange">산술/논리</span></td>
+          <td>기본 산술, 부정, 조건문</td>
+          <td>다단계 산술</td>
+        </tr>
+        <tr>
+          <td><span class="hl-pink">독해</span></td>
+          <td>사실 추출, 상호참조</td>
+          <td>FRCT (인지과학)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="equation-box anim d5">
+    예: gerund_upper = gerund(x) → uppercase(gerund(x))
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 6: Emergence Timeline ═══════════ -->
+<div class="slide" data-slide="5">
+  <div class="slide-number anim d1">06 — 출현 순서</div>
+  <h2 class="title anim d2">능력이 출현하는 순서<br><span class="hl-cyan" style="font-size:.7em;">학습 토큰 수 기준</span></h2>
+
+  <div class="timeline anim d3">
+    <div class="timeline-item">
+      <div class="timeline-time">~50B 토큰</div>
+      <div class="timeline-label">복사 (Copying) — 가장 먼저 출현하는 보편적 능력</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">~100-150B 토큰</div>
+      <div class="timeline-label">문자열 조작 (토큰 뒤집기, 대소문자 변환)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">~150-300B 토큰</div>
+      <div class="timeline-label">형태 변환 (단수→복수, 현재→동명사)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">~200-400B 토큰</div>
+      <div class="timeline-label">사실 추출, 상호참조, 번역 (영↔불, 영↔스)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">~300-500B 토큰</div>
+      <div class="timeline-label">세계 지식 (국가→수도), 기본 논리 (AND, OR, 조건문)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">~500-800B 토큰</div>
+      <div class="timeline-label">다단계 산술, 복합 추론 — 가장 늦게 출현</div>
+    </div>
+  </div>
+
+  <div class="card glow-blue anim d4" style="margin-top:16px;">
+    <div class="card-desc" style="text-align:center;">
+      단순한 기능 → 복합 기능 순서로 출현 | <strong style="color:var(--accent-blue)">단순성 편향(Simplicity Bias)</strong> 확인
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 7: H1 Results ═══════════ -->
+<div class="slide" data-slide="6">
+  <div class="slide-number anim d1">07 — 가설 H1 검증</div>
+  <h2 class="title anim d2">구성적 순서의 검증</h2>
+  <h3 class="subtitle anim d3">"구성 과제는 구성요소 이후에 출현하는가?"</h3>
+
+  <div class="equation-box anim d3">
+    ∀τ ∈ P(c) : t*<sub>τ</sub>(m) ≤ t*<sub>c</sub>(m)
+  </div>
+
+  <div class="card-grid cols-3 anim d4">
+    <div class="card glow-green">
+      <div class="metric">
+        <div class="metric-value hl-green">54</div>
+        <div class="metric-label">정상 순서<br>(76건 중)</div>
+      </div>
+    </div>
+    <div class="card glow-orange">
+      <div class="metric">
+        <div class="metric-value hl-orange">19</div>
+        <div class="metric-label">약한 역전</div>
+      </div>
+    </div>
+    <div class="card glow-pink">
+      <div class="metric">
+        <div class="metric-value hl-pink">3</div>
+        <div class="metric-label">강한 역전</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card glow-purple anim d5">
+    <div class="card-desc" style="text-align:center;">
+      3건의 강한 역전은 <strong style="color:var(--accent-purple)">모두 "first_letter" 과제</strong> 관련<br>
+      → 이 과제가 진정한 기본 단위가 아닐 가능성 시사
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 8: H2 Results ═══════════ -->
+<div class="slide" data-slide="7">
+  <div class="slide-number anim d1">08 — 가설 H2 검증</div>
+  <h2 class="title anim d2">모델 간 출현 순서의 <span class="hl-blue">일관성</span></h2>
+
+  <div class="card-grid cols-2 anim d3">
+    <div class="card glow-blue">
+      <div class="metric">
+        <div class="metric-value" style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ρ = 0.81</div>
+        <div class="metric-label">45개 모델 쌍 평균<br>스피어만 순위 상관계수</div>
+      </div>
+    </div>
+    <div class="card glow-green">
+      <div class="metric">
+        <div class="metric-value hl-green">p &lt; 10⁻⁷</div>
+        <div class="metric-label">모든 상관계수<br>통계적으로 유의</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anim d4">
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">OLMo-2<br><span style="font-size:.75em;color:var(--text-muted);">(가족 내)</span></div>
+        <div class="bar-track"><div class="bar-fill" style="background:var(--gradient-2);" data-width="93%"></div></div>
+        <div class="bar-val">0.72–0.93</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Pythia<br><span style="font-size:.75em;color:var(--text-muted);">(가족 내)</span></div>
+        <div class="bar-track"><div class="bar-fill" style="background:var(--gradient-3);" data-width="91%"></div></div>
+        <div class="bar-val">0.81–0.91</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">LLM360<br>vs OLMo-2</div>
+        <div class="bar-track"><div class="bar-fill" style="background:var(--gradient-4);" data-width="93%"></div></div>
+        <div class="bar-val">0.82–0.93</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Amber<br>vs Crystal</div>
+        <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(135deg,#f59e0b,#ef4444);" data-width="90%"></div></div>
+        <div class="bar-val">ρ = 0.90</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card glow-orange anim d5" style="margin-top:12px;">
+    <div class="card-desc" style="text-align:center;">
+      <strong style="color:var(--accent-orange)">Amber vs Crystal (ρ=0.90)</strong> — 서로 다른 데이터 혼합(코드 vs 자연어)에서도 순서 유지!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 9: Threshold ═══════════ -->
+<div class="slide" data-slide="8">
+  <div class="slide-number anim d1">09 — 임계값 분석</div>
+  <h2 class="title anim d2">절대 vs 상대 임계값</h2>
+
+  <div class="card-grid cols-2 anim d3">
+    <div class="card glow-green" style="border-width:2px;">
+      <div class="card-title" style="color:var(--accent-green);">절대 임계값 (Absolute)</div>
+      <div class="sp-8"></div>
+      <div class="card-desc">고정 정확도 기준 (θ=0.80) 초과 시점</div>
+      <div class="sp-16"></div>
+      <div class="metric">
+        <div class="metric-value hl-green">ρ = 0.86</div>
+        <div class="metric-label">평균 상관계수</div>
+      </div>
+      <div class="sp-8"></div>
+      <div class="card-desc" style="text-align:center;color:var(--accent-green);">✓ 높은 일관성</div>
+    </div>
+    <div class="card glow-pink">
+      <div class="card-title" style="color:var(--accent-pink);">상대 임계값 (Relative)</div>
+      <div class="sp-8"></div>
+      <div class="card-desc">모델 최대 성능의 비율 (α=0.80)</div>
+      <div class="sp-16"></div>
+      <div class="metric">
+        <div class="metric-value hl-pink">ρ = 0.53</div>
+        <div class="metric-label">평균 상관계수</div>
+      </div>
+      <div class="sp-8"></div>
+      <div class="card-desc" style="text-align:center;color:var(--accent-pink);">✗ 낮은 일관성</div>
+    </div>
+  </div>
+
+  <div class="card glow-blue anim d4" style="margin-top:12px;">
+    <div class="card-desc" style="text-align:center;">
+      절대 임계값이 연산 능력의 <strong style="color:var(--accent-blue)">기능적 가용성(functional availability)</strong>을<br>
+      더 정확히 포착함
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 10: H3 Results ═══════════ -->
+<div class="slide" data-slide="9">
+  <div class="slide-number anim d1">10 — 가설 H3 검증</div>
+  <h2 class="title anim d2">표현 수준의 <span class="hl-purple">예측력</span></h2>
+  <h3 class="subtitle anim d2">함수 벡터(Function Vector)를 이용한 궤적 예측</h3>
+
+  <div class="card glow-purple anim d3">
+    <div class="card-title">방법: Leave-One-Out + 커널 릿지 회귀</div>
+    <div class="card-desc">
+      과제 표현 벡터 간 <span class="hl-purple">코사인 유사도</span>를 RBF 커널로 변환,<br>
+      나머지 과제의 궤적으로부터 제외된 과제의 학습 궤적을 예측
+    </div>
+  </div>
+
+  <div class="card-grid cols-3 anim d4">
+    <div class="card glow-blue">
+      <div class="metric">
+        <div class="metric-value hl-blue">R² .75</div>
+        <div class="metric-label">전체 과제 기반<br>평균 결정계수</div>
+      </div>
+    </div>
+    <div class="card glow-cyan">
+      <div class="metric">
+        <div class="metric-value hl-cyan">R² .68</div>
+        <div class="metric-label">기본 과제만<br>사용시</div>
+      </div>
+    </div>
+    <div class="card glow-green">
+      <div class="metric">
+        <div class="metric-value hl-green">R² .95</div>
+        <div class="metric-label">최고 개별<br>과제 성능</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anim d5" style="overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr><th>과제</th><th>R²</th><th>MAE</th><th>모델</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>fr_eng_upper</td><td><span class="hl-green">0.99</span></td><td>0.017</td><td>OLMo2-7B</td></tr>
+        <tr><td>plural_lower</td><td><span class="hl-blue">0.89</span></td><td>0.028</td><td>OLMo2-7B</td></tr>
+        <tr><td>eng_fr_upper</td><td><span class="hl-orange">0.51</span></td><td>0.068</td><td>OLMo2-7B</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card glow-orange anim d6" style="margin-top:12px;">
+    <div class="card-desc" style="text-align:center;">
+      기본→전체 과제 기반 전환 시 MAE <strong style="color:var(--accent-orange)">+0.135 개선</strong><br>
+      → 구성 과제 궤적이 구성요소 <em>이상의</em> 구조를 공유
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 11: Function Vectors ═══════════ -->
+<div class="slide" data-slide="10">
+  <div class="slide-number anim d1">11 — 함수 벡터 추출</div>
+  <h2 class="title anim d2">모델 내부 표현 추출 방법</h2>
+
+  <div class="card-grid cols-2 anim d3">
+    <div class="card glow-blue">
+      <span class="card-icon">🧠</span>
+      <div class="card-title">헤드 기반 추출</div>
+      <div class="card-desc">
+        <strong style="color:var(--text-primary)">인과적 간접 효과(CIE)</strong> 분석으로 과제 효과가 가장 큰 희소 어텐션 헤드를 식별<br><br>
+        정답 프롬프트에서 출력을 평균화
+      </div>
+    </div>
+    <div class="card glow-purple">
+      <span class="card-icon">📊</span>
+      <div class="card-title">은닉 상태 추출</div>
+      <div class="card-desc">
+        MLP 이후 <strong style="color:var(--text-primary)">은닉 상태(hidden state)</strong>를 마지막 비패딩 토큰 위치에서 추출<br><br>
+        블록 수준에서 정답 예시 평균
+      </div>
+    </div>
+  </div>
+
+  <div class="anim d4">
+    <div class="flow" style="margin-top:24px;">
+      <div class="flow-node" style="border-color:rgba(59,130,246,.4);">프롬프트 입력</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(139,92,246,.4);">어텐션/MLP</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(6,182,212,.4);">함수 벡터</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(16,185,129,.4);">코사인 유사도</div>
+    </div>
+  </div>
+
+  <div class="card glow-cyan anim d5" style="margin-top:16px;">
+    <div class="card-desc" style="text-align:center;">
+      유사한 함수 벡터 표현을 가진 과제들은<br>
+      <strong style="color:var(--accent-cyan)">유사한 학습 궤적</strong>을 보임
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 12: Key Insights ═══════════ -->
+<div class="slide" data-slide="11">
+  <div class="slide-number anim d1">12 — 핵심 발견</div>
+  <h2 class="title anim d2">주요 통찰 요약</h2>
+
+  <div class="card glow-blue anim d3">
+    <span class="card-icon">🔗</span>
+    <div class="card-title">1. 출현 순서의 놀라운 일관성</div>
+    <div class="card-desc">
+      45개 모델 쌍에서 평균 <span class="hl-blue">ρ = 0.81</span> — 모델 크기(410M~13B), 아키텍처, 데이터 혼합과 무관
+    </div>
+  </div>
+
+  <div class="card glow-purple anim d4">
+    <span class="card-icon">🧩</span>
+    <div class="card-title">2. 구성적 구조의 존재</div>
+    <div class="card-desc">
+      구성 과제는 구성요소 이후에 출현 — <span class="hl-purple">76건 중 54건(71%)</span> 정상 순서 확인
+    </div>
+  </div>
+
+  <div class="card glow-green anim d5">
+    <span class="card-icon">🎯</span>
+    <div class="card-title">3. 예측 가능한 궤적</div>
+    <div class="card-desc">
+      함수 벡터로 <span class="hl-green">R² = 0.68–0.84</span>의 정확도로 새로운 과제의 학습 궤적 예측 가능
+    </div>
+  </div>
+
+  <div class="card glow-orange anim d6">
+    <span class="card-icon">📊</span>
+    <div class="card-title">4. 데이터 혼합의 미미한 영향</div>
+    <div class="card-desc">
+      코드 중심(Crystal) vs 자연어 중심(Amber)에서도 <span class="hl-orange">ρ = 0.90</span> — 순서는 데이터보다 구조에 기인
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 13: Limitations ═══════════ -->
+<div class="slide" data-slide="12">
+  <div class="slide-number anim d1">13 — 한계점</div>
+  <h2 class="title anim d2">연구의 <span class="hl-pink">한계</span></h2>
+
+  <div class="card-grid cols-2 anim d3">
+    <div class="card glow-pink">
+      <span class="card-icon">⚠️</span>
+      <div class="card-title">과제 원자성</div>
+      <div class="card-desc">"기본" 과제가 진정한 최소 단위인지 보장 불가 — 해석 가능한 구성 요소일 뿐</div>
+    </div>
+    <div class="card glow-orange">
+      <span class="card-icon">⏱️</span>
+      <div class="card-title">분석 범위</div>
+      <div class="card-desc">첫 1조 토큰까지만 분석 — 후기 특화 지식 습득 미포착</div>
+    </div>
+    <div class="card glow-purple">
+      <span class="card-icon">📐</span>
+      <div class="card-title">임계값 민감도</div>
+      <div class="card-desc">절대 임계값에서만 일관성 확인, 상대 임계값은 모델별 최대 성능 의존</div>
+    </div>
+    <div class="card glow-blue">
+      <span class="card-icon">🔄</span>
+      <div class="card-title">평가 방식</div>
+      <div class="card-desc">문맥 내 학습(ICL) + 정확 일치만 사용 — 다른 평가 패러다임 미검증</div>
+    </div>
+  </div>
+
+  <div class="card glow-cyan anim d4" style="margin-top:8px;">
+    <div class="card-desc" style="text-align:center;">
+      일부 예측에서 낮은 R² (예: eng_fr_upper = 0.51)<br>
+      → 표현 기하학이 모든 궤적 분산을 포착하지는 못함
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 14: Applications ═══════════ -->
+<div class="slide" data-slide="13">
+  <div class="slide-number anim d1">14 — 실용적 응용</div>
+  <h2 class="title anim d2">실무 적용 가능성</h2>
+
+  <div class="card glow-blue anim d3" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="font-size:2.5rem;flex-shrink:0;">🔬</div>
+    <div>
+      <div class="card-title" style="font-size:clamp(1rem,2vw,1.2rem);">사전학습 모니터링</div>
+      <div class="card-desc">과제 수트를 <strong style="color:var(--text-primary)">조기 진단 도구</strong>로 활용<br>모델이 예정된 일정에 따라 능력을 발전시키는지 확인</div>
+    </div>
+  </div>
+
+  <div class="card glow-green anim d4" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="font-size:2.5rem;flex-shrink:0;">📦</div>
+    <div>
+      <div class="card-title" style="font-size:clamp(1rem,2vw,1.2rem);">데이터 혼합 최적화</div>
+      <div class="card-desc">과제 간 의존성 이해를 바탕으로<br><strong style="color:var(--text-primary)">전략적 데이터 구성</strong> 결정에 활용</div>
+    </div>
+  </div>
+
+  <div class="card glow-purple anim d5" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="font-size:2.5rem;flex-shrink:0;">🏗️</div>
+    <div>
+      <div class="card-title" style="font-size:clamp(1rem,2vw,1.2rem);">모델 개발 가이드</div>
+      <div class="card-desc">기술 출현의 구조적 이해를 통해<br><strong style="color:var(--text-primary)">아키텍처 및 학습 수정</strong> 방향 제시</div>
+    </div>
+  </div>
+
+  <div class="card glow-cyan anim d6" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="font-size:2.5rem;flex-shrink:0;">📈</div>
+    <div>
+      <div class="card-title" style="font-size:clamp(1rem,2vw,1.2rem);">연산 자원 절약</div>
+      <div class="card-desc">특정 능력의 출현 시점 예측으로<br><strong style="color:var(--text-primary)">불필요한 학습 연장 방지</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 15: Conclusion ═══════════ -->
+<div class="slide" data-slide="14">
+  <div class="slide-number anim d1">15 — 결론</div>
+
+  <div class="flex-grow" style="display:flex;flex-direction:column;justify-content:center;">
+    <h2 class="title anim d2" style="text-align:center;">
+      사전학습은 <span class="hl-cyan">체계적</span>이다
+    </h2>
+
+    <div class="card glow-cyan anim d3" style="border-width:2px;text-align:center;padding:32px 24px;">
+      <div style="font-size:clamp(1rem,2.2vw,1.3rem);line-height:1.9;color:var(--text-primary);">
+        "기술은 <span class="hl-cyan">구성적 순서</span>로 출현하며,<br>
+        이 순서는 모델 전반에 걸쳐 <span class="hl-blue">일관적</span>이다."
+      </div>
+    </div>
+
+    <div class="sp-24"></div>
+
+    <div class="card-grid cols-3 anim d4">
+      <div class="card" style="text-align:center;">
+        <div class="metric-value" style="font-size:clamp(1.2rem,3vw,1.8rem);background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ρ = 0.81</div>
+        <div class="metric-label">모델 간 일관성</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="metric-value" style="font-size:clamp(1.2rem,3vw,1.8rem);background:var(--gradient-3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">71%</div>
+        <div class="metric-label">구성적 순서 준수</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="metric-value" style="font-size:clamp(1.2rem,3vw,1.8rem);background:var(--gradient-4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">R² .84</div>
+        <div class="metric-label">궤적 예측 최고</div>
+      </div>
+    </div>
+
+    <div class="sp-24"></div>
+    <div class="anim d5" style="text-align:center;">
+      <span class="badge blue">코드</span>
+      <span class="mono" style="color:var(--text-muted);"> github.com/KaiserWhoLearns/ElementalTask</span>
+    </div>
+    <div class="sp-8"></div>
+    <div class="anim d6" style="text-align:center;">
+      <span class="badge purple">논문</span>
+      <span class="mono" style="color:var(--text-muted);"> arXiv:2604.08510</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- ── Navigation ── -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">◀</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <div class="nav-progress" id="dots"></div>
+    <div class="nav-counter" id="counter">1 / 15</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">▶</button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let cur = 0;
+
+  // Build dots
+  const dotsEl = document.getElementById('dots');
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = 'nav-dot' + (i===0?' active':'');
+    d.addEventListener('click',()=>go(i));
+    dotsEl.appendChild(d);
+  }
+
+  const counterEl = document.getElementById('counter');
+  const prevBtn   = document.getElementById('prevBtn');
+  const nextBtn   = document.getElementById('nextBtn');
+
+  function go(n){
+    if(n<0||n>=total) return;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(n>cur?'prev':'');
+    setTimeout(()=>slides[cur===n?cur:cur].classList.remove('prev'),500);
+
+    const old = cur;
+    cur = n;
+    slides[cur].classList.remove('prev');
+    slides[cur].classList.add('active');
+    slides[cur].scrollTop = 0;
+
+    // Remove prev from old after transition
+    setTimeout(()=>{slides[old].classList.remove('prev');},500);
+
+    // Dots
+    dotsEl.querySelectorAll('.nav-dot').forEach((d,i)=>{
+      d.classList.toggle('active',i===cur);
+    });
+    counterEl.textContent = (cur+1)+' / '+total;
+    prevBtn.disabled = cur===0;
+    nextBtn.disabled = cur===total-1;
+
+    // Animate bars
+    animateBars();
+  }
+
+  prevBtn.addEventListener('click',()=>go(cur-1));
+  nextBtn.addEventListener('click',()=>go(cur+1));
+
+  // Keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ') go(cur+1);
+    if(e.key==='ArrowLeft') go(cur-1);
+  });
+
+  // Swipe
+  let tx=0,ty=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    const dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){
+      dx<0?go(cur+1):go(cur-1);
+    }
+  },{passive:true});
+
+  // Animate bar fills on the active slide
+  function animateBars(){
+    const active = slides[cur];
+    active.querySelectorAll('.bar-fill').forEach(b=>{
+      const w = b.getAttribute('data-width');
+      if(w){ b.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>{b.style.width=w;})); }
+    });
+  }
+
+  // Init
+  prevBtn.disabled = true;
+  animateBars();
+})();
+</script>
+</body>
+</html>
