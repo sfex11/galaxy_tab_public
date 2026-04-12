@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>멀티에이전트 안전 진단 대시보드 - OpenClaw Wiki</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1a1a2e; background: #0f0f1a; color: #e0e0e0; }
+a { color: #667eea; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
+header h1 { font-size: 2.2em; margin-bottom: 8px; }
+header p { font-size: 1.1em; opacity: 0.9; }
+nav { background: #1a1a2e; padding: 15px; margin: 20px 0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+nav a { color: #667eea; padding: 8px 16px; border-radius: 8px; font-weight: 500; transition: background 0.2s; }
+nav a:hover { background: #f0f2ff; text-decoration: none; }
+
+.section { background: #1a1a2e; padding: 30px; margin: 20px 0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.section h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.4em; }
+.section h3 { color: #999; margin: 15px 0 8px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Health Score Cards */
+.health-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.health-card { background: #252540; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #333; }
+.health-card .score { font-size: 3em; font-weight: 800; margin: 10px 0; }
+.health-card .label { color: #999; font-size: 0.9em; }
+.health-card .detail { color: #666; font-size: 0.8em; margin-top: 5px; }
+.score-good { color: #4ade80; }
+.score-warn { color: #fbbf24; }
+.score-danger { color: #f87171; }
+.score-neutral { color: #667eea; }
+
+/* Bar charts */
+.bar-chart { margin: 10px 0; }
+.bar-row { display: flex; align-items: center; margin: 8px 0; gap: 10px; }
+.bar-label { width: 180px; font-size: 0.85em; text-align: right; flex-shrink: 0; color: #ccc; }
+.bar-track { flex: 1; height: 28px; background: #252540; border-radius: 6px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 6px; transition: width 1s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.75em; font-weight: 600; color: white; }
+.bar-fill.blue { background: linear-gradient(90deg, #667eea, #764ba2); }
+.bar-fill.red { background: linear-gradient(90deg, #f87171, #dc2626); }
+.bar-fill.green { background: linear-gradient(90deg, #4ade80, #16a34a); }
+.bar-fill.yellow { background: linear-gradient(90deg, #fbbf24, #d97706); }
+
+/* Trust Graph */
+.graph-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; }
+.graph-node { background: #252540; border: 2px solid #667eea; border-radius: 10px; padding: 12px 18px; text-align: center; font-size: 0.85em; position: relative; }
+.graph-node .node-name { font-weight: 700; color: #667eea; }
+.graph-node .node-count { color: #999; font-size: 0.8em; }
+.graph-node.hub { border-color: #f87171; }
+.graph-node.hub .node-name { color: #f87171; }
+
+.edge-list { margin: 15px 0; }
+.edge-item { display: flex; align-items: center; padding: 6px 0; border-bottom: 1px solid #252540; font-size: 0.85em; }
+.edge-item .edge-weight { width: 50px; font-weight: 700; color: #667eea; text-align: right; margin-right: 10px; }
+.edge-item .edge-weight.high { color: #f87171; }
+.edge-item .edge-weight.medium { color: #fbbf24; }
+.edge-item .edge-weight.low { color: #4ade80; }
+
+/* Gap Analysis */
+.gap-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.gap-table th, .gap-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #252540; font-size: 0.85em; }
+.gap-table th { background: #252540; color: #667eea; font-weight: 600; text-transform: uppercase; font-size: 0.75em; letter-spacing: 1px; }
+.gap-table .priority { display: inline-block; padding: 2px 10px; border-radius: 10px; font-weight: 600; font-size: 0.8em; }
+.gap-table .priority.high { background: #3b1111; color: #f87171; }
+.gap-table .priority.medium { background: #3b2e11; color: #fbbf24; }
+.gap-table .priority.low { background: #113b22; color: #4ade80; }
+
+/* Insight box */
+.insight { background: #252540; border-left: 4px solid #667eea; padding: 15px 20px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+.insight strong { color: #667eea; }
+
+/* Footer */
+footer { text-align: center; padding: 20px; color: #666; margin-top: 40px; font-size: 0.9em; }
+
+@media (max-width: 768px) {
+  .health-grid { grid-template-columns: repeat(2, 1fr); }
+  .bar-label { width: 120px; font-size: 0.75em; }
+  header h1 { font-size: 1.6em; }
+}
+</style></head>
+<body>
+
+<header>
+<h1>🛡️ 멀티에이전트 안전 진단 대시보드</h1>
+<p>Wiki 287편 소스 기반 · 2026-04-12 분석</p>
+</header>
+
+<div class="container">
+
+<nav>
+<a href="../index.html">🏠 홈</a>
+<a href="../sources.html">📚 논문</a>
+<a href="../daily.html">📝 일일요약</a>
+<a href="../slides.html">🎨 슬라이드</a>
+<a href="../research.html">🔬 연구</a>
+<a href="../blog.html">🧠 Wiki 분석</a>
+<a href="../reports.html">📊 보고서</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" target="_blank">GitHub</a>
+</nav>
+
+<!-- Health Scores -->
+<div class="section">
+<h2>📊 생태계 건강도 지표</h2>
+<div class="health-grid">
+  <div class="health-card">
+    <div class="label">집단 신뢰 지수 (CTI)</div>
+    <div class="score score-warn">0.53</div>
+    <div class="detail">에이전트 간 신뢰 기반 53편 / 287편</div>
+  </div>
+  <div class="health-card">
+    <div class="label">취약점 커버리지</div>
+    <div class="score score-danger">0.18</div>
+    <div class="detail">53편 신뢰/검증 vs 287편 전체</div>
+  </div>
+  <div class="health-card">
+    <div class="label">거버넌스 성숙도</div>
+    <div class="score score-warn">0.10</div>
+    <div class="detail">30편 / 287편 거버넌스 다룸</div>
+  </div>
+  <div class="health-card">
+    <div class="label">복원력 지수</div>
+    <div class="score score-neutral">0.36</div>
+    <div class="detail">자가복원 패턴 103편 / 287편</div>
+  </div>
+  <div class="health-card">
+    <div class="label">취약점 표면 (VS)</div>
+    <div class="score score-danger">HIGH</div>
+    <div class="detail">N² 성장 · 7가지 공격 벡터 활성</div>
+  </div>
+  <div class="health-card">
+    <div class="label">창발 위험도</div>
+    <div class="score score-warn">MED</div>
+    <div class="detail">72편 MA 시스템 중 편향 탐지 46편</div>
+  </div>
+</div>
+
+<div class="insight">
+<strong>⚠️ 핵심 발견:</strong> 287편 중 <strong>신뢰/검증</strong>을 다루는 논문은 53편(18%)에 불과합니다. 반면 <strong>취약점</strong>이 언급된 논문은 150편(52%)으로, 문제 인식과 해결책 사이에 큰 갭이 존재합니다.
+</div>
+</div>
+
+<!-- Trust Graph -->
+<div class="section">
+<h2>🔗 엔티티 신뢰 그래프</h2>
+<h3>노드 (엔티티)</h3>
+<div class="graph-container">
+  <div class="graph-node hub"><div class="node-name">llm-agent</div><div class="node-count">92편</div></div>
+  <div class="graph-node hub"><div class="node-name">llm</div><div class="node-count">69편</div></div>
+  <div class="graph-node"><div class="node-name">transformer</div><div class="node-count">25편</div></div>
+  <div class="graph-node"><div class="node-name">vlm</div><div class="node-count">22편</div></div>
+  <div class="graph-node"><div class="node-name">mllm</div><div class="node-count">17편</div></div>
+  <div class="graph-node"><div class="node-name">multi-agent-system</div><div class="node-count">17편</div></div>
+</div>
+
+<h3>엣지 (동시 언급 강도)</h3>
+<div class="edge-list">
+  <div class="edge-item"><span class="edge-weight high">91</span> llm ↔ llm-agent</div>
+  <div class="edge-item"><span class="edge-weight high">18</span> llm ↔ mllm</div>
+  <div class="edge-item"><span class="edge-weight medium">16</span> llm ↔ vlm</div>
+  <div class="edge-item"><span class="edge-weight medium">14</span> llm ↔ multi-agent-system</div>
+  <div class="edge-item"><span class="edge-weight medium">13</span> llm-agent ↔ multi-agent-system</div>
+  <div class="edge-item"><span class="edge-weight medium">13</span> mllm ↔ vlm</div>
+  <div class="edge-item"><span class="edge-weight low">9</span> llm ↔ transformer</div>
+  <div class="edge-item"><span class="edge-weight low">4</span> llm-agent ↔ transformer</div>
+  <div class="edge-item"><span class="edge-weight low">3</span> llm-agent ↔ vlm</div>
+  <div class="edge-item"><span class="edge-weight low">3</span> llm-agent ↔ mllm</div>
+</div>
+
+<div class="insight">
+<strong>🔗 그래프 분석:</strong> llm-agent가 중심 허브(hub)로, llm과의 연결이 압도적으로 강합니다(91). 반면 multi-agent-system은 llm(14)과 llm-agent(13)와만 연결되어 <strong>상대적으로 고립된 클러스터</strong>를 형성합니다. 멀티에이전트 안전 연구가 메인스트림 LLM 연구와 분리되어 진행되는 경향이 있습니다.
+</div>
+</div>
+
+<!-- Vulnerability Surface -->
+<div class="section">
+<h2>🔴 취약점 표면 분석</h2>
+<h3>공격 벡터별 노출 소스 수</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">추론 불신뢰</span>
+    <div class="bar-track"><div class="bar-fill red" style="width:100%">150편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">권한 남용</span>
+    <div class="bar-track"><div class="bar-fill red" style="width:60.7%">91편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">사회적 동조/편향</span>
+    <div class="bar-track"><div class="bar-fill yellow" style="width:30.7%">46편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">거버넌스 부재</span>
+    <div class="bar-track"><div class="bar-fill yellow" style="width:20%">30편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">기만/조작</span>
+    <div class="bar-track"><div class="bar-fill yellow" style="width:13.3%">20편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">메모리/상태</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:5%">75편 (클러스터)</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">귀인 왜곡</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:2%">3편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">메모리 오염</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:2%">3편</div></div>
+  </div>
+</div>
+</div>
+
+<!-- Solution Coverage -->
+<div class="section">
+<h2>🟢 해결책 커버리지</h2>
+<h3>해결책 패턴별 적용 소스 수</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">안전 궤적 검사</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:100%">103편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">역할 분화</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:41.7%">43편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">공유 상태</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:21.4%">22편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">거버넌스</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:12.6%">13편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">자기 개선</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:4.9%">5편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">공진화</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:3.9%">4편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">교차 검증</span>
+    <div class="bar-track"><div class="bar-fill green" style="width:1.9%">2편</div></div>
+  </div>
+</div>
+
+<div class="insight">
+<strong>⚠️ 커버리지 갭:</strong> "추론 불신뢰"(150편)는 가장 큰 취약점이지만, 대응 수단인 "안전 궤적 검사"(103편)가 부분적으로만 대응합니다. 반면 "사회적 동조/편향"(46편)에 대한 핵심 대응인 "교차 검증"은 <strong>단 2편</strong>만 다루고 있어 가장 큰 해결책 갭입니다.
+</div>
+</div>
+
+<!-- Concept Clusters -->
+<div class="section">
+<h2>📁 개념 클러스터 분포</h2>
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">에이전트/협업</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:100%">191편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">학습/최적화</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:83.2%">159편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">추론/계획</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:74.3%">142편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">평가/벤치마크</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:72.3%">138편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">안전/거버넌스</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:64.9%">124편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">도구/코드</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:63.4%">121편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">비전/멀티모달</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:45%">86편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">메모리/상태</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:39.3%">75편</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">신뢰/검증</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width:27.7%">53편</div></div>
+  </div>
+</div>
+</div>
+
+<!-- Research Gap Table -->
+<div class="section">
+<h2>🎯 연구 우선순위 매트릭스</h2>
+<table class="gap-table">
+<thead>
+<tr><th>우선순위</th><th>연구 갭</th><th>취약점 노출</th><th>해결책 커버리지</th><th>갭 심각도</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="priority high">P0</span></td>
+  <td>에이전트 간 신뢰 측정 메트릭</td>
+  <td>53편 언급</td>
+  <td>2편 (교차검증) = 3.8%</td>
+  <td style="color:#f87171;font-weight:700">매우 높음</td>
+</tr>
+<tr>
+  <td><span class="priority high">P0</span></td>
+  <td>사회적 동조 대응 프레임워크</td>
+  <td>46편 언급</td>
+  <td>2편 (교차검증) = 4.3%</td>
+  <td style="color:#f87171;font-weight:700">매우 높음</td>
+</tr>
+<tr>
+  <td><span class="priority high">P1</span></td>
+  <td>확장성-안전성 트레이드오프 모델</td>
+  <td>91편 (권한) + 46편 (편향)</td>
+  <td>5편 (자기개선) = 5.5%</td>
+  <td style="color:#f87171;font-weight:700">높음</td>
+</tr>
+<tr>
+  <td><span class="priority medium">P1</span></td>
+  <td>창발적 행동 예측 프레임워크</td>
+  <td>72편 MA 시스템</td>
+  <td>4편 (공진화) = 5.6%</td>
+  <td style="color:#fbbf24;font-weight:700">높음</td>
+</tr>
+<tr>
+  <td><span class="priority medium">P2</span></td>
+  <td>적대적 환경 합의 프로토콜</td>
+  <td>20편 (기만) + 46편 (편향)</td>
+  <td>2편 (교차검증) = 3.1%</td>
+  <td style="color:#fbbf24;font-weight:700">높음</td>
+</tr>
+<tr>
+  <td><span class="priority low">P2</span></td>
+  <td>생태계 모니터링 대시보드</td>
+  <td>30편 (거버넌스)</td>
+  <td>13편 (거버넌스) = 43%</td>
+  <td style="color:#4ade80;font-weight:700">보통</td>
+</tr>
+<tr>
+  <td><span class="priority low">P3</span></td>
+  <td>메모리 오염 방지</td>
+  <td>3편</td>
+  <td>22편 (공유상태) = 733%</td>
+  <td style="color:#4ade80;font-weight:700">낮음</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- Proposed Framework -->
+<div class="section">
+<h2>🚀 제안: MASA 프레임워크</h2>
+<h3>Multi-Agent Safety Assessment</h3>
+
+<div class="insight">
+<strong>📌 제안:</strong> 위 갭 분석을 기반으로, 멀티에이전트 생태계의 안전성을 실시간 진단하는 <strong>MASA 프레임워크</strong>를 제안합니다.
+</div>
+
+<table class="gap-table">
+<thead><tr><th>구성요소</th><th>입력</th><th>출력</th><th>우선순위</th></tr></thead>
+<tbody>
+<tr><td>신뢰 그래프</td><td>에이전트 궤적 + 교차검증 결과</td><td>실시간 가중치 그래프</td><td><span class="priority high">P0</span></td></tr>
+<tr><td>취약점 표면 계산기</td><td>엔티티 수 N × 연결 M</td><td>예상 공격 표면 (O(N²))</td><td><span class="priority high">P0</span></td></tr>
+<tr><td>편향 탐지기</td><td>에이전트 출력 유사도</td><td>동조/위장 경고</td><td><span class="priority high">P0</span></td></tr>
+<tr><td>창발 예측기</td><td>역할 구성 + 상호작용 패턴</td><td>창발 위험 확률</td><td><span class="priority medium">P1</span></td></tr>
+<tr><td>건강도 대시보드</td><td>위 4개 구성요소 출력</td><td>CTI, VS, ER, RS 지표</td><td><span class="priority medium">P1</span></td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<footer><p>🤖 티씨오 · Wiki 287편 기반 자동 분석 · 2026-04-12</p></footer>
+</body></html>
