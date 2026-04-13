@@ -133,3 +133,18 @@
 - 2026-04-12-figures-as-interfaces-toward-llm-native-artifacts-.md
 - 2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md
 - 2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md
+
+## [2026-04-13 02:16] llm-ingest | 13편 분석, 엔티티 15개, 개념 277개
+- 2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md
+- 2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent.md
+- 2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md
+- 2026-04-13-what-drives-representation-steering-a-mechanistic-.md
+- 2026-04-13-clawbench-can-ai-agents-complete-everyday-online-t.md
+- 2026-04-13-cram-less-to-fit-more-training-data-pruning-improv.md
+- 2026-04-13-what-do-language-models-learn-and-when-the-implici.md
+- 2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera.md
+- 2026-04-13-visually-grounded-humanoid-agents.md
+- 2026-04-13-density-driven-optimal-control-convergence-guarant.md
+- 2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md
+- 2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-.md
+- 2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md

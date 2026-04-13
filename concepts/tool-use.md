@@ -116,3 +116,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)
 
 - [[sources/2026-04-12-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-12)
+
+- [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-13)
+
+- [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-13)

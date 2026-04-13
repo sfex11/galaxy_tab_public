@@ -32,3 +32,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-maestro-adapting-guis-and-guiding-navigation-with-.md|MAESTRO: Adapting GUIs and Guiding Navigation with User Pref]] (2026-04-09)
 
 - [[sources/2026-04-12-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-12)
+
+- [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-13)

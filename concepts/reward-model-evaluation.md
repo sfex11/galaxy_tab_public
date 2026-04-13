@@ -12,3 +12,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-personalized-rewardbench-evaluating-reward-models-.md|Personalized RewardBench: Evaluating Reward Models with Huma]]
 
 - [[sources/2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-12)
+
+- [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-13)

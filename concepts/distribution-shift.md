@@ -22,3 +22,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-12)
 
 - [[sources/2026-04-12-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-12)
+
+- [[sources/2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-13)

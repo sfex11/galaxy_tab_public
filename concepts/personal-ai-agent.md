@@ -14,3 +14,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-hippocamp-benchmarking-contextual-agents-on-person.md|HippoCamp: Benchmarking Contextual Agents on Personal Comput]] (2026-04-03)
 
 - [[sources/2026-04-12-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-12)
+
+- [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-13)

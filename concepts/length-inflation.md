@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]]
+
+- [[sources/2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-13)

@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>밀도 기반 최적 제어: 확률적 LTI 다중 에이전트 시스템의 수렴 보장</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg-primary: #0a0e27;
+  --bg-secondary: #111640;
+  --bg-card: rgba(25, 32, 72, 0.7);
+  --accent-1: #00d4ff;
+  --accent-2: #7b61ff;
+  --accent-3: #ff6b9d;
+  --accent-4: #00e5a0;
+  --text-primary: #e8eaf6;
+  --text-secondary: #9fa8da;
+  --text-dim: #5c6bc0;
+  --grad-1: linear-gradient(135deg, #00d4ff, #7b61ff);
+  --grad-2: linear-gradient(135deg, #7b61ff, #ff6b9d);
+  --grad-3: linear-gradient(135deg, #00e5a0, #00d4ff);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slides-container {
+  width: 100%; height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 60px;
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-80px);
+}
+
+.slide-inner {
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Background Effects */
+.bg-grid {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-glow {
+  position: fixed;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
+.bg-glow-1 { background: var(--accent-1); top: -100px; right: -100px; }
+.bg-glow-2 { background: var(--accent-2); bottom: -150px; left: -100px; }
+
+/* Typography */
+h1 {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+p, li {
+  font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.gradient-text {
+  background: var(--grad-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-2 {
+  background: var(--grad-2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-3 {
+  background: var(--grad-3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid rgba(123,97,255,0.15);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 10px 0;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card:hover { border-color: rgba(123,97,255,0.4); }
+
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+/* Equation */
+.eq-block {
+  background: rgba(0,0,0,0.4);
+  border-left: 3px solid var(--accent-1);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 14px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+  color: var(--accent-1);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.eq-block.purple { border-left-color: var(--accent-2); color: var(--accent-2); }
+.eq-block.green { border-left-color: var(--accent-4); color: var(--accent-4); }
+.eq-block.pink { border-left-color: var(--accent-3); color: var(--accent-3); }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+  font-weight: 500;
+  margin: 4px;
+}
+
+.tag-blue { background: rgba(0,212,255,0.15); color: var(--accent-1); border: 1px solid rgba(0,212,255,0.3); }
+.tag-purple { background: rgba(123,97,255,0.15); color: var(--accent-2); border: 1px solid rgba(123,97,255,0.3); }
+.tag-pink { background: rgba(255,107,157,0.15); color: var(--accent-3); border: 1px solid rgba(255,107,157,0.3); }
+.tag-green { background: rgba(0,229,160,0.15); color: var(--accent-4); border: 1px solid rgba(0,229,160,0.3); }
+
+/* List */
+ul.styled { list-style: none; padding: 0; }
+ul.styled li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+}
+ul.styled li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 16px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-1);
+}
+
+ul.styled li:nth-child(2n)::before { background: var(--accent-2); }
+ul.styled li:nth-child(3n)::before { background: var(--accent-4); }
+
+/* Steps */
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.step-num {
+  min-width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.step-num.c1 { background: rgba(0,212,255,0.2); color: var(--accent-1); border: 2px solid var(--accent-1); }
+.step-num.c2 { background: rgba(123,97,255,0.2); color: var(--accent-2); border: 2px solid var(--accent-2); }
+.step-num.c3 { background: rgba(0,229,160,0.2); color: var(--accent-4); border: 2px solid var(--accent-4); }
+
+/* Diagram */
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.flow-box {
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
+}
+
+.flow-arrow {
+  font-size: 1.4rem;
+  color: var(--text-dim);
+}
+
+/* Highlight box */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,97,255,0.1));
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+/* Theorem box */
+.theorem-box {
+  background: linear-gradient(135deg, rgba(123,97,255,0.08), rgba(255,107,157,0.08));
+  border: 1px solid rgba(123,97,255,0.3);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 14px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.theorem-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--grad-2);
+}
+
+.theorem-label {
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-2);
+  margin-bottom: 8px;
+}
+
+/* Navigation */
+.nav-bar {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(10,14,39,0.9);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(123,97,255,0.15);
+  z-index: 100;
+}
+
+.nav-btn {
+  min-width: 48px; min-height: 48px;
+  border: 1px solid rgba(123,97,255,0.3);
+  border-radius: 12px;
+  background: rgba(123,97,255,0.1);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.nav-btn:hover, .nav-btn:active {
+  background: rgba(123,97,255,0.3);
+  border-color: var(--accent-2);
+}
+
+.nav-btn:disabled { opacity: 0.3; }
+
+.progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 16px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(123,97,255,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--grad-1);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  color: var(--text-dim);
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+.slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+.slide.active .anim-3 { animation: fadeInUp 0.5s 0.35s both; }
+.slide.active .anim-4 { animation: fadeInUp 0.5s 0.5s both; }
+.slide.active .anim-5 { animation: fadeInUp 0.5s 0.65s both; }
+
+/* Particle canvas for title */
+.particle-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Agent visualization */
+.agent-viz {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin: 16px 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,212,255,0.15);
+}
+
+.agent-dot {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  box-shadow: 0 0 12px var(--accent-1);
+  animation: float 3s ease-in-out infinite;
+}
+
+.agent-dot:nth-child(2) { background: var(--accent-2); box-shadow: 0 0 12px var(--accent-2); animation-delay: 0.5s; }
+.agent-dot:nth-child(3) { background: var(--accent-4); box-shadow: 0 0 12px var(--accent-4); animation-delay: 1s; }
+
+.density-region {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(255,107,157,0.4);
+  background: rgba(255,107,157,0.05);
+}
+
+/* Title slide specific */
+.title-meta {
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  color: var(--text-dim);
+  margin-top: 12px;
+}
+
+.title-divider {
+  width: 80px;
+  height: 3px;
+  background: var(--grad-1);
+  border-radius: 2px;
+  margin: 20px 0;
+}
+
+/* Convergence graph */
+.conv-graph {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  margin: 16px 0;
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(0,212,255,0.15);
+  overflow: hidden;
+}
+
+.conv-line {
+  position: absolute;
+  bottom: 20px; left: 30px;
+  width: calc(100% - 50px);
+  height: calc(100% - 40px);
+}
+
+/* Comparison table */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.compare-col {
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.compare-col.old {
+  background: rgba(255,107,157,0.08);
+  border: 1px solid rgba(255,107,157,0.2);
+}
+
+.compare-col.new {
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.2);
+}
+
+/* Section label */
+.section-label {
+  font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Responsive: Tablet */
+@media (max-width: 768px) {
+  .slide { padding: 30px 30px 80px; }
+  .card { padding: 18px; }
+  .card-row { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .flow-diagram { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+  .eq-block { padding: 12px 16px; font-size: clamp(0.65rem, 1.4vw, 0.85rem); }
+  .agent-viz { height: 160px; }
+  .conv-graph { height: 150px; }
+  h1 { font-size: clamp(1.4rem, 3.5vw, 2.4rem); }
+  h2 { font-size: clamp(1.2rem, 2.8vw, 1.8rem); }
+}
+
+/* Responsive: Mobile */
+@media (max-width: 480px) {
+  .slide { padding: 20px 20px 80px; }
+  .card { padding: 14px; margin: 6px 0; border-radius: 12px; }
+  .card-row { gap: 10px; }
+  .step { gap: 10px; }
+  .step-num { min-width: 34px; height: 34px; font-size: 0.85rem; }
+  .eq-block { padding: 10px 12px; font-size: clamp(0.6rem, 1.3vw, 0.8rem); }
+  .nav-bar { padding: 10px 16px; }
+  .nav-btn { min-width: 44px; min-height: 44px; }
+  .progress-wrap { margin: 0 10px; }
+  .tag { padding: 3px 10px; font-size: clamp(0.6rem, 1.2vw, 0.75rem); }
+  .title-divider { margin: 14px 0; }
+  .agent-viz { height: 130px; }
+  .conv-graph { height: 120px; }
+  .highlight-box, .theorem-box { padding: 14px; }
+  .bg-glow { width: 300px; height: 300px; }
+}
+
+/* Responsive: Small Mobile */
+@media (max-width: 320px) {
+  .slide { padding: 14px 14px 76px; }
+  .card { padding: 10px; }
+  .eq-block { padding: 8px 10px; }
+  .step-num { min-width: 30px; height: 30px; font-size: 0.75rem; }
+  .flow-box { padding: 8px 12px; min-width: 80px; }
+  .nav-btn { min-width: 44px; min-height: 44px; font-size: 1rem; }
+  h1 { font-size: clamp(1.1rem, 3vw, 1.8rem); }
+  h2 { font-size: clamp(1rem, 2.5vw, 1.4rem); }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="slides-container" id="slidesContainer">
+
+<!-- Slide 1: Title -->
+<div class="slide active" id="slide-0">
+  <canvas class="particle-canvas" id="particleCanvas"></canvas>
+  <div class="slide-inner" style="text-align:center;">
+    <div class="anim-1">
+      <span class="section-label" style="color:var(--accent-1);">arXiv: 2604.08495v1</span>
+    </div>
+    <h1 class="anim-2" style="margin-top:12px;">
+      <span class="gradient-text">밀도 기반 최적 제어</span><br>
+      <span style="font-size:0.65em; font-weight:500; color:var(--text-secondary);">확률적 LTI 다중 에이전트 시스템의 수렴 보장</span>
+    </h1>
+    <div class="title-divider anim-3" style="margin:20px auto;"></div>
+    <p class="anim-3" style="color:var(--text-primary); font-weight:500;">Kooktae Lee</p>
+    <p class="anim-3 title-meta">New Mexico Institute of Mining and Technology</p>
+    <div class="anim-4" style="margin-top:24px;">
+      <span class="tag tag-blue">최적 수송</span>
+      <span class="tag tag-purple">다중 에이전트</span>
+      <span class="tag tag-pink">확률적 제어</span>
+      <span class="tag tag-green">수렴 보장</span>
+    </div>
+    <p class="anim-5 title-meta" style="margin-top:24px;">2026년 4월 | 논문 시각화 슬라이드</p>
+  </div>
+</div>
+
+<!-- Slide 2: Motivation -->
+<div class="slide" id="slide-1">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-2);">01 / 연구 배경</span>
+    <h2 class="anim-1"><span class="gradient-text-2">비균일 지역 커버리지 문제</span></h2>
+    <p class="anim-2" style="margin-bottom:16px;">
+      다중 에이전트가 특정 공간 밀도 분포에 맞게 배치되어야 하는 임무 — 감시, 수색/구조, 환경 모니터링 등에서 핵심적인 과제입니다.
+    </p>
+
+    <div class="card-row anim-3">
+      <div class="card">
+        <h3 style="color:var(--accent-3);">기존 방법의 한계</h3>
+        <ul class="styled">
+          <li>오일러 방정식(PDE) 기반 — 계산 비용 과다</li>
+          <li>가우시안 혼합 모델(GMM) — 매개변수 가정 필요</li>
+          <li>휴리스틱 방법 — 최적성 보장 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent-4);">본 논문의 해결책</h3>
+        <ul class="styled">
+          <li>라그랑주 입자 기반 접근</li>
+          <li>비모수 목표 밀도 지원</li>
+          <li>엄격한 수렴 보장 제공</li>
+          <li>확률적 노이즈 명시적 처리</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="agent-viz anim-4">
+      <div class="density-region" style="width:120px;height:120px;top:20px;left:15%;"></div>
+      <div class="density-region" style="width:90px;height:90px;top:40px;right:20%;"></div>
+      <div class="density-region" style="width:70px;height:70px;bottom:20px;left:45%;"></div>
+      <div class="agent-dot" style="top:50px;left:20%;"></div>
+      <div class="agent-dot" style="top:80px;right:25%;"></div>
+      <div class="agent-dot" style="bottom:40px;left:50%;"></div>
+      <p style="position:absolute;bottom:8px;right:12px;font-size:0.7rem;color:var(--text-dim);">에이전트들이 목표 밀도로 수렴하는 과정</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3: System Model -->
+<div class="slide" id="slide-2">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-1);">02 / 시스템 모델</span>
+    <h2 class="anim-1"><span class="gradient-text">확률적 LTI 동역학</span></h2>
+
+    <div class="card anim-2">
+      <h3 style="color:var(--accent-1);">이산 시간 확률적 시스템</h3>
+      <div class="eq-block">x_i^(k+1) = A_i · x_i^k + B_i · u_i^k + w_i^k,    w_i^k ~ N(0, Σ_w)</div>
+      <div class="eq-block purple">y_i^k = C_i · x_i^k + v_i^k,    v_i^k ~ N(0, Σ_v)</div>
+      <div style="margin-top:12px;">
+        <span class="tag tag-blue">x_i^k ∈ ℝⁿ : 상태</span>
+        <span class="tag tag-purple">u_i^k ∈ ℝᵐ : 제어 입력</span>
+        <span class="tag tag-pink">y_i^k ∈ ℝᵈ : 출력</span>
+      </div>
+    </div>
+
+    <div class="card-row anim-3">
+      <div class="card">
+        <div class="theorem-label">가정 1</div>
+        <p>각 에이전트의 <strong style="color:var(--accent-1);">(A_i, B_i)</strong>는 <strong>완전 가제어</strong>(completely controllable)입니다.</p>
+      </div>
+      <div class="card">
+        <div class="theorem-label">가정 2</div>
+        <p><strong style="color:var(--accent-2);">A_i</strong>는 최소한 <strong>한계 안정</strong>(marginally stable) — 모든 고유값이 닫힌 단위원 내에 존재합니다.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <h3 style="color:var(--accent-4);">출력 상대 차수 (Output Relative Degree)</h3>
+      <p><strong>정의:</strong> C_i · A_i^(r-1) · B_i ≠ 0 을 만족하는 최소 양의 정수 <strong>r</strong>.<br>
+      제어 입력이 출력에 <strong>k+r</strong> 스텝 후 영향을 미칩니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: Optimal Transport -->
+<div class="slide" id="slide-3">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-4);">03 / 이론적 기반</span>
+    <h2 class="anim-1"><span class="gradient-text-3">최적 수송과 와서슈타인 거리</span></h2>
+
+    <div class="card anim-2">
+      <h3 style="color:var(--accent-1);">2-와서슈타인 거리 (Kantorovich 문제)</h3>
+      <div class="eq-block">W₂(ρ, ν) = ( min_{π_ij ≥ 0} ΣΣ π_ij · d(y_i, q_j)² )^(1/2)</div>
+      <p style="margin-top:10px;">제약조건: Σ_j π_ij = α_i, &nbsp; Σ_i π_ij = β_j, &nbsp; ΣΣ π_ij = 1</p>
+    </div>
+
+    <div class="card-row anim-3">
+      <div class="card">
+        <h3 style="color:var(--accent-2);">시간 평균 경험적 분포</h3>
+        <div class="eq-block purple" style="font-size:clamp(0.6rem,1.3vw,0.85rem);">ρ^k := 1/((k+1)·n_a) · Σ_i Σ_t δ_{y_i^t}</div>
+        <p style="margin-top:8px;">에이전트의 과거 출력 위치를 시간에 대해 평균화한 경험적 분포입니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent-4);">목표 분포</h3>
+        <div class="eq-block green" style="font-size:clamp(0.6rem,1.3vw,0.85rem);">ν := 1/N · Σ_j δ_{q_j}</div>
+        <p style="margin-top:8px;">비모수적(non-parametric) 목표 밀도를 이산 샘플 포인트로 표현합니다.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <p style="color:var(--text-primary);"><strong>핵심 목표:</strong> 시간이 지남에 따라 경험적 분포 ρ^k가 목표 분포 ν에 와서슈타인 거리 의미에서 수렴하도록 제어합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: D²OC Formulation -->
+<div class="slide" id="slide-4">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-3);">04 / 핵심 공식화</span>
+    <h2 class="anim-1"><span class="gradient-text-2">D²OC 최적 제어 공식화</span></h2>
+
+    <div class="card anim-2">
+      <h3 style="color:var(--accent-3);">비용 함수</h3>
+      <div class="eq-block pink">min_{U_i} J(U_i) := E[ Σ_{h=r}^{H+r-1} (W_i^{k+h})² ] + ||U_i||²_R</div>
+      <p style="margin-top:10px;">
+        <span class="tag tag-pink">와서슈타인 비용</span> + <span class="tag tag-blue">제어 정규화</span> 최소화
+      </p>
+    </div>
+
+    <div class="theorem-box anim-3">
+      <div class="theorem-label">명제 1 — 이차 재구성</div>
+      <p>와서슈타인 비용이 이차 형태로 변환됩니다:</p>
+      <div class="eq-block purple" style="margin-top:10px;">J = U^T · H_i · U + 2f_i^T · U + const.</div>
+      <p style="margin-top:8px;font-size:clamp(0.75rem,1.4vw,0.9rem);">
+        H_i = (Ω_i·Θ_i)^T·(Ω_i·Θ_i) + R<br>
+        f_i = (Ω_i·Θ_i)^T·Ω_i·(Φ_i·E[x_i^k] − Q̄_i)
+      </p>
+    </div>
+
+    <div class="theorem-box anim-4">
+      <div class="theorem-label">정리 1 — 최적 제어 법칙</div>
+      <p><strong>비제약 해:</strong></p>
+      <div class="eq-block green">U_i^{k|H★} = −H_i⁻¹ · f_i</div>
+      <p style="margin-top:8px;"><strong>구 제약 투영 (따름정리 1):</strong></p>
+      <div class="eq-block" style="font-size:clamp(0.6rem,1.3vw,0.85rem);">u_i^{k+τ,★} = min(1, u_max / ||u_i^{k+τ,uncon}||) · u_i^{k+τ,uncon}</div>
+      <p style="margin-top:8px;color:var(--accent-4);">반복 솔버 없이 닫힌 형태 투영으로 해를 구합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6: Reachability -->
+<div class="slide" id="slide-5">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-1);">05 / 도달가능성 분석</span>
+    <h2 class="anim-1"><span class="gradient-text">도달가능성 기반 목표 선택</span></h2>
+
+    <div class="card anim-2">
+      <h3 style="color:var(--accent-1);">확률적 h-스텝 도달가능 집합</h3>
+      <div class="eq-block" style="font-size:clamp(0.6rem,1.3vw,0.85rem);">R_i^{k+h}(α) := { x ∈ ℝⁿ | ∃ 제어 입력 U ⊆ 𝒰,
+  (x − μ)^T · Σ_{w,h}⁻¹ · (x − μ) ≤ χ²_{n,α} }</div>
+      <p style="margin-top:10px;">신뢰 수준 α에서 에이전트가 h-스텝 내 도달할 수 있는 상태 공간 영역을 정의합니다.</p>
+    </div>
+
+    <div class="card anim-3">
+      <h3 style="color:var(--accent-2);">지역 샘플 선택 전략</h3>
+      <div class="eq-block purple">min_{q_j, π_j} Σ_{j ∈ S_i} π_j · ||A_i^h · μ_i^k − q_j||²</div>
+      <p style="margin-top:10px;">공칭 예측에 가장 가까운 이웃을 순차적으로 선택하고, 샘플 용량 β를 고려하여 질량을 할당합니다.</p>
+    </div>
+
+    <div class="card-row anim-4">
+      <div class="card">
+        <h3 style="color:var(--accent-4);">투영 접근법</h3>
+        <div class="eq-block green" style="font-size:clamp(0.6rem,1.2vw,0.8rem);">q̃ = argmin_{z ∈ C·M} ||z − q̄||²</div>
+        <p style="margin-top:6px;">무게중심이 도달가능 집합 밖이면 가장 가까운 점으로 투영합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent-3);">연성 제약 접근법</h3>
+        <div class="eq-block pink" style="font-size:clamp(0.6rem,1.2vw,0.8rem);">min Σπ_j||q_j − q̄||² + λ||q̄ − q̂||²</div>
+        <p style="margin-top:6px;">λ > 0으로 원하는 무게중심과 실현 가능성 사이의 트레이드오프를 조절합니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: Three-Stage Framework -->
+<div class="slide" id="slide-6">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-2);">06 / 알고리즘 프레임워크</span>
+    <h2 class="anim-1"><span class="gradient-text-2">3단계 분산형 D²OC</span></h2>
+
+    <div class="anim-2">
+      <div class="step">
+        <div class="step-num c1">1</div>
+        <div class="card" style="flex:1;margin:0;">
+          <h3 style="color:var(--accent-1);">도달가능성 기반 MPC</h3>
+          <p>각 에이전트가 근접성과 잔여 가중치 기반으로 샘플 포인트를 선택하고, 지역 와서슈타인 거리를 최소화하는 제어 입력을 계산합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-3">
+      <div class="step">
+        <div class="step-num c2">2</div>
+        <div class="card" style="flex:1;margin:0;">
+          <h3 style="color:var(--accent-2);">가중치 업데이트</h3>
+          <p>지역 와서슈타인 문제를 풀어 샘플 가중치를 갱신합니다. 최근 커버된 위치의 가중치를 감소시켜 에이전트가 새로운 영역을 탐색하도록 유도합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-4">
+      <div class="step">
+        <div class="step-num c3">3</div>
+        <div class="card" style="flex:1;margin:0;">
+          <h3 style="color:var(--accent-4);">가중치 공유 및 합의</h3>
+          <p>통신 범위 내 이웃과 샘플 가중치를 교환합니다. 최소 가중치 합의(min-weight consensus)를 통해 과대평가를 방지합니다.</p>
+          <div class="eq-block green" style="margin-top:8px;font-size:clamp(0.65rem,1.2vw,0.8rem);">β_i,j ← min(β_i,j, β_{이웃,j})</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-diagram anim-5">
+      <div class="flow-box" style="background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.3);color:var(--accent-1);">MPC 계산</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(123,97,255,0.15);border:1px solid rgba(123,97,255,0.3);color:var(--accent-2);">가중치 갱신</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);color:var(--accent-4);">분산 합의</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,107,157,0.12);border:1px solid rgba(255,107,157,0.3);color:var(--accent-3);">반복</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8: Algorithm -->
+<div class="slide" id="slide-7">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-4);">07 / 알고리즘</span>
+    <h2 class="anim-1"><span class="gradient-text-3">분산형 D²OC 알고리즘</span></h2>
+
+    <div class="card anim-2" style="font-family:'JetBrains Mono',monospace; font-size:clamp(0.6rem,1.3vw,0.82rem); line-height:1.8;">
+      <div style="color:var(--accent-4);font-weight:700;margin-bottom:8px;">Algorithm 1: Decentralized D²OC with Reachability-Aware MPC</div>
+      <div style="color:var(--text-dim);">초기화: μ_i⁰, β_i,j⁰ 설정</div>
+      <div style="margin-top:8px;"><span style="color:var(--accent-2);">for</span> k = 0, 1, 2, ... <span style="color:var(--accent-2);">do</span></div>
+      <div style="padding-left:16px;margin-top:4px;">
+        <div style="color:var(--accent-1);">// 단계 1: 도달가능성 기반 MPC</div>
+        <div>&nbsp;&nbsp;<span style="color:var(--accent-2);">for</span> h = r <span style="color:var(--accent-2);">to</span> H+r-1:</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;- 공칭 예측 A_i^h · μ_i^k 계산</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;- 지역 샘플 Q_i^{k+h} 식별</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;- OT로 무게중심 q̄_i^{k+h} 계산</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;- 투영 또는 연성 제약 적용</div>
+        <div>&nbsp;&nbsp;최적 제어 u_i^k 계산 → 적용</div>
+        <div style="margin-top:6px;color:var(--accent-2);">// 단계 2: 가중치 업데이트</div>
+        <div>&nbsp;&nbsp;지역 OT → β_i,j^{k+1} 갱신</div>
+        <div style="margin-top:6px;color:var(--accent-4);">// 단계 3: 합의</div>
+        <div>&nbsp;&nbsp;이웃과 β 교환</div>
+        <div>&nbsp;&nbsp;β_i,j ← min(β_i,j, β_{이웃,j})</div>
+      </div>
+      <div><span style="color:var(--accent-2);">end</span></div>
+    </div>
+
+    <div class="highlight-box anim-3">
+      <p style="color:var(--text-primary);"><strong>핵심 특성:</strong> 각 에이전트는 지역 정보만으로 독립적으로 제어를 계산하며, 이웃과의 간헐적 통신만으로 전역 커버리지를 달성합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Convergence -->
+<div class="slide" id="slide-8">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-3);">08 / 수렴 분석</span>
+    <h2 class="anim-1"><span class="gradient-text-2">수렴 보장 (정리 2)</span></h2>
+
+    <div class="theorem-box anim-2">
+      <div class="theorem-label">정리 2 — 주요 수렴 결과</div>
+      <p>확률적 LTI 동역학 하에서, 분산형 가중치 공유를 통한 MPC 해를 적용하면:</p>
+      <div class="eq-block pink" style="margin-top:12px;font-size:clamp(0.65rem,1.4vw,0.9rem);">E[W₂²(ρ^{k+1}, ν)] ≤ (1 − c/(k+1)) · E[W₂²(ρ^k, ν)] + C/(k+1)²</div>
+      <p style="margin-top:10px;">상수 c, C > 0은 가제어성, 노이즈, 통신 조건에 의존합니다.</p>
+    </div>
+
+    <div class="card anim-3">
+      <h3 style="color:var(--accent-4);">극한 거동</h3>
+      <div class="eq-block green">lim_{k→∞} E[W₂²(ρ^k, ν)] ≤ ε_h</div>
+      <p style="margin-top:10px;">잔여 오차 ε_h는 통신 빈도, 프로세스/측정 노이즈 강도, 투영 오차에 의해 결정됩니다.</p>
+    </div>
+
+    <div class="card anim-4">
+      <h3 style="color:var(--accent-2);">수렴 증명 핵심 단계</h3>
+      <ul class="styled">
+        <li><strong>엄격한 볼록성</strong> → 유일한 최적 제어 보장 (정리 1)</li>
+        <li><strong>오차 분해:</strong> 투영 오차 + 확률적 추적 오차</li>
+        <li><strong>L-부드러움</strong>을 통한 와서슈타인 하강 부등식</li>
+        <li><strong>소산적 드리프트</strong> — 분산 합의가 과대평가 완화</li>
+        <li><strong>Chung 보조정리</strong> → O(1/k) 수렴 속도</li>
+      </ul>
+    </div>
+
+    <div class="conv-graph anim-5">
+      <svg viewBox="0 0 400 150" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1"/>
+          </linearGradient>
+        </defs>
+        <line x1="40" y1="130" x2="380" y2="130" stroke="rgba(123,97,255,0.3)" stroke-width="1"/>
+        <line x1="40" y1="130" x2="40" y2="15" stroke="rgba(123,97,255,0.3)" stroke-width="1"/>
+        <text x="200" y="148" fill="#5c6bc0" font-size="9" text-anchor="middle" font-family="Noto Sans KR">시간 k →</text>
+        <text x="16" y="75" fill="#5c6bc0" font-size="9" text-anchor="middle" font-family="Noto Sans KR" transform="rotate(-90,16,75)">W₂²</text>
+        <!-- Convergence curve -->
+        <path d="M45,25 Q80,30 120,50 Q160,68 200,80 Q250,92 300,98 Q340,102 375,104" fill="none" stroke="url(#lineGrad)" stroke-width="2.5"/>
+        <!-- epsilon line -->
+        <line x1="40" y1="108" x2="380" y2="108" stroke="rgba(0,229,160,0.5)" stroke-width="1" stroke-dasharray="6,4"/>
+        <text x="385" y="108" fill="#00e5a0" font-size="8" font-family="JetBrains Mono">ε_h</text>
+        <!-- Shaded area -->
+        <path d="M45,25 Q80,30 120,50 Q160,68 200,80 Q250,92 300,98 Q340,102 375,104 L375,130 L45,130 Z" fill="url(#lineGrad)" opacity="0.08"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Simulation -->
+<div class="slide" id="slide-9">
+  <div class="slide-inner">
+    <span class="section-label anim-1" style="color:var(--accent-1);">09 / 시뮬레이션</span>
+    <h2 class="anim-1"><span class="gradient-text">시뮬레이션 결과</span></h2>
+
+    <div class="card anim-2">
+      <h3 style="color:var(--accent-1);">실험 플랫폼: 선형화 쿼드로터 3대</h3>
+      <div class="eq-block" style="font-size:clamp(0.6rem,1.2vw,0.8rem);">x_i^k = [x, ẋ, y, ẏ, z, ż, φ, φ̇, θ, θ̇, ψ, ψ̇]^T  (12차원 상태)</div>
+      <div style="margin-top:10px;">
+        <span class="tag tag-blue">출력 상대 차수 r = 4</span>
+        <span class="tag tag-purple">통신 범위: 5 단위</span>
+      </div>
+    </div>
+
+    <div class="card anim-3">
+      <h3 style="color:var(--accent-3);">노이즈 설정</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;">
+        <div style="text-align:center;">
+          <div class="tag tag-pink" style="display:block;margin-bottom:4px;">프로세스 노이즈</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.85rem);">w ~ N(0, 0.2·I₁₂)</p>
+        </div>
+        <div style="text-align:center;">
+          <div class="tag tag-purple" style="display:block;margin-bottom:4px;">측정 노이즈</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.85rem);">v ~ N(0, 0.5·I₃)</p>
+        </div>
+        <div style="text-align:center;">
+          <div class="tag tag-blue" style="display:block;margin-bottom:4px;">초기 불확실성</div>
+          <p style="font-size:clamp(0.7rem,1.2vw,0.85rem);">δ ~ N(0, 4·I₁₂)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-grid anim-4">
+      <div class="compare-col old">
+        <h3 style="color:var(--accent-3);margin-bottom:12px;">기존 D2C</h3>
+        <p style="font-size:clamp(0.75rem,1.3vw,0.9rem);">탐욕적 목표 선택 + PID 추적</p>
+        <p style="margin-top:10px;color:var(--accent-3);font-weight:700;font-size:clamp(0.85rem,1.5vw,1rem);">토러스 분포 복원 실패</p>
+        <p style="margin-top:6px;font-size:clamp(0.7rem,1.2vw,0.8rem);">노이즈에 의해 외부 경계로 드리프트</p>
+      </div>
+      <div class="compare-col new">
+        <h3 style="color:var(--accent-4);margin-bottom:12px;">제안된 D²OC</h3>
+        <p style="font-size:clamp(0.75rem,1.3vw,0.9rem);">도달가능성 기반 MPC + 분산 합의</p>
+        <p style="margin-top:10px;color:var(--accent-4);font-weight:700;font-size:clamp(0.85rem,1.5vw,1rem);">정밀한 분포 매칭 성공</p>
+        <p style="margin-top:6px;font-size:clamp(0.7rem,1.2vw,0.8rem);">심한 노이즈에도 일관된 성능</p>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <p style="color:var(--text-primary);font-size:clamp(0.75rem,1.4vw,0.9rem);"><strong>100회 몬테카를로 실험:</strong> 경험적 평균이 유계 영역 ε_h로 점근 수렴, 좁은 표준편차로 높은 강건성을 입증했습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Conclusion -->
+<div class="slide" id="slide-10">
+  <div class="slide-inner" style="text-align:center;">
+    <span class="section-label anim-1" style="color:var(--accent-4);">10 / 결론</span>
+    <h2 class="anim-1"><span class="gradient-text-3">결론 및 기여</span></h2>
+
+    <div class="card anim-2" style="text-align:left;">
+      <h3 style="color:var(--accent-1);text-align:center;margin-bottom:16px;">핵심 기여</h3>
+      <ul class="styled">
+        <li><strong>확률적 D²OC 프레임워크</strong> — 개별 에이전트 동역학과 집단 분포 매칭을 라그랑주 관점에서 연결</li>
+        <li><strong>엄격한 수렴 보장</strong> — 도달가능성 분석을 통해 시간 평균 분포의 와서슈타인 수렴 증명</li>
+        <li><strong>닫힌 형태 해</strong> — 이차 비용 함수와 볼록 최적화로 반복 솔버 불필요</li>
+        <li><strong>분산형 운영</strong> — 간헐적 통신과 최소 가중치 합의만으로 전역 커버리지 달성</li>
+      </ul>
+    </div>
+
+    <div class="card-row anim-3">
+      <div class="card" style="text-align:center;border-color:rgba(0,212,255,0.3);">
+        <div style="font-size:2rem;margin-bottom:8px;">🔬</div>
+        <p style="color:var(--accent-1);font-weight:700;">PDE 차원의 저주 회피</p>
+        <p style="font-size:clamp(0.7rem,1.2vw,0.82rem);">라그랑주 입자 기반 접근</p>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(123,97,255,0.3);">
+        <div style="font-size:2rem;margin-bottom:8px;">📐</div>
+        <p style="color:var(--accent-2);font-weight:700;">비모수 밀도 지원</p>
+        <p style="font-size:clamp(0.7rem,1.2vw,0.82rem);">GMM 가정 불필요</p>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(0,229,160,0.3);">
+        <div style="font-size:2rem;margin-bottom:8px;">🛡️</div>
+        <p style="color:var(--accent-4);font-weight:700;">노이즈 강건성</p>
+        <p style="font-size:clamp(0.7rem,1.2vw,0.82rem);">프로세스 및 측정 노이즈 명시 처리</p>
+      </div>
+    </div>
+
+    <div class="anim-4" style="margin-top:20px;">
+      <div class="title-divider" style="margin:0 auto 16px;"></div>
+      <p style="color:var(--text-dim);font-size:clamp(0.7rem,1.2vw,0.82rem);">
+        Kooktae Lee | New Mexico Institute of Mining and Technology<br>
+        arXiv: 2604.08495v1 | 2026년 4월
+      </p>
+    </div>
+  </div>
+</div>
+
+</div><!-- slides-container end -->
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">◀</button>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1 / 11</span>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+const total = slides.length;
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= total) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add(dir > 0 ? 'prev' : '');
+  slides[current].classList.remove(dir > 0 ? '' : 'prev');
+  current = next;
+  slides[current].classList.remove('prev');
+  slides[current].classList.add('active');
+  updateUI();
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= total || idx === current) return;
+  const dir = idx > current ? 1 : -1;
+  slides[current].classList.remove('active', 'prev');
+  if (dir > 0) slides[current].classList.add('prev');
+  current = idx;
+  slides[current].classList.remove('prev');
+  slides[current].classList.add('active');
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('progressText').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === total - 1;
+  // Scroll slide to top
+  slides[current].scrollTop = 0;
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+});
+
+// Touch swipe
+let touchX = 0, touchY = 0, swiping = false;
+document.addEventListener('touchstart', e => {
+  touchX = e.changedTouches[0].screenX;
+  touchY = e.changedTouches[0].screenY;
+  swiping = true;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  if (!swiping) return;
+  swiping = false;
+  const dx = e.changedTouches[0].screenX - touchX;
+  const dy = e.changedTouches[0].screenY - touchY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    navigate(dx < 0 ? 1 : -1);
+  }
+});
+
+// Particle animation for title slide
+const canvas = document.getElementById('particleCanvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let w, h;
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 40; i++) {
+    particles.push({
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 2 + 1,
+      color: ['#00d4ff', '#7b61ff', '#ff6b9d', '#00e5a0'][Math.floor(Math.random() * 4)]
+    });
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.6;
+      ctx.fill();
+    });
+    // Draw connections
+    ctx.globalAlpha = 0.08;
+    ctx.strokeStyle = '#7b61ff';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        if (dx * dx + dy * dy < 12000) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+}
+
+updateUI();
+</script>
+</body>
+</html>

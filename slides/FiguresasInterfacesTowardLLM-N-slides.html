@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Figures as Interfaces - 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg-dark: #0a0e27;
+    --bg-card: #111638;
+    --bg-card2: #161b45;
+    --accent: #6c63ff;
+    --accent2: #00d2ff;
+    --accent3: #ff6b9d;
+    --accent4: #ffd93d;
+    --text: #e8e8f0;
+    --text-dim: #8b8ba8;
+    --text-bright: #ffffff;
+    --gradient1: linear-gradient(135deg, #6c63ff 0%, #00d2ff 100%);
+    --gradient2: linear-gradient(135deg, #ff6b9d 0%, #ffd93d 100%);
+    --gradient3: linear-gradient(135deg, #00d2ff 0%, #6c63ff 50%, #ff6b9d 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 60px;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(17, 22, 56, 0.9);
+    backdrop-filter: blur(12px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid rgba(108, 99, 255, 0.3);
+  }
+
+  .nav-btn {
+    width: 48px; height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: var(--gradient1);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active { transform: scale(0.92); }
+  .nav-btn:hover { box-shadow: 0 0 20px rgba(108, 99, 255, 0.5); }
+
+  .slide-counter {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    color: var(--text-dim);
+    min-width: 60px;
+    text-align: center;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--gradient1);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ===== DOT NAVIGATION ===== */
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    opacity: 0.4;
+    transition: all 0.3s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dot.active {
+    opacity: 1;
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 700px;
+  }
+
+  .section-label {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+
+  /* ===== CARDS & COMPONENTS ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(108, 99, 255, 0.15);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(108, 99, 255, 0.4);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .card-text {
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .highlight-box {
+    background: var(--bg-card2);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    border-radius: 0 12px 12px 0;
+    max-width: 800px;
+    width: 100%;
+    margin: 16px 0;
+  }
+
+  .highlight-box p {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .formula-box {
+    background: rgba(108, 99, 255, 0.1);
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    border-radius: 12px;
+    padding: 20px 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+    color: var(--accent2);
+    text-align: center;
+    margin: 16px 0;
+    letter-spacing: 1px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+    font-weight: 600;
+    margin: 3px;
+  }
+  .tag-purple { background: rgba(108,99,255,0.2); color: #a5a0ff; }
+  .tag-blue { background: rgba(0,210,255,0.15); color: #6ce8ff; }
+  .tag-pink { background: rgba(255,107,157,0.15); color: #ff9ec0; }
+  .tag-yellow { background: rgba(255,217,61,0.15); color: #ffe066; }
+
+  /* ===== LISTS ===== */
+  .feature-list {
+    list-style: none;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .feature-list li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid rgba(108,99,255,0.1);
+  }
+
+  .feature-list li .li-icon {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    margin-top: 2px;
+  }
+
+  /* ===== FLOW / PIPELINE ===== */
+  .flow-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+  }
+
+  .flow-step {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,99,255,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .flow-step .step-num {
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .flow-step .step-label {
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-top: 4px;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  /* ===== STATS ===== */
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-box {
+    text-align: center;
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 20px 28px;
+    border: 1px solid rgba(108,99,255,0.15);
+    min-width: 120px;
+  }
+
+  .stat-num {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ===== AGENT DIAGRAM ===== */
+  .agent-diagram {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .agent-box {
+    flex: 1;
+    min-width: 200px;
+    max-width: 280px;
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    border: 1px solid;
+    position: relative;
+  }
+
+  .agent-box.planner { border-color: rgba(108,99,255,0.4); }
+  .agent-box.executor { border-color: rgba(0,210,255,0.4); }
+  .agent-box.evaluator { border-color: rgba(255,107,157,0.4); }
+
+  .agent-box .agent-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .agent-box .agent-name {
+    font-weight: 700;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-bottom: 8px;
+    color: var(--text-bright);
+  }
+  .agent-box .agent-desc {
+    font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gradient1);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-dark);
+  }
+
+  .tl-item .tl-step {
+    font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+    color: var(--accent2);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tl-item .tl-title {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 600;
+    color: var(--text-bright);
+    margin: 2px 0;
+  }
+
+  .tl-item .tl-desc {
+    font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ===== BAR CHART (CSS) ===== */
+  .bar-chart {
+    max-width: 600px;
+    width: 100%;
+    margin: 16px 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+
+  .bar-label {
+    font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+    color: var(--text);
+    width: 130px;
+    text-align: right;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+    font-weight: 700;
+    color: white;
+  }
+
+  .bar-fill.purple { background: var(--gradient1); }
+  .bar-fill.pink { background: var(--gradient2); }
+
+  /* ===== BIDIRECTIONAL DIAGRAM ===== */
+  .bidir-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin: 16px 0;
+  }
+
+  .bidir-box {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 20px 24px;
+    text-align: center;
+    border: 1px solid rgba(108,99,255,0.2);
+    min-width: 140px;
+  }
+
+  .bidir-box .b-icon { font-size: 2rem; margin-bottom: 8px; }
+  .bidir-box .b-label {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  .bidir-arrows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent);
+    font-size: 1.4rem;
+  }
+
+  .bidir-arrows span {
+    font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  /* ===== FLOATING PARTICLES ===== */
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100px) rotate(360deg); }
+  }
+
+  /* ===== CONTENT WRAPPER ===== */
+  .content-wrap {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in { animation: fadeIn 0.6s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .slide.active .fade-d1 { animation: fadeIn 0.5s 0.1s ease both; }
+  .slide.active .fade-d2 { animation: fadeIn 0.5s 0.2s ease both; }
+  .slide.active .fade-d3 { animation: fadeIn 0.5s 0.3s ease both; }
+  .slide.active .fade-d4 { animation: fadeIn 0.5s 0.4s ease both; }
+  .slide.active .fade-d5 { animation: fadeIn 0.5s 0.5s ease both; }
+  .slide.active .fade-d6 { animation: fadeIn 0.5s 0.6s ease both; }
+
+  /* ===== GLOW DECORATION ===== */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 30px 90px; }
+    .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+    .agent-diagram { flex-direction: column; align-items: center; }
+    .agent-box { max-width: 100%; }
+    .bidir-container { flex-direction: column; }
+    .bidir-arrows { transform: rotate(90deg); }
+    .flow-container { gap: 6px; }
+    .flow-step { min-width: 80px; padding: 10px 12px; }
+    .stat-box { min-width: 100px; padding: 16px 20px; }
+    .bar-label { width: 100px; }
+    .nav { padding: 6px 12px; gap: 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 90px; }
+    .slide-title { margin-bottom: 16px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .highlight-box { padding: 14px 16px; }
+    .formula-box { padding: 14px 18px; }
+    .stat-row { gap: 10px; }
+    .stat-box { padding: 12px 16px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 18px; }
+    .timeline { padding-left: 20px; }
+    .tl-item { padding-left: 16px; }
+    .flow-step { min-width: 70px; padding: 8px 10px; }
+    .bar-label { width: 80px; font-size: clamp(0.6rem, 1.4vw, 0.75rem); }
+    .dots { gap: 4px; }
+    .dot { width: 6px; height: 6px; }
+    .dot.active { width: 18px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 85px; }
+    .slide-title { margin-bottom: 12px; }
+    .card { padding: 12px; }
+    .highlight-box { padding: 10px 12px; }
+    .nav { bottom: 10px; padding: 5px 10px; gap: 6px; }
+    .nav-btn { width: 44px; height: 44px; }
+    .stat-row { flex-direction: column; align-items: center; }
+    .bar-label { width: 65px; }
+    .bar-track { height: 22px; }
+    .agent-box { padding: 16px 14px; }
+    .flow-arrow { display: none; }
+    .flow-step { min-width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Particles Background -->
+<div class="particles" id="particles"></div>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ==================== SLIDES ==================== -->
+<div class="slide-container" id="slideContainer">
+
+  <!-- SLIDE 0: Title -->
+  <div class="slide active" data-slide="0">
+    <div class="glow-orb" style="width:400px;height:400px;background:#6c63ff;top:-100px;right:-100px;"></div>
+    <div class="glow-orb" style="width:300px;height:300px;background:#00d2ff;bottom:-80px;left:-80px;"></div>
+    <div class="content-wrap" style="justify-content:center;">
+      <div class="section-label fade-d1">arXiv: 2604.08491</div>
+      <h1 class="slide-title fade-d2" style="font-size:clamp(1.5rem,4.5vw,3rem);">
+        그림을 인터페이스로:<br>과학적 발견을 위한<br>LLM 네이티브 산출물
+      </h1>
+      <p class="slide-subtitle fade-d3">
+        Yifang Wang, Rui Sheng, Erzhuo Shao, Yifan Qian,<br>
+        Haotian Li, Nan Cao, Dashun Wang
+      </p>
+      <div class="fade-d4" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+        <span class="tag tag-purple">HCI</span>
+        <span class="tag tag-blue">LLM</span>
+        <span class="tag tag-pink">시각화</span>
+        <span class="tag tag-yellow">과학적 발견</span>
+      </div>
+      <p class="fade-d5" style="margin-top:32px;color:var(--text-dim);font-size:clamp(0.7rem,1.5vw,0.85rem);">
+        좌우 스와이프 또는 버튼으로 탐색하세요
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Problem -->
+  <div class="slide" data-slide="1">
+    <div class="glow-orb" style="width:350px;height:350px;background:#ff6b9d;top:-80px;left:-80px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">문제 정의</div>
+      <h2 class="slide-title fade-d2">과학 연구의 그림은<br>왜 아직도 정적일까?</h2>
+      <div class="highlight-box fade-d3">
+        <p>현재 과학 연구에서 그림(figure)은 분석 과정의 <strong style="color:var(--accent3)">최종 산출물</strong>로만 취급됩니다. 데이터, 코드, 분석 맥락과 완전히 단절된 정적 이미지에 불과합니다.</p>
+      </div>
+      <div class="card-grid card-grid-2 fade-d4" style="margin-top:20px;">
+        <div class="card">
+          <span class="card-icon">🖼️</span>
+          <div class="card-title">정적 이미지</div>
+          <div class="card-text">원본 데이터와 분석 과정에 대한 연결 고리가 완전히 끊어져 있음</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔒</span>
+          <div class="card-title">재현 불가</div>
+          <div class="card-text">그림에서 원래 분석 과정을 역추적하거나 확장하기 어려움</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🤖</span>
+          <div class="card-title">AI 비활용</div>
+          <div class="card-text">LLM이 그림의 내용을 직접 조작하거나 추론할 수 없음</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔄</span>
+          <div class="card-title">협업 장벽</div>
+          <div class="card-text">인간-AI 간 양방향 상호작용이 불가능한 일방향 산출물</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Core Concept -->
+  <div class="slide" data-slide="2">
+    <div class="glow-orb" style="width:400px;height:400px;background:#6c63ff;bottom:-120px;right:-100px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">핵심 개념</div>
+      <h2 class="slide-title fade-d2">LLM 네이티브 그림이란?</h2>
+      <p class="slide-subtitle fade-d3">
+        사람이 읽을 수 있으면서 동시에 기계가 접근 가능한<br>데이터 기반 연구 산출물
+      </p>
+      <div class="highlight-box fade-d4">
+        <p>그림은 더 이상 <strong style="color:var(--accent3)">최종 결과물</strong>이 아닌, <strong style="color:var(--accent2)">발견을 위한 인터페이스</strong>입니다. 데이터 하위 집합, 분석 연산, 코드, 시각화 사양을 모두 내장하여 LLM이 출처를 추적하고, 코드를 생성하여 분석을 확장할 수 있습니다.</p>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:20px;" class="fade-d5">
+        <div style="text-align:center;padding:16px 24px;background:var(--bg-card);border-radius:12px;border:1px solid rgba(108,99,255,0.2);">
+          <div style="font-size:2rem;">👁️</div>
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);color:var(--text-bright);font-weight:600;margin-top:6px;">인간 가독성</div>
+          <div style="font-size:clamp(0.65rem,1.4vw,0.78rem);color:var(--text-dim);margin-top:4px;">시각적 직관적 이해</div>
+        </div>
+        <div style="font-size:2rem;color:var(--accent);display:flex;align-items:center;">+</div>
+        <div style="text-align:center;padding:16px 24px;background:var(--bg-card);border-radius:12px;border:1px solid rgba(0,210,255,0.2);">
+          <div style="font-size:2rem;">⚙️</div>
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);color:var(--text-bright);font-weight:600;margin-top:6px;">기계 접근성</div>
+          <div style="font-size:clamp(0.65rem,1.4vw,0.78rem);color:var(--text-dim);margin-top:4px;">구조화된 데이터/코드 접근</div>
+        </div>
+        <div style="font-size:2rem;color:var(--accent);display:flex;align-items:center;">=</div>
+        <div style="text-align:center;padding:16px 24px;background:var(--bg-card);border-radius:12px;border:2px solid rgba(108,99,255,0.4);">
+          <div style="font-size:2rem;">🔬</div>
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);background:var(--gradient1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;margin-top:6px;">발견 인터페이스</div>
+          <div style="font-size:clamp(0.65rem,1.4vw,0.78rem);color:var(--text-dim);margin-top:4px;">출처 추적 + 분석 확장</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Framework Architecture -->
+  <div class="slide" data-slide="3">
+    <div class="glow-orb" style="width:350px;height:350px;background:#00d2ff;top:-100px;left:-60px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">프레임워크 구조</div>
+      <h2 class="slide-title fade-d2">4대 핵심 구성 요소</h2>
+      <div class="formula-box fade-d3">
+        F<sub>t</sub> = { V<sub>t</sub> , C<sub>t</sub> , D<sub>t</sub> , M<sub>t</sub> }
+      </div>
+      <div class="card-grid card-grid-4 fade-d4" style="margin-top:12px;">
+        <div class="card" style="border-top:3px solid var(--accent);">
+          <div class="card-title" style="color:var(--accent);">V<sub>t</sub> - 시각화</div>
+          <div class="card-text">렌더링된 이미지, 텍스트 요약, Vega-Lite JSON 사양</div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--accent2);">
+          <div class="card-title" style="color:var(--accent2);">C<sub>t</sub> - 코드</div>
+          <div class="card-text">시각화를 생성하는 실행 가능한 SQL, Python 연산</div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--accent3);">
+          <div class="card-title" style="color:var(--accent3);">D<sub>t</sub> - 데이터</div>
+          <div class="card-text">렌더링에 사용된 기본 데이터 하위 집합과 스키마</div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--accent4);">
+          <div class="card-title" style="color:var(--accent4);">M<sub>t</sub> - 메타데이터</div>
+          <div class="card-text">타임스탬프, 버전, 사용자 연산 설명, 산출물 링크</div>
+        </div>
+      </div>
+      <div class="highlight-box fade-d5" style="margin-top:20px;">
+        <p>이 네 가지 구성 요소가 결합되어 <strong style="color:var(--accent2);">완전한 출처 정보(provenance)</strong>를 제공하며, LLM이 그림을 단순 이미지가 아닌 <strong style="color:var(--accent);">구조화된 인터페이스</strong>로 활용할 수 있게 합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Bidirectional Mapping -->
+  <div class="slide" data-slide="4">
+    <div class="glow-orb" style="width:300px;height:300px;background:#ff6b9d;bottom:-80px;left:-60px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">양방향 매핑</div>
+      <h2 class="slide-title fade-d2">분석과 시각화의<br>양방향 변환</h2>
+
+      <div class="bidir-container fade-d3">
+        <div class="bidir-box">
+          <div class="b-icon">💬</div>
+          <div class="b-label">분석 연산</div>
+          <div style="font-size:clamp(0.65rem,1.3vw,0.75rem);color:var(--text-dim);margin-top:4px;">자연어 / SQL / Python</div>
+        </div>
+        <div class="bidir-arrows">
+          <span style="font-size:clamp(0.55rem,1.2vw,0.68rem);">순방향</span>
+          →
+          ←
+          <span style="font-size:clamp(0.55rem,1.2vw,0.68rem);">역방향</span>
+        </div>
+        <div class="bidir-box">
+          <div class="b-icon">📊</div>
+          <div class="b-label">시각화</div>
+          <div style="font-size:clamp(0.65rem,1.3vw,0.75rem);color:var(--text-dim);margin-top:4px;">차트 / 대시보드 / 상호작용</div>
+        </div>
+      </div>
+
+      <div class="card-grid card-grid-2 fade-d4" style="margin-top:24px;">
+        <div class="card">
+          <div class="card-title" style="color:var(--accent2);">순방향: 연산 → 시각화</div>
+          <div class="card-text">자연어를 테이블 선택, 필터링, 차트 유형 지정, 시각적 인코딩 등 일련의 동작으로 파싱</div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--accent3);">역방향: 시각화 → 연산</div>
+          <div class="card-text">브러싱, 클릭 등 시각적 상호작용을 데이터 행에 자동 매핑하여 새로운 분석 시퀀스를 트리거</div>
+        </div>
+      </div>
+
+      <div class="highlight-box fade-d5" style="margin-top:16px;">
+        <p>이 <strong style="color:var(--accent);">왕복 변환(round-trip conversion)</strong> 덕분에 사용자와 LLM이 시각화를 통해 데이터를 탐색하고, 다시 데이터에서 새로운 시각화를 생성하는 <strong style="color:var(--accent2);">혼합 주도형 워크플로</strong>가 가능합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Nexus System -->
+  <div class="slide" data-slide="5">
+    <div class="glow-orb" style="width:400px;height:400px;background:#6c63ff;top:-120px;right:-100px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">시스템 구현</div>
+      <h2 class="slide-title fade-d2">Nexus: 멀티 에이전트 시스템</h2>
+      <p class="slide-subtitle fade-d3">"과학의 과학(Science of Science)" 도메인에 적용된 프레임워크 구현체</p>
+
+      <div class="agent-diagram fade-d4">
+        <div class="agent-box planner">
+          <div class="agent-icon">🧠</div>
+          <div class="agent-name">플래너 에이전트</div>
+          <div class="agent-desc">사용자 의도 추론, 쿼리 분류, 다음 단계 추천</div>
+        </div>
+        <div class="agent-box executor">
+          <div class="agent-icon">⚡</div>
+          <div class="agent-name">실행기 에이전트</div>
+          <div class="agent-desc">SQL/Python/Vega-Lite 코드를 격리된 샌드박스에서 생성 및 실행</div>
+        </div>
+        <div class="agent-box evaluator">
+          <div class="agent-icon">🔍</div>
+          <div class="agent-name">평가자 에이전트</div>
+          <div class="agent-desc">동작 성공 여부를 평가하고 자기 반성을 통한 오류 처리</div>
+        </div>
+      </div>
+
+      <div class="flow-container fade-d5" style="margin-top:24px;">
+        <div class="flow-step">
+          <div class="step-num">1단계</div>
+          <div class="step-label">계획</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-num">2단계</div>
+          <div class="step-label">실행</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-num">3단계</div>
+          <div class="step-label">관찰</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-num">4단계</div>
+          <div class="step-label">평가</div>
+        </div>
+        <div class="flow-arrow">↻</div>
+        <div class="flow-step">
+          <div class="step-num">반복</div>
+          <div class="step-label">정제</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Hybrid UI & Action Space -->
+  <div class="slide" data-slide="6">
+    <div class="glow-orb" style="width:300px;height:300px;background:#00d2ff;bottom:-80px;right:-80px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">하이브리드 인터페이스</div>
+      <h2 class="slide-title fade-d2">언어 UI + 그래픽 UI</h2>
+
+      <div class="card-grid card-grid-2 fade-d3">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <div class="card-title" style="color:var(--accent);">💬 언어 UI (LUI)</div>
+          <div class="card-text">자연어 쿼리 입력, 인라인 대화형 위젯을 통한 분석 지시 및 탐색</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent2);">
+          <div class="card-title" style="color:var(--accent2);">📊 그래픽 UI (GUI)</div>
+          <div class="card-text">인터랙티브 대시보드: 브러싱, 필터링, 클릭, 줌 등 직접 조작</div>
+        </div>
+      </div>
+
+      <h3 class="fade-d4" style="margin-top:28px;">원자적 연산 공간 (4대 범주)</h3>
+      <div class="card-grid card-grid-4 fade-d5">
+        <div class="card" style="text-align:center;">
+          <span class="card-icon">🔽</span>
+          <div class="card-title">데이터 필터링</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <span class="card-icon">🔄</span>
+          <div class="card-title">데이터 변환</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <span class="card-icon">📈</span>
+          <div class="card-title">분석/모델링</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <span class="card-icon">🎨</span>
+          <div class="card-title">데이터 시각화</div>
+        </div>
+      </div>
+
+      <div class="highlight-box fade-d6" style="margin-top:16px;">
+        <p>LLM은 블랙박스 생성기가 아닌, <strong style="color:var(--accent2);">정의된 연산 공간</strong> 내에서 <strong style="color:var(--accent);">계획-실행-관찰 루프</strong>를 통해 분석을 조율합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Case Study -->
+  <div class="slide" data-slide="7">
+    <div class="glow-orb" style="width:350px;height:350px;background:#ffd93d;top:-100px;left:-80px;opacity:0.08;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">사례 연구</div>
+      <h2 class="slide-title fade-d2">대학 혁신 생태계 탐색</h2>
+      <p class="slide-subtitle fade-d3">과학의 과학(SciSci) 도메인에서의 반복적 탐색 과정</p>
+
+      <div class="timeline fade-d4">
+        <div class="tl-item">
+          <div class="tl-step">1단계 - 초기 탐색</div>
+          <div class="tl-title">발명 공개 vs 특허 인용 논문 분포 조회</div>
+          <div class="tl-desc">시스템이 개별 발명가 수준의 산점도(scatterplot)를 자동 생성</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-step">2단계 - 데이터 조작</div>
+          <div class="tl-title">로그 스케일 변환 요청</div>
+          <div class="tl-desc">분석 출처 정보를 유지하면서 시각화 업데이트</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-step">3단계 - 드릴다운</div>
+          <div class="tl-title">높은 공개율 영역 브러싱 후 부서 분포 요청</div>
+          <div class="tl-desc">연동 막대 차트(bar chart) 생성 - 양방향 매핑 동작</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-step">4단계 - 비교 분석</div>
+          <div class="tl-title">높은 특허 인용이지만 낮은 발명 공개를 보이는 초임 교수 식별</div>
+          <div class="tl-desc">기술 이전 파이프라인의 <strong style="color:var(--accent3);">구조적 격차</strong> 발견</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-step">5단계 - 재현</div>
+          <div class="tl-title">전체 세션, 코드, 데이터, 산출물 저장</div>
+          <div class="tl-desc">검증 및 확장을 위한 완전한 재현 가능</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Evaluation -->
+  <div class="slide" data-slide="8">
+    <div class="glow-orb" style="width:400px;height:400px;background:#6c63ff;bottom:-100px;right:-100px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">성능 평가</div>
+      <h2 class="slide-title fade-d2">정량적 평가 결과</h2>
+      <p class="slide-subtitle fade-d3">308개 쌍 쿼리 테스트 스위트, 3가지 하위 작업</p>
+
+      <div class="stat-row fade-d4">
+        <div class="stat-box">
+          <div class="stat-num">96.7%</div>
+          <div class="stat-label">실행 성공률</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">92.7%</div>
+          <div class="stat-label">E2E 정확도</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">91.0%</div>
+          <div class="stat-label">그림 간 연동</div>
+        </div>
+      </div>
+
+      <div class="bar-chart fade-d5" style="margin-top:24px;">
+        <div class="bar-row">
+          <div class="bar-label">초기 질문<br>실행 성공</div>
+          <div class="bar-track">
+            <div class="bar-fill purple" style="width:96.7%;">96.7%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">초기 질문<br>E2E 정확도</div>
+          <div class="bar-track">
+            <div class="bar-fill purple" style="width:92.7%;">92.7%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">후속 질문<br>SQL 정확도</div>
+          <div class="bar-track">
+            <div class="bar-fill pink" style="width:79.8%;">79.8%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">그림 간<br>연동 정확도</div>
+          <div class="bar-track">
+            <div class="bar-fill purple" style="width:91%;">91.0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box fade-d6" style="margin-top:16px;">
+        <p><strong style="color:var(--accent4);">주요 오류 원인:</strong> SQL 생성 오류, 퍼지 문자열 매칭 실패, 연속 범위 술어를 이산 IN 절로 잘못 변환하는 문제</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Design Principles -->
+  <div class="slide" data-slide="9">
+    <div class="glow-orb" style="width:350px;height:350px;background:#ff6b9d;top:-80px;right:-60px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">설계 원칙</div>
+      <h2 class="slide-title fade-d2">핵심 설계 원칙 4가지</h2>
+
+      <ul class="feature-list fade-d3">
+        <li>
+          <span class="li-icon">1️⃣</span>
+          <div>
+            <strong style="color:var(--accent);">이중 가독성 (Dual-Legibility)</strong><br>
+            <span style="color:var(--text-dim);">그림은 인간에게 직관적이면서 동시에 기계에 출처 정보를 노출해야 합니다.</span>
+          </div>
+        </li>
+        <li>
+          <span class="li-icon">2️⃣</span>
+          <div>
+            <strong style="color:var(--accent2);">조합적 해석 가능성 (Compositional Interpretability)</strong><br>
+            <span style="color:var(--text-dim);">시각적 인식(인간) + 구조화된 데이터/코드 접근(기계)에서 의미가 도출됩니다.</span>
+          </div>
+        </li>
+        <li>
+          <span class="li-icon">3️⃣</span>
+          <div>
+            <strong style="color:var(--accent3);">출처를 인터페이스로 (Provenance-as-Interface)</strong><br>
+            <span style="color:var(--text-dim);">완전한 분석 계보가 사후 투명성과 감사 추적을 가능하게 합니다.</span>
+          </div>
+        </li>
+        <li>
+          <span class="li-icon">4️⃣</span>
+          <div>
+            <strong style="color:var(--accent4);">혼합 주도형 워크플로 (Mixed-Initiative Workflows)</strong><br>
+            <span style="color:var(--text-dim);">인간과 LLM이 자연어 지정과 직접 조작을 번갈아 수행합니다.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Tech Stack -->
+  <div class="slide" data-slide="10">
+    <div class="glow-orb" style="width:300px;height:300px;background:#00d2ff;top:-80px;left:-60px;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">기술 스택</div>
+      <h2 class="slide-title fade-d2">구현 기술 스택</h2>
+
+      <div class="card-grid card-grid-2 fade-d3">
+        <div class="card">
+          <div class="card-title" style="color:var(--accent);">프론트엔드</div>
+          <div class="card-text">React.js, Redux.js, Vega-Lite</div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--accent2);">백엔드</div>
+          <div class="card-text">Flask, Python</div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--accent3);">LLM 조율</div>
+          <div class="card-text">LangChain, LangGraph + Claude 4.5 Sonnet</div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--accent4);">데이터 저장소</div>
+          <div class="card-text">Google BigQuery (관계형), Pinecone (벡터)</div>
+        </div>
+      </div>
+
+      <h3 class="fade-d4" style="margin-top:28px;">3개 통합 데이터베이스</h3>
+      <div class="card-grid fade-d5" style="grid-template-columns:1fr;">
+        <div class="card" style="display:flex;gap:16px;align-items:center;">
+          <span style="font-size:2rem;flex-shrink:0;">🏛️</span>
+          <div>
+            <div class="card-title">SciSci 관계형 DB</div>
+            <div class="card-text">대학 수준 혁신 데이터셋 (특허, 출판물, 연구비)</div>
+          </div>
+        </div>
+        <div class="card" style="display:flex;gap:16px;align-items:center;">
+          <span style="font-size:2rem;flex-shrink:0;">📚</span>
+          <div>
+            <div class="card-title">SciSciCorpus 벡터 DB</div>
+            <div class="card-text">RAG 기반 추론을 위한 도메인 문헌 벡터 데이터베이스</div>
+          </div>
+        </div>
+        <div class="card" style="display:flex;gap:16px;align-items:center;">
+          <span style="font-size:2rem;flex-shrink:0;">📋</span>
+          <div>
+            <div class="card-title">탐색 이력 DB</div>
+            <div class="card-text">대화 테이블, 메시지 테이블, 산출물 버전 관리 추적</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Limitations & Future -->
+  <div class="slide" data-slide="11">
+    <div class="glow-orb" style="width:400px;height:400px;background:#ffd93d;bottom:-100px;left:-80px;opacity:0.08;"></div>
+    <div class="content-wrap">
+      <div class="section-label fade-d1">한계 및 미래 방향</div>
+      <h2 class="slide-title fade-d2">현재 한계와<br>미래 연구 방향</h2>
+
+      <div class="card-grid card-grid-2 fade-d3" style="margin-top:8px;">
+        <div class="card" style="border-top:3px solid var(--accent3);">
+          <div class="card-title" style="color:var(--accent3);">현재 한계</div>
+          <ul style="list-style:none;padding:0;">
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• LLM의 간헐적 오류 생성</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 구조화된 데이터 & 선언적 시각화 전제</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 탐색적 분석에만 평가 집중</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 대규모 산출물 저장 확장성 우려</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top:3px solid var(--accent2);">
+          <div class="card-title" style="color:var(--accent2);">미래 방향</div>
+          <ul style="list-style:none;padding:0;">
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 대규모 분석을 위한 확장성 개선</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 복잡한 시각화 문법의 의미적 일반화</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 다중 인간/AI 협업 추론</li>
+            <li style="padding:4px 0;font-size:clamp(0.72rem,1.6vw,0.85rem);color:var(--text-dim);">• 시뮬레이션, 불확실성, 교차 도메인 확장</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight-box fade-d4" style="margin-top:20px;">
+        <p>GUI-SQL 변환 충실도를 위한 <strong style="color:var(--accent);">명시적 안내 메커니즘</strong>, 확인적 과학 검증, 그리고 다양한 과학 도메인으로의 확장이 핵심 과제로 남아있습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Conclusion -->
+  <div class="slide" data-slide="12">
+    <div class="glow-orb" style="width:500px;height:500px;background:#6c63ff;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="content-wrap" style="justify-content:center;text-align:center;">
+      <div class="section-label fade-d1">결론</div>
+      <h2 class="slide-title fade-d2" style="font-size:clamp(1.4rem,4vw,2.6rem);">
+        그림은 최종 결과물이 아닌,<br>
+        <span style="background:var(--gradient2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">발견을 위한 인터페이스</span>입니다
+      </h2>
+      <p class="slide-subtitle fade-d3" style="max-width:650px;">
+        이 연구는 인간-AI 협업을 선형적 채팅 기반 교환에서, 출처 정보가 풍부한 반복적 탐색으로 전환하는 기초 원칙을 확립합니다.
+      </p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:24px;" class="fade-d4">
+        <div style="padding:12px 20px;background:rgba(108,99,255,0.15);border-radius:10px;border:1px solid rgba(108,99,255,0.3);">
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);color:var(--text-bright);font-weight:600;">출처 내장</div>
+        </div>
+        <div style="padding:12px 20px;background:rgba(0,210,255,0.15);border-radius:10px;border:1px solid rgba(0,210,255,0.3);">
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);color:var(--text-bright);font-weight:600;">상호작용성</div>
+        </div>
+        <div style="padding:12px 20px;background:rgba(255,107,157,0.15);border-radius:10px;border:1px solid rgba(255,107,157,0.3);">
+          <div style="font-size:clamp(0.75rem,1.8vw,0.9rem);color:var(--text-bright);font-weight:600;">설명 가능성</div>
+        </div>
+      </div>
+
+      <div class="fade-d5" style="margin-top:40px;color:var(--text-dim);font-size:clamp(0.7rem,1.5vw,0.85rem);">
+        arXiv: 2604.08491v1<br>
+        Yifang Wang 외 6인 | 2026
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END SLIDES -->
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#8594;</button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  const dotsContainer = document.getElementById('dots');
+
+  // Create dots
+  for(let i = 0; i < total; i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  // Create particles
+  const particlesEl = document.getElementById('particles');
+  const colors = ['#6c63ff','#00d2ff','#ff6b9d','#ffd93d'];
+  for(let i = 0; i < 20; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*6 + 2;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (Math.random()*20+15)+'s';
+    p.style.animationDelay = (Math.random()*20)+'s';
+    particlesEl.appendChild(p);
+  }
+
+  function goTo(n){
+    if(n < 0 || n >= total || n === current) return;
+    const dir = n > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'prev' : '');
+    slides[current].classList.remove(dir > 0 ? '' : 'prev');
+    if(dir > 0) slides[current].classList.add('prev');
+    else slides[current].classList.remove('prev');
+    current = n;
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+    update();
+  }
+
+  function update(){
+    counter.textContent = (current+1) + ' / ' + total;
+    progressBar.style.width = ((current+1)/total*100) + '%';
+    document.querySelectorAll('.dot').forEach((d,i)=>{
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', ()=> goTo(current-1));
+  document.getElementById('nextBtn').addEventListener('click', ()=> goTo(current+1));
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current+1); }
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current-1); }
+  });
+
+  // Touch / Swipe
+  document.addEventListener('touchstart', (e)=>{
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, {passive:true});
+
+  document.addEventListener('touchend', (e)=>{
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+      if(dx < 0) goTo(current+1);
+      else goTo(current-1);
+    }
+  }, {passive:true});
+
+  update();
+})();
+</script>
+</body>
+</html>

@@ -28,3 +28,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md|Understanding the Role of Hallucination in Reinforcement Pos]] (2026-04-07)
 
 - [[sources/2026-04-12-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-12)
+
+- [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)

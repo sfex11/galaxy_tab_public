@@ -48,3 +48,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-robust-quadruped-locomotion-via-evolutionary-reinf.md|Robust Quadruped Locomotion via Evolutionary Reinforcement L]] (2026-04-10)
 
 - [[sources/2026-04-12-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-12)
+
+- [[sources/2026-04-13-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-13)

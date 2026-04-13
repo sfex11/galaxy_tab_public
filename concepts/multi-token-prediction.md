@@ -18,3 +18,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|Toward Consistent World Models with Multi-Token Prediction a]] (2026-04-09)
 
 - [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-12)
+
+- [[sources/2026-04-13-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-13)

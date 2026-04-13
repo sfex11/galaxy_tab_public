@@ -32,3 +32,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)
 
 - [[sources/2026-04-12-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-12)
+
+- [[sources/2026-04-13-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-13)

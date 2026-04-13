@@ -20,3 +20,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-12)
 
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)
+
+- [[sources/2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-13)

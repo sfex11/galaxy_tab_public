@@ -26,3 +26,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici.md|What do Language Models Learn and When? The Implicit Curricu]] (2026-04-12)
 
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)
+
+- [[sources/2026-04-13-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-13)
+
+- [[sources/2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-13)

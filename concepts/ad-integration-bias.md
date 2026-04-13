@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]]
+
+- [[sources/2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-13)

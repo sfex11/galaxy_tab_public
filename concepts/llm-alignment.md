@@ -32,3 +32,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-12)
 
 - [[sources/2026-04-12-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-12)
+
+- [[sources/2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-13)
+
+- [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)

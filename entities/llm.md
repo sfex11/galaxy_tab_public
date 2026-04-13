@@ -156,3 +156,11 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-12)
 
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)
+
+- [[sources/2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-13)
+
+- [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)
+
+- [[sources/2026-04-13-cram-less-to-fit-more-training-data-pruning-improv.md|Cram Less to Fit More: Training Data Pruning Improves Memori]] (2026-04-13)
+
+- [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-13)

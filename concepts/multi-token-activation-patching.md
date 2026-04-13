@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-12-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]]
+
+- [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)

@@ -153,3 +153,5 @@ _자동 생성됨_
 - [[sources/2026-04-12-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-12)
 
 - [[sources/2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-12)
+
+- [[sources/2026-04-13-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-13)

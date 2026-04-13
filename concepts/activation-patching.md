@@ -16,3 +16,5 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-neuro-rit-neuron-guided-instruction-tuning-for-rob.md|Neuro-RIT: Neuron-Guided Instruction Tuning for Robust Retri]] (2026-04-03)
 
 - [[sources/2026-04-12-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-12)
+
+- [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)
