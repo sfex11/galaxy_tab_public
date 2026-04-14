@@ -47,3 +47,7 @@ OpenVLThinkerV2는 Group Relative Policy Optimization(GRPO)을 기반으로 한 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-]]: 동일 논문(OpenVLThinkerV2)의 다른 날짜 요약으로, GRPO 기반 멀티모달 범용 추론 모델을 다룬다.

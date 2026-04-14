@@ -31,3 +31,7 @@ AI agents increasingly operate in multi-agent environments where outcomes depend
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-14-semantic-rate-distortion-for-bounded-multi-agent-c]]: 둘 다 다중 AI 에이전트 간 조정/커뮤니케이션 문제를 다루며, 전자는 알고리즘 단일문화의 전략적 조정을, 후자는 이질적 에이전트 간 의미적 통신 비용을 분석한다.

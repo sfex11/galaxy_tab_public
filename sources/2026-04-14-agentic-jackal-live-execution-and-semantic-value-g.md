@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-]]: 둘 다 에이전틱 모델의 외부 도구 호출 전략을 다루며, 전자는 메타인지적 도구 사용 판단을, 후자는 실시간 Jira 쿼리 실행을 통한 의미 기반 도구 활용을 다룬다.
+- → [[sources/2026-04-13-clawbench-can-ai-agents-complete-everyday-online-t]]: 둘 다 실제 라이브 환경에서의 AI 에이전트 태스크 수행을 다루며, 전자는 웹 태스크 벤치마크를, 후자는 Jira 실시간 쿼리 에이전트를 제안한다.

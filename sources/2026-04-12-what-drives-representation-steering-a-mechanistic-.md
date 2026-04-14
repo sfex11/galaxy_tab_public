@@ -43,3 +43,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-]]: 동일 논문의 다른 날짜 요약으로, 스티어링 벡터의 내부 인과 메커니즘을 다룬다.
+- → [[sources/2026-04-14-large-language-models-generate-harmful-content-usi]]: 둘 다 LLM 내부의 안전성/정렬 메커니즘을 기계적으로 분석하며, 전자는 거부 스티어링의 인과 경로를, 후자는 유해 콘텐츠 생성의 통합 메커니즘을 규명한다.

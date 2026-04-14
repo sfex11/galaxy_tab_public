@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-]]: 둘 다 대규모 비전-언어 모델의 추론 능력 향상을 다루며, 전자는 GRPO 기반 범용 추론 학습을, 후자는 추론 시 신뢰도 보정(calibration)을 다룬다.

@@ -44,3 +44,7 @@ LLM 사전학습은 모델과 데이터 믹스에 걸쳐 구성적이고 예측 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-12-what-do-language-models-learn-and-when-the-implici]]: 동일 논문의 다른 날짜 요약으로, LLM 사전학습의 암묵적 커리큘럼 가설을 다룬다.

@@ -49,3 +49,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-14-risk-seeking-conservative-policy-iteration-with-ag]]: 둘 다 분산형 다중 에이전트 의사결정의 이론적 수렴 보장을 다루며, 전자는 밀도 기반 최적 제어를, 후자는 Dec-POMDP의 보수적 정책 반복을 분석한다.

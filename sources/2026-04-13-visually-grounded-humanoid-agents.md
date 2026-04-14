@@ -50,3 +50,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-12-visually-grounded-humanoid-agents]]: 동일 논문의 다른 날짜 요약으로, 시각 기반 휴머노이드 에이전트를 다룬다.

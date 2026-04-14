@@ -51,3 +51,7 @@ RLHF로 사용자 정렬된 LLM이라도 광고 수익이라는 배포자 목표
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-14-large-language-models-generate-harmful-content-usi]]: 둘 다 LLM 정렬(alignment)의 취약성을 다루며, 전자는 광고 편향으로 인한 reward hacking을, 후자는 안전 가드레일 우회 메커니즘을 분석한다.

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-demystifying-opd-length-inflation-and-stabilizatio]]: 둘 다 LLM 강화학습의 훈련 안정성 문제를 다루며, 전자는 희소 보상 하의 크레딧 할당 문제를, 후자는 on-policy distillation의 길이 팽창 문제를 분석한다.
+- → [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-]]: 둘 다 LLM의 RL 기반 추론 강화를 다루며, 전자는 크레딧 할당의 이론적 분석을, 후자는 GRPO를 멀티모달로 확장 적용한다.
+- → [[sources/2026-04-14-process-reward-agents-for-steering-knowledge-inten]]: 둘 다 LLM 추론 과정의 중간 단계 평가를 다루며, 전자는 프로세스 보상으로 지식 집약적 추론을 안내하고, 후자는 크레딧 할당으로 유효 행동을 식별한다.

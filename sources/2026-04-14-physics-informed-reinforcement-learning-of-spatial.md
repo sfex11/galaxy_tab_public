@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera]]: 둘 다 자율주행의 일반화 문제를 다루며, 전자는 memorization vs 일반화 분리 벤치마크를, 후자는 물리 정보 기반 RL로 맵 없는 레이싱의 OOD 일반화를 다룬다.

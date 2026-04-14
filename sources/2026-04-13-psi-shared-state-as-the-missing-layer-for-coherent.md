@@ -52,3 +52,7 @@ PSI는 자연어 요청으로 생성된 개별 AI 모듈들을 **공유 상태(s
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-12-psi-shared-state-as-the-missing-layer-for-coherent]]: 동일 논문(PSI)의 다른 날짜 요약으로, AI 생성 모듈 간 공유 상태 레이어 아키텍처를 다룬다.
