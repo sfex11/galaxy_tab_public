@@ -159,3 +159,13 @@ LLM(대규모 언어모델)을 핵심 추론 엔진으로 활용하여 환경을
 - [[sources/2026-04-13-clawbench-can-ai-agents-complete-everyday-online-t.md|2026 04 13 clawbench can ai agents complete everyday online t.md]] (2026-04-13)
 - [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent.md|2026 04 13 psi shared state as the missing layer for coherent.md]] (2026-04-13)
 - [[sources/2026-04-14-strategic-algorithmic-monocultureexperimental-evid.md|2026 04 14 strategic algorithmic monocultureexperimental evid.md]] (2026-04-14)
+
+### Wiki Query: 에이전트 구성에 정형 의미론이 필요한가? (2026-04-14)
+
+Wiki 97편 종합 결과: **런타임 계약 검증 + 구성적 안전성 모니터링 하이브리드**가 타입 시스템보다 현실적.
+- Governed Memory: 공유 메모리의 구조적 계약 필요
+- AgentFactory: 서브에이전트 동적 생성 → 정적 well-formedness 불가
+- Among Us 기만: 합성의 비단조성 — 개별 안전 ⊭ 구성 안전
+- 인간 감독의 한계: 지연 피드백이 구성 오류 탐지를 체계적으로 왜곡
+
+→ [[queries/query-1.md|상세 분석]]
