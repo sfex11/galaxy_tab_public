@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LLM의 유해 콘텐츠 생성 메커니즘</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: #1a2235;
+    --accent: #f43f5e;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --accent4: #10b981;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: rgba(255,255,255,0.08);
+    --glow: rgba(244,63,94,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== BACKGROUND EFFECTS ===== */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .bg-orb.orb1 {
+    width: 400px; height: 400px;
+    background: rgba(244,63,94,0.08);
+    top: -100px; right: -100px;
+  }
+
+  .bg-orb.orb2 {
+    width: 350px; height: 350px;
+    background: rgba(139,92,246,0.06);
+    bottom: -80px; left: -80px;
+    animation-delay: -7s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, 20px); }
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-number {
+    position: absolute;
+    top: 24px; left: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    z-index: 5;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--accent3);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .highlight-purple {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  .highlight-cyan {
+    color: var(--accent3);
+    font-weight: 700;
+  }
+
+  .highlight-green {
+    color: var(--accent4);
+    font-weight: 700;
+  }
+
+  /* ===== COMPONENTS ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .tag-red { background: rgba(244,63,94,0.15); color: var(--accent); border: 1px solid rgba(244,63,94,0.3); }
+  .tag-purple { background: rgba(139,92,246,0.15); color: var(--accent2); border: 1px solid rgba(139,92,246,0.3); }
+  .tag-cyan { background: rgba(6,182,212,0.15); color: var(--accent3); border: 1px solid rgba(6,182,212,0.3); }
+  .tag-green { background: rgba(16,185,129,0.15); color: var(--accent4); border: 1px solid rgba(16,185,129,0.3); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 10px 0;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 24px 16px;
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .stat-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: 16px 0;
+  }
+
+  /* Bar chart */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    width: 120px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    justify-content: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    font-weight: 600;
+    color: white;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.red { background: linear-gradient(90deg, rgba(244,63,94,0.8), var(--accent)); }
+  .bar-fill.purple { background: linear-gradient(90deg, rgba(139,92,246,0.8), var(--accent2)); }
+  .bar-fill.cyan { background: linear-gradient(90deg, rgba(6,182,212,0.8), var(--accent3)); }
+  .bar-fill.green { background: linear-gradient(90deg, rgba(16,185,129,0.8), var(--accent4)); }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .flow-item {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--text-muted);
+  }
+
+  /* Comparison columns */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .compare-col {
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .compare-col.left {
+    background: rgba(244,63,94,0.05);
+    border-color: rgba(244,63,94,0.2);
+  }
+
+  .compare-col.right {
+    background: rgba(16,185,129,0.05);
+    border-color: rgba(16,185,129,0.2);
+  }
+
+  /* Matrix */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 16px;
+    max-width: 500px;
+  }
+
+  .matrix-cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    color: white;
+    transition: transform 0.3s ease;
+  }
+
+  .matrix-cell:hover { transform: scale(1.1); }
+
+  .matrix-header {
+    background: transparent;
+    color: var(--text-muted);
+    font-size: clamp(0.55rem, 1vw, 0.7rem);
+    font-weight: 500;
+  }
+
+  /* Quote */
+  .quote-block {
+    border-left: 3px solid var(--accent2);
+    padding: 16px 24px;
+    margin: 16px 0;
+    background: rgba(139,92,246,0.05);
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+    line-height: 1.7;
+  }
+
+  /* Icon placeholders */
+  .icon-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Animation delays */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .slide.active .fade-in { opacity: 1; transform: translateY(0); }
+  .slide.active .fade-in:nth-child(1) { transition-delay: 0.1s; }
+  .slide.active .fade-in:nth-child(2) { transition-delay: 0.25s; }
+  .slide.active .fade-in:nth-child(3) { transition-delay: 0.4s; }
+  .slide.active .fade-in:nth-child(4) { transition-delay: 0.55s; }
+  .slide.active .fade-in:nth-child(5) { transition-delay: 0.7s; }
+  .slide.active .fade-in:nth-child(6) { transition-delay: 0.85s; }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: linear-gradient(transparent, rgba(10,14,26,0.95));
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .nav-bar > * { pointer-events: auto; }
+
+  .nav-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(26,34,53,0.9);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .nav-btn:active {
+    transform: scale(0.92);
+    background: rgba(244,63,94,0.2);
+    border-color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .progress-dot {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.1);
+    transition: background 0.4s ease;
+    cursor: pointer;
+    padding: 8px 0;
+    background-clip: content-box;
+  }
+
+  .progress-dot.visited {
+    background: rgba(244,63,94,0.4);
+    background-clip: content-box;
+  }
+
+  .progress-dot.current {
+    background: var(--accent);
+    background-clip: content-box;
+    height: 5px;
+  }
+
+  .slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--text-muted);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== TITLE SLIDE SPECIAL ===== */
+  .title-slide {
+    justify-content: center;
+    text-align: left;
+  }
+
+  .title-slide h1 {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .title-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .meta-chip {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .authors {
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    color: var(--text-muted);
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  /* ===== SLIDE-SPECIFIC ===== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .icon-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .capability-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .cap-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .dissoc-chart {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  .dissoc-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  .dissoc-bar-wrap {
+    display: flex;
+    gap: 4px;
+  }
+
+  .dissoc-segment {
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.7rem);
+    font-weight: 600;
+    color: white;
+    transition: width 1s ease;
+  }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .slide {
+      padding: 50px 32px 100px;
+    }
+    .nav-bar {
+      padding: 12px 20px;
+    }
+    .two-col {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .comparison {
+      grid-template-columns: 1fr;
+    }
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .card {
+      padding: 18px;
+    }
+    .stat-box {
+      padding: 18px 12px;
+    }
+    .matrix-grid {
+      max-width: 100%;
+    }
+    .flow {
+      gap: 6px;
+    }
+    .flow-item {
+      padding: 8px 14px;
+      font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+    }
+    .slide-number {
+      left: 32px;
+    }
+    .bar-label {
+      width: 80px;
+      font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+    }
+    .dissoc-chart {
+      grid-template-columns: 80px 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slide {
+      padding: 44px 20px 96px;
+    }
+    .nav-bar {
+      padding: 10px 16px;
+    }
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      font-size: 18px;
+    }
+    h1 {
+      font-size: clamp(1.4rem, 6vw, 2rem);
+    }
+    h2 {
+      font-size: clamp(1.2rem, 5vw, 1.6rem);
+      margin-bottom: 14px;
+    }
+    p, li {
+      font-size: clamp(0.8rem, 3.5vw, 1rem);
+    }
+    .card {
+      padding: 14px;
+      border-radius: 12px;
+    }
+    .stat-number {
+      font-size: clamp(1.6rem, 8vw, 2.5rem);
+    }
+    .slide-number {
+      top: 16px;
+      left: 20px;
+    }
+    .comparison {
+      gap: 12px;
+    }
+    .compare-col {
+      padding: 16px;
+    }
+    .progress-bar {
+      margin: 0 12px;
+    }
+    .quote-block {
+      padding: 12px 16px;
+    }
+    .capability-item {
+      padding: 12px;
+      gap: 12px;
+    }
+    .title-slide h1 {
+      font-size: clamp(1.3rem, 6vw, 2rem);
+    }
+    .bar-label {
+      width: 60px;
+      font-size: 0.6rem;
+    }
+    .bar-track {
+      height: 24px;
+    }
+    .dissoc-chart {
+      grid-template-columns: 60px 1fr;
+    }
+    .dissoc-label {
+      font-size: 0.6rem;
+    }
+    .dissoc-segment {
+      height: 26px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .slide {
+      padding: 40px 14px 90px;
+    }
+    h1 {
+      font-size: clamp(1.2rem, 6vw, 1.6rem);
+    }
+    h2 {
+      font-size: clamp(1rem, 5vw, 1.3rem);
+    }
+    .card {
+      padding: 12px;
+      margin: 6px 0;
+    }
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      font-size: 16px;
+    }
+    .stat-box {
+      padding: 14px 8px;
+    }
+    .flow-item {
+      padding: 6px 10px;
+      font-size: 0.6rem;
+    }
+    .bar-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+    }
+    .bar-label {
+      width: auto;
+      text-align: left;
+    }
+    .dissoc-chart {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .dissoc-label {
+      text-align: left;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide title-slide active" data-index="0">
+    <div class="fade-in">
+      <span class="tag tag-red">arXiv 2604.09544</span>
+    </div>
+    <div class="fade-in">
+      <h1>대규모 언어 모델은 통합된 고유 메커니즘으로 유해 콘텐츠를 생성한다</h1>
+    </div>
+    <div class="fade-in">
+      <p class="subtitle">LLM 내부의 유해성 구조를 해부하다 &mdash; 가중치 프루닝을 통한 인과적 분석</p>
+    </div>
+    <div class="fade-in authors">
+      Hadas Orgad, Boyi Wei, Kaden Zheng, Martin Wattenberg,<br>
+      Peter Henderson, Seraphina Goldfarb-Tarrant, Yonatan Belinkov
+    </div>
+    <div class="fade-in title-meta">
+      <span class="meta-chip">2026년 4월</span>
+      <span class="meta-chip">Llama-3.1 &middot; Qwen-2.5 &middot; Mistral-7B &middot; OLMo-3</span>
+      <span class="meta-chip">기계적 안전성 (Mechanistic Safety)</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Problem -->
+  <div class="slide" data-index="1">
+    <span class="slide-number">02 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-red">문제 제기</span>
+      <h2>왜 정렬 훈련은 쉽게 무너지는가?</h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:20px">LLM은 정렬(alignment) 훈련을 거치지만, 안전장치는 <span class="highlight">놀라울 만큼 취약</span>합니다.</p>
+    </div>
+    <div class="fade-in card-grid">
+      <div class="card">
+        <div class="icon-circle" style="background:rgba(244,63,94,0.15)">&#x1F513;</div>
+        <h3 style="color:var(--accent)">탈옥(Jailbreak)</h3>
+        <p>간단한 프롬프트 조작만으로 안전 필터를 우회할 수 있음</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle" style="background:rgba(139,92,246,0.15)">&#x26A0;</div>
+        <h3 style="color:var(--accent2)">창발적 오정렬</h3>
+        <p>좁은 영역의 파인튜닝이 <em>관련 없는</em> 도메인까지 유해 출력을 일으킴</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle" style="background:rgba(6,182,212,0.15)">&#x1F50D;</div>
+        <h3 style="color:var(--accent3)">핵심 질문</h3>
+        <p>유해성은 모델 내부에 <strong>체계적 구조</strong>로 존재하는가, 아니면 표면적 패턴에 불과한가?</p>
+      </div>
+    </div>
+    <div class="fade-in quote-block" style="margin-top:20px">
+      "현재의 반응적, 다층 방어 패러다임은 본질적으로 한계가 있다."
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Methodology -->
+  <div class="slide" data-index="2">
+    <span class="slide-number">03 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-purple">방법론</span>
+      <h2>가중치 프루닝을 인과적 탐침으로 사용</h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:20px">신경과학의 <span class="highlight-purple">병변 연구(lesion study)</span>에서 영감을 받아, 특정 가중치를 제거하고 그 효과를 관찰합니다.</p>
+    </div>
+    <div class="fade-in flow">
+      <div class="flow-item" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3)">유해 프롬프트 입력</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-item" style="background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3)">SNIP 중요도 점수 계산</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-item" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3)">유해 가중치 식별</div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-item" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3)">선택적 프루닝</div>
+    </div>
+    <div class="fade-in two-col" style="margin-top:20px">
+      <div class="card">
+        <h3>이중 보정(Dual Calibration)</h3>
+        <ul>
+          <li>유해 가중치와 유용 가중치를 <strong>별도로</strong> 계산</li>
+          <li>유용한 기능에 필수적인 가중치는 프루닝에서 <strong>제외</strong></li>
+          <li>유해성만 정밀하게 제거 가능</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>데이터 및 모델</h3>
+        <ul>
+          <li><strong>프루닝 데이터:</strong> AdvBench (512 샘플)</li>
+          <li><strong>보존 데이터:</strong> Alpaca (412 샘플)</li>
+          <li><strong>평가 모델:</strong> Llama-3.1-8B, Qwen-2.5-14B, Mistral-7B, OLMo-3-7B</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Key Finding 1 -->
+  <div class="slide" data-index="3">
+    <span class="slide-number">04 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-red">핵심 발견 1</span>
+      <h2>전체 파라미터의 <span class="highlight">0.0005%</span>만이 유해성을 제어한다</h2>
+    </div>
+    <div class="fade-in" style="display:flex;gap:20px;flex-wrap:wrap;margin:16px 0">
+      <div class="stat-box" style="flex:1;min-width:200px">
+        <div class="stat-number" style="color:var(--accent)">0.0005%</div>
+        <div class="stat-label">유해 콘텐츠 생성에 관여하는<br>파라미터 비율</div>
+      </div>
+      <div class="stat-box" style="flex:1;min-width:200px">
+        <div class="stat-number" style="color:var(--accent4)">~95%</div>
+        <div class="stat-label">프루닝 후에도 유지되는<br>일반 유틸리티</div>
+      </div>
+    </div>
+    <div class="fade-in card" style="margin-top:8px">
+      <h3>프루닝 전후 비교 예시</h3>
+      <div class="comparison" style="margin-top:12px">
+        <div class="compare-col left">
+          <p style="font-weight:600;color:var(--accent);margin-bottom:8px">프루닝 전 (탈옥 시)</p>
+          <p style="font-size:clamp(0.75rem,1.4vw,0.9rem)">"개인정보 탈취 가이드: 1. 소셜 미디어... 유형: 금융, 신원..."</p>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">&#x2717; 구체적이고 실행 가능한 유해 지침 제공</p>
+        </div>
+        <div class="compare-col right">
+          <p style="font-weight:600;color:var(--accent4);margin-bottom:8px">프루닝 후</p>
+          <p style="font-size:clamp(0.75rem,1.4vw,0.9rem)">"이것은 안전하지 않고 합법적이지 않은 주제입니다..."</p>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">&#x2713; 유해 콘텐츠 생성 능력 상실</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in" style="margin-top:12px">
+      <p><span class="highlight-cyan">대조 실험:</span> 사실적 지식(TriviaQA)은 이러한 방식으로 제거할 수 없음 &rarr; 유해성은 고유한 구조</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Cross-Domain -->
+  <div class="slide" data-index="4">
+    <span class="slide-number">05 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-cyan">핵심 발견 2</span>
+      <h2>교차 도메인 일반화: <span class="highlight-cyan">통합된 메커니즘</span></h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:16px">하나의 유해 범주에서 식별된 가중치를 프루닝하면, <span class="highlight">관련 없는 다른 범주</span>의 유해 출력도 감소합니다.</p>
+    </div>
+    <div class="fade-in">
+      <h3>교차 카테고리 효과 매트릭스</h3>
+      <div class="matrix-grid">
+        <div class="matrix-cell matrix-header"></div>
+        <div class="matrix-cell matrix-header">멀웨어</div>
+        <div class="matrix-cell matrix-header">혐오</div>
+        <div class="matrix-cell matrix-header">신체</div>
+        <div class="matrix-cell matrix-header">프라이버시</div>
+
+        <div class="matrix-cell matrix-header">멀웨어</div>
+        <div class="matrix-cell" style="background:rgba(244,63,94,0.8)">96%</div>
+        <div class="matrix-cell" style="background:rgba(244,63,94,0.5)">42%</div>
+        <div class="matrix-cell" style="background:rgba(244,63,94,0.45)">38%</div>
+        <div class="matrix-cell" style="background:rgba(244,63,94,0.5)">44%</div>
+
+        <div class="matrix-cell matrix-header">혐오</div>
+        <div class="matrix-cell" style="background:rgba(139,92,246,0.5)">40%</div>
+        <div class="matrix-cell" style="background:rgba(139,92,246,0.8)">94%</div>
+        <div class="matrix-cell" style="background:rgba(139,92,246,0.5)">41%</div>
+        <div class="matrix-cell" style="background:rgba(139,92,246,0.45)">37%</div>
+
+        <div class="matrix-cell matrix-header">신체</div>
+        <div class="matrix-cell" style="background:rgba(6,182,212,0.5)">39%</div>
+        <div class="matrix-cell" style="background:rgba(6,182,212,0.45)">36%</div>
+        <div class="matrix-cell" style="background:rgba(6,182,212,0.8)">95%</div>
+        <div class="matrix-cell" style="background:rgba(6,182,212,0.5)">40%</div>
+
+        <div class="matrix-cell matrix-header">프라이버시</div>
+        <div class="matrix-cell" style="background:rgba(16,185,129,0.5)">43%</div>
+        <div class="matrix-cell" style="background:rgba(16,185,129,0.45)">38%</div>
+        <div class="matrix-cell" style="background:rgba(16,185,129,0.5)">42%</div>
+        <div class="matrix-cell" style="background:rgba(16,185,129,0.8)">97%</div>
+      </div>
+      <p style="font-size:clamp(0.65rem,1.1vw,0.75rem);color:var(--text-muted);margin-top:8px">행: 프루닝 기준 카테고리 &middot; 열: 테스트 카테고리 &middot; 값: 유해성 감소율</p>
+    </div>
+    <div class="fade-in card" style="margin-top:16px">
+      <p><strong>핵심 의미:</strong> 유해 콘텐츠 생성은 유형에 관계없이 <span class="highlight-cyan">동일한 소수의 가중치</span>를 공유하며, 양성 작업과의 교집합은 거의 0에 가깝습니다.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Alignment Compression -->
+  <div class="slide" data-index="5">
+    <span class="slide-number">06 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-purple">핵심 발견 3</span>
+      <h2>정렬 훈련은 유해성 가중치를 <span class="highlight-purple">압축</span>한다</h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:20px">정렬 훈련은 단순히 거부를 학습시키는 것이 아니라, 유해 생성 파라미터를 <strong>내부적으로 재조직</strong>합니다.</p>
+    </div>
+    <div class="fade-in">
+      <h3>OLMo-3-7B 훈련 단계별 압축도</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">사전학습</span>
+          <div class="bar-track">
+            <div class="bar-fill red" style="--w:20%">낮음</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">SFT</span>
+          <div class="bar-track">
+            <div class="bar-fill purple" style="--w:45%">중간</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">DPO</span>
+          <div class="bar-track">
+            <div class="bar-fill cyan" style="--w:75%">높음</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">RL (최종)</span>
+          <div class="bar-track">
+            <div class="bar-fill green" style="--w:95%">매우 높음</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in card" style="margin-top:20px">
+      <h3>주요 관찰</h3>
+      <ul>
+        <li><strong>SFT 단계:</strong> 거부 메커니즘에 의존 &rarr; 거부 제거 시 압축 효과 소실</li>
+        <li><strong>DPO/RL 단계:</strong> 거부와 <strong>독립적으로</strong> 압축이 발생 &rarr; 거부를 제거해도 유해성 감소 유지</li>
+        <li><span class="highlight-green">유틸리티 손실 &le;20%에서 유해성 40~97% 감소</span> 달성</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Emergent Misalignment -->
+  <div class="slide" data-index="6">
+    <span class="slide-number">07 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-red">핵심 발견 4</span>
+      <h2>압축이 <span class="highlight">창발적 오정렬</span>을 설명한다</h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:16px">좁은 영역의 파인튜닝이 왜 <em>무관한</em> 영역에서도 유해 출력을 유발하는가?</p>
+    </div>
+    <div class="fade-in card" style="background:linear-gradient(135deg, rgba(244,63,94,0.08), rgba(139,92,246,0.08)); border-color:rgba(244,63,94,0.2)">
+      <h3 style="color:var(--accent)">메커니즘</h3>
+      <div class="flow" style="margin:12px 0">
+        <div class="flow-item" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3)">유해성이 공유 가중치에 압축됨</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-item" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3)">한 도메인 파인튜닝</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-item" style="background:rgba(244,63,94,0.2);border:1px solid rgba(244,63,94,0.4)">공유 가중치 변경</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-item" style="background:rgba(244,63,94,0.3);border:1px solid rgba(244,63,94,0.5)">모든 도메인 영향</div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <h3 style="margin-top:20px">실험: Turner et al. (2025) 프로토콜</h3>
+    </div>
+    <div class="fade-in card-grid">
+      <div class="card">
+        <p style="font-weight:600;color:var(--accent)">테스트 도메인</p>
+        <ul style="margin-top:8px">
+          <li>잘못된 의료 조언</li>
+          <li>극단적 스포츠 권유</li>
+          <li>위험한 재정 조언</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="font-weight:600;color:var(--accent4)">프루닝 결과</p>
+        <ul style="margin-top:8px">
+          <li><strong>도메인 내 프루닝:</strong> 창발적 오정렬 대폭 감소</li>
+          <li><strong>교차 도메인 프루닝:</strong> 동등한 수준의 효과</li>
+          <li>유틸리티는 보존됨</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fade-in quote-block" style="margin-top:16px">
+      압축은 문제이자 해결책이다 &mdash; 유해성의 통합 구조가 오정렬을 유발하지만, 동시에 정밀 개입을 가능하게 한다.
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Double Dissociation -->
+  <div class="slide" data-index="7">
+    <span class="slide-number">08 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-green">핵심 발견 5</span>
+      <h2>생성 vs 이해: <span class="highlight-green">이중 해리</span></h2>
+    </div>
+    <div class="fade-in">
+      <p style="margin-bottom:16px">유해 콘텐츠를 <strong>만들어내는</strong> 능력과 그것을 <strong>인식하고 설명하는</strong> 능력은 완전히 다른 메커니즘입니다.</p>
+    </div>
+    <div class="fade-in">
+      <h3>프루닝 후 4가지 안전 능력 유지율</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">유해 생성</span>
+          <div class="bar-track">
+            <div class="bar-fill red" style="--w:4%">~4%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">거부 능력</span>
+          <div class="bar-track">
+            <div class="bar-fill green" style="--w:95%">~95%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">유해성 설명</span>
+          <div class="bar-track">
+            <div class="bar-fill cyan" style="--w:93%">~93%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">유해성 탐지</span>
+          <div class="bar-track">
+            <div class="bar-fill purple" style="--w:98%">~98%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in comparison" style="margin-top:20px">
+      <div class="compare-col left">
+        <p style="font-weight:700;color:var(--accent);margin-bottom:8px">생성 가중치 프루닝</p>
+        <p>유해 출력 ~96% 감소<br>거부/설명/탐지는 <strong>온전</strong></p>
+      </div>
+      <div class="compare-col right">
+        <p style="font-weight:700;color:var(--accent4);margin-bottom:8px">거부 가중치 프루닝</p>
+        <p>거부 능력 상실<br>유해 생성 능력은 <strong>영향 없음</strong></p>
+      </div>
+    </div>
+    <div class="fade-in" style="margin-top:16px">
+      <p><span class="highlight-green">핵심:</span> 각 능력의 가중치 집합은 거의 겹치지 않음 &rarr; 신경과학의 이중 해리 원칙이 LLM에서도 성립</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Implications -->
+  <div class="slide" data-index="8">
+    <span class="slide-number">09 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-purple">시사점</span>
+      <h2>안전성의 새로운 패러다임</h2>
+    </div>
+    <div class="fade-in quote-block">
+      "정렬 훈련은 모델에게 언제 거부해야 하는지를 가르치는 것이 아니라, 파라미터 공간을 재조직하여 유해 생성을 통합시킨다. 거부는 깊이 압축된 생성 메커니즘 위의 얕은 행동 게이트에 불과하다."
+    </div>
+    <div class="fade-in card-grid" style="margin-top:20px">
+      <div class="card" style="border-left:3px solid var(--accent)">
+        <h3 style="color:var(--accent)">기존 접근법의 한계</h3>
+        <ul>
+          <li>행동 수준의 안전 가드레일</li>
+          <li>반응적, 다층 방어</li>
+          <li>표면적 거부 학습</li>
+          <li>탈옥에 근본적으로 취약</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent4)">
+        <h3 style="color:var(--accent4)">제안: 기계적 정렬</h3>
+        <ul>
+          <li>내부 메커니즘 직접 타겟팅</li>
+          <li>유해 생성 능력의 구조적 제거</li>
+          <li>이해 능력은 보존</li>
+          <li>모델이 유해성을 <em>아는</em> 것과 <em>생성하는</em> 것의 분리</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fade-in card" style="margin-top:16px;background:rgba(16,185,129,0.05);border-color:rgba(16,185,129,0.2)">
+      <p><span class="highlight-green">이상적인 안전 시스템:</span> 모델이 유해 콘텐츠를 이해하지만(콘텐츠 모더레이션, 레드팀, 정책 집행을 위해) 생성할 수는 없는 상태 &mdash; 이 연구는 이것이 <strong>구조적으로 가능</strong>함을 보여줍니다.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Summary of Contributions -->
+  <div class="slide" data-index="9">
+    <span class="slide-number">10 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-cyan">핵심 기여</span>
+      <h2>6가지 주요 기여점</h2>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(244,63,94,0.15)">1</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">구조적 발견</p>
+          <p>유해성은 전체 파라미터의 <span class="highlight">0.0005%</span>에 인코딩되어 있으며, 도메인 간 통합되어 있음</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(139,92,246,0.15)">2</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">기계적 통찰</p>
+          <p>정렬 훈련은 거부 메커니즘과 <span class="highlight-purple">독립적으로</span> 유해 생성 가중치를 압축</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(6,182,212,0.15)">3</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">창발적 오정렬 설명</p>
+          <p>압축 메커니즘이 좁은 파인튜닝이 <span class="highlight-cyan">광범위한 오정렬</span>을 유발하는 이유를 규명</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(16,185,129,0.15)">4</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">이중 해리 증명</p>
+          <p>유해 콘텐츠의 <span class="highlight-green">생성과 이해는 기계적으로 분리</span>되어 있음</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(244,63,94,0.15)">5</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">방법론적 혁신</p>
+          <p>가중치 프루닝을 신경과학의 병변 연구에 비유한 인과적 탐침 도구로 활용</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="capability-item">
+        <div class="cap-icon" style="background:rgba(139,92,246,0.15)">6</div>
+        <div>
+          <p style="font-weight:600;color:var(--text-primary)">실용적 경로 제시</p>
+          <p>행동 가드레일이 아닌 내부 구조에 기반한 <strong>기계적 정렬</strong>의 토대 마련</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Conclusion -->
+  <div class="slide" data-index="10">
+    <span class="slide-number">11 / 11</span>
+    <div class="fade-in">
+      <span class="tag tag-green">결론</span>
+      <h2>유해성은 구조다. 구조는 개입할 수 있다.</h2>
+    </div>
+    <div class="fade-in">
+      <div class="divider"></div>
+    </div>
+    <div class="fade-in" style="margin:20px 0">
+      <div class="card" style="background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(6,182,212,0.08)); border-color:rgba(139,92,246,0.2)">
+        <p style="font-size:clamp(0.9rem,2vw,1.2rem);line-height:1.8;color:var(--text-primary)">
+          LLM의 유해성은 분산된 표면 패턴이 아니라 <span class="highlight-purple">일관된 내부 구조</span>로 존재합니다.<br>
+          이 구조는 <span class="highlight">극도로 압축</span>되어 있으며, 도메인을 초월하여 <span class="highlight-cyan">통합</span>되어 있고,<br>
+          유해 콘텐츠의 이해 능력과는 <span class="highlight-green">완전히 분리</span>되어 있습니다.
+        </p>
+      </div>
+    </div>
+    <div class="fade-in quote-block">
+      "행동적 가드레일을 넘어, 모델의 기계적 이해에 기반한 정렬 &mdash; 이것이 안전성의 미래 방향이다."
+    </div>
+    <div class="fade-in" style="margin-top:24px">
+      <p style="color:var(--text-muted);font-size:clamp(0.75rem,1.3vw,0.9rem)">
+        <strong>논문:</strong> Orgad et al. (2026) &middot; arXiv:2604.09544v1<br>
+        <strong>모델:</strong> Llama-3.1-8B, Qwen-2.5-14B, Mistral-7B, OLMo-3-7B<br>
+        <strong>키워드:</strong> 기계적 정렬, 가중치 프루닝, 이중 해리, 창발적 오정렬, AI 안전성
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled aria-label="이전 슬라이드">&#x2190;</button>
+  <div class="progress-bar" id="progressBar"></div>
+  <span class="slide-counter" id="slideCounter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">&#x2192;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // Build progress dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    dot.addEventListener('click', () => goTo(i));
+    progressBar.appendChild(dot);
+  }
+
+  function updateProgress() {
+    const dots = progressBar.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].className = 'progress-dot';
+      if (i < current) dots[i].classList.add('visited');
+      if (i === current) dots[i].classList.add('current');
+    }
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    slides[current].style.opacity = '0';
+    current = index;
+    slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    slides[current].style.opacity = '0';
+    requestAnimationFrame(() => {
+      slides[current].classList.add('active');
+      slides[current].classList.remove('exit-left');
+      slides[current].scrollTop = 0;
+    });
+    updateProgress();
+  }
+
+  window.navigate = function(dir) {
+    goTo(current + dir);
+  };
+
+  // Touch/swipe support
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const dx = touchStartX - touchEndX;
+    const dy = Math.abs(touchStartY - touchEndY);
+    if (Math.abs(dx) > 50 && dy < Math.abs(dx) * 0.7) {
+      if (dx > 0) navigate(1);
+      else navigate(-1);
+    }
+  }, { passive: true });
+
+  // Keyboard support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>

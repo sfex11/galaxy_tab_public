@@ -1,56 +1,73 @@
-# Vlm
+# Vlm: 합성 분석
 
 **카테고리**: AI/ML
 **관련 논문**: 26편
+**분석 기준일**: 2026-04-14
 
 ## 정의
 
-_Wiki 축적 중 (claude 분석 대기)_
+Vision-Language Model(VLM)은 시각 정보와 자연어를 동시에 처리하는 멀티모달 모델로, 이미지/비디오 이해, 시각적 그라운딩, 공간 추론, 에이전틱 행동 등 광범위한 태스크를 수행한다.
 
+## 연구 지형: 네 가지 축
 
-## 논문에서 발견된 핵심 인사이트
+26편의 논문을 분석한 결과, 현재 VLM 연구는 네 가지 핵심 축을 중심으로 전개되고 있다.
 
-- 단안 비디오만으로 2D VLM에 명시적 3D 공간 추론 능력을 부여함으로써, 기하학적 단서를 보조 입력으로 추가하는 기존 접근법의 한계를 넘어 언어 기반 3D 위치 추정과 공간 추론을 통합한 프레임워크를 제시했다.
-- 단안 비디오만으로 2D VLM에 3D 공간 추론 능력을 부여함으로써, 별도 깊이 센서 없이도 언어 기반 로컬라이제이션과 시점 인식 추론이 가능해진다.
-- 체화된 내비게이션 에이전트의 평가를 이상적 조건의 성능 측정에서 실세계 입력 손상에 대한 신뢰성 평가로 확장하여, 안전한 실배포를 위한 벤치마크 패러다임을 제시한다.
-- 비디오 생성 모델이 학습 과정에서 자연스럽게 획득한 암묵적 3D 공간 프라이어를 명시적 3D 데이터 없이 장면 이해에 전이할 수 있다는 패러다임 전환을 제시한다.
-- VLM의 의미적 그라운딩 능력과 물리적 메트릭 추론을 다중 에이전트 확률적 프레임워크로 분리·통합함으로써, 로봇 내비게이션에서 정밀한 공간 명령 수행이 가능해진다.
-- NavTrust는 체화된 내비게이션 모델을 이상적 조건이 아닌 실세계 손상 시나리오에서 평가함으로써, 성능 중심 평가에서 신뢰성 중심 평가로의 전환을 제안하는 최초의 통합 벤치마크이다.
-- VLM의 의미적 그라운딩 능력과 메트릭 공간 추론의 간극을 다중 에이전트 확률적 프레임워크로 연결함으로써, 자연어 명령의 물리적 실행 가능성을 크게 높였다.
-- 체화된 내비게이션 시스템의 실환경 배포를 위해, 이상적 조건이 아닌 체계적 입력 손상 하에서의 신뢰성 평가가 필수적이며, NavTrust는 VLN과 OGN을 통합하는 최초의 강건성 벤치마크를 제시한다.
-- 장면 그래프 위에서의 구조적 추론을 통해 LLM/VLM의 공간 이해 한계를 극복하고, 자연어 지시 기반의 정밀한 3D 레이아웃 편집을 가능하게 한 점이 핵심이다.
-- MARCUS는 에이전틱 VLM 패러다임을 임상 심장학에 적용하여, 이질적 의료 모달리티(ECG/초음파/MRI)를 통합 추론하는 대화형 진단 시스템을 구현함으로써 도메인 특화 멀티모달 에이전트의 실현 가능성을 입증했다.
-- 멀티모달 LLM을 실내/객체 수준에서 도시 규모 3D 환경으로 확장하기 위해 coarse-to-fine 병렬 브랜치 인코딩과 자동화된 대규모 데이터 생성 파이프라인을 결합한 최초의 통합 프레임워크를 제안했다.
-- 시각 토큰을 제거하는 대신 레이어별 시각-언어 상호작용을 동적으로 선택함으로써, 정보 손실 없이 LVLM 추론 효율을 개선할 수 있다는 새로운 패러다임을 제시한다.
-- 로봇 조작에서 의미 압축 기반 메모리 대신 원시 지각 단서를 보존하는 에피소딕 메모리가 관찰 수준의 비마르코프 의사결정 문제를 효과적으로 해결한다.
-- 에이전틱 VLM 평가를 단일 턴 정답률에서 다중 턴 전략적 질문 생성과 정보 통합 능력 측정으로 전환함으로써, 실제 에이전트 배포 시나리오에 부합하는 평가 패러다임을 제시한다.
-- 프론티어 포인트 대신 지속적 방향(persistent direction)을 탐색 단위로 사용하면, 불완전한 관측 하에서의 경로 불안정성과 반복 방문 문제를 구조적으로 해소할 수 있다.
+### 1. 공간 추론 능력의 확장 (9편)
+
+가장 두꺼운 연구 흐름이다. **Loc3R-VLM**은 단안 비디오만으로 2D VLM에 3D 공간 추론을 부여하는 프레임워크를 제시했고, **3D-Layout-R1**은 장면 그래프 기반 구조적 추론으로 언어 지시 기반 3D 편집을 실현했다. **3DCity-LLM**은 이를 도시 규모로 확장하며 coarse-to-fine 인코딩 전략을 도입했다. **Generation Models Know Space**는 비디오 생성 모델의 암묵적 3D 프라이어를 전이하는 패러다임 전환을 제안했다. 이들은 공통적으로 VLM의 '공간적 맹점'을 지적하면서, 명시적 3D 데이터 의존을 줄이는 방향으로 수렴한다.
+
+### 2. 체화된 내비게이션과 에이전틱 행동 (10편)
+
+**NavTrust**(3편 중복)는 VLN/OGN 모델의 신뢰성 평가 패러다임을 제시하여, 성능 중심에서 강건성 중심으로의 전환을 촉구했다. **Meanings and Measurements**는 다중 에이전트 확률적 프레임워크로 의미적 그라운딩과 메트릭 추론의 간극을 연결했고, **DRIVE-Nav**는 프론티어 대신 방향 기반 탐색으로 경로 불안정성을 해소했다. **Stop Wandering**은 메타인지 결핍을 비효율적 탐색의 원인으로 진단했으며, **UniDriveVLA**는 자율주행에서 지각-이해-행동을 통합했다. **Chameleon**은 에피소딕 메모리로 장기 시계 로봇 조작 문제를 다뤘고, **Visually-grounded Humanoid Agents**는 시각 관찰만으로 자연스러운 휴머노이드 행동을 구현했다.
+
+이 축에서 주목할 **보완 관계**: NavTrust가 "얼마나 신뢰할 수 있는가"를 묻는다면, DRIVE-Nav과 Stop Wandering은 "어떻게 더 효율적으로 탐색하는가"를, Meanings and Measurements는 "얼마나 정밀하게 실행하는가"를 다룬다.
+
+### 3. 추론 능력과 메타인지 강화 (4편)
+
+**OpenVLThinkerV2**는 GRPO 기반 통합 RL로 이질적 시각 태스크에서 세밀 지각과 다단계 추론을 동시 달성했다. **Act Wisely**는 도구 사용의 메타인지를 VLM에 학습시켜 맹목적 도구 호출을 억제했다. **AMIGO**는 에이전틱 VLM 평가를 다중 턴 전략적 질문 생성으로 전환하는 벤치마크를 제안했다. **MARCUS**는 심장학 도메인에서 에이전틱 추론의 실현 가능성을 입증했다.
+
+### 4. 효율성과 표현 최적화 (3편)
+
+**VISOR**는 시각 토큰 축소 대신 레이어별 동적 상호작용 선택이라는 직교적 전략을 제시했다. **Steerable Visual Representations**는 텍스트 조건 경량 어댑터로 시각 표현의 조향 가능성을 확보했다. **Appear2Meaning**은 문화적 메타데이터 추론이라는 새로운 평가 차원을 개척했다.
+
+## 핵심 논점과 긴장
+
+- **암묵적 vs 명시적 3D 표현**: Generation Models Know Space는 명시적 3D 데이터 없이 암묵적 프라이어를 활용하는 반면, 3D-Layout-R1은 장면 그래프라는 명시적 구조에 의존한다. 이 긴장은 "VLM이 진정한 3D 이해를 갖추는가, 아니면 구조적 보조가 필수인가"라는 근본 질문으로 이어진다.
+- **단일 모델 vs 다중 에이전트**: Meanings and Measurements의 모듈화된 다중 에이전트 접근은 OpenVLThinkerV2의 통합 단일 모델 접근과 대조된다. 복잡한 공간 추론에서 어떤 패러다임이 우위를 점할지는 미결 과제다.
+- **성능 vs 신뢰성**: NavTrust가 강건성 평가의 필요성을 역설하는 반면, 대부분의 연구는 여전히 이상적 조건의 성능 향상에 집중한다.
+
+## 미래 방향
+
+1. **공간 추론의 스케일업**: 객체 → 실내 → 도시 규모로의 확장이 진행 중이며, 다음 단계는 동적 환경에서의 실시간 공간 추론이 될 것이다.
+2. **메타인지 내재화**: Stop Wandering과 Act Wisely가 시사하듯, "언제 탐색을 멈출지", "언제 도구를 쓸지"를 스스로 판단하는 능력이 에이전틱 VLM의 핵심 차별점이 될 것이다.
+3. **도메인 특화 확장**: MARCUS(의료), UniDriveVLA(자율주행), Appear2Meaning(문화유산)이 보여주듯, 범용 VLM의 전문 도메인 적용이 가속화될 전망이다.
+4. **평가 패러다임의 성숙**: NavTrust(강건성), AMIGO(다중 턴 에이전틱), Appear2Meaning(문화적 추론) 등 평가 방식 자체의 혁신이 모델 발전을 견인하고 있다.
 
 ## 전체 관련 논문 (26편)
 
-- [[sources/2026-03-19-loc3r-vlm-language-based-localization-and-3d-reaso.md|2026 03 19 loc3r vlm language based localization and 3d reaso.md]] (2026-03-19)
-- [[sources/2026-03-20-loc3r-vlm-language-based-localization-and-3d-reaso.md|2026 03 20 loc3r vlm language based localization and 3d reaso.md]] (2026-03-20)
-- [[sources/2026-03-21-navtrust-benchmarking-trustworthiness-for-embodied.md|2026 03 21 navtrust benchmarking trustworthiness for embodied.md]] (2026-03-21)
-- [[sources/2026-03-22-generation-models-know-space-unleashing-implicit-3.md|2026 03 22 generation models know space unleashing implicit 3.md]] (2026-03-22)
-- [[sources/2026-03-22-meanings-and-measurements-multi-agent-probabilisti.md|2026 03 22 meanings and measurements multi agent probabilisti.md]] (2026-03-22)
-- [[sources/2026-03-22-navtrust-benchmarking-trustworthiness-for-embodied.md|2026 03 22 navtrust benchmarking trustworthiness for embodied.md]] (2026-03-22)
-- [[sources/2026-03-23-meanings-and-measurements-multi-agent-probabilisti.md|2026 03 23 meanings and measurements multi agent probabilisti.md]] (2026-03-23)
-- [[sources/2026-03-23-navtrust-benchmarking-trustworthiness-for-embodied.md|2026 03 23 navtrust benchmarking trustworthiness for embodied.md]] (2026-03-23)
-- [[sources/2026-03-25-3d-layout-r1-structured-reasoning-for-language-ins.md|2026 03 25 3d layout r1 structured reasoning for language ins.md]] (2026-03-25)
-- [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|2026 03 25 marcus an agentic multimodal vision language model.md]] (2026-03-25)
-- [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|2026 03 26 3dcity llm empowering multi modality large languag.md]] (2026-03-26)
-- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|2026 03 26 vision on request enhanced vllm efficiency with sp.md]] (2026-03-26)
-- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|2026 03 27 chameleon episodic memory for long horizon robotic.md]] (2026-03-27)
-- [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|2026 03 31 amigo agentic multi image grounding oracle benchma.md]] (2026-03-31)
-- [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|2026 03 31 drive nav directional reasoning inspection and ver.md]] (2026-03-31)
-- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|2026 04 01 amigo agentic multi image grounding oracle benchma.md]] (2026-04-01)
-- [[sources/2026-04-03-unidrivevla-unifying-understanding-perception-and-.md|2026 04 03 unidrivevla unifying understanding perception and .md]] (2026-04-03)
-- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|2026 04 04 stop wandering efficient vision language navigatio.md]] (2026-04-04)
-- [[sources/2026-04-05-steerable-visual-representations.md|2026 04 05 steerable visual representations.md]] (2026-04-05)
-- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|2026 04 06 stop wandering efficient vision language navigatio.md]] (2026-04-06)
-- [[sources/2026-04-10-appear2meaning-a-cross-cultural-benchmark-for-stru.md|2026 04 10 appear2meaning a cross cultural benchmark for stru.md]] (2026-04-10)
-- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|2026 04 11 openvlthinkerv2 a generalist multimodal reasoning .md]] (2026-04-11)
-- [[sources/2026-04-12-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|2026 04 12 act wisely cultivating meta cognitive tool use in .md]] (2026-04-12)
-- [[sources/2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|2026 04 12 openvlthinkerv2 a generalist multimodal reasoning .md]] (2026-04-12)
-- [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|2026 04 13 act wisely cultivating meta cognitive tool use in .md]] (2026-04-13)
-- [[sources/2026-04-13-visually-grounded-humanoid-agents.md|2026 04 13 visually grounded humanoid agents.md]] (2026-04-13)
+- [[sources/2026-03-19-loc3r-vlm-language-based-localization-and-3d-reaso.md|Loc3R-VLM]] (2026-03-19)
+- [[sources/2026-03-20-loc3r-vlm-language-based-localization-and-3d-reaso.md|Loc3R-VLM]] (2026-03-20)
+- [[sources/2026-03-21-navtrust-benchmarking-trustworthiness-for-embodied.md|NavTrust]] (2026-03-21)
+- [[sources/2026-03-22-generation-models-know-space-unleashing-implicit-3.md|Generation Models Know Space]] (2026-03-22)
+- [[sources/2026-03-22-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements]] (2026-03-22)
+- [[sources/2026-03-22-navtrust-benchmarking-trustworthiness-for-embodied.md|NavTrust]] (2026-03-22)
+- [[sources/2026-03-23-meanings-and-measurements-multi-agent-probabilisti.md|Meanings and Measurements]] (2026-03-23)
+- [[sources/2026-03-23-navtrust-benchmarking-trustworthiness-for-embodied.md|NavTrust]] (2026-03-23)
+- [[sources/2026-03-25-3d-layout-r1-structured-reasoning-for-language-ins.md|3D-Layout-R1]] (2026-03-25)
+- [[sources/2026-03-25-marcus-an-agentic-multimodal-vision-language-model.md|MARCUS]] (2026-03-25)
+- [[sources/2026-03-26-3dcity-llm-empowering-multi-modality-large-languag.md|3DCity-LLM]] (2026-03-26)
+- [[sources/2026-03-26-vision-on-request-enhanced-vllm-efficiency-with-sp.md|VISOR]] (2026-03-26)
+- [[sources/2026-03-27-chameleon-episodic-memory-for-long-horizon-robotic.md|Chameleon]] (2026-03-27)
+- [[sources/2026-03-31-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO]] (2026-03-31)
+- [[sources/2026-03-31-drive-nav-directional-reasoning-inspection-and-ver.md|DRIVE-Nav]] (2026-03-31)
+- [[sources/2026-04-01-amigo-agentic-multi-image-grounding-oracle-benchma.md|AMIGO]] (2026-04-01)
+- [[sources/2026-04-03-unidrivevla-unifying-understanding-perception-and-.md|UniDriveVLA]] (2026-04-03)
+- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering]] (2026-04-04)
+- [[sources/2026-04-05-steerable-visual-representations.md|Steerable Visual Representations]] (2026-04-05)
+- [[sources/2026-04-06-stop-wandering-efficient-vision-language-navigatio.md|Stop Wandering]] (2026-04-06)
+- [[sources/2026-04-10-appear2meaning-a-cross-cultural-benchmark-for-stru.md|Appear2Meaning]] (2026-04-10)
+- [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2]] (2026-04-11)
+- [[sources/2026-04-12-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely]] (2026-04-12)
+- [[sources/2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2]] (2026-04-12)
+- [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely]] (2026-04-13)
+- [[sources/2026-04-13-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-13)

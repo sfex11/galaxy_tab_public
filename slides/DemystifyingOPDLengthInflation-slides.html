@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Demystifying OPD: 길이 팽창과 안정화 전략</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2235;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --danger: #ef4444;
+    --danger-light: #f87171;
+    --success: #10b981;
+    --success-light: #34d399;
+    --warning: #f59e0b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: rgba(99, 102, 241, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    color: var(--accent-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 700;
+    color: var(--accent-light);
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+
+  .highlight { color: var(--accent-light); font-weight: 700; }
+  .danger { color: var(--danger-light); font-weight: 700; }
+  .success { color: var(--success-light); font-weight: 700; }
+  .warning { color: var(--warning); font-weight: 700; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+
+  /* ===== CARDS & BOXES ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+    align-content: start;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px var(--accent-glow);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .info-box {
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(99,102,241,0.05));
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  .danger-box {
+    background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05));
+    border-left: 4px solid var(--danger);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  .success-box {
+    background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+    border-left: 4px solid var(--success);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  /* ===== LISTS ===== */
+  ul { list-style: none; padding: 0; }
+  ul li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  ol { padding-left: 24px; }
+  ol li { padding: 6px 0; }
+
+  /* ===== TABLE ===== */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 16px 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    min-width: 500px;
+  }
+
+  th {
+    background: var(--bg-card-alt);
+    color: var(--accent-light);
+    font-weight: 700;
+    padding: 12px 14px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td { background: rgba(99,102,241,0.05); }
+
+  .best {
+    color: var(--success-light);
+    font-weight: 700;
+  }
+
+  /* ===== FLOW / DIAGRAM ===== */
+  .flow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .flow-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 120px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  }
+
+  .flow-arrow {
+    color: var(--accent-light);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .flow-step.danger-step {
+    border-color: var(--danger);
+    background: rgba(239,68,68,0.08);
+  }
+
+  /* ===== EQUATION ===== */
+  .equation {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.6vw, 1.05rem);
+    text-align: center;
+    color: var(--accent-light);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    min-width: 100px;
+    font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+    text-align: right;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.accent-bar { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+  .bar-fill.danger-bar { background: linear-gradient(90deg, #b91c1c, var(--danger)); }
+  .bar-fill.success-bar { background: linear-gradient(90deg, #047857, var(--success)); }
+  .bar-fill.warning-bar { background: linear-gradient(90deg, #b45309, var(--warning)); }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 16px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--danger), var(--danger));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 22px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-primary);
+  }
+  .timeline-item.danger-item::before { background: var(--danger); }
+  .timeline-item .label {
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+    color: var(--accent-light);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* ===== CYCLE DIAGRAM ===== */
+  .cycle-diagram {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+    padding: 24px;
+    background: rgba(239,68,68,0.04);
+    border: 1px dashed var(--danger);
+    border-radius: 16px;
+  }
+
+  .cycle-step {
+    background: var(--bg-card);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    text-align: center;
+    color: var(--text-secondary);
+    max-width: 160px;
+  }
+
+  .cycle-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--danger-light);
+    font-size: 1.2rem;
+  }
+
+  /* ===== COMPARISON ===== */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: start;
+    margin: 16px 0;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 900;
+    color: var(--text-muted);
+    padding-top: 40px;
+  }
+
+  .vs-panel {
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .vs-panel.panel-bad {
+    background: rgba(239,68,68,0.05);
+    border-color: rgba(239,68,68,0.3);
+  }
+
+  .vs-panel.panel-good {
+    background: rgba(16,185,129,0.05);
+    border-color: rgba(16,185,129,0.3);
+  }
+
+  /* ===== METRIC BOXES ===== */
+  .metric-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .metric-box {
+    flex: 1;
+    min-width: 140px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .metric-value {
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .metric-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .metric-delta {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  /* ===== PROGRESS INDICATOR ===== */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.4s ease;
+    z-index: 1000;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: linear-gradient(transparent, var(--bg-primary) 30%);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .nav-btn:active { transform: scale(0.95); }
+  .nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    pointer-events: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 60%;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-dot.active {
+    background: var(--accent-light);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ===== TITLE SLIDE SPECIAL ===== */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.15) 0%, transparent 70%);
+  }
+
+  .title-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 6px 20px;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--accent-light);
+    font-weight: 500;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .authors {
+    font-size: clamp(0.75rem, 1.4vw, 1rem);
+    color: var(--text-muted);
+    margin-top: 20px;
+    line-height: 1.8;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-item {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .slide.active .anim-item:nth-child(1) { animation-delay: 0.1s; }
+  .slide.active .anim-item:nth-child(2) { animation-delay: 0.2s; }
+  .slide.active .anim-item:nth-child(3) { animation-delay: 0.3s; }
+  .slide.active .anim-item:nth-child(4) { animation-delay: 0.4s; }
+  .slide.active .anim-item:nth-child(5) { animation-delay: 0.5s; }
+  .slide.active .anim-item:nth-child(6) { animation-delay: 0.6s; }
+  .slide.active .anim-item:nth-child(7) { animation-delay: 0.7s; }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+    50% { box-shadow: 0 0 20px 4px var(--accent-glow); }
+  }
+
+  .glow-pulse { animation: pulse-glow 2s infinite; }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.1) 0%, transparent 60%);
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: rgba(99,102,241,0.2);
+    line-height: 1;
+  }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 30px 80px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-divider { padding-top: 0; }
+    .flow-container { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .nav-btn span.btn-text { display: none; }
+    .metric-row { gap: 10px; }
+    .metric-box { min-width: 100px; padding: 14px; }
+    h1 { margin-bottom: 12px; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 80px; }
+    h2 { margin-bottom: 14px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .info-box, .danger-box, .success-box { padding: 14px 16px; }
+    .nav-container { padding: 10px 16px; }
+    .nav-dots { gap: 4px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+    .equation { padding: 14px 16px; font-size: clamp(0.65rem, 3vw, 0.85rem); }
+    .metric-value { font-size: clamp(1.2rem, 6vw, 2rem); }
+    .cycle-diagram { padding: 16px; gap: 6px; }
+    .cycle-step { padding: 8px 12px; max-width: 130px; }
+    .timeline { padding-left: 24px; }
+    .timeline-item { padding: 12px 14px; }
+    .table-wrap { font-size: 0.75rem; }
+    .authors { font-size: 0.7rem; }
+    .bar-label { min-width: 75px; }
+  }
+
+  /* ===== SMALL MOBILE ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 76px; }
+    .card { padding: 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 10px 14px; }
+    .metric-box { min-width: 80px; padding: 10px; }
+    .bar-label { min-width: 60px; font-size: 0.65rem; }
+    .bar-track { height: 22px; }
+    .title-badge { padding: 4px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ===== SLIDE 0: TITLE ===== -->
+  <div class="slide title-slide active" data-index="0">
+    <div class="title-badge">arXiv:2604.08527 &middot; 2026</div>
+    <h1 style="max-width: 800px;">OPD의 비밀을 밝히다:<br>대규모 언어 모델의 길이 팽창과 안정화 전략</h1>
+    <p class="subtitle" style="max-width: 600px;">On-Policy Distillation에서 발생하는<br>치명적 실패 모드와 그 해결책</p>
+    <div class="authors">
+      Feng Luo &middot; Yu-Neng Chuang &middot; Guanchu Wang &middot; Zicheng Xu<br>
+      Xiaotian Han &middot; Tianyi Zhang &middot; Vladimir Braverman
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 1: AGENDA ===== -->
+  <div class="slide" data-index="1">
+    <div class="slide-number">개요</div>
+    <h2>발표 순서</h2>
+    <div class="card-grid cols-2" style="max-width: 800px;">
+      <div class="card anim-item">
+        <div class="card-icon">&#x1F3AF;</div>
+        <h3>1. 배경</h3>
+        <p>지식 증류와 On-Policy Distillation(OPD)의 개념</p>
+      </div>
+      <div class="card anim-item">
+        <div class="card-icon">&#x26A0;</div>
+        <h3>2. 문제 발견</h3>
+        <p>OPD 훈련 중 발생하는 길이 팽창 현상</p>
+      </div>
+      <div class="card anim-item">
+        <div class="card-icon">&#x1F50D;</div>
+        <h3>3. 원인 분석</h3>
+        <p>반복 포화와 자기강화 피드백 루프</p>
+      </div>
+      <div class="card anim-item">
+        <div class="card-icon">&#x2705;</div>
+        <h3>4. 해결책</h3>
+        <p>Stable-OPD: 혼합 증류 + KL 정규화</p>
+      </div>
+      <div class="card anim-item">
+        <div class="card-icon">&#x1F4CA;</div>
+        <h3>5. 실험 결과</h3>
+        <p>수학 추론 벤치마크에서의 성능 검증</p>
+      </div>
+      <div class="card anim-item">
+        <div class="card-icon">&#x1F4A1;</div>
+        <h3>6. 결론</h3>
+        <p>핵심 기여와 시사점</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 2: BACKGROUND - Off vs On ===== -->
+  <div class="slide" data-index="2">
+    <div class="slide-number">배경</div>
+    <h2>지식 증류: Off-Policy vs On-Policy</h2>
+    <div class="vs-container anim-item">
+      <div class="vs-panel" style="background: var(--bg-card);">
+        <h3 style="color: var(--warning);">Off-Policy 증류 (기존)</h3>
+        <p style="margin-bottom: 12px;"><span class="highlight">고정된 데이터셋</span>으로 학생 모델 훈련</p>
+        <div class="equation" style="font-size: clamp(0.65rem, 1.3vw, 0.9rem);">
+          L = E<sub>(x,y)~P</sub>[D(π<sub>T</sub> ∥ π<sub>S</sub>)(y|x)]
+        </div>
+        <div class="danger-box">
+          <p><span class="danger">문제:</span> 훈련-추론 불일치<br>
+          학생은 추론 시 자신의 출력을 기반으로 하지만, 훈련은 교사/정답 분포에서 수행</p>
+        </div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-panel" style="background: var(--bg-card);">
+        <h3 style="color: var(--success);">On-Policy 증류 (OPD)</h3>
+        <p style="margin-bottom: 12px;"><span class="highlight">학생 자체 생성</span> 데이터로 훈련</p>
+        <div class="equation" style="font-size: clamp(0.65rem, 1.3vw, 0.9rem);">
+          L = E<sub>x,ŷ~π<sub>S</sub></sub>[D(π<sub>S</sub> ∥ π<sub>T</sub>)(ŷ|x)]
+        </div>
+        <div class="success-box">
+          <p><span class="success">장점:</span> 훈련-추론 정렬<br>
+          학생의 현재 정책에서 샘플링하여 실제 추론 환경과 동일한 조건에서 학습</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 3: PROBLEM OVERVIEW ===== -->
+  <div class="slide" data-index="3">
+    <div class="slide-number">문제 발견</div>
+    <h2>OPD의 <span class="danger">치명적 실패 모드</span></h2>
+    <p class="subtitle">훈련이 진행되면서 갑작스러운 길이 팽창이 발생한다</p>
+
+    <div class="timeline">
+      <div class="timeline-item anim-item">
+        <div class="label">초기 단계 (안정기)</div>
+        <p>모델이 안정적으로 학습. 절단율 ~0.5 (1.5B) / ~0.23 (7B), 반복율 ~0</p>
+      </div>
+      <div class="timeline-item danger-item anim-item">
+        <div class="label" style="color: var(--danger-light);">위상 전이 (~30 스텝 내)</div>
+        <p><span class="danger">절단율이 ~1.0으로 급등</span> (거의 모든 생성이 최대 길이 도달)<br>
+        <span class="danger">반복율이 0.3~0.6으로 폭증</span></p>
+      </div>
+      <div class="timeline-item danger-item anim-item">
+        <div class="label" style="color: var(--danger-light);">성능 붕괴</div>
+        <p>검증 정확도가 급격히 하락하며 회복되지 않음. 편향된 기울기가 훈련을 지배.</p>
+      </div>
+    </div>
+
+    <div class="info-box anim-item">
+      <p><span class="highlight">핵심 관찰:</span> 이 현상은 학생 크기(1.5B, 7B)와 교사 모델에 관계없이 <strong>일관되게</strong> 발생한다.</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 4: THE FEEDBACK LOOP ===== -->
+  <div class="slide" data-index="4">
+    <div class="slide-number">원인 분석</div>
+    <h2>자기강화 <span class="danger">피드백 루프</span></h2>
+    <p class="subtitle">반복 포화(Repetition Saturation)가 길이 팽창을 유발하는 메커니즘</p>
+
+    <div class="cycle-diagram anim-item">
+      <div class="cycle-step">반복 토큰에<br><span class="danger">4~9배 큰</span><br>어드밴티지</div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-step">학생이 반복<br>패턴을<br><span class="danger">더 많이 생성</span></div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-step">반복 토큰<br>방문 빈도<br><span class="danger">급증</span></div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-step">기울기 신호를<br>반복이<br><span class="danger">지배</span></div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-step">시퀀스 길이<br><span class="danger">폭발적 증가</span><br>&amp; 절단</div>
+      <div class="cycle-arrow" style="opacity: 0.5;">&circlearrowleft;</div>
+    </div>
+
+    <div class="card-grid cols-2" style="margin-top: 16px;">
+      <div class="danger-box anim-item">
+        <h3 style="color: var(--danger-light); font-size: clamp(0.85rem, 1.6vw, 1.1rem);">Reverse-KL 어드밴티지</h3>
+        <div class="equation" style="font-size: clamp(0.65rem, 1.3vw, 0.85rem);">A(s,y) = log π<sub>T</sub>(y|s) - log π<sub>θ</sub>(y|s)</div>
+        <p style="margin-top: 8px;">교사가 반복 토큰에 높은 확률을 부여 &rarr; 학생과의 차이가 크므로 <span class="danger">어드밴티지가 비대칭적으로 커짐</span></p>
+      </div>
+      <div class="info-box anim-item">
+        <h3>붕괴 전후 비교</h3>
+        <p><span class="highlight">붕괴 전:</span> 반복 토큰 ~5% &rarr; 큰 어드밴티지지만 전체 기여 제한적</p>
+        <p style="margin-top: 8px;"><span class="danger">붕괴 후:</span> 반복 토큰 ~30% &rarr; 큰 어드밴티지 &times; 높은 빈도 = <strong>기울기 지배</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 5: SECTION - SOLUTION ===== -->
+  <div class="slide section-slide" data-index="5">
+    <div class="section-number anim-item">II</div>
+    <h2 class="anim-item" style="margin-top: 16px;">해결책: <span class="highlight">Stable-OPD</span></h2>
+    <p class="subtitle anim-item" style="max-width: 500px;">혼합 증류(Mixture Distillation) +<br>KL 정규화(KL Regularization)</p>
+  </div>
+
+  <!-- ===== SLIDE 6: SOLUTION 1 - Mixture Distillation ===== -->
+  <div class="slide" data-index="6">
+    <div class="slide-number">해결책 1</div>
+    <h2>혼합 증류 <span class="highlight">(Mixture Distillation)</span></h2>
+    <p class="subtitle">On-Policy OPD와 Off-Policy SFT를 결합</p>
+
+    <div class="equation anim-item">
+      L<sub>mix</sub>(θ) = L<sub>OPD</sub>(θ) + λ<sub>gold</sub> &middot; E<sub>(x,y)~D<sub>gold</sub></sub>[L<sub>SFT</sub>(θ; x, y)]
+    </div>
+
+    <div class="flow-container anim-item">
+      <div class="flow-step">
+        <strong style="color: var(--accent-light);">On-Policy 롤아웃</strong><br>
+        <small>학생 생성 데이터</small>
+      </div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-step" style="border-color: var(--success);">
+        <strong style="color: var(--success-light);">Golden 솔루션</strong><br>
+        <small>고품질 정답 데이터</small>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step" style="border-color: var(--accent); background: rgba(99,102,241,0.08);">
+        <strong style="color: var(--accent-light);">동일 미니배치</strong><br>
+        <small>함께 훈련</small>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2" style="margin-top: 12px;">
+      <div class="success-box anim-item">
+        <h3 style="color: var(--success-light); font-size: clamp(0.85rem, 1.5vw, 1.05rem);">핵심 메커니즘</h3>
+        <p>완전한(비절단, 비반복) 궤적의 일정 비율을 항상 유지하여 <span class="success">안정적인 앵커</span> 역할</p>
+      </div>
+      <div class="info-box anim-item">
+        <h3>기존 방법과의 차이</h3>
+        <p>On-policy 롤아웃의 교사 신호를 <span class="highlight">변경하지 않음</span> &mdash; Golden 데이터는 보조 SFT 항으로만 활용</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 7: SOLUTION 2 - KL Regularization ===== -->
+  <div class="slide" data-index="7">
+    <div class="slide-number">해결책 2</div>
+    <h2>KL 정규화 <span class="highlight">(KL Regularization)</span></h2>
+    <p class="subtitle">참조 모델 기반 발산 제약으로 정책 드리프트 방지</p>
+
+    <div class="equation anim-item">
+      L<sub>Stable-OPD</sub>(θ) = L<sub>mix</sub>(θ) + β<sub>KL</sub> &middot; E<sub>s<sub>t</sub></sub>[D<sub>KL</sub>(π<sub>θ</sub>(·|s<sub>t</sub>) ∥ π<sub>ref</sub>(·|s<sub>t</sub>))]
+    </div>
+
+    <div class="card anim-item" style="margin: 20px 0; border-color: var(--accent);">
+      <h3>작동 원리</h3>
+      <ul>
+        <li><span class="highlight">π<sub>ref</sub></span> = 초기 학생 체크포인트 (훈련 전 상태)</li>
+        <li>방문한 프리픽스 상태에서의 <span class="highlight">정책 이탈을 페널티</span></li>
+        <li>토큰 수준에서 급격한 정책 변화를 제한</li>
+        <li>반복적이고 긴 시퀀스 방향으로의 이동을 억제</li>
+      </ul>
+    </div>
+
+    <div class="success-box anim-item">
+      <h3 style="color: var(--success-light); font-size: clamp(0.85rem, 1.5vw, 1.05rem);">두 전략의 상보적 효과</h3>
+      <p><span class="success">KL 정규화</span>: 토큰 수준에서 급격한 정책 변화 제한<br>
+      <span class="success">혼합 증류</span>: 고품질 궤적의 안정적 비율 유지<br>
+      &rarr; 두 메커니즘이 서로 다른 수준에서 안정화를 달성</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 8: EXPERIMENTAL SETUP ===== -->
+  <div class="slide" data-index="8">
+    <div class="slide-number">실험 설정</div>
+    <h2>실험 환경</h2>
+
+    <div class="card-grid cols-2">
+      <div class="card anim-item">
+        <h3>학생 모델</h3>
+        <ul>
+          <li><span class="mono">Qwen2.5-Math-1.5B</span></li>
+          <li><span class="mono">Qwen2.5-Math-7B</span></li>
+        </ul>
+      </div>
+      <div class="card anim-item">
+        <h3>교사 모델</h3>
+        <ul>
+          <li><span class="mono">DeepSeek-R1-Distill-7B</span></li>
+          <li><span class="mono">OpenThinkerV3</span></li>
+        </ul>
+      </div>
+      <div class="card anim-item">
+        <h3>데이터셋</h3>
+        <ul>
+          <li><span class="highlight">OpenR1-Math-220k</span> &rarr; 46k 고품질 샘플</li>
+          <li>SFT: 33k &middot; OPD: 13k</li>
+        </ul>
+      </div>
+      <div class="card anim-item">
+        <h3>평가 벤치마크</h3>
+        <ul>
+          <li><span class="highlight">avg@32:</span> AIME 2024, AIME 2025, AMC</li>
+          <li><span class="highlight">pass@1:</span> Minerva, OlympiadBench, MATH500</li>
+        </ul>
+      </div>
+      <div class="card anim-item" style="grid-column: span 2;">
+        <h3>훈련 상세</h3>
+        <p style="display: flex; flex-wrap: wrap; gap: 12px 24px;">
+          <span>롤아웃 배치: <span class="mono highlight">64</span></span>
+          <span>프롬프트당 궤적: <span class="mono highlight">4</span></span>
+          <span>학습률: <span class="mono highlight">1e-6</span></span>
+          <span>생성 온도: <span class="mono highlight">1.0</span></span>
+          <span>평가 온도: <span class="mono highlight">0.6</span></span>
+          <span>하드웨어: <span class="mono highlight">4&times;H200</span></span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 9: RESULTS - 7B ===== -->
+  <div class="slide" data-index="9">
+    <div class="slide-number">실험 결과</div>
+    <h2>Qwen2.5-Math-<span class="highlight">7B</span> 결과</h2>
+
+    <div class="table-wrap anim-item">
+      <table>
+        <thead>
+          <tr>
+            <th>방법</th>
+            <th>평균</th>
+            <th>MATH-500</th>
+            <th>Minerva</th>
+            <th>Olympiad</th>
+            <th>AMC</th>
+            <th>AIME24</th>
+            <th>AIME25</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left; font-weight:500;">SFT</td>
+            <td>44.1</td><td>82.6</td><td>40.8</td><td>43.7</td><td>52.8</td><td>22.2</td><td>22.3</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:500;">GRPO</td>
+            <td>45.5</td><td>84.4</td><td>39.3</td><td>46.8</td><td>62.0</td><td>25.1</td><td>15.3</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:500; color: var(--danger-light);">OPD</td>
+            <td style="color: var(--danger-light);">43.8</td><td>80.0</td><td>37.9</td><td>47.5</td><td>53.4</td><td>21.7</td><td>22.2</td>
+          </tr>
+          <tr style="background: rgba(16,185,129,0.08);">
+            <td style="text-align:left; font-weight:700; color: var(--success-light);">Stable-OPD</td>
+            <td class="best">47.6</td><td class="best">84.6</td><td class="best">43.4</td><td class="best">49.3</td><td class="best">58.1</td><td class="best">24.7</td><td class="best">25.2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="metric-row anim-item">
+      <div class="metric-box">
+        <div class="metric-value" style="color: var(--danger-light);">43.8%</div>
+        <div class="metric-label">OPD (기존)</div>
+        <div class="metric-delta" style="color: var(--danger-light);">SFT보다 낮음</div>
+      </div>
+      <div class="metric-box glow-pulse" style="border-color: var(--success);">
+        <div class="metric-value" style="color: var(--success-light);">47.6%</div>
+        <div class="metric-label">Stable-OPD</div>
+        <div class="metric-delta" style="color: var(--success-light);">+3.8%p 개선</div>
+      </div>
+    </div>
+
+    <div class="info-box anim-item">
+      <p><span class="highlight">핵심:</span> 기존 OPD(43.8%)는 단순 SFT(44.1%)보다도 낮지만, Stable-OPD(47.6%)는 <strong>모든 베이스라인을 압도</strong></p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 10: RESULTS - 1.5B ===== -->
+  <div class="slide" data-index="10">
+    <div class="slide-number">실험 결과</div>
+    <h2>Qwen2.5-Math-<span class="highlight">1.5B</span> 결과</h2>
+
+    <div class="table-wrap anim-item">
+      <table>
+        <thead>
+          <tr>
+            <th>방법</th>
+            <th>평균</th>
+            <th>MATH-500</th>
+            <th>Minerva</th>
+            <th>Olympiad</th>
+            <th>AMC</th>
+            <th>AIME24</th>
+            <th>AIME25</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left; font-weight:500;">SFT</td>
+            <td>31.9</td><td>70.6</td><td>26.8</td><td>31.3</td><td>37.8</td><td>11.7</td><td>13.2</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:500;">GRPO</td>
+            <td>30.1</td><td>61.8</td><td>26.8</td><td>32.0</td><td>40.2</td><td>11.8</td><td>7.7</td>
+          </tr>
+          <tr>
+            <td style="text-align:left; font-weight:500; color: var(--danger-light);">OPD</td>
+            <td style="color: var(--danger-light);">28.9</td><td>56.7</td><td>23.4</td><td>31.0</td><td>35.9</td><td>11.1</td><td>15.0</td>
+          </tr>
+          <tr style="background: rgba(16,185,129,0.08);">
+            <td style="text-align:left; font-weight:700; color: var(--success-light);">Stable-OPD</td>
+            <td class="best">36.1</td><td class="best">73.9</td><td class="best">32.6</td><td class="best">37.4</td><td class="best">43.0</td><td class="best">13.8</td><td class="best">16.0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bar-chart anim-item">
+      <div class="bar-row">
+        <div class="bar-label">SFT</div>
+        <div class="bar-track"><div class="bar-fill accent-bar" style="--w: 53%;">31.9%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">GRPO</div>
+        <div class="bar-track"><div class="bar-fill warning-bar" style="--w: 50%;">30.1%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">OPD</div>
+        <div class="bar-track"><div class="bar-fill danger-bar" style="--w: 48%;">28.9%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="font-weight: 700; color: var(--success-light);">Stable-OPD</div>
+        <div class="bar-track"><div class="bar-fill success-bar" style="--w: 60%;">36.1%</div></div>
+      </div>
+    </div>
+
+    <div class="success-box anim-item">
+      <p><span class="success">+7.2%p 개선!</span> OPD(28.9%) &rarr; Stable-OPD(36.1%). 소형 모델에서 안정화 효과가 더욱 극적으로 나타남.</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 11: ZERO-SHOT RL COMPARISON ===== -->
+  <div class="slide" data-index="11">
+    <div class="slide-number">비교 분석</div>
+    <h2>Zero-Shot RL 방법과의 <span class="highlight">비교</span></h2>
+    <p class="subtitle">7B 모델 기준, Stable-OPD가 모든 RL 방법을 능가</p>
+
+    <div class="bar-chart anim-item" style="max-width: 700px;">
+      <div class="bar-row">
+        <div class="bar-label">SimpleRL-Zero</div>
+        <div class="bar-track"><div class="bar-fill warning-bar" style="--w: 52%;">37.4%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">PRIME-Zero</div>
+        <div class="bar-track"><div class="bar-fill warning-bar" style="--w: 57%;">40.8%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">OpenReasoner</div>
+        <div class="bar-track"><div class="bar-fill accent-bar" style="--w: 57%;">41.0%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Oat-Zero</div>
+        <div class="bar-track"><div class="bar-fill accent-bar" style="--w: 61%;">43.8%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">GRPO</div>
+        <div class="bar-track"><div class="bar-fill accent-bar" style="--w: 63%;">45.5%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="font-weight:700; color:var(--success-light);">Stable-OPD</div>
+        <div class="bar-track"><div class="bar-fill success-bar" style="--w: 66%;">47.6%</div></div>
+      </div>
+    </div>
+
+    <div class="info-box anim-item">
+      <p><span class="highlight">시사점:</span> Stable-OPD는 강화학습 기반 방법들과 비교해도 우수한 성능을 보이며, 밀집 토큰 수준 감독(dense token-level supervision)의 잠재력을 입증</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 12: ABLATION ===== -->
+  <div class="slide" data-index="12">
+    <div class="slide-number">절삭 연구</div>
+    <h2>구성 요소별 <span class="highlight">기여도 분석</span></h2>
+    <p class="subtitle">Qwen2.5-Math-1.5B에서의 Ablation Study</p>
+
+    <div class="bar-chart anim-item" style="max-width: 650px; margin-top: 20px;">
+      <div class="bar-row">
+        <div class="bar-label">Base Model</div>
+        <div class="bar-track"><div class="bar-fill" style="--w: 27%; background: var(--text-muted);">16.0%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">OPD</div>
+        <div class="bar-track"><div class="bar-fill danger-bar" style="--w: 47%;">28.0%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">+ KL 정규화</div>
+        <div class="bar-track"><div class="bar-fill accent-bar" style="--w: 50%;">29.7%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="font-weight:700; color:var(--success-light);">+ KL + 혼합증류</div>
+        <div class="bar-track"><div class="bar-fill success-bar" style="--w: 60%;">35.7%</div></div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2" style="margin-top: 24px;">
+      <div class="card anim-item">
+        <h3 style="color: var(--accent-light);">KL 정규화 단독</h3>
+        <div class="metric-value" style="font-size: clamp(1.2rem, 3vw, 2rem); color: var(--accent-light);">+1.7%p</div>
+        <p style="margin-top: 8px;">28.0 &rarr; 29.7<br>완만한 개선. 토큰 수준 정책 드리프트 억제.</p>
+      </div>
+      <div class="card anim-item" style="border-color: var(--success);">
+        <h3 style="color: var(--success-light);">혼합 증류 추가</h3>
+        <div class="metric-value" style="font-size: clamp(1.2rem, 3vw, 2rem); color: var(--success-light);">+6.0%p</div>
+        <p style="margin-top: 8px;">29.7 &rarr; 35.7<br>극적 개선! 두 전략의 <span class="success">상보적 효과</span> 확인.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 13: TRAINING DYNAMICS ===== -->
+  <div class="slide" data-index="13">
+    <div class="slide-number">훈련 동역학</div>
+    <h2>OPD vs Stable-OPD <span class="highlight">훈련 과정</span></h2>
+
+    <div class="vs-container">
+      <div class="vs-panel panel-bad anim-item">
+        <h3 style="color: var(--danger-light);">기존 OPD</h3>
+        <ul>
+          <li>초기 낮은 절단율 (~0.3~0.5)</li>
+          <li><span class="danger">스텝 150~180에서 위상 전이</span></li>
+          <li>절단율 &rarr; 1.0 급등</li>
+          <li>반복율 &rarr; 0.3~0.6 폭증</li>
+          <li>검증 정확도 급격 하락</li>
+          <li><span class="danger">회복 불가능한 붕괴</span></li>
+        </ul>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-panel panel-good anim-item">
+        <h3 style="color: var(--success-light);">Stable-OPD</h3>
+        <ul>
+          <li>절단율 전 구간 평탄 (~0.2~0.4)</li>
+          <li><span class="success">위상 전이 없음</span></li>
+          <li>반복율 전 구간 ~0 유지</li>
+          <li>롤아웃 & 검증 모두 안정</li>
+          <li>검증 정확도 꾸준히 상승</li>
+          <li><span class="success">처음부터 끝까지 안정적</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box anim-item" style="margin-top: 16px;">
+      <p><span class="highlight">다른 교사 모델(DeepSeek-R1-Distill-7B)에서도 동일:</span> OPD는 급격한 팽창을 보이지만, Stable-OPD는 후반부에 경미한 드리프트만 관찰됨.</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 14: KEY METRICS ===== -->
+  <div class="slide" data-index="14">
+    <div class="slide-number">핵심 지표</div>
+    <h2>측정 방법론</h2>
+
+    <div class="card-grid cols-2" style="margin-top: 12px;">
+      <div class="card anim-item">
+        <h3 style="color: var(--warning);">절단율 (Truncation Rate)</h3>
+        <div class="equation" style="font-size: clamp(0.6rem, 1.3vw, 0.85rem);">
+          TruncRate = (1/N) &Sigma; trunc(o<sub>i</sub>)
+        </div>
+        <p style="margin-top: 12px;">
+          <span class="highlight">trunc(o<sub>i</sub>)</span> = EOS 토큰 없이 최대 길이에 도달하여 생성이 중단된 경우 1<br><br>
+          절단된 시퀀스가 많을수록 훈련 데이터 품질이 저하됨
+        </p>
+      </div>
+      <div class="card anim-item">
+        <h3 style="color: var(--danger-light);">반복율 (Repetition Rate)</h3>
+        <div class="equation" style="font-size: clamp(0.6rem, 1.3vw, 0.85rem);">
+          CompRatio = |bytes(tail)| / |compress(bytes(tail))|
+        </div>
+        <p style="margin-top: 12px;">
+          <span class="highlight">압축 기반 측정:</span> 롤아웃 후반부의 압축률을 계산<br><br>
+          꼬리 길이 > 10,000자 &amp; 압축비 > 10이면 &ldquo;반복&rdquo;으로 판정 &mdash; 정보량이 매우 낮은 반복 패턴
+        </p>
+      </div>
+    </div>
+
+    <div class="danger-box anim-item" style="margin-top: 16px;">
+      <p><span class="danger">핵심 통찰:</span> 절단율과 반복율의 급등은 항상 <strong>동시에</strong> 발생하며, 검증 정확도 하락과 정확히 일치한다. 이는 두 현상이 동일한 근본 원인(자기강화 피드백 루프)에서 기인함을 보여준다.</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 15: PRIOR WORK DISTINCTION ===== -->
+  <div class="slide" data-index="15">
+    <div class="slide-number">관련 연구와의 차이</div>
+    <h2>기존 길이 편향 연구와의 <span class="highlight">차별점</span></h2>
+
+    <div class="vs-container" style="margin-top: 16px;">
+      <div class="vs-panel anim-item" style="background: var(--bg-card);">
+        <h3 style="color: var(--warning);">기존 연구 (Dr.GRPO, DAPO 등)</h3>
+        <ul>
+          <li>RLVR에서의 <span class="warning">시퀀스 수준</span> 길이 편향</li>
+          <li>기울기 재가중(gradient reweighting)으로 해결</li>
+          <li>보상 신호와 길이의 상관관계 문제</li>
+        </ul>
+      </div>
+      <div class="vs-divider">vs</div>
+      <div class="vs-panel anim-item" style="background: var(--bg-card); border-color: var(--accent);">
+        <h3 style="color: var(--accent-light);">본 연구 (OPD 특유)</h3>
+        <ul>
+          <li><span class="highlight">토큰 수준</span> reverse-KL 어드밴티지의 비대칭성</li>
+          <li>On-policy 샘플링이 이를 증폭하는 메커니즘</li>
+          <li>교사 우도(likelihood) 신호와 학생 데이터 수집의 상호작용</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box anim-item" style="margin-top: 16px;">
+      <p><span class="highlight">질적으로 다른 실패 모드:</span> RLVR의 길이 편향은 보상 해킹(reward hacking)에서 비롯되지만, OPD의 길이 팽창은 <strong>교사-학생 간 확률 차이와 on-policy 방문 빈도의 상호작용</strong>이라는 고유한 메커니즘에서 발생</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 16: CONCLUSION ===== -->
+  <div class="slide" data-index="16">
+    <div class="slide-number">결론</div>
+    <h2>핵심 기여 요약</h2>
+
+    <div class="card-grid" style="gap: 16px; margin-top: 12px;">
+      <div class="card anim-item" style="border-left: 4px solid var(--danger);">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.5rem;">1</span> 문제 발견 및 진단</h3>
+        <p>OPD에서 이전에 탐구되지 않은 <span class="danger">길이 팽창 실패 모드</span>를 식별하고, 반복 토큰의 비대칭 어드밴티지와 자기강화 피드백 루프라는 근본 메커니즘을 규명</p>
+      </div>
+      <div class="card anim-item" style="border-left: 4px solid var(--success);">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.5rem;">2</span> 실용적 해결책 제시</h3>
+        <p><span class="success">Stable-OPD</span> 프레임워크: 혼합 증류와 KL 정규화의 상보적 조합으로 훈련 안정성과 성능을 동시에 달성</p>
+      </div>
+      <div class="card anim-item" style="border-left: 4px solid var(--accent);">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.5rem;">3</span> 우수한 실험 결과</h3>
+        <p>수학 추론 6개 벤치마크에서 <span class="highlight">평균 7.2%p 개선</span> (1.5B), SFT, GRPO, 다수의 Zero-shot RL 방법 모두 능가</p>
+      </div>
+    </div>
+
+    <div class="metric-row anim-item" style="margin-top: 24px;">
+      <div class="metric-box" style="border-color: var(--success);">
+        <div class="metric-value" style="color: var(--success-light);">+7.2%p</div>
+        <div class="metric-label">1.5B 평균 개선</div>
+      </div>
+      <div class="metric-box" style="border-color: var(--success);">
+        <div class="metric-value" style="color: var(--success-light);">+3.8%p</div>
+        <div class="metric-label">7B 평균 개선</div>
+      </div>
+      <div class="metric-box" style="border-color: var(--accent);">
+        <div class="metric-value" style="color: var(--accent-light);">6개</div>
+        <div class="metric-label">벤치마크 모두 1위</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 17: THANK YOU ===== -->
+  <div class="slide section-slide" data-index="17">
+    <div class="anim-item" style="margin-bottom: 20px;">
+      <div class="title-badge">arXiv:2604.08527</div>
+    </div>
+    <h1 class="anim-item" style="font-size: clamp(1.5rem, 4vw, 3rem);">감사합니다</h1>
+    <p class="subtitle anim-item" style="max-width: 500px; margin-top: 12px;">
+      Demystifying OPD: Length Inflation and<br>Stabilization Strategies for Large Language Models
+    </p>
+    <p class="anim-item" style="color: var(--text-muted); margin-top: 24px; font-size: clamp(0.75rem, 1.3vw, 0.9rem);">
+      Feng Luo, Yu-Neng Chuang, Guanchu Wang, Zicheng Xu,<br>
+      Xiaotian Han, Tianyi Zhang, Vladimir Braverman
+    </p>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-container">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    <span class="btn-text">이전</span>
+  </button>
+  <div class="nav-dots" id="navDots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">
+    <span class="btn-text">다음</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isAnimating = false;
+
+  // Build nav dots
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateProgress() {
+    const pct = ((currentSlide) / (totalSlides - 1)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function updateDots() {
+    document.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  function updateButtons() {
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlide || isAnimating || index < 0 || index >= totalSlides) return;
+    isAnimating = true;
+
+    const direction = index > currentSlide ? 1 : -1;
+    const oldSlide = slides[currentSlide];
+    const newSlide = slides[index];
+
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(direction > 0 ? 'exit-left' : '');
+    oldSlide.style.transform = direction > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    oldSlide.style.opacity = '0';
+
+    newSlide.style.transform = direction > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    newSlide.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      newSlide.classList.add('active');
+      newSlide.classList.remove('exit-left');
+    });
+
+    currentSlide = index;
+    updateProgress();
+    updateDots();
+    updateButtons();
+
+    setTimeout(() => {
+      oldSlide.classList.remove('exit-left');
+      oldSlide.style.transform = '';
+      oldSlide.style.opacity = '';
+      isAnimating = false;
+    }, 500);
+  }
+
+  function navigate(dir) {
+    goToSlide(currentSlide + dir);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      navigate(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigate(-1);
+    }
+  });
+
+  // Touch / swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  // Init
+  updateProgress();
+  updateButtons();
+</script>
+</body>
+</html>
