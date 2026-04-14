@@ -113,3 +113,11 @@ _자동 생성됨_
 - [[sources/2026-04-06-actionparty-multi-subject-action-binding-in-genera.md|ActionParty: Multi-Subject Action Binding in Generative Vide]] (2026-04-06)
 
 - [[sources/2026-04-06-the-self-driving-portfolio-agentic-architecture-fo.md|The Self Driving Portfolio: Agentic Architecture for Institu]] (2026-04-06)
+
+- [[sources/2026-04-14-event-driven-temporal-graph-networks-for-asynchron.md]]
+
+- [[sources/2026-04-14-strategic-algorithmic-monocultureexperimental-evid.md]]
+
+## 관련 논문 (46편)
+
+- [[sources/2026-03-19-multi-source-evidence-fusion-for-audio-question-an.md|2026 03 19 multi source evidence fusion for audio question an]] (2026-03-19)

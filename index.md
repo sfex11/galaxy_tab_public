@@ -61,3 +61,20 @@
 - [[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]] - TraceSafe: A Systematic Assessment of LLM Guardrails on Multi-Step Tool-Calling Trajectories
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md]] - OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for Multi-domain Visual Tasks
+- [[sources/2026-04-14-large-language-models-generate-harmful-content-usi.md]] - Large Language Models Generate Harmful Content Using a Distinct, Unified Mechanism
+- [[sources/2026-04-14-vl-calibration-decoupled-confidence-calibration-fo.md]] - VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-14-event-driven-temporal-graph-networks-for-asynchron.md]] - Event-Driven Temporal Graph Networks for Asynchronous Multi-Agent Cyber Defense in NetForge_RL
+- [[sources/2026-04-14-semantic-rate-distortion-for-bounded-multi-agent-c.md]] - Semantic Rate-Distortion for Bounded Multi-Agent Communication: Capacity-Derived Semantic Spaces and the Communication Cost of Alignment
+- [[sources/2026-04-14-many-ways-to-be-fake-benchmarking-fake-news-detect.md]] - Many Ways to Be Fake: Benchmarking Fake News Detection Under Strategy-Driven AI Generation
+- [[sources/2026-04-14-visor-agentic-visual-retrieval-augmented-generatio.md]] - VISOR: Agentic Visual Retrieval-Augmented Generation via Iterative Search and Over-horizon Reasoning
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-14-strategic-algorithmic-monocultureexperimental-evid.md]] - Strategic Algorithmic Monoculture:Experimental Evidence from Coordination Games
+- [[sources/2026-04-14-physics-informed-reinforcement-learning-of-spatial.md]] - Physics-Informed Reinforcement Learning of Spatial Density Velocity Potentials for Map-Free Racing
+- [[sources/2026-04-14-risk-seeking-conservative-policy-iteration-with-ag.md]] - Risk-seeking conservative policy iteration with agent-state based policies for Dec-POMDPs with guaranteed convergence
+- [[sources/2026-04-14-process-reward-agents-for-steering-knowledge-inten.md]] - Process Reward Agents for Steering Knowledge-Intensive Reasoning
+- [[sources/2026-04-14-agentic-jackal-live-execution-and-semantic-value-g.md]] - Agentic Jackal: Live Execution and Semantic Value Grounding for Text-to-JQL
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-14-from-reasoning-to-agentic-credit-assignment-in-rei.md]] - From Reasoning to Agentic: Credit Assignment in Reinforcement Learning for Large Language Models

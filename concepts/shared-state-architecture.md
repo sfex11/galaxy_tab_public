@@ -32,3 +32,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI: Shared State as the Missing Layer for Coherent AI-Gener]] (2026-04-13)
 
 - [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-13)
+
+## 관련 논문 (13편)
+
+- [[sources/2026-04-04-stop-wandering-efficient-vision-language-navigatio.md|2026 04 04 stop wandering efficient vision language navigatio]] (2026-04-04)

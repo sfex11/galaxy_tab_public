@@ -148,3 +148,27 @@
 - 2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md
 - 2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-.md
 - 2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md
+
+## [2026-04-14 08:49] ingest | Large Language Models Generate Harmful Content Using a Distinct, Unified Mechanism
+
+## [2026-04-14 08:49] ingest | VL-Calibration: Decoupled Confidence Calibration for Large Vision-Language Models Reasoning
+
+## [2026-04-14 08:49] ingest | Event-Driven Temporal Graph Networks for Asynchronous Multi-Agent Cyber Defense in NetForge_RL
+
+## [2026-04-14 08:49] ingest | Semantic Rate-Distortion for Bounded Multi-Agent Communication: Capacity-Derived Semantic Spaces and the Communication Cost of Alignment
+
+## [2026-04-14 08:49] ingest | Many Ways to Be Fake: Benchmarking Fake News Detection Under Strategy-Driven AI Generation
+
+## [2026-04-14 08:49] ingest | VISOR: Agentic Visual Retrieval-Augmented Generation via Iterative Search and Over-horizon Reasoning
+
+## [2026-04-14 08:49] ingest | Strategic Algorithmic Monoculture:Experimental Evidence from Coordination Games
+
+## [2026-04-14 08:49] ingest | Physics-Informed Reinforcement Learning of Spatial Density Velocity Potentials for Map-Free Racing
+
+## [2026-04-14 08:49] ingest | Risk-seeking conservative policy iteration with agent-state based policies for Dec-POMDPs with guaranteed convergence
+
+## [2026-04-14 08:49] ingest | Process Reward Agents for Steering Knowledge-Intensive Reasoning
+
+## [2026-04-14 08:49] ingest | Agentic Jackal: Live Execution and Semantic Value Grounding for Text-to-JQL
+
+## [2026-04-14 08:49] ingest | From Reasoning to Agentic: Credit Assignment in Reinforcement Learning for Large Language Models
