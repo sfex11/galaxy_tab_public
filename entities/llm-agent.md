@@ -169,3 +169,17 @@ Wiki 97편 종합 결과: **런타임 계약 검증 + 구성적 안전성 모니
 - 인간 감독의 한계: 지연 피드백이 구성 오류 탐지를 체계적으로 왜곡
 
 → [[queries/query-1.md|상세 분석]]
+
+- [[sources/2026-04-15-λ_a-a-typed-lambda-calculus-for-llm-agent-composit.md]]
+
+- [[sources/2026-04-15-retrieval-is-not-enough-why-organizational-ai-need.md]]
+
+### Wiki Query: 에이전트의 아이덴티티 궁극의 정의 (2026-04-15)
+
+Wiki 종합: 에이전트 아이덴티티는 **5차원 복합 현상** (심리/사회/기술/법/이식).
+- **이중 불투명성**: 자기 보고 ≠ 실제 행동 (MTI), 전략적 기만 가능 (Among Us) → 궤적만 신뢰 근거
+- **창발 vs 거버넌스 충돌**: 자율적 진화 허용 + 거버넌스 유지가 핵심 과제
+- **이식성의 존재론**: 아이덴티티가 연속적 경험에 있는지 검증가능 속성에 있는지
+- **유령 에이전트**: 5차원 모두 결여 → 시스템 신뢰 훼손
+
+→ [[queries/query-agent-identity.md|상세 분석]] | → [[concepts/agent-identity|개념 페이지]]

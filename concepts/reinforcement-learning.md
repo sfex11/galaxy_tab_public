@@ -163,3 +163,5 @@ _자동 생성됨_
 ## 관련 논문 (65편)
 
 - [[sources/2026-03-22-sol-execbench-speed-of-light-benchmarking-for-real.md|2026 03 22 sol execbench speed of light benchmarking for real]] (2026-03-22)
+
+- [[sources/2026-04-15-autonomous-diffractometry-enabled-by-visual-reinfo.md]]

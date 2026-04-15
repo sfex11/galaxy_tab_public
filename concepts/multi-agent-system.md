@@ -121,3 +121,7 @@ _자동 생성됨_
 ## 관련 논문 (46편)
 
 - [[sources/2026-03-19-multi-source-evidence-fusion-for-audio-question-an.md|2026 03 19 multi source evidence fusion for audio question an]] (2026-03-19)
+
+- [[sources/2026-04-15-gentac-generative-modeling-and-forecasting-of-socc.md]]
+
+- [[sources/2026-04-15-collaborative-multi-agent-scripts-generation-for-e.md]]

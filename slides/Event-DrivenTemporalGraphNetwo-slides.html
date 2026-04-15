@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CT-GMARL: 비동기 멀티에이전트 사이버 방어를 위한 이벤트 기반 시간 그래프 네트워크</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card2: #1a2235;
+    --accent-cyan: #00e5ff;
+    --accent-green: #39ff14;
+    --accent-red: #ff3d71;
+    --accent-orange: #ff9f43;
+    --accent-purple: #b388ff;
+    --accent-blue: #448aff;
+    --text-primary: #e8eaf6;
+    --text-secondary: #90a4ae;
+    --glass: rgba(17, 24, 39, 0.75);
+    --glass-border: rgba(0, 229, 255, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--bg-dark);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+  }
+
+  .slide-container {
+    width: 100%;
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 40px;
+  }
+  .slide-container.active { display: flex; }
+
+  /* ===== 배경 효과 ===== */
+  .bg-grid {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+  .bg-glow {
+    position: fixed; width: 600px; height: 600px; border-radius: 50%;
+    filter: blur(150px); opacity: 0.12; pointer-events: none; z-index: 0;
+  }
+  .bg-glow.cyan { background: var(--accent-cyan); top: -200px; right: -200px; }
+  .bg-glow.purple { background: var(--accent-purple); bottom: -200px; left: -200px; }
+
+  /* ===== 타이포그래피 ===== */
+  .slide-number {
+    position: absolute; top: 20px; right: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--accent-cyan); opacity: 0.6;
+  }
+
+  h1.title-main {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  h2.slide-title {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--accent-cyan);
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2.slide-title .icon {
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700; color: var(--accent-purple);
+    margin: 16px 0 10px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+  }
+
+  /* ===== 카드 ===== */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,229,255,0.08);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .card-accent-top {
+    border-top: 3px solid var(--accent-cyan);
+  }
+  .card-accent-green { border-top: 3px solid var(--accent-green); }
+  .card-accent-red { border-top: 3px solid var(--accent-red); }
+  .card-accent-purple { border-top: 3px solid var(--accent-purple); }
+  .card-accent-orange { border-top: 3px solid var(--accent-orange); }
+
+  /* ===== 배지 & 태그 ===== */
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+  }
+  .badge-cyan { background: rgba(0,229,255,0.15); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.3); }
+  .badge-green { background: rgba(57,255,20,0.1); color: var(--accent-green); border: 1px solid rgba(57,255,20,0.25); }
+  .badge-red { background: rgba(255,61,113,0.1); color: var(--accent-red); border: 1px solid rgba(255,61,113,0.25); }
+  .badge-purple { background: rgba(179,136,255,0.1); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.25); }
+  .badge-orange { background: rgba(255,159,67,0.1); color: var(--accent-orange); border: 1px solid rgba(255,159,67,0.25); }
+
+  /* ===== 메트릭 박스 ===== */
+  .metric-box {
+    text-align: center;
+    padding: 20px;
+  }
+  .metric-value {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+  }
+  .metric-value.cyan { color: var(--accent-cyan); text-shadow: 0 0 20px rgba(0,229,255,0.4); }
+  .metric-value.green { color: var(--accent-green); text-shadow: 0 0 20px rgba(57,255,20,0.4); }
+  .metric-value.red { color: var(--accent-red); text-shadow: 0 0 20px rgba(255,61,113,0.4); }
+  .metric-value.purple { color: var(--accent-purple); text-shadow: 0 0 20px rgba(179,136,255,0.4); }
+  .metric-value.orange { color: var(--accent-orange); text-shadow: 0 0 20px rgba(255,159,67,0.4); }
+  .metric-label {
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* ===== 테이블 ===== */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 12px; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+  }
+  th {
+    background: rgba(0,229,255,0.1);
+    color: var(--accent-cyan);
+    padding: 12px 14px; text-align: left;
+    font-weight: 600; white-space: nowrap;
+    border-bottom: 2px solid rgba(0,229,255,0.2);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  tr:hover td { background: rgba(0,229,255,0.03); }
+
+  /* ===== 코드 ===== */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 12px;
+    padding: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+    color: #c9d1d9;
+  }
+  .code-block .kw { color: var(--accent-purple); }
+  .code-block .fn { color: var(--accent-cyan); }
+  .code-block .cm { color: #6a737d; font-style: italic; }
+  .code-block .num { color: var(--accent-orange); }
+  .code-block .str { color: var(--accent-green); }
+
+  /* ===== 다이어그램 ===== */
+  .diagram-flow {
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap; justify-content: center;
+    margin: 20px 0;
+  }
+  .diagram-node {
+    background: var(--bg-card2);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    text-align: center;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    font-weight: 500;
+    min-width: 100px;
+  }
+  .diagram-arrow {
+    color: var(--accent-cyan);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    flex-shrink: 0;
+  }
+
+  /* ===== 리스트 ===== */
+  ul.styled-list {
+    list-style: none;
+    padding: 0;
+  }
+  ul.styled-list li {
+    padding: 8px 0 8px 24px;
+    position: relative;
+  }
+  ul.styled-list li::before {
+    content: '▹';
+    position: absolute; left: 0;
+    color: var(--accent-cyan);
+    font-weight: 700;
+  }
+
+  /* ===== 비교 바 ===== */
+  .compare-bar {
+    display: flex; align-items: center; gap: 12px;
+    margin: 8px 0;
+  }
+  .compare-label {
+    font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+    min-width: 100px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .compare-track {
+    flex: 1; height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .compare-fill {
+    height: 100%;
+    border-radius: 14px;
+    transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex; align-items: center;
+    padding-left: 12px;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .fill-cyan { background: linear-gradient(90deg, rgba(0,229,255,0.3), var(--accent-cyan)); color: #0a0e1a; }
+  .fill-orange { background: linear-gradient(90deg, rgba(255,159,67,0.3), var(--accent-orange)); color: #0a0e1a; }
+  .fill-purple { background: linear-gradient(90deg, rgba(179,136,255,0.3), var(--accent-purple)); color: #0a0e1a; }
+  .fill-red { background: linear-gradient(90deg, rgba(255,61,113,0.3), var(--accent-red)); color: #fff; }
+  .fill-green { background: linear-gradient(90deg, rgba(57,255,20,0.2), var(--accent-green)); color: #0a0e1a; }
+
+  /* ===== 네비게이션 ===== */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; justify-content: center; align-items: center; gap: 12px;
+    padding: 14px 20px;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 1000;
+  }
+  .nav-btn {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,229,255,0.3);
+    background: rgba(0,229,255,0.08);
+    color: var(--accent-cyan);
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(0,229,255,0.2);
+    box-shadow: 0 0 16px rgba(0,229,255,0.2);
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .nav-progress {
+    display: flex; gap: 5px; align-items: center;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-dot.active {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px var(--accent-cyan);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+    color: var(--text-secondary);
+    min-width: 60px; text-align: center;
+  }
+
+  /* ===== 애니메이션 ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  @keyframes slideRight {
+    from { transform: translateX(-40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .slide-container.active .anim-1 { animation: fadeInUp 0.6s ease both; }
+  .slide-container.active .anim-2 { animation: fadeInUp 0.6s ease 0.15s both; }
+  .slide-container.active .anim-3 { animation: fadeInUp 0.6s ease 0.3s both; }
+  .slide-container.active .anim-4 { animation: fadeInUp 0.6s ease 0.45s both; }
+  .slide-container.active .anim-5 { animation: fadeInUp 0.6s ease 0.6s both; }
+  .slide-container.active .anim-slide { animation: slideRight 0.6s ease 0.2s both; }
+  .slide-container.active .anim-scale { animation: scaleIn 0.5s ease 0.3s both; }
+
+  /* ===== 구분선 ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    margin: 20px 0;
+    opacity: 0.3;
+  }
+
+  /* ===== 하이라이트 텍스트 ===== */
+  .hl-cyan { color: var(--accent-cyan); font-weight: 600; }
+  .hl-green { color: var(--accent-green); font-weight: 600; }
+  .hl-red { color: var(--accent-red); font-weight: 600; }
+  .hl-orange { color: var(--accent-orange); font-weight: 600; }
+  .hl-purple { color: var(--accent-purple); font-weight: 600; }
+
+  /* ===== 네트워크 토폴로지 시각화 ===== */
+  .topology-visual {
+    display: flex; flex-direction: column; gap: 14px;
+    padding: 16px; margin: 16px 0;
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+  }
+  .subnet-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+    font-weight: 500;
+  }
+  .subnet-icon { font-size: 1.4em; flex-shrink: 0; }
+  .subnet-dmz { background: rgba(255,61,113,0.1); border: 1px solid rgba(255,61,113,0.2); }
+  .subnet-corp { background: rgba(255,159,67,0.1); border: 1px solid rgba(255,159,67,0.2); }
+  .subnet-vault { background: rgba(57,255,20,0.1); border: 1px solid rgba(57,255,20,0.15); }
+  .subnet-connector {
+    width: 2px; height: 20px; margin-left: 30px;
+    background: linear-gradient(to bottom, var(--accent-cyan), transparent);
+  }
+
+  /* ===== 패딩 바텀 (네비게이션 공간) ===== */
+  .slide-container { padding-bottom: 100px; }
+
+  /* ===== 태블릿 ===== */
+  @media (max-width: 768px) {
+    .slide-container { padding: 28px 24px 100px; }
+    .card { padding: 18px; }
+    .card-grid { grid-template-columns: 1fr; }
+    h2.slide-title { margin-bottom: 18px; }
+    .compare-label { min-width: 80px; font-size: 0.8rem; }
+    .diagram-flow { gap: 6px; }
+    .diagram-node { padding: 10px 12px; min-width: 80px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+  }
+
+  /* ===== 모바일 ===== */
+  @media (max-width: 480px) {
+    .slide-container { padding: 20px 16px 100px; }
+    .card { padding: 14px; border-radius: 12px; }
+    .card-grid { gap: 10px; }
+    h2.slide-title { font-size: clamp(1.1rem, 5vw, 1.6rem); gap: 8px; margin-bottom: 14px; }
+    .slide-number { top: 12px; right: 16px; }
+    .metric-box { padding: 14px; }
+    .code-block { padding: 12px; font-size: 0.65rem; }
+    table { font-size: 0.7rem; }
+    th, td { padding: 8px 8px; }
+    .compare-label { min-width: 60px; font-size: 0.7rem; }
+    .nav-btn { width: 48px; height: 48px; font-size: 18px; }
+    .nav-bar { padding: 10px 12px; gap: 8px; }
+    .bg-glow { width: 300px; height: 300px; }
+    .diagram-node { min-width: 60px; padding: 8px 10px; font-size: 0.7rem; }
+    .diagram-arrow { font-size: 1rem; }
+    .subtitle { margin-bottom: 20px; }
+  }
+
+  /* ===== 소형 모바일 ===== */
+  @media (max-width: 320px) {
+    .slide-container { padding: 14px 10px 90px; }
+    .card { padding: 10px; margin-bottom: 10px; }
+    h1.title-main { font-size: 1.3rem; }
+    h2.slide-title { font-size: 1.05rem; }
+    .metric-value { font-size: 1.8rem; }
+    .nav-btn { width: 44px; height: 44px; font-size: 16px; border-radius: 10px; }
+    .nav-counter { font-size: 0.7rem; min-width: 48px; }
+    .nav-dot { width: 5px; height: 5px; }
+    .nav-dot.active { width: 14px; }
+    .badge { padding: 3px 10px; font-size: 0.65rem; }
+    .compare-track { height: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 배경 효과 -->
+<div class="bg-grid"></div>
+<div class="bg-glow cyan"></div>
+<div class="bg-glow purple"></div>
+
+<!-- ========== 슬라이드 1: 타이틀 ========== -->
+<div class="slide-container active" id="slide-1">
+  <span class="slide-number">01 / 12</span>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; max-width:900px;">
+    <div class="anim-1" style="margin-bottom:20px;">
+      <span class="badge badge-cyan">arXiv 2604.09523</span>
+      <span class="badge badge-purple">2026</span>
+      <span class="badge badge-green">MIT 라이선스</span>
+    </div>
+    <h1 class="title-main anim-2">비동기 멀티에이전트 사이버 방어를 위한<br>이벤트 기반 시간 그래프 네트워크</h1>
+    <p class="subtitle anim-3">Event-Driven Temporal Graph Networks for Asynchronous Multi-Agent Cyber Defense in NetForge_RL</p>
+    <div class="divider anim-3"></div>
+    <div class="anim-4" style="margin-top:16px;">
+      <p style="color:var(--text-secondary); font-size:clamp(0.85rem,2vw,1.05rem);">
+        <span class="hl-cyan">Igor Jankowski</span>
+      </p>
+    </div>
+    <div class="card-grid anim-5" style="margin-top:28px;">
+      <div class="card card-accent-top metric-box">
+        <div class="metric-value cyan">2.0×</div>
+        <div class="metric-label">R-MAPPO 대비 보상 향상</div>
+      </div>
+      <div class="card card-accent-green metric-box">
+        <div class="metric-value green">12×</div>
+        <div class="metric-label">서비스 복구율 향상</div>
+      </div>
+      <div class="card card-accent-purple metric-box">
+        <div class="metric-value purple">98K</div>
+        <div class="metric-label">제로샷 전이 보상</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 2: 문제 정의 ========== -->
+<div class="slide-container" id="slide-2">
+  <span class="slide-number">02 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">⚠</span> 문제 정의: Sim2Real 격차</h2>
+  <p class="anim-2" style="margin-bottom:20px; color:var(--text-secondary);">
+    기존 사이버 RL 시뮬레이터의 <span class="hl-red">세 가지 근본적 결함</span>이 실제 SOC 배포를 가로막고 있습니다.
+  </p>
+  <div class="card-grid">
+    <div class="card card-accent-red anim-3">
+      <h3 style="color:var(--accent-red);">&#9201; 동기식 vs 비동기식 시간</h3>
+      <ul class="styled-list">
+        <li>기존: 고정 이산 틱으로 행동이 즉시 해결</li>
+        <li>현실: 확률적 지속시간, 행동 중 적이 중단 가능</li>
+        <li>실제 사이버 작전은 <span class="hl-cyan">본질적으로 비동기적</span></li>
+      </ul>
+    </div>
+    <div class="card card-accent-orange anim-4">
+      <h3 style="color:var(--accent-orange);">&#128196; 클린 상태 vs NLP 텔레메트리</h3>
+      <ul class="styled-list">
+        <li>기존: 깨끗한 원-핫 인코딩 배열</li>
+        <li>현실: 노이즈가 많은 비정형 Windows 이벤트 XML</li>
+        <li>이진 지시자는 <span class="hl-cyan">프로덕션에 배포 불가</span></li>
+      </ul>
+    </div>
+    <div class="card card-accent-purple anim-5">
+      <h3 style="color:var(--accent-purple);">&#127760; 정적 토폴로지</h3>
+      <ul class="styled-list">
+        <li>MLP는 고정 입력 차원 요구 → 특정 네트워크 구조 암기</li>
+        <li>동적 노드 프로비저닝이 있는 기업 네트워크에 부적합</li>
+        <li><span class="hl-cyan">제로샷 스케일링 불가능</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 3: NetForge_RL 개요 ========== -->
+<div class="slide-container" id="slide-3">
+  <span class="slide-number">03 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#9881;</span> NetForge_RL 시뮬레이터</h2>
+  <p class="anim-2 subtitle">최초의 연속 시간 POSMDP 기반 사이버 MARL 시뮬레이터</p>
+
+  <div class="card anim-3" style="margin-bottom:16px;">
+    <h3>수학적 프레임워크</h3>
+    <div class="code-block">
+      <span class="cm">// 연속 시간 부분 관측 반마르코프 결정 과정</span><br>
+      POSMDP = ⟨<span class="kw">S</span>, <span class="kw">A</span>, <span class="kw">O</span>, <span class="fn">Ω</span>, <span class="fn">P</span>, <span class="fn">R</span>, <span class="fn">F</span>⟩<br><br>
+      <span class="cm">// 이벤트 기반 시간 진행</span><br>
+      t<sub>k+1</sub> = <span class="fn">min</span>{evt.completion_tick | evt ∈ ℒ}<br><br>
+      <span class="cm">// 체류 시간: 확률적 지속시간</span><br>
+      τ ~ <span class="fn">F</span>(t | s, a)<br>
+      Δt<sub>k</sub> = (t<sub>k+1</sub> − t<sub>k</sub>) / <span class="num">50.0</span>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-top anim-4">
+      <h3>핵심 특징</h3>
+      <ul class="styled-list">
+        <li><span class="hl-cyan">이벤트 기반</span> 시간 모델링 (이산 틱 대체)</li>
+        <li><span class="hl-green">NLP 인코딩</span> SIEM 텔레메트리</li>
+        <li><span class="hl-purple">제로 트러스트</span> 네트워크 접근 제약</li>
+        <li>O(A) 복잡도의 충돌 해결 엔진</li>
+      </ul>
+    </div>
+    <div class="card card-accent-green anim-5">
+      <h3>듀얼 모드 엔진</h3>
+      <div class="compare-bar">
+        <span class="compare-label">Mock</span>
+        <div class="compare-track">
+          <div class="compare-fill fill-cyan" style="width:100%;">~10,000 SPS</div>
+        </div>
+      </div>
+      <div class="compare-bar">
+        <span class="compare-label">Docker</span>
+        <div class="compare-track">
+          <div class="compare-fill fill-red" style="width:5%;">~5 SPS</div>
+        </div>
+      </div>
+      <p style="margin-top:10px; font-size:0.85rem; color:var(--text-secondary);">
+        <span class="hl-orange">2,000×</span> 처리량 차이 → Mock에서 훈련, Docker에서 검증
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 4: NLP-SIEM 파이프라인 & ZTNA ========== -->
+<div class="slide-container" id="slide-4">
+  <span class="slide-number">04 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#128274;</span> NLP-SIEM 파이프라인 & 제로 트러스트</h2>
+
+  <div class="card anim-2" style="margin-bottom:16px;">
+    <h3>로그 처리 파이프라인</h3>
+    <div class="diagram-flow">
+      <div class="diagram-node" style="border-color:var(--accent-red);">Windows<br>Event XML</div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node" style="border-color:var(--accent-orange);">TF-IDF<br>(3-5그램)</div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node" style="border-color:var(--accent-purple);">TruncatedSVD<br>(LSA)</div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node" style="border-color:var(--accent-cyan);">ℝ<sup>128</sup><br>임베딩</div>
+    </div>
+    <p style="font-size:clamp(0.75rem,1.6vw,0.9rem); color:var(--text-secondary); text-align:center;">
+      슬라이딩 윈도우 내 최근 <span class="hl-cyan">8개 로그</span>의 평균 임베딩 &middot; BERT 백엔드(MiniLM-L6-v2) 지원
+    </p>
+  </div>
+
+  <div class="card anim-3" style="margin-bottom:16px;">
+    <h3>제로 트러스트 네트워크 토폴로지 (ZTNA)</h3>
+    <div class="topology-visual">
+      <div class="subnet-row subnet-dmz">
+        <span class="subnet-icon">&#127760;</span>
+        <div>
+          <strong style="color:var(--accent-red);">DMZ 서브넷</strong> (10.0.0.0/24)<br>
+          <span style="font-size:0.8em; color:var(--text-secondary);">공개 웹/메일 서버</span>
+        </div>
+      </div>
+      <div class="subnet-connector"></div>
+      <div class="subnet-row subnet-corp">
+        <span class="subnet-icon">&#128187;</span>
+        <div>
+          <strong style="color:var(--accent-orange);">기업 서브넷</strong> (10.0.2.0/24)<br>
+          <span style="font-size:0.8em; color:var(--text-secondary);">Windows 워크스테이션</span>
+        </div>
+      </div>
+      <div class="subnet-connector"></div>
+      <div class="subnet-row subnet-vault">
+        <span class="subnet-icon">&#128272;</span>
+        <div>
+          <strong style="color:var(--accent-green);">보안 볼트</strong> (10.0.1.0/24)<br>
+          <span style="font-size:0.8em; color:var(--text-secondary);">도메인 컨트롤러, SQL DB, PII 볼트 &middot; <span class="hl-green">암호화 토큰 필수</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-orange anim-4">
+    <h3 style="color:var(--accent-orange);">&#127922; Green 에이전트: 확률적 거짓양성</h3>
+    <p>비균질 포아송 과정으로 거짓양성 생성:</p>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
+      <span class="badge badge-orange">λ<sub>day</sub> = 5 events/tick</span>
+      <span class="badge badge-purple">λ<sub>night</sub> = 0.5 events/tick</span>
+      <span class="badge badge-red">SNR: 1:20 (진짜 vs 양성)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 5: 행동 공간 & 보상 함수 ========== -->
+<div class="slide-container" id="slide-5">
+  <span class="slide-number">05 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#9876;</span> 행동 공간 & 보상 설계</h2>
+
+  <div class="card anim-2" style="margin-bottom:16px;">
+    <h3>행동 분류 (MITRE ATT&CK 매핑)</h3>
+    <p style="margin-bottom:10px; font-size:0.85rem; color:var(--text-secondary);">
+      행동 공간: <span class="hl-cyan">MultiDiscrete([32, 100])</span> — 32개 전술 × 100개 대상 IP
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>행동</th><th>에이전트</th><th>지속시간 τ</th><th>에너지</th><th>효과</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="hl-red">ExploitRemoteService</td><td>Red</td><td>5</td><td>5</td><td>원격 서비스 익스플로잇</td></tr>
+          <tr><td class="hl-red">ExploitEternalBlue</td><td>Red</td><td>6</td><td>4</td><td>SMB RCE (MS17-010)</td></tr>
+          <tr><td class="hl-red">DumpLSASS</td><td>Red</td><td>2</td><td>1</td><td>자격증명 토큰 추출</td></tr>
+          <tr><td class="hl-cyan">IsolateHost</td><td>Blue</td><td>1</td><td>1</td><td>네트워크 엣지 절단</td></tr>
+          <tr><td class="hl-cyan">RotateKerberos</td><td>Blue</td><td>4</td><td>50</td><td>글로벌 토큰 플러시</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:10px; font-size:0.85rem;">
+      <span class="badge badge-cyan">Blue 제약</span> 최대 <span class="hl-cyan">2개</span> 동시 방어 행동 &middot;
+      <span class="badge badge-green">선점 우위</span> Blue가 Red 행동을 중단 가능
+    </p>
+  </div>
+
+  <div class="card card-accent-top anim-3">
+    <h3>보상 함수 구조</h3>
+    <div class="code-block">
+      <span class="cm">// Blue 팀 보상</span><br>
+      R<sub>total</sub><sup>Blue</sup> = <span class="fn">R<sub>tactical</sub></span> + <span class="fn">R<sub>health</sub></span> − <span class="fn">R<sub>economics</sub></span> − <span class="fn">R<sub>cost</sub></span><br><br>
+      <span class="str">전술</span>: +<span class="num">5.0</span> 정확한 격리 | +<span class="num">3.0</span> 정리 | −<span class="num">2.0</span> 오탐<br>
+      <span class="str">건강</span>: <span class="num">1.0</span> × (정상호스트 / 전체호스트)<br>
+      <span class="str">경제</span>: −<span class="num">5.0</span> × (격리호스트 / 전체호스트) <span class="cm">// SLA 패널티</span><br>
+      <span class="str">비용</span>: 행동별 운영비 <span class="cm">// RotateKerberos: −50</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 6: CT-GMARL 아키텍처 ========== -->
+<div class="slide-container" id="slide-6">
+  <span class="slide-number">06 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#129504;</span> CT-GMARL 아키텍처</h2>
+  <p class="subtitle anim-2">연속 시간 그래프 멀티에이전트 강화학습</p>
+
+  <div class="diagram-flow anim-3" style="margin-bottom:20px;">
+    <div class="diagram-node" style="border-color:var(--accent-red);">NLP-SIEM<br>관측</div>
+    <span class="diagram-arrow">→</span>
+    <div class="diagram-node" style="border-color:var(--accent-purple);">멀티헤드<br>GAT</div>
+    <span class="diagram-arrow">→</span>
+    <div class="diagram-node" style="border-color:var(--accent-orange);">토폴로지<br>메시지</div>
+    <span class="diagram-arrow">→</span>
+    <div class="diagram-node" style="border-color:var(--accent-cyan);">Neural<br>ODE-RNN</div>
+    <span class="diagram-arrow">→</span>
+    <div class="diagram-node" style="border-color:var(--accent-green);">CT-MAPPO<br>정책</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-purple anim-4">
+      <h3 style="color:var(--accent-purple);">&#128064; 공간 추론: GAT</h3>
+      <div class="code-block">
+        <span class="cm">// 동적 토폴로지 마스킹</span><br>
+        e<sub>ij</sub> = <span class="fn">LeakyReLU</span>(<span class="kw">a</span><sup>T</sup>[<span class="kw">W</span>h<sub>i</sub> ∥ <span class="kw">W</span>h<sub>j</sub>]) + <span class="kw">M</span><sub>ij</sub><br><br>
+        <span class="kw">M</span><sub>ij</sub> = <span class="num">0</span> &nbsp;&nbsp;&nbsp;<span class="cm">// 엣지 존재</span><br>
+        <span class="kw">M</span><sub>ij</sub> = <span class="num">−∞</span> <span class="cm">// 방화벽/ZTNA 차단</span>
+      </div>
+      <p style="font-size:0.85rem; margin-top:8px;">
+        <span class="badge badge-purple">4-헤드 어텐션</span>
+        <span class="badge badge-cyan">LayerNorm + 잔차</span>
+      </p>
+    </div>
+
+    <div class="card card-accent-orange anim-5">
+      <h3 style="color:var(--accent-orange);">&#8986; 시간 역학: Neural ODE-RNN</h3>
+      <div class="code-block">
+        <span class="cm">// 연속 은닉 상태 진화</span><br>
+        <span class="kw">dh</span>(t)/<span class="kw">dt</span> = <span class="fn">f<sub>θ</sub></span>(h(t))<br><br>
+        <span class="cm">// RK4 고정 스텝 적분</span><br>
+        h(t<sub>k+1</sub>) = h(t<sub>k</sub>) + <span class="fn">∫</span> f<sub>θ</sub>(h(s)) ds<br><br>
+        <span class="cm">// 게이트 업데이트</span><br>
+        g = <span class="fn">σ</span>(<span class="fn">LN</span>(<span class="kw">W</span><sub>g</sub>[x ∥ h(t)]))<br>
+        h<sub>new</sub> = (<span class="num">1</span>−g)⊙h(t) + g⊙<span class="fn">tanh</span>(...)
+      </div>
+      <p style="font-size:0.85rem; margin-top:8px;">
+        <span class="badge badge-orange">고정 4 NFE/스텝</span>
+        <span class="badge badge-green">"체류 시간" 해결</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 7: CT-MAPPO 최적화 ========== -->
+<div class="slide-container" id="slide-7">
+  <span class="slide-number">07 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#9889;</span> CT-MAPPO 최적화</h2>
+
+  <div class="card anim-2" style="margin-bottom:16px;">
+    <h3>연속 시간 할인 & GAE</h3>
+    <div class="code-block">
+      <span class="cm">// 지수 시간 감쇠 (평탄한 γ 대체)</span><br>
+      γ(Δt) = <span class="fn">e</span><sup>−<span class="num">β</span>·Δt</sup> &nbsp;&nbsp;&nbsp;&nbsp; <span class="cm">β = 0.05</span><br><br>
+      <span class="cm">// 연속 시간 일반화 이점 추정</span><br>
+      δ<sub>t</sub> = r<sub>t</sub> + <span class="fn">e</span><sup>−βΔt</sup> · V(s<sub>t+1</sub>) − V(s<sub>t</sub>)<br>
+      Â<sub>t</sub> = δ<sub>t</sub> + (λ · <span class="fn">e</span><sup>−βΔt</sup>) · Â<sub>t+1</sub>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:8px;">
+      물리적 행동 지속시간에 따라 크레딧 할당을 정렬 → 가변 지속시간 행동의 정확한 가치 평가
+    </p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-top anim-3">
+      <h3>CTDE 패러다임</h3>
+      <ul class="styled-list">
+        <li><span class="hl-cyan">분산 액터</span>: π<sub>θ</sub>(a|o) — 로컬 관측만 사용</li>
+        <li><span class="hl-purple">중앙 비평가</span>: V<sub>φ</sub>(s) — 노이즈 없는 전역 상태</li>
+        <li>PPO 클리핑 (ε = 0.2) + 엔트로피 정규화 (0.01)</li>
+      </ul>
+    </div>
+    <div class="card card-accent-green anim-4">
+      <h3>주요 하이퍼파라미터</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:clamp(0.7rem,1.5vw,0.85rem);">
+        <span class="hl-cyan">은닉 차원</span><span>128</span>
+        <span class="hl-cyan">GAT 헤드</span><span>4</span>
+        <span class="hl-cyan">β (시간 감쇠)</span><span>0.05</span>
+        <span class="hl-cyan">ODE 솔버</span><span>RK4 고정</span>
+        <span class="hl-cyan">액터 LR</span><span>3×10⁻⁴</span>
+        <span class="hl-cyan">비평가 LR</span><span>1×10⁻³</span>
+        <span class="hl-cyan">배치 크기</span><span>512</span>
+        <span class="hl-cyan">롤아웃</span><span>2048 스텝</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 8: 실험 설계 ========== -->
+<div class="slide-container" id="slide-8">
+  <span class="slide-number">08 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#128300;</span> 실험 설계</h2>
+
+  <div class="card anim-2" style="margin-bottom:16px;">
+    <h3>인프라 & 재현성</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin:10px 0;">
+      <span class="badge badge-cyan">NVIDIA A100 클러스터</span>
+      <span class="badge badge-green">32 CPU 코어</span>
+      <span class="badge badge-purple">~8시간 수렴 (2.5M 스텝)</span>
+      <span class="badge badge-orange">10 시드 × 7 실험</span>
+    </div>
+  </div>
+
+  <div class="card anim-3">
+    <h3>7가지 실험 매트릭스</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>구성</th><th>연구 질문</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="hl-cyan">1</span></td>
+            <td>CT-GMARL (전체)</td>
+            <td>연속 시공간 아키텍처가 Sim2Real POSMDP 격차를 해결하는가?</td>
+          </tr>
+          <tr>
+            <td><span class="hl-orange">2</span></td>
+            <td>R-MAPPO 베이스라인</td>
+            <td>표준 이산 메모리 모델이 비규칙 텔레메트리를 처리할 수 있는가?</td>
+          </tr>
+          <tr>
+            <td><span class="hl-orange">3</span></td>
+            <td>QMIX 베이스라인</td>
+            <td>값 분해만으로 토폴로지 복잡성을 해결할 수 있는가?</td>
+          </tr>
+          <tr>
+            <td><span class="hl-purple">4</span></td>
+            <td>절제: No-ODE</td>
+            <td>연속 적분 제거의 비용 (리지드 RNN)</td>
+          </tr>
+          <tr>
+            <td><span class="hl-purple">5</span></td>
+            <td>절제: No-GAT</td>
+            <td>공간 이웃 라우팅 가시성 상실의 영향</td>
+          </tr>
+          <tr>
+            <td><span class="hl-purple">6</span></td>
+            <td>절제: No-Beta</td>
+            <td>정적 γ가 확률적 지속시간에서 보상을 왜곡하는가?</td>
+          </tr>
+          <tr>
+            <td><span class="hl-green">7</span></td>
+            <td>제로샷 Sim2Real</td>
+            <td>Mock 훈련 정책이 파인튜닝 없이 실제 CVE로 전이되는가?</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 9: 핵심 결과 ========== -->
+<div class="slide-container" id="slide-9">
+  <span class="slide-number">09 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#127942;</span> 핵심 실험 결과</h2>
+
+  <div class="card-grid anim-2">
+    <div class="card card-accent-top metric-box">
+      <div class="metric-value cyan">57,135</div>
+      <div class="metric-label">CT-GMARL Blue 보상 (중앙값)</div>
+    </div>
+    <div class="card card-accent-orange metric-box">
+      <div class="metric-value orange">28,347</div>
+      <div class="metric-label">R-MAPPO (2.0× 낮음)</div>
+    </div>
+    <div class="card card-accent-red metric-box">
+      <div class="metric-value red">26,649</div>
+      <div class="metric-label">QMIX (2.1× 낮음)</div>
+    </div>
+  </div>
+
+  <div class="card anim-3" style="margin-bottom:16px;">
+    <h3>서비스 복구량 비교</h3>
+    <div class="compare-bar">
+      <span class="compare-label">CT-GMARL</span>
+      <div class="compare-track">
+        <div class="compare-fill fill-cyan" style="width:100%;">144</div>
+      </div>
+    </div>
+    <div class="compare-bar">
+      <span class="compare-label">R-MAPPO</span>
+      <div class="compare-track">
+        <div class="compare-fill fill-orange" style="width:9%;">13</div>
+      </div>
+    </div>
+    <div class="compare-bar">
+      <span class="compare-label">QMIX</span>
+      <div class="compare-track">
+        <div class="compare-fill fill-red" style="width:3.5%;">5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-red anim-4">
+    <h3 style="color:var(--accent-red);">&#128293; "초토화" 딜레마</h3>
+    <div class="card-grid" style="margin-top:10px;">
+      <div style="padding:8px;">
+        <p style="font-size:0.9rem;"><strong>베이스라인 전략:</strong></p>
+        <ul class="styled-list">
+          <li>호스트를 공격적으로 격리하여 <span class="hl-green">익스플로잇 0건</span> 달성</li>
+          <li>그러나 서비스도 거의 복구하지 못함</li>
+          <li><span class="hl-red">보안 지표는 충족하지만 운영 실패</span></li>
+        </ul>
+      </div>
+      <div style="padding:8px;">
+        <p style="font-size:0.9rem;"><strong>CT-GMARL 전략:</strong></p>
+        <ul class="styled-list">
+          <li>호스트 접근성 유지하며 <span class="hl-cyan">통제된 노출</span> 허용</li>
+          <li>능동적 복구로 <span class="hl-green">144개 서비스 복원</span></li>
+          <li><span class="hl-cyan">보안과 운영의 균형 달성</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 10: 절제 연구 ========== -->
+<div class="slide-container" id="slide-10">
+  <span class="slide-number">10 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#128269;</span> 절제 연구 & Sim2Real 전이</h2>
+
+  <div class="card anim-2" style="margin-bottom:16px;">
+    <h3>절제 실험 결과</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>아키텍처</th><th>Blue 보상</th><th>서비스 복구</th><th>SPS</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:rgba(0,229,255,0.05);">
+            <td><strong class="hl-cyan">CT-GMARL (전체)</strong></td>
+            <td><strong>57,135</strong></td>
+            <td><strong>144</strong></td>
+            <td>10.0</td>
+          </tr>
+          <tr>
+            <td class="hl-purple">No-ODE</td>
+            <td>51,783 <span style="color:var(--accent-red);">(-9%)</span></td>
+            <td>32 <span style="color:var(--accent-red);">(-78%)</span></td>
+            <td>5.0</td>
+          </tr>
+          <tr>
+            <td class="hl-purple">No-GAT</td>
+            <td>56,565 <span style="color:var(--accent-orange);">(-1%)</span></td>
+            <td>73 <span style="color:var(--accent-orange);">(-49%)</span></td>
+            <td>4.8</td>
+          </tr>
+          <tr>
+            <td class="hl-purple">No-Beta</td>
+            <td>56,656 <span style="color:var(--accent-orange);">(-1%)</span></td>
+            <td>48 <span style="color:var(--accent-red);">(-67%)</span></td>
+            <td>7.4</td>
+          </tr>
+          <tr>
+            <td>R-MAPPO</td>
+            <td>28,347</td>
+            <td>13</td>
+            <td>17.2</td>
+          </tr>
+          <tr>
+            <td>QMIX</td>
+            <td>26,649</td>
+            <td>5</td>
+            <td>11.7</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-purple anim-3">
+      <h3>절제 핵심 발견</h3>
+      <ul class="styled-list">
+        <li><span class="hl-red">No-ODE</span>: 보상 -9%, 서비스 복구 <strong>-78%</strong> — 체류 시간 동안 은닉 상태 단절</li>
+        <li><span class="hl-orange">No-GAT</span>: 높은 엔트로피(4.93 vs 2.04) — 공간 정밀도 상실로 무차별 행동 할당</li>
+        <li><span class="hl-orange">No-Beta</span>: 서비스 -67% — 가변 지속시간 행동의 정확한 크레딧 할당에 연속 시간 할인 필수</li>
+      </ul>
+    </div>
+    <div class="card card-accent-green anim-4">
+      <h3 style="color:var(--accent-green);">&#127919; 제로샷 Sim2Real 전이</h3>
+      <div class="metric-box" style="padding:16px 0;">
+        <div class="metric-value green">98,026</div>
+        <div class="metric-label">Docker 환경 중앙값 보상 (시뮬레이션의 1.7×)</div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:10px;">
+        Docker의 결정론적 CVE 실행이 확률적 자기 대전 적보다 더 밀집된 보상 신호 제공.<br>
+        실제 CVE: <span class="badge badge-red">EternalBlue</span> <span class="badge badge-red">BlueKeep</span> <span class="badge badge-red">Apache RFI</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 11: 행동 분석 ========== -->
+<div class="slide-container" id="slide-11">
+  <span class="slide-number">11 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#128200;</span> 행동 분포 & 전략 분석</h2>
+
+  <div class="card-grid">
+    <div class="card card-accent-red anim-2">
+      <h3 style="color:var(--accent-red);">R-MAPPO 행동 패턴</h3>
+      <div style="margin:12px 0;">
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">DMZ</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-red" style="width:90%;">90% 집중</div>
+          </div>
+        </div>
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">기업</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-red" style="width:8%;">8%</div>
+          </div>
+        </div>
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">볼트</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-red" style="width:2%;">2%</div>
+          </div>
+        </div>
+      </div>
+      <ul class="styled-list" style="font-size:0.85rem;">
+        <li>토폴로지 마스킹 부재 → DMZ에 포화</li>
+        <li>NLP 노이즈가 가장 많은 경계부에 반응</li>
+        <li>내부 네트워크 <span class="hl-red">완전 미모니터링</span></li>
+        <li>Green Agent 노이즈에 행동 대역폭 낭비</li>
+      </ul>
+    </div>
+
+    <div class="card card-accent-top anim-3">
+      <h3 style="color:var(--accent-cyan);">CT-GMARL 행동 패턴</h3>
+      <div style="margin:12px 0;">
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">DMZ</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-cyan" style="width:20%;">희소</div>
+          </div>
+        </div>
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">기업</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-cyan" style="width:45%;">중점</div>
+          </div>
+        </div>
+        <div class="compare-bar">
+          <span class="compare-label" style="font-size:0.75rem;">ZTNA</span>
+          <div class="compare-track">
+            <div class="compare-fill fill-cyan" style="width:75%;">밀집 방어</div>
+          </div>
+        </div>
+      </div>
+      <ul class="styled-list" style="font-size:0.85rem;">
+        <li>양성 경계부 노이즈 <span class="hl-green">무시 학습</span></li>
+        <li>ZTNA 초크포인트에 <span class="hl-cyan">밀집 지속 행동</span></li>
+        <li>TopologyMessagePasser로 계층적 방어</li>
+        <li>내부 익스플로잇 체인 차단점에 선제 배치</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-accent-green anim-4">
+    <h3 style="color:var(--accent-green);">Red 에이전트 봉쇄 결과</h3>
+    <p style="font-size:clamp(0.85rem,1.8vw,1rem);">
+      공격자가 <span class="hl-red">최하위 행동의 반복 실패 루프</span>에 갇힘 &middot;
+      대상 분포가 DMZ(ID 0~10)에 국한 &middot;
+      내부/제한 볼트는 <span class="hl-green">미접촉</span> &middot;
+      횡적 이동에 필요한 ZTNA 토큰 획득 <span class="hl-cyan">차단</span>
+    </p>
+  </div>
+</div>
+
+<!-- ========== 슬라이드 12: 결론 & 한계 ========== -->
+<div class="slide-container" id="slide-12">
+  <span class="slide-number">12 / 12</span>
+  <h2 class="slide-title anim-1"><span class="icon">&#128161;</span> 결론 & 한계점</h2>
+
+  <div class="card card-accent-top anim-2" style="margin-bottom:16px;">
+    <h3>핵심 기여</h3>
+    <div class="card-grid" style="margin:12px 0;">
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#9201;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-cyan">이벤트 기반 시간</strong><br>연속 POSMDP로 이산 틱 대체</p>
+      </div>
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#128196;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-green">NLP 텔레메트리</strong><br>Windows XML → ℝ¹²⁸ 임베딩</p>
+      </div>
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#128274;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-purple">제로 트러스트</strong><br>ZTNA 토큰 기반 접근 제어</p>
+      </div>
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#129518;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-orange">Neural ODE</strong><br>비규칙 샘플링 처리</p>
+      </div>
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#128202;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-cyan">연속 시간 GAE</strong><br>지수 감쇠 크레딧 할당</p>
+      </div>
+      <div style="text-align:center; padding:10px;">
+        <div style="font-size:2em; margin-bottom:8px;">&#128296;</div>
+        <p style="font-size:0.9rem;"><strong class="hl-green">듀얼 하이퍼바이저</strong><br>2,000× 속도 차 활용</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-red anim-3">
+      <h3 style="color:var(--accent-red);">한계점</h3>
+      <ul class="styled-list">
+        <li><span class="hl-orange">계산 오버헤드</span>: Neural ODE RK4가 이산 LSTM보다 상당히 높은 FLOPs 요구</li>
+        <li><span class="hl-orange">평가 병목</span>: DockerHypervisor ≈5 SPS → 라이브 환경 직접 훈련 불가</li>
+        <li><span class="hl-orange">Red 행동 공간</span>: 32개 사전 정의 행동에 한정 — 실제 APT의 새로운 공격 원시 패턴에 일반화 어려움</li>
+      </ul>
+    </div>
+    <div class="card card-accent-purple anim-4">
+      <h3 style="color:var(--accent-purple);">이중 용도 함의</h3>
+      <p style="font-size:0.9rem;">
+        동일한 연속 시간 RL 메커니즘이 이론적으로
+        <span class="hl-red">고도로 회피적인 자율 적대적 에이전트</span>
+        훈련에 활용될 수 있으며, 인간 방어자를 우회하기 위해
+        횡적 이동 속도를 최적화할 수 있음.
+      </p>
+    </div>
+  </div>
+
+  <div class="card anim-5" style="margin-top:16px; text-align:center; border: 1px solid rgba(0,229,255,0.3);">
+    <p style="font-size:clamp(0.8rem,1.8vw,1rem); color:var(--text-secondary);">
+      <span class="hl-cyan">코드 공개 (MIT)</span><br>
+      NetForge_RL 시뮬레이터 &middot; CT-GMARL & 실험 코드 &middot; 사전 훈련 가중치
+    </p>
+  </div>
+</div>
+
+<!-- ===== 네비게이션 바 ===== -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전">&#9664;</button>
+  <div class="nav-progress" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음">&#9654;</button>
+</nav>
+
+<script>
+const TOTAL = 12;
+let current = 1;
+
+function init() {
+  const dots = document.getElementById('navDots');
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'nav-dot' + (i === 1 ? ' active' : '');
+    d.dataset.slide = i;
+    d.addEventListener('click', () => goTo(i));
+    dots.appendChild(d);
+  }
+  updateNav();
+}
+
+function goTo(n) {
+  if (n < 1 || n > TOTAL || n === current) return;
+  document.getElementById('slide-' + current).classList.remove('active');
+  current = n;
+  document.getElementById('slide-' + current).classList.add('active');
+  updateNav();
+  window.scrollTo(0, 0);
+}
+
+function changeSlide(dir) {
+  goTo(current + dir);
+}
+
+function updateNav() {
+  document.getElementById('navCounter').textContent = current + ' / ' + TOTAL;
+  document.getElementById('prevBtn').disabled = (current === 1);
+  document.getElementById('nextBtn').disabled = (current === TOTAL);
+  document.querySelectorAll('.nav-dot').forEach(d => {
+    d.classList.toggle('active', +d.dataset.slide === current);
+  });
+}
+
+// 키보드 네비게이션
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+// 스와이프 네비게이션
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+    if (dx < 0) changeSlide(1);
+    else changeSlide(-1);
+  }
+}, { passive: true });
+
+init();
+</script>
+</body>
+</html>

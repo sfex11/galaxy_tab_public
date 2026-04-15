@@ -172,3 +172,37 @@
 ## [2026-04-14 08:49] ingest | Agentic Jackal: Live Execution and Semantic Value Grounding for Text-to-JQL
 
 ## [2026-04-14 08:49] ingest | From Reasoning to Agentic: Credit Assignment in Reinforcement Learning for Large Language Models
+
+## [2026-04-15 08:30] ingest | Detecting Safety Violations Across Many Agent Traces
+
+## [2026-04-15 08:30] ingest | Solving Physics Olympiad via Reinforcement Learning on Physics Simulators
+
+## [2026-04-15 08:30] ingest | Psychological Concept Neurons: Can Neural Control Bias Probing and Shift Generation in LLMs?
+
+## [2026-04-15 08:30] ingest | CLSGen: A Dual-Head Fine-Tuning Framework for Joint Probabilistic Classification and Verbalized Explanation
+
+## [2026-04-15 08:30] ingest | C-ReD: A Comprehensive Chinese Benchmark for AI-Generated Text Detection Derived from Real-World Prompts
+
+## [2026-04-15 08:30] ingest | A Mechanistic Analysis of Looped Reasoning Language Models
+
+## [2026-04-15 08:30] ingest | ClawGuard: A Runtime Security Framework for Tool-Augmented LLM Agents Against Indirect Prompt Injection
+
+## [2026-04-15 08:30] ingest | GenTac: Generative Modeling and Forecasting of Soccer Tactics
+
+## [2026-04-15 08:30] ingest | ClawGUI: A Unified Framework for Training, Evaluating, and Deploying GUI Agents
+
+## [2026-04-15 08:30] ingest | Autonomous Diffractometry Enabled by Visual Reinforcement Learning
+
+## [2026-04-15 08:30] ingest | $λ_A$: A Typed Lambda Calculus for LLM Agent Composition
+
+## [2026-04-15 08:30] ingest | Retrieval Is Not Enough: Why Organizational AI Needs Epistemic Infrastructure
+
+## [2026-04-15 08:30] ingest | StarVLA-$α$: Reducing Complexity in Vision-Language-Action Systems
+
+## [2026-04-15 08:30] ingest | Agentic Aggregation for Parallel Scaling of Long-Horizon Agentic Tasks
+
+## [2026-04-15 08:30] ingest | Collaborative Multi-Agent Scripts Generation for Enhancing Imperfect-Information Reasoning in Murder Mystery Games
+
+## [2026-04-15 08:30] ingest | General365: Benchmarking General Reasoning in Large Language Models Across Diverse and Challenging Tasks
+
+## [2026-04-15 08:30] ingest | Physics-Informed State Space Models for Reliable Solar Irradiance Forecasting in Off-Grid Systems

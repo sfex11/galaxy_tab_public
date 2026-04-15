@@ -78,3 +78,25 @@
 - [[sources/2026-04-14-agentic-jackal-live-execution-and-semantic-value-g.md]] - Agentic Jackal: Live Execution and Semantic Value Grounding for Text-to-JQL
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-04-14-from-reasoning-to-agentic-credit-assignment-in-rei.md]] - From Reasoning to Agentic: Credit Assignment in Reinforcement Learning for Large Language Models
+- [[sources/2026-04-15-detecting-safety-violations-across-many-agent-trac.md]] - Detecting Safety Violations Across Many Agent Traces
+- [[sources/2026-04-15-solving-physics-olympiad-via-reinforcement-learnin.md]] - Solving Physics Olympiad via Reinforcement Learning on Physics Simulators
+- [[sources/2026-04-15-psychological-concept-neurons-can-neural-control-b.md]] - Psychological Concept Neurons: Can Neural Control Bias Probing and Shift Generation in LLMs?
+- [[sources/2026-04-15-clsgen-a-dual-head-fine-tuning-framework-for-joint.md]] - CLSGen: A Dual-Head Fine-Tuning Framework for Joint Probabilistic Classification and Verbalized Explanation
+- [[sources/2026-04-15-c-red-a-comprehensive-chinese-benchmark-for-ai-gen.md]] - C-ReD: A Comprehensive Chinese Benchmark for AI-Generated Text Detection Derived from Real-World Prompts
+- [[sources/2026-04-15-a-mechanistic-analysis-of-looped-reasoning-languag.md]] - A Mechanistic Analysis of Looped Reasoning Language Models
+- [[sources/2026-04-15-clawguard-a-runtime-security-framework-for-tool-au.md]] - ClawGuard: A Runtime Security Framework for Tool-Augmented LLM Agents Against Indirect Prompt Injection
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-15-gentac-generative-modeling-and-forecasting-of-socc.md]] - GenTac: Generative Modeling and Forecasting of Soccer Tactics
+- [[sources/2026-04-15-clawgui-a-unified-framework-for-training-evaluatin.md]] - ClawGUI: A Unified Framework for Training, Evaluating, and Deploying GUI Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-15-autonomous-diffractometry-enabled-by-visual-reinfo.md]] - Autonomous Diffractometry Enabled by Visual Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-15-λ_a-a-typed-lambda-calculus-for-llm-agent-composit.md]] - $λ_A$: A Typed Lambda Calculus for LLM Agent Composition
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-15-retrieval-is-not-enough-why-organizational-ai-need.md]] - Retrieval Is Not Enough: Why Organizational AI Needs Epistemic Infrastructure
+- [[sources/2026-04-15-starvla-α-reducing-complexity-in-vision-language-a.md]] - StarVLA-$α$: Reducing Complexity in Vision-Language-Action Systems
+- [[sources/2026-04-15-agentic-aggregation-for-parallel-scaling-of-long-h.md]] - Agentic Aggregation for Parallel Scaling of Long-Horizon Agentic Tasks
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-15-collaborative-multi-agent-scripts-generation-for-e.md]] - Collaborative Multi-Agent Scripts Generation for Enhancing Imperfect-Information Reasoning in Murder Mystery Games
+- [[sources/2026-04-15-general365-benchmarking-general-reasoning-in-large.md]] - General365: Benchmarking General Reasoning in Large Language Models Across Diverse and Challenging Tasks
+- [[sources/2026-04-15-physics-informed-state-space-models-for-reliable-s.md]] - Physics-Informed State Space Models for Reliable Solar Irradiance Forecasting in Off-Grid Systems
