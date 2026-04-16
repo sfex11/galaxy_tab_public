@@ -100,3 +100,18 @@
 - [[sources/2026-04-15-collaborative-multi-agent-scripts-generation-for-e.md]] - Collaborative Multi-Agent Scripts Generation for Enhancing Imperfect-Information Reasoning in Murder Mystery Games
 - [[sources/2026-04-15-general365-benchmarking-general-reasoning-in-large.md]] - General365: Benchmarking General Reasoning in Large Language Models Across Diverse and Challenging Tasks
 - [[sources/2026-04-15-physics-informed-state-space-models-for-reliable-s.md]] - Physics-Informed State Space Models for Reliable Solar Irradiance Forecasting in Off-Grid Systems
+- [[sources/2026-04-16-scenecritic-a-symbolic-evaluator-for-3d-indoor-sce.md]] - SceneCritic: A Symbolic Evaluator for 3D Indoor Scene Synthesis
+- [[sources/2026-04-16-toward-autonomous-long-horizon-engineering-for-ml-.md]] - Toward Autonomous Long-Horizon Engineering for ML Research
+- [[sources/2026-04-16-lightning-opd-efficient-post-training-for-large-re.md]] - Lightning OPD: Efficient Post-Training for Large Reasoning Models with Offline On-Policy Distillation
+- [[sources/2026-04-16-one-token-away-from-collapse-the-fragility-of-inst.md]] - One Token Away from Collapse: The Fragility of Instruction-Tuned Helpfulness
+- [[sources/2026-04-16-policyllm-towards-excellent-comprehension-of-publi.md]] - PolicyLLM: Towards Excellent Comprehension of Public Policy for Large Language Models
+- [[sources/2026-04-16-logiceval-a-systematic-framework-for-evaluating-au.md]] - LogicEval: A Systematic Framework for Evaluating Automated Repair Techniques for Logical Vulnerabilities in Real-World Software
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-16-parallax-why-ai-agents-that-think-must-never-act.md]] - Parallax: Why AI Agents That Think Must Never Act
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-16-cycle-consistent-search-question-reconstructabilit.md]] - Cycle-Consistent Search: Question Reconstructability as a Proxy Reward for Search Agent Training
+- [[sources/2026-04-16-modeling-co-pilots-for-text-to-model-translation.md]] - Modeling Co-Pilots for Text-to-Model Translation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-16-drawing-on-memory-dual-trace-encoding-improves-cro.md]] - Drawing on Memory: Dual-Trace Encoding Improves Cross-Session Recall in LLM Agents
+- [[sources/2026-04-16-dino-explorer-active-underwater-discovery-via-ego-.md]] - DINO-Explorer: Active Underwater Discovery via Ego-Motion Compensated Semantic Predictive Coding
+- [[sources/2026-04-16-rethinking-on-policy-distillation-of-large-languag.md]] - Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe

@@ -206,3 +206,31 @@
 ## [2026-04-15 08:30] ingest | General365: Benchmarking General Reasoning in Large Language Models Across Diverse and Challenging Tasks
 
 ## [2026-04-15 08:30] ingest | Physics-Informed State Space Models for Reliable Solar Irradiance Forecasting in Off-Grid Systems
+
+## [2026-04-16 06:00] llm-ingest | 0편 분석, 엔티티 15개, 개념 282개
+
+## [2026-04-16 08:00] llm-ingest | 0편 분석, 엔티티 15개, 개념 282개
+
+## [2026-04-16 09:01] ingest | SceneCritic: A Symbolic Evaluator for 3D Indoor Scene Synthesis
+
+## [2026-04-16 09:01] ingest | Toward Autonomous Long-Horizon Engineering for ML Research
+
+## [2026-04-16 09:01] ingest | Lightning OPD: Efficient Post-Training for Large Reasoning Models with Offline On-Policy Distillation
+
+## [2026-04-16 09:01] ingest | One Token Away from Collapse: The Fragility of Instruction-Tuned Helpfulness
+
+## [2026-04-16 09:01] ingest | PolicyLLM: Towards Excellent Comprehension of Public Policy for Large Language Models
+
+## [2026-04-16 09:01] ingest | LogicEval: A Systematic Framework for Evaluating Automated Repair Techniques for Logical Vulnerabilities in Real-World Software
+
+## [2026-04-16 09:01] ingest | Parallax: Why AI Agents That Think Must Never Act
+
+## [2026-04-16 09:01] ingest | Cycle-Consistent Search: Question Reconstructability as a Proxy Reward for Search Agent Training
+
+## [2026-04-16 09:01] ingest | Modeling Co-Pilots for Text-to-Model Translation
+
+## [2026-04-16 09:01] ingest | Drawing on Memory: Dual-Trace Encoding Improves Cross-Session Recall in LLM Agents
+
+## [2026-04-16 09:01] ingest | DINO-Explorer: Active Underwater Discovery via Ego-Motion Compensated Semantic Predictive Coding
+
+## [2026-04-16 09:01] ingest | Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe

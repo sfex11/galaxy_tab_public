@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>루프 추론 언어 모델의 메커니즘 분석</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2235;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: rgba(255,255,255,0.08);
+    --glow-blue: rgba(59,130,246,0.3);
+    --glow-purple: rgba(139,92,246,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+    flex-direction: column;
+    padding: 40px 50px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide.exit-left {
+    display: flex;
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-pink));
+    z-index: 100;
+    transition: width 0.4s ease;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ===== SLIDE COUNTER ===== */
+  .slide-counter {
+    position: fixed; bottom: 20px; right: 20px;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+    padding: 4px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  /* ===== NAV BUTTONS ===== */
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    min-width: 44px; min-height: 44px;
+    border: none;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    transition: all 0.25s ease;
+    display: flex; align-items: center; justify-content: center;
+    touch-action: manipulation;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .nav-btn:active { transform: translateY(-50%) scale(0.92); }
+  .nav-prev { left: 10px; }
+  .nav-next { right: 10px; }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title {
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .label-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+  .label-purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+  .label-cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+  .label-green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .label-pink { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
+  .label-orange { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+  .label-red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+    align-content: start;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.75rem, 1.6vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card ul { list-style: none; padding: 0; }
+  .card li { padding: 3px 0; padding-left: 16px; position: relative; }
+  .card li::before {
+    content: '›';
+    position: absolute; left: 0;
+    color: var(--accent-cyan);
+    font-weight: 700;
+  }
+
+  /* ===== SPECIAL COMPONENTS ===== */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+    border-left: 3px solid var(--accent-blue);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-size: clamp(0.78rem, 1.6vw, 0.9rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .math-block {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    color: var(--accent-cyan);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .tag-list {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 12px 0;
+  }
+  .tag {
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    padding: 20px;
+  }
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 500;
+    min-width: 80px;
+    position: relative;
+  }
+  .flow-box.highlight {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 20px var(--glow-blue);
+  }
+  .flow-box.loop {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 20px var(--glow-purple);
+  }
+  .flow-arrow {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+  }
+
+  /* ===== MODEL COMPARISON TABLE ===== */
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: clamp(0.65rem, 1.4vw, 0.82rem);
+  }
+  .comparison-table th {
+    background: rgba(59,130,246,0.12);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent-blue);
+    white-space: nowrap;
+  }
+  .comparison-table td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .comparison-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .status-yes { color: var(--accent-green); font-weight: 700; }
+  .status-no { color: var(--accent-red); font-weight: 700; }
+  .status-partial { color: var(--accent-orange); font-weight: 700; }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 16px 0;
+    padding-left: 20px;
+    border-left: 2px solid var(--border);
+  }
+  .timeline-item {
+    padding: 12px 0 12px 20px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -7px; top: 18px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: 2px solid var(--bg-dark);
+  }
+  .timeline-item:nth-child(2)::before { background: var(--accent-purple); }
+  .timeline-item:nth-child(3)::before { background: var(--accent-cyan); }
+  .timeline-item:nth-child(4)::before { background: var(--accent-green); }
+  .timeline-item h4 {
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .timeline-item p {
+    font-size: clamp(0.72rem, 1.4vw, 0.85rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== LOOP ANIMATION ===== */
+  .loop-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    position: relative;
+    height: 200px;
+  }
+  .orbit-ring {
+    width: 160px; height: 160px;
+    border: 2px dashed rgba(139,92,246,0.3);
+    border-radius: 50%;
+    position: relative;
+    animation: spin 12s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .orbit-dot {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    top: -7px; left: 50%;
+    margin-left: -7px;
+  }
+  .orbit-dot:nth-child(1) { background: var(--accent-blue); top: -7px; left: 50%; }
+  .orbit-dot:nth-child(2) { background: var(--accent-purple); top: 50%; right: -7px; left: auto; margin-top: -7px; }
+  .orbit-dot:nth-child(3) { background: var(--accent-pink); bottom: -7px; top: auto; left: 50%; }
+  .orbit-dot:nth-child(4) { background: var(--accent-cyan); top: 50%; left: -7px; margin-top: -7px; }
+  .orbit-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    width: 80px;
+  }
+
+  /* ===== CONVERGENCE VISUAL ===== */
+  .convergence-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .conv-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .conv-label {
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    color: var(--text-secondary);
+    min-width: 80px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .conv-bar {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .conv-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.5s ease;
+  }
+  .conv-fill.blue { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+  .conv-fill.purple { background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); }
+  .conv-fill.green { background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); }
+  .conv-fill.orange { background: linear-gradient(90deg, var(--accent-orange), var(--accent-red)); }
+
+  /* ===== COVER SLIDE ===== */
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 30%, rgba(139,92,246,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(6,182,212,0.08) 0%, transparent 50%);
+    z-index: 0;
+  }
+  .cover-content {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    gap: 20px;
+  }
+  .cover-content .slide-title {
+    font-size: clamp(1.6rem, 4.5vw, 3rem);
+    max-width: 800px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .author-list {
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 600px;
+  }
+
+  /* Animated particles on cover */
+  .particles {
+    position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ===== KEY INSIGHT ===== */
+  .key-insight {
+    background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .key-insight .icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+  .key-insight p {
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* ===== SLIDE SPECIFIC BACKGROUNDS ===== */
+  .slide-bg-1 {
+    background: radial-gradient(ellipse at 70% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+                var(--bg-dark);
+  }
+  .slide-bg-2 {
+    background: radial-gradient(ellipse at 30% 70%, rgba(139,92,246,0.06) 0%, transparent 50%),
+                var(--bg-dark);
+  }
+  .slide-bg-3 {
+    background: radial-gradient(ellipse at 80% 60%, rgba(6,182,212,0.06) 0%, transparent 50%),
+                var(--bg-dark);
+  }
+
+  /* ===== CONCLUSION ITEMS ===== */
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .conclusion-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .conclusion-num {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 900;
+    color: var(--accent-purple);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+    min-width: 30px;
+  }
+  .conclusion-text h4 {
+    font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .conclusion-text p {
+    font-size: clamp(0.72rem, 1.4vw, 0.85rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .nav-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+    .nav-prev { left: 6px; }
+    .nav-next { right: 6px; }
+    .flow-diagram { gap: 6px; }
+    .flow-box { padding: 10px 12px; min-width: 60px; }
+    .comparison-table { font-size: clamp(0.6rem, 1.4vw, 0.78rem); }
+    .comparison-table th, .comparison-table td { padding: 8px 10px; }
+    .orbit-ring { width: 130px; height: 130px; }
+    .loop-visual { height: 170px; }
+    .cover-content .slide-title { font-size: clamp(1.4rem, 4vw, 2.2rem); }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px; }
+    .slide-title { margin-bottom: 16px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-icon { font-size: 1.3rem; margin-bottom: 8px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 1rem; }
+    .nav-prev { left: 4px; top: auto; bottom: 18px; transform: none; }
+    .nav-next { right: 4px; top: auto; bottom: 18px; transform: none; }
+    .nav-btn:active { transform: scale(0.92); }
+    .slide-counter { bottom: 22px; right: 56px; font-size: 0.7rem; }
+    .flow-diagram { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .highlight-box { padding: 12px 14px; }
+    .math-block { padding: 12px 14px; font-size: clamp(0.6rem, 1.3vw, 0.78rem); }
+    .orbit-ring { width: 110px; height: 110px; }
+    .loop-visual { height: 150px; }
+    .comparison-table th, .comparison-table td { padding: 6px 8px; }
+    .cover-content .slide-title { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    .key-insight { padding: 14px 16px; }
+    .section-label { letter-spacing: 2px; font-size: 0.6rem; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 18px 14px; }
+    .slide-title { font-size: clamp(1rem, 4.5vw, 1.4rem); margin-bottom: 12px; }
+    .card { padding: 12px; }
+    .card h3 { font-size: 0.8rem; }
+    .card p, .card li { font-size: 0.7rem; }
+    .nav-btn { width: 40px; height: 40px; }
+    .flow-box { font-size: 0.65rem; padding: 8px 10px; }
+    .conv-label { min-width: 60px; font-size: 0.6rem; }
+    .orbit-ring { width: 90px; height: 90px; }
+    .loop-visual { height: 130px; }
+    .comparison-table { font-size: 0.6rem; }
+    .author-list { font-size: 0.65rem; }
+  }
+
+  /* Swipe hint animation */
+  .swipe-hint {
+    position: absolute;
+    bottom: 50px;
+    left: 50%; transform: translateX(-50%);
+    color: var(--text-muted);
+    font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+    animation: pulse 2s ease infinite;
+    z-index: 1;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">1 / 12</div>
+
+<button class="nav-btn nav-prev" id="prevBtn" aria-label="이전 슬라이드">‹</button>
+<button class="nav-btn nav-next" id="nextBtn" aria-label="다음 슬라이드">›</button>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ============ SLIDE 1: COVER ============ -->
+  <div class="slide active" data-slide="1">
+    <div class="particles" id="particles"></div>
+    <div class="cover-bg"></div>
+    <div class="cover-content">
+      <span class="section-label label-blue">arXiv:2604.11791 · 2026</span>
+      <h1 class="slide-title">루프 추론 언어 모델의<br>메커니즘 분석</h1>
+      <p class="slide-subtitle" style="max-width:640px;">
+        트랜스포머 레이어를 반복 순환시키는 루프 언어 모델의 내부 동역학을<br>
+        피드포워드 모델과 비교하여 메커니즘적으로 분석한 연구
+      </p>
+      <div class="author-list">
+        Hugh Blayney · Alvaro Arroyo · Johan Obando-Ceron · Pablo Samuel Castro<br>
+        Aaron Courville · Michael M. Bronstein · Xiaowen Dong
+      </div>
+      <div class="tag-list" style="justify-content:center;">
+        <span class="tag">순환 트랜스포머</span>
+        <span class="tag">고정점 수렴</span>
+        <span class="tag">추론 단계</span>
+        <span class="tag">주의 메커니즘</span>
+      </div>
+      <div class="swipe-hint">← 스와이프하여 탐색 →</div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 2: 연구 배경 ============ -->
+  <div class="slide slide-bg-1" data-slide="2">
+    <span class="section-label label-blue">배경</span>
+    <h2 class="slide-title">왜 루프 언어 모델을 분석해야 하는가?</h2>
+    <p class="slide-subtitle">
+      최근 LLM은 추론 능력이 핵심 역량이 되었고, 레이어를 반복 순환시켜 성능을 높이는 새로운 접근이 등장했습니다.
+      그러나 이 모델들의 <strong style="color:var(--accent-cyan)">내부 동역학</strong>은 아직 충분히 이해되지 않고 있습니다.
+    </p>
+
+    <div class="card-grid grid-2">
+      <div class="card">
+        <span class="card-icon">🔄</span>
+        <h3>피드포워드 vs 루프</h3>
+        <p>기존 모델은 레이어를 한 번만 통과하지만, 루프 모델은 같은 레이어 블록을 여러 번 반복하여 <strong style="color:#fff">기능적 깊이</strong>를 매개변수 수로부터 분리합니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h3>추론 단계(Stages of Inference)</h3>
+        <p>피드포워드 트랜스포머는 추론 시 여러 <strong style="color:#fff">계산 단계</strong>로 분해됩니다. 루프 모델에서도 동일한 단계가 나타나는지가 핵심 질문입니다.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3>연구 목표</h3>
+        <ul>
+          <li>순환 고정점 행동 분석</li>
+          <li>어텐션 패턴 안정성 검증</li>
+          <li>피드포워드 단계와의 비교</li>
+          <li>아키텍처 설계 지침 도출</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <h3>관련 연구</h3>
+        <ul>
+          <li>Universal Transformers (2018)</li>
+          <li>Huginn, Ouro, HRM, TRM</li>
+          <li>PonderNet, Adaptive Computation</li>
+          <li>Attention Sinks 분석</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 3: 아키텍처 정의 ============ -->
+  <div class="slide slide-bg-2" data-slide="3">
+    <span class="section-label label-purple">아키텍처</span>
+    <h2 class="slide-title">루프 트랜스포머의 구조</h2>
+    <p class="slide-subtitle">
+      <strong style="color:#fff">(p, k × l, c)</strong> 형태로 정의되는 루프 트랜스포머의 세 구성 요소
+    </p>
+
+    <div class="flow-diagram">
+      <div class="flow-box highlight">
+        <div style="font-size:0.65rem;color:var(--accent-blue);margin-bottom:4px;">프렐류드</div>
+        <div>p개 레이어</div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">1회 실행</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box loop" style="position:relative;">
+        <div style="font-size:0.65rem;color:var(--accent-purple);margin-bottom:4px;">순환 블록</div>
+        <div>k개 레이어</div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">l회 반복 🔄</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box highlight">
+        <div style="font-size:0.65rem;color:var(--accent-blue);margin-bottom:4px;">코다</div>
+        <div>c개 레이어</div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">1회 실행</div>
+      </div>
+    </div>
+
+    <div class="card-grid grid-2">
+      <div class="card">
+        <h3>순환 블록 합성</h3>
+        <div class="math-block">S_k(X) = B_k(B_{k-1}(...B_1(X)...))</div>
+        <p>k개의 트랜스포머 블록 B₁~Bₖ를 순차적으로 적용한 결과를 l번 반복합니다.</p>
+      </div>
+      <div class="card">
+        <h3>입력 주입(Input Injection)</h3>
+        <div class="math-block">S_k(X, Z) = B_k(...B_1([X, Z] · W_I)...)</div>
+        <p>각 반복마다 원본 입력 Z를 재주입하여 정보 손실을 방지합니다.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      각 트랜스포머 블록은 <strong style="color:#fff">어텐션 → 잔차 연결 → MLP → 잔차 연결</strong> 순서로 구성되며,
+      정규화(normalization) 레이어의 위치에 따라 Pre-Norm, Post-Norm, Sandwich-Norm으로 나뉩니다.
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 4: 이론적 분석 1 ============ -->
+  <div class="slide slide-bg-3" data-slide="4">
+    <span class="section-label label-cyan">이론</span>
+    <h2 class="slide-title">순환 고정점 이론</h2>
+    <p class="slide-subtitle">루프 모델이 반복을 거듭할수록 수렴하는 순환 고정점(Cyclic Fixed Point)의 수학적 토대</p>
+
+    <div class="card-grid grid-2">
+      <div class="card" style="border-left:3px solid var(--accent-blue);">
+        <h3>명제 4.1: 순환 고정점</h3>
+        <p style="margin-bottom:10px;">
+          (l, k)-순환 블록이 고정점 X' = S_k(X')에 도달하면, 블록의 모든 순환 순열도 각자의 고정점에 도달합니다.
+        </p>
+        <div class="key-insight" style="padding:12px;">
+          <p style="font-size:clamp(0.72rem,1.4vw,0.85rem);">
+            → 각 레이어가 <strong style="color:var(--accent-cyan)">서로 다른 고유한 고정점</strong>에 수렴하여,
+            잠재 공간에서 일관된 <strong style="color:var(--accent-purple)">순환 궤적</strong>을 형성
+          </p>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent-purple);">
+        <h3>명제 4.2: 어텐션 패턴 수렴</h3>
+        <div class="math-block" style="font-size:clamp(0.6rem,1.2vw,0.75rem);">‖S_l(X_{l,t}) - S_l(X_{l,t-1})‖
+≤ L_sm · (2B · κ_l / √d) · ‖X_{l,t} - X_{l,t-1}‖</div>
+        <p style="margin-top:10px;">
+          잔차 스트림이 수렴하면 어텐션 패턴도 <strong style="color:#fff">반드시 수렴</strong>합니다.
+          κ_l = ‖W_Q · W_K^T‖이며, L_sm은 소프트맥스의 립시츠 상수입니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3>ColSum 집중도 지표</h3>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
+        <div style="flex:1;min-width:200px;">
+          <div class="math-block">C = 1 - H_col ∈ [0, 1]
+C = 1 + (1/log T) · Σ ĉⱼ · log(ĉⱼ)</div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <p style="font-size:clamp(0.72rem,1.4vw,0.85rem);color:var(--text-secondary);line-height:1.6;">
+            <strong style="color:var(--accent-orange);">높은 C</strong> = 집중된 어텐션 (어텐션 싱크)<br>
+            <strong style="color:var(--accent-green);">낮은 C</strong> = 분산된 어텐션 (혼합/mixing)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 5: 분석 대상 모델 ============ -->
+  <div class="slide slide-bg-1" data-slide="5">
+    <span class="section-label label-green">실험</span>
+    <h2 class="slide-title">분석 대상 모델 4종</h2>
+    <p class="slide-subtitle">서로 다른 학습 방식과 아키텍처를 가진 4개의 루프 언어 모델을 비교 분석</p>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>크기</th>
+          <th>학습 방식</th>
+          <th>고정점 수렴</th>
+          <th>추론 단계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#fff">Huginn-0125</strong></td>
+          <td>-</td>
+          <td>처음부터 학습</td>
+          <td class="status-yes">✓ 빠른 수렴</td>
+          <td class="status-partial">△ 제한적</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Ouro 1.4B</strong></td>
+          <td>1.4B</td>
+          <td>처음부터 학습</td>
+          <td class="status-no">✗ 미수렴</td>
+          <td class="status-partial">△ 불안정</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Retrofitted Llama</strong></td>
+          <td>-</td>
+          <td>사전학습 후 변환</td>
+          <td class="status-yes">✓ 빠른 수렴</td>
+          <td class="status-yes">✓ 안정적</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Retrofitted OLMo</strong></td>
+          <td>-</td>
+          <td>사전학습 후 변환</td>
+          <td class="status-yes">✓ 수렴</td>
+          <td class="status-yes">✓ 안정적</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card-grid grid-2" style="margin-top:16px;">
+      <div class="card" style="border-top:3px solid var(--accent-green);">
+        <h3>Retrofitted 모델이 우수</h3>
+        <p>사전학습된 피드포워드 모델을 순환 구조로 변환한 모델들이 고정점 수렴과 안정적인 추론 단계 모두에서 가장 좋은 결과를 보였습니다.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-red);">
+        <h3>Ouro의 한계</h3>
+        <p>고정점에 수렴하지 않으며, 학습 시 사용한 반복 횟수를 넘어서면 추론 단계가 불안정해지고 성능이 저하됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 6: 고정점 수렴 시각화 ============ -->
+  <div class="slide slide-bg-2" data-slide="6">
+    <span class="section-label label-purple">핵심 발견 1</span>
+    <h2 class="slide-title">순환 고정점 수렴 패턴</h2>
+    <p class="slide-subtitle">
+      반복 횟수가 증가할수록 잔차 스트림의 차이가 감소하며, 잠재 공간에서 순환 궤적이 수렴합니다.
+    </p>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;">
+        <h3 style="font-size:clamp(0.82rem,1.6vw,0.95rem);margin-bottom:12px;color:var(--accent-cyan);">잔차 스트림 수렴도</h3>
+        <div class="convergence-bars">
+          <div class="conv-bar-row">
+            <span class="conv-label">반복 1</span>
+            <div class="conv-bar"><div class="conv-fill blue" style="width:95%"></div></div>
+          </div>
+          <div class="conv-bar-row">
+            <span class="conv-label">반복 2</span>
+            <div class="conv-bar"><div class="conv-fill blue" style="width:62%"></div></div>
+          </div>
+          <div class="conv-bar-row">
+            <span class="conv-label">반복 4</span>
+            <div class="conv-bar"><div class="conv-fill blue" style="width:28%"></div></div>
+          </div>
+          <div class="conv-bar-row">
+            <span class="conv-label">반복 8</span>
+            <div class="conv-bar"><div class="conv-fill blue" style="width:8%"></div></div>
+          </div>
+          <div class="conv-bar-row">
+            <span class="conv-label">반복 16</span>
+            <div class="conv-bar"><div class="conv-fill blue" style="width:2%"></div></div>
+          </div>
+        </div>
+        <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-muted);margin-top:8px;">
+          Huginn-0125, Retrofitted Llama: 연속 반복 간 잔차 스트림 차이 (‖Δ‖) 급감
+        </p>
+      </div>
+
+      <div style="flex:1;min-width:240px;">
+        <h3 style="font-size:clamp(0.82rem,1.6vw,0.95rem);margin-bottom:12px;color:var(--accent-purple);">잠재 공간 순환 궤적</h3>
+        <div class="loop-visual">
+          <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+          </div>
+          <div class="orbit-center">순환<br>고정점</div>
+        </div>
+        <p style="font-size:clamp(0.68rem,1.3vw,0.78rem);color:var(--text-muted);text-align:center;">
+          PCA 축소 궤적: 반복마다 동일한 순환 경로를 정확히 추적
+        </p>
+      </div>
+    </div>
+
+    <div class="key-insight" style="margin-top:16px;">
+      <p>각 레이어는 단일 고정점이 아닌 <strong style="color:var(--accent-cyan)">서로 다른 고유 고정점</strong>에 수렴하여,
+      잠재 공간에서 <strong style="color:var(--accent-purple)">일관된 순환 궤적</strong>을 형성합니다.</p>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 7: 어텐션 안정화 ============ -->
+  <div class="slide slide-bg-3" data-slide="7">
+    <span class="section-label label-cyan">핵심 발견 2</span>
+    <h2 class="slide-title">어텐션 패턴의 안정화</h2>
+    <p class="slide-subtitle">고정점에 도달하면 어텐션 헤드의 행동도 안정화되어 반복 간 일정한 패턴을 유지합니다.</p>
+
+    <div class="card-grid grid-2">
+      <div class="card">
+        <h3>프로베니우스 노름 히트맵</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:12px 0;padding:10px;background:rgba(0,0,0,0.3);border-radius:10px;">
+          <div style="background:var(--accent-blue);opacity:1;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-blue);opacity:0.2;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-blue);opacity:0.15;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-blue);opacity:0.1;height:28px;border-radius:4px;"></div>
+
+          <div style="background:var(--accent-blue);opacity:0.2;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-purple);opacity:1;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-purple);opacity:0.2;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-purple);opacity:0.15;height:28px;border-radius:4px;"></div>
+
+          <div style="background:var(--accent-blue);opacity:0.15;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-purple);opacity:0.2;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-cyan);opacity:1;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-cyan);opacity:0.2;height:28px;border-radius:4px;"></div>
+
+          <div style="background:var(--accent-blue);opacity:0.1;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-purple);opacity:0.15;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-cyan);opacity:0.2;height:28px;border-radius:4px;"></div>
+          <div style="background:var(--accent-pink);opacity:1;height:28px;border-radius:4px;"></div>
+        </div>
+        <p>대각선 패턴: 각 레이어가 반복 간 자기 자신과 가장 유사 → <strong style="color:#fff">어텐션 수렴 확인</strong></p>
+      </div>
+      <div class="card">
+        <h3>의미와 시사점</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>상태 수렴</h4>
+            <p>잔차 스트림이 고정점에 접근</p>
+          </div>
+          <div class="timeline-item">
+            <h4>어텐션 수렴</h4>
+            <p>립시츠 연속성에 의해 어텐션 패턴도 수렴</p>
+          </div>
+          <div class="timeline-item">
+            <h4>행동 안정화</h4>
+            <p>모든 반복에서 동일한 계산 수행</p>
+          </div>
+          <div class="timeline-item">
+            <h4>예측 가능성</h4>
+            <p>테스트 시 추가 반복에도 일관된 동작</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 8: 추론 단계 ============ -->
+  <div class="slide slide-bg-1" data-slide="8">
+    <span class="section-label label-orange">핵심 발견 3</span>
+    <h2 class="slide-title">추론 단계의 반복 패턴</h2>
+    <p class="slide-subtitle">
+      루프 모델은 피드포워드 모델의 추론 단계를 <strong style="color:var(--accent-orange)">각 반복마다 재현</strong>합니다.
+    </p>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:12px;">ColSum 집중도 패턴 비교</h3>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <h4 style="font-size:clamp(0.72rem,1.4vw,0.82rem);color:var(--accent-blue);margin-bottom:8px;">피드포워드 모델</h4>
+          <div style="display:flex;gap:3px;align-items:end;height:80px;padding:8px 0;">
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:90%;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:30%;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:25%;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:75%;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:20%;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:85%;"></div>
+          </div>
+          <p style="font-size:clamp(0.62rem,1.2vw,0.72rem);color:var(--text-muted);text-align:center;">
+            집중 → 혼합 → 집중 (1회)
+          </p>
+        </div>
+        <div style="flex:2;min-width:200px;">
+          <h4 style="font-size:clamp(0.72rem,1.4vw,0.82rem);color:var(--accent-purple);margin-bottom:8px;">루프 모델 (4회 반복)</h4>
+          <div style="display:flex;gap:2px;align-items:end;height:80px;padding:8px 0;">
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:85%;opacity:1;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:30%;opacity:1;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:80%;opacity:1;"></div>
+            <div style="width:2px;background:rgba(255,255,255,0.2);height:100%;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:85%;opacity:0.85;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:28%;opacity:0.85;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:80%;opacity:0.85;"></div>
+            <div style="width:2px;background:rgba(255,255,255,0.2);height:100%;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:85%;opacity:0.7;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:25%;opacity:0.7;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:82%;opacity:0.7;"></div>
+            <div style="width:2px;background:rgba(255,255,255,0.2);height:100%;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:85%;opacity:0.55;"></div>
+            <div style="flex:1;background:var(--accent-green);border-radius:3px 3px 0 0;height:26%;opacity:0.55;"></div>
+            <div style="flex:1;background:var(--accent-orange);border-radius:3px 3px 0 0;height:80%;opacity:0.55;"></div>
+          </div>
+          <p style="font-size:clamp(0.62rem,1.2vw,0.72rem);color:var(--text-muted);text-align:center;">
+            반복 1 | 반복 2 | 반복 3 | 반복 4 — 동일 패턴 반복
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid grid-2">
+      <div class="card" style="border-left:3px solid var(--accent-green);">
+        <h3>Retrofitted 모델</h3>
+        <p>각 순환 루프 내에서 피드포워드 모델의 혼합/집중 단계를 정확히 재현합니다. 128회 반복까지 안정적으로 유지됩니다.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent-orange);">
+        <h3>Huginn-0125의 한계</h3>
+        <p>정규화 구조가 활성화 크기 변화를 억제하여 혼합 행동에 필요한 조건이 형성되지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 9: 아키텍처 영향 ============ -->
+  <div class="slide slide-bg-2" data-slide="9">
+    <span class="section-label label-pink">핵심 발견 4</span>
+    <h2 class="slide-title">아키텍처 설계의 영향</h2>
+    <p class="slide-subtitle">입력 주입, 정규화 방식이 고정점 수렴에 미치는 영향을 체계적으로 분석</p>
+
+    <div class="card-grid grid-3">
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">💉</span>
+        <h3>입력 주입 + Pre-Norm</h3>
+        <div class="convergence-bars" style="margin:10px 0;">
+          <div class="conv-bar"><div class="conv-fill green" style="width:98%"></div></div>
+        </div>
+        <p><span class="status-yes">일관된 수렴</span><br>가장 안정적인 조합</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🔀</span>
+        <h3>입력 주입 없음</h3>
+        <div class="convergence-bars" style="margin:10px 0;">
+          <div class="conv-bar"><div class="conv-fill orange" style="width:35%"></div></div>
+        </div>
+        <p><span class="status-no">수렴 실패</span><br>고정점 행동 저하</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🥪</span>
+        <h3>Sandwich Norm</h3>
+        <div class="convergence-bars" style="margin:10px 0;">
+          <div class="conv-bar"><div class="conv-fill purple" style="width:65%"></div></div>
+        </div>
+        <p><span class="status-partial">혼합 결과</span><br>입력 주입에 따라 변동</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:20px;">
+      <strong style="color:#fff;">설계 지침:</strong>
+      순환 고정점 수렴을 위해서는 <strong style="color:var(--accent-green)">입력 주입</strong>이 필수적이며,
+      <strong style="color:var(--accent-blue)">Pre-Normalization</strong> 구성이 가장 안정적인 결과를 제공합니다.
+      Huginn-0125의 경우 Sandwich Norm이 잔차 스트림의 크기 변화를 억제하여 혼합 단계 형성을 방해합니다.
+    </div>
+
+    <div class="card" style="margin-top:16px;background:var(--bg-card-alt);">
+      <h3>Huginn-0125의 정규화 문제</h3>
+      <p>Sandwich normalization이 적용되면 레이어 출력이 항상 정규화되어 잔차 스트림의 <strong style="color:#fff">활성화 크기</strong>가 변하지 않습니다. 이로 인해 ColSum 혼합 행동에 필요한 조건이 충족되지 않아, 어텐션 패턴이 수렴하더라도 의미 있는 추론 단계가 형성되지 않습니다.</p>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 10: 자기 조직화 ============ -->
+  <div class="slide slide-bg-3" data-slide="10">
+    <span class="section-label label-green">핵심 발견 5</span>
+    <h2 class="slide-title">추론 단계의 자기 조직화</h2>
+    <p class="slide-subtitle">
+      소규모 모델 실험에서 혼합 단계가 학습 중 <strong style="color:var(--accent-green)">자발적으로 출현</strong>하는 것을 확인
+    </p>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3>실험 설정</h3>
+      <div class="tag-list">
+        <span class="tag" style="border-color:var(--accent-green);">4회 고정 반복</span>
+        <span class="tag" style="border-color:var(--accent-blue);">커리큘럼 없음</span>
+        <span class="tag" style="border-color:var(--accent-purple);">최종 잠재 상태만 손실 계산</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;">
+          <div style="font-size:clamp(0.9rem,2vw,1.2rem);font-weight:700;color:var(--accent-blue);">(2,4×4,2)</div>
+          <div style="font-size:clamp(0.65rem,1.2vw,0.75rem);color:var(--text-muted);">소형</div>
+        </div>
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;">
+          <div style="font-size:clamp(0.9rem,2vw,1.2rem);font-weight:700;color:var(--accent-purple);">(2,8×4,2)</div>
+          <div style="font-size:clamp(0.65rem,1.2vw,0.75rem);color:var(--text-muted);">중형</div>
+        </div>
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px;">
+          <div style="font-size:clamp(0.9rem,2vw,1.2rem);font-weight:700;color:var(--accent-cyan);">(2,12×4,2)</div>
+          <div style="font-size:clamp(0.65rem,1.2vw,0.75rem);color:var(--text-muted);">대형</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <span class="icon">✨</span>
+      <p>
+        혼합 단계는 피드포워드 행동을 편향시키는 특별한 학습 절차 없이도<br>
+        <strong style="color:var(--accent-green)">자발적으로 출현</strong>합니다.
+        모델은 스스로 피드포워드 모델과 유사한 다중 혼합 단계로 조직화됩니다.
+      </p>
+    </div>
+
+    <div class="card-grid grid-2" style="margin-top:16px;">
+      <div class="card">
+        <h3>안정성 (고정점 모델)</h3>
+        <p>Retrofitted Llama의 레이어별 ColSum 집중도는 빠르게 안정화되며, <strong style="color:var(--accent-green)">128회 반복까지도 안정적</strong>으로 유지됩니다. 학습 깊이를 훨씬 초과하는 테스트 시에도 추론 단계가 보존됩니다.</p>
+      </div>
+      <div class="card">
+        <h3>불안정성 (비고정점 모델)</h3>
+        <p>Ouro의 레이어들은 반복에 따라 계속 변화하며, 학습 시 반복 횟수를 초과하면 <strong style="color:var(--accent-red)">단계가 붕괴</strong>되고 성능이 저하됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 11: 핵심 시사점 ============ -->
+  <div class="slide slide-bg-1" data-slide="11">
+    <span class="section-label label-purple">시사점</span>
+    <h2 class="slide-title">핵심 시사점과 설계 지침</h2>
+    <p class="slide-subtitle">
+      이 연구의 발견들이 루프 언어 모델의 아키텍처 설계에 주는 실질적 가이드라인
+    </p>
+
+    <div class="conclusion-grid">
+      <div class="conclusion-item">
+        <div class="conclusion-num">01</div>
+        <div class="conclusion-text">
+          <h4>기능적 깊이와 매개변수의 분리</h4>
+          <p>루프 모델은 적은 매개변수로 깊은 계산을 수행할 수 있으며, 이는 피드포워드 모델의 추론 단계를 각 반복에서 재현함으로써 달성됩니다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">02</div>
+        <div class="conclusion-text">
+          <h4>입력 주입은 필수</h4>
+          <p>순환 고정점 수렴을 위해 각 반복마다 원본 입력을 재주입하는 것이 핵심입니다. 없으면 고정점 행동이 크게 저하됩니다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">03</div>
+        <div class="conclusion-text">
+          <h4>정규화 방식이 중요</h4>
+          <p>Pre-normalization이 가장 안정적이며, Sandwich normalization은 혼합 단계 형성을 방해할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">04</div>
+        <div class="conclusion-text">
+          <h4>고정점 수렴 = 일반화 능력</h4>
+          <p>고정점에 수렴하는 모델은 학습 시 사용한 반복 횟수를 초과해도 안정적으로 동작하여, 테스트 시 추가 연산 예산 배분이 가능합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong style="color:#fff">메커니즘적 통찰의 전이:</strong>
+      피드포워드 모델에 대한 기존 메커니즘적 이해를 루프 아키텍처 설계에 직접 활용할 수 있습니다.
+      이는 모델 해석 가능성과 효율적인 아키텍처 탐색 모두에 기여합니다.
+    </div>
+  </div>
+
+  <!-- ============ SLIDE 12: 한계 및 결론 ============ -->
+  <div class="slide slide-bg-2" data-slide="12">
+    <span class="section-label label-red">결론</span>
+    <h2 class="slide-title">한계점과 미래 연구 방향</h2>
+
+    <div class="card-grid grid-2">
+      <div class="card" style="border-left:3px solid var(--accent-orange);">
+        <h3>연구의 한계</h3>
+        <ul>
+          <li>단일 순환 블록(cyclic recurrence)만 분석 — 다중 순환 블록(sequential recurrence)은 미검토</li>
+          <li>고정점 수렴이 <em>왜</em> 일어나는지에 대한 해석적 증명 부재</li>
+          <li>고정점 수렴이 추론 능력에 유리한지 제약인지 아직 미결정</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent-green);">
+        <h3>미래 연구 방향</h3>
+        <ul>
+          <li>다중 순환 블록 구조에 대한 확장 분석</li>
+          <li>고정점 수렴의 이론적 원인 규명</li>
+          <li>적응적 반복 횟수 결정 메커니즘</li>
+          <li>더 큰 규모의 모델에서 검증</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="key-insight" style="margin-top:20px;background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(6,182,212,0.1));border-color:rgba(16,185,129,0.2);">
+      <span class="icon">📌</span>
+      <p>
+        루프 트랜스포머는 피드포워드 모델의 추론 단계를 반복적으로 재현하며,<br>
+        순환 고정점 수렴은 <strong style="color:var(--accent-green)">안정적인 테스트 시 확장</strong>의 핵심 메커니즘입니다.<br>
+        이 발견은 메커니즘적 통찰을 아키텍처 설계 지침으로 직접 연결합니다.
+      </p>
+    </div>
+
+    <div style="margin-top:24px;text-align:center;">
+      <div style="font-size:clamp(0.65rem,1.3vw,0.78rem);color:var(--text-muted);">
+        논문: arXiv:2604.11791v1 · 39 페이지 · 63 그림<br>
+        Blayney, Arroyo, Obando-Ceron, Castro, Courville, Bronstein, Dong (2026)
+      </div>
+      <div class="tag-list" style="justify-content:center;margin-top:12px;">
+        <span class="tag">cs.LG</span>
+        <span class="tag">cs.AI</span>
+        <span class="tag">CC BY 4.0</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function goTo(index) {
+    if (isAnimating || index === current || index < 0 || index >= total) return;
+    isAnimating = true;
+
+    const oldSlide = slides[current];
+    const newSlide = slides[index];
+    const direction = index > current ? 1 : -1;
+
+    oldSlide.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    oldSlide.style.opacity = '0';
+    oldSlide.style.transform = 'translateX(' + (-60 * direction) + 'px)';
+
+    newSlide.style.display = 'flex';
+    newSlide.style.transition = 'none';
+    newSlide.style.opacity = '0';
+    newSlide.style.transform = 'translateX(' + (60 * direction) + 'px)';
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        newSlide.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        newSlide.style.opacity = '1';
+        newSlide.style.transform = 'translateX(0)';
+      });
+    });
+
+    setTimeout(function() {
+      oldSlide.classList.remove('active');
+      oldSlide.style.display = 'none';
+      newSlide.classList.add('active');
+      current = index;
+      updateUI();
+      isAnimating = false;
+      newSlide.scrollTop = 0;
+    }, 420);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const dx = touchStartX - touchEndX;
+    const dy = Math.abs(touchStartY - touchEndY);
+    if (Math.abs(dx) > 50 && dy < Math.abs(dx) * 0.7) {
+      if (dx > 0) next(); else prev();
+    }
+  }, { passive: true });
+
+  // Particles on cover slide
+  const particlesEl = document.getElementById('particles');
+  if (particlesEl) {
+    const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#ec4899', '#10b981'];
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+      particlesEl.appendChild(p);
+    }
+  }
+
+  updateUI();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SceneCritic: 3D 실내 장면 합성을 위한 기호적 평가기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #121640;
+    --bg-card: rgba(255,255,255,0.05);
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b9d;
+    --accent4: #ffa726;
+    --text-primary: #e8eaf6;
+    --text-secondary: #9ea7cf;
+    --text-muted: #5c6394;
+    --border: rgba(108,99,255,0.25);
+    --gradient1: linear-gradient(135deg, #6c63ff 0%, #00d4aa 100%);
+    --gradient2: linear-gradient(135deg, #ff6b9d 0%, #ffa726 100%);
+    --gradient3: linear-gradient(135deg, #6c63ff 0%, #ff6b9d 100%);
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 60px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Background decoration */
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-glow.g1 { width:600px; height:600px; background:#6c63ff; top:-200px; right:-200px; }
+  .bg-glow.g2 { width:400px; height:400px; background:#00d4aa; bottom:-100px; left:-100px; }
+  .bg-glow.g3 { width:300px; height:300px; background:#ff6b9d; top:50%; left:50%; transform:translate(-50%,-50%); }
+
+  /* Typography */
+  .slide-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .gradient-text {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text2 {
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text3 {
+    background: var(--gradient3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 800px;
+    line-height: 1.7;
+  }
+
+  .slide-content {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(108,99,255,0.15);
+  }
+
+  .card-title {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-body {
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Grid layouts */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  /* Stat boxes */
+  .stat-box {
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .stat-value {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* Comparison bars */
+  .bar-group { margin: 8px 0; }
+  .bar-label {
+    font-size: clamp(0.75rem, 1.3vw, 0.85rem);
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bar-track {
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .slide.active .bar-fill { width: var(--w); }
+  .bar-fill.accent { background: var(--gradient1); }
+  .bar-fill.accent2 { background: var(--gradient2); }
+  .bar-fill.accent3 { background: var(--gradient3); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+    font-weight: 500;
+    margin: 3px;
+  }
+  .tag-purple { background: rgba(108,99,255,0.2); color: #a5a0ff; border: 1px solid rgba(108,99,255,0.3); }
+  .tag-green { background: rgba(0,212,170,0.2); color: #00d4aa; border: 1px solid rgba(0,212,170,0.3); }
+  .tag-pink { background: rgba(255,107,157,0.2); color: #ff6b9d; border: 1px solid rgba(255,107,157,0.3); }
+  .tag-orange { background: rgba(255,167,38,0.2); color: #ffa726; border: 1px solid rgba(255,167,38,0.3); }
+
+  /* Flow diagram */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    font-weight: 600;
+    text-align: center;
+    min-width: 100px;
+  }
+  .flow-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  }
+  .data-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent);
+    border-bottom: 2px solid var(--border);
+    font-size: clamp(0.7rem, 1.3vw, 0.82rem);
+  }
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+  }
+  .data-table tr:hover td { background: rgba(108,99,255,0.05); }
+  .highlight-cell { color: var(--accent2) !important; font-weight: 700; }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(10,14,39,0.9);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px; min-height: 48px;
+    padding: 10px 22px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: var(--bg-card);
+    border-color: var(--border);
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Animated elements */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .slide.active .fade-up { opacity: 1; transform: translateY(0); }
+  .slide.active .fade-up:nth-child(1) { transition-delay: 0.1s; }
+  .slide.active .fade-up:nth-child(2) { transition-delay: 0.2s; }
+  .slide.active .fade-up:nth-child(3) { transition-delay: 0.3s; }
+  .slide.active .fade-up:nth-child(4) { transition-delay: 0.4s; }
+  .slide.active .fade-up:nth-child(5) { transition-delay: 0.5s; }
+
+  /* Pulse dot */
+  .pulse-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .float { animation: float 4s ease-in-out infinite; }
+
+  /* Separator line */
+  .sep {
+    width: 60px; height: 3px;
+    border-radius: 2px;
+    margin: 16px auto;
+  }
+
+  /* VS divider */
+  .vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--gradient2);
+    font-weight: 900;
+    font-size: 0.75rem;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  /* Check / cross icons */
+  .icon-pass { color: var(--accent2); }
+  .icon-fail { color: var(--accent3); }
+
+  .section-label {
+    font-size: clamp(0.7rem, 1.2vw, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  /* Tooltip on title slide */
+  .paper-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  /* Responsive - Tablet */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 28px 80px 28px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .card { padding: 18px; }
+    .flow-row { gap: 8px; }
+    .flow-box { padding: 10px 14px; min-width: 80px; }
+    .data-table th, .data-table td { padding: 6px 8px; }
+    .nav-bar { padding: 10px 16px; }
+    .bg-glow.g1 { width: 300px; height: 300px; }
+    .bg-glow.g2 { width: 200px; height: 200px; }
+  }
+
+  /* Responsive - Mobile */
+  @media (max-width: 480px) {
+    .slide { padding: 20px 16px 76px 16px; justify-content: flex-start; padding-top: 30px; }
+    .slide-title { margin-bottom: 16px; }
+    .card { padding: 14px; border-radius: 12px; }
+    .card-icon { width: 30px; height: 30px; font-size: 14px; }
+    .stat-box { padding: 14px; }
+    .flow-box { padding: 8px 10px; min-width: 60px; font-size: 0.7rem; }
+    .flow-arrow { font-size: 0.9rem; }
+    .nav-btn { padding: 8px 16px; min-width: 44px; min-height: 44px; }
+    .progress-bar { margin: 0 10px; }
+    .subtitle { line-height: 1.6; }
+    .grid-3 { gap: 10px; }
+    .bar-track { height: 22px; }
+    .paper-meta { gap: 6px; }
+    .vs-badge { width: 36px; height: 36px; font-size: 0.65rem; }
+    .bg-glow { display: none; }
+  }
+
+  /* Responsive - Small Mobile */
+  @media (max-width: 320px) {
+    .slide { padding: 14px 10px 72px 10px; padding-top: 20px; }
+    .card { padding: 10px; }
+    .stat-box { padding: 10px; }
+    .nav-btn { padding: 6px 12px; border-radius: 8px; }
+    .flow-box { font-size: 0.65rem; padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+<div class="bg-glow g3"></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- Slide 1: Title -->
+<div class="slide active" data-index="0">
+  <div class="section-label fade-up">arXiv 2604.13035 &middot; 2026</div>
+  <h1 class="slide-title fade-up">
+    <span class="gradient-text">SceneCritic</span>
+  </h1>
+  <p class="subtitle fade-up" style="font-size:clamp(1rem,2.2vw,1.5rem); font-weight:500; color:var(--text-primary); margin-bottom:8px;">
+    3D 실내 장면 합성을 위한<br>기호적 평가 프레임워크
+  </p>
+  <div class="sep fade-up" style="background:var(--gradient1);"></div>
+  <p class="subtitle fade-up">
+    VLM 심사관의 불안정성을 극복하고,<br>
+    데이터 기반 온톨로지로 해석 가능한 장면 평가를 수행
+  </p>
+  <div class="paper-meta fade-up">
+    <span class="tag tag-purple">Sengupta, Ao, Cascante-Bonilla</span>
+    <span class="tag tag-green">3D 장면 합성</span>
+    <span class="tag tag-pink">기호적 평가</span>
+  </div>
+</div>
+
+<!-- Slide 2: Problem -->
+<div class="slide" data-index="1">
+  <div class="section-label fade-up">문제 제기</div>
+  <h2 class="slide-title fade-up">
+    VLM 심사관은 <span class="gradient-text2">신뢰할 수 없다</span>
+  </h2>
+  <div class="slide-content">
+    <div class="grid-2 fade-up">
+      <div class="card">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(255,107,157,0.2);">
+            <span style="color:var(--accent3);">&#x26A0;</span>
+          </div>
+          시점 불안정성
+        </div>
+        <div class="card-body">
+          동일한 장면을 다른 각도에서 렌더링하면 VLM 점수가 <strong style="color:var(--accent3);">12~19점</strong>까지 변동. 같은 피아노 방이 75%와 55%로 평가됨.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(255,167,38,0.2);">
+            <span style="color:var(--accent4);">&#x1F441;</span>
+          </div>
+          2D 렌더링 의존
+        </div>
+        <div class="card-body">
+          2D 이미지로 변환 시 3D 공간 정보가 소실되어 기하학적 위반을 감지하지 못함.
+        </div>
+      </div>
+    </div>
+    <div class="grid-2 fade-up">
+      <div class="card">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(108,99,255,0.2);">
+            <span style="color:var(--accent);">&#x2753;</span>
+          </div>
+          해석 불가능한 점수
+        </div>
+        <div class="card-body">
+          전체적 단일 점수만 제공하며, 어떤 객체/관계가 문제인지 구체적으로 식별 불가.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(0,212,170,0.2);">
+            <span style="color:var(--accent2);">&#x1F504;</span>
+          </div>
+          순위 역전 현상
+        </div>
+        <div class="card-body">
+          시점을 바꾸면 모델 순위가 완전히 뒤바뀜. 좌/우 비대칭 편향이 <strong style="color:var(--accent4);">11 vs 28점</strong>으로 발생.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3: Solution Overview -->
+<div class="slide" data-index="2">
+  <div class="section-label fade-up">해결 방안</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text">SceneCritic</span>의 접근법
+  </h2>
+  <div class="slide-content">
+    <div class="flow-row fade-up" style="margin-bottom:20px;">
+      <div class="flow-box" style="background:rgba(108,99,255,0.2); border:1px solid var(--accent);">
+        3D 레이아웃<br>입력
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-box" style="background:rgba(0,212,170,0.2); border:1px solid var(--accent2);">
+        SceneOnto<br>온톨로지 참조
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-box" style="background:rgba(255,107,157,0.2); border:1px solid var(--accent3);">
+        기호적 제약<br>검증
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-box" style="background:rgba(255,167,38,0.2); border:1px solid var(--accent4);">
+        객체별 피드백<br>+ 점수
+      </div>
+    </div>
+    <div class="card fade-up">
+      <div class="card-body" style="text-align:center; font-size:clamp(0.85rem,1.6vw,1rem);">
+        <strong style="color:var(--accent);">핵심 아이디어:</strong> 렌더링 없이 3D 레이아웃을 직접 분석하여<br>
+        <strong>시점 독립적</strong>이고 <strong>해석 가능한</strong> 평가 수행
+      </div>
+    </div>
+    <div class="grid-3 fade-up">
+      <div class="stat-box">
+        <div class="stat-value gradient-text">&#x1F4D0;</div>
+        <div class="stat-label">의미론적<br>일관성</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value gradient-text2">&#x1F9ED;</div>
+        <div class="stat-label">방향<br>정렬</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value gradient-text3">&#x1F4E6;</div>
+        <div class="stat-label">충돌<br>검출</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: SceneOnto -->
+<div class="slide" data-index="3">
+  <div class="section-label fade-up">핵심 구성 요소 1</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text">SceneOnto</span> &mdash; 공간 온톨로지
+  </h2>
+  <div class="slide-content">
+    <div class="grid-3 fade-up">
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent);">3</div>
+        <div class="stat-label">데이터셋 통합<br><small style="color:var(--text-muted);">3D-FRONT, ScanNet, Visual Genome</small></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent2);">79</div>
+        <div class="stat-label">객체 카테고리<br><small style="color:var(--text-muted);">방 유형별 관계 그래프</small></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent3);">489</div>
+        <div class="stat-label">객체 쌍 관계<br><small style="color:var(--text-muted);">73.6% 양의 연관성</small></div>
+      </div>
+    </div>
+    <div class="grid-2 fade-up" style="margin-top:12px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">&#x1F4CF; 치수 사전</div>
+        <div class="card-body">
+          79개 카테고리의 너비/높이/깊이에 대한 백분위 통계 (p5, p25, 중앙값, p75, p95) 수집
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent2);">&#x1F517; 지지 관계</div>
+        <div class="card-body">
+          객체가 어떤 표면 위에 놓이는지 정의 (5cm 정렬 허용 오차)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent3);">&#x1F91D; 동시 출현</div>
+        <div class="card-body">
+          쌍별 조건부 확률 P(b|a)과 정규화된 PMI로 연관성 정량화
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent4);">&#x1F9ED; 방향 전략</div>
+        <div class="card-body">
+          벽을 등지는 비율, 중앙을 향하는 비율, 쌍 대면 관계 등 방향 패턴 수집
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: Three Evaluation Dimensions -->
+<div class="slide" data-index="4">
+  <div class="section-label fade-up">핵심 구성 요소 2</div>
+  <h2 class="slide-title fade-up">
+    3가지 <span class="gradient-text2">평가 차원</span>
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up" style="border-left: 3px solid var(--accent);">
+      <div class="card-title" style="color:var(--accent);">&#x2460; 공간 의미론 (Semantic)</div>
+      <div class="card-body">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="tag tag-purple">스케일 검증 (p5-p95)</span>
+          <span class="tag tag-purple">동시 출현 타당성</span>
+          <span class="tag tag-purple">근접성 제약</span>
+          <span class="tag tag-purple">완전성 검사</span>
+        </div>
+        <p style="margin-top:8px;">객체 크기가 경험적 분포 범위 내인지, 기능적 관련 쌍이 <strong>2.0m 이내</strong>인지 확인</p>
+      </div>
+    </div>
+    <div class="card fade-up" style="border-left: 3px solid var(--accent2);">
+      <div class="card-title" style="color:var(--accent2);">&#x2461; 방향 검증 (Orientation)</div>
+      <div class="card-body">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="tag tag-green">벽 등지기</span>
+          <span class="tag tag-green">중앙 향하기</span>
+          <span class="tag tag-green">쌍 대면</span>
+        </div>
+        <p style="margin-top:8px;">각도 편차 &Delta;&theta; 계산 &mdash; 소프트 임계값 <strong>75&deg;</strong>, 하드 임계값 <strong>150&deg;</strong></p>
+      </div>
+    </div>
+    <div class="card fade-up" style="border-left: 3px solid var(--accent3);">
+      <div class="card-title" style="color:var(--accent3);">&#x2462; 충돌 검출 (Overlap)</div>
+      <div class="card-body">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="tag tag-pink">AABB 근접 충돌</span>
+          <span class="tag tag-pink">OBB 회전 충돌 (SAT)</span>
+        </div>
+        <p style="margin-top:8px;">축 정렬 + 회전 고려 충돌 탐지의 평균 &mdash; 허용 오차 <strong>0.2m</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6: Human Alignment -->
+<div class="slide" data-index="5">
+  <div class="section-label fade-up">핵심 결과</div>
+  <h2 class="slide-title fade-up">
+    인간 판단과의 <span class="gradient-text">일치율</span>
+  </h2>
+  <p class="subtitle fade-up" style="margin-bottom:20px;">16명의 평가자, 594건의 판단 &mdash; SceneCritic vs VLM 비교</p>
+  <div class="slide-content">
+    <div class="card fade-up">
+      <div class="card-title" style="color:var(--accent2);">&#x2705; 쉬운 장면</div>
+      <div class="bar-group">
+        <div class="bar-label"><span>SceneCritic</span><span class="icon-pass">94.44%</span></div>
+        <div class="bar-track"><div class="bar-fill accent" style="--w:94.44%;">94.4%</div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>VLM 심사관</span><span class="icon-fail">58.82%</span></div>
+        <div class="bar-track"><div class="bar-fill accent2" style="--w:58.82%;">58.8%</div></div>
+      </div>
+    </div>
+    <div class="card fade-up">
+      <div class="card-title" style="color:var(--accent4);">&#x1F525; 복잡한 장면</div>
+      <div class="bar-group">
+        <div class="bar-label"><span>SceneCritic</span><span class="icon-pass">83.33%</span></div>
+        <div class="bar-track"><div class="bar-fill accent" style="--w:83.33%;">83.3%</div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>VLM 심사관</span><span class="icon-fail">47.06%</span></div>
+        <div class="bar-track"><div class="bar-fill accent2" style="--w:47.06%;">47.1%</div></div>
+      </div>
+    </div>
+    <div class="card fade-up" style="text-align:center;">
+      <div class="card-body">
+        충돌(Overlap) 지표에서 SceneCritic은 <strong style="color:var(--accent2);">100% 인간 일치율</strong> 달성<br>
+        <span style="color:var(--text-muted);">Fleiss &kappa; = 0.59~0.72 (상당한 일치도)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: VLM Instability Data -->
+<div class="slide" data-index="6">
+  <div class="section-label fade-up">정량적 분석</div>
+  <h2 class="slide-title fade-up">
+    VLM 점수의 <span class="gradient-text2">시점별 변동</span>
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>파이프라인</th>
+            <th>의미론 변동</th>
+            <th>충돌(좌)</th>
+            <th>충돌(우)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LayoutGPT + Gemini</td>
+            <td class="highlight-cell">19.32점</td>
+            <td>18.45</td>
+            <td>22.31</td>
+          </tr>
+          <tr>
+            <td>LayoutVLM + Gemini</td>
+            <td>15.67점</td>
+            <td class="highlight-cell">11.16</td>
+            <td class="highlight-cell">28.09</td>
+          </tr>
+          <tr>
+            <td>Holodeck + Qwen72B</td>
+            <td>12.46점</td>
+            <td>14.82</td>
+            <td>19.54</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2 fade-up">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;color:var(--accent3);">&#x00B1;19점</div>
+        <div class="stat-label">동일 장면의 최대 VLM 점수 변동</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;color:var(--accent2);">0점</div>
+        <div class="stat-label">SceneCritic의 시점 변동<br>(렌더링 불필요)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8: 13 Models Refinement -->
+<div class="slide" data-index="7">
+  <div class="section-label fade-up">반복 개선 실험</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text3">13개 모델</span> &times; 4가지 학습 전략
+  </h2>
+  <div class="slide-content">
+    <div class="grid-2 fade-up">
+      <div class="card">
+        <div class="card-title"><span class="tag tag-purple">GRPO</span> 일반 RL</div>
+        <div class="card-body" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+          Qwen3-14B, Qwen3-235B,<br>UI-Venus-Navi-72B
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="tag tag-green">PPO/DPO</span> RLHF</div>
+        <div class="card-body" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+          Gemini-2.5-Flash, Qwen2.5-VL-7B,<br>LLaMA4-Maverick 등
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="tag tag-pink">RLIF</span> 반복 피드백</div>
+        <div class="card-body" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+          Qwen3-14B-Intuitor-MATH,<br>Qwen3-14B-GRPO-MATH
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="tag tag-orange">RLVR</span> 검증 보상</div>
+        <div class="card-body" style="font-size:clamp(0.7rem,1.2vw,0.82rem);">
+          DeepSeek-3.2V, VL-Reasoner-72B,<br>Holo1.5-72B 등
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up" style="margin-top: 8px;">
+      <div class="card-body" style="text-align:center;">
+        <strong>3가지 비평 모달리티</strong> 비교: 규칙 기반 (Heuristic) &middot; 텍스트 LLM &middot; 이미지 VLM
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Key Findings -->
+<div class="slide" data-index="8">
+  <div class="section-label fade-up">주요 발견</div>
+  <h2 class="slide-title fade-up">
+    텍스트 LLM이 <span class="gradient-text">VLM을 능가</span>한다
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up">
+      <div class="card-title" style="color:var(--accent);">&#x1F3C6; 의미론적 점수 최고 성능</div>
+      <div class="bar-group">
+        <div class="bar-label"><span>DeepSeek-3.2V (규칙 기반)</span><span style="color:var(--accent2);">80.83</span></div>
+        <div class="bar-track"><div class="bar-fill accent" style="--w:80.83%;">80.8</div></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label"><span>DeepSeek-3.2V (텍스트 LLM)</span><span style="color:var(--accent2);">79.57</span></div>
+        <div class="bar-track"><div class="bar-fill accent" style="--w:79.57%;">79.6</div></div>
+      </div>
+    </div>
+    <div class="grid-2 fade-up">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent2);">&#x1F4A1; 핵심 인사이트 1</div>
+        <div class="card-body">
+          구조화된 텍스트 표현만으로도 의미론적 레이아웃 개선이 가능 &mdash; 이미지가 꼭 필요하지 않음
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent4);">&#x1F4A1; 핵심 인사이트 2</div>
+        <div class="card-body">
+          수학 특화 학습은 작은 모델에서도 방향 추론 능력을 크게 향상시킴
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up">
+      <div class="card-title" style="color:var(--accent3);">&#x1F9ED; 방향 — 가장 어려운 차원</div>
+      <div class="bar-group">
+        <div class="bar-label"><span>최고 성능 (Qwen2.5-14B-GRPO)</span><span>65.1</span></div>
+        <div class="bar-track"><div class="bar-fill accent3" style="--w:65.1%;">65.1</div></div>
+      </div>
+      <div class="card-body" style="margin-top:6px;">
+        이미지 기반 VLM 피드백이 방향 개선에 가장 효과적 (Gemini: 43.7 &rarr; 55.8)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Architecture Summary -->
+<div class="slide" data-index="9">
+  <div class="section-label fade-up">시스템 아키텍처</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text3">SceneCritic</span> 전체 파이프라인
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up" style="text-align:center; padding: 28px;">
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:center;">
+        <div class="flow-row">
+          <div class="flow-box" style="background:rgba(108,99,255,0.15); border:1px solid var(--accent); width:100%; max-width:400px;">
+            <strong style="color:var(--accent);">입력:</strong> 3D 장면 레이아웃 (바운딩 박스, 레이블, 회전)
+          </div>
+        </div>
+        <span style="font-size:1.5rem;color:var(--text-muted);">&#x2B07;</span>
+        <div class="flow-row">
+          <div class="flow-box" style="background:rgba(0,212,170,0.15); border:1px solid var(--accent2); width:100%; max-width:400px;">
+            <strong style="color:var(--accent2);">SceneOnto 조회</strong><br>
+            <small style="color:var(--text-secondary);">3D-FRONT + ScanNet + Visual Genome</small>
+          </div>
+        </div>
+        <span style="font-size:1.5rem;color:var(--text-muted);">&#x2B07;</span>
+        <div class="flow-row" style="gap:10px;">
+          <div class="flow-box" style="background:rgba(108,99,255,0.1); border:1px solid var(--accent);">의미론</div>
+          <div class="flow-box" style="background:rgba(0,212,170,0.1); border:1px solid var(--accent2);">방향</div>
+          <div class="flow-box" style="background:rgba(255,107,157,0.1); border:1px solid var(--accent3);">충돌</div>
+        </div>
+        <span style="font-size:1.5rem;color:var(--text-muted);">&#x2B07;</span>
+        <div class="flow-row">
+          <div class="flow-box" style="background:rgba(255,167,38,0.15); border:1px solid var(--accent4); width:100%; max-width:400px;">
+            <strong style="color:var(--accent4);">출력:</strong> 객체별 세부 피드백 + 3가지 점수 (0~100)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card fade-up" style="text-align:center;">
+      <div class="card-body">
+        ProcTHOR-10K을 사용한 임계값 교정으로 체계적 편향 없이 일관성 극대화
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Contributions -->
+<div class="slide" data-index="10">
+  <div class="section-label fade-up">기여</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text">4가지 핵심 기여</span>
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up" style="border-left:3px solid var(--accent);">
+      <div class="card-title" style="color:var(--accent);">&#x2460; SceneOnto</div>
+      <div class="card-body">
+        3개 주요 데이터셋(6,813 + 1,511 + 61,530 장면)에서 추출한 구조화된 공간 온톨로지. 79개 객체 카테고리의 관계 그래프.
+      </div>
+    </div>
+    <div class="card fade-up" style="border-left:3px solid var(--accent2);">
+      <div class="card-title" style="color:var(--accent2);">&#x2461; SceneCritic 평가기</div>
+      <div class="card-body">
+        의미론/방향/충돌 3차원에서 해석 가능한 임계값 기반 기호적 평가. 객체 및 관계 수준의 세부 피드백 제공.
+      </div>
+    </div>
+    <div class="card fade-up" style="border-left:3px solid var(--accent3);">
+      <div class="card-title" style="color:var(--accent3);">&#x2462; 반복 개선 테스트베드</div>
+      <div class="card-body">
+        13개 모델 &times; 4개 후학습 패러다임 &times; 3가지 비평 모달리티의 체계적 평가. 텍스트 LLM이 VLM을 능가함을 입증.
+      </div>
+    </div>
+    <div class="card fade-up" style="border-left:3px solid var(--accent4);">
+      <div class="card-title" style="color:var(--accent4);">&#x2463; 인간 정렬 연구</div>
+      <div class="card-body">
+        SceneCritic이 94.44% (쉬운) / 83.33% (복잡) 인간 일치율 달성. VLM 대비 압도적 우위.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 12: Conclusion -->
+<div class="slide" data-index="11">
+  <div class="section-label fade-up">결론</div>
+  <h2 class="slide-title fade-up">
+    <span class="gradient-text3">시사점과 방향</span>
+  </h2>
+  <div class="slide-content">
+    <div class="card fade-up" style="text-align:center; padding:28px;">
+      <div style="font-size:clamp(1rem, 2vw, 1.3rem); line-height:1.8; color:var(--text-primary);">
+        "공간적 추론의 평가는<br>
+        렌더링 선택과 프롬프트 표현에<br>
+        <strong style="color:var(--accent);">독립적인</strong> 평가 메커니즘을 필요로 한다"
+      </div>
+    </div>
+    <div class="grid-2 fade-up">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent2);">&#x2714; 입증된 사실</div>
+        <div class="card-body">
+          <p>&bull; VLM 평가자는 3D 장면에 부적합</p>
+          <p>&bull; 데이터 기반 기호적 평가가 안정적</p>
+          <p>&bull; 텍스트와 비전의 상호보완 역할</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent4);">&#x1F52D; 향후 연구</div>
+        <div class="card-body">
+          <p>&bull; 방향 추론의 추가 개선</p>
+          <p>&bull; 더 다양한 방 유형으로 확장</p>
+          <p>&bull; 실시간 장면 생성 피드백</p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-up" style="text-align:center; margin-top: 16px;">
+      <span class="tag tag-purple">arXiv: 2604.13035</span>
+      <span class="tag tag-green">lab-spell.github.io/SceneCritic</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>&larr; 이전</button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-counter" id="slideCounter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">다음 &rarr;</button>
+</nav>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const progressFill = document.getElementById('progressFill');
+  const slideCounter = document.getElementById('slideCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function updateSlide(newIndex, direction) {
+    if (newIndex < 0 || newIndex >= total || newIndex === current) return;
+    const oldSlide = slides[current];
+    const newSlide = slides[newIndex];
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(direction > 0 ? 'exit-left' : '');
+    setTimeout(() => oldSlide.classList.remove('exit-left'), 500);
+    newSlide.style.transform = direction > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    newSlide.offsetHeight; // force reflow
+    newSlide.classList.add('active');
+    current = newIndex;
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    slideCounter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) { updateSlide(current + dir, dir); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  // Init
+  progressFill.style.width = (1 / total * 100) + '%';
+</script>
+</body>
+</html>

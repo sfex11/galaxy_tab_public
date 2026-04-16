@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PolicyLLM: 공공정책을 위한 대형 언어모델의 이해력 향상</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --primary: #1a237e;
+    --primary-light: #3949ab;
+    --accent: #ff6f00;
+    --accent-light: #ffa726;
+    --bg-dark: #0d1117;
+    --bg-card: #161b22;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --gradient-1: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+    --gradient-2: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+    --gradient-accent: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
+    --success: #2e7d32;
+    --danger: #c62828;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  /* ===== SLIDE BACKGROUNDS ===== */
+  .slide-title { background: var(--gradient-1); justify-content: center; align-items: center; text-align: center; }
+  .slide-dark { background: var(--bg-dark); }
+  .slide-blue { background: var(--gradient-2); }
+  .slide-end { background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #01579b 100%); justify-content: center; align-items: center; text-align: center; }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-title h1 {
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .slide-title .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.4rem);
+    font-weight: 300;
+    opacity: 0.85;
+    max-width: 800px;
+    line-height: 1.6;
+  }
+
+  .slide-title .meta {
+    margin-top: 30px;
+    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    opacity: 0.6;
+    line-height: 1.8;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 700;
+    margin: 8px 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .badge-accent { background: var(--gradient-accent); color: #fff; }
+  .badge-outline { border: 2px solid rgba(255,255,255,0.4); color: #fff; }
+
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    margin: 15px 0 10px;
+    color: var(--accent-light);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  /* ===== CARDS & GRIDS ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-accent {
+    border-left: 4px solid var(--accent);
+  }
+
+  .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 { margin-top: 0; }
+
+  /* ===== STAT BOX ===== */
+  .stat-box {
+    text-align: center;
+    padding: 24px 16px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-number {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* ===== TABLES ===== */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+    min-width: 500px;
+  }
+
+  th {
+    background: rgba(26,35,126,0.6);
+    padding: 12px 14px;
+    text-align: center;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  tr:hover td { background: rgba(255,255,255,0.06); }
+
+  .highlight-cell { color: var(--accent-light); font-weight: 700; }
+  .improve-cell { color: #66bb6a; font-weight: 700; }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart { margin: 10px 0; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    gap: 10px;
+  }
+
+  .bar-label {
+    min-width: 120px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    text-align: right;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-blue { background: linear-gradient(90deg, #1565c0, #42a5f5); }
+  .bar-orange { background: linear-gradient(90deg, #e65100, #ff9800); }
+  .bar-green { background: linear-gradient(90deg, #2e7d32, #66bb6a); }
+  .bar-purple { background: linear-gradient(90deg, #6a1b9a, #ab47bc); }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .flow-box {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 16px 22px;
+    text-align: center;
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    font-weight: 500;
+    min-width: 100px;
+  }
+
+  .flow-box.active-box {
+    background: var(--gradient-accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--accent-light);
+  }
+
+  /* ===== LEVEL TAGS ===== */
+  .level-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: clamp(0.65rem, 1.1vw, 0.78rem);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .level-1 { background: rgba(66,165,245,0.2); color: #42a5f5; border: 1px solid rgba(66,165,245,0.3); }
+  .level-2 { background: rgba(171,71,188,0.2); color: #ce93d8; border: 1px solid rgba(171,71,188,0.3); }
+  .level-3 { background: rgba(255,167,38,0.2); color: #ffa726; border: 1px solid rgba(255,167,38,0.3); }
+
+  /* ===== BULLET LIST ===== */
+  ul.custom-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.custom-list li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+
+  ul.custom-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-light);
+    font-weight: 700;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active { transform: scale(0.95); }
+  .nav-btn:hover { background: rgba(255,255,255,0.18); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .nav-progress {
+    font-size: clamp(0.7rem, 1.3vw, 0.9rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ===== ANNOTATIONS ===== */
+  .note-box {
+    background: rgba(255,111,0,0.1);
+    border: 1px solid rgba(255,111,0,0.3);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    color: var(--accent-light);
+  }
+
+  .two-col-text {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  /* ===== ANIMATION ===== */
+  .fade-in { animation: fadeUp 0.7s ease forwards; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1 { animation-delay: 0.15s; opacity: 0; }
+  .delay-2 { animation-delay: 0.3s; opacity: 0; }
+  .delay-3 { animation-delay: 0.45s; opacity: 0; }
+  .delay-4 { animation-delay: 0.6s; opacity: 0; }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 30px 90px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .two-col-text { grid-template-columns: 1fr; }
+    .flow { gap: 8px; }
+    .flow-box { padding: 10px 14px; min-width: 80px; }
+    .bar-label { min-width: 90px; }
+    h2 { margin-bottom: 20px; }
+    .card { padding: 20px; }
+    table { min-width: 420px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 90px; justify-content: flex-start; padding-top: 30px; }
+    .slide-title { justify-content: center; padding-top: 24px; }
+    h2 { font-size: clamp(1.2rem, 5vw, 1.6rem); margin-bottom: 16px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .stat-box { padding: 16px 10px; }
+    .bar-row { gap: 6px; }
+    .bar-label { min-width: 70px; }
+    .bar-track { height: 22px; }
+    .nav { padding: 10px 16px; }
+    .flow-arrow { font-size: 1.1rem; }
+    .flow-box { padding: 8px 10px; font-size: clamp(0.65rem, 2.8vw, 0.82rem); min-width: 60px; }
+    .badge { padding: 4px 12px; margin: 4px 2px; }
+    table { min-width: 360px; font-size: clamp(0.6rem, 2.5vw, 0.78rem); }
+    th, td { padding: 8px 8px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 85px; }
+    .slide-title h1 { font-size: clamp(1.3rem, 6vw, 1.7rem); }
+    h2 { font-size: clamp(1.05rem, 5.5vw, 1.3rem); }
+    .card { padding: 12px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 8px 12px; }
+    .stat-number { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+    .bar-label { min-width: 55px; font-size: 0.65rem; }
+    table { min-width: 300px; }
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-container" id="slideContainer">
+
+<!-- ========== SLIDE 1: 타이틀 ========== -->
+<div class="slide slide-title active" data-index="0">
+  <div>
+    <div style="margin-bottom:20px;">
+      <span class="badge badge-accent">ACL 2026 Findings</span>
+      <span class="badge badge-outline">arXiv: 2604.12995</span>
+    </div>
+    <h1 class="fade-in">PolicyLLM</h1>
+    <p class="subtitle fade-in delay-1">공공정책에 대한 대형 언어모델의<br>탁월한 이해력을 향하여</p>
+    <p class="meta fade-in delay-2">
+      Han Bao, Penghao Zhang, Yue Huang, Zhengqing Yuan 외 8인<br>
+      2026년 4월 · CC BY 4.0
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 2: 연구 동기 ========== -->
+<div class="slide slide-dark" data-index="1">
+  <h2 class="fade-in">연구 동기 및 배경</h2>
+  <div class="grid-2 fade-in delay-1">
+    <div class="card card-accent">
+      <span class="card-icon">🏛️</span>
+      <h3>문제 인식</h3>
+      <p>LLM이 실세계 의사결정에 점점 더 많이 활용되지만, <strong>공공정책 이해 및 추론 능력</strong>에 대한 체계적 평가가 부재합니다.</p>
+    </div>
+    <div class="card card-accent">
+      <span class="card-icon">🔍</span>
+      <h3>기존 한계</h3>
+      <p>법률(LawBench, LegalBench)이나 의료(BioASQ) 벤치마크는 있지만, <strong>국내 정책 이해</strong>에 초점을 맞춘 벤치마크는 없었습니다.</p>
+    </div>
+  </div>
+  <div class="note-box fade-in delay-2">
+    💡 본 연구는 <strong>미국·중국 양국</strong>의 공공정책을 대상으로 LLM의 정책 이해력을 최초로 체계적으로 평가합니다.
+  </div>
+</div>
+
+<!-- ========== SLIDE 3: 핵심 기여 ========== -->
+<div class="slide slide-dark" data-index="2">
+  <h2 class="fade-in">핵심 기여 (3가지)</h2>
+  <div class="grid-3 fade-in delay-1">
+    <div class="card" style="border-top: 4px solid #42a5f5;">
+      <span class="card-icon">📊</span>
+      <h3>PolicyBench</h3>
+      <p>미·중 양국 정책을 아우르는 <strong>최초의 대규모 벤치마크</strong> — 21,000+개 평가 사례</p>
+    </div>
+    <div class="card" style="border-top: 4px solid #ab47bc;">
+      <span class="card-icon">📋</span>
+      <h3>실증적 분석</h3>
+      <p>11개 최신 LLM 모델의 <strong>정책 이해 강점과 약점</strong>에 대한 심층 분석</p>
+    </div>
+    <div class="card" style="border-top: 4px solid #ffa726;">
+      <span class="card-icon">🧠</span>
+      <h3>PolicyMoE</h3>
+      <p>인지 수준별 전문가 모듈을 갖춘 <strong>Mixture-of-Experts</strong> 특화 모델</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 4: PolicyBench 개요 ========== -->
+<div class="slide slide-dark" data-index="3">
+  <h2 class="fade-in">PolicyBench 데이터셋 개요</h2>
+  <div class="grid-3 fade-in delay-1" style="margin-bottom: 24px;">
+    <div class="stat-box">
+      <div class="stat-number">21K+</div>
+      <div class="stat-label">총 평가 사례</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">1,324</div>
+      <div class="stat-label">수집 정책 문서</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">10</div>
+      <div class="stat-label">세부 과제 수</div>
+    </div>
+  </div>
+  <div class="grid-2 fade-in delay-2">
+    <div class="card">
+      <h3>🇨🇳 중국 정책</h3>
+      <ul class="custom-list">
+        <li>721개 정책 + 1,890개 보충자료</li>
+        <li>출처: 국무원 정책문서 저장소</li>
+        <li>기간: 2000년 ~ 2025년 1월</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🇺🇸 미국 정책</h3>
+      <ul class="custom-list">
+        <li>603개 정책 + 1,082개 보충자료</li>
+        <li>출처: 12개 연방 부처</li>
+        <li>교통부, HHS, 상무부, 에너지부 등</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5: 블룸 분류 체계 ========== -->
+<div class="slide slide-blue" data-index="4">
+  <h2 class="fade-in" style="color:#fff;">블룸 분류 체계 기반 3단계 평가</h2>
+  <div class="flow fade-in delay-1">
+    <div class="flow-box" style="background:rgba(66,165,245,0.3);border-color:#42a5f5;">
+      <strong>Level 1</strong><br>암기
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box" style="background:rgba(171,71,188,0.3);border-color:#ce93d8;">
+      <strong>Level 2</strong><br>이해
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box active-box">
+      <strong>Level 3</strong><br>적용
+    </div>
+  </div>
+  <div class="grid-3 fade-in delay-2">
+    <div class="card" style="background:rgba(0,0,0,0.25);">
+      <span class="level-tag level-1">Level 1</span>
+      <h3 style="color:#42a5f5;">암기 (Memorization)</h3>
+      <ul class="custom-list">
+        <li>조항/날짜 기억</li>
+        <li>용어 인식</li>
+        <li>기관 식별</li>
+      </ul>
+      <p style="margin-top:8px;color:#8b949e;font-size:0.8rem;">CN: 5,003건 / US: 3,705건</p>
+    </div>
+    <div class="card" style="background:rgba(0,0,0,0.25);">
+      <span class="level-tag level-2">Level 2</span>
+      <h3 style="color:#ce93d8;">이해 (Understanding)</h3>
+      <ul class="custom-list">
+        <li>정책 취지 이해</li>
+        <li>이해관계 파악</li>
+        <li>제도 이해</li>
+      </ul>
+      <p style="margin-top:8px;color:#8b949e;font-size:0.8rem;">CN: 3,984건 / US: 3,493건</p>
+    </div>
+    <div class="card" style="background:rgba(0,0,0,0.25);">
+      <span class="level-tag level-3">Level 3</span>
+      <h3 style="color:#ffa726;">적용 (Application)</h3>
+      <ul class="custom-list">
+        <li>정책 기반 수리 추론</li>
+        <li>시나리오 의사결정</li>
+        <li>절차적 이행</li>
+        <li>정책 논리 설명</li>
+      </ul>
+      <p style="margin-top:8px;color:#8b949e;font-size:0.8rem;">CN: 2,514건 / US: 2,236건</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 6: 10개 세부 과제 ========== -->
+<div class="slide slide-dark" data-index="5">
+  <h2 class="fade-in">10개 세부 과제 상세</h2>
+  <div class="table-wrap fade-in delay-1">
+    <table>
+      <thead>
+        <tr>
+          <th>수준</th>
+          <th>과제</th>
+          <th>중국</th>
+          <th>미국</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td rowspan="3"><span class="level-tag level-1">L1</span></td>
+            <td style="text-align:left;">1-1 조항/날짜 기억</td><td>4,498</td><td>3,351</td></tr>
+        <tr><td style="text-align:left;">1-2 용어 인식</td><td>237</td><td>126</td></tr>
+        <tr><td style="text-align:left;">1-3 기관 식별</td><td>268</td><td>228</td></tr>
+        <tr><td rowspan="3"><span class="level-tag level-2">L2</span></td>
+            <td style="text-align:left;">2-1 정책 취지 이해</td><td>1,219</td><td>1,013</td></tr>
+        <tr><td style="text-align:left;">2-2 이해관계 파악</td><td>1,145</td><td>996</td></tr>
+        <tr><td style="text-align:left;">2-3 제도 이해</td><td>1,620</td><td>1,484</td></tr>
+        <tr><td rowspan="4"><span class="level-tag level-3">L3</span></td>
+            <td style="text-align:left;">3-1 수리 추론</td><td>918</td><td>452</td></tr>
+        <tr><td style="text-align:left;">3-2 시나리오 의사결정</td><td>77</td><td>179</td></tr>
+        <tr><td style="text-align:left;">3-3 절차적 이행</td><td>320</td><td>391</td></tr>
+        <tr><td style="text-align:left;">3-4 정책 논리 설명</td><td>1,199</td><td>1,214</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== SLIDE 7: 평가 결과 개요 ========== -->
+<div class="slide slide-dark" data-index="6">
+  <h2 class="fade-in">주요 모델 평가 결과</h2>
+  <p class="fade-in delay-1" style="color:var(--text-secondary);margin-bottom:16px;">11개 최신 LLM 모델 대상 · 평균 정확도 기준</p>
+  <div class="bar-chart fade-in delay-1">
+    <div class="bar-row">
+      <span class="bar-label">DeepSeek-R1</span>
+      <div class="bar-track"><div class="bar-fill bar-orange" style="--w:83%;">66.34%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">QwQ-32B</span>
+      <div class="bar-track"><div class="bar-fill bar-blue" style="--w:79%;">63.21%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">GPT-4o</span>
+      <div class="bar-track"><div class="bar-fill bar-blue" style="--w:77%;">62.50%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Claude-3.7</span>
+      <div class="bar-track"><div class="bar-fill bar-purple" style="--w:76%;">61.80%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Gemini-2.5</span>
+      <div class="bar-track"><div class="bar-fill bar-green" style="--w:75%;">60.90%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">DeepSeek-V3</span>
+      <div class="bar-track"><div class="bar-fill bar-blue" style="--w:74%;">60.20%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">LLaMA-4</span>
+      <div class="bar-track"><div class="bar-fill bar-blue" style="--w:72%;">58.50%</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Gemma-3-27B</span>
+      <div class="bar-track"><div class="bar-fill bar-blue" style="--w:68%;">55.10%</div></div>
+    </div>
+  </div>
+  <div class="note-box fade-in delay-2">
+    🏆 <strong>DeepSeek-R1</strong>이 평균 66.34%로 최고 성능 달성. 전체적으로 인지 수준이 높을수록 성능이 향상되는 역설적 패턴 관찰
+  </div>
+</div>
+
+<!-- ========== SLIDE 8: 인지 수준별 성능 ========== -->
+<div class="slide slide-dark" data-index="7">
+  <h2 class="fade-in">인지 수준별 성능 비교</h2>
+  <div class="grid-2 fade-in delay-1">
+    <div>
+      <h3>🇨🇳 중국 정책</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-1">L1</span> 암기</span>
+          <div class="bar-track"><div class="bar-fill bar-blue" style="--w:62%;">41~62%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-2">L2</span> 이해</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:63%;">55~63%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-3">L3</span> 적용</span>
+          <div class="bar-track"><div class="bar-fill bar-orange" style="--w:80%;">68~80%</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>🇺🇸 미국 정책</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-1">L1</span> 암기</span>
+          <div class="bar-track"><div class="bar-fill bar-blue" style="--w:59%;">46~59%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-2">L2</span> 이해</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:69%;">57~69%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label"><span class="level-tag level-3">L3</span> 적용</span>
+          <div class="bar-track"><div class="bar-fill bar-orange" style="--w:77%;">66~77%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card fade-in delay-2" style="margin-top:20px;background:rgba(255,111,0,0.08);border:1px solid rgba(255,111,0,0.2);">
+    <p><strong>핵심 발견:</strong> 모든 모델이 단순 암기(L1)보다 <strong>적용(L3)</strong>에서 더 높은 성능을 보임. 이는 instruction-tuning과 RLHF가 추론 능력을 강화하는 반면, 단순 사실 기억에는 취약함을 시사합니다.</p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 9: PolicyMoE 아키텍처 ========== -->
+<div class="slide slide-dark" data-index="8">
+  <h2 class="fade-in">PolicyMoE 아키텍처</h2>
+  <p class="fade-in delay-1" style="color:var(--text-secondary);margin-bottom:20px;">인지 수준별 전문가 모듈 + 라우터 기반 Mixture-of-Experts</p>
+  <div class="flow fade-in delay-1" style="margin-bottom:24px;">
+    <div class="flow-box">📝 입력 질의</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box active-box">🔀 라우터</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box" style="background:rgba(66,165,245,0.2);border-color:#42a5f5;">전문가 선택</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box">📤 응답 생성</div>
+  </div>
+  <div class="grid-3 fade-in delay-2">
+    <div class="card" style="border-top:4px solid #42a5f5;">
+      <h3 style="color:#42a5f5;">🧩 기억 전문가</h3>
+      <p>사실 기반 정책 지식 정밀 회상 및 용어 정확도 강화</p>
+    </div>
+    <div class="card" style="border-top:4px solid #ce93d8;">
+      <h3 style="color:#ce93d8;">💡 이해 전문가</h3>
+      <p>정책 의도 해석 및 제도적 맥락 파악 전문화</p>
+    </div>
+    <div class="card" style="border-top:4px solid #ffa726;">
+      <h3 style="color:#ffa726;">⚡ 적용 전문가</h3>
+      <p>시나리오 추론 및 구현 계획 수립 최적화</p>
+    </div>
+  </div>
+  <div class="card fade-in delay-3" style="margin-top:16px;">
+    <div class="grid-2" style="gap:16px;">
+      <div>
+        <p style="color:var(--text-secondary);font-size:0.85rem;"><strong>기반 모델:</strong> Qwen2.5-7B-Instruct</p>
+        <p style="color:var(--text-secondary);font-size:0.85rem;"><strong>LoRA:</strong> rank=16, α=32, dropout=0.05</p>
+      </div>
+      <div>
+        <p style="color:var(--text-secondary);font-size:0.85rem;"><strong>전문가 학습:</strong> 3 에폭 / <strong>라우터:</strong> 4 에폭</p>
+        <p style="color:var(--text-secondary);font-size:0.85rem;"><strong>학습률:</strong> 5×10⁻⁵ / <strong>배치:</strong> 16</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 10: PolicyMoE 성능 향상 ========== -->
+<div class="slide slide-dark" data-index="9">
+  <h2 class="fade-in">PolicyMoE 파인튜닝 성능 향상</h2>
+  <p class="fade-in delay-1" style="color:var(--text-secondary);margin-bottom:16px;">Qwen2.5-7B 기준 · 상대적 성능 향상률</p>
+  <div class="table-wrap fade-in delay-1">
+    <table>
+      <thead>
+        <tr>
+          <th>수준</th>
+          <th>지역</th>
+          <th>기존</th>
+          <th>PolicyMoE</th>
+          <th>향상률</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2"><span class="level-tag level-1">L1</span></td>
+          <td>🇨🇳</td><td>36.85%</td><td>41.83%</td><td class="improve-cell">↑ 13.51%</td>
+        </tr>
+        <tr>
+          <td>🇺🇸</td><td>23.35%</td><td>35.43%</td><td class="improve-cell">↑ 51.73%</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><span class="level-tag level-2">L2</span></td>
+          <td>🇨🇳</td><td>45.68%</td><td>47.02%</td><td class="improve-cell">↑ 2.93%</td>
+        </tr>
+        <tr>
+          <td>🇺🇸</td><td>42.31%</td><td>42.78%</td><td class="improve-cell">↑ 1.11%</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><span class="level-tag level-3">L3</span></td>
+          <td>🇨🇳</td><td>64.73%</td><td>69.12%</td><td class="improve-cell">↑ 6.78%</td>
+        </tr>
+        <tr>
+          <td>🇺🇸</td><td>46.65%</td><td>57.48%</td><td class="improve-cell">↑ 23.22%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note-box fade-in delay-2">
+    🚀 미국 정책 L1에서 <strong>+51.73%</strong>, L3에서 <strong>+23.22%</strong>의 큰 향상 — 도메인 특화 파인튜닝의 효과가 뚜렷합니다.
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: 주요 발견 ========== -->
+<div class="slide slide-dark" data-index="10">
+  <h2 class="fade-in">5가지 핵심 발견</h2>
+  <div style="display:flex;flex-direction:column;gap:14px;" class="fade-in delay-1">
+    <div class="card card-accent" style="padding:16px 24px;">
+      <h3 style="margin:0 0 4px;">1. 역설적 인지 수준 성능 패턴</h3>
+      <p>적용(L3) 과제에서 75%+ 정확도를 보이나, 단순 암기(L1)에서는 41%까지 하락. 추론 > 기억</p>
+    </div>
+    <div class="card card-accent" style="padding:16px 24px;">
+      <h3 style="margin:0 0 4px;">2. 구조화 vs 추상적 추론</h3>
+      <p>구체적 규칙 기반 과제에 강하지만, 제도적 위임이나 이념적 의도 등 추상적 개념에 취약</p>
+    </div>
+    <div class="card card-accent" style="padding:16px 24px;">
+      <h3 style="margin:0 0 4px;">3. 언어 간 격차</h3>
+      <p>미국 정책(62.39%) > 중국 정책(61.02%) — 영어 중심 사전학습 편향. 예외: QwQ-32B</p>
+    </div>
+    <div class="card card-accent" style="padding:16px 24px;">
+      <h3 style="margin:0 0 4px;">4. 라우터 전문화 확인</h3>
+      <p>L1에서 기억 전문가가 80%+ 가중치 수신. L2/L3는 분산 가중치로 다차원적 성격 반영</p>
+    </div>
+    <div class="card card-accent" style="padding:16px 24px;">
+      <h3 style="margin:0 0 4px;">5. 인간 대비 비교</h3>
+      <p>인간 전문가 L3 오픈북 ~70% vs LLM 최고 80% — L2에서 인간도 성능 하락하는 비단조 패턴</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 12: 오류 분석 ========== -->
+<div class="slide slide-dark" data-index="11">
+  <h2 class="fade-in">오류 분석 및 한계</h2>
+  <div class="grid-2 fade-in delay-1">
+    <div>
+      <h3>⚠️ 수준별 주요 오류</h3>
+      <div class="card" style="margin-bottom:12px;">
+        <span class="level-tag level-1">L1</span>
+        <p>유사 선택지 간 의미 혼동, 법률 전문 용어의 미묘한 차이 구별 실패</p>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <span class="level-tag level-2">L2</span>
+        <p>정책 의도 오독, 심층 제도적 논리보다 표면적 단서에 의존</p>
+      </div>
+      <div class="card">
+        <span class="level-tag level-3">L3</span>
+        <p>정량적 추론 오류, 절차 과도 단순화, 근거 없는 원칙 환각</p>
+      </div>
+    </div>
+    <div>
+      <h3>🔒 연구의 한계</h3>
+      <ul class="custom-list">
+        <li>지리적 범위가 미·중 양국으로 제한</li>
+        <li>객관식/O·X 형식 위주의 평가</li>
+        <li>PolicyMoE의 추상적 이해 향상 제한적 (L2: +1~3%)</li>
+        <li>라우터가 단일 전문가만 선택 (top-1)</li>
+      </ul>
+      <div class="note-box" style="margin-top:16px;">
+        향후 다국가 확장, 개방형 문항, 다중 전문가 융합 등의 연구 방향 제시
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 13: 데이터 품질 ========== -->
+<div class="slide slide-dark" data-index="12">
+  <h2 class="fade-in">데이터 품질 및 검증</h2>
+  <div class="grid-2 fade-in delay-1">
+    <div>
+      <h3>👥 주석 팀 구성</h3>
+      <div class="card" style="margin-bottom:16px;">
+        <ul class="custom-list">
+          <li>핵심 팀: 5명의 박사과정 연구원 (공공정책, 법학, 전산사회학)</li>
+          <li>보조 인력: 3명의 학부생 (데이터 포맷팅)</li>
+          <li>외부 전문가 4인 검증 (120건 샘플)</li>
+        </ul>
+      </div>
+      <h3>✅ 전문가 검증 결과</h3>
+      <div class="card">
+        <p><strong>정확성:</strong> <span class="highlight-cell">96.1%</span></p>
+        <p><strong>내용 타당성:</strong> <span class="highlight-cell">94.5%</span></p>
+        <p><strong>전문가 오픈북 정확도:</strong></p>
+        <p style="color:var(--text-secondary);">L1: 82.3% · L2: 88.4% · L3: 90.1%</p>
+      </div>
+    </div>
+    <div>
+      <h3>📏 품질 지표 (5점 리커트)</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">L1 명확성</span>
+          <div class="bar-track"><div class="bar-fill bar-green" style="--w:98.6%;">98.66%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">L2 관련성</span>
+          <div class="bar-track"><div class="bar-fill bar-green" style="--w:98.3%;">98.32%</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">L3 충실도</span>
+          <div class="bar-track"><div class="bar-fill bar-green" style="--w:96.5%;">96.54%</div></div>
+        </div>
+      </div>
+      <h3 style="margin-top:20px;">🤝 주석자 간 일치도 (Cohen's κ)</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">관련성</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:87.7%;">0.877</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">블룸 분류</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:85.6%;">0.856</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">명확성</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:84.1%;">0.841</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">충실도</span>
+          <div class="bar-track"><div class="bar-fill bar-purple" style="--w:82.7%;">0.827</div></div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.8rem;margin-top:8px;">모두 0.80 강한 일치 기준 초과</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 14: 결론 ========== -->
+<div class="slide slide-end" data-index="13">
+  <div>
+    <h1 class="fade-in" style="font-size:clamp(1.4rem,3.5vw,2.8rem);margin-bottom:30px;">결론 및 시사점</h1>
+    <div style="max-width:700px;margin:0 auto;text-align:left;" class="fade-in delay-1">
+      <div class="card" style="background:rgba(0,0,0,0.3);margin-bottom:16px;text-align:center;">
+        <p style="font-size:clamp(0.9rem,2vw,1.15rem);line-height:1.8;">
+          <strong>PolicyBench</strong>는 LLM의 공공정책 이해력을 체계적으로 평가하는<br><strong>최초의 대규모 교차체제 벤치마크</strong>입니다.
+        </p>
+      </div>
+      <ul class="custom-list" style="margin-bottom:24px;">
+        <li>LLM은 <strong>추론 적용</strong>에 강하지만 <strong>사실 기억</strong>에 취약</li>
+        <li>추상적 정책 개념 이해에 <strong>구조적 한계</strong> 존재</li>
+        <li><strong>PolicyMoE</strong>를 통한 도메인 특화가 효과적 해법 제시</li>
+        <li>다국어·다체제 공공정책 AI 연구의 <strong>기초 토대</strong> 마련</li>
+      </ul>
+    </div>
+    <div class="fade-in delay-2" style="margin-top:20px;">
+      <span class="badge badge-accent">ACL 2026 Findings</span>
+      <span class="badge badge-outline">데이터셋 공개</span>
+    </div>
+    <p class="fade-in delay-3" style="margin-top:24px;opacity:0.5;font-size:clamp(0.7rem,1.3vw,0.85rem);">
+      arXiv: 2604.12995v1 · CC BY 4.0
+    </p>
+  </div>
+</div>
+
+</div><!-- /slide-container -->
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>
+    ◀ 이전
+  </button>
+  <span class="nav-progress" id="navProgress">1 / 14</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+    다음 ▶
+  </button>
+</nav>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navProgress = document.getElementById('navProgress');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateSlide() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === current) s.classList.add('active');
+      else if (i < current) s.classList.add('prev');
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    navProgress.textContent = (current + 1) + ' / ' + total;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+    current = next;
+    updateSlide();
+  }
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    }
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+
+  updateSlide();
+</script>
+</body>
+</html>
