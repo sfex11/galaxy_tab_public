@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-15-gentac-generative-modeling-and-forecasting-of-socc]]: 둘 다 시계열 예측(축구 전술 vs 태양 복사량)에 생성 모델/상태공간 모델을 적용하며, 확률적 다중 시나리오 예측을 추구한다.

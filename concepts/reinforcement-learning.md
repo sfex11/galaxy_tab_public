@@ -167,3 +167,5 @@ _자동 생성됨_
 - [[sources/2026-04-15-autonomous-diffractometry-enabled-by-visual-reinfo.md]]
 
 - [[sources/2026-04-16-cycle-consistent-search-question-reconstructabilit.md]]
+
+- [[sources/2026-04-17-from-pyx-to-py-investigating-reinforcement-learnin.md]]

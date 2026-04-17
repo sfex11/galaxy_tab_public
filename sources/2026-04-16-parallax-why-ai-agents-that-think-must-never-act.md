@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-15-λ_a-a-typed-lambda-calculus-for-llm-agent-composit]]: 둘 다 AI 에이전트의 구조적/안전성 문제를 형식적으로 다루며, 전자는 타입 시스템으로 합성 정합성을, 후자는 사고와 행동의 분리 원칙을 제안한다.
+- → [[sources/2026-04-17-acts-of-configuration-rethinking-provenance-tempor]]: 둘 다 AI 에이전트의 행위 주체성과 안전성에 대한 윤리적·설계적 문제를 탐구한다.

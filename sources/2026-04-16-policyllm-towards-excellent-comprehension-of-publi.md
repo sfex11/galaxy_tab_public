@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-17-from-feelings-to-metrics-understanding-and-formali]]: 둘 다 특정 도메인(공공정책 vs 일반 사용)에서 LLM 능력을 체계적으로 평가하기 위한 벤치마크/방법론을 제안한다.

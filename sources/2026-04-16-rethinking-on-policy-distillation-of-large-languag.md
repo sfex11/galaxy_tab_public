@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-16-lightning-opd-efficient-post-training-for-large-re]]: 둘 다 LLM의 on-policy distillation(OPD) 기법을 다루며, 전자는 효율적 오프라인 OPD를, 후자는 OPD의 학습 역학과 메커니즘을 체계적으로 분석한다.

@@ -125,3 +125,5 @@ _자동 생성됨_
 - [[sources/2026-04-15-gentac-generative-modeling-and-forecasting-of-socc.md]]
 
 - [[sources/2026-04-15-collaborative-multi-agent-scripts-generation-for-e.md]]
+
+- [[sources/2026-04-17-trex-automating-llm-fine-tuning-via-agent-driven-t.md]]

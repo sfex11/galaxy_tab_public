@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-16-drawing-on-memory-dual-trace-encoding-improves-cro]]: 둘 다 AI 에이전트의 지식/메모리 관리 한계를 지적하며, 전자는 인식론적 구조의 필요성을, 후자는 이중 트레이스 인코딩을 제안한다.
+- → [[sources/2026-04-16-cycle-consistent-search-question-reconstructabilit]]: 둘 다 검색(retrieval) 기반 AI의 한계를 지적하며, 전자는 인식론적 구조를, 후자는 cycle-consistent 보상으로 검색 품질을 개선한다.

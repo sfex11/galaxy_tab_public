@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-17-from-pyx-to-py-investigating-reinforcement-learnin]]: 둘 다 강화학습으로 LLM의 추론 능력을 향상시키되, 전자는 물리 시뮬레이터를 보상 환경으로, 후자는 사전훈련 분포 P(y) 최적화를 활용한다.

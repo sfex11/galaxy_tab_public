@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>From P(y|x) to P(y): Pre-train Space에서의 강화학습 연구</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2235;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-pink: #ec4899;
+    --accent-green: #10b981;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-dim: #64748b;
+    --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --gradient-2: linear-gradient(135deg, #06b6d4, #10b981);
+    --gradient-3: linear-gradient(135deg, #ec4899, #f59e0b);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 40px 60px;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== TITLE SLIDE ===== */
+  .slide-title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(139,92,246,0.1) 0%, transparent 60%),
+                var(--bg-dark);
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--accent-blue);
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+  }
+
+  .title-main {
+    font-size: clamp(1.4rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 900px;
+  }
+
+  .title-math {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-sub {
+    font-size: clamp(0.9rem, 2vw, 1.4rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 32px;
+    max-width: 700px;
+  }
+
+  .title-authors {
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.8;
+  }
+
+  .title-arxiv {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    color: var(--accent-cyan);
+    opacity: 0.7;
+  }
+
+  /* ===== SECTION HEADERS ===== */
+  .slide-header {
+    margin-bottom: 28px;
+    flex-shrink: 0;
+  }
+
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .slide-heading {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .heading-accent {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .heading-accent-2 {
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .heading-accent-3 {
+    background: var(--gradient-3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== CONTENT AREA ===== */
+  .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .content-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .content-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .content-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card.blue::before { background: var(--gradient-1); }
+  .card.green::before { background: var(--gradient-2); }
+  .card.pink::before { background: var(--gradient-3); }
+  .card.purple::before { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+
+  .card-icon {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .card-text {
+    font-size: clamp(0.72rem, 1.4vw, 0.88rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== MATH BLOCK ===== */
+  .math-block {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.3vw, 0.9rem);
+    color: var(--accent-cyan);
+    text-align: center;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* ===== BULLET LIST ===== */
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .bullet-list li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 12px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .bullet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 9px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  .bullet-list li strong {
+    color: var(--text-primary);
+  }
+
+  /* ===== STAT BOXES ===== */
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .stat-value.blue { color: var(--accent-blue); }
+  .stat-value.green { color: var(--accent-green); }
+  .stat-value.pink { color: var(--accent-pink); }
+  .stat-value.purple { color: var(--accent-purple); }
+  .stat-value.orange { color: var(--accent-orange); }
+  .stat-value.cyan { color: var(--accent-cyan); }
+
+  .stat-label {
+    font-size: clamp(0.6rem, 1.2vw, 0.78rem);
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+  }
+
+  .comparison-table th {
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: clamp(0.6rem, 1.1vw, 0.78rem);
+  }
+
+  .comparison-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+  }
+
+  .comparison-table tr.highlight td {
+    color: var(--accent-green);
+    font-weight: 700;
+    background: rgba(16,185,129,0.06);
+  }
+
+  .comparison-table .best {
+    color: var(--accent-green);
+    font-weight: 700;
+  }
+
+  .comparison-table .improve {
+    color: var(--accent-cyan);
+    font-size: clamp(0.55rem, 1vw, 0.7rem);
+  }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+
+  .flow-box {
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: clamp(0.7rem, 1.3vw, 0.88rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .flow-box.blue-bg { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: var(--accent-blue); }
+  .flow-box.purple-bg { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: var(--accent-purple); }
+  .flow-box.green-bg { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: var(--accent-green); }
+  .flow-box.pink-bg { background: rgba(236,72,153,0.15); border: 1px solid rgba(236,72,153,0.3); color: var(--accent-pink); }
+  .flow-box.cyan-bg { background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); color: var(--accent-cyan); }
+
+  .flow-arrow {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== PHASE TIMELINE ===== */
+  .phase-timeline {
+    display: flex;
+    gap: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .phase-block {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .phase-block.phase1 {
+    background: linear-gradient(180deg, rgba(139,92,246,0.2), rgba(139,92,246,0.05));
+    border-right: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .phase-block.phase2 {
+    background: linear-gradient(180deg, rgba(59,130,246,0.2), rgba(59,130,246,0.05));
+  }
+
+  .phase-label {
+    font-size: clamp(0.6rem, 1vw, 0.72rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .phase-name {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .phase-desc {
+    font-size: clamp(0.65rem, 1.2vw, 0.82rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== TAG ===== */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: clamp(0.55rem, 1vw, 0.7rem);
+    font-weight: 600;
+  }
+
+  .tag.blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+  .tag.green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .tag.pink { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
+  .tag.purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bar-label {
+    width: 80px;
+    font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.55rem, 1vw, 0.72rem);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    transition: width 1s ease;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active {
+    background: rgba(59,130,246,0.2);
+    border-color: var(--accent-blue);
+    transform: scale(0.95);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-dot.active {
+    background: var(--accent-blue);
+    box-shadow: 0 0 8px rgba(59,130,246,0.5);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1.2vw, 0.78rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== DECORATIVE ===== */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    margin: 8px 0;
+  }
+
+  .highlight-text {
+    color: var(--accent-cyan);
+    font-weight: 600;
+  }
+
+  .vs-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--accent-orange);
+    font-weight: 900;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 28px 28px 80px 28px; }
+    .content-grid.cols-2, .content-grid.cols-3 {
+      grid-template-columns: 1fr;
+    }
+    .card { padding: 18px; }
+    .stat-row { gap: 8px; }
+    .stat-box { padding: 14px; min-width: 90px; }
+    .flow-horizontal { gap: 6px; }
+    .flow-box { padding: 10px 14px; }
+    .phase-timeline { flex-direction: column; }
+    .phase-block.phase1 { border-right: none; border-bottom: 2px solid rgba(255,255,255,0.1); }
+    .bar-label { width: 60px; }
+    .nav-dot { width: 6px; height: 6px; }
+    .nav-dot.active { width: 18px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 16px 76px 16px; }
+    .slide-header { margin-bottom: 18px; }
+    .card { padding: 14px; border-radius: 12px; }
+    .stat-box { min-width: 70px; padding: 10px; }
+    .comparison-table th, .comparison-table td { padding: 7px 8px; }
+    .flow-box { padding: 8px 10px; font-size: clamp(0.6rem, 1.1vw, 0.78rem); }
+    .flow-arrow { font-size: 1rem; }
+    .bar-track { height: 24px; }
+    .nav-bar { padding: 8px 12px; }
+    .nav-btn { width: 44px; height: 44px; }
+    .math-block { padding: 12px 14px; font-size: clamp(0.58rem, 1.1vw, 0.78rem); }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 12px 72px 12px; }
+    .card { padding: 12px; }
+    .stat-row { flex-direction: column; }
+    .stat-box { min-width: unset; }
+    .bar-label { width: 50px; font-size: 0.55rem; }
+    .nav-progress { gap: 4px; }
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.3s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.5s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.6s both; }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.25; }
+  }
+
+  .glow-anim { animation: pulse-glow 4s infinite ease-in-out; }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <div class="slide slide-title active" data-index="0">
+    <div class="glow-orb glow-anim" style="width:400px;height:400px;background:var(--accent-blue);top:-100px;right:-100px;"></div>
+    <div class="glow-orb glow-anim" style="width:300px;height:300px;background:var(--accent-purple);bottom:-80px;left:-80px;animation-delay:2s;"></div>
+    <div class="title-badge anim-1">arXiv 2604.14142</div>
+    <h1 class="title-main anim-2">
+      <span class="title-math">P(y|x)</span>에서 <span class="title-math">P(y)</span>로
+    </h1>
+    <p class="title-sub anim-3">사전학습 공간에서의 강화학습 연구</p>
+    <p class="title-authors anim-4">
+      Yuqiao Tan &middot; Minzheng Wang &middot; Bo Liu &middot; Zichen Liu<br>
+      Tian Liang &middot; Shizhu He &middot; Jun Zhao &middot; Kang Liu
+    </p>
+    <p class="title-arxiv anim-5">arxiv.org/abs/2604.14142v1</p>
+  </div>
+
+  <!-- ==================== SLIDE 2: MOTIVATION ==================== -->
+  <div class="slide" data-index="1">
+    <div class="glow-orb glow-anim" style="width:300px;height:300px;background:var(--accent-blue);top:-60px;right:-60px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">01 &mdash; 연구 배경</div>
+      <h2 class="slide-heading"><span class="heading-accent">왜 P(y)를 최적화</span>하는가?</h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2">
+        <div class="card-title">기존 RLVR의 한계</div>
+        <div class="card-text">
+          검증 가능한 보상을 활용한 강화학습(RLVR)은 조건부 분포 <strong style="color:var(--accent-cyan);">P(y|x)</strong>를 최적화하여 LLM 추론 능력을 향상시킵니다.
+          그러나 이 접근법은 <strong style="color:var(--accent-pink);">기저 모델의 기존 출력 분포에 의해 근본적으로 제한</strong>됩니다.
+        </div>
+      </div>
+      <div class="content-grid cols-2 anim-3">
+        <div class="card green">
+          <div class="card-icon">&#x1F512;</div>
+          <div class="card-title">Post-train 공간 (기존)</div>
+          <div class="card-text">조건부 정책 &pi;<sub>&theta;</sub>(y|x) 최적화<br>입력 쿼리 x에 항상 종속<br><strong style="color:var(--accent-orange);">기저 모델 능력의 천장 존재</strong></div>
+        </div>
+        <div class="card purple">
+          <div class="card-icon">&#x1F513;</div>
+          <div class="card-title">Pre-train 공간 (제안)</div>
+          <div class="card-text">주변 정책 &pi;<sub>&theta;</sub>(y) 최적화<br>입력 조건 없이 추론 궤적 직접 최적화<br><strong style="color:var(--accent-green);">출력 분포의 경계를 확장</strong></div>
+        </div>
+      </div>
+      <div class="math-block anim-4">
+        Post-train: max E<sub>x~X</sub>[R(y) &middot; log &pi;<sub>&theta;</sub>(y|x)] &nbsp;&rarr;&nbsp; Pre-train: max E[R(y) &middot; log &pi;<sub>&theta;</sub>(y)]
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: GRADIENT ALIGNMENT ==================== -->
+  <div class="slide" data-index="2">
+    <div class="glow-orb glow-anim" style="width:250px;height:250px;background:var(--accent-cyan);bottom:-60px;left:-60px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">02 &mdash; 이론적 기반</div>
+      <h2 class="slide-heading"><span class="heading-accent-2">그래디언트 정렬</span> 검증</h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2">
+        <div class="card-title">핵심 통찰: log P(y)와 log P(y|x)의 그래디언트가 정렬된다</div>
+        <div class="math-block" style="margin-top:12px;background:rgba(6,182,212,0.08);border-color:rgba(6,182,212,0.2);">
+          log &pi;<sub>&theta;'</sub>(y|x) &asymp; log &pi;<sub>&theta;</sub>(y|x) + &eta; &middot; R(y) &middot; [&nabla; log &pi;<sub>&theta;</sub>(y)]<sup>T</sup> &nabla; log &pi;<sub>&theta;</sub>(y|x) + O(&eta;&sup2;)
+        </div>
+        <div class="card-text" style="margin-top:12px;">
+          1차 테일러 전개로 증명: P(y) 최적화가 P(y|x)를 <strong>그래디언트 내적이 양수</strong>일 때 함께 개선합니다.
+        </div>
+      </div>
+      <div class="stat-row anim-3">
+        <div class="stat-box">
+          <div class="stat-value green">100%</div>
+          <div class="stat-label">그래디언트 내적 양수 비율<br>(모든 샘플)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value cyan">+9.2</div>
+          <div class="stat-label">평균 그래디언트<br>내적 값</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value purple">400</div>
+          <div class="stat-label">AMC23 롤아웃<br>(Qwen3-4B)</div>
+        </div>
+      </div>
+      <div class="card green anim-4">
+        <div class="card-text" style="text-align:center;">
+          <strong style="color:var(--accent-green);">관찰 결과:</strong> log P(y|x)와 log P(y)의 분포가 밀접하게 정렬 &rarr; <strong>PreRL이 표준 RL의 유효한 대리 목적함수</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: NSR MECHANISM ==================== -->
+  <div class="slide" data-index="3">
+    <div class="glow-orb glow-anim" style="width:300px;height:300px;background:var(--accent-pink);top:-80px;left:-80px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">03 &mdash; 핵심 메커니즘</div>
+      <h2 class="slide-heading"><span class="heading-accent-3">음성 샘플 강화</span> (NSR)</h2>
+    </div>
+    <div class="content-area">
+      <div class="content-grid cols-2 anim-2">
+        <div class="card pink">
+          <div class="card-icon">&#x274C;</div>
+          <div class="card-title">PSR (양성 샘플 강화)</div>
+          <div class="card-text">
+            정답 응답을 강화<br><br>
+            <strong style="color:var(--accent-red);">Pre-train 공간에서 실패</strong><br>
+            자체 생성 궤적에서 효과적 학습 불가<br>
+            On-policy 학습 붕괴 발생
+          </div>
+        </div>
+        <div class="card green">
+          <div class="card-icon">&#x2705;</div>
+          <div class="card-title">NSR (음성 샘플 강화)</div>
+          <div class="card-text">
+            오답 응답을 억제<br><br>
+            <strong style="color:var(--accent-green);">Pre-train 공간에서 매우 효과적</strong><br>
+            잘못된 추론 경로를 빠르게 제거<br>
+            추론 행동을 극적으로 증가
+          </div>
+        </div>
+      </div>
+      <div class="stat-row anim-3">
+        <div class="stat-box">
+          <div class="stat-value pink">14.89x</div>
+          <div class="stat-label">전환 사고<br>(Transition) 증가</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value orange">6.54x</div>
+          <div class="stat-label">반성 사고<br>(Reflection) 증가</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value green">86%</div>
+          <div class="stat-label">정확도 달성</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value blue">3x</div>
+          <div class="stat-label">더 적은<br>학습 스텝</div>
+        </div>
+      </div>
+      <div class="card blue anim-4">
+        <div class="card-text" style="text-align:center;">
+          NSR의 핵심 원리: <strong style="color:var(--accent-cyan);">잘못된 추론 공간을 제거</strong>함으로써 모델이 올바른 추론 하위 공간으로 자연스럽게 이동
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: DSRL FRAMEWORK ==================== -->
+  <div class="slide" data-index="4">
+    <div class="glow-orb glow-anim" style="width:280px;height:280px;background:var(--accent-purple);bottom:-70px;right:-70px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">04 &mdash; 제안 프레임워크</div>
+      <h2 class="slide-heading"><span class="heading-accent">Dual Space RL</span> (DSRL)</h2>
+    </div>
+    <div class="content-area">
+      <div class="card purple anim-2" style="text-align:center;">
+        <div class="card-title">정책 환생 (Policy Reincarnation) 전략</div>
+        <div class="card-text">NSR-PreRL과 표준 RL을 순차적으로 결합하여 두 공간의 장점을 모두 활용</div>
+      </div>
+      <div class="phase-timeline anim-3">
+        <div class="phase-block phase1">
+          <div class="phase-label">Phase 1 &middot; s &le; S</div>
+          <div class="phase-name" style="color:var(--accent-purple);">NSR-PreRL 워밍업</div>
+          <div class="phase-desc">
+            입력 조건 제거<br>
+            음성 샘플에만 적용<br>
+            <strong>추론 지평 확장</strong>
+          </div>
+        </div>
+        <div class="phase-block phase2">
+          <div class="phase-label">Phase 2 &middot; s &gt; S</div>
+          <div class="phase-name" style="color:var(--accent-blue);">표준 RL</div>
+          <div class="phase-desc">
+            완전한 조건부 학습<br>
+            모든 샘플 활용<br>
+            <strong>세밀한 최적화</strong>
+          </div>
+        </div>
+      </div>
+      <div class="math-block anim-4">
+        &nabla;<sub>&theta;</sub> J<sub>DSRL</sub> = E[&sum; &nabla;<sub>&theta;</sub> log &pi;<sub>&theta;</sub>(y<sub>t</sub> | x<sup>𝕀[s&gt;S]</sup>, y<sub>&lt;t</sub>) &middot; R(y) &middot; 𝕀[s&gt;S &or; R(y)&lt;0]]
+      </div>
+      <div class="flow-horizontal anim-5">
+        <div class="flow-box purple-bg">NSR-PreRL</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box pink-bg">추론 지평 확장</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box blue-bg">표준 RL</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box green-bg">성능 극대화</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6: MAIN RESULTS ==================== -->
+  <div class="slide" data-index="5">
+    <div class="glow-orb glow-anim" style="width:250px;height:250px;background:var(--accent-green);top:-60px;left:-60px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">05 &mdash; 실험 결과</div>
+      <h2 class="slide-heading"><span class="heading-accent-2">수학적 추론</span> 벤치마크</h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2" style="padding:16px;overflow-x:auto;">
+        <div class="card-title" style="margin-bottom:12px;">Qwen3-4B &mdash; Avg@32 결과</div>
+        <table class="comparison-table">
+          <thead>
+            <tr><th>방법</th><th>MATH500</th><th>AMC23</th><th>AIME24</th><th>AIME25</th><th>평균</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Vanilla</td><td>-</td><td>-</td><td>-</td><td>-</td><td>41.26</td></tr>
+            <tr><td>GRPO</td><td>-</td><td>-</td><td>-</td><td>-</td><td>55.79</td></tr>
+            <tr class="highlight"><td><strong>DSRL</strong></td><td>-</td><td>-</td><td class="best">+4.69</td><td class="best">+2.50</td><td class="best">57.54</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stat-row anim-3">
+        <div class="stat-box">
+          <div class="stat-value green">57.54</div>
+          <div class="stat-label">DSRL 평균<br>(Qwen3-4B)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value blue">58.47</div>
+          <div class="stat-label">DSRL 평균<br>(Qwen3-8B)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value orange">+1.75</div>
+          <div class="stat-label">vs GRPO<br>(Qwen3-4B)</div>
+        </div>
+      </div>
+      <div class="card green anim-4">
+        <div class="card-title">비교 기준선</div>
+        <div class="card-text">
+          PPO, Reinforce++, RLOO, Dr.GRPO, DAPO 등 다양한 기준선 대비 <strong style="color:var(--accent-green);">DSRL이 일관되게 최고 성능</strong> 달성. Pass@K (K &isin; [1,256]) 전 구간에서 GRPO 대비 우위 유지.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7: TRAINING EFFICIENCY ==================== -->
+  <div class="slide" data-index="6">
+    <div class="glow-orb glow-anim" style="width:280px;height:280px;background:var(--accent-orange);top:-70px;right:-70px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">06 &mdash; 학습 효율성</div>
+      <h2 class="slide-heading"><span class="heading-accent-3">더 빠르게, 더 정확하게</span></h2>
+    </div>
+    <div class="content-area">
+      <div class="stat-row anim-2">
+        <div class="stat-box">
+          <div class="stat-value green">61.6%</div>
+          <div class="stat-label">DSRL 최종 정확도</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value blue">57.7%</div>
+          <div class="stat-label">GRPO 최종 정확도</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value orange">+3.9%p</div>
+          <div class="stat-label">성능 향상</div>
+        </div>
+      </div>
+      <div class="card pink anim-3">
+        <div class="card-title">학습 속도 비교</div>
+        <div class="bar-chart" style="margin-top:12px;">
+          <div class="bar-row">
+            <div class="bar-label">45% 달성</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:40%;background:var(--gradient-2);">DSRL</div>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:100%;background:rgba(59,130,246,0.5);">GRPO (2.5x)</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">58% 달성</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:63%;background:var(--gradient-2);">DSRL</div>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:100%;background:rgba(59,130,246,0.5);">GRPO (1.6x)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-grid cols-2 anim-4">
+        <div class="card green">
+          <div class="card-icon">&#x26A1;</div>
+          <div class="card-title">2.5배 빠른 수렴</div>
+          <div class="card-text">45% 정확도에 도달하는 데 GRPO 대비 2.5배 적은 학습 스텝 필요</div>
+        </div>
+        <div class="card purple">
+          <div class="card-icon">&#x1F4C8;</div>
+          <div class="card-title">지속적 성장</div>
+          <div class="card-text">NSR-PreRL 워밍업 단계에서 응답 길이가 지속적으로 성장하며 추론 깊이 증가</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8: REASONING BEHAVIORS ==================== -->
+  <div class="slide" data-index="7">
+    <div class="glow-orb glow-anim" style="width:260px;height:260px;background:var(--accent-cyan);bottom:-60px;left:-60px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">07 &mdash; 추론 행동 분석</div>
+      <h2 class="slide-heading"><span class="heading-accent">추론 능력의 진화</span></h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2">
+        <div class="card-title">AIME25에서의 추론 행동 변화</div>
+        <div class="card-text">DSRL은 표준 RL보다 훨씬 높은 빈도 천장에 도달하는 추론 행동을 유도합니다.</div>
+      </div>
+      <div class="content-grid cols-2 anim-3">
+        <div class="card green">
+          <div class="card-icon">&#x1F3AF;</div>
+          <div class="card-title">하위 목표 설정</div>
+          <div class="card-text">복잡한 문제를 작은 단위로 분해하는 능력이 지속적으로 성장</div>
+        </div>
+        <div class="card purple">
+          <div class="card-icon">&#x1F504;</div>
+          <div class="card-title">열거 (Enumeration)</div>
+          <div class="card-text">가능한 경우의 수를 체계적으로 탐색하는 행동 증가</div>
+        </div>
+        <div class="card pink">
+          <div class="card-icon">&#x2714;&#xFE0F;</div>
+          <div class="card-title">검증 (Verification)</div>
+          <div class="card-text">자신의 중간 결과를 검증하는 행동이 크게 강화됨</div>
+        </div>
+        <div class="card blue">
+          <div class="card-icon">&#x21A9;&#xFE0F;</div>
+          <div class="card-title">역추적 (Backtracking)</div>
+          <div class="card-text">오류 발견 시 이전 단계로 되돌아가 재탐색하는 능력 향상</div>
+        </div>
+      </div>
+      <div class="card green anim-4" style="text-align:center;">
+        <div class="card-text">
+          <strong style="color:var(--accent-green);">완전 해결 문제:</strong> NSR-PreRL 단계에서 급격한 정복 &nbsp;|&nbsp;
+          <strong style="color:var(--accent-red);">미해결 문제:</strong> 워밍업 중 상당한 감소 (효과적 가지치기)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 9: OOD GENERALIZATION ==================== -->
+  <div class="slide" data-index="8">
+    <div class="glow-orb glow-anim" style="width:280px;height:280px;background:var(--accent-green);top:-80px;right:-80px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">08 &mdash; 일반화 성능</div>
+      <h2 class="slide-heading"><span class="heading-accent-2">도메인 외 평가</span></h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2" style="padding:16px;overflow-x:auto;">
+        <div class="card-title" style="margin-bottom:12px;">DSRL vs GRPO 향상폭 (Qwen3-4B)</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">GPQA<br>Diamond</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:70%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);">+3.79</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">MMLU<br>Pro</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#06b6d4,#10b981);">+5.37</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">BBH</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:38%;background:linear-gradient(90deg,#ec4899,#f59e0b);">+2.04</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Human<br>Eval</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:5%;background:rgba(255,255,255,0.2);">0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card green anim-3" style="padding:16px;overflow-x:auto;">
+        <div class="card-title" style="margin-bottom:12px;">Qwen3-8B 도메인 외 성능</div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value purple">+2.52</div>
+            <div class="stat-label">GPQA-Diamond</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value cyan">+4.32</div>
+            <div class="stat-label">MMLU-Pro</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value green">+2.44</div>
+            <div class="stat-label">HumanEval</div>
+          </div>
+        </div>
+      </div>
+      <div class="card purple anim-4">
+        <div class="card-text" style="text-align:center;">
+          수학적 추론에서의 향상이 <strong style="color:var(--accent-purple);">지식 집약적 도메인(GPQA, MMLU-Pro)</strong>으로 효과적으로 전이됨을 확인
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 10: ABLATION ==================== -->
+  <div class="slide" data-index="9">
+    <div class="glow-orb glow-anim" style="width:240px;height:240px;background:var(--accent-purple);bottom:-60px;right:-60px;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">09 &mdash; 소거 분석</div>
+      <h2 class="slide-heading"><span class="heading-accent-3">설계 선택의 검증</span></h2>
+    </div>
+    <div class="content-area">
+      <div class="content-grid cols-2 anim-2">
+        <div class="card pink">
+          <div class="card-title">워밍업 스텝 수의 영향</div>
+          <div class="card-text" style="margin-bottom:12px;">
+            최적 범위: <strong style="color:var(--accent-orange);">10~25 스텝</strong><br><br>
+            <strong style="color:var(--accent-red);">너무 적으면:</strong> 불충분한 자극<br>
+            <strong style="color:var(--accent-red);">너무 많으면:</strong> 과탐색으로 후속 최적화 방해<br><br>
+            <strong style="color:var(--accent-cyan);">역 U자형 경향</strong>이 벤치마크 전반에 관찰됨
+          </div>
+        </div>
+        <div class="card blue">
+          <div class="card-title">Pre-train vs Post-train 워밍업</div>
+          <div class="card-text" style="margin-bottom:12px;">20 스텝 워밍업 기준 비교:</div>
+          <div class="stat-row" style="margin-bottom:8px;">
+            <div class="stat-box" style="padding:10px;">
+              <div class="stat-value pink" style="font-size:clamp(1rem,2.5vw,1.6rem);">54.38</div>
+              <div class="stat-label">NSR-RL<br>(Post-train)</div>
+            </div>
+            <div class="stat-box" style="padding:10px;">
+              <div class="stat-value green" style="font-size:clamp(1rem,2.5vw,1.6rem);">57.54</div>
+              <div class="stat-label">NSR-PreRL<br>(DSRL)</div>
+            </div>
+          </div>
+          <div class="card-text" style="text-align:center;">
+            <strong style="color:var(--accent-green);">+6.6점 차이</strong> (20 스텝 시점)
+          </div>
+        </div>
+      </div>
+      <div class="card green anim-3" style="text-align:center;">
+        <div class="card-text">
+          Pre-train 공간에서의 워밍업이 Post-train 워밍업보다 <strong style="color:var(--accent-green);">일관되게 우수</strong> &mdash; 입력 조건 제거가 추론 지평 확장에 핵심적 역할
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 11: KEY FINDINGS ==================== -->
+  <div class="slide" data-index="10">
+    <div class="glow-orb glow-anim" style="width:300px;height:300px;background:var(--accent-blue);top:-80px;left:-80px;"></div>
+    <div class="glow-orb glow-anim" style="width:200px;height:200px;background:var(--accent-green);bottom:-60px;right:-60px;animation-delay:2s;"></div>
+    <div class="slide-header anim-1">
+      <div class="slide-number">10 &mdash; 핵심 발견</div>
+      <h2 class="slide-heading"><span class="heading-accent">5가지 핵심 기여</span></h2>
+    </div>
+    <div class="content-area">
+      <div class="card blue anim-2">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <span class="tag blue" style="flex-shrink:0;margin-top:2px;">1</span>
+          <div>
+            <div class="card-title">그래디언트 정렬 검증</div>
+            <div class="card-text">log P(y)와 log P(y|x)의 그래디언트가 강하게 정렬되어 PreRL이 유효한 대리 목적함수</div>
+          </div>
+        </div>
+      </div>
+      <div class="card pink anim-3">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <span class="tag pink" style="flex-shrink:0;margin-top:2px;">2</span>
+          <div>
+            <div class="card-title">NSR의 독보적 효과</div>
+            <div class="card-text">음성 샘플 강화가 Pre-train 공간에서 유일하게 효과적. 전환 사고 14.89배, 반성 사고 6.54배 증가</div>
+          </div>
+        </div>
+      </div>
+      <div class="card purple anim-4">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <span class="tag purple" style="flex-shrink:0;margin-top:2px;">3</span>
+          <div>
+            <div class="card-title">정책 환생 전략</div>
+            <div class="card-text">NSR-PreRL 후 표준 RL의 순차 적용이 각각 단독 사용보다 일관되게 우수한 성능</div>
+          </div>
+        </div>
+      </div>
+      <div class="card green anim-5">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <span class="tag green" style="flex-shrink:0;margin-top:2px;">4</span>
+          <div>
+            <div class="card-title">강력한 일반화</div>
+            <div class="card-text">수학적 추론의 향상이 지식 집약적 OOD 태스크로 효과적 전이</div>
+          </div>
+        </div>
+      </div>
+      <div class="card blue anim-6">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <span class="tag blue" style="flex-shrink:0;margin-top:2px;">5</span>
+          <div>
+            <div class="card-title">샘플 효율성</div>
+            <div class="card-text">더 적은 학습 스텝으로 더 높은 성능 달성 (2.5배 빠른 수렴)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 12: CONCLUSION ==================== -->
+  <div class="slide" data-index="11" style="justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.1) 0%, transparent 60%),var(--bg-dark);">
+    <div class="glow-orb glow-anim" style="width:400px;height:400px;background:var(--accent-purple);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div class="slide-number anim-1" style="margin-bottom:24px;">결론</div>
+    <h2 class="anim-2" style="font-size:clamp(1.3rem,3.5vw,2.6rem);font-weight:900;line-height:1.3;max-width:800px;margin-bottom:24px;">
+      <span class="heading-accent">사전학습 공간</span>에서의 강화학습은<br>
+      LLM 추론의 <span class="heading-accent-3">새로운 지평</span>을 연다
+    </h2>
+    <div class="card anim-3" style="max-width:700px;margin:0 auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
+      <div class="card-text" style="font-size:clamp(0.78rem,1.5vw,1rem);line-height:1.9;text-align:left;">
+        <strong style="color:var(--accent-purple);">PreRL</strong>은 보상 기반 RL이 사전학습 공간에서 실현 가능함을 입증했습니다.
+        <strong style="color:var(--accent-pink);">NSR</strong>의 잘못된 경로 제거 효과와 결합된
+        <strong style="color:var(--accent-blue);">DSRL</strong>의 정책 환생 전략은
+        정제된 올바른 추론 하위 공간으로 정책을 유도하여
+        다양한 벤치마크에서 <strong style="color:var(--accent-green);">최고 수준의 성능</strong>을 달성합니다.
+      </div>
+    </div>
+    <div class="flow-horizontal anim-4" style="margin-top:24px;">
+      <div class="flow-box purple-bg">P(y|x)</div>
+      <div class="flow-arrow" style="font-size:2rem;">&rarr;</div>
+      <div class="flow-box cyan-bg">P(y)</div>
+      <div class="flow-arrow" style="font-size:2rem;">&rarr;</div>
+      <div class="flow-box green-bg">더 나은 추론</div>
+    </div>
+    <p class="anim-5" style="margin-top:32px;color:var(--text-dim);font-size:clamp(0.6rem,1vw,0.75rem);font-family:'JetBrains Mono',monospace;">
+      arXiv:2604.14142v1
+    </p>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" aria-label="이전 슬라이드">&#x276E;</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <div class="nav-progress" id="navDots"></div>
+    <span class="nav-counter" id="navCounter">1 / 12</span>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="다음 슬라이드">&#x276F;</button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+
+  // Build dots
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    document.getElementById('navCounter').textContent = (current + 1) + ' / ' + totalSlides;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === totalSlides - 1;
+    const dots = dotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach((d, i) => d.className = 'nav-dot' + (i === current ? ' active' : ''));
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= totalSlides || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    current = index;
+    slides[current].classList.remove('exit-left');
+    slides[current].style.transform = '';
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+    updateUI();
+  }
+
+  function navigate(dir) { goTo(current + dir); }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0, swiping = false;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    swiping = true;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>

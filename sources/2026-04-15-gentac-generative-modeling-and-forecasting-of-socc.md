@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-15-physics-informed-state-space-models-for-reliable-s]]: 둘 다 시계열 예측(축구 전술 vs 태양 복사량)에 생성 모델/상태공간 모델을 적용하며, 확률적 다중 시나리오 예측을 추구한다.
+- → [[sources/2026-04-16-dino-explorer-active-underwater-discovery-via-ego-]]: 둘 다 예측 코딩/생성 모델을 동적 환경(수중 탐사 vs 축구 경기)의 시공간 의사결정에 활용한다.

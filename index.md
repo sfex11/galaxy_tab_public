@@ -115,3 +115,17 @@
 - [[sources/2026-04-16-drawing-on-memory-dual-trace-encoding-improves-cro.md]] - Drawing on Memory: Dual-Trace Encoding Improves Cross-Session Recall in LLM Agents
 - [[sources/2026-04-16-dino-explorer-active-underwater-discovery-via-ego-.md]] - DINO-Explorer: Active Underwater Discovery via Ego-Motion Compensated Semantic Predictive Coding
 - [[sources/2026-04-16-rethinking-on-policy-distillation-of-large-languag.md]] - Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-17-from-pyx-to-py-investigating-reinforcement-learnin.md]] - From $P(y|x)$ to $P(y)$: Investigating Reinforcement Learning in Pre-train Space
+- [[sources/2026-04-17-from-feelings-to-metrics-understanding-and-formali.md]] - From Feelings to Metrics: Understanding and Formalizing How Users Vibe-Test LLMs
+- [[sources/2026-04-17-rhetorical-questions-in-llm-representations-a-line.md]] - Rhetorical Questions in LLM Representations: A Linear Probing Study
+- [[sources/2026-04-17-correct-prediction-wrong-steps-consensus-reasoning.md]] - Correct Prediction, Wrong Steps? Consensus Reasoning Knowledge Graph for Robust Chain-of-Thought Synthesis
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-17-trex-automating-llm-fine-tuning-via-agent-driven-t.md]] - TREX: Automating LLM Fine-tuning via Agent-Driven Tree-based Exploration
+- [[sources/2026-04-17-interpretable-stylistic-variation-in-human-and-llm.md]] - Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies
+- [[sources/2026-04-17-longcot-benchmarking-long-horizon-chain-of-thought.md]] - LongCoT: Benchmarking Long-Horizon Chain-of-Thought Reasoning
+- [[sources/2026-04-17-π-play-multi-agent-self-play-via-privileged-self-d.md]] - $π$-Play: Multi-Agent Self-Play via Privileged Self-Distillation without External Data
+- [[sources/2026-04-17-memory-transfer-learning-how-memories-are-transfer.md]] - Memory Transfer Learning: How Memories are Transferred Across Domains in Coding Agents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-17-acts-of-configuration-rethinking-provenance-tempor.md]] - Acts of Configuration: Rethinking Provenance, Temporality and Legitimacy in Post-Mortem Agents
+- [[sources/2026-04-17-from-where-words-come-efficient-regularization-of-.md]] - From Where Words Come: Efficient Regularization of Code Tokenizers Through Source Attribution

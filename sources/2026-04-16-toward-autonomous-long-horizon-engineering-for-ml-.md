@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-17-trex-automating-llm-fine-tuning-via-agent-driven-t]]: 둘 다 자율 AI 에이전트가 ML 연구/훈련 파이프라인을 장기적으로 자동화하는 시스템을 제안한다.

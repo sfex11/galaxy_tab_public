@@ -234,3 +234,25 @@
 ## [2026-04-16 09:01] ingest | DINO-Explorer: Active Underwater Discovery via Ego-Motion Compensated Semantic Predictive Coding
 
 ## [2026-04-16 09:01] ingest | Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe
+
+## [2026-04-17 08:30] ingest | From $P(y|x)$ to $P(y)$: Investigating Reinforcement Learning in Pre-train Space
+
+## [2026-04-17 08:30] ingest | From Feelings to Metrics: Understanding and Formalizing How Users Vibe-Test LLMs
+
+## [2026-04-17 08:30] ingest | Rhetorical Questions in LLM Representations: A Linear Probing Study
+
+## [2026-04-17 08:30] ingest | Correct Prediction, Wrong Steps? Consensus Reasoning Knowledge Graph for Robust Chain-of-Thought Synthesis
+
+## [2026-04-17 08:30] ingest | TREX: Automating LLM Fine-tuning via Agent-Driven Tree-based Exploration
+
+## [2026-04-17 08:30] ingest | Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies
+
+## [2026-04-17 08:30] ingest | LongCoT: Benchmarking Long-Horizon Chain-of-Thought Reasoning
+
+## [2026-04-17 08:30] ingest | $π$-Play: Multi-Agent Self-Play via Privileged Self-Distillation without External Data
+
+## [2026-04-17 08:30] ingest | Memory Transfer Learning: How Memories are Transferred Across Domains in Coding Agents
+
+## [2026-04-17 08:30] ingest | Acts of Configuration: Rethinking Provenance, Temporality and Legitimacy in Post-Mortem Agents
+
+## [2026-04-17 08:30] ingest | From Where Words Come: Efficient Regularization of Code Tokenizers Through Source Attribution

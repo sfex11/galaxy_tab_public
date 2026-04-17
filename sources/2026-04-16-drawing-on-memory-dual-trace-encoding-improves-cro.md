@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-17-memory-transfer-learning-how-memories-are-transfer]]: 둘 다 LLM 에이전트의 메모리 시스템을 개선하는 연구로, 전자는 cross-session recall을, 후자는 cross-domain 메모리 전이를 다룬다.
+- → [[sources/2026-04-15-retrieval-is-not-enough-why-organizational-ai-need]]: 둘 다 AI 에이전트의 지식/메모리 관리 한계를 지적하며, 전자는 인식론적 구조의 필요성을, 후자는 이중 트레이스 인코딩을 제안한다.

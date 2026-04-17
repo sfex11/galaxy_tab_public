@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-15-gentac-generative-modeling-and-forecasting-of-socc]]: 둘 다 예측 코딩/생성 모델을 동적 환경(수중 탐사 vs 축구 경기)의 시공간 의사결정에 활용한다.
