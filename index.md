@@ -129,3 +129,17 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-04-17-acts-of-configuration-rethinking-provenance-tempor.md]] - Acts of Configuration: Rethinking Provenance, Temporality and Legitimacy in Post-Mortem Agents
 - [[sources/2026-04-17-from-where-words-come-efficient-regularization-of-.md]] - From Where Words Come: Efficient Regularization of Code Tokenizers Through Source Attribution
+- [[sources/2026-04-18-mm-webagent-a-hierarchical-multimodal-web-agent-fo.md]] - MM-WebAgent: A Hierarchical Multimodal Web Agent for Webpage Generation
+- [[sources/2026-04-18-generalization-in-llm-problem-solving-the-case-of-.md]] - Generalization in LLM Problem Solving: The Case of the Shortest Path
+- [[sources/2026-04-18-diagnosing-llm-judge-reliability-conformal-predict.md]] - Diagnosing LLM Judge Reliability: Conformal Prediction Sets and Transitivity Violations
+- [[entities/transformer]] - Transformer
+- [[sources/2026-04-18-how-do-llms-and-vlms-understand-viewpoint-rotation.md]] - How Do LLMs and VLMs Understand Viewpoint Rotation Without Vision? An Interpretability Study
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-18-coopeval-benchmarking-cooperation-sustaining-mecha.md]] - CoopEval: Benchmarking Cooperation-Sustaining Mechanisms and LLM Agents in Social Dilemmas
+- [[sources/2026-04-18-agentic-microphysics-a-manifesto-for-generative-ai.md]] - Agentic Microphysics: A Manifesto for Generative AI Safety
+- [[sources/2026-04-18-blue-data-intelligence-layer-streaming-data-and-ag.md]] - Blue Data Intelligence Layer: Streaming Data and Agents for Multi-source Multi-modal Data-Centric Applications
+- [[sources/2026-04-18-ad4ad-benchmarking-visual-anomaly-detection-models.md]] - AD4AD: Benchmarking Visual Anomaly Detection Models for Safer Autonomous Driving
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-18-radagent-a-tool-using-ai-agent-for-stepwise-interp.md]] - RadAgent: A tool-using AI agent for stepwise interpretation of chest computed tomography
+- [[sources/2026-04-18-scepsy-serving-agentic-workflows-using-aggregate-l.md]] - Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
+- [[sources/2026-04-18-from-tokens-to-steps-verification-aware-speculativ.md]] - From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning

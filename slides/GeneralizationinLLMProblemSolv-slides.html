@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LLM 문제 해결의 일반화: 최단 경로 사례</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #111640;
+    --bg-card: rgba(255,255,255,0.04);
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8e6f0;
+    --text-dim: #8b89a0;
+    --text-bright: #ffffff;
+    --border: rgba(108,99,255,0.2);
+    --success: #00d4aa;
+    --fail: #ff6b6b;
+    --warn: #ffd93d;
+    --gradient1: linear-gradient(135deg, #6c63ff 0%, #00d4aa 100%);
+    --gradient2: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+    --gradient3: linear-gradient(135deg, #6c63ff 0%, #e040fb 100%);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    width: 100%; height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 50px 60px 90px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(60px);
+    transition: opacity .5s ease, transform .5s ease, visibility 0s .5s;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1; visibility: visible;
+    transform: translateX(0);
+    transition: opacity .5s ease, transform .5s ease, visibility 0s 0s;
+  }
+
+  .slide.prev {
+    transform: translateX(-60px);
+  }
+
+  /* ── Typography ── */
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 20px;
+    color: var(--text-bright);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent2);
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 2vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  .highlight { color: var(--accent); font-weight: 700; }
+  .hl-green { color: var(--accent2); font-weight: 700; }
+  .hl-red { color: var(--accent3); font-weight: 700; }
+  .hl-yellow { color: var(--accent4); font-weight: 700; }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+    flex: 1;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform .3s, border-color .3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card h3 { margin-bottom: 8px; }
+
+  /* ── Comparison Bars ── */
+  .bar-group { margin-top: 16px; }
+
+  .bar-item {
+    margin-bottom: 14px;
+  }
+
+  .bar-label {
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .bar-track {
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(.25,.46,.45,.94);
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.green { background: linear-gradient(90deg, #00d4aa, #00b894); }
+  .bar-fill.red { background: linear-gradient(90deg, #ff6b6b, #e55656); }
+  .bar-fill.blue { background: linear-gradient(90deg, #6c63ff, #5a52e0); }
+  .bar-fill.yellow { background: linear-gradient(90deg, #ffd93d, #f0c929); color: #333; }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-node {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-weight: 500;
+    min-width: 100px;
+  }
+
+  .flow-arrow {
+    font-size: 1.4rem;
+    color: var(--accent);
+  }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+  }
+
+  .data-table th, .data-table td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table th {
+    background: rgba(108,99,255,0.15);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* ── Key Insight Box ── */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,212,170,0.08));
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin-top: 16px;
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+    line-height: 1.6;
+  }
+
+  .insight-box.warn {
+    background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,217,61,0.08));
+    border-left-color: var(--accent3);
+  }
+
+  /* ── Versus Layout ── */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .vs-badge {
+    background: var(--gradient2);
+    color: #fff;
+    font-weight: 900;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .vs-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  /* ── Pill Tags ── */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+  .tag.green { background: rgba(0,212,170,0.15); color: var(--accent2); }
+  .tag.red { background: rgba(255,107,107,0.15); color: var(--accent3); }
+  .tag.blue { background: rgba(108,99,255,0.15); color: var(--accent); }
+  .tag.yellow { background: rgba(255,217,61,0.15); color: var(--accent4); }
+
+  /* ── Bullet List ── */
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+  ul.clean li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px;
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  ul.clean li.g::before { background: var(--accent2); }
+  ul.clean li.r::before { background: var(--accent3); }
+  ul.clean li.y::before { background: var(--accent4); }
+
+  /* ── Step list ── */
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li {
+    counter-increment: step;
+    padding: 12px 0 12px 52px;
+    position: relative;
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 10px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--gradient1);
+    color: #fff;
+    font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  /* ── Nav ── */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 70px;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px; min-height: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    border-radius: 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 18px;
+    transition: background .2s, border-color .2s;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Noto Sans KR', sans-serif;
+    gap: 6px;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(108,99,255,0.2);
+    border-color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background .3s, transform .3s;
+    cursor: pointer;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    transform: scale(1.4);
+  }
+
+  .nav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ── Background decorations ── */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .bg-glow.g1 { top: -200px; right: -100px; background: var(--accent); }
+  .bg-glow.g2 { bottom: -200px; left: -100px; background: var(--accent2); }
+
+  /* ── Title slide special ── */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title-slide h1 {
+    font-size: clamp(1.8rem, 5vw, 3.6rem);
+    margin-bottom: 20px;
+  }
+
+  .title-meta {
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    color: var(--text-dim);
+    margin-top: 20px;
+    line-height: 1.8;
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 24px;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  /* ── Animated Graph (CSS only) ── */
+  .mini-graph {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 120px;
+    margin-top: 16px;
+    padding: 0 8px;
+  }
+
+  .mini-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mini-bar {
+    width: 100%;
+    max-width: 50px;
+    border-radius: 6px 6px 0 0;
+    height: 0%;
+    transition: height 1s cubic-bezier(.25,.46,.45,.94);
+  }
+
+  .slide.active .mini-bar { height: var(--h); }
+
+  .mini-bar-label {
+    font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+    color: var(--text-dim);
+    text-align: center;
+    word-break: keep-all;
+  }
+
+  /* ── Keyframe Animations ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp .5s .1s both; }
+  .slide.active .anim-2 { animation: fadeInUp .5s .25s both; }
+  .slide.active .anim-3 { animation: fadeInUp .5s .4s both; }
+  .slide.active .anim-4 { animation: fadeInUp .5s .55s both; }
+  .slide.active .anim-5 { animation: fadeInUp .5s .7s both; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .slide { padding: 30px 30px 85px; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-badge {
+      width: 40px; height: 40px;
+      justify-self: center;
+    }
+    .flow { gap: 6px; }
+    .flow-node { min-width: 80px; padding: 10px 14px; }
+    .nav { height: 64px; }
+    .mini-graph { height: 100px; }
+    h1 { margin-bottom: 12px; }
+    h2 { margin-bottom: 14px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 80px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 0 12px; font-size: 0.95rem; }
+    .nav-dot { width: 6px; height: 6px; }
+    .flow-node { min-width: 65px; padding: 8px 10px; font-size: clamp(0.65rem, 1.5vw, 0.8rem); }
+    .flow-arrow { font-size: 1rem; }
+    .data-table th, .data-table td { padding: 8px 6px; }
+    .insight-box { padding: 14px 16px; }
+    .bar-track { height: 22px; }
+    .steps li { padding-left: 42px; }
+    .steps li::before { width: 28px; height: 28px; font-size: 0.75rem; }
+    .vs-box { padding: 14px; }
+    .mini-graph { height: 80px; gap: 4px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 76px; }
+    h2 { margin-bottom: 10px; }
+    .card { padding: 12px; }
+    .nav { padding: 0 10px; height: 60px; }
+    .nav-btn { padding: 0 8px; font-size: 0.85rem; border-radius: 8px; }
+    .nav-dot { width: 5px; height: 5px; gap: 3px; }
+    .bar-track { height: 18px; }
+    .flow-node { min-width: 55px; padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ════════ SLIDE 1: Title ════════ -->
+  <div class="slide title-slide active" data-idx="0">
+    <div class="title-badge anim-1">arXiv 2604.15306</div>
+    <h1 class="anim-2">LLM 문제 해결의 일반화:<br>최단 경로 사례 연구</h1>
+    <p class="subtitle anim-3">언어 모델은 체계적으로 일반화할 수 있는가?<br>통제된 합성 환경에서의 실증 분석</p>
+    <div class="title-meta anim-4">
+      Yao Tong · Jiayuan Ye · Anastasia Borovykh · Reza Shokri<br>
+      2026년 4월
+    </div>
+    <div class="anim-5" style="margin-top:16px;">
+      <span class="tag blue">일반화</span>
+      <span class="tag green">최단 경로</span>
+      <span class="tag yellow">강화 학습</span>
+      <span class="tag red">길이 확장</span>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 2: 연구 동기 ════════ -->
+  <div class="slide" data-idx="1">
+    <div class="slide-number anim-1">연구 배경</div>
+    <h2 class="anim-2">왜 이 연구가 필요한가?</h2>
+    <div class="card-grid cols-2 anim-3">
+      <div class="card">
+        <span class="card-icon">🤔</span>
+        <h3>핵심 질문</h3>
+        <p>언어 모델이 <span class="highlight">체계적 일반화</span>를 달성할 수 있는가?<br>이 질문은 여전히 활발히 논쟁 중</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧩</span>
+        <h3>문제점</h3>
+        <p>성능이 <span class="hl-yellow">학습 데이터, 학습 방법, 추론 전략</span> 등 다중 요인에 의해 결정 → 실패 원인 해석이 어려움</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <h3>해결책</h3>
+        <p><span class="hl-green">통제된 합성 환경</span>을 도입하여 각 요인의 영향을 깨끗하게 분리·측정</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🗺️</span>
+        <h3>왜 최단 경로?</h3>
+        <p><span class="highlight">조합 가능한 순차적 최적화</span>의 대표적 문제로, 구조적 일반화를 시험하기 이상적</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 3: 실험 설계 ════════ -->
+  <div class="slide" data-idx="2">
+    <div class="slide-number anim-1">실험 설계</div>
+    <h2 class="anim-2">합성 환경 구성</h2>
+    <div class="card anim-3" style="margin-bottom:16px;">
+      <h3>모델 아키텍처</h3>
+      <p><span class="highlight">8층, 8-헤드 트랜스포머</span> (LLaMA 아키텍처 기반) · RoPE 위치 인코딩 사용</p>
+    </div>
+    <div class="card-grid cols-2 anim-4">
+      <div class="card">
+        <h3>학습 맵</h3>
+        <p><span class="hl-green">50×40</span> 희소 그리드<br>|V| = 2,000 노드</p>
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--text-dim);">시퀀스: <code style="color:var(--accent)">&lt;s&gt; i j : E S E E … N W j &lt;/s&gt;</code></p>
+      </div>
+      <div class="card">
+        <h3>테스트 맵</h3>
+        <p><span class="hl-red">30×30, 40×40, 50×50</span><br>희소율: 25% – 75%</p>
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--text-dim);">학습 때 <b>본 적 없는</b> 새로운 맵에서 평가</p>
+      </div>
+    </div>
+    <div class="flow anim-5">
+      <div class="flow-node">사전학습<br><small style="color:var(--text-dim)">랜덤 워크</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">SFT<br><small style="color:var(--text-dim)">지도 미세조정</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">RL (Dr.GRPO)<br><small style="color:var(--text-dim)">강화 학습</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">추론 전략<br><small style="color:var(--text-dim)">디코딩</small></div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 4: 두 축의 일반화 ════════ -->
+  <div class="slide" data-idx="3">
+    <div class="slide-number anim-1">핵심 프레임워크</div>
+    <h2 class="anim-2">두 가지 일반화 축</h2>
+    <div class="vs-container anim-3">
+      <div class="vs-box" style="border-color: var(--accent2);">
+        <h3 style="color:var(--accent2);">공간 전이</h3>
+        <p style="font-size:clamp(0.8rem,1.8vw,1rem);">학습 때 보지 못한 <span class="hl-green">새로운 맵</span>에서의 성능</p>
+        <div style="margin-top:12px;">
+          <span class="tag green" style="font-size:1rem;">✓ 성공 (>90%)</span>
+        </div>
+        <p style="margin-top:10px;font-size:0.85rem;color:var(--text-dim);">모델이 방향 토큰 기반의 <b>구조적 잠재 연산자</b>를 학습함</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box" style="border-color: var(--accent3);">
+        <h3 style="color:var(--accent3);">길이 확장</h3>
+        <p style="font-size:clamp(0.8rem,1.8vw,1rem);">학습 때보다 <span class="hl-red">더 긴 경로</span>에서의 성능</p>
+        <div style="margin-top:12px;">
+          <span class="tag red" style="font-size:1rem;">✗ 실패</span>
+        </div>
+        <p style="margin-top:10px;font-size:0.85rem;color:var(--text-dim);"><b>재귀적 불안정성</b>으로 인한 일관된 실패</p>
+      </div>
+    </div>
+    <div class="insight-box anim-4">
+      💡 핵심 발견: 길이 확장 실패는 부분 경로 오류의 <b>누적</b>이 아니라, <b>조합 과정 자체의 불안정성</b>이 원인
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 5: 재귀적 불안정성 분석 ════════ -->
+  <div class="slide" data-idx="4">
+    <div class="slide-number anim-1">길이 확장 분석</div>
+    <h2 class="anim-2">재귀적 불안정성의 증거</h2>
+    <p class="anim-3" style="margin-bottom:16px;">긴 경로를 두 부분으로 분해하여 실패 원인 추적</p>
+    <table class="data-table anim-4">
+      <thead>
+        <tr>
+          <th>경로 길이</th>
+          <th>전체 성공률<br>Pr(Long)</th>
+          <th>부분 성공률<br>Pr(Sub₁∧Sub₂)</th>
+          <th>조건부 성공률<br>Pr(Long|Sub)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>(20, 30]</td>
+          <td style="color:var(--accent2);font-weight:700;">77.4%</td>
+          <td>84.6%</td>
+          <td style="color:var(--accent2);">81.1%</td>
+        </tr>
+        <tr>
+          <td>(30, 40]</td>
+          <td style="color:var(--accent3);font-weight:700;">53.0%</td>
+          <td>79.6%</td>
+          <td style="color:var(--accent3);">58.9%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="insight-box warn anim-5">
+      ⚠️ 부분 경로가 <b>모두 맞아도</b> 전체 경로 실패 — 조건부 성공률이 81.1% → 58.9%로 급락<br>
+      이는 <span class="hl-red">부분 해결책을 조합하는 과정 자체</span>가 불안정함을 의미
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 6: 데이터 전략 ════════ -->
+  <div class="slide" data-idx="5">
+    <div class="slide-number anim-1">학습 데이터 전략</div>
+    <h2 class="anim-2">질문 수 vs 답변 수: 무엇이 더 중요한가?</h2>
+    <p class="anim-3">동일한 학습 예산에서 <span class="highlight">다양한 질문</span>에 투자하는 것이 <span class="hl-red">같은 질문의 여러 답변</span>보다 효과적</p>
+
+    <div class="bar-group anim-4">
+      <div class="bar-item">
+        <div class="bar-label"><span>다양한 질문 (각 1개 답변)</span> <span class="hl-green">94%</span></div>
+        <div class="bar-track">
+          <div class="bar-fill green" style="--w:94%;">94%</div>
+        </div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span>적은 질문 (각 32개 답변)</span> <span class="hl-red">82%</span></div>
+        <div class="bar-track">
+          <div class="bar-fill red" style="--w:82%;">82%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid cols-2 anim-5" style="margin-top:20px;">
+      <div class="card">
+        <h3>커버리지 (Coverage)</h3>
+        <p>전체 노드 중 학습에 포함된 노드 비율<br><span class="hl-green">c ≥ 32%</span>에서 성능 수렴 시작<br>c ≥ 64%일 때 ~90% 성공률 달성</p>
+      </div>
+      <div class="card">
+        <h3>다양성 (Diversity)</h3>
+        <p>질문 분포의 다양성<br>최소 <span class="hl-yellow">d ≥ 4</span>이 필요<br>그 이상은 수확체감 발생</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 7: 수학 도메인 검증 ════════ -->
+  <div class="slide" data-idx="6">
+    <div class="slide-number anim-1">실제 도메인 검증</div>
+    <h2 class="anim-2">MathQA 실험: 커버리지의 우월성</h2>
+    <p class="anim-3">Qwen2.5-7B-Instruct 모델 · DeepSeek-R1으로 솔루션 생성</p>
+
+    <table class="data-table anim-4">
+      <thead>
+        <tr>
+          <th>전략</th>
+          <th>확률 분야</th>
+          <th>이득 분야</th>
+          <th>물리 분야</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;">높은 커버리지<br><small style="color:var(--accent2)">더 많은 질문</small></td>
+          <td style="color:var(--accent2);font-weight:700;">79.2%</td>
+          <td style="color:var(--accent2);font-weight:700;">82.0%</td>
+          <td style="color:var(--accent2);font-weight:700;">77.0%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">높은 다양성</td>
+          <td>74.0%</td>
+          <td>74.0%</td>
+          <td>74.0%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">더 많은 솔루션<br><small style="color:var(--accent3)">같은 질문 반복</small></td>
+          <td style="color:var(--accent3);">70.0%</td>
+          <td style="color:var(--accent3);">77.1%</td>
+          <td style="color:var(--accent3);">70.0%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box anim-5">
+      💡 합성 환경의 발견이 <b>실제 수학 도메인</b>에서도 재현됨 — 커버리지가 일관되게 가장 높은 성능 달성
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 8: 길이 확장 구제 시도 ════════ -->
+  <div class="slide" data-idx="7">
+    <div class="slide-number anim-1">길이 확장 대응</div>
+    <h2 class="anim-2">약간 더 긴 경로로 학습 보강</h2>
+    <p class="anim-3">목표 길이 30에 대해 다양한 길이의 보강 데이터(1%)를 추가</p>
+
+    <div class="bar-group anim-4">
+      <div class="bar-item">
+        <div class="bar-label"><span>l = 32–34 (약간 긴 경로)</span> <span class="hl-green">~90%</span></div>
+        <div class="bar-track">
+          <div class="bar-fill green" style="--w:90%;">~90%</div>
+        </div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span>l = 22–24 (짧은 경로, 12% 보강)</span> <span class="hl-yellow">미미한 개선</span></div>
+        <div class="bar-track">
+          <div class="bar-fill yellow" style="--w:35%;"></div>
+        </div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label"><span>l = 80 (훨씬 긴 경로)</span> <span class="hl-red">성능 저하</span></div>
+        <div class="bar-track">
+          <div class="bar-fill red" style="--w:20%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box anim-5">
+      💡 <span class="hl-green">목표 길이보다 약간(+2~4) 더 긴</span> 경로를 소량(1%) 추가하면 효과적<br>
+      너무 짧거나 너무 긴 경로는 도움이 되지 않거나 오히려 해로움
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 9: SFT vs RL ════════ -->
+  <div class="slide" data-idx="8">
+    <div class="slide-number anim-1">학습 방법 비교</div>
+    <h2 class="anim-2">SFT vs 강화 학습 (RL)</h2>
+
+    <div class="card-grid cols-2 anim-3">
+      <div class="card" style="border-color:var(--accent);">
+        <h3 style="color:var(--accent);">지도 미세조정 (SFT)</h3>
+        <ul class="clean">
+          <li class="g">초기에 빠르게 성능 향상</li>
+          <li class="r">장기 학습 시 <b>과적합</b>으로 급격한 성능 저하</li>
+          <li class="g">최고 성능(peak)이 RL보다 높거나 같음</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--accent2);">
+        <h3 style="color:var(--accent2);">강화 학습 (Dr.GRPO)</h3>
+        <ul class="clean">
+          <li class="g">에폭 전반에 걸쳐 <b>안정적</b></li>
+          <li class="r">SFT의 최고 성능을 <b>절대 초과하지 못함</b></li>
+          <li class="y">과적합을 방지하지만 능력 한계는 동일</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insight-box anim-4">
+      ⚠️ 핵심: RL은 학습을 <b>안정화</b>하지만, 새로운 전이 또는 확장 능력을 <b>해금하지 못함</b><br>
+      → 최고 성능은 항상 최적의 SFT 모델과 동일
+    </div>
+
+    <div class="mini-graph anim-5">
+      <div class="mini-bar-col">
+        <div class="mini-bar" style="--h:90%;background:var(--accent);"></div>
+        <span class="mini-bar-label">SFT<br>최고점</span>
+      </div>
+      <div class="mini-bar-col">
+        <div class="mini-bar" style="--h:45%;background:var(--accent);opacity:0.5;"></div>
+        <span class="mini-bar-label">SFT<br>과적합 후</span>
+      </div>
+      <div class="mini-bar-col">
+        <div class="mini-bar" style="--h:78%;background:var(--accent2);"></div>
+        <span class="mini-bar-label">RL<br>초기</span>
+      </div>
+      <div class="mini-bar-col">
+        <div class="mini-bar" style="--h:80%;background:var(--accent2);"></div>
+        <span class="mini-bar-label">RL<br>중기</span>
+      </div>
+      <div class="mini-bar-col">
+        <div class="mini-bar" style="--h:80%;background:var(--accent2);"></div>
+        <span class="mini-bar-label">RL<br>후기</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 10: 추론 전략 ════════ -->
+  <div class="slide" data-idx="9">
+    <div class="slide-number anim-1">추론 시간 전략</div>
+    <h2 class="anim-2">추론 시간 확장의 효과와 한계</h2>
+
+    <div class="card-grid cols-3 anim-3">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3>탐욕적 디코딩</h3>
+        <p>기준선<br><small style="color:var(--text-dim)">가장 확률 높은 토큰 선택</small></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <h3>다수결 (10개)</h3>
+        <p>10개 샘플 중<br><b>가장 빈번한</b> 결과 선택</p>
+      </div>
+      <div class="card" style="border-color:var(--accent2);">
+        <span class="card-icon">⚡</span>
+        <h3>최단 선택 (10개)</h3>
+        <p>10개 샘플 중<br><span class="hl-green">가장 짧은</span> 경로 선택</p>
+      </div>
+    </div>
+
+    <div class="anim-4" style="margin-top:20px;">
+      <h3>비교 결과</h3>
+      <div class="bar-group">
+        <div class="bar-item">
+          <div class="bar-label"><span>SFT + 최단 선택 (10개)</span> <span class="hl-green">최고</span></div>
+          <div class="bar-track">
+            <div class="bar-fill green" style="--w:92%;">최고 성능</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>SFT + 다수결 (10개)</span></div>
+          <div class="bar-track">
+            <div class="bar-fill blue" style="--w:80%;"></div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>RL + 탐욕적 디코딩</span> <span class="hl-red">SFT보다 낮음</span></div>
+          <div class="bar-track">
+            <div class="bar-fill red" style="--w:65%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box warn anim-5">
+      ⚠️ 추론 전략은 성능 곡선을 <b>위로 이동</b>시키지만, 길이 확장 실패를 <b>근본적으로 해결하지 못함</b><br>
+      또한 RL은 효과적인 솔루션 공간을 <b>축소</b>시키는 것으로 보임
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 11: 파이프라인 종합 ════════ -->
+  <div class="slide" data-idx="10">
+    <div class="slide-number anim-1">종합 분석</div>
+    <h2 class="anim-2">학습 파이프라인 단계별 역할</h2>
+
+    <ol class="steps anim-3">
+      <li>
+        <strong>데이터 커버리지</strong>가 능력의 <span class="hl-green">상한선을 설정</span><br>
+        <small style="color:var(--text-dim)">커버리지가 부족하면 다른 어떤 방법으로도 보상 불가</small>
+      </li>
+      <li>
+        <strong>강화 학습</strong>은 학습을 <span class="hl-yellow">안정화</span>하지만 한계를 확장하지 못함<br>
+        <small style="color:var(--text-dim)">과적합 방지에는 효과적이나 새로운 능력 해금 없음</small>
+      </li>
+      <li>
+        <strong>추론 시간 확장</strong>은 성능을 <span class="highlight">향상</span>시키지만 구조적 실패를 해결 못함<br>
+        <small style="color:var(--text-dim)">목표 지향적 선택(최단 경로)이 가장 효과적</small>
+      </li>
+    </ol>
+
+    <div class="flow anim-4" style="margin-top:24px;">
+      <div class="flow-node" style="border-color:var(--accent2);">
+        <span style="color:var(--accent2);font-weight:700;">데이터</span><br>
+        <small>상한선 결정</small>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="border-color:var(--accent4);">
+        <span style="color:var(--accent4);font-weight:700;">RL</span><br>
+        <small>안정화</small>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="border-color:var(--accent);">
+        <span style="color:var(--accent);font-weight:700;">추론</span><br>
+        <small>성능 향상</small>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node" style="border-color:var(--accent3);">
+        <span style="color:var(--accent3);font-weight:700;">길이 확장</span><br>
+        <small>여전히 실패 ✗</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SLIDE 12: 결론 ════════ -->
+  <div class="slide" data-idx="11">
+    <div class="slide-number anim-1">결론 및 시사점</div>
+    <h2 class="anim-2">핵심 발견 요약</h2>
+
+    <div class="card-grid cols-2 anim-3">
+      <div class="card" style="border-left:3px solid var(--accent2);">
+        <span class="tag green">성공</span>
+        <h3 style="margin-top:8px;">강력한 공간 전이</h3>
+        <p>새로운 맵에서 >90% 성공률 — 모델이 구조적 잠재 연산자를 학습</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent3);">
+        <span class="tag red">실패</span>
+        <h3 style="margin-top:8px;">길이 확장 불가</h3>
+        <p>재귀적 불안정성으로 인한 일관된 실패 — RL, 추론 전략 모두 해결 못함</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent4);">
+        <span class="tag yellow">교훈</span>
+        <h3 style="margin-top:8px;">데이터가 왕</h3>
+        <p>다양한 질문 > 같은 질문의 여러 답변<br>커버리지가 성능 상한 결정</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent);">
+        <span class="tag blue">실용적 팁</span>
+        <h3 style="margin-top:8px;">목표+α 전략</h3>
+        <p>목표보다 약간(+2~4) 더 긴 경로를 소량 포함하면 길이 확장 크게 개선</p>
+      </div>
+    </div>
+
+    <div class="insight-box anim-4">
+      🔑 <b>근본적 메시지:</b> 각 파이프라인 단계는 고유한 역할을 가지며, 이전 단계의 한계를 이후 단계가 보상할 수 없다.
+      체계적 일반화를 위해서는 <b>데이터 구성</b>부터 올바르게 설계해야 한다.
+    </div>
+
+    <div class="anim-5" style="margin-top:16px;text-align:center;">
+      <p style="color:var(--text-dim);font-size:clamp(0.7rem,1.4vw,0.85rem);">
+        📄 논문: arXiv 2604.15306 &nbsp;|&nbsp;
+        💻 코드: github.com/privacytrustlab/PathGeneralization
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ Navigation ══ -->
+<nav class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>
+    ◀ <span class="nav-btn-text">이전</span>
+  </button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+    <div class="nav-progress" id="dots"></div>
+    <span class="nav-label" id="counter">1 / 12</span>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">
+    <span class="nav-btn-text">다음</span> ▶
+  </button>
+</nav>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  let startX = 0;
+  let startY = 0;
+
+  // Build dots
+  const dotsEl = document.getElementById('dots');
+  for(let i=0;i<total;i++){
+    const d = document.createElement('span');
+    d.className = 'nav-dot' + (i===0?' active':'');
+    d.onclick = ()=>goTo(i);
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=total||n===cur) return;
+    const dir = n > cur ? 1 : -1;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.toggle('prev', dir === 1);
+    cur = n;
+    slides[cur].classList.remove('prev');
+    slides[cur].classList.add('active');
+    updateUI();
+  }
+
+  function go(d){ goTo(cur+d); }
+  window.go = go;
+
+  function updateUI(){
+    document.getElementById('prevBtn').disabled = cur===0;
+    document.getElementById('nextBtn').disabled = cur===total-1;
+    document.getElementById('counter').textContent = (cur+1)+' / '+total;
+    document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') go(1);
+    else if(e.key==='ArrowLeft') go(-1);
+  });
+
+  // Touch swipe
+  document.addEventListener('touchstart', e=>{
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+
+  document.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)*1.5){
+      go(dx < 0 ? 1 : -1);
+    }
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>

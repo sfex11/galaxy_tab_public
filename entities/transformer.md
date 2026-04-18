@@ -54,3 +54,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-04-09-in-place-test-time-training.md|2026 04 09 in place test time training.md]] (2026-04-09)
 - [[sources/2026-04-09-toward-consistent-world-models-with-multi-token-pr.md|2026 04 09 toward consistent world models with multi token pr.md]] (2026-04-09)
 - [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent.md|2026 04 13 psi shared state as the missing layer for coherent.md]] (2026-04-13)
+
+- [[sources/2026-04-18-how-do-llms-and-vlms-understand-viewpoint-rotation.md]]

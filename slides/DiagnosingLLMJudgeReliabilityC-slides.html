@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>LLM 판별자 신뢰성 진단 - 논문 슬라이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-dark: #4834D4;
+    --accent: #00CEC9;
+    --accent2: #FD79A8;
+    --accent3: #FDCB6E;
+    --bg-dark: #0F0F1A;
+    --bg-card: #1A1A2E;
+    --bg-card2: #16213E;
+    --text-main: #E8E8F0;
+    --text-dim: #9B9BB0;
+    --gradient1: linear-gradient(135deg, #6C5CE7 0%, #00CEC9 100%);
+    --gradient2: linear-gradient(135deg, #FD79A8 0%, #FDCB6E 100%);
+    --gradient3: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    padding: 40px 60px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--gradient3);
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== 타이틀 슬라이드 ===== */
+  .slide-title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(0,206,201,0.1) 0%, transparent 60%),
+                var(--gradient3);
+  }
+
+  .title-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 20px;
+    background: rgba(108,92,231,0.2);
+    border: 1px solid rgba(108,92,231,0.4);
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .slide-title h1 {
+    font-size: clamp(1.4rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-title .subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 32px;
+    max-width: 700px;
+  }
+
+  .authors {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .meta-info {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== 일반 슬라이드 헤더 ===== */
+  .slide-header {
+    flex-shrink: 0;
+    margin-bottom: 28px;
+  }
+
+  .slide-number {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .slide-header h2 {
+    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+  }
+
+  .slide-header .header-line {
+    width: 60px;
+    height: 3px;
+    background: var(--gradient1);
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+
+  /* ===== 카드 그리드 ===== */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .card {
+    background: rgba(26,26,46,0.8);
+    border: 1px solid rgba(108,92,231,0.15);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(108,92,231,0.4);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card p, .card li {
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+
+  /* ===== 하이라이트 수치 ===== */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: rgba(108,92,231,0.1);
+    border: 1px solid rgba(108,92,231,0.25);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .stat-box:hover {
+    background: rgba(108,92,231,0.2);
+  }
+
+  .stat-value {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ===== 바 차트 시각화 ===== */
+  .bar-chart {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .bar-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .bar-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    color: var(--text-main);
+    min-width: 90px;
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 700;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .bar-fill.gradient1 { background: var(--gradient1); }
+  .bar-fill.gradient2 { background: var(--gradient2); }
+  .bar-fill.green { background: linear-gradient(135deg, #00B894 0%, #00CEC9 100%); }
+  .bar-fill.orange { background: linear-gradient(135deg, #E17055 0%, #FDCB6E 100%); }
+  .bar-fill.red { background: linear-gradient(135deg, #D63031 0%, #FD79A8 100%); }
+
+  /* ===== 테이블 ===== */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: clamp(0.7rem, 1.4vw, 0.88rem);
+  }
+
+  .data-table th {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--accent);
+    border-bottom: 2px solid rgba(108,92,231,0.3);
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  }
+
+  .data-table td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-dim);
+  }
+
+  .data-table tr:hover td {
+    background: rgba(108,92,231,0.05);
+  }
+
+  .data-table .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+
+  .highlight-green { color: #00CEC9 !important; }
+  .highlight-yellow { color: #FDCB6E !important; }
+  .highlight-red { color: #FD79A8 !important; }
+
+  /* ===== 수식 박스 ===== */
+  .formula-box {
+    background: rgba(108,92,231,0.08);
+    border: 1px solid rgba(108,92,231,0.25);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    color: var(--accent3);
+    text-align: center;
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  /* ===== 프로세스 흐름 ===== */
+  .process-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .process-step {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,92,231,0.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 100px;
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    font-weight: 500;
+  }
+
+  .process-arrow {
+    color: var(--primary);
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  /* ===== 키 인사이트 박스 ===== */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.15) 0%, rgba(0,206,201,0.1) 100%);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin: 14px 0;
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-main);
+  }
+
+  .insight-box strong {
+    color: var(--accent);
+  }
+
+  /* ===== 비교 vs 박스 ===== */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin: 16px 0;
+  }
+
+  .vs-badge {
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2rem;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  /* ===== 네비게이션 ===== */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(15,15,26,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(108,92,231,0.2);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 20px;
+    border: 1px solid rgba(108,92,231,0.3);
+    background: rgba(108,92,231,0.1);
+    color: var(--text-main);
+    border-radius: 12px;
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:hover, .nav-btn:active {
+    background: rgba(108,92,231,0.3);
+    border-color: var(--primary);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-indicator {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* ===== 키보드 힌트 ===== */
+  .key-hint {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+    z-index: 90;
+  }
+
+  /* ===== 파티클 배경 ===== */
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100px) rotate(360deg); }
+  }
+
+  /* ===== 태그 ===== */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    font-weight: 600;
+    margin: 2px 4px;
+  }
+
+  .tag-purple { background: rgba(108,92,231,0.2); color: #A29BFE; }
+  .tag-green { background: rgba(0,206,201,0.2); color: #00CEC9; }
+  .tag-pink { background: rgba(253,121,168,0.2); color: #FD79A8; }
+  .tag-yellow { background: rgba(253,203,110,0.2); color: #FDCB6E; }
+
+  /* ===== 애니메이션 ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  .delay-5 { animation-delay: 0.5s; opacity: 0; }
+  .delay-6 { animation-delay: 0.6s; opacity: 0; }
+
+  /* ===== 미디어 쿼리: 태블릿 ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 28px 30px; padding-bottom: 80px; }
+    .card-grid.cols-2 { grid-template-columns: 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-badge { display: none; }
+    .stat-row { gap: 10px; }
+    .stat-box { min-width: 100px; padding: 14px 10px; }
+    .process-flow { gap: 6px; }
+    .process-step { min-width: 80px; padding: 10px 12px; }
+    .key-hint { display: none; }
+    .bar-label { min-width: 70px; }
+    .data-table { font-size: clamp(0.65rem, 1.3vw, 0.82rem); }
+    .data-table th, .data-table td { padding: 8px 6px; }
+  }
+
+  /* ===== 미디어 쿼리: 모바일 ===== */
+  @media (max-width: 480px) {
+    .slide { padding: 20px; padding-bottom: 75px; }
+    .slide-header { margin-bottom: 18px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .stat-row { flex-direction: column; gap: 8px; }
+    .stat-box { min-width: unset; padding: 14px; }
+    .nav-bar { padding: 10px 16px; }
+    .nav-btn { padding: 10px 14px; font-size: 0.85rem; }
+    .formula-box { padding: 14px 16px; font-size: clamp(0.7rem, 1.4vw, 0.9rem); }
+    .process-flow { flex-direction: column; }
+    .process-arrow { transform: rotate(90deg); }
+    .bar-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .bar-label { text-align: left; min-width: unset; }
+    .insight-box { padding: 14px 16px; }
+    .title-badge { padding: 4px 14px; font-size: clamp(0.6rem, 1.2vw, 0.75rem); }
+    .data-table th, .data-table td { padding: 6px 4px; }
+  }
+
+  /* ===== 미디어 쿼리: 소형 모바일 ===== */
+  @media (max-width: 320px) {
+    .slide { padding: 14px; padding-bottom: 70px; }
+    .slide-header { margin-bottom: 14px; }
+    .card { padding: 12px; }
+    .nav-btn { padding: 8px 10px; min-width: 44px; min-height: 44px; }
+    .stat-box { padding: 10px; }
+    .slide-indicator { min-width: 40px; font-size: 0.65rem; }
+    .progress-bar { margin: 0 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 파티클 배경 -->
+<div class="particles" id="particles"></div>
+
+<!-- 슬라이드 컨테이너 -->
+<div class="slide-container" id="slideContainer">
+
+  <!-- 슬라이드 1: 타이틀 -->
+  <div class="slide slide-title active" data-index="0">
+    <div class="title-badge animate-in delay-1">arXiv:2604.15302 &middot; 2026</div>
+    <h1 class="animate-in delay-2">LLM 판별자 신뢰성 진단</h1>
+    <p class="subtitle animate-in delay-3">적합 예측 집합과 이행성 위반을 활용한 진단 도구</p>
+    <p class="authors animate-in delay-4">Manan Gupta &middot; Dhruv Kumar</p>
+    <p class="meta-info animate-in delay-5">
+      <span class="tag tag-purple">CS.AI</span>
+      <span class="tag tag-green">CS.CL</span>
+      <span class="tag tag-pink">CS.LG</span>
+    </p>
+  </div>
+
+  <!-- 슬라이드 2: 문제 제기 -->
+  <div class="slide" data-index="1">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">01 &mdash; 문제 제기</div>
+      <h2 class="animate-in delay-2">LLM 판별자, 정말 믿을 수 있을까?</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card animate-in delay-3">
+        <span class="card-icon">&#x1F50D;</span>
+        <h3>현재 상황</h3>
+        <p>LLM-as-Judge 프레임워크가 자동 NLG 평가에 널리 사용되고 있으나, <strong style="color:#FD79A8">개별 인스턴스 단위의 신뢰성</strong>은 충분히 이해되지 않고 있습니다.</p>
+      </div>
+      <div class="card animate-in delay-4">
+        <span class="card-icon">&#x26A0;</span>
+        <h3>핵심 문제</h3>
+        <ul>
+          <li>집계 지표가 개별 문서의 실패를 은폐</li>
+          <li>어떤 평가가 신뢰할 수 있는지 불분명</li>
+          <li>기준(criterion)별 신뢰도 차이 미탐구</li>
+        </ul>
+      </div>
+      <div class="card animate-in delay-5" style="grid-column: 1 / -1;">
+        <span class="card-icon">&#x1F3AF;</span>
+        <h3>연구 목표</h3>
+        <p>SummEval 데이터셋에 적용되는 <strong style="color:#00CEC9">이중 진단 도구</strong>를 제시하여, 집계 수준이 아닌 <strong style="color:#FDCB6E">개별 입력 단위</strong>에서 LLM 판별자의 신뢰성을 정밀 진단합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 3: 실험 설계 -->
+  <div class="slide" data-index="2">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">02 &mdash; 실험 설계</div>
+      <h2 class="animate-in delay-2">데이터셋 및 실험 구성</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>SummEval 데이터셋</h3>
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-value">30</div>
+          <div class="stat-label">문서 수</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">8</div>
+          <div class="stat-label">요약 시스템</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">4</div>
+          <div class="stat-label">평가 기준</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">4</div>
+          <div class="stat-label">LLM 판별자</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card animate-in delay-4">
+        <h3>LLM 판별자 (Judges)</h3>
+        <ul>
+          <li>GPT-4o-mini</li>
+          <li>LLaMA-3.1-70B</li>
+          <li>Qwen-2.5-72B</li>
+          <li>Mistral-Small-3.1</li>
+        </ul>
+      </div>
+      <div class="card animate-in delay-5">
+        <h3>평가 기준 (Criteria)</h3>
+        <ul>
+          <li><span class="tag tag-green">일관성 (Coherence)</span></li>
+          <li><span class="tag tag-green">관련성 (Relevance)</span></li>
+          <li><span class="tag tag-yellow">유창성 (Fluency)</span></li>
+          <li><span class="tag tag-pink">일치성 (Consistency)</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card animate-in delay-6" style="margin-top:16px;">
+      <h3>API 호출 규모</h3>
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1.2rem,3vw,2rem);">40,320</div>
+          <div class="stat-label">쌍별 비교 프로토콜</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1.2rem,3vw,2rem);">3,840</div>
+          <div class="stat-label">직접 점수 프로토콜</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 4: 방법론 개요 -->
+  <div class="slide" data-index="3">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">03 &mdash; 방법론</div>
+      <h2 class="animate-in delay-2">이중 진단 프레임워크</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="process-flow animate-in delay-3">
+      <div class="process-step" style="border-color: var(--accent);">LLM 판별자<br>평가 수행</div>
+      <div class="process-arrow">&#x27A1;</div>
+      <div class="process-step" style="border-color: var(--accent2);">진단 1<br>이행성 분석</div>
+      <div class="process-arrow">&#x27A1;</div>
+      <div class="process-step" style="border-color: var(--accent3);">진단 2<br>적합 예측</div>
+      <div class="process-arrow">&#x27A1;</div>
+      <div class="process-step" style="border-color: var(--accent);">신뢰성<br>진단 결과</div>
+    </div>
+    <div class="card-grid cols-2" style="margin-top:12px;">
+      <div class="card animate-in delay-4" style="border-left: 3px solid var(--accent2);">
+        <h3>진단 1: 이행성 분석</h3>
+        <p style="margin-bottom:10px;">쌍별 비교에서 <strong style="color:#FD79A8">방향성 순환(3-cycle)</strong>을 탐지하여 논리적 비일관성을 측정합니다.</p>
+        <p>예시: A > B, B > C 이면 A > C 여야 하나, C > A가 관찰되면 이행성 위반</p>
+      </div>
+      <div class="card animate-in delay-5" style="border-left: 3px solid var(--accent3);">
+        <h3>진단 2: 적합 예측 집합</h3>
+        <p style="margin-bottom:10px;">분할 적합 예측(Split Conformal Prediction)으로 <strong style="color:#FDCB6E">이론적 보장이 있는 예측 집합</strong>을 생성합니다.</p>
+        <p>집합 크기가 클수록 해당 입력에 대한 판별자의 불확실성이 높음을 의미</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 5: 적합 예측 수식 -->
+  <div class="slide" data-index="4">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">04 &mdash; 수학적 프레임워크</div>
+      <h2 class="animate-in delay-2">적합 예측 집합 구성</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>비적합성 점수 (Nonconformity Score)</h3>
+      <div class="formula-box">s = |y&#x0302; &minus; y*|</div>
+      <p style="margin-top:10px;">판별자 점수(y&#x0302;)와 반올림된 사람 평균 점수(y*) 간의 절대 잔차</p>
+    </div>
+    <div class="card animate-in delay-4" style="margin-bottom:16px;">
+      <h3>적합 임계값 (Conformal Threshold)</h3>
+      <div class="formula-box">q&#x0302; = s<sub>(&#x2308;(1&minus;&alpha;)(n+1)&#x2309;)</sub></div>
+      <p style="margin-top:10px;">보정 데이터의 경험적 분위수로, 커버리지 보장을 제공합니다.</p>
+    </div>
+    <div class="card animate-in delay-5">
+      <h3>예측 집합 (Prediction Set)</h3>
+      <div class="formula-box">C(x) = { y &isin; {1, ..., 5} : |y&#x0302; &minus; y| &le; q&#x0302; }</div>
+      <p style="margin-top:10px;">커버리지 &ge; (1&minus;&alpha;)를 보장하는 가능한 점수들의 집합. <strong style="color:#FDCB6E">집합 크기 = 신뢰도 지표</strong></p>
+    </div>
+    <div class="insight-box animate-in delay-6">
+      <strong>핵심:</strong> 20회 무작위 50/50 보정/테스트 분할로 평균과 95% 신뢰구간을 보고합니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 6: 이행성 분석 결과 -->
+  <div class="slide" data-index="5">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">05 &mdash; 결과 1</div>
+      <h2 class="animate-in delay-2">이행성 위반: 숨겨진 비일관성</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="vs-container animate-in delay-3">
+      <div class="card" style="border-color: rgba(0,206,201,0.4);">
+        <h3 style="color:#00CEC9;">집계 위반율</h3>
+        <div class="stat-value" style="font-size:clamp(2rem,5vw,3.5rem); text-align:center;">0.8~4.1%</div>
+        <p style="text-align:center; margin-top:8px;">낮아 보이는 수치</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="card" style="border-color: rgba(253,121,168,0.4);">
+        <h3 style="color:#FD79A8;">문서별 영향 비율</h3>
+        <div class="stat-value" style="font-size:clamp(2rem,5vw,3.5rem); text-align:center;">33~67%</div>
+        <p style="text-align:center; margin-top:8px;">문서에 순환이 존재</p>
+      </div>
+    </div>
+    <div class="card animate-in delay-4" style="margin-top:16px;">
+      <h3>판별자별 상세 결과</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>판별자</th>
+            <th>집계 위반율 (&rho;&#x0304;)</th>
+            <th>영향 문서 비율</th>
+            <th>최대 문서별 위반율</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LLaMA-3.1-70B</td>
+            <td class="mono highlight-green">0.8%</td>
+            <td class="mono highlight-yellow">33.3%</td>
+            <td class="mono">-</td>
+          </tr>
+          <tr>
+            <td>Mistral-Small-3.1</td>
+            <td class="mono highlight-red">4.1%</td>
+            <td class="mono highlight-red">67%</td>
+            <td class="mono highlight-red">30.4%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight-box animate-in delay-5">
+      <strong>가려진 이질성 문제 (Masked Heterogeneity):</strong> 집계 통계가 소수 문서에 집중된 심각한 비일관성을 은폐합니다. 중앙값은 0이지만 상위 꼬리의 이질성이 매우 큽니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 7: MFAS 결과 -->
+  <div class="slide" data-index="6">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">06 &mdash; 결과 2</div>
+      <h2 class="animate-in delay-2">MFAS 순위 복구 실험</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>최소 피드백 호 집합 (Minimum Feedback Arc Set)</h3>
+      <p>이행성 위반을 자동으로 수정하기 위해 MFAS 기반 순위 복구를 시도했습니다.</p>
+    </div>
+    <div class="card animate-in delay-4" style="margin-bottom:16px; border-color: rgba(253,121,168,0.3);">
+      <h3 style="color:#FD79A8;">결과: 개선 효과 없음</h3>
+      <ul>
+        <li>Kendall &tau; 범위: 0.071 ~ 0.714 (불안정)</li>
+        <li>단순 Win Rate 대비 일관된 개선 없음</li>
+        <li>인간 판단과의 일치도 향상 실패</li>
+      </ul>
+    </div>
+    <div class="insight-box animate-in delay-5">
+      <strong>해석:</strong> 위반이 <strong>소수 문서에 희소하게 분포</strong>(&rho;&#x0304; &lt; 5%)되어 있어, 토너먼트 그래프가 거의 비순환적이므로 복구할 여지가 거의 없습니다. 따라서 자동 수정보다는 <strong>문제 문서를 탐지하여 인간 검토에 위임</strong>하는 것을 권장합니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 8: 적합 예측 결과 -->
+  <div class="slide" data-index="7">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">07 &mdash; 결과 3</div>
+      <h2 class="animate-in delay-2">적합 예측 집합 크기 = 신뢰도</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>기준별 평균 예측 집합 크기 (1~5 척도)</h3>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <span class="bar-label">관련성</span>
+          <div class="bar-track">
+            <div class="bar-fill green" style="width: 60%;" data-target="60">~3.0</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">일관성</span>
+          <div class="bar-track">
+            <div class="bar-fill green" style="width: 64%;" data-target="64">~3.2</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">유창성</span>
+          <div class="bar-track">
+            <div class="bar-fill red" style="width: 98%;" data-target="98">~4.9</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">일치성</span>
+          <div class="bar-track">
+            <div class="bar-fill red" style="width: 98%;" data-target="98">~4.9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-row animate-in delay-4">
+      <div class="stat-box" style="border-color: rgba(0,206,201,0.4);">
+        <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">&#x2264; 2</div>
+        <div class="stat-label">신뢰할 수 있음</div>
+      </div>
+      <div class="stat-box" style="border-color: rgba(253,203,110,0.4);">
+        <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">3~4</div>
+        <div class="stat-label">주의 필요</div>
+      </div>
+      <div class="stat-box" style="border-color: rgba(253,121,168,0.4);">
+        <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">= 5</div>
+        <div class="stat-label">인간 검토 필요</div>
+      </div>
+    </div>
+    <div class="insight-box animate-in delay-5">
+      <strong>발견:</strong> 관련성과 일관성은 신뢰할 수 있으나, 유창성과 일치성은 거의 <strong>최대 불확실성</strong> 수준입니다. 기준이 판별자보다 신뢰도에 더 큰 영향을 미칩니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 9: 집합 크기와 오류 상관관계 -->
+  <div class="slide" data-index="8">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">08 &mdash; 결과 4</div>
+      <h2 class="animate-in delay-2">예측 집합 크기 &harr; 실제 오류</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>핵심 상관관계</h3>
+      <div class="stat-row">
+        <div class="stat-box" style="flex:2;">
+          <div class="stat-value">r<sub>s</sub> = +0.576</div>
+          <div class="stat-label">집합 크기 &harr; 판별자 오류 (Spearman)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(0.9rem,2vw,1.3rem);">N=1,918</div>
+          <div class="stat-label">표본 수</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(0.9rem,2vw,1.3rem);">p&lt;10<sup>-100</sup></div>
+          <div class="stat-label">통계적 유의성</div>
+        </div>
+      </div>
+    </div>
+    <div class="card animate-in delay-4" style="margin-bottom:16px;">
+      <h3>기준별 집합 크기-오류 상관관계 (통합)</h3>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <span class="bar-label">일치성</span>
+          <div class="bar-track">
+            <div class="bar-fill gradient1" style="width: 68%;" data-target="68">r<sub>s</sub>=+0.34</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">일관성</span>
+          <div class="bar-track">
+            <div class="bar-fill gradient1" style="width: 32%;" data-target="32">r<sub>s</sub>=+0.16</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">유창성</span>
+          <div class="bar-track">
+            <div class="bar-fill gradient1" style="width: 30%;" data-target="30">r<sub>s</sub>=+0.15</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <span class="bar-label">관련성</span>
+          <div class="bar-track">
+            <div class="bar-fill orange" style="width: 5%;" data-target="5"><small>~0</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box animate-in delay-5">
+      <strong>의미:</strong> 예측 집합이 넓을수록 실제 오류도 크다는 것이 통계적으로 확인되었습니다. 이는 집합 크기가 <strong>유효한 불확실성 지표</strong>임을 검증합니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 10: 판별자 간 일치도 -->
+  <div class="slide" data-index="9">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">09 &mdash; 결과 5</div>
+      <h2 class="animate-in delay-2">판별자 간 집합 크기 일치도</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px;">
+      <h3>기준별 판별자 간 평균 상관 (r&#x0304;)</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>평가 기준</th>
+            <th>평균 상관 (r&#x0304;)</th>
+            <th>해석</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>유창성</td>
+            <td class="mono highlight-green">0.38</td>
+            <td>중간 수준 일치</td>
+          </tr>
+          <tr>
+            <td>관련성</td>
+            <td class="mono highlight-green">0.36</td>
+            <td>중간 수준 일치</td>
+          </tr>
+          <tr>
+            <td>일치성</td>
+            <td class="mono highlight-yellow">0.32</td>
+            <td>중간 수준 일치</td>
+          </tr>
+          <tr>
+            <td>일관성</td>
+            <td class="mono highlight-red">0.10</td>
+            <td>약한 일치</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card animate-in delay-4" style="margin-bottom:16px;">
+      <h3>주목할 판별자 쌍</h3>
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1.2rem,3vw,2rem);">r=0.81</div>
+          <div class="stat-label">GPT / Mistral<br>유창성</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1.2rem,3vw,2rem);">r=0.70</div>
+          <div class="stat-label">GPT / Qwen<br>관련성</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box animate-in delay-5">
+      <strong>해석:</strong> 넓은 예측 집합은 특정 판별자의 문제가 아니라 <strong>문서 자체의 고유 난이도</strong>를 반영합니다. 일관성(Coherence)의 약한 일치는 모델 간 "일관성" 개념의 내부 표상 차이 때문일 수 있습니다.
+    </div>
+  </div>
+
+  <!-- 슬라이드 11: 핵심 발견 통합 -->
+  <div class="slide" data-index="10">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">10 &mdash; 핵심 발견</div>
+      <h2 class="animate-in delay-2">기준이 판별자보다 중요하다</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card animate-in delay-3" style="margin-bottom:16px; border-color: rgba(0,206,201,0.4);">
+      <h3 style="font-size:clamp(1.1rem,2.5vw,1.5rem);">통합 발견: 기준(Criterion) &gt; 판별자(Judge)</h3>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.1rem); line-height:1.8;">
+        이행성 분석과 적합 예측 분석 <strong style="color:#00CEC9">모두에서</strong> 동일한 결론이 도출되었습니다:
+        어떤 기준을 평가하느냐가 어떤 모델을 사용하느냐보다 신뢰도에 더 결정적인 영향을 미칩니다.
+      </p>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card animate-in delay-4" style="border-left: 3px solid #00CEC9; background: rgba(0,206,201,0.05);">
+        <h3 style="color:#00CEC9;">신뢰할 수 있는 기준</h3>
+        <div style="text-align:center; margin: 12px 0;">
+          <div style="font-size:clamp(1.5rem,4vw,2.5rem); font-weight:900; color:#00CEC9;">일관성 &middot; 관련성</div>
+          <p style="margin-top:8px;">평균 집합 크기 ~3.0~3.2</p>
+          <p>이행성 위반 낮음</p>
+        </div>
+      </div>
+      <div class="card animate-in delay-5" style="border-left: 3px solid #FD79A8; background: rgba(253,121,168,0.05);">
+        <h3 style="color:#FD79A8;">회의적으로 봐야 할 기준</h3>
+        <div style="text-align:center; margin: 12px 0;">
+          <div style="font-size:clamp(1.5rem,4vw,2.5rem); font-weight:900; color:#FD79A8;">유창성 &middot; 일치성</div>
+          <p style="margin-top:8px;">평균 집합 크기 ~4.9</p>
+          <p>거의 최대 불확실성</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 12: 실용적 권고사항 -->
+  <div class="slide" data-index="11">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">11 &mdash; 실용적 시사점</div>
+      <h2 class="animate-in delay-2">배포 시 권고사항</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card-grid cols-1">
+      <div class="card animate-in delay-3" style="border-left: 3px solid #00CEC9;">
+        <h3>1. 선택적 인간 검토 위임</h3>
+        <p>예측 집합 크기 <strong style="color:#FDCB6E">&le; 2</strong>이면 자동 판정을 신뢰하고, <strong style="color:#FD79A8">= 5</strong>이면 인간 전문가 검토로 위임하세요.</p>
+      </div>
+      <div class="card animate-in delay-4" style="border-left: 3px solid #FDCB6E;">
+        <h3>2. 기준별 차별 전략</h3>
+        <p>일관성/관련성 평가는 LLM 판별자에게 위임해도 안전하지만, 유창성/일치성은 <strong style="color:#FD79A8">인간 평가를 병행</strong>하는 것을 권장합니다.</p>
+      </div>
+      <div class="card animate-in delay-5" style="border-left: 3px solid #FD79A8;">
+        <h3>3. 문제 문서 탐지</h3>
+        <p>이행성 위반이 집중된 문서를 자동 탐지하여 인간 후속 검토(human follow-up)로 안내하세요. MFAS 자동 수정보다 효과적입니다.</p>
+      </div>
+      <div class="card animate-in delay-6" style="border-left: 3px solid #6C5CE7;">
+        <h3>4. 집계 지표에 의존하지 마세요</h3>
+        <p>집계 위반율 0.8~4.1%가 낮아 보여도, <strong style="color:#FD79A8">개별 문서의 33~67%</strong>에 문제가 숨어 있을 수 있습니다. 반드시 개별 수준 진단을 병행하세요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 13: 한계 및 향후 연구 -->
+  <div class="slide" data-index="12">
+    <div class="slide-header">
+      <div class="slide-number animate-in delay-1">12 &mdash; 한계 및 향후 연구</div>
+      <h2 class="animate-in delay-2">한계점과 미래 방향</h2>
+      <div class="header-line animate-in delay-3"></div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card animate-in delay-3">
+        <span class="card-icon">&#x1F4CF;</span>
+        <h3>규모의 한계</h3>
+        <p>단일 데이터셋(SummEval)의 30개 문서만 사용. 일반화 가능성 검증 필요</p>
+      </div>
+      <div class="card animate-in delay-4">
+        <span class="card-icon">&#x1F4CA;</span>
+        <h3>커버리지 한계</h3>
+        <p>주변(marginal) 커버리지만 보장. 조건부(conditional) 커버리지는 미보장</p>
+      </div>
+      <div class="card animate-in delay-5">
+        <span class="card-icon">&#x2699;</span>
+        <h3>비적합성 점수</h3>
+        <p>고정 절대 잔차만 사용. 학습 기반 대안 미탐구</p>
+      </div>
+      <div class="card animate-in delay-6">
+        <span class="card-icon">&#x1F4DD;</span>
+        <h3>프롬프트 강건성</h3>
+        <p>기준당 단일 프롬프트만 사용. 프롬프트 변형에 대한 강건성 미검증</p>
+      </div>
+    </div>
+    <div class="card animate-in delay-6" style="margin-top: 16px; border-color: rgba(108,92,231,0.3);">
+      <h3>향후 연구 방향</h3>
+      <ul>
+        <li>대규모 다중 데이터셋 검증</li>
+        <li>조건부 커버리지 보장 방법 탐구</li>
+        <li>학습된 비적합성 점수 함수 개발</li>
+        <li>다양한 프롬프트에 대한 강건성 분석</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 슬라이드 14: 결론 -->
+  <div class="slide slide-title" data-index="13" style="background: radial-gradient(ellipse at 40% 40%, rgba(253,121,168,0.1) 0%, transparent 50%), radial-gradient(ellipse at 60% 60%, rgba(0,206,201,0.1) 0%, transparent 50%), var(--gradient3);">
+    <div class="title-badge animate-in delay-1">결론</div>
+    <h1 class="animate-in delay-2">LLM 판별자를 맹신하지 마세요</h1>
+    <p class="subtitle animate-in delay-3" style="max-width:650px;">
+      적합 예측 집합과 이행성 분석이라는 두 진단 도구로 개별 입력 단위의 신뢰성을 정량화할 수 있습니다.
+    </p>
+    <div style="margin-top:20px;" class="animate-in delay-4">
+      <div class="stat-row" style="justify-content:center; max-width:600px; margin: 0 auto;">
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">&#x2705;</div>
+          <div class="stat-label">일관성 &middot; 관련성<br>신뢰 가능</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">&#x26A0;&#xFE0F;</div>
+          <div class="stat-label">유창성 &middot; 일치성<br>주의 필요</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="font-size:clamp(1rem,2.5vw,1.6rem);">&#x1F4E6;</div>
+          <div class="stat-label">코드 &middot; 프롬프트<br>전체 공개</div>
+        </div>
+      </div>
+    </div>
+    <p class="meta-info animate-in delay-5" style="margin-top:28px;">
+      Manan Gupta &middot; Dhruv Kumar &middot; arXiv:2604.15302
+    </p>
+  </div>
+
+</div>
+
+<!-- 네비게이션 -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>
+    &#x25C0; 이전
+  </button>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="slide-indicator" id="slideIndicator">1 / 14</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+    다음 &#x25B6;
+  </button>
+</nav>
+
+<div class="key-hint">&#x2190; &#x2192; 키보드 | 스와이프</div>
+
+<script>
+  // 파티클 배경 생성
+  (function createParticles() {
+    const container = document.getElementById('particles');
+    const colors = ['#6C5CE7', '#00CEC9', '#FD79A8', '#FDCB6E'];
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 6 + 2;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.animationDuration = (Math.random() * 20 + 15) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      container.appendChild(p);
+    }
+  })();
+
+  // 슬라이드 로직
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('slideIndicator').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) {
+    if ((dir === -1 && current === 0) || (dir === 1 && current === total - 1)) return;
+    slides[current].classList.remove('active');
+    current += dir;
+    const next = slides[current];
+    next.classList.add('active');
+    next.scrollTop = 0;
+    // Re-trigger animations
+    next.querySelectorAll('.animate-in').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = '';
+    });
+    updateUI();
+  }
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      changeSlide(-1);
+    }
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, { passive: true });
+
+  updateUI();
+</script>
+</body>
+</html>
