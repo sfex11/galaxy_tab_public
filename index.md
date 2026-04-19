@@ -143,3 +143,17 @@
 - [[sources/2026-04-18-radagent-a-tool-using-ai-agent-for-stepwise-interp.md]] - RadAgent: A tool-using AI agent for stepwise interpretation of chest computed tomography
 - [[sources/2026-04-18-scepsy-serving-agentic-workflows-using-aggregate-l.md]] - Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
 - [[sources/2026-04-18-from-tokens-to-steps-verification-aware-speculativ.md]] - From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning
+- [[sources/2026-04-19-mm-webagent-a-hierarchical-multimodal-web-agent-fo.md]] - MM-WebAgent: A Hierarchical Multimodal Web Agent for Webpage Generation
+- [[sources/2026-04-19-generalization-in-llm-problem-solving-the-case-of-.md]] - Generalization in LLM Problem Solving: The Case of the Shortest Path
+- [[sources/2026-04-19-diagnosing-llm-judge-reliability-conformal-predict.md]] - Diagnosing LLM Judge Reliability: Conformal Prediction Sets and Transitivity Violations
+- [[entities/transformer]] - Transformer
+- [[sources/2026-04-19-how-do-llms-and-vlms-understand-viewpoint-rotation.md]] - How Do LLMs and VLMs Understand Viewpoint Rotation Without Vision? An Interpretability Study
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-19-coopeval-benchmarking-cooperation-sustaining-mecha.md]] - CoopEval: Benchmarking Cooperation-Sustaining Mechanisms and LLM Agents in Social Dilemmas
+- [[sources/2026-04-19-agentic-microphysics-a-manifesto-for-generative-ai.md]] - Agentic Microphysics: A Manifesto for Generative AI Safety
+- [[sources/2026-04-19-blue-data-intelligence-layer-streaming-data-and-ag.md]] - Blue Data Intelligence Layer: Streaming Data and Agents for Multi-source Multi-modal Data-Centric Applications
+- [[sources/2026-04-19-ad4ad-benchmarking-visual-anomaly-detection-models.md]] - AD4AD: Benchmarking Visual Anomaly Detection Models for Safer Autonomous Driving
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-19-radagent-a-tool-using-ai-agent-for-stepwise-interp.md]] - RadAgent: A tool-using AI agent for stepwise interpretation of chest computed tomography
+- [[sources/2026-04-19-scepsy-serving-agentic-workflows-using-aggregate-l.md]] - Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
+- [[sources/2026-04-19-from-tokens-to-steps-verification-aware-speculativ.md]] - From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning

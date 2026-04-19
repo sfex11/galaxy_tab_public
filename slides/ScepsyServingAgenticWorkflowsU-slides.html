@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Scepsy: Aggregate LLM 파이프라인을 활용한 에이전틱 워크플로우 서빙</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2235;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-bright: #f8fafc;
+    --border: rgba(99, 102, 241, 0.2);
+    --gradient1: linear-gradient(135deg, #6366f1, #06b6d4);
+    --gradient2: linear-gradient(135deg, #f59e0b, #ef4444);
+    --gradient3: linear-gradient(135deg, #10b981, #06b6d4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .gradient-text {
+    background: var(--gradient1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-2 {
+    background: var(--gradient2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-3 {
+    background: var(--gradient3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== CARDS & BOXES ===== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .card-accent {
+    border-left: 4px solid var(--accent);
+  }
+
+  .card-cyan {
+    border-left: 4px solid var(--accent2);
+  }
+
+  .card-amber {
+    border-left: 4px solid var(--accent3);
+  }
+
+  .card-green {
+    border-left: 4px solid var(--accent4);
+  }
+
+  .card-red {
+    border-left: 4px solid var(--accent5);
+  }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.1));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 12px 0;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .stat-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  /* ===== LISTS ===== */
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .list-cyan li::before { background: var(--accent2); }
+  .list-amber li::before { background: var(--accent3); }
+  .list-green li::before { background: var(--accent4); }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    justify-content: center;
+  }
+
+  .flow-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    text-align: center;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    flex-shrink: 0;
+  }
+
+  /* ===== EQUATION ===== */
+  .equation {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.8rem, 1.6vw, 1.1rem);
+    background: rgba(99,102,241,0.1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin: 10px 0;
+    text-align: center;
+    color: var(--accent-light);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* ===== BAR CHART ===== */
+  .bar-chart {
+    margin: 14px 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .bar-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    min-width: 90px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    font-weight: 600;
+    color: white;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.indigo { background: var(--gradient1); }
+  .bar-fill.amber { background: var(--gradient2); }
+  .bar-fill.green { background: var(--gradient3); }
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+  }
+
+  .compare-table th {
+    background: rgba(99,102,241,0.2);
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .compare-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .compare-table tr:hover td {
+    background: rgba(99,102,241,0.08);
+  }
+
+  .compare-table .winner {
+    color: var(--accent4);
+    font-weight: 600;
+  }
+
+  /* ===== PIPELINE VISUAL ===== */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 14px 0;
+  }
+
+  .pipeline-stage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .stage-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .stage-num.s1 { background: var(--accent); }
+  .stage-num.s2 { background: var(--accent2); }
+  .stage-num.s3 { background: var(--accent3); }
+  .stage-num.s4 { background: var(--accent4); }
+
+  .stage-content {
+    flex: 1;
+  }
+
+  .stage-title {
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    margin-bottom: 2px;
+  }
+
+  .stage-desc {
+    font-size: clamp(0.72rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+  }
+
+  /* ===== TAG ===== */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag-indigo { background: rgba(99,102,241,0.2); color: var(--accent-light); }
+  .tag-cyan { background: rgba(6,182,212,0.2); color: var(--accent2); }
+  .tag-amber { background: rgba(245,158,11,0.2); color: var(--accent3); }
+  .tag-green { background: rgba(16,185,129,0.2); color: var(--accent4); }
+  .tag-red { background: rgba(239,68,68,0.2); color: var(--accent5); }
+
+  /* ===== ICON BLOCKS ===== */
+  .icon-block {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(10, 14, 26, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-btn:active {
+    background: var(--accent);
+    transform: scale(0.92);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient1);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+
+  /* ===== DECORATIVE ===== */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > *:not(.glow-orb) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--gradient1);
+    border-radius: 2px;
+    margin: 12px 0;
+  }
+
+  .spacer { flex: 1; }
+
+  .flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+  }
+
+  /* Tree diagram */
+  .tree-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+    color: var(--text-dim);
+  }
+
+  .tree-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .tree-node {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .tree-gen { background: rgba(99,102,241,0.2); color: var(--accent-light); border: 1px solid rgba(99,102,241,0.3); }
+  .tree-ver { background: rgba(6,182,212,0.2); color: var(--accent2); border: 1px solid rgba(6,182,212,0.3); }
+  .tree-line { color: var(--text-dim); font-size: 0.9rem; }
+
+  /* GPU visual */
+  .gpu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin: 12px 0;
+    max-width: 360px;
+  }
+
+  .gpu-cell {
+    height: 38px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .anim-1 { animation: fadeInUp 0.5s 0.1s both; }
+  .slide.active .anim-2 { animation: fadeInUp 0.5s 0.2s both; }
+  .slide.active .anim-3 { animation: fadeInUp 0.5s 0.3s both; }
+  .slide.active .anim-4 { animation: fadeInUp 0.5s 0.4s both; }
+  .slide.active .anim-5 { animation: fadeInUp 0.5s 0.5s both; }
+  .slide.active .anim-6 { animation: fadeInUp 0.5s 0.6s both; }
+  .slide.active .anim-7 { animation: fadeInUp 0.5s 0.7s both; }
+
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .slide { padding: 28px 28px 80px; }
+    .two-col { grid-template-columns: 1fr; gap: 10px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .flow-row { gap: 6px; }
+    .flow-box { min-width: 80px; padding: 8px 12px; }
+    .card { padding: 16px 18px; }
+    .gpu-grid { grid-template-columns: repeat(4, 1fr); max-width: 280px; }
+    .compare-table { font-size: clamp(0.6rem, 1.3vw, 0.8rem); }
+    .compare-table th, .compare-table td { padding: 6px 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 20px 20px 80px; }
+    h1 { margin-bottom: 10px; }
+    h2 { margin-bottom: 10px; }
+    .card { padding: 14px 16px; margin-bottom: 10px; border-radius: 10px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .stat-box { padding: 12px 8px; }
+    .flow-row { gap: 4px; }
+    .flow-box { min-width: 70px; padding: 8px 10px; font-size: 0.7rem; }
+    .flow-arrow { font-size: 0.9rem; }
+    .nav { padding: 8px 14px; }
+    .nav-btn { width: 44px; height: 44px; }
+    .pipeline-stage { padding: 10px 12px; gap: 10px; }
+    .icon-circle { width: 36px; height: 36px; font-size: 1rem; }
+    .divider { margin: 8px 0; }
+    .bar-label { min-width: 70px; }
+    .bar-track { height: 24px; }
+    .equation { padding: 10px 14px; font-size: 0.72rem; }
+    .gpu-grid { grid-template-columns: repeat(4, 1fr); gap: 4px; max-width: 240px; }
+    .gpu-cell { height: 32px; font-size: 0.58rem; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 76px; }
+    .card { padding: 10px 12px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+    .stat-box { padding: 10px 6px; }
+    .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+    .progress-bar { margin: 0 10px; }
+    .flow-box { min-width: 60px; padding: 6px 8px; }
+    .bar-label { min-width: 55px; font-size: 0.6rem; }
+    .pipeline-stage { padding: 8px 10px; }
+    .stage-num { width: 26px; height: 26px; font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <div class="slide active" id="slide-0">
+    <div class="glow-orb" style="width:300px;height:300px;background:var(--accent);opacity:0.08;top:-50px;right:-80px;"></div>
+    <div class="glow-orb" style="width:250px;height:250px;background:var(--accent2);opacity:0.06;bottom:60px;left:-60px;"></div>
+    <div class="spacer"></div>
+    <div class="anim-1">
+      <div class="slide-number">arXiv 2604.15186 &middot; 2026</div>
+    </div>
+    <h1 class="anim-2">
+      <span class="gradient-text">Scepsy</span>
+    </h1>
+    <h2 class="anim-3" style="font-weight:400; color:var(--text-dim);">
+      Aggregate LLM 파이프라인을 활용한<br>에이전틱 워크플로우 서빙
+    </h2>
+    <div class="divider anim-4"></div>
+    <p class="subtitle anim-5" style="margin-top:8px;">
+      Marcel Wagenl&auml;nder, Otto White, Britannio Jarrett, Pedro Silvestre,<br>
+      Yanda Tao, Guo Li, Huanzhou Zhu, Ll&uacute;is Vilanova, Peter Pietzuch
+    </p>
+    <div class="anim-6" style="margin-top:18px;">
+      <span class="tag tag-indigo">cs.DC</span>
+      <span class="tag tag-cyan">cs.AI</span>
+      <span class="tag tag-amber">시스템</span>
+      <span class="tag tag-green">LLM 서빙</span>
+    </div>
+    <div class="spacer"></div>
+    <p class="anim-7" style="font-size:clamp(0.7rem,1.2vw,0.8rem);color:var(--text-dim);text-align:center;">
+      좌우 스와이프 또는 하단 버튼으로 탐색
+    </p>
+  </div>
+
+  <!-- ===== SLIDE 2: PROBLEM ===== -->
+  <div class="slide" id="slide-1">
+    <div class="glow-orb" style="width:280px;height:280px;background:var(--accent5);opacity:0.06;top:20px;right:-60px;"></div>
+    <div class="slide-number anim-1">01 &middot; 문제 정의</div>
+    <h2 class="anim-2"><span class="gradient-text-2">에이전틱 워크플로우</span>의 서빙 과제</h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-red anim-3">
+      <h3>핵심 문제</h3>
+      <p>에이전틱 워크플로우는 <strong>여러 LLM과 도구를 조합</strong>하여 복잡한 작업을 수행합니다. 이를 목표 처리량과 낮은 지연시간으로 서빙하는 것이 매우 어렵습니다.</p>
+    </div>
+
+    <div class="two-col anim-4">
+      <div class="card card-amber">
+        <h3 style="color:var(--accent3);">예측 불가능한 실행</h3>
+        <ul>
+          <li><strong>분기(Branching)</strong> &mdash; 데이터에 따라 다른 경로</li>
+          <li><strong>팬아웃(Fan-out)</strong> &mdash; 다수 후보 동시 생성</li>
+          <li><strong>재귀(Recursion)</strong> &mdash; 반복적 추론 루프</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <h3 style="color:var(--accent-light);">GPU 자원 부족</h3>
+        <ul>
+          <li>LLM 수가 GPU 수를 초과</li>
+          <li>임의의 프레임워크 지원 필요</li>
+          <li>정적 분석으로는 한계</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <h3 style="color:var(--accent3);">Beam Search 예시</h3>
+      <p style="margin-bottom:8px;">생성기(1B) + 검증기(8B) 반복 호출 &rarr; 실행시간 <strong>9~264초</strong> (29배 차이)</p>
+      <div class="tree-visual">
+        <div class="tree-row"><div class="tree-node tree-gen">생성기</div></div>
+        <div class="tree-line">&darr; &darr; &darr;</div>
+        <div class="tree-row">
+          <div class="tree-node tree-ver">검증</div>
+          <div class="tree-node tree-ver">검증</div>
+          <div class="tree-node tree-ver">검증</div>
+        </div>
+        <div class="tree-line">&darr; &darr;</div>
+        <div class="tree-row">
+          <div class="tree-node tree-gen">생성</div>
+          <div class="tree-node tree-gen">생성</div>
+        </div>
+        <div class="tree-line">&darr; &darr; &darr; &darr;</div>
+        <div class="tree-row">
+          <div class="tree-node tree-ver">검증</div>
+          <div class="tree-node tree-ver">검증</div>
+          <div class="tree-node tree-ver">검증</div>
+          <div class="tree-node tree-ver">검증</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 3: KEY INSIGHT ===== -->
+  <div class="slide" id="slide-2">
+    <div class="glow-orb" style="width:300px;height:300px;background:var(--accent4);opacity:0.07;bottom:40px;left:-80px;"></div>
+    <div class="slide-number anim-1">02 &middot; 핵심 통찰</div>
+    <h2 class="anim-2"><span class="gradient-text-3">안정적인 상대 비율</span>의 발견</h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-green anim-3">
+      <h3>핵심 관찰</h3>
+      <p>엔드투엔드 지연시간은 크게 변동하지만, <strong>각 LLM의 총 실행 시간 비율은 실행 간에 비교적 안정적</strong>입니다.</p>
+    </div>
+
+    <div class="two-col anim-4">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.75rem,1.3vw,0.9rem);color:var(--text-dim);margin-bottom:8px;">절대 실행 시간</div>
+        <div style="font-family:'JetBrains Mono';font-size:clamp(1.8rem,4vw,3rem);color:var(--accent5);font-weight:700;">9~264초</div>
+        <div style="font-size:clamp(0.7rem,1.2vw,0.82rem);color:var(--text-dim);margin-top:4px;">29배 변동 &mdash; 예측 불가</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.75rem,1.3vw,0.9rem);color:var(--text-dim);margin-bottom:8px;">상대 실행 비율</div>
+        <div style="font-family:'JetBrains Mono';font-size:clamp(1.8rem,4vw,3rem);color:var(--accent4);font-weight:700;">4배 안정</div>
+        <div style="font-size:clamp(0.7rem,1.2vw,0.82rem);color:var(--text-dim);margin-top:4px;">절대 시간 대비 &mdash; 예측 가능!</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <h3>이것이 의미하는 바</h3>
+      <p>개별 LLM의 실행 시간은 예측할 수 없지만, <strong>전체 워크플로우에서 각 LLM이 차지하는 비중</strong>은 예측 가능합니다. 이 비율을 활용하면 GPU 자원을 효율적으로 배분할 수 있습니다.</p>
+    </div>
+
+    <div class="anim-6" style="text-align:center;margin-top:10px;">
+      <span class="tag tag-green" style="font-size:clamp(0.8rem,1.4vw,1rem);padding:6px 16px;">이 통찰이 Scepsy의 핵심 기반</span>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 4: SYSTEM OVERVIEW ===== -->
+  <div class="slide" id="slide-3">
+    <div class="glow-orb" style="width:260px;height:260px;background:var(--accent);opacity:0.07;top:-30px;left:-60px;"></div>
+    <div class="slide-number anim-1">03 &middot; 시스템 개요</div>
+    <h2 class="anim-2"><span class="gradient-text">Scepsy</span> 4단계 아키텍처</h2>
+    <div class="divider anim-2"></div>
+
+    <div class="pipeline anim-3">
+      <div class="pipeline-stage">
+        <div class="stage-num s1">1</div>
+        <div class="stage-content">
+          <div class="stage-title">워크플로우 트레이싱</div>
+          <div class="stage-desc">HTTP 프록시로 LLM 호출 캡처 &mdash; 요청/응답, 타임스탬프, 워크플로우 ID 기록</div>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num s2">2</div>
+        <div class="stage-content">
+          <div class="stage-title">통계적 집계</div>
+          <div class="stage-desc">LLM별 호출 횟수(n<sub>m</sub>)와 요청 수준 병렬성(p<sub>m</sub>) 추출</div>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num s3">3</div>
+        <div class="stage-content">
+          <div class="stage-title">GPU 스케줄링</div>
+          <div class="stage-desc">Aggregate LLM Pipeline으로 GPU 분수 할당, 텐서 병렬성, 복제 수 탐색</div>
+        </div>
+      </div>
+      <div class="pipeline-stage">
+        <div class="stage-num s4">4</div>
+        <div class="stage-content">
+          <div class="stage-title">토폴로지 인식 배치</div>
+          <div class="stage-desc">NVLink 토폴로지 고려 계층적 배치 &mdash; Kubernetes + Nvidia MPS로 실행</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4">
+      <p style="text-align:center;"><strong>Python 2,525줄</strong> &middot; vLLM/SGLang 호환 &middot; LangChain / LangGraph / AutoGen / Camel 지원</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 5: AGGREGATE LLM PIPELINE ===== -->
+  <div class="slide" id="slide-4">
+    <div class="glow-orb" style="width:280px;height:280px;background:var(--accent2);opacity:0.07;top:20px;right:-70px;"></div>
+    <div class="slide-number anim-1">04 &middot; 핵심 기술</div>
+    <h2 class="anim-2"><span class="gradient-text">Aggregate LLM Pipeline</span></h2>
+    <div class="divider anim-2"></div>
+
+    <p class="anim-3" style="margin-bottom:14px;">LLM 프로파일링 통계를 결합하여 워크플로우 전체의 지연시간/처리량을 예측하는 경량 모델입니다.</p>
+
+    <div class="anim-4">
+      <div class="flow-row">
+        <div class="flow-box" style="border-color:var(--accent);">트레이싱</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box" style="border-color:var(--accent2);">집계</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box" style="border-color:var(--accent3);">프로파일링</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box" style="border-color:var(--accent4);">합성</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box" style="border-color:var(--accent-light);">예측</div>
+      </div>
+    </div>
+
+    <div class="card card-cyan anim-5">
+      <h3 style="color:var(--accent2);">지연시간 수식</h3>
+      <div class="equation">L<sub>w</sub>(&lambda;<sub>w</sub>) = &Sigma;<sub>m</sub> L<sub>m</sub>(&lambda;<sub>w</sub> &middot; n<sub>m</sub>) &middot; (n<sub>m</sub> / p<sub>m</sub>)</div>
+      <p style="font-size:clamp(0.72rem,1.3vw,0.85rem);color:var(--text-dim);margin-top:6px;">
+        L<sub>m</sub> = LLM m의 지연시간 &nbsp;|&nbsp; n<sub>m</sub> = 호출 횟수 &nbsp;|&nbsp; p<sub>m</sub> = 요청 병렬성
+      </p>
+    </div>
+
+    <div class="card card-amber anim-6">
+      <h3 style="color:var(--accent3);">처리량 수식</h3>
+      <div class="equation">T<sub>w</sub> = min<sub>m</sub> (T<sub>m</sub> / n<sub>m</sub>)</div>
+      <p style="font-size:clamp(0.72rem,1.3vw,0.85rem);color:var(--text-dim);margin-top:6px;">
+        병목 LLM이 전체 워크플로우 처리량을 결정
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 6: GPU SCHEDULING ===== -->
+  <div class="slide" id="slide-5">
+    <div class="glow-orb" style="width:240px;height:240px;background:var(--accent3);opacity:0.07;bottom:60px;right:-50px;"></div>
+    <div class="slide-number anim-1">05 &middot; GPU 스케줄링</div>
+    <h2 class="anim-2"><span class="gradient-text-2">3차원 탐색 공간</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="stat-grid anim-3">
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent);">GPU<br>분수</div>
+        <div class="stat-label">분수 GPU 할당<br>(예: 0.66 GPU)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent2);">TP<br>차수</div>
+        <div class="stat-label">텐서 병렬성<br>(1, 2, 4)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color:var(--accent3);">복제<br>수</div>
+        <div class="stat-label">모델 복제<br>처리량 스케일링</div>
+      </div>
+    </div>
+
+    <div class="card card-accent anim-4">
+      <h3>탐색 프루닝 전략</h3>
+      <ul>
+        <li>높은 지연시간 LLM에 더 많은 자원 우선 배분</li>
+        <li>연속 GPU 할당만 허용 (대칭성 활용)</li>
+        <li>텐서 병렬성은 고대역폭 연결(NVLink)로 제한</li>
+      </ul>
+    </div>
+
+    <div class="two-col anim-5">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.75rem,1.3vw,0.85rem);color:var(--text-dim);">프루닝 전 탐색 공간</div>
+        <div style="font-family:'JetBrains Mono';font-size:clamp(1.2rem,3vw,2rem);color:var(--accent5);font-weight:700;">~2,900만</div>
+        <div style="font-size:clamp(0.65rem,1.1vw,0.78rem);color:var(--text-dim);">5 LLM, 16 GPU 기준</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.75rem,1.3vw,0.85rem);color:var(--text-dim);">탐색 시간</div>
+        <div style="font-family:'JetBrains Mono';font-size:clamp(1.2rem,3vw,2rem);color:var(--accent4);font-weight:700;">&lt;35초</div>
+        <div style="font-size:clamp(0.65rem,1.1vw,0.78rem);color:var(--text-dim);">프루닝 후</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-6">
+      <h3>분수 GPU 공유 (Fractional GPU)</h3>
+      <p>Nvidia MPS를 통해 하나의 GPU에 여러 LLM을 분수 단위로 배치합니다. 예: 임베딩 모델에 GPU의 1/13만 할당 &rarr; 자원 낭비 최소화</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 7: PLACEMENT ===== -->
+  <div class="slide" id="slide-6">
+    <div class="glow-orb" style="width:260px;height:260px;background:var(--accent4);opacity:0.06;top:-20px;left:-60px;"></div>
+    <div class="slide-number anim-1">06 &middot; 배치 전략</div>
+    <h2 class="anim-2"><span class="gradient-text-3">계층적 토폴로지 인식 배치</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="two-col anim-3">
+      <div class="card card-accent">
+        <h3 style="color:var(--accent-light);">노드 간 배치</h3>
+        <ul>
+          <li>"가장 제약 많은 것 우선" 휴리스틱</li>
+          <li>텐서 병렬 모델을 먼저 배치</li>
+          <li>큰 할당을 우선 배치</li>
+          <li>NVLink 연결 용량 보존</li>
+        </ul>
+      </div>
+      <div class="card card-cyan">
+        <h3 style="color:var(--accent2);">노드 내 배치</h3>
+        <ul class="list-cyan">
+          <li>NVLink 도메인별 열거</li>
+          <li>불균형 점수로 도메인 선택</li>
+          <li>이미 사용 중인 GPU에 먼저 패킹</li>
+          <li>균형 잡힌 후보 우선</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <h3>GPU 배치 예시 (4노드 &times; 4 GPU)</h3>
+      <div class="gpu-grid" style="margin:auto;">
+        <div class="gpu-cell" style="background:rgba(99,102,241,0.4);">LLM-A</div>
+        <div class="gpu-cell" style="background:rgba(99,102,241,0.4);">LLM-A</div>
+        <div class="gpu-cell" style="background:rgba(6,182,212,0.3);">LLM-B</div>
+        <div class="gpu-cell" style="background:rgba(6,182,212,0.3);">LLM-B</div>
+        <div class="gpu-cell" style="background:rgba(245,158,11,0.3);">LLM-C</div>
+        <div class="gpu-cell" style="background:rgba(245,158,11,0.3);">LLM-C</div>
+        <div class="gpu-cell" style="background:rgba(16,185,129,0.3);">LLM-D</div>
+        <div class="gpu-cell" style="background:rgba(16,185,129,0.3);">LLM-D</div>
+        <div class="gpu-cell" style="background:rgba(99,102,241,0.25);">A</div>
+        <div class="gpu-cell" style="background:rgba(6,182,212,0.2);">B</div>
+        <div class="gpu-cell" style="background:rgba(245,158,11,0.2);">C</div>
+        <div class="gpu-cell" style="background:rgba(239,68,68,0.3);">LLM-E</div>
+        <div class="gpu-cell" style="background:rgba(99,102,241,0.15);">A</div>
+        <div class="gpu-cell" style="background:rgba(6,182,212,0.15);">B</div>
+        <div class="gpu-cell" style="background:rgba(239,68,68,0.2);">E</div>
+        <div class="gpu-cell" style="background:rgba(239,68,68,0.2);">E</div>
+      </div>
+      <p style="font-size:clamp(0.65rem,1.2vw,0.78rem);color:var(--text-dim);text-align:center;margin-top:8px;">NVLink 연결 쌍 &rarr; 텐서 병렬 모델 우선 배치 | 분수 공유로 나머지 채움</p>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <p><strong>배포:</strong> Kubernetes 배포 파일 생성 &rarr; 확장 Nvidia 디바이스 플러그인 &rarr; SGLang 라우터로 부하 분산</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 8: WORKLOADS ===== -->
+  <div class="slide" id="slide-7">
+    <div class="glow-orb" style="width:250px;height:250px;background:var(--accent3);opacity:0.07;top:30px;right:-60px;"></div>
+    <div class="slide-number anim-1">07 &middot; 실험 워크플로우</div>
+    <h2 class="anim-2">평가 대상 <span class="gradient-text-2">에이전틱 워크플로우</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-amber anim-3">
+      <h3 style="color:var(--accent3);">Beam Search (추론 시간 스케일링)</h3>
+      <div class="two-col" style="margin-top:10px;">
+        <div>
+          <ul class="list-amber">
+            <li><strong>생성기:</strong> Llama-3.2-1B</li>
+            <li><strong>검증기:</strong> Llama-3.1-8B-PRM</li>
+            <li>반복적 빔 확장 + 점수 매김</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list-amber">
+            <li>호출: 24~844회/요청</li>
+            <li>실행: 9~264초</li>
+            <li>팬아웃 + 순차 의존성</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-cyan anim-4">
+      <h3 style="color:var(--accent2);">RAG + Reranker (검색 증강 생성)</h3>
+      <div class="two-col" style="margin-top:10px;">
+        <div>
+          <ul class="list-cyan">
+            <li><strong>임베딩:</strong> e5-base-v2</li>
+            <li><strong>생성기:</strong> Llama-3-8B</li>
+            <li>문서 검색 + 생성 + 재순위</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list-cyan">
+            <li>검색 + LLM 조합</li>
+            <li>비-LLM + LLM 혼합</li>
+            <li>비교적 예측 가능한 실행</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card anim-5">
+      <h3>실험 환경</h3>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent);font-size:clamp(1.1rem,2.5vw,1.8rem);">16 GPU</div>
+          <div class="stat-label">4노드 &times; 4 A6000</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent2);font-size:clamp(1.1rem,2.5vw,1.8rem);">NVLink 3</div>
+          <div class="stat-label">GPU 쌍 연결</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent3);font-size:clamp(1.1rem,2.5vw,1.8rem);">100Gbps</div>
+          <div class="stat-label">InfiniBand</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent4);font-size:clamp(1.1rem,2.5vw,1.8rem);">vLLM</div>
+          <div class="stat-label">v0.17 엔진</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 9: RESULTS vs K8s ===== -->
+  <div class="slide" id="slide-8">
+    <div class="glow-orb" style="width:280px;height:280px;background:var(--accent4);opacity:0.06;bottom:60px;left:-80px;"></div>
+    <div class="slide-number anim-1">08 &middot; 평가 결과 (1)</div>
+    <h2 class="anim-2">vs <span class="gradient-text">Kubernetes 오토스케일러</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-green anim-3">
+      <h3 style="color:var(--accent4);">Beam Search 워크플로우</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">4 GPU 처리량</div>
+          <div class="bar-track"><div class="bar-fill indigo" style="--w:100%;">2.4x</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">8 GPU 처리량</div>
+          <div class="bar-track"><div class="bar-fill indigo" style="--w:62%;">1.5x</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">16 GPU 처리량</div>
+          <div class="bar-track"><div class="bar-fill indigo" style="--w:75%;">1.8x</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">16 GPU 지연</div>
+          <div class="bar-track"><div class="bar-fill green" style="--w:95%;">10.4x 개선</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-cyan anim-4">
+      <h3 style="color:var(--accent2);">RAG + Reranker 워크플로우</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">4 GPU 처리량</div>
+          <div class="bar-track"><div class="bar-fill indigo" style="--w:62%;">1.5x</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">4 GPU 지연</div>
+          <div class="bar-track"><div class="bar-fill green" style="--w:78%;">14.9x 개선</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">16 GPU 지연</div>
+          <div class="bar-track"><div class="bar-fill green" style="--w:100%;">27x 개선</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5" style="text-align:center;">
+      <p><strong>최대 2.4배 처리량 향상, 최대 27배 지연시간 개선</strong></p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 10: RESULTS vs BASELINES ===== -->
+  <div class="slide" id="slide-9">
+    <div class="glow-orb" style="width:260px;height:260px;background:var(--accent5);opacity:0.06;top:10px;right:-50px;"></div>
+    <div class="slide-number anim-1">09 &middot; 평가 결과 (2)</div>
+    <h2 class="anim-2">vs <span class="gradient-text-2">최신 베이스라인</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-red anim-3">
+      <h3>vs Aegaeon (다중 LLM 멀티플렉싱)</h3>
+      <table class="compare-table">
+        <tr><th>워크플로우</th><th>GPU</th><th>처리량</th><th>지연시간</th></tr>
+        <tr><td>Beam Search</td><td>4</td><td class="winner">7.3x &uarr;</td><td class="winner">14.1x &darr;</td></tr>
+        <tr><td>Beam Search</td><td>8</td><td class="winner">6.8x &uarr;</td><td class="winner">12.9x &darr;</td></tr>
+        <tr><td>RAG</td><td>4</td><td class="winner">2.5x &uarr;</td><td class="winner">3.4x &darr;</td></tr>
+        <tr><td>RAG</td><td>8</td><td class="winner">2.9x &uarr;</td><td class="winner">4.5x &darr;</td></tr>
+      </table>
+      <p style="font-size:clamp(0.68rem,1.2vw,0.8rem);color:var(--text-dim);margin-top:6px;">Aegaeon은 프리픽스 캐싱 미지원 &amp; 프리필 인스턴스 교체 오버헤드로 성능 저하</p>
+    </div>
+
+    <div class="card card-amber anim-4">
+      <h3>vs Ayo (에이전틱 워크플로우 최적화)</h3>
+      <table class="compare-table">
+        <tr><th>워크플로우</th><th>GPU</th><th>처리량</th></tr>
+        <tr><td>Beam Search</td><td>4</td><td class="winner">3.2x &uarr;</td></tr>
+        <tr><td>Beam Search</td><td>8</td><td class="winner">8.2x &uarr;</td></tr>
+        <tr><td>RAG</td><td>4</td><td class="winner">2.1x &uarr;</td></tr>
+        <tr><td>RAG</td><td>8</td><td class="winner">2.4x &uarr;</td></tr>
+      </table>
+      <p style="font-size:clamp(0.68rem,1.2vw,0.8rem);color:var(--text-dim);margin-top:6px;">Ayo는 요청 수준 스케줄링만 &mdash; 에이전틱 워크플로우에 불충분</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 11: ABLATION ===== -->
+  <div class="slide" id="slide-10">
+    <div class="glow-orb" style="width:240px;height:240px;background:var(--accent);opacity:0.07;bottom:40px;right:-50px;"></div>
+    <div class="slide-number anim-1">10 &middot; 분석</div>
+    <h2 class="anim-2"><span class="gradient-text">Ablation Study</span> &amp; 확장성</h2>
+    <div class="divider anim-2"></div>
+
+    <div class="two-col anim-3">
+      <div class="card card-accent">
+        <h3>RAG+Reranker (4 GPU)</h3>
+        <ul>
+          <li><strong>분수 GPU 공배치</strong>가 처리량의 가장 큰 기여자</li>
+          <li>두 최적화 비활성화 시 누적 성능 저하</li>
+        </ul>
+      </div>
+      <div class="card card-cyan">
+        <h3>Beam Search (4 GPU)</h3>
+        <ul class="list-cyan">
+          <li><strong>텐서 병렬성</strong>이 지연시간의 가장 큰 기여자</li>
+          <li>두 최적화가 시너지 효과</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-4">
+      <h3>스케줄러 확장성</h3>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent);font-size:clamp(1rem,2.2vw,1.6rem);">&lt;35초</div>
+          <div class="stat-label">5 LLM, 16 GPU<br>탐색 시간</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent2);font-size:clamp(1rem,2.2vw,1.6rem);">~70초</div>
+          <div class="stat-label">3 LLM, 128 GPU<br>탐색 시간</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--accent3);font-size:clamp(1rem,2.2vw,1.6rem);">~1초</div>
+          <div class="stat-label">3 LLM, 16 GPU<br>20 분수/GPU</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-5">
+      <h3>다중 워크플로우 동시 서빙</h3>
+      <p>RAG + Beam Search를 8 GPU에서 동시 서빙 &mdash; <strong>평등 복지(Egalitarian Welfare) 정책</strong>으로 워크플로우 간 자원 고갈 방지</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 12: KEY DIFFERENCES ===== -->
+  <div class="slide" id="slide-11">
+    <div class="glow-orb" style="width:260px;height:260px;background:var(--accent2);opacity:0.06;top:-20px;left:-50px;"></div>
+    <div class="slide-number anim-1">11 &middot; 차별점</div>
+    <h2 class="anim-2"><span class="gradient-text-3">기존 시스템과의 차이</span></h2>
+    <div class="divider anim-2"></div>
+
+    <div class="icon-block anim-3">
+      <div class="icon-circle" style="background:rgba(99,102,241,0.2);color:var(--accent-light);">K</div>
+      <div>
+        <h3>vs Kubernetes</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.92rem);">워크플로우 인식 GPU 할당, 지연시간-처리량 동시 최적화, 텐서 병렬성 지원 추가</p>
+      </div>
+    </div>
+
+    <div class="icon-block anim-4">
+      <div class="icon-circle" style="background:rgba(6,182,212,0.2);color:var(--accent2);">A</div>
+      <div>
+        <h3>vs Aegaeon</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.92rem);">프리픽스 캐싱 지원, 프리필 교체 오버헤드 없음, 워크플로우 수준 스케줄링</p>
+      </div>
+    </div>
+
+    <div class="icon-block anim-5">
+      <div class="icon-circle" style="background:rgba(245,158,11,0.2);color:var(--accent3);">Y</div>
+      <div>
+        <h3>vs Ayo</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.92rem);">다중 LLM 지원, 자동 GPU 할당, 처리량 최적화, 프로그래밍 모델 제약 없음</p>
+      </div>
+    </div>
+
+    <div class="card anim-6" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.08));">
+      <h3>Scepsy만의 강점</h3>
+      <div class="stat-grid">
+        <div class="stat-box" style="background:transparent;border:none;">
+          <span class="tag tag-indigo">동적 워크플로우</span>
+          <div class="stat-label" style="margin-top:6px;">정적 분석 불필요<br>트레이스 기반 접근</div>
+        </div>
+        <div class="stat-box" style="background:transparent;border:none;">
+          <span class="tag tag-cyan">프레임워크 무관</span>
+          <div class="stat-label" style="margin-top:6px;">LangChain, AutoGen<br>등 모두 지원</div>
+        </div>
+        <div class="stat-box" style="background:transparent;border:none;">
+          <span class="tag tag-green">자동 최적화</span>
+          <div class="stat-label" style="margin-top:6px;">사용자 개입 없이<br>최적 할당 탐색</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 13: LIMITATIONS ===== -->
+  <div class="slide" id="slide-12">
+    <div class="glow-orb" style="width:220px;height:220px;background:var(--accent5);opacity:0.06;top:20px;right:-40px;"></div>
+    <div class="slide-number anim-1">12 &middot; 한계 및 향후 연구</div>
+    <h2 class="anim-2"><span class="gradient-text-2">현재 한계</span>와 미래 방향</h2>
+    <div class="divider anim-2"></div>
+
+    <div class="card card-red anim-3">
+      <h3>LLM 간 병렬성</h3>
+      <p>파이프라인이 직렬 LLM을 가정합니다. 서로 다른 LLM으로의 팬아웃 시 부정확한 모델링이 발생할 수 있습니다.</p>
+      <p style="color:var(--accent4);font-size:clamp(0.72rem,1.3vw,0.85rem);margin-top:4px;"><strong>해결:</strong> 임계 경로 기여도를 별도 추적</p>
+    </div>
+
+    <div class="card card-amber anim-4">
+      <h3>이중 모달 부하 분포</h3>
+      <p>하나의 LLM이 여러 워크플로우나 역할에 재사용되면 이중 모달 분포가 발생합니다.</p>
+      <p style="color:var(--accent4);font-size:clamp(0.72rem,1.3vw,0.85rem);margin-top:4px;"><strong>해결:</strong> 사용 패턴별 트레이스 분류, 패턴별 파이프라인 구축</p>
+    </div>
+
+    <div class="card card-accent anim-5">
+      <h3>비-무시 도구 실행</h3>
+      <p>도구 실행이 수 밀리초 수준이라 가정하지만, 긴 모니터링 작업 등이 포함되면 지연시간을 지배할 수 있습니다.</p>
+      <p style="color:var(--accent4);font-size:clamp(0.72rem,1.3vw,0.85rem);margin-top:4px;"><strong>해결:</strong> 고정 지연시간 바이어스의 비-최적화 도구 단계 추가</p>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 14: CONCLUSION ===== -->
+  <div class="slide" id="slide-13">
+    <div class="glow-orb" style="width:300px;height:300px;background:var(--accent);opacity:0.08;bottom:-40px;right:-80px;"></div>
+    <div class="glow-orb" style="width:200px;height:200px;background:var(--accent4);opacity:0.06;top:30px;left:-40px;"></div>
+    <div class="spacer"></div>
+    <div class="slide-number anim-1">13 &middot; 결론</div>
+    <h2 class="anim-2" style="font-size:clamp(1.5rem,3.5vw,2.6rem);">
+      <span class="gradient-text">Scepsy</span>: 핵심 정리
+    </h2>
+    <div class="divider anim-2" style="margin:16px auto;"></div>
+
+    <div class="stat-grid anim-3">
+      <div class="stat-box" style="border:1px solid rgba(99,102,241,0.3);">
+        <div class="stat-value" style="color:var(--accent);">2.4x</div>
+        <div class="stat-label">최대 처리량 향상</div>
+      </div>
+      <div class="stat-box" style="border:1px solid rgba(6,182,212,0.3);">
+        <div class="stat-value" style="color:var(--accent2);">27x</div>
+        <div class="stat-label">최대 지연시간 개선</div>
+      </div>
+      <div class="stat-box" style="border:1px solid rgba(245,158,11,0.3);">
+        <div class="stat-value" style="color:var(--accent3);">8.2x</div>
+        <div class="stat-label">vs Ayo 처리량</div>
+      </div>
+      <div class="stat-box" style="border:1px solid rgba(16,185,129,0.3);">
+        <div class="stat-value" style="color:var(--accent4);">14.1x</div>
+        <div class="stat-label">vs Aegaeon 지연</div>
+      </div>
+    </div>
+
+    <div class="highlight-box anim-4" style="text-align:center;">
+      <p style="font-size:clamp(0.9rem,1.8vw,1.15rem);line-height:1.8;">
+        <strong>LLM 실행 시간의 상대적 안정성</strong>이라는 통찰을 기반으로,<br>
+        <strong>Aggregate LLM Pipeline</strong>을 구축하여<br>
+        복잡한 에이전틱 워크플로우를 효율적으로 서빙합니다.
+      </p>
+    </div>
+
+    <div class="anim-5" style="text-align:center;margin-top:10px;">
+      <span class="tag tag-indigo">분수 GPU 공유</span>
+      <span class="tag tag-cyan">텐서 병렬성</span>
+      <span class="tag tag-amber">토폴로지 인식 배치</span>
+      <span class="tag tag-green">프레임워크 무관</span>
+    </div>
+
+    <div class="anim-6" style="text-align:center;margin-top:18px;">
+      <p style="font-size:clamp(0.75rem,1.3vw,0.9rem);color:var(--text-dim);">
+        arXiv: 2604.15186 &middot; Python 2,525줄 &middot; 2026
+      </p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" aria-label="이전 슬라이드">&#9664;</button>
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">1 / 14</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" aria-label="다음 슬라이드">&#9654;</button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isTransitioning = false;
+
+  function updateSlide() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === current) s.classList.add('active');
+      else if (i < current) s.classList.add('prev');
+    });
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('progressText').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) {
+    if (isTransitioning) return;
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+    isTransitioning = true;
+    current = next;
+    updateSlide();
+    setTimeout(() => { isTransitioning = false; }, 500);
+  }
+
+  // Touch swipe
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      changeSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  updateSlide();
+</script>
+</body>
+</html>

@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CoopEval: 사회적 딜레마에서의 협력 유지 메커니즘 벤치마킹</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --highlight2: #f59e0b;
+    --success: #10b981;
+    --info: #3b82f6;
+    --subtle: #94a3b8;
+    --bg: #0f0f1a;
+    --card: rgba(255,255,255,0.05);
+    --card-border: rgba(255,255,255,0.08);
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .slide-container {
+    width: 100%; height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Backgrounds */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .slide-title-bg::before {
+    background: radial-gradient(ellipse at 30% 50%, rgba(233,69,96,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(59,130,246,0.1) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .slide-problem-bg::before {
+    background: radial-gradient(ellipse at 80% 20%, rgba(233,69,96,0.12) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .slide-method-bg::before {
+    background: radial-gradient(ellipse at 20% 80%, rgba(59,130,246,0.12) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .slide-result-bg::before {
+    background: radial-gradient(ellipse at 50% 50%, rgba(16,185,129,0.1) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .slide-conclusion-bg::before {
+    background: radial-gradient(ellipse at 50% 30%, rgba(245,158,11,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 80%, rgba(233,69,96,0.08) 0%, transparent 50%),
+                var(--bg);
+  }
+
+  /* Typography */
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p, li {
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .dim { color: var(--text-dim); }
+  .highlight { color: var(--highlight); font-weight: 700; }
+  .highlight2 { color: var(--highlight2); font-weight: 700; }
+  .success { color: var(--success); font-weight: 700; }
+  .info { color: var(--info); font-weight: 700; }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    font-weight: 500;
+    margin: 3px 4px;
+  }
+
+  .tag-red { background: rgba(233,69,96,0.2); color: #f87171; border: 1px solid rgba(233,69,96,0.3); }
+  .tag-blue { background: rgba(59,130,246,0.2); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+  .tag-green { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+  .tag-amber { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 8px 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card h3 { color: #fff; }
+
+  /* Bar chart */
+  .bar-chart {
+    margin: 16px 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 12px;
+  }
+
+  .bar-label {
+    min-width: 100px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 32px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 700;
+    color: #fff;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    width: 0;
+  }
+
+  .slide.active .bar-fill { width: var(--w); }
+
+  .bar-fill.red { background: linear-gradient(90deg, #e94560, #f87171); }
+  .bar-fill.blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .bar-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
+  .bar-fill.amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .bar-fill.purple { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+
+  /* Payoff matrix */
+  .matrix {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    gap: 2px;
+    margin: 16px auto;
+    max-width: 360px;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+  }
+
+  .matrix-cell {
+    padding: 10px 16px;
+    text-align: center;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+  }
+
+  .matrix-header {
+    font-weight: 700;
+    background: rgba(59,130,246,0.15);
+    color: #93c5fd;
+  }
+
+  .matrix-row-header {
+    font-weight: 700;
+    background: rgba(233,69,96,0.15);
+    color: #f87171;
+  }
+
+  .matrix-highlight {
+    background: rgba(16,185,129,0.15);
+    color: #6ee7b7;
+    font-weight: 700;
+  }
+
+  /* Comparison table */
+  .comp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    margin: 12px 0;
+    font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+  }
+
+  .comp-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--card-border);
+    font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+  }
+
+  .comp-table td {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .comp-table tr td:first-child {
+    border-radius: 8px 0 0 8px;
+    font-weight: 600;
+  }
+
+  .comp-table tr td:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  .flow-item {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    text-align: center;
+  }
+
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--text-dim);
+  }
+
+  /* Stat boxes */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 20px 16px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+  }
+
+  .stat-number {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.9rem);
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  /* Evo chart */
+  .evo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+
+  .evo-label {
+    width: 80px;
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .evo-before, .evo-after {
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    transition: width 1s ease;
+  }
+
+  .evo-arrow-small {
+    font-size: 1.2rem;
+    color: var(--success);
+    flex-shrink: 0;
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(15,15,26,0.9);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--card-border);
+    z-index: 100;
+  }
+
+  .nav-btn {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px 20px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 12px;
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-btn:active {
+    transform: scale(0.95);
+    background: rgba(255,255,255,0.1);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .progress-bar {
+    flex: 1;
+    margin: 0 16px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--highlight), var(--info));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .slide-counter {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* Section indicator */
+  .section-label {
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  /* Lists */
+  ul { list-style: none; padding: 0; }
+  ul li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+  }
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 4px;
+    color: var(--highlight);
+    font-weight: 700;
+  }
+
+  .authors {
+    font-size: clamp(0.8rem, 1.6vw, 1.05rem);
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--highlight), var(--info));
+    border-radius: 3px;
+    margin: 16px 0;
+  }
+
+  .emoji-big { font-size: clamp(2rem, 5vw, 4rem); }
+
+  .insight-box {
+    border-left: 3px solid var(--highlight);
+    padding: 16px 20px;
+    background: rgba(233,69,96,0.06);
+    border-radius: 0 12px 12px 0;
+    margin: 12px 0;
+  }
+
+  .insight-box.green {
+    border-left-color: var(--success);
+    background: rgba(16,185,129,0.06);
+  }
+
+  .insight-box.blue {
+    border-left-color: var(--info);
+    background: rgba(59,130,246,0.06);
+  }
+
+  /* Swipe hint animation */
+  .swipe-hint {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    animation: fadeInOut 4s ease forwards;
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  @keyframes fadeInOut {
+    0%,100% { opacity: 0; }
+    20%,80% { opacity: 0.7; }
+  }
+
+  /* Tablet */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 40px 90px; }
+    .card-grid-2, .card-grid-3, .card-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .card { padding: 18px; }
+    .bar-label { min-width: 80px; }
+    .stat-box { min-width: 100px; padding: 16px 12px; }
+    .matrix { max-width: 300px; }
+    .matrix-cell { padding: 8px 10px; }
+    .flow-item { padding: 10px 14px; }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .slide { padding: 24px 20px 90px; justify-content: flex-start; padding-top: 32px; }
+    .card-grid-2, .card-grid-3, .card-grid-4 {
+      grid-template-columns: 1fr;
+    }
+    .card { padding: 16px; margin: 4px 0; }
+    h1 { margin-bottom: 12px; }
+    h2 { margin-bottom: 10px; }
+    .bar-label { min-width: 60px; font-size: 0.7rem; }
+    .bar-track { height: 26px; }
+    .bar-fill { padding-right: 6px; font-size: 0.65rem; }
+    .stat-row { gap: 8px; }
+    .stat-box { min-width: 80px; padding: 14px 8px; }
+    .nav { padding: 10px 16px; }
+    .nav-btn { min-width: 44px; min-height: 44px; padding: 8px 14px; font-size: 0.85rem; }
+    .flow { gap: 4px; }
+    .flow-item { padding: 8px 12px; font-size: 0.75rem; }
+    .flow-arrow { font-size: 1rem; }
+    .comp-table th, .comp-table td { padding: 6px 8px; font-size: 0.7rem; }
+    .matrix { max-width: 260px; }
+    .matrix-cell { padding: 6px 8px; font-size: 0.7rem; }
+    .section-label { letter-spacing: 2px; margin-bottom: 8px; }
+    .divider { margin: 10px 0; }
+    .authors { margin-bottom: 12px; }
+    .insight-box { padding: 12px 14px; }
+  }
+
+  /* Small mobile */
+  @media (max-width: 320px) {
+    .slide { padding: 16px 14px 85px; padding-top: 24px; }
+    .card { padding: 12px; border-radius: 10px; }
+    .bar-label { min-width: 50px; }
+    .stat-box { padding: 10px 6px; }
+    .nav { padding: 8px 10px; }
+    .nav-btn { padding: 6px 10px; font-size: 0.8rem; }
+    .comp-table th, .comp-table td { padding: 5px 6px; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- Slide 1: Title -->
+<div class="slide slide-title-bg active" data-index="0">
+  <div class="section-label">arXiv:2604.15267</div>
+  <h1>CoopEval: 사회적 딜레마에서<br>LLM 에이전트의 <span class="highlight">협력 유지</span><br>메커니즘 벤치마킹</h1>
+  <div class="divider"></div>
+  <p class="subtitle">강력한 추론 능력을 가진 LLM일수록 오히려 <span class="highlight">덜 협력적</span>으로 행동하는 문제를 해결하기 위한 게임이론 기반 메커니즘 비교 연구</p>
+  <div class="authors">
+    Emanuel Tewolde, Xiao Zhang, David Guzman Piedrahita,<br>Vincent Conitzer, Zhijing Jin
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;">
+    <span class="tag tag-red">AI 안전성</span>
+    <span class="tag tag-blue">게임이론</span>
+    <span class="tag tag-green">다중 에이전트</span>
+    <span class="tag tag-amber">벤치마크</span>
+  </div>
+</div>
+
+<!-- Slide 2: Problem -->
+<div class="slide slide-problem-bg" data-index="1">
+  <div class="section-label">문제 제기</div>
+  <h2>추론 능력이 강한 LLM은<br><span class="highlight">왜 협력하지 않는가?</span></h2>
+  <div class="divider"></div>
+  <div class="insight-box">
+    <p>최신 LLM들은 단발성(single-shot) 사회적 딜레마에서 <span class="highlight">100% 배신</span>을 선택합니다. 추론 능력이 강할수록 오히려 협력률이 떨어지는 역설이 관찰됩니다.</p>
+  </div>
+  <div class="stat-row" style="margin-top:20px;">
+    <div class="stat-box">
+      <div class="stat-number" style="color:var(--highlight);">7.2%</div>
+      <div class="stat-label">기본 협력률<br>(메커니즘 없음)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" style="color:var(--info);">50,000+</div>
+      <div class="stat-label">총 의사결정<br>수집량</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" style="color:var(--highlight2);">6</div>
+      <div class="stat-label">테스트된<br>LLM 모델 수</div>
+    </div>
+  </div>
+  <p class="dim" style="margin-top:16px;font-size:clamp(0.75rem,1.4vw,0.9rem);">* GPT-4o만 유일하게 ~50% 협력 (하지만 최신 모델 아님)</p>
+</div>
+
+<!-- Slide 3: Games -->
+<div class="slide slide-method-bg" data-index="2">
+  <div class="section-label">실험 설계</div>
+  <h2>4가지 <span class="info">사회적 딜레마</span> 게임</h2>
+  <div class="divider"></div>
+  <div class="card-grid card-grid-4">
+    <div class="card">
+      <span class="card-icon">🔒</span>
+      <h3>죄수의 딜레마</h3>
+      <p style="font-size:clamp(0.75rem,1.4vw,0.9rem);">2인, 2행동. 협력 비용 11, 상대 이득 22. 상호 협력(2,2) vs 상호 배신(1,1)</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">✈️</span>
+      <h3>여행자의 딜레마</h3>
+      <p style="font-size:clamp(0.75rem,1.4vw,0.9rem);">2인, k행동. 가격 $2~$5 설정. 최저가 경쟁의 "바닥 치닫기" 구조</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏛️</span>
+      <h3>공공재 게임</h3>
+      <p style="font-size:clamp(0.75rem,1.4vw,0.9rem);">3인, 기여 결정. 공동 풀에 배수(α=1.5) 적용 후 균등 분배. 무임승차 유혹</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🤝</span>
+      <h3>신뢰 게임</h3>
+      <p style="font-size:clamp(0.75rem,1.4vw,0.9rem);">2인, 비대칭. P1이 $4 위탁 → 4배 증식 → P2의 분배 결정. 상호 신뢰 필요</p>
+    </div>
+  </div>
+  <div class="insight-box blue" style="margin-top:16px;">
+    <p>각 게임은 <span class="info">서로 다른 협력 구성요소</span>를 테스트합니다: 직접 호혜, 가격 경쟁, 집단 행동, 비대칭 신뢰</p>
+  </div>
+</div>
+
+<!-- Slide 4: Prisoner's Dilemma Matrix -->
+<div class="slide slide-method-bg" data-index="3">
+  <div class="section-label">핵심 게임</div>
+  <h2>죄수의 딜레마 <span class="info">보수 행렬</span></h2>
+  <div class="divider"></div>
+  <div style="text-align:center;">
+    <div class="matrix">
+      <div class="matrix-cell" style="background:transparent;"></div>
+      <div class="matrix-cell matrix-header">협력 (C)</div>
+      <div class="matrix-cell matrix-header">배신 (D)</div>
+      <div class="matrix-cell matrix-row-header">협력 (C)</div>
+      <div class="matrix-cell matrix-highlight">2 , 2</div>
+      <div class="matrix-cell">0 , 3</div>
+      <div class="matrix-cell matrix-row-header">배신 (D)</div>
+      <div class="matrix-cell">3 , 0</div>
+      <div class="matrix-cell" style="background:rgba(233,69,96,0.15);color:#f87171;">1 , 1</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <p style="text-align:center;">내시 균형: <span class="highlight">(배신, 배신) = (1,1)</span></p>
+    <p style="text-align:center;margin-top:6px;">사회적 최적: <span class="success">(협력, 협력) = (2,2)</span></p>
+  </div>
+  <div class="insight-box" style="margin-top:20px;">
+    <p>합리적 개인에게 배신은 <span class="highlight">우월 전략</span>입니다. 하지만 모두가 배신하면 모두가 손해 — 이것이 사회적 딜레마의 본질입니다.</p>
+  </div>
+</div>
+
+<!-- Slide 5: Mechanisms -->
+<div class="slide slide-method-bg" data-index="4">
+  <div class="section-label">핵심 방법론</div>
+  <h2>4가지 <span class="info">협력 유지 메커니즘</span></h2>
+  <div class="divider"></div>
+  <div class="card-grid card-grid-4">
+    <div class="card" style="border-left:3px solid #e94560;">
+      <h3 style="color:#f87171;">🔄 반복 (Repetition)</h3>
+      <p style="font-size:clamp(0.73rem,1.3vw,0.88rem);">동일 상대와 반복 플레이. 과거 행동 관찰 가능. 지속 확률 δ=0.8, 히스토리 창 k=3</p>
+    </div>
+    <div class="card" style="border-left:3px solid #3b82f6;">
+      <h3 style="color:#93c5fd;">⭐ 평판 (Reputation)</h3>
+      <p style="font-size:clamp(0.73rem,1.3vw,0.88rem);">매 라운드 새 상대와 매칭. 상대의 과거 기록 열람 가능. 1차/고차 정보 구분</p>
+    </div>
+    <div class="card" style="border-left:3px solid #10b981;">
+      <h3 style="color:#6ee7b7;">⚖️ 중재 (Mediation)</h3>
+      <p style="font-size:clamp(0.73rem,1.3vw,0.88rem);">신뢰할 수 있는 중재자에게 위임. 투표로 중재 전략 선택. 조건부 협력 실현</p>
+    </div>
+    <div class="card" style="border-left:3px solid #f59e0b;">
+      <h3 style="color:#fcd34d;">📜 계약 (Contract)</h3>
+      <p style="font-size:clamp(0.73rem,1.3vw,0.88rem);">결과 조건부 지불 이전 약정. 제로섬 이전으로 협력 비용 보상. 투표로 계약 선택</p>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:20px;">
+    <div class="flow-item" style="background:rgba(233,69,96,0.2);color:#f87171;">단순</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="background:rgba(59,130,246,0.2);color:#93c5fd;">간접</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">제도적</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-item" style="background:rgba(245,158,11,0.2);color:#fcd34d;">구속력</div>
+  </div>
+</div>
+
+<!-- Slide 6: Models -->
+<div class="slide slide-method-bg" data-index="5">
+  <div class="section-label">실험 대상</div>
+  <h2>테스트된 <span class="info">6개 LLM 모델</span></h2>
+  <div class="divider"></div>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>모델</th>
+        <th>제공사</th>
+        <th>추론</th>
+        <th>특징</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:#6ee7b7;">Gemini-R</td>
+        <td>Google</td>
+        <td><span class="tag tag-green" style="margin:0;font-size:0.7rem;">활성화</span></td>
+        <td>Gemini 3 Flash + 추론</td>
+      </tr>
+      <tr>
+        <td style="color:#6ee7b7;">Gemini-B</td>
+        <td>Google</td>
+        <td><span class="tag tag-red" style="margin:0;font-size:0.7rem;">비활성</span></td>
+        <td>Gemini 3 Flash 기본</td>
+      </tr>
+      <tr>
+        <td style="color:#93c5fd;">Claude</td>
+        <td>Anthropic</td>
+        <td><span class="tag tag-amber" style="margin:0;font-size:0.7rem;">낮음</span></td>
+        <td>Sonnet 4.5</td>
+      </tr>
+      <tr>
+        <td style="color:#93c5fd;">GPT-5.2</td>
+        <td>OpenAI</td>
+        <td><span class="tag tag-amber" style="margin:0;font-size:0.7rem;">낮음</span></td>
+        <td>전략적 영향 고려 최저</td>
+      </tr>
+      <tr>
+        <td style="color:#fcd34d;">GPT-4o</td>
+        <td>OpenAI</td>
+        <td><span class="tag tag-red" style="margin:0;font-size:0.7rem;">비활성</span></td>
+        <td>유일하게 기본 협력 ~50%</td>
+      </tr>
+      <tr>
+        <td style="color:#fcd34d;">Qwen-30B</td>
+        <td>Alibaba</td>
+        <td><span class="tag tag-green" style="margin:0;font-size:0.7rem;">활성화</span></td>
+        <td>저비용, 성능 최하위</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="dim" style="margin-top:12px;font-size:clamp(0.72rem,1.3vw,0.85rem);">모든 모델은 확률 분포를 제출 가능 (LLM 무작위화 한계 보완). 온도=1, CoT 프롬프팅 사용.</p>
+</div>
+
+<!-- Slide 7: Main Results -->
+<div class="slide slide-result-bg" data-index="6">
+  <div class="section-label">핵심 결과</div>
+  <h2>메커니즘별 <span class="success">복지 회복률</span></h2>
+  <div class="divider"></div>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label" style="color:#f87171;">메커니즘 없음</div>
+      <div class="bar-track">
+        <div class="bar-fill red" style="--w:7.2%;">7.2%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#a78bfa;">평판+</div>
+      <div class="bar-track">
+        <div class="bar-fill purple" style="--w:22.7%;">22.7%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#a78bfa;">평판-</div>
+      <div class="bar-track">
+        <div class="bar-fill purple" style="--w:32.1%;">32.1%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#60a5fa;">반복</div>
+      <div class="bar-track">
+        <div class="bar-fill blue" style="--w:58.7%;">58.7%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#34d399;">중재</div>
+      <div class="bar-track">
+        <div class="bar-fill green" style="--w:69.5%;">69.5%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#fbbf24;">계약</div>
+      <div class="bar-track">
+        <div class="bar-fill amber" style="--w:80.1%;">80.1%</div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-box green">
+    <p><span class="success">계약 메커니즘</span>이 80.1%로 가장 효과적이며, <span class="success">중재</span>(69.5%)가 그 뒤를 이었습니다. 반면 평판 시스템은 가장 낮은 효과를 보였습니다.</p>
+  </div>
+</div>
+
+<!-- Slide 8: Model Performance -->
+<div class="slide slide-result-bg" data-index="7">
+  <div class="section-label">모델별 비교</div>
+  <h2>메커니즘별 <span class="success">모델 성능</span></h2>
+  <div class="divider"></div>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>모델</th>
+        <th>반복</th>
+        <th>평판-</th>
+        <th>중재</th>
+        <th>계약</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:#6ee7b7;">Gemini-R</td>
+        <td>0.627</td>
+        <td>—</td>
+        <td style="color:#6ee7b7;">0.868</td>
+        <td style="color:#6ee7b7;">1.055</td>
+      </tr>
+      <tr>
+        <td style="color:#6ee7b7;">Gemini-B</td>
+        <td>—</td>
+        <td>—</td>
+        <td style="color:#6ee7b7;">0.853</td>
+        <td style="color:#fcd34d;font-weight:700;">1.138</td>
+      </tr>
+      <tr>
+        <td style="color:#93c5fd;">Claude</td>
+        <td>—</td>
+        <td>0.375</td>
+        <td style="color:#6ee7b7;">0.863</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td style="color:#93c5fd;">GPT-5.2</td>
+        <td>0.588</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td style="color:#fcd34d;">Qwen-30B</td>
+        <td>0.535</td>
+        <td>0.399</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="dim" style="margin-top:8px;font-size:clamp(0.7rem,1.3vw,0.85rem);">정규화 0-1 척도 (1=완전 협력). 1 초과는 사회적 최적 이상의 결과.</p>
+  <div class="insight-box green" style="margin-top:12px;">
+    <p><span class="success">Gemini 3 Flash</span> 계열이 전반적으로 최고 성능. <span class="highlight">Gemini-B의 계약 점수 1.138</span>은 사회적 최적을 초과한 결과입니다.</p>
+  </div>
+</div>
+
+<!-- Slide 9: Mechanism Deep Dive -->
+<div class="slide slide-result-bg" data-index="8">
+  <div class="section-label">심층 분석</div>
+  <h2>각 메커니즘의 <span class="success">강점과 한계</span></h2>
+  <div class="divider"></div>
+  <div class="card-grid card-grid-4">
+    <div class="card" style="border-top:3px solid #e94560;">
+      <h3 style="color:#f87171;">반복</h3>
+      <ul>
+        <li>동일 상대 시 <span class="success">효과적</span></li>
+        <li>상대가 바뀌면 협력 <span class="highlight">급감</span></li>
+        <li>δ=0.8, 히스토리 k=3</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #8b5cf6;">
+      <h3 style="color:#a78bfa;">평판</h3>
+      <ul>
+        <li><span class="highlight">가장 비효과적</span> (7-23%)</li>
+        <li>고차 정보가 오히려 해로움</li>
+        <li>첫 라운드 50-100% 무임승차</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #10b981;">
+      <h3 style="color:#6ee7b7;">중재</h3>
+      <ul>
+        <li>70-90% 투표 합의 달성</li>
+        <li>위임 시 80-89% 내시균형</li>
+        <li>여행자/공공재에서 22%↓</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #f59e0b;">
+      <h3 style="color:#fcd34d;">계약</h3>
+      <ul>
+        <li><span class="success">최고 효과 (80.1%)</span></li>
+        <li>공공재 94% 약우월 협력</li>
+        <li>신뢰게임에서 50-67%</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Evolutionary Dynamics -->
+<div class="slide slide-result-bg" data-index="9">
+  <div class="section-label">진화적 압력</div>
+  <h2>진화 최적화 후 <span class="success">협력 적합도</span></h2>
+  <div class="divider"></div>
+  <p style="margin-bottom:16px;font-size:clamp(0.8rem,1.6vw,1rem);">복제자 동역학(Replicator Dynamics)으로 1000단계 진화 시뮬레이션 후 적합도 측정:</p>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label" style="color:#f87171;">메커니즘 없음</div>
+      <div class="bar-track">
+        <div class="bar-fill red" style="--w:2.1%;">2.1%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#60a5fa;">반복</div>
+      <div class="bar-track">
+        <div class="bar-fill blue" style="--w:99.2%;">99.2%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#fbbf24;">계약</div>
+      <div class="bar-track">
+        <div class="bar-fill amber" style="--w:99.9%;">99.9%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#34d399;">중재</div>
+      <div class="bar-track">
+        <div class="bar-fill green" style="--w:100%;">100%</div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-box green" style="margin-top:16px;">
+    <p>진화적 선택 압력 하에서 메커니즘 있는 경우 협력이 <span class="success">90-100%</span>까지 상승합니다. 메커니즘 없이는 오히려 <span class="highlight">2.1%로 하락</span>합니다. 제도적 설계가 AI 협력의 핵심임을 시사합니다.</p>
+  </div>
+</div>
+
+<!-- Slide 11: Decision Justification -->
+<div class="slide slide-problem-bg" data-index="10">
+  <div class="section-label">의사결정 분석</div>
+  <h2>LLM의 <span class="highlight">추론 패턴</span> 분석</h2>
+  <div class="divider"></div>
+  <p style="margin-bottom:16px;">LLM들이 의사결정 시 가장 빈번하게 사용한 추론 카테고리:</p>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">개인 효용 극대화</div>
+      <div class="bar-track">
+        <div class="bar-fill red" style="--w:92%;">지배적</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">전략적 균형</div>
+      <div class="bar-track">
+        <div class="bar-fill blue" style="--w:65%;">2위</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">전략적 영향</div>
+      <div class="bar-track">
+        <div class="bar-fill purple" style="--w:40%;">반복/평판에서</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">상대 불확실성</div>
+      <div class="bar-track">
+        <div class="bar-fill amber" style="--w:58%;">평판 58%</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">호혜성</div>
+      <div class="bar-track">
+        <div class="bar-fill green" style="--w:20%;">반복에서만</div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-box" style="margin-top:12px;">
+    <p>LLM들은 압도적으로 <span class="highlight">개인 효용 극대화</span>에 집중하며, 사회적 규범이나 불평등 회피 같은 요인은 거의 고려하지 않았습니다.</p>
+  </div>
+</div>
+
+<!-- Slide 12: Theorem -->
+<div class="slide slide-method-bg" data-index="11">
+  <div class="section-label">이론적 기초</div>
+  <h2><span class="info">통합 정리</span> (Theorem 1)</h2>
+  <div class="divider"></div>
+  <div class="card" style="border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.06);">
+    <p style="font-size:clamp(0.85rem,1.7vw,1.1rem);line-height:1.8;">
+      "각 메커니즘(중재, 계약, 반복, 평판+)에 대해, 모든 정규형 게임에서, 파레토 우월한 행동 프로필에 의해 지배되는 모든 내시 균형은 — <span class="info">부분게임 완전균형(SPE)</span>에서 해당 우월 보수를 달성할 수 있다."
+    </p>
+  </div>
+  <div style="margin-top:20px;">
+    <h3 style="color:var(--highlight);">중요한 한계</h3>
+    <div class="insight-box" style="margin-top:8px;">
+      <p>이 정리는 <span class="highlight">나쁜 균형을 배제하지 않습니다</span>. 무조건 배신도 여전히 부분게임 완전균형으로 존재합니다. 이론적으로 가능한 것과 LLM이 실제로 달성하는 것 사이에는 상당한 격차가 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 13: Key Findings Summary -->
+<div class="slide slide-conclusion-bg" data-index="12">
+  <div class="section-label">주요 발견</div>
+  <h2>5가지 <span class="highlight2">핵심 발견</span></h2>
+  <div class="divider"></div>
+  <div class="card" style="margin-bottom:10px;border-left:3px solid #e94560;">
+    <p><span class="highlight">1.</span> 최신 LLM들은 단발성 사회적 딜레마에서 <span class="highlight">일관되게 배신</span>을 선택합니다.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px;border-left:3px solid #f59e0b;">
+    <p><span class="highlight2">2.</span> 메커니즘 효과는 <span class="highlight2">23%에서 80%까지</span> 극적인 차이를 보입니다.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px;border-left:3px solid #10b981;">
+    <p><span class="success">3.</span> <span class="success">계약과 중재</span>가 가장 효과적이며, 평판 시스템은 가장 비효과적입니다.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px;border-left:3px solid #3b82f6;">
+    <p><span class="info">4.</span> 진화적 선택 압력 하에서 메커니즘의 효과가 <span class="info">90-100%까지 극대화</span>됩니다.</p>
+  </div>
+  <div class="card" style="border-left:3px solid #8b5cf6;">
+    <p style="color:#a78bfa;"><strong>5.</strong></span> 평판의 고차 정보가 오히려 협력을 <span style="color:#a78bfa;">저해</span>하는 반직관적 결과가 관찰되었습니다.</p>
+  </div>
+</div>
+
+<!-- Slide 14: Implications -->
+<div class="slide slide-conclusion-bg" data-index="13">
+  <div class="section-label">시사점</div>
+  <h2>AI 안전성을 위한 <span class="highlight2">함의</span></h2>
+  <div class="divider"></div>
+  <div class="card-grid" style="grid-template-columns:1fr;">
+    <div class="card" style="background:rgba(233,69,96,0.06);border:1px solid rgba(233,69,96,0.2);">
+      <h3 style="color:#f87171;">⚠️ 경고</h3>
+      <p>추론 능력 향상이 자동으로 협력 행동으로 이어지지 않습니다. 더 강력한 LLM은 더 효과적으로 배신합니다.</p>
+    </div>
+    <div class="card" style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);">
+      <h3 style="color:#6ee7b7;">✅ 해결책</h3>
+      <p>게임이론적 메커니즘 설계(특히 계약과 중재)를 통해 LLM 에이전트 간 협력을 구조적으로 유도할 수 있습니다.</p>
+    </div>
+    <div class="card" style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);">
+      <h3 style="color:#93c5fd;">🔮 미래 방향</h3>
+      <p>다중 에이전트 AI 시스템의 안전한 배치를 위해, 제도적 메커니즘 설계가 필수적입니다. "단순한 전략"이 이론적으로는 충분하지만, LLM 구현에는 복잡성 장벽이 존재합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 15: End -->
+<div class="slide slide-title-bg" data-index="14">
+  <div style="text-align:center;">
+    <div class="emoji-big" style="margin-bottom:20px;">🤖🤝🤖</div>
+    <h1 style="text-align:center;">감사합니다</h1>
+    <div class="divider" style="margin:20px auto;"></div>
+    <p class="subtitle" style="text-align:center;">"제도적 설계를 통해<br>AI 에이전트의 협력을 유도할 수 있다"</p>
+    <div style="margin-top:24px;">
+      <span class="tag tag-blue">arXiv:2604.15267</span>
+      <span class="tag tag-amber">CoopEval</span>
+    </div>
+    <p class="dim" style="margin-top:24px;font-size:clamp(0.7rem,1.3vw,0.85rem);">
+      Tewolde, Zhang, Piedrahita, Conitzer, Jin
+    </p>
+  </div>
+</div>
+
+</div><!-- slide-container -->
+
+<!-- Swipe hint -->
+<div class="swipe-hint" id="swipeHint">← 스와이프하거나 버튼을 눌러 이동 →</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>◀ 이전</button>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="slide-counter" id="slideCounter">1 / 15</span>
+  <button class="nav-btn" id="nextBtn" onclick="nextSlide()">다음 ▶</button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function goToSlide(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit-left');
+    setTimeout(() => slides[current === 0 && n > 0 ? 0 : current].classList.remove('exit-left'), 500);
+
+    const prev = current;
+    current = n;
+
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i === current) s.classList.add('active');
+    });
+
+    // Reset scroll
+    slides[current].scrollTop = 0;
+
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() { goToSlide(current + 1); }
+  function prevSlide() { goToSlide(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe
+  let touchStartX = 0, touchStartY = 0, isSwiping = false;
+  const container = document.getElementById('slideContainer');
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = true;
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    if (!isSwiping) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) nextSlide();
+      else prevSlide();
+    }
+    isSwiping = false;
+  }, { passive: true });
+
+  // Init
+  goToSlide(0);
+</script>
+
+</body>
+</html>
