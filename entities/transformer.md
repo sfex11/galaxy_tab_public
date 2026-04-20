@@ -58,3 +58,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-04-18-how-do-llms-and-vlms-understand-viewpoint-rotation.md]]
 
 - [[sources/2026-04-19-how-do-llms-and-vlms-understand-viewpoint-rotation.md]]
+
+- [[sources/2026-04-20-how-do-llms-and-vlms-understand-viewpoint-rotation.md]]

@@ -308,3 +308,27 @@
 ## [2026-04-19 08:30] ingest | Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
 
 ## [2026-04-19 08:30] ingest | From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning
+
+## [2026-04-20 08:00] llm-ingest | 0편 분석, 엔티티 15개, 개념 340개
+
+## [2026-04-20 08:32] ingest | MM-WebAgent: A Hierarchical Multimodal Web Agent for Webpage Generation
+
+## [2026-04-20 08:32] ingest | Generalization in LLM Problem Solving: The Case of the Shortest Path
+
+## [2026-04-20 08:32] ingest | Diagnosing LLM Judge Reliability: Conformal Prediction Sets and Transitivity Violations
+
+## [2026-04-20 08:32] ingest | How Do LLMs and VLMs Understand Viewpoint Rotation Without Vision? An Interpretability Study
+
+## [2026-04-20 08:32] ingest | CoopEval: Benchmarking Cooperation-Sustaining Mechanisms and LLM Agents in Social Dilemmas
+
+## [2026-04-20 08:32] ingest | Agentic Microphysics: A Manifesto for Generative AI Safety
+
+## [2026-04-20 08:32] ingest | Blue Data Intelligence Layer: Streaming Data and Agents for Multi-source Multi-modal Data-Centric Applications
+
+## [2026-04-20 08:32] ingest | AD4AD: Benchmarking Visual Anomaly Detection Models for Safer Autonomous Driving
+
+## [2026-04-20 08:32] ingest | RadAgent: A tool-using AI agent for stepwise interpretation of chest computed tomography
+
+## [2026-04-20 08:32] ingest | Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
+
+## [2026-04-20 08:32] ingest | From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning
