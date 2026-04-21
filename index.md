@@ -171,3 +171,20 @@
 - [[sources/2026-04-20-radagent-a-tool-using-ai-agent-for-stepwise-interp.md]] - RadAgent: A tool-using AI agent for stepwise interpretation of chest computed tomography
 - [[sources/2026-04-20-scepsy-serving-agentic-workflows-using-aggregate-l.md]] - Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
 - [[sources/2026-04-20-from-tokens-to-steps-verification-aware-speculativ.md]] - From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning
+- [[sources/2026-04-21-finecog-nav-integrating-fine-grained-cognitive-mod.md]] - FineCog-Nav: Integrating Fine-grained Cognitive Modules for Zero-shot Multimodal UAV Navigation
+- [[sources/2026-04-21-asmr-bench-auditing-for-sabotage-in-ml-research.md]] - ASMR-Bench: Auditing for Sabotage in ML Research
+- [[sources/2026-04-21-using-large-language-models-and-knowledge-graphs-t.md]] - Using Large Language Models and Knowledge Graphs to Improve the Interpretability of Machine Learning Models in Manufacturing
+- [[sources/2026-04-21-evaluating-the-progression-of-large-language-model.md]] - Evaluating the Progression of Large Language Model Capabilities for Small-Molecule Drug Design
+- [[sources/2026-04-21-learning-to-reason-with-insight-for-informal-theor.md]] - Learning to Reason with Insight for Informal Theorem Proving
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-04-21-no-universal-courtesy-a-cross-linguistic-multi-mod.md]] - No Universal Courtesy: A Cross-Linguistic, Multi-Model Study of Politeness Effects on LLMs Using the PLUM Corpus
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-04-21-from-benchmarking-to-reasoning-a-dual-aspect-large.md]] - From Benchmarking to Reasoning: A Dual-Aspect, Large-Scale Evaluation of LLMs on Vietnamese Legal Text
+- [[sources/2026-04-21-semantic-area-graph-reasoning-for-multi-robot-lang.md]] - Semantic Area Graph Reasoning for Multi-Robot Language-Guided Search
+- [[sources/2026-04-21-swannlp-at-semeval-2026-task-5-an-llm-based-framew.md]] - SwanNLP at SemEval-2026 Task 5: An LLM-based Framework for Plausibility Scoring in Narrative Word Sense Disambiguation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-21-beyond-distribution-sharpening-the-importance-of-t.md]] - Beyond Distribution Sharpening: The Importance of Task Rewards
+- [[sources/2026-04-21-investigating-conversational-agents-to-support-sec.md]] - Investigating Conversational Agents to Support Secondary School Students Learning CSP
+- [[sources/2026-04-21-chemgraph-xanes-an-agentic-framework-for-xanes-sim.md]] - ChemGraph-XANES: An Agentic Framework for XANES Simulation and Analysis
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-21-march-multi-agent-radiology-clinical-hierarchy-for.md]] - MARCH: Multi-Agent Radiology Clinical Hierarchy for CT Report Generation

@@ -332,3 +332,29 @@
 ## [2026-04-20 08:32] ingest | Scepsy: Serving Agentic Workflows Using Aggregate LLM Pipelines
 
 ## [2026-04-20 08:32] ingest | From Tokens to Steps: Verification-Aware Speculative Decoding for Efficient Multi-Step Reasoning
+
+## [2026-04-21 08:53] ingest | FineCog-Nav: Integrating Fine-grained Cognitive Modules for Zero-shot Multimodal UAV Navigation
+
+## [2026-04-21 08:53] ingest | ASMR-Bench: Auditing for Sabotage in ML Research
+
+## [2026-04-21 08:53] ingest | Using Large Language Models and Knowledge Graphs to Improve the Interpretability of Machine Learning Models in Manufacturing
+
+## [2026-04-21 08:53] ingest | Evaluating the Progression of Large Language Model Capabilities for Small-Molecule Drug Design
+
+## [2026-04-21 08:53] ingest | Learning to Reason with Insight for Informal Theorem Proving
+
+## [2026-04-21 08:53] ingest | No Universal Courtesy: A Cross-Linguistic, Multi-Model Study of Politeness Effects on LLMs Using the PLUM Corpus
+
+## [2026-04-21 08:53] ingest | From Benchmarking to Reasoning: A Dual-Aspect, Large-Scale Evaluation of LLMs on Vietnamese Legal Text
+
+## [2026-04-21 08:53] ingest | Semantic Area Graph Reasoning for Multi-Robot Language-Guided Search
+
+## [2026-04-21 08:53] ingest | SwanNLP at SemEval-2026 Task 5: An LLM-based Framework for Plausibility Scoring in Narrative Word Sense Disambiguation
+
+## [2026-04-21 08:53] ingest | Beyond Distribution Sharpening: The Importance of Task Rewards
+
+## [2026-04-21 08:53] ingest | Investigating Conversational Agents to Support Secondary School Students Learning CSP
+
+## [2026-04-21 08:53] ingest | ChemGraph-XANES: An Agentic Framework for XANES Simulation and Analysis
+
+## [2026-04-21 08:53] ingest | MARCH: Multi-Agent Radiology Clinical Hierarchy for CT Report Generation
