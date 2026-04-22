@@ -171,3 +171,7 @@ _자동 생성됨_
 - [[sources/2026-04-17-from-pyx-to-py-investigating-reinforcement-learnin.md]]
 
 - [[sources/2026-04-21-beyond-distribution-sharpening-the-importance-of-t.md]]
+
+- [[sources/2026-04-22-when-can-llms-learn-to-reason-with-weak-supervisio.md]]
+
+- [[sources/2026-04-22-oger-a-robust-offline-guided-exploration-reward-fo.md]]

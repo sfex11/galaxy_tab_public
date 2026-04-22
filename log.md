@@ -358,3 +358,35 @@
 ## [2026-04-21 08:53] ingest | ChemGraph-XANES: An Agentic Framework for XANES Simulation and Analysis
 
 ## [2026-04-21 08:53] ingest | MARCH: Multi-Agent Radiology Clinical Hierarchy for CT Report Generation
+
+## [2026-04-22 06:00] llm-ingest | 0편 분석, 엔티티 16개, 개념 340개
+
+## [2026-04-22 08:37] ingest | Agentic Forecasting using Sequential Bayesian Updating of Linguistic Beliefs
+
+## [2026-04-22 08:37] ingest | When Can LLMs Learn to Reason with Weak Supervision?
+
+## [2026-04-22 08:37] ingest | Benchmarking System Dynamics AI Assistants: Cloud Versus Local LLMs on CLD Extraction and Discussion
+
+## [2026-04-22 08:37] ingest | Dual Alignment Between Language Model Layers and Human Sentence Processing
+
+## [2026-04-22 08:37] ingest | GSQ: Highly-Accurate Low-Precision Scalar Quantization for LLMs via Gumbel-Softmax Sampling
+
+## [2026-04-22 08:37] ingest | FUSE: Ensembling Verifiers with Zero Labeled Data
+
+## [2026-04-22 08:37] ingest | ClawEnvKit: Automatic Environment Generation for Claw-Like Agents
+
+## [2026-04-22 08:37] ingest | OGER: A Robust Offline-Guided Exploration Reward for Hybrid Reinforcement Learning
+
+## [2026-04-22 08:37] ingest | MASS-RAG: Multi-Agent Synthesis Retrieval-Augmented Generation
+
+## [2026-04-22 08:37] ingest | QRAFTI: An Agentic Framework for Empirical Research in Quantitative Finance
+
+## [2026-04-22 08:37] ingest | OneVL: One-Step Latent Reasoning and Planning with Vision-Language Explanation
+
+## [2026-04-22 08:37] ingest | Latent Phase-Shift Rollback: Inference-Time Error Correction via Residual Stream Monitoring and KV-Cache Steering
+
+## [2026-04-22 08:37] ingest | WorldDB: A Vector Graph-of-Worlds Memory Engine with Ontology-Aware Write-Time Reconciliation
+
+## [2026-04-22 08:37] ingest | Asset Harvester: Extracting 3D Assets from Autonomous Driving Logs for Simulation
+
+## [2026-04-22 08:37] ingest | Using large language models for embodied planning introduces systematic safety risks

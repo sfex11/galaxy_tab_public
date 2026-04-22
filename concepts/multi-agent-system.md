@@ -129,3 +129,7 @@ _자동 생성됨_
 - [[sources/2026-04-17-trex-automating-llm-fine-tuning-via-agent-driven-t.md]]
 
 - [[sources/2026-04-21-march-multi-agent-radiology-clinical-hierarchy-for.md]]
+
+- [[sources/2026-04-22-mass-rag-multi-agent-synthesis-retrieval-augmented.md]]
+
+- [[sources/2026-04-22-qrafti-an-agentic-framework-for-empirical-research.md]]

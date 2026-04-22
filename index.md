@@ -188,3 +188,22 @@
 - [[sources/2026-04-21-chemgraph-xanes-an-agentic-framework-for-xanes-sim.md]] - ChemGraph-XANES: An Agentic Framework for XANES Simulation and Analysis
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-04-21-march-multi-agent-radiology-clinical-hierarchy-for.md]] - MARCH: Multi-Agent Radiology Clinical Hierarchy for CT Report Generation
+- [[sources/2026-04-22-agentic-forecasting-using-sequential-bayesian-upda.md]] - Agentic Forecasting using Sequential Bayesian Updating of Linguistic Beliefs
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-22-when-can-llms-learn-to-reason-with-weak-supervisio.md]] - When Can LLMs Learn to Reason with Weak Supervision?
+- [[sources/2026-04-22-benchmarking-system-dynamics-ai-assistants-cloud-v.md]] - Benchmarking System Dynamics AI Assistants: Cloud Versus Local LLMs on CLD Extraction and Discussion
+- [[sources/2026-04-22-dual-alignment-between-language-model-layers-and-h.md]] - Dual Alignment Between Language Model Layers and Human Sentence Processing
+- [[sources/2026-04-22-gsq-highly-accurate-low-precision-scalar-quantizat.md]] - GSQ: Highly-Accurate Low-Precision Scalar Quantization for LLMs via Gumbel-Softmax Sampling
+- [[sources/2026-04-22-fuse-ensembling-verifiers-with-zero-labeled-data.md]] - FUSE: Ensembling Verifiers with Zero Labeled Data
+- [[sources/2026-04-22-clawenvkit-automatic-environment-generation-for-cl.md]] - ClawEnvKit: Automatic Environment Generation for Claw-Like Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-22-oger-a-robust-offline-guided-exploration-reward-fo.md]] - OGER: A Robust Offline-Guided Exploration Reward for Hybrid Reinforcement Learning
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-22-mass-rag-multi-agent-synthesis-retrieval-augmented.md]] - MASS-RAG: Multi-Agent Synthesis Retrieval-Augmented Generation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-22-qrafti-an-agentic-framework-for-empirical-research.md]] - QRAFTI: An Agentic Framework for Empirical Research in Quantitative Finance
+- [[sources/2026-04-22-onevl-one-step-latent-reasoning-and-planning-with-.md]] - OneVL: One-Step Latent Reasoning and Planning with Vision-Language Explanation
+- [[sources/2026-04-22-latent-phase-shift-rollback-inference-time-error-c.md]] - Latent Phase-Shift Rollback: Inference-Time Error Correction via Residual Stream Monitoring and KV-Cache Steering
+- [[sources/2026-04-22-worlddb-a-vector-graph-of-worlds-memory-engine-wit.md]] - WorldDB: A Vector Graph-of-Worlds Memory Engine with Ontology-Aware Write-Time Reconciliation
+- [[sources/2026-04-22-asset-harvester-extracting-3d-assets-from-autonomo.md]] - Asset Harvester: Extracting 3D Assets from Autonomous Driving Logs for Simulation
+- [[sources/2026-04-22-using-large-language-models-for-embodied-planning-.md]] - Using large language models for embodied planning introduces systematic safety risks
