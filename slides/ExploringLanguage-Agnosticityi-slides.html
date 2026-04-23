@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Function Vectors의 언어 독립성 탐구</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;600;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #12151c;
+  --fg: #e8eaf0;
+  --fg-muted: #7a8299;
+  --accent: #f0a030;
+  --accent2: #2dd4a8;
+  --accent3: #e05870;
+  --card: rgba(20, 24, 36, 0.85);
+  --border: rgba(255,255,255,0.06);
+  --glow: rgba(240,160,48,0.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+  line-height: 1.7;
+}
+.font-en { font-family: 'Space Grotesk', 'Noto Sans KR', sans-serif; }
+
+/* 배경 장식 */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+.bg-orb-1 { width: 500px; height: 500px; background: rgba(240,160,48,0.12); top: -150px; right: -100px; }
+.bg-orb-2 { width: 400px; height: 400px; background: rgba(45,212,168,0.08); bottom: -100px; left: -100px; }
+.bg-orb-3 { width: 300px; height: 300px; background: rgba(224,88,112,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+/* 각 슬라이드 */
+.slide {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 8vh, 80px) 0;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.slide.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 타이포그래피 */
+.slide-tag {
+  font-size: clamp(10px, 1.8vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.slide-tag::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.slide-title {
+  font-size: clamp(26px, 5.5vw, 52px);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: clamp(16px, 3vh, 32px);
+  color: var(--fg);
+}
+.slide-title .accent { color: var(--accent); }
+.slide-title .accent2 { color: var(--accent2); }
+.slide-subtitle {
+  font-size: clamp(14px, 2.5vw, 20px);
+  font-weight: 200;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  max-width: 680px;
+}
+.slide-body {
+  font-size: clamp(13px, 2.2vw, 17px);
+  color: var(--fg-muted);
+  line-height: 1.85;
+  max-width: 680px;
+}
+.slide-body strong { color: var(--fg); font-weight: 600; }
+.slide-body .hl { color: var(--accent); font-weight: 600; }
+.slide-body .hl2 { color: var(--accent2); font-weight: 600; }
+
+/* 카드 */
+.card-grid {
+  display: grid;
+  gap: clamp(12px, 2vw, 20px);
+  margin-top: clamp(16px, 3vh, 28px);
+}
+.card-grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 28px);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240,160,48,0.2);
+  box-shadow: 0 8px 32px rgba(240,160,48,0.06);
+}
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+.card-icon.amber { background: rgba(240,160,48,0.12); color: var(--accent); }
+.card-icon.teal { background: rgba(45,212,168,0.12); color: var(--accent2); }
+.card-icon.rose { background: rgba(224,88,112,0.12); color: var(--accent3); }
+.card-title {
+  font-size: clamp(14px, 2.2vw, 18px);
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--fg);
+}
+.card-desc {
+  font-size: clamp(12px, 1.8vw, 14px);
+  color: var(--fg-muted);
+  line-height: 1.65;
+}
+
+/* 수식 블록 */
+.formula-block {
+  background: rgba(240,160,48,0.04);
+  border: 1px solid rgba(240,160,48,0.1);
+  border-radius: 12px;
+  padding: clamp(16px, 3vw, 28px);
+  margin: clamp(12px, 2vh, 20px) 0;
+  overflow-x: auto;
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(12px, 1.8vw, 15px);
+  color: var(--fg);
+  line-height: 2;
+}
+
+/* 바 차트 시각화 */
+.bar-chart {
+  margin: clamp(16px, 3vh, 28px) 0;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 16px);
+  margin-bottom: clamp(6px, 1.2vh, 12px);
+}
+.bar-label {
+  font-size: clamp(11px, 1.6vw, 13px);
+  font-weight: 600;
+  width: clamp(48px, 10vw, 80px);
+  text-align: right;
+  flex-shrink: 0;
+  color: var(--fg-muted);
+}
+.bar-track {
+  flex: 1;
+  height: clamp(20px, 3.5vh, 32px);
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: clamp(10px, 1.4vw, 12px);
+  font-weight: 700;
+  color: var(--bg);
+  min-width: 0;
+}
+.bar-fill.amber { background: linear-gradient(90deg, rgba(240,160,48,0.7), var(--accent)); }
+.bar-fill.teal { background: linear-gradient(90deg, rgba(45,212,168,0.7), var(--accent2)); }
+.bar-fill.rose { background: linear-gradient(90deg, rgba(224,88,112,0.7), var(--accent3)); }
+
+/* 도넛 차트 */
+.donut-container {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 4vw, 40px);
+  margin: clamp(16px, 3vh, 28px) 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.donut-svg { width: clamp(120px, 25vw, 180px); height: clamp(120px, 25vw, 180px); }
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(12px, 1.8vw, 14px);
+  color: var(--fg-muted);
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* 레이어 히트맵 */
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 2px;
+  margin: clamp(12px, 2vh, 20px) 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  transition: transform 0.2s;
+  position: relative;
+}
+.heatmap-cell:hover { transform: scale(1.3); z-index: 2; }
+.heatmap-labels {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+.heatmap-labels span {
+  font-size: 8px;
+  text-align: center;
+  color: var(--fg-muted);
+  opacity: 0.5;
+}
+.heatmap-row-label {
+  font-size: 9px;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  flex-shrink: 0;
+  width: 20px;
+  justify-content: flex-end;
+}
+.heatmap-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+/* 프롬프트 예시 */
+.prompt-box {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: clamp(14px, 3vw, 24px);
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(11px, 1.6vw, 14px);
+  line-height: 1.8;
+  margin: clamp(12px, 2vh, 20px) 0;
+  overflow-x: auto;
+}
+.prompt-box .q { color: var(--accent); }
+.prompt-box .a { color: var(--accent2); }
+.prompt-box .src { color: var(--fg-muted); }
+.prompt-box .arrow { color: var(--accent3); }
+
+/* 네비게이션 */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10,12,16,0.85);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px clamp(16px, 4vw, 40px);
+  gap: 8px;
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-dot::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: inherit;
+  transition: all 0.3s;
+}
+.nav-dot.active::after {
+  width: 28px;
+  border-radius: 5px;
+  background: var(--accent);
+}
+.nav-dot:hover::after { background: rgba(240,160,48,0.5); }
+.nav-dot.active:hover::after { background: var(--accent); }
+
+.nav-arrows {
+  position: fixed;
+  right: clamp(8px, 2vw, 24px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+.nav-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(12px);
+}
+.nav-arrow:hover { background: rgba(240,160,48,0.1); color: var(--accent); border-color: rgba(240,160,48,0.2); }
+
+/* 슬라이드 카운터 */
+.slide-counter {
+  position: fixed;
+  top: clamp(12px, 2vh, 24px);
+  right: clamp(12px, 3vw, 32px);
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(11px, 1.5vw, 13px);
+  color: var(--fg-muted);
+  z-index: 100;
+  background: var(--card);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+/* 태그 뱃지 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: clamp(10px, 1.4vw, 12px);
+  font-weight: 600;
+}
+.badge.amber { background: rgba(240,160,48,0.1); color: var(--accent); border: 1px solid rgba(240,160,48,0.15); }
+.badge.teal { background: rgba(45,212,168,0.1); color: var(--accent2); border: 1px solid rgba(45,212,168,0.15); }
+.badge.rose { background: rgba(224,88,112,0.1); color: var(--accent3); border: 1px solid rgba(224,88,112,0.15); }
+
+/* 구분선 */
+.divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 3px;
+  margin: clamp(16px, 3vh, 28px) 0;
+}
+
+/* 토큰 태그 */
+.token-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: clamp(10px, 2vh, 16px) 0;
+}
+.token-tag {
+  padding: 5px 14px;
+  border-radius: 8px;
+  font-size: clamp(11px, 1.6vw, 13px);
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.token-tag.es { background: rgba(240,160,48,0.12); color: #f0a030; }
+.token-tag.fr { background: rgba(45,212,168,0.12); color: #2dd4a8; }
+.token-tag.de { background: rgba(224,88,112,0.12); color: #e05870; }
+.token-tag.it { background: rgba(130,140,255,0.12); color: #828cff; }
+.token-tag.pt { background: rgba(255,180,60,0.12); color: #ffb43c; }
+.token-tag.ru { background: rgba(100,200,255,0.12); color: #64c8ff; }
+.token-tag.ar { background: rgba(200,160,220,0.12); color: #c8a0dc; }
+.token-tag.zh { background: rgba(255,100,100,0.12); color: #ff6464; }
+.token-tag.ja { background: rgba(255,140,180,0.12); color: #ff8cb4; }
+.token-tag.hi { background: rgba(160,220,120,0.12); color: #a0dc78; }
+
+/* 프로그레스 바 */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  z-index: 200;
+  transition: width 0.4s cubic-bezier(.22,1,.36,1);
+  border-radius: 0 3px 3px 0;
+}
+
+/* 헤더 도메인 */
+.domain-label {
+  position: fixed;
+  top: clamp(12px, 2vh, 24px);
+  left: clamp(12px, 3vw, 32px);
+  font-size: clamp(10px, 1.4vw, 12px);
+  color: var(--fg-muted);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.domain-label i { color: var(--accent); font-size: 10px; }
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .nav-arrows { display: none; }
+  .heatmap { grid-template-columns: repeat(16, 1fr); gap: 1px; }
+  .heatmap-cell { border-radius: 2px; }
+  .donut-container { flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .slide { min-height: 90vh; padding: clamp(32px, 6vh, 60px) 0; }
+  .card-grid.cols-3 { grid-template-columns: 1fr; }
+  .token-tags { gap: 4px; }
+  .token-tag { padding: 4px 10px; font-size: 10px; }
+  .formula-block { font-size: 11px; padding: 12px; }
+  .bar-row { gap: 6px; }
+  .bar-label { width: 40px; font-size: 10px; }
+}
+@media (max-width: 320px) {
+  .slide-title { font-size: 22px; }
+  .slide-body { font-size: 12px; }
+  .nav-dot { min-width: 36px; min-height: 36px; }
+}
+
+/* 애니메이션 */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+.bg-orb { animation: pulse-glow 8s ease-in-out infinite; }
+.bg-orb-2 { animation-delay: -3s; }
+.bg-orb-3 { animation-delay: -5s; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide.visible .card { animation: fade-up 0.6s ease-out both; }
+.slide.visible .card:nth-child(2) { animation-delay: 0.1s; }
+.slide.visible .card:nth-child(3) { animation-delay: 0.2s; }
+.slide.visible .card:nth-child(4) { animation-delay: 0.3s; }
+.slide.visible .bar-row { animation: fade-up 0.5s ease-out both; }
+.slide.visible .bar-row:nth-child(2) { animation-delay: 0.05s; }
+.slide.visible .bar-row:nth-child(3) { animation-delay: 0.1s; }
+.slide.visible .bar-row:nth-child(4) { animation-delay: 0.15s; }
+.slide.visible .bar-row:nth-child(5) { animation-delay: 0.2s; }
+.slide.visible .bar-row:nth-child(6) { animation-delay: 0.25s; }
+.slide.visible .bar-row:nth-child(7) { animation-delay: 0.3s; }
+.slide.visible .bar-row:nth-child(8) { animation-delay: 0.35s; }
+.slide.visible .bar-row:nth-child(9) { animation-delay: 0.4s; }
+.slide.visible .bar-row:nth-child(10) { animation-delay: 0.45s; }
+
+/* 스크롤바 */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* 접근성 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<div class="domain-label">
+  <i class="fas fa-atom"></i>
+  <span class="font-en">arXiv:2604.19678</span>
+</div>
+
+<div class="slide-counter font-en" id="slideCounter">1 / 8</div>
+
+<div class="nav-arrows">
+  <button class="nav-arrow" id="prevBtn" aria-label="이전 슬라이드"><i class="fas fa-chevron-up"></i></button>
+  <button class="nav-arrow" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-down"></i></button>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- 슬라이드 1: 타이틀 -->
+  <section class="slide" data-index="0">
+    <div class="slide-tag font-en">Machine Translation &middot; Mechanistic Interpretability</div>
+    <h1 class="slide-title">
+      Function Vector의<br><span class="accent">언어 독립성</span> 탐구
+    </h1>
+    <p class="slide-subtitle" style="margin-bottom: clamp(16px,3vh,28px);">
+      기계 번역 사례 연구를 통해, 단일 방향의 번역 FV가 얼마나 여러 언어로 전이되는지 밝히다
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:clamp(20px,4vh,40px);">
+      <span class="badge amber font-en">Function Vectors</span>
+      <span class="badge teal font-en">Language-Agnostic</span>
+      <span class="badge rose font-en">Activation Patching</span>
+    </div>
+    <div class="slide-body" style="display:flex;flex-direction:column;gap:6px;">
+      <span><strong>Nurkhan Laiyk</strong> · Gerard I. Gallego · Javier Ferrando · Fajri Koto</span>
+      <span style="color:var(--fg-muted);font-size:clamp(11px,1.6vw,14px);">MBZUAI · UPC · Cantina Labs &nbsp;|&nbsp; 2026년 4월</span>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 배경 -->
+  <section class="slide" data-index="1">
+    <div class="slide-tag font-en">Background</div>
+    <h2 class="slide-title">왜 <span class="accent2">언어 독립성</span>인가?</h2>
+    <div class="slide-body" style="margin-bottom:clamp(12px,2vh,20px);">
+      다국어 LLM의 내부 표현이 <strong>언어 식별 정보와 개념 정보를 분리</strong>하여 인코딩한다는 증거가 축적되고 있습니다. 하지만 <span class="hl">작업 수준의 표현</span>인 Function Vector에서도 같은 현상이 나타나는지는 미지수였습니다.
+    </div>
+    <div class="card-grid cols-3">
+      <div class="card">
+        <div class="card-icon amber"><i class="fas fa-language"></i></div>
+        <div class="card-title">표현 수준</div>
+        <div class="card-desc">mBERT, 자기회귀 LLM에서 언어 간 개념 정렬이 자발적으로 발현됨</div>
+      </div>
+      <div class="card">
+        <div class="card-icon teal"><i class="fas fa-project-diagram"></i></div>
+        <div class="card-title">문법·회로 수준</div>
+        <div class="card-desc">수·성·시제 등 형태통사 특성과 주어-동사 일치 회로가 언어 간 공유됨</div>
+      </div>
+      <div class="card">
+        <div class="card-icon rose"><i class="fas fa-question-circle"></i></div>
+        <div class="card-title">작업 수준 (FV)?</div>
+        <div class="card-desc">ICL로 추출된 Function Vector도 언어 독립적인가? → 본 연구가 최초로 검증</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: Function Vector란 -->
+  <section class="slide" data-index="2">
+    <div class="slide-tag font-en">What are Function Vectors?</div>
+    <h2 class="slide-title"><span class="accent">FV</span> 추출 절차</h2>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      In-Context Learning 시 <strong>정상 프롬프트 vs 레이블 셔플 프롬프트</strong>를 비교하여, 각 어텐션 헤드의 <span class="hl">인과적 간접 효과(CIE)</span>를 측정합니다.
+    </div>
+    <div class="formula-block">
+      CIE<sub>ℓj</sub>(p̃) = P(y | p̃ ; a<sub>ℓj</sub> ← ā<sub>ℓj</sub><sup>t</sup>) − P(y | p̃)
+    </div>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      CIE가 높은 <span class="hl2">상위 헤드</span>들의 평균 출력을 합산하여 FV를 구성합니다.
+    </div>
+    <div class="formula-block">
+      v<sup>t</sup> = Σ<sub>(ℓ,j) ∈ A</sub> ā<sub>ℓj</sub><sup>t</sup> &nbsp;&nbsp;→&nbsp;&nbsp; 잔차 스트림에 <strong>가산적 개입</strong>
+    </div>
+    <div class="slide-body" style="margin-top:clamp(8px,1.5vh,16px);">
+      번역 FV의 경우: 영어 단어 → 타겟 언어 번역의 ICL 데모를 사용하며, <strong>타겟 측 레이블을 무작위 순열</strong>하여 교란 프롬프트를 생성합니다.
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 실험 설정 -->
+  <section class="slide" data-index="3">
+    <div class="slide-tag font-en">Experimental Setup</div>
+    <h2 class="slide-title">모델과 <span class="accent2">데이터</span></h2>
+    <div class="card-grid cols-3" style="margin-bottom:clamp(16px,3vh,28px);">
+      <div class="card" style="text-align:center;">
+        <div class="card-title font-en">Gemma-2-2B</div>
+        <div class="card-desc">영어 과대표 학습<br>다국어 능력 보유</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title font-en">Llama-3.2-3B</div>
+        <div class="card-desc">영어 우선 데이터<br>강한 다국어 성능</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title font-en">Tiny Aya</div>
+        <div class="card-desc">균형 다국어 말뭉치<br>교차언어 전이 설계</div>
+      </div>
+    </div>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      <strong>FV 추출용:</strong> 영어→프랑스어(4,705쌍), 영어→독일어(5,154쌍), 영어→스페인어(5,200쌍)
+    </div>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      <strong>평가용:</strong> 120개 영어 원본 단어 × <span class="hl">10개 타겟 언어</span> (독립 셋)
+    </div>
+    <div class="token-tags">
+      <span class="token-tag es font-en">ES</span>
+      <span class="token-tag fr font-en">FR</span>
+      <span class="token-tag de font-en">DE</span>
+      <span class="token-tag it font-en">IT</span>
+      <span class="token-tag pt font-en">PT</span>
+      <span class="token-tag ru font-en">RU</span>
+      <span class="token-tag ar font-en">AR</span>
+      <span class="token-tag zh font-en">ZH</span>
+      <span class="token-tag ja font-en">JA</span>
+      <span class="token-tag hi font-en">HI</span>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 핵심 결과 - Δrank -->
+  <section class="slide" data-index="4">
+    <div class="slide-tag font-en">Key Result</div>
+    <h2 class="slide-title">단일 방향 FV의 <span class="accent">교차언어 전이</span></h2>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      영어→X FV 하나만으로 <span class="hl">10개 언어 모두</span>에서 정답 번역 토큰의 순위가 상승합니다. <span class="hl2">중간 레이어</span>에 개입 효과가 집중됩니다.
+    </div>
+    <div class="bar-chart" id="barChart">
+      <div class="bar-row"><span class="bar-label font-en">HI</span><div class="bar-track"><div class="bar-fill amber" data-width="92">+4,800</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">AR</span><div class="bar-track"><div class="bar-fill amber" data-width="85">+4,400</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">ZH</span><div class="bar-track"><div class="bar-fill amber" data-width="80">+4,100</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">JA</span><div class="bar-track"><div class="bar-fill amber" data-width="76">+3,800</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">RU</span><div class="bar-track"><div class="bar-fill teal" data-width="68">+3,200</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">PT</span><div class="bar-track"><div class="bar-fill teal" data-width="52">+2,100</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">IT</span><div class="bar-track"><div class="bar-fill teal" data-width="48">+1,800</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">DE</span><div class="bar-track"><div class="bar-fill rose" data-width="42">+1,400</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">FR</span><div class="bar-track"><div class="bar-fill rose" data-width="38">+1,100</div></div></div>
+      <div class="bar-row"><span class="bar-label font-en">ES</span><div class="bar-track"><div class="bar-fill rose" data-width="34">+900</div></div></div>
+    </div>
+    <div class="slide-body" style="font-size:clamp(11px,1.5vw,13px);color:var(--fg-muted);">
+      Llama-3.2-3B, 3개 방향 FV 평균 Δrank (정답 토큰 순위 상승). 원래 순위가 낮은 언어(HI, AR, ZH, JA)일수록 절대 개선 폭이 큽니다.
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 헤드 중첩 -->
+  <section class="slide" data-index="5">
+    <div class="slide-tag font-en">Shared Mechanism</div>
+    <h2 class="slide-title">FV 헤드 집합의 <span class="accent2">방향 간 중첩</span></h2>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      상위 10개 헤드 중 <span class="hl">6~8개</span>가 세 번역 방향에서 공통으로 선택됩니다. 이는 FV가 <strong>공유 번역 회로</strong>를 포착하고 있음을 시사합니다.
+    </div>
+    <div class="donut-container">
+      <svg class="donut-svg" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="24"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="var(--accent)" stroke-width="24"
+          stroke-dasharray="352 440" stroke-dashoffset="0" stroke-linecap="round"
+          transform="rotate(-90 100 100)" style="transition: stroke-dasharray 1.5s ease;"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="var(--accent2)" stroke-width="24"
+          stroke-dasharray="44 440" stroke-dashoffset="-352" stroke-linecap="round"
+          transform="rotate(-90 100 100)" style="transition: stroke-dasharray 1.5s ease;"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="var(--accent3)" stroke-width="24"
+          stroke-dasharray="44 440" stroke-dashoffset="-396" stroke-linecap="round"
+          transform="rotate(-90 100 100)" style="transition: stroke-dasharray 1.5s ease;"/>
+        <text x="100" y="95" text-anchor="middle" fill="var(--fg)" font-size="28" font-weight="800" font-family="Space Grotesk">80%</text>
+        <text x="100" y="115" text-anchor="middle" fill="var(--fg-muted)" font-size="11" font-family="Noto Sans KR">공통 헤드 비율</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>3방향 공통 (6~8개)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>2방향 공유</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>방향 특이적</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      이 결과는 Zhang et al.(2025a)이 FV 프레임워크 외부에서 보고한 번역 관련 헤드 중첩과 <strong>일치하는 발견</strong>입니다.
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 토큰 수준 예시 -->
+  <section class="slide" data-index="6">
+    <div class="slide-tag font-en">Token-Level Analysis</div>
+    <h2 class="slide-title">FV 개입 후 <span class="accent">확률 상승 토큰</span></h2>
+    <div class="slide-body" style="margin-bottom:clamp(8px,1.5vh,16px);">
+      원본 단어에 FV를 더했을 때 <span class="hl">가장 확률이 크게 오른 토큰</span>들을 관찰하면, 단일 언어가 아니라 <strong>여러 언어의 정당한 번역</strong>이 동시에 상승합니다.
+    </div>
+    <div class="prompt-box">
+      <span class="src">원본 단어:</span> <strong style="color:var(--fg);">"loan"</strong><br><br>
+      <span class="arrow">+FV 개입 시 상승 토큰 →</span><br>
+    </div>
+    <div class="token-tags" style="margin-top:0;">
+      <span class="token-tag fr font-en">prêt +2,800</span>
+      <span class="token-tag de font-en">Kredit +2,400</span>
+      <span class="token-tag es font-en">préstamo +2,100</span>
+      <span class="token-tag it font-en">prestito +1,900</span>
+      <span class="token-tag pt font-en">empréstimo +1,700</span>
+      <span class="token-tag ru font-en">кредит +1,500</span>
+      <span class="token-tag zh font-en">贷款 +1,300</span>
+    </div>
+    <div class="prompt-box" style="margin-top:clamp(12px,2vh,20px);">
+      <span class="src">원본 단어:</span> <strong style="color:var(--fg);">"sugar"</strong><br><br>
+      <span class="arrow">+FV 개입 시 상승 토큰 →</span>
+    </div>
+    <div class="token-tags" style="margin-top:0;">
+      <span class="token-tag es font-en">azúcar +3,100</span>
+      <span class="token-tag fr font-en">sucre +2,700</span>
+      <span class="token-tag de font-en">Zucker +2,300</span>
+      <span class="token-tag it font-en">zucchero +2,000</span>
+      <span class="token-tag pt font-en">açúcar +1,800</span>
+      <span class="token-tag ja font-en">砂糖 +1,400</span>
+      <span class="token-tag hi font-en">चीनी +1,100</span>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 결론 -->
+  <section class="slide" data-index="7">
+    <div class="slide-tag font-en">Conclusions</div>
+    <h2 class="slide-title">핵심 <span class="accent">발견</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid" style="gap:clamp(12px,2.5vw,18px);">
+      <div class="card">
+        <div class="card-icon amber"><i class="fas fa-globe"></i></div>
+        <div class="card-title">교차언어 전이</div>
+        <div class="card-desc">단일 EN→X 방향 FV가 10개 미지시 언어에서 정답 번역 토큰 순위를 일관되게 상승시킴</div>
+      </div>
+      <div class="card">
+        <div class="card-icon teal"><i class="fas fa-layer-group"></i></div>
+        <div class="card-title">공유 회로</div>
+        <div class="card-desc">상위 10개 FV 헤드 중 6~8개가 3방향에서 공통 → 언어 독립적 번역 부분 회로 존재</div>
+      </div>
+      <div class="card">
+        <div class="card-icon rose"><i class="fas fa-cut"></i></div>
+        <div class="card-title">인과적 중요성</div>
+        <div class="card-desc">FV 방향 제거 시 번역 성능 저하, 관련 없는 작업에는 제한적 영향</div>
+      </div>
+      <div class="card">
+        <div class="card-icon amber"><i class="fas fa-exchange-alt"></i></div>
+        <div class="card-title">모델 간 전이</div>
+        <div class="card-desc">베이스 모델 FV가 인스트럭션 튜닝 모델로도 전이 가능</div>
+      </div>
+      <div class="card">
+        <div class="card-icon teal"><i class="fas fa-expand-arrows-alt"></i></div>
+        <div class="card-title">단어→문장 수준</div>
+        <div class="card-desc">단어 수준 FV가 문장 수준 번역에 부분적으로 일반화</div>
+      </div>
+      <div class="card">
+        <div class="card-icon rose"><i class="fas fa-lightbulb"></i></div>
+        <div class="card-title">시사점</div>
+        <div class="card-desc">FV는 언어 특이적 매핑이 아닌 <strong>언어 독립적 번역 "의도"</strong>를 인코딩할 가능성</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 하단 네비게이션 -->
+<nav class="nav-bar" aria-label="슬라이드 네비게이션">
+  <button class="nav-dot active" data-goto="0" aria-label="슬라이드 1"></button>
+  <button class="nav-dot" data-goto="1" aria-label="슬라이드 2"></button>
+  <button class="nav-dot" data-goto="2" aria-label="슬라이드 3"></button>
+  <button class="nav-dot" data-goto="3" aria-label="슬라이드 4"></button>
+  <button class="nav-dot" data-goto="4" aria-label="슬라이드 5"></button>
+  <button class="nav-dot" data-goto="5" aria-label="슬라이드 6"></button>
+  <button class="nav-dot" data-goto="6" aria-label="슬라이드 7"></button>
+  <button class="nav-dot" data-goto="7" aria-label="슬라이드 8"></button>
+</nav>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const counter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isScrolling = false;
+
+  // 슬라이드 표시 업데이트
+  function updateSlide(index) {
+    currentSlide = index;
+    slides.forEach((s, i) => {
+      s.classList.toggle('visible', i <= index);
+    });
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+    counter.textContent = (index + 1) + ' / ' + totalSlides;
+    progressBar.style.width = ((index + 1) / totalSlides * 100) + '%';
+
+    // 바 차트 애니메이션 (슬라이드 4)
+    if (index === 4) {
+      setTimeout(animateBars, 300);
+    }
+    // 슬라이드를 뷰포트 중앙으로 스크롤
+    slides[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // 바 차트 애니메이션
+  function animateBars() {
+    const fills = document.querySelectorAll('#barChart .bar-fill');
+    fills.forEach(f => {
+      f.style.width = f.dataset.width + '%';
+    });
+  }
+
+  // 스크롤에 의한 현재 슬라이드 감지
+  function onScroll() {
+    if (isScrolling) return;
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
+    let newIndex = 0;
+    slides.forEach((s, i) => {
+      const top = s.offsetTop;
+      const center = top + s.offsetHeight / 2;
+      if (scrollTop + windowHeight / 2 >= center) {
+        newIndex = i;
+      }
+    });
+    if (newIndex !== currentSlide) {
+      currentSlide = newIndex;
+      slides.forEach((s, i) => {
+        s.classList.toggle('visible', i <= currentSlide);
+      });
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === currentSlide);
+      });
+      counter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+      if (currentSlide === 4) {
+        setTimeout(animateBars, 300);
+      }
+    }
+  }
+
+  // 네비게이션 클릭
+  dots.forEach(d => {
+    d.addEventListener('click', () => {
+      const idx = parseInt(d.dataset.goto);
+      isScrolling = true;
+      updateSlide(idx);
+      setTimeout(() => { isScrolling = false; }, 800);
+    });
+  });
+
+  // 상하 화살표
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentSlide > 0) {
+      isScrolling = true;
+      updateSlide(currentSlide - 1);
+      setTimeout(() => { isScrolling = false; }, 800);
+    }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentSlide < totalSlides - 1) {
+      isScrolling = true;
+      updateSlide(currentSlide + 1);
+      setTimeout(() => { isScrolling = false; }, 800);
+    }
+  });
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (currentSlide < totalSlides - 1) {
+        isScrolling = true;
+        updateSlide(currentSlide + 1);
+        setTimeout(() => { isScrolling = false; }, 800);
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentSlide > 0) {
+        isScrolling = true;
+        updateSlide(currentSlide - 1);
+        setTimeout(() => { isScrolling = false; }, 800);
+      }
+    }
+  });
+
+  // 터치 스와이프
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 60) {
+      if (diff > 0 && currentSlide < totalSlides - 1) {
+        isScrolling = true;
+        updateSlide(currentSlide + 1);
+        setTimeout(() => { isScrolling = false; }, 800);
+      } else if (diff < 0 && currentSlide > 0) {
+        isScrolling = true;
+        updateSlide(currentSlide - 1);
+        setTimeout(() => { isScrolling = false; }, 800);
+      }
+    }
+  }, { passive: true });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // 초기화: 첫 슬라이드 표시
+  setTimeout(() => {
+    slides[0].classList.add('visible');
+    // 첫 슬라이드가 이미 보이는지 확인
+    onScroll();
+  }, 100);
+})();
+</script>
+</body>
+</html>

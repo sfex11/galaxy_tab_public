@@ -390,3 +390,14 @@
 ## [2026-04-22 08:37] ingest | Asset Harvester: Extracting 3D Assets from Autonomous Driving Logs for Simulation
 
 ## [2026-04-22 08:37] ingest | Using large language models for embodied planning introduces systematic safety risks
+
+## [2026-04-23 02:11] llm-ingest | 9편 분석, 엔티티 27개, 개념 372개
+- 2026-04-23-vla-foundry-a-unified-framework-for-training-visio.md
+- 2026-04-23-discovering-a-shared-logical-subspace-steering-llm.md
+- 2026-04-23-epistemic-orientation-in-parliamentary-discourse-i.md
+- 2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md
+- 2026-04-23-exploring-language-agnosticity-in-function-vectors.md
+- 2026-04-23-chat2workflow-a-benchmark-for-generating-executabl.md
+- 2026-04-23-an-ai-agent-execution-environment-to-safeguard-use.md
+- 2026-04-23-safetyalfred-evaluating-safety-conscious-planning-.md
+- 2026-04-23-planning-in-entropy-regularized-markov-decision-pr.md

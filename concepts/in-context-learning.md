@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]]
 
 - [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
+
+### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
+
+→ [[sources/2026-04-23-exploring-language-agnosticity-in-function-vectors.md|상세 보기]]

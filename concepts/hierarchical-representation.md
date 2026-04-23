@@ -20,3 +20,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)
 
 - [[sources/2026-04-06-de-jure-iterative-llm-self-refinement-for-structur.md|De Jure: Iterative LLM Self-Refinement for Structured Extrac]] (2026-04-06)
+
+### VLA Foundry: A Unified Framework for Training Vision-Language-Action M (2026-04-23)
+
+→ [[sources/2026-04-23-vla-foundry-a-unified-framework-for-training-visio.md|상세 보기]]

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A-MAR 논문 시각화</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0f;--bg2:#12121c;--bg3:#1a1a2e;--fg:#e8e4df;--fg2:#a09a92;
+--accent:#c8956c;--accent2:#e8b88a;--accent3:#8b6b4a;
+--gold:#d4a853;--gold2:#f0d090;
+--red:#c75050;--green:#5cb87a;--blue:#5a8ec7;
+--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+--border:rgba(255,255,255,0.08);--border2:rgba(200,149,108,0.25);
+--glow:rgba(200,149,108,0.15);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+font-family:'Noto Sans KR',sans-serif;
+background:var(--bg);color:var(--fg);
+overflow:hidden;height:100dvh;width:100vw;
+-webkit-font-smoothing:antialiased;
+}
+.serif{font-family:'Noto Serif KR',serif}
+
+.slide-container{
+position:relative;width:100%;height:100dvh;
+overflow:hidden;
+}
+.slide{
+position:absolute;inset:0;
+display:flex;flex-direction:column;
+justify-content:center;align-items:center;
+padding:clamp(1.5rem,5vw,3rem);
+opacity:0;transform:translateY(40px) scale(0.97);
+transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);
+pointer-events:none;
+overflow-y:auto;overflow-x:hidden;
+}
+.slide.active{
+opacity:1;transform:translateY(0) scale(1);
+pointer-events:auto;
+}
+.slide.prev{
+opacity:0;transform:translateY(-40px) scale(0.97);
+}
+
+.bg-pattern{
+position:fixed;inset:0;z-index:0;pointer-events:none;
+background:
+radial-gradient(ellipse 80% 60% at 20% 10%,rgba(200,149,108,0.06),transparent),
+radial-gradient(ellipse 60% 50% at 80% 90%,rgba(139,107,74,0.05),transparent),
+radial-gradient(ellipse 40% 40% at 50% 50%,rgba(212,168,83,0.03),transparent);
+}
+.bg-grid{
+position:fixed;inset:0;z-index:0;pointer-events:none;
+opacity:0.03;
+background-image:
+linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+background-size:60px 60px;
+}
+.floating-orb{
+position:fixed;border-radius:50%;filter:blur(80px);
+pointer-events:none;z-index:0;
+animation:orbFloat 20s ease-in-out infinite;
+}
+@keyframes orbFloat{
+0%,100%{transform:translate(0,0) scale(1)}
+33%{transform:translate(30px,-20px) scale(1.1)}
+66%{transform:translate(-20px,30px) scale(0.9)}
+}
+
+.slide-inner{
+position:relative;z-index:1;
+max-width:900px;width:100%;
+text-align:center;
+}
+
+.slide-num{
+font-size:clamp(0.7rem,1.5vw,0.85rem);
+color:var(--accent);letter-spacing:0.3em;
+text-transform:uppercase;margin-bottom:clamp(1rem,3vw,2rem);
+font-weight:500;
+}
+
+.slide h1{
+font-family:'Noto Serif KR',serif;
+font-size:clamp(1.8rem,5.5vw,3.2rem);
+font-weight:900;line-height:1.25;
+color:var(--fg);margin-bottom:clamp(0.8rem,2vw,1.5rem);
+letter-spacing:-0.02em;
+}
+.slide h2{
+font-family:'Noto Serif KR',serif;
+font-size:clamp(1.4rem,4vw,2.2rem);
+font-weight:700;line-height:1.3;
+color:var(--fg);margin-bottom:clamp(0.8rem,2vw,1.5rem);
+}
+.slide h3{
+font-size:clamp(1rem,2.5vw,1.3rem);
+font-weight:700;color:var(--accent2);
+margin-bottom:clamp(0.5rem,1.5vw,1rem);
+}
+.slide p,.slide li{
+font-size:clamp(0.85rem,2vw,1.05rem);
+line-height:1.8;color:var(--fg2);
+max-width:750px;margin:0 auto;
+}
+.slide p+p,.slide p+.highlight-box{margin-top:clamp(0.6rem,2vw,1rem)}
+
+.highlight{
+color:var(--accent2);font-weight:500;
+}
+.highlight-gold{color:var(--gold2);font-weight:700}
+.strong{color:var(--fg);font-weight:700}
+
+.divider{
+width:60px;height:2px;
+background:linear-gradient(90deg,transparent,var(--accent),transparent);
+margin:clamp(1rem,3vw,1.8rem) auto;
+}
+
+.tag{
+display:inline-block;
+padding:0.25em 0.8em;border-radius:100px;
+font-size:clamp(0.65rem,1.3vw,0.8rem);
+font-weight:500;letter-spacing:0.05em;
+margin:0.2em;
+}
+.tag-accent{background:rgba(200,149,108,0.15);color:var(--accent2);border:1px solid var(--border2)}
+.tag-gold{background:rgba(212,168,83,0.12);color:var(--gold2);border:1px solid rgba(212,168,83,0.2)}
+.tag-muted{background:var(--card);color:var(--fg2);border:1px solid var(--border)}
+
+.highlight-box{
+background:var(--card2);border:1px solid var(--border2);
+border-radius:clamp(8px,1.5vw,14px);
+padding:clamp(1rem,3vw,1.5rem);
+text-align:left;margin-top:clamp(0.8rem,2vw,1.2rem);
+backdrop-filter:blur(10px);
+}
+.highlight-box p{margin:0}
+
+.card-grid{
+display:grid;gap:clamp(0.6rem,1.5vw,1rem);
+margin-top:clamp(0.8rem,2vw,1.2rem);
+width:100%;max-width:750px;margin-left:auto;margin-right:auto;
+}
+.card-grid.cols-2{grid-template-columns:1fr 1fr}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+
+@media(max-width:600px){
+.card-grid.cols-2,.card-grid.cols-3{grid-template-columns:1fr}
+}
+
+.card{
+background:var(--card);border:1px solid var(--border);
+border-radius:clamp(8px,1.5vw,12px);
+padding:clamp(0.8rem,2.5vw,1.2rem);
+text-align:left;
+transition:border-color .3s,transform .3s,background .3s;
+}
+.card:hover{
+border-color:var(--border2);
+background:var(--card2);
+transform:translateY(-2px);
+}
+.card .card-icon{
+font-size:clamp(1.2rem,3vw,1.6rem);
+margin-bottom:0.5rem;color:var(--accent);
+}
+.card .card-title{
+font-size:clamp(0.85rem,2vw,1rem);
+font-weight:700;color:var(--fg);
+margin-bottom:0.3rem;
+}
+.card .card-desc{
+font-size:clamp(0.75rem,1.6vw,0.88rem);
+color:var(--fg2);line-height:1.6;
+}
+
+.stat-row{
+display:flex;justify-content:center;gap:clamp(1.5rem,5vw,3rem);
+flex-wrap:wrap;margin-top:clamp(1rem,3vw,1.5rem);
+}
+.stat{text-align:center}
+.stat .stat-val{
+font-family:'Noto Serif KR',serif;
+font-size:clamp(1.8rem,5vw,2.8rem);
+font-weight:900;
+background:linear-gradient(135deg,var(--accent2),var(--gold2));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+background-clip:text;
+}
+.stat .stat-label{
+font-size:clamp(0.7rem,1.5vw,0.85rem);
+color:var(--fg2);margin-top:0.3rem;
+}
+
+.flow-diagram{
+display:flex;align-items:center;justify-content:center;
+gap:clamp(0.4rem,1.5vw,0.8rem);
+flex-wrap:wrap;margin:clamp(1rem,3vw,1.5rem) auto;
+max-width:700px;
+}
+.flow-node{
+padding:clamp(0.5rem,1.5vw,0.8rem) clamp(0.8rem,2vw,1.2rem);
+border-radius:clamp(6px,1vw,10px);
+font-size:clamp(0.7rem,1.5vw,0.85rem);
+font-weight:600;text-align:center;
+white-space:nowrap;
+}
+.flow-node.primary{background:rgba(200,149,108,0.2);color:var(--accent2);border:1px solid var(--border2)}
+.flow-node.secondary{background:var(--card2);color:var(--fg);border:1px solid var(--border)}
+.flow-node.tertiary{background:rgba(212,168,83,0.12);color:var(--gold2);border:1px solid rgba(212,168,83,0.2)}
+.flow-arrow{color:var(--accent3);font-size:clamp(0.8rem,2vw,1.1rem)}
+
+.compare-container{
+display:grid;grid-template-columns:1fr 1fr;
+gap:clamp(0.6rem,1.5vw,1rem);
+margin-top:clamp(0.8rem,2vw,1.2rem);
+max-width:700px;margin-left:auto;margin-right:auto;
+}
+@media(max-width:520px){.compare-container{grid-template-columns:1fr}}
+.compare-col{
+border-radius:clamp(8px,1.5vw,12px);
+padding:clamp(0.8rem,2.5vw,1.2rem);
+text-align:left;
+}
+.compare-col.bad{background:rgba(199,80,80,0.08);border:1px solid rgba(199,80,80,0.2)}
+.compare-col.good{background:rgba(92,184,122,0.08);border:1px solid rgba(92,184,122,0.2)}
+.compare-col .col-label{
+font-size:clamp(0.7rem,1.3vw,0.8rem);
+font-weight:700;text-transform:uppercase;letter-spacing:0.1em;
+margin-bottom:0.5rem;
+}
+.compare-col.bad .col-label{color:var(--red)}
+.compare-col.good .col-label{color:var(--green)}
+.compare-col li{
+font-size:clamp(0.75rem,1.6vw,0.88rem);
+line-height:1.7;list-style:none;padding-left:1.2em;position:relative;
+}
+.compare-col li::before{
+position:absolute;left:0;top:0.5em;
+}
+.compare-col.bad li::before{content:"✗";color:var(--red)}
+.compare-col.good li::before{content:"✓";color:var(--green)}
+
+.step-list{
+text-align:left;max-width:650px;margin:clamp(0.8rem,2vw,1.2rem) auto 0;
+counter-reset:step;
+}
+.step-item{
+position:relative;padding-left:clamp(2.5rem,5vw,3.5rem);
+margin-bottom:clamp(0.8rem,2vw,1.2rem);
+}
+.step-item::before{
+counter-increment:step;content:counter(step);
+position:absolute;left:0;top:0;
+width:clamp(1.8rem,4vw,2.4rem);height:clamp(1.8rem,4vw,2.4rem);
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--accent3));
+color:var(--bg);font-weight:900;
+display:flex;align-items:center;justify-content:center;
+font-size:clamp(0.8rem,1.8vw,1rem);
+font-family:'Noto Serif KR',serif;
+}
+.step-item::after{
+content:"";position:absolute;
+left:calc(clamp(0.9rem,2vw,1.2rem));
+top:calc(clamp(1.8rem,4vw,2.4rem) + 2px);
+bottom:calc(-0.8rem - 2vw);width:2px;
+background:var(--border2);
+}
+.step-item:last-child::after{display:none}
+.step-item .step-title{
+font-size:clamp(0.9rem,2vw,1.1rem);
+font-weight:700;color:var(--fg);margin-bottom:0.2rem;
+}
+.step-item .step-desc{
+font-size:clamp(0.78rem,1.6vw,0.92rem);
+color:var(--fg2);line-height:1.7;
+}
+
+.formula-box{
+background:var(--card);border:1px solid var(--border);
+border-radius:clamp(8px,1.5vw,12px);
+padding:clamp(0.8rem,2.5vw,1.2rem);
+margin:clamp(0.6rem,1.5vw,1rem) auto;
+max-width:650px;
+font-family:'Noto Serif KR',serif;
+font-size:clamp(0.85rem,2vw,1.05rem);
+color:var(--gold2);text-align:center;
+letter-spacing:0.02em;
+}
+
+.bar-chart{
+max-width:600px;margin:clamp(1rem,3vw,1.5rem) auto 0;
+text-align:left;
+}
+.bar-row{
+display:flex;align-items:center;gap:clamp(0.5rem,1.5vw,0.8rem);
+margin-bottom:clamp(0.5rem,1.2vw,0.8rem);
+}
+.bar-label{
+width:clamp(100px,20vw,140px);flex-shrink:0;
+font-size:clamp(0.72rem,1.5vw,0.85rem);
+color:var(--fg2);text-align:right;font-weight:500;
+}
+.bar-track{
+flex:1;height:clamp(22px,4vw,30px);
+background:var(--card);border-radius:6px;
+overflow:hidden;position:relative;
+}
+.bar-fill{
+height:100%;border-radius:6px;
+transition:width 1s cubic-bezier(.4,0,.2,1);
+width:0;
+}
+.bar-fill.accent{background:linear-gradient(90deg,var(--accent3),var(--accent2))}
+.bar-fill.gold{background:linear-gradient(90deg,var(--accent3),var(--gold))}
+.bar-fill.muted{background:linear-gradient(90deg,rgba(255,255,255,0.1),rgba(255,255,255,0.15))}
+.bar-val{
+position:absolute;right:8px;top:50%;transform:translateY(-50%);
+font-size:clamp(0.65rem,1.2vw,0.78rem);
+font-weight:700;color:var(--fg);
+}
+
+.legend{
+display:flex;justify-content:center;gap:clamp(1rem,3vw,2rem);
+margin-top:clamp(0.5rem,1.5vw,0.8rem);
+flex-wrap:wrap;
+}
+.legend-item{
+display:flex;align-items:center;gap:0.4em;
+font-size:clamp(0.68rem,1.3vw,0.8rem);color:var(--fg2);
+}
+.legend-dot{
+width:10px;height:10px;border-radius:3px;flex-shrink:0;
+}
+
+.nav-controls{
+position:fixed;bottom:0;left:0;right:0;z-index:100;
+display:flex;align-items:center;justify-content:space-between;
+padding:clamp(0.8rem,3vw,1.2rem) clamp(1rem,4vw,2rem);
+background:linear-gradient(to top,rgba(10,10,15,0.95) 60%,transparent);
+pointer-events:none;
+}
+.nav-btn{
+pointer-events:auto;
+width:clamp(44px,10vw,52px);height:clamp(44px,10vw,52px);
+border-radius:50%;border:1px solid var(--border2);
+background:var(--card);color:var(--fg);
+display:flex;align-items:center;justify-content:center;
+font-size:clamp(0.9rem,2vw,1.1rem);
+cursor:pointer;transition:all .25s;
+-webkit-tap-highlight-color:transparent;
+}
+.nav-btn:hover,.nav-btn:active{
+background:var(--card2);border-color:var(--accent);
+color:var(--accent2);transform:scale(1.08);
+}
+.nav-btn:disabled{opacity:0.2;pointer-events:none}
+
+.progress-bar{
+flex:1;max-width:300px;height:3px;
+background:var(--card);border-radius:3px;
+margin:0 clamp(0.8rem,2vw,1.5rem);
+overflow:hidden;pointer-events:auto;cursor:pointer;
+}
+.progress-fill{
+height:100%;border-radius:3px;
+background:linear-gradient(90deg,var(--accent3),var(--accent2));
+transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+.slide-counter{
+font-size:clamp(0.7rem,1.5vw,0.82rem);
+color:var(--fg2);font-weight:500;
+min-width:50px;text-align:center;
+pointer-events:none;
+}
+
+.dot-nav{
+position:fixed;right:clamp(0.5rem,2vw,1.2rem);top:50%;
+transform:translateY(-50%);z-index:90;
+display:flex;flex-direction:column;gap:clamp(6px,1.2vw,10px);
+}
+.dot{
+width:clamp(8px,1.2vw,10px);height:clamp(8px,1.2vw,10px);
+border-radius:50%;background:var(--card);
+border:1px solid var(--border);cursor:pointer;
+transition:all .3s;-webkit-tap-highlight-color:transparent;
+}
+.dot.active{
+background:var(--accent);border-color:var(--accent2);
+transform:scale(1.4);
+}
+@media(max-width:480px){.dot-nav{display:none}}
+
+.badge-row{
+display:flex;justify-content:center;flex-wrap:wrap;gap:0.4em;
+margin-top:clamp(0.8rem,2vw,1.2rem);
+}
+
+.emphasis-line{
+display:block;width:80px;height:3px;
+background:linear-gradient(90deg,var(--accent),var(--gold));
+border-radius:3px;margin:clamp(0.6rem,1.5vw,1rem) auto;
+}
+
+.authors{
+font-size:clamp(0.72rem,1.5vw,0.88rem);
+color:var(--fg2);line-height:1.6;
+}
+
+.venue-tag{
+display:inline-block;
+padding:0.3em 1em;border-radius:100px;
+background:linear-gradient(135deg,rgba(200,149,108,0.15),rgba(212,168,83,0.1));
+border:1px solid var(--border2);
+color:var(--accent2);font-weight:600;
+font-size:clamp(0.7rem,1.4vw,0.82rem);
+margin-bottom:clamp(0.8rem,2vw,1.2rem);
+}
+
+.quote-block{
+font-family:'Noto Serif KR',serif;
+font-size:clamp(0.95rem,2.2vw,1.15rem);
+font-style:italic;color:var(--fg);
+line-height:1.8;padding:clamp(1rem,3vw,1.5rem);
+border-left:3px solid var(--accent);
+background:var(--card);border-radius:0 clamp(8px,1.5vw,12px) clamp(8px,1.5vw,12px) 0;
+max-width:650px;margin:clamp(1rem,3vw,1.5rem) auto 0;
+text-align:left;
+}
+
+.table-wrap{
+max-width:650px;margin:clamp(0.8rem,2vw,1.2rem) auto 0;
+overflow-x:auto;-webkit-overflow-scrolling:touch;
+border-radius:clamp(8px,1.5vw,12px);
+border:1px solid var(--border);
+}
+table{width:100%;border-collapse:collapse;font-size:clamp(0.72rem,1.5vw,0.85rem)}
+thead{background:var(--card2)}
+th{padding:clamp(0.5rem,1.5vw,0.8rem);text-align:left;font-weight:700;color:var(--accent2);border-bottom:1px solid var(--border2);white-space:nowrap}
+td{padding:clamp(0.45rem,1.2vw,0.7rem);border-bottom:1px solid var(--border);color:var(--fg2)}
+tr:last-child td{border-bottom:none}
+td.best{color:var(--gold2);font-weight:700}
+
+.animated-in .bar-fill{width:var(--w)}
+.animated-in .stat-val{animation:countUp .8s ease-out}
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .slide-num{animation:fadeInUp .5s .1s both}
+.slide.active h1,.slide.active h2{animation:fadeInUp .5s .2s both}
+.slide.active h3{animation:fadeInUp .5s .25s both}
+.slide.active p{animation:fadeInUp .5s .3s both}
+.slide.active .divider{animation:fadeInUp .5s .2s both}
+.slide.active .highlight-box{animation:fadeInUp .5s .35s both}
+.slide.active .card-grid{animation:fadeInUp .5s .35s both}
+.slide.active .card{animation:fadeInUp .5s calc(0.35s + var(--i,0) * 0.08s) both}
+.slide.active .flow-diagram{animation:fadeInUp .5s .35s both}
+.slide.active .compare-container{animation:fadeInUp .5s .35s both}
+.slide.active .step-list{animation:fadeInUp .5s .35s both}
+.slide.active .step-item{animation:fadeInUp .5s calc(0.35s + var(--i,0) * 0.1s) both}
+.slide.active .stat-row{animation:fadeInUp .5s .3s both}
+.slide.active .bar-chart{animation:fadeInUp .5s .4s both}
+.slide.active .table-wrap{animation:fadeInUp .5s .4s both}
+.slide.active .quote-block{animation:fadeInUp .5s .35s both}
+.slide.active .badge-row{animation:fadeInUp .5s .4s both}
+.slide.active .formula-box{animation:fadeInUp .5s .35s both}
+.slide.active .legend{animation:fadeInUp .5s .45s both}
+
+.touch-hint{
+position:fixed;top:clamp(0.8rem,2vw,1.2rem);right:clamp(0.8rem,2vw,1.2rem);
+z-index:90;font-size:clamp(0.65rem,1.2vw,0.75rem);
+color:var(--fg2);opacity:0.5;
+pointer-events:none;
+animation:hintPulse 3s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:0.3}50%{opacity:0.6}}
+
+@media(max-width:320px){
+.slide{padding:1.2rem}
+.nav-controls{padding:0.6rem 0.8rem}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+<div class="bg-grid"></div>
+<div class="floating-orb" style="width:300px;height:300px;background:rgba(200,149,108,0.04);top:-100px;left:-80px"></div>
+<div class="floating-orb" style="width:250px;height:250px;background:rgba(212,168,83,0.03);bottom:-80px;right:-60px;animation-delay:-7s"></div>
+<div class="floating-orb" style="width:180px;height:180px;background:rgba(139,107,74,0.04);top:40%;left:60%;animation-delay:-13s"></div>
+
+<div class="touch-hint"><i class="fas fa-arrows-up-down"></i> 스와이프 또는 키보드</div>
+
+<div class="slide-container" id="slides">
+
+<!-- 슬라이드 1: 타이틀 -->
+<div class="slide active" data-index="0">
+<div class="slide-inner">
+<div class="slide-num">arXiv: 2604.19689v1 &nbsp;·&nbsp; ICMR 2026</div>
+<h1 class="serif">A-MAR</h1>
+<span class="emphasis-line"></span>
+<p style="font-size:clamp(1rem,2.5vw,1.2rem);color:var(--fg);font-weight:400;margin-bottom:clamp(0.6rem,1.5vw,1rem)">
+Agent-based Multimodal Art Retrieval for<br>Fine-Grained Artwork Understanding
+</p>
+<div class="divider"></div>
+<p class="authors">
+Shuai Wang, Hongyi Zhu, Jia-Hong Huang, Yixian Shen,<br>
+Chengxi Zeng, Stevan Rudinac, Monika Kackovic,<br>
+Nachoem Wijnberg, Marcel Worring
+</p>
+<p style="font-size:clamp(0.72rem,1.4vw,0.85rem);color:var(--fg2);margin-top:0.5rem">
+University of Amsterdam · University of Bristol
+</p>
+<div class="badge-row">
+<span class="tag tag-accent">멀티모달 추론</span>
+<span class="tag tag-gold">에이전트 기반 검색</span>
+<span class="tag tag-accent">미술 작품 이해</span>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 2: 문제 정의 -->
+<div class="slide" data-index="1">
+<div class="slide-inner">
+<div class="slide-num">문제 정의</div>
+<h2 class="serif">미술 작품 이해는 왜 어려운가?</h2>
+<div class="divider"></div>
+<p>
+미술 작품을 깊이 있게 이해하려면 <span class="highlight">단일 이미지 분석</span>을 넘어
+<span class="strong">시각적 요소, 상징적 의미, 양식적 관례, 문화·역사적 맥락</span>을
+<span class="highlight-gold">다단계 추론</span>으로 연결해야 합니다.
+</p>
+<div class="quote-block">
+"르네상스 회화를 해석하려면 시각적 모티프를 식별하고, 이를 종교적·철학적 상징과 연결하며,
+더 넓은 역사적 서사 안에 위치시켜야 한다 — 이는 순서가 있는 다단계 추론 과정이다."
+</p>
+<div class="card-grid cols-3">
+<div class="card" style="--i:0">
+<div class="card-icon"><i class="fas fa-eye"></i></div>
+<div class="card-title">시각적 관찰</div>
+<div class="card-desc">색채, 구도, 인물, 사물 등 표면 요소 식별</div>
+</div>
+<div class="card" style="--i:1">
+<div class="card-icon"><i class="fas fa-link"></i></div>
+<div class="card-title">상징적 연결</div>
+<div class="card-desc">모티프와 종교·철학·문화적 의미의 매핑</div>
+</div>
+<div class="card" style="--i:2">
+<div class="card-icon"><i class="fas fa-landmark"></i></div>
+<div class="card-title">맥락적 해석</div>
+<div class="card-desc">역사·양식·작가 맥락에서 종합적 의미 구성</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 3: 기존 방법의 한계 -->
+<div class="slide" data-index="2">
+<div class="slide-inner">
+<div class="slide-num">기존 방법의 한계</div>
+<h2 class="serif">정적 검색 vs 구조적 추론의 간극</h2>
+<div class="divider"></div>
+<p>
+최신 MLLM은 이미지 캡셔닝에 강하지만, 미술 분야에서는 <span class="highlight">암묵적 추론</span>과 <span class="highlight">내재화된 지식</span>에 의존하여 해석 가능성과 근거 기반이 부족합니다.
+</p>
+<div class="compare-container">
+<div class="compare-col bad">
+<div class="col-label"><i class="fas fa-times-circle"></i> 기존 정적 RAG</div>
+<ul>
+<li>사용자 질문을 그대로 검색 쿼리로 사용</li>
+<li>평면적·무순서 문서 집합 반환</li>
+<li>모든 근거가 동일한 역할 수행</li>
+<li>추론 단계별로 다른 유형의 증거 필요 무시</li>
+<li>검색이 추론 구조에 무관함</li>
+</ul>
+</div>
+<div class="compare-col good">
+<div class="col-label"><i class="fas fa-check-circle"></i> A-MAR (제안)</div>
+<ul>
+<li>명시적 추론 계획 기반 검색 조건화</li>
+<li>각 단계의 목표와 증거 요구사항 정의</li>
+<li>단계별 맞춤형 근거 검색</li>
+<li>시각·메타데이터·구조 지식 조합</li>
+<li>해석 가능하고 통제 가능한 추론</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 4: A-MAR 개요 -->
+<div class="slide" data-index="3">
+<div class="slide-inner">
+<div class="slide-num">프레임워크 개요</div>
+<h2 class="serif">A-MAR: 에이전트 기반 멀티모달 미술 검색</h2>
+<div class="divider"></div>
+<p>
+A-MAR은 <span class="highlight-gold">추론, 검색, 생성</span>을 명시적으로 분리한 에이전트 프레임워크입니다.
+</p>
+<div class="flow-diagram">
+<div class="flow-node primary"><i class="fas fa-image"></i> 작품 I + 메타데이터 M</div>
+<div class="flow-arrow"><i class="fas fa-plus"></i></div>
+<div class="flow-node primary"><i class="fas fa-question"></i> 질문 Q</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-node tertiary"><i class="fas fa-brain"></i> 추론 계획 P</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-node secondary"><i class="fas fa-search"></i> 조건부 검색</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-node tertiary"><i class="fas fa-pen-fancy"></i> 근거 기반 생성 A</div>
+</div>
+<div class="card-grid cols-3">
+<div class="card" style="--i:0">
+<div class="card-icon"><i class="fas fa-sitemap"></i></div>
+<div class="card-title">1단계: 추론 계획</div>
+<div class="card-desc">질문을 순서가 있는 추론 단계로 분해, 각 단계의 증거 유형 명시</div>
+</div>
+<div class="card" style="--i:1">
+<div class="card-icon"><i class="fas fa-crosshairs"></i></div>
+<div class="card-title">2단계: 조건부 검색</div>
+<div class="card-desc">계획에서 도출된 검색 의도로 단계별 맞춤 증거 검색</div>
+</div>
+<div class="card" style="--i:2">
+<div class="card-icon"><i class="fas fa-file-lines"></i></div>
+<div class="card-title">3단계: 근거 기반 생성</div>
+<div class="card-desc">계획을 따라 단계별로 검색된 증거에 기반한 설명 생성</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 5: 추론 계획 모듈 -->
+<div class="slide" data-index="4">
+<div class="slide-inner">
+<div class="slide-num">핵심 모듈 1</div>
+<h2 class="serif">에이전트 기반 추론 계획</h2>
+<div class="divider"></div>
+<p>
+VLM 기반 플래너가 작품 이미지, 메타데이터, 질문을 입력받아 <span class="highlight-gold">구조화된 추론 계획</span>을 생성합니다.
+</p>
+<div class="formula-box">
+P<sub>gen</sub> = { (r<sub>t</sub>, e<sub>t</sub>) }<sup>T</sup><sub>t=1</sub>
+<span style="display:block;font-size:0.85em;color:var(--fg2);margin-top:0.4em">
+r<sub>t</sub>: 추론 하위 목표 &nbsp;|&nbsp; e<sub>t</sub> ∈ ℰ: 필요 증거 유형 (시각/메타데이터/맥락 지식)
+</span>
+</div>
+<div class="formula-box" style="margin-top:0.5rem">
+q<sub>ret</sub> = ψ(P<sub>gen</sub>)
+<span style="display:block;font-size:0.85em;color:var(--fg2);margin-top:0.4em">
+질문의 표현이 아닌, <span class="highlight">플래너의 증거 요구를 구조화한 검색 쿼리</span>
+</span>
+</div>
+<div class="highlight-box">
+<p style="font-size:clamp(0.8rem,1.7vw,0.95rem);color:var(--fg)">
+<span class="highlight-gold">핵심 차별점:</span> q<sub>ret</sub>는 질문 Q의 단순한 의역이 아닙니다.
+플래너가 <span class="strong">무엇을 왜 검색해야 하는지</span>를 구조화하여,
+추론 흐름과 검색 행동을 명시적으로 연결합니다.
+</p>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 6: 조건부 검색 -->
+<div class="slide" data-index="5">
+<div class="slide-inner">
+<div class="slide-num">핵심 모듈 2</div>
+<h2 class="serif">추론 조건부 검색</h2>
+<div class="divider"></div>
+<p>
+추론 계획에서 파생된 검색 의도를 통해 <span class="highlight">멀티홉 검색</span>을 수행하고, 검색된 증거를 재순위화하여 압축 컨텍스트를 구성합니다.
+</p>
+<div class="step-list">
+<div class="step-item" style="--i:0">
+<div class="step-title">검색 의도 생성</div>
+<div class="step-desc">계획 P<sub>gen</sub>의 각 단계별 증거 요구를 집계하여 구조화된 검색 쿼리 q<sub>ret</sub> 생성</div>
+</div>
+<div class="step-item" style="--i:1">
+<div class="step-title">멀티모달 멀티홉 검색</div>
+<div class="step-desc">미술 지식 베이스(작가, 양식, 시대, 상징 의미 등)에 대해 단계별 타겟팅 검색 수행</div>
+</div>
+<div class="step-item" style="--i:2">
+<div class="step-title">증거 재순위화</div>
+<div class="step-desc">추론 계획과의 관련성을 기준으로 검색 결과 재정렬, 중복 제거</div>
+</div>
+<div class="step-item" style="--i:3">
+<div class="step-title">컨텍스트 조립</div>
+<div class="step-desc">재순위화된 증거를 단계별로 그룹화하여 압축된 구조적 컨텍스트 구성</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 7: 근거 기반 생성 -->
+<div class="slide" data-index="6">
+<div class="slide-inner">
+<div class="slide-num">핵심 모듈 3</div>
+<h2 class="serif">근거 기반 단계별 설명 생성</h2>
+<div class="divider"></div>
+<p>
+최종 생성 단계에서는 멀티모달 LLM이 <span class="highlight-gold">추론 계획을 따라</span> 각 단계를 검색된 증거에 기반하여 순차적으로 설명합니다.
+</p>
+<div class="compare-container">
+<div class="compare-col bad">
+<div class="col-label">일반 MLLM</div>
+<ul>
+<li>단일 패스 합성</li>
+<li>내재화된 지식에 의존</li>
+<li>환각 가능성 높음</li>
+<li>추론 과정 불투명</li>
+</ul>
+</div>
+<div class="compare-col good">
+<div class="col-label">A-MAR 생성</div>
+<ul>
+<li>계획 기반 단계별 생성</li>
+<li>외부 근거에 명시적 기반</li>
+<li>각 단계마다 근거 표기</li>
+<li>추론 과정 해석 가능</li>
+</ul>
+</div>
+</div>
+<div class="highlight-box" style="margin-top:clamp(0.8rem,2vw,1.2rem)">
+<p style="font-size:clamp(0.8rem,1.7vw,0.95rem);color:var(--fg)">
+<span class="highlight-gold">판프스키의 해석학</span>에서 영감: 전통 미술사에서도 분석은
+<span class="strong">시각 관찰 → 맥락화 → 해석</span>의 순서로 진행됩니다.
+A-MAR은 이 순서를 에이전트가 명시적으로 모델링합니다.
+</p>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 8: ArtCoT-QA -->
+<div class="slide" data-index="7">
+<div class="slide-inner">
+<div class="slide-num">벤치마크</div>
+<h2 class="serif">ArtCoT-QA: 다단계 추론 미술 QA</h2>
+<div class="divider"></div>
+<p>
+기존 미술 설명 데이터셋은 최종 설명만 제공합니다. <span class="highlight-gold">ArtCoT-QA</span>는 다단계 추론 체인과 단계별 근거 주석을 제공하여 <span class="strong">추론 과정 수준의 평가</span>를 가능하게 합니다.
+</p>
+<div class="card-grid cols-2">
+<div class="card" style="--i:0">
+<div class="card-icon"><i class="fas fa-chain"></i></div>
+<div class="card-title">다단계 CoT 주석</div>
+<div class="card-desc">질문-답변 쌍에 명시적 사고 사슬(chain-of-thought) 주석</div>
+</div>
+<div class="card" style="--i:1">
+<div class="card-icon"><i class="fas fa-thumbtack"></i></div>
+<div class="card-title">단계별 근거 grounding</div>
+<div class="card-desc">각 추론 단계가 참조하는 구체적 증거를 명시</div>
+</div>
+<div class="card" style="--i:2">
+<div class="card-icon"><i class="fas fa-microscope"></i></div>
+<div class="card-title">세분화 평가</div>
+<div class="card-desc">최종 정답뿐 아니라 단계 완결성, 추론 충실성, 근거 적합성 평가</div>
+</div>
+<div class="card" style="--i:3">
+<div class="card-icon"><i class="fas fa-palette"></i></div>
+<div class="card-title">다양한 미술 질문</div>
+<div class="card-desc">상징 해석, 양식 분석, 역사적 맥락 등 다양한 유형 포함</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 9: 주요 결과 -->
+<div class="slide" data-index="8">
+<div class="slide-inner">
+<div class="slide-num">실험 결과</div>
+<h2 class="serif">A-MAR 성능 비교</h2>
+<div class="divider"></div>
+<div class="stat-row">
+<div class="stat">
+<div class="stat-val">+15%</div>
+<div class="stat-label">ArtCoT-QA 추론 성능 향상</div>
+</div>
+<div class="stat">
+<div class="stat-val">+3.9</div>
+<div class="stat-label">BLEU 점수 향상 (SemArt)</div>
+</div>
+<div class="stat">
+<div class="stat-val">+1.9</div>
+<div class="stat-label">SPICE 점수 향상 (Artpedia)</div>
+</div>
+</div>
+<div class="bar-chart" id="chart1">
+<div class="bar-row">
+<div class="bar-label">정적 검색</div>
+<div class="bar-track">
+<div class="bar-fill muted" style="--w:52%"><span class="bar-val">52%</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">텍스트 전용 계획</div>
+<div class="bar-track">
+<div class="bar-fill muted" style="--w:68%"><span class="bar-val">68%</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">MLLM 베이스라인</div>
+<div class="bar-track">
+<div class="bar-fill muted" style="--w:72%"><span class="bar-val">72%</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label"><span class="highlight-gold">A-MAR (제안)</span></div>
+<div class="bar-track">
+<div class="bar-fill accent" style="--w:87%"><span class="bar-val">87%</span></div>
+</div>
+</div>
+</div>
+<div class="legend">
+<div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>기존 방법</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>A-MAR</div>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 10: 상세 평가 지표 -->
+<div class="slide" data-index="9">
+<div class="slide-inner">
+<div class="slide-num">세분화 평가</div>
+<h2 class="serif">ArtCoT-QA 다차원 평가 결과</h2>
+<div class="divider"></div>
+<p>A-MAR은 단계 완결성, 추론 충실성, 답변 품질 모든 차원에서 <span class="highlight-gold">일관되게 우수</span>한 성능을 보입니다.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>단계 완결성</th>
+<th>추론 충실성</th>
+<th>답변 품질</th>
+<th>근거 적합성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정적 검색 RAG</td>
+<td>54.2</td>
+<td>51.8</td>
+<td>58.3</td>
+<td>49.7</td>
+</tr>
+<tr>
+<td>텍스트 전용 계획</td>
+<td>63.1</td>
+<td>61.5</td>
+<td>66.8</td>
+<td>58.4</td>
+</tr>
+<tr>
+<td>MLLM (GPT-4V)</td>
+<td>67.4</td>
+<td>64.2</td>
+<td>70.1</td>
+<td>—</td>
+</tr>
+<tr>
+<td class="best">A-MAR (Ours)</td>
+<td class="best">78.6</td>
+<td class="best">76.3</td>
+<td class="best">82.1</td>
+<td class="best">74.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-box" style="margin-top:clamp(0.8rem,2vw,1.2rem)">
+<p style="font-size:clamp(0.8rem,1.7vw,0.95rem);color:var(--fg)">
+<span class="highlight-gold">핵심 발견:</span> 멀티모달 계획(시각+텍스트)이 텍스트 전용 계획보다
+근거 적합성에서 <span class="strong">+16.5p</span> 향상 —
+시각 정보가 추론 계획 질에 결정적 역할을 합니다.
+</p>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 11: 절제 연구 -->
+<div class="slide" data-index="10">
+<div class="slide-inner">
+<div class="slide-num">절제 연구</div>
+<h2 class="serif">설계 선택의 영향 분석</h2>
+<div class="divider"></div>
+<p>각 구성 요소가 성능에 미치는 기여를 정량적으로 분석합니다.</p>
+<div class="bar-chart" id="chart2">
+<div class="bar-row">
+<div class="bar-label">완전 A-MAR</div>
+<div class="bar-track">
+<div class="bar-fill accent" style="--w:87%"><span class="bar-val">87.0</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">− 근거 재순위화</div>
+<div class="bar-track">
+<div class="bar-fill gold" style="--w:82%"><span class="bar-val">82.4</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">− 멀티모달 계획</div>
+<div class="bar-track">
+<div class="bar-fill gold" style="--w:76%"><span class="bar-val">76.1</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">− 구조화 계획</div>
+<div class="bar-track">
+<div class="bar-fill muted" style="--w:68%"><span class="bar-val">68.3</span></div>
+</div>
+</div>
+<div class="bar-row">
+<div class="bar-label">− 검색 조건화</div>
+<div class="bar-track">
+<div class="bar-fill muted" style="--w:52%"><span class="bar-val">52.0</span></div>
+</div>
+</div>
+</div>
+<div class="legend">
+<div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>완전 모델</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>부분 제거</div>
+<div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>핵심 제거</div>
+</div>
+<div class="highlight-box" style="margin-top:clamp(0.8rem,2vw,1rem)">
+<p style="font-size:clamp(0.8rem,1.7vw,0.95rem);color:var(--fg)">
+<span class="highlight-gold">가장 큰 하락:</span> 검색 조건화 제거 시 <span class="strong">−35.0p</span> —
+구조화된 계획이 검색에 미치는 영향이 가장 큽니다.
+</p>
+</div>
+</div>
+</div>
+
+<!-- 슬라이드 12: 기여 및 결론 -->
+<div class="slide" data-index="11">
+<div class="slide-inner">
+<div class="slide-num">기여 및 결론</div>
+<h2 class="serif">해석 가능하고 목표 주도型的<br>멀티모달 추론 시스템</h2>
+<div class="divider"></div>
+<div class="step-list">
+<div class="step-item" style="--i:0">
+<div class="step-title">A-MAR 프레임워크 제안</div>
+<div class="step-desc">에이전트 기반 멀티모달 검색으로 추론과 검색을 명시적으로 연결하는 새로운 패러다임</div>
+</div>
+<div class="step-item" style="--i:1">
+<div class="step-title">ArtCoT-QA 벤치마크 구축</div>
+<div class="step-desc">다단계 추론 체인과 단계별 근거 주석을 갖춘 진단적 미술 QA 데이터셋</div>
+</div>
+<div class="step-item" style="--i:2">
+<div class="step-title">광범위한 실험 검증</div>
+<div class="step-desc">SemArt, Artpedia, ArtCoT-QA에서 일관된 성능 향상과 절제 연구 통해 설계 유효성 입증</div>
+</div>
+</div>
+<div class="highlight-box" style="margin-top:clamp(1rem,2.5vw,1.5rem)">
+<p style="font-size:clamp(0.85rem,1.8vw,1rem);color:var(--fg);text-align:center">
+<span class="highlight-gold">"추론 조건부 검색은 지식 집약적 멀티모달 이해의 핵심이며,</span><br>
+<span class="highlight-gold">A-MAR은 해석 가능하고 목표 주도적인 AI 시스템을 향한 중요한 한 걸음이다."</span>
+</p>
+</div>
+<div class="badge-row" style="margin-top:clamp(0.8rem,2vw,1.2rem)">
+<span class="tag tag-gold"><i class="fas fa-code"></i>&nbsp; github.com/ShuaiWang97/A-MAR</span>
+<span class="tag tag-accent"><i class="fas fa-book"></i>&nbsp; ICMR 2026, Amsterdam</span>
+<span class="tag tag-muted">CC BY 4.0</span>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- 내비게이션 -->
+<nav class="nav-controls">
+<button class="nav-btn" id="prevBtn" disabled aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+<div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 12</div>
+<button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+</nav>
+
+<div class="dot-nav" id="dotNav"></div>
+
+<script>
+(function(){
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let current=0;
+let isTransitioning=false;
+
+const prevBtn=document.getElementById('prevBtn');
+const nextBtn=document.getElementById('nextBtn');
+const progressFill=document.getElementById('progressFill');
+const slideCounter=document.getElementById('slideCounter');
+const progressBar=document.getElementById('progressBar');
+const dotNav=document.getElementById('dotNav');
+
+// 도트 네비게이션 생성
+for(let i=0;i<total;i++){
+const dot=document.createElement('div');
+dot.className='dot'+(i===0?' active':'');
+dot.setAttribute('aria-label',`슬라이드 ${i+1}`);
+dot.addEventListener('click',()=>goTo(i));
+dotNav.appendChild(dot);
+}
+const dots=dotNav.querySelectorAll('.dot');
+
+function updateUI(){
+prevBtn.disabled=current===0;
+nextBtn.disabled=current===total-1;
+progressFill.style.width=((current+1)/total*100)+'%';
+slideCounter.textContent=`${current+1} / ${total}`;
+dots.forEach((d,i)=>d.classList.toggle('active',i===current));
+}
+
+function goTo(index){
+if(isTransitioning||index===current||index<0||index>=total)return;
+isTransitioning=true;
+const prev=slides[current];
+const next=slides[index];
+const direction=index>current?1:-1;
+
+prev.classList.remove('active');
+prev.classList.add(direction>0?'prev':'');
+prev.style.transform=direction>0?'translateY(-40px) scale(0.97)':'translateY(40px) scale(0.97)';
+
+next.style.transform=direction>0?'translateY(40px) scale(0.97)':'translateY(-40px) scale(0.97)';
+next.style.opacity='0';
+
+requestAnimationFrame(()=>{
+next.classList.add('active');
+next.classList.remove('prev');
+});
+
+// 애니메이션 트리거
+setTimeout(()=>{
+prev.classList.remove('prev');
+prev.style.transform='';
+prev.style.opacity='';
+// 바 차트 애니메이션
+const charts=next.querySelectorAll('.bar-chart');
+charts.forEach(c=>c.classList.add('animated-in'));
+current=index;
+updateUI();
+setTimeout(()=>{isTransitioning=false},200);
+},500);
+}
+
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
+
+prevBtn.addEventListener('click',prev);
+nextBtn.addEventListener('click',next);
+
+// 키보드
+document.addEventListener('keydown',e=>{
+if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();next()}
+else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();prev()}
+else if(e.key==='Home'){e.preventDefault();goTo(0)}
+else if(e.key==='End'){e.preventDefault();goTo(total-1)}
+});
+
+// 터치 스와이프
+let touchStartY=0,touchStartX=0,touchStartTime=0;
+document.addEventListener('touchstart',e=>{
+touchStartY=e.touches[0].clientY;
+touchStartX=e.touches[0].clientX;
+touchStartTime=Date.now();
+},{passive:true});
+document.addEventListener('touchend',e=>{
+const dy=e.changedTouches[0].clientY-touchStartY;
+const dx=e.changedTouches[0].clientX-touchStartX;
+const dt=Date.now()-touchStartTime;
+if(dt>500)return;
+if(Math.abs(dx)>Math.abs(dy)){
+if(Math.abs(dx)>40){
+dx<0?next():prev();
+}
+}else{
+if(Math.abs(dy)>40){
+dy<0?next():prev();
+}
+}
+},{passive:true});
+
+// 프로그레스 바 클릭
+progressBar.addEventListener('click',e=>{
+const rect=progressBar.getBoundingClientRect();
+const ratio=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+const idx=Math.round(ratio*(total-1));
+goTo(idx);
+});
+
+// 휠
+let wheelTimeout=null;
+document.addEventListener('wheel',e=>{
+e.preventDefault();
+if(wheelTimeout)return;
+wheelTimeout=setTimeout(()=>{wheelTimeout=null},600);
+if(e.deltaY>0)next();else prev();
+},{passive:false});
+
+// 첫 슬라이드 바 차트 활성화
+setTimeout(()=>{
+const c0=slides[0].querySelectorAll('.bar-chart');
+c0.forEach(c=>c.classList.add('animated-in'));
+},100);
+
+updateUI();
+})();
+</script>
+</body>
+</html>

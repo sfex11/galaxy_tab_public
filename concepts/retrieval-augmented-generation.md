@@ -38,3 +38,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
 
 - [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md|A Systematic Study of Retrieval Pipeline Design for Retrieva]] (2026-04-10)
+
+### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
+
+→ [[sources/2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md|상세 보기]]

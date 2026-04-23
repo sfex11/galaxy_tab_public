@@ -140,3 +140,31 @@ TriAttention의 삼각함수 기반 긴 추론 효율화, Brief is Better의 비
 - [[sources/2026-04-13-cram-less-to-fit-more-training-data-pruning-improv.md|2026 04 13 cram less to fit more training data pruning improv.md]] (2026-04-13)
 - [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|2026 04 13 figures as interfaces toward llm native artifacts .md]] (2026-04-13)
 - [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|2026 04 13 what drives representation steering a mechanistic .md]] (2026-04-13)
+
+### VLA Foundry: A Unified Framework for Training Vision-Language-Action M (2026-04-23)
+
+→ [[sources/2026-04-23-vla-foundry-a-unified-framework-for-training-visio.md|상세 보기]]
+
+### Discovering a Shared Logical Subspace: Steering LLM Logical Reasoning  (2026-04-23)
+
+LLM이 자연어와 기호 언어 사이에 공유 논리 부분공간을 내재하고 있다는 가설을 제공하며, 이를 통해 논리 추론 능력이 모달리티 독립적인 내부 구조에 기반함을 시사한다.
+
+→ [[sources/2026-04-23-discovering-a-shared-logical-subspace-steering-llm.md|상세 보기]]
+
+### Epistemic orientation in parliamentary discourse is associated with de (2026-04-23)
+
+LLM을 AI 시스템 평가를 넘어 정치 담화의 인식론적 속성을 정량화하는 측정 도구로 확장하는 사례를 제공하며, LLM-as-Judge의 신뢰성을 임베딩 기반 보정과 결합하여 강화하는 하이브리드 평가 패턴을 보여준다.
+
+→ [[sources/2026-04-23-epistemic-orientation-in-parliamentary-discourse-i.md|상세 보기]]
+
+### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
+
+다국어 LLM에서 function vector가 언어 비의존적 작업 표현을 부분적으로 캡처하지만, 언어별 크기 변동이 존재함을 확인하여 다국어 모델의 내부 표현 구조에 대한 이해를 심화시킨다.
+
+→ [[sources/2026-04-23-exploring-language-agnosticity-in-function-vectors.md|상세 보기]]
+
+### Chat2Workflow: A Benchmark for Generating Executable Visual Workflows  (2026-04-23)
+
+자연어 이해 능력과 시각적 워크플로우 생성 능력 사이의 체계적 갭을 정량화하여, LLM 능력 평가가 텍스트 생성을 넘어 구조적 프로그램 합성(structural program synthesis)으로 확장되어야 함을 시사한다.
+
+→ [[sources/2026-04-23-chat2workflow-a-benchmark-for-generating-executabl.md|상세 보기]]

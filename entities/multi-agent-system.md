@@ -44,3 +44,7 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|2026 04 09 paper circle an open source multi agent research d.md]] (2026-04-09)
 - [[sources/2026-04-09-social-dynamics-as-critical-vulnerabilities-that-u.md|2026 04 09 social dynamics as critical vulnerabilities that u.md]] (2026-04-09)
 - [[sources/2026-04-11-density-driven-optimal-control-convergence-guarant.md|2026 04 11 density driven optimal control convergence guarant.md]] (2026-04-11)
+
+### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
+
+→ [[sources/2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md|상세 보기]]

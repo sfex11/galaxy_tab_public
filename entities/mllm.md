@@ -65,3 +65,9 @@ MLLM을 자율적 에이전트로 확장하려는 시도가 활발하다. **MARC
 - [[sources/2026-04-12-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2]] (2026-04-12) — 범용 멀티모달 추론 모델 (갱신)
 - [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely]] (2026-04-13) — 메타인지적 도구 사용 (갱신)
 - [[sources/2026-04-13-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-13) — 시각 기반 휴머노이드 에이전트
+
+### SafetyALFRED: Evaluating Safety-Conscious Planning of Multimodal Large (2026-04-23)
+
+SafetyALFRED는 MLLM의 멀티모달 이해 능력이 체화 환경에서 안전 의사결정으로 변환되는지를 평가하여, 기존 '이해→출력' 연구에서 '이해→계획→행동'으로 평가 패러다임을 확장한다.
+
+→ [[sources/2026-04-23-safetyalfred-evaluating-safety-conscious-planning-.md|상세 보기]]
