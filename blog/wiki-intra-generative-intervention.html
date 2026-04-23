@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LPSR이 LLM 안전성의 사전/사후 이분법을 무너뜨리는 방식</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d11;
+    --bg-card: #16161d;
+    --bg-card-hover: #1c1c26;
+    --fg: #e8e6e3;
+    --fg-muted: #8a8a9a;
+    --fg-dim: #55556a;
+    --accent: #ff6b35;
+    --accent-glow: rgba(255, 107, 53, 0.15);
+    --accent2: #00e5a0;
+    --accent2-glow: rgba(0, 229, 160, 0.12);
+    --accent3: #a78bfa;
+    --accent3-glow: rgba(167, 139, 250, 0.12);
+    --border: #2a2a3a;
+    --border-accent: rgba(255, 107, 53, 0.3);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font-body: 'Noto Sans KR', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 2.5vw, 18px);
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 13, 17, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(12px, 3vw, 24px);
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    display: inline-block;
+    padding: 14px 12px;
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 500;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  nav a:hover { color: var(--accent); }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  header {
+    padding: clamp(48px, 8vw, 80px) 0 clamp(32px, 5vw, 48px);
+    position: relative;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 1.8vw, 13px);
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 900;
+    line-height: 1.3;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), #ff9a5c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 2.2vw, 17px);
+    color: var(--fg-muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .meta {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+    font-size: clamp(12px, 1.8vw, 13px);
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+  }
+
+  main { padding-bottom: clamp(60px, 10vw, 100px); }
+
+  section { margin-bottom: clamp(40px, 6vw, 64px); }
+
+  h2 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  h2.green { border-left-color: var(--accent2); }
+  h2.purple { border-left-color: var(--accent3); }
+
+  h3 {
+    font-size: clamp(16px, 2.8vw, 21px);
+    font-weight: 600;
+    color: #ddd;
+    margin-bottom: 12px;
+  }
+
+  p { margin-bottom: 16px; color: var(--fg); }
+
+  .diagram-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(16px, 3vw, 32px);
+    margin: 24px 0;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+  .diagram-title {
+    font-size: clamp(12px, 1.8vw, 14px);
+    color: var(--fg-dim);
+    text-align: center;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(20px, 3vw, 28px);
+    margin-bottom: 16px;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-accent);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 640px) {
+    .card-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .card-label {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 1.5vw, 12px);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .card-label.green { color: var(--accent2); }
+  .card-label.purple { color: var(--accent3); }
+
+  .card-title {
+    font-size: clamp(14px, 2.2vw, 17px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: clamp(13px, 2vw, 15px);
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+
+  .callout {
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-sm);
+    padding: clamp(16px, 2.5vw, 24px);
+    margin: 24px 0;
+  }
+  .callout.green {
+    background: var(--accent2-glow);
+    border-color: rgba(0, 229, 160, 0.25);
+  }
+  .callout.purple {
+    background: var(--accent3-glow);
+    border-color: rgba(167, 139, 250, 0.25);
+  }
+  .callout-title {
+    font-weight: 700;
+    font-size: clamp(14px, 2.2vw, 16px);
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .callout.green .callout-title { color: var(--accent2); }
+  .callout.purple .callout-title { color: var(--accent3); }
+  .callout p { margin-bottom: 0; color: var(--fg); font-size: clamp(13px, 2vw, 15px); }
+
+  .step-list { list-style: none; counter-reset: step; }
+  .step-list li {
+    counter-increment: step;
+    position: relative;
+    padding-left: clamp(40px, 6vw, 56px);
+    margin-bottom: 20px;
+    min-height: 28px;
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .step-list li p { margin-bottom: 0; }
+
+  .vs-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .vs-box {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    font-size: clamp(13px, 2vw, 15px);
+    font-weight: 600;
+    text-align: center;
+  }
+  .vs-box.old {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .vs-box.new {
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    color: var(--accent);
+  }
+  .vs-divider {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-dim);
+    flex-shrink: 0;
+  }
+
+  .inline-code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--accent2);
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  .insight-block {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.06), rgba(167, 139, 250, 0.06));
+    border: 1px solid rgba(255, 107, 53, 0.15);
+    border-radius: var(--radius);
+    padding: clamp(24px, 3.5vw, 36px);
+    margin: 32px 0;
+  }
+  .insight-block h3 {
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .insight-block p { color: var(--fg); }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+  }
+
+  footer {
+    text-align: center;
+    padding: 32px 16px;
+    font-size: 13px;
+    color: var(--fg-dim);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 홈</a><a href="../sources.html">📚 논문</a><a href="../daily.html">📝 일일요약</a><a href="../slides.html">🎨 슬라이드</a><a href="../research.html">🔬 연구</a><a href="blog.html">🧠 Wiki 분석</a><a href="../patent/README.html">📋 특허</a><a href="../reports.html">📊 보고서</a><a href="https://github.com/sfex11/galaxy_tab_public" target="_blank">GitHub</a>
+</nav>
+
+<div class="container">
+
+  <header class="fade-in">
+    <span class="tag">LLM SAFETY / LPSR</span>
+    <h1>LPSR이 LLM 안전성의<br><span class="highlight">사전/사후 이분법</span>을 무너뜨리는 방식</h1>
+    <p class="subtitle">기존 LLM 안전성은 "생성 전 제어"와 "생성 후 평가" 두 축으로만 설명되었다. LPSR(Latent Phase-Shift Rollback)은 잔류 스트림 실시간 모니터링과 KV-Cache 되감기를 결합해 제3의 패러다임 — <strong style="color:#fff;">추론 중간 개입</strong>을 제시한다.</p>
+    <div class="meta">
+      <span>2025-06-30</span>
+      <span>약 8분 읽기</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 섹션 1: 이분법의 구조 -->
+    <section class="fade-in">
+      <h2>기존 이분법의 구조</h2>
+      <p>LLM 안전성 연구는 역사적으로 두 가지 접근 축으로 나뉘었다. 하나는 생성이 시작되기 전에 모델의 동작 구조 자체를 제한하는 방식이고, 다른 하나는 생성이 완료된 후 최종 출력물을 검사하는 방식이다.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-label">Pre-Generation</div>
+          <div class="card-title">Box Maze</div>
+          <p class="card-desc">프로세스 구조 단위에서 아키텍처 수준의 제약을 부과. 생성이 시작되기 전에 허용 가능한 경로를 정의한다.</p>
+        </div>
+        <div class="card" style="display:flex;align-items:center;justify-content:center;border-style:dashed;">
+          <span style="color:var(--fg-dim);font-size:clamp(13px,2vw,15px);">빈 공간<br>(사각지대)</span>
+        </div>
+        <div class="card">
+          <div class="card-label">Post-Generation</div>
+          <div class="card-title">TraceSafe</div>
+          <p class="card-desc">최종 텍스트를 대상으로 가드레일 평가를 수행. 생성이 끝난 뒤에야 문제를 식별할 수 있다.</p>
+        </div>
+      </div>
+
+      <!-- 3축 다이어그램 -->
+      <div class="diagram-wrap">
+        <div class="diagram-title">[ Fig 1. 안전성 개입 축의 3분화 ]</div>
+        <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- 타임라인 축 -->
+          <line x1="60" y1="180" x2="660" y2="180" stroke="#2a2a3a" stroke-width="2"/>
+          <polygon points="660,175 670,180 660,185" fill="#2a2a3a"/>
+
+          <!-- 시간 라벨 -->
+          <text x="80" y="220" fill="#55556a" font-size="11" font-family="JetBrains Mono, monospace">T₀ 생성 전</text>
+          <text x="310" y="220" fill="#55556a" font-size="11" font-family="JetBrains Mono, monospace">T₁ 생성 중</text>
+          <text x="550" y="220" fill="#55556a" font-size="11" font-family="JetBrains Mono, monospace">T₂ 생성 후</text>
+
+          <!-- 점선 구간 표시 -->
+          <line x1="180" y1="180" x2="430" y2="180" stroke="#ff6b35" stroke-width="3" stroke-dasharray="6 4" opacity="0.5"/>
+          <rect x="180" y="172" width="250" height="16" rx="4" fill="rgba(255,107,53,0.06)"/>
+          <text x="305" y="166" fill="#ff6b35" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">기존 사각지대</text>
+
+          <!-- Box Maze 노드 -->
+          <circle cx="100" cy="180" r="32" fill="#16161d" stroke="#a78bfa" stroke-width="2.5"/>
+          <text x="100" y="176" fill="#a78bfa" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">Box</text>
+          <text x="100" y="190" fill="#a78bfa" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">Maze</text>
+          <!-- 위쪽 라벨 -->
+          <rect x="42" y="110" width="116" height="40" rx="6" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+          <text x="100" y="127" fill="#a78bfa" font-size="10" font-weight="600" text-anchor="middle">구조적 사전 제어</text>
+          <text x="100" y="141" fill="#8a8a9a" font-size="9" text-anchor="middle">대상: 프로세스 구조</text>
+          <line x1="100" y1="148" x2="100" y2="160" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+          <!-- LPSR 노드 -->
+          <circle cx="360" cy="180" r="36" fill="#16161d" stroke="#ff6b35" stroke-width="2.5"/>
+          <text x="360" y="176" fill="#ff6b35" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace" text-anchor="middle">LPSR</text>
+          <text x="360" y="190" fill="#ff6b35" font-size="9" font-family="JetBrains Mono, monospace" text-anchor="middle">Phase-Shift</text>
+          <!-- 아래쪽 라벨 -->
+          <rect x="285" y="240" width="150" height="48" rx="6" fill="rgba(255,107,53,0.1)" stroke="rgba(255,107,53,0.3)" stroke-width="1"/>
+          <text x="360" y="258" fill="#ff6b35" font-size="10" font-weight="600" text-anchor="middle">추론 중간 개입</text>
+          <text x="360" y="272" fill="#8a8a9a" font-size="9" text-anchor="middle">대상: 잔류 스트림 / KV-Cache</text>
+          <line x1="360" y1="216" x2="360" y2="240" stroke="#ff6b35" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+          <!-- TraceSafe 노드 -->
+          <circle cx="600" cy="180" r="32" fill="#16161d" stroke="#00e5a0" stroke-width="2.5"/>
+          <text x="600" y="176" fill="#00e5a0" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">Trace</text>
+          <text x="600" y="190" fill="#00e5a0" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">Safe</text>
+          <!-- 위쪽 라벨 -->
+          <rect x="540" y="110" width="120" height="40" rx="6" fill="rgba(0,229,160,0.08)" stroke="rgba(0,229,160,0.25)" stroke-width="1"/>
+          <text x="600" y="127" fill="#00e5a0" font-size="10" font-weight="600" text-anchor="middle">가드레일 사후 평가</text>
+          <text x="600" y="141" fill="#8a8a9a" font-size="9" text-anchor="middle">대상: 최종 텍스트</text>
+          <line x1="600" y1="148" x2="600" y2="160" stroke="#00e5a0" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+          <!-- NEW 배지 -->
+          <rect x="340" y="130" width="40" height="18" rx="9" fill="#ff6b35"/>
+          <text x="360" y="143" fill="#fff" font-size="9" font-weight="700" font-family="JetBrains Mono, monospace" text-anchor="middle">NEW</text>
+        </svg>
+      </div>
+
+      <p>이 구도에서 핵심적으로 빠져 있는 것이 바로 <strong style="color:#fff;">"토큰이 생성되는 동안"</strong>이라는 시간대다. Box Maze는 문을 닫고 시작하고, TraceSafe는 문이 열린 뒤에 검사한다. 그 사이에서 무슨 일이 일어나는지는 아무도 들여다보지 않았다.</p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 섹션 2: 사각지대 -->
+    <section class="fade-in">
+      <h2 class="green">회복 불가능한 추론 오류라는 사각지대</h2>
+      <p>사전/사후 이분법이 가진 치명적 결함은 단순한 "시간적 공백"이 아니다. 문제는 그 공백에서 발생하는 오류의 <strong style="color:var(--accent2);">복합화(composition)</strong> 성질이다.</p>
+
+      <div class="callout green">
+        <div class="callout-title">핵심 문제: 오류의 연쇄적 복합화</div>
+        <p>초기 추론 단계에서 논리적 궤적이 미세하게 이탈하면, 이 이탈은 이후 토큰 생성에 누적되어 입력한다. 사후 평가 단계에서 발견했을 때는 이미 전체 추론 체인이 오염된 상태다. 어느 지점으로 되돌아가야 할지도, 원래 올바른 궤적이 무엇이었는지도 복원할 수 없다.</p>
+      </div>
+
+      <h3>왜 사후 평가로 복구가 안 되는가</h3>
+      <p>TraceSafe 계열의 가드레일은 최종 텍스트에서 "유해함"을 탐지할 수는 있어도, "어떤 추론 단계에서 궤적이 벗어났는지"를 역추적할 수 없다. 이는 다음 세 가지 이유 때문이다.</p>
+
+      <ol class="step-list">
+        <li><p><strong style="color:#fff;">상태 의존성:</strong> 각 토큰은 이전 모든 토큰의 KV-Cache 상태에 의존해 생성된다. 오류 원인이 특정 단계에 있어도, 그 영향은 이후 모든 단계에 퍼져 있다.</p></li>
+        <li><p><strong style="color:#fff;">비가역성:</strong> Transformer의 self-attention은 순차적 상태 갱신이다. 중간 상태를 저장하지 않으면 이전 지점으로 되돌아갈 수 없다.</p></li>
+        <li><p><strong style="color:#fff;">인과 모호성:</strong> 최종 출력이 잘못되었다는 것은 알 수 있어도, "5번째 토큰이 원인인지 15번째인지"는 텍스트만으로 분별할 수 없다.</p></li>
+      </ol>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 섹션 3: LPSR 제3의 축 -->
+    <section class="fade-in">
+      <h2>LPSR: 제3의 축이 열리는 방식</h2>
+      <p>LPSR(Latent Phase-Shift Rollback)은 이 빈 공간을 정확히 채운다. 두 가지 메커니즘을 결합한다.</p>
+
+      <div class="vs-row">
+        <div class="vs-box old">잔류 스트림<br>실시간 모니터링</div>
+        <div class="vs-divider">＋</div>
+        <div class="vs-box old">KV-Cache<br>되감기</div>
+        <div class="vs-divider">＝</div>
+        <div class="vs-box new">추론 중간 개입</div>
+      </div>
+
+      <h3>감지: 잔류 스트림(Residual Stream) 모니터링</h3>
+      <p>Transformer의 잔류 스트림은 각 레이어를 거치며 누적되는 표현 벡터다. 이 벡터의 궤적이 "예상된 논리적 부분공간"을 벗어나는 순간, LPSR은 이탈을 실시간으로 감지한다. 텍스트가 완성되기를 기다릴 필요 없이, 벡터 공간에서의 이탈 자체를 신호로 삼는다.</p>
+
+      <h3>수정: KV-Cache 되감기(Rollback)</h3>
+      <p>이탈이 감지되면, LPSR은 해당 시점 이전의 KV-Cache 스냅샷으로 상태를 되감는다. 그리고 재생성을 시도한다. 핵심은 "전체를 처음부터 다시 하는 것"이 아니라 <span class="inline-code">이탈 감지 지점 직전</span>으로만 돌아간다는 점이다. 이전까지의 정상적인 추론은 그대로 보존된다.</p>
+
+      <div class="callout">
+        <div class="callout-title">Box Maze / TraceSafe와의 결정적 차이</div>
+        <p>Box Maze는 "어디로 갈 수 있는지"를 제한하지만 "가는 도중에 뭐가 잘못되고 있는지"는 모른다. TraceSafe는 "도착한 곳이 잘못되었다"는 것을 악지만 "다시 어디로 가야 할지" 모른다. LPSR은 "지금 잘못된 방향으로 가고 있으니, 직전 갈림길로 돌아가서 다른 길을 가자"고 말한다.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 섹션 4: 논리적 부분공간 -->
+    <section class="fade-in">
+      <h2 class="purple">Shared Logical Subspace가 제공하는 이론적 기반</h2>
+      <p>LPSR이 "이탈"을 감지하려면 기준이 필요하다. 무엇으로부터의 이탈인가? 여기서 <span class="inline-code">shared logical subspace</span> 개념이 이론적 닻 역할을 한다.</p>
+
+      <div class="card">
+        <div class="card-label purple">THEORETICAL BASIS</div>
+        <div class="card-title">논리적 부분공간(Logical Subspace)이란</div>
+        <p class="card-desc">여러 논리적 추론 과정이 잔류 스트림 내에서 공유하는 저차원 부분공간을 의미한다. 정상적인 추론 궤적은 이 부분공간 내에서 움직이며, 오류가 발생하면 궤적이 부분공간 밖으로 튕겨 나간다.</p>
+      </div>
+
+      <p>이 부분공간이 "shared"인 이유는, 서로 다른 프롬프트·도메인에서도 논리적으로 건전한 추론이 특정 벡터 축 패턴을 공유하기 때문이다. 즉, 부분공간은 개별 사례에 과적합되지 않은 일반화된 "논리 건전성의 기하학적 지표"다.</p>
+
+      <p>LPSR은 이 부분공간을 기준 삼아 잔류 스트림을 실시간으로 투영(projection)하고, 그 거리가 임계치를 초과하면 이탈로 판정한다. 사후 텍스트 분석이 아니라 <strong style="color:#fff;">표현 공간에서의 기하학적 이탈</strong>을 신호로 쓰기 때문에, 텍스트가 완성되기도 전에 조치가 가능하다.</p>
+
+      <div class="callout purple">
+        <div class="callout-title">이론적 시너지</div>
+        <p>논리적 부분공간이 "정상 궤적의 형태"를 정의하면, LPSR이 "궤적 이탈을 감지하고 되감는" 실행 메커니즘을 제공한다. 형태론 + 실행론의 결합이 비로소 추론 중간 개입을 현실적으로 만든다.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 섹션 5: 통합 파이프라인 -->
+    <section class="fade-in">
+      <h2>통합 무결성 파이프라인</h2>
+      <p>세 축이 결합되면, LLM 안전성은 단절된 두 검문소가 아니라 <strong style="color:#fff;">연속적인 3겹 필터</strong>가 된다.</p>
+
+      <!-- 파이프라인 다이어그램 -->
+      <div class="diagram-wrap">
+        <div class="diagram-title">[ Fig 2. 3겹 무결성 파이프라인 ]</div>
+        <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg">
+          <!-- 배경 단계 구분 -->
+          <rect x="30" y="30" width="200" height="360" rx="10" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.15)" stroke-width="1"/>
+          <rect x="260" y="30" width="200" height="360" rx="10" fill="rgba(255,107,53,0.04)" stroke="rgba(255,107,53,0.15)" stroke-width="1"/>
+          <rect x="490" y="30" width="200" height="360" rx="10" fill="rgba(0,229,160,0.04)" stroke="rgba(0,229,160,0.15)" stroke-width="1"/>
+
+          <!-- 단계 헤더 -->
+          <text x="130" y="58" fill="#a78bfa" font-size="12" font-weight="700" text-anchor="middle" font-family="Noto Sans KR, sans-serif">Phase 1</text>
+          <text x="130" y="74" fill="#8a8a9a" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">구조적 사전 제어</text>
+
+          <text x="360" y="58" fill="#ff6b35" font-size="12" font-weight="700" text-anchor="middle" font-family="Noto Sans KR, sans-serif">Phase 2</text>
+          <text x="360" y="74" fill="#8a8a9a" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">추론 중간 개입</text>
+
+          <text x="590" y="58" fill="#00e5a0" font-size="12" font-weight="700" text-anchor="middle" font-family="Noto Sans KR, sans-serif">Phase 3</text>
+          <text x="590" y="74" fill="#8a8a9a" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">가드레일 사후 평가</text>
+
+          <!-- Phase 1 내용 -->
+          <rect x="55" y="100" width="150" height="44" rx="8" fill="#16161d" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+          <text x="130" y="118" fill="#a78bfa" font-size="11" font-weight="600" text-anchor="middle" font-family="Noto Sans KR, sans-serif">Box Maze</text>
+          <text x="130" y="134" fill="#8a8a9a" font-size="9" text-anchor="middle">프로세스 구조 제약</text>
+
+          <rect x="55" y="160" width="150" height="36" rx="6" fill="rgba(167,139,250,0.06)"/>
+          <text x="130" y="183" fill="#a78bfa" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">허용 경로 사전 정의</text>
+
+          <rect x="55" y="210" width="150" height="36" rx="6" fill="rgba(167,139,250,0.06)"/>
+          <text x="130" y="233" fill="#a78bfa" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">아키텍처 수준 필터</text>
+
+          <!-- 화살표 1→2 -->
+          <line x1="210" y1="200" x2="255" y2="200" stroke="#2a2a3a" stroke-width="2"/>
+          <polygon points="255,196 265,200 255,204" fill="#2a2a3a"/>
+
+          <!-- Phase 2 내용 -->
+          <rect x="285" y="100" width="150" height="44" rx="8" fill="#16161d" stroke="rgba(255,107,53,0.3)" stroke-width="1"/>
+          <text x="360" y="118" fill="#ff6b35" font-size="11" font-weight="600" text-anchor="middle" font-family="Noto Sans KR, sans-serif">LPSR</text>
+          <text x="360" y="134" fill="#8a8a9a" font-size="9" text-anchor="middle">잔류 스트림 + KV-Cache</text>
+
+          <rect x="285" y="158" width="150" height="30" rx="5" fill="rgba(255,107,53,0.08)"/>
+          <text x="360" y="178" fill="#ff9a5c" font-size="9" text-anchor="middle" font-family="Noto Sans KR, sans-serif">① 논리적 부분공간 정의</text>
+
+          <rect x="285" y="196" width="150" height="30" rx="5" fill="rgba(255,107,53,0.08)"/>
+          <text x="360" y="216" fill="#ff9a5c" font-size="9" text-anchor="middle" font-family="Noto Sans KR, sans-serif">② 실시간 이탈 감지</text>
+
+          <rect x="285" y="234" width="150" height="30" rx="5" fill="rgba(255,107,53,0.08)"/>
+          <text x="360" y="254" fill="#ff9a5c" font-size="9" text-anchor="middle" font-family="Noto Sans KR, sans-serif">③ KV-Cache 되감기</text>
+
+          <rect x="285" y="272" width="150" height="30" rx="5" fill="rgba(255,107,53,0.08)"/>
+          <text x="360" y="292" fill="#ff9a5c" font-size="9" text-anchor="middle" font-family="Noto Sans KR, sans-serif">④ 정상 궤적 재생성</text>
+
+          <!-- 되감기 루프 화살표 -->
+          <path d="M 440 249 Q 460 249 460 225 Q 460 200 440 200 L 438 200" fill="none" stroke="#ff6b35" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+          <polygon points="438,196 430,200 438,204" fill="#ff6b35" opacity="0.6"/>
+          <text x="472" y="228" fill="#ff6b35" font-size="8" font-family="JetBrains Mono, monospace" opacity="0.7">rollback</text>
+
+          <!-- 화살표 2→3 -->
+          <line x1="440" y1="200" x2="485" y2="200" stroke="#2a2a3a" stroke-width="2"/>
+          <polygon points="485,196 495,200 485,204" fill="#2a2a3a"/>
+
+          <!-- Phase 3 내용 -->
+          <rect x="515" y="100" width="150" height="44" rx="8" fill="#16161d" stroke="rgba(0,229,160,0.3)" stroke-width="1"/>
+          <text x="590" y="118" fill="#00e5a0" font-size="11" font-weight="600" text-anchor="middle" font-family="Noto Sans KR, sans-serif">TraceSafe</text>
+          <text x="590" y="134" fill="#8a8a9a" font-size="9" text-anchor="middle">최종 텍스트 검사</text>
+
+          <rect x="515" y="160" width="150" height="36" rx="6" fill="rgba(0,229,160,0.06)"/>
+          <text x="590" y="183" fill="#00e5a0" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">유해성 분류</text>
+
+          <rect x="515" y="210" width="150" height="36" rx="6" fill="rgba(0,229,160,0.06)"/>
+          <text x="590" y="233" fill="#00e5a0" font-size="10" text-anchor="middle" font-family="Noto Sans KR, sans-serif">최종 가드레일 필터</text>
+
+          <!-- 하단 결과 -->
+          <rect x="180" y="340" width="360" height="38" rx="8" fill="linear-gradient(90deg, rgba(167,139,250,0.1), rgba(255,107,53,0.1), rgba(0,229,160,0.1))" stroke="#2a2a3a" stroke-width="1"/>
+          <defs>
+            <linearGradient id="resultGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(167,139,250,0.12)"/>
+              <stop offset="50%" stop-color="rgba(255,107,53,0.12)"/>
+              <stop offset="100%" stop-color="rgba(0,229,160,0.12)"/>
+            </linearGradient>
+          </defs>
+          <rect x="180" y="340" width="360" height="38" rx="8" fill="url(#resultGrad)" stroke="#2a2a3a" stroke-width="1"/>
+          <text x="360" y="364" fill="#e8e6e3" font-size="11" font-weight="600" text-anchor="middle" font-family="Noto Sans KR, sans-serif">완전한 무결성 파이프라인 (End-to-End Integrity)</text>
+        </svg>
+      </div>
+
+      <p>파이프라인의 각 단계가 담당하는 역할을 정밀하게 분리하면 다음과 같다.</p>
+
+      <div class="card-grid" style="grid-template-columns: 1fr;">
+        <div class="card" style="display:grid;grid-template-columns:1fr;gap:0;">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(167,139,250,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:#a78bfa;font-family:var(--font-mono);font-size:14px;font-weight:700;">1</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:#a78bfa;font-size:clamp(13px,2vw,15px);margin-bottom:4px;">논리적 부분공간 정의</div>
+              <div style="color:var(--fg-muted);font-size:clamp(12px,1.8vw,14px);">추론이 정상적으로 진행될 때 잔류 스트림이 거주하는 저차원 부분공간을 사전에 학습·정의</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,107,53,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:#ff6b35;font-family:var(--font-mono);font-size:14px;font-weight:700;">2</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:#ff6b35;font-size:clamp(13px,2vw,15px);margin-bottom:4px;">실시간 이탈 감지</div>
+              <div style="color:var(--fg-muted);font-size:clamp(12px,1.8vw,14px);">매 토큰 생성 시 잔류 스트림을 부분공간에 투영하고, 잔차 거리가 임계치를 초과하는지 모니터링</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,107,53,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:#ff6b35;font-family:var(--font-mono);font-size:14px;font-weight:700;">3</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:#ff6b35;font-size:clamp(13px,2vw,15px);margin-bottom:4px;">KV-Cache 되감기</div>
+              <div style="color:var(--fg-muted);font-size:clamp(12px,1.8vw,14px);">이탈 감지 직전 시점의 KV-Cache 스냅샷으로 상태를 복원. 이전까지의 정상 추론 보존</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:12px 0;">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,229,160,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:#00e5a0;font-family:var(--font-mono);font-size:14px;font-weight:700;">4</span>
+            </div>
+            <div>
+              <div style="font-weight:700;color:#00e5a0;font-size:clamp(13px,2vw,15px);margin-bottom:4px;">정상 궤적 재생성 + 사후 검증</div>
+              <div style="color:var(--fg-muted);font-size:clamp(12px,1.8vw,14px);">복원된 상태에서 재생성을 수행하고, 최종 출력을 TraceSafe가 최종 검증하여 파이프라인 종결</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 섹션 6: 핵심 통찰 -->
+    <section class="fade-in">
+      <h2>핵심 통찰</h2>
+
+      <div class="insight-block">
+        <h3>사전/사후 이분법의 근본적 한계</h3>
+        <p>"생성 전에 통제하느냐, 생성 후에 검사하느냐"는 프레임워크는 <strong style="color:var(--accent);">회복 불가능한 추론 오류</strong>라는 현상을 설명할 수 없다. 이 현상은 생성 중간에 발생하고, 생성 중간에만 개입할 수 있다. 이분법 자체가 제3의 영역을 배제하는 잘못된 카테고리화다.</p>
+      </div>
+
+      <div class="insight-block" style="background:linear-gradient(135deg, rgba(255,107,53,0.06), rgba(0,229,160,0.06));border-color:rgba(0,229,160,0.15);">
+        <h3>중간 개입과 논리적 부분공간의 결합</h3>
+        <p>중간 개입만으로는 "무엇을 기준으로 이탈을 판단할 것인가"가 미해결이다. 논리적 부분공간만으로는 "이탈을 감지한 뒤 어떻게 복구할 것인가"가 미해결이다. 두 가지가 결합될 때 비로소 <strong style="color:var(--accent2);">감지-복구 루프</strong>가 완성되며, 이것이 사전 제어와 사후 평가 사이의 간극을 실질적으로 메운다.</p>
+      </div>
+
+      <div class="insight-block" style="background:linear-gradient(135deg, rgba(167,139,250,0.06), rgba(0,229,160,0.06));border-color:rgba(167,139,250,0.15);">
+        <h3>완전한 무결성 파이프라인의 의미</h3>
+        <p>세 축이 통합된 파이프라인은 단순한 "방어 깊이(depth of defense)"의 증가가 아니다. 각 축이 처리할 수 없는 오류 유형이 명확히 다르다. Box Maze가 막지 못한 구조 내 오류를 LPSR이 잡고, LPSR이 놓친 미세한 궤적 이탈을 TraceSafe가 최종적으로 포착한다. <strong style="color:var(--accent3);">상호 보완적 분업</strong>이 아니라 <strong style="color:var(--accent3);">오류 유형별 전문화</strong>다.</p>
+      </div>
+
+      <p style="margin-top:24px;">LLM 안전성 연구가 "사전 vs 사후"라는 이분법에서 벗어나야 한다는 주장은 단순한 분류학적 교정이 아니다. 이것은 실제로 회복 불가능한 오류가 생성 중간에 발생한다는 경험적 사실에 기반한, 필연적인 패러다임 전환이다. LPSR과 논리적 부분공간의 결합은 이 전환의 첫 번째 구체적 실현 형태다.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    Galaxy Tab Research &middot; Wiki Analysis Series
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
