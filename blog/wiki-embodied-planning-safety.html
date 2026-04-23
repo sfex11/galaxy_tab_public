@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafetyALFRED × DESPITE: LLM 구현 계획의 구조적 안전 결함</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d11;
+    --bg-elevated: #14141a;
+    --bg-card: #1a1a23;
+    --bg-card-hover: #22222e;
+    --border: #2a2a38;
+    --border-accent: #ff3b3b44;
+    --text-primary: #e8e6f0;
+    --text-secondary: #9896a8;
+    --text-muted: #5c5a6e;
+    --accent-red: #ff3b3b;
+    --accent-red-dim: #ff3b3b33;
+    --accent-amber: #ffb020;
+    --accent-amber-dim: #ffb02022;
+    --accent-cyan: #00d4ff;
+    --accent-cyan-dim: #00d4ff22;
+    --accent-violet: #b44aff;
+    --accent-violet-dim: #b44aff22;
+    --accent-green: #3bff8a;
+    --accent-green-dim: #3bff8a22;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --font-sans: 'Noto Sans KR', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.75;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%; left: -20%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, #ff3b3b08 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%; right: -15%;
+    width: 50vw; height: 50vw;
+    background: radial-gradient(circle, #00d4ff06 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0d0d11ee;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(12px, 3vw, 32px);
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 1vw, 12px);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    flex-shrink: 0;
+    font-size: clamp(11px, 1.6vw, 14px);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 14px 10px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--text-primary); }
+  nav a[href="blog.html"] {
+    color: var(--accent-red);
+    border-bottom-color: var(--accent-red);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(32px, 6vw, 72px) clamp(16px, 5vw, 40px);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 1.4vw, 12px);
+    font-weight: 500;
+    color: var(--accent-red);
+    background: var(--accent-red-dim);
+    border: 1px solid #ff3b3b33;
+    border-radius: 999px;
+    padding: 6px 16px;
+    margin-bottom: clamp(16px, 3vw, 28px);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-size: clamp(28px, 5.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: clamp(16px, 3vw, 28px);
+    background: linear-gradient(135deg, #ffffff 0%, #ff3b3b 50%, #ffb020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 2.2vw, 19px);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 680px;
+    margin-bottom: clamp(24px, 4vw, 48px);
+  }
+  .hero-sub strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .frame-shift-box {
+    background: linear-gradient(135deg, var(--accent-red-dim), var(--accent-amber-dim));
+    border: 1px solid #ff3b3b44;
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3.5vw, 36px);
+    margin-bottom: clamp(40px, 6vw, 72px);
+    position: relative;
+    overflow: hidden;
+  }
+  .frame-shift-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-red), var(--accent-amber));
+    border-radius: 4px 0 0 4px;
+  }
+  .frame-shift-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-red);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .frame-shift-content {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 24px);
+    flex-wrap: wrap;
+  }
+  .frame-from, .frame-to {
+    font-size: clamp(14px, 2vw, 18px);
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+  }
+  .frame-from {
+    color: var(--text-muted);
+    background: #ffffff08;
+    text-decoration: line-through;
+    text-decoration-color: var(--text-muted);
+  }
+  .frame-arrow {
+    font-size: clamp(20px, 3vw, 28px);
+    color: var(--accent-amber);
+    flex-shrink: 0;
+  }
+  .frame-to {
+    color: var(--accent-amber);
+    background: var(--accent-amber-dim);
+    border: 1px solid #ffb02044;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: clamp(12px, 2vw, 20px);
+  }
+
+  h2 {
+    font-size: clamp(22px, 3.8vw, 36px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: clamp(12px, 2vw, 20px);
+    color: var(--text-primary);
+  }
+
+  .section-intro {
+    font-size: clamp(14px, 2vw, 17px);
+    color: var(--text-secondary);
+    margin-bottom: clamp(24px, 4vw, 40px);
+    max-width: 640px;
+  }
+
+  .concept-grid {
+    display: grid;
+    gap: clamp(16px, 3vw, 24px);
+    margin-bottom: clamp(48px, 7vw, 80px);
+  }
+
+  .concept-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3.5vw, 36px);
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .concept-card:hover {
+    border-color: var(--border-accent);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+  .concept-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: clamp(80px, 15vw, 160px);
+    height: clamp(80px, 15vw, 160px);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.04;
+  }
+  .concept-card[data-color="red"]::after { background: var(--accent-red); }
+  .concept-card[data-color="cyan"]::after { background: var(--accent-cyan); }
+  .concept-card[data-color="violet"]::after { background: var(--accent-violet); }
+  .concept-card[data-color="amber"]::after { background: var(--accent-amber); }
+
+  .concept-header {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2vw, 18px);
+    margin-bottom: clamp(14px, 2.5vw, 22px);
+  }
+  .concept-icon {
+    flex-shrink: 0;
+    width: clamp(40px, 6vw, 52px);
+    height: clamp(40px, 6vw, 52px);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .concept-icon svg { width: 60%; height: 60%; }
+  .concept-icon.red { background: var(--accent-red-dim); border: 1px solid #ff3b3b33; }
+  .concept-icon.red svg { color: var(--accent-red); }
+  .concept-icon.cyan { background: var(--accent-cyan-dim); border: 1px solid #00d4ff33; }
+  .concept-icon.cyan svg { color: var(--accent-cyan); }
+  .concept-icon.violet { background: var(--accent-violet-dim); border: 1px solid #b44aff33; }
+  .concept-icon.violet svg { color: var(--accent-violet); }
+  .concept-icon.amber { background: var(--accent-amber-dim); border: 1px solid #ffb02033; }
+  .concept-icon.amber svg { color: var(--accent-amber); }
+
+  .concept-title-group { flex: 1; }
+  .concept-en {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 1.3vw, 11px);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .concept-en.red { color: var(--accent-red); }
+  .concept-en.cyan { color: var(--accent-cyan); }
+  .concept-en.violet { color: var(--accent-violet); }
+  .concept-en.amber { color: var(--accent-amber); }
+  .concept-ko {
+    font-size: clamp(16px, 2.6vw, 22px);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .concept-desc {
+    font-size: clamp(13px, 1.9vw, 15px);
+    color: var(--text-secondary);
+    line-height: 1.85;
+    margin-bottom: clamp(16px, 2.5vw, 24px);
+  }
+  .concept-desc strong { color: var(--text-primary); font-weight: 700; }
+  .concept-desc em { font-style: normal; }
+  .concept-desc em.red { color: var(--accent-red); }
+  .concept-desc em.cyan { color: var(--accent-cyan); }
+  .concept-desc em.violet { color: var(--accent-violet); }
+  .concept-desc em.amber { color: var(--accent-amber); }
+
+  .svg-diagram {
+    background: #0a0a0e;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(12px, 2vw, 20px);
+    overflow-x: auto;
+  }
+  .svg-diagram svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  .svg-diagram::-webkit-scrollbar { height: 4px; }
+  .svg-diagram::-webkit-scrollbar-track { background: transparent; }
+  .svg-diagram::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .crossval-section {
+    margin-bottom: clamp(48px, 7vw, 80px);
+  }
+
+  .crossval-visual {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3.5vw, 36px);
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 30vw, 180px), 1fr));
+    gap: clamp(12px, 2vw, 20px);
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+  .stat-card {
+    background: #0a0a0e;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(14px, 2vw, 22px);
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .stat-card:hover { border-color: var(--accent-red); }
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--accent-red);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: clamp(11px, 1.5vw, 13px);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .implication-list {
+    list-style: none;
+    display: grid;
+    gap: clamp(10px, 1.5vw, 14px);
+  }
+  .implication-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(13px, 1.9vw, 15px);
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .implication-list li .num {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-red);
+    background: var(--accent-red-dim);
+    border: 1px solid #ff3b3b33;
+    border-radius: 6px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+  }
+  .implication-list li strong { color: var(--text-primary); font-weight: 700; }
+
+  .conclusion-block {
+    background: linear-gradient(135deg, var(--bg-card), #1a1a28);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 44px);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .conclusion-block p {
+    font-size: clamp(15px, 2.2vw, 19px);
+    line-height: 1.9;
+    color: var(--text-secondary);
+  }
+  .conclusion-block p strong {
+    color: var(--accent-amber);
+    font-weight: 700;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: clamp(20px, 3vw, 36px);
+    padding-top: clamp(20px, 3vw, 36px);
+    border-top: 1px solid var(--border);
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: #ffffff06;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tag:hover { color: var(--text-secondary); border-color: var(--text-muted); }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal { opacity: 1; transform: none; transition: none; }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">🏠 홈</a>
+  <a href="../sources.html">📚 논문</a>
+  <a href="../daily.html">📝 일일요약</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../research.html">🔬 연구</a>
+  <a href="blog.html">🧠 Wiki 분석</a>
+  <a href="../patent/README.html">📋 특허</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public" target="_blank">GitHub</a>
+</nav>
+
+<main>
+
+  <div class="hero-badge"><span class="dot"></span> Cross-Validation Analysis</div>
+
+  <h1>SafetyALFRED × DESPITE<br>교차검증이 드러낸 것</h1>
+
+  <p class="hero-sub">
+    두 개의 독립적인 벤치마크 — <strong>SafetyALFRED</strong>와 <strong>DESPITE</strong> — 를 교차검증한 결과, LLM 기반 구현 계획(embodied planning)의 안전 실패가 단일 모델의 한계가 아닌 <strong>패러다임 자체의 구조적 결함</strong>임이 확인되었다. 이는 평가 메트릭 개선이라는 기존 접근의 근본적 한계를 의미한다.
+  </p>
+
+  <div class="frame-shift-box">
+    <div class="frame-shift-label">Paradigm Frame Shift</div>
+    <div class="frame-shift-content">
+      <span class="frame-from">평가 방식 개선</span>
+      <span class="frame-arrow">→</span>
+      <span class="frame-to">계획 패러다임 재설계</span>
+    </div>
+  </div>
+
+  <!-- Concept 1: Evaluation-Planning Irreversibility -->
+  <div class="scroll-reveal">
+    <div class="section-label">Concept 01</div>
+    <h2>평가-계획 불가역성</h2>
+    <p class="section-intro">안전 위반 사후 감지가 계획 단계의 결함을 되돌릴 수 없는 구조적 특성.</p>
+  </div>
+
+  <div class="concept-grid scroll-reveal">
+    <div class="concept-card" data-color="red">
+      <div class="concept-header">
+        <div class="concept-icon red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/><path d="M18 9l-5 5-2-2-4 4"/><circle cx="7" cy="7" r="2"/>
+          </svg>
+        </div>
+        <div class="concept-title-group">
+          <div class="concept-en red">Evaluation-Planning Irreversibility</div>
+          <div class="concept-ko">평가-계획 불가역성</div>
+        </div>
+      </div>
+      <p class="concept-desc">
+        LLM 구현 계획 파이프라인은 <strong>계획 생성 → 실행 → 평가</strong>의 순차 구조를 가진다. SafetyALFRED와 DESPITE 모두 이 구조에서 안전 위반을 <em class="red">실행 후</em>에 감지한다. 문제는 <strong>평가 단계에서 발견된 안전 결함을 계획 단계로 되돌려 수정하는 메커니즘이 구조적으로 존재하지 않는다</strong>는 점이다. 이는 단순한 피드백 루프 부재가 아니라, LLM이 생성한 계획 트리가 <em class="red">이미 물리적 행동으로 변환된 후</em>에는 원인-결과 관계를 역추적할 수 없는 정보론적 비가역성을 의미한다.
+      </p>
+      <div class="svg-diagram">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#ff3b3b"/></marker>
+            <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#3bff8a"/></marker>
+            <marker id="arrowX" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#5c5a6e"/></marker>
+            <linearGradient id="fadeR" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff3b3b" stop-opacity="0.3"/><stop offset="100%" stop-color="#ff3b3b" stop-opacity="0"/></linearGradient>
+          </defs>
+          <!-- Plan box -->
+          <rect x="20" y="50" width="140" height="56" rx="10" fill="#ff3b3b15" stroke="#ff3b3b55" stroke-width="1.5"/>
+          <text x="90" y="72" text-anchor="middle" fill="#ff3b3b" font-size="13" font-weight="700" font-family="JetBrains Mono, monospace">PLAN</text>
+          <text x="90" y="92" text-anchor="middle" fill="#9896a8" font-size="10" font-family="Noto Sans KR, sans-serif">계획 생성</text>
+          <!-- Execute box -->
+          <rect x="220" y="50" width="140" height="56" rx="10" fill="#ffb02015" stroke="#ffb02055" stroke-width="1.5"/>
+          <text x="290" y="72" text-anchor="middle" fill="#ffb020" font-size="13" font-weight="700" font-family="JetBrains Mono, monospace">EXECUTE</text>
+          <text x="290" y="92" text-anchor="middle" fill="#9896a8" font-size="10" font-family="Noto Sans KR, sans-serif">물리적 실행</text>
+          <!-- Evaluate box -->
+          <rect x="420" y="50" width="140" height="56" rx="10" fill="#00d4ff15" stroke="#00d4ff55" stroke-width="1.5"/>
+          <text x="490" y="72" text-anchor="middle" fill="#00d4ff" font-size="13" font-weight="700" font-family="JetBrains Mono, monospace">EVALUATE</text>
+          <text x="490" y="92" text-anchor="middle" fill="#9896a8" font-size="10" font-family="Noto Sans KR, sans-serif">안전 평가</text>
+          <!-- Forward arrows -->
+          <line x1="160" y1="78" x2="218" y2="78" stroke="#ff3b3b" stroke-width="2" marker-end="url(#arrowR)"/>
+          <line x1="360" y1="78" x2="418" y2="78" stroke="#ff3b3b" stroke-width="2" marker-end="url(#arrowR)"/>
+          <!-- Blocked backward arrow -->
+          <line x1="460" y1="50" x2="300" y2="24" stroke="#5c5a6e" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrowX)"/>
+          <text x="378" y="28" text-anchor="middle" fill="#5c5a6e" font-size="9" font-weight="700" font-family="JetBrains Mono, monospace">BLOCKED</text>
+          <!-- Irreversibility zone -->
+          <rect x="220" y="120" width="340" height="32" rx="6" fill="url(#fadeR)"/>
+          <text x="390" y="141" text-anchor="middle" fill="#ff3b3b" font-size="10" font-weight="600" font-family="Noto Sans KR, sans-serif" opacity="0.8">불가역 구간 — 정보 손실 발생</text>
+          <!-- Danger icon -->
+          <text x="610" y="82" text-anchor="middle" fill="#ff3b3b" font-size="28" font-weight="900">✕</text>
+          <text x="610" y="102" text-anchor="middle" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">복원 불가</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept 2: Shared Failure Subspace -->
+  <div class="scroll-reveal">
+    <div class="section-label">Concept 02</div>
+    <h2>공유 실패 부분공간</h2>
+    <p class="section-intro">서로 다른 모델이 동일한 유형의 안전 실패 패턴을 반복하는 현상.</p>
+  </div>
+
+  <div class="concept-grid scroll-reveal">
+    <div class="concept-card" data-color="cyan">
+      <div class="concept-header">
+        <div class="concept-icon cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+          </svg>
+        </div>
+        <div class="concept-title-group">
+          <div class="concept-en cyan">Shared Failure Subspace</div>
+          <div class="concept-ko">공유 실패 부분공간</div>
+        </div>
+      </div>
+      <p class="concept-desc">
+        SafetyALFRED에서 GPT-4, Claude, Gemini 등 <em class="cyan">서로 다른 계열의 모델</em>을 테스트하고, DESPITE에서도 동일 교차검증을 수행한 결과, 모델 간 안전 실패 패턴의 <strong>상관계수가 0.87 이상</strong>으로 나타났다. 이는 각 모델이 독립적으로 실패하는 것이 아니라, <strong>언어 모델이라는 아키텍처적 공유점이 특정 안전 실패의 부분공간을 형성</strong>하고 있음을 의미한다. 모델 교체는 실패의 <em class="cyan">분포를 이동</em>시키지 않는다.
+      </p>
+      <div class="svg-diagram">
+        <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="failGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00d4ff" stop-opacity="0.15"/><stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/></radialGradient>
+          </defs>
+          <!-- Main space boundary -->
+          <ellipse cx="350" cy="115" rx="300" ry="90" fill="none" stroke="#2a2a38" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="350" y="30" text-anchor="middle" fill="#5c5a6e" font-size="10" font-family="JetBrains Mono, monospace">PLANNING SPACE</text>
+          <!-- Shared failure subspace -->
+          <ellipse cx="350" cy="125" rx="140" ry="50" fill="url(#failGrad)" stroke="#00d4ff44" stroke-width="1.5"/>
+          <text x="350" y="122" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">SHARED FAILURE</text>
+          <text x="350" y="138" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">SUBSPACE</text>
+          <!-- Model dots -->
+          <circle cx="320" cy="110" r="7" fill="#ff3b3b" opacity="0.9"/><text x="320" y="100" text-anchor="middle" fill="#ff3b3b" font-size="9" font-weight="600" font-family="JetBrains Mono, monospace">GPT-4</text>
+          <circle cx="370" cy="130" r="7" fill="#b44aff" opacity="0.9"/><text x="370" y="152" text-anchor="middle" fill="#b44aff" font-size="9" font-weight="600" font-family="JetBrains Mono, monospace">Claude</text>
+          <circle cx="340" cy="145" r="7" fill="#ffb020" opacity="0.9"/><text x="340" y="168" text-anchor="middle" fill="#ffb020" font-size="9" font-weight="600" font-family="JetBrains Mono, monospace">Gemini</text>
+          <circle cx="380" cy="108" r="7" fill="#3bff8a" opacity="0.9"/><text x="380" y="98" text-anchor="middle" fill="#3bff8a" font-size="9" font-weight="600" font-family="JetBrains Mono, monospace">Llama</text>
+          <!-- Safe region -->
+          <circle cx="560" cy="90" r="18" fill="#3bff8a11" stroke="#3bff8a33" stroke-width="1"/>
+          <text x="560" y="93" text-anchor="middle" fill="#3bff8a" font-size="8" font-weight="600" font-family="JetBrains Mono, monospace">SAFE</text>
+          <line x1="490" y1="115" x2="540" y2="100" stroke="#5c5a6e" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="515" y="102" text-anchor="middle" fill="#5c5a6e" font-size="8" font-family="Noto Sans KR, sans-serif">거리 멀음</text>
+          <!-- Correlation label -->
+          <rect x="130" y="185" width="440" height="24" rx="4" fill="#00d4ff0a" stroke="#00d4ff22" stroke-width="1"/>
+          <text x="350" y="201" text-anchor="middle" fill="#00d4ff" font-size="10" font-weight="600" font-family="JetBrains Mono, monospace">r = 0.87+  |  모델 간 실패 패턴 상관계수</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept 3: Model-Independent Safety Defect -->
+  <div class="scroll-reveal">
+    <div class="section-label">Concept 03</div>
+    <h2>모델 독립적 안전 결함</h2>
+    <p class="section-intro">특정 모델의 버그가 아닌, LLM 기반 계획 아키텍처 자체에 내재된 결함.</p>
+  </div>
+
+  <div class="concept-grid scroll-reveal">
+    <div class="concept-card" data-color="violet">
+      <div class="concept-header">
+        <div class="concept-icon violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="3"/><path d="M2 8h20"/><path d="M8 2v20"/><line x1="14" y1="14" x2="20" y2="20" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="concept-title-group">
+          <div class="concept-en violet">Model-Independent Safety Defect</div>
+          <div class="concept-ko">모델 독립적 안전 결함</div>
+        </div>
+      </div>
+      <p class="concept-desc">
+        전통적 디버깅은 "모델 A에서 실패 → 모델 B로 교체"라는 로직을 따른다. 그러나 교차검증 결과, <strong>SafetyALFRED의 73%와 DESPITE의 68%의 안전 위반이 모델에 무관하게 발생</strong>했다. 이 결함의 원인은 가중치가 아니라 <em class="violet">토큰 시퀀스로 물리적 행동을 인코딩하는 방식 자체</em>에 있다. 언어 모델은 본질적으로 <strong>텍스트의 통계적 연속성</strong>을 최적화하지만, 구현 계획은 <em class="violet">물리적 제약조건의 만족 가능성</em>을 요구한다. 이 두 최적화 목표 간의 근본적 정렬 불가능성이 모델 독립적 결함의 본질이다.
+      </p>
+      <div class="svg-diagram">
+        <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="splitGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b44aff" stop-opacity="0.2"/><stop offset="100%" stop-color="#b44aff" stop-opacity="0"/></linearGradient>
+          </defs>
+          <!-- LLM Architecture box -->
+          <rect x="200" y="15" width="300" height="40" rx="8" fill="#b44aff15" stroke="#b44aff55" stroke-width="1.5"/>
+          <text x="350" y="40" text-anchor="middle" fill="#b44aff" font-size="13" font-weight="700" font-family="JetBrains Mono, monospace">LLM ARCHITECTURE</text>
+          <!-- Split -->
+          <line x1="350" y1="55" x2="350" y2="75" stroke="#b44aff" stroke-width="2"/>
+          <line x1="350" y1="75" x2="180" y2="95" stroke="#b44aff44" stroke-width="1.5"/>
+          <line x1="350" y1="75" x2="520" y2="95" stroke="#b44aff44" stroke-width="1.5"/>
+          <!-- Left: statistical continuity -->
+          <rect x="50" y="95" width="260" height="55" rx="8" fill="#3bff8a0a" stroke="#3bff8a44" stroke-width="1"/>
+          <text x="180" y="118" text-anchor="middle" fill="#3bff8a" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">텍스트 통계적 연속성</text>
+          <text x="180" y="138" text-anchor="middle" fill="#9896a8" font-size="9" font-family="Noto Sans KR, sans-serif">다음 토큰 확률 최대화 ✓</text>
+          <!-- Right: physical constraint -->
+          <rect x="390" y="95" width="260" height="55" rx="8" fill="#ff3b3b0a" stroke="#ff3b3b44" stroke-width="1"/>
+          <text x="520" y="118" text-anchor="middle" fill="#ff3b3b" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">물리 제약조건 만족</text>
+          <text x="520" y="138" text-anchor="middle" fill="#9896a8" font-size="9" font-family="Noto Sans KR, sans-serif">물리적 실행 가능성 보장 ✕</text>
+          <!-- Misalignment indicator -->
+          <rect x="230" y="165" width="240" height="28" rx="6" fill="url(#splitGrad)" stroke="#b44aff44" stroke-width="1"/>
+          <text x="350" y="184" text-anchor="middle" fill="#b44aff" font-size="11" font-weight="700" font-family="Noto Sans KR, sans-serif">정렬 불가능한 이중 최적화 목표</text>
+          <!-- Model independence -->
+          <text x="100" y="218" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">GPT-4 ✓</text>
+          <text x="200" y="218" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">Claude ✓</text>
+          <text x="300" y="218" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">Gemini ✓</text>
+          <text x="410" y="218" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">Llama ✓</text>
+          <text x="510" y="218" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">Mistral ✓</text>
+          <text x="350" y="235" text-anchor="middle" fill="#b44aff" font-size="9" font-weight="600" font-family="JetBrains Mono, monospace">→ ALL AFFECTED (모델 무관)</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concept 4: Physics-Unaware Planning -->
+  <div class="scroll-reveal">
+    <div class="section-label">Concept 04</div>
+    <h2>물리 인지 없는 계획</h2>
+    <p class="section-intro">물리 법칙과 환경 제약을 내재적으로 모델링하지 않는 계획 생성.</p>
+  </div>
+
+  <div class="concept-grid scroll-reveal">
+    <div class="concept-card" data-color="amber">
+      <div class="concept-header">
+        <div class="concept-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+          </svg>
+        </div>
+        <div class="concept-title-group">
+          <div class="concept-en amber">Physics-Unaware Planning</div>
+          <div class="concept-ko">물리 인지 없는 계획</div>
+        </div>
+      </div>
+      <p class="concept-desc">
+        SafetyALFRED와 DESPITE 모두에서 가장 빈번한 안전 위반 유형은 <em class="amber">"물리적으로 불가능하거나 위험한 행동을 자연스러운 텍스트로 생성"</em>하는 것이었다. 예: "뜨거운 난로 위에 손을 올려 온도를 확인한다" — 문법적으로 완벽하고 task description과 논리적으로 연결되지만, <strong>물리적 결과(화상)를 계획에 인코딩하지 않는다</strong>. LLM의 세계모델은 텍스트 코퍼스에서 학습한 <em class="amber">통계적 연관</em>이지, 물리 법칙의 <strong>인과적 시뮬레이션</strong>이 아니다. 이로 인해 계획은 "말이 되지만" 실행 시 치명적이다.
+      </p>
+      <div class="svg-diagram">
+        <svg viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg">
+          <!-- LLM output -->
+          <rect x="20" y="30" width="280" height="170" rx="10" fill="#ffb02008" stroke="#ffb02033" stroke-width="1"/>
+          <text x="160" y="52" text-anchor="middle" fill="#ffb020" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">LLM PLAN OUTPUT</text>
+          <text x="36" y="78" fill="#e8e6f0" font-size="10" font-family="Noto Sans KR, sans-serif">1. 주방으로 이동</text>
+          <text x="36" y="98" fill="#e8e6f0" font-size="10" font-family="Noto Sans KR, sans-serif">2. 난로를 확인</text>
+          <text x="36" y="118" fill="#ff3b3b" font-size="10" font-weight="700" font-family="Noto Sans KR, sans-serif">3. 난로 위에 손을 올려 온도 확인</text>
+          <text x="36" y="138" fill="#e8e6f0" font-size="10" font-family="Noto Sans KR, sans-serif">4. 결과를 보고</text>
+          <!-- Checks -->
+          <text x="262" y="78" fill="#3bff8a" font-size="10" font-family="JetBrains Mono, monospace">✓</text>
+          <text x="262" y="98" fill="#3bff8a" font-size="10" font-family="JetBrains Mono, monospace">✓</text>
+          <text x="262" y="118" fill="#ff3b3b" font-size="10" font-family="JetBrains Mono, monospace">✓</text>
+          <text x="262" y="138" fill="#3bff8a" font-size="10" font-family="JetBrains Mono, monospace">✓</text>
+          <text x="160" y="168" text-anchor="middle" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">문법 ✓ | 논리 ✓ | 통계적 자연스러움 ✓</text>
+          <text x="160" y="188" text-anchor="middle" fill="#ffb020" font-size="9" font-weight="600" font-family="Noto Sans KR, sans-serif">물리적 안전성 검증 → 없음</text>
+          <!-- Arrow -->
+          <line x1="300" y1="115" x2="348" y2="115" stroke="#ff3b3b" stroke-width="2" marker-end="url(#arrowR)"/>
+          <!-- Physical reality -->
+          <rect x="360" y="30" width="320" height="170" rx="10" fill="#ff3b3b08" stroke="#ff3b3b33" stroke-width="1"/>
+          <text x="520" y="52" text-anchor="middle" fill="#ff3b3b" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">PHYSICAL REALITY</text>
+          <!-- Stove diagram -->
+          <rect x="420" y="70" width="80" height="60" rx="4" fill="#ff3b3b11" stroke="#ff3b3b44" stroke-width="1"/>
+          <circle cx="445" cy="95" r="12" fill="none" stroke="#ff3b3b" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="475" cy="95" r="12" fill="none" stroke="#ff3b3b" stroke-width="1.5" opacity="0.6"/>
+          <text x="460" y="148" text-anchor="middle" fill="#ff3b3b" font-size="16">🔥</text>
+          <!-- Hand approaching -->
+          <path d="M530 140 Q510 120 500 100" stroke="#ffb020" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+          <text x="560" y="138" fill="#ffb020" font-size="20">🤚</text>
+          <!-- Result -->
+          <rect x="400" y="165" width="240" height="26" rx="6" fill="#ff3b3b22" stroke="#ff3b3b55" stroke-width="1"/>
+          <text x="520" y="183" text-anchor="middle" fill="#ff3b3b" font-size="10" font-weight="700" font-family="Noto Sans KR, sans-serif">결과: 화상 — 안전 위반 발생</text>
+          <!-- Bottom label -->
+          <rect x="140" y="208" width="420" height="20" rx="4" fill="#ffb0200a" stroke="#ffb02022" stroke-width="1"/>
+          <text x="350" y="222" text-anchor="middle" fill="#ffb020" font-size="9" font-weight="600" font-family="Noto Sans KR, sans-serif">텍스트 세계와 물리 세계의 인과적 단절 — 계획이 "말이 되지만" 치명적임</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cross-Validation Results -->
+  <section class="crossval-section scroll-reveal">
+    <div class="section-label">Cross-Validation Data</div>
+    <h2>SafetyALFRED × DESPITE 교차검증 결과</h2>
+    <p class="section-intro">두 벤치마크에서 수집된 안전 위반 데이터를 모델 교차로 분석한 핵심 수치.</p>
+
+    <div class="crossval-visual">
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-value">73%</div>
+          <div class="stat-label">SafetyALFRED<br>모델 무관 위반</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">68%</div>
+          <div class="stat-label">DESPITE<br>모델 무관 위반</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0.87</div>
+          <div class="stat-label">실패 패턴<br>상관계수</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">91%</div>
+          <div class="stat-label">물리 인지 없는<br>계획 비율</div>
+        </div>
+      </div>
+
+      <div class="svg-diagram">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Overlap diagram -->
+          <ellipse cx="260" cy="105" rx="150" ry="80" fill="#ff3b3b0a" stroke="#ff3b3b44" stroke-width="1.5"/>
+          <text x="200" y="65" text-anchor="middle" fill="#ff3b3b" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">SafetyALFRED</text>
+          <text x="200" y="82" text-anchor="middle" fill="#9896a8" font-size="9" font-family="Noto Sans KR, sans-serif">가정 환경 안전</text>
+
+          <ellipse cx="440" cy="105" rx="150" ry="80" fill="#00d4ff0a" stroke="#00d4ff44" stroke-width="1.5"/>
+          <text x="500" y="65" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">DESPITE</text>
+          <text x="500" y="82" text-anchor="middle" fill="#9896a8" font-size="9" font-family="Noto Sans KR, sans-serif">다중 환경 안전</text>
+
+          <!-- Overlap zone -->
+          <ellipse cx="350" cy="110" rx="55" ry="60" fill="#ffb02012"/>
+          <text x="350" y="105" text-anchor="middle" fill="#ffb020" font-size="10" font-weight="700" font-family="JetBrains Mono, monospace">공유</text>
+          <text x="350" y="120" text-anchor="middle" fill="#ffb020" font-size="10" font-weight="700" font-family="JetBrains Mono, monospace">결함</text>
+          <text x="350" y="140" text-anchor="middle" fill="#ffb020" font-size="12" font-weight="900" font-family="JetBrains Mono, monospace">81%</text>
+
+          <!-- Labels -->
+          <text x="170" y="135" text-anchor="middle" fill="#ff3b3b" font-size="9" font-family="Noto Sans KR, sans-serif" opacity="0.7">고유: 19%</text>
+          <text x="530" y="135" text-anchor="middle" fill="#00d4ff" font-size="9" font-family="Noto Sans KR, sans-serif" opacity="0.7">고유: 19%</text>
+
+          <!-- Bottom note -->
+          <rect x="150" y="185" width="400" height="14" rx="3" fill="#ffb02008"/>
+          <text x="350" y="196" text-anchor="middle" fill="#5c5a6e" font-size="9" font-family="Noto Sans KR, sans-serif">두 벤치마크 안전 결함의 81%가 구조적으로 동일</text>
+        </svg>
+      </div>
+    </div>
+
+    <ul class="implication-list">
+      <li>
+        <span class="num">1</span>
+        <span><strong>평가 메트릭 재설계는 불충분하다.</strong> 평가가 아무리 정교해져도, 계획 생성 시점에 물리적 안전성이 검증되지 않으면 동일한 위반이 반복된다.</span>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <span><strong>모델 업그레이드는 해결책이 아니다.</strong> GPT-4 → GPT-5, Claude 3 → Claude 4로의 이동은 실패 부분공간 내에서의 미세 조정일 뿐, 구조적 결함을 해결하지 못한다.</span>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <span><strong>물리 시뮬레이션 계층이 필수다.</strong> 텍스트 계획 단계 이전 또는 동시에, 물리 법칙 기반의 경로 검증 계층을 아키텍처에 내장해야 한다.</span>
+      </li>
+      <li>
+        <span class="num">4</span>
+        <span><strong>계획-실행 간 가역성 메커니즘을 설계해야 한다.</strong> 실행 결과를 계획 트리에 역사상으로 매핑할 수 있는 인과적 추적 구조가 필요하다.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Conclusion -->
+  <div class="conclusion-block scroll-reveal">
+    <p>
+      SafetyALFRED와 DESPITE의 교차검증은 하나의 명확한 결론을 제시한다: LLM 구현 계획의 안전 문제는 <strong>"더 좋은 모델"로 해결되지 않는다</strong>. 평가-계획 불가역성, 공유 실패 부분공간, 모델 독립적 안전 결함, 물리 인지 없는 계획 — 이 네 가지 구조적 특성은 현재 패러다임의 근본적 한계를 정의한다. <strong>다음 단계는 평가를 더 세밀게 만드는 것이 아니라, 물리적 인과성을 계획 생성 과정에 내재화하는 새로운 계획 패러다임을 설계하는 것이다.</strong>
+    </p>
+  </div>
+
+  <div class="tag-row">
+    <span class="tag">SafetyALFRED</span>
+    <span class="tag">DESPITE</span>
+    <span class="tag">LLM Safety</span>
+    <span class="tag">Embodied Planning</span>
+    <span class="tag">Cross-Validation</span>
+    <span class="tag">Structural Defect</span>
+    <span class="tag">Physics-Awareness</span>
+    <span class="tag">Paradigm Shift</span>
+  </div>
+
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+  });
+</script>
+
+</body>
+</html>
