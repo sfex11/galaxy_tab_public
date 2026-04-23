@@ -46,3 +46,6 @@ Nemotron-Cascade 2는 NVIDIA가 공개한 30B MoE(Mixture-of-Experts) 모델로,
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/nemotron-cascade-2.md|nemotron cascade 2]]

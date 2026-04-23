@@ -19,20 +19,20 @@
 ## 기존 Wiki와의 관계
 
 ### RAG 패러다임의 확장: 검색→생성에서 추론→검색→생성으로
-기존 [[retrieval-augmented-generation]]은 검색 후 생성하는 선형 파이프라인을 전제하지만, A-MAR은 **추론 계획(reasoning plan)을 먼저 수립하고, 이 계획에 검색을 명시적으로 조건화**한다는 점에서 질적 차이가 있다. 이는 Wiki의 [[epistemic-fidelity]](인식론적 충실도) 개념과 직결된다—암묵적 지식에 의존하는 MLLM의 한계를 "검색 충실도"가 아닌 "증거 기반 충실도"로 극복하려는 시도다.
+기존 [[concepts/retrieval-augmented-generation.md|retrieval augmented generation]]은 검색 후 생성하는 선형 파이프라인을 전제하지만, A-MAR은 **추론 계획(reasoning plan)을 먼저 수립하고, 이 계획에 검색을 명시적으로 조건화**한다는 점에서 질적 차이가 있다. 이는 Wiki의 [[concepts/epistemic-fidelity.md|epistemic fidelity]](인식론적 충실도) 개념과 직결된다—암묵적 지식에 의존하는 MLLM의 한계를 "검색 충실도"가 아닌 "증거 기반 충실도"로 극복하려는 시도다.
 
 ### 추론 무결성과의 연결
-[[reasoning-integrity]]와 [[process-control-architecture]]의 맥락에서, A-MAR의 구조화된 추론 계획은 사후 검증이 아닌 **아키텍처 수준에서 추론 경로를 구조화**하는 접근법이다. Box Maze가 프로세스 제어로 추론 무결성을 강제한다면, A-MAR은 검색 조건화로 추론의 근거(traceability)를 강제한다.
+[[concepts/reasoning-integrity.md|reasoning integrity]]와 [[concepts/process-control-architecture.md|process control architecture]]의 맥락에서, A-MAR의 구조화된 추론 계획은 사후 검증이 아닌 **아키텍처 수준에서 추론 경로를 구조화**하는 접근법이다. Box Maze가 프로세스 제어로 추론 무결성을 강제한다면, A-MAR은 검색 조건화로 추론의 근거(traceability)를 강제한다.
 
 ### 에이전트 아키텍처로서의 위치
-[[llm-agent]]의 97편 합성 분석에서 "능력 확장" 축에 해당하며, 특히 미술이라는 문화적·역사적 맥락이 요구되는 도메인에서 [[evidence-fusion]]과 [[visual-grounding]]을 결합하는 사례다.
+[[entities/llm-agent.md|llm agent]]의 97편 합성 분석에서 "능력 확장" 축에 해당하며, 특히 미술이라는 문화적·역사적 맥락이 요구되는 도메인에서 [[concepts/evidence-fusion.md|evidence fusion]]과 [[concepts/visual-grounding.md|visual grounding]]을 결합하는 사례다.
 
 ## 핵심 구조
 1. 쿼리 분해 → 구조화된 추론 계획 수립
 2. 계획에 조건화된 멀티모달 검색
 3. 검색된 증거에 기반한 명시적 근거 생성
 
-이 구조는 [[structure-level-integrity-enforcement]](구조 수준 무결성 강제)의 도메인 특화 적용이라고 볼 수 있다.
+이 구조는 [[concepts/structure-level-integrity-enforcement.md|structure level integrity enforcement]](구조 수준 무결성 강제)의 도메인 특화 적용이라고 볼 수 있다.
 
 ## 🔗 관련 논문
 

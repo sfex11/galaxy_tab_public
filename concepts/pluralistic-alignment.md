@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-10-personalized-rewardbench-evaluating-reward-models-.md|Personalized RewardBench: Evaluating Reward Models with Huma]]
+
+### Relative Principals, Pluralistic Alignment, and the Structural Value A (2026-04-24)

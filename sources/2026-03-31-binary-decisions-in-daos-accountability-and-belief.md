@@ -21,9 +21,9 @@ DAO 거버넌스의 이진 의사결정에서 선형 의견 풀과 스마트 컨
 
 이 논문은 기존 Wiki의 여러 주제와 교차점을 가진다:
 
-- **[[multi-agent-system]]**: DAO 거버넌스 의회는 본질적으로 다중 에이전트 의사결정 시스템이다. 각 전문가가 독립적 에이전트로서 사적 정보를 기반으로 판단하고, 이를 집계하는 구조는 multi-agent system의 합의 메커니즘과 직접 연결된다.
-- **[[ai-decision-making]]**: Mecha-nudges for Machines 논문이 AI의 의사결정 편향과 선택 설계를 다뤘다면, 본 논문은 분산 환경에서의 집단적 이진 의사결정의 수학적 기초를 제공한다.
-- **[[theory-of-mind]]**: 전문가들이 타인의 신념을 고려하며 전략적으로 행동하는 구조는 belief aggregation과 ToM 추론의 형식적 모델링과 관련된다.
+- **[[concepts/multi-agent-system.md|multi agent system]]**: DAO 거버넌스 의회는 본질적으로 다중 에이전트 의사결정 시스템이다. 각 전문가가 독립적 에이전트로서 사적 정보를 기반으로 판단하고, 이를 집계하는 구조는 multi-agent system의 합의 메커니즘과 직접 연결된다.
+- **[[concepts/ai-decision-making.md|ai decision making]]**: Mecha-nudges for Machines 논문이 AI의 의사결정 편향과 선택 설계를 다뤘다면, 본 논문은 분산 환경에서의 집단적 이진 의사결정의 수학적 기초를 제공한다.
+- **[[concepts/theory-of-mind.md|theory of mind]]**: 전문가들이 타인의 신념을 고려하며 전략적으로 행동하는 구조는 belief aggregation과 ToM 추론의 형식적 모델링과 관련된다.
 
 ### 새로운 관점
 

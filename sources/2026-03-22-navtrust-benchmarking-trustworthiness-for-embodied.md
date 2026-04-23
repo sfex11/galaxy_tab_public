@@ -25,7 +25,7 @@ NavTrust는 체화된 내비게이션(Embodied Navigation) 모델의 **신뢰성
 
 ### 연구적 의의
 
-이 연구는 [[embodied-ai]] 분야에서 모델 평가의 패러다임을 성능 중심에서 **신뢰성 중심**으로 전환할 것을 제안한다. 이는 [[ai-safety]] 관점에서도 중요한데, 실제 로봇 배치 시 입력 노이즈나 센서 오류에 대한 강건성이 안전성과 직결되기 때문이다. VLN 컴포넌트는 [[vision-language-model]]과 밀접하게 연관되며, 내비게이션 에이전트의 신뢰성 평가는 [[llm-agent]]의 실세계 배치 신뢰성 논의와도 맥락을 같이 한다.
+이 연구는 [[concepts/embodied-ai.md|embodied ai]] 분야에서 모델 평가의 패러다임을 성능 중심에서 **신뢰성 중심**으로 전환할 것을 제안한다. 이는 [[concepts/ai-safety.md|ai safety]] 관점에서도 중요한데, 실제 로봇 배치 시 입력 노이즈나 센서 오류에 대한 강건성이 안전성과 직결되기 때문이다. VLN 컴포넌트는 [[concepts/vision-language-model.md|vision language model]]과 밀접하게 연관되며, 내비게이션 에이전트의 신뢰성 평가는 [[entities/llm-agent.md|llm agent]]의 실세계 배치 신뢰성 논의와도 맥락을 같이 한다.
 
 기존 AgentVLN이 에이전트적 내비게이션의 능력 확장에 초점을 맞췄다면, NavTrust는 그러한 능력이 **얼마나 신뢰할 수 있는지**를 묻는 상보적 연구라 할 수 있다.
 

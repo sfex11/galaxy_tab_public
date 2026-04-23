@@ -23,7 +23,7 @@ ViT와 LLM을 분리하지 않고 통합된 시공간 토큰 스코어링으로 
 
 ### 기존 Wiki와의 관계
 
-[[Transformer]] 아키텍처의 효율성 문제를 비디오 VLM 맥락에서 다루며, ViT와 LLM 양쪽 모두의 토큰 처리를 통합한다는 점에서 Transformer 연구의 확장이다. 또한 2026-04-08의 **TriAttention** 논문이 긴 추론(long reasoning)에서 삼각함수 기반 효율적 어텐션을 다뤘다면, 본 논문은 긴 비디오 입력에서의 토큰 효율성이라는 상보적 문제를 해결한다.
+[[concepts/transformer.md|transformer]] 아키텍처의 효율성 문제를 비디오 VLM 맥락에서 다루며, ViT와 LLM 양쪽 모두의 토큰 처리를 통합한다는 점에서 Transformer 연구의 확장이다. 또한 2026-04-08의 **TriAttention** 논문이 긴 추론(long reasoning)에서 삼각함수 기반 효율적 어텐션을 다뤘다면, 본 논문은 긴 비디오 입력에서의 토큰 효율성이라는 상보적 문제를 해결한다.
 
 ## 🔗 관련 논문
 

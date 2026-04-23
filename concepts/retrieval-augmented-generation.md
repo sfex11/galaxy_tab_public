@@ -40,5 +40,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-a-systematic-study-of-retrieval-pipeline-design-fo.md|A Systematic Study of Retrieval Pipeline Design for Retrieva]] (2026-04-10)
 
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
-
-→ [[sources/2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md|상세 보기]]

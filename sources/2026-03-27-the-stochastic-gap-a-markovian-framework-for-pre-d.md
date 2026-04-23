@@ -25,9 +25,9 @@
 
 ### 기존 연구와의 연결
 
-이 프레임워크는 [[llm-agent]] 시스템의 실제 배포에 필수적인 **사전 감사(pre-deployment auditing)** 방법론을 제시한다는 점에서, 에이전트 안전성 연구([[ai-safety]])와 직접적으로 연결된다. 특히 TraceSafe의 가드레일 평가가 실행 시점의 안전성을 다루는 반면, 본 논문은 **배포 이전 단계**에서의 수학적 보증을 목표로 한다.
+이 프레임워크는 [[entities/llm-agent.md|llm agent]] 시스템의 실제 배포에 필수적인 **사전 감사(pre-deployment auditing)** 방법론을 제시한다는 점에서, 에이전트 안전성 연구([[concepts/ai-safety.md|ai safety]])와 직접적으로 연결된다. 특히 TraceSafe의 가드레일 평가가 실행 시점의 안전성을 다루는 반면, 본 논문은 **배포 이전 단계**에서의 수학적 보증을 목표로 한다.
 
-마르코프 의사결정 프로세스(MDP) 기반 접근은 [[reinforcement-learning]]의 이론적 기반을 공유하며, 감독 비용 최적화 측면에서 [[multi-agent-system]]의 거버넌스 문제와도 맞닿아 있다. 또한 AI 거버넌스 관점에서 'Who Governs the Machine' 논문의 기계 정체성 거버넌스 프레임워크와 상호 보완적이다.
+마르코프 의사결정 프로세스(MDP) 기반 접근은 [[concepts/reinforcement-learning.md|reinforcement learning]]의 이론적 기반을 공유하며, 감독 비용 최적화 측면에서 [[concepts/multi-agent-system.md|multi agent system]]의 거버넌스 문제와도 맞닿아 있다. 또한 AI 거버넌스 관점에서 'Who Governs the Machine' 논문의 기계 정체성 거버넌스 프레임워크와 상호 보완적이다.
 
 ## 🔗 관련 논문
 

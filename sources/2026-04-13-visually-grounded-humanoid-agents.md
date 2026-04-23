@@ -17,15 +17,15 @@
 
 ### 기존 Wiki와의 관계
 
-- **[[humanoid-agent]]**: 이 논문의 직접적 후속 버전(v1)으로, 기존 2026-04-11/12 엔트리와 동일 연구선상에 있다. 시각 기반 휴머노이드 에이전트의 핵심 프레임워크를 정의한다.
-- **[[visual-locomotion]]**: 시각 정보만으로 이동을 수행하는 핵심 능력과 직결된다.
-- **[[embodied-ai]]**: privileged state 없이 시각 관측 기반으로 환경과 상호작용하는 embodied AI의 대표 사례다.
-- **[[3d-human-reconstruction]]**: 디지털 휴먼 생성 파이프라인의 렌더링/재구성 단계와 연결된다.
-- **[[vision-language-model]]**: 목표 지정(goal specification)에 VLM 기반 접근이 활용될 가능성이 높다.
+- **[[concepts/humanoid-agent.md|humanoid agent]]**: 이 논문의 직접적 후속 버전(v1)으로, 기존 2026-04-11/12 엔트리와 동일 연구선상에 있다. 시각 기반 휴머노이드 에이전트의 핵심 프레임워크를 정의한다.
+- **[[concepts/visual-locomotion.md|visual locomotion]]**: 시각 정보만으로 이동을 수행하는 핵심 능력과 직결된다.
+- **[[concepts/embodied-ai.md|embodied ai]]**: privileged state 없이 시각 관측 기반으로 환경과 상호작용하는 embodied AI의 대표 사례다.
+- **[[concepts/3d-human-reconstruction.md|3d human reconstruction]]**: 디지털 휴먼 생성 파이프라인의 렌더링/재구성 단계와 연결된다.
+- **[[concepts/vision-language-model.md|vision language model]]**: 목표 지정(goal specification)에 VLM 기반 접근이 활용될 가능성이 높다.
 
 ### 핵심 기여
 
-수동적 제어에서 능동적 시각 기반 에이전트로의 전환은 **scalability** 문제를 해결하며, 임의의 3D 환경에 디지털 휴먼을 대규모로 배치(populate)할 수 있는 가능성을 열었다. 이는 강화학습 기반 locomotion 정책과 시각 인식을 결합한 접근으로, [[reinforcement-learning]]과 [[visual-grounding]] 개념의 교차점에 위치한다.
+수동적 제어에서 능동적 시각 기반 에이전트로의 전환은 **scalability** 문제를 해결하며, 임의의 3D 환경에 디지털 휴먼을 대규모로 배치(populate)할 수 있는 가능성을 열었다. 이는 강화학습 기반 locomotion 정책과 시각 인식을 결합한 접근으로, [[concepts/reinforcement-learning.md|reinforcement learning]]과 [[concepts/visual-grounding.md|visual grounding]] 개념의 교차점에 위치한다.
 
 ## 🔗 관련 논문
 

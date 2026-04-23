@@ -17,7 +17,7 @@
 
 ### 기존 Wiki와의 연결
 
-**연합학습(federated-learning)** 개념과 직접적으로 관련된다. 기존 Wiki에서는 [[federated-learning]]이 분산 강화학습 맥락에서 다뤄졌으나(Federated Distributional Reinforcement Learning), 본 논문은 연합학습의 보안 취약점이라는 새로운 관점을 추가한다. 연합학습은 데이터를 중앙에 모으지 않고 분산 학습하므로 각 참여자가 주입하는 데이터를 직접 검증하기 어렵다는 구조적 취약점이 존재하며, 이것이 백도어 공격의 주요 공격면이 된다.
+**연합학습(federated-learning)** 개념과 직접적으로 관련된다. 기존 Wiki에서는 [[concepts/federated-learning.md|federated learning]]이 분산 강화학습 맥락에서 다뤄졌으나(Federated Distributional Reinforcement Learning), 본 논문은 연합학습의 보안 취약점이라는 새로운 관점을 추가한다. 연합학습은 데이터를 중앙에 모으지 않고 분산 학습하므로 각 참여자가 주입하는 데이터를 직접 검증하기 어렵다는 구조적 취약점이 존재하며, 이것이 백도어 공격의 주요 공격면이 된다.
 
 **AI 안전(ai-safety)** 관점에서도 중요한 연결점이 있다. 기존 TraceSafe 논문이 LLM 가드레일의 체계적 평가를 다뤘다면, FL-PBM은 학습 파이프라인 자체의 보안을 다룬다는 점에서 AI 안전의 다른 층위를 보완한다.
 

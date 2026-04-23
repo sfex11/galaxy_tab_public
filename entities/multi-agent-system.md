@@ -7,7 +7,6 @@
 
 _Wiki 축적 중 (claude 분석 대기)_
 
-
 ## 논문에서 발견된 핵심 인사이트
 
 - 다중 에이전트 조율과 다목적 트레이드오프를 동시에 해결하는 조건부 신경 솔버를 제시하여, 신경 조합 최적화 분야를 단일 에이전트·단일 목적에서 다중 에이전트·다목적 설정으로 확장했다.
@@ -47,4 +46,6 @@ _Wiki 축적 중 (claude 분석 대기)_
 
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
 
-→ [[sources/2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md|상세 보기]]
+### Lifecycle-Aware Federated Continual Learning in Mobile Autonomous Syst (2026-04-24)
+
+다중 에이전트 협력의 목표가 단기 작업 완수에서 장기 생애주기 전체의 환경 적응으로 확장됨을 보여준다. 연합 학습이 다중 자율 에이전트의 장기 적응을 위한 구조적 인프라로 기능할 수 있음을 시사한다.

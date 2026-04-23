@@ -17,9 +17,9 @@ AI 에이전트의 메모리 관리에서 '무엇을 기억할 것인가'만큼 
 
 본 논문은 **적응적 예산 기반 망각 프레임워크(adaptive budgeted forgetting framework)**를 제안한다. 관련성 기반 스코어링(relevance-guided scoring)과 제한된 최적화(bounded optimization)를 통해 메모리를 조절하며, 불필요한 기억을 능동적으로 제거하여 에이전트의 추론 일관성과 효율성을 동시에 확보한다.
 
-이 연구는 기존 메모리 관리 연구와 차별화되는 지점이 있다. [[shared-state-architecture]]의 공유 상태 아키텍처가 여러 에이전트 간 메모리 일관성에 초점을 맞추는 반면, 본 연구는 단일 에이전트 내에서의 메모리 생애주기 관리에 집중한다. [[ChameleonEpisodicMemoryforLong]] 등 에피소딕 메모리 연구가 기억의 저장과 검색에 초점을 두었다면, 본 논문은 **무엇을 잊을 것인가**라는 보완적 문제를 다룬다.
+이 연구는 기존 메모리 관리 연구와 차별화되는 지점이 있다. [[concepts/shared-state-architecture.md|shared state architecture]]의 공유 상태 아키텍처가 여러 에이전트 간 메모리 일관성에 초점을 맞추는 반면, 본 연구는 단일 에이전트 내에서의 메모리 생애주기 관리에 집중한다. [[ChameleonEpisodicMemoryforLong]] 등 에피소딕 메모리 연구가 기억의 저장과 검색에 초점을 두었다면, 본 논문은 **무엇을 잊을 것인가**라는 보완적 문제를 다룬다.
 
-또한 [[llm-agent]] 엔티티의 핵심 과제인 장기 자율성(long-horizon autonomy)과 직결되며, [[cognitive-architecture]]의 인지 아키텍처 설계에서 망각 메커니즘이 필수 구성요소임을 실증적으로 보여준다. [[metacognition]] 개념과도 연결되는데, 에이전트가 자신의 메모리 상태를 모니터링하고 능동적으로 조절한다는 점에서 메타인지적 자기 조절의 한 형태로 볼 수 있다.
+또한 [[entities/llm-agent.md|llm agent]] 엔티티의 핵심 과제인 장기 자율성(long-horizon autonomy)과 직결되며, [[concepts/cognitive-architecture.md|cognitive architecture]]의 인지 아키텍처 설계에서 망각 메커니즘이 필수 구성요소임을 실증적으로 보여준다. [[concepts/metacognition.md|metacognition]] 개념과도 연결되는데, 에이전트가 자신의 메모리 상태를 모니터링하고 능동적으로 조절한다는 점에서 메타인지적 자기 조절의 한 형태로 볼 수 있다.
 
 ## 🔗 관련 논문
 
@@ -40,3 +40,6 @@ AI 에이전트의 메모리 관리에서 '무엇을 기억할 것인가'만큼 
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/non-uniform-forgetting-protection.md|non uniform forgetting protection]]

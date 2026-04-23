@@ -17,9 +17,9 @@ Multi-Token Prediction은 단순한 추론 가속 기법이 아니라, 그래디
 
 ### 기존 Wiki와의 연결
 
-[[multi-token-prediction]] 개념은 기존에 'Efficient Training-Free Multi-Token Prediction via Embedding Lookahead' 등 추론 효율 관점에서 다뤄졌으나, 본 논문은 MTP를 **학습 역학(training dynamics)** 관점에서 재해석한다는 점에서 차별화된다. [[world-model]] 개념은 VectorWorld 등 자율주행 시뮬레이션 맥락에서 축적되었는데, 본 논문은 LLM 내부의 암묵적 세계 모델이라는 보다 근본적 질문을 다룬다.
+[[concepts/multi-token-prediction.md|multi token prediction]] 개념은 기존에 'Efficient Training-Free Multi-Token Prediction via Embedding Lookahead' 등 추론 효율 관점에서 다뤄졌으나, 본 논문은 MTP를 **학습 역학(training dynamics)** 관점에서 재해석한다는 점에서 차별화된다. [[concepts/world-model.md|world model]] 개념은 VectorWorld 등 자율주행 시뮬레이션 맥락에서 축적되었는데, 본 논문은 LLM 내부의 암묵적 세계 모델이라는 보다 근본적 질문을 다룬다.
 
-'What do Language Models Learn and When?' 논문과 함께 읽으면, LLM 학습 과정에서 사실 기억과 구조적 표현이 어떤 순서로 형성되는지에 대한 통합적 시각을 얻을 수 있다. [[scaling-laws]], [[curriculum-learning]] 관점에서도 MTP의 귀납적 편향이 학습 효율에 미치는 영향을 이해하는 데 유용하다.
+'What do Language Models Learn and When?' 논문과 함께 읽으면, LLM 학습 과정에서 사실 기억과 구조적 표현이 어떤 순서로 형성되는지에 대한 통합적 시각을 얻을 수 있다. [[concepts/scaling-laws.md|scaling laws]], [[concepts/curriculum-learning.md|curriculum learning]] 관점에서도 MTP의 귀납적 편향이 학습 효율에 미치는 영향을 이해하는 데 유용하다.
 
 ### 핵심 기여
 - MTP의 그래디언트 귀납적 편향에 대한 이론적 프레임워크 제시

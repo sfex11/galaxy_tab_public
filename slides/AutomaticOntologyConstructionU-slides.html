@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>자동 온톨로지 구축 — LLM 기반 하이브리드 지능 시스템</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg-card: rgba(16, 20, 30, 0.85);
+    --fg: #e8ecf4;
+    --fg-muted: #6b7a94;
+    --accent: #00e5a0;
+    --accent-dim: rgba(0, 229, 160, 0.12);
+    --accent2: #ff6b4a;
+    --accent2-dim: rgba(255, 107, 74, 0.12);
+    --accent3: #4ea8ff;
+    --accent3-dim: rgba(78, 168, 255, 0.12);
+    --border: rgba(255,255,255,0.06);
+    --radius: clamp(10px, 2vw, 18px);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Noto Sans KR', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 배경 효과 */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.25;
+    animation: blobFloat 18s ease-in-out infinite alternate;
+  }
+  .bg-blob:nth-child(1) {
+    width: clamp(300px, 50vw, 600px); height: clamp(300px, 50vw, 600px);
+    background: var(--accent);
+    top: -10%; left: -10%;
+    animation-delay: 0s;
+  }
+  .bg-blob:nth-child(2) {
+    width: clamp(250px, 40vw, 500px); height: clamp(250px, 40vw, 500px);
+    background: var(--accent2);
+    bottom: -15%; right: -10%;
+    animation-delay: -6s;
+    animation-duration: 22s;
+  }
+  .bg-blob:nth-child(3) {
+    width: clamp(200px, 35vw, 400px); height: clamp(200px, 35vw, 400px);
+    background: var(--accent3);
+    top: 40%; left: 50%;
+    animation-delay: -12s;
+    animation-duration: 25s;
+  }
+  @keyframes blobFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.08); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+    100% { transform: translate(15px, -15px) scale(1.03); }
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: clamp(30px, 5vw, 60px) clamp(30px, 5vw, 60px);
+  }
+
+  /* 슬라이드 컨테이너 */
+  .slides-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+
+  .slide {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(24px, 5vw, 80px) clamp(16px, 5vw, 60px);
+    position: relative;
+  }
+
+  .slide-inner {
+    width: 100%;
+    max-width: 960px;
+  }
+
+  /* 타이포그래피 */
+  .slide-label {
+    font-family: var(--font-display);
+    font-size: clamp(10px, 1.5vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(12px, 2vw, 24px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .slide-label::before {
+    content: '';
+    width: 24px; height: 2px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: clamp(16px, 3vw, 32px);
+  }
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: clamp(12px, 2vw, 24px);
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-weight: 500;
+    margin-bottom: clamp(8px, 1.5vw, 16px);
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 200;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  .text-body {
+    font-size: clamp(13px, 1.8vw, 17px);
+    color: var(--fg-muted);
+    line-height: 1.8;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(16px, 3vw, 32px);
+    backdrop-filter: blur(20px);
+    transition: transform 0.35s cubic-bezier(.22,.61,.36,1), border-color 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  .card-icon {
+    width: clamp(40px, 5vw, 56px);
+    height: clamp(40px, 5vw, 56px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 2vw, 22px);
+    margin-bottom: clamp(10px, 1.5vw, 18px);
+    flex-shrink: 0;
+  }
+
+  /* 그리드 레이아웃 */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(12px, 2vw, 20px);
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(12px, 2vw, 20px);
+  }
+  @media (min-width: 600px) {
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 900px) {
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  /* 아키텍처 다이어그램 */
+  .arch-diagram {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .arch-layer {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(14px, 2.5vw, 24px);
+    text-align: center;
+    position: relative;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(.22,.61,.36,1);
+  }
+  .arch-layer:hover {
+    transform: scale(1.02);
+  }
+  .arch-layer.accent-green { border-color: rgba(0,229,160,0.3); }
+  .arch-layer.accent-blue { border-color: rgba(78,168,255,0.3); }
+  .arch-layer.accent-orange { border-color: rgba(255,107,74,0.3); }
+  .arch-layer.accent-green:hover { box-shadow: 0 0 40px rgba(0,229,160,0.1); }
+  .arch-layer.accent-blue:hover { box-shadow: 0 0 40px rgba(78,168,255,0.1); }
+  .arch-layer.accent-orange:hover { box-shadow: 0 0 40px rgba(255,107,74,0.1); }
+
+  .arch-connector {
+    width: 2px;
+    height: clamp(20px, 4vw, 40px);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .arch-connector::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    animation: connectorPulse 2s ease-in-out infinite;
+  }
+  @keyframes connectorPulse {
+    0%, 100% { opacity: 0.3; transform: translateY(-100%); }
+    50% { opacity: 1; transform: translateY(100%); }
+  }
+
+  .arch-sub {
+    display: flex;
+    gap: clamp(8px, 1.5vw, 16px);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: clamp(8px, 1.5vw, 14px);
+  }
+  .arch-tag {
+    font-size: clamp(10px, 1.4vw, 13px);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    background: rgba(255,255,255,0.03);
+    white-space: nowrap;
+  }
+
+  /* 비교 테이블 */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: clamp(12px, 1.6vw, 15px);
+  }
+  .compare-table th, .compare-table td {
+    padding: clamp(10px, 2vw, 16px);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(11px, 1.4vw, 14px);
+    color: var(--fg-muted);
+    letter-spacing: 0.05em;
+  }
+  .compare-table th:first-child { width: 30%; }
+  .compare-table td:first-child {
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .compare-table .old { color: var(--fg-muted); }
+  .compare-table .new { color: var(--accent); font-weight: 500; }
+
+  /* 플로우 다이어그램 */
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 20px);
+    width: 100%;
+    max-width: 600px;
+    padding: clamp(12px, 2vw, 20px);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .flow-num {
+    width: clamp(36px, 5vw, 48px);
+    height: clamp(36px, 5vw, 48px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(14px, 2vw, 18px);
+    flex-shrink: 0;
+  }
+  .flow-arrow {
+    width: 2px;
+    height: clamp(16px, 3vw, 28px);
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    margin: 0 auto;
+  }
+
+  /* 태그 */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: clamp(10px, 1.3vw, 12px);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .tag-green { background: var(--accent-dim); color: var(--accent); }
+  .tag-orange { background: var(--accent2-dim); color: var(--accent2); }
+  .tag-blue { background: var(--accent3-dim); color: var(--accent3); }
+
+  /* 네비게이션 */
+  .nav-dots {
+    position: fixed;
+    right: clamp(12px, 2vw, 28px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--fg-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+  }
+  .nav-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0,229,160,0.4);
+    transform: scale(1.3);
+  }
+  @media (max-width: 480px) {
+    .nav-dots { right: 8px; gap: 8px; }
+    .nav-dot { width: 8px; height: 8px; }
+  }
+
+  /* 하단 네비게이션 버튼 */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: clamp(12px, 2vw, 20px);
+    background: linear-gradient(to top, var(--bg) 60%, transparent);
+    pointer-events: none;
+  }
+  .nav-btn {
+    pointer-events: all;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--fg);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s;
+  }
+  .nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 20px rgba(0,229,160,0.15);
+  }
+  .nav-btn:active { transform: scale(0.92); }
+
+  .slide-counter {
+    pointer-events: all;
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 8px;
+  }
+  .slide-counter span { color: var(--accent); font-weight: 700; }
+
+  /* 진행 바 */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    z-index: 200;
+    transition: width 0.4s cubic-bezier(.22,.61,.36,1);
+    box-shadow: 0 0 12px rgba(0,229,160,0.4);
+  }
+
+  /* 스크롤 애니메이션 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(clamp(20px, 4vw, 50px));
+    transition: opacity 0.7s cubic-bezier(.22,.61,.36,1), transform 0.7s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* 키워드 캡슐 */
+  .keyword-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1vw, 10px);
+    margin-top: clamp(12px, 2vw, 20px);
+  }
+  .keyword {
+    font-size: clamp(11px, 1.4vw, 14px);
+    padding: 6px 14px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.3s;
+  }
+  .keyword:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* 메타 정보 */
+  .meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 2vw, 20px);
+    margin-top: clamp(16px, 3vw, 28px);
+  }
+  .meta-item {
+    font-size: clamp(11px, 1.3vw, 13px);
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-item i { color: var(--accent); font-size: 0.9em; }
+
+  /* 인용 블록 */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: clamp(12px, 2vw, 24px) clamp(14px, 2.5vw, 28px);
+    background: var(--accent-dim);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: clamp(12px, 2vw, 24px) 0;
+  }
+  .quote-block p {
+    font-size: clamp(13px, 1.8vw, 17px);
+    color: var(--fg);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* 수치 카드 */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(10px, 2vw, 16px);
+    margin-top: clamp(16px, 3vw, 28px);
+  }
+  @media (min-width: 700px) {
+    .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .stat-card {
+    text-align: center;
+    padding: clamp(14px, 2.5vw, 24px) clamp(8px, 1.5vw, 16px);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: clamp(10px, 1.2vw, 12px);
+    color: var(--fg-muted);
+  }
+
+  /* 파티클 캔버스 */
+  #particleCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* 스크롤바 숨김 */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  /* 환원 감소 모드 */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transition: none; opacity: 1; transform: none; }
+    .bg-blob { animation: none; }
+    .arch-connector::after { animation: none; opacity: 0.5; }
+    #particleCanvas { display: none; }
+  }
+
+  /* 소형 화면 보정 */
+  @media (max-width: 320px) {
+    .slide { padding: 20px 12px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-blob"></div>
+  <div class="bg-blob"></div>
+  <div class="bg-blob"></div>
+</div>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="nav-dots" aria-label="슬라이드 탐색">
+  <button class="nav-dot active" data-slide="0" aria-label="슬라이드 1"></button>
+  <button class="nav-dot" data-slide="1" aria-label="슬라이드 2"></button>
+  <button class="nav-dot" data-slide="2" aria-label="슬라이드 3"></button>
+  <button class="nav-dot" data-slide="3" aria-label="슬라이드 4"></button>
+  <button class="nav-dot" data-slide="4" aria-label="슬라이드 5"></button>
+  <button class="nav-dot" data-slide="5" aria-label="슬라이드 6"></button>
+  <button class="nav-dot" data-slide="6" aria-label="슬라이드 7"></button>
+  <button class="nav-dot" data-slide="7" aria-label="슬라이드 8"></button>
+</nav>
+
+<div class="slides-wrapper">
+
+  <!-- 슬라이드 1: 제목 -->
+  <section class="slide" id="slide-0">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="reveal">
+        <div class="slide-label" style="justify-content:center;">arXiv: 2604.20795</div>
+      </div>
+      <h1 class="reveal reveal-delay-1">
+        LLM 기반<br><span class="highlight">자동 온톨로지 구축</span>
+      </h1>
+      <p class="subtitle reveal reveal-delay-2" style="margin:0 auto;">
+        하이브리드 지능 시스템을 위한 외부 기억 계층으로서의<br>메모리, 검증, 계획 기능 통합
+      </p>
+      <div class="keyword-row reveal reveal-delay-3" style="justify-content:center;">
+        <span class="keyword">온톨로지</span>
+        <span class="keyword">LLM</span>
+        <span class="keyword">외부 기억</span>
+        <span class="keyword">자동 구축</span>
+        <span class="keyword">하이브리드 아키텍처</span>
+        <span class="keyword">지식 그래프</span>
+      </div>
+      <div class="meta-info reveal reveal-delay-4" style="justify-content:center;">
+        <span class="meta-item"><i class="fas fa-file-alt"></i> 논문 시각화</span>
+        <span class="meta-item"><i class="fas fa-calendar"></i> 2025</span>
+        <span class="meta-item"><i class="fas fa-flask"></i> AI · 지식 표현</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 문제 제기 -->
+  <section class="slide" id="slide-1">
+    <div class="slide-inner">
+      <div class="slide-label reveal">문제 제기</div>
+      <h2 class="reveal reveal-delay-1">기존 LLM 접근법의 <span style="color:var(--accent2)">한계</span></h2>
+      <div class="quote-block reveal reveal-delay-2">
+        <p>"파라메트릭 기억과 벡터 검색(RAG)만으로는 구조화된 지식을 일관되게 유지하고 추론할 수 없다."</p>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon" style="background:var(--accent2-dim);color:var(--accent2);">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3>파라메트릭 지식 한계</h3>
+          <p class="text-body">학습 시점에 압축된 지식만 보유. 최신 정보 반영 불가, 환각(Hallucination) 발생.</p>
+        </div>
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon" style="background:var(--accent2-dim);color:var(--accent2);">
+            <i class="fas fa-database"></i>
+          </div>
+          <h3>RAG의 구조적 부족</h3>
+          <p class="text-body">벡터 유사도 기반 검색은 의미적 근접성만 측정. 개념 간 계층·관계 구조 파악 불가.</p>
+        </div>
+        <div class="card reveal reveal-delay-4">
+          <div class="card-icon" style="background:var(--accent2-dim);color:var(--accent2);">
+            <i class="fas fa-link-slash"></i>
+          </div>
+          <h3>일관성 결여</h3>
+          <p class="text-body">추론 과정에서 모순된 결론 도출 가능. 지식 간 충돌을 체계적으로 감지·해결할 매커니즘 부재.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 핵심 제안 -->
+  <section class="slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="slide-label reveal">핵심 제안</div>
+      <h2 class="reveal reveal-delay-1">외부 온톨로지 기억 계층</h2>
+      <p class="text-body reveal reveal-delay-2" style="max-width:640px;margin-bottom:clamp(16px,3vw,32px);">
+        LLM의 파라메트릭 기억을 보완하는 구조화된 온톨로지를 외부 계층으로 배치하여, 지식의 자동 구축·검증·계획을 수행하는 하이브리드 아키텍처를 제안합니다.
+      </p>
+      <div class="grid-3">
+        <div class="card reveal reveal-delay-2" style="border-color:rgba(0,229,160,0.2);">
+          <div class="card-icon" style="background:var(--accent-dim);color:var(--accent);">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <h3 style="color:var(--accent);">자동 구축</h3>
+          <p class="text-body">LLM이 텍스트에서 개념과 관계를 추출하여 온톨로지를 자동으로 생성·확장.</p>
+          <div style="margin-top:8px;"><span class="tag tag-green">Memory</span></div>
+        </div>
+        <div class="card reveal reveal-delay-3" style="border-color:rgba(78,168,255,0.2);">
+          <div class="card-icon" style="background:var(--accent3-dim);color:var(--accent3);">
+            <i class="fas fa-shield-halved"></i>
+          </div>
+          <h3 style="color:var(--accent3);">검증</h3>
+          <p class="text-body">온톨로지의 일관성 규칙을 통해 LLM 출력의 논리적 타당성을 실시간 검증.</p>
+          <div style="margin-top:8px;"><span class="tag tag-blue">Verification</span></div>
+        </div>
+        <div class="card reveal reveal-delay-4" style="border-color:rgba(255,107,74,0.2);">
+          <div class="card-icon" style="background:var(--accent2-dim);color:var(--accent2);">
+            <i class="fas fa-route"></i>
+          </div>
+          <h3 style="color:var(--accent2);">계획</h3>
+          <p class="text-body">온톨로지 구조를 활용해 다단계 추론 경로를 계획하고 태스크를 분해.</p>
+          <div style="margin-top:8px;"><span class="tag tag-orange">Planning</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 아키텍처 -->
+  <section class="slide" id="slide-3">
+    <div class="slide-inner">
+      <div class="slide-label reveal">시스템 아키텍처</div>
+      <h2 class="reveal reveal-delay-1">하이브리드 지능 시스템 구조</h2>
+      <div class="arch-diagram reveal reveal-delay-2" style="margin-top:clamp(20px,4vw,40px);">
+        <!-- 계층 1: 사용자 인터페이스 -->
+        <div class="arch-layer accent-orange">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(13px,2vw,17px);color:var(--accent2);">
+            <i class="fas fa-user" style="margin-right:6px;"></i>사용자 인터페이스 계층
+          </div>
+          <div class="arch-sub">
+            <span class="arch-tag">자연어 질의</span>
+            <span class="arch-tag">태스크 명세</span>
+            <span class="arch-tag">결과 시각화</span>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <!-- 계층 2: LLM 코어 -->
+        <div class="arch-layer accent-blue">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(13px,2vw,17px);color:var(--accent3);">
+            <i class="fas fa-microchip" style="margin-right:6px;"></i>LLM 코어 계층
+          </div>
+          <div class="arch-sub">
+            <span class="arch-tag">이해 · 생성</span>
+            <span class="arch-tag">추론</span>
+            <span class="arch-tag">개체-관계 추출</span>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <!-- 계층 3: 온톨로지 기억 -->
+        <div class="arch-layer accent-green">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(14px,2.2vw,19px);color:var(--accent);">
+            <i class="fas fa-project-diagram" style="margin-right:6px;"></i>외부 온톨로지 기억 계층
+          </div>
+          <div class="arch-sub">
+            <span class="arch-tag" style="border-color:rgba(0,229,160,0.3);color:var(--accent);">메모리</span>
+            <span class="arch-tag" style="border-color:rgba(78,168,255,0.3);color:var(--accent3);">검증</span>
+            <span class="arch-tag" style="border-color:rgba(255,107,74,0.3);color:var(--accent2);">계획</span>
+          </div>
+          <div class="arch-sub" style="margin-top:clamp(8px,1.5vw,12px);">
+            <span class="arch-tag">개념 계층</span>
+            <span class="arch-tag">관계 네트워크</span>
+            <span class="arch-tag">제약 조건</span>
+            <span class="arch-tag">추론 규칙</span>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <!-- 계층 4: 지식 소스 -->
+        <div class="arch-layer" style="border-color:rgba(255,255,255,0.1);">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(13px,2vw,17px);color:var(--fg-muted);">
+            <i class="fas fa-layer-group" style="margin-right:6px;"></i>지식 소스 계층
+          </div>
+          <div class="arch-sub">
+            <span class="arch-tag">문서 코퍼스</span>
+            <span class="arch-tag">도메인 데이터</span>
+            <span class="arch-tag">기존 온톨로지</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 작동 원리 -->
+  <section class="slide" id="slide-4">
+    <div class="slide-inner">
+      <div class="slide-label reveal">작동 원리</div>
+      <h2 class="reveal reveal-delay-1">자동 온톨로지 구축 파이프라인</h2>
+      <div class="flow-steps reveal reveal-delay-2" style="margin-top:clamp(20px,4vw,36px);">
+        <div class="flow-step">
+          <div class="flow-num" style="background:var(--accent-dim);color:var(--accent);">1</div>
+          <div>
+            <h3 style="margin-bottom:2px;">텍스트 수집 및 전처리</h3>
+            <p class="text-body">도메인 문서를 수집하고 문장 단위로 분할하여 LLM 입력 형식으로 정규화.</p>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step">
+          <div class="flow-num" style="background:var(--accent3-dim);color:var(--accent3);">2</div>
+          <div>
+            <h3 style="margin-bottom:2px;">개체-관계 추출</h3>
+            <p class="text-body">LLM이 각 문장에서 핵심 개체(Entity)와 개체 간 관계(Relation)를 식별.</p>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step">
+          <div class="flow-num" style="background:var(--accent2-dim);color:var(--accent2);">3</div>
+          <div>
+            <h3 style="margin-bottom:2px;">온톨로지 통합 및 정제</h3>
+            <p class="text-body">추출된 삼중항(Triple)을 기존 온톨로지와 병합. 중복 제거, 계층 정렬, 충돌 해결.</p>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step">
+          <div class="flow-num" style="background:var(--accent-dim);color:var(--accent);">4</div>
+          <div>
+            <h3 style="margin-bottom:2px;">일관성 검증</h3>
+            <p class="text-body">온톨로지 제약(공리, 카디널리티, 계층 규칙) 위반 사항을 자동 검출하고 수정.</p>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step">
+          <div class="flow-num" style="background:var(--accent3-dim);color:var(--accent3);">5</div>
+          <div>
+            <h3 style="margin-bottom:2px;">지식 기반 추론 계획</h3>
+            <p class="text-body">구축된 온톨로지를 기반으로 복잡한 질의를 하위 태스크로 분해하고 추론 경로 계획.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 비교 분석 -->
+  <section class="slide" id="slide-5">
+    <div class="slide-inner">
+      <div class="slide-label reveal">비교 분석</div>
+      <h2 class="reveal reveal-delay-1">기존 방법 vs 제안 아키텍처</h2>
+      <div class="card reveal reveal-delay-2" style="overflow-x:auto;padding:0;margin-top:clamp(16px,3vw,28px);">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>평가 기준</th>
+              <th>순수 LLM</th>
+              <th>RAG</th>
+              <th style="color:var(--accent);">제안 방법</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>지식 구조화</td>
+              <td class="old">암묵적 (비구조)</td>
+              <td class="old">반구조 (청크)</td>
+              <td class="new">명시적 (온톨로지)</td>
+            </tr>
+            <tr>
+              <td>일관성 보장</td>
+              <td class="old">불가</td>
+              <td class="old">제한적</td>
+              <td class="new">형식적 검증</td>
+            </tr>
+            <tr>
+              <td>관계 추론</td>
+              <td class="old">약함</td>
+              <td class="old">벡터 유사도</td>
+              <td class="new">그래프 기반</td>
+            </tr>
+            <tr>
+              <td>환각 감지</td>
+              <td class="old">불가</td>
+              <td class="old">출처 추적</td>
+              <td class="new">제약 위반 탐지</td>
+            </tr>
+            <tr>
+              <td>다단계 계획</td>
+              <td class="old">프롬프트 의존</td>
+              <td class="old">불가</td>
+              <td class="new">온톨로지 기반</td>
+            </tr>
+            <tr>
+              <td>지식 확장</td>
+              <td class="old">재학습 필요</td>
+              <td class="old">인덱스 추가</td>
+              <td class="new">증분 구축</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 세 가지 역할 상세 -->
+  <section class="slide" id="slide-6">
+    <div class="slide-inner">
+      <div class="slide-label reveal">심층 분석</div>
+      <h2 class="reveal reveal-delay-1">외부 계층의 세 가지 역할</h2>
+
+      <div class="grid-2 reveal reveal-delay-2" style="margin-top:clamp(16px,3vw,28px);">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:clamp(8px,1.5vw,14px);">
+            <div class="card-icon" style="background:var(--accent-dim);color:var(--accent);margin-bottom:0;width:clamp(32px,4vw,42px);height:clamp(32px,4vw,42px);font-size:clamp(14px,1.6vw,18px);">
+              <i class="fas fa-hard-drive"></i>
+            </div>
+            <h3 style="color:var(--accent);margin-bottom:0;">메모리 Memory</h3>
+          </div>
+          <p class="text-body">LLM의 파라메트릭 기억 외부에 구조화된 장기 기억을 유지. 개념, 속성, 관계를 그래프 형태로 저장하여 LLM이 필요 시 조회·갱신 가능. 시간에 따른 지식 변화도 추적.</p>
+          <div class="keyword-row" style="margin-top:10px;">
+            <span class="keyword">지식 그래프</span>
+            <span class="keyword">삼중항 저장</span>
+            <span class="keyword">증분 갱신</span>
+          </div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent3);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:clamp(8px,1.5vw,14px);">
+            <div class="card-icon" style="background:var(--accent3-dim);color:var(--accent3);margin-bottom:0;width:clamp(32px,4vw,42px);height:clamp(32px,4vw,42px);font-size:clamp(14px,1.6vw,18px);">
+              <i class="fas fa-check-double"></i>
+            </div>
+            <h3 style="color:var(--accent3);margin-bottom:0;">검증 Verification</h3>
+          </div>
+          <p class="text-body">LLM이 생성한 답변이나 추론 결과를 온톨로지의 공리와 제약 조건에 대해 교차 검증. 모순이 발견되면 피드백 루프를 통해 LLM에 수정 요청. 사실적 정확성 보장.</p>
+          <div class="keyword-row" style="margin-top:10px;">
+            <span class="keyword">일관성 검사</span>
+            <span class="keyword">환각 탐지</span>
+            <span class="keyword">피드백 루프</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-3" style="margin-top:clamp(12px,2vw,20px);">
+        <div class="card" style="border-left:3px solid var(--accent2);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:clamp(8px,1.5vw,14px);">
+            <div class="card-icon" style="background:var(--accent2-dim);color:var(--accent2);margin-bottom:0;width:clamp(32px,4vw,42px);height:clamp(32px,4vw,42px);font-size:clamp(14px,1.6vw,18px);">
+              <i class="fas fa-diagram-project"></i>
+            </div>
+            <h3 style="color:var(--accent2);margin-bottom:0;">계획 Planning</h3>
+          </div>
+          <p class="text-body">복잡한 질의를 온톨로지의 개념 계층과 관계 경로를 따라 하위 질의로 분해. 각 단계에서 필요한 지식을 식별하고, 실행 순서를 결정하여 체계적인 다단계 추론을 가능하게 함.</p>
+          <div class="keyword-row" style="margin-top:10px;">
+            <span class="keyword">태스크 분해</span>
+            <span class="keyword">경로 탐색</span>
+            <span class="keyword">다단계 추론</span>
+            <span class="keyword">의존성 해석</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 결론 -->
+  <section class="slide" id="slide-7">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="slide-label reveal" style="justify-content:center;">결론 및 시사점</div>
+      <h2 class="reveal reveal-delay-1" style="max-width:700px;margin:0 auto clamp(16px,3vw,28px);">
+        구조화된 지식으로<br>LLM의 <span style="color:var(--accent);">지능을 확장</span>하다
+      </h2>
+
+      <div class="stat-grid reveal reveal-delay-2">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--accent);">3</div>
+          <div class="stat-label">핵심 기능<br>메모리·검증·계획</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--accent3);">4</div>
+          <div class="stat-label">아키텍처 계층<br>UI·LLM·온톨로지·데이터</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--accent2);">5</div>
+          <div class="stat-label">파이프라인 단계<br>수집→추출→통합→검증→계획</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--fg);">1</div>
+          <div class="stat-label">통합 프레임워크<br>자동 온톨로지 구축</div>
+        </div>
+      </div>
+
+      <div class="card reveal reveal-delay-3" style="margin-top:clamp(20px,4vw,36px);text-align:left;max-width:640px;margin-left:auto;margin-right:auto;border-color:rgba(0,229,160,0.2);">
+        <h3 style="color:var(--accent);margin-bottom:10px;"><i class="fas fa-lightbulb" style="margin-right:8px;"></i>핵심 시사점</h3>
+        <p class="text-body">
+          본 논문은 LLM이 단독으로 지식을 처리하는 방식에서 벗어나, 온톨로지라는 형식적 지식 표현을 외부 계층으로 결합함으로써 지능 시스템의 신뢰성과 추론 능력을 근본적으로 향상시키는 새로운 패러다임을 제시합니다. 이 하이브리드 접근법은 의료, 법률, 과학 등 일관성이 중요한 도메인에서 특히 강력한 잠재력을 가집니다.
+        </p>
+      </div>
+
+      <div class="meta-info reveal reveal-delay-4" style="justify-content:center;margin-top:clamp(20px,4vw,36px);">
+        <span class="meta-item"><i class="fas fa-link"></i> arxiv.org/abs/2604.20795</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 하단 네비게이션 -->
+<div class="bottom-nav">
+  <button class="nav-btn" id="btnPrev" aria-label="이전 슬라이드">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+  <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">8</span></div>
+  <button class="nav-btn" id="btnNext" aria-label="다음 슬라이드">
+    <i class="fas fa-chevron-down"></i>
+  </button>
+</div>
+
+<script>
+(function() {
+  /* 파티클 시스템 */
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const PARTICLE_COUNT = 50;
+  let animId;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.3 + 0.1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, Math.max(0.1, this.size), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 229, 160, ' + this.opacity + ')';
+      ctx.fill();
+    }
+  }
+
+  if (!prefersReducedMotion) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      /* 가까운 파티클 연결선 */
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            const lineOpacity = (1 - dist / 120) * 0.06;
+            ctx.strokeStyle = 'rgba(0, 229, 160, ' + lineOpacity + ')';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      animId = requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  /* 슬라이드 탐색 */
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const currentSlideEl = document.getElementById('currentSlide');
+  const progressBar = document.getElementById('progressBar');
+  const totalSlides = slides.length;
+
+  let currentIndex = 0;
+
+  function scrollToSlide(index) {
+    if (index < 0 || index >= totalSlides) return;
+    currentIndex = index;
+    slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updateUI();
+  }
+
+  function updateUI() {
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    currentSlideEl.textContent = currentIndex + 1;
+    const progress = ((currentIndex + 1) / totalSlides) * 100;
+    progressBar.style.width = progress + '%';
+  }
+
+  btnPrev.addEventListener('click', () => scrollToSlide(currentIndex - 1));
+  btnNext.addEventListener('click', () => scrollToSlide(currentIndex + 1));
+  dots.forEach(d => {
+    d.addEventListener('click', () => {
+      scrollToSlide(parseInt(d.dataset.slide));
+    });
+  });
+
+  /* 키보드 네비게이션 */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      scrollToSlide(currentIndex + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      scrollToSlide(currentIndex - 1);
+    }
+  });
+
+  /* 터치 스와이프 */
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+      if (dy > 0) scrollToSlide(currentIndex + 1);
+      else scrollToSlide(currentIndex - 1);
+    }
+  }, { passive: true });
+
+  /* IntersectionObserver로 현재 슬라이드 감지 */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+        const id = entry.target.id;
+        const index = parseInt(id.split('-')[1]);
+        if (!isNaN(index)) {
+          currentIndex = index;
+          updateUI();
+        }
+      }
+    });
+  }, { threshold: [0.4, 0.6] });
+  slides.forEach(s => observer.observe(s));
+
+  /* Reveal 애니메이션 */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* 초기 UI 상태 */
+  updateUI();
+})();
+</script>
+</body>
+</html>

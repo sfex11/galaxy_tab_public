@@ -25,7 +25,7 @@ CAMO는 조건부 신경망 구조를 채택하여, 주어진 선호도 벡터(p
 
 ### 연구적 의의
 
-이 연구는 [[convex-optimization|볼록 최적화]]와 [[reinforcement-learning|강화학습]] 분야의 교차점에 위치한다. 특히 다중 에이전트 경로 계획 문제에 신경 조합 최적화(neural combinatorial optimization)를 적용한 점에서, [[multi-agent-system|다중 에이전트 시스템]] 연구와 직접적으로 연결된다. 또한 로봇 시스템의 실시간 의사결정이라는 맥락에서 [[embodied-ai|체화된 AI]] 연구와도 관련성을 갖는다.
+이 연구는 [[concepts/convex-optimization.md|볼록 최적화]]와 [[concepts/reinforcement-learning.md|강화학습]] 분야의 교차점에 위치한다. 특히 다중 에이전트 경로 계획 문제에 신경 조합 최적화(neural combinatorial optimization)를 적용한 점에서, [[concepts/multi-agent-system.md|다중 에이전트 시스템]] 연구와 직접적으로 연결된다. 또한 로봇 시스템의 실시간 의사결정이라는 맥락에서 [[concepts/embodied-ai.md|체화된 AI]] 연구와도 관련성을 갖는다.
 
 ## 🔗 관련 논문
 

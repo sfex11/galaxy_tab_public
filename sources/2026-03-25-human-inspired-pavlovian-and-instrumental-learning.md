@@ -17,7 +17,7 @@
 
 이 세 시스템의 통합은 기존 강화학습의 근본적 딜레마를 해결하려는 시도이다. 순수 MF 방법은 수렴이 느리고 탐색 과정에서 안전하지 않을 수 있으며, MB 방법은 계산 비용이 높고 모델 불일치(model mismatch)에 취약하다. Pavlovian 구성요소를 추가함으로써 안전한 탐색을 보장하면서도, MF/MB의 장점을 상황에 따라 적응적으로 활용할 수 있다.
 
-이 연구는 [[reinforcement-learning]]의 새로운 방향을 제시하며, 특히 [[embodied-ai]] 분야의 자율 내비게이션 과제와 직접적으로 연결된다. Pavlovian 학습의 반사적 안전 메커니즘은 [[ai-safety]] 관점에서도 의미가 있으며, 모델 기반/모델 프리의 적응적 전환은 [[meta-learning]]의 아이디어와 맥을 같이 한다. 또한 인간 인지 모델링에 기반한 설계는 [[cognitive-modeling]]과 [[theory-of-mind]] 연구와도 접점을 형성한다. 탐색-활용 균형 문제는 [[decoupling-exploration-and-policy-optimization]] 연구와 상보적 관계에 있다.
+이 연구는 [[concepts/reinforcement-learning.md|reinforcement learning]]의 새로운 방향을 제시하며, 특히 [[concepts/embodied-ai.md|embodied ai]] 분야의 자율 내비게이션 과제와 직접적으로 연결된다. Pavlovian 학습의 반사적 안전 메커니즘은 [[concepts/ai-safety.md|ai safety]] 관점에서도 의미가 있으며, 모델 기반/모델 프리의 적응적 전환은 [[concepts/meta-learning.md|meta learning]]의 아이디어와 맥을 같이 한다. 또한 인간 인지 모델링에 기반한 설계는 [[concepts/cognitive-modeling.md|cognitive modeling]]과 [[concepts/theory-of-mind.md|theory of mind]] 연구와도 접점을 형성한다. 탐색-활용 균형 문제는 [[decoupling-exploration-and-policy-optimization]] 연구와 상보적 관계에 있다.
 
 ## 🔗 관련 논문
 

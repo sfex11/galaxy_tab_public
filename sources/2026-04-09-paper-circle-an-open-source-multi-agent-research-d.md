@@ -21,7 +21,7 @@ Paper Circle은 과학 문헌의 폭발적 증가에 대응하여, 논문의 발
 - **오픈소스 접근**: 재현성과 확장성을 위한 공개 프레임워크
 
 ### 기존 연구와의 연결
-Paper Circle은 [[multi-agent-system]] 패러다임의 학술 연구 자동화 적용 사례로, Bilevel Autoresearch의 메타 연구 자동화와 맥락을 같이한다. 에이전트의 도구 사용 능력은 [[tool-use]] 개념과 직결되며, AgentFactory의 자기진화 프레임워크와도 에이전트 협업 측면에서 비교할 수 있다. 또한 RAG 기반 검색과 결합하여 [[retrieval-augmented-generation]] 파이프라인의 에이전트 확장으로 볼 수 있다. CliffSearch의 에이전트 기반 이론 탐색과도 자동화된 연구 탐색이라는 공통 목표를 공유한다.
+Paper Circle은 [[concepts/multi-agent-system.md|multi agent system]] 패러다임의 학술 연구 자동화 적용 사례로, Bilevel Autoresearch의 메타 연구 자동화와 맥락을 같이한다. 에이전트의 도구 사용 능력은 [[concepts/tool-use.md|tool use]] 개념과 직결되며, AgentFactory의 자기진화 프레임워크와도 에이전트 협업 측면에서 비교할 수 있다. 또한 RAG 기반 검색과 결합하여 [[concepts/retrieval-augmented-generation.md|retrieval augmented generation]] 파이프라인의 에이전트 확장으로 볼 수 있다. CliffSearch의 에이전트 기반 이론 탐색과도 자동화된 연구 탐색이라는 공통 목표를 공유한다.
 
 ## 🔗 관련 논문
 

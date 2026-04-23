@@ -17,9 +17,9 @@ RLHF나 출력 필터링 같은 행동 수준 안전장치의 한계를 넘어, 
 
 ### 기존 연구와의 관계
 
-이 연구는 [[ai-safety]] 분야에서 LLM의 신뢰성 확보라는 핵심 과제를 다룬다. TraceSafe가 가드레일 기반의 사후적 안전성 평가에 집중했다면, Box Maze는 추론 프로세스 자체를 구조적으로 제어하는 **사전적(proactive)** 접근을 취한다는 점에서 상호보완적이다. 또한 [[reinforcement-learning]] 기반 정렬(RLHF)의 한계를 지적하며, 아키텍처 설계를 통한 대안적 정렬 방법론을 모색한다.
+이 연구는 [[concepts/ai-safety.md|ai safety]] 분야에서 LLM의 신뢰성 확보라는 핵심 과제를 다룬다. TraceSafe가 가드레일 기반의 사후적 안전성 평가에 집중했다면, Box Maze는 추론 프로세스 자체를 구조적으로 제어하는 **사전적(proactive)** 접근을 취한다는 점에서 상호보완적이다. 또한 [[concepts/reinforcement-learning.md|reinforcement learning]] 기반 정렬(RLHF)의 한계를 지적하며, 아키텍처 설계를 통한 대안적 정렬 방법론을 모색한다.
 
-[[reasoning-chain]] 및 [[reasoning-chain-evaluation]] 개념과 직접 연결되며, 추론 체인의 각 단계를 "Box"라는 제어 단위로 분리하여 검증 가능하게 만드는 것이 핵심이다. 이는 TriAttention의 긴 추론 효율화와도 관련되나, Box Maze는 효율보다 **신뢰성과 무결성**에 초점을 맞춘다.
+[[concepts/reasoning-chain.md|reasoning chain]] 및 [[concepts/reasoning-chain-evaluation.md|reasoning chain evaluation]] 개념과 직접 연결되며, 추론 체인의 각 단계를 "Box"라는 제어 단위로 분리하여 검증 가능하게 만드는 것이 핵심이다. 이는 TriAttention의 긴 추론 효율화와도 관련되나, Box Maze는 효율보다 **신뢰성과 무결성**에 초점을 맞춘다.
 
 ### 주요 기여
 

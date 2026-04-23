@@ -23,11 +23,11 @@ F2LLM-v2는 80M부터 14B까지 8가지 크기의 범용 다국어 임베딩 모
 
 ### 기존 Wiki와의 연결
 
-[[text-embedding]] 개념과 직접 관련된다. 기존에 등록된 'The Unreasonable Effectiveness of Text Embedding Interpolation' 논문이 텍스트 임베딩의 보간 효과를 다뤘다면, F2LLM-v2는 다국어 확장성과 효율적 모델 크기 스케일링이라는 실용적 차원에서 임베딩 연구를 확장한다.
+[[concepts/text-embedding.md|text embedding]] 개념과 직접 관련된다. 기존에 등록된 'The Unreasonable Effectiveness of Text Embedding Interpolation' 논문이 텍스트 임베딩의 보간 효과를 다뤘다면, F2LLM-v2는 다국어 확장성과 효율적 모델 크기 스케일링이라는 실용적 차원에서 임베딩 연구를 확장한다.
 
-[[transfer-learning]] 관점에서, LLM의 사전학습 지식을 임베딩 태스크로 전이하는 접근법이 핵심이며, [[multimodal-learning]]과 달리 텍스트 단일 모달리티에 집중하되 언어 다양성 축으로 확장한다는 차별점이 있다.
+[[concepts/transfer-learning.md|transfer learning]] 관점에서, LLM의 사전학습 지식을 임베딩 태스크로 전이하는 접근법이 핵심이며, [[concepts/multimodal-learning.md|multimodal learning]]과 달리 텍스트 단일 모달리티에 집중하되 언어 다양성 축으로 확장한다는 차별점이 있다.
 
-Matryoshka Learning은 단일 학습으로 유연한 차원 선택을 가능하게 하여, 검색(retrieval) 시스템의 효율성-성능 트레이드오프 문제를 해결한다. Knowledge Distillation을 통한 모델 압축은 [[token-pruning]]에서 다루는 효율성 최적화와 철학적 맥을 같이 한다.
+Matryoshka Learning은 단일 학습으로 유연한 차원 선택을 가능하게 하여, 검색(retrieval) 시스템의 효율성-성능 트레이드오프 문제를 해결한다. Knowledge Distillation을 통한 모델 압축은 [[concepts/token-pruning.md|token pruning]]에서 다루는 효율성 최적화와 철학적 맥을 같이 한다.
 
 ## 🔗 관련 논문
 

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/area-coverage.md|area coverage]]
+
+---
+**관련**: [[concepts/area-coverage.md|area coverage]]

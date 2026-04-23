@@ -21,11 +21,11 @@ NavTrust는 두 가지 주요 내비게이션 패러다임을 모두 다룬다:
 - **Vision-Language Navigation (VLN)**: 자연어 지시를 따라 이동하는 에이전트
 - **Object-Goal Navigation (OGN)**: 지정된 목표 객체를 향해 이동하는 에이전트
 
-벤치마크는 입력 모달리티(시각, 언어, 센서 등)에 대한 체계적 손상을 적용하여, 명목적(nominal) 조건과 손상 조건 간의 성능 격차를 정량화한다. 이는 [[embodied-ai]] 분야에서 실용적 배포를 위한 중요한 평가 프레임워크를 제공한다.
+벤치마크는 입력 모달리티(시각, 언어, 센서 등)에 대한 체계적 손상을 적용하여, 명목적(nominal) 조건과 손상 조건 간의 성능 격차를 정량화한다. 이는 [[concepts/embodied-ai.md|embodied ai]] 분야에서 실용적 배포를 위한 중요한 평가 프레임워크를 제공한다.
 
 ### 기존 연구와의 관계
 
-본 연구는 [[vision-language-model]]과 [[spatial-reasoning]]의 교차점에 위치하며, AgentVLN이 제시한 에이전틱 VLN 접근법의 강건성을 평가하는 보완적 역할을 한다. 또한 [[ai-safety]] 관점에서 내비게이션 모델의 신뢰성 문제를 다루며, TraceSafe가 LLM 가드레일을 평가한 것처럼 체화된 AI 시스템의 안전성 평가 방법론을 확장한다. CADENCE(context-adaptive depth estimation) 연구와도 내비게이션 환경에서의 인식 강건성이라는 주제로 연결된다.
+본 연구는 [[concepts/vision-language-model.md|vision language model]]과 [[concepts/spatial-reasoning.md|spatial reasoning]]의 교차점에 위치하며, AgentVLN이 제시한 에이전틱 VLN 접근법의 강건성을 평가하는 보완적 역할을 한다. 또한 [[concepts/ai-safety.md|ai safety]] 관점에서 내비게이션 모델의 신뢰성 문제를 다루며, TraceSafe가 LLM 가드레일을 평가한 것처럼 체화된 AI 시스템의 안전성 평가 방법론을 확장한다. CADENCE(context-adaptive depth estimation) 연구와도 내비게이션 환경에서의 인식 강건성이라는 주제로 연결된다.
 
 ## 🔗 관련 논문
 

@@ -23,7 +23,7 @@ LLM은 next-token prediction으로만 훈련되었음에도 임베딩 공간 프
 
 ### 의의 및 연결점
 
-이 연구는 [[Transformer]] 아키텍처의 임베딩 공간에 이미 내재된 예측 능력을 재발견한다는 점에서 주목할 만하다. 기존 Wiki의 'toward consistent world models with multi-token prediction' 논문이 multi-token prediction의 일관성 문제를 다룬다면, 본 논문은 이를 효율적으로 구현하는 실용적 방법론에 초점을 맞춘다. 또한 'triattention efficient long reasoning with trigonometric' 논문과 함께 LLM 추론 효율화라는 공통 연구 흐름을 형성한다.
+이 연구는 [[concepts/transformer.md|transformer]] 아키텍처의 임베딩 공간에 이미 내재된 예측 능력을 재발견한다는 점에서 주목할 만하다. 기존 Wiki의 'toward consistent world models with multi-token prediction' 논문이 multi-token prediction의 일관성 문제를 다룬다면, 본 논문은 이를 효율적으로 구현하는 실용적 방법론에 초점을 맞춘다. 또한 'triattention efficient long reasoning with trigonometric' 논문과 함께 LLM 추론 효율화라는 공통 연구 흐름을 형성한다.
 
 Speculative decoding의 핵심 병목이었던 드래프트 모델 의존성을 제거함으로써, 모델 배포 및 서빙 파이프라인을 단순화할 수 있는 실질적 가치를 지닌다.
 

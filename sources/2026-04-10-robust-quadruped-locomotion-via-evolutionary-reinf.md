@@ -21,9 +21,9 @@
 
 ### 기존 Wiki와의 연결
 
-이 연구는 [[reinforcement-learning]] 엔티티 및 개념과 직접적으로 연관된다. 특히 [[distribution-shift]] 문제를 sim-to-real 전이 관점에서 다루며, [[model-based-rl]]과 대비되는 model-free 접근법의 로버스트니스를 탐구한다. 또한 로봇 보행이라는 도메인에서 [[embodied-ai]]와 연결되며, 진화 알고리즘의 활용은 [[metaheuristic-optimization]]의 연장선에 있다. CEM의 집단 기반 탐색은 [[self-organizing-systems]]의 원리와도 맞닿아 있다.
+이 연구는 [[concepts/reinforcement-learning.md|reinforcement learning]] 엔티티 및 개념과 직접적으로 연관된다. 특히 [[concepts/distribution-shift.md|distribution shift]] 문제를 sim-to-real 전이 관점에서 다루며, [[concepts/model-based-rl.md|model based rl]]과 대비되는 model-free 접근법의 로버스트니스를 탐구한다. 또한 로봇 보행이라는 도메인에서 [[concepts/embodied-ai.md|embodied ai]]와 연결되며, 진화 알고리즘의 활용은 [[concepts/metaheuristic-optimization.md|metaheuristic optimization]]의 연장선에 있다. CEM의 집단 기반 탐색은 [[concepts/self-organizing-systems.md|self organizing systems]]의 원리와도 맞닿아 있다.
 
-사족보행 로봇의 sim-to-real 전이 문제는 [[autonomous-driving]]의 closed-loop 평가([[closed-loop-evaluation]])에서 다루는 시뮬레이션-현실 간극 문제와 구조적으로 유사하다.
+사족보행 로봇의 sim-to-real 전이 문제는 [[concepts/autonomous-driving.md|autonomous driving]]의 closed-loop 평가([[concepts/closed-loop-evaluation.md|closed loop evaluation]])에서 다루는 시뮬레이션-현실 간극 문제와 구조적으로 유사하다.
 
 ## 🔗 관련 논문
 

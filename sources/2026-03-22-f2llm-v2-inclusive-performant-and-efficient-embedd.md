@@ -25,7 +25,7 @@ F2LLM-v2는 80M에서 14B까지 8가지 크기의 범용 다국어 임베딩 모
 
 이 연구는 텍스트 임베딩 분야에서 **규모 확장성(scalability)**과 **언어 포용성(inclusivity)**을 동시에 추구한다는 점에서 주목할 만하다. 기존 임베딩 모델들이 주로 영어 중심이었던 반면, F2LLM-v2는 200개 이상 언어를 명시적으로 지원하며, matryoshka 학습을 통해 리소스 제약 환경에서도 효율적 배포가 가능하다. 또한 지식 증류를 통한 모델 압축은 임베딩 모델의 실용적 배포 장벽을 낮추는 데 기여한다.
 
-기존 Wiki의 [[text-embedding]] 개념과 직접적으로 관련되며, transfer-learning과 knowledge-distillation 기법을 핵심적으로 활용한다는 점에서 해당 개념들과의 교차점이 존재한다.
+기존 Wiki의 [[concepts/text-embedding.md|text embedding]] 개념과 직접적으로 관련되며, transfer-learning과 knowledge-distillation 기법을 핵심적으로 활용한다는 점에서 해당 개념들과의 교차점이 존재한다.
 
 ## 🔗 관련 논문
 

@@ -19,11 +19,11 @@
 
 ### 기존 Wiki와의 연결
 
-- **Transformer / ViT 계열**: 기존 [[transformer]] 엔티티와 직접 관련. ViT 기반 사전학습 모델의 표현력 한계를 다루며, transformer 표현의 제어 가능성이라는 새로운 축을 제시한다.
-- **Representation Steering**: 기존 [[representation-steering]] 개념이 LLM 내부 활성화 벡터 조향에 초점을 맞춘 반면, 본 논문은 **비전 도메인**에서의 표현 조향을 다룬다는 점에서 상호보완적이다. 특히 [[what-drives-representation-steering]] 논문의 메커니즘적 분석과 비교하면, 모달리티 간 조향 기법의 유사성과 차이를 탐구할 수 있다.
-- **Multimodal LLM**: [[multimodal-llm]] 개념과 연결. 텍스트-비전 간 표현 공간의 상호작용을 다루며, 언어 중심 표현의 한계를 시각 중심으로 보완한다.
-- **Vision-Language Model**: [[vision-language-model]] 계열 연구와 밀접. VLM이 언어 프롬프트로 시각 표현을 안내하는 기존 방식의 대안을 제시한다.
-- **Token Pruning**: [[token-pruning]] 연구들이 효율성을 위해 토큰을 선별하는 것과 유사하게, 본 연구는 의미적으로 관련된 시각 특징을 선택적으로 강조한다는 점에서 개념적 연결이 있다.
+- **Transformer / ViT 계열**: 기존 [[concepts/transformer.md|transformer]] 엔티티와 직접 관련. ViT 기반 사전학습 모델의 표현력 한계를 다루며, transformer 표현의 제어 가능성이라는 새로운 축을 제시한다.
+- **Representation Steering**: 기존 [[concepts/representation-steering.md|representation steering]] 개념이 LLM 내부 활성화 벡터 조향에 초점을 맞춘 반면, 본 논문은 **비전 도메인**에서의 표현 조향을 다룬다는 점에서 상호보완적이다. 특히 [[what-drives-representation-steering]] 논문의 메커니즘적 분석과 비교하면, 모달리티 간 조향 기법의 유사성과 차이를 탐구할 수 있다.
+- **Multimodal LLM**: [[concepts/multimodal-llm.md|multimodal llm]] 개념과 연결. 텍스트-비전 간 표현 공간의 상호작용을 다루며, 언어 중심 표현의 한계를 시각 중심으로 보완한다.
+- **Vision-Language Model**: [[concepts/vision-language-model.md|vision language model]] 계열 연구와 밀접. VLM이 언어 프롬프트로 시각 표현을 안내하는 기존 방식의 대안을 제시한다.
+- **Token Pruning**: [[concepts/token-pruning.md|token pruning]] 연구들이 효율성을 위해 토큰을 선별하는 것과 유사하게, 본 연구는 의미적으로 관련된 시각 특징을 선택적으로 강조한다는 점에서 개념적 연결이 있다.
 
 ## 🔗 관련 논문
 

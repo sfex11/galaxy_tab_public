@@ -17,9 +17,9 @@
 
 ### 기존 Wiki와의 관계
 
-이 연구는 [[autonomous-driving]]과 [[on-device-inference]] 개념의 교차점에 위치한다. 제한된 하드웨어에서 깊이 추정 모델을 효율적으로 실행한다는 점에서, 에너지-성능 트레이드오프를 다룬 *Sustainability Is Not Linear* 연구와 직접적으로 맥을 같이 한다. 또한 [[sensor-fusion]] 관점에서 단안(monocular) 카메라만으로 깊이를 추정한다는 점은 LiDAR-카메라 융합 기반의 *Deep Neural Network Based Roadwork Detection* 접근과 대조적이다.
+이 연구는 [[concepts/autonomous-driving.md|autonomous driving]]과 [[concepts/on-device-inference.md|on device inference]] 개념의 교차점에 위치한다. 제한된 하드웨어에서 깊이 추정 모델을 효율적으로 실행한다는 점에서, 에너지-성능 트레이드오프를 다룬 *Sustainability Is Not Linear* 연구와 직접적으로 맥을 같이 한다. 또한 [[concepts/sensor-fusion.md|sensor fusion]] 관점에서 단안(monocular) 카메라만으로 깊이를 추정한다는 점은 LiDAR-카메라 융합 기반의 *Deep Neural Network Based Roadwork Detection* 접근과 대조적이다.
 
-**Slimmable network** 기법은 [[model-pruning]]과 [[model-compression]]의 연장선상에 있으며, 단일 모델 내에서 폭(width)을 동적으로 조절하여 여러 정확도-비용 운영점을 제공한다. 이는 정적 프루닝과 달리 런타임에 적응이 가능하다는 점에서 차별화된다.
+**Slimmable network** 기법은 [[concepts/model-pruning.md|model pruning]]과 [[concepts/model-compression.md|model compression]]의 연장선상에 있으며, 단일 모델 내에서 폭(width)을 동적으로 조절하여 여러 정확도-비용 운영점을 제공한다. 이는 정적 프루닝과 달리 런타임에 적응이 가능하다는 점에서 차별화된다.
 
 ### 핵심 기여
 
@@ -40,3 +40,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/monocular-pose-estimation.md|monocular pose estimation]]

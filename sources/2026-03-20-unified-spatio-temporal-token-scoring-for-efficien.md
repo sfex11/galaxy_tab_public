@@ -19,7 +19,7 @@ ViT와 LLM을 관통하는 통합 시공간 토큰 스코어링으로, 비디오
 
 ### 기존 Wiki와의 연결
 
-이 연구는 [[Transformer]] 아키텍처의 효율성 개선과 직결된다. ViT와 LLM 모두 Transformer 기반이므로, 토큰 프루닝은 Transformer의 근본적 연산 병목을 해결하는 핵심 기법이다. 또한 비디오 이해 태스크에서의 효율적 추론은 LLM Agent가 멀티모달 입력을 실시간으로 처리해야 하는 시나리오와도 관련이 깊다. 최근 연구된 멀티모달 임베딩(MMEmb-R1) 및 시각 표현 학습(Steerable Visual Representations)과 상보적인 관계에 있으며, 특히 TriAttention의 효율적 추론 접근법과 방법론적 유사성을 공유한다.
+이 연구는 [[concepts/transformer.md|transformer]] 아키텍처의 효율성 개선과 직결된다. ViT와 LLM 모두 Transformer 기반이므로, 토큰 프루닝은 Transformer의 근본적 연산 병목을 해결하는 핵심 기법이다. 또한 비디오 이해 태스크에서의 효율적 추론은 LLM Agent가 멀티모달 입력을 실시간으로 처리해야 하는 시나리오와도 관련이 깊다. 최근 연구된 멀티모달 임베딩(MMEmb-R1) 및 시각 표현 학습(Steerable Visual Representations)과 상보적인 관계에 있으며, 특히 TriAttention의 효율적 추론 접근법과 방법론적 유사성을 공유한다.
 
 ## 🔗 관련 논문
 

@@ -17,7 +17,7 @@
 
 저자들은 이러한 최적화 원시 연산(optimization primitives)을 컨텍스트 공간에서 체계적으로 연구하며, 기존에 파편화되어 있던 in-context learning 방법론들을 통합적 프레임워크로 재정립한다. 이는 **Reflective Context Learning**이라는 개념으로, 에이전트가 자신의 컨텍스트를 메타인지적으로 관리하고 최적화하는 능력을 의미한다.
 
-이 연구는 [[in-context-learning]]의 이론적 기반을 강화하며, [[metacognition]] 및 [[memory-management]]와 직접적으로 연결된다. 컨텍스트 공간에서의 forgetting 문제는 [[adaptive-forgetting]]과 관련되고, 에이전트의 경험 기반 학습 일반화는 [[curriculum-learning]] 및 [[scaling-laws]]와도 맞닿아 있다. 특히 PSI의 shared-state 아키텍처([[shared-state-architecture]])나 Box Maze의 process-control 접근([[process-control-architecture]])이 컨텍스트 공간 최적화의 구체적 구현 사례로 볼 수 있다.
+이 연구는 [[concepts/in-context-learning.md|in context learning]]의 이론적 기반을 강화하며, [[concepts/metacognition.md|metacognition]] 및 [[concepts/memory-management.md|memory management]]와 직접적으로 연결된다. 컨텍스트 공간에서의 forgetting 문제는 [[concepts/adaptive-forgetting.md|adaptive forgetting]]과 관련되고, 에이전트의 경험 기반 학습 일반화는 [[concepts/curriculum-learning.md|curriculum learning]] 및 [[concepts/scaling-laws.md|scaling laws]]와도 맞닿아 있다. 특히 PSI의 shared-state 아키텍처([[concepts/shared-state-architecture.md|shared state architecture]])나 Box Maze의 process-control 접근([[concepts/process-control-architecture.md|process control architecture]])이 컨텍스트 공간 최적화의 구체적 구현 사례로 볼 수 있다.
 
 ## 🔗 관련 논문
 

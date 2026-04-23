@@ -33,3 +33,12 @@ VectorWorld는 이러한 한계를 극복하기 위해 **벡터 그래프 기반
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/vector-quantization.md|vector quantization]]
+
+---
+**관련**: [[concepts/latent-diffusion.md|latent diffusion]]
+
+---
+**관련**: [[concepts/residual-stream-monitoring.md|residual stream monitoring]]

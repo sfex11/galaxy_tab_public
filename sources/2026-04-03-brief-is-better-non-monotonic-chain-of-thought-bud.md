@@ -26,7 +26,7 @@
 
 ### 기존 연구와의 연결
 
-이 결과는 [[reasoning-chain]] 및 [[reasoning-integrity]] 개념과 직접적으로 관련된다. 추론 체인의 길이가 반드시 품질을 보장하지 않는다는 점에서, Box Maze의 프로세스 제어 아키텍처([[process-control-architecture]])가 제안한 구조화된 추론 제어의 필요성을 뒷받침한다. 또한 [[tool-use]] 개념과 밀접하며, TraceSafe의 가드레일 연구와도 연결된다—도구 호출 시 과도한 추론이 오히려 안전성 문제를 야기할 수 있다. [[metacognition]] 관점에서 Act Wisely 논문이 제안한 메타인지적 도구 사용과도 상보적이다: 언제 충분히 생각했는지 아는 것이 중요하다.
+이 결과는 [[concepts/reasoning-chain.md|reasoning chain]] 및 [[concepts/reasoning-integrity.md|reasoning integrity]] 개념과 직접적으로 관련된다. 추론 체인의 길이가 반드시 품질을 보장하지 않는다는 점에서, Box Maze의 프로세스 제어 아키텍처([[concepts/process-control-architecture.md|process control architecture]])가 제안한 구조화된 추론 제어의 필요성을 뒷받침한다. 또한 [[concepts/tool-use.md|tool use]] 개념과 밀접하며, TraceSafe의 가드레일 연구와도 연결된다—도구 호출 시 과도한 추론이 오히려 안전성 문제를 야기할 수 있다. [[concepts/metacognition.md|metacognition]] 관점에서 Act Wisely 논문이 제안한 메타인지적 도구 사용과도 상보적이다: 언제 충분히 생각했는지 아는 것이 중요하다.
 
 ### 시사점
 

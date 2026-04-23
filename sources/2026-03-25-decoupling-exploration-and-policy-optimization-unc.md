@@ -33,3 +33,12 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/gpu-kernel-optimization.md|gpu kernel optimization]]
+
+---
+**관련**: [[concepts/bilevel-optimization.md|bilevel optimization]]
+
+---
+**관련**: [[concepts/myopic-optimization.md|myopic optimization]]

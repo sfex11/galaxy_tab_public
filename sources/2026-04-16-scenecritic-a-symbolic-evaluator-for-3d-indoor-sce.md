@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-15-starvla-α-reducing-complexity-in-vision-language-a]]: 둘 다 비전-언어 모델의 실제 적용(로봇 행동 vs 3D 장면 생성)에서 아키텍처 단순화 또는 평가 개선을 다룬다.
+
+---
+**관련**: [[concepts/citation-hallucination.md|citation hallucination]]

@@ -15,9 +15,9 @@
 
 VISOR는 기존 Large Vision-Language Model(LVLM) 효율화의 지배적 패러다임인 **시각 토큰 축소(visual token reduction)**에 정면으로 도전하는 연구다. 기존 접근법들이 시각 토큰을 압축·제거하여 연산 비용을 줄이는 반면, VISOR는 시각 정보를 버리지 않으면서도 추론 비용을 절감한다. 핵심 아이디어는 모든 레이어에서 시각-언어 상호작용(cross-attention)을 수행하는 대신, **필요한 레이어에서만 선택적으로(sparse, dynamically)** 시각 정보를 참조하는 것이다.
 
-이는 기존 token-pruning 계열 연구([[token-pruning]])가 직면하는 정보 병목(information bottleneck) 문제를 근본적으로 우회한다. 특히 세밀한 이해와 추론이 필요한 어려운 태스크에서 토큰 축소 방식의 성능 저하가 심한데, VISOR는 전체 시각 정보를 유지하므로 이 한계를 극복한다.
+이는 기존 token-pruning 계열 연구([[concepts/token-pruning.md|token pruning]])가 직면하는 정보 병목(information bottleneck) 문제를 근본적으로 우회한다. 특히 세밀한 이해와 추론이 필요한 어려운 태스크에서 토큰 축소 방식의 성능 저하가 심한데, VISOR는 전체 시각 정보를 유지하므로 이 한계를 극복한다.
 
-기존 Wiki의 [[vision-language-model]], [[VLM]], [[MLLM]] 엔티티와 직접 관련되며, Unified Spatio-Temporal Token Scoring 등 video-vlm 효율화 연구와도 비교 가능하다. 다만 VISOR는 토큰 자체를 줄이는 것이 아니라 **어텐션 연산의 희소화**라는 직교적 전략을 취한다는 점에서 차별화된다. Transformer 아키텍처 내 cross-attention 메커니즘의 동적 제어라는 측면에서 [[transformer]] 엔티티와도 연결된다.
+기존 Wiki의 [[concepts/vision-language-model.md|vision language model]], [[entities/vlm.md|vlm]], [[entities/mllm.md|mllm]] 엔티티와 직접 관련되며, Unified Spatio-Temporal Token Scoring 등 video-vlm 효율화 연구와도 비교 가능하다. 다만 VISOR는 토큰 자체를 줄이는 것이 아니라 **어텐션 연산의 희소화**라는 직교적 전략을 취한다는 점에서 차별화된다. Transformer 아키텍처 내 cross-attention 메커니즘의 동적 제어라는 측면에서 [[concepts/transformer.md|transformer]] 엔티티와도 연결된다.
 
 ## 🔗 관련 논문
 

@@ -22,5 +22,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-01-dynamic-dual-granularity-skill-bank-for-agentic-rl.md|Dynamic Dual-Granularity Skill Bank for Agentic RL]] (2026-04-01)
 
 ### VLA Foundry: A Unified Framework for Training Vision-Language-Action M (2026-04-23)
-
-→ [[sources/2026-04-23-vla-foundry-a-unified-framework-for-training-visio.md|상세 보기]]

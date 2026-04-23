@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnosing CFG Interpretation in LLMs</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --bg3: #1a1a26;
+  --fg: #e8e6f0;
+  --fg2: #a8a4b8;
+  --fg3: #6b6680;
+  --accent: #00e5a0;
+  --accent2: #00b87d;
+  --accent-dim: rgba(0,229,160,0.1);
+  --warn: #ff6b6b;
+  --warn-dim: rgba(255,107,107,0.12);
+  --orange: #ffaa40;
+  --orange-dim: rgba(255,170,64,0.12);
+  --blue: #4dabf7;
+  --blue-dim: rgba(77,171,247,0.12);
+  --purple: #c084fc;
+  --purple-dim: rgba(192,132,252,0.12);
+  --card: rgba(26,26,38,0.85);
+  --border: rgba(255,255,255,0.06);
+  --radius: clamp(8px, 1.5vw, 16px);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Noto Sans KR', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.slide {
+  min-height: 100vh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 5vw, 60px) clamp(16px, 6vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,229,160,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(77,171,247,0.02) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.slide-num {
+  position: absolute;
+  top: clamp(12px, 2vw, 24px);
+  right: clamp(16px, 4vw, 40px);
+  font-family: var(--mono);
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: var(--fg3);
+  letter-spacing: 0.05em;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.1vw, 13px);
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.tag-accent { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+.tag-warn { background: var(--warn-dim); color: var(--warn); border: 1px solid rgba(255,107,107,0.2); }
+.tag-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,170,64,0.2); }
+.tag-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(77,171,247,0.2); }
+.tag-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(192,132,252,0.2); }
+
+h1 {
+  font-size: clamp(28px, 5.5vw, 64px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: clamp(12px, 2vw, 24px);
+}
+
+h2 {
+  font-size: clamp(20px, 3.5vw, 42px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(10px, 1.5vw, 20px);
+}
+
+h3 {
+  font-size: clamp(15px, 2vw, 24px);
+  font-weight: 700;
+  margin-bottom: clamp(6px, 1vw, 14px);
+}
+
+p, li {
+  font-size: clamp(13px, 1.6vw, 18px);
+  color: var(--fg2);
+  line-height: 1.8;
+}
+
+ul { padding-left: clamp(14px, 2vw, 24px); }
+li { margin-bottom: clamp(4px, 0.6vw, 8px); }
+li::marker { color: var(--accent); }
+
+.subtitle {
+  font-size: clamp(14px, 2vw, 22px);
+  font-weight: 300;
+  color: var(--fg2);
+  margin-bottom: clamp(16px, 2.5vw, 32px);
+  max-width: 680px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(14px, 2vw, 28px);
+  backdrop-filter: blur(12px);
+}
+
+.code-block {
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.2vw, 14px);
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(12px, 1.5vw, 20px);
+  overflow-x: auto;
+  line-height: 1.7;
+  color: var(--fg2);
+  white-space: pre;
+}
+
+.code-block .kw { color: var(--accent); }
+.code-block .str { color: var(--orange); }
+.code-block .cmt { color: var(--fg3); font-style: italic; }
+.code-block .sym { color: var(--purple); }
+.code-block .num { color: var(--blue); }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 1.5vw, 20px);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 1.2vw, 16px);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 1vw, 14px);
+}
+
+.metric-bar {
+  height: clamp(20px, 2.5vw, 32px);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+}
+
+.metric-bar .fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.metric-bar .label {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.highlight-text { color: var(--accent); font-weight: 700; }
+.warn-text { color: var(--warn); font-weight: 700; }
+.orange-text { color: var(--orange); font-weight: 700; }
+.blue-text { color: var(--blue); font-weight: 700; }
+.purple-text { color: var(--purple); font-weight: 700; }
+
+.divider {
+  width: clamp(40px, 6vw, 80px);
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
+  margin: clamp(8px, 1.2vw, 16px) 0;
+}
+
+.author-line {
+  font-size: clamp(11px, 1.3vw, 15px);
+  color: var(--fg3);
+  margin-bottom: clamp(4px, 0.5vw, 8px);
+}
+
+.meta-line {
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.1vw, 13px);
+  color: var(--fg3);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(11px, 1.2vw, 14px);
+}
+
+th {
+  background: rgba(0,229,160,0.08);
+  color: var(--accent);
+  font-weight: 600;
+  padding: clamp(8px, 1vw, 14px) clamp(10px, 1.2vw, 16px);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: clamp(6px, 0.8vw, 12px) clamp(10px, 1.2vw, 16px);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg2);
+}
+
+tr:last-child td { border-bottom: none; }
+
+.icon-box {
+  width: clamp(36px, 4vw, 52px);
+  height: clamp(36px, 4vw, 52px);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 2vw, 22px);
+  flex-shrink: 0;
+}
+
+.flex-row { display: flex; align-items: flex-start; gap: clamp(10px, 1.2vw, 16px); }
+.flex-col { display: flex; flex-direction: column; gap: clamp(8px, 1vw, 16px); }
+
+.gap-sm { gap: clamp(6px, 0.8vw, 12px); }
+.mt-auto { margin-top: auto; }
+
+.arrow-down {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--fg3);
+  font-size: clamp(18px, 2.5vw, 28px);
+  padding: clamp(4px, 0.8vw, 10px) 0;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0.15); }
+  50% { box-shadow: 0 0 20px 4px rgba(0,229,160,0.1); }
+}
+
+.glow-pulse { animation: pulse-glow 3s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-anim { animation: float 4s ease-in-out infinite; }
+
+.nav-dots {
+  position: fixed;
+  right: clamp(8px, 1.5vw, 20px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 100;
+}
+
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg3);
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.nav-dot.active {
+  opacity: 1;
+  background: var(--accent);
+  height: 18px;
+  border-radius: 3px;
+}
+
+@media (max-width: 640px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+  .table-wrap { font-size: 10px; }
+}
+
+.stat-big {
+  font-family: var(--mono);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: clamp(10px, 1.1vw, 13px);
+  color: var(--fg3);
+  margin-top: 4px;
+}
+
+@keyframes grid-bg {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+.grid-bg-anim {
+  background-image:
+    linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-bg 20s linear infinite;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- 슬라이드 1: 제목 -->
+<section class="slide grid-bg-anim" id="s0">
+  <span class="slide-num">01 / 13</span>
+  <div class="fade-in">
+    <div style="display:flex;gap:8px;margin-bottom:clamp(12px,1.5vw,20px);flex-wrap:wrap;">
+      <span class="tag tag-accent">cs.AI</span>
+      <span class="tag tag-blue">arXiv: 2604.20811v1</span>
+    </div>
+    <h1>Diagnosing CFG Interpretation<br>in LLMs</h1>
+    <div class="divider"></div>
+    <p class="subtitle">LLM이 컨텍스트 내 제공된 문맥자유문법(CFG)을 진정으로 해석할 수 있는가? 표면 구문 파싱과 논리적 실행 사이의 간극을 진단한다.</p>
+    <div class="author-line">Hanqi Li, Lu Chen, Kai Yu</div>
+    <div class="meta-line">상하이교통대학교 X-LANCE Lab · 2026년 4월</div>
+  </div>
+</section>
+
+<!-- 슬라이드 2: 배경과 동기 -->
+<section class="slide" id="s1">
+  <span class="slide-num">02 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-orange">Background</span>
+    <h2>왜 CFG 해석 능력을 평가하는가?</h2>
+    <div class="divider"></div>
+    <div class="flex-col" style="margin-top:clamp(8px,1.5vw,20px);">
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--orange-dim);color:var(--orange);">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div>
+          <h3>에이전트 시스템의 핵심 요구</h3>
+          <p>LLM은 도구 호출, API 오케스트레이션, DSL 생성을 위해 동적으로 정의된 기계 인터페이스(JSON 스키마, 함수 시그니처)를 준수해야 함</p>
+        </div>
+      </div>
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--warn-dim);color:var(--warn);">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div>
+          <h3>"거의 맞음"은 충분하지 않다</h3>
+          <p>단일 구분자 누락이나 중첩 루프의 논리 불일치가 치명적 실행 실패를 유발할 수 있음 (Yehudai et al., 2025)</p>
+        </div>
+      </div>
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--purple-dim);color:var(--purple);">
+          <i class="fas fa-question-circle"></i>
+        </div>
+        <div>
+          <h3>핵심 질문</h3>
+          <p>LLM은 제공된 문법의 <span class="highlight-text">형식적 논리를 내면화</span>하는가, 아니면 메모리에서 <span class="warn-text">표면 규칙성만 검색</span>하는가?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 3: 연구 기여 -->
+<section class="slide" id="s2">
+  <span class="slide-num">03 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-accent">Contributions</span>
+    <h2>세 가지 핵심 기여</h2>
+    <div class="divider"></div>
+    <div class="grid-3" style="margin-top:clamp(12px,2vw,28px);">
+      <div class="card flex-col" style="border-top:2px solid var(--accent);">
+        <div class="icon-box float-anim" style="background:var(--accent-dim);color:var(--accent);">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h3>3계층 평가 계층구조</h3>
+        <p><span class="highlight-text">구문 · 행동 · 의미</span>를 분리하여 구조적 추론 실패를 정밀하게 지역화하는 RoboGrid 벤치마크 개발</p>
+      </div>
+      <div class="card flex-col" style="border-top:2px solid var(--blue);">
+        <div class="icon-box float-anim" style="background:var(--blue-dim);color:var(--blue);animation-delay:0.5s;">
+          <i class="fas fa-microscope"></i>
+        </div>
+        <h3>인컨텍스트 문법 해석 정식화</h3>
+        <p>표면 패턴 매칭에서 <span class="blue-text">형식 규칙 귀납</span>으로 평가 패러다임 전환</p>
+      </div>
+      <div class="card flex-col" style="border-top:2px solid var(--orange);">
+        <div class="icon-box float-anim" style="background:var(--orange-dim);color:var(--orange);animation-delay:1s;">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>SOTA 모델의 한계 특성화</h3>
+        <p>구문 준수율과 의미 정렬 간 <span class="warn-text">대규모 격차</span>를 발견하고 의미적 선험지식 의존성을 입증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 4: RoboGrid 환경 -->
+<section class="slide" id="s3">
+  <span class="slide-num">04 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-blue">Environment</span>
+    <h2>RoboGrid 환경</h2>
+    <div class="divider"></div>
+    <div class="grid-2" style="margin-top:clamp(8px,1.5vw,20px);">
+      <div class="flex-col gap-sm">
+        <div class="card">
+          <h3>결정론적 그리드 월드</h3>
+          <p>로봇이 그리드를 탐색하며 객체를 수집하는 환경으로, <span class="highlight-text">코드와 행동 간 명확한 매핑</span>을 제공</p>
+          <p style="margin-top:8px;">상태: <code style="color:var(--accent);font-family:var(--mono);font-size:inherit;">(x, y, facing, inventory)</code></p>
+        </div>
+        <div class="card">
+          <h3>설계 철학</h3>
+          <ul>
+            <li>작업 논리 이해와 형식 구문 준수를 <span class="blue-text">분리</span></li>
+            <li>모호함 없는 실행 의미 제공</li>
+            <li>합성 환경 기반 정밀 행동 평가</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="background:rgba(0,0,0,0.4);">
+        <h3 style="margin-bottom:10px;">명령어 집합</h3>
+        <div class="code-block"><span class="kw">Move</span>(dir, n)    <span class="cmt"># 앞/뒤로 n칸 이동</span>
+<span class="kw">Turn</span>(dir)       <span class="cmt"># 좌/우 90도 회전</span>
+<span class="kw">Grab</span>(item)      <span class="cmt"># 객체 수집 | key | box</span>
+<span class="kw">Loop</span>(n, body)   <span class="cmt"># body를 n번 반복</span>
+<span class="kw">If</span>(cond, then, else?) <span class="cmt"># 조건 분기</span>
+<span class="kw">Holding</span>(item)   <span class="cmt"># 상태 조회 술어</span>
+<span class="sym">And</span> | <span class="sym">Or</span> | <span class="sym">Not</span>  <span class="cmt"># 논리 연산자</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 5: EBNF 문법 규격 -->
+<section class="slide" id="s4">
+  <span class="slide-num">05 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-purple">Grammar</span>
+    <h2>EBNF 기반 문법 규격</h2>
+    <div class="divider"></div>
+    <div class="grid-2" style="margin-top:clamp(8px,1.5vw,20px);">
+      <div>
+        <div class="code-block" style="margin-bottom:clamp(8px,1vw,16px);"><span class="kw">start</span> : stmt+
+<span class="kw">stmt</span>  : action_stmt | loop | if_stmt
+
+<span class="kw">action_stmt</span> : DO action END
+<span class="kw">loop</span>        : LOOP INT TIMES
+                 LBR stmt+ RBR
+<span class="kw">if_stmt</span>     : IF cond THEN
+                 LBR stmt+ RBR
+                 (ELSE LBR stmt+ RBR)?
+
+<span class="kw">action</span> : MOVE MOVE_DIR INT?
+         | TURN TURN_DIR
+         | GRAB ITEM
+<span class="kw">cond</span>   : HOLDING ITEM</div>
+        <div class="code-block"><span class="str">DO</span>    : <span class="str">"exec"</span>       <span class="str">END</span>   : <span class="str">"end"</span>
+<span class="str">LOOP</span>  : <span class="str">"loop"</span>       <span class="str">TIMES</span> : <span class="str">"times"</span>
+<span class="str">IF</span>    : <span class="str">"when"</span>       <span class="str">THEN</span>  : <span class="str">"after"</span>
+<span class="str">LBR</span>   : <span class="str">"["</span>          <span class="str">RBR</span>   : <span class="str">"]"</span></div>
+      </div>
+      <div class="flex-col gap-sm">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <h3><i class="fas fa-sync-alt" style="color:var(--accent);margin-right:6px;"></i>재귀적 합성</h3>
+          <p>loop, if_stmt이 stmt+를 재귀적으로 포함하여 중첩 허용</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--blue);">
+          <h3><i class="fas fa-code" style="color:var(--blue);margin-right:6px;"></i>명시적 구분자</h3>
+          <p>DO/END, LBR/RBR이 재귀 수준 추적을 위한 앵커 제공</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--orange);">
+          <h3><i class="fas fa-exchange-alt" style="color:var(--orange);margin-right:6px;"></i>동적 단말 기호</h3>
+          <p>"loop" → "v_xkqm" 등 불투명 토큰으로 치환하여 <span class="orange-text">의미적 선험지식 차단</span></p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--purple);">
+          <h3><i class="fas fa-bolt" style="color:var(--purple);margin-right:6px;"></i>인컨텍스트 해석기</h3>
+          <p>EBNF가 추론 시점에 동적 프로토콜로 작동</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 6: 제어 가능한 데이터 생성 -->
+<section class="slide" id="s5">
+  <span class="slide-num">06 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-orange">Generation</span>
+    <h2>제어 가능한 데이터 생성</h2>
+    <div class="divider"></div>
+    <div class="table-wrap" style="margin-top:clamp(10px,1.5vw,20px);">
+      <table>
+        <thead>
+          <tr>
+            <th>범주</th>
+            <th>파라미터</th>
+            <th>구성 공간</th>
+            <th>평가 목적</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-accent">재귀</span></td>
+            <td>최대 중첩 깊이 (D)</td>
+            <td style="font-family:var(--mono);">{2, ..., 20}</td>
+            <td>계층적 상태 추적 수평 탐색</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-accent">재귀</span></td>
+            <td>Else 분기 확률 (p)</td>
+            <td style="font-family:var(--mono);">[0.0, 1.0]</td>
+            <td>제어 흐름 분기 밀도 조절</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">표현식</span></td>
+            <td>표현식 깊이 (E)</td>
+            <td style="font-family:var(--mono);">{1, 2, 3}</td>
+            <td>중첩 산술/불리언 술어 제어</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">표면</span></td>
+            <td>구문 스타일</td>
+            <td style="font-family:var(--mono);">Block / C-style / S-expr</td>
+            <td>구조적 구분자에 대한 견고성</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">표면</span></td>
+            <td>어휘 친숙도</td>
+            <td style="font-family:var(--mono);">Natural / Alien</td>
+            <td>의미적 선험지식으로부터 분리</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:clamp(10px,1.5vw,18px);">
+      <p><i class="fas fa-info-circle" style="color:var(--accent);margin-right:6px;"></i>정적 벤치마크와 달리 <span class="highlight-text">다차원 구성 공간(D, p, E)을 체계적으로 스윕</span>하여 문법 해석 능력의 특정 측면을 격리</p>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 7: 3계층 평가 프레임워크 -->
+<section class="slide" id="s6">
+  <span class="slide-num">07 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-accent">Framework</span>
+    <h2>3계층 평가 계층구조</h2>
+    <div class="divider"></div>
+    <div class="flex-col" style="margin-top:clamp(10px,2vw,24px);align-items:center;">
+      <div class="card glow-pulse" style="width:100%;max-width:520px;border-top:2px solid var(--accent);text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <div class="icon-box" style="background:var(--accent-dim);color:var(--accent);"><i class="fas fa-check-circle"></i></div>
+          <div style="text-align:left;">
+            <h3 style="margin:0;">Layer 1: 구문 유효성 (SVR)</h3>
+            <p style="margin:0;font-size:clamp(11px,1.3vw,15px);">출력이 CFG 생성 규칙에 부합하는가?</p>
+          </div>
+          <div class="stat-big" style="color:var(--accent);margin-left:auto;">78%</div>
+        </div>
+      </div>
+      <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+      <div class="card" style="width:100%;max-width:520px;border-top:2px solid var(--orange);text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <div class="icon-box" style="background:var(--orange-dim);color:var(--orange);"><i class="fas fa-cogs"></i></div>
+          <div style="text-align:left;">
+            <h3 style="margin:0;">Layer 2: 행동 동등성 (BER)</h3>
+            <p style="margin:0;font-size:clamp(11px,1.3vw,15px);">실행된 프로그램이 의도한 상태 변화를 달성하는가?</p>
+          </div>
+          <div class="stat-big" style="color:var(--orange);margin-left:auto;">52%</div>
+        </div>
+      </div>
+      <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+      <div class="card" style="width:100%;max-width:520px;border-top:2px solid var(--warn);text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <div class="icon-box" style="background:var(--warn-dim);color:var(--warn);"><i class="fas fa-sitemap"></i></div>
+          <div style="text-align:left;">
+            <h3 style="margin:0;">Layer 3: 의미 정확성 (SCR)</h3>
+            <p style="margin:0;font-size:clamp(11px,1.3vw,15px);">유도된 AST가 정답 논리와 구조적으로 동일한가?</p>
+          </div>
+          <div class="stat-big" style="color:var(--warn);margin-left:auto;">31%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 8: 세 가지 태스크 -->
+<section class="slide" id="s7">
+  <span class="slide-num">08 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-blue">Tasks</span>
+    <h2>세 가지 평가 태스크</h2>
+    <div class="divider"></div>
+    <div class="grid-3" style="margin-top:clamp(10px,1.5vw,20px);">
+      <div class="card flex-col" style="border-left:3px solid var(--accent);">
+        <span class="tag tag-accent" style="align-self:flex-start;margin-bottom:8px;">Task 1</span>
+        <h3>문법성 판단</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--fg3);margin-bottom:8px;">Grammaticality Judgment</p>
+        <p>주어진 CFG에 대해 입력 문자열이 문법적으로 유효한지 판별</p>
+        <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--border);">
+          <p style="font-size:clamp(11px,1.1vw,13px);color:var(--fg3);"><i class="fas fa-bullseye" style="color:var(--accent);margin-right:4px;"></i>주요 평가: <span class="highlight-text">SVR</span></p>
+        </div>
+      </div>
+      <div class="card flex-col" style="border-left:3px solid var(--orange);">
+        <span class="tag tag-orange" style="align-self:flex-start;margin-bottom:8px;">Task 2</span>
+        <h3>목표 조건부 생성</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--fg3);margin-bottom:8px;">Goal-Conditioned Generation</p>
+        <p>목표 상태가 주어지면 도달하는 프로그램 생성</p>
+        <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--border);">
+          <p style="font-size:clamp(11px,1.1vw,13px);color:var(--fg3);"><i class="fas fa-bullseye" style="color:var(--orange);margin-right:4px;"></i>주요 평가: <span class="orange-text">BER</span></p>
+        </div>
+      </div>
+      <div class="card flex-col" style="border-left:3px solid var(--purple);">
+        <span class="tag tag-purple" style="align-self:flex-start;margin-bottom:8px;">Task 3</span>
+        <h3>명령-코드 변환</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--fg3);margin-bottom:8px;">Instruction-to-Code Generation</p>
+        <p>자연어 명령을 해당 CFG 코드로 변환</p>
+        <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--border);">
+          <p style="font-size:clamp(11px,1.1vw,13px);color:var(--fg3);"><i class="fas fa-bullseye" style="color:var(--purple);margin-right:4px;"></i>주요 평가: <span class="purple-text">SVR + BER + SCR</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 9: 주요 실험 결과 -->
+<section class="slide" id="s8">
+  <span class="slide-num">09 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-warn">Results</span>
+    <h2>주요 실험 결과</h2>
+    <div class="divider"></div>
+    <div class="grid-2" style="margin-top:clamp(10px,1.5vw,20px);">
+      <div class="flex-col gap-sm">
+        <h3 style="margin:0;">계층적 성능 저하 패턴</h3>
+        <div>
+          <p style="margin-bottom:6px;font-size:clamp(11px,1.2vw,14px);">구문 유효성 (SVR)</p>
+          <div class="metric-bar"><div class="fill" style="width:78%;background:linear-gradient(90deg,var(--accent2),var(--accent));"></div><span class="label">78%</span></div>
+        </div>
+        <div>
+          <p style="margin-bottom:6px;font-size:clamp(11px,1.2vw,14px);">행동 동등성 (BER)</p>
+          <div class="metric-bar"><div class="fill" style="width:52%;background:linear-gradient(90deg,#cc7a20,var(--orange));"></div><span class="label">52%</span></div>
+        </div>
+        <div>
+          <p style="margin-bottom:6px;font-size:clamp(11px,1.2vw,14px);">의미 정확성 (SCR)</p>
+          <div class="metric-bar"><div class="fill" style="width:31%;background:linear-gradient(90deg,#cc3333,var(--warn));"></div><span class="label">31%</span></div>
+        </div>
+        <div class="card" style="margin-top:8px;background:var(--warn-dim);border-color:rgba(255,107,107,0.2);">
+          <p style="color:var(--warn);font-weight:600;font-size:clamp(12px,1.3vw,15px);"><i class="fas fa-exclamation-circle" style="margin-right:4px;"></i>구문 준수가 의미 정확성을 보장하지 않음</p>
+        </div>
+      </div>
+      <div class="flex-col gap-sm">
+        <h3 style="margin:0;">핵심 발견</h3>
+        <div class="card" style="border-left:3px solid var(--warn);">
+          <p><span class="warn-text">급격한 비선형 감소</span>: 깊이 증가에 따라 성능이 급격히 붕괴하며, 이는 LLM의 깊은 추론 사슬 유지 한계와 일치 (Rodkin et al., 2025)</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--orange);">
+          <p><span class="orange-text">Alien 토큰 효과</span>: 익숙한 어휘를 불투명 토큰으로 교체하면 성능이 급감하여, <span class="highlight-text">순수 기호 귀납이 아닌 의미적 선험지식 의존</span>을 입증</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--blue);">
+          <p><span class="blue-text">CoT의 부분적 완화</span>: 사고사슬(CoT) 추론이 어느 정도 도움이 되지만, 구조적 밀도(깊은 재귀, 높은 분기) 앞에서는 여전히 붕괴</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 10: 절제 연구 -->
+<section class="slide" id="s9">
+  <span class="slide-num">10 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-purple">Ablation</span>
+    <h2>절제 연구 분석</h2>
+    <div class="divider"></div>
+    <div class="grid-3" style="margin-top:clamp(10px,1.5vw,20px);">
+      <div class="card flex-col">
+        <div class="icon-box" style="background:var(--accent-dim);color:var(--accent);margin-bottom:10px;">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h3>계층 깊이와 재귀 스케일링</h3>
+        <p>D=2에서는 높은 성능을 보이나, <span class="warn-text">D≥6</span>에서 비선형 감소 시작</p>
+        <p style="margin-top:6px;">Else 분기 확률(p) 증가 시 분기 밀도에 비례하여 BER, SCR 추가 저하</p>
+      </div>
+      <div class="card flex-col">
+        <div class="icon-box" style="background:var(--blue-dim);color:var(--blue);margin-bottom:10px;">
+          <i class="fas fa-project-diagram"></i>
+        </div>
+        <h3>술어 복잡도와 논리 해결</h3>
+        <p>표현식 깊이(E) 증가는 <span class="orange-text">지역적 논리 해결 실패</span>로 이어짐</p>
+        <p style="margin-top:6px;">깊은 재귀 실패와 구분 가능: 중첩 And/Or/Not 술어에서 독립적 저하 패턴 관찰</p>
+      </div>
+      <div class="card flex-col">
+        <div class="icon-box" style="background:var(--purple-dim);color:var(--purple);margin-bottom:10px;">
+          <i class="fas fa-font"></i>
+        </div>
+        <h3>구조적 구분자와 어휘 선험지식</h3>
+        <p>Block → C-style → S-expr 전환 시 <span class="purple-text">격식 차이 발생</span></p>
+        <p style="margin-top:6px;">Alien 어휘 사용 시 모든 스타일에서 극적인 성능 하락 → 순수 기호 귀납 한계</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 11: 프롬프팅 전략 -->
+<section class="slide" id="s10">
+  <span class="slide-num">11 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-orange">Prompting</span>
+    <h2>프롬프팅 전략과 ICL 효율성</h2>
+    <div class="divider"></div>
+    <div class="flex-col gap-sm" style="margin-top:clamp(10px,1.5vw,20px);">
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--accent-dim);color:var(--accent);flex-shrink:0;">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div>
+          <h3 style="margin:0;">새로운 CFG에서 CoT의 지배적 우위</h3>
+          <p>Zero-shot 대비 CoT가 새로운 문법 해석에서 가장 큰 개선을 제공하나, 이는 <span class="highlight-text">표면 구문 수준에 국한</span></p>
+        </div>
+      </div>
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--warn-dim);color:var(--warn);flex-shrink:0;">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div>
+          <h3 style="margin:0;">Few-shot 프롬프팅의 한계적 수익</h3>
+          <p>예제 수 증가가 초기에는 도움이 되나, <span class="warn-text">수확 체감이 빠르게 나타남</span> — 구조적 이해가 아닌 패턴 모방에 의존하는 것으로 추정</p>
+        </div>
+      </div>
+      <div class="card flex-row">
+        <div class="icon-box" style="background:var(--orange-dim);color:var(--orange);flex-shrink:0;">
+          <i class="fas fa-infinity"></i>
+        </div>
+        <div>
+          <h3 style="margin:0">깊이에서의 보편적 취약성</h3>
+          <p>모든 프롬프팅 전략이 <span class="orange-text">깊은 중첩(D ≥ 8)에서 보편적으로 붕괴</span> — 이는 프롬프트 엔지니어링으로 극복 불가한 근본적 한계를 시사</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 12: 실패 모드 분석 -->
+<section class="slide" id="s11">
+  <span class="slide-num">12 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-warn">Failure Modes</span>
+    <h2>실패 모드 분류와 사례</h2>
+    <div class="divider"></div>
+    <div class="grid-3" style="margin-top:clamp(10px,1.5vw,20px);">
+      <div class="card flex-col" style="border-top:3px solid var(--accent);">
+        <h3><span class="highlight-text">구문 취약성</span></h3>
+        <p style="font-size:clamp(11px,1.2vw,14px);color:var(--fg3);margin-bottom:8px;">Syntactic Fragility</p>
+        <ul style="font-size:clamp(11px,1.2vw,14px);">
+          <li>어휘 매핑 실패: 불투명 토큰 혼동</li>
+          <li>계층 스코핑 실패: 중첩 구분자 불일치</li>
+          <li>연산자 혼동: 유사 토큰 간 오인식</li>
+          <li>조기 스코프 종료: 닫는 괄호 누락</li>
+        </ul>
+      </div>
+      <div class="card flex-col" style="border-top:3px solid var(--orange);">
+        <h3><span class="orange-text">행동 불일치</span></h3>
+        <p style="font-size:clamp(11px,1.2vw,14px);color:var(--fg3);margin-bottom:8px;">Behavioral Misalignment</p>
+        <ul style="font-size:clamp(11px,1.2vw,14px);">
+          <li>논리 술어 반전: And/Or 혼동</li>
+          <li>산술 시뮬레이션 붕괴: 계산 오류 누적</li>
+          <li>계획 수평 붕괴: 다단계 목표 달성 실패</li>
+        </ul>
+      </div>
+      <div class="card flex-col" style="border-top:3px solid var(--warn);">
+        <h3><span class="warn-text">의미 드리프트</span></h3>
+        <p style="font-size:clamp(11px,1.2vw,14px);color:var(--fg3);margin-bottom:8px;">Semantic Drift</p>
+        <ul style="font-size:clamp(11px,1.2vw,14px);">
+          <li>산술 AST 평탄화: 중첩 구조 손실</li>
+          <li>불리언 AST 평탄화: 논리 깊이 붕괴</li>
+          <li>자기회귀 에코: 구조적 중복 생성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(10px,1.5vw,18px);background:var(--warn-dim);border-color:rgba(255,107,107,0.15);">
+      <p style="font-size:clamp(12px,1.3vw,15px);"><i class="fas fa-lightbulb" style="color:var(--warn);margin-right:6px;"></i><span class="warn-text">핵심 통찰:</span> 구문적으로 유효한 출력이라도 내부 AST 구조가 평탄화되어 원래 논리를 보존하지 못하는 현상이 광범위하게 관찰됨</p>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 13: 결론 -->
+<section class="slide grid-bg-anim" id="s12">
+  <span class="slide-num">13 / 13</span>
+  <div class="fade-in">
+    <span class="tag tag-accent">Conclusion</span>
+    <h2>결론과 시사점</h2>
+    <div class="divider"></div>
+    <div class="grid-2" style="margin-top:clamp(10px,2vw,24px);">
+      <div class="flex-col gap-sm">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <h3 style="margin:0 0 6px 0;">핵심 메시지</h3>
+          <p>LLM은 CFG를 <span class="highlight-text">표면적으로는 따를 수 있으나</span>, 복잡도가 증가하면 <span class="warn-text">논리적 충실도가 붕괴</span>한다. 이는 순수 기호 귀납이 아닌 <span class="orange-text">의미적 선험지식에 의존</span>하기 때문이다.</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--blue);">
+          <h3 style="margin:0 0 6px 0;">계층적 상태 추적의 한계</h3>
+          <p>깊은 재귀와 높은 분기에서 <span class="blue-text">계층적 상태 추적 능력</span>이 보편적으로 실패하며, 이는 신뢰 가능한 문법 무관 에이전트 구현의 핵심 병목이다.</p>
+        </div>
+      </div>
+      <div class="flex-col gap-sm">
+        <div class="card" style="border-left:3px solid var(--purple);">
+          <h3 style="margin:0 0 6px 0;">향후 방향</h3>
+          <ul>
+            <li>순수 기호 귀납 능력 향상을 위한 아키텍처 연구</li>
+            <li>깊은 중첩 구조 처리를 위한 체인-오브-사고 이상의 추론 메커니즘</li>
+            <li>문법 무관 에이전트를 위한 검증-수정 루프 통합</li>
+          </ul>
+        </div>
+        <div class="card" style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);">
+          <p style="font-size:clamp(12px,1.3vw,15px);text-align:center;"><i class="fas fa-link" style="color:var(--accent);margin-right:6px;"></i><a href="http://arxiv.org/abs/2604.20811v1" style="color:var(--accent);text-decoration:none;" target="_blank">arxiv.org/abs/2604.20811v1</a></p>
+          <p style="font-size:clamp(10px,1vw,12px);text-align:center;color:var(--fg3);margin-top:4px;">License: CC BY 4.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const navContainer = document.getElementById('navDots');
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.setAttribute('aria-label', `슬라이드 ${i + 1}로 이동`);
+    dot.addEventListener('click', () => {
+      slides[i].scrollIntoView({ behavior: 'smooth' });
+    });
+    navContainer.appendChild(dot);
+  });
+
+  const dots = navContainer.querySelectorAll('.nav-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(slides).indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => observer.observe(s));
+
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+  // 메트릭 바 애니메이션
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fill = entry.target.querySelector('.fill');
+        if (fill) {
+          const w = fill.style.width;
+          fill.style.width = '0%';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              fill.style.width = w;
+            });
+          });
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.metric-bar').forEach(bar => barObserver.observe(bar));
+})();
+</script>
+</body>
+</html>

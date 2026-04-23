@@ -22,11 +22,11 @@
 
 | Wiki 출처 | 기여 내용 |
 |-----------|-----------|
-| **[[zero-knowledge-negotiation]]** | Groth16 zk-SNARK (~80ms 증명, ~200byte) + Paillier 동형암호 조합으로 사적 효용 비공개 협상 프로토콜 정의 |
-| **[[differential-privacy]]** 논문 (arXiv:2603.17902) | AI 에이전트 환경에서의 ε-차등 프라이버시 트레이드오프 분석 — 효용 함수 은닉의 이론적 선례 |
-| **[[multi-agent-system]]** CAMOA 논문 | 다중 에이전트·다목적 설정에서 **파레토 최적 해**를 신경 솔버로 생성 — 그러나 **프라이버시 보존 레이어가 없음** |
-| **[[agent-identity]]** | ZKP 기반 자격 이식(portability), DID, 행동 궤적 감사 — 합의 후 검증과 신원 이식의 기반 |
-| **[[agent-coordination]]** Agentic FL 논문 | 로컬 데이터 비공개 상태에서 글로벌 합의(secure aggregation) — 사적 효용 비공개 합의의 구조적 선례 |
+| **[[concepts/zero-knowledge-negotiation.md|zero knowledge negotiation]]** | Groth16 zk-SNARK (~80ms 증명, ~200byte) + Paillier 동형암호 조합으로 사적 효용 비공개 협상 프로토콜 정의 |
+| **[[concepts/differential-privacy.md|differential privacy]]** 논문 (arXiv:2603.17902) | AI 에이전트 환경에서의 ε-차등 프라이버시 트레이드오프 분석 — 효용 함수 은닉의 이론적 선례 |
+| **[[concepts/multi-agent-system.md|multi agent system]]** CAMOA 논문 | 다중 에이전트·다목적 설정에서 **파레토 최적 해**를 신경 솔버로 생성 — 그러나 **프라이버시 보존 레이어가 없음** |
+| **[[concepts/agent-identity.md|agent identity]]** | ZKP 기반 자격 이식(portability), DID, 행동 궤적 감사 — 합의 후 검증과 신원 이식의 기반 |
+| **[[concepts/agent-coordination.md|agent coordination]]** Agentic FL 논문 | 로컬 데이터 비공개 상태에서 글로벌 합의(secure aggregation) — 사적 효용 비공개 합의의 구조적 선례 |
 
 #### (2) 핵심 메커니즘 (특허 명세서 기반)
 

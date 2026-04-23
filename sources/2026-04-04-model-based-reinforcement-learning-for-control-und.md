@@ -17,7 +17,7 @@
 
 ### 기존 Wiki와의 연결
 
-[[reinforcement-learning]] 엔티티의 핵심 확장 연구로, 정상성 가정을 완화한 점이 차별점이다. [[distribution-shift]] 개념과 직접 연관되며, 동역학 변화를 분포 이동(distribution shift)의 일종으로 볼 수 있다. [[meta-learning]] 개념과도 연결되는데, 에피소드마다 변하는 환경에 빠르게 적응하는 능력이 메타학습의 핵심 목표와 일치한다. [[world-model]] 개념에서 GP 기반 동역학 모델은 환경의 월드 모델을 명시적으로 학습하는 접근법에 해당한다.
+[[concepts/reinforcement-learning.md|reinforcement learning]] 엔티티의 핵심 확장 연구로, 정상성 가정을 완화한 점이 차별점이다. [[concepts/distribution-shift.md|distribution shift]] 개념과 직접 연관되며, 동역학 변화를 분포 이동(distribution shift)의 일종으로 볼 수 있다. [[concepts/meta-learning.md|meta learning]] 개념과도 연결되는데, 에피소드마다 변하는 환경에 빠르게 적응하는 능력이 메타학습의 핵심 목표와 일치한다. [[concepts/world-model.md|world model]] 개념에서 GP 기반 동역학 모델은 환경의 월드 모델을 명시적으로 학습하는 접근법에 해당한다.
 
 기존 소스 중 robust quadruped locomotion 연구가 진화적 강화학습으로 로봇 제어의 강건성을 다룬 점에서 상보적이며, federated distributional RL 연구도 분산 환경에서의 RL 일반화 문제를 공유한다.
 

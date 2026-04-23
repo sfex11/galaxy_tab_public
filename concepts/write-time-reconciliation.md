@@ -13,3 +13,5 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Automatic Ontology Construction Using LLMs as an External Layer of Mem (2026-04-24)

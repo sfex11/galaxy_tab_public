@@ -22,7 +22,7 @@ PIBT는 수백~수천 에이전트가 혼잡한 환경에서 실시간으로 경
 MD-PIBT는 에이전트 간 의존성 그래프를 명시적으로 모델링하여, 단일 충돌 제약을 넘어 **다중 에이전트 의존성을 동시에 고려한 계획**을 수행한다. 이를 통해 PIBT의 효율성을 유지하면서도 탐색 공간을 확장하여 더 일반적인 해를 도출할 수 있다.
 
 ### 연구 맥락
-기존 Wiki의 [[multi-agent-path-planning]] 개념과 직접적으로 연결되며, ADMM 기반 분산 MPC나 Density-Driven Optimal Control 등 다중 에이전트 조율 연구와 문제 도메인을 공유한다. 특히 [[multi-robot-coordination]]에서 다루는 충돌 회피 및 협조적 계획 문제의 구체적 알고리즘 개선 사례에 해당한다. 또한 [[computational-complexity]]와 관련하여, 대규모 에이전트 환경에서의 계산 효율성과 해의 품질 간 트레이드오프를 다룬다.
+기존 Wiki의 [[concepts/multi-agent-path-planning.md|multi agent path planning]] 개념과 직접적으로 연결되며, ADMM 기반 분산 MPC나 Density-Driven Optimal Control 등 다중 에이전트 조율 연구와 문제 도메인을 공유한다. 특히 [[concepts/multi-robot-coordination.md|multi robot coordination]]에서 다루는 충돌 회피 및 협조적 계획 문제의 구체적 알고리즘 개선 사례에 해당한다. 또한 [[concepts/computational-complexity.md|computational complexity]]와 관련하여, 대규모 에이전트 환경에서의 계산 효율성과 해의 품질 간 트레이드오프를 다룬다.
 
 ## 🔗 관련 논문
 

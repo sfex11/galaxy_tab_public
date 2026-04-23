@@ -23,11 +23,11 @@ LLM 추론 모델은 무관한 컨텍스트 길이 증가나 멀티턴 대화만
 
 - 무관한 컨텍스트가 길어질수록 LLM의 추론 체인이 짧아지고, 자기검증 단계가 생략되는 경향이 발생한다.
 - 멀티턴 대화 환경에서도 이전 턴의 누적 컨텍스트가 현재 추론 품질을 저하시킨다.
-- 이는 [[long-context]] 처리와 [[reasoning-integrity]] 간의 근본적 긴장 관계를 드러낸다.
+- 이는 [[concepts/long-context.md|long context]] 처리와 [[concepts/reasoning-integrity.md|reasoning integrity]] 간의 근본적 긴장 관계를 드러낸다.
 
 ### Wiki 연결점
 
-본 연구는 [[reasoning-chain]] 평가와 직접적으로 관련되며, Box Maze([[process-control-architecture]])가 제안한 추론 신뢰성 문제의 구체적 실패 모드를 실증한다. 또한 [[scaling-laws]] 관점에서 테스트 타임 컴퓨팅의 한계를 보여주고, [[adversarial-prompting]]의 비의도적 변형으로도 해석할 수 있다. [[mechanistic-interpretability]] 연구인 Representation Steering 논문과 함께, LLM 내부 추론 메커니즘의 취약성을 다각도로 조명한다.
+본 연구는 [[concepts/reasoning-chain.md|reasoning chain]] 평가와 직접적으로 관련되며, Box Maze([[concepts/process-control-architecture.md|process control architecture]])가 제안한 추론 신뢰성 문제의 구체적 실패 모드를 실증한다. 또한 [[concepts/scaling-laws.md|scaling laws]] 관점에서 테스트 타임 컴퓨팅의 한계를 보여주고, [[concepts/adversarial-prompting.md|adversarial prompting]]의 비의도적 변형으로도 해석할 수 있다. [[concepts/mechanistic-interpretability.md|mechanistic interpretability]] 연구인 Representation Steering 논문과 함께, LLM 내부 추론 메커니즘의 취약성을 다각도로 조명한다.
 
 ## 🔗 관련 논문
 

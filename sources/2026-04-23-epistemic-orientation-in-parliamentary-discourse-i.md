@@ -44,3 +44,6 @@ LLM 단독 판단이 아닌 LLM 평가 + 임베딩 유사도의 이중 경로를
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/epistemic-infrastructure.md|epistemic infrastructure]]

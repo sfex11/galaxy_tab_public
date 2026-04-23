@@ -23,9 +23,9 @@
 
 ### Wiki 연결점 분석
 
-이 연구는 [[llm-agent]] 엔티티와 직접적으로 관련된다. 에이전트의 장기 작동 안정성을 메모리 관리 관점에서 다루며, [[shared-state-architecture]] 및 [[context-bus]] 개념과도 밀접하다. PSI 논문이 에이전트 간 공유 상태의 일관성을 다뤘다면, 본 논문은 단일 에이전트 내 메모리의 **질적 관리**에 초점을 맞춘다.
+이 연구는 [[entities/llm-agent.md|llm agent]] 엔티티와 직접적으로 관련된다. 에이전트의 장기 작동 안정성을 메모리 관리 관점에서 다루며, [[concepts/shared-state-architecture.md|shared state architecture]] 및 [[concepts/context-bus.md|context bus]] 개념과도 밀접하다. PSI 논문이 에이전트 간 공유 상태의 일관성을 다뤘다면, 본 논문은 단일 에이전트 내 메모리의 **질적 관리**에 초점을 맞춘다.
 
-[[cognitive-architecture]] 개념과도 연결되는데, Triadic Cognitive Architecture가 자율 에이전트의 행동 제한을 인지 구조로 다룬 반면, 본 연구는 메모리 차원의 자기 조절 메커니즘을 제시한다. 또한 [[metacognition]] 개념과 관련하여, 에이전트가 자신의 메모리 상태를 평가하고 능동적으로 관리하는 메타인지적 능력을 구현한 것으로 볼 수 있다.
+[[concepts/cognitive-architecture.md|cognitive architecture]] 개념과도 연결되는데, Triadic Cognitive Architecture가 자율 에이전트의 행동 제한을 인지 구조로 다룬 반면, 본 연구는 메모리 차원의 자기 조절 메커니즘을 제시한다. 또한 [[concepts/metacognition.md|metacognition]] 개념과 관련하여, 에이전트가 자신의 메모리 상태를 평가하고 능동적으로 관리하는 메타인지적 능력을 구현한 것으로 볼 수 있다.
 
 MemBoost의 비용 인식 LLM 추론 메모리 관리와도 상호보완적이며, ChameleonEpisodicMemory의 에피소딕 메모리 접근법과 대조적으로 **망각의 능동적 역할**을 강조한다는 점에서 차별화된다.
 

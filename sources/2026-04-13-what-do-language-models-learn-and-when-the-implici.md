@@ -17,11 +17,11 @@ LLM 사전학습은 모델과 데이터 믹스에 걸쳐 구성적이고 예측 
 
 ### 기존 Wiki와의 관계
 
-- **[[implicit-curriculum]]**: 2026-04-11/12에 등록된 동일 논문의 업데이트 버전(v1)으로, implicit curriculum 개념의 핵심 근거 논문이다.
-- **[[scaling-laws]]**: 스케일링 법칙이 검증 손실의 양적 개선만 포착하는 한계를 지적하며, 능력별 출현 순서라는 질적 차원을 보완한다.
-- **[[curriculum-learning]]**: 명시적 커리큘럼 설계 없이도 데이터 분포 자체가 암묵적 커리큘럼을 형성한다는 점에서, 기존 curriculum learning 연구의 관점을 확장한다.
-- **[[emergent-abilities]]**: 능력 출현의 순서가 예측 가능하다는 주장은 emergent abilities의 '갑작스러운 출현' 서사에 대한 대안적 설명을 제공한다.
-- **[[multi-token-prediction]]**: 토큰 수준 학습 동역학과 연결되며, 학습 초기/후기에 습득되는 패턴의 차이를 이해하는 데 기여한다.
+- **[[concepts/implicit-curriculum.md|implicit curriculum]]**: 2026-04-11/12에 등록된 동일 논문의 업데이트 버전(v1)으로, implicit curriculum 개념의 핵심 근거 논문이다.
+- **[[concepts/scaling-laws.md|scaling laws]]**: 스케일링 법칙이 검증 손실의 양적 개선만 포착하는 한계를 지적하며, 능력별 출현 순서라는 질적 차원을 보완한다.
+- **[[concepts/curriculum-learning.md|curriculum learning]]**: 명시적 커리큘럼 설계 없이도 데이터 분포 자체가 암묵적 커리큘럼을 형성한다는 점에서, 기존 curriculum learning 연구의 관점을 확장한다.
+- **[[concepts/emergent-abilities.md|emergent abilities]]**: 능력 출현의 순서가 예측 가능하다는 주장은 emergent abilities의 '갑작스러운 출현' 서사에 대한 대안적 설명을 제공한다.
+- **[[concepts/multi-token-prediction.md|multi token prediction]]**: 토큰 수준 학습 동역학과 연결되며, 학습 초기/후기에 습득되는 패턴의 차이를 이해하는 데 기여한다.
 
 ### 핵심 기여
 

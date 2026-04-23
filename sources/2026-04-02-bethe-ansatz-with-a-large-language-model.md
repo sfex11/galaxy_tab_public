@@ -17,14 +17,14 @@ LLM이 미발표 적분가능 스핀 체인 모델의 Bethe Ansatz 풀이를 반
 
 ### 핵심 의의
 
-이 연구는 LLM의 활용 범위를 자연어 처리나 코드 생성을 넘어 **수리물리학의 상징적(symbolic) 계산**으로 확장한다는 점에서 주목할 만하다. Bethe Ansatz는 고도로 전문화된 수학적 기법으로, LLM이 이러한 도메인 특화 추론을 수행할 수 있다는 것은 기존 [[llm]] 엔티티의 능력 경계를 재정의하는 사례다.
+이 연구는 LLM의 활용 범위를 자연어 처리나 코드 생성을 넘어 **수리물리학의 상징적(symbolic) 계산**으로 확장한다는 점에서 주목할 만하다. Bethe Ansatz는 고도로 전문화된 수학적 기법으로, LLM이 이러한 도메인 특화 추론을 수행할 수 있다는 것은 기존 [[entities/llm.md|llm]] 엔티티의 능력 경계를 재정의하는 사례다.
 
 ### 기존 Wiki와의 연결
 
-- **[[llm]]**: LLM의 새로운 응용 영역(수리물리 계산)을 보여주는 사례로, 기존에 등록된 코드 생성, 금융 추론 등과 함께 LLM 능력의 스펙트럼을 넓힌다.
-- **[[reasoning-chain]]**: LLM이 다단계 수학적 추론 체인을 따라 Bethe Ansatz를 도출하는 과정은 reasoning-chain 개념과 직결된다.
-- **[[metacognition]]**: 인간 피드백을 통한 오류 수정 루프는 LLM의 메타인지적 한계와 인간-AI 협업의 필요성을 보여준다.
-- **[[code-generation]]**: 상징적 수학 계산은 코드 생성과 유사한 구조적 출력 생성 능력에 기반한다.
+- **[[entities/llm.md|llm]]**: LLM의 새로운 응용 영역(수리물리 계산)을 보여주는 사례로, 기존에 등록된 코드 생성, 금융 추론 등과 함께 LLM 능력의 스펙트럼을 넓힌다.
+- **[[concepts/reasoning-chain.md|reasoning chain]]**: LLM이 다단계 수학적 추론 체인을 따라 Bethe Ansatz를 도출하는 과정은 reasoning-chain 개념과 직결된다.
+- **[[concepts/metacognition.md|metacognition]]**: 인간 피드백을 통한 오류 수정 루프는 LLM의 메타인지적 한계와 인간-AI 협업의 필요성을 보여준다.
+- **[[concepts/code-generation.md|code generation]]**: 상징적 수학 계산은 코드 생성과 유사한 구조적 출력 생성 능력에 기반한다.
 
 ### 한계와 시사점
 

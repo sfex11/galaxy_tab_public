@@ -17,9 +17,9 @@
 
 ### 기존 연구와의 관계
 
-이 논문은 기존 Wiki의 [[density-driven-optimal-control]] 개념을 직접 확장하며, 2026-04-11/12에 등록된 동일 제목 논문의 업데이트 버전(v1)이다. [[multi-robot-coordination]], [[area-coverage]], [[stochastic-optimal-control]] 개념과 밀접하게 연결된다.
+이 논문은 기존 Wiki의 [[concepts/density-driven-optimal-control.md|density driven optimal control]] 개념을 직접 확장하며, 2026-04-11/12에 등록된 동일 제목 논문의 업데이트 버전(v1)이다. [[concepts/multi-robot-coordination.md|multi robot coordination]], [[concepts/area-coverage.md|area coverage]], [[concepts/stochastic-optimal-control.md|stochastic optimal control]] 개념과 밀접하게 연결된다.
 
-확률적 LTI(Linear Time-Invariant) 시스템에 대한 수렴 보장을 제공한다는 점에서 [[control-barrier-function]]과 [[model-predictive-control]] 기반 분산 제어 연구(ADMM-Based Distributed MPC)와 상호보완적이다. 또한 [[distributed-optimization]] 관점에서 분산 최적화의 새로운 접근법을 제시한다.
+확률적 LTI(Linear Time-Invariant) 시스템에 대한 수렴 보장을 제공한다는 점에서 [[concepts/control-barrier-function.md|control barrier function]]과 [[concepts/model-predictive-control.md|model predictive control]] 기반 분산 제어 연구(ADMM-Based Distributed MPC)와 상호보완적이다. 또한 [[concepts/distributed-optimization.md|distributed optimization]] 관점에서 분산 최적화의 새로운 접근법을 제시한다.
 
 ### 핵심 기여
 
@@ -27,7 +27,7 @@
 - **수렴 보장**: 확률적 다중 에이전트 시스템에서 이론적 수렴 증명 제공
 - **분산형 제어**: 중앙 집중식 조율 없이 개별 에이전트가 자율적으로 목표 밀도 분포에 수렴
 
-강화학습 기반 다중 에이전트 조율([[multi-agent-reinforcement-learning]])과 달리 최적 제어 이론에 기반한 분석적 접근을 취한다는 점에서 차별화된다.
+강화학습 기반 다중 에이전트 조율([[concepts/multi-agent-reinforcement-learning.md|multi agent reinforcement learning]])과 달리 최적 제어 이론에 기반한 분석적 접근을 취한다는 점에서 차별화된다.
 
 ## 🔗 관련 논문
 

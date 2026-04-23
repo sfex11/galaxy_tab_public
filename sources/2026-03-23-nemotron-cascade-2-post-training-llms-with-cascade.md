@@ -23,7 +23,7 @@ Nemotron-Cascade 2는 NVIDIA가 공개한 30B MoE(Mixture of Experts) 모델로,
 
 ### 의의
 
-이 연구는 **MoE 아키텍처와 post-training 기법의 결합**이 소형 모델에서도 프론티어급 성능을 가능케 함을 실증한다. 활성 파라미터 3B로 671B 모델에 근접하는 성능은 효율적 배포 관점에서 큰 함의를 가진다. 또한 Cascade RL 패러다임은 [[reinforcement-learning]]의 새로운 확장으로, 교사-학생 프레임워크를 RL 탐색에 적용한 점이 주목할 만하다. 에이전트 능력 강화 측면에서는 [[llm-agent]] 연구와 직접적으로 연결되며, post-training 최적화 기법으로서 [[post-training]] 개념과도 깊이 관련된다.
+이 연구는 **MoE 아키텍처와 post-training 기법의 결합**이 소형 모델에서도 프론티어급 성능을 가능케 함을 실증한다. 활성 파라미터 3B로 671B 모델에 근접하는 성능은 효율적 배포 관점에서 큰 함의를 가진다. 또한 Cascade RL 패러다임은 [[concepts/reinforcement-learning.md|reinforcement learning]]의 새로운 확장으로, 교사-학생 프레임워크를 RL 탐색에 적용한 점이 주목할 만하다. 에이전트 능력 강화 측면에서는 [[entities/llm-agent.md|llm agent]] 연구와 직접적으로 연결되며, post-training 최적화 기법으로서 [[concepts/post-training.md|post training]] 개념과도 깊이 관련된다.
 
 ## 🔗 관련 논문
 

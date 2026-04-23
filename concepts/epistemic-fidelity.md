@@ -15,4 +15,4 @@ _자동 Wiki Query에서 추출됨_
 
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
 
-→ [[sources/2026-04-23-a-mar-agent-based-multimodal-art-retrieval-for-fin.md|상세 보기]]
+### Automatic Ontology Construction Using LLMs as an External Layer of Mem (2026-04-24)

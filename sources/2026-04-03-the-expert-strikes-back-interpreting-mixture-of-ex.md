@@ -21,7 +21,7 @@ MoE 전문가 뉴런은 dense FFN 뉴런보다 일관되게 덜 다의적이며,
 
 ### Wiki 연결점
 
-이 연구는 [[mechanistic-interpretability]]와 직접적으로 연결된다. 기존 Wiki의 mechanistic interpretability 연구들이 주로 steering vector와 activation patching을 통한 dense 모델 분석에 집중한 반면, 본 논문은 MoE라는 다른 아키텍처 축에서의 해석가능성을 탐구한다. 또한 [[mixture-of-experts]] 개념의 이해를 효율성 너머 해석가능성으로 확장하며, Nemotron-Cascade 2 등 기존 MoE 관련 연구와 상호보완적이다. [[representation-steering]] 연구에서 다룬 뉴런 수준의 의미 분석과도 방법론적 유사성이 있다.
+이 연구는 [[concepts/mechanistic-interpretability.md|mechanistic interpretability]]와 직접적으로 연결된다. 기존 Wiki의 mechanistic interpretability 연구들이 주로 steering vector와 activation patching을 통한 dense 모델 분석에 집중한 반면, 본 논문은 MoE라는 다른 아키텍처 축에서의 해석가능성을 탐구한다. 또한 [[concepts/mixture-of-experts.md|mixture of experts]] 개념의 이해를 효율성 너머 해석가능성으로 확장하며, Nemotron-Cascade 2 등 기존 MoE 관련 연구와 상호보완적이다. [[concepts/representation-steering.md|representation steering]] 연구에서 다룬 뉴런 수준의 의미 분석과도 방법론적 유사성이 있다.
 
 $k$-sparse probing이라는 분석 도구는 뉴런의 다의성(polysemanticity)을 정량화하는 체계적 방법으로, 향후 다양한 아키텍처 비교 연구의 표준 도구가 될 수 있다.
 

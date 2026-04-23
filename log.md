@@ -401,3 +401,37 @@
 - 2026-04-23-an-ai-agent-execution-environment-to-safeguard-use.md
 - 2026-04-23-safetyalfred-evaluating-safety-conscious-planning-.md
 - 2026-04-23-planning-in-entropy-regularized-markov-decision-pr.md
+
+## [2026-04-24 04:06] llm-ingest | 8편 분석, 엔티티 44개, 개념 415개
+- 2026-04-24-diagnosing-cfg-interpretation-in-llms.md
+- 2026-04-24-relative-principals-pluralistic-alignment-and-the-.md
+- 2026-04-24-automatic-ontology-construction-using-llms-as-an-e.md
+- 2026-04-24-can-ai-be-a-doctor-a-study-of-empathy-readability-.md
+- 2026-04-24-swe-chat-coding-agent-interactions-from-real-users.md
+- 2026-04-24-a-hough-transform-approach-to-safety-aware-scalar-.md
+- 2026-04-24-lifecycle-aware-federated-continual-learning-in-mo.md
+- 2026-04-24-interval-pomdp-shielding-for-imperfect-perception-.md
+
+## [2026-04-24 07:06] lint | Wiki 건전성 체크
+- Issues: 5672개
+- Orphans: 864, Missing: 4808, Contradictions: 0
+
+## [2026-04-24 07:26] lint | Wiki 건전성 체크
+- Issues: 1150개
+- Orphans: 138, Missing: 1012, Contradictions: 0
+
+## [2026-04-24 07:31] lint | Wiki 건전성 체크
+- Issues: 1083개
+- Orphans: 71, Missing: 1012, Contradictions: 0
+
+## [2026-04-24 07:32] lint | Wiki 건전성 체크
+- Issues: 3980개
+- Orphans: 71, Missing: 3909, Contradictions: 0
+
+## [2026-04-24 07:32] lint | Wiki 건전성 체크
+- Issues: 3927개
+- Orphans: 71, Missing: 3856, Contradictions: 0
+
+## [2026-04-24 07:36] lint | Wiki 건전성 체크
+- Issues: 601개
+- Orphans: 71, Missing: 530, Contradictions: 0

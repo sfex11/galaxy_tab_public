@@ -23,7 +23,7 @@
 
 ### Wiki 연결점
 
-본 연구는 [[multi-agent-system]] 개념과 직접적으로 관련되며, 특히 다중 에이전트 간 책임 소재를 인간이 판단하는 문제를 다룬다는 점에서 [[theory-of-mind]] 및 [[cognitive-modeling]] 개념과도 밀접하다. 또한 [[ai-safety]] 관점에서 인간 감독(human oversight) 하의 편향 문제를 다루므로, TraceSafe 등 LLM 가드레일 연구와 보완적 관계에 있다. LLM Agent의 신뢰성과 거버넌스를 다룬 'Who Governs the Machine' 논문과도 인간-AI 신뢰 측면에서 연결된다.
+본 연구는 [[concepts/multi-agent-system.md|multi agent system]] 개념과 직접적으로 관련되며, 특히 다중 에이전트 간 책임 소재를 인간이 판단하는 문제를 다룬다는 점에서 [[concepts/theory-of-mind.md|theory of mind]] 및 [[concepts/cognitive-modeling.md|cognitive modeling]] 개념과도 밀접하다. 또한 [[concepts/ai-safety.md|ai safety]] 관점에서 인간 감독(human oversight) 하의 편향 문제를 다루므로, TraceSafe 등 LLM 가드레일 연구와 보완적 관계에 있다. LLM Agent의 신뢰성과 거버넌스를 다룬 'Who Governs the Machine' 논문과도 인간-AI 신뢰 측면에서 연결된다.
 
 ## 🔗 관련 논문
 
@@ -46,3 +46,12 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/zero-error-capacity.md|zero error capacity]]
+
+---
+**관련**: [[concepts/compounding-error.md|compounding error]]
+
+---
+**관련**: [[concepts/ai-feedback-loop.md|ai feedback loop]]

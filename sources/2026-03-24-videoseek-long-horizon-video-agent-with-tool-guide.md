@@ -28,10 +28,10 @@ VideoSeek는 장시간 비디오 이해를 위한 에이전트 모델로, 비디
 
 ### 기존 연구와의 관계
 
-- **토큰 프루닝 및 효율적 비디오 처리**: 불필요한 프레임/토큰을 줄여 효율성을 높인다는 점에서 [[token-pruning]] 및 [[video-vlm]] 개념과 직접 연결된다. Unified Spatio-Temporal Token Scoring 연구가 토큰 수준의 효율화를 다뤘다면, VideoSeek는 프레임 수준에서 에이전틱 탐색으로 효율화를 달성한다.
-- **도구 사용(tool-use)**: LLM 에이전트가 외부 도구를 활용하는 패러다임을 비디오 도메인에 확장한 것으로, [[tool-use]] 개념과 관련된다.
-- **장시간 컨텍스트 처리**: VideoAtlas가 계층적 표현으로 장시간 비디오를 다뤘다면, VideoSeek는 능동적 탐색 전략으로 접근한다는 점에서 [[long-context]] 개념과 상호보완적이다.
-- **LLM Agent**: 비디오 이해를 에이전트 프레임워크로 구성하여 [[llm-agent]] 엔티티와 연결된다.
+- **토큰 프루닝 및 효율적 비디오 처리**: 불필요한 프레임/토큰을 줄여 효율성을 높인다는 점에서 [[concepts/token-pruning.md|token pruning]] 및 [[concepts/video-vlm.md|video vlm]] 개념과 직접 연결된다. Unified Spatio-Temporal Token Scoring 연구가 토큰 수준의 효율화를 다뤘다면, VideoSeek는 프레임 수준에서 에이전틱 탐색으로 효율화를 달성한다.
+- **도구 사용(tool-use)**: LLM 에이전트가 외부 도구를 활용하는 패러다임을 비디오 도메인에 확장한 것으로, [[concepts/tool-use.md|tool use]] 개념과 관련된다.
+- **장시간 컨텍스트 처리**: VideoAtlas가 계층적 표현으로 장시간 비디오를 다뤘다면, VideoSeek는 능동적 탐색 전략으로 접근한다는 점에서 [[concepts/long-context.md|long context]] 개념과 상호보완적이다.
+- **LLM Agent**: 비디오 이해를 에이전트 프레임워크로 구성하여 [[entities/llm-agent.md|llm agent]] 엔티티와 연결된다.
 
 ## 🔗 관련 논문
 

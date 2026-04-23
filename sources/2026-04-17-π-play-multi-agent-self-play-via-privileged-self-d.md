@@ -36,3 +36,18 @@ _자동 생성됨_
 
 - → [[sources/2026-04-16-lightning-opd-efficient-post-training-for-large-re]]: 둘 다 self-distillation/distillation 기반 LLM 후훈련 기법을 탐구하며, 외부 데이터 의존도를 줄이는 방향을 추구한다.
 - → [[sources/2026-04-16-cycle-consistent-search-question-reconstructabilit]]: 둘 다 gold supervision 없이 자기 생성 신호(cycle consistency vs self-play)로 에이전트를 훈련하는 방법을 제안한다.
+
+---
+**관련**: [[concepts/end-to-end-vla-training.md|end to end vla training]]
+
+---
+**관련**: [[concepts/test-time-training.md|test time training]]
+
+---
+**관련**: [[concepts/closed-loop-training.md|closed loop training]]
+
+---
+**관련**: [[concepts/external-ontological-memory.md|external ontological memory]]
+
+---
+**관련**: [[concepts/ontology-construction.md|ontology construction]]

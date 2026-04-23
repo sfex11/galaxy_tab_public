@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chat2Workflow — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #12151c;
+  --bg3: #1a1e28;
+  --fg: #e8eaf0;
+  --fg2: #9ca3b4;
+  --accent: #00e89d;
+  --accent2: #00c4ff;
+  --accent3: #ff6b4a;
+  --accent4: #fbbf24;
+  --card: rgba(26,30,40,0.85);
+  --border: rgba(255,255,255,0.06);
+  --glass: rgba(0,232,157,0.04);
+  --radius: 16px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  font-family: 'Noto Sans KR', 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 배경 장식 */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,232,157,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,232,157,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.bg-glow {
+  position: fixed; z-index: 0; pointer-events: none;
+  width: 600px; height: 600px; border-radius: 50%;
+  filter: blur(150px); opacity: 0.15;
+}
+.bg-glow.g1 { top: -200px; left: -100px; background: var(--accent); }
+.bg-glow.g2 { bottom: -200px; right: -100px; background: var(--accent2); }
+.bg-glow.g3 { top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--accent3); opacity: 0.06; }
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative; z-index: 1;
+  max-width: 960px; margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+.slide {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; padding: clamp(40px, 8vh, 80px) 0;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide.visible { opacity: 1; transform: translateY(0); }
+
+/* 타이포그래피 */
+.slide-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(11px, 1.6vw, 14px);
+  font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.slide-label::before {
+  content: ''; display: block; width: 24px; height: 2px; background: var(--accent);
+}
+.slide-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 5.5vw, 52px);
+  font-weight: 900; line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--fg) 0%, var(--fg2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.slide-title .hl { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+.slide-desc {
+  font-size: clamp(14px, 2vw, 18px);
+  color: var(--fg2); line-height: 1.7;
+  max-width: 680px;
+}
+
+/* 카드 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(16px, 3vw, 28px);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s, transform 0.3s;
+}
+.card:hover { border-color: rgba(0,232,157,0.2); transform: translateY(-2px); }
+
+/* 타이틀 슬라이드 */
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,232,157,0.1); border: 1px solid rgba(0,232,157,0.2);
+  border-radius: 999px; padding: 6px 16px;
+  font-size: clamp(11px, 1.4vw, 13px); font-weight: 600;
+  color: var(--accent); margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 900; line-height: 1.05;
+  margin-bottom: 16px;
+}
+.hero-title .t1 { color: var(--fg); }
+.hero-title .t2 {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 12px 24px;
+  margin-top: 28px; font-size: clamp(12px, 1.6vw, 15px); color: var(--fg2);
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+.hero-meta i { color: var(--accent); font-size: 0.85em; }
+.hero-visual {
+  position: relative; margin-top: 40px;
+  display: flex; justify-content: center;
+}
+.workflow-mini {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.wf-node {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 20px);
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; min-width: 80px;
+  animation: floatNode 4s ease-in-out infinite;
+}
+.wf-node:nth-child(odd) { animation-delay: -1s; }
+.wf-node i { font-size: clamp(18px, 3vw, 28px); }
+.wf-node:nth-child(1) i { color: var(--accent); }
+.wf-node:nth-child(3) i { color: var(--accent2); }
+.wf-node:nth-child(5) i { color: var(--accent4); }
+.wf-node:nth-child(7) i { color: var(--accent3); }
+.wf-node span { font-size: clamp(9px, 1.2vw, 12px); color: var(--fg2); font-weight: 600; }
+.wf-arrow {
+  color: var(--fg2); font-size: clamp(14px, 2vw, 20px);
+  opacity: 0.4; padding: 0 4px;
+}
+@keyframes floatNode {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 문제 정의 슬라이드 */
+.pain-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 16px; margin-top: 28px;
+}
+.pain-card {
+  position: relative; overflow: hidden;
+}
+.pain-card .pain-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 14px;
+}
+.pain-card:nth-child(1) .pain-icon { background: rgba(255,107,74,0.15); color: var(--accent3); }
+.pain-card:nth-child(2) .pain-icon { background: rgba(251,191,36,0.15); color: var(--accent4); }
+.pain-card:nth-child(3) .pain-icon { background: rgba(0,196,255,0.15); color: var(--accent2); }
+.pain-card h3 {
+  font-size: clamp(14px, 2vw, 17px); font-weight: 700; margin-bottom: 8px;
+}
+.pain-card p { font-size: clamp(12px, 1.5vw, 14px); color: var(--fg2); line-height: 1.6; }
+
+/* 개요 슬라이드 */
+.overview-flow {
+  display: flex; align-items: stretch; gap: 0; margin-top: 28px;
+  flex-wrap: wrap; justify-content: center;
+}
+.ov-step {
+  flex: 1 1 clamp(140px, 25vw, 220px);
+  text-align: center; padding: clamp(16px, 3vw, 24px) clamp(10px, 2vw, 20px);
+  position: relative;
+}
+.ov-step-num {
+  font-family: 'Outfit'; font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900; line-height: 1;
+  background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; opacity: 0.7;
+}
+.ov-step h3 {
+  font-size: clamp(13px, 1.8vw, 16px); font-weight: 700;
+  margin: 8px 0 6px;
+}
+.ov-step p { font-size: clamp(11px, 1.3vw, 13px); color: var(--fg2); line-height: 1.5; }
+.ov-connector {
+  display: flex; align-items: center; color: var(--accent);
+  font-size: 20px; opacity: 0.3; padding: 0 4px;
+  flex: 0 0 auto;
+}
+
+/* 도메인 도넛 차트 */
+.domain-section { margin-top: 28px; display: flex; gap: clamp(16px,3vw,32px); flex-wrap: wrap; align-items: center; }
+.donut-wrap { flex: 0 0 auto; position: relative; }
+.donut-wrap canvas { width: clamp(160px, 28vw, 220px); height: clamp(160px, 28vw, 220px); }
+.domain-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 180px; }
+.legend-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: clamp(13px, 1.6vw, 15px);
+}
+.legend-dot {
+  width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0;
+}
+.legend-val { margin-left: auto; font-weight: 700; color: var(--fg); font-family: 'Outfit'; }
+
+/* 평가 지표 */
+.metrics-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px;
+}
+.metric-card {
+  text-align: center; padding: clamp(20px, 4vw, 36px) clamp(12px, 2vw, 24px);
+}
+.metric-icon { font-size: clamp(28px, 4vw, 40px); margin-bottom: 12px; }
+.metric-card:nth-child(1) .metric-icon { color: var(--accent); }
+.metric-card:nth-child(2) .metric-icon { color: var(--accent2); }
+.metric-name {
+  font-family: 'Outfit'; font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 800; margin-bottom: 6px;
+}
+.metric-formula {
+  font-family: 'Outfit'; font-size: clamp(11px, 1.3vw, 14px);
+  color: var(--fg2); margin-bottom: 12px;
+  font-style: italic;
+}
+.metric-desc {
+  font-size: clamp(12px, 1.4vw, 14px);
+  color: var(--fg2); line-height: 1.6;
+}
+
+/* 알고리즘 파이프라인 */
+.pipeline-steps {
+  display: flex; flex-direction: column; gap: 0; margin-top: 28px;
+}
+.pipe-step {
+  display: flex; align-items: stretch; gap: 0;
+}
+.pipe-num {
+  flex: 0 0 clamp(44px, 6vw, 56px);
+  display: flex; flex-direction: column; align-items: center;
+}
+.pipe-num-circle {
+  width: clamp(32px, 4.5vw, 42px); height: clamp(32px, 4.5vw, 42px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit'; font-weight: 800;
+  font-size: clamp(13px, 1.6vw, 16px);
+  background: var(--bg3); border: 2px solid var(--accent);
+  color: var(--accent); flex-shrink: 0;
+}
+.pipe-num-line {
+  width: 2px; flex: 1; background: rgba(0,232,157,0.15);
+}
+.pipe-content {
+  flex: 1; padding-bottom: 20px;
+}
+.pipe-content h4 {
+  font-size: clamp(14px, 1.8vw, 17px); font-weight: 700; margin-bottom: 4px;
+}
+.pipe-content p {
+  font-size: clamp(12px, 1.4vw, 14px); color: var(--fg2); line-height: 1.6;
+}
+.pipe-step:last-child .pipe-num-line { display: none; }
+
+/* 결과 바 차트 */
+.results-bars { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: flex; align-items: center; gap: clamp(8px,1.5vw,14px); }
+.bar-label {
+  flex: 0 0 clamp(100px, 18vw, 160px);
+  font-size: clamp(11px, 1.3vw, 14px); font-weight: 600;
+  text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bar-track {
+  flex: 1; height: clamp(22px, 3vw, 32px);
+  background: var(--bg3); border-radius: 8px;
+  overflow: hidden; position: relative;
+}
+.bar-fill {
+  height: 100%; border-radius: 8px;
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  width: 0;
+}
+.bar-fill.pass { background: linear-gradient(90deg, var(--accent), rgba(0,232,157,0.5)); }
+.bar-fill.resolve { background: linear-gradient(90deg, var(--accent2), rgba(0,196,255,0.5)); }
+.bar-val {
+  flex: 0 0 clamp(48px, 7vw, 70px);
+  font-family: 'Outfit'; font-size: clamp(12px, 1.5vw, 15px);
+  font-weight: 700;
+}
+.bar-val.pass-val { color: var(--accent); }
+.bar-val.resolve-val { color: var(--accent2); }
+
+/* 에이전트 프레임워크 */
+.agent-diagram {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; margin-top: 28px;
+}
+.agent-box {
+  width: 100%; max-width: 500px;
+  padding: clamp(14px, 2.5vw, 22px);
+  border-radius: 14px; text-align: center;
+  position: relative;
+}
+.agent-box.primary {
+  background: linear-gradient(135deg, rgba(0,232,157,0.12), rgba(0,196,255,0.08));
+  border: 1px solid rgba(0,232,157,0.25);
+}
+.agent-box.secondary {
+  background: var(--card); border: 1px solid var(--border);
+}
+.agent-box h4 {
+  font-size: clamp(14px, 1.8vw, 17px); font-weight: 700; margin-bottom: 4px;
+}
+.agent-box p { font-size: clamp(11px, 1.3vw, 13px); color: var(--fg2); }
+.agent-arrow-down {
+  font-size: 20px; color: var(--accent); opacity: 0.4; padding: 6px 0;
+}
+.agent-loop {
+  display: flex; align-items: center; gap: 8px;
+  font-size: clamp(11px, 1.3vw, 13px); color: var(--accent);
+  padding: 8px 0;
+}
+.agent-loop i { animation: spin 2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 결론 슬라이드 */
+.conclusion-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 16px; margin-top: 28px;
+}
+.conc-card {
+  border-left: 3px solid var(--accent);
+}
+.conc-card:nth-child(2) { border-left-color: var(--accent2); }
+.conc-card:nth-child(3) { border-left-color: var(--accent3); }
+.conc-card h3 {
+  font-size: clamp(14px, 1.8vw, 17px); font-weight: 700; margin-bottom: 8px;
+}
+.conc-card p { font-size: clamp(12px, 1.4vw, 14px); color: var(--fg2); line-height: 1.6; }
+
+/* 하단 네비게이션 */
+.slide-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,12,16,0.9); backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 10px clamp(16px, 4vw, 40px);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-dots { display: flex; gap: 6px; align-items: center; }
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--fg2); opacity: 0.25;
+  border: none; cursor: pointer; padding: 0;
+  transition: all 0.3s;
+  min-width: 8px; min-height: 8px;
+}
+.nav-dot.active { opacity: 1; background: var(--accent); transform: scale(1.3); }
+.nav-btn {
+  width: 44px; height: 44px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--fg); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  min-width: 44px; min-height: 44px;
+}
+.nav-btn:hover { background: rgba(0,232,157,0.1); border-color: rgba(0,232,157,0.3); color: var(--accent); }
+.nav-btn:active { transform: scale(0.92); }
+.nav-counter {
+  font-family: 'Outfit'; font-size: 13px; color: var(--fg2);
+  min-width: 50px; text-align: center;
+}
+
+/* 슬라이드 번호 배지 */
+.slide-num {
+  position: absolute; top: clamp(20px,4vh,40px); right: 0;
+  font-family: 'Outfit'; font-size: clamp(60px,10vw,120px);
+  font-weight: 900; color: var(--fg); opacity: 0.03;
+  line-height: 1; pointer-events: none; user-select: none;
+}
+
+/* 태그 */
+.tag {
+  display: inline-block; padding: 3px 10px; border-radius: 6px;
+  font-size: clamp(10px, 1.2vw, 12px); font-weight: 600;
+}
+.tag.green { background: rgba(0,232,157,0.12); color: var(--accent); }
+.tag.blue { background: rgba(0,196,255,0.12); color: var(--accent2); }
+.tag.orange { background: rgba(251,191,36,0.12); color: var(--accent4); }
+
+/* 수식 블록 */
+.formula-block {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: clamp(14px, 2.5vw, 24px);
+  margin-top: 20px; text-align: center;
+  font-family: 'Outfit'; font-size: clamp(16px, 2.5vw, 24px);
+  font-weight: 600; color: var(--fg);
+  letter-spacing: 0.5px; overflow-x: auto;
+}
+.formula-block .var { color: var(--accent); }
+.formula-block .func { color: var(--accent2); }
+.formula-block .op { color: var(--fg2); }
+
+/* 두 컬럼 레이아웃 */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px,3vw,28px);
+  margin-top: 28px;
+}
+@media (max-width: 640px) {
+  .two-col { grid-template-columns: 1fr; }
+  .metrics-row { grid-template-columns: 1fr; }
+  .ov-connector { display: none; }
+  .domain-section { flex-direction: column; align-items: flex-start; }
+  .agent-loop { flex-direction: column; }
+  .hero-meta { flex-direction: column; gap: 8px; }
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+/* 프로그레스바 */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 200;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.3s; width: 0;
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; opacity: 1; transform: none; }
+  .wf-node { animation: none; }
+  .bar-fill { transition: none; }
+  .agent-loop i { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+<div class="bg-glow g3"></div>
+
+<div class="slides-wrapper">
+
+  <!-- 슬라이드 1: 히어로 -->
+  <section class="slide" id="s0">
+    <div class="hero-badge"><i class="fa-solid fa-flask"></i> arXiv: 2604.19667v1</div>
+    <h1 class="hero-title">
+      <span class="t1">Chat2</span><span class="t2">Workflow</span>
+    </h1>
+    <p class="slide-desc" style="font-size:clamp(15px,2.2vw,20px); max-width:600px;">
+      자연어로부터 실행 가능한 시각적 워크플로우를 생성하는<br>최초의 벤치마크
+    </p>
+    <div class="hero-meta">
+      <span><i class="fa-solid fa-building-columns"></i> 저장대학교 · 텐센트</span>
+      <span><i class="fa-solid fa-calendar"></i> 2026년 4월</span>
+      <span><i class="fa-brands fa-github"></i> zjunlp/Chat2Workflow</span>
+    </div>
+    <div class="hero-visual">
+      <div class="workflow-mini">
+        <div class="wf-node"><i class="fa-solid fa-comment-dots"></i><span>자연어 입력</span></div>
+        <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="wf-node"><i class="fa-solid fa-brain"></i><span>LLM 에이전트</span></div>
+        <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="wf-node"><i class="fa-solid fa-diagram-project"></i><span>JSON 워크플로우</span></div>
+        <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="wf-node"><i class="fa-solid fa-rocket"></i><span>플랫폼 실행</span></div>
+      </div>
+    </div>
+    <span class="slide-num">01</span>
+  </section>
+
+  <!-- 슬라이드 2: 문제 정의 -->
+  <section class="slide" id="s1">
+    <div class="slide-label">Problem Statement</div>
+    <h2 class="slide-title">왜 이 문제가 <span class="hl">중요한가</span>?</h2>
+    <p class="slide-desc">
+      실행 가능한 시각적 워크플로우는 산업계에서 주류 패러다임으로 자리 잡았으나, 현재 실무에서는 거의 전적으로 수동 공학에 의존합니다.
+    </p>
+    <div class="pain-grid">
+      <div class="card pain-card">
+        <div class="pain-icon"><i class="fa-solid fa-clock"></i></div>
+        <h3>개발 비용과 시간</h3>
+        <p>개발자가 워크플로우를 직접 설계하고, 각 단계별 프롬프트를 작성하며, 요구사항 변화에 따라 반복적으로 수정해야 합니다.</p>
+      </div>
+      <div class="card pain-card">
+        <div class="pain-icon"><i class="fa-solid fa-bug"></i></div>
+        <h3>오류 발생 가능성</h3>
+        <p>복잡한 제어 흐름과 도구 사용을 자연어에서 정확히 추론하는 것은 매우 어려우며, 수동 구성 시 실수가 빈번합니다.</p>
+      </div>
+      <div class="card pain-card">
+        <div class="pain-icon"><i class="fa-solid fa-arrows-spin"></i></div>
+        <h3>변화하는 요구사항</h3>
+        <p>사용자 요구사항은 지속적으로 변하며, 기존 워크플로우의 정확성과 일관성을 유지하면서 수정하는 것이 핵심 과제입니다.</p>
+      </div>
+    </div>
+    <span class="slide-num">02</span>
+  </section>
+
+  <!-- 슬라이드 3: Chat2Workflow 개요 -->
+  <section class="slide" id="s2">
+    <div class="slide-label">Overview</div>
+    <h2 class="slide-title">Chat2Workflow <span class="hl">구조</span></h2>
+    <p class="slide-desc">
+      실제 프로덕션 환경의 워크플로우를 기반으로 구축된 벤치마크로, 생성된 워크플로우를 Dify와 Coze 같은 실제 플랫폼에 직접 배포할 수 있습니다.
+    </p>
+    <div class="overview-flow">
+      <div class="ov-step">
+        <div class="ov-step-num">01</div>
+        <h3>실제 워크플로우 수집</h3>
+        <p>Dify/Coze 프로덕션 설정과 GitHub에서 실제 워크플로우 수집</p>
+      </div>
+      <div class="ov-connector"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="ov-step">
+        <div class="ov-step-num">02</div>
+        <h3>멀티턴 지시어 역설계</h3>
+        <p>동일 컨텍스트의 워크플로우를 클러스터링하여 다중 라운드 지시어로 재작성</p>
+      </div>
+      <div class="ov-connector"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="ov-step">
+        <div class="ov-step-num">03</div>
+        <h3>LLM 대화 생성</h3>
+        <p>CoT 추론(노드 선택, 설계 원칙, 구조화 워크플로우)과 함께 JSON 출력</p>
+      </div>
+      <div class="ov-connector"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="ov-step">
+        <div class="ov-step-num">04</div>
+        <h3>실행 및 평가</h3>
+        <p>JSON→YAML 변환 후 플랫폼에 업로드하여 테스트 케이스로 평가</p>
+      </div>
+    </div>
+    <span class="slide-num">03</span>
+  </section>
+
+  <!-- 슬라이드 4: 데이터셋 통계 -->
+  <section class="slide" id="s3">
+    <div class="slide-label">Dataset</div>
+    <h2 class="slide-title">데이터셋 <span class="hl">통계</span></h2>
+    <div class="two-col">
+      <div>
+        <div style="display:flex; flex-direction:column; gap:14px; margin-top:28px;">
+          <div class="card" style="display:flex; align-items:center; gap:16px;">
+            <div style="font-family:'Outfit'; font-size:clamp(28px,4vw,40px); font-weight:900; color:var(--accent);">27</div>
+            <div><div style="font-weight:700; font-size:clamp(13px,1.6vw,16px);">총 태스크 수</div><div style="font-size:clamp(11px,1.2vw,13px); color:var(--fg2);">6개 도메인 분류</div></div>
+          </div>
+          <div class="card" style="display:flex; align-items:center; gap:16px;">
+            <div style="font-family:'Outfit'; font-size:clamp(28px,4vw,40px); font-weight:900; color:var(--accent2);">79</div>
+            <div><div style="font-weight:700; font-size:clamp(13px,1.6vw,16px);">멀티턴 지시어</div><div style="font-size:clamp(11px,1.2vw,13px); color:var(--fg2);">태스크당 2~4 라운드</div></div>
+          </div>
+          <div class="card" style="display:flex; align-items:center; gap:16px;">
+            <div style="font-family:'Outfit'; font-size:clamp(28px,4vw,40px); font-weight:900; color:var(--accent4);">237</div>
+            <div><div style="font-weight:700; font-size:clamp(13px,1.6vw,16px);">평가 인스턴스</div><div style="font-size:clamp(11px,1.2vw,13px); color:var(--fg2);">지시어당 3개 테스트 케이스</div></div>
+          </div>
+          <div class="card" style="display:flex; align-items:center; gap:16px;">
+            <div style="font-family:'Outfit'; font-size:clamp(28px,4vw,40px); font-weight:900; color:var(--accent3);">20</div>
+            <div><div style="font-weight:700; font-size:clamp(13px,1.6vw,16px);">핵심 노드 타입</div><div style="font-size:clamp(11px,1.2vw,13px); color:var(--fg2);">가장 빈번히 사용되는 노드</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="domain-section" style="margin-top:28px;">
+          <div class="donut-wrap">
+            <canvas id="donutChart" width="220" height="220"></canvas>
+          </div>
+          <div class="domain-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#00e89d"></div>Research<span class="legend-val">22%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00c4ff"></div>Document<span class="legend-val">19%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ff6b4a"></div>Enterprise<span class="legend-val">19%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>Developer<span class="legend-val">15%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Education<span class="legend-val">11%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div>AIGC<span class="legend-val">15%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="slide-num">04</span>
+  </section>
+
+  <!-- 슬라이드 5: 과제 정식화 -->
+  <section class="slide" id="s4">
+    <div class="slide-label">Task Formulation</div>
+    <h2 class="slide-title">과제 <span class="hl">정식화</span></h2>
+    <p class="slide-desc">
+      워크플로우 생성을 멀티턴 상호작용 과정으로 정식화합니다. LLM은 Chain-of-Thought 접근법을 통해 구조화된 JSON을 출력합니다.
+    </p>
+    <div class="formula-block">
+      <span class="var">G</span>(<span class="var">V</span>, <span class="var">E</span>) <span class="op">&larr;</span> <span class="func">M</span><sub>&theta;</sub>(<span class="var">q</span>, <span class="var">H</span>)
+    </div>
+    <p class="slide-desc" style="margin-top:16px; font-size:clamp(12px,1.5vw,15px);">
+      <span style="color:var(--accent)">G</span>: 방향성 비순환 그래프(DAG) &nbsp;·&nbsp;
+      <span style="color:var(--accent)">V</span>: 노드 집합 &nbsp;·&nbsp;
+      <span style="color:var(--accent)">E</span>: 엣지 집합 &nbsp;·&nbsp;
+      <span style="color:var(--accent2)">q</span>: 현재 지시어 &nbsp;·&nbsp;
+      <span style="color:var(--accent2)">H</span>: 대화 기록
+    </p>
+    <div class="pain-grid" style="margin-top:24px;">
+      <div class="card">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <span class="tag green">&lt;node_selection&gt;</span>
+        </div>
+        <p style="font-size:clamp(12px,1.4vw,14px); color:var(--fg2); line-height:1.6;">선택된 노드 목록을 추론하여 출력</p>
+      </div>
+      <div class="card">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <span class="tag blue">&lt;design_principle&gt;</span>
+        </div>
+        <p style="font-size:clamp(12px,1.4vw,14px); color:var(--fg2); line-height:1.6;">설계 원칙과 계획 근거를 서술</p>
+      </div>
+      <div class="card">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <span class="tag orange">&lt;workflow&gt;</span>
+        </div>
+        <p style="font-size:clamp(12px,1.4vw,14px); color:var(--fg2); line-height:1.6;">nodes_info와 edges 필드를 포함한 JSON 구조</p>
+      </div>
+    </div>
+    <span class="slide-num">05</span>
+  </section>
+
+  <!-- 슬라이드 6: 평가 프로토콜 -->
+  <section class="slide" id="s5">
+    <div class="slide-label">Evaluation</div>
+    <h2 class="slide-title">2단계 <span class="hl">평가</span> 프로토콜</h2>
+    <p class="slide-desc">
+      워크플로우의 품질은 표현 형태만으로 판단할 수 없습니다. 실제 실행 결과까지 검증하는 두 단계 평가 방식을 도입했습니다.
+    </p>
+    <div class="metrics-row">
+      <div class="card metric-card">
+        <div class="metric-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div class="metric-name">Pass Rate</div>
+        <div class="metric-formula">N_success / N_total</div>
+        <div class="metric-desc">
+          CoT 일관성, JSON 파싱, YAML 변환, 변수 일치성, 논리적 유효성 검증을 통과하는 비율
+        </div>
+      </div>
+      <div class="card metric-card">
+        <div class="metric-icon"><i class="fa-solid fa-play-circle"></i></div>
+        <div class="metric-name">Resolve Rate</div>
+        <div class="metric-formula">N_resolved / N_total</div>
+        <div class="metric-desc">
+          플랫폼에 임포트되어 실제로 실행되고, 지시어의 모든 요구사항을 충족하는 결과를 생성하는 비율
+        </div>
+      </div>
+    </div>
+    <div class="pipeline-steps" style="margin-top:24px;">
+      <div class="pipe-step">
+        <div class="pipe-num"><div class="pipe-num-circle">1</div><div class="pipe-num-line"></div></div>
+        <div class="pipe-content"><h4>형식 검사</h4><p>필수 태그 존재 여부 및 JSON 파싱 가능성 확인</p></div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num"><div class="pipe-num-circle">2</div><div class="pipe-num-line"></div></div>
+        <div class="pipe-content"><h4>변환 및 임포트</h4><p>JSON → YAML 변환 후 플랫폼으로 임포트 성공 여부 확인</p></div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num"><div class="pipe-num-circle">3</div><div class="pipe-num-line"></div></div>
+        <div class="pipe-content"><h4>변수 일치성</h4><p>추출된 변수가 참조 변수와 일치하는지 검증</p></div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num"><div class="pipe-num-circle">4</div><div class="pipe-num-line"></div></div>
+        <div class="pipe-content"><h4>논리적 유효성</h4><p>LLM 기반 판정으로 CoT 일관성과 핵심 노드 포함 여부 확인</p></div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num"><div class="pipe-num-circle">5</div><div class="pipe-num-line"></div></div>
+        <div class="pipe-content"><h4>실행 검증</h4><p>실제 플랫폼에서 테스트 케이스 실행 후 결과가 요구사항을 충족하는지 LLM 판정</p></div>
+      </div>
+    </div>
+    <span class="slide-num">06</span>
+  </section>
+
+  <!-- 슬라이드 7: 주요 결과 -->
+  <section class="slide" id="s6">
+    <div class="slide-label">Main Results</div>
+    <h2 class="slide-title">실험 <span class="hl">결과</span></h2>
+    <p class="slide-desc">
+      15개 대표 모델을 평가한 결과, 최신 LLM도 고수준 의도는 파악하나 정확하고 안정적인 실행 가능 워크플로우 생성에는 여전히 한계가 있습니다.
+    </p>
+    <div style="display:flex; gap:8px; margin-top:20px; flex-wrap:wrap;">
+      <span class="tag green">Pass Rate (%)</span>
+      <span class="tag blue">Resolve Rate (%)</span>
+    </div>
+    <div class="results-bars" id="resultsBars">
+      <!-- JS에서 동적 생성 -->
+    </div>
+    <span class="slide-num">07</span>
+  </section>
+
+  <!-- 슬라이드 8: 에이전트 프레임워크 -->
+  <section class="slide" id="s7">
+    <div class="slide-label">Agentic Baseline</div>
+    <h2 class="slide-title">오류 기반 <span class="hl">에이전트</span> 프레임워크</h2>
+    <p class="slide-desc">
+      반복적 실행 오류를 완화하기 위해 오류 메시지를 기반으로 자가 수정하는 에이전트 프레임워크를 제안합니다.
+    </p>
+    <div class="agent-diagram">
+      <div class="agent-box primary">
+        <h4><i class="fa-solid fa-comment-dots" style="margin-right:6px;"></i>사용자 지시어 + 대화 기록</h4>
+        <p>멀티턴 자연어 입력</p>
+      </div>
+      <div class="agent-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+      <div class="agent-box primary">
+        <h4><i class="fa-solid fa-brain" style="margin-right:6px;"></i>LLM 에이전트 (CoT 생성)</h4>
+        <p>node_selection → design_principle → workflow JSON</p>
+      </div>
+      <div class="agent-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+      <div class="agent-box secondary">
+        <h4><i class="fa-solid fa-gears" style="margin-right:6px;"></i>JSON → YAML 변환 → 플랫폼 임포트</h4>
+        <p>Dify 1.9.2에 워크플로우 배포</p>
+      </div>
+      <div class="agent-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+      <div class="agent-box secondary">
+        <h4><i class="fa-solid fa-vial" style="margin-right:6px;"></i>테스트 케이스 실행</h4>
+        <p>성공 시 종료, 오류 시 피드백 루프 진입</p>
+      </div>
+      <div class="agent-loop">
+        <i class="fa-solid fa-rotate"></i>
+        <span>오류 메시지를 컨텍스트에 추가하여 재생성 (최대 반복)</span>
+      </div>
+      <div class="agent-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+      <div class="agent-box primary" style="border-color:rgba(0,196,255,0.25); background:linear-gradient(135deg,rgba(0,196,255,0.12),rgba(0,232,157,0.08));">
+        <h4 style="color:var(--accent2);"><i class="fa-solid fa-check-double" style="margin-right:6px;"></i>최대 5.34% Resolve Rate 향상</h4>
+        <p>GPT-5.1, GPT-5.2에서 검증</p>
+      </div>
+    </div>
+    <span class="slide-num">08</span>
+  </section>
+
+  <!-- 슬라이드 9: 핵심 발견 -->
+  <section class="slide" id="s8">
+    <div class="slide-label">Key Findings</div>
+    <h2 class="slide-title">핵심 <span class="hl">발견</span></h2>
+    <div class="conclusion-grid">
+      <div class="card conc-card">
+        <h3>의도 파악 vs 실행 가능성</h3>
+        <p>최신 모델들은 사용자의 고수준 의도를 파악하는 데는 능숙하지만, 이를 정확하고 안정적으로 실행 가능한 워크플로우로 변환하는 데 큰 격차가 존재합니다.</p>
+      </div>
+      <div class="card conc-card">
+        <h3>복잡도 증가 시 급격한 성능 저하</h3>
+        <p>태스크가 복잡해지거나 요구사항이 변화할수록 Pass Rate와 Resolve Rate 모두 현저히 감소하여 구조적 추론의 한계를 보여줍니다.</p>
+      </div>
+      <div class="card conc-card">
+        <h3>에이전트 루프의 한계</h3>
+        <p>오류 기반 자가 수정 에이전트가 최대 5.34% 향상을 달성했으나, 여전히 실무 수준의 자동화와는 큰 간극이 남아 있습니다.</p>
+      </div>
+      <div class="card conc-card" style="border-left-color:var(--accent4);">
+        <h3>멀티턴 요구사항 변화의 어려움</h3>
+        <p>사용자가 기존 워크플로우를 수정하거나 추가 기능을 요청할 때, 이전 라운드의 정확성과 일관성을 유지하면서 적응하는 것이 특히 어렵습니다.</p>
+      </div>
+    </div>
+    <span class="slide-num">09</span>
+  </section>
+
+  <!-- 슬라이드 10: 결론 -->
+  <section class="slide" id="s9">
+    <div class="slide-label">Conclusion</div>
+    <h2 class="slide-title">결론 및 <span class="hl">향후 방향</span></h2>
+    <p class="slide-desc">
+      Chat2Workflow는 자연어로부터 실행 가능한 워크플로우를 자동 생성하는 문제를 체계적으로 연구하기 위한 기반을 제공합니다.
+    </p>
+    <div class="conclusion-grid">
+      <div class="card conc-card">
+        <h3>기여</h3>
+        <p>실제 프로덕션 환경 기반의 최초 워크플로우 생성 벤치마크를 제안하고, 2단계 평가 프로토콜과 오류 기반 에이전트 프레임워크를 제시했습니다.</p>
+      </div>
+      <div class="card conc-card">
+        <h3>현실적 격차</h3>
+        <p>최신 LLM의 성능에도 불구하고 산업급 자동화를 달성하기 위한 구조적 추론과 적응적 워크플로우 합성 능력은 여전히 핵심 병목입니다.</p>
+      </div>
+      <div class="card conc-card">
+        <h3>향후 연구</h3>
+        <p>구조적 추론 강화, 적응적 워크플로우 합성, 더 강력한 자가 수정 메커니즘, 그리고 확장된 벤치마크 구축이 필요합니다.</p>
+      </div>
+    </div>
+    <div style="margin-top:36px; text-align:center;">
+      <a href="https://arxiv.org/abs/2604.19667v1" target="_blank" rel="noopener"
+         style="display:inline-flex; align-items:center; gap:8px; padding:14px 28px; border-radius:12px;
+                background:linear-gradient(135deg, var(--accent), var(--accent2)); color:#0a0c10;
+                font-weight:700; font-size:clamp(14px,1.8vw,16px); text-decoration:none;
+                transition:transform 0.2s, box-shadow 0.2s; min-height:44px; min-width:44px;"
+         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(0,232,157,0.3)'"
+         onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> 논문 전문 보기
+      </a>
+      <a href="https://github.com/zjunlp/Chat2Workflow" target="_blank" rel="noopener"
+         style="display:inline-flex; align-items:center; gap:8px; padding:14px 28px; border-radius:12px;
+                border:1px solid var(--border); background:var(--bg3); color:var(--fg);
+                font-weight:600; font-size:clamp(14px,1.8vw,16px); text-decoration:none;
+                margin-left:12px; transition:transform 0.2s, border-color 0.2s; min-height:44px; min-width:44px;"
+         onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(0,232,157,0.3)'"
+         onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <i class="fa-brands fa-github"></i> GitHub
+      </a>
+    </div>
+    <span class="slide-num">10</span>
+  </section>
+
+</div>
+
+<!-- 하단 네비게이션 -->
+<nav class="slide-nav" aria-label="슬라이드 네비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 10</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fa-solid fa-chevron-right"></i></button>
+</nav>
+
+<script>
+// 슬라이드 데이터
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+
+// 네비게이션 도트 생성
+const navDots = document.getElementById('navDots');
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.setAttribute('aria-label', `${i + 1}번 슬라이드`);
+  dot.addEventListener('click', () => goToSlide(i));
+  navDots.appendChild(dot);
+}
+
+function goToSlide(index) {
+  if (index < 0 || index >= totalSlides) return;
+  currentSlide = index;
+  slides[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  updateNav();
+}
+
+function updateNav() {
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+  });
+  document.getElementById('navCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+  // 프로그레스바
+  const pct = ((currentSlide + 1) / totalSlides) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+// 키보드 네비게이션
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); goToSlide(currentSlide + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goToSlide(currentSlide - 1); }
+});
+
+// 터치 스와이프
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    if (dx < 0) goToSlide(currentSlide + 1);
+    else goToSlide(currentSlide - 1);
+  }
+}, { passive: true });
+
+// IntersectionObserver로 슬라이드 감지
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    entry.target.classList.toggle('visible', entry.isIntersecting);
+    if (entry.isIntersecting) {
+      const idx = Array.from(slides).indexOf(entry.target);
+      if (idx !== -1) { currentSlide = idx; updateNav(); }
+      // 바 차트 애니메이션 트리거
+      if (entry.target.id === 's6') animateBars();
+      // 도넛 차트 트리거
+      if (entry.target.id === 's3') drawDonut();
+    }
+  });
+}, { threshold: 0.45 });
+slides.forEach(s => observer.observe(s));
+
+// 도넛 차트
+function drawDonut() {
+  const canvas = document.getElementById('donutChart');
+  if (!canvas || canvas.dataset.drawn) return;
+  canvas.dataset.drawn = '1';
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const size = 220;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+
+  const data = [22, 19, 19, 15, 11, 15];
+  const colors = ['#00e89d', '#00c4ff', '#ff6b4a', '#fbbf24', '#a78bfa', '#f472b6'];
+  const cx = size / 2, cy = size / 2;
+  const outerR = Math.max(1, size / 2 - 10);
+  const innerR = Math.max(1, outerR * 0.58);
+  const total = data.reduce((a, b) => a + b, 0);
+
+  let startAngle = -Math.PI / 2;
+  const gap = 0.03;
+
+  data.forEach((val, i) => {
+    const sweep = (val / total) * Math.PI * 2 - gap;
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerR, startAngle, startAngle + sweep);
+    ctx.arc(cx, cy, innerR, startAngle + sweep, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    startAngle += sweep + gap;
+  });
+
+  // 중앙 텍스트
+  ctx.fillStyle = '#e8eaf0';
+  ctx.font = '800 24px Outfit';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('6', cx, cy - 8);
+  ctx.font = '400 11px "Noto Sans KR"';
+  ctx.fillStyle = '#9ca3b4';
+  ctx.fillText('도메인', cx, cy + 14);
+}
+
+// 결과 바 차트 데이터
+const modelData = [
+  { name: 'GPT-5.2', pass: 72.8, resolve: 18.9 },
+  { name: 'GPT-5.1', pass: 68.4, resolve: 16.5 },
+  { name: 'Claude-Sonnet-4.5', pass: 65.2, resolve: 14.8 },
+  { name: 'Gemini-3-Pro', pass: 60.1, resolve: 12.3 },
+  { name: 'Qwen3-Coder-480B', pass: 58.6, resolve: 11.7 },
+  { name: 'DeepSeek-V3.2', pass: 55.3, resolve: 10.2 },
+  { name: 'Qwen3-235B', pass: 53.8, resolve: 9.5 },
+  { name: 'GLM-4.7', pass: 48.2, resolve: 7.8 },
+  { name: 'Kimi-K2', pass: 44.6, resolve: 6.3 },
+  { name: 'Qwen3-32B', pass: 40.1, resolve: 5.1 },
+];
+
+const barsContainer = document.getElementById('resultsBars');
+modelData.forEach((m, idx) => {
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  row.innerHTML = `
+    <div class="bar-label">${m.name}</div>
+    <div class="bar-track"><div class="bar-fill pass" data-w="${m.pass}" style="width:0%"></div></div>
+    <div class="bar-val pass-val">${m.pass}%</div>
+    <div class="bar-track"><div class="bar-fill resolve" data-w="${m.resolve}" style="width:0%"></div></div>
+    <div class="bar-val resolve-val">${m.resolve}%</div>
+  `;
+  barsContainer.appendChild(row);
+});
+
+let barsAnimated = false;
+function animateBars() {
+  if (barsAnimated) return;
+  barsAnimated = true;
+  document.querySelectorAll('.bar-fill').forEach((bar, i) => {
+    setTimeout(() => {
+      bar.style.width = bar.dataset.w + '%';
+    }, i * 40);
+  });
+}
+
+// 첫 슬라이드 표시
+slides[0].classList.add('visible');
+updateNav();
+</script>
+</body>
+</html>

@@ -22,11 +22,11 @@ Claudini는 Claude Code 기반의 autoresearch 파이프라인을 활용하여 L
 
 ### 연구 의의
 
-이 연구는 두 가지 중요한 흐름의 교차점에 위치한다. 첫째, [[autoresearch]] 패러다임의 실질적 성과를 입증한다. Bilevel Autoresearch가 메타 수준에서 autoresearch 자체를 연구했다면, Claudini는 구체적인 도메인(적대적 공격)에서 autoresearch가 인간 연구자 수준 이상의 알고리즘을 발견할 수 있음을 보여준다. 둘째, [[ai-safety]] 관점에서 AI 시스템이 스스로 보안 취약점을 발견하고 공격 수단을 개발할 수 있다는 이중적 함의를 갖는다.
+이 연구는 두 가지 중요한 흐름의 교차점에 위치한다. 첫째, [[concepts/autoresearch.md|autoresearch]] 패러다임의 실질적 성과를 입증한다. Bilevel Autoresearch가 메타 수준에서 autoresearch 자체를 연구했다면, Claudini는 구체적인 도메인(적대적 공격)에서 autoresearch가 인간 연구자 수준 이상의 알고리즘을 발견할 수 있음을 보여준다. 둘째, [[concepts/ai-safety.md|ai safety]] 관점에서 AI 시스템이 스스로 보안 취약점을 발견하고 공격 수단을 개발할 수 있다는 이중적 함의를 갖는다.
 
 ### 기술적 특징
 
-기존 공격 구현체에서 출발하여 자율적으로 새로운 알고리즘을 탐색·진화시키는 방식을 채택했다. 이는 LLM 에이전트가 단순 코드 작성을 넘어 연구 설계와 실험 반복까지 수행하는 [[llm-agent]]의 고도화된 활용 사례다. 화이트박스 접근이라는 점에서 모델 내부 그래디언트 정보를 활용한 최적화 기반 공격으로 추정되며, 이는 [[adversarial-prompting]]의 체계적 자동화에 해당한다.
+기존 공격 구현체에서 출발하여 자율적으로 새로운 알고리즘을 탐색·진화시키는 방식을 채택했다. 이는 LLM 에이전트가 단순 코드 작성을 넘어 연구 설계와 실험 반복까지 수행하는 [[entities/llm-agent.md|llm agent]]의 고도화된 활용 사례다. 화이트박스 접근이라는 점에서 모델 내부 그래디언트 정보를 활용한 최적화 기반 공격으로 추정되며, 이는 [[concepts/adversarial-prompting.md|adversarial prompting]]의 체계적 자동화에 해당한다.
 
 ### Wiki 연결
 

@@ -21,7 +21,7 @@ MONA(Myopic Optimization with Non-myopic Approval)는 다단계 보상 해킹(re
 - **설계 함의**: 보상 해킹 완화를 위한 승인 메커니즘 설계 시 고려해야 할 트레이드오프를 제시
 
 ### AI 안전성과의 연결
-보상 해킹은 [[ai-safety]] 분야의 핵심 문제 중 하나로, 에이전트가 설계자의 의도와 다른 방식으로 보상을 최대화하는 현상이다. MONA의 근시적 최적화 접근은 [[reinforcement-learning]]에서의 안전한 탐색 문제와 직결되며, 승인 신호 설계는 [[llm-alignment]]의 인간 피드백 기반 학습(RLHF)과 유사한 구조적 도전을 공유한다. 또한 다단계 보상 해킹 방지라는 주제는 [[llm-agent]] 시스템에서 장기 계획을 수립하는 에이전트의 안전성 문제와도 관련이 깊다.
+보상 해킹은 [[concepts/ai-safety.md|ai safety]] 분야의 핵심 문제 중 하나로, 에이전트가 설계자의 의도와 다른 방식으로 보상을 최대화하는 현상이다. MONA의 근시적 최적화 접근은 [[concepts/reinforcement-learning.md|reinforcement learning]]에서의 안전한 탐색 문제와 직결되며, 승인 신호 설계는 [[concepts/llm-alignment.md|llm alignment]]의 인간 피드백 기반 학습(RLHF)과 유사한 구조적 도전을 공유한다. 또한 다단계 보상 해킹 방지라는 주제는 [[entities/llm-agent.md|llm agent]] 시스템에서 장기 계획을 수립하는 에이전트의 안전성 문제와도 관련이 깊다.
 
 ### 설계 시사점
 승인 함수가 결과에 과도하게 의존하면 보상 해킹에 취약해지고, 과도하게 독립적이면 유용한 학습 신호를 제공하지 못하는 딜레마가 존재한다. 이는 보상 모델 설계의 근본적 긴장을 드러낸다.
@@ -47,3 +47,12 @@ MONA(Myopic Optimization with Non-myopic Approval)는 다단계 보상 해킹(re
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/design-probe.md|design probe]]
+
+---
+**관련**: [[concepts/mechanism-design.md|mechanism design]]
+
+---
+**관련**: [[concepts/transformational-game-design.md|transformational game design]]

@@ -36,3 +36,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-14-risk-seeking-conservative-policy-iteration-with-ag]]: 둘 다 다중 에이전트 강화학습(MARL)의 분산 의사결정을 다루며, 전자는 사이버 방어의 비동기 에이전트를, 후자는 Dec-POMDP의 정책 최적화를 다룬다.
+
+---
+**관련**: [[concepts/noisy-actuation.md|noisy actuation]]

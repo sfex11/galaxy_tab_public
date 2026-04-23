@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-17-interpretable-stylistic-variation-in-human-and-llm]]: 둘 다 LLM의 텍스트 생성 특성을 토큰/스타일 수준에서 분석하며, 토크나이저 품질과 생성 텍스트 스타일의 해석 가능성을 다룬다.
+
+---
+**관련**: [[concepts/backdoor-attack.md|backdoor attack]]
+
+---
+**관련**: [[concepts/tokenization.md|tokenization]]

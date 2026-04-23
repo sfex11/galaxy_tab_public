@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-31-binary-decisions-in-daos-accountability-and-belief.md|Binary Decisions in DAOs: Accountability and Belief Aggregat]]
+
+### Relative Principals, Pluralistic Alignment, and the Structural Value A (2026-04-24)

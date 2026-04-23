@@ -17,7 +17,7 @@
 
 ### 기존 Wiki와의 연결
 
-**[[reinforcement-learning]]** 엔티티와 직접적으로 관련되며, 특히 모델 기반 접근법이라는 점에서 모델 프리 방법 중심의 기존 RL 논문들과 차별화된다. **[[distribution-shift]]** 개념과 밀접한데, 동역학 자체가 시간에 따라 변화하는 것이 분포 이동의 한 형태이다. **[[meta-learning]]** 개념과도 연결되는데, 에피소드 간 빠른 적응이 핵심 과제이며, 'Unified Policy Value Decomposition for Rapid Adaptation' 논문의 빠른 적응 주제와 공명한다. 또한 **[[model-predictive-control]]** 개념과 관련이 깊으며, GP 기반 동역학 모델 위에서 제어 정책을 최적화하는 구조는 MPC 패러다임과 유사하다.
+**[[concepts/reinforcement-learning.md|reinforcement learning]]** 엔티티와 직접적으로 관련되며, 특히 모델 기반 접근법이라는 점에서 모델 프리 방법 중심의 기존 RL 논문들과 차별화된다. **[[concepts/distribution-shift.md|distribution shift]]** 개념과 밀접한데, 동역학 자체가 시간에 따라 변화하는 것이 분포 이동의 한 형태이다. **[[concepts/meta-learning.md|meta learning]]** 개념과도 연결되는데, 에피소드 간 빠른 적응이 핵심 과제이며, 'Unified Policy Value Decomposition for Rapid Adaptation' 논문의 빠른 적응 주제와 공명한다. 또한 **[[concepts/model-predictive-control.md|model predictive control]]** 개념과 관련이 깊으며, GP 기반 동역학 모델 위에서 제어 정책을 최적화하는 구조는 MPC 패러다임과 유사하다.
 
 'Robust Quadruped Locomotion via Evolutionary RL'(2026-04-10)이 진화적 방법으로 로봇 제어의 강건성을 추구한 것과 비교하면, 본 논문은 모델 불확실성의 명시적 추적을 통해 적응성을 확보하는 상보적 접근을 취한다.
 
@@ -37,3 +37,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/non-stationary-dynamics.md|non stationary dynamics]]

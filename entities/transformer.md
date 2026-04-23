@@ -7,7 +7,6 @@
 
 _Wiki 축적 중 (claude 분석 대기)_
 
-
 ## 논문에서 발견된 핵심 인사이트
 
 - LLM의 임베딩 공간에서 mask token을 프로브로 활용하면, 별도 draft 모델 없이도 training-free로 multi-token prediction이 가능하며 이는 speculative decoding의 실용적 장벽을 크게 낮춘다.
@@ -65,10 +64,6 @@ _Wiki 축적 중 (claude 분석 대기)_
 
 트랜스포머의 내부 표현 공간이 자연어 처리뿐 아니라 기호적 논리 구조도 동시에 인코딩할 수 있는 이질적 표현의 융합 지점으로서의 역할을 새롭게 부각한다.
 
-→ [[sources/2026-04-23-discovering-a-shared-logical-subspace-steering-llm.md|상세 보기]]
-
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
 
 디코더 전용 트랜스포머의 활성화 공간에서 추출된 function vector의 교차 언어 일반화 특성을 최초로 체계적으로 분석하여, 트랜스포머 아키텍처 내 작업 표현의 언어 독립성에 대한 새로운 증거를 제공한다.
-
-→ [[sources/2026-04-23-exploring-language-agnosticity-in-function-vectors.md|상세 보기]]

@@ -15,4 +15,4 @@ _Wiki 축적 중_
 
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
 
-→ [[sources/2026-04-23-exploring-language-agnosticity-in-function-vectors.md|상세 보기]]
+### Diagnosing CFG Interpretation in LLMs (2026-04-24)

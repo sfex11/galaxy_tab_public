@@ -39,6 +39,6 @@ ZKP 기반 협상은 다음 공격을 수학적으로 방지:
 ## 관련 개념
 
 - [[privacy]] — 에이전트 프라이버시 보존의 핵심 수단
-- [[multi-agent-system]] — 자율 에이전트 간 협상 = MA 시스템의 새로운 패턴
-- [[agent-coordination]] — 협상 프로토콜 = 조율의 한 형태
-- [[ai-safety]] — 사적 선호 보호 + 기만 불가능한 합의
+- [[concepts/multi-agent-system.md|multi agent system]] — 자율 에이전트 간 협상 = MA 시스템의 새로운 패턴
+- [[concepts/agent-coordination.md|agent coordination]] — 협상 프로토콜 = 조율의 한 형태
+- [[concepts/ai-safety.md|ai safety]] — 사적 선호 보호 + 기만 불가능한 합의

@@ -21,9 +21,9 @@ SCRAT(Stochastic Control with Retrieval and Auditable Trajectories)는 에이전
 - **Verifiable Action**: 감사 가능한 궤적(auditable trajectories)을 통한 행동 검증 메커니즘
 
 ### 기존 연구와의 연결
-이 논문은 [[cognitive-architecture]]의 확장으로, 특히 Triadic Cognitive Architecture가 제안한 자율 행동 경계 설정과 유사한 문제의식을 공유한다. [[memory-management]]의 적응적 망각(adaptive forgetting) 개념과도 밀접하며, 다람쥐의 scatter-hoarding이 에이전트의 선택적 기억 저장/폐기 전략과 대응된다. [[agent-reliability-auditing]]의 사전 배포 감사 프레임워크와 검증 가능한 궤적 개념이 상호보완적이다. 또한 [[process-control-architecture]]의 Box Maze 같은 신뢰성 있는 LLM 추론 제어 구조와도 연결된다.
+이 논문은 [[concepts/cognitive-architecture.md|cognitive architecture]]의 확장으로, 특히 Triadic Cognitive Architecture가 제안한 자율 행동 경계 설정과 유사한 문제의식을 공유한다. [[concepts/memory-management.md|memory management]]의 적응적 망각(adaptive forgetting) 개념과도 밀접하며, 다람쥐의 scatter-hoarding이 에이전트의 선택적 기억 저장/폐기 전략과 대응된다. [[concepts/agent-reliability-auditing.md|agent reliability auditing]]의 사전 배포 감사 프레임워크와 검증 가능한 궤적 개념이 상호보완적이다. 또한 [[concepts/process-control-architecture.md|process control architecture]]의 Box Maze 같은 신뢰성 있는 LLM 추론 제어 구조와도 연결된다.
 
-부분 관측성 하의 확률적 제어는 [[reinforcement-learning]] 및 [[model-based-rl]]과 직접 관련되며, 생물학적 행동에서 AI 설계 원칙을 도출하는 접근은 [[behavioral-temperament]] 프로파일링 연구와 방법론적 유사성을 갖는다.
+부분 관측성 하의 확률적 제어는 [[concepts/reinforcement-learning.md|reinforcement learning]] 및 [[concepts/model-based-rl.md|model based rl]]과 직접 관련되며, 생물학적 행동에서 AI 설계 원칙을 도출하는 접근은 [[concepts/behavioral-temperament.md|behavioral temperament]] 프로파일링 연구와 방법론적 유사성을 갖는다.
 
 ## 🔗 관련 논문
 
@@ -52,3 +52,6 @@ SCRAT(Stochastic Control with Retrieval and Auditable Trajectories)는 에이전
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/auditable-gap.md|auditable gap]]

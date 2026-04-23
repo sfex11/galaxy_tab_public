@@ -28,7 +28,7 @@ DRIVE-Nav의 핵심 혁신은 원시 프론티어(raw frontiers) 대신 **지속
 
 DRIVE-Nav는 [[AgentVLN]]의 에이전틱 비전-언어 내비게이션과 유사한 embodied navigation 문제를 다루지만, 사전 정의된 언어 명령이 아닌 개방형 어휘 목표를 처리한다는 점에서 차별화된다. [[CADENCE]]의 맥락 적응형 깊이 추정과 보완적 관계에 있으며, 내비게이션 에이전트의 공간 인식 능력 향상이라는 공통 목표를 공유한다.
 
-VLM 기반 제로샷 접근법을 사용한다는 점에서 [[vision-language-model]] 연구 흐름에 속하며, 구조화된 탐색 전략은 [[graph-based-planning]] 개념과도 연결된다. 특히 불완전 관측 하 효율적 탐색이라는 문제 설정은 [[embodied-ai]] 분야의 핵심 도전 과제를 정면으로 다룬다.
+VLM 기반 제로샷 접근법을 사용한다는 점에서 [[concepts/vision-language-model.md|vision language model]] 연구 흐름에 속하며, 구조화된 탐색 전략은 [[concepts/graph-based-planning.md|graph based planning]] 개념과도 연결된다. 특히 불완전 관측 하 효율적 탐색이라는 문제 설정은 [[concepts/embodied-ai.md|embodied ai]] 분야의 핵심 도전 과제를 정면으로 다룬다.
 
 ## 🔗 관련 논문
 

@@ -19,9 +19,9 @@ Android Coach는 **Single State Multiple Actions (SSMA)** 패러다임을 제안
 
 ### 기존 Wiki와의 연결
 
-이 연구는 [[reinforcement-learning]] 엔티티의 에이전트 훈련 효율화 맥락에서 중요하다. 특히 [[token-efficiency]] 개념과 공명하는데, Batched Contextual Reinforcement 논문이 토큰 레벨에서 효율성을 추구했다면, Android Coach는 **상태-행동 레벨**에서의 효율성을 다룬다. [[curriculum-learning]]과도 관련이 있으며, 탐색 전략의 체계화라는 점에서 [[meta-learning]]의 탐색-활용 트레이드오프 논의와 맥을 같이한다.
+이 연구는 [[concepts/reinforcement-learning.md|reinforcement learning]] 엔티티의 에이전트 훈련 효율화 맥락에서 중요하다. 특히 [[concepts/token-efficiency.md|token efficiency]] 개념과 공명하는데, Batched Contextual Reinforcement 논문이 토큰 레벨에서 효율성을 추구했다면, Android Coach는 **상태-행동 레벨**에서의 효율성을 다룬다. [[concepts/curriculum-learning.md|curriculum learning]]과도 관련이 있으며, 탐색 전략의 체계화라는 점에서 [[concepts/meta-learning.md|meta learning]]의 탐색-활용 트레이드오프 논의와 맥을 같이한다.
 
-[[computer-use-agent]] 및 [[web-agent-evaluation]] 개념과도 직접 연결된다—Android 에이전트는 GUI 기반 컴퓨터 사용 에이전트의 모바일 버전이며, ClawBench 등의 평가 프레임워크와 상호보완적이다. [[tool-use]] 개념에서도 에이전트가 앱 인터페이스를 도구로 활용하는 패턴을 보인다.
+[[concepts/computer-use-agent.md|computer use agent]] 및 [[concepts/web-agent-evaluation.md|web agent evaluation]] 개념과도 직접 연결된다—Android 에이전트는 GUI 기반 컴퓨터 사용 에이전트의 모바일 버전이며, ClawBench 등의 평가 프레임워크와 상호보완적이다. [[concepts/tool-use.md|tool use]] 개념에서도 에이전트가 앱 인터페이스를 도구로 활용하는 패턴을 보인다.
 
 ## 🔗 관련 논문
 

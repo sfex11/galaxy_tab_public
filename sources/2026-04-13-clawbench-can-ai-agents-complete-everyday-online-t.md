@@ -16,10 +16,10 @@
 ClawBench는 144개 라이브 플랫폼에 걸쳐 15개 카테고리의 153개 일상 태스크(구매, 예약, 구직 지원 등)를 평가하는 프레임워크이다. 기존 웹 에이전트 벤치마크가 시뮬레이션 환경이나 제한된 도메인에 집중한 것과 달리, ClawBench는 **실제 라이브 웹사이트**에서의 end-to-end 태스크 완수를 측정한다는 점에서 차별화된다.
 
 ### 기존 Wiki와의 관계
-- [[web-agent-evaluation]]: ClawBench는 이 개념의 핵심 사례로, Vision2Web이나 UI-Voyager 같은 기존 벤치마크가 GUI 인터랙션 수준에 머문 반면, 태스크 완료의 실용적 성공률을 측정
-- [[computer-use-agent]]: 에이전트가 브라우저를 조작하여 실제 서비스를 이용하는 시나리오로, human oversight 전략 연구와 직결
-- [[llm-agent]]: 범용 에이전트의 실세계 능력 한계를 정량적으로 드러냄
-- [[closed-loop-evaluation]]: 라이브 환경 특성상 동적 웹페이지 변화에 대응하는 closed-loop 평가가 필수
+- [[concepts/web-agent-evaluation.md|web agent evaluation]]: ClawBench는 이 개념의 핵심 사례로, Vision2Web이나 UI-Voyager 같은 기존 벤치마크가 GUI 인터랙션 수준에 머문 반면, 태스크 완료의 실용적 성공률을 측정
+- [[concepts/computer-use-agent.md|computer use agent]]: 에이전트가 브라우저를 조작하여 실제 서비스를 이용하는 시나리오로, human oversight 전략 연구와 직결
+- [[entities/llm-agent.md|llm agent]]: 범용 에이전트의 실세계 능력 한계를 정량적으로 드러냄
+- [[concepts/closed-loop-evaluation.md|closed loop evaluation]]: 라이브 환경 특성상 동적 웹페이지 변화에 대응하는 closed-loop 평가가 필수
 
 ### 핵심 기여
 1. 15개 카테고리 분류 체계로 일상 태스크의 다양성을 체계화

@@ -30,5 +30,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)
 
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
-
-→ [[sources/2026-04-23-exploring-language-agnosticity-in-function-vectors.md|상세 보기]]

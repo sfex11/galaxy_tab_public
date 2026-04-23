@@ -20,7 +20,7 @@ Retrieval-Augmented Language Model(RALM)은 지식 집약적 태스크에서 높
 
 Neuro-RIT는 이 문제를 해결하기 위해 뉴런 단위의 세밀한 가이드를 통한 instruction tuning을 제안한다. 핵심 아이디어는 검색 컨텍스트 처리에 관여하는 특정 뉴런을 식별하고, 해당 뉴런에 집중적으로 튜닝을 적용하여 노이즈에 강건한 RAG 시스템을 구축하는 것이다. 이는 전체 모델을 업데이트하는 기존 방식 대비 효율적이며, 모델의 기존 능력을 보존하면서도 검색 노이즈에 대한 내성을 높인다.
 
-이 연구는 [[mechanistic-interpretability]]와 [[retrieval-augmented-generation]]의 교차점에 위치한다. 뉴런 수준 분석을 통해 모델 내부에서 검색 컨텍스트가 어떻게 처리되는지 이해하고, 이를 훈련에 활용한다는 점에서 [[activation-patching]]이나 [[representation-steering]] 연구와 방법론적 유사성을 가진다. 또한 파라미터 효율적 튜닝이라는 측면에서 [[model-pruning]]이나 [[knowledge-injection]] 연구와도 연결된다. 노이즈 강건성이라는 목표는 [[reasoning-integrity]] 개념과도 맞닿아 있으며, RAG 파이프라인 설계 관점에서는 최근의 체계적 RAG 설계 연구와 직접적으로 관련된다.
+이 연구는 [[concepts/mechanistic-interpretability.md|mechanistic interpretability]]와 [[concepts/retrieval-augmented-generation.md|retrieval augmented generation]]의 교차점에 위치한다. 뉴런 수준 분석을 통해 모델 내부에서 검색 컨텍스트가 어떻게 처리되는지 이해하고, 이를 훈련에 활용한다는 점에서 [[concepts/activation-patching.md|activation patching]]이나 [[concepts/representation-steering.md|representation steering]] 연구와 방법론적 유사성을 가진다. 또한 파라미터 효율적 튜닝이라는 측면에서 [[concepts/model-pruning.md|model pruning]]이나 [[concepts/knowledge-injection.md|knowledge injection]] 연구와도 연결된다. 노이즈 강건성이라는 목표는 [[concepts/reasoning-integrity.md|reasoning integrity]] 개념과도 맞닿아 있으며, RAG 파이프라인 설계 관점에서는 최근의 체계적 RAG 설계 연구와 직접적으로 관련된다.
 
 ## 🔗 관련 논문
 

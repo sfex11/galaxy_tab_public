@@ -18,5 +18,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### An AI Agent Execution Environment to Safeguard User Data (2026-04-23)
-
-→ [[sources/2026-04-23-an-ai-agent-execution-environment-to-safeguard-use.md|상세 보기]]

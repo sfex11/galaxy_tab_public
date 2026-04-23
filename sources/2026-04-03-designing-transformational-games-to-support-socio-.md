@@ -17,9 +17,9 @@
 
 연구진은 **Diversity Duel**과 **Secret Agent**라는 두 가지 게임을 설계했다. 이 게임들은 GenAI 도구를 직접 통합하여 플레이어가 AI의 편향(bias), 공정성(fairness), 프라이버시 등 사회윤리적 쟁점을 체험적으로 탐구하도록 유도한다. 핵심 설계 원리는 게임 메커니즘 자체가 윤리적 딜레마를 자연스럽게 발생시키도록 하는 것이며, 이를 통해 단순한 지식 전달이 아닌 **사회윤리적 추론(socio-ethical reasoning)** 역량을 기르는 데 초점을 맞춘다.
 
-이 연구는 기존 Wiki의 [[ai-safety]] 및 [[ai-governance]] 개념과 직접적으로 연결된다. AI 시스템의 안전성과 거버넌스를 기술적 관점에서 다루는 기존 논문들과 달리, 본 논문은 **교육적·사회적 관점**에서 AI 윤리 문제에 접근한다는 점에서 상호보완적이다. 또한 [[llm-alignment]] 개념과도 관련이 깊은데, AI 정렬 문제를 비전문가인 청소년도 직관적으로 이해할 수 있는 게임 기반 프레임워크를 제시하기 때문이다. [[choice-architecture]] 개념과도 흥미로운 접점이 있다—게임의 선택 구조가 곧 AI 윤리적 판단의 scaffolding 역할을 한다.
+이 연구는 기존 Wiki의 [[concepts/ai-safety.md|ai safety]] 및 [[concepts/ai-governance.md|ai governance]] 개념과 직접적으로 연결된다. AI 시스템의 안전성과 거버넌스를 기술적 관점에서 다루는 기존 논문들과 달리, 본 논문은 **교육적·사회적 관점**에서 AI 윤리 문제에 접근한다는 점에서 상호보완적이다. 또한 [[concepts/llm-alignment.md|llm alignment]] 개념과도 관련이 깊은데, AI 정렬 문제를 비전문가인 청소년도 직관적으로 이해할 수 있는 게임 기반 프레임워크를 제시하기 때문이다. [[concepts/choice-architecture.md|choice architecture]] 개념과도 흥미로운 접점이 있다—게임의 선택 구조가 곧 AI 윤리적 판단의 scaffolding 역할을 한다.
 
-생성형 AI의 편향 문제를 다룬다는 점에서 [[gender-bias]] 관련 논문(ConGA 등)이나, AI 챗봇의 이해 충돌을 분석한 [[conflict-of-interest-in-ai]] 논문과도 주제적 연결이 존재한다.
+생성형 AI의 편향 문제를 다룬다는 점에서 [[concepts/gender-bias.md|gender bias]] 관련 논문(ConGA 등)이나, AI 챗봇의 이해 충돌을 분석한 [[concepts/conflict-of-interest-in-ai.md|conflict of interest in ai]] 논문과도 주제적 연결이 존재한다.
 
 ## 🔗 관련 논문
 
@@ -34,3 +34,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/intra-generative-intervention.md|intra generative intervention]]

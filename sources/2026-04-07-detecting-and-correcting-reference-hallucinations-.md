@@ -19,7 +19,7 @@
 
 이 연구는 기존 LLM 벤치마크 연구들이 모델의 추론 능력이나 태스크 수행 정확도에 집중한 것과 달리, **출력의 근거(grounding) 품질**이라는 새로운 평가 축을 제시한다. 특히 RAG(Retrieval-Augmented Generation) 파이프라인이 환각을 줄이는 해법으로 주목받는 상황에서, 검색 없이 모델이 자체 생성하는 인용의 취약성을 정량화한 점이 중요하다.
 
-딥 리서치 에이전트의 인용 환각 문제는 [[ai-safety]] 및 [[ai-governance]] 관점에서도 중대한 함의를 가진다. 학술·법률·의료 등 고위험 도메인에서 허위 인용은 잘못된 의사결정으로 이어질 수 있기 때문이다. 또한 에이전트 신뢰성 감사([[agent-reliability-auditing]])의 범위를 행동 정확성에서 출처 정확성으로 확장해야 함을 시사한다.
+딥 리서치 에이전트의 인용 환각 문제는 [[concepts/ai-safety.md|ai safety]] 및 [[concepts/ai-governance.md|ai governance]] 관점에서도 중대한 함의를 가진다. 학술·법률·의료 등 고위험 도메인에서 허위 인용은 잘못된 의사결정으로 이어질 수 있기 때문이다. 또한 에이전트 신뢰성 감사([[concepts/agent-reliability-auditing.md|agent reliability auditing]])의 범위를 행동 정확성에서 출처 정확성으로 확장해야 함을 시사한다.
 
 ## 🔗 관련 논문
 

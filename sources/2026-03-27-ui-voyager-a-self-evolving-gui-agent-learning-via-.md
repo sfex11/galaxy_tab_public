@@ -19,7 +19,7 @@ UI-Voyager는 모바일 GUI 자동화를 위한 2단계 자기진화(self-evolvi
 
 **2단계 — 실패 경험 활용:** 단순 거부를 넘어 실패 궤적에서도 학습 신호를 추출하는 것이 핵심 차별점이다. 장기 호라이즌 GUI 태스크에서 각 스텝의 기여도를 정밀하게 평가하여, 희소 보상 환경에서도 효과적인 credit assignment를 수행한다.
 
-이 접근은 [[reinforcement-learning]]의 exploration-exploitation 문제와 직결되며, 특히 [[llm-agent]] 분야에서 에이전트의 자율적 능력 향상이라는 핵심 과제를 다룬다. Android Coach(온라인 에이전트 학습 효율화)와 유사하게 모바일 환경에서의 에이전트 훈련을 다루지만, UI-Voyager는 오프라인 실패 경험 재활용에 초점을 맞춘다는 점에서 상호보완적이다. ClawBench의 웹 에이전트 평가 관점에서도, 실패 경험 학습은 실제 배포 시 에이전트 신뢰성 향상의 핵심 메커니즘이 된다. Act Wisely의 메타인지적 도구 사용과도 연결되는데, 실패로부터의 학습은 본질적으로 에이전트의 메타인지 능력에 해당한다.
+이 접근은 [[concepts/reinforcement-learning.md|reinforcement learning]]의 exploration-exploitation 문제와 직결되며, 특히 [[entities/llm-agent.md|llm agent]] 분야에서 에이전트의 자율적 능력 향상이라는 핵심 과제를 다룬다. Android Coach(온라인 에이전트 학습 효율화)와 유사하게 모바일 환경에서의 에이전트 훈련을 다루지만, UI-Voyager는 오프라인 실패 경험 재활용에 초점을 맞춘다는 점에서 상호보완적이다. ClawBench의 웹 에이전트 평가 관점에서도, 실패 경험 학습은 실제 배포 시 에이전트 신뢰성 향상의 핵심 메커니즘이 된다. Act Wisely의 메타인지적 도구 사용과도 연결되는데, 실패로부터의 학습은 본질적으로 에이전트의 메타인지 능력에 해당한다.
 
 ## 🔗 관련 논문
 

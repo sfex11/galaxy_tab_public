@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-16-modeling-co-pilots-for-text-to-model-translation]]: 둘 다 LLM을 소프트웨어/모델 생성에 활용할 때의 체계적 평가 프레임워크를 제시한다.
+
+---
+**관련**: [[concepts/semantic-clustering.md|semantic clustering]]

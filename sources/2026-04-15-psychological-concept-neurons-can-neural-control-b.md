@@ -36,3 +36,27 @@ _자동 생성됨_
 
 - → [[sources/2026-04-17-rhetorical-questions-in-llm-representations-a-line]]: 둘 다 LLM 내부 표상을 프로빙하여 특정 개념(성격 특성 vs 수사적 질문)이 어떻게 인코딩되는지 분석한다.
 - → [[sources/2026-04-17-interpretable-stylistic-variation-in-human-and-llm]]: 둘 다 LLM의 내부 표현과 생성 행동 간 관계를 분석하며, 성격/스타일 같은 고수준 특성이 모델에 어떻게 반영되는지 탐구한다.
+
+---
+**관련**: [[concepts/rdf-owl-representation.md|rdf owl representation]]
+
+---
+**관련**: [[concepts/neural-operator.md|neural operator]]
+
+---
+**관련**: [[concepts/architectural-paradigm-shift.md|architectural paradigm shift]]
+
+---
+**관련**: [[concepts/temporal-logic.md|temporal logic]]
+
+---
+**관련**: [[concepts/file-system-behavioral-trace.md|file system behavioral trace]]
+
+---
+**관련**: [[concepts/shared-logical-subspace.md|shared logical subspace]]
+
+---
+**관련**: [[concepts/latent-phase-shift-rollback.md|latent phase shift rollback]]
+
+---
+**관련**: [[concepts/neural-combinatorial-optimization.md|neural combinatorial optimization]]

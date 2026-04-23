@@ -30,7 +30,7 @@ FinTradeBench는 LLM의 금융 의사결정 능력을 평가하기 위한 벤치
 
 이 연구는 [[FrontierFinance|FrontierFinance: A Long-Horizon Computer Use Benchmark]]와 직접적으로 관련된다. FrontierFinance가 장기 컴퓨터 사용 기반 금융 벤치마크라면, FinTradeBench는 금융 추론 자체에 초점을 맞춘 상호보완적 벤치마크이다. 두 연구 모두 LLM의 금융 도메인 적용 가능성을 체계적으로 평가하려는 흐름에 속한다.
 
-또한 LLM의 추론 능력 평가라는 측면에서 [[reasoning-chain|reasoning-chain]] 개념과 연결되며, 도메인 특화 벤치마크 설계라는 관점에서 다양한 평가 연구들과 맥락을 공유한다.
+또한 LLM의 추론 능력 평가라는 측면에서 [[concepts/reasoning-chain.md|reasoning chain]] 개념과 연결되며, 도메인 특화 벤치마크 설계라는 관점에서 다양한 평가 연구들과 맥락을 공유한다.
 
 ## 🔗 관련 논문
 

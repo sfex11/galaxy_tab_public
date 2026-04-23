@@ -29,10 +29,10 @@
 → [[queries/query-2.md|상세 분석]]
 
 ## 관련 논문
-- → [[sources/2026-03-20-governed-memory-a-production-architecture-for-mult.md|Governed Memory]]
-- → [[sources/2026-04-12-psi-shared-state-as-the-missing-layer-for-coherent.md|PSI]]
-- → [[sources/2026-04-02-the-triadic-cognitive-architecture-bounding-autono.md|Triadic Architecture]]
-- → [[sources/2026-03-24-learning-dynamic-belief-graphs-for-theory-of-mind-.md|Dynamic Belief Graphs]]
+- 
+- 
+- 
+- 
 
 ---
 _Wiki Query 결과에서 새로운 개념으로 추출됨 (2026-04-14)_

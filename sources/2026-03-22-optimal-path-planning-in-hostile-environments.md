@@ -21,7 +21,7 @@
 - 에이전트 간 협력을 통한 위험 최소화 경로 탐색 전략 제시
 
 ### 기존 Wiki와의 관계
-본 연구는 [[multi-agent-system]]의 협력적 계획 측면과 직접 관련된다. 기존 Wiki의 다중 에이전트 시스템이 주로 LLM 기반 소프트웨어 에이전트에 초점을 맞춘 반면, 본 논문은 물리적 환경에서의 고전적 계획 문제로 확장한다. 또한 [[convex-optimization]]의 경로 최적화 관점 및 동적 교통 할당([[dynamic-traffic-assignment]])과 그래프 기반 최적화라는 방법론적 공통점을 가진다. 강화학습([[reinforcement-learning]]) 기반 로봇 이동 연구(robust quadruped locomotion 등)와도 경로 계획이라는 상위 목표를 공유하나, 본 논문은 이론적 복잡도 분석에 집중한다는 점에서 차별화된다.
+본 연구는 [[concepts/multi-agent-system.md|multi agent system]]의 협력적 계획 측면과 직접 관련된다. 기존 Wiki의 다중 에이전트 시스템이 주로 LLM 기반 소프트웨어 에이전트에 초점을 맞춘 반면, 본 논문은 물리적 환경에서의 고전적 계획 문제로 확장한다. 또한 [[concepts/convex-optimization.md|convex optimization]]의 경로 최적화 관점 및 동적 교통 할당([[concepts/dynamic-traffic-assignment.md|dynamic traffic assignment]])과 그래프 기반 최적화라는 방법론적 공통점을 가진다. 강화학습([[concepts/reinforcement-learning.md|reinforcement learning]]) 기반 로봇 이동 연구(robust quadruped locomotion 등)와도 경로 계획이라는 상위 목표를 공유하나, 본 논문은 이론적 복잡도 분석에 집중한다는 점에서 차별화된다.
 
 ## 🔗 관련 논문
 

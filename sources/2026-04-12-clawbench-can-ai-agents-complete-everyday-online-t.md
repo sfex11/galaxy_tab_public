@@ -21,7 +21,7 @@ ClawBench는 일상적인 온라인 작업 수행 능력을 평가하기 위한 
 - **다양한 플랫폼 커버리지**: 144개 플랫폼 × 15개 카테고리로 에이전트의 범용성을 측정
 
 ### 기존 연구와의 관계
-ClawBench는 [[web-agent-evaluation]] 분야의 핵심 벤치마크로, 기존의 ClawBench 초기 버전(2026-04-11)을 확장한 것으로 보인다. [[computer-use-agent]] 개념과 직접 연관되며, Android Coach의 온라인 에이전트 학습 효율화 연구([[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md]])와 상호보완적이다. TraceSafe의 LLM 가드레일 평가([[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]])는 이러한 실제 환경 에이전트의 안전성 측면을 다루며, Comparing Human Oversight Strategies([[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md]])는 에이전트 감독 전략을 제시한다. [[llm-agent]] 엔티티의 실용적 평가 사례로서, [[closed-loop-evaluation]] 및 [[tool-use]] 개념과도 밀접하게 연결된다.
+ClawBench는 [[concepts/web-agent-evaluation.md|web agent evaluation]] 분야의 핵심 벤치마크로, 기존의 ClawBench 초기 버전(2026-04-11)을 확장한 것으로 보인다. [[concepts/computer-use-agent.md|computer use agent]] 개념과 직접 연관되며, Android Coach의 온라인 에이전트 학습 효율화 연구([[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md]])와 상호보완적이다. TraceSafe의 LLM 가드레일 평가([[sources/2026-04-10-tracesafe-a-systematic-assessment-of-llm-guardrail.md]])는 이러한 실제 환경 에이전트의 안전성 측면을 다루며, Comparing Human Oversight Strategies([[sources/2026-04-08-comparing-human-oversight-strategies-for-computer-.md]])는 에이전트 감독 전략을 제시한다. [[entities/llm-agent.md|llm agent]] 엔티티의 실용적 평가 사례로서, [[concepts/closed-loop-evaluation.md|closed loop evaluation]] 및 [[concepts/tool-use.md|tool use]] 개념과도 밀접하게 연결된다.
 
 ## 🔗 관련 논문
 

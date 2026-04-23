@@ -25,9 +25,9 @@
 
 ### 기존 연구와의 연결
 
-이 논문은 [[adaptive-forgetting]], [[memory-management]] 개념과 직접적으로 연결된다. 특히 Novel Memory Forgetting Techniques 논문이 다룬 에이전트 메모리 관리 문제의 의료 도메인 적용으로 볼 수 있다. [[cognitive-architecture]] 관점에서는 Triadic Cognitive Architecture 논문과 유사하게 인지과학적 구조를 AI에 적용하지만, 진단이라는 구체적 태스크에 특화했다.
+이 논문은 [[concepts/adaptive-forgetting.md|adaptive forgetting]], [[concepts/memory-management.md|memory management]] 개념과 직접적으로 연결된다. 특히 Novel Memory Forgetting Techniques 논문이 다룬 에이전트 메모리 관리 문제의 의료 도메인 적용으로 볼 수 있다. [[concepts/cognitive-architecture.md|cognitive architecture]] 관점에서는 Triadic Cognitive Architecture 논문과 유사하게 인지과학적 구조를 AI에 적용하지만, 진단이라는 구체적 태스크에 특화했다.
 
-[[reinforcement-learning]]을 메모리 최적화에 활용하는 접근은 Android Coach의 온라인 에이전트 훈련, Batched Contextual Reinforcement의 효율적 RL 프레임워크와 방법론적 유사성이 있다. [[medical-ai]] 측면에서는 MARCUS의 의료 VLM 접근과 상호보완적이다.
+[[concepts/reinforcement-learning.md|reinforcement learning]]을 메모리 최적화에 활용하는 접근은 Android Coach의 온라인 에이전트 훈련, Batched Contextual Reinforcement의 효율적 RL 프레임워크와 방법론적 유사성이 있다. [[concepts/medical-ai.md|medical ai]] 측면에서는 MARCUS의 의료 VLM 접근과 상호보완적이다.
 
 ## 🔗 관련 논문
 

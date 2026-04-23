@@ -19,13 +19,13 @@ LLM의 자연어 이해 능력이 곧 실행 가능한 시각적 워크플로우
 ## 기존 Wiki와의 관계
 
 ### LLM Agent 능력 스펙트럼의 확장
-기존 [[llm-agent]] 연구가 주로 '주어진 워크플로우를 실행'하는 에이전트에 집중했다면, Chat2Workflow는 **'워크플로우를 생성'**하는 에이전트 역할을 새로 정의한다. 이는 [[aggregate-pipeline-serving]]이 다루는 에이전틱 파이프라인을 LLM이 직접 설계할 수 있는지라는 근본적 질문으로 이어진다.
+기존 [[entities/llm-agent.md|llm agent]] 연구가 주로 '주어진 워크플로우를 실행'하는 에이전트에 집중했다면, Chat2Workflow는 **'워크플로우를 생성'**하는 에이전트 역할을 새로 정의한다. 이는 [[concepts/aggregate-pipeline-serving.md|aggregate pipeline serving]]이 다루는 에이전틱 파이프라인을 LLM이 직접 설계할 수 있는지라는 근본적 질문으로 이어진다.
 
 ### 벤치마크 패러다임의 이동
-기존 [[llm-benchmark]]가 정답 일치나 LLM-as-Judge에 의존해왔다면, Chat2Workflow는 **실행 가능성(executability)**을 평가의 핵심 축으로 삼는다. 이는 [[closed-loop-evaluation]]이 자율주행에서 도입한 실행 기반 평가 패러다임을 워크플로우 도메인으로 확장하는 것과 같은 맥락이다.
+기존 [[concepts/llm-benchmark.md|llm benchmark]]가 정답 일치나 LLM-as-Judge에 의존해왔다면, Chat2Workflow는 **실행 가능성(executability)**을 평가의 핵심 축으로 삼는다. 이는 [[concepts/closed-loop-evaluation.md|closed loop evaluation]]이 자율주행에서 도입한 실행 기반 평가 패러다임을 워크플로우 도메인으로 확장하는 것과 같은 맥락이다.
 
 ### 컴퓨터 사용 에이전트와의 연결
-[[computer-use-agent]]가 GUI를 통해 직접 행동하는 방식과 달리, Chat2Workflow는 시각적 워크플로우라는 **중간 표현(intermediate representation)**을 생성한다. 이는 [[thought-action-separation]]의 변형으로 해석할 수 있다—생성된 워크플로우가 '사고의 외재화'이자 '검증 가능한 실행 계획'이 되기 때문이다.
+[[concepts/computer-use-agent.md|computer use agent]]가 GUI를 통해 직접 행동하는 방식과 달리, Chat2Workflow는 시각적 워크플로우라는 **중간 표현(intermediate representation)**을 생성한다. 이는 [[concepts/thought-action-separation.md|thought action separation]]의 변형으로 해석할 수 있다—생성된 워크플로우가 '사고의 외재화'이자 '검증 가능한 실행 계획'이 되기 때문이다.
 
 ## 다른 논문과의 연결점
 - **ClawBench** (2026-04-13): 에이전트가 온라인 작업을 수행하는 능력을 평가한 반면, Chat2Workflow는 작업 자체를 워크플로우로 설계하는 능력을 평가하여 보완적 관계

@@ -17,10 +17,10 @@
 
 ### 기존 Wiki와의 관계
 
-- **[[ai-artifact-design]]**: 이 논문은 기존 ai-artifact-design 개념의 핵심 소스로, LLM 네이티브 아티팩트의 구체적 설계 원칙을 제시한다.
-- **[[multimodal-llm]]**: 멀티모달 LLM이 figure를 이미지로 재해석하는 현재 한계를 지적하며, 텍스트-구조 기반 대안을 제안한다.
-- **[[tool-use]]**: LLM의 도구 사용 능력을 figure 생성·조작에 확장 적용하는 프레임워크를 논의한다.
-- **[[shared-state-architecture]]** / **[[context-bus]]**: figure를 공유 상태 객체로 다루는 접근은 PSI 논문의 shared-state 아키텍처와 개념적으로 연결된다.
+- **[[concepts/ai-artifact-design.md|ai artifact design]]**: 이 논문은 기존 ai-artifact-design 개념의 핵심 소스로, LLM 네이티브 아티팩트의 구체적 설계 원칙을 제시한다.
+- **[[concepts/multimodal-llm.md|multimodal llm]]**: 멀티모달 LLM이 figure를 이미지로 재해석하는 현재 한계를 지적하며, 텍스트-구조 기반 대안을 제안한다.
+- **[[concepts/tool-use.md|tool use]]**: LLM의 도구 사용 능력을 figure 생성·조작에 확장 적용하는 프레임워크를 논의한다.
+- **[[concepts/shared-state-architecture.md|shared state architecture]]** / **[[concepts/context-bus.md|context bus]]**: figure를 공유 상태 객체로 다루는 접근은 PSI 논문의 shared-state 아키텍처와 개념적으로 연결된다.
 
 ### 핵심 기여
 

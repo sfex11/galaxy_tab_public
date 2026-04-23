@@ -45,3 +45,9 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/goal-conditioned-policy.md|goal conditioned policy]]
+
+---
+**관련**: [[concepts/layered-capability-decomposition.md|layered capability decomposition]]

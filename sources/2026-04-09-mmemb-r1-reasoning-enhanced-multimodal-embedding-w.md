@@ -17,7 +17,7 @@ MLLM(Multimodal Large Language Model)을 멀티모달 임베딩 태스크에 활
 
 이를 해결하기 위해 **Pair-Aware Selection**과 **Adaptive Control** 메커니즘을 제안한다. Pair-Aware Selection은 추론이 실제로 임베딩 품질을 개선하는 쌍에만 선택적으로 CoT를 적용하고, Adaptive Control은 추론 깊이를 동적으로 조절하여 불필요한 추론 오버헤드를 줄인다.
 
-이 연구는 기존 [[text-embedding]] 연구들이 정적 표현 학습에 집중했던 것과 달리, 추론 과정 자체를 임베딩 품질 향상에 활용하는 새로운 패러다임을 제시한다. [[reasoning-chain]] 개념과도 밀접하게 연관되며, 추론의 선택적 적용이라는 점에서 [[metacognition]] 및 [[token-efficiency]]와도 접점이 있다. 특히 R1 스타일 추론 강화 접근법은 [[multimodal-learning]]과 [[contrastive-learning]]의 교차점에서 새로운 연구 방향을 열고 있다. MMEmb-R1 논문에서 제안한 '추론이 해로운 경우를 판별'하는 메커니즘은 [[test-time-scaling]]에서의 컴퓨팅 자원 배분 문제와도 구조적으로 유사하다.
+이 연구는 기존 [[concepts/text-embedding.md|text embedding]] 연구들이 정적 표현 학습에 집중했던 것과 달리, 추론 과정 자체를 임베딩 품질 향상에 활용하는 새로운 패러다임을 제시한다. [[concepts/reasoning-chain.md|reasoning chain]] 개념과도 밀접하게 연관되며, 추론의 선택적 적용이라는 점에서 [[concepts/metacognition.md|metacognition]] 및 [[concepts/token-efficiency.md|token efficiency]]와도 접점이 있다. 특히 R1 스타일 추론 강화 접근법은 [[concepts/multimodal-learning.md|multimodal learning]]과 [[concepts/contrastive-learning.md|contrastive learning]]의 교차점에서 새로운 연구 방향을 열고 있다. MMEmb-R1 논문에서 제안한 '추론이 해로운 경우를 판별'하는 메커니즘은 [[concepts/test-time-scaling.md|test time scaling]]에서의 컴퓨팅 자원 배분 문제와도 구조적으로 유사하다.
 
 ## 🔗 관련 논문
 

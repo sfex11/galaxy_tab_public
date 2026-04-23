@@ -19,9 +19,9 @@ LLM 기반 listwise 랭킹에서 후보자의 리스트 내 위치가 체계적 
 
 ### 기존 Wiki와의 연결
 
-- **LLM 편향 연구**: [[llm-alignment]] 및 [[choice-architecture]]와 밀접하게 관련된다. 특히 Mecha-nudges for Machines(2026-03-26)에서 다룬 AI 의사결정의 선택 설계 문제와 유사한 맥락이다. 리스트 내 위치가 일종의 nudge로 작용하여 LLM의 판단을 왜곡한다는 관점에서 연결된다.
-- **LLM 벤치마크**: [[llm-benchmark]] 관점에서, pointwise vs listwise 평가 패러다임의 비교는 LLM 평가 방법론의 신뢰성 문제와 연결된다. Evaluating the Reliability and Fidelity of Automated Judgmen(2026-03-25)에서 다룬 자동 평가의 신뢰성 문제와도 맥을 같이한다.
-- **추론 효율성**: 토큰 소비 최적화 측면에서 [[speculative-decoding]], [[token-pruning]] 등 효율적 추론 관련 연구와 간접적으로 연결된다.
+- **LLM 편향 연구**: [[concepts/llm-alignment.md|llm alignment]] 및 [[concepts/choice-architecture.md|choice architecture]]와 밀접하게 관련된다. 특히 Mecha-nudges for Machines(2026-03-26)에서 다룬 AI 의사결정의 선택 설계 문제와 유사한 맥락이다. 리스트 내 위치가 일종의 nudge로 작용하여 LLM의 판단을 왜곡한다는 관점에서 연결된다.
+- **LLM 벤치마크**: [[concepts/llm-benchmark.md|llm benchmark]] 관점에서, pointwise vs listwise 평가 패러다임의 비교는 LLM 평가 방법론의 신뢰성 문제와 연결된다. Evaluating the Reliability and Fidelity of Automated Judgmen(2026-03-25)에서 다룬 자동 평가의 신뢰성 문제와도 맥을 같이한다.
+- **추론 효율성**: 토큰 소비 최적화 측면에서 [[concepts/speculative-decoding.md|speculative decoding]], [[concepts/token-pruning.md|token pruning]] 등 효율적 추론 관련 연구와 간접적으로 연결된다.
 
 ## 🔗 관련 논문
 

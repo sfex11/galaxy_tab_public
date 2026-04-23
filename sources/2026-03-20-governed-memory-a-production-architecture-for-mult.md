@@ -26,9 +26,9 @@
 
 ### 기존 Wiki와의 연결
 
-- **[[multi-agent-system]]**: 본 논문은 멀티 에이전트 시스템의 실제 배포 시 발생하는 메모리 관리 문제를 체계적으로 분석하며, Paper Circle이나 Social Dynamics 연구에서 다룬 에이전트 간 상호작용의 실용적 확장이다.
-- **[[llm-agent]]**: LLM 기반 에이전트의 자율적 워크플로우 실행 시 메모리 공유와 거버넌스가 핵심 병목임을 보여주며, TraceSafe의 가드레일 연구와 상호보완적이다.
-- **[[ai-safety]]**: 거버넌스 파편화와 품질 저하 문제는 AI 안전성의 운영적 측면과 직결된다.
+- **[[concepts/multi-agent-system.md|multi agent system]]**: 본 논문은 멀티 에이전트 시스템의 실제 배포 시 발생하는 메모리 관리 문제를 체계적으로 분석하며, Paper Circle이나 Social Dynamics 연구에서 다룬 에이전트 간 상호작용의 실용적 확장이다.
+- **[[entities/llm-agent.md|llm agent]]**: LLM 기반 에이전트의 자율적 워크플로우 실행 시 메모리 공유와 거버넌스가 핵심 병목임을 보여주며, TraceSafe의 가드레일 연구와 상호보완적이다.
+- **[[concepts/ai-safety.md|ai safety]]**: 거버넌스 파편화와 품질 저하 문제는 AI 안전성의 운영적 측면과 직결된다.
 
 ### 시사점
 
@@ -52,3 +52,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/workflow-engineering-automation.md|workflow engineering automation]]

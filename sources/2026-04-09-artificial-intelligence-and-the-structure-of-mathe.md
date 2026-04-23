@@ -25,10 +25,10 @@ AI는 수학적 논리에 보완적인 데이터 기반 경로를 통해 형식 
 
 ### 기존 Wiki와의 연결
 
-- **[[symbolic-computation]]**: 본 논문의 형식 증명 분석은 기호 연산과 직접 연결된다. LLM이 기호적 수학 문제를 다루는 연구(Bethe Ansatz with LLM)와 상호 보완적이다.
-- **[[autoresearch]]**: AI의 자율적 수학 발견 비전은 Bilevel Autoresearch의 메타 연구 자동화 개념과 맞닿아 있다.
-- **[[reasoning-integrity]]**, **[[reasoning-chain]]**: 형식 증명의 구조적 건전성 분석은 LLM 추론 체인의 신뢰성 연구와 연결된다.
-- **[[set-theory]]**, **[[forcing]]**: 수학 기초론(집합론, 강제법)에 대한 기존 논문들과 수학의 전역 구조라는 주제에서 자연스럽게 연결된다.
+- **[[concepts/symbolic-computation.md|symbolic computation]]**: 본 논문의 형식 증명 분석은 기호 연산과 직접 연결된다. LLM이 기호적 수학 문제를 다루는 연구(Bethe Ansatz with LLM)와 상호 보완적이다.
+- **[[concepts/autoresearch.md|autoresearch]]**: AI의 자율적 수학 발견 비전은 Bilevel Autoresearch의 메타 연구 자동화 개념과 맞닿아 있다.
+- **[[concepts/reasoning-integrity.md|reasoning integrity]]**, **[[concepts/reasoning-chain.md|reasoning chain]]**: 형식 증명의 구조적 건전성 분석은 LLM 추론 체인의 신뢰성 연구와 연결된다.
+- **[[concepts/set-theory.md|set theory]]**, **[[concepts/forcing.md|forcing]]**: 수학 기초론(집합론, 강제법)에 대한 기존 논문들과 수학의 전역 구조라는 주제에서 자연스럽게 연결된다.
 
 ## 🔗 관련 논문
 

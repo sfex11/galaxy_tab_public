@@ -43,3 +43,12 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/memory-management.md|memory management]]
+
+---
+**관련**: [[concepts/stein-variational-inference.md|stein variational inference]]
+
+---
+**관련**: [[concepts/memory-fragmentation-failure.md|memory fragmentation failure]]

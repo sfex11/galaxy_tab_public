@@ -31,3 +31,21 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/strategic-exploitation.md|strategic exploitation]]
+
+---
+**관련**: [[concepts/roadwork-detection.md|roadwork detection]]
+
+---
+**관련**: [[concepts/error-attribution-problem.md|error attribution problem]]
+
+---
+**관련**: [[concepts/traveling-salesman-problem.md|traveling salesman problem]]
+
+---
+**관련**: [[concepts/principal-identification-problem.md|principal identification problem]]
+
+---
+**관련**: [[concepts/binary-analysis.md|binary analysis]]

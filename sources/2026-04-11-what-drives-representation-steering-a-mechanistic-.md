@@ -23,7 +23,7 @@
 - 서로 다른 스티어링 벡터가 동일한 거부 결과를 만들더라도, 영향을 미치는 내부 경로가 다를 수 있음을 시사한다.
 
 ### 기존 Wiki와의 관계
-본 연구는 [[reasoning-integrity]]와 밀접하게 관련된다. LLM의 내부 추론 과정을 해석하고 제어하는 메커니즘을 다루기 때문이다. 또한 [[ai-safety]] 개념과 직접 연결되며, 스티어링 벡터를 통한 모델 정렬은 안전한 AI 행동을 보장하기 위한 핵심 기법이다. [[adversarial-prompting]]과도 관련이 있는데, 거부 메커니즘의 이해는 적대적 프롬프트에 대한 방어력 향상에 기여할 수 있다. [[post-training]] 개념과도 연결되며, 스티어링 벡터는 사후 훈련 단계에서의 경량 정렬 방법으로 활용된다.
+본 연구는 [[concepts/reasoning-integrity.md|reasoning integrity]]와 밀접하게 관련된다. LLM의 내부 추론 과정을 해석하고 제어하는 메커니즘을 다루기 때문이다. 또한 [[concepts/ai-safety.md|ai safety]] 개념과 직접 연결되며, 스티어링 벡터를 통한 모델 정렬은 안전한 AI 행동을 보장하기 위한 핵심 기법이다. [[concepts/adversarial-prompting.md|adversarial prompting]]과도 관련이 있는데, 거부 메커니즘의 이해는 적대적 프롬프트에 대한 방어력 향상에 기여할 수 있다. [[concepts/post-training.md|post training]] 개념과도 연결되며, 스티어링 벡터는 사후 훈련 단계에서의 경량 정렬 방법으로 활용된다.
 
 ## 🔗 관련 논문
 

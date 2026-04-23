@@ -17,11 +17,11 @@
 
 ### 기존 Wiki와의 관계
 
-이 논문은 기존에 등록된 [[shared-state-architecture]] 개념과 직접적으로 연결되며, 해당 개념의 2026-04-11 버전에서 이미 이 논문이 참조되고 있다. [[context-bus]] 개념 역시 PSI의 핵심 메커니즘인 personal-context bus와 정확히 일치한다. [[personal-ai-agent]] 개념은 PSI가 타겟하는 응용 도메인이다.
+이 논문은 기존에 등록된 [[concepts/shared-state-architecture.md|shared state architecture]] 개념과 직접적으로 연결되며, 해당 개념의 2026-04-11 버전에서 이미 이 논문이 참조되고 있다. [[concepts/context-bus.md|context bus]] 개념 역시 PSI의 핵심 메커니즘인 personal-context bus와 정확히 일치한다. [[concepts/personal-ai-agent.md|personal ai agent]] 개념은 PSI가 타겟하는 응용 도메인이다.
 
 ### 관련 연구 연결
 
-- **SAGAI-MID**(2026-03-31): 동적 런타임 미들웨어로서 AI 모듈 간 연결을 다루며, PSI의 공유 상태 접근과 상호보완적이다. 둘 다 [[schema-interoperability]]와 [[llm-middleware]] 문제를 해결하려 한다.
+- **SAGAI-MID**(2026-03-31): 동적 런타임 미들웨어로서 AI 모듈 간 연결을 다루며, PSI의 공유 상태 접근과 상호보완적이다. 둘 다 [[concepts/schema-interoperability.md|schema interoperability]]와 [[concepts/llm-middleware.md|llm middleware]] 문제를 해결하려 한다.
 - **MemBoost**(2026-03-30): 메모리 기반 LLM 추론 프레임워크로, PSI의 상태 공유 메커니즘과 비용 최적화 관점에서 비교 가능하다.
 - **HippoCamp**(2026-04-03): 개인 컴퓨팅 환경의 컨텍스트 에이전트 벤치마크로, PSI가 해결하려는 개인 AI 에이전트의 일관성 문제와 평가 측면에서 연결된다.
 
@@ -51,3 +51,5 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent]]: 동일 논문(PSI)의 다른 날짜 요약으로, AI 생성 모듈 간 공유 상태 레이어 아키텍처를 다룬다.
+
+- [[concepts/shared-failure-subspace.md|shared failure subspace]]

@@ -16,11 +16,11 @@
 에이전틱 멀티모달 모델이 외부 도구 호출과 내부 지식 활용 사이에서 적절히 판단하지 못하는 **메타인지 결핍(meta-cognitive deficit)** 문제를 다룬다. 현재 에이전트들은 시각적 맥락만으로 해결 가능한 쿼리에도 반사적으로 도구를 실행하는 **맹목적 도구 호출(blind tool invocation)** 패턴을 보이며, 이는 심각한 지연과 비효율을 초래한다.
 
 ### 기존 Wiki와의 관계
-- **[[metacognition]]**: 본 논문의 핵심 프레임워크. LLM이 자신의 지식 경계를 인식하고 도구 사용 여부를 판단하는 능력에 초점.
-- **[[agentic-vlm]]**: 에이전틱 VLM의 도구 사용 최적화라는 직접적 확장. MARCUS 등 기존 agentic VLM 연구와 달리 '언제 도구를 쓰지 않을지'에 집중.
-- **[[tool-use]]**: TraceSafe, AgentFactory 등 도구 사용 연구의 메타인지적 보완. 도구 호출의 양이 아닌 질적 판단을 다룸.
-- **[[reasoning-shift]]**: 맥락에 따라 추론 전략을 전환하는 문제와 구조적으로 유사. 도구 호출 vs 내부 추론 선택이 일종의 reasoning shift.
-- **[[adaptive-inference]]**: CADENCE의 컨텍스트 적응형 추론과 상보적. 본 논문은 도구 호출 차원의 적응적 추론을 제안.
+- **[[concepts/metacognition.md|metacognition]]**: 본 논문의 핵심 프레임워크. LLM이 자신의 지식 경계를 인식하고 도구 사용 여부를 판단하는 능력에 초점.
+- **[[concepts/agentic-vlm.md|agentic vlm]]**: 에이전틱 VLM의 도구 사용 최적화라는 직접적 확장. MARCUS 등 기존 agentic VLM 연구와 달리 '언제 도구를 쓰지 않을지'에 집중.
+- **[[concepts/tool-use.md|tool use]]**: TraceSafe, AgentFactory 등 도구 사용 연구의 메타인지적 보완. 도구 호출의 양이 아닌 질적 판단을 다룸.
+- **[[concepts/reasoning-shift.md|reasoning shift]]**: 맥락에 따라 추론 전략을 전환하는 문제와 구조적으로 유사. 도구 호출 vs 내부 추론 선택이 일종의 reasoning shift.
+- **[[concepts/adaptive-inference.md|adaptive inference]]**: CADENCE의 컨텍스트 적응형 추론과 상보적. 본 논문은 도구 호출 차원의 적응적 추론을 제안.
 
 ### 핵심 기여
 도구 사용의 메타인지적 판단 프레임워크를 제시하여, 에이전트가 불필요한 외부 호출을 줄이고 내부 지식으로 충분한 경우를 자율적으로 식별하도록 학습시킴. 이는 에이전트 효율성과 응답 지연 개선에 직접 기여한다.

@@ -43,3 +43,9 @@ MLE 에이전트 훈련의 핵심 병목인 ML 파이프라인 실행 비용을 
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/requirements-engineering.md|requirements engineering]]
+
+---
+**관련**: [[concepts/origami-engineering.md|origami engineering]]

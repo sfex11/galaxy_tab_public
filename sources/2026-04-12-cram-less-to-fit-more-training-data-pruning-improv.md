@@ -21,14 +21,14 @@
 - **용량-정보 트레이드오프**: 모델이 "더 적게 cramming"할수록 실제로 "더 많이 fit"할 수 있다는 역설적 결과 제시
 
 ### 기존 연구와의 관계
-- [[training-data-pruning]] 개념의 핵심 이론적 근거를 제공하며, 기존 데이터 pruning이 단순 효율성을 넘어 기억 품질 향상에 기여함을 보임
-- [[fact-memorization]] 개념을 정보이론적으로 정식화한 최초 시도로, hallucination 감소와 직접 연결
-- [[knowledge-injection]]과 관련하여, 외부 지식 주입 전에 학습 데이터 품질 최적화가 선행되어야 함을 시사
-- [[scaling-laws]]와 연결: 모델 크기 증가만이 아닌 데이터 분포 최적화를 통한 성능 향상 경로 제시
-- [[curriculum-learning]]의 데이터 선별 전략과 상호보완적 관계
+- [[concepts/training-data-pruning.md|training data pruning]] 개념의 핵심 이론적 근거를 제공하며, 기존 데이터 pruning이 단순 효율성을 넘어 기억 품질 향상에 기여함을 보임
+- [[concepts/fact-memorization.md|fact memorization]] 개념을 정보이론적으로 정식화한 최초 시도로, hallucination 감소와 직접 연결
+- [[concepts/knowledge-injection.md|knowledge injection]]과 관련하여, 외부 지식 주입 전에 학습 데이터 품질 최적화가 선행되어야 함을 시사
+- [[concepts/scaling-laws.md|scaling laws]]와 연결: 모델 크기 증가만이 아닌 데이터 분포 최적화를 통한 성능 향상 경로 제시
+- [[concepts/curriculum-learning.md|curriculum learning]]의 데이터 선별 전략과 상호보완적 관계
 
 ### 시사점
-정보이론적 capacity limit 개념은 LLM의 사실 기억 한계를 이해하는 새로운 프레임워크를 제공하며, 합성 데이터 생성([[synthetic-data-generation]]) 시에도 정보 밀도 최적화가 중요함을 암시한다.
+정보이론적 capacity limit 개념은 LLM의 사실 기억 한계를 이해하는 새로운 프레임워크를 제공하며, 합성 데이터 생성([[concepts/synthetic-data-generation.md|synthetic data generation]]) 시에도 정보 밀도 최적화가 중요함을 암시한다.
 
 ## 🔗 관련 논문
 

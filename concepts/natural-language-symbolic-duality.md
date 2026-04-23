@@ -10,3 +10,5 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-23-discovering-a-shared-logical-subspace-steering-llm.md|Discovering a Shared Logical Subspace: Steering LLM Logical ]]
+
+### Diagnosing CFG Interpretation in LLMs (2026-04-24)

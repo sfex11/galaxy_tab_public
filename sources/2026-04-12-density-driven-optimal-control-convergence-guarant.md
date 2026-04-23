@@ -17,7 +17,7 @@
 
 ### 기존 연구와의 관계
 
-- **multi-robot-coordination / multi-agent-path-planning**: 본 논문은 다중 에이전트의 분산 제어 문제를 직접적으로 다루며, ADMM 기반 분산 MPC 연구([[2026-03-23-admm-based-distributed-mpc-with-control-barrier-fu.md]])와 밀접하게 관련된다. 두 연구 모두 분산 최적화를 통한 다중 로봇 협조를 목표로 하나, 본 논문은 확률적 LTI 시스템에서의 수렴 보장에 초점을 맞춘다.
+- **multi-robot-coordination / multi-agent-path-planning**: 본 논문은 다중 에이전트의 분산 제어 문제를 직접적으로 다루며, ADMM 기반 분산 MPC 연구([[sources/2026-03-23-admm-based-distributed-mpc-with-control-barrier-fu.md|2026 03 23 admm based distributed mpc with control barrier fu]])와 밀접하게 관련된다. 두 연구 모두 분산 최적화를 통한 다중 로봇 협조를 목표로 하나, 본 논문은 확률적 LTI 시스템에서의 수렴 보장에 초점을 맞춘다.
 - **density-driven-optimal-control**: 밀도 함수 매칭을 통한 최적 제어라는 새로운 접근법으로, 기존 model-predictive-control이나 control-barrier-function과 상호보완적 관계에 있다.
 - **distributed-optimization**: ADMM 기반 분산 MPC 연구와 최적화 방법론을 공유하며, Lagrangian 관점에서의 확장을 제공한다.
 
@@ -43,3 +43,6 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/instrumental-convergence.md|instrumental convergence]]

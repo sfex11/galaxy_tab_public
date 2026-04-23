@@ -19,7 +19,7 @@
 
 본 논문은 코드 생성에서 기존 reasoning LLM들이 사용하는 **upfront thinking**(답변 전 사전 추론) 방식의 한계를 지적하고, 코드 생성 과정 중 어디서든 추론을 삽입할 수 있는 **Think Anywhere** 패러다임을 제안한다. 기존 접근법은 코드 작성 전에 모든 추론을 완료해야 하지만, 실제 코딩에서는 구현 도중에야 문제의 복잡성이 드러나는 경우가 많다. 또한 코드의 난이도가 부분마다 다르기 때문에, 추론 노력을 적응적으로 분배할 필요가 있다.
 
-Think Anywhere는 코드 생성 중간에 reasoning token을 삽입하여, 어려운 로직이 등장할 때 집중적으로 사고하고 단순한 부분은 빠르게 넘어가는 방식이다. 이는 [[process-control-architecture]]의 아이디어와 유사하게, 생성 과정 자체를 제어 가능한 구조로 만든다는 점에서 주목할 만하다.
+Think Anywhere는 코드 생성 중간에 reasoning token을 삽입하여, 어려운 로직이 등장할 때 집중적으로 사고하고 단순한 부분은 빠르게 넘어가는 방식이다. 이는 [[concepts/process-control-architecture.md|process control architecture]]의 아이디어와 유사하게, 생성 과정 자체를 제어 가능한 구조로 만든다는 점에서 주목할 만하다.
 
 ### 기존 연구와의 연결
 

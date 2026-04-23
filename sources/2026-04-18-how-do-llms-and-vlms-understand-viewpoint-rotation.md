@@ -22,7 +22,7 @@ Over the past year, spatial intelligence has drawn increasing attention. Many pr
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

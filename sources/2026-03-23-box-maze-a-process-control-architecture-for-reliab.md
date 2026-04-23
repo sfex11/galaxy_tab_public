@@ -40,3 +40,24 @@ RLHF 기반 접근의 한계를 지적한다는 점에서 **reinforcement-learni
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/markov-decision-process.md|markov decision process]]
+
+---
+**관련**: [[entities/gaussian-process-dynamics.md|gaussian process dynamics]]
+
+---
+**관련**: [[concepts/dual-memory-architecture.md|dual memory architecture]]
+
+---
+**관련**: [[concepts/ontological-architecture-redesign.md|ontological architecture redesign]]
+
+---
+**관련**: [[concepts/ai-architecture-documentation.md|ai architecture documentation]]
+
+---
+**관련**: [[concepts/markov-decision-process.md|markov decision process]]
+
+---
+**관련**: [[concepts/gaussian-process-dynamics.md|gaussian process dynamics]]

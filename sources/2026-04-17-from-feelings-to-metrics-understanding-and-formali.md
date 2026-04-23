@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-04-16-one-token-away-from-collapse-the-fragility-of-inst]]: 둘 다 instruction-tuned LLM의 실제 사용 품질을 벤치마크 너머에서 평가하며, 전자는 취약성 분석을, 후자는 사용자 체감 평가(vibe-testing)를 형식화한다.
 - → [[sources/2026-04-16-policyllm-towards-excellent-comprehension-of-publi]]: 둘 다 특정 도메인(공공정책 vs 일반 사용)에서 LLM 능력을 체계적으로 평가하기 위한 벤치마크/방법론을 제안한다.
+
+---
+**관련**: [[concepts/experience-reuse.md|experience reuse]]

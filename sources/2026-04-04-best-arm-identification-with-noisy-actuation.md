@@ -21,7 +21,7 @@
 - 정보이론과 순차적 의사결정(sequential decision-making)의 교차점에서 새로운 이론적 결과 제시
 
 ### Wiki 내 연결점
-본 연구는 [[distributed-optimization]]과 개념적으로 연결된다. 분산 환경에서 중앙-에이전트 간 통신 제약 하에 최적화를 수행한다는 점에서 [[multi-agent-system]]의 통신 프로토콜 설계와도 관련이 있다. 또한 불확실성 하의 탐색-활용 균형이라는 면에서 [[reinforcement-learning]]의 탐색(exploration) 문제와 이론적 기반을 공유하며, [[decoupling-exploration-and-policy-optimization]] 논문의 탐색 전략 분리 아이디어와도 맥을 같이 한다. 정보이론적 하한(lower bound)을 활용하는 접근은 [[scaling-laws]] 연구에서 모델 성능의 이론적 한계를 규명하는 방법론과 유사한 분석 철학을 보인다.
+본 연구는 [[concepts/distributed-optimization.md|distributed optimization]]과 개념적으로 연결된다. 분산 환경에서 중앙-에이전트 간 통신 제약 하에 최적화를 수행한다는 점에서 [[concepts/multi-agent-system.md|multi agent system]]의 통신 프로토콜 설계와도 관련이 있다. 또한 불확실성 하의 탐색-활용 균형이라는 면에서 [[concepts/reinforcement-learning.md|reinforcement learning]]의 탐색(exploration) 문제와 이론적 기반을 공유하며, [[decoupling-exploration-and-policy-optimization]] 논문의 탐색 전략 분리 아이디어와도 맥을 같이 한다. 정보이론적 하한(lower bound)을 활용하는 접근은 [[concepts/scaling-laws.md|scaling laws]] 연구에서 모델 성능의 이론적 한계를 규명하는 방법론과 유사한 분석 철학을 보인다.
 
 ## 🔗 관련 논문
 

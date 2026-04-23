@@ -21,7 +21,7 @@ CAMO(Conditional Multi-Objective solver)는 다목적 다중 외판원 문제(MO
 
 ### 기존 Wiki와의 연결
 
-이 연구는 **convex-optimization** 개념과 밀접한 관련이 있다. 다목적 최적화에서 파레토 프론티어 탐색은 볼록 최적화의 핵심 주제이며, 동적 교통 배정 문제([[convex-optimization]])와 유사한 조합 최적화 구조를 공유한다. 또한 **multi-agent-system** 엔티티와 직접적으로 연결되는데, 다중 로봇 협업 경로 계획이라는 점에서 에이전트 간 작업 분배와 조율 메커니즘을 다룬다. **reinforcement-learning** 개념과도 관련이 있으며, 신경 조합 최적화 솔버들이 강화학습 기반 훈련을 활용하는 추세와 맥을 같이 한다.
+이 연구는 **convex-optimization** 개념과 밀접한 관련이 있다. 다목적 최적화에서 파레토 프론티어 탐색은 볼록 최적화의 핵심 주제이며, 동적 교통 배정 문제([[concepts/convex-optimization.md|convex optimization]])와 유사한 조합 최적화 구조를 공유한다. 또한 **multi-agent-system** 엔티티와 직접적으로 연결되는데, 다중 로봇 협업 경로 계획이라는 점에서 에이전트 간 작업 분배와 조율 메커니즘을 다룬다. **reinforcement-learning** 개념과도 관련이 있으며, 신경 조합 최적화 솔버들이 강화학습 기반 훈련을 활용하는 추세와 맥을 같이 한다.
 
 ### 의의
 

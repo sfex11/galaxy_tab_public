@@ -17,7 +17,7 @@
 
 PinPoint는 이 문제를 해결하기 위해 **Stein Variational Newton (SVN)** 방법과 **기하학적 잔차(geometric residuals)**를 결합한다. SVN은 Stein Variational Gradient Descent의 2차 확장으로, 다봉 사후 분포를 효율적으로 샘플링하면서 기하학적 제약 조건을 활용해 물리적으로 타당한 자세 추정을 수행한다. 이는 단순한 점 추정 대신 가능한 자세 구성들의 분포를 제공함으로써 불확실성을 명시적으로 모델링한다.
 
-이 연구는 [[differentiable-rendering|미분 가능 렌더링]]과 [[uncertainty-quantification|불확실성 정량화]] 개념과 밀접하게 연결된다. 기하학적 잔차를 통한 최적화는 미분 가능 렌더링에서의 역문제 풀이와 유사한 접근이며, 다봉 분포 추정은 불확실성 정량화의 핵심 과제다. 또한 [[robotics-foundation-model|로보틱스 파운데이션 모델]] 연구와도 관련되는데, 수술 로봇의 자율성을 높이기 위한 인식 모듈로서의 역할을 한다. [[spatial-reasoning|공간 추론]] 관점에서 3D 자세를 2D 관측으로부터 복원하는 과제는 VLM 기반 3D 공간 이해 연구들과 공유하는 근본적 도전이다.
+이 연구는 [[concepts/differentiable-rendering.md|미분 가능 렌더링]]과 [[concepts/uncertainty-quantification.md|불확실성 정량화]] 개념과 밀접하게 연결된다. 기하학적 잔차를 통한 최적화는 미분 가능 렌더링에서의 역문제 풀이와 유사한 접근이며, 다봉 분포 추정은 불확실성 정량화의 핵심 과제다. 또한 [[entities/robotics-foundation-model.md|로보틱스 파운데이션 모델]] 연구와도 관련되는데, 수술 로봇의 자율성을 높이기 위한 인식 모듈로서의 역할을 한다. [[concepts/spatial-reasoning.md|공간 추론]] 관점에서 3D 자세를 2D 관측으로부터 복원하는 과제는 VLM 기반 3D 공간 이해 연구들과 공유하는 근본적 도전이다.
 
 ## 📐 개념
 
@@ -27,3 +27,6 @@ PinPoint는 이 문제를 해결하기 위해 **Stein Variational Newton (SVN)**
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/monocular-depth-estimation.md|monocular depth estimation]]

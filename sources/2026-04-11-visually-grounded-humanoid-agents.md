@@ -17,9 +17,9 @@
 
 ### 기존 Wiki와의 관계
 
-이 연구는 [[embodied-ai]] 분야의 핵심 진전으로, 기존 AgentVLN 등의 embodied navigation 연구가 로봇/에이전트의 내비게이션에 집중했다면, 본 논문은 인간형 아바타의 전신 행동 생성으로 확장한다. [[vision-language-model]] 및 [[visual-grounding]] 개념과 밀접하게 연결되며, 시각 입력을 행동으로 변환하는 grounding 메커니즘을 활용한다. 또한 [[reinforcement-learning]]의 정책 학습 방법론과 [[diffusion-model]] 기반 모션 생성 기술이 결합된 접근으로 볼 수 있다.
+이 연구는 [[concepts/embodied-ai.md|embodied ai]] 분야의 핵심 진전으로, 기존 AgentVLN 등의 embodied navigation 연구가 로봇/에이전트의 내비게이션에 집중했다면, 본 논문은 인간형 아바타의 전신 행동 생성으로 확장한다. [[concepts/vision-language-model.md|vision language model]] 및 [[concepts/visual-grounding.md|visual grounding]] 개념과 밀접하게 연결되며, 시각 입력을 행동으로 변환하는 grounding 메커니즘을 활용한다. 또한 [[concepts/reinforcement-learning.md|reinforcement learning]]의 정책 학습 방법론과 [[concepts/diffusion-model.md|diffusion model]] 기반 모션 생성 기술이 결합된 접근으로 볼 수 있다.
 
-[[3d-scene-understanding]]과도 관련되는데, 에이전트가 새로운 3D 환경을 시각적으로 이해하고 상호작용해야 하기 때문이다. 기존의 [[3d-human-reconstruction]] 연구가 외형 복원에 집중했다면, 본 연구는 행동 생성까지 포괄하는 점에서 차별화된다.
+[[concepts/3d-scene-understanding.md|3d scene understanding]]과도 관련되는데, 에이전트가 새로운 3D 환경을 시각적으로 이해하고 상호작용해야 하기 때문이다. 기존의 [[concepts/3d-human-reconstruction.md|3d human reconstruction]] 연구가 외형 복원에 집중했다면, 본 연구는 행동 생성까지 포괄하는 점에서 차별화된다.
 
 ### 연결 논문
 

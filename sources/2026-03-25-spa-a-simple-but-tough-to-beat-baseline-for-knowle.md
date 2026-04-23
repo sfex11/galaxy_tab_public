@@ -28,7 +28,7 @@ SPA(Scaling Prompt-engineered Augmentation)는 LLM의 지식 주입(knowledge in
 
 ### 기존 Wiki와의 연결
 
-이 연구는 [[prompt-engineering]] 개념과 직접적으로 관련된다. 프롬프트 설계를 통한 데이터 생성이라는 점에서 프롬프트 엔지니어링의 새로운 활용 사례를 보여준다. 또한 [[knowledge-distillation]]과도 연결되는데, LLM이 생성한 합성 데이터를 통해 지식을 전이한다는 점에서 증류의 변형으로 볼 수 있다. [[post-training]] 관점에서는 사전 학습 이후 특정 도메인 지식을 주입하는 후처리 기법으로 분류할 수 있다. Nemotron-Cascade 2의 합성 데이터 활용 전략과도 비교 가능하며, FinTradeBench 등 도메인 특화 벤치마크에서의 지식 부족 문제를 해결하는 데 적용 가능한 방법론이다.
+이 연구는 [[concepts/prompt-engineering.md|prompt engineering]] 개념과 직접적으로 관련된다. 프롬프트 설계를 통한 데이터 생성이라는 점에서 프롬프트 엔지니어링의 새로운 활용 사례를 보여준다. 또한 [[concepts/knowledge-distillation.md|knowledge distillation]]과도 연결되는데, LLM이 생성한 합성 데이터를 통해 지식을 전이한다는 점에서 증류의 변형으로 볼 수 있다. [[concepts/post-training.md|post training]] 관점에서는 사전 학습 이후 특정 도메인 지식을 주입하는 후처리 기법으로 분류할 수 있다. Nemotron-Cascade 2의 합성 데이터 활용 전략과도 비교 가능하며, FinTradeBench 등 도메인 특화 벤치마크에서의 지식 부족 문제를 해결하는 데 적용 가능한 방법론이다.
 
 ## 🔗 관련 논문
 

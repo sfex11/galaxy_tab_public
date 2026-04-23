@@ -25,7 +25,7 @@
 - **llm-alignment**: 스티어링 벡터가 정렬 기법으로서 왜 효과적인지에 대한 해석 가능한 근거를 제공한다.
 
 ### 연결점
-[[2026-04-11-what-drives-representation-steering-a-mechanistic-]] 이전 버전과 동일 논문의 업데이트로 보이며, [[2026-03-27-analysing-the-safety-pitfalls-of-steering-vectors]] 논문이 스티어링 벡터의 안전성 함정을 분석한 것과 상호보완적이다. 본 논문은 '왜 작동하는가'를, 후자는 '어디서 실패하는가'를 다룬다.
+[[sources/2026-04-11-what-drives-representation-steering-a-mechanistic-.md|2026 04 11 what drives representation steering a mechanistic ]] 이전 버전과 동일 논문의 업데이트로 보이며, [[sources/2026-03-27-analysing-the-safety-pitfalls-of-steering-vectors.md|2026 03 27 analysing the safety pitfalls of steering vectors]] 논문이 스티어링 벡터의 안전성 함정을 분석한 것과 상호보완적이다. 본 논문은 '왜 작동하는가'를, 후자는 '어디서 실패하는가'를 다룬다.
 
 ## 🔗 관련 논문
 

@@ -7,7 +7,6 @@
 
 _Wiki 축적 중_
 
-
 ## 관련 논문 (1편)
 
 - [[sources/2026-03-19-efficient-training-free-multi-token-prediction-via.md|2026 03 19 efficient training free multi token prediction via]] (2026-03-19)

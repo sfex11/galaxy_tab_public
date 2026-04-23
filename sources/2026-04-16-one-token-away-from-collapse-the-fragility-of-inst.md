@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-17-from-feelings-to-metrics-understanding-and-formali]]: 둘 다 instruction-tuned LLM의 실제 사용 품질을 벤치마크 너머에서 평가하며, 전자는 취약성 분석을, 후자는 사용자 체감 평가(vibe-testing)를 형식화한다.
+
+---
+**관련**: [[concepts/helpfulness-robustness.md|helpfulness robustness]]
+
+---
+**관련**: [[concepts/truncation-collapse.md|truncation collapse]]

@@ -20,7 +20,7 @@
 기존에는 픽셀별 불확실성을 단순 평균(mean)으로 집계하는 방식이 관행적으로 사용되었으나, 본 연구는 이 접근이 최적이 아님을 보여준다. **공간 인식 집계(spatially-aware aggregation)** 전략을 제안하여, 불확실성의 공간적 분포 패턴을 고려함으로써 OoD(Out-of-Distribution) 탐지 및 실패 감지(failure detection)와 같은 하류 작업에서 성능을 개선한다.
 
 ### 기존 연구와의 연결
-본 논문의 불확실성 정량화 접근법은 [[uncertainty-quantification]] 개념과 직접적으로 관련된다. Semantic Token Clustering 연구가 토큰 수준에서 효율적 UQ를 다뤘다면, 본 연구는 세그멘테이션 도메인에서 집계 전략이라는 상보적 측면을 탐구한다. 또한 자율주행 인식([[autonomous-driving-perception]], [[autonomous-driving]])의 안전성 확보와 밀접하며, OoD 탐지 관점에서 [[distribution-shift]] 문제와도 연결된다. 공간 정보 활용이라는 측면에서 [[spatial-reasoning]] 개념과의 접점도 존재한다.
+본 논문의 불확실성 정량화 접근법은 [[concepts/uncertainty-quantification.md|uncertainty quantification]] 개념과 직접적으로 관련된다. Semantic Token Clustering 연구가 토큰 수준에서 효율적 UQ를 다뤘다면, 본 연구는 세그멘테이션 도메인에서 집계 전략이라는 상보적 측면을 탐구한다. 또한 자율주행 인식([[concepts/autonomous-driving-perception.md|autonomous driving perception]], [[concepts/autonomous-driving.md|autonomous driving]])의 안전성 확보와 밀접하며, OoD 탐지 관점에서 [[concepts/distribution-shift.md|distribution shift]] 문제와도 연결된다. 공간 정보 활용이라는 측면에서 [[concepts/spatial-reasoning.md|spatial reasoning]] 개념과의 접점도 존재한다.
 
 ## 🔗 관련 논문
 

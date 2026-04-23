@@ -17,9 +17,9 @@
 
 본 논문은 **적응적 예산 기반 망각 프레임워크(adaptive budgeted forgetting framework)**를 제안한다. 핵심 메커니즘은 관련성 기반 점수화(relevance-guided scoring)와 제약 최적화(bounded optimization)를 통해 메모리를 능동적으로 조절하는 것이다. 이는 단순히 오래된 기억을 삭제하는 것이 아니라, 현재 맥락에서의 관련성과 효율성을 균형 있게 조율한다.
 
-이 연구는 LLM 에이전트의 메모리 아키텍처 설계에서 '무엇을 기억할 것인가'만큼 '무엇을 잊을 것인가'가 중요함을 실증적으로 보여준다. 특히 [[shared-state-architecture]]와 [[context-bus]] 개념에서 다루는 에이전트 간 상태 공유 문제와 직결되며, 공유 메모리 풀에서의 망각 전략이 시스템 전체 일관성에 미치는 영향을 시사한다. 또한 [[ChameleonEpisodicMemoryforLong-slides]]의 에피소딕 메모리 접근법과 대비되는 능동적 망각 패러다임을 제시하며, [[MemBoost]] 프레임워크의 비용 인식 추론과도 메모리 효율성 측면에서 연결된다.
+이 연구는 LLM 에이전트의 메모리 아키텍처 설계에서 '무엇을 기억할 것인가'만큼 '무엇을 잊을 것인가'가 중요함을 실증적으로 보여준다. 특히 [[concepts/shared-state-architecture.md|shared state architecture]]와 [[concepts/context-bus.md|context bus]] 개념에서 다루는 에이전트 간 상태 공유 문제와 직결되며, 공유 메모리 풀에서의 망각 전략이 시스템 전체 일관성에 미치는 영향을 시사한다. 또한 [[ChameleonEpisodicMemoryforLong-slides]]의 에피소딕 메모리 접근법과 대비되는 능동적 망각 패러다임을 제시하며, [[MemBoost]] 프레임워크의 비용 인식 추론과도 메모리 효율성 측면에서 연결된다.
 
-에이전트 신뢰성 관점에서는 [[agent-reliability-auditing]]의 사전 배포 평가 프레임워크에 메모리 망각 정책의 검증이 추가되어야 함을 암시한다.
+에이전트 신뢰성 관점에서는 [[concepts/agent-reliability-auditing.md|agent reliability auditing]]의 사전 배포 평가 프레임워크에 메모리 망각 정책의 검증이 추가되어야 함을 암시한다.
 
 ## 🔗 관련 논문
 

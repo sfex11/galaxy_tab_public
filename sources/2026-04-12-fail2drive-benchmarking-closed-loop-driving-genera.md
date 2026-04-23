@@ -19,10 +19,10 @@ Fail2Drive는 CARLA 시뮬레이터 기반의 **최초의 paired-route 벤치마
 기존 자율주행 벤치마크는 학습과 동일한 시나리오를 테스트에 사용하여, 높은 성능이 **암기(memorization)**의 결과일 수 있다는 근본적 문제가 있다. Fail2Drive는 분포 이동(distribution shift) 조건에서의 진정한 일반화를 측정하는 데 초점을 맞춘다.
 
 ### 기존 Wiki와의 관계
-- **[[autonomous-driving]]**: CARLA 기반 자율주행 평가의 새로운 표준을 제안하며, VectorWorld 등 기존 월드 모델 연구와 상호보완적
-- **[[closed-loop-evaluation]]**: 폐루프 평가 방법론의 핵심 발전으로, 기존 UniDriveVLA, YC-Bench와 함께 에이전트 평가 체계를 확장
-- **[[distribution-shift]]**: 분포 이동 하에서의 강건성 평가라는 점에서 세그멘테이션, 제어 분야의 연구들과 연결
-- **[[world-model]]**: 월드 모델의 일반화 한계를 드러내는 실증적 벤치마크로 기능
+- **[[concepts/autonomous-driving.md|autonomous driving]]**: CARLA 기반 자율주행 평가의 새로운 표준을 제안하며, VectorWorld 등 기존 월드 모델 연구와 상호보완적
+- **[[concepts/closed-loop-evaluation.md|closed loop evaluation]]**: 폐루프 평가 방법론의 핵심 발전으로, 기존 UniDriveVLA, YC-Bench와 함께 에이전트 평가 체계를 확장
+- **[[concepts/distribution-shift.md|distribution shift]]**: 분포 이동 하에서의 강건성 평가라는 점에서 세그멘테이션, 제어 분야의 연구들과 연결
+- **[[concepts/world-model.md|world model]]**: 월드 모델의 일반화 한계를 드러내는 실증적 벤치마크로 기능
 
 ### 방법론적 기여
 paired-route 설계를 통해 동일 루트에서 학습 조건과 새로운 조건을 직접 비교할 수 있어, 일반화 실패 지점을 정밀하게 진단할 수 있다. 이는 단순 성공률이 아닌 **일반화 격차(generalization gap)**를 정량화하는 새로운 평가 패러다임이다.

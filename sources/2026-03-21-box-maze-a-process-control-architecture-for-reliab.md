@@ -28,9 +28,9 @@ Box Maze는 LLM의 추론 과정 자체를 구조적으로 제어하기 위한 *
 
 ### 기존 Wiki와의 관계
 
-- **[[ai-safety]]**: Box Maze는 AI 안전성을 출력 필터링이 아닌 아키텍처 수준에서 접근한다는 점에서, TraceSafe의 가드레일 평가 연구와 상호보완적이다. TraceSafe가 기존 가드레일의 효과를 "평가"하는 데 집중했다면, Box Maze는 가드레일을 아키텍처에 "내장"하는 방법론을 제안한다.
-- **[[llm-agent]]**: LLM 에이전트의 신뢰성 있는 추론은 에이전트 시스템의 핵심 과제이며, Box Maze의 프로세스 제어 개념은 에이전트의 계획 및 실행 단계에 직접 적용 가능하다.
-- **[[transformer]]**: Transformer 기반 LLM의 구조적 한계(환각, 추론 불안정성)를 아키텍처 확장으로 보완하려는 시도로, Transformer 연구의 발전 방향 중 하나를 보여준다.
+- **[[concepts/ai-safety.md|ai safety]]**: Box Maze는 AI 안전성을 출력 필터링이 아닌 아키텍처 수준에서 접근한다는 점에서, TraceSafe의 가드레일 평가 연구와 상호보완적이다. TraceSafe가 기존 가드레일의 효과를 "평가"하는 데 집중했다면, Box Maze는 가드레일을 아키텍처에 "내장"하는 방법론을 제안한다.
+- **[[entities/llm-agent.md|llm agent]]**: LLM 에이전트의 신뢰성 있는 추론은 에이전트 시스템의 핵심 과제이며, Box Maze의 프로세스 제어 개념은 에이전트의 계획 및 실행 단계에 직접 적용 가능하다.
+- **[[concepts/transformer.md|transformer]]**: Transformer 기반 LLM의 구조적 한계(환각, 추론 불안정성)를 아키텍처 확장으로 보완하려는 시도로, Transformer 연구의 발전 방향 중 하나를 보여준다.
 
 ### 관련 소스 연결
 

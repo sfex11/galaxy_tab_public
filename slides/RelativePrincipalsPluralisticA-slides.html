@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>구조적 가치 정렬 문제 — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0a0c;
+  --bg2: #111115;
+  --bg3: #1a1a20;
+  --fg: #e8e4df;
+  --fg-dim: #8a8680;
+  --accent: #d4a04a;
+  --accent-glow: rgba(212,160,74,0.15);
+  --accent2: #c25d3a;
+  --accent3: #4a9e8e;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: clamp(20px, 5vw, 60px);
+  position: relative;
+  overflow: hidden;
+}
+
+.slide.active {
+  display: flex;
+  animation: slideIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 배경 장식 */
+.slide::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 20%, var(--accent-glow) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(74,158,142,0.06) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide > * { position: relative; z-index: 1; }
+
+/* 타이포그래피 */
+.slide-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: clamp(16px, 3vw, 32px);
+}
+
+.slide-subtitle {
+  font-size: clamp(14px, 2.5vw, 20px);
+  font-weight: 200;
+  color: var(--fg-dim);
+  text-align: center;
+  line-height: 1.7;
+  max-width: 700px;
+}
+
+.slide-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(22px, 4.5vw, 40px);
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: clamp(20px, 4vw, 40px);
+  line-height: 1.25;
+}
+
+.accent { color: var(--accent); }
+.accent2 { color: var(--accent2); }
+.accent3 { color: var(--accent3); }
+
+/* 카드 */
+.card-grid {
+  display: grid;
+  gap: clamp(12px, 2vw, 20px);
+  width: 100%;
+  max-width: 900px;
+}
+
+.card-grid.cols-3 { grid-template-columns: 1fr; }
+.card-grid.cols-2 { grid-template-columns: 1fr; }
+
+@media (min-width: 600px) {
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(16px, 3vw, 28px);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212,160,74,0.25);
+}
+
+.card-icon {
+  font-size: clamp(20px, 3vw, 28px);
+  margin-bottom: clamp(8px, 1.5vw, 14px);
+}
+
+.card-label {
+  font-weight: 700;
+  font-size: clamp(14px, 2vw, 18px);
+  margin-bottom: clamp(6px, 1vw, 10px);
+  color: var(--fg);
+}
+
+.card-text {
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--fg-dim);
+  line-height: 1.65;
+}
+
+/* 인용구 */
+.quote-block {
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: clamp(16px, 3vw, 28px) clamp(20px, 4vw, 36px);
+  max-width: 760px;
+  width: 100%;
+}
+
+.quote-text {
+  font-size: clamp(14px, 2.2vw, 19px);
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--fg);
+  font-style: italic;
+}
+
+.quote-attr {
+  font-size: clamp(11px, 1.4vw, 14px);
+  color: var(--fg-dim);
+  margin-top: clamp(8px, 1.5vw, 14px);
+  font-style: normal;
+}
+
+/* 다이어그램 영역 */
+.diagram-container {
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+}
+
+.axis-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.5vw, 22px);
+  width: 100%;
+}
+
+.axis-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 18px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(14px, 2.5vw, 22px);
+  transition: border-color 0.3s ease;
+}
+
+.axis-row:hover { border-color: rgba(212,160,74,0.3); }
+
+.axis-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 900;
+  min-width: clamp(40px, 8vw, 64px);
+  text-align: center;
+  line-height: 1;
+}
+
+.axis-content { flex: 1; }
+
+.axis-label {
+  font-weight: 700;
+  font-size: clamp(14px, 2.2vw, 20px);
+  margin-bottom: clamp(4px, 0.8vw, 8px);
+}
+
+.axis-desc {
+  font-size: clamp(11px, 1.5vw, 14px);
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+/* 네비게이션 */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(to top, rgba(10,10,12,0.95) 60%, transparent);
+  pointer-events: none;
+}
+
+.nav-bar > * { pointer-events: auto; }
+
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--fg);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn:active {
+  transform: scale(0.92);
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.progress-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg-dim);
+  opacity: 0.3;
+  transition: all 0.35s ease;
+}
+
+.dot.active {
+  opacity: 1;
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* 페이지 번호 */
+.page-indicator {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-size: clamp(11px, 1.4vw, 13px);
+  color: var(--fg-dim);
+  z-index: 100;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* 태그 */
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: clamp(10px, 1.3vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tag-gold { background: rgba(212,160,74,0.15); color: var(--accent); }
+.tag-red { background: rgba(194,93,58,0.15); color: var(--accent2); }
+.tag-teal { background: rgba(74,158,142,0.15); color: var(--accent3); }
+
+/* 키워드 구름 */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(6px, 1.2vw, 10px);
+  max-width: 800px;
+}
+
+.keyword {
+  padding: clamp(6px, 1.2vw, 10px) clamp(12px, 2vw, 18px);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: clamp(11px, 1.5vw, 14px);
+  color: var(--fg-dim);
+  background: var(--card);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.keyword:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* 스케일링 다이어그램 */
+.scaling-visual {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vw, 16px);
+  width: 100%;
+  max-width: 700px;
+}
+
+.scaling-bar {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 14px);
+}
+
+.scaling-label {
+  min-width: clamp(80px, 18vw, 120px);
+  font-size: clamp(11px, 1.5vw, 14px);
+  font-weight: 700;
+  text-align: right;
+  color: var(--fg-dim);
+}
+
+.scaling-track {
+  flex: 1;
+  height: clamp(28px, 4vw, 38px);
+  background: var(--card);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+}
+
+.scaling-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: clamp(10px, 1.3vw, 12px);
+  font-weight: 700;
+  color: var(--bg);
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  width: 0;
+}
+
+.scaling-fill.animated { /* JS에서 제어 */ }
+
+/* 결론 아이템 */
+.conclusion-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.5vw, 22px);
+  max-width: 700px;
+  width: 100%;
+}
+
+.conclusion-item {
+  display: flex;
+  gap: clamp(12px, 2vw, 18px);
+  align-items: flex-start;
+}
+
+.conclusion-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+  min-width: clamp(30px, 6vw, 44px);
+}
+
+.conclusion-body h4 {
+  font-size: clamp(14px, 2vw, 18px);
+  font-weight: 700;
+  margin-bottom: clamp(3px, 0.6vw, 6px);
+}
+
+.conclusion-body p {
+  font-size: clamp(11px, 1.5vw, 14px);
+  color: var(--fg-dim);
+  line-height: 1.65;
+}
+
+/* 분리선 */
+.divider {
+  width: 60px;
+  height: 2px;
+  background: var(--accent);
+  margin: clamp(16px, 3vw, 28px) auto;
+  border-radius: 1px;
+}
+
+/* 메타 정보 */
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(8px, 1.5vw, 14px);
+  margin-top: clamp(8px, 2vw, 16px);
+}
+
+.meta-item {
+  font-size: clamp(10px, 1.3vw, 12px);
+  color: var(--fg-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-item i { color: var(--accent); font-size: 0.9em; }
+
+/* 비교 테이블 */
+.compare-table {
+  width: 100%;
+  max-width: 800px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 20px);
+  text-align: left;
+  font-size: clamp(11px, 1.5vw, 14px);
+  line-height: 1.55;
+}
+
+.compare-table th {
+  background: var(--bg3);
+  font-weight: 700;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-table td {
+  color: var(--fg-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-table tr:last-child td { border-bottom: none; }
+
+.compare-table td:first-child {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* 상호작용 다이어그램 */
+.interaction-diagram {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1;
+  position: relative;
+  margin: 0 auto;
+}
+
+.interaction-node {
+  position: absolute;
+  width: clamp(90px, 22vw, 140px);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.interaction-node:hover { transform: scale(1.08); }
+
+.interaction-circle {
+  width: clamp(60px, 15vw, 90px);
+  height: clamp(60px, 15vw, 90px);
+  border-radius: 50%;
+  margin: 0 auto clamp(6px, 1vw, 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(18px, 3vw, 26px);
+  border: 2px solid;
+}
+
+.interaction-name {
+  font-size: clamp(10px, 1.4vw, 13px);
+  font-weight: 700;
+}
+
+.interaction-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* 흐름 화살표 */
+.flow-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 600px;
+  width: 100%;
+}
+
+.flow-step {
+  padding: clamp(14px, 2.5vw, 22px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.flow-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+.flow-step:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+
+.flow-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--border);
+}
+
+.flow-step-label {
+  font-size: clamp(10px, 1.3vw, 12px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: clamp(4px, 0.8vw, 8px);
+}
+
+.flow-step-text {
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: var(--fg-dim);
+  line-height: 1.65;
+}
+
+/* 수직 스위프 인디케이터 */
+.swipe-hint {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--fg-dim);
+  opacity: 0;
+  animation: hintPulse 3s ease 2s forwards;
+  z-index: 99;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@keyframes hintPulse {
+  0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+  15% { opacity: 0.6; transform: translateX(-50%) translateY(0); }
+  85% { opacity: 0.6; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
+}
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 768px) {
+  .slide { padding: clamp(20px, 6vw, 40px) clamp(16px, 5vw, 32px); }
+  .interaction-diagram { max-width: 320px; }
+  .compare-table { font-size: 11px; }
+  .compare-table th, .compare-table td { padding: 8px 10px; }
+}
+
+@media (max-width: 480px) {
+  .card-grid.cols-3 { grid-template-columns: 1fr; }
+  .card-grid.cols-2 { grid-template-columns: 1fr; }
+  .interaction-diagram { max-width: 280px; }
+  .interaction-circle { width: 56px; height: 56px; font-size: 16px; }
+  .interaction-node { width: 80px; }
+}
+
+@media (max-width: 320px) {
+  .slide-title { font-size: 24px; }
+  .slide-heading { font-size: 20px; }
+  .card { padding: 14px; }
+}
+
+/* 감소된 모션 */
+@media (prefers-reduced-motion: reduce) {
+  .slide.active { animation: none; }
+  .swipe-hint { animation: none; }
+  .scaling-fill { transition: none; }
+}
+
+/* 스크롤바 숨김 */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+
+/* 노이즈 텍스처 오버레이 */
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* 플로팅 파티클 캔버스 */
+#particle-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+</style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+<canvas id="particle-canvas"></canvas>
+
+<div class="page-indicator" id="pageIndicator">1 / 10</div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- 슬라이드 1: 제목 -->
+  <div class="slide active" data-index="0">
+    <div style="text-align:center; max-width:800px;">
+      <div class="meta-row" style="margin-bottom: clamp(16px,3vw,28px);">
+        <span class="tag tag-gold">FAccT '26</span>
+        <span class="tag tag-teal">cs.CY</span>
+      </div>
+      <h1 class="slide-title">
+        <span class="accent">구조적 가치 정렬 문제</span><br>
+        <span style="font-weight:200; font-size:clamp(18px,3.5vw,32px); color:var(--fg-dim);">상대적 위임인, 다원적 정렬, 그리고</span>
+      </h1>
+      <div class="divider"></div>
+      <p class="slide-subtitle">
+        Travis LaCroix &middot; Durham University<br>
+        2026년 6월, 몬트리올
+      </p>
+      <div class="meta-row" style="margin-top: clamp(20px,4vw,36px);">
+        <span class="meta-item"><i class="fas fa-file-alt"></i> arXiv:2604.20805</span>
+        <span class="meta-item"><i class="fas fa-balance-scale"></i> CC BY 4.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 2: 문제 제기 -->
+  <div class="slide" data-index="1">
+    <h2 class="slide-heading">왜 <span class="accent">구조적</span> 접근인가?</h2>
+    <div class="quote-block" style="margin-bottom: clamp(20px,4vw,36px);">
+      <p class="quote-text">
+        "이 시스템이 정렬되었는가?"라는 질문은 그 자체로 불완전하다. 
+        <span class="accent">누구를 위해</span>, <span class="accent2">어느 정도까지</span>, 
+        <span class="accent3">어떤 기준으로</span> 정렬되었는지를 명시해야만 의미가 있다.
+      </p>
+      <p class="quote-attr">— 논문의 핵심 주장 요약</p>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card">
+        <div class="card-icon accent2"><i class="fas fa-times-circle"></i></div>
+        <div class="card-label">기존 관점의 한계</div>
+        <div class="card-text">가치 정렬을 순수 기술적·규범적 문제로 간주. 미래 가상 시스템에 집중하여 현실의 거버넌스 문제를 간과.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon accent3"><i class="fas fa-check-circle"></i></div>
+        <div class="card-label">본 논문의 접근</div>
+        <div class="card-text">정렬을 거버넌스의 <span class="accent">구조적 질문</span>으로 재구성. 목표 설정, 정보 분포, 이해관계 충돌의 상호작용에 주목.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 3: 주인-대리인 프레임워크 -->
+  <div class="slide" data-index="2">
+    <h2 class="slide-heading">경제학에서 빌려온 렌즈<br><span style="font-weight:200; font-size:clamp(14px,2.5vw,22px); color:var(--fg-dim);">주인-대리인 프레임워크</span></h2>
+    <div class="card-grid cols-3" style="margin-bottom: clamp(16px,3vw,28px);">
+      <div class="card" style="text-align:center;">
+        <div class="card-icon accent"><i class="fas fa-user-tie"></i></div>
+        <div class="card-label">위임인 (Principal)</div>
+        <div class="card-text">의사결정을 위임하는 인간 — 사용자, 개발자, 규제자, 이해관계자</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon accent3"><i class="fas fa-robot"></i></div>
+        <div class="card-label">대리인 (Agent)</div>
+        <div class="card-text">위임받아 행동하는 AI 시스템 — 스스로의 목적함수에 따라 최적화</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-icon accent2"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="card-label">부합 문제</div>
+        <div class="card-text">대리인의 행동이 위임인의 진정한 이익과 일치하지 않는 상황</div>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p class="quote-text" style="font-size:clamp(12px,1.8vw,16px);">
+        경제학에서 <span class="accent">인센티브의 불일치</span>만으로는 주인-대리인 문제를 발생시키기에 불충분하며, 
+        <span class="accent3">정보의 비대칭성</span>과의 상호작용이 핵심이다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 슬라이드 4: 세 가지 축 -->
+  <div class="slide" data-index="3">
+    <h2 class="slide-heading">가치 정렬의 <span class="accent">세 가지 축</span></h2>
+    <div class="axis-diagram">
+      <div class="axis-row">
+        <div class="axis-num accent">01</div>
+        <div class="axis-content">
+          <div class="axis-label accent">목표 축 (Objectives)</div>
+          <div class="axis-desc">프록시 지표가 진정한 목표를 포착하지 못할 때 발생하는 부정렬. 예: 클릭률 최적화가 사용자 만족과 어긋남.</div>
+        </div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-num accent3">02</div>
+        <div class="axis-content">
+          <div class="axis-label accent3">정보 축 (Information)</div>
+          <div class="axis-desc">불투명성, 분포 변화, 감시 한계로 인해 위임인이 시스템 동작을 이해하지 못할 때 발생. 경제학의 도덕적 해이·역선택과 유사.</div>
+        </div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-num accent2">03</div>
+        <div class="axis-content">
+          <div class="axis-label accent2">위임인 축 (Principals)</div>
+          <div class="axis-desc">개발자, 사용자, 규제자, 피영향자 등 다수의 인간 행위자가 서로 다르거나 충돌하는 가치를 가질 때 발생.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 5: 축 간 상호작용 -->
+  <div class="slide" data-index="4">
+    <h2 class="slide-heading">축 간의 <span class="accent3">역동적 상호작용</span></h2>
+    <p class="slide-subtitle" style="margin-bottom: clamp(16px,3vw,28px);">세 축은 독립적이지 않다. 하나의 축에서의 문제가 다른 축을 악화시킨다.</p>
+    <div class="interaction-diagram" id="interactionDiagram">
+      <svg class="interaction-line" viewBox="0 0 200 200" style="width:100%;height:100%;">
+        <line x1="100" y1="30" x2="100" y2="170" stroke="rgba(212,160,74,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="30" y1="100" x2="170" y2="100" stroke="rgba(74,158,142,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="48" y1="48" x2="152" y2="152" stroke="rgba(194,93,58,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+        <circle cx="100" cy="30" r="4" fill="var(--accent)" opacity="0.6"/>
+        <circle cx="100" cy="170" r="4" fill="var(--accent)" opacity="0.6"/>
+        <circle cx="30" cy="100" r="4" fill="var(--accent3)" opacity="0.6"/>
+        <circle cx="170" cy="100" r="4" fill="var(--accent3)" opacity="0.6"/>
+        <circle cx="48" cy="48" r="4" fill="var(--accent2)" opacity="0.6"/>
+        <circle cx="152" cy="152" r="4" fill="var(--accent2)" opacity="0.6"/>
+      </svg>
+      <div class="interaction-node" style="top:2%; left:50%; transform:translateX(-50%);">
+        <div class="interaction-circle" style="border-color:var(--accent); background:var(--accent-glow);"><i class="fas fa-bullseye accent"></i></div>
+        <div class="interaction-name accent">목표</div>
+      </div>
+      <div class="interaction-node" style="bottom:2%; left:50%; transform:translateX(-50%);">
+        <div class="interaction-circle" style="border-color:var(--accent); background:var(--accent-glow);"><i class="fas fa-bullseye accent"></i></div>
+        <div class="interaction-name accent">목표</div>
+      </div>
+      <div class="interaction-node" style="top:50%; left:0%; transform:translateY(-50%);">
+        <div class="interaction-circle" style="border-color:var(--accent3); background:rgba(74,158,142,0.12);"><i class="fas fa-eye accent3"></i></div>
+        <div class="interaction-name accent3">정보</div>
+      </div>
+      <div class="interaction-node" style="top:50%; right:0%;">
+        <div class="interaction-circle" style="border-color:var(--accent3); background:rgba(74,158,142,0.12);"><i class="fas fa-eye accent3"></i></div>
+        <div class="interaction-name accent3">정보</div>
+      </div>
+      <div class="interaction-node" style="top:5%; left:2%;">
+        <div class="interaction-circle" style="border-color:var(--accent2); background:rgba(194,93,58,0.12);"><i class="fas fa-users accent2"></i></div>
+        <div class="interaction-name accent2">위임인</div>
+      </div>
+      <div class="interaction-node" style="bottom:5%; right:2%;">
+        <div class="interaction-circle" style="border-color:var(--accent2); background:rgba(194,93,58,0.12);"><i class="fas fa-users accent2"></i></div>
+        <div class="interaction-name accent2">위임인</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 6: 정보 비대칭의 세 유형 -->
+  <div class="slide" data-index="5">
+    <h2 class="slide-heading">정보 비대칭의 <span class="accent3">세 가지 유형</span></h2>
+    <div class="card-grid cols-3">
+      <div class="card">
+        <div class="card-icon accent3"><i class="fas fa-gavel"></i></div>
+        <div class="card-label">비검증 가능성<br><span style="font-weight:200;font-size:0.85em;color:var(--fg-dim);">Non-verifiability</span></div>
+        <div class="card-text">행동과 결과가 관측 가능하더라도 제3자(법원, 규제기관)가 검증할 수 없는 상황.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon accent"><i class="fas fa-mask"></i></div>
+        <div class="card-label">도덕적 해이<br><span style="font-weight:200;font-size:0.85em;color:var(--fg-dim);">Moral Hazard</span></div>
+        <div class="card-text">위임인이 대리인의 행동이 자신의 이익에 부합하는지 관찰할 수 없는 은닉 행동 문제.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon accent2"><i class="fas fa-question-circle"></i></div>
+        <div class="card-label">역선택<br><span style="font-weight:200;font-size:0.85em;color:var(--fg-dim);">Adverse Selection</span></div>
+        <div class="card-text">계약 전에 대리인의 능력이나 특성을 완전히 평가할 수 없는 은닉 정보 문제.</div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: clamp(16px,3vw,28px);">
+      <p class="quote-text" style="font-size:clamp(12px,1.7vw,15px);">
+        인센티브 불일치는 주인-대리인 문제의 <span class="accent">필요조건도 충분조건도 아니다</span>. 
+        문제는 인센티브 구조와 정보 비대칭의 <span class="accent3">상호작용</span>에서 발생한다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 슬라이드 7: 다원적 가치와 스케일링 가설 -->
+  <div class="slide" data-index="6">
+    <h2 class="slide-heading"><span class="accent2">스케일링 가설</span><br><span style="font-weight:200;font-size:clamp(14px,2.5vw,22px);color:var(--fg-dim);">가치 정렬 AI를 위한</span></h2>
+    <p class="slide-subtitle" style="margin-bottom: clamp(16px,3vw,28px);">모델의 일반성, 배포 범위, 이해관계자 다양성이 증가할수록 부정렬 리스크가 체계적으로 확대된다.</p>
+    <div class="scaling-visual">
+      <div class="scaling-bar">
+        <div class="scaling-label">정보 비대칭</div>
+        <div class="scaling-track"><div class="scaling-fill" data-width="85%" style="background:linear-gradient(90deg,var(--accent3),rgba(74,158,142,0.6));">고위험</div></div>
+      </div>
+      <div class="scaling-bar">
+        <div class="scaling-label">가치 충돌</div>
+        <div class="scaling-track"><div class="scaling-fill" data-width="78%" style="background:linear-gradient(90deg,var(--accent2),rgba(194,93,58,0.6));">심화</div></div>
+      </div>
+      <div class="scaling-bar">
+        <div class="scaling-label">권력 불균형</div>
+        <div class="scaling-track"><div class="scaling-fill" data-width="70%" style="background:linear-gradient(90deg,var(--accent),rgba(212,160,74,0.6));">증대</div></div>
+      </div>
+      <div class="scaling-bar">
+        <div class="scaling-label">평가 복잡성</div>
+        <div class="scaling-track"><div class="scaling-fill" data-width="92%" style="background:linear-gradient(90deg,#8a6abf,rgba(138,106,191,0.5));">극대화</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 8: 비교 테이블 -->
+  <div class="slide" data-index="7">
+    <h2 class="slide-heading">기존 관점 vs <span class="accent">구조적 관점</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:30%;">차원</th>
+          <th style="width:35%;">기존 관점</th>
+          <th style="width:35%;">구조적 관점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>문제의 본질</td>
+          <td>기술적·규범적 과제</td>
+          <td>거버넌스의 구조적 질문</td>
+        </tr>
+        <tr>
+          <td>정렬의 대상</td>
+          <td>추상적 "인류 가치"</td>
+          <td>맥락적, 관계적 판단</td>
+        </tr>
+        <tr>
+          <td>해결 가능성</td>
+          <td>기술적 "해결" 가능</td>
+          <td>지속적 관리 필수</td>
+        </tr>
+        <tr>
+          <td>이해관계자</td>
+          <td>단일 위임인 가정</td>
+          <td>다원적 위임인 인정</td>
+        </tr>
+        <tr>
+          <td>정보의 역할</td>
+          <td>부차적 요소</td>
+          <td>부정렬의 핵심 축</td>
+        </tr>
+        <tr>
+          <td>핵심 질문</td>
+          <td>"정렬되었는가?"</td>
+          <td>"누구에게, 어느 정도, 어떤 대가로?"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 슬라이드 9: 거버넌스로서의 정렬 -->
+  <div class="slide" data-index="8">
+    <h2 class="slide-heading">정렬은 <span class="accent">지속적 거버넌스</span>다</h2>
+    <div class="flow-section" style="margin-bottom: clamp(20px,4vw,36px);">
+      <div class="flow-step">
+        <div class="flow-step-label accent">1. 목표 설정</div>
+        <div class="flow-step-text">谁的 목표가 우선인가? 어떤 프록시 지표를 사용할 것인가? 이 결정 자체가 권력 행사다.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label accent3">2. 시스템 평가</div>
+        <div class="flow-step-text">정보 비대칭 하에서 시스템 동작을 어떻게 감시·평가할 것인가? 벤치마크의 한계는 무엇인가?</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label accent2">3. 이의 제기와 재구성</div>
+        <div class="flow-step-text">영향받는 공동체가 어떻게 결정에 이의를 제기하고, 목표와 기준을 재구성할 수 있는가?</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label" style="color:var(--fg-dim);">4. 순환적 관리</div>
+        <div class="flow-step-text">정렬은 한 번의 설계로 완료되지 않는다. 배포 후 맥락 변화에 따라 지속적으로 재조정되어야 한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 10: 핵심 결론 -->
+  <div class="slide" data-index="9">
+    <h2 class="slide-heading">핵심 <span class="accent">결론</span></h2>
+    <div class="conclusion-list">
+      <div class="conclusion-item">
+        <div class="conclusion-num">1</div>
+        <div class="conclusion-body">
+          <h4>정렬은 단일 기술적 속성이 아니다</h4>
+          <p>모델의 고유한 속성이 아니라, 목표 지정 방식, 정보 분포, 이해관계의 실제 반영 방식에 의해 형성되는 <span class="accent">결과</span>이다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">2</div>
+        <div class="conclusion-body">
+          <h4>다원적이고 맥락 의존적이다</h4>
+          <p>경쟁하는 가치 간의 <span class="accent2">트레이드오프</span>가 필수적으로 수반되며, 모든 이해관계자에게 동시에 정렬되는 것은 불가능하다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">3</div>
+        <div class="conclusion-body">
+          <h4>거버넌스가 필수적이다</h4>
+          <p>기술적 설계만으로 "해결"될 수 없다. 목표 설정, 평가, 이의 제기 메커니즘을 결정하는 <span class="accent3">제도적 과정</span>이 필요하다.</p>
+        </div>
+      </div>
+      <div class="conclusion-item">
+        <div class="conclusion-num">4</div>
+        <div class="conclusion-body">
+          <h4>올바른 질문을 던져라</h4>
+          <p>"완벽히 정렬되었는가?"가 아니라 <span class="accent">"누구에게 충분히 정렬되었는가, 어떤 대가로?"</span>를 물어야 한다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="keyword-cloud">
+      <span class="keyword">주인-대리인</span>
+      <span class="keyword">정보 비대칭</span>
+      <span class="keyword">다원주의</span>
+      <span class="keyword">거버넌스</span>
+      <span class="keyword">권력 관계</span>
+      <span class="keyword">프록시 지표</span>
+      <span class="keyword">RLHF</span>
+      <span class="keyword">FAccT</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- 네비게이션 -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+  <div class="progress-dots" id="progressDots"></div>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<div class="swipe-hint" id="swipeHint">
+  <i class="fas fa-hand-pointer"></i> 좌우로 스와이프하거나 버튼을 탭하세요
+</div>
+
+<script>
+/* ===== 슬라이드 네비게이션 ===== */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+let isAnimating = false;
+
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsContainer = document.getElementById('progressDots');
+const pageIndicator = document.getElementById('pageIndicator');
+
+// 도트 생성
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => goToSlide(i));
+  dot.setAttribute('role', 'button');
+  dot.setAttribute('aria-label', `슬라이드 ${i + 1}로 이동`);
+  dot.style.minWidth = '8px';
+  dot.style.minHeight = '8px';
+  dotsContainer.appendChild(dot);
+}
+
+function goToSlide(index) {
+  if (index === currentSlide || isAnimating || index < 0 || index >= totalSlides) return;
+  isAnimating = true;
+
+  slides[currentSlide].classList.remove('active');
+  slides[currentSlide].style.display = 'none';
+
+  currentSlide = index;
+  slides[currentSlide].style.display = 'flex';
+  slides[currentSlide].classList.add('active');
+
+  // 도트 업데이트
+  const dots = dotsContainer.querySelectorAll('.dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+
+  // 페이지 표시 업데이트
+  pageIndicator.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+  // 스케일링 바 애니메이션 (슬라이드 7)
+  if (currentSlide === 6) {
+    animateScalingBars();
+  }
+
+  setTimeout(() => { isAnimating = false; }, 600);
+}
+
+prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+// 키보드 네비게이션
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goToSlide(currentSlide - 1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goToSlide(currentSlide + 1);
+});
+
+// 터치 스와이프
+let touchStartX = 0;
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    if (dx < 0) goToSlide(currentSlide + 1);
+    else goToSlide(currentSlide - 1);
+  }
+}, { passive: true });
+
+// 스케일링 바 애니메이션
+function animateScalingBars() {
+  const fills = document.querySelectorAll('.scaling-fill');
+  fills.forEach((fill, i) => {
+    fill.style.width = '0';
+    setTimeout(() => {
+      fill.style.width = fill.dataset.width;
+    }, 200 + i * 150);
+  });
+}
+
+/* ===== 파티클 배경 ===== */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animFrameId;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.max(0.5, Math.random() * 1.8);
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.pulseSpeed = Math.random() * 0.01 + 0.005;
+    this.pulsePhase = Math.random() * Math.PI * 2;
+  }
+  update(time) {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < -10 || this.x > canvas.width + 10 || this.y < -10 || this.y > canvas.height + 10) {
+      this.reset();
+    }
+    this.currentOpacity = this.opacity * (0.6 + 0.4 * Math.sin(time * this.pulseSpeed + this.pulsePhase));
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, Math.max(0.1, this.size), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212, 160, 74, ${this.currentOpacity})`;
+    ctx.fill();
+  }
+}
+
+// 파티클 수를 화면 크기에 맞게 조정
+const particleCount = Math.min(60, Math.floor((window.innerWidth * window.innerHeight) / 20000));
+for (let i = 0; i < particleCount; i++) {
+  particles.push(new Particle());
+}
+
+let startTime = performance.now();
+function animateParticles() {
+  const time = performance.now() - startTime;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.update(time);
+    p.draw();
+  });
+
+  // 가까운 파티클 간 연결선
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        const lineOpacity = (1 - dist / 120) * 0.08;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(212, 160, 74, ${lineOpacity})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+
+  animFrameId = requestAnimationFrame(animateParticles);
+}
+
+// 감소된 모션 존중
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  animateParticles();
+}
+</script>
+</body>
+</html>

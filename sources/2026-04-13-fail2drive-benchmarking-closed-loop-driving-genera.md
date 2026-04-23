@@ -17,7 +17,7 @@ Fail2Drive는 CARLA 시뮬레이터 기반의 최초 **paired-route 벤치마크
 
 ### 기존 Wiki와의 관계
 
-본 논문은 기존 Wiki의 [[autonomous-driving]], [[closed-loop-evaluation]], [[distribution-shift]], [[generalization-gap]], [[world-model]] 개념과 직접적으로 연결된다. 특히 2026-04-11에 등록된 동일 제목의 이전 버전(v1 → 업데이트)과 연속선상에 있으며, [[fail2drive]] 시리즈의 확장판이다.
+본 논문은 기존 Wiki의 [[concepts/autonomous-driving.md|autonomous driving]], [[concepts/closed-loop-evaluation.md|closed loop evaluation]], [[concepts/distribution-shift.md|distribution shift]], [[concepts/generalization-gap.md|generalization gap]], [[concepts/world-model.md|world model]] 개념과 직접적으로 연결된다. 특히 2026-04-11에 등록된 동일 제목의 이전 버전(v1 → 업데이트)과 연속선상에 있으며, [[fail2drive]] 시리즈의 확장판이다.
 
 ### 핵심 기여
 

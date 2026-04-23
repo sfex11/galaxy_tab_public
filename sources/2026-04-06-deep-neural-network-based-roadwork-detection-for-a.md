@@ -22,7 +22,7 @@
 - **미국 데이터셋 적응**: 기존 US 데이터셋을 적응(adapt)하고 새로운 데이터셋을 구축하여 모델 학습에 활용
 
 ### Wiki 내 위치
-본 연구는 [[autonomous-driving]] 분야의 인식(perception) 파이프라인에 해당하며, 특히 [[autonomous-driving-perception]]의 센서 융합 접근과 직접적으로 연결된다. 기존 Wiki의 AdaRadar가 레이더 기반 스펙트럼 압축을 다뤘다면, 본 논문은 카메라+LiDAR 융합으로 도로 공사라는 특수 시나리오에 초점을 맞춘다. 또한 [[distribution-shift]] 관점에서, 도로 공사 현장은 일반 주행 환경과 크게 다른 동적 환경을 형성하므로 자율주행 모델의 일반화 능력을 시험하는 중요한 테스트 케이스다. Fail2Drive 벤치마크가 제기한 closed-loop 일반화 문제와도 맥을 같이한다.
+본 연구는 [[concepts/autonomous-driving.md|autonomous driving]] 분야의 인식(perception) 파이프라인에 해당하며, 특히 [[concepts/autonomous-driving-perception.md|autonomous driving perception]]의 센서 융합 접근과 직접적으로 연결된다. 기존 Wiki의 AdaRadar가 레이더 기반 스펙트럼 압축을 다뤘다면, 본 논문은 카메라+LiDAR 융합으로 도로 공사라는 특수 시나리오에 초점을 맞춘다. 또한 [[concepts/distribution-shift.md|distribution shift]] 관점에서, 도로 공사 현장은 일반 주행 환경과 크게 다른 동적 환경을 형성하므로 자율주행 모델의 일반화 능력을 시험하는 중요한 테스트 케이스다. Fail2Drive 벤치마크가 제기한 closed-loop 일반화 문제와도 맥을 같이한다.
 
 ## 🔗 관련 논문
 

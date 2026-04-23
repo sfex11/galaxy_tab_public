@@ -31,3 +31,30 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/lagrangian-framework.md|lagrangian framework]]
+
+---
+**관련**: [[concepts/imperfect-perception.md|imperfect perception]]
+
+---
+**관련**: [[concepts/information-theoretic-capacity.md|information theoretic capacity]]
+
+---
+**관련**: [[concepts/three-layer-reward-architecture.md|three layer reward architecture]]
+
+---
+**관련**: [[concepts/execution-layer-scaling.md|execution layer scaling]]
+
+---
+**관련**: [[concepts/emergent-abilities.md|emergent abilities]]
+
+---
+**관련**: [[concepts/runtime-verification-layer.md|runtime verification layer]]
+
+---
+**관련**: [[concepts/intent-guided-editing.md|intent guided editing]]
+
+---
+**관련**: [[concepts/layer-wise-forgetting-sensitivity.md|layer wise forgetting sensitivity]]

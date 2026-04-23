@@ -19,7 +19,7 @@
 
 이 연구는 AI 공정성(fairness) 연구에서 중요한 전환점을 제시한다. 기존의 텍스트 기반 편향 연구를 넘어, **모달리티 자체가 차별의 매개체**가 될 수 있음을 보여준다. 접근성(accessibility)과 공정성(fairness)이 상충할 수 있다는 발견은 AI 시스템 설계에서 두 가치를 동시에 고려해야 한다는 설계 원칙을 요구한다.
 
-기존 Wiki의 [[differential-privacy]] 개념이 다루는 프라이버시 보호 관점, [[ai-safety]]의 안전성 논의와 직접적으로 연결된다. 또한 [[gender-bias]] 개념에서 다룬 성별 편향 문제가 음성 모달리티에서 더욱 심화될 수 있음을 시사한다.
+기존 Wiki의 [[concepts/differential-privacy.md|differential privacy]] 개념이 다루는 프라이버시 보호 관점, [[concepts/ai-safety.md|ai safety]]의 안전성 논의와 직접적으로 연결된다. 또한 [[concepts/gender-bias.md|gender bias]] 개념에서 다룬 성별 편향 문제가 음성 모달리티에서 더욱 심화될 수 있음을 시사한다.
 
 ## 🔗 관련 논문
 

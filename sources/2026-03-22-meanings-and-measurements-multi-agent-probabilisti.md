@@ -21,7 +21,7 @@ VLM의 의미적 그라운딩 능력과 물리적 메트릭 추론을 다중 에
 
 ### 기존 연구와의 연결
 
-이 연구는 **VLM 기반 공간 추론**의 한계를 보완하는 방향으로, 기존 Wiki의 [[visual-grounding]], [[spatial-reasoning]], [[vision-language-model]] 개념과 직접적으로 연결된다. 특히 Loc3R-VLM이 3D 공간 추론과 VLM을 결합한 것과 유사한 문제 의식을 공유하지만, 본 논문은 메트릭 정밀도와 다중 에이전트 협력이라는 차별점을 가진다. AgentVLN의 에이전틱 내비게이션 접근과도 관련되며, [[embodied-ai]] 분야의 실질적 배포 가능성을 높이는 연구다. 다중 에이전트 구조는 [[multi-agent-system]] 엔티티와도 연결되며, 확률적 추론 통합은 [[evidence-fusion]] 개념과 맥을 같이 한다.
+이 연구는 **VLM 기반 공간 추론**의 한계를 보완하는 방향으로, 기존 Wiki의 [[concepts/visual-grounding.md|visual grounding]], [[concepts/spatial-reasoning.md|spatial reasoning]], [[concepts/vision-language-model.md|vision language model]] 개념과 직접적으로 연결된다. 특히 Loc3R-VLM이 3D 공간 추론과 VLM을 결합한 것과 유사한 문제 의식을 공유하지만, 본 논문은 메트릭 정밀도와 다중 에이전트 협력이라는 차별점을 가진다. AgentVLN의 에이전틱 내비게이션 접근과도 관련되며, [[concepts/embodied-ai.md|embodied ai]] 분야의 실질적 배포 가능성을 높이는 연구다. 다중 에이전트 구조는 [[concepts/multi-agent-system.md|multi agent system]] 엔티티와도 연결되며, 확률적 추론 통합은 [[concepts/evidence-fusion.md|evidence fusion]] 개념과 맥을 같이 한다.
 
 ## 🔗 관련 논문
 
