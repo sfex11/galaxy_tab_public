@@ -47,3 +47,7 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-infrastructure.md|epistemic infrastructure]]
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-24-relative-principals-pluralistic-alignment-and-the-]]: 둘 다 AI 평가 방법론을 민주주의·거버넌스 문제로 확장하며, 하나는 LLM 평가로 국회 담화의 인식론적 지향성을 정량화하고, 다른 하나는 정렬 문제를 주인-대리인 거버넌스 구조로 형식화한다.

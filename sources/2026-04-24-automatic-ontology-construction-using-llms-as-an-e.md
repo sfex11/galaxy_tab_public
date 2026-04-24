@@ -86,3 +86,7 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/proactive-safety-planning.md|proactive safety planning]]
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-22-worlddb-a-vector-graph-of-worlds-memory-engine-wit]]: 둘 다 평평한 벡터 기반 RAG의 메모리 파편화 한계를 지적하며, 하나는 그래프-오브-월드 구조로, 다른 하나는 RDF/OWL 형식 온톨로지로 구조적 지식 표현을 통해 이를 해결한다.

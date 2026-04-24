@@ -55,3 +55,8 @@ Fail2Drive가 자율주행에서 정적 평가와 폐루프 평가의 격차를 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-22-using-large-language-models-for-embodied-planning-]]: 둘 다 LLM 기반 체화 에이전트의 안전성 평가를 다루며, 하나는 DESPITE 벤치마크로 계획의 체계적 위험을, 다른 하나는 SafetyALFRED로 주방 환경에서의 사전 회피 능력을 평가한다.
+- → [[sources/2026-04-24-interval-pomdp-shielding-for-imperfect-perception-]]: 둘 다 자율/체화 에이전트의 안전성을 다루며, 하나는 불완전 인지 하에서 형식적 증명 가능한 실드링을, 다른 하나는 벤치마크를 통해 안전 인식 계획 능력을 실증적으로 평가한다.

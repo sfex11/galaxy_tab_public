@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-22-oger-a-robust-offline-guided-exploration-reward-fo]]: 둘 다 검증 가능 보상 기반 강화학습(RLVR)의 한계를 다루며, 하나는 오프라인 교사 기반 탐사 보상으로, 다른 하나는 약한 감독 하에서 RLVR이 성공할 조건을 분석한다.
+- → [[sources/2026-04-22-fuse-ensembling-verifiers-with-zero-labeled-data]]: 둘 다 고품질 정답 라벨이 부족한 상황을 다루며, 하나는 무감독 검증자 앙상블로, 다른 하나는 약한 감독 신호 하에서의 RLVR 성공 조건을 연구한다.

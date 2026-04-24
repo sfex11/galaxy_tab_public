@@ -65,3 +65,7 @@ VLA Foundry는 언어 사전학습부터 행동 전문가 미세조정(action-ex
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-22-onevl-one-step-latent-reasoning-and-planning-with-]]: 둘 다 시각-언어-행동(VLA) 모델을 다루며, 하나는 잠재 추론을 통한 자율주행 지연 문제를, 다른 하나는 언어→시각→행동 전체 훈련 파이프라인의 통합 프레임워크를 제안한다.
