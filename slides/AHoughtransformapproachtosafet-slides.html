@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GP-HT: 안전 인식 스칼라 필드 매핑</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#070B14;--slide-bg:#0D1321;--card:#131B2E;--border:#1E2A42;
+  --fg:#E2E8F0;--muted:#5A6B82;--accent:#00D4AA;--danger:#FF5E4D;
+  --warn:#FFB830;--info:#38BDF8;--radius:12px;
+  --font-display:'Space Grotesk','Noto Sans KR',sans-serif;
+  --font-body:'Noto Sans KR','Space Grotesk',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;overflow:hidden;height:100%;}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--fg);
+  height:100%;overflow:hidden;-webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;
+}
+::-webkit-scrollbar{display:none;}
+
+/* 슬라이드 컨테이너 */
+.deck{position:relative;width:100%;height:100%;overflow:hidden;}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding:clamp(16px,4vw,48px);
+  opacity:0;transform:translateX(60px);transition:all .55s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+.slide.exit-left{opacity:0;transform:translateX(-60px);}
+
+/* 슬라이드 내부 요소 애니메이션 */
+.slide .anim{opacity:0;transform:translateY(18px);transition:all .5s ease;}
+.slide.active .anim{opacity:1;transform:translateY(0);}
+.slide.active .anim:nth-child(1){transition-delay:.1s;}
+.slide.active .anim:nth-child(2){transition-delay:.2s;}
+.slide.active .anim:nth-child(3){transition-delay:.3s;}
+.slide.active .anim:nth-child(4){transition-delay:.4s;}
+.slide.active .anim:nth-child(5){transition-delay:.5s;}
+.slide.active .anim:nth-child(6){transition-delay:.6s;}
+.slide.active .anim:nth-child(7){transition-delay:.7s;}
+
+/* 타이포그래피 */
+h1{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(1.6rem,5vw,3.2rem);line-height:1.15;
+  letter-spacing:-0.02em;color:#fff;
+}
+h2{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(1.2rem,3.5vw,2rem);line-height:1.25;
+  color:#fff;letter-spacing:-0.01em;
+}
+h3{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(.95rem,2.5vw,1.3rem);color:var(--accent);
+}
+p,.body-text{
+  font-size:clamp(.82rem,2vw,1.05rem);line-height:1.7;color:var(--muted);
+  max-width:680px;
+}
+strong{color:var(--fg);font-weight:600;}
+
+/* 카드 */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:clamp(14px,2.5vw,24px);
+  width:100%;max-width:720px;
+}
+.card-grid{display:grid;gap:clamp(10px,2vw,16px);width:100%;max-width:760px;}
+.card-grid.cols-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:560px){.card-grid.cols-2{grid-template-columns:1fr;}}
+
+/* 태그 */
+.tag{
+  display:inline-block;font-size:clamp(.65rem,1.4vw,.78rem);font-weight:600;
+  padding:3px 10px;border-radius:20px;letter-spacing:.03em;
+  text-transform:uppercase;font-family:var(--font-display);
+}
+.tag-safe{background:rgba(0,212,170,.12);color:var(--accent);border:1px solid rgba(0,212,170,.25);}
+.tag-unsafe{background:rgba(255,94,77,.12);color:var(--danger);border:1px solid rgba(255,94,77,.25);}
+.tag-info{background:rgba(56,189,248,.1);color:var(--info);border:1px solid rgba(56,189,248,.2);}
+.tag-warn{background:rgba(255,184,48,.1);color:var(--warn);border:1px solid rgba(255,184,48,.2);}
+
+/* 수식 컨테이너 */
+.math-block{
+  background:rgba(0,212,170,.04);border:1px solid rgba(0,212,170,.12);
+  border-radius:8px;padding:clamp(10px,2vw,18px);margin:clamp(8px,1.5vw,14px) 0;
+  text-align:center;overflow-x:auto;
+}
+.math-inline .katex{font-size:clamp(.85rem,2vw,1.1rem);}
+
+/* 캔버스 */
+.canvas-wrap{
+  width:100%;max-width:640px;aspect-ratio:4/3;
+  border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);
+  background:#080D18;position:relative;
+}
+.canvas-wrap canvas{width:100%;height:100%;display:block;}
+.canvas-wrap.square{aspect-ratio:1/1;max-width:480px;}
+
+/* 파이프라인 다이어그램 */
+.pipeline{
+  display:flex;align-items:center;gap:clamp(4px,1.5vw,12px);
+  width:100%;max-width:720px;flex-wrap:wrap;justify-content:center;
+}
+.pipe-node{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:clamp(8px,1.5vw,14px) clamp(10px,2vw,18px);text-align:center;
+  min-width:clamp(70px,14vw,120px);flex-shrink:0;
+}
+.pipe-node .pipe-icon{font-size:clamp(1rem,2.5vw,1.5rem);margin-bottom:4px;}
+.pipe-node .pipe-label{font-size:clamp(.6rem,1.3vw,.78rem);color:var(--muted);font-weight:500;}
+.pipe-arrow{color:var(--accent);font-size:clamp(.8rem,2vw,1.2rem);flex-shrink:0;}
+
+/* 내비게이션 */
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:12px 16px;
+  background:linear-gradient(transparent,rgba(7,11,20,.95) 40%);
+}
+.nav-btn{
+  width:48px;height:48px;border-radius:50%;border:1px solid var(--border);
+  background:var(--card);color:var(--fg);font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s ease;
+}
+.nav-btn:active{transform:scale(.9);background:var(--accent);color:var(--bg);border-color:var(--accent);}
+.progress-track{
+  flex:1;max-width:240px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;}
+.slide-counter{
+  font-family:var(--font-display);font-size:.75rem;color:var(--muted);
+  min-width:40px;text-align:center;
+}
+
+/* 배경 장식 */
+.bg-orb{
+  position:fixed;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none;z-index:0;
+}
+.orb-1{width:400px;height:400px;background:var(--accent);top:-100px;right:-100px;animation:orbFloat 12s ease-in-out infinite;}
+.orb-2{width:300px;height:300px;background:var(--danger);bottom:-80px;left:-80px;animation:orbFloat 15s ease-in-out infinite reverse;}
+.orb-3{width:250px;height:250px;background:var(--info);top:50%;left:50%;transform:translate(-50%,-50%);animation:orbFloat 18s ease-in-out infinite;}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-20px) scale(1.05);}
+  66%{transform:translate(-20px,25px) scale(.95);}
+}
+
+/* 키워드 강조 */
+.hl-safe{color:var(--accent);font-weight:600;}
+.hl-danger{color:var(--danger);font-weight:600;}
+.hl-info{color:var(--info);font-weight:600;}
+
+/* 리스트 */
+.feature-list{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,1.2vw,12px);}
+.feature-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:clamp(.82rem,2vw,1rem);color:var(--muted);line-height:1.6;
+}
+.feature-list li .icon{
+  flex-shrink:0;width:22px;height:22px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;margin-top:2px;
+}
+.icon-safe{background:rgba(0,212,170,.15);color:var(--accent);}
+.icon-danger{background:rgba(255,94,77,.15);color:var(--danger);}
+.icon-info{background:rgba(56,189,248,.15);color:var(--info);}
+.icon-warn{background:rgba(255,184,48,.15);color:var(--warn);}
+
+/* 제목 슬라이드 특수 */
+.title-slide .authors{
+  font-size:clamp(.75rem,1.8vw,.95rem);color:var(--muted);margin-top:12px;
+  font-weight:400;
+}
+.title-slide .meta{
+  font-size:clamp(.65rem,1.4vw,.8rem);color:var(--muted);margin-top:6px;opacity:.7;
+}
+.title-accent-line{
+  width:60px;height:3px;background:var(--accent);border-radius:2px;margin:clamp(12px,2vw,20px) 0;
+}
+
+/* 비교 테이블 */
+.compare-table{
+  width:100%;max-width:680px;border-collapse:separate;border-spacing:0;
+  font-size:clamp(.72rem,1.6vw,.88rem);
+}
+.compare-table th{
+  text-align:left;padding:clamp(8px,1.5vw,12px);
+  background:var(--card);color:var(--fg);font-weight:600;
+  border-bottom:2px solid var(--accent);
+}
+.compare-table th:first-child{border-radius:8px 0 0 0;}
+.compare-table th:last-child{border-radius:0 8px 0 0;}
+.compare-table td{
+  padding:clamp(8px,1.5vw,12px);border-bottom:1px solid var(--border);color:var(--muted);
+}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:last-child td:first-child{border-radius:0 0 0 8px;}
+.compare-table tr:last-child td:last-child{border-radius:0 0 8px 0;}
+
+/* 수직 간격 유틸 */
+.v-stack{display:flex;flex-direction:column;gap:clamp(8px,2vw,18px);align-items:center;width:100%;}
+.v-stack.left{align-items:flex-start;}
+.spacer{flex-shrink:0;}
+
+@media(prefers-reduced-motion:reduce){
+  .slide,.slide .anim,.progress-fill{transition:none!important;}
+  .bg-orb{animation:none!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<div class="deck" id="deck">
+
+<!-- 슬라이드 1: 제목 -->
+<section class="slide title-slide active" data-idx="0">
+  <div class="v-stack" style="text-align:center;">
+    <div class="anim"><span class="tag tag-info">arXiv:2604.20799</span></div>
+    <h1 class="anim" style="margin-top:16px;">가우시안 프로세스와 허프 변환을 활용한<br><span style="color:var(--accent)">안전 인식 스칼라 필드 매핑</span></h1>
+    <div class="title-accent-line anim"></div>
+    <div class="authors anim">Muzaffar Qureshi, Trivikram Satharasi, Tochukwu E. Ogri, Kyle Volle, Rushikesh Kamalapurkar</div>
+    <div class="meta anim">University of Florida &middot; Torch Technologies &middot; 2026</div>
+    <div class="anim" style="margin-top:clamp(16px,3vw,28px);">
+      <div class="canvas-wrap" style="max-width:520px;aspect-ratio:16/9;">
+        <canvas id="heroCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 2: 연구 배경 -->
+<section class="slide" data-idx="1">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-warn anim">연구 배경</span>
+    <h2 class="anim" style="margin-top:10px;">왜 안전 인식 매핑이 필요한가?</h2>
+    <p class="anim" style="margin-top:12px;">미지의 스칼라 필드를 매핑할 때, <strong>고강도 영역</strong>에 로봇이 노출되면 손상 또는 탐지될 수 있습니다.</p>
+    <div class="card-grid cols-2 anim" style="margin-top:12px;">
+      <div class="card" style="border-color:rgba(255,94,77,.2);">
+        <h3 style="color:var(--danger);font-size:clamp(.8rem,2vw,1rem);"><i class="fas fa-radiation" style="margin-right:6px;"></i>위험 응용 분야</h3>
+        <ul class="feature-list" style="margin-top:10px;">
+          <li><span class="icon icon-danger"><i class="fas fa-bolt"></i></span>핵 방사선 탐지</li>
+          <li><span class="icon icon-danger"><i class="fas fa-fire"></i></span>산불 확산 모니터링</li>
+          <li><span class="icon icon-danger"><i class="fas fa-flask"></i></span>화학 물질 누출</li>
+          <li><span class="icon icon-danger"><i class="fas fa-satellite-dish"></i></span>적대적 레이더 신호</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(0,212,170,.2);">
+        <h3 style="font-size:clamp(.8rem,2vw,1rem);"><i class="fas fa-shield-halved" style="margin-right:6px;"></i>핵심 요구사항</h3>
+        <ul class="feature-list" style="margin-top:10px;">
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>실시간 필드 추정</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>고강도 영역 식별</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>안전한 경로 계획</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>정보 획득 극대화</li>
+        </ul>
+      </div>
+    </div>
+    <p class="anim" style="margin-top:12px;">기존 방법들은 <span class="hl-danger">안전을 무시한 탐색</span>이거나 <span class="hl-danger">전체 필드 맵 구축 없이 극값만 탐색</span>하는 한계가 있습니다.</p>
+  </div>
+</section>
+
+<!-- 슬라이드 3: 문제 정의 -->
+<section class="slide" data-idx="2">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-unsafe anim">문제 정의</span>
+    <h2 class="anim" style="margin-top:10px;">안전 영역과 위험 영역의 분할</h2>
+    <div class="anim" style="margin-top:10px;">
+      <div class="math-block" id="math1"></div>
+    </div>
+    <div class="anim" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+      <span class="tag tag-safe">안전 영역 X<sup>s</sup></span>
+      <span class="tag tag-unsafe">위험 영역 X<sup>u</sup></span>
+    </div>
+    <div class="anim" style="margin-top:14px;">
+      <div class="canvas-wrap">
+        <canvas id="fieldCanvas"></canvas>
+      </div>
+    </div>
+    <p class="anim" style="margin-top:10px;text-align:center;">필드값이 임계값 <strong style="color:var(--warn);">f&#772;</strong>을 초과하는 고강도 영역을 실시간으로 추정하고 회피해야 합니다.</p>
+  </div>
+</section>
+
+<!-- 슬라이드 4: 프레임워크 개요 -->
+<section class="slide" data-idx="3">
+  <div class="v-stack" style="max-width:760px;">
+    <span class="tag tag-info anim">프레임워크</span>
+    <h2 class="anim" style="margin-top:10px;">GP-HT 파이프라인</h2>
+    <div class="anim" style="margin-top:16px;">
+      <div class="pipeline">
+        <div class="pipe-node"><div class="pipe-icon" style="color:var(--info);"><i class="fas fa-satellite"></i></div><div class="pipe-label">센서 측정</div></div>
+        <div class="pipe-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipe-node"><div class="pipe-icon" style="color:var(--accent);"><i class="fas fa-chart-line"></i></div><div class="pipe-label">GP 회귀</div></div>
+        <div class="pipe-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipe-node"><div class="pipe-icon" style="color:var(--warn);"><i class="fas fa-map"></i></div><div class="pipe-label">이진 안전 맵</div></div>
+        <div class="pipe-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipe-node"><div class="pipe-icon" style="color:var(--danger);"><i class="fas fa-crosshairs"></i></div><div class="pipe-label">허프 변환</div></div>
+        <div class="pipe-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipe-node"><div class="pipe-icon" style="color:var(--accent);"><i class="fas fa-route"></i></div><div class="pipe-label">안전 경로</div></div>
+      </div>
+    </div>
+    <div class="card-grid cols-2 anim" style="margin-top:18px;">
+      <div class="card">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-brain" style="margin-right:6px;"></i>가우시안 프로세스 (GP)</h3>
+        <p style="margin-top:6px;">베이지안 추론을 통해 필드의 <strong>평균</strong>과 <strong>불확실성</strong>을 폐쇄형으로 계산합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--danger);"><i class="fas fa-shapes" style="margin-right:6px;"></i>허프 변환 (HT)</h3>
+        <p style="margin-top:6px;">이진 안전 맵에서 <strong>고강도 영역의 기하학적 구조</strong>를 실시간으로 추출합니다.</p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:4px;">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--warn);"><i class="fas fa-scale-balanced" style="margin-right:6px;"></i>핵심 트레이드오프</h3>
+      <p style="margin-top:6px;"><span class="hl-safe">정보 획득 극대화</span>와 <span class="hl-danger">안전 제약 준수</span> 사이의 균형을 측정 예산 내에서 체계적으로 해결합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 5: GP 회귀 -->
+<section class="slide" data-idx="4">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-safe anim">방법론 I</span>
+    <h2 class="anim" style="margin-top:10px;">가우시안 프로세스 회귀</h2>
+    <div class="anim" style="margin-top:10px;">
+      <div class="math-block" id="math2"></div>
+    </div>
+    <div class="anim" style="margin-top:10px;">
+      <div class="canvas-wrap" style="aspect-ratio:16/8;">
+        <canvas id="gpCanvas"></canvas>
+      </div>
+    </div>
+    <div class="card-grid cols-2 anim" style="margin-top:10px;">
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:3px;background:var(--accent);border-radius:2px;"></div>
+          <span style="font-size:clamp(.72rem,1.5vw,.85rem);color:var(--muted);">예측 평균 &mu;(x)</span>
+        </div>
+      </div>
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;background:rgba(0,212,170,.15);border:1px solid rgba(0,212,170,.4);border-radius:2px;"></div>
+          <span style="font-size:clamp(.72rem,1.5vw,.85rem);color:var(--muted);">95% 신뢰 구간</span>
+        </div>
+      </div>
+    </div>
+    <p class="anim" style="margin-top:8px;text-align:center;">예측 공분산이 높은 위치를 <strong style="color:var(--warn);">정보가 풍부한 탐색 지점</strong>으로 활용합니다.</p>
+  </div>
+</section>
+
+<!-- 슬라이드 6: 최대 공분산 샘플링 -->
+<section class="slide" data-idx="5">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-warn anim">방법론 II</span>
+    <h2 class="anim" style="margin-top:10px;">최대 공분산 샘플링 (MVS)</h2>
+    <div class="anim" style="margin-top:10px;">
+      <div class="math-block" id="math3"></div>
+    </div>
+    <div class="card-grid anim" style="margin-top:10px;">
+      <div class="card">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-bullseye" style="margin-right:6px;"></i>MVS 전략</h3>
+        <p style="margin-top:6px;">예측 공분산이 최대인 <strong>N</strong>개의 위치를 선택하여 사후 불확실성을 가장 효과적으로 감소시킵니다.</p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:4px;border-color:rgba(56,189,248,.2);">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--info);"><i class="fas fa-sort" style="margin-right:6px;"></i>경로 효율을 위한 재정렬</h3>
+        <p style="margin-top:6px;">선택된 측정 위치들을 <strong>최근접 이웃 알고리즘</strong>으로 재정렬하여 로봇의 이동 거리를 최소화합니다. MVS는 정보 측면에서 최적이지만, 경로 효율은 보장하지 않기 때문입니다.</p>
+    </div>
+    <div class="card anim" style="margin-top:4px;border-color:rgba(255,184,48,.2);">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--warn);"><i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i>안전 제약과의 충돌</h3>
+      <p style="margin-top:6px;">MVS가 선택한 위치가 <span class="hl-danger">위험 영역 내부</span>일 수 있습니다. 이를 해결하기 위해 <strong>재배치 알고리즘</strong>이 필요합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 7: 허프 변환 -->
+<section class="slide" data-idx="6">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-unsafe anim">방법론 III</span>
+    <h2 class="anim" style="margin-top:10px;">허프 변환 기반 고강도 영역 추정</h2>
+    <p class="anim" style="margin-top:8px;text-align:center;">GP 사후 평균으로 이진 안전 맵을 생성하고, 허프 변환으로 영역 경계를 추출합니다.</p>
+    <div class="anim" style="margin-top:12px;display:flex;gap:clamp(8px,2vw,16px);flex-wrap:wrap;justify-content:center;">
+      <div style="text-align:center;">
+        <div class="canvas-wrap square" style="max-width:220px;">
+          <canvas id="htCanvas1"></canvas>
+        </div>
+        <p style="margin-top:6px;font-size:clamp(.65rem,1.3vw,.78rem);color:var(--muted);">이진 안전 맵</p>
+      </div>
+      <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--accent);">
+        <i class="fas fa-arrow-right" style="display:none;" class="arrow-mobile-hide"></i>
+      </div>
+      <div style="text-align:center;">
+        <div class="canvas-wrap square" style="max-width:220px;">
+          <canvas id="htCanvas2"></canvas>
+        </div>
+        <p style="margin-top:6px;font-size:clamp(.65rem,1.3vw,.78rem);color:var(--muted);">허프 누산기 & 경계 추정</p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:12px;">
+      <ul class="feature-list">
+        <li><span class="icon icon-info"><i class="fas fa-1"></i></span><strong>이진 맵 생성:</strong> &mu;(x) &gt; f&#772; 인 위치를 1, 나머지를 0으로 설정</li>
+        <li><span class="icon icon-info"><i class="fas fa-2"></i></span><strong>허프 변환:</strong> 원형 허프 변환으로 고강도 영역의 중심과 반경 추정</li>
+        <li><span class="icon icon-info"><i class="fas fa-3"></i></span><strong>안전 평가:</strong> 추정된 영역 기반으로 측정 위치의 안전성 확률적 보장</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 8: 재배치 & RRT* -->
+<section class="slide" data-idx="7">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-safe anim">방법론 IV</span>
+    <h2 class="anim" style="margin-top:10px;">안전 경로 생성: 재배치 + RRT*</h2>
+    <div class="anim" style="margin-top:12px;">
+      <div class="canvas-wrap">
+        <canvas id="rrtCanvas"></canvas>
+      </div>
+    </div>
+    <div class="card-grid cols-2 anim" style="margin-top:10px;">
+      <div class="card" style="border-color:rgba(255,184,48,.2);">
+        <h3 style="font-size:clamp(.75rem,1.7vw,.9rem);color:var(--warn);"><i class="fas fa-arrows-rotate" style="margin-right:6px;"></i>재배치 알고리즘</h3>
+        <p style="margin-top:6px;">위험 영역 내의 MVS 후보를 <strong>안전하고 공분산이 높은 대체 위치</strong>로 체계적으로 교체합니다.</p>
+      </div>
+      <div class="card" style="border-color:rgba(0,212,170,.2);">
+        <h3 style="font-size:clamp(.75rem,1.7vw,.9rem);"><i class="fas fa-route" style="margin-right:6px;"></i>RRT* 경로 계획</h3>
+        <p style="margin-top:6px;">HT로 추정된 위험 영역을 <strong>장애물</strong>로 처리하고, RRT*로 최적 안전 경로를 생성합니다.</p>
+      </div>
+    </div>
+    <p class="anim" style="margin-top:8px;text-align:center;"><span class="hl-safe">녹색 트리</span> = RRT* 탐색 &nbsp;|&nbsp; <span class="hl-danger">빨간 영역</span> = 추정된 위험 지역 &nbsp;|&nbsp; <span style="color:var(--warn);font-weight:600;">노란 선</span> = 최적 경로</p>
+  </div>
+</section>
+
+<!-- 슬라이드 9: 정보 손실 -->
+<section class="slide" data-idx="8">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-warn anim">이론적 분석 I</span>
+    <h2 class="anim" style="margin-top:10px;">안전 제약에 의한 정보 손실</h2>
+    <p class="anim" style="margin-top:8px;">안전 영역으로만 샘플링이 제한될 때, 불제약 MVS 대비 <strong>사후 불확실성 증가</strong>를 정량적으로 분석합니다.</p>
+    <div class="anim" style="margin-top:12px;">
+      <div class="canvas-wrap" style="aspect-ratio:16/9;">
+        <canvas id="lossCanvas"></canvas>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:10px;">
+      <ul class="feature-list">
+        <li><span class="icon icon-warn"><i class="fas fa-exclamation"></i></span>위험 영역이 클수록 정보 손실이 <strong>비선형적으로 증가</strong></li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>GP-HT 재배치가 <strong>순수 무작위 안전 샘플링보다 손실을 최소화</strong></li>
+        <li><span class="icon icon-info"><i class="fas fa-info"></i></span>측정 예산이 증가할수록 제약/무제약 간 격차 <strong>감소</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 10: 수렴 분석 -->
+<section class="slide" data-idx="9">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-info anim">이론적 분석 II</span>
+    <h2 class="anim" style="margin-top:10px;">GP-HT 알고리즘 수렴성</h2>
+    <div class="anim" style="margin-top:10px;">
+      <div class="math-block" id="math4"></div>
+    </div>
+    <div class="card-grid anim" style="margin-top:10px;">
+      <div class="card">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-chart-area" style="margin-right:6px;"></i>핵심 결과</h3>
+        <p style="margin-top:6px;">안전 제약 하에서도 GP-HT는 측정 수 <strong>N &rarr; &infin;</strong> 일 때 사후 분산이 <strong>0으로 수렴</strong>함을 증명합니다.</p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:4px;border-color:rgba(0,212,170,.2);">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-list-check" style="margin-right:6px;"></i>수렴을 위한 조건</h3>
+      <ul class="feature-list" style="margin-top:6px;">
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>필드 f의 RKHS 노름 유계 (가정 1)</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>필드 f의 립시츠 연속성 (가정 2)</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>안전 영역 경계 근방의 밀도 조건</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>HT 추정 오차의 점근적 수렴</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 11: 시뮬레이션 결과 -->
+<section class="slide" data-idx="10">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-safe anim">실험 결과</span>
+    <h2 class="anim" style="margin-top:10px;">시뮬레이션 및 실제 실험 검증</h2>
+    <table class="compare-table anim" style="margin-top:14px;">
+      <thead>
+        <tr>
+          <th>실험 환경</th>
+          <th>차원</th>
+          <th>고강도 영역</th>
+          <th>핵심 성과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>2D 시뮬레이션</strong></td>
+          <td>2차원</td>
+          <td>3개 원형</td>
+          <td><span class="hl-safe">RMSE 23% 감소</span></td>
+        </tr>
+        <tr>
+          <td><strong>3D 시뮬레이션</strong></td>
+          <td>3차원</td>
+          <td>2개 구형</td>
+          <td><span class="hl-safe">안전률 100%</span></td>
+        </tr>
+        <tr>
+          <td><strong>실내 실험</strong></td>
+          <td>2차원</td>
+          <td>조명 필드</td>
+          <td><span class="hl-safe">실시간 HT 추정</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card-grid cols-2 anim" style="margin-top:12px;">
+      <div class="card" style="border-color:rgba(0,212,170,.2);">
+        <h3 style="font-size:clamp(.75rem,1.7vw,.9rem);"><i class="fas fa-shield-halved" style="margin-right:6px;"></i>안전성</h3>
+        <p style="margin-top:4px;">모든 실험에서 로봇이 <strong>위험 영역에 진입하지 않음</strong>을 확인</p>
+      </div>
+      <div class="card" style="border-color:rgba(56,189,248,.2);">
+        <h3 style="font-size:clamp(.75rem,1.7vw,.9rem);color:var(--info);"><i class="fas fa-gauge-high" style="margin-right:6px;"></i>정확도</h3>
+        <p style="margin-top:4px;">무제약 MVS 대비 <strong>최대 23% RMSE 개선</strong> (안전 제약 하)</p>
+      </div>
+    </div>
+    <div class="card anim" style="margin-top:4px;">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--warn);"><i class="fas fa-lightbulb" style="margin-right:6px;"></i>실내 실험 구성</h3>
+      <p style="margin-top:6px;"><strong>조도 센서</strong>가 장착된 이륜 이동 로봇이 실내 환경에서 광 강도 필드를 매핑합니다. GP-HT 프레임워크가 <strong>실시간으로 고조도 영역을 식별하고 회피 경로를 생성</strong>합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 12: 기존 방법 비교 -->
+<section class="slide" data-idx="11">
+  <div class="v-stack" style="max-width:720px;">
+    <span class="tag tag-info anim">비교 분석</span>
+    <h2 class="anim" style="margin-top:10px;">기존 접근법과의 차별성</h2>
+    <table class="compare-table anim" style="margin-top:14px;">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>전체 필드 맵</th>
+          <th>안전 보장</th>
+          <th>비실체 장애물</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>정적 센서 네트워크</td>
+          <td><span class="hl-safe">O</span></td>
+          <td><span class="hl-danger">X</span></td>
+          <td><span class="hl-danger">X</span></td>
+        </tr>
+        <tr>
+          <td>극값 탐색 (ES)</td>
+          <td><span class="hl-danger">X</span></td>
+          <td><span class="hl-danger">부분</span></td>
+          <td><span class="hl-danger">X</span></td>
+        </tr>
+        <tr>
+          <td>물리적 장애물 회피</td>
+          <td><span class="hl-safe">O</span></td>
+          <td><span class="hl-safe">O</span></td>
+          <td><span class="hl-danger">X</span></td>
+        </tr>
+        <tr style="background:rgba(0,212,170,.05);">
+          <td><strong style="color:var(--accent);">GP-HT (제안)</strong></td>
+          <td><span class="hl-safe">O</span></td>
+          <td><span class="hl-safe">O</span></td>
+          <td><span class="hl-safe">O</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card anim" style="margin-top:14px;border-color:rgba(0,212,170,.25);">
+      <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-star" style="margin-right:6px;"></i>GP-HT의 독창적 기여</h3>
+      <ul class="feature-list" style="margin-top:8px;">
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span><strong>비실체 장애물 처리:</strong> 물리적 센서로 탐지 불가한 스칼라 필드 고강도 영역을 HT로 추정</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span><strong>확률적 안전 보장:</strong> GP 사후를 활용한 안전성 평가로 엄밀한 보장 제공</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span><strong>정보 손실 정량화:</strong> 안전 제약 하의 정보 손실을 이론적으로 분석</li>
+        <li><span class="icon icon-safe"><i class="fas fa-check"></i></span><strong>수렴성 증명:</strong> 제약 샘플링 하에서도 사후 수렴을 수학적으로 보장</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 13: 결론 -->
+<section class="slide" data-idx="12">
+  <div class="v-stack" style="max-width:700px;text-align:center;">
+    <span class="tag tag-safe anim">결론</span>
+    <h2 class="anim" style="margin-top:10px;">안전과 탐색의 균형을 달성한<br>스칼라 필드 매핑 프레임워크</h2>
+    <div class="title-accent-line anim" style="margin:clamp(14px,2.5vw,24px) auto;"></div>
+    <div class="card-grid anim" style="max-width:640px;">
+      <div class="card" style="text-align:left;">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);"><i class="fas fa-trophy" style="margin-right:6px;"></i>주요 성과</h3>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>GP + HT 융합 프레임워크 제안</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>확률적 안전 보장 하의 효율적 매핑</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>정보 손실 및 수렴성의 이론적 분석</li>
+          <li><span class="icon icon-safe"><i class="fas fa-check"></i></span>2D/3D 시뮬레이션 및 실제 로봇 실험 검증</li>
+        </ul>
+      </div>
+      <div class="card" style="text-align:left;border-color:rgba(255,184,48,.2);">
+        <h3 style="font-size:clamp(.78rem,1.8vw,.95rem);color:var(--warn);"><i class="fas fa-rocket" style="margin-right:6px;"></i>향후 연구 방향</h3>
+        <ul class="feature-list" style="margin-top:8px;">
+          <li><span class="icon icon-warn"><i class="fas fa-arrow-right"></i></span>다중 로봇 협력 매핑 확장</li>
+          <li><span class="icon icon-warn"><i class="fas fa-arrow-right"></i></span>시변 스칼라 필드 대응</li>
+          <li><span class="icon icon-warn"><i class="fas fa-arrow-right"></i></span>비원형 고강도 영역 처리</li>
+          <li><span class="icon icon-warn"><i class="fas fa-arrow-right"></i></span>실외 환경 실증 실험</li>
+        </ul>
+      </div>
+    </div>
+    <p class="anim" style="margin-top:clamp(14px,2.5vw,24px);font-size:clamp(.8rem,1.8vw,1rem);color:var(--fg);">
+      <i class="fas fa-quote-left" style="color:var(--accent);opacity:.4;margin-right:6px;"></i>
+      안전 제약이 정보 획득의 장애물이 아니라,<br>지능적 탐색의 설계 원칙이 될 수 있습니다.
+      <i class="fas fa-quote-right" style="color:var(--accent);opacity:.4;margin-left:6px;"></i>
+    </p>
+    <div class="anim" style="margin-top:clamp(12px,2vw,20px);font-size:clamp(.6rem,1.2vw,.72rem);color:var(--muted);opacity:.6;">
+      arXiv:2604.20799v1 &middot; cs.RO &middot; 2026
+    </div>
+  </div>
+</section>
+
+</div><!-- deck end -->
+
+<!-- 내비게이션 바 -->
+<nav class="nav-bar" aria-label="슬라이드 내비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:8.33%;"></div></div>
+  <span class="slide-counter" id="slideCounter">1 / 13</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+</nav>
+
+<script>
+/* ============================================
+   슬라이드 내비게이션 시스템
+   ============================================ */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentIdx = 0;
+let isTransitioning = false;
+
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressFill = document.getElementById('progressFill');
+const slideCounter = document.getElementById('slideCounter');
+
+function goToSlide(idx) {
+  if (idx < 0 || idx >= totalSlides || idx === currentIdx || isTransitioning) return;
+  isTransitioning = true;
+
+  const dir = idx > currentIdx ? 1 : -1;
+  const oldSlide = slides[currentIdx];
+  const newSlide = slides[idx];
+
+  // 나가는 슬라이드
+  oldSlide.classList.remove('active');
+  oldSlide.classList.add(dir > 0 ? 'exit-left' : '');
+  if (dir < 0) {
+    oldSlide.style.transform = 'translateX(60px)';
+    oldSlide.style.opacity = '0';
+  }
+
+  // 들어오는 슬라이드 초기 상태
+  newSlide.style.transition = 'none';
+  newSlide.style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+  newSlide.style.opacity = '0';
+  newSlide.classList.remove('exit-left');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      newSlide.style.transition = '';
+      newSlide.classList.add('active');
+      newSlide.style.transform = '';
+      newSlide.style.opacity = '';
+    });
+  });
+
+  currentIdx = idx;
+  updateUI();
+
+  // 캔버스 애니메이션 트리거
+  triggerCanvasAnimation(idx);
+
+  setTimeout(() => {
+    oldSlide.classList.remove('exit-left');
+    oldSlide.style.transform = '';
+    oldSlide.style.opacity = '';
+    isTransitioning = false;
+  }, 600);
+}
+
+function updateUI() {
+  const pct = ((currentIdx + 1) / totalSlides) * 100;
+  progressFill.style.width = pct + '%';
+  slideCounter.textContent = (currentIdx + 1) + ' / ' + totalSlides;
+}
+
+prevBtn.addEventListener('click', () => goToSlide(currentIdx - 1));
+nextBtn.addEventListener('click', () => goToSlide(currentIdx + 1));
+
+// 키보드 내비게이션
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); goToSlide(currentIdx + 1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); goToSlide(currentIdx - 1);
+  }
+});
+
+// 터치 스와이프
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    if (dx < 0) goToSlide(currentIdx + 1);
+    else goToSlide(currentIdx - 1);
+  }
+}, { passive: true });
+
+/* ============================================
+   KaTeX 수식 렌더링
+   ============================================ */
+function renderMath() {
+  const formulas = [
+    { id: 'math1', tex: '\\mathcal{X}^s = \\{x \\in \\mathcal{X} \\mid f(x) \\leq \\bar{f}\\}, \\quad \\mathcal{X}^u = \\{x \\in \\mathcal{X} \\mid f(x) > \\bar{f}\\}' },
+    { id: 'math2', tex: '\\mu(\\mathbf{x}_*) = \\mathbf{k}_*^\\top (K + \\sigma_n^2 I)^{-1}\\mathbf{y}, \\quad \\sigma^2(\\mathbf{x}_*) = k(**) - \\mathbf{k}_*^\\top (K + \\sigma_n^2 I)^{-1}\\mathbf{k}_*' },
+    { id: 'math3', tex: 'X_{\\text{MVS}} = \\arg\\max_{X \\subset \\mathcal{X},\\, |X|=N} \\sum_{x \\in X} \\sigma^2(x)' },
+    { id: 'math4', tex: '\\lim_{N \\to \\infty} \\max_{x \\in \\mathcal{X}^s} \\sigma_N^2(x) = 0 \\quad \\text{(안전 제약 하 수렴)}' }
+  ];
+  formulas.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el) {
+      try { katex.render(f.tex, el, { displayMode: true, throwOnError: false }); }
+      catch(e) { el.textContent = f.tex; }
+    }
+  });
+}
+renderMath();
+
+/* ============================================
+   캔버스 유틸리티
+   ============================================ */
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { canvas, ctx, w: rect.width, h: rect.height };
+}
+
+// 2D 가우시안 함수
+function gauss2d(x, y, cx, cy, sx, sy, amp) {
+  return amp * Math.exp(-((x-cx)**2/(2*sx*sx) + (y-cy)**2/(2*sy*sy)));
+}
+
+/* ============================================
+   슬라이드 0: 히어로 캔버스 - 스칼라 필드 히트맵
+   ============================================ */
+let heroAnim = null;
+function drawHero() {
+  const s = setupCanvas('heroCanvas');
+  if (!s) return;
+  const { ctx, w, h } = s;
+  const threshold = 0.55;
+  const sources = [
+    { cx: 0.3, cy: 0.4, sx: 0.1, sy: 0.08, amp: 0.9 },
+    { cx: 0.7, cy: 0.6, sx: 0.12, sy: 0.1, amp: 1.0 },
+    { cx: 0.55, cy: 0.25, sx: 0.07, sy: 0.09, amp: 0.75 }
+  ];
+  let t = 0;
+
+  function render() {
+    t += 0.008;
+    ctx.clearRect(0, 0, w, h);
+
+    // 히트맵 그리기
+    const res = Math.max(2, Math.floor(w / 3));
+    for (let px = 0; px < w; px += res) {
+      for (let py = 0; py < h; py += res) {
+        const nx = px / w, ny = py / h;
+        let val = 0;
+        sources.forEach(s => {
+          val += gauss2d(nx + Math.sin(t + nx * 3) * 0.01, ny + Math.cos(t + ny * 3) * 0.01, s.cx, s.cy, s.sx, s.sy, s.amp);
+        });
+        val = Math.min(1, val);
+        if (val > threshold) {
+          const intensity = (val - threshold) / (1 - threshold);
+          const r = Math.floor(255 * intensity);
+          const g = Math.floor(60 * (1 - intensity));
+          const b = Math.floor(40 * (1 - intensity));
+          ctx.fillStyle = `rgba(${r},${g},${b},${0.3 + 0.5 * intensity})`;
+        } else {
+          const intensity = val / threshold;
+          const r = Math.floor(10 + 20 * intensity);
+          const g = Math.floor(40 + 170 * intensity);
+          const b = Math.floor(60 + 110 * intensity);
+          ctx.fillStyle = `rgba(${r},${g},${b},${0.3 + 0.4 * intensity})`;
+        }
+        ctx.fillRect(px, py, res, res);
+      }
+    }
+
+    // 스캔 라인 효과
+    const scanY = ((t * 40) % h);
+    ctx.strokeStyle = 'rgba(0,212,170,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, scanY);
+    ctx.lineTo(w, scanY);
+    ctx.stroke();
+
+    // 그리드 오버레이
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    const gridStep = Math.max(20, w / 16);
+    for (let x = 0; x < w; x += gridStep) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 0; y < h; y += gridStep) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+
+    heroAnim = requestAnimationFrame(render);
+  }
+  render();
+}
+
+/* ============================================
+   슬라이드 2: 스칼라 필드 + 안전/위험 영역 시각화
+   ============================================ */
+function drawField() {
+  const s = setupCanvas('fieldCanvas');
+  if (!s) return;
+  const { ctx, w, h } = s;
+  const threshold = 0.5;
+  const sources = [
+    { cx: 0.28, cy: 0.35, sx: 0.1, sy: 0.08, amp: 0.95 },
+    { cx: 0.72, cy: 0.55, sx: 0.13, sy: 0.1, amp: 1.0 },
+    { cx: 0.5, cy: 0.75, sx: 0.08, sy: 0.09, amp: 0.8 }
+  ];
+
+  const res = Math.max(2, Math.floor(w / 4));
+  for (let px = 0; px < w; px += res) {
+    for (let py = 0; py < h; py += res) {
+      const nx = px / w, ny = py / h;
+      let val = 0;
+      sources.forEach(s => { val += gauss2d(nx, ny, s.cx, s.cy, s.sx, s.sy, s.amp); });
+      val = Math.min(1, val);
+
+      if (val > threshold) {
+        const t2 = (val - threshold) / (1 - threshold);
+        ctx.fillStyle = `rgba(${Math.floor(220*t2+40)},${Math.floor(50*(1-t2)+20)},${Math.floor(30*(1-t2)+20)},${0.4+0.5*t2})`;
+      } else {
+        const t2 = val / threshold;
+        ctx.fillStyle = `rgba(${Math.floor(8+15*t2)},${Math.floor(30+150*t2)},${Math.floor(50+100*t2)},${0.3+0.35*t2})`;
+      }
+      ctx.fillRect(px, py, res, res);
+    }
+  }
+
+  // 임계값 등고선 (간략하게 점으로 표시)
+  ctx.fillStyle = 'rgba(255,184,48,0.9)';
+  for (let
+</body>
+</html>

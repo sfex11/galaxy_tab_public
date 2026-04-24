@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SWE-chat 논문 시각화</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --fg: #e8e6e3;
+  --fg-dim: #8a8a9a;
+  --accent: #00e5a0;
+  --accent2: #ff6b4a;
+  --accent3: #ffd23f;
+  --card: rgba(255,255,255,0.04);
+  --card-border: rgba(255,255,255,0.08);
+  --glass: rgba(10,10,15,0.85);
+  --radius: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 배경 장식 */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+.bg-orb-1 { width: 500px; height: 500px; background: var(--accent); top: -150px; left: -200px; }
+.bg-orb-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -150px; opacity: 0.2; }
+.bg-orb-3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.08; }
+
+/* 네비게이션 */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.nav-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 3vw, 16px);
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--fg);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.1); }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+
+.slide-counter {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--fg-dim);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* 프로그레스 바 */
+.progress-bar {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  z-index: 100;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 12px var(--accent);
+}
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative;
+  z-index: 1;
+  padding-top: 76px;
+}
+
+.slide {
+  min-height: calc(100vh - 76px);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 6vw, 60px) clamp(16px, 5vw, 80px);
+  animation: slideIn 0.5s ease;
+  position: relative;
+}
+.slide.active { display: flex; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 슬라이드 내 공통 스타일 */
+.slide-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(10px, 2.2vw, 13px);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.slide-title {
+  font-weight: 900;
+  font-size: clamp(26px, 6vw, 52px);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  color: var(--fg);
+}
+
+.slide-subtitle {
+  font-size: clamp(14px, 3vw, 20px);
+  color: var(--fg-dim);
+  font-weight: 400;
+  max-width: 680px;
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+
+/* 카드 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: clamp(16px, 4vw, 28px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s, border-color 0.3s;
+}
+.card:hover { border-color: rgba(0,229,160,0.2); }
+
+/* 통계 카드 그리드 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(10px, 2.5vw, 16px);
+  width: 100%;
+  max-width: 600px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: clamp(14px, 3vw, 24px) clamp(8px, 2vw, 16px);
+}
+
+.stat-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 7vw, 48px);
+  color: var(--accent);
+  line-height: 1.1;
+  display: block;
+}
+
+.stat-number.orange { color: var(--accent2); }
+.stat-number.yellow { color: var(--accent3); }
+.stat-number.white { color: var(--fg); }
+
+.stat-label {
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--fg-dim);
+  margin-top: 6px;
+  display: block;
+  font-weight: 400;
+}
+
+/* 바 차트 */
+.bar-chart { width: 100%; max-width: 500px; }
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 14px);
+  margin-bottom: clamp(10px, 2vw, 16px);
+}
+.bar-label {
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--fg-dim);
+  min-width: clamp(80px, 22vw, 140px);
+  text-align: right;
+  flex-shrink: 0;
+}
+.bar-track {
+  flex: 1;
+  height: clamp(28px, 6vw, 42px);
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(11px, 2.5vw, 14px);
+  font-weight: 700;
+  color: var(--bg);
+  transition: width 1s ease;
+  width: 0;
+}
+.bar-fill.animated { /* JS로 너비 설정 */ }
+.bar-fill.green { background: linear-gradient(90deg, #00c98d, #00e5a0); }
+.bar-fill.red { background: linear-gradient(90deg, #e04520, #ff6b4a); }
+.bar-fill.yellow { background: linear-gradient(90deg, #e0a800, #ffd23f); }
+.bar-fill.mixed { background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+
+/* 도넛 차트 */
+.donut-container {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 5vw, 40px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.donut-chart {
+  position: relative;
+  width: clamp(160px, 40vw, 220px);
+  height: clamp(160px, 40vw, 220px);
+  flex-shrink: 0;
+}
+
+.donut-chart svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.donut-chart circle {
+  fill: none;
+  stroke-width: 24;
+  transition: stroke-dasharray 1.2s ease, stroke-dashoffset 1.2s ease;
+}
+
+.donut-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.donut-center-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 5vw, 32px);
+  color: var(--fg);
+}
+.donut-center-label {
+  font-size: clamp(10px, 2vw, 12px);
+  color: var(--fg-dim);
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 14px);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(12px, 2.8vw, 15px);
+  color: var(--fg-dim);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.legend-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: var(--fg);
+  margin-left: auto;
+  padding-left: 12px;
+}
+
+/* 인사이트 박스 */
+.insight-box {
+  background: rgba(0,229,160,0.06);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: 12px;
+  padding: clamp(14px, 3vw, 22px);
+  margin-top: clamp(16px, 3vw, 28px);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.insight-box i {
+  color: var(--accent);
+  font-size: clamp(16px, 3vw, 20px);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.insight-box p {
+  font-size: clamp(13px, 2.8vw, 16px);
+  color: var(--fg);
+  line-height: 1.7;
+}
+
+.insight-box.warn {
+  background: rgba(255,107,74,0.06);
+  border-color: rgba(255,107,74,0.15);
+}
+.insight-box.warn i { color: var(--accent2); }
+
+/* 비교 테이블 */
+.compare-table {
+  width: 100%;
+  max-width: 560px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: clamp(11px, 2.5vw, 14px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+.compare-table th {
+  background: rgba(255,255,255,0.06);
+  padding: clamp(10px, 2.5vw, 14px);
+  text-align: left;
+  font-weight: 700;
+  color: var(--fg);
+  border-bottom: 1px solid var(--card-border);
+}
+.compare-table td {
+  padding: clamp(10px, 2.5vw, 14px);
+  border-bottom: 1px solid var(--card-border);
+  color: var(--fg-dim);
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table td.highlight {
+  color: var(--accent2);
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* 플로우 다이어그램 */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  width: 100%;
+  max-width: 480px;
+}
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.5vw, 16px);
+  padding: clamp(12px, 3vw, 18px);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: border-color 0.3s;
+}
+.flow-step:hover { border-color: rgba(0,229,160,0.2); }
+.flow-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.flow-icon.green { background: rgba(0,229,160,0.12); color: var(--accent); }
+.flow-icon.orange { background: rgba(255,107,74,0.12); color: var(--accent2); }
+.flow-icon.yellow { background: rgba(255,210,63,0.12); color: var(--accent3); }
+.flow-icon.white { background: rgba(255,255,255,0.08); color: var(--fg); }
+.flow-text {
+  font-size: clamp(12px, 2.8vw, 15px);
+  color: var(--fg);
+  line-height: 1.5;
+}
+.flow-text span {
+  display: block;
+  font-size: clamp(10px, 2.2vw, 12px);
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+/* 타임라인 */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 500px;
+}
+.timeline-item {
+  display: flex;
+  gap: clamp(12px, 3vw, 18px);
+  padding-bottom: clamp(16px, 3vw, 24px);
+  position: relative;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: var(--card-border);
+}
+.timeline-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  z-index: 1;
+}
+.timeline-dot.green { background: rgba(0,229,160,0.15); color: var(--accent); }
+.timeline-dot.orange { background: rgba(255,107,74,0.15); color: var(--accent2); }
+.timeline-dot.yellow { background: rgba(255,210,63,0.15); color: var(--accent3); }
+.timeline-content h4 {
+  font-size: clamp(13px, 3vw, 16px);
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.timeline-content p {
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+/* 태그 */
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: clamp(10px, 2.2vw, 12px);
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tag.green { background: rgba(0,229,160,0.12); color: var(--accent); }
+.tag.red { background: rgba(255,107,74,0.12); color: var(--accent2); }
+.tag.yellow { background: rgba(255,210,63,0.12); color: var(--accent3); }
+
+/* 두 컬럼 레이아웃 */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 4vw, 40px);
+  width: 100%;
+  align-items: center;
+}
+
+/* 히어로 특수 스타일 */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.2);
+  font-size: clamp(11px, 2.5vw, 13px);
+  color: var(--accent);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.hero-badge i { font-size: 12px; }
+
+.hero-title {
+  font-weight: 900;
+  font-size: clamp(32px, 8vw, 64px);
+  line-height: 1.08;
+  margin-bottom: 8px;
+}
+.hero-title .accent { color: var(--accent); }
+.hero-title .accent2 { color: var(--accent2); }
+
+.hero-authors {
+  font-size: clamp(12px, 2.5vw, 15px);
+  color: var(--fg-dim);
+  margin-bottom: 6px;
+}
+.hero-venue {
+  font-size: clamp(11px, 2.2vw, 13px);
+  color: var(--fg-dim);
+  opacity: 0.7;
+}
+
+.hero-stats-row {
+  display: flex;
+  gap: clamp(16px, 4vw, 32px);
+  margin-top: clamp(24px, 5vw, 40px);
+  flex-wrap: wrap;
+}
+.hero-stat {
+  text-align: left;
+}
+.hero-stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 6vw, 40px);
+  color: var(--fg);
+  line-height: 1.1;
+}
+.hero-stat-label {
+  font-size: clamp(10px, 2.2vw, 12px);
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+/* 비율 인디케이터 */
+.ratio-block {
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  height: clamp(40px, 8vw, 56px);
+  margin-bottom: clamp(12px, 2.5vw, 20px);
+}
+.ratio-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(10px, 2.2vw, 13px);
+  font-weight: 700;
+  color: var(--bg);
+  transition: width 1s ease;
+}
+
+/* 푸시백 다이어그램 */
+.pushback-visual {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 14px);
+  width: 100%;
+  max-width: 500px;
+}
+.pb-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pb-bar-wrap {
+  flex: 1;
+  height: clamp(32px, 7vw, 44px);
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.pb-bar {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(11px, 2.5vw, 14px);
+  font-weight: 700;
+  color: var(--bg);
+  transition: width 1s ease;
+  width: 0;
+}
+.pb-label {
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--fg-dim);
+  min-width: clamp(70px, 18vw, 100px);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 스와이프 인디케이터 */
+.swipe-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  font-size: 12px;
+  color: var(--fg-dim);
+  animation: fadeHint 3s ease 2s forwards;
+  pointer-events: none;
+}
+@keyframes fadeHint {
+  to { opacity: 0; }
+}
+
+/* 도트 네비게이션 */
+.dots-nav {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dot-btn {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--fg-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+.dot-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* 반응형 */
+@media (min-width: 769px) {
+  .two-col { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .swipe-hint { display: none; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { gap: 8px; }
+  .stat-card { padding: 12px 8px; }
+  .nav-bar { padding: 10px 12px; }
+  .slide { padding: clamp(20px, 5vw, 40px) clamp(14px, 4vw, 24px); }
+  .dots-nav { display: none; }
+}
+
+@media (max-width: 320px) {
+  .hero-stats-row { gap: 12px; }
+  .bar-label { min-width: 60px; font-size: 10px; }
+}
+
+/* 접근성: 모션 감소 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 스크롤바 커스텀 */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- 배경 장식 -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<!-- 네비게이션 -->
+<nav class="nav-bar" role="navigation" aria-label="슬라이드 네비게이션">
+  <div class="nav-title">SWE-CHAT</div>
+  <div class="nav-controls">
+    <button class="nav-btn disabled" id="prevBtn" aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+    <span class="slide-counter" id="slideCounter">1 / 10</span>
+    <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+  </div>
+</nav>
+
+<!-- 프로그레스 바 -->
+<div class="progress-bar" id="progressBar" style="width: 10%"></div>
+
+<!-- 도트 네비게이션 -->
+<div class="dots-nav" id="dotsNav" role="navigation" aria-label="슬라이드 선택"></div>
+
+<!-- 슬라이드 -->
+<main class="slides-wrapper">
+
+  <!-- 슬라이드 1: 히어로 -->
+  <section class="slide active" data-index="0">
+    <div class="hero-badge"><i class="fas fa-flask"></i> arXiv: 2604.20779</div>
+    <h1 class="hero-title">SWE-chat<span class="accent">:</span><br>실제 사용자의<br><span class="accent2">코딩 에이전트</span><br>상호작용 데이터셋</h1>
+    <p class="hero-authors">Joachim Baumann, Vishakh Padmakumar, Xiang Li, John Yang, Diyi Yang, Sanmi Koyejo</p>
+    <p class="hero-venue">Stanford University &middot; 2026</p>
+    <div class="hero-stats-row">
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="6000">0</div>
+        <div class="hero-stat-label">세션 수</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="63000">0</div>
+        <div class="hero-stat-label">사용자 프롬프트</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="355000">0</div>
+        <div class="hero-stat-label">에이전트 도구 호출</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="2700000" data-suffix="">0</div>
+        <div class="hero-stat-label">총 로그 이벤트</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 연구 배경 -->
+  <section class="slide" data-index="1">
+    <div class="slide-label">Background</div>
+    <h2 class="slide-title">왜 이 연구가<br>필요한가?</h2>
+    <p class="slide-subtitle">AI 코딩 에이전트는 급격히 도입되고 있지만, 실제 사용 방식에 대한 실증적 증거는 거의 없습니다.</p>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-icon orange"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="flow-text">
+          기존 벤치마크의 한계
+          <span>SWE-bench 등은 큐레이팅된 문제만 평가 — 실제 반복적 사용과 차이 큼</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon yellow"><i class="fas fa-robot"></i></div>
+        <div class="flow-text">
+          에이전트 능력은 급성장 중
+          <span>12시간 인간 작업의 50%를 성공한다는 보고 (METR 2026)</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon white"><i class="fas fa-question-circle"></i></div>
+        <div class="flow-text">
+          근본적 질문 미해결
+          <span>사용자가 얼마나 에이전트 출력을 실제로 사용하는가? 실패 시 어떻게 대응하는가?</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon green"><i class="fas fa-database"></i></div>
+        <div class="flow-text">
+          SWE-chat으로 gap 해소
+          <span>실제 오픈소스 개발자의 완전한 상호작용 추적 + 코드 작성자 귀속</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 데이터셋 구조 -->
+  <section class="slide" data-index="2">
+    <div class="slide-label">Dataset</div>
+    <h2 class="slide-title">SWE-chat<br>데이터 구조</h2>
+    <p class="slide-subtitle">Entire.io를 통해 공개 GitHub 저장소에서 자동 수집되는 실제 세션 데이터입니다.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot green"><i class="fas fa-user"></i></div>
+        <div class="timeline-content">
+          <h4>사용자 프롬프트</h4>
+          <p>자연어 요청 — 버그 수정, 기능 구현뿐 아니라 코드 이해, 리팩토링 등 다양한 의도</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot yellow"><i class="fas fa-cogs"></i></div>
+        <div class="timeline-content">
+          <h4>에이전트 도구 호출</h4>
+          <p>파일 읽기/편집, 셸 명령어 실행, 코드 검색, 서브에이전트 호출 등</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot orange"><i class="fas fa-code-branch"></i></div>
+        <div class="timeline-content">
+          <h4>코드 커밋 + 작성자 귀속</h4>
+          <p>라인 단위로 인간 vs 에이전트 코드 구분 — 어떤 코드가 실제로 커밋되었는지 추적</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot green"><i class="fas fa-sync"></i></div>
+        <div class="timeline-content">
+          <h4>지속적 수집 파이프라인</h4>
+          <p>라이빙 데이터셋 — 새로운 세션을 자동 발견하고 처리하여 지속적 성장</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 코딩 모드 분포 -->
+  <section class="slide" data-index="3">
+    <div class="slide-label">RQ1 &middot; Coding Modes</div>
+    <h2 class="slide-title">바이모달 코딩<br>패턴</h2>
+    <p class="slide-subtitle">사용자의 코딩 방식은 극단적으로 양극화되어 있습니다.</p>
+    <div class="ratio-block" id="ratioBlock">
+      <div class="ratio-seg" style="width:23%; background: var(--accent3); color: var(--bg);">23%</div>
+      <div class="ratio-seg" style="width:13%; background: var(--fg-dim); color: var(--bg);">13%</div>
+      <div class="ratio-seg" style="width:23%; background: rgba(255,255,255,0.15); color: var(--fg);">23%</div>
+      <div class="ratio-seg" style="width:41%; background: var(--accent2); color: var(--bg);">41%</div>
+    </div>
+    <div class="bar-chart" style="max-width:100%;">
+      <div class="bar-row">
+        <div class="bar-label">바이브 코딩</div>
+        <div class="bar-track"><div class="bar-fill red" data-width="41%">41%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">협업 코딩</div>
+        <div class="bar-track"><div class="bar-fill mixed" data-width="36%">36%</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">인간 직접 작성</div>
+        <div class="bar-track"><div class="bar-fill yellow" data-width="23%">23%</div></div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <i class="fas fa-lightbulb"></i>
+      <p>바이브 코딩(에이전트가 사실상 모든 코드 작성)이 세션의 <strong>41%</strong>를 차지하지만, <strong>23%</strong>는 인간이 직접 모든 코드를 작성합니다. 중간地带이 현저히 적은 바이모달 분포입니다.</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 작업 유형 다양성 -->
+  <section class="slide" data-index="4">
+    <div class="slide-label">RQ1 &middot; Task Types</div>
+    <h2 class="slide-title">코드 작성만이<br>전부가 아니다</h2>
+    <p class="slide-subtitle">사용자의 요청은 패치 생성에 국한되지 않고, 훨씬 다양한 작업을 포괄합니다.</p>
+    <div class="two-col">
+      <div class="bar-chart" style="max-width:100%;">
+        <div class="bar-row">
+          <div class="bar-label">코드 이해</div>
+          <div class="bar-track"><div class="bar-fill green" data-width="85%">최다</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">버그 수정</div>
+          <div class="bar-track"><div class="bar-fill yellow" data-width="62%">높음</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">기능 구현</div>
+          <div class="bar-track"><div class="bar-fill yellow" data-width="55%">높음</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">리팩토링</div>
+          <div class="bar-track"><div class="bar-fill mixed" data-width="42%">중간</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">테스트 작성</div>
+          <div class="bar-track"><div class="bar-fill mixed" data-width="35%">중간</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="donut-chart" id="toolDonut">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="46" stroke="rgba(255,255,255,0.04)" stroke-width="24"/>
+            <circle cx="60" cy="60" r="46" stroke="#00e5a0" stroke-width="24"
+              stroke-dasharray="96 289" stroke-dashoffset="0" class="donut-seg" data-dash="96 289"/>
+            <circle cx="60" cy="60" r="46" stroke="#ffd23f" stroke-width="24"
+              stroke-dasharray="115 289" stroke-dashoffset="-96" class="donut-seg" data-dash="115 289" data-offset="-96"/>
+            <circle cx="60" cy="60" r="46" stroke="#ff6b4a" stroke-width="24"
+              stroke-dasharray="78 289" stroke-dashoffset="-211" class="donut-seg" data-dash="78 289" data-offset="-211"/>
+          </svg>
+          <div class="donut-center-text">
+            <div class="donut-center-number">1/3</div>
+            <div class="donut-center-label">bash 명령어</div>
+          </div>
+        </div>
+        <div class="donut-legend" style="margin-top:16px;">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#00e5a0"></div>
+            파일 편집
+            <span class="legend-value">33%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ffd23f"></div>
+            bash 실행
+            <span class="legend-value">40%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ff6b4a"></div>
+            파일 읽기/검색
+            <span class="legend-value">27%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <i class="fas fa-lightbulb"></i>
+      <p><strong>코드 이해</strong>가 가장 흔한 사용자 의도입니다. 에이전트는 도구 호출의 1/3을 파일 편집이 아닌 bash 명령어 실행에 사용하며, 기존 벤치마크는 이 다양성을 과소평가합니다.</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 코드 효율성 -->
+  <section class="slide" data-index="5">
+    <div class="slide-label">RQ2 &middot; Efficiency</div>
+    <h2 class="slide-title">에이전트 코드의<br>낮은 생존율</h2>
+    <p class="slide-subtitle">에이전트가 생성한 코드의 절반 이상이 최종 커밋에서 폐기됩니다.</p>
+    <div class="donut-container" style="margin-bottom: 24px;">
+      <div class="donut-chart" id="survivalDonut">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="46" stroke="rgba(255,255,255,0.04)" stroke-width="24"/>
+          <circle cx="60" cy="60" r="46" stroke="#00e5a0" stroke-width="24"
+            stroke-dasharray="127 289" stroke-dashoffset="0" class="donut-seg" data-dash="127 289"/>
+          <circle cx="60" cy="60" r="46" stroke="#ff6b4a" stroke-width="24"
+            stroke-dasharray="161 289" stroke-dashoffset="-127" class="donut-seg" data-dash="161 289" data-offset="-127"/>
+        </svg>
+        <div class="donut-center-text">
+          <div class="donut-center-number">44%</div>
+          <div class="donut-center-label">생존율</div>
+        </div>
+      </div>
+      <div class="donut-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#00e5a0"></div>
+          커밋에 포함
+          <span class="legend-value">44%</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#ff6b4a"></div>
+          폐기됨
+          <span class="legend-value">56%</span>
+        </div>
+      </div>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>코딩 모드</th>
+          <th>토큰/커밋 라인</th>
+          <th>비용 효율</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>협업 코딩</td>
+          <td>기준 (1x)</td>
+          <td style="color:var(--accent)">효율적</td>
+        </tr>
+        <tr>
+          <td>바이브 코딩</td>
+          <td class="highlight">~3x 더 많음</td>
+          <td class="highlight">비효율적</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="insight-box warn">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>바이브 코딩은 협업 코딩 대비 <strong>약 3배 더 많은 토큰과 비용</strong>을 커밋된 라인당 소모합니다. 에이전트가 자율적으로 작성할수록 낭비가 커집니다.</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 보안 취약점 -->
+  <section class="slide" data-index="6">
+    <div class="slide-label">RQ2 &middot; Security</div>
+    <h2 class="slide-title">바이브 코딩의<br>보안 리스크</h2>
+    <p class="slide-subtitle">에이전트가 작성한 코드는 인간이 작성한 코드보다 더 많은 보안 취약점을 도입합니다.</p>
+    <div class="bar-chart" style="max-width:100%; margin-bottom: 24px;">
+      <div class="bar-row">
+        <div class="bar-label">인간 직접 작성</div>
+        <div class="bar-track"><div class="bar-fill green" data-width="11%">1x</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">인간+에이전트 협업</div>
+        <div class="bar-track"><div class="bar-fill yellow" data-width="55%">~5x</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">바이브 코딩</div>
+        <div class="bar-track"><div class="bar-fill red" data-width="100%">~9x</div></div>
+      </div>
+    </div>
+    <div class="card" style="max-width: 500px;">
+      <div style="font-size: clamp(11px, 2.2vw, 13px); color: var(--fg-dim); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Grotesk', sans-serif;">Semgrep 정적 분석 기준</div>
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 8vw, 56px); font-weight: 700; color: var(--accent2);">9x</span>
+        <span style="font-size: clamp(14px, 3vw, 18px); color: var(--fg-dim);">더 많은 취약점 / 커밋 라인</span>
+      </div>
+      <p style="font-size: clamp(12px, 2.5vw, 14px); color: var(--fg-dim); margin-top: 8px; line-height: 1.7;">
+        바이브 코딩으로 생성된 코드는 인간이 직접 작성한 코드보다 커밋 라인당 약 9배, 협업 코드보다 약 5배 더 많은 보안 취약점을 포함합니다.
+      </p>
+    </div>
+    <div class="insight-box warn">
+      <i class="fas fa-shield-alt"></i>
+      <p>자율성이 높을수록 보안 품질이 저하됩니다. 인간의 감독이 코드 안전성에 직결됩니다.</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 사용자 푸시백 -->
+  <section class="slide" data-index="7">
+    <div class="slide-label">RQ2 &middot; User Pushback</div>
+    <h2 class="slide-title">사용자는 끊임없이<br>에이전트에 반발한다</h2>
+    <p class="slide-subtitle">44%의 모든 턴에서 사용자가 에이전트 출력에 대해 푸시백을 합니다.</p>
+    <div class="stats-grid" style="margin-bottom: clamp(20px, 4vw, 32px);">
+      <div class="stat-card card">
+        <span class="stat-number orange">44%</span>
+        <span class="stat-label">턴당 푸시백 비율</span>
+      </div>
+      <div class="stat-card card">
+        <span class="stat-number yellow">5%</span>
+        <span class="stat-label">에이전트 중단 비율</span>
+      </div>
+      <div class="stat-card card">
+        <span class="stat-number white">100분+</span>
+        <span class="stat-label">최장 턴 소요시간</span>
+      </div>
+      <div class="stat-card card">
+        <span class="stat-number" style="color:var(--fg-dim);">거의 없음</span>
+        <span class="stat-label">에이전트 자발적 질문</span>
+      </div>
+    </div>
+    <div class="pushback-visual">
+      <div class="pb-item">
+        <div class="pb-label">정정</div>
+        <div class="pb-bar-wrap"><div class="pb-bar" data-width="52" style="background: linear-gradient(90deg, #ff6b4a, #ff8a6b);">52%</div></div>
+      </div>
+      <div class="pb-item">
+        <div class="pb-label">실패 보고</div>
+        <div class="pb-bar-wrap"><div class="pb-bar" data-width="28" style="background: linear-gradient(90deg, #ffd23f, #ffe066);">28%</div></div>
+      </div>
+      <div class="pb-item">
+        <div class="pb-label">거부</div>
+        <div class="pb-bar-wrap"><div class="pb-bar" data-width="20" style="background: linear-gradient(90deg, #8a8a9a, #aaaabc);">20%</div></div>
+      </div>
+    </div>
+    <div class="insight-box warn">
+      <i class="fas fa-hand-paper"></i>
+      <p>에이전트는 99.9백분위수에서 <strong>100분 이상</strong> 자율적으로 작동하지만, 사용자에게 clarification을 요청하는 경우는 거의 없습니다. 사용자가 직접 중단하고 교정해야 합니다.</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 9: 핵심 발견 요약 -->
+  <section class="slide" data-index="8">
+    <div class="slide-label">Key Findings</div>
+    <h2 class="slide-title">핵심 발견</h2>
+    <p class="slide-subtitle">SWE-chat이 밝혀낸 실제 코딩 에이전트 사용의 5가지 핵심 인사이트</p>
+    <div class="flow-steps" style="max-width: 100%;">
+      <div class="flow-step">
+        <div class="flow-icon green"><i class="fas fa-chart-bar"></i></div>
+        <div class="flow-text">
+          코딩 패턴은 극단적으로 바이모달
+          <span>41% 바이브 코딩 vs 23% 인간 전담 — 중간이 없음</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon orange"><i class="fas fa-trash-alt"></i></div>
+        <div class="flow-text">
+          에이전트 코드의 절반이 폐기됨
+          <span>44%만 커밋 생존 — 자율성 높을수록 폐기율 증가</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon orange"><i class="fas fa-bug"></i></div>
+        <div class="flow-text">
+          바이브 코딩이 보안에 위험
+          <span>인간 작성 코드 대비 9배 더 많은 취약점 도입</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon yellow"><i class="fas fa-hand-paper"></i></div>
+        <div class="flow-text">
+          사용자가 지속적으로 에이전트를 견제
+          <span>44% 턴에서 푸시백, 5%에서 직접 중단</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon white"><i class="fas fa-eye-slash"></i></div>
+        <div class="flow-text">
+          자율성이 감독을 앞지름
+          <span>에이전트는 길게 작동하지만 사용자에게 거의 질문하지 않음</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 10: 향후 방향 -->
+  <section class="slide" data-index="9">
+    <div class="slide-label">Outlook</div>
+    <h2 class="slide-title">더 나은 코딩<br>에이전트를 향하여</h2>
+    <p class="slide-subtitle">SWE-chat이 제시하는 연구 로드맵과 시사점</p>
+    <div class="two-col">
+      <div>
+        <div class="card" style="margin-bottom: clamp(12px, 2.5vw, 16px); border-left: 3px solid var(--accent);">
+          <h4 style="font-size: clamp(14px, 3vw, 17px); font-weight: 700; margin-bottom: 6px; color: var(--accent);">실제 워크플로 기반 벤치마크</h4>
+          <p style="font-size: clamp(12px, 2.5vw, 14px); color: var(--fg-dim); line-height: 1.7;">큐레이팅된 문제가 아닌, 실제 개발자의 반복적이고 다양한 작업 흐름을 반영한 평가 체계 필요</p>
+        </div>
+        <div class="card" style="margin-bottom: clamp(12px, 2.5vw, 16px); border-left: 3px solid var(--accent3);">
+          <h4 style="font-size: clamp(14px, 3vw, 17px); font-weight: 700; margin-bottom: 6px; color: var(--accent3);">적응적 상호작용 설계</h4>
+          <p style="font-size: clamp(12px, 2.5vw, 14px); color: var(--fg-dim); line-height: 1.7;">에이전트가 사용자의 코딩 스타일(바이브 vs 협업)과 전문도에 맞춰 행동을 조절해야 함</p>
+        </div>
+        <div class="card" style="border-left: 3px solid var(--accent2);">
+          <h4 style="font-size: clamp(14px, 3vw, 17px); font-weight: 700; margin-bottom: 6px; color: var(--accent2);">사용자 시뮬레이터</h4>
+          <p style="font-size: clamp(12px, 2.5vw, 14px); color: var(--fg-dim); line-height: 1.7;">실제 세션 데이터로 검증된 오픈소스 사용자 시뮬레이터로 오프라인 평가 가능</p>
+        </div>
+      </div>
+      <div class="card" style="background: rgba(0,229,160,0.03); border-color: rgba(0,229,160,0.12);">
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(11px, 2.2vw, 13px); text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 14px;">핵심 메시지</div>
+        <p style="font-size: clamp(15px, 3.2vw, 20px); font-weight: 700; line-height: 1.7; margin-bottom: 12px;">
+          "에이전트는 강력하지만<br>취약하다."
+        </p>
+        <p style="font-size: clamp(13px, 2.8vw, 16px); color: var(--fg-dim); line-height: 1.8;">
+          자율성 향상만으로는 부족합니다. 실제 사용 데이터에 기반한 감독 체계, 보안 검증, 그리고 인간-에이전트 협업 모델의 근본적 재설계가 필요합니다.
+        </p>
+        <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+          <span class="tag green">실증 기반</span>
+          <span class="tag yellow">감독 강화</span>
+          <span class="tag red">보안 우선</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 스와이프 힌트 -->
+<div class="swipe-hint">
+  <i class="fas fa-arrows-alt-v"></i> 위아래로 스크롤하거나 버튼으로 이동
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isAnimating = false;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const slideCounter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const dotsNav = document.getElementById('dotsNav');
+
+  // 도트 네비게이션 생성
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'dot-btn' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `${i + 1}번 슬라이드로 이동`);
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsNav.appendChild(dot);
+  }
+
+  function updateUI() {
+    slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+    progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+    prevBtn.classList.toggle('disabled', currentSlide === 0);
+    nextBtn.classList.toggle('disabled', currentSlide === totalSlides - 1);
+
+    const dots = dotsNav.querySelectorAll('.dot-btn');
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  }
+
+  function animateBars(slide) {
+    // 바 차트 애니메이션
+    const bars = slide.querySelectorAll('.bar-fill[data-width]');
+    bars.forEach((bar, i) => {
+      bar.style.width = '0';
+      setTimeout(() => {
+        bar.style.width = bar.dataset.width;
+      }, 100 + i * 120);
+    });
+
+    // 푸시백 바 애니메이션
+    const pbBars = slide.querySelectorAll('.pb-bar[data-width]');
+    pbBars.forEach((bar, i) => {
+      bar.style.width = '0';
+      setTimeout(() => {
+        bar.style.width = bar.dataset.width + '%';
+      }, 100 + i * 150);
+    });
+  }
+
+  function animateCounters(slide) {
+    const counters = slide.querySelectorAll('.hero-stat-num[data-count]');
+    counters.forEach(el => {
+      const target = parseInt(el.dataset.count);
+      const duration = 1500;
+      const start = performance.now();
+
+      function formatNum(n) {
+        if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+        return n.toLocaleString();
+      }
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutExpo
+        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = Math.floor(eased * target);
+        el.textContent = formatNum(current);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlide || isAnimating || index < 0 || index >= totalSlides) return;
+    isAnimating = true;
+
+    slides[currentSlide].classList.remove('active');
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    updateUI();
+    animateBars(slides[currentSlide]);
+    animateCounters(slides[currentSlide]);
+
+    setTimeout(() => { isAnimating = false; }, 500);
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    }
+  });
+
+  // 터치 스와이프
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    // 세로 스와이프 우선, 최소 거리 50px
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+      if (dy > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  // 휠 이벤트 (디바운스)
+  let wheelTimeout = null;
+  document.addEventListener('wheel', (e) => {
+    if (wheelTimeout) return;
+    wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 800);
+    if (e.deltaY > 30) goToSlide(currentSlide + 1);
+    else if (e.deltaY < -30) goToSlide(currentSlide - 1);
+  }, { passive: true });
+
+  // 초기 애니메이션
+  updateUI();
+  animateBars(slides[0]);
+  animateCounters(slides[0]);
+
+  // 배경 오브 미세 움직임
+  const orbs = document.querySelectorAll('.bg-orb');
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  function moveOrbs() {
+    orbs.forEach((orb, i) => {
+      const factor = (i + 1) * 8;
+      orb.style.transform = `translate(${mouseX * factor}px, ${mouseY * factor}px)`;
+    });
+    requestAnimationFrame(moveOrbs);
+  }
+  moveOrbs();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ASR 평가: 생성적 LLM의 활용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0a0c;
+  --bg2: #111115;
+  --card: #18181d;
+  --card2: #1e1e25;
+  --border: #2a2a35;
+  --fg: #e8e6e1;
+  --fg2: #a09d96;
+  --muted: #6b6860;
+  --accent: #e8a838;
+  --accent2: #f0c060;
+  --accent-dim: rgba(232,168,56,0.12);
+  --red: #e85050;
+  --green: #50c878;
+  --teal: #40b8a0;
+  --bar-wer: #e85050;
+  --bar-cer: #e87850;
+  --bar-bert: #50a0e8;
+  --bar-semdist: #50c878;
+  --bar-semsent: #40b8a0;
+  --bar-llm: #e8a838;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  font-family:'Noto Sans KR','Space Grotesk',sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+  min-height:100dvh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.bg-glow{
+  position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 20%, rgba(232,168,56,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 80% 80%, rgba(64,184,160,0.04) 0%, transparent 70%);
+}
+.slide-container{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;
+  padding:20px 16px 100px;
+}
+.slide{
+  display:none;
+  animation:fadeSlide .5s ease forwards;
+  min-height:calc(100dvh - 140px);
+  padding:24px 0;
+}
+.slide.active{display:block}
+@keyframes fadeSlide{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.slide-num{
+  font-family:'Space Grotesk',monospace;
+  font-size:clamp(11px,2.5vw,13px);
+  color:var(--muted);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.slide-title{
+  font-size:clamp(22px,5.5vw,36px);
+  font-weight:900;
+  line-height:1.25;
+  margin-bottom:20px;
+  color:var(--fg);
+}
+.slide-title .hl{color:var(--accent)}
+.subtitle{
+  font-size:clamp(14px,3.2vw,18px);
+  color:var(--fg2);
+  line-height:1.7;
+  font-weight:300;
+  max-width:700px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:clamp(16px,4vw,24px);
+  margin:16px 0;
+  transition:border-color .3s;
+}
+.card:hover{border-color:rgba(232,168,56,0.3)}
+.card-grid{display:grid;gap:12px}
+.card-grid.c2{grid-template-columns:1fr 1fr}
+@media(max-width:480px){.card-grid.c2{grid-template-columns:1fr}}
+.card-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  margin-bottom:12px;
+}
+.card-label{
+  font-size:clamp(11px,2.5vw,13px);
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:6px;
+}
+.card-value{
+  font-family:'Space Grotesk',monospace;
+  font-size:clamp(28px,7vw,44px);
+  font-weight:700;
+  line-height:1.1;
+}
+.card-desc{
+  font-size:clamp(12px,2.8vw,14px);
+  color:var(--fg2);
+  margin-top:8px;
+  line-height:1.6;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:20px;
+  font-size:clamp(11px,2.5vw,12px);
+  font-weight:600;
+  background:var(--accent-dim);
+  color:var(--accent);
+  border:1px solid rgba(232,168,56,0.2);
+}
+.badge.green{background:rgba(80,200,120,0.1);color:var(--green);border-color:rgba(80,200,120,0.2)}
+.badge.red{background:rgba(232,80,80,0.1);color:var(--red);border-color:rgba(232,80,80,0.2)}
+.tag{
+  display:inline-block;
+  padding:3px 10px;border-radius:6px;
+  font-size:11px;font-weight:500;
+  background:var(--card2);color:var(--fg2);
+  border:1px solid var(--border);
+}
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:20px 0;
+}
+/* 바 차트 */
+.bar-chart{display:flex;flex-direction:column;gap:clamp(10px,2.5vw,14px);padding:8px 0}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{
+  width:clamp(100px,28vw,160px);
+  font-size:clamp(11px,2.8vw,13px);
+  color:var(--fg2);
+  text-align:right;
+  flex-shrink:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.bar-track{
+  flex:1;height:clamp(22px,5vw,32px);
+  background:var(--bg2);
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+}
+.bar-fill{
+  height:100%;
+  border-radius:8px;
+  transition:width 1.2s cubic-bezier(.22,1,.36,1);
+  position:relative;
+  display:flex;align-items:center;
+  justify-content:flex-end;
+  padding-right:10px;
+}
+.bar-fill.wer{background:linear-gradient(90deg,var(--bar-wer),#f07060)}
+.bar-fill.cer{background:linear-gradient(90deg,var(--bar-cer),#f0a070)}
+.bar-fill.bert{background:linear-gradient(90deg,var(--bar-bert),#70b8f0)}
+.bar-fill.semdist{background:linear-gradient(90deg,var(--bar-semdist),#70e0a0)}
+.bar-fill.semsent{background:linear-gradient(90deg,var(--bar-semsent),#70d8c0)}
+.bar-fill.llm{background:linear-gradient(90deg,var(--bar-llm),var(--accent2))}
+.bar-val{
+  font-family:'Space Grotesk',monospace;
+  font-size:clamp(11px,2.5vw,13px);
+  font-weight:700;
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.5);
+  white-space:nowrap;
+}
+/* 프롬프트 박스 */
+.prompt-box{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:clamp(14px,3.5vw,20px);
+  font-size:clamp(12px,2.8vw,14px);
+  line-height:1.8;
+  color:var(--fg2);
+  overflow-x:auto;
+}
+.prompt-box .role{
+  font-weight:700;
+  color:var(--accent);
+  font-size:clamp(11px,2.5vw,12px);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:4px;
+}
+.prompt-box .role.assistant{color:var(--teal)}
+.prompt-box .ref{color:var(--fg);font-weight:500}
+.prompt-box .hyp{color:var(--accent2)}
+.prompt-box .ans{color:var(--teal);font-style:italic}
+/* 표 */
+.data-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:clamp(11px,2.5vw,13px);
+}
+.data-table th{
+  padding:10px 8px;
+  text-align:center;
+  font-weight:600;
+  color:var(--muted);
+  border-bottom:2px solid var(--border);
+  font-size:clamp(10px,2.2vw,11px);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.data-table td{
+  padding:10px 8px;
+  text-align:center;
+  color:var(--fg2);
+  border-bottom:1px solid rgba(42,42,53,.5);
+}
+.data-table tr:hover td{background:rgba(232,168,56,0.03)}
+.data-table .best{color:var(--accent);font-weight:700;font-family:'Space Grotesk',monospace}
+.data-table .metric-name{text-align:left;color:var(--fg);font-weight:500}
+.table-scroll{overflow-x:auto;margin:12px -4px;padding:0 4px;-webkit-overflow-scrolling:touch}
+/* 비교 다이어그램 */
+.compare{
+  display:flex;align-items:stretch;gap:clamp(10px,2.5vw,16px);
+  margin:16px 0;
+}
+@media(max-width:480px){.compare{flex-direction:column}}
+.compare-item{
+  flex:1;
+  border-radius:14px;
+  padding:clamp(16px,4vw,24px);
+  position:relative;
+  overflow:hidden;
+}
+.compare-item.old{background:linear-gradient(135deg,rgba(232,80,80,0.08),rgba(232,80,80,0.02));border:1px solid rgba(232,80,80,0.15)}
+.compare-item.new{background:linear-gradient(135deg,rgba(232,168,56,0.08),rgba(232,168,56,0.02));border:1px solid rgba(232,168,56,0.15)}
+.compare-item .ci-title{
+  font-size:clamp(14px,3.5vw,18px);
+  font-weight:700;
+  margin-bottom:10px;
+}
+.compare-item.old .ci-title{color:var(--red)}
+.compare-item.new .ci-title{color:var(--accent)}
+.compare-item ul{list-style:none;padding:0}
+.compare-item li{
+  font-size:clamp(12px,2.8vw,14px);
+  color:var(--fg2);
+  padding:6px 0;
+  padding-left:20px;
+  position:relative;
+  line-height:1.6;
+}
+.compare-item li::before{
+  content:'';
+  position:absolute;left:0;top:14px;
+  width:8px;height:8px;border-radius:50%;
+}
+.compare-item.old li::before{background:var(--red)}
+.compare-item.new li::before{background:var(--accent)}
+.vs-badge{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',monospace;
+  font-weight:700;font-size:clamp(14px,3vw,18px);
+  color:var(--muted);flex-shrink:0;
+  align-self:center;
+}
+@media(max-width:480px){.vs-badge{align-self:center;transform:rotate(90deg)}}
+/* 방법론 카드 */
+.method-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:clamp(18px,4.5vw,28px);
+  margin:14px 0;
+  position:relative;
+  overflow:hidden;
+  transition:all .3s;
+}
+.method-card:hover{border-color:rgba(232,168,56,0.3);transform:translateY(-2px)}
+.method-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:4px;height:100%;
+  border-radius:4px 0 0 4px;
+}
+.method-card.m1::before{background:var(--accent)}
+.method-card.m2::before{background:var(--teal)}
+.method-card.m3::before{background:var(--green)}
+.method-num{
+  font-family:'Space Grotesk',monospace;
+  font-size:clamp(11px,2.5vw,12px);
+  color:var(--muted);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.method-title{
+  font-size:clamp(15px,3.8vw,20px);
+  font-weight:700;
+  margin-bottom:8px;
+}
+.method-desc{
+  font-size:clamp(12px,2.8vw,14px);
+  color:var(--fg2);
+  line-height:1.7;
+}
+/* 인사이트 박스 */
+.insight{
+  background:linear-gradient(135deg,var(--accent-dim),rgba(232,168,56,0.03));
+  border:1px solid rgba(232,168,56,0.15);
+  border-radius:14px;
+  padding:clamp(16px,4vw,22px);
+  margin:20px 0;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.insight-icon{
+  font-size:20px;
+  color:var(--accent);
+  flex-shrink:0;
+  margin-top:2px;
+}
+.insight-text{
+  font-size:clamp(13px,3vw,15px);
+  color:var(--fg);
+  line-height:1.7;
+  font-weight:400;
+}
+/* 네비게이션 */
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,12,0.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:10px 16px;
+  padding-bottom:max(10px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.nav-btn{
+  width:48px;height:48px;
+  border-radius:12px;border:1px solid var(--border);
+  background:var(--card);color:var(--fg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;
+  transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.nav-btn:active{transform:scale(.92);background:var(--card2)}
+.nav-btn:disabled{opacity:.3;pointer-events:none}
+.nav-dots{
+  display:flex;gap:6px;align-items:center;
+  flex:1;justify-content:center;
+}
+.nav-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--border);
+  transition:all .3s;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-dot.active{
+  background:var(--accent);
+  width:24px;
+  border-radius:4px;
+}
+.nav-counter{
+  font-family:'Space Grotesk',monospace;
+  font-size:12px;color:var(--muted);
+  flex-shrink:0;
+  min-width:40px;text-align:center;
+}
+/* 타이틀 슬라이드 특수 */
+.title-slide{
+  display:flex;flex-direction:column;
+  justify-content:center;
+  min-height:calc(100dvh - 160px);
+  text-align:center;
+  padding-top:40px;
+}
+.title-slide .slide-title{
+  font-size:clamp(26px,6.5vw,44px);
+  margin-bottom:16px;
+}
+.title-slide .paper-meta{
+  display:flex;flex-wrap:wrap;gap:8px;
+  justify-content:center;
+  margin:20px 0;
+}
+.title-slide .authors{
+  font-size:clamp(12px,2.8vw,14px);
+  color:var(--fg2);
+  line-height:1.8;
+  margin:12px 0;
+}
+.title-slide .affil{
+  font-size:clamp(11px,2.5vw,12px);
+  color:var(--muted);
+  line-height:1.7;
+}
+.arxiv-link{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:10px;
+  background:var(--card);border:1px solid var(--border);
+  color:var(--fg2);text-decoration:none;
+  font-size:clamp(12px,2.8vw,14px);
+  transition:all .3s;
+  margin-top:16px;
+}
+.arxiv-link:hover{border-color:var(--accent);color:var(--accent)}
+/* 스와이프 힌트 */
+.swipe-hint{
+  text-align:center;
+  font-size:11px;color:var(--muted);
+  margin-top:24px;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
+/* 결론 슬라이드 */
+.conclusion-grid{display:grid;gap:12px;margin:16px 0}
+.conclusion-item{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:clamp(16px,4vw,20px);
+  transition:all .3s;
+}
+.conclusion-item:hover{border-color:rgba(232,168,56,0.25)}
+.conclusion-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:16px;
+}
+.conclusion-text{
+  font-size:clamp(13px,3vw,15px);
+  color:var(--fg2);line-height:1.7;
+}
+.conclusion-text strong{color:var(--fg);font-weight:600}
+/* 애니메이션 관찰 */
+.animate-in{opacity:0;transform:translateY(16px);transition:all .6s ease}
+.animate-in.visible{opacity:1;transform:translateY(0)}
+/* 데코 */
+.deco-line{
+  width:60px;height:3px;border-radius:2px;
+  background:var(--accent);margin:16px 0;
+}
+@media(max-width:320px){
+  .slide-container{padding:12px 10px 90px}
+  .card{padding:12px}
+  .nav-btn{width:42px;height:42px}
+}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="slide-container" id="slides">
+
+  <!-- 슬라이드 0: 타이틀 -->
+  <div class="slide active title-slide" data-index="0">
+    <div class="slide-num">arXiv:2604.21928v1 &middot; 2026</div>
+    <div class="slide-title">
+      생성적 대형 언어 모델을 활용한<br><span class="hl">자동 음성 인식 평가</span>
+    </div>
+    <div class="subtitle">Evaluation of Automatic Speech Recognition Using Generative Large Language Models</div>
+    <div class="deco-line" style="margin:20px auto"></div>
+    <div class="paper-meta">
+      <span class="badge">cs.CL</span>
+      <span class="badge green">HATS 데이터셋</span>
+      <span class="badge">CC BY 4.0</span>
+    </div>
+    <div class="authors">
+      Thibault Bañeras-Roux, Shashi Kumar, Driss Khalil, Sergio Burdisso,<br>
+      Petr Motlicek, Shiran Liu, Mickael Rouvier, Jane Wottawa, Richard Dufour
+    </div>
+    <div class="affil">
+      Idiap Research Institute &middot; Avignon University &middot; Le Mans University &middot; Nantes University
+    </div>
+    <a class="arxiv-link" href="http://arxiv.org/abs/2604.21928v1" target="_blank" rel="noopener">
+      <i class="fas fa-external-link-alt"></i> arXiv에서 원문 보기
+    </a>
+    <div class="swipe-hint"><i class="fas fa-chevron-right"></i>&nbsp; 스와이프하여 시작</div>
+  </div>
+
+  <!-- 슬라이드 1: 문제 정의 -->
+  <div class="slide" data-index="1">
+    <div class="slide-num">01 / 문제 정의</div>
+    <div class="slide-title">WER의 <span class="hl">근본적 한계</span></div>
+    <div class="subtitle">자동 음성 인식(ASR) 평가의 표준 지표인 WER은 의미를 무시하고, 인간 지각과의 상관관계가 낮습니다.</div>
+    <div class="compare">
+      <div class="compare-item old">
+        <div class="ci-title"><i class="fas fa-times-circle"></i>&nbsp; WER의 문제</div>
+        <ul>
+          <li>어휘 수준에서만 비교 — 의미 맥락 무시</li>
+          <li>치명적 오류와 사소한 오류를 동일하게 처리</li>
+          <li>다운스트림 작업과 상관관계 부족</li>
+          <li>인간 지각과 낮은 일치도 (63%)</li>
+          <li>대소문자 구분 등 경직성</li>
+        </ul>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="compare-item new">
+        <div class="ci-title"><i class="fas fa-check-circle"></i>&nbsp; 필요한 지표</div>
+        <ul>
+          <li>의미적 유사성 기반 평가</li>
+          <li>오류 심각도 가중치 부여</li>
+          <li>인간 판단과 높은 상관관계</li>
+          <li>해석 가능한 결과 제공</li>
+          <li>실제 사용자 경험 반영</li>
+        </ul>
+      </div>
+    </div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-lightbulb"></i></div>
+      <div class="insight-text">WER 개선이 반드시 사용자가 체감하는 품질 향상으로 이어지지는 않습니다. 평가 지표의 전환이 시급합니다.</div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 2: 관련 연구 -->
+  <div class="slide" data-index="2">
+    <div class="slide-num">02 / 관련 연구</div>
+    <div class="slide-title">의미 기반 <span class="hl">평가 지표의 발전</span></div>
+    <div class="subtitle">정적 임베딩에서 문맥적 인코더 모델까지, 의미 평가 지표는 지속적으로 발전해 왔습니다.</div>
+    <div class="method-card m1 animate-in">
+      <div class="method-num">1세대</div>
+      <div class="method-title">정적 워드 임베딩 (Le et al., 2016)</div>
+      <div class="method-desc">Word2Vec, GloVe 등을 활용하여 ASR 평가에 임베딩 기반 접근을 최초로 도입. 문맥 무시로 인해 한계 노출.</div>
+    </div>
+    <div class="method-card m2 animate-in">
+      <div class="method-num">2세대</div>
+      <div class="method-title">문맥적 인코더 모델 (BERT, SemDist)</div>
+      <div class="method-desc">BERT의 양방향 인코더를 활용한 SemDist(Kim et al., 2021)가 인간 지각과 WER보다 우수한 상관관계를 입증. 가중 WER 등 해석 가능성 연구도 진행.</div>
+    </div>
+    <div class="method-card m3 animate-in">
+      <div class="method-num">미탐구 영역</div>
+      <div class="method-title">디코더 기반 생성적 LLM</div>
+      <div class="method-desc">GPT, Llama, Gemma 등 디코더 아키텍처 LLM은 다양한 작업에서 뛰어난 성능을 보여주었으나, ASR 평가에는 거의 활용되지 않음.</div>
+    </div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-key"></i></div>
+      <div class="insight-text">본 논문의 핵심 질문: <strong>디코더 기반 LLM이 ASR 평가에 얼마나 적합한가?</strong></div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 3: 세 가지 접근법 -->
+  <div class="slide" data-index="3">
+    <div class="slide-num">03 / 연구 방법</div>
+    <div class="slide-title">LLM을 활용한 <span class="hl">세 가지 평가 접근법</span></div>
+    <div class="subtitle">두 가지 보완적 축 — "LLM as Judge"와 임베딩 품질 평가 — 에서 세 가지 실험을 수행합니다.</div>
+    <div class="method-card m1 animate-in">
+      <div class="method-num">접근법 1</div>
+      <div class="method-title"><i class="fas fa-hand-pointer"></i>&nbsp; 최적 가설 선택</div>
+      <div class="method-desc">두 개의 ASR 가설 중 참조 텍스트에 더 가까운 것을 LLM이 선택. Chain-of-thought 추론을 활용하여 의사결정 과정을 노출.</div>
+    </div>
+    <div class="method-card m2 animate-in">
+      <div class="method-num">접근법 2</div>
+      <div class="method-title"><i class="fas fa-vector-square"></i>&nbsp; 생성적 임베딩 기반 의미 거리</div>
+      <div class="method-desc">디코더 LLM에서 추출한 임베딩에 다양한 풀링(pooling) 전략을 적용하여 의미 유사도 메트릭 구축. 인코더 임베딩과 비교.</div>
+    </div>
+    <div class="method-card m3 animate-in">
+      <div class="method-num">접근법 3</div>
+      <div class="method-title"><i class="fas fa-tags"></i>&nbsp; 오류의 정성적 분류</div>
+      <div class="method-desc">LLM이 전사 오류에 정성적 라벨을 부여하여 해석 가능한 평가 수행. 오류 유형과 심각도를 자동으로 분석.</div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 4: HATS 베이스라인 결과 -->
+  <div class="slide" data-index="4">
+    <div class="slide-num">04 / 기존 지표 베이스라인</div>
+    <div class="slide-title">HATS 데이터셋에서의 <span class="hl">기존 지표 성능</span></div>
+    <div class="subtitle">인간 주석자 합의도에 따른 하위 집합에서 측정한 기존 자동 지표의 일치율</div>
+    <div class="card animate-in">
+      <div class="card-label">인간 합의도 100% 하위 집합 — 지표별 일치율 (%)</div>
+      <div class="bar-chart" id="chart-baseline">
+        <div class="bar-row">
+          <div class="bar-label">WER</div>
+          <div class="bar-track"><div class="bar-fill wer" data-width="63" style="width:0%"><span class="bar-val">63%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">CER</div>
+          <div class="bar-track"><div class="bar-fill cer" data-width="77" style="width:0%"><span class="bar-val">77%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">BERTScore</div>
+          <div class="bar-track"><div class="bar-fill bert" data-width="80" style="width:0%"><span class="bar-val">80%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">SemDist</div>
+          <div class="bar-track"><div class="bar-fill semdist" data-width="80" style="width:0%"><span class="bar-val">80%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">SemDist Sentence</div>
+          <div class="bar-track"><div class="bar-fill semsent" data-width="90" style="width:0%"><span class="bar-val">90%</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="table-scroll animate-in">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>지표</th>
+            <th>100% 합의<br>일치율</th>
+            <th>100% 합의<br>동점</th>
+            <th>≥70% 합의<br>일치율</th>
+            <th>≥70% 합의<br>동점</th>
+            <th>전체<br>일치율</th>
+            <th>전체<br>동점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="metric-name">WER</td><td>63</td><td>23</td><td>53</td><td>28</td><td>49</td><td>28</td></tr>
+          <tr><td class="metric-name">CER</td><td>77</td><td>17</td><td>64</td><td>21</td><td>60</td><td>22</td></tr>
+          <tr><td class="metric-name">BERTScore</td><td>80</td><td>0</td><td>68</td><td>0</td><td>65</td><td>0</td></tr>
+          <tr><td class="metric-name">SemDist</td><td>80</td><td>0</td><td>71</td><td>0</td><td>67</td><td>0</td></tr>
+          <tr><td class="metric-name">SemDist Sentence</td><td class="best">90</td><td>0</td><td class="best">78</td><td>0</td><td class="best">73</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 슬라이드 5: LLM 가설 선택 실험 -->
+  <div class="slide" data-index="5">
+    <div class="slide-num">05 / 핵심 실험</div>
+    <div class="slide-title">LLM을 활용한 <span class="hl">최적 가설 선택</span></div>
+    <div class="subtitle">One-shot 프롬프트로 두 가설 중 더 나은 전사를 선택하도록 LLM에 요청합니다.</div>
+    <div class="prompt-box animate-in">
+      <div class="role">User</div>
+      <div>참조 텍스트는 오디오의 정확한 전사입니다. 두 개의 잘못된 가설이 제시됩니다. 추론을 설명하고 마지막에 'A', 'B', 'a', 또는 'b'를 작성하세요.</div>
+      <div style="margin-top:10px"><span class="ref">참조:</span> it's to him self</div>
+      <div><span class="hyp">가설 A:</span> are to him self</div>
+      <div><span class="hyp">가설 B:</span> it's uh to him-self</div>
+      <div style="margin-top:10px" class="role assistant">Assistant</div>
+      <div class="ans">가설 B는 불필요한 발화('uh')를 포함하지만, 단어와 의미 면에서 참조에 훨씬 더 잘 대응합니다. 불필요한 발화가 원본에 포함된 것이라면 허용될 수 있지만, 가설 A의 문법 오류는 더 문제적입니다. 따라서 가장 수용 가능한 전사는 <strong>가설 B</strong>입니다.</div>
+    </div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-brain"></i></div>
+      <div class="insight-text">Chain-of-thought를 활용하여 모델의 추론 과정을 노출하고, 최종 결정만 자동 추출합니다.</div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 6: LLM 가설 선택 결과 -->
+  <div class="slide" data-index="6">
+    <div class="slide-num">06 / 실험 결과</div>
+    <div class="slide-title">LLM, 기존 지표를 <span class="hl">압도적 성능</span>으로 능가</div>
+    <div class="subtitle">최신 LLM 모델들은 인간 주석자와 92~94% 일치율을 달성했습니다.</div>
+    <div class="card animate-in">
+      <div class="card-label">인간 합의도 100% — 전체 지표 비교</div>
+      <div class="bar-chart" id="chart-llm">
+        <div class="bar-row">
+          <div class="bar-label">WER</div>
+          <div class="bar-track"><div class="bar-fill wer" data-width="63" style="width:0%"><span class="bar-val">63%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">SemDist Sent.</div>
+          <div class="bar-track"><div class="bar-fill semsent" data-width="90" style="width:0%"><span class="bar-val">90%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">qwen3-8B</div>
+          <div class="bar-track"><div class="bar-fill llm" data-width="91" style="width:0%"><span class="bar-val">91%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">qwen3.5-35B</div>
+          <div class="bar-track"><div class="bar-fill llm" data-width="92" style="width:0%"><span class="bar-val">92%</span></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-4.1</div>
+          <div class="bar-track"><div class="bar-fill llm" data-width="94" style="width:0%"><span class="bar-val">94%</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-grid c2 animate-in">
+      <div class="card" style="text-align:center">
+        <div class="card-label">WER 대비 향상</div>
+        <div class="card-value" style="color:var(--green)">+31%p</div>
+        <div class="card-desc">63% → 94%</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="card-label">기존 최고 대비</div>
+        <div class="card-value" style="color:var(--accent)">+4%p</div>
+        <div class="card-desc">SemDist Sent. 90% → 94%</div>
+      </div>
+    </div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="insight-text">모델 크기가 유일한 결정 요인은 아닙니다: <strong>qwen3-8B이 gemma3-27b를, qwen3.5-27b가 qwen3-30b를 능가</strong>했습니다. 최신성과 아키텍처가 중요합니다.</div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 7: 임베딩 분석 -->
+  <div class="slide" data-index="7">
+    <div class="slide-num">07 / 임베딩 품질</div>
+    <div class="slide-title">디코더 LLM 임베딩의 <span class="hl">의미 표현 능력</span></div>
+    <div class="subtitle">디코더 LLM에서 추출한 임베딩이 인코더 모델과 비교해 어떤 성능을 보이는지 분석합니다.</div>
+    <div class="card animate-in">
+      <div class="card-label">핵심 발견</div>
+      <div class="card-grid c2">
+        <div>
+          <div class="method-title" style="font-size:clamp(14px,3.5vw,18px);color:var(--teal)">
+            <i class="fas fa-equals"></i>&nbsp; 인코더 대비 성능
+          </div>
+          <div class="card-desc">디코더 기반 LLM 임베딩은 인코더 모델(CamemBERT)과 <strong>유사한 수준</strong>의 의미 유사도 측정 성능을 보입니다.</div>
+        </div>
+        <div>
+          <div class="method-title" style="font-size:clamp(14px,3.5vw,18px);color:var(--accent)">
+            <i class="fas fa-sliders-h"></i>&nbsp; 풀링 전략의 중요성
+          </div>
+          <div class="card-desc">평균 풀링, 최대 풀링, CLS 토큰 등 <strong>풀링 방식에 따라 성능이 크게 달라지며</strong>, 최적 전략은 모델별로 상이합니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="method-card m2 animate-in">
+      <div class="method-num">풀링 전략 비교</div>
+      <div class="method-title">임베딩 집계 방법</div>
+      <div class="card-desc">
+        <span class="tag" style="margin:2px">Mean Pooling</span>
+        <span class="tag" style="margin:2px">Max Pooling</span>
+        <span class="tag" style="margin:2px">Last Token</span>
+        <span class="tag" style="margin:2px">CLS Token</span>
+        <span class="tag" style="margin:2px">Weighted Mean</span>
+        <br><br>
+        각 풀링 전략을 Cosine Similarity 기반 의미 거리 계산에 적용하여, 문장 수준의 의미 보존 정도를 정량화했습니다.
+      </div>
+    </div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-exchange-alt"></i></div>
+      <div class="insight-text">디코더 LLM은 단순한 텍스트 생성뿐만 아니라, <strong>의미적 표현 공간에서도 인코더에 필적하는 품질</strong>을 제공합니다.</div>
+    </div>
+  </div>
+
+  <!-- 슬라이드 8: 결론 -->
+  <div class="slide" data-index="8">
+    <div class="slide-num">08 / 결론</div>
+    <div class="slide-title">ASR 평가의 <span class="hl">새로운 패러다임</span></div>
+    <div class="subtitle">생성적 LLM은 ASR 평가에서 인간 지각에 가장 가까운 판단을 제공하며, 해석 가능성까지 확보합니다.</div>
+    <div class="conclusion-grid">
+      <div class="conclusion-item animate-in">
+        <div class="conclusion-icon" style="background:var(--accent-dim);color:var(--accent)"><i class="fas fa-trophy"></i></div>
+        <div class="conclusion-text"><strong>압도적 성능:</strong> 최고 LLM은 인간 주석자와 94% 일치율을 달성하며, WER(63%)은 물론 인코더 기반 의미 지표(90%)도 능가했습니다.</div>
+      </div>
+      <div class="conclusion-item animate-in">
+        <div class="conclusion-icon" style="background:rgba(64,184,160,0.1);color:var(--teal)"><i class="fas fa-layer-group"></i></div>
+        <div class="conclusion-text"><strong>임베딩 가치 입증:</strong> 디코더 LLM 임베딩이 인코더 모델에 필적하는 의미 표현 능력을 보여주어, 새로운 의미 메트릭 구축의 가능성을 열었습니다.</div>
+      </div>
+      <div class="conclusion-item animate-in">
+        <div class="conclusion-icon" style="background:rgba(80,200,120,0.1);color:var(--green)"><i class="fas fa-search"></i></div>
+        <div class="conclusion-text"><strong>해석 가능성:</strong> LLM이 오류 유형과 심각도에 정성적 라벨을 부여할 수 있어, "0.62" 같은 불투명한 점수 대신 의미 있는 피드백 제공이 가능합니다.</div>
+      </div>
+      <div class="conclusion-item animate-in">
+        <div class="conclusion-icon" style="background:rgba(232,80,80,0.1);color:var(--red)"><i class="fas fa-unlock"></i></div>
+        <div class="conclusion-text"><strong>개방성:</strong> qwen3.5-35B 같은 오픈 액세스 모델이 GPT-4.1에 필적하는 성능을 보여, 상용 API 의존 없이도 고품질 평가가 가능합니다.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="insight animate-in">
+      <div class="insight-icon"><i class="fas fa-arrow-right"></i></div>
+      <div class="insight-text"><strong>향후 방향:</strong> 다국어 확장, 실시간 평가 파이프라인 통합, 오류 심각도의 정량화 등이 연구 과제로 남아 있습니다.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 네비게이션 바 -->
+<nav class="nav-bar" aria-label="슬라이드 네비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드" disabled>
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-counter" id="navCounter">1/9</div>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</nav>
+
+<script>
+(function(){
+  'use strict';
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navDots = document.getElementById('navDots');
+  const navCounter = document.getElementById('navCounter');
+
+  // 도트 생성
+  for(let i = 0; i < totalSlides; i++){
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', (i+1) + '번 슬라이드');
+    dot.dataset.index = i;
+    dot.style.cssText = 'min-width:8px;min-height:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;';
+    dot.addEventListener('click', function(){ goTo(parseInt(this.dataset.index)); });
+    navDots.appendChild(dot);
+  }
+
+  function goTo(idx){
+    if(idx < 0 || idx >= totalSlides || idx === current || isAnimating) return;
+    isAnimating = true;
+    slides[current].classList.remove('active');
+    slides[current].style.display = 'none';
+    current = idx;
+    slides[current].classList.add('active');
+    updateNav();
+    // 애니메이션 요소 재시작
+    triggerAnimations();
+    // 차트 애니메이션
+    setTimeout(animateBars, 200);
+    setTimeout(function(){ isAnimating = false; }, 500);
+  }
+
+  function updateNav(){
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === totalSlides - 1;
+    navCounter.textContent = (current+1) + '/' + totalSlides;
+    const dots = navDots.querySelectorAll('.nav-dot');
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
+  }
+
+  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
+
+  // 키보드
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1);
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
+  document.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, {passive: true});
+  document.addEventListener('touchend', function(e){
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+      if(dx < 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, {passive: true});
+
+  // 차트 애니메이션
+  function animateBars(){
+    var charts = document.querySelectorAll('.slide.active .bar-fill');
+    charts.forEach(function(bar){
+      var w = bar.getAttribute('data-width');
+      if(w) bar.style.width = w + '%';
+    });
+  }
+
+  // 스크롤 내 애니메이션 트리거
+  function triggerAnimations(){
+    var items = slides[current].querySelectorAll('.animate-in');
+    items.forEach(function(el, i){
+      el.classList.remove('visible');
+      setTimeout(function(){ el.classList.add('visible'); }, 100 + i * 120);
+    });
+  }
+
+  // 초기 실행
+  animateBars();
+  setTimeout(triggerAnimations, 300);
+
+  // prefers-reduced-motion 존중
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('.animate-in').forEach(function(el){ el.classList.add('visible'); });
+    document.querySelectorAll('.bar-fill').forEach(function(bar){
+      var w = bar.getAttribute('data-width');
+      if(w) bar.style.width = w + '%';
+    });
+  }
+})();
+</script>
+</body>
+</html>

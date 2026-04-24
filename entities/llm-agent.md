@@ -230,3 +230,27 @@ LLM 에이전트의 위협 모델을 외부 공격자(프롬프트 인젝션)와
 ### SWE-chat: Coding Agent Interactions From Real Users in the Wild (2026-04-24)
 
 SWE-chat은 97편의 기존 연구가 주로 합성 태스크에서 에이전트 능력을 평가해왔다는 한계를 실증적으로 부각한다 — 실제 사용자 6,000세션의 데이터가 에이전트 평가 연구에 새로운 실증적 축을 추가한다.
+
+### From Research Question to Scientific Workflow: Leveraging Agentic AI f (2026-04-25)
+
+과학 워크플로우 명세화라는 새로운 적용 영역을 제시한다. 기존 에이전트가 태스크를 '실행'하는 데 집중했다면, 본 논문의 에이전트는 비구조화된 의도를 구조화된 사양으로 '번역'하는 역할을 수행하며, 이는 에이전트 능력을 실행에서 명세화로 확장하는 방향성을 보여준다.
+
+→ [[sources/2026-04-25-from-research-question-to-scientific-workflow-leve.md|상세 보기]]
+
+### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-25)
+
+Nemobot은 LLM 에이전트의 적용 대상을 태스크 실행에서 메타-엔지니어링으로 확장한다—사용자가 에이전트를 설계·배포하는 것 자체가 에이전트적 경험이 되는 이중 구조를 제시하며, 기존 합성 분석의 '능력 확장' 축을 메타 수준에서 보완한다.
+
+→ [[sources/2026-04-25-nemobot-games-crafting-strategic-ai-gaming-agents-.md|상세 보기]]
+
+### Transient Turn Injection: Exposing Stateless Multi-Turn Vulnerabilitie (2026-04-25)
+
+TTI가 LLM 기반 공격자 에이전트를 사용하여 다중 턴 공격 경로를 자동 탐색함을 보여주며, 에이전트의 계획·반복 능력이 방어적 목적뿐 아니라 공격적 목적으로도 전용될 수 있음을 실증한다. 이는 에이전트 능력의 양면성 문제를 대화 보안 도메인으로 확장한다.
+
+→ [[sources/2026-04-25-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]
+
+### Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Lo (2026-04-25)
+
+도구 스키마 주입이 단순한 토큰 비용이 아닌 추론 품질 저하因子임을 실증하여, 에이전트 아키텍처에서 도구 인터페이스 계층을 최적화 대상으로 명시적으로 포함해야 함을 시사한다.
+
+→ [[sources/2026-04-25-tool-attention-is-all-you-need-dynamic-tool-gating.md|상세 보기]]

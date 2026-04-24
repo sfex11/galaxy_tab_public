@@ -20,3 +20,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-03-21-how-auditory-knowledge-in-llm-backbones-shapes-aud.md|2026 03 21 how auditory knowledge in llm backbones shapes aud.md]] (2026-03-21)
 - [[sources/2026-03-22-how-auditory-knowledge-in-llm-backbones-shapes-aud.md|2026 03 22 how auditory knowledge in llm backbones shapes aud.md]] (2026-03-22)
 - [[sources/2026-03-23-how-auditory-knowledge-in-llm-backbones-shapes-aud.md|2026 03 23 how auditory knowledge in llm backbones shapes aud.md]] (2026-03-23)
+
+### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-25)
+
+LLM 백본이 내재한 청각 지식이 LALM 성능 상한을 결정한다는 기존 발견을 평가 측면에서 보완한다—동일한 지식이 ASR 후보 평가의 신뢰성 상한선으로도 기능한다.
+
+→ [[sources/2026-04-25-evaluation-of-automatic-speech-recognition-using-g.md|상세 보기]]

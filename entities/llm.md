@@ -168,3 +168,31 @@ LLM의 인컨텍스트 CFG 해석 능력이 구문·행동·의미 세 축에서
 ### Can "AI" Be a Doctor? A Study of Empathy, Readability, and Alignment i (2026-04-24)
 
 임상 환경에서 LLM의 정렬 결함이 안전성 위반이 아닌 감정 극성 증폭(Very Negative 43–45%)으로 나타남을 실증하여, 정렬 평가가 도메인별로 근본적으로 다른 메트릭을 요구함을 보여준다.
+
+### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-25)
+
+→ [[sources/2026-04-25-evaluation-of-automatic-speech-recognition-using-g.md|상세 보기]]
+
+### MathDuels: Evaluating LLMs as Problem Posers and Solvers (2026-04-25)
+
+LLM을 단일 역할(해결자)이 아닌 이중 역할(출제자+해결자)로 평가하는 MathDuels는, 기존 합성 분석이 '안전성·추론·에이전트' 축으로 분석한 LLM 능력 평가에 '문제 생성 능력'이라는 새로운 축을 추가한다.
+
+→ [[sources/2026-04-25-mathduels-evaluating-llms-as-problem-posers-and-so.md|상세 보기]]
+
+### A Multimodal Text- and Graph-Based Approach for Open-Domain Event Extr (2026-04-25)
+
+개방 도메인 이벤트 추출에서 LLM이 사전 정의 없이도 이벤트 유형을 식별하는 범용성을 보여주며, 단순 텍스트 생성을 넘어 구조화된 지식 추출 엔진으로서의 역할을 확장한다.
+
+→ [[sources/2026-04-25-a-multimodal-text--and-graph-based-approach-for-op.md|상세 보기]]
+
+### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-25)
+
+RedirectQA가 LLM의 지식 저장 방식이 엔티티의 정규 표현이 아닌 표면 형태 빈도에 편향되어 있음을 실증함으로써, 'LLM이 사실을 기억한다'는 명제의 의미를 재검토하게 한다. 기존 78편 합성 분석에서 다루던 지식 한계 문제에 표면 형태 접근성이라는 새로운 차원을 추가한다.
+
+→ [[sources/2026-04-25-revisiting-non-verbatim-memorization-in-large-lang.md|상세 보기]]
+
+### Transient Turn Injection: Exposing Stateless Multi-Turn Vulnerabilitie (2026-04-25)
+
+TTI는 LLM의 대화 처리가 턴 간 맥락을 구조적으로 단절시키는 무상태(stateless) 특성을 가질 때 심각한 안전 취약성이 발생함을 보여주며, 대화형 배포에서 상태 관리가 안전성의 필수 전제조건임을 규명한다.
+
+→ [[sources/2026-04-25-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]

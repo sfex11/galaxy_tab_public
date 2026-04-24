@@ -435,3 +435,16 @@
 ## [2026-04-24 07:36] lint | Wiki 건전성 체크
 - Issues: 601개
 - Orphans: 71, Missing: 530, Contradictions: 0
+
+## [2026-04-25 08:10] llm-ingest | 11편 분석, 엔티티 68개, 개념 468개
+- 2026-04-25-evaluation-of-automatic-speech-recognition-using-g.md
+- 2026-04-25-mathduels-evaluating-llms-as-problem-posers-and-so.md
+- 2026-04-25-from-research-question-to-scientific-workflow-leve.md
+- 2026-04-25-nemobot-games-crafting-strategic-ai-gaming-agents-.md
+- 2026-04-25-task-driven-co-design-of-heterogeneous-multi-robot.md
+- 2026-04-25-a-multimodal-text--and-graph-based-approach-for-op.md
+- 2026-04-25-revisiting-non-verbatim-memorization-in-large-lang.md
+- 2026-04-25-machine-behavior-in-relational-moral-dilemmas-mora.md
+- 2026-04-25-transient-turn-injection-exposing-stateless-multi-.md
+- 2026-04-25-bounding-the-black-box-a-statistical-certification.md
+- 2026-04-25-tool-attention-is-all-you-need-dynamic-tool-gating.md
