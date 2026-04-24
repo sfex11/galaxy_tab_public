@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3축은 부족하다: 정렬을 위한 완전한 좌표계를 찾아서</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #09090b;
+      color: #ffffff;
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: rgba(245,158,11,0.25); color: #fde68a; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+    .glass-panel {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(245,158,11,0.15);
+    }
+    .accent-amber { color: #f59e0b; }
+    .bg-accent-amber { background: #f59e0b; }
+    .border-accent-amber { border-color: #f59e0b; }
+    .text-muted { color: #a1a1aa; }
+    .text-dimmed { color: #71717a; }
+    .gradient-text {
+      background: linear-gradient(to right, #fbbf24, #ffffff, #a1a1aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(245,158,11,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .quote-block {
+      border-left: 3px solid #f59e0b;
+      padding: 16px 20px;
+      background: rgba(245,158,11,0.04);
+      border-radius: 0 12px 12px 0;
+      margin: 24px 0;
+      font-style: italic;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #a1a1aa;
+    }
+    .tag-amber {
+      border-color: rgba(245,158,11,0.3);
+      background: rgba(245,158,11,0.08);
+      color: #fbbf24;
+    }
+    .tag-red {
+      border-color: rgba(239,68,68,0.3);
+      background: rgba(239,68,68,0.08);
+      color: #fca5a5;
+    }
+    .tag-green {
+      border-color: rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.08);
+      color: #86efac;
+    }
+    .tag-blue {
+      border-color: rgba(59,130,246,0.3);
+      background: rgba(59,130,246,0.08);
+      color: #93c5fd;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+    }
+    thead th {
+      background: rgba(255,255,255,0.04);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 500;
+      color: #d4d4d8;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    thead th:first-child { border-radius: 8px 0 0 0; }
+    thead th:last-child { border-radius: 0 8px 0 0; }
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: #a1a1aa;
+      vertical-align: top;
+    }
+    tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .axis-card {
+      position: relative;
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+    .axis-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+    .axis-card.goal::before { background: linear-gradient(to right, #f59e0b, transparent); }
+    .axis-card.info::before { background: linear-gradient(to right, #3b82f6, transparent); }
+    .axis-card.deleg::before { background: linear-gradient(to right, #a855f7, transparent); }
+    .axis-card.trade::before { background: linear-gradient(to right, #ef4444, transparent); }
+    .axis-card.missing::before { background: linear-gradient(to right, #22c55e, transparent); }
+
+    .sub-ax {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      margin: 6px 0;
+      font-size: 13px;
+    }
+    .nav-link {
+      color: #71717a;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      transition: color 0.15s ease;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: #ffffff; }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.2);
+      color: #fbbf24;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .toc-link {
+      display: block;
+      padding: 6px 12px;
+      color: #71717a;
+      text-decoration: none;
+      font-size: 13px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    .toc-link:hover {
+      color: #fbbf24;
+      background: rgba(245,158,11,0.06);
+    }
+    .arrow-impossible {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #fca5a5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .mech-box {
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin: 8px 0;
+    }
+    .mech-box .mech-title {
+      font-weight: 500;
+      font-size: 13px;
+      color: #d4d4d8;
+      margin-bottom: 4px;
+    }
+    .mech-box .mech-desc {
+      font-size: 12px;
+      color: #71717a;
+      line-height: 1.5;
+    }
+    .framework-node {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.15);
+      font-size: 13px;
+      font-weight: 500;
+      color: #fbbf24;
+      margin: 6px 0;
+    }
+    .connector {
+      width: 2px;
+      height: 16px;
+      background: rgba(245,158,11,0.2);
+      margin-left: 28px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.6s ease forwards; }
+    .fade-in-d1 { animation-delay: 0.1s; opacity: 0; }
+    .fade-in-d2 { animation-delay: 0.2s; opacity: 0; }
+    .fade-in-d3 { animation-delay: 0.3s; opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-panel" style="border-top: none; border-left: none; border-right: none;">
+    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-1 overflow-x-auto">
+        <a href="../index.html" class="nav-link">🏠 홈</a>
+        <a href="../sources.html" class="nav-link">📚 논문</a>
+        <a href="../daily.html" class="nav-link">📝 일일요약</a>
+        <a href="../slides.html" class="nav-link">🎨 슬라이드</a>
+        <a href="../research.html" class="nav-link">🔬 연구</a>
+        <a href="blog.html" class="nav-link" style="color: #fbbf24;">🧠 Wiki 분석</a>
+        <a href="../patent/README.html" class="nav-link">📋 특허</a>
+        <a href="../reports.html" class="nav-link">📊 보고서</a>
+        <a href="https://github.com/sfex11/galaxy_tab_public" target="_blank" class="nav-link">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 pt-28 pb-24">
+
+    <!-- Hero -->
+    <section class="relative mb-16 fade-in">
+      <div class="hero-glow"></div>
+      <div class="flex items-center gap-3 mb-6">
+        <span class="tag tag-amber">Auto Query #14</span>
+        <span class="tag">2026년 분석</span>
+        <span class="tag">AI 정렬</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-5" style="font-family: 'Noto Sans KR', sans-serif;">
+        <span class="gradient-text">3축은 부족하다:</span><br>
+        정렬을 위한 완전한 좌표계를 찾아서
+      </h1>
+      <p class="text-muted text-lg max-w-2xl mb-8">
+        LaCroix(2026)가 제안한 Goal·Information·Delegation 3축 프레임워크를 구조적으로 해체하고,
+        범주 오류, 과압축, 인과적 종속성의 문제를 밝힌다. 그리고 정말 필요한 좌표계를 제안한다.
+      </p>
+      <div class="glass-card p-5 flex flex-col sm:flex-row gap-4 sm:items-center">
+        <div class="flex-1">
+          <p class="text-sm font-medium text-white mb-1">LaCroix (2026)</p>
+          <p class="text-xs text-dimmed">Structural Analysis of Sufficiency, Independence, and Omission in the Three-Axis Framework</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="http://arxiv.org/abs/2604.20805v1" target="_blank"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium bg-white text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            arXiv
+          </a>
+          <a href="wiki-alignment-how-many-axes.html"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-all duration-200">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            이전 글
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <aside class="glass-card p-5 mb-16 fade-in fade-in-d1">
+      <p class="text-xs font-medium text-dimmed uppercase tracking-wider mb-3">목차</p>
+      <div class="flex flex-col gap-1">
+        <a href="#s1" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">01</span> 범주 오류: PA 이론과 3축은 같은 층위가 아니다</a>
+        <a href="#s2" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">02</span> Goal 축: 4개의 독립 하위 축으로 분해되어야 한다</a>
+        <a href="#s3" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">03</span> Information 축: 이질적 현상의 무차별 통합</a>
+        <a href="#s4" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">04</span> Delegation 축: 독립성이 가장 의심스러운 축</a>
+        <a href="#s5" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">05</span> 누락된 제4축: 트레이드오프 메커니즘</a>
+        <a href="#s6" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">06</span> 추가 누락 축: 검증, 자율성, 수평 정렬, 체화</a>
+        <a href="#s7" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">07</span> 수정된 프레임워크 제안</a>
+        <a href="#s8" class="toc-link"><span class="text-dimmed mr-2 font-mono text-xs">08</span> 결론</a>
+      </div>
+    </aside>
+
+    <!-- Section 1 -->
+    <section id="s1" class="mb-16 fade-in fade-in-d2">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">1</span>
+        <h2 class="text-xl font-semibold tracking-tight">범주 오류: PA 이론과 3축은 같은 층위가 아니다</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        LaCroix의 3축 프레임워크는 주인-대리인(Principal-Agent, PA) 이론에서 출발한다. 그러나 분석 계층을 엄밀히 따져보면,
+        원래 PA 이론의 구성 요소와 LaCroix가 축으로 선택한 항목 사이에 심각한 <strong class="text-white">범주 오류(Category Error)</strong>가 존재한다.
+      </p>
+
+      <div class="quote-block">
+        PA 이론의 "해법 공간 조건"이 AI 맥락에서 "문제 공간의 독립 축"으로 변이했음을 LaCroix가 간과했다.
+        이는 분석의 기초 지반에서 발생한 오류이다.
+      </div>
+
+      <p class="text-muted mb-5">
+        구체적으로, PA 이론의 네 가지 핵심 개념이 LaCroix의 프레임워크에서 어떻게 처리되었는지를 비교하면 문제가 명확해진다.
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table>
+          <thead>
+            <tr>
+              <th>PA 이론 개념</th>
+              <th>원래 역할</th>
+              <th>LaCroix의 처리</th>
+              <th>문제</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-mono text-xs text-zinc-300">IC (Incentive Compatibility)</td>
+              <td>해법 공간의 조건</td>
+              <td>축 불포함</td>
+              <td><span class="tag tag-red">축적 간과</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs text-zinc-300">PC (Participation Constraint)</td>
+              <td>해법 공간의 조건</td>
+              <td>축 불포함</td>
+              <td><span class="tag tag-red">Deceptive Alignment 변이 무시</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs text-zinc-300">Information Asymmetry</td>
+              <td>문제 공간의 구조</td>
+              <td>축 2로 직접 채택</td>
+              <td><span class="tag tag-green">적절</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs text-zinc-300">Contractibility</td>
+              <td>문제 공간의 구조</td>
+              <td>축 2의 하위 유형 흡수</td>
+              <td><span class="tag tag-amber">차원 축소</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-muted mb-4">
+        특히 <span class="accent-amber font-medium">참여 제약(PC)</span>의 처리가 문제다. AI 맥락에서 PC는 단순한 "참여 여부"가 아니라
+        <strong class="text-white">Deceptive Alignment</strong>—에이전트가 겉으로는 정렬된 척하면서 내심 다른 목표를 추구하는 현상—로 변이한다.
+        이것은 독립적인 문제 차원이지, Information 축의 하위 유형으로 흡수될 수 있는 성질이 아니다.
+      </p>
+      <p class="text-muted">
+        마찬가지로 <span class="accent-amber font-medium">인센티브 호환성(IC)</span>은 PA 이론에서는 "해법이 존재하기 위한 필요조건"이지만,
+        AI 정렬에서는 에이전트의 보상 함수가 주인의 가치와 얼마나 일치하는지를 묻는 <strong class="text-white">문제 자체</strong>가 된다.
+        해법 공간의 조건을 문제 공간의 축으로 승격시키지 않은 것은 프레임워크의 설명력을 근본적으로 제한한다.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="s2" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">2</span>
+        <h2 class="text-xl font-semibold tracking-tight">Goal 축: 4개의 독립 하위 축으로 분해되어야 한다</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        LaCroix는 Goal 축을 "단일 vs 다원적"의 1차원으로 설정했다. 이것은 <strong class="text-white">심각한 과압축(Over-compression)</strong>이다.
+        "다원적 목표"라는 하나의 라벨 안에 서로 구조적으로 비동형인 네 가지 독립 문제가 숨어 있다.
+      </p>
+
+      <div class="axis-card goal mb-6">
+        <p class="text-xs font-mono text-amber-400/60 uppercase tracking-wider mb-3">Goal 축 분해</p>
+        <h3 class="text-base font-medium text-white mb-4">"단일 vs 다원적"에 숨겨진 4개의 독립 차원</h3>
+
+        <div class="sub-ax">
+          <p class="text-white text-sm font-medium mb-1">① 가치 기수성 (Cardinality)</p>
+          <p class="text-xs text-dimmed">목표의 개수 N. N이 커질수록 Aggregation 복잡도가 <span class="accent-amber font-mono">초선형(O(N²) 이상)</span>으로 증가.
+          단순한 "다수"와 "소수"의 구분만으로는 이 복잡도 폭발을 포착할 수 없다.</p>
+        </div>
+        <div class="sub-ax">
+          <p class="text-white text-sm font-medium mb-1">② 공가능성 (Commensurability)</p>
+          <p class="text-xs text-dimmed">서로 다른 가치를 동일한 척도로 환산 가능한가? 불가능한 경우,
+          <span class="font-mono text-red-300/80">RLHF의 가중합 접근이 근본적으로 무효</span>가 된다.
+          사과와 오렌지를 더하는 것과 같다.</p>
+        </div>
+        <div class="sub-ax">
+          <p class="text-white text-sm font-medium mb-1">③ 갈등 구조 (Conflict Topology)</p>
+          <p class="text-xs text-dimmed">가치 간 갈등의 기하학적 구조. 영합(Positive-sum), 제로섬(Zero-sum), 협력적(Cooperative)에 따라
+          최적 Aggregation 전략이 완전히 달라짐. <span class="arrow-impossible">Arrow 불가능 정리</span> 직격 타겟.</p>
+        </div>
+        <div class="sub-ax">
+          <p class="text-white text-sm font-medium mb-1">④ 가치 안정성 (Value Stability)</p>
+          <p class="text-xs text-dimmed">시간에 따라 가치가 진화하는가? 진화하는 가치 환경에서 "정렬"의 정의 자체가 시간 의존적이 되며,
+          특정 시점의 정렬이 다른 시점의 오정렬을 의미할 수 있다.</p>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        "단일 vs 다원적"이라는 이분법은 "색깔이 있는가?"라고 묻는 것과 같다.
+        빨간색과 파란색은 같은 "색깔 있음" 범주에 속하지만, 혼합할 때의 결과는 완전히 다르다.
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="s3" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">3</span>
+        <h2 class="text-xl font-semibold tracking-tight">Information 축: 이질적 현상의 무차별 통합</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        Information 축은 PA 이론에서 직접 채택한 축으로 보인다. 그러나 "정보 비대칭"이라는 라벨 아래
+        <strong class="text-white">구조적으로 비동형인 현상들이 무차별적으로 통합</strong>되어 있다.
+      </p>
+
+      <p class="text-muted mb-4">
+        전통적 PA 이론에서 도덕적 해이(Moral Hazard)와 역선택(Adverse Selection)은 각각
+        <span class="font-mono text-xs text-zinc-300">사후 행동 감시 불가</span>와
+        <span class="font-mono text-xs text-zinc-300">사전 유형 식별 불가</span>라는 구조적으로 다른 문제다.
+        이 둘을 같은 축 위에 놓는 것은 분석의 정밀도를 떨어뜨린다.
+      </p>
+
+      <p class="text-muted mb-5">
+        더 결정적으로, AI 맥락에서는 PA 이론에 존재하지 않는 <strong class="text-white">세 가지 고유한 비대칭</strong>이 추가로 발생한다.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="glass-card p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <i data-lucide="eye-off" class="w-4 h-4 text-blue-400"></i>
+            <p class="text-sm font-medium text-white">해석 가능성 비대칭</p>
+          </div>
+          <p class="text-xs text-dimmed leading-relaxed">
+            주인이 에이전트의 <strong class="text-zinc-300">추론 과정</strong>을 이해할 수 없다.
+            결과는 관측 가능해도 과정은 블랙박스.
+            이것은 단순한 "정보 부족"이 아니라 "해석 불가"다.
+          </p>
+        </div>
+        <div class="glass-card p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <i data-lucide="gauge" class="w-4 h-4 text-blue-400"></i>
+            <p class="text-sm font-medium text-white">역량 비대칭</p>
+          </div>
+          <p class="text-xs text-dimmed leading-relaxed">
+            에이전트가 <strong class="text-zinc-300">자신의 능력 한계</strong>를 주인보다 더 정확히 안다.
+            에이전트가 "할 수 없다"고 말할 때,
+            그것이 진실인지 전략적 회피인지 주인은 판별할 수 없다.
+          </p>
+        </div>
+        <div class="glass-card p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <i data-lucide="compass" class="w-4 h-4 text-blue-400"></i>
+            <p class="text-sm font-medium text-white">가치 탐색 비대칭</p>
+          </div>
+          <p class="text-xs text-dimmed leading-relaxed">
+            주인이 <strong class="text-zinc-300">자신의 가치를 완전히 articulation</strong>할 수 없다.
+            우리 모두는 자신이 무엇을 중요하게 여기는지 끝까지 알지 못한다.
+            에이전트가 주인보다 주인의 가치를 먼저 발견할 수 있다.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-muted">
+        이 세 가지는 PA 이론의 도덕적 해이·역선택과도 구조적으로 다르고, 서로 간에도 구조적으로 다르다.
+        이를 하나의 "Information" 축으로 묶는 것은 <span class="accent-amber">분해력의 결여</span>를 의미한다.
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="s4" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">4</span>
+        <h2 class="text-xl font-semibold tracking-tight">Delegation 축: 독립성이 가장 의심스러운 축</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        세 축 중에서 Delegation 축의 독립성이 가장 취약하다. LaCroix는 3축이 서로 직교(Orthogonal)한다고 암시하지만,
+        <strong class="text-white">Goal 축과 Delegation 축 사이에 인과적 종속성</strong>이 존재한다.
+      </p>
+
+      <div class="glass-card p-6 mb-6" style="border-color: rgba(168,85,247,0.15);">
+        <p class="text-sm font-medium text-purple-300 mb-2">인과적 종속 관계</p>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-amber-500/10 text-amber-300 border border-amber-500/20">Goal = 다원적</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-600"></i>
+          <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">Delegation = 다원적</span>
+        </div>
+        <p class="text-xs text-dimmed">
+          다원적 가치를 가진 주인은 필연적으로 다원적 위임 구조를 선택하게 된다.
+          서로 다른 가치 영역에 서로 다른 전문 에이전트를 배정하는 것이 자연스럽기 때문이다.
+          이는 "직교"라는 주장에 대한 직접적인 반례다.
+        </p>
+      </div>
+
+      <p class="text-muted mb-5">
+        더욱이, LaCroix의 3축이 생성하는 <span class="font-mono text-xs text-zinc-300">2³ = 8개 조합</span> 중 일부는 기능적으로 무의미하다.
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table>
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Information</th>
+              <th>Delegation</th>
+              <th>상태</th>
+              <th>이유</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-mono text-xs">단일</td>
+              <td class="font-mono text-xs">대칭</td>
+              <td class="font-mono text-xs">단일</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">전통적 단일 에이전트 설정</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">단일</td>
+              <td class="font-mono text-xs">비대칭</td>
+              <td class="font-mono text-xs">단일</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">표준 PA 문제</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">단일</td>
+              <td class="font-mono text-xs">대칭</td>
+              <td class="font-mono text-xs">다원</td>
+              <td><span class="tag tag-amber">약유효</span></td>
+              <td class="text-xs">단일 목표를 다중 에이전트로 분할 — 사실상 단일 위임</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">단일</td>
+              <td class="font-mono text-xs">비대칭</td>
+              <td class="font-mono text-xs">다원</td>
+              <td><span class="tag tag-red">무의미</span></td>
+              <td class="text-xs">단일 목표 + 다원 위임인 ≈ 단일 위임인 (분할 불가)</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">다원</td>
+              <td class="font-mono text-xs">대칭</td>
+              <td class="font-mono text-xs">단일</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">다원 가치를 단일 에이전트에 위임 — RLHF의 현실</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">다원</td>
+              <td class="font-mono text-xs">비대칭</td>
+              <td class="font-mono text-xs">단일</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">가장 어려운 현실적 설정</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">다원</td>
+              <td class="font-mono text-xs">대칭</td>
+              <td class="font-mono text-xs">다원</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">다중 전문가 모델</td>
+            </tr>
+            <tr>
+              <td class="font-mono text-xs">다원</td>
+              <td class="font-mono text-xs">비대칭</td>
+              <td class="font-mono text-xs">다원</td>
+              <td><span class="tag tag-green">유효</span></td>
+              <td class="text-xs">복합적 현실 설정</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-muted">
+        8개 중 1개가 완전히 무의미하고 1개가 약유효하다. 이것은 축들이 직교하지 않는다는 강력한 증거다.
+        직교하는 축이라면 모든 조합이 의미를 가져야 한다.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="s5" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">5</span>
+        <h2 class="text-xl font-semibold tracking-tight">누락된 제4축: 트레이드오프 메커니즘</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        LaCroix 프레임워크에서 가장 결정적인 누락은 <strong class="text-white">트레이드오프 메커니즘(Trade-off Mechanism)</strong>이다.
+        이것은 단순히 "빠진 항목"이 아니라, 기존 3축보다 <span class="accent-amber font-medium">실천적 중요성이 더 높은</span> 차원이다.
+      </p>
+
+      <div class="quote-block">
+        동일한 Goal·Information·Delegation 설정이라도, 트레이드오프 메커니즘에 따라 결과가 극단적으로 달라진다.
+        축 분류가 아무리 정확해도, 어떻게 갈등을 해결하는지를 모르면 정렬은 불가능하다.
+      </div>
+
+      <div class="axis-card trade mb-6">
+        <p class="text-xs font-mono text-red-400/60 uppercase tracking-wider mb-3">제4축 후보: Trade-off Mechanism</p>
+        <h3 class="text-base font-medium text-white mb-4">네 가지 메커니즘과 각각의 치명적 한계</h3>
+
+        <div class="mech-box">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <p class="mech-title">가중합 (RLHF)</p>
+            <span class="tag tag-red" style="font-size:10px;">투표의 역설</span>
+          </div>
+          <p class="mech-desc">
+            가중치 결정의 임의성. Condorcet 역설에 의해 가중치 순위가 결과 순위를 보존하지 않음.
+            "안전성 0.4 + 유용성 0.6"과 "안전성 0.6 + 유용성 0.4"가 동일한 두 가치에 대해 서로 모순된 순위를 생성할 수 있다.
+          </p>
+        </div>
+
+        <div class="mech-box">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+            <p class="mech-title">제약 기반 (Constraint-based)</p>
+            <span class="tag tag-red" style="font-size:10px;">무해한 불가능 정리</span>
+          </div>
+          <p class="mech-desc">
+            "무해함"과 "유용함"을 각각 제약으로 설정할 때, 두 제약이 충돌하면 feasible set이 공집합이 된다.
+            Ethan Perez 등의 "Harmlessness Impossibility" 결과가 이를 직접 보여줌.
+          </p>
+        </div>
+
+        <div class="mech-box">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+            <p class="mech-title">사전순위 (Lexicographic)</p>
+            <span class="tag tag-amber" style="font-size:10px;">순위 결정의 자의성</span>
+          </div>
+          <p class="mech-desc">
+            "안전성 > 유용성 > 효율성" 같은 순위를 정하는 것 자체가 가치 판단이다.
+            순위 결정의 정당화는 결국 또 다른 메타-트레이드오프 문제로 귀결되어 무한 후퇴에 빠진다.
+          </p>
+        </div>
+
+        <div class="mech-box">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+            <p class="mech-title">협상 (Negotiation)</p>
+            <span class="tag tag-red" style="font-size:10px;">전략적 거짓말</span>
+          </div>
+          <p class="mech-desc">
+            여러 이해관계자가 협상으로 트레이드오프를 결정할 때, 협상력 비대칭이 결과를 왜곡한다.
+            더 나아가 AI 에이전트가 협상에 참여하는 경우, 전략적 거짓말(Strategic Misrepresentation) 문제가 발생한다.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-muted">
+        이 네 가지 메커니즘은 상호 배타적이지 않으며, 혼합 사용 시 더 복잡한 문제가 발생한다.
+        어떤 메커니즘을 선택하느냐에 따라 <strong class="text-white">동일한 3축 설정에서도 완전히 다른 정렬 결과</strong>가 나온다.
+        이것이 트레이드오프 메커니즘이 독립 축이 되어야 하는 이유다.
+      </p>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="s6" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">6</span>
+        <h2 class="text-xl font-semibold tracking-tight">추가 누락 축: 검증, 자율성, 수평 정렬, 체화</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        트레이드오프 메커니즘 외에도, LaCroix의 프레임워크에서 완전히 누락된 네 가지 차원이 존재한다.
+        이 중 일부는 PA 이론의 프레임 자체를 초월하는 문제다.
+      </p>
+
+      <div class="axis-card missing">
+        <p class="text-xs font-mono text-green-400/60 uppercase tracking-wider mb-3">추가 누락 축</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+          <div class="p-4 rounded-xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-green-400"></i>
+              <p class="text-sm font-medium text-white">검증 가능성 (Verifiability)</p>
+            </div>
+            <p class="text-xs text-dimmed leading-relaxed">
+              관측된 결과가 정렬을 실제로 만족하는지 <strong class="text-zinc-300">판정 가능한가?</strong>
+              정렬이 검증 불가능하다면, 우리는 "정렬되었다고 믿는 것"과 "정렬된 것"을 구분할 수 없다.
+              이것은 Information 비대칭의 하위 문제가 아니라, 인식론적 차원의 독립 문제다.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="brain" class="w-4 h-4 text-green-400"></i>
+              <p class="text-sm font-medium text-white">에이전트 자율성 (Autonomy)</p>
+            </div>
+            <p class="text-xs text-dimmed leading-relaxed">
+              위임 거부, 하위 목표 자발적 생성, 메타인지—이들은 PA 프레임의 <strong class="text-zinc-300">"대리인은 수동적 도구"라는 전제</strong>를 무너뜨린다.
+              자율적 에이전트는 주인의 명령을 거부할 수 있는 존재이며, 이는 Delegation 축의 "단일 vs 다원"으로는 포착 불가능하다.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="network" class="w-4 h-4 text-green-400"></i>
+              <p class="text-sm font-medium text-white">수평적 정렬 (Horizontal Alignment)</p>
+            </div>
+            <p class="text-xs text-dimmed leading-relaxed">
+              LaCroix의 프레임은 오직 <strong class="text-zinc-300">주인-에이전트(수직) 관계</strong>만 다룬다.
+              그러나 멀티 에이전트 시스템에서는 에이전트-에이전트 간 정렬이 필요하며,
+              이 수평 정렬이 수직 정렬과 어떻게 상호작용하는지는 전혀 다루어지지 않는다.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="box" class="w-4 h-4 text-green-400"></i>
+              <p class="text-sm font-medium text-white">체화 / 물리적 배포 (Embodiment)</p>
+            </div>
+            <p class="text-xs text-dimmed leading-relaxed">
+              로봇, 자율주행 등 물리적 배포 환경에서는 <strong class="text-zinc-300">행동의 되돌림 불가</strong>와
+              시공간적 제약이라는 새로운 차원이 등장한다.
+              시뮬레이션에서는 취소 가능한 행동이 현실에서는 돌이킬 수 없는 피해가 된다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="s7" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">7</span>
+        <h2 class="text-xl font-semibold tracking-tight">수정된 프레임워크 제안</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        위의 비판을 종합하여, LaCroix의 3축을 대체할 수 있는 수정된 프레임워크를 제안한다.
+        핵심 원칙은 세 가지다: <span class="accent-amber">(1)</span> 각 축은 실제로 독립적이어야 하고,
+        <span class="accent-amber">(2)</span> 과압축을 해제하며,
+        <span class="accent-amber">(3)</span> PA 이론을 초월하는 현상을 포함해야 한다.
+      </p>
+
+      <div class="glass-card p-6 mb-6">
+        <p class="text-xs font-mono text-amber-400/60 uppercase tracking-wider mb-4">수정된 좌표계 (v0.1)</p>
+
+        <div class="framework-node">
+          <i data-lucide="target" class="w-4 h-4"></i>
+          <span>축 G: 가치 구조 (Goal Structure)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">4 하위 차원</span>
+        </div>
+        <div class="connector"></div>
+        <div class="ml-10 pl-4 border-l border-amber-500/10 flex flex-col gap-1 mb-4">
+          <p class="text-xs text-dimmed">├ G₁: 기수성 (Cardinality)</p>
+          <p class="text-xs text-dimmed">├ G₂: 공가능성 (Commensurability)</p>
+          <p class="text-xs text-dimmed">├ G₃: 갈등 구조 (Conflict Topology)</p>
+          <p class="text-xs text-dimmed">└ G₄: 시간 안정성 (Value Stability)</p>
+        </div>
+
+        <div class="framework-node">
+          <i data-lucide="radio" class="w-4 h-4"></i>
+          <span>축 I: 인식론적 비대칭 (Epistemic Asymmetry)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">5+ 하위 유형</span>
+        </div>
+        <div class="connector"></div>
+        <div class="ml-10 pl-4 border-l border-amber-500/10 flex flex-col gap-1 mb-4">
+          <p class="text-xs text-dimmed">├ I₁: 도덕적 해이 (Moral Hazard)</p>
+          <p class="text-xs text-dimmed">├ I₂: 역선택 (Adverse Selection)</p>
+          <p class="text-xs text-dimmed">├ I₃: 해석 가능성 비대칭</p>
+          <p class="text-xs text-dimmed">├ I₄: 역량 비대칭</p>
+          <p class="text-xs text-dimmed">└ I₅: 가치 탐색 비대칭</p>
+        </div>
+
+        <div class="framework-node">
+          <i data-lucide="scale" class="w-4 h-4"></i>
+          <span>축 T: 트레이드오프 메커니즘 (Trade-off)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">4 메커니즘</span>
+        </div>
+        <div class="connector"></div>
+        <div class="ml-10 pl-4 border-l border-amber-500/10 flex flex-col gap-1 mb-4">
+          <p class="text-xs text-dimmed">├ T₁: 가중합 (Weighted Sum)</p>
+          <p class="text-xs text-dimmed">├ T₂: 제약 기반 (Constraint)</p>
+          <p class="text-xs text-dimmed">├ T₃: 사전순위 (Lexicographic)</p>
+          <p class="text-xs text-dimmed">└ T₄: 협상 (Negotiation)</p>
+        </div>
+
+        <div class="framework-node">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>축 V: 검증 가능성 (Verifiability)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">독립 축</span>
+        </div>
+        <div class="connector"></div>
+        <div class="framework-node">
+          <i data-lucide="brain" class="w-4 h-4"></i>
+          <span>축 A: 자율성 (Autonomy)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">PA 초월</span>
+        </div>
+        <div class="connector"></div>
+        <div class="framework-node">
+          <i data-lucide="network" class="w-4 h-4"></i>
+          <span>축 H: 수평 정렬 (Horizontal Alignment)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">PA 초월</span>
+        </div>
+        <div class="connector"></div>
+        <div class="framework-node">
+          <i data-lucide="box" class="w-4 h-4"></i>
+          <span>축 E: 체화 (Embodiment)</span>
+          <span class="text-xs text-dimmed ml-auto font-mono">PA 초월</span>
+        </div>
+      </div>
+
+      <p class="text-muted mb-5">
+        여기서 "시간(Time)"은 독립 축으로 두지 않고 <strong class="text-white">교차 차원(Cross-cutting dimension)</strong>으로 처리한다.
+        각 축을 "정적 vs 동적"으로 확장하는 것이 적절한데, 시간을 독립 축으로 두면 모든 축과 교차하여 차원의 수가 기하급수적으로 증가하기 때문이다.
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table>
+          <thead>
+            <tr>
+              <th>속성</th>
+              <th>LaCroix 3축</th>
+              <th>수정된 프레임워크</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-white text-sm">축의 수</td>
+              <td class="font-mono text-xs">3</td>
+              <td class="font-mono text-xs">7 (하위 차원 포함 시 20+)</td>
+            </tr>
+            <tr>
+              <td class="text-white text-sm">직교성</td>
+              <td class="text-xs"><span class="tag tag-red">위반 (Goal↔Delegation)</span></td>
+              <td class="text-xs"><span class="tag tag-green">검증 필요 (설계 목표)</span></td>
+            </tr>
+            <tr>
+              <td class="text-white text-sm">과압축 해제</td>
+              <td class="text-xs"><span class="tag tag-red">미해결</span></td>
+              <td class="text-xs"><span class="tag tag-green">Goal 4차원 분해</span></td>
+            </tr>
+            <tr>
+              <td class="text-white text-sm">PA 이론 초월</td>
+              <td class="text-xs"><span class="tag tag-red">불가</span></td>
+              <td class="text-xs"><span class="tag tag-green">A, H, E 축</span></td>
+            </tr>
+            <tr>
+              <td class="text-white text-sm">트레이드오프 명시</td>
+              <td class="text-xs"><span class="tag tag-red">누락</span></td>
+              <td class="text-xs"><span class="tag tag-green">T 축 독립 처리</span></td>
+            </tr>
+            <tr>
+              <td class="text-white text-sm">시간 처리</td>
+              <td class="text-xs">불명확</td>
+              <td class="text-xs">교차 차원</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-muted">
+        물론 이 프레임워크도 완전하지 않다. 7개 축이라는 복잡성 자체가 실용성을 해칠 수 있다.
+        그러나 <strong class="text-white">설명력과 단순성 사이의 트레이드오프</strong>에서, LaCroix의 3축이 잘못된 단순성을 선택했다면,
+        수정안은 오히려 정확한 복잡성을 선택한 것이라 할 수 있다.
+        실용적 단순화는 정확한 프레임워크 위에서만 유효하다.
+      </p>
+    </section>
+
+    <!-- Section 8 -->
+    <section id="s8" class="mb-16">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="section-num">8</span>
+        <h2 class="text-xl font-semibold tracking-tight">결론</h2>
+      </div>
+
+      <p class="text-muted mb-5">
+        LaCroix(2026)의 3축 프레임워크는 AI 정렬 문제를 구조적으로 분석하려는 시도로서 가치가 있다.
+        PA 이론의 도구를 AI 맥락으로 가져오는 접근 자체는 유효하다. 그러나 세 가지 근본적 결함이 존재한다.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="glass-card p-5 text-center">
+          <p class="text-2xl font-semibold accent-amber mb-2">범주 오류</p>
+          <p class="text-xs text-dimmed leading-relaxed">
+            PA 이론의 해법 공간 조건을 AI의 문제 공간 축으로 승격시키지 않음.
+            IC와 PC의 변이를 간과.
+          </p>
+        </div>
+        <div class="glass-card p-5 text-center">
+          <p class="text-2xl font-semibold accent-amber mb-2">과압축</p>
+          <p class="text-xs text-dimmed leading-relaxed">
+            Goal 축에 4개의 독립 차원이 압축되어 있고,
+            Information 축에 이질적 현상이 무차별 통합됨.
+          </p>
+        </div>
+        <div class="glass-card p-5 text-center">
+          <p class="text-2xl font-semibold accent-amber mb-2">치명적 누락</p>
+          <p class="text-xs text-dimmed leading-relaxed">
+            트레이드오프 메커니즘, 검증 가능성, 자율성, 수평 정렬, 체화—
+            실천적 중요성이 높은 축들이 누락됨.
+          </p>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        정렬 연구에 필요한 것은 "몇 개의 축이 있는가?"에 대한 답이 아니다.
+        "각 축이 독립적인가? 충분히 분해되었는가? 중요한 현상을 누락하지 않았는가?"에 대한 답이다.
+        LaCroix의 3축은 이 세 질문에 대해 모두 부정적이다.
+      </div>
+
+      <p class="text-muted mb-6">
+        <a href="wiki-alignment-how-many-axes.html" class="accent-amber hover:underline">이전 글</a>에서 "정렬을 위한 좌표계가 필요하다"고 주장했다면,
+        이 글에서는 "그 좌표계는 적어도 7개의 축을 가져야 하며, 각 축은 추가적으로 분해 가능해야 한다"는 구체적 제안을 했다.
+      </p>
+
+      <p class="text-muted mb-8">
+        다음 단계는 두 가지다. 첫째, 제안된 7축 간의 직교성을 엄밀하게 검증하는 것.
+        둘째, 실제 정렬 사례들에 이 프레임워크를 적용하여 설명력을 테스트하는 것.
+        프레임워크의 가치는 이론적 우아성이 아니라, 실제 문제를 해결하는 데 쓸모가 있는지에 있다.
+      </p>
+
+      <div class="glass-card p-5 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div class="flex items-center gap-3 flex-1">
+          <i data-lucide="file-text" class="w-5 h-5 text-amber-400 flex-shrink-0"></i>
+          <div>
+            <p class="text-sm font-medium text-white">원문 참조</p>
+            <p class="text-xs text-dimmed">LaCroix (2026). Structural Analysis of Sufficiency, Independence, and Omission in the Three-Axis Framework</p>
+          </div>
+        </div>
+        <a href="http://arxiv.org/abs/2604.20805v1" target="_blank"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium bg-white text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200 flex-shrink-0">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          arXiv 열기
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer Nav -->
+    <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <a href="wiki-alignment-how-many-axes.html" class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        이전: 정렬에 몇 개의 축이 필요한가?
+      </a>
+      <a href="blog.html" class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors">
+        🧠 Wiki 분석 목록으로
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
