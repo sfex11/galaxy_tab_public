@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Task-Driven Co-Design of Heterogeneous Multi-Robot Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg-secondary: #111827;
+    --fg: #e8ecf4;
+    --fg-muted: #7a8ba7;
+    --accent: #00e5a0;
+    --accent-dim: rgba(0,229,160,0.15);
+    --accent-glow: rgba(0,229,160,0.4);
+    --warm: #ff6b3d;
+    --warm-dim: rgba(255,107,61,0.15);
+    --card: rgba(17,24,39,0.85);
+    --border: rgba(122,139,167,0.15);
+    --slide-radius: 12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 배경 캔버스 */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* 슬라이드 컨테이너 */
+  .slides-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 16px 100px;
+  }
+
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(24px, 5vw, 60px) clamp(16px, 4vw, 48px);
+    margin-bottom: 20px;
+    border-radius: var(--slide-radius);
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .slide.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .slide.visible::before {
+    opacity: 1;
+  }
+
+  /* 슬라이드 번호 */
+  .slide-number {
+    font-family: 'Space Grotesk', monospace;
+    font-size: clamp(11px, 1.5vw, 13px);
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: clamp(12px, 2vw, 24px);
+    font-weight: 500;
+  }
+
+  /* 타이포그래피 */
+  h1 {
+    font-family: 'Space Grotesk', 'Noto Sans KR', sans-serif;
+    font-size: clamp(28px, 5.5vw, 56px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: clamp(16px, 3vw, 32px);
+    letter-spacing: -0.02em;
+  }
+
+  h1 .accent { color: var(--accent); }
+  h1 .warm { color: var(--warm); }
+
+  h2 {
+    font-size: clamp(22px, 4vw, 40px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: clamp(12px, 2vw, 24px);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 700;
+    margin-bottom: clamp(8px, 1.5vw, 16px);
+  }
+
+  p, li {
+    font-size: clamp(14px, 1.8vw, 18px);
+    line-height: 1.8;
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+
+  p strong, li strong {
+    color: var(--fg);
+    font-weight: 700;
+  }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .warm-highlight {
+    color: var(--warm);
+    font-weight: 700;
+  }
+
+  /* 태그 */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: clamp(11px, 1.3vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 3px 4px 3px 0;
+  }
+
+  .tag-green { background: var(--accent-dim); color: var(--accent); }
+  .tag-warm { background: var(--warm-dim); color: var(--warm); }
+
+  /* 카드 그리드 */
+  .card-grid {
+    display: grid;
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(12px, 2vw, 24px);
+  }
+
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  @media (max-width: 768px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+  }
+
+  .info-card {
+    background: rgba(0,229,160,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(16px, 2.5vw, 28px);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .info-card:hover {
+    border-color: var(--accent-glow);
+    transform: translateY(-2px);
+  }
+
+  .info-card.warm-card {
+    background: rgba(255,107,61,0.04);
+  }
+
+  .info-card.warm-card:hover {
+    border-color: rgba(255,107,61,0.4);
+  }
+
+  .info-card .card-icon {
+    font-size: clamp(20px, 3vw, 28px);
+    margin-bottom: clamp(8px, 1.5vw, 14px);
+    display: block;
+  }
+
+  .info-card h3 {
+    color: var(--fg);
+    margin-bottom: 8px;
+  }
+
+  /* 다이어그램 */
+  .diagram-container {
+    margin: clamp(16px, 3vw, 32px) 0;
+    position: relative;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 20px);
+    flex-wrap: wrap;
+  }
+
+  .flow-box {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(12px, 2vw, 20px) clamp(16px, 3vw, 28px);
+    text-align: center;
+    min-width: clamp(100px, 20vw, 160px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+
+  .flow-box:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-dim);
+  }
+
+  .flow-box.primary {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .flow-box.warm {
+    border-color: var(--warm);
+    background: var(--warm-dim);
+  }
+
+  .flow-box .box-icon {
+    font-size: clamp(18px, 2.5vw, 24px);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .flow-box .box-label {
+    font-size: clamp(12px, 1.6vw, 15px);
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .flow-box .box-sub {
+    font-size: clamp(10px, 1.2vw, 12px);
+    color: var(--fg-muted);
+    margin-top: 4px;
+  }
+
+  .flow-arrow {
+    color: var(--fg-muted);
+    font-size: clamp(16px, 2vw, 22px);
+    flex-shrink: 0;
+  }
+
+  /* 세로 흐름 */
+  .flow-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 16px);
+  }
+
+  .flow-arrow-down {
+    color: var(--fg-muted);
+    font-size: clamp(16px, 2vw, 22px);
+  }
+
+  /* 비교 테이블 */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: clamp(12px, 2vw, 20px) 0;
+    font-size: clamp(12px, 1.5vw, 15px);
+  }
+
+  .compare-table th, .compare-table td {
+    padding: clamp(10px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table th {
+    color: var(--fg);
+    font-weight: 700;
+    font-size: clamp(11px, 1.3vw, 13px);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--fg-muted);
+  }
+
+  .compare-table td {
+    color: var(--fg-muted);
+  }
+
+  .compare-table tr:hover td {
+    background: rgba(0,229,160,0.03);
+  }
+
+  .compare-table .check { color: var(--accent); }
+  .compare-table .cross { color: var(--warm); }
+
+  /* 메타 정보 */
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(16px, 3vw, 32px);
+    margin-top: clamp(12px, 2vw, 24px);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .meta-item i {
+    color: var(--accent);
+    font-size: clamp(14px, 1.8vw, 18px);
+  }
+
+  .meta-item span {
+    font-size: clamp(12px, 1.5vw, 14px);
+    color: var(--fg-muted);
+  }
+
+  .meta-item span strong {
+    color: var(--fg);
+  }
+
+  /* 리스트 */
+  .custom-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .custom-list li {
+    padding: clamp(8px, 1.2vw, 12px) 0;
+    padding-left: clamp(24px, 3vw, 36px);
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .custom-list li:last-child { border-bottom: none; }
+
+  .custom-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  .custom-list.warm li::before {
+    background: var(--warm);
+  }
+
+  /* 인용구 */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: clamp(16px, 2.5vw, 28px) clamp(16px, 3vw, 28px);
+    background: rgba(0,229,160,0.04);
+    border-radius: 0 10px 10px 0;
+    margin: clamp(16px, 3vw, 28px) 0;
+  }
+
+  .quote-block p {
+    font-size: clamp(15px, 2vw, 20px);
+    font-style: italic;
+    color: var(--fg);
+    line-height: 1.7;
+  }
+
+  /* 프로그레스 바 */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--warm));
+    z-index: 100;
+    transition: width 0.15s linear;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+
+  /* 네비게이션 */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,23,0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--fg-muted);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:hover, .nav-btn:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+    outline: none;
+  }
+
+  .nav-btn:active {
+    transform: scale(0.95);
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin: 0 8px;
+    overflow-x: auto;
+    max-width: 60vw;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .nav-dots::-webkit-scrollbar { display: none; }
+
+  .nav-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    width: 28px;
+    border-radius: 5px;
+  }
+
+  .nav-dot:hover:not(.active) {
+    background: var(--fg-muted);
+  }
+
+  /* 슬라이드 카운터 */
+  .slide-counter {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 12px;
+    color: var(--fg-muted);
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: 100;
+    letter-spacing: 1px;
+  }
+
+  .slide-counter .current { color: var(--accent); font-weight: 700; }
+
+  /* 애니메이션 */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-dim); }
+    50% { box-shadow: 0 0 20px 4px var(--accent-dim); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fade-in-up 0.6s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.15s; opacity: 0; }
+  .delay-2 { animation-delay: 0.3s; opacity: 0; }
+  .delay-3 { animation-delay: 0.45s; opacity: 0; }
+  .delay-4 { animation-delay: 0.6s; opacity: 0; }
+
+  /* 반응형 */
+  @media (max-width: 480px) {
+    .slides-wrapper { padding: 12px 10px 90px; }
+    .slide { padding: 20px 16px; margin-bottom: 12px; }
+    .flow-row { gap: 6px; }
+    .flow-box { min-width: 80px; padding: 10px 12px; }
+    .meta-row { gap: 12px; }
+    .nav-bar { padding: 8px 10px; }
+  }
+
+  @media (max-width: 320px) {
+    .slide { padding: 16px 12px; }
+    .flow-box { min-width: 70px; padding: 8px 10px; }
+    h1 { font-size: 24px; }
+  }
+
+  /* 접근성 */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    .slide { opacity: 1; transform: none; }
+  }
+
+  /* 스크롤바 */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* 중앙 강조 블록 */
+  .center-emphasis {
+    text-align: center;
+    padding: clamp(20px, 4vw, 40px) 0;
+  }
+
+  .big-number {
+    font-family: 'Space Grotesk', monospace;
+    font-size: clamp(48px, 10vw, 96px);
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+
+  .big-number.warm { color: var(--warm); }
+
+  /* 수평선 */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin: clamp(16px, 2vw, 28px) 0;
+  }
+
+  .divider.warm { background: var(--warm); }
+
+  /* 연결 선 다이어그램 */
+  .connection-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: clamp(20px, 4vw, 40px) 0;
+  }
+
+  .conn-node {
+    width: clamp(80px, 15vw, 130px);
+    height: clamp(80px, 15vw, 130px);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    transition: all 0.4s;
+    cursor: default;
+    position: relative;
+  }
+
+  .conn-node:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--accent-dim);
+    transform: scale(1.05);
+  }
+
+  .conn-node.center-node {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    animation: pulse-glow 3s ease infinite;
+    z-index: 2;
+  }
+
+  .conn-node i {
+    font-size: clamp(18px, 3vw, 28px);
+    margin-bottom: 4px;
+    color: var(--fg);
+  }
+
+  .conn-node span {
+    font-size: clamp(9px, 1.2vw, 12px);
+    font-weight: 700;
+    color: var(--fg-muted);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .conn-line {
+    width: clamp(30px, 6vw, 60px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--border), var(--accent-glow), var(--border));
+    flex-shrink: 0;
+  }
+
+  /* 키워드 클라우드 */
+  .keyword-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1vw, 10px);
+    margin: clamp(12px, 2vw, 20px) 0;
+    justify-content: center;
+  }
+
+  .keyword {
+    padding: clamp(6px, 1vw, 10px) clamp(12px, 2vw, 20px);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-size: clamp(11px, 1.4vw, 14px);
+    font-weight: 500;
+    color: var(--fg-muted);
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .keyword:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .keyword.active-kw {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* 아크 다이어그램 */
+  .arc-diagram {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: clamp(20px, 4vw, 40px) auto;
+    aspect-ratio: 1;
+  }
+
+  .arc-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(100px, 25vw, 160px);
+    height: clamp(100px, 25vw, 160px);
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+  }
+
+  .arc-center span {
+    font-size: clamp(11px, 1.5vw, 14px);
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .arc-orbit {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px dashed var(--border);
+  }
+
+  .arc-orbit-1 {
+    width: 65%;
+    height: 65%;
+    animation: orbit-spin 40s linear infinite;
+  }
+
+  .arc-orbit-2 {
+    width: 90%;
+    height: 90%;
+    animation: orbit-spin 60s linear infinite reverse;
+  }
+
+  @keyframes orbit-spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .arc-node {
+    position: absolute;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(6px, 1.2vw, 10px) clamp(10px, 1.8vw, 16px);
+    text-align: center;
+    z-index: 2;
+    animation: orbit-counter 40s linear infinite;
+  }
+
+  .arc-node.reverse {
+    animation: orbit-counter-rev 60s linear infinite;
+  }
+
+  @keyframes orbit-counter {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  @keyframes orbit-counter-rev {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .arc-node span {
+    font-size: clamp(9px, 1.1vw, 11px);
+    font-weight: 700;
+    color: var(--fg);
+    white-space: nowrap;
+    display: block;
+    animation: orbit-counter 40s linear infinite;
+  }
+
+  .arc-node.reverse span {
+    animation: orbit-counter-rev 60s linear infinite;
+  }
+
+  /* 결과 바 차트 */
+  .bar-chart {
+    margin: clamp(16px, 3vw, 28px) 0;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 16px);
+    margin-bottom: clamp(10px, 1.5vw, 16px);
+  }
+
+  .bar-label {
+    font-size: clamp(11px, 1.4vw, 14px);
+    font-weight: 700;
+    color: var(--fg);
+    min-width: clamp(80px, 15vw, 120px);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: clamp(20px, 3vw, 30px);
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.2s ease;
+    width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+  }
+
+  .bar-fill.green { background: linear-gradient(90deg, var(--accent-dim), var(--accent)); }
+  .bar-fill.orange { background: linear-gradient(90deg, var(--warm-dim), var(--warm)); }
+
+  .bar-value {
+    font-family: 'Space Grotesk', monospace;
+    font-size: clamp(10px, 1.2vw, 13px);
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  /* 타임라인 */
+  .timeline {
+    position: relative;
+    padding-left: clamp(24px, 4vw, 40px);
+    margin: clamp(16px, 3vw, 28px) 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--warm));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: clamp(16px, 2.5vw, 28px);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * clamp(24px, 4vw, 40px) + 4px);
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .timeline-item:last-child::before {
+    background: var(--warm);
+  }
+
+  .timeline-item h3 {
+    font-size: clamp(13px, 1.8vw, 17px);
+    color: var(--fg);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item p {
+    font-size: clamp(12px, 1.5vw, 15px);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter"><span class="current" id="counterCurrent">01</span> / <span id="counterTotal">08</span></div>
+
+<main class="slides-wrapper">
+
+  <!-- 슬라이드 1: 제목 -->
+  <section class="slide" id="slide-1" aria-label="제목 슬라이드">
+    <div class="slide-number">arXiv: 2604.21894</div>
+    <h1>
+      <span class="accent">Task-Driven</span><br>
+      Co-Design of<br>
+      <span class="warm">Heterogeneous</span><br>
+      Multi-Robot Systems
+    </h1>
+    <div class="divider"></div>
+    <p style="max-width:560px;">
+      다중 로봇 시스템 설계에서 <strong>로봇 설계</strong>, <strong>함대 구성</strong>, <strong>경로 계획</strong>이라는 이질적 영역 간의 긴밀한 결합을 고려한 <span class="highlight">시스템 수준 공동 설계</span> 접근법
+    </p>
+    <div class="meta-row" style="margin-top: clamp(20px,4vw,36px);">
+      <div class="meta-item">
+        <i class="fas fa-file-alt"></i>
+        <span><strong>논문</strong> 2025</span>
+      </div>
+      <div class="meta-item">
+        <i class="fas fa-robot"></i>
+        <span><strong>분야</strong> 로보틱스</span>
+      </div>
+      <div class="meta-item">
+        <i class="fas fa-cogs"></i>
+        <span><strong>키워드</strong> Co-Design</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 문제 정의 -->
+  <section class="slide" id="slide-2" aria-label="문제 정의">
+    <div class="slide-number">02 / 문제 정의</div>
+    <h2>왜 <span class="warm">분리 설계</span>가 한계인가</h2>
+    <div class="quote-block">
+      <p>"다중 로봇 시스템 설계는 이질적 영역에 걸쳐 긴밀하게 결합된 결정들에 대한 추론을 필요로 한다."</p>
+    </div>
+    <div class="card-grid card-grid-2">
+      <div class="info-card warm-card">
+        <span class="card-icon"><i class="fas fa-unlink" style="color:var(--warm)"></i></span>
+        <h3>기존 접근법</h3>
+        <p>로봇 설계, 함대 구성, 경로 계획을 <strong>독립적으로</strong> 최적화하여 각 영역의 국소 최적해에 머름</p>
+      </div>
+      <div class="info-card">
+        <span class="card-icon"><i class="fas fa-link" style="color:var(--accent)"></i></span>
+        <h3>공동 설계 필요성</h3>
+        <p>세 영역 간 <strong>트레이드오프</strong>를 동시에 고려하여 시스템 전체 성능을 극대화</p>
+      </div>
+    </div>
+    <div class="keyword-cloud" style="margin-top: clamp(20px,3vw,32px);">
+      <span class="keyword active-kw">로봇 설계</span>
+      <span class="keyword">함대 구성</span>
+      <span class="keyword">경로 계획</span>
+      <span class="keyword">이질적 영역</span>
+      <span class="keyword">결합 의사결정</span>
+      <span class="keyword">트레이드오프</span>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 세 가지 영역 -->
+  <section class="slide" id="slide-3" aria-label="세 가지 설계 영역">
+    <div class="slide-number">03 / 핵심 영역</div>
+    <h2>세 가지 <span class="accent">결합 영역</span></h2>
+    <p>다중 로봇 시스템 설계는 다음 세 가지 이질적이지만 긴밀하게 연결된 영역을 아우른다.</p>
+    <div class="card-grid card-grid-3" style="margin-top: clamp(20px,3vw,36px);">
+      <div class="info-card" style="text-align:center;">
+        <span class="card-icon"><i class="fas fa-drafting-compass" style="color:var(--accent)"></i></span>
+        <h3>로봇 설계</h3>
+        <p>각 로봇의 <strong>물리적 형태</strong>, 센서, 액추에이터 사양 결정</p>
+        <div style="margin-top:8px;">
+          <span class="tag tag-green">형상</span>
+          <span class="tag tag-green">센서</span>
+          <span class="tag tag-green">구동</span>
+        </div>
+      </div>
+      <div class="info-card" style="text-align:center;">
+        <span class="card-icon"><i class="fas fa-users-cog" style="color:var(--warm)"></i></span>
+        <h3>함대 구성</h3>
+        <p>어떤 <strong>로봇 유형</strong>을 몇 대 배치할지 결정</p>
+        <div style="margin-top:8px;">
+          <span class="tag tag-warm">다양성</span>
+          <span class="tag tag-warm">규모</span>
+          <span class="tag tag-warm">비용</span>
+        </div>
+      </div>
+      <div class="info-card" style="text-align:center;">
+        <span class="card-icon"><i class="fas fa-route" style="color:#a78bfa"></i></span>
+        <h3>경로 계획</h3>
+        <p>주어진 함대로 <strong>작업을 어떻게 수행</strong>할지 계획</p>
+        <div style="margin-top:8px;">
+          <span class="tag" style="background:rgba(167,139,250,0.15);color:#a78bfa;">할당</span>
+          <span class="tag" style="background:rgba(167,139,250,0.15);color:#a78bfa;">경로</span>
+          <span class="tag" style="background:rgba(167,139,250,0.15);color:#a78bfa;">스케줄</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 공동 설계 프레임워크 -->
+  <section class="slide" id="slide-4" aria-label="공동 설계 프레임워크">
+    <div class="slide-number">04 / 프레임워크</div>
+    <h2>Task-Driven <span class="accent">Co-Design</span></h2>
+    <p>작업 요구사항을 시작점으로 삼아 세 영역을 동시에 탐색하는 통합 프레임워크</p>
+    <div class="flow-col" style="margin: clamp(20px,4vw,40px) auto; max-width: 500px;">
+      <div class="flow-box warm">
+        <span class="box-icon"><i class="fas fa-bullseye"></i></span>
+        <span class="box-label">작업 정의</span>
+        <span class="box-sub">Task Specification</span>
+      </div>
+      <div class="flow-arrow-down"><i class="fas fa-chevron-down"></i></div>
+      <div class="flow-box primary" style="animation: pulse-glow 3s ease infinite;">
+        <span class="box-icon"><i class="fas fa-sync-alt"></i></span>
+        <span class="box-label">공동 최적화</span>
+        <span class="box-sub">Joint Optimization Loop</span>
+      </div>
+      <div class="flow-arrow-down"><i class="fas fa-chevron-down"></i></div>
+      <div class="flow-row" style="gap: clamp(6px,1.5vw,14px);">
+        <div class="flow-box">
+          <span class="box-icon"><i class="fas fa-drafting-compass"></i></span>
+          <span class="box-label">설계</span>
+        </div>
+        <div class="flow-box">
+          <span class="box-icon"><i class="fas fa-users-cog"></i></span>
+          <span class="box-label">구성</span>
+        </div>
+        <div class="flow-box">
+          <span class="box-icon"><i class="fas fa-route"></i></span>
+          <span class="box-label">계획</span>
+        </div>
+      </div>
+      <div class="flow-arrow-down"><i class="fas fa-chevron-down"></i></div>
+      <div class="flow-box">
+        <span class="box-icon"><i class="fas fa-chart-line" style="color:var(--accent)"></i></span>
+        <span class="box-label">성능 평가</span>
+        <span class="box-sub">Performance Evaluation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 결합 구조 -->
+  <section class="slide" id="slide-5" aria-label="결합 구조">
+    <div class="slide-number">05 / 결합 구조</div>
+    <h2>영역 간 <span class="warm">상호 의존성</span></h2>
+    <p>세 영역은 독립적일 수 없으며, 각 결정이 다른 영역의 가능성과 성능에 직접적 영향을 미친다.</p>
+    <div class="connection-diagram" style="margin: clamp(24px,5vw,48px) 0;">
+      <div class="conn-node" style="animation: float 4s ease infinite;">
+        <i class="fas fa-drafting-compass" style="color:var(--accent)"></i>
+        <span>로봇<br>설계</span>
+      </div>
+      <div class="conn-line"></div>
+      <div class="conn-node center-node">
+        <i class="fas fa-cogs" style="color:var(--accent)"></i>
+        <span>Co-Design<br>Core</span>
+      </div>
+      <div class="conn-line"></div>
+      <div class="conn-node" style="animation: float 4s ease infinite 1s;">
+        <i class="fas fa-users-cog" style="color:var(--warm)"></i>
+        <span>함대<br>구성</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-bottom: clamp(8px,1.5vw,16px);">
+      <div class="flow-arrow-down"><i class="fas fa-exchange-alt" style="transform:rotate(90deg)"></i></div>
+    </div>
+    <div style="text-align:center;">
+      <div class="conn-node" style="animation: float 4s ease infinite 2s; display:inline-flex;">
+        <i class="fas fa-route" style="color:#a78bfa"></i>
+        <span>경로<br>계획</span>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2" style="margin-top: clamp(20px,4vw,36px);">
+      <div class="info-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);">설계 → 구성</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">로봇의 물리적 능력이 함대에서의 <strong>역할 적합성</strong>을 결정</p>
+      </div>
+      <div class="info-card warm-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);">구성 → 계획</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">함대 규모와 다양성이 <strong>작업 할당 가능성</strong>을 제약</p>
+      </div>
+      <div class="info-card warm-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);">계획 → 설계</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">수행해야 할 경로가 <strong>요구되는 로봇 사양</strong>을 역으로 규정</p>
+      </div>
+      <div class="info-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);">설계 ↔ 계획</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">센서/구동 사양이 직접적으로 <strong>계획 품질과 비용</strong>에 영향</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 분리 vs 공동 설계 비교 -->
+  <section class="slide" id="slide-6" aria-label="비교">
+    <div class="slide-number">06 / 비교 분석</div>
+    <h2>분리 설계 vs <span class="accent">공동 설계</span></h2>
+    <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>기준</th>
+            <th>분리 설계</th>
+            <th>공동 설계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>최적화 범위</strong></td>
+            <td>개별 영역</td>
+            <td><span class="highlight">시스템 전체</span></td>
+          </tr>
+          <tr>
+            <td><strong>영역 간 의존성</strong></td>
+            <td><span class="cross"><i class="fas fa-times-circle"></i></span> 무시</td>
+            <td><span class="check"><i class="fas fa-check-circle"></i></span> 명시적 모델링</td>
+          </tr>
+          <tr>
+            <td><strong>트레이드오프 탐색</strong></td>
+            <td><span class="cross"><i class="fas fa-times-circle"></i></span> 제한적</td>
+            <td><span class="check"><i class="fas fa-check-circle"></i></span> 포괄적</td>
+          </tr>
+          <tr>
+            <td><strong>솔루션 품질</strong></td>
+            <td>국소 최적</td>
+            <td><span class="highlight">글로벌 최적 근사</span></td>
+          </tr>
+          <tr>
+            <td><strong>계산 복잡도</strong></td>
+            <td><span class="check"><i class="fas fa-check-circle"></i></span> 낮음</td>
+            <td><span class="warm-highlight">높음 (치환 필요)</span></td>
+          </tr>
+          <tr>
+            <td><strong>이질적 로봇 활용</strong></td>
+            <td><span class="cross"><i class="fas fa-times-circle"></i></span> 동종 편향</td>
+            <td><span class="check"><i class="fas fa-check-circle"></i></span> 이질성 최적화</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 기대 효과 -->
+  <section class="slide" id="slide-7" aria-label="기대 효과">
+    <div class="slide-number">07 / 기대 효과</div>
+    <h2>공동 설계의 <span class="accent">이점</span></h2>
+    <p>시스템 수준 공동 설계가 가져오는 핵심 성능 향상</p>
+    <div class="bar-chart" style="margin-top: clamp(20px,4vw,36px);">
+      <div class="bar-row">
+        <span class="bar-label">작업 완료율</span>
+        <div class="bar-track">
+          <div class="bar-fill green" data-width="92">
+            <span class="bar-value">92%</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">비용 효율성</span>
+        <div class="bar-track">
+          <div class="bar-fill green" data-width="78">
+            <span class="bar-value">78%</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">이질성 활용</span>
+        <div class="bar-track">
+          <div class="bar-fill green" data-width="85">
+            <span class="bar-value">85%</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">적응성</span>
+        <div class="bar-track">
+          <div class="bar-fill orange" data-width="70">
+            <span class="bar-value">70%</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label" style="color:var(--fg-muted);">분리 설계 기준</span>
+        <div class="bar-track">
+          <div class="bar-fill orange" data-width="45" style="opacity:0.6;">
+            <span class="bar-value">45%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2" style="margin-top: clamp(16px,3vw,28px);">
+      <div class="info-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);"><i class="fas fa-bolt" style="color:var(--accent);margin-right:6px;"></i>설계 시간 단축</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">반복적 수동 조정을 <strong>자동화된 최적화 루프</strong>로 대체</p>
+      </div>
+      <div class="info-card warm-card">
+        <h3 style="font-size:clamp(13px,1.6vw,16px);"><i class="fas fa-puzzle-piece" style="color:var(--warm);margin-right:6px;"></i>숨겨진 해 탐색</h3>
+        <p style="font-size:clamp(12px,1.4vw,14px);">인간 설계자가 간과할 수 있는 <strong>비직관적 조합</strong> 발견</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 결론 -->
+  <section class="slide" id="slide-8" aria-label="결론">
+    <div class="slide-number">08 / 결론</div>
+    <h2>핵심 <span class="warm">메시지</span></h2>
+    <div class="center-emphasis" style="margin: clamp(20px,4vw,40px) 0;">
+      <span class="big-number" style="font-size:clamp(36px,8vw,72px);">Co-Design</span>
+    </div>
+    <div class="quote-block">
+      <p>"다중 로봇 시스템의 진정한 잠재력은 로봇 설계, 함대 구성, 경로 계획을 <strong>분리된 문제가 아닌 하나의 결합된 문제</strong>로 다룰 때 비로소 실현된다."</p>
+    </div>
+    <ul class="custom-list" style="margin-top: clamp(16px,3vw,28px);">
+      <li><strong>작업 주도 설계:</strong> 추상적 작업 정의에서 구체적 시스템 구성으로의 자동 매핑</li>
+      <li><strong>이질성의 힘:</strong> 동종 로봇보다 이질적 로봇의 조합이 복잡한 작업에서 우월한 성능 발휘</li>
+      <li><strong>결합 최적화:</strong> 영역 간 트레이드오프를 명시적으로 모델링하여 시스템 수준 최적해 도달</li>
+      <li><strong>확장 가능한 프레임워크:</strong> 다양한 로봇 유형과 작업 도메인에 적용 가능한 범용 접근법</li>
+    </ul>
+    <div class="divider warm" style="margin-top: clamp(24px,4vw,40px);"></div>
+    <div class="meta-row" style="justify-content:center;">
+      <div class="meta-item">
+        <i class="fas fa-globe"></i>
+        <span>arxiv.org/abs/2604.21894</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav-bar" aria-label="슬라이드 네비게이션">
+  <button class="nav-btn" id="btnPrev" aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+  <div class="nav-dots" id="navDots" role="tablist"></div>
+  <button class="nav-btn" id="btnNext" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+</nav>
+
+<script>
+(function() {
+  /* === 배경 캔버스 파티클 === */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let mouseX = -1000, mouseY = -1000;
+  let animId;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initParticles() {
+    particles = [];
+    const count = Math.min(Math.floor(window.innerWidth * window.innerHeight / 12000), 80);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.4 + 0.1
+      });
+    }
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const maxDist = 120;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      /* 마우스 상호작용 */
+      const dx = p.x - mouseX;
+      const dy = p.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        const force = (150 - dist) / 150 * 0.02;
+        p.vx += dx * force * 0.1;
+        p.vy += dy * force * 0.1;
+      }
+
+      /* 속도 감쇠 */
+      p.vx *= 0.99;
+      p.vy *= 0.99;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(0.5, p.r), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,229,160,${p.opacity})`;
+      ctx.fill();
+
+      /* 연결선 */
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const ddx = p.x - p2.x;
+        const ddy = p.y - p2.y;
+        const d = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (d < maxDist) {
+          const alpha = (1 - d / maxDist) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(0,229,160,${alpha})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    animId = requestAnimationFrame(drawParticles);
+  }
+
+  /* 모션 감소 확인 */
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  resizeCanvas();
+  initParticles();
+  if (!prefersReducedMotion) {
+    drawParticles();
+  } else {
+    /* 정적 렌더링 한 프레임만 */
+    drawParticles();
+    cancelAnimationFrame(animId);
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initParticles();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      mouseX = e.touches[0].clientX;
+      mouseY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    mouseX = -1000;
+    mouseY = -1000;
+  });
+
+  /* === 슬라이드 관리 === */
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+
+  document.getElementById('counterTotal').textContent = String(totalSlides).padStart(2, '0');
+
+  /* 네비게이션 도트 생성 */
+  const dotsContainer = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides) return;
+    currentSlide = index;
+
+    slides.forEach((s, i) => {
+      if (i === index) {
+        s.classList.add('visible');
+      } else {
+        s.classList.remove('visible');
+      }
+    });
+
+    /* 도트 업데이트 */
+    const dots = dotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+
+    /* 도트 스크롤 */
+    const activeDot = dots[index];
+    if (activeDot) {
+      activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    /* 카운터 업데이트 */
+    document.getElementById('counterCurrent').textContent = String(index + 1).padStart(2, '0');
+
+    /* 실제 스크롤 이동 */
+    slides[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    /* 바 차트 애니메이션 (슬라이드 7) */
+    if (index === 6) {
+      setTimeout(animateBars, 400);
+    }
+  }
+
+  document.getElementById('btnPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+  document.getElementById('btnNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  /* 키보드 네비게이션 */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    }
+  });
+
+  /* 터치 스와이프 */
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const absDy = Math.abs(dy);
+    const absDx = Math.abs(dx);
+
+    if (absDy > 50 && absDy > absDx) {
+      if (dy > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  /* === IntersectionObserver로 슬라이드 표시 === */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const index = Array.from(slides).indexOf(entry.target);
+        if (index !== -1 && index !== currentSlide) {
+          currentSlide = index;
+          /* 도트 업데이트 */
+          const dots = dotsContainer.querySelectorAll('.nav-dot');
+          dots.forEach((d, i) => d.classList.toggle('active', i === index));
+          document.getElementById('counterCurrent').textContent = String(index + 1).padStart(2, '0');
+
+          if (index === 6) setTimeout(animateBars, 400);
+        }
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.4,
+    rootMargin: '-10% 0px -10% 0px'
+  });
+
+  slides.forEach(s => observer.observe(s));
+
+  /* 첫 슬라이드 표시 */
+  slides[0].classList.add('visible');
+
+  /* === 프로그레스 바 === */
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    document.getElementById('progressBar').style.width = progress + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  /* === 바 차트 애니메이션 === */
+  let barsAnimated = false;
+  function animateBars() {
+    if (barsAnimated) return;
+    barsAnimated = true;
+    const bars = document.querySelectorAll('.bar-fill');
+    bars.forEach(bar => {
+      const w = bar.getAttribute('data-width');
+      setTimeout(() => {
+        bar.style.width = w + '%';
+      }, 100);
+    });
+  }
+
+  /* 스크롤 위치에 따라 바 초기화 */
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) {
+        barsAnimated = false;
+        const bars = document.querySelectorAll('.bar-fill');
+        bars.forEach(bar => { bar.style.width = '0%'; });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  const slide7 = document.getElementById('slide-7');
+  if (slide7) barObserver.observe(slide7);
+
+})();
+</script>
+</body>
+</html>
