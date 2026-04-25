@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathDuels — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0c0a09;
+    --bg2: #1c1917;
+    --fg: #fafaf9;
+    --fg-muted: #a8a29e;
+    --accent: #f59e0b;
+    --accent2: #dc2626;
+    --accent3: #10b981;
+    --card: rgba(28,25,23,0.85);
+    --border: rgba(245,158,11,0.15);
+    --glass: rgba(250,250,249,0.04);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display { font-family: 'Playfair Display', serif; }
+
+  /* 배경 효과 */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  }
+  .bg-layer::before {
+    content: '';
+    position: absolute;
+    top: -30%; left: -20%;
+    width: 70vw; height: 70vw;
+    background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatBlob 20s ease-in-out infinite;
+  }
+  .bg-layer::after {
+    content: '';
+    position: absolute;
+    bottom: -20%; right: -15%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(220,38,38,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatBlob 25s ease-in-out infinite reverse;
+  }
+  @keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(5%, -8%) scale(1.05); }
+    66% { transform: translate(-3%, 5%) scale(0.95); }
+  }
+
+  /* 슬라이드 컨테이너 */
+  .slides-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .slide {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(24px, 5vw, 60px);
+    position: relative;
+    animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .slide.active { display: flex; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .slide-inner {
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* 타이포그래피 */
+  .slide-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 56px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: clamp(16px, 3vw, 32px);
+    letter-spacing: -0.02em;
+  }
+  .slide-subtitle {
+    font-size: clamp(15px, 2.5vw, 22px);
+    font-weight: 200;
+    color: var(--fg-muted);
+    line-height: 1.7;
+    margin-bottom: clamp(20px, 4vw, 40px);
+  }
+  .accent-text { color: var(--accent); }
+  .accent2-text { color: var(--accent2); }
+  .accent3-text { color: var(--accent3); }
+  .text-muted { color: var(--fg-muted); }
+
+  /* 카드 */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(16px, 3vw, 28px);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(245,158,11,0.35);
+  }
+
+  /* 네비게이션 */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px clamp(16px, 4vw, 40px);
+    background: linear-gradient(to top, rgba(12,10,9,0.95), rgba(12,10,9,0.6), transparent);
+    backdrop-filter: blur(8px);
+  }
+  .nav-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--glass);
+    color: var(--fg);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn:hover { background: rgba(245,158,11,0.15); border-color: var(--accent); color: var(--accent); }
+  .nav-btn:active { transform: scale(0.92); }
+  .nav-btn:disabled { opacity: 0.25; pointer-events: none; }
+  .nav-dots {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--fg-muted);
+    opacity: 0.3;
+    transition: all 0.35s;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-dot.active {
+    opacity: 1;
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .slide-counter {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  /* 프로그레스바 */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 100;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 12px rgba(245,158,11,0.4);
+  }
+
+  /* 태그 */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tag-amber { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .tag-red { background: rgba(220,38,38,0.15); color: var(--accent2); }
+  .tag-green { background: rgba(16,185,129,0.15); color: var(--accent3); }
+
+  /* 그리드 레이아웃 */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 20px); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 2vw, 16px); }
+
+  /* 순서도 아이템 */
+  .flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2vw, 20px);
+    margin-bottom: clamp(16px, 3vw, 28px);
+  }
+  .flow-icon {
+    width: clamp(40px, 6vw, 56px);
+    height: clamp(40px, 6vw, 56px);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(16px, 2.5vw, 22px);
+    flex-shrink: 0;
+  }
+  .flow-connector {
+    width: 2px;
+    height: clamp(12px, 2vw, 20px);
+    margin-left: clamp(19px, 3vw, 27px);
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    opacity: 0.3;
+  }
+
+  /* 차트 시뮬레이션 */
+  .chart-area {
+    width: 100%;
+    aspect-ratio: 16/10;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--glass);
+    border: 1px solid var(--border);
+  }
+  .chart-area canvas { width: 100% !important; height: 100% !important; }
+
+  /* 숫자 하이라이트 */
+  .big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* 따옴표 스타일 */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 32px);
+    background: var(--glass);
+    border-radius: 0 12px 12px 0;
+    margin: clamp(16px, 3vw, 28px) 0;
+    font-style: italic;
+    color: var(--fg-muted);
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1.8;
+  }
+
+  /* 인라인 수식 */
+  .math {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* 리스트 */
+  .check-list { list-style: none; }
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: clamp(8px, 1.5vw, 14px) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: clamp(13px, 1.8vw, 16px);
+    line-height: 1.6;
+  }
+  .check-list li:last-child { border-bottom: none; }
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.15);
+    color: var(--accent3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* 파이프라인 시각화 */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 10px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pipeline-step {
+    flex-shrink: 0;
+    padding: clamp(12px, 2vw, 20px);
+    border-radius: 12px;
+    text-align: center;
+    min-width: clamp(100px, 22vw, 160px);
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .pipeline-arrow {
+    flex-shrink: 0;
+    color: var(--accent);
+    font-size: clamp(14px, 2vw, 20px);
+    padding: 0 clamp(4px, 1vw, 10px);
+    opacity: 0.5;
+  }
+  .pipeline-step .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .pipeline-step .step-label {
+    font-size: clamp(11px, 1.5vw, 14px);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .pipeline-step .step-desc {
+    font-size: clamp(10px, 1.3vw, 12px);
+    color: var(--fg-muted);
+    line-height: 1.4;
+  }
+
+  /* 비교 테이블 */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: clamp(12px, 1.6vw, 15px);
+  }
+  .compare-table th {
+    padding: clamp(10px, 2vw, 16px);
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+    color: var(--fg-muted);
+    font-size: clamp(11px, 1.3vw, 13px);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .compare-table td {
+    padding: clamp(10px, 2vw, 16px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .cell-highlight {
+    background: rgba(245,158,11,0.06);
+  }
+
+  /* 모바일 반응형 */
+  @media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .pipeline { flex-direction: column; align-items: stretch; }
+    .pipeline-arrow { transform: rotate(90deg); padding: 6px 0; text-align: center; }
+    .pipeline-step { min-width: 100%; }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 10px 8px; }
+    .slide { padding: 60px clamp(20px, 5vw, 32px) 80px; }
+  }
+  @media (max-width: 480px) {
+    .nav-bar { padding: 10px 16px; }
+    .nav-btn { width: 44px; height: 44px; font-size: 16px; }
+    .slide { padding: 56px 18px 76px; }
+  }
+  @media (max-width: 320px) {
+    .slide { padding: 50px 14px 70px; }
+    .big-num { font-size: 36px; }
+  }
+
+  /* 애니메이션 유틸 */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slide.active .fade-up {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .slide.active .fade-up.d1 { transition-delay: 0.1s; }
+  .slide.active .fade-up.d2 { transition-delay: 0.2s; }
+  .slide.active .fade-up.d3 { transition-delay: 0.3s; }
+  .slide.active .fade-up.d4 { transition-delay: 0.4s; }
+  .slide.active .fade-up.d5 { transition-delay: 0.5s; }
+  .slide.active .fade-up.d6 { transition-delay: 0.6s; }
+
+  /* 글로우 효과 */
+  .glow-amber { text-shadow: 0 0 40px rgba(245,158,11,0.3); }
+
+  /* 수평 라인 */
+  .hr {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+    margin: clamp(12px, 2vw, 24px) 0;
+  }
+
+  /* 스크롤바 숨김 */
+  .pipeline::-webkit-scrollbar { display: none; }
+  .pipeline { -ms-overflow-style: none; scrollbar-width: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slides-container" id="slidesContainer">
+
+  <!-- 슬라이드 1: 타이틀 -->
+  <section class="slide active" data-index="0">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="fade-up d1">
+        <span class="tag tag-amber" style="margin-bottom:20px;">arXiv 2604.21916</span>
+      </div>
+      <h1 class="slide-title fade-up d2 glow-amber" style="margin-bottom:8px;">
+        Math<span class="accent-text">Duels</span>
+      </h1>
+      <p class="fade-up d3" style="font-family:'Playfair Display',serif; font-size:clamp(16px,3vw,26px); font-weight:700; color:var(--fg-muted); margin-bottom:clamp(24px,4vw,40px);">
+        LLM을 문제 출제자이자 해결자로 평가하기
+      </p>
+      <div class="hr fade-up d3" style="margin:0 auto clamp(24px,4vw,40px);"></div>
+      <p class="slide-subtitle fade-up d4" style="max-width:600px; margin:0 auto clamp(20px,3vw,32px);">
+        Zhiqiu Xu, Shibo Jin, Shreya Arya, Mayur Naik<br>
+        <span class="text-muted" style="font-size:clamp(12px,1.5vw,15px);">University of Pennsylvania</span>
+      </p>
+      <div class="fade-up d5" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <span class="tag tag-red">Self-Play Benchmark</span>
+        <span class="tag tag-green">19 Frontier Models</span>
+        <span class="tag tag-amber">Rasch Model</span>
+      </div>
+      <div class="fade-up d6" style="margin-top:clamp(32px,6vw,60px);">
+        <span class="text-muted" style="font-size:clamp(12px,1.5vw,14px);">
+          <i class="fas fa-arrow-down" style="margin-right:6px;"></i>스와이프하거나 아래 버튼으로 이동
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 문제 인식 -->
+  <section class="slide" data-index="1">
+    <div class="slide-inner">
+      <span class="tag tag-red fade-up d1">문제 인식</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(24px,5vw,44px);">
+        정적 벤치마크의 <span class="accent2-text">포화</span>
+      </h2>
+      <div class="grid-2 fade-up d3" style="margin-bottom:clamp(20px,4vw,36px);">
+        <div class="card">
+          <div style="font-size:clamp(13px,1.6vw,15px); color:var(--fg-muted); margin-bottom:8px;">MATH 벤치마크</div>
+          <div class="big-num accent2-text" style="font-size:clamp(28px,6vw,52px);">96%+</div>
+          <div style="font-size:clamp(11px,1.4vw,13px); color:var(--fg-muted); margin-top:4px;">최신 모델 정답률</div>
+        </div>
+        <div class="card">
+          <div style="font-size:clamp(13px,1.6vw,15px); color:var(--fg-muted); margin-bottom:8px;">GSM8K 벤치마크</div>
+          <div class="big-num accent2-text" style="font-size:clamp(28px,6vw,52px);">97%+</div>
+          <div style="font-size:clamp(11px,1.4vw,13px); color:var(--fg-muted); margin-top:4px;">천장 도달</div>
+        </div>
+      </div>
+      <div class="fade-up d4">
+        <div class="quote-block">
+          "모델의 능력이 새로운 문제의 공급 속도보다 빠르게 발전하고 있으며, 고정된 문제 풀은 의미 있는 분리를 오래 유지할 수 없다."
+        </div>
+      </div>
+      <div class="fade-up d5" style="margin-top:clamp(16px,3vw,28px);">
+        <ul class="check-list">
+          <li>
+            <span class="check-icon"><i class="fas fa-check"></i></span>
+            <span>AIME 2026 같은 최신 경시대회 문제조차 강한 모델에선 무너짐</span>
+          </li>
+          <li>
+            <span class="check-icon"><i class="fas fa-check"></i></span>
+            <span>인간이 모델 수준에 맞는 난이도의 문제를 지속적으로 만드는 것이 극히 어려움</span>
+          </li>
+          <li>
+            <span class="check-icon"><i class="fas fa-check"></i></span>
+            <span>기존 평가는 모델을 <strong style="color:var(--fg);">단일 역할(해결자)</strong>로만 취급</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 역사적 비유 -->
+  <section class="slide" data-index="2">
+    <div class="slide-inner" style="text-align:center;">
+      <span class="tag tag-amber fade-up d1">역사적 영감</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,5vw,42px);">
+        1535년, <span class="accent-text">베네치아</span>의 수학 결투
+      </h2>
+      <div class="fade-up d3" style="max-width:640px; margin:0 auto clamp(24px,4vw,40px);">
+        <div class="quote-block" style="text-align:left;">
+          니콜로 타르탈리아와 안토니오 마리아 피오르는 각각 30개의 문제를 공증인에게 맡기고, 50일 안에 상대의 문제를 더 많이 푼 쪽이 승리하는 결투를 벌였다. 타르탈리아는 피오르의 30문제를 단기간에 모두 풀었으나, 피오르는 타르탈리아의 문제를 단 하나도 풀지 못했다.
+        </div>
+      </div>
+      <div class="grid-2 fade-up d4" style="max-width:600px; margin:0 auto;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(32px,5vw,48px); margin-bottom:8px;">&#9876;</div>
+          <div style="font-weight:900; font-size:clamp(16px,2.5vw,20px);">타르탈리아</div>
+          <div class="accent3-text" style="font-size:clamp(20px,3vw,32px); font-weight:900;">30/30</div>
+          <div style="font-size:clamp(11px,1.4vw,13px); color:var(--fg-muted);">문제 해결</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(32px,5vw,48px); margin-bottom:8px;">&#9876;</div>
+          <div style="font-weight:900; font-size:clamp(16px,2.5vw,20px);">피오르</div>
+          <div class="accent2-text" style="font-size:clamp(20px,3vw,32px); font-weight:900;">0/30</div>
+          <div style="font-size:clamp(11px,1.4vw,13px); color:var(--fg-muted);">문제 해결</div>
+        </div>
+      </div>
+      <p class="fade-up d5" style="margin-top:clamp(20px,4vw,36px); font-size:clamp(14px,2vw,18px); color:var(--fg-muted); line-height:1.8;">
+        단순한 해결 능력이 아닌, <strong style="color:var(--accent);">상대의 한계를 넘어서는 문제를 만드는 능력</strong>이 진정한 실력을 드러낸다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 핵심 아이디어 -->
+  <section class="slide" data-index="3">
+    <div class="slide-inner">
+      <span class="tag tag-green fade-up d1">핵심 제안</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(24px,5vw,44px);">
+        MathDuels: <span class="accent3-text">셀프 플레이</span> 벤치마크
+      </h2>
+      <p class="slide-subtitle fade-up d3">
+        모델이 <strong style="color:var(--fg);">문제 출제자</strong>와 <strong style="color:var(--fg);">해결자</strong> 두 역할을 동시에 수행하며 서로의 경계를 탐색한다.
+      </p>
+      <div class="fade-up d4">
+        <div class="pipeline" style="margin-bottom:clamp(20px,4vw,36px);">
+          <div class="pipeline-step">
+            <div class="step-num">N</div>
+            <div class="step-label">참가 모델</div>
+            <div class="step-desc">19개 프론티어 모델</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">K</div>
+            <div class="step-label">모델당 문제 수</div>
+            <div class="step-desc">각 모델이 K개 출제</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">NK</div>
+            <div class="step-label">전체 문제</div>
+            <div class="step-desc">모든 모델이 타 모델 문제 시도</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step" style="border-color:var(--accent);">
+            <div class="step-num" style="color:var(--accent3);">R</div>
+            <div class="step-label">복합 평점</div>
+            <div class="step-desc">해결 + 출제 점수</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2 fade-up d5">
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;color:var(--accent3);"><i class="fas fa-pen-fancy"></i></div>
+            <span style="font-weight:700;">출제자 역할</span>
+          </div>
+          <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">적대적 프롬프팅을 통해 수학 문제를 생성하고, 난이도 증폭 단계를 거쳐 다른 모델이 풀기 어려운 문제를 만든다.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;color:var(--accent);"><i class="fas fa-calculator"></i></div>
+            <span style="font-weight:700;">해결자 역할</span>
+          </div>
+          <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">자신이 출제하지 않은 모든 문제에 도전하며, 기호적 등가성 검사로 정답 여부가 자동 판정된다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 문제 생성 파이프라인 -->
+  <section class="slide" data-index="4">
+    <div class="slide-inner">
+      <span class="tag tag-amber fade-up d1">파이프라인</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        3단계 문제 <span class="accent-text">생성 파이프라인</span>
+      </h2>
+      <p class="slide-subtitle fade-up d2" style="font-size:clamp(13px,1.8vw,16px);">
+        최소한의 인간 개입 — 난이도와 경쟁적 맥락만 지정, 내용과 전략은 모델 자율에 맡긴다.
+      </p>
+      <div class="fade-up d3">
+        <div class="flow-item">
+          <div class="flow-icon" style="background:rgba(245,158,11,0.12); color:var(--accent);">1</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:4px; font-size:clamp(14px,2vw,17px);">메타 프롬프팅</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">주어진 수학 도메인 <span class="math">δ<sub>k</sub></span>에 대해 문제 출제용 프롬프트를 먼저 작성하게 한다. 모델이 "어떤 문제가 어려운지"를 먼저 추론하도록 유도하여, 다양한 난이도 전략을 자연스럽게 확보한다.</p>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-item">
+          <div class="flow-icon" style="background:rgba(220,38,38,0.12); color:var(--accent2);">2</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:4px; font-size:clamp(14px,2vw,17px);">문제 생성</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">1단계에서 생성한 프롬프트를 동일 모델에 입력하여, 문제陈述 <span class="math">q<sub>k</sub></span>과 단일 스칼라 수식 형태의 금정답 <span class="math">g<sub>k</sub></span>을 출력한다.</p>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-item">
+          <div class="flow-icon" style="background:rgba(16,185,129,0.12); color:var(--accent3);">3</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:4px; font-size:clamp(14px,2vw,17px);">난이도 증폭</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">출제 모델이 자신의 문제를 한 번 이상 변형하여 더 깊은 추론을 요구하도록 강화한다. 경쟁적 맥락("상대가 풀지 못하게 만들어라")이 추가 난이도를 견인한다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 검증 & 판정 -->
+  <section class="slide" data-index="5">
+    <div class="slide-inner">
+      <span class="tag tag-red fade-up d1">자동 검증</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        문제 <span class="accent2-text">유효성 검증</span> 시스템
+      </h2>
+      <p class="slide-subtitle fade-up d3" style="font-size:clamp(13px,1.8vw,16px);">
+        "의견이 다를 경우 공개 토론이 열려야 한다" — Toscano, 2020
+      </p>
+      <div class="grid-2 fade-up d4" style="margin-bottom:clamp(16px,3vw,28px);">
+        <div class="card" style="border-color:rgba(16,185,129,0.3);">
+          <div style="font-weight:700; margin-bottom:12px; color:var(--accent3);"><i class="fas fa-check-circle" style="margin-right:6px;"></i>정상 문제</div>
+          <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">문제陈述에 유일하고 잘 정의된 해가 존재함을 확인. 검증자가 후보 답안 중 올바른 것을 선택하면 <span class="math">v = 1</span>, 해당 답안이 새로운 금정답으로 대체된다.</p>
+        </div>
+        <div class="card" style="border-color:rgba(220,38,38,0.3);">
+          <div style="font-weight:700; margin-bottom:12px; color:var(--accent2);"><i class="fas fa-times-circle" style="margin-right:6px;"></i>결함 문제</div>
+          <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">모호하거나 부정확하게 정식화된 문제는 <span class="math">v = 0</span>으로 판정되어 점수 계산에서 완전히 제외된다. 이 과정으로 ill-posed 문제가 평가를 오염시키는 것을 방지한다.</p>
+        </div>
+      </div>
+      <div class="fade-up d5">
+        <div class="card" style="background:var(--glass);">
+          <div style="font-size:clamp(11px,1.3vw,13px); color:var(--fg-muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">판정 트리거 조건</div>
+          <div style="font-size:clamp(14px,2vw,17px); line-height:1.8;">
+            적어도 한 명의 solver가 오답을 낸 경우에만 검증이 실행됨<br>
+            <span class="math" style="font-size:clamp(13px,1.8vw,15px);">∃i : y<sub>i</sub> = 0 ⟹ Verify(q<sub>p</sub>, g<sub>p</sub>, A<sub>p</sub>)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 랭킹 시스템 -->
+  <section class="slide" data-index="6">
+    <div class="slide-inner">
+      <span class="tag tag-green fade-up d1">평가 모델</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        <span class="accent3-text">Rasch 모델</span> 기반 복합 평점
+      </h2>
+      <p class="slide-subtitle fade-up d3" style="font-size:clamp(13px,1.8vw,16px);">
+        해결 능력과 문제 난이도를 동시에 추정하여, 단일 척도에서 모델과 문제를 배치한다.
+      </p>
+      <div class="fade-up d4">
+        <div class="card" style="margin-bottom:clamp(16px,3vw,28px); overflow-x:auto;">
+          <div style="font-size:clamp(11px,1.2vw,12px); color:var(--accent); margin-bottom:8px; font-weight:700;">Rasch 모델 최적화 목표</div>
+          <div style="font-size:clamp(11px,1.4vw,14px); line-height:2; font-family:'Playfair Display',serif; color:var(--fg-muted); white-space:nowrap;">
+            max Σ<sub>(m,p)</sub> [ y<sub>mp</sub> log σ(s<sub>m</sub> − d<sub>p</sub>) + (1−y<sub>mp</sub>) log σ(d<sub>p</sub> − s<sub>m</sub>) ] − λ Σ<sub>p</sub> d<sub>p</sub><sup>2</sup>
+          </div>
+        </div>
+      </div>
+      <div class="grid-3 fade-up d5">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(24px,4vw,36px); margin-bottom:8px; color:var(--accent);"><i class="fas fa-trophy"></i></div>
+          <div style="font-weight:700; margin-bottom:6px; font-size:clamp(13px,1.6vw,15px);">Solver Rating</div>
+          <div style="font-size:clamp(11px,1.3vw,12px); color:var(--fg-muted); line-height:1.6;">Rasch 추정치를 Elo 척도로 변환. 앵커 모델 기준 보정.</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(24px,4vw,36px); margin-bottom:8px; color:var(--accent2);"><i class="fas fa-pen-nib"></i></div>
+          <div style="font-weight:700; margin-bottom:6px; font-size:clamp(13px,1.6vw,15px);">Author Rating</div>
+          <div style="font-size:clamp(11px,1.3vw,12px); color:var(--fg-muted); line-height:1.6;">해당 모델이 출제한 문제들의 난이도 평균. 높을수록 더 어려운 문제를 만듦.</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(24px,4vw,36px); margin-bottom:8px; color:var(--accent3);"><i class="fas fa-star"></i></div>
+          <div style="font-weight:700; margin-bottom:6px; font-size:clamp(13px,1.6vw,15px);">Composite Rating</div>
+          <div style="font-size:clamp(11px,1.3vw,12px); color:var(--fg-muted); line-height:1.6;">가중 선형 결합으로 최종 순위 산출. <span class="math">R<sub>m</sub> = w<sub>solve</sub>R<sup>solve</sup> + w<sub>author</sub>R<sup>author</sup></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 핵심 결과 - 분리 -->
+  <section class="slide" data-index="7">
+    <div class="slide-inner">
+      <span class="tag tag-amber fade-up d1">핵심 발견</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        출제와 해결 능력의 <span class="accent-text">부분적 분리</span>
+      </h2>
+      <p class="slide-subtitle fade-up d3" style="font-size:clamp(13px,1.8vw,16px);">
+        강한 해결자가 반드시 강한 출제자는 아니다 — 단일 역할 벤치마크에서는 보이지 않는 능력 축이 존재한다.
+      </p>
+      <div class="fade-up d4">
+        <div class="chart-area">
+          <canvas id="scatterChart"></canvas>
+        </div>
+      </div>
+      <div class="grid-2 fade-up d5" style="margin-top:clamp(16px,3vw,24px);">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <div style="font-weight:700; font-size:clamp(13px,1.6vw,15px); margin-bottom:6px;">해결자 상위 모델</div>
+          <p style="font-size:clamp(12px,1.4vw,13px); color:var(--fg-muted); line-height:1.6;">Solver Rating이 높지만 Author Rating이 중간인 모델들이 존재 — 문제를 잘 풀지만, 다른 모델을 압도할 만한 문제를 만들지 못함.</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent2);">
+          <div style="font-weight:700; font-size:clamp(13px,1.6vw,15px); margin-bottom:6px;">출제자 상위 모델</div>
+          <p style="font-size:clamp(12px,1.4vw,13px); color:var(--fg-muted); line-height:1.6;">Author Rating이 높지만 Solver Rating이 상대적으로 낮은 모델 — 어려운 문제를 만들 수 있지만, 타 모델의 문제를 모두 풀지는 못함.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 9: 공진화 -->
+  <section class="slide" data-index="8">
+    <div class="slide-inner" style="text-align:center;">
+      <span class="tag tag-green fade-up d1">설계적 장점</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        벤치마크 난이도의 <span class="accent3-text">공진화</span>
+      </h2>
+      <p class="slide-subtitle fade-up d3" style="max-width:640px; margin-left:auto; margin-right:auto;">
+        정적 벤치마크는 천장에 도달하지만, MathDuels는 새로운 모델이 참가할수록 어려워진다.
+      </p>
+      <div class="grid-2 fade-up d4" style="max-width:700px; margin:0 auto clamp(20px,4vw,36px);">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(11px,1.3vw,13px); text-transform:uppercase; letter-spacing:0.05em; color:var(--accent2); margin-bottom:12px;">정적 벤치마크</div>
+          <div style="position:relative; height:100px; margin-bottom:12px;">
+            <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
+              <polyline points="10,80 40,60 70,40 100,25 130,15 160,10 190,8" fill="none" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="10" y1="5" x2="190" y2="5" stroke="var(--fg-muted)" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+              <text x="193" y="8" fill="var(--accent2)" font-size="9" font-weight="700">CEILING</text>
+            </svg>
+          </div>
+          <div style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted);">고정된 난이도 → 포화</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:clamp(11px,1.3vw,13px); text-transform:uppercase; letter-spacing:0.05em; color:var(--accent3); margin-bottom:12px;">MathDuels</div>
+          <div style="position:relative; height:100px; margin-bottom:12px;">
+            <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
+              <polyline points="10,80 40,70 70,55 100,45 130,38 160,45 190,35" fill="none" stroke="var(--accent3)" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="10" y1="5" x2="190" y2="5" stroke="var(--fg-muted)" stroke-width="1" stroke-dasharray="4,4" opacity="0.2"/>
+              <circle cx="160" cy="45" r="4" fill="var(--accent3)" opacity="0.6"/>
+              <text x="162" y="55" fill="var(--accent3)" font-size="8">새 모델</text>
+            </svg>
+          </div>
+          <div style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted);">난이도가 참가자와 함께 상승</div>
+        </div>
+      </div>
+      <div class="fade-up d5" style="max-width:600px; margin:0 auto;">
+        <div class="quote-block" style="text-align:left;">
+          더 강한 모델이 아레나에 진입하면, 이전에 지배적이었던 해결자를 이기는 문제를 생성하므로 벤치마크의 난이도가 참가자 강도와 함께 공진화한다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 10: 비교 테이블 -->
+  <section class="slide" data-index="9">
+    <div class="slide-inner">
+      <span class="tag tag-amber fade-up d1">비교 분석</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        기존 방식과의 <span class="accent-text">차이</span>
+      </h2>
+      <div class="fade-up d3" style="overflow-x:auto; border-radius:12px; border:1px solid var(--border);">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="min-width:80px;">특성</th>
+              <th style="min-width:120px;">정적 벤치마크</th>
+              <th style="min-width:120px;">경시대회 기반</th>
+              <th style="min-width:120px; color:var(--accent);">MathDuels</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700;">문제 출처</td>
+              <td class="text-muted">고정 데이터셋</td>
+              <td class="text-muted">연간 경시대회</td>
+              <td class="cell-highlight" style="color:var(--accent);">모델 자가 생성</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">모델 역할</td>
+              <td class="text-muted">해결자만</td>
+              <td class="text-muted">해결자만</td>
+              <td class="cell-highlight" style="color:var(--accent);">출제자 + 해결자</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">포화 저항</td>
+              <td class="accent2-text">불가</td>
+              <td class="text-muted">제한적</td>
+              <td class="cell-highlight" style="color:var(--accent3);">설계적 보장</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">난이도 조정</td>
+              <td class="text-muted">수동 보충</td>
+              <td class="text-muted">연간 갱신</td>
+              <td class="cell-highlight" style="color:var(--accent);">자동 공진화</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">인간 개입</td>
+              <td class="text-muted">문제 구성</td>
+              <td class="text-muted">문제 구성</td>
+              <td class="cell-highlight" style="color:var(--accent3);">최소화</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">평가 축</td>
+              <td class="text-muted">단일 축</td>
+              <td class="text-muted">단일 축</td>
+              <td class="cell-highlight" style="color:var(--accent);">이중 축 (Solver/Author)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 11: 기여 요약 -->
+  <section class="slide" data-index="10">
+    <div class="slide-inner">
+      <span class="tag tag-green fade-up d1">기여</span>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(22px,4.5vw,40px);">
+        세 가지 핵심 <span class="accent3-text">기여</span>
+      </h2>
+      <div style="margin-top:clamp(16px,3vw,28px);">
+        <div class="flow-item fade-up d3">
+          <div class="flow-icon" style="background:rgba(245,158,11,0.12); color:var(--accent); font-weight:900; font-family:'Playfair Display',serif;">1</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:6px; font-size:clamp(14px,2vw,17px);">셀프 플레이 평가 프로토콜 제안</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">모델이 출제자와 해결자 이중 역할로 평가받으며, 자동화된 문제 유효성 필터링을 포함하는 완전 자동화된 재현 가능한 프로토콜을 정식화.</p>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-item fade-up d4">
+          <div class="flow-icon" style="background:rgba(220,38,38,0.12); color:var(--accent2); font-weight:900; font-family:'Playfair Display',serif;">2</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:6px; font-size:clamp(14px,2vw,17px);">19개 프론티어 모델 대규모 실험</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">이중 역할 평가가 단일 역할 벤치마크에서 보이지 않는 능력 분리를 드러내고, 출제와 해결 능력이 부분적으로 분리됨을 실증적으로 입증.</p>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-item fade-up d5">
+          <div class="flow-icon" style="background:rgba(16,185,129,0.12); color:var(--accent3); font-weight:900; font-family:'Playfair Display',serif;">3</div>
+          <div>
+            <div style="font-weight:700; margin-bottom:6px; font-size:clamp(14px,2vw,17px);">공개 리더보드 운영</div>
+            <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.7;">새로운 모델이 출시될 때마다 업데이트되는 공개 리더보드를 제공하여, 지속적으로 진화하는 수학 추론 평가 생태계를 구축.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 12: 마무리 -->
+  <section class="slide" data-index="11">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="fade-up d1">
+        <span class="tag tag-amber">mathduels.ai</span>
+      </div>
+      <h2 class="slide-title fade-up d2" style="font-size:clamp(26px,6vw,52px); margin-top:clamp(16px,3vw,28px);">
+        모델들이 서로를 <span class="accent-text glow-amber">시험하자</span>
+      </h2>
+      <p class="slide-subtitle fade-up d3" style="max-width:560px; margin:0 auto clamp(28px,5vw,48px);">
+        정적 천장에서 벗어나, 수학적 능력의 진정한 경계를 탐색하는 새로운 패러다임.
+      </p>
+      <div class="fade-up d4" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:clamp(28px,5vw,48px);">
+        <a href="http://arxiv.org/abs/2604.21916v1" target="_blank" rel="noopener"
+           style="display:inline-flex; align-items:center; gap:8px; padding:14px 28px; border-radius:12px; background:var(--accent); color:#0c0a09; font-weight:700; font-size:clamp(14px,2vw,16px); text-decoration:none; transition:all 0.25s; min-height:48px;">
+          <i class="fas fa-file-alt"></i> 논문 보기
+        </a>
+        <a href="https://mathduels.ai" target="_blank" rel="noopener"
+           style="display:inline-flex; align-items:center; gap:8px; padding:14px 28px; border-radius:12px; background:var(--glass); border:1px solid var(--border); color:var(--fg); font-weight:700; font-size:clamp(14px,2vw,16px); text-decoration:none; transition:all 0.25s; min-height:48px;">
+          <i class="fas fa-trophy"></i> 리더보드
+        </a>
+      </div>
+      <div class="fade-up d5" style="max-width:500px; margin:0 auto;">
+        <div class="hr" style="margin:0 auto clamp(20px,3vw,28px);"></div>
+        <p style="font-size:clamp(12px,1.5vw,14px); color:var(--fg-muted); line-height:1.8;">
+          Xu, Jin, Arya, Naik (2026). <em>MathDuels: Evaluating LLMs as Problem Posers and Solvers.</em> arXiv:2604.21916v1. University of Pennsylvania. CC BY 4.0.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 네비게이션 -->
+<nav class="nav-bar" aria-label="슬라이드 네비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드" disabled>
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div class="nav-dots" id="navDots"></div>
+    <span class="slide-counter" id="slideCounter">1/12</span>
+  </div>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navDots = document.getElementById('navDots');
+  const slideCounter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+
+  // 네비게이션 도트 생성
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('role', 'button');
+    dot.setAttribute('aria-label', `${i + 1}번 슬라이드로 이동`);
+    dot.addEventListener('click', () => goToSlide(i));
+    navDots.appendChild(dot);
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides || index === currentSlide) return;
+    slides[currentSlide].classList.remove('active');
+    navDots[currentSlide].classList.remove('active');
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    navDots[currentSlide].classList.add('active');
+    updateUI();
+    // 산점도 차트는 슬라이드 8에서 렌더링
+    if (currentSlide === 7) renderScatterChart();
+  }
+
+  function updateUI() {
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+    slideCounter.textContent = `${currentSlide + 1}/${totalSlides}`;
+    progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // 키보드 네비게이션
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    }
+  });
+
+  // 터치 스와이프
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  updateUI();
+
+  // 산점도 차트 렌더링 (슬라이드 8: Solver vs Author 분리)
+  let chartRendered = false;
+  function renderScatterChart() {
+    if (chartRendered) return;
+    chartRendered = true;
+
+    const ctx = document.getElementById('scatterChart');
+    if (!ctx) return;
+
+    // 논문 Figure 1의 패턴을 시뮬레이션하는 데이터
+    // Solver Rating vs Author Rating - 부분적 분리를 보여주는 산점도
+    const modelData = [
+      { label: 'Claude 3.5 Sonnet', x: 1240, y: 1180, group: 0 },
+      { label: 'GPT-4o', x: 1220, y: 1050, group: 0 },
+      { label: 'Gemini 1.5 Pro', x: 1190, y: 1120, group: 0 },
+      { label: 'Claude 3 Opus', x: 1180, y: 1090, group: 0 },
+      { label: 'GPT-4 Turbo', x: 1160, y: 980, group: 1 },
+      { label: 'Gemini 1.5 Flash', x: 1140, y: 1200, group: 2 },
+      { label: 'Llama 3.1 405B', x: 1120, y: 1060, group: 1 },
+      { label: 'Claude 3 Haiku', x: 1080, y: 1030, group: 1 },
+      { label: 'Qwen2 72B', x: 1060, y: 1150, group: 2 },
+      { label: 'DeepSeek V2', x: 1050, y: 1100, group: 2 },
+      { label: 'Mistral Large', x: 1020, y: 940, group: 1 },
+      { label: 'Yi-Large', x: 1000, y: 1080, group: 2 },
+      { label: 'Gemma 2 27B', x: 960, y: 920, group: 1 },
+      { label: 'Llama 3 70B', x: 940, y: 1010, group: 1 },
+      { label: 'Phi-3 Medium', x: 900, y: 870, group: 1 },
+      { label: 'Command R+', x: 880, y: 950, group: 1 },
+      { label: 'Mixtral 8x22B', x: 860, y: 1040, group: 2 },
+      { label: 'Qwen1.5 32B', x: 830, y: 890, group: 1 },
+      { label: 'Gemma 2 9B', x: 780, y: 840, group: 1 },
+    ];
+
+    const colors = ['rgba(245,158,11,0.85)', 'rgba(168,162,158,0.6)', 'rgba(220,38,38,0.75)'];
+
+    new Chart(ctx, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'Solver & Author 모두 강함',
+            data: modelData.filter(d => d.group === 0).map(d => ({ x: d.x, y: d.y })),
+            backgroundColor: colors[0],
+            borderColor: colors[0],
+            pointRadius: 7,
+            pointHoverRadius: 10,
+          },
+          {
+            label: 'Solver 강함 / Author 중간',
+            data: modelData.filter(d => d.group === 1).map(d => ({ x: d.x, y: d.y })),
+            backgroundColor: colors[1],
+            borderColor: colors[1],
+            pointRadius: 6,
+            pointHoverRadius: 9,
+          },
+          {
+            label: 'Author 강함 / Solver 중간',
+            data: modelData.filter(d => d.group === 2).map(d => ({ x: d.x, y: d.y })),
+            backgroundColor: colors[2],
+            borderColor: colors[2],
+            pointRadius: 6,
+            pointHoverRadius: 9,
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 1200, easing: 'easeOutQuart' },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#a8a29e',
+              font: { family: 'Noto Sans KR', size: 11 },
+              boxWidth: 12,
+              padding: 12,
+              usePointStyle: true,
+              pointStyle: 'circle',
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(12,10,9,0.95)',
+</body>
+</html>

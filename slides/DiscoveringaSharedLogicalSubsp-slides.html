@@ -1,1 +1,1294 @@
-  LLM API 에러: The read operation timed out
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shared Logical Subspace — 논문 시각화</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a0f0d;
+  --bg2: #111a16;
+  --bg3: #162019;
+  --fg: #e8f0ec;
+  --fg-muted: #8a9e93;
+  --accent: #00e88f;
+  --accent2: #00c9a7;
+  --accent-dim: rgba(0,232,143,0.12);
+  --warm: #f0a040;
+  --warm-dim: rgba(240,160,64,0.12);
+  --red: #ff5f6d;
+  --card: rgba(22,32,25,0.85);
+  --border: rgba(0,232,143,0.15);
+  --glass: rgba(10,15,13,0.7);
+  --radius: clamp(8px, 2vw, 16px);
+  --font: 'Noto Sans KR', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: clamp(14px, 3.5vw, 18px);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 배경 효과 */
+.bg-noise {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.bg-glow {
+  position: fixed; z-index: 0; pointer-events: none;
+  width: clamp(300px, 60vw, 600px); height: clamp(300px, 60vw, 600px);
+  border-radius: 50%; filter: blur(clamp(80px, 15vw, 160px));
+}
+.bg-glow-1 { top: -10%; left: -10%; background: rgba(0,232,143,0.06); }
+.bg-glow-2 { bottom: -15%; right: -10%; background: rgba(240,160,64,0.04); }
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative; z-index: 1;
+  width: 100%; min-height: 100vh;
+}
+
+.slide {
+  min-height: 100vh;
+  width: 100%;
+  padding: clamp(24px, 5vw, 60px) clamp(16px, 5vw, 48px);
+  display: flex; flex-direction: column;
+  justify-content: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide.visible {
+  opacity: 1; transform: translateY(0);
+}
+
+.slide-inner {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 타이포그래피 */
+.slide-tag {
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: clamp(8px, 2vw, 16px);
+  display: flex; align-items: center; gap: 8px;
+}
+.slide-tag::before {
+  content: ''; display: inline-block;
+  width: clamp(16px, 3vw, 24px); height: 2px;
+  background: var(--accent);
+}
+
+.slide-title {
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: clamp(12px, 3vw, 24px);
+  letter-spacing: -0.02em;
+}
+.slide-title .accent { color: var(--accent); }
+.slide-title .warm { color: var(--warm); }
+
+.slide-subtitle {
+  font-size: clamp(0.95rem, 2.5vw, 1.25rem);
+  color: var(--fg-muted);
+  font-weight: 300;
+  line-height: 1.8;
+  max-width: 680px;
+}
+
+/* 카드 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(16px, 3vw, 28px);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s, transform 0.3s;
+}
+.card:hover {
+  border-color: rgba(0,232,143,0.35);
+  transform: translateY(-2px);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2vw, 20px);
+  margin-top: clamp(16px, 3vw, 32px);
+}
+@media (min-width: 600px) {
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.card-icon {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  margin-bottom: clamp(8px, 1.5vw, 12px);
+  display: inline-flex;
+  width: clamp(40px, 8vw, 52px); height: clamp(40px, 8vw, 52px);
+  align-items: center; justify-content: center;
+  border-radius: 12px;
+}
+.card-icon.green { background: var(--accent-dim); color: var(--accent); }
+.card-icon.warm { background: var(--warm-dim); color: var(--warm); }
+.card-icon.red { background: rgba(255,95,109,0.12); color: var(--red); }
+
+.card-title {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 800;
+  margin-bottom: clamp(4px, 1vw, 8px);
+}
+
+.card-desc {
+  font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+  color: var(--fg-muted);
+  line-height: 1.7;
+}
+
+/* 수식 */
+.math-block {
+  font-family: var(--mono);
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  background: rgba(0,232,143,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(14px, 3vw, 24px);
+  margin: clamp(12px, 2vw, 20px) 0;
+  text-align: center;
+  color: var(--fg);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 2;
+}
+.math-block .var { color: var(--accent); font-weight: 600; }
+.math-block .fn { color: var(--warm); }
+.math-block .op { color: var(--fg-muted); }
+
+/* 다이어그램 */
+.diagram {
+  margin: clamp(16px, 3vw, 32px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2vw, 16px);
+}
+
+.diagram-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 16px);
+  flex-wrap: wrap;
+}
+
+.d-box {
+  padding: clamp(8px, 2vw, 14px) clamp(14px, 3vw, 24px);
+  border-radius: var(--radius);
+  font-size: clamp(0.72rem, 1.7vw, 0.88rem);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  transition: transform 0.3s;
+}
+.d-box:hover { transform: scale(1.05); }
+
+.d-box.green { background: var(--accent-dim); border: 1px solid rgba(0,232,143,0.3); color: var(--accent); }
+.d-box.warm { background: var(--warm-dim); border: 1px solid rgba(240,160,64,0.3); color: var(--warm); }
+.d-box.neutral { background: rgba(138,158,147,0.08); border: 1px solid rgba(138,158,147,0.2); color: var(--fg-muted); }
+.d-box.highlight { background: rgba(0,232,143,0.2); border: 1.5px solid var(--accent); color: var(--accent); box-shadow: 0 0 20px rgba(0,232,143,0.15); }
+
+.d-arrow {
+  color: var(--fg-muted);
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  flex-shrink: 0;
+}
+.d-arrow-down { transform: rotate(90deg); }
+
+/* 두 개 패널 나란히 */
+.dual-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2vw, 20px);
+  margin: clamp(16px, 3vw, 28px) 0;
+}
+@media (min-width: 600px) {
+  .dual-panel { grid-template-columns: 1fr 1fr; }
+}
+
+.panel {
+  border-radius: var(--radius);
+  padding: clamp(14px, 3vw, 24px);
+  border: 1px solid var(--border);
+}
+.panel-nl { background: rgba(0,232,143,0.04); }
+.panel-sym { background: rgba(240,160,64,0.04); border-color: rgba(240,160,64,0.2); }
+
+.panel-label {
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: clamp(8px, 1.5vw, 12px);
+  font-weight: 600;
+}
+.panel-nl .panel-label { color: var(--accent); }
+.panel-sym .panel-label { color: var(--warm); }
+
+.panel-content {
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  color: var(--fg);
+  line-height: 1.8;
+}
+
+/* 스텝 표시 */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.5vw, 20px);
+  margin: clamp(16px, 3vw, 28px) 0;
+}
+
+.step {
+  display: flex;
+  gap: clamp(12px, 2vw, 16px);
+  align-items: flex-start;
+}
+
+.step-num {
+  flex-shrink: 0;
+  width: clamp(32px, 6vw, 44px); height: clamp(32px, 6vw, 44px);
+  border-radius: 50%;
+  background: var(--accent-dim);
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.step-body {}
+.step-title {
+  font-weight: 800;
+  font-size: clamp(0.88rem, 2vw, 1.05rem);
+  margin-bottom: clamp(4px, 1vw, 6px);
+}
+.step-desc {
+  color: var(--fg-muted);
+  font-size: clamp(0.78rem, 1.7vw, 0.88rem);
+  line-height: 1.7;
+}
+
+/* 결과 바 차트 */
+.bar-chart {
+  margin: clamp(16px, 3vw, 28px) 0;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 14px);
+  margin-bottom: clamp(8px, 1.5vw, 14px);
+}
+.bar-label {
+  flex-shrink: 0;
+  width: clamp(80px, 18vw, 120px);
+  font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+  font-weight: 600;
+  text-align: right;
+  color: var(--fg-muted);
+}
+.bar-track {
+  flex: 1;
+  height: clamp(20px, 4vw, 30px);
+  background: rgba(138,158,147,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0;
+}
+.bar-fill.green { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.bar-fill.warm { background: linear-gradient(90deg, var(--warm), #f0c060); }
+.bar-fill.dim { background: rgba(138,158,147,0.25); }
+
+.bar-val {
+  flex-shrink: 0;
+  width: clamp(40px, 8vw, 56px);
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+  font-weight: 600;
+  color: var(--fg);
+}
+.bar-val .delta {
+  font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+  margin-left: 2px;
+}
+.bar-val .delta.up { color: var(--accent); }
+.bar-val .delta.same { color: var(--fg-muted); }
+
+/* 인사이트 리스트 */
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vw, 16px);
+  margin: clamp(16px, 3vw, 28px) 0;
+}
+
+.insight {
+  display: flex;
+  gap: clamp(10px, 2vw, 14px);
+  align-items: flex-start;
+  padding: clamp(12px, 2.5vw, 18px);
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.insight-icon {
+  flex-shrink: 0;
+  width: clamp(28px, 5vw, 36px); height: clamp(28px, 5vw, 36px);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+}
+.insight-icon.i1 { background: var(--accent-dim); color: var(--accent); }
+.insight-icon.i2 { background: var(--warm-dim); color: var(--warm); }
+.insight-icon.i3 { background: rgba(100,180,255,0.12); color: #64b4ff; }
+.insight-icon.i4 { background: rgba(255,95,109,0.12); color: var(--red); }
+
+.insight-text {
+  font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+  line-height: 1.7;
+}
+.insight-text strong { color: var(--fg); font-weight: 700; }
+
+/* 내비게이션 */
+.nav-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,15,13,0.85);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-progress {
+  flex: 1;
+  height: 3px;
+  background: rgba(138,158,147,0.15);
+  border-radius: 2px;
+  margin: 0 clamp(12px, 2vw, 20px);
+  overflow: hidden;
+}
+.nav-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0;
+}
+
+.nav-btn {
+  min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--fg-muted);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  cursor: pointer;
+  transition: all 0.25s;
+  padding: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-btn:hover, .nav-btn:active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.nav-dots {
+  display: flex; gap: 6px;
+  align-items: center;
+}
+.nav-dot {
+  width: clamp(6px, 1.2vw, 8px); height: clamp(6px, 1.2vw, 8px);
+  border-radius: 50%;
+  background: rgba(138,158,147,0.25);
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(0,232,143,0.4);
+  width: clamp(18px, 3vw, 24px);
+  border-radius: 4px;
+}
+
+.slide-counter {
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 1.3vw, 0.75rem);
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+
+/* 타이틀 슬라이드 특수 */
+.title-slide .slide-inner {
+  text-align: left;
+}
+.title-arxiv {
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+  color: var(--fg-muted);
+  margin-bottom: clamp(20px, 4vw, 40px);
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.title-arxiv i { color: var(--accent); }
+
+.title-main {
+  font-size: clamp(2rem, 6.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: clamp(12px, 3vw, 24px);
+  letter-spacing: -0.03em;
+}
+
+.title-authors {
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  color: var(--fg-muted);
+  margin-bottom: clamp(6px, 1.5vw, 12px);
+}
+.title-affil {
+  font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+  color: rgba(138,158,147,0.6);
+  font-weight: 300;
+}
+
+.title-visual {
+  margin-top: clamp(28px, 6vw, 56px);
+  position: relative;
+  height: clamp(120px, 25vw, 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-ring {
+  position: absolute;
+  border: 1px solid rgba(0,232,143,0.1);
+  border-radius: 50%;
+  animation: orbit-spin 20s linear infinite;
+}
+.orbit-ring:nth-child(1) { width: 80%; height: 80%; }
+.orbit-ring:nth-child(2) { width: 55%; height: 55%; animation-direction: reverse; animation-duration: 15s; border-color: rgba(240,160,64,0.08); }
+.orbit-ring:nth-child(3) { width: 30%; height: 30%; animation-duration: 10s; }
+
+.orbit-dot {
+  position: absolute;
+  width: clamp(6px, 1.2vw, 10px); height: clamp(6px, 1.2vw, 10px);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(0,232,143,0.5);
+}
+.orbit-ring:nth-child(1) .orbit-dot { top: 0; left: 50%; transform: translate(-50%, -50%); }
+.orbit-ring:nth-child(2) .orbit-dot { bottom: 0; right: 10%; transform: translate(50%, 50%); background: var(--warm); box-shadow: 0 0 10px rgba(240,160,64,0.5); }
+.orbit-ring:nth-child(3) .orbit-dot { top: 10%; left: 0; transform: translate(-50%, -50%); }
+
+.orbit-center {
+  width: clamp(20px, 4vw, 36px); height: clamp(20px, 4vw, 36px);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* 레이어 시각화 */
+.layer-viz {
+  margin: clamp(16px, 3vw, 28px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vw, 10px);
+}
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 12px);
+}
+.layer-label {
+  flex-shrink: 0;
+  width: clamp(50px, 10vw, 70px);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 1.3vw, 0.72rem);
+  color: var(--fg-muted);
+  text-align: right;
+}
+.layer-bar-track {
+  flex: 1; height: clamp(14px, 3vw, 22px);
+  background: rgba(138,158,147,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.layer-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+}
+.layer-val {
+  flex-shrink: 0;
+  width: clamp(36px, 7vw, 48px);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+  color: var(--fg-muted);
+}
+
+/* 벤치마크 테이블 */
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: clamp(16px, 3vw, 28px) 0;
+  font-size: clamp(0.7rem, 1.6vw, 0.82rem);
+}
+.bench-table th {
+  text-align: left;
+  padding: clamp(8px, 1.5vw, 12px) clamp(6px, 1.2vw, 10px);
+  border-bottom: 2px solid var(--border);
+  color: var(--fg-muted);
+  font-weight: 600;
+  font-size: clamp(0.62rem, 1.3vw, 0.72rem);
+  letter-spacing: 0.05em;
+}
+.bench-table td {
+  padding: clamp(8px, 1.5vw, 12px) clamp(6px, 1.2vw, 10px);
+  border-bottom: 1px solid rgba(138,158,147,0.08);
+  font-family: var(--mono);
+}
+.bench-table tr:hover td {
+  background: rgba(0,232,143,0.03);
+}
+.bench-table .best {
+  color: var(--accent);
+  font-weight: 600;
+}
+.bench-table .base {
+  color: var(--fg-muted);
+}
+.bench-over {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* 키워드 태그 */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 1.2vw, 10px);
+  margin: clamp(12px, 2.5vw, 20px) 0;
+}
+.tag {
+  font-size: clamp(0.65rem, 1.4vw, 0.78rem);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.tag.green { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,232,143,0.2); }
+.tag.warm { background: var(--warm-dim); color: var(--warm); border: 1px solid rgba(240,160,64,0.2); }
+.tag.neutral { background: rgba(138,158,147,0.08); color: var(--fg-muted); border: 1px solid rgba(138,158,147,0.15); }
+
+/* 컨클루전 하이라이트 */
+.conclusion-highlight {
+  margin: clamp(20px, 4vw, 40px) 0;
+  padding: clamp(20px, 4vw, 36px);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(0,232,143,0.06), rgba(240,160,64,0.04));
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.conclusion-highlight p {
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--fg);
+}
+.conclusion-highlight strong {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* 비교 시각화 */
+.compare-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.5vw, 14px);
+  margin: clamp(12px, 2vw, 20px) 0;
+  flex-wrap: wrap;
+}
+
+/* 슬라이드 번호 뱃지 */
+.slide-num-badge {
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  right: clamp(16px, 3vw, 32px);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+  color: rgba(138,158,147,0.3);
+}
+
+/* 스크롤 힌트 */
+.scroll-hint {
+  position: absolute;
+  bottom: clamp(60px, 10vw, 90px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--fg-muted);
+  font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+  animation: hint-float 2s ease-in-out infinite;
+}
+.scroll-hint i { font-size: clamp(0.8rem, 1.8vw, 1rem); }
+
+@keyframes hint-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+  50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+  .dual-panel { grid-template-columns: 1fr; }
+  .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+  .bar-label { width: 60px; font-size: 0.62rem; }
+  .bench-table { font-size: 0.62rem; }
+  .bench-table th, .bench-table td { padding: 6px 4px; }
+  .diagram-row { flex-direction: column; }
+  .d-arrow-down { transform: rotate(0deg); }
+  .d-arrow:not(.d-arrow-down) { transform: rotate(90deg); }
+  .compare-arrows { flex-direction: column; }
+}
+
+@media (max-width: 320px) {
+  .slide { padding: 16px 12px; }
+  .title-main { font-size: 1.6rem; }
+  .bench-over { font-size: 0.55rem; }
+}
+
+/* 접근성 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .slide { opacity: 1; transform: none; }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- 슬라이드 1: 타이틀 -->
+  <section class="slide title-slide" data-slide="0" aria-label="제목 슬라이드">
+    <span class="slide-num-badge">01 / 09</span>
+    <div class="slide-inner">
+      <div class="title-arxiv"><i class="fas fa-file-alt"></i> arXiv:2604.19716v1 &middot; ACL 2026</div>
+      <h1 class="title-main">
+        공유 논리 부분공간 발견:<br>
+        <span class="accent">LLM 논리 추론</span>의 <span class="warm">조향</span>
+      </h1>
+      <p class="title-authors">Feihao Fang, My T. Thai, Yuanyuan Lei</p>
+      <p class="title-affil">UIUC &middot; University of Florida</p>
+      <div class="tag-list">
+        <span class="tag green">논리 추론</span>
+        <span class="tag warm">정준 상관 분석</span>
+        <span class="tag green">추론 시 조향</span>
+        <span class="tag neutral">학습 불필요</span>
+        <span class="tag warm">다중 뷰 정렬</span>
+      </div>
+      <div class="title-visual">
+        <div class="orbit-ring"><div class="orbit-dot"></div></div>
+        <div class="orbit-ring"><div class="orbit-dot"></div></div>
+        <div class="orbit-ring"><div class="orbit-dot"></div></div>
+        <div class="orbit-center"></div>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHint">
+      <span>스크롤</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- 슬라이드 2: 동기 -->
+  <section class="slide" data-slide="1" aria-label="동기 슬라이드">
+    <span class="slide-num-badge">02 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">동기</div>
+      <h2 class="slide-title">LLM은 여전히 <span class="warm">다단계 논리 추론</span>에 취약하다</h2>
+      <p class="slide-subtitle">기존 접근법은 각각 한계가 있다. 자연어 뷰만 다루거나, 외부 기호求解器를 부착하는 방식으로는 근본적인 해결이 어렵다.</p>
+
+      <div class="card-grid card-grid-2">
+        <div class="card">
+          <div class="card-icon red"><i class="fas fa-comment-dots"></i></div>
+          <div class="card-title">자연어 의존 방법</div>
+          <div class="card-desc">프롬프트 엔지니어링, CoT 세밀화 등. 표면 형태에 강하게 의존하여 논리 구조를 놓친다.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon warm"><i class="fas fa-puzzle-piece"></i></div>
+          <div class="card-title">신경-기호 방법</div>
+          <div class="card-desc">외부 정리기/검증기를 부착. 추가 모듈 필요, 모델 내부 논리를 직접 건드리지 못한다.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: clamp(12px, 2.5vw, 20px); border-color: rgba(0,232,143,0.3);">
+        <div class="card-icon green"><i class="fas fa-lightbulb"></i></div>
+        <div class="card-title" style="color: var(--accent);">핵심 질문</div>
+        <div class="card-desc" style="color: var(--fg);">LLM 내부에 <strong>자연어 뷰와 기호 뷰 모두에 정렬된 공유 논리 부분공간</strong>이 존재하는가? 이를 활용해 추론을 조향할 수 있는가?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 직관 -->
+  <section class="slide" data-slide="2" aria-label="핵심 직관 슬라이드">
+    <span class="slide-num-badge">03 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">핵심 직관</div>
+      <h2 class="slide-title">동일한 추론, <span class="accent">두 가지 표현</span></h2>
+      <p class="slide-subtitle">모든 논리 문제는 자연어 증명과 기호 증명 두 가지로 표현 가능하다. 논리적 과정은 동일하지만 표면 형태가 다르다.</p>
+
+      <div class="dual-panel">
+        <div class="panel panel-nl">
+          <div class="panel-label"><i class="fas fa-language"></i> 자연어 뷰 (NL)</div>
+          <div class="panel-content">
+            모든 새는 날 수 있다.<br>
+            트위티는 새이다.<br><br>
+            <strong>트위티는 새이고, 모든 새는 날 수 있으므로, 트위티는 날 수 있다.</strong>
+          </div>
+        </div>
+        <div class="panel panel-sym">
+          <div class="panel-label"><i class="fas fa-code"></i> 기호 뷰 (Symbolic)</div>
+          <div class="panel-content" style="font-family: var(--mono); font-size: clamp(0.7rem, 1.6vw, 0.85rem);">
+            bird(tweety)<br>
+            ∀x(bird(x) → can_fly(x))<br><br>
+            <strong>bird(tweety).<br>∀x(bird(x)→can_fly(x)).<br>can_fly(tweety).</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram-row">
+          <div class="d-box green">NL 증명</div>
+          <div class="d-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="d-box highlight">공유 논리 부분공간</div>
+          <div class="d-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="d-box warm">기호 증명</div>
+        </div>
+        <p style="text-align:center; color: var(--fg-muted); font-size: clamp(0.7rem, 1.5vw, 0.82rem); margin-top: 8px;">
+          표면 형태는 다르지만, <strong style="color:var(--accent)">동일한 논리 구조</strong>를 공유한다
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: 방법 개요 -->
+  <section class="slide" data-slide="3" aria-label="방법 개요 슬라이드">
+    <span class="slide-num-badge">04 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">방법</div>
+      <h2 class="slide-title"><span class="accent">논리 부분공간 조향</span> (LSS)</h2>
+
+      <div class="diagram">
+        <div class="d-box neutral" style="width: 100%; max-width: 320px;">
+          <i class="fas fa-database" style="margin-right:6px;"></i> NL + 기호 쌍 데이터
+        </div>
+        <div class="d-arrow d-arrow-down"><i class="fas fa-arrow-right"></i></div>
+        <div class="d-box green" style="width: 100%; max-width: 320px;">
+          <i class="fas fa-layer-group" style="margin-right:6px;"></i> 잔차 스트림 활성화 수집
+        </div>
+        <div class="d-arrow d-arrow-down"><i class="fas fa-arrow-right"></i></div>
+        <div class="d-box highlight" style="width: 100%; max-width: 320px;">
+          <i class="fas fa-compress-arrows-alt" style="margin-right:6px;"></i> PCA → CCA → 직교 기저
+        </div>
+        <div class="d-arrow d-arrow-down"><i class="fas fa-arrow-right"></i></div>
+        <div class="d-box warm" style="width: 100%; max-width: 320px;">
+          <i class="fas fa-location-arrow" style="margin-right:6px;"></i> 추론 시 토큰별 조향
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: clamp(12px, 2.5vw, 20px);">
+        <div class="card-title">핵심 원리</div>
+        <div class="card-desc">토큰 생성 시, 활성화 벡터를 학습된 부분공간으로 <strong style="color:var(--accent)">투영하여 증폭</strong>한다. 모델 가중치는 변경하지 않는 <strong style="color:var(--warm)">학습 불필요(training-free)</strong> 방식이다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 3단계 학습 -->
+  <section class="slide" data-slide="4" aria-label="3단계 학습 슬라이드">
+    <span class="slide-num-badge">05 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">알고리즘</div>
+      <h2 class="slide-title">부분공간 학습 <span class="warm">3단계</span></h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">PCA: 노이즈 제거 & 압축</div>
+            <div class="step-desc">각 뷰의 잔차 활성화에 대해 주성분 분석을 수행하여 고차원 잔차 스트림을 저차원으로 압축하고 노이즈를 제거한다.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">CCA: 교차 뷰 정렬</div>
+            <div class="step-desc">정준 상관 분석으로 NL 뷰와 기호 뷰 간의 상관관계를 최대화하는 저차원 부분공간을 학습한다.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">역투영 & 직교 기저 구성</div>
+            <div class="step-desc">CCA 부분공간을 원래 잔차 차원으로 역투영하여 직교 기저 <span style="font-family:var(--mono); color:var(--accent);">U<sup>(ℓ)</sup> ∈ ℝ<sup>D×k</sup></span>를 얻는다.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="math-block">
+        <span class="var">E<sup>(ℓ)</sup></span><span class="op">(</span><span class="var">r</span><span class="op">) =</span>
+        <span class="fn">‖</span><span class="var">r<sup>⊤</sup> U<sup>(ℓ)</sup></span><span class="fn">‖</span><sub>2</sub><sup>2</sup>
+        <span class="op"> /</span>
+        <span class="fn">‖</span><span class="var">r</span><span class="fn">‖</span><sub>2</sub><sup>2</sup>
+        <span style="color:var(--fg-muted); font-size:0.85em; display:block; margin-top:8px;">정규화된 투영 에너지: 활성화가 논리 부분공간에 얼마나 놓여 있는지 측정</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 조향 메커니즘 -->
+  <section class="slide" data-slide="5" aria-label="조향 메커니즘 슬라이드">
+    <span class="slide-num-badge">06 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">추론 시 조향</div>
+      <h2 class="slide-title">토큰별 <span class="accent">실시간 조향</span></h2>
+      <p class="slide-subtitle">자기회귀 생성 중 각 토큰의 활성화를 부분공간 방향으로 선형 증폭하여, 논리적 추론 궤적을 유도한다.</p>
+
+      <div class="diagram" style="margin-top: clamp(24px, 4vw, 40px);">
+        <div class="diagram-row">
+          <div class="d-box neutral">토큰 <span style="font-family:var(--mono)">h<sub>t</sub><sup>(ℓ)</sup></span></div>
+          <div class="d-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="d-box green">부분공간 투영<br><span style="font-family:var(--mono); font-size:0.8em;">P<sup>(ℓ)</sup>h<sub>t</sub><sup>(ℓ)</sup></span></div>
+          <div class="d-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="d-box warm">α 배 증폭<br><span style="font-family:var(--mono); font-size:0.8em;">+ α·P<sup>(ℓ)</sup>h<sub>t</sub><sup>(ℓ)</sup></span></div>
+          <div class="d-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="d-box highlight">조향된 활성화</div>
+        </div>
+      </div>
+
+      <div class="math-block">
+        <span class="var">h̃<sub>t</sub><sup>(ℓ)</sup></span>
+        <span class="op">=</span>
+        <span class="var">h<sub>t</sub><sup>(ℓ)</sup></span>
+        <span class="op">+</span>
+        <span class="var">α</span>
+        <span class="op">·</span>
+        <span class="var">P<sup>(ℓ)</sup></span>
+        <span class="var">h<sub>t</sub><sup>(ℓ)</sup></span>
+        <span style="color:var(--fg-muted); font-size:0.85em; display:block; margin-top:8px;">
+          α: 조향 강도 계수 &middot; P<sup>(ℓ)</sup> = U<sup>(ℓ)</sup>U<sup>(ℓ)⊤</sup>: 직교 투영 행렬
+        </span>
+      </div>
+
+      <div class="card-grid card-grid-3">
+        <div class="card">
+          <div class="card-icon green"><i class="fas fa-check"></i></div>
+          <div class="card-title">학습 불필요</div>
+          <div class="card-desc">가중치 변경 없이 추론 시에만 적용</div>
+        </div>
+        <div class="card">
+          <div class="card-icon green"><i class="fas fa-bolt"></i></div>
+          <div class="card-title">경량 오버헤드</div>
+          <div class="card-desc">선형 투영만 추가, 생성 속도 영향 최소</div>
+        </div>
+        <div class="card">
+          <div class="card-icon warm"><i class="fas fa-sliders-h"></i></div>
+          <div class="card-title">조절 가능</div>
+          <div class="card-desc">α와 대상 레이어로 강도 제어</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 주요 결과 -->
+  <section class="slide" data-slide="6" aria-label="실험 결과 슬라이드">
+    <span class="slide-num-badge">07 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">실험 결과</div>
+      <h2 class="slide-title">최대 <span class="accent">11%p</span> 정확도 향상</h2>
+      <p class="slide-subtitle">4개 논리 추론 벤치마크, 5개 LLM에서 일관된 개선을 달성했다.</p>
+
+      <div class="bar-chart" id="barChart">
+        <div class="bar-row">
+          <div class="bar-label">FOLIO</div>
+          <div class="bar-track"><div class="bar-fill dim" data-w="68"></div></div>
+          <div class="bar-val"><span class="base">68.0</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="color:var(--accent);">FOLIO+LSS</div>
+          <div class="bar-track"><div class="bar-fill green" data-w="79"></div></div>
+          <div class="bar-val">79.0 <span class="delta up">+11</span></div>
+        </div>
+        <div class="bar-row" style="margin-top:8px;">
+          <div class="bar-label">PrOntoQA</div>
+          <div class="bar-track"><div class="bar-fill dim" data-w="74"></div></div>
+          <div class="bar-val"><span class="base">74.0</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="color:var(--accent);">PrOnto+LSS</div>
+          <div class="bar-track"><div class="bar-fill green" data-w="83"></div></div>
+          <div class="bar-val">83.0 <span class="delta up">+9</span></div>
+        </div>
+        <div class="bar-row" style="margin-top:8px;">
+          <div class="bar-label">ProofWriter</div>
+          <div class="bar-track"><div class="bar-fill dim" data-w="82"></div></div>
+          <div class="bar-val"><span class="base">82.0</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="color:var(--accent);">PW+LSS</div>
+          <div class="bar-track"><div class="bar-fill green" data-w="89"></div></div>
+          <div class="bar-val">89.0 <span class="delta up">+7</span></div>
+        </div>
+        <div class="bar-row" style="margin-top:8px;">
+          <div class="bar-label">LogiQA 2.0</div>
+          <div class="bar-track"><div class="bar-fill dim" data-w="51"></div></div>
+          <div class="bar-val"><span class="base">51.0</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" style="color:var(--accent);">LQ+LSS</div>
+          <div class="bar-track"><div class="bar-fill warm" data-w="56"></div></div>
+          <div class="bar-val">56.0 <span class="delta up">+5</span></div>
+        </div>
+      </div>
+
+      <p style="font-size: clamp(0.65rem, 1.3vw, 0.75rem); color: var(--fg-muted); font-family: var(--mono);">
+        * Greedy CoT 기준, Llama-3-8B 모델. LogiQA 2.0은 도메인 외 일반화 설정.
+      </p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 분석 인사이트 -->
+  <section class="slide" data-slide="7" aria-label="분석 인사이트 슬라이드">
+    <span class="slide-num-badge">08 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">심층 분석</div>
+      <h2 class="slide-title">논리 부분공간이 <span class="warm">무엇을</span> 인코딩하는가</h2>
+
+      <div class="insight-list">
+        <div class="insight">
+          <div class="insight-icon i1"><i class="fas fa-brain"></i></div>
+          <div class="insight-text"><strong>의미 + 논리 구조 동시 인코딩</strong> — 부분공간은 단순한 문법 정보가 아니라, 의미적 관계와 논리적 구조를 모두 포착한다.</div>
+        </div>
+        <div class="insight">
+          <div class="insight-icon i2"><i class="fas fa-layer-group"></i></div>
+          <div class="insight-text"><strong>상위 레이어에서 정렬 강화</strong> — NL-기호 뷰 간 정렬은 하위 레이어보다 상위 레이어에서 현저히 강해진다.</div>
+        </div>
+        <div class="insight">
+          <div class="insight-icon i3"><i class="fas fa-chart-line"></i></div>
+          <div class="insight-text"><strong>투영 에너지 ∝ 정답률</strong> — 부분공간 내 투영 에너지가 높은 추론 사슬일수록 정답 확률이 높다.</div>
+        </div>
+        <div class="insight">
+          <div class="insight-icon i4"><i class="fas fa-exchange-alt"></i></div>
+          <div class="insight-text"><strong>추론 동작 변화</strong> — 조향 후 "since", "so" 등 논리 접속사 사용 증가, "think", "assume" 등 모호한 동사 감소.</div>
+        </div>
+      </div>
+
+      <!-- 레이어별 정렬 시각화 -->
+      <div class="layer-viz" id="layerViz">
+        <div class="layer-row">
+          <div class="layer-label">Layer 8</div>
+          <div class="layer-bar-track"><div class="layer-bar" data-w="25" style="background: linear-gradient(90deg, rgba(0,232,143,0.15), rgba(0,232,143,0.3));"></div></div>
+          <div class="layer-val">0.25</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-label">Layer 16</div>
+          <div class="layer-bar-track"><div class="layer-bar" data-w="48" style="background: linear-gradient(90deg, rgba(0,232,143,0.2), rgba(0,232,143,0.45));"></div></div>
+          <div class="layer-val">0.48</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-label">Layer 24</div>
+          <div class="layer-bar-track"><div class="layer-bar" data-w="67" style="background: linear-gradient(90deg, rgba(0,232,143,0.3), rgba(0,232,143,0.6));"></div></div>
+          <div class="layer-val">0.67</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-label">Layer 32</div>
+          <div class="layer-bar-track"><div class="layer-bar" data-w="82" style="background: linear-gradient(90deg, rgba(0,232,143,0.4), var(--accent));"></div></div>
+          <div class="layer-val">0.82</div>
+        </div>
+      </div>
+      <p style="text-align:center; font-size: clamp(0.65rem, 1.3vw, 0.75rem); color: var(--fg-muted);">NL-기호 뷰 CCA 상관관계 (Llama-3-8B, 레이어별)</p>
+    </div>
+  </section>
+
+  <!-- 슬라이드 9: 결론 -->
+  <section class="slide" data-slide="8" aria-label="결론 슬라이드">
+    <span class="slide-num-badge">09 / 09</span>
+    <div class="slide-inner">
+      <div class="slide-tag">결론</div>
+      <h2 class="slide-title">공유 논리 부분공간은 <span class="accent">실재한다</span></h2>
+
+      <div class="conclusion-highlight">
+        <p>LLM 내부에 자연어와 기호 언어 <strong>양쪽 뷰에 정렬된 저차원 논리 부분공간</strong>이 존재하며, 이를 조향하면 <strong>최대 11%p</strong>의 추론 정확도 향상을 달성할 수 있다.</p>
+      </div>
+
+      <div class="card-grid card-grid-3">
+        <div class="card">
+          <div class="card-icon green"><i class="fas fa-search"></i></div>
+          <div class="card-title">발견</div>
+          <div class="card-desc">다중 뷰 논리 부분공간의 존재를 CCA로 최초 발견하고 특성화</div>
+        </div>
+        <div class="card">
+          <div class="card-icon green"><i class="fas fa-compass"></i></div>
+          <div class="card-title">조향</div>
+          <div class="card-desc">학습 불필요한 추론 시 조향으로 교차 뷰 신호 활용</div>
+        </div>
+        <div class="card">
+          <div class="card-icon warm"><i class="fas fa-globe"></i></div>
+          <div class="card-title">일반화</div>
+          <div class="card-desc">도메인 외 벤치마크(LogiQA 2.0)에서도 강한 일반화 성능</div>
+        </div>
+      </div>
+
+      <div style="margin-top: clamp(20px, 4vw, 36px); text-align: center;">
+        <a href="http://arxiv.org/abs/2604.19716v1" target="_blank" rel="noopener"
+           style="display:inline-flex; align-items:center; gap:8px; padding: 12px 28px; border-radius: 30px;
+                  background: var(--accent-dim); border: 1px solid rgba(0,232,143,0.3); color: var(--accent);
+                  font-weight: 700; font-size: clamp(0.82rem, 1.8vw, 0.95rem); text-decoration: none;
+                  transition: all 0.3s; min-height: 44px; min-width: 44px;"
+           onmouseover="this.style.background='rgba(0,232,143,0.2)'; this.style.transform='translateY(-2px)'"
+           onmouseout="this.style.background='var(--accent-dim)'; this.style.transform='none'"
+           aria-label="arXiv 논문 페이지 열기">
+          <i class="fas fa-external-link-alt"></i> arXiv에서 원문 보기
+        </a>
+        <a href="https://github.com/lei-nlp-lab/logical_subspace_acl_2026" target="_blank" rel="noopener"
+           style="display:inline-flex; align-items:center; gap:8px; padding: 12px 28px; border-radius: 30px;
+                  background: rgba(138,158,147,0.08); border: 1px solid rgba(138,158,147,0.2); color: var(--fg-muted);
+                  font-weight: 600; font-size: clamp(0.82rem, 1.8vw, 0.95rem); text-decoration: none;
+                  transition: all 0.3s; min-height: 44px; min-width: 44px; margin-left: 8px;"
+           onmouseover="this.style.borderColor='var(--fg-muted)'; this.style.color='var(--fg)'; this.style.transform='translateY(-2px)'"
+           onmouseout="this.style.borderColor='rgba(138,158,147,0.2)'; this.style.color='var(--fg-muted)'; this.style.transform='none'"
+           aria-label="GitHub 저장소 열기">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 네비게이션 바 -->
+<nav class="nav-bar" aria-label="슬라이드 네비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드"><i class="fas fa-chevron-left"></i></button>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-progress"><div class="nav-progress-fill" id="progressFill"></div></div>
+  <span class="slide-counter" id="slideCounter">1 / 9</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fas fa-chevron-right"></i></button>
+</nav>
+
+<script>
+(function() {
+  'use strict';
+
+  /* 슬라이드 요소 수집 */
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isScrolling = false;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navDots = document.getElementById('navDots');
+  const progressFill = document.getElementById('progressFill');
+  const slideCounter = document.getElementById('slideCounter');
+  const scrollHint = document.getElementById('scrollHint');
+
+  /* 네비게이션 도트 생성 */
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', (i + 1) + '번 슬라이드로 이동');
+    dot.addEventListener('click', () => goToSlide(i));
+    navDots.appendChild(dot);
+  }
+
+  /* 슬라이드 이동 함수 */
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides || isScrolling) return;
+    isScrolling = true;
+    currentSlide = index;
+
+    slides.forEach((s, i) => {
+      if (i === index) {
+        s.classList.add('visible');
+        s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+
+    updateNav();
+    animateSlideElements(index);
+
+    setTimeout(() => { isScrolling = false; }, 800);
+  }
+
+  function updateNav() {
+    const dots = navDots.querySelectorAll('.nav-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    progressFill.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+    slideCounter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+
+    if (scrollHint) {
+      scrollHint.style.display = currentSlide === 0 ? '' : 'none';
+    }
+  }
+
+  /* 슬라이드 내 애니메이션 트리거 */
+  function animateSlideElements(index) {
+    const slide = slides[index];
+
+    /* 바 차트 애니메이션 */
+    const bars = slide.querySelectorAll('.bar-fill');
+    bars.forEach((bar, i) => {
+      bar.style.width = '0';
+      setTimeout(() => {
+        bar.style.width = bar.dataset.w + '%';
+      }, 200 + i * 80);
+    });
+
+    /* 레이어 바 애니메이션 */
+    const layerBars = slide.querySelectorAll('.layer-bar');
+    layerBars.forEach((bar, i) => {
+      bar.style.width = '0';
+      setTimeout(() => {
+        bar.style.width = bar.dataset.w + '%';
+      }, 300 + i * 120);
+    });
+  }
+
+  /* 버튼 이벤트 */
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  /* 키보드 내비게이션 */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    }
+  });
+
+  /* 터치 스와이프 */
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const absDy = Math.abs(dy);
+    const absDx = Math.abs(dx);
+
+    /* 세로 스와이프 우선, 최소 임계값 */
+    if (absDy > 50 && absDy > absDx) {
+      if (dy > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  /* 스크롤 감지 (IntersectionObserver) */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+        const idx = parseInt(entry.target.dataset.slide);
+        if (!isNaN(idx) && idx !== currentSlide) {
+          currentSlide = idx;
+          updateNav();
+          animateSlideElements(idx);
+        }
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: [0.4, 0.6],
+    rootMargin: '0px'
+  });
+
+  slides.forEach(s => observer.observe(s));
+
+  /* 휠 이벤트 (디바운스) */
+  let wheelTimeout = null;
+  document.addEventListener('wheel', (e) => {
+    if (wheelTimeout) return;
+    wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 900);
+
+    if (e.deltaY > 30) goToSlide(currentSlide + 1);
+    else if (e.deltaY 
+</body>
+</html>

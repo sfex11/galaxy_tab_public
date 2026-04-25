@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Agentic AI for Science Automation — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0e12;
+  --bg-card: #15181e;
+  --bg-card-hover: #1c2028;
+  --fg: #e8e6e1;
+  --fg-muted: #8a8d95;
+  --accent: #e0a526;
+  --accent-glow: rgba(224,165,38,0.25);
+  --teal: #2ec4a2;
+  --teal-glow: rgba(46,196,162,0.2);
+  --red: #e05555;
+  --border: #2a2d35;
+  --radius: clamp(8px,1.5vw,14px);
+  --font-main: 'Noto Sans KR', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  font-size: clamp(14px, 2.2vw, 18px);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+body {
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 배경 장식 */
+.bg-grain {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+.bg-blobs {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.12;
+  animation: blobFloat 20s ease-in-out infinite alternate;
+}
+.blob-1 { width: clamp(200px,40vw,500px); height: clamp(200px,40vw,500px); background: var(--accent); top: -10%; left: -10%; }
+.blob-2 { width: clamp(250px,35vw,450px); height: clamp(250px,35vw,450px); background: var(--teal); bottom: -5%; right: -8%; animation-delay: -7s; animation-duration: 25s; }
+.blob-3 { width: clamp(150px,25vw,350px); height: clamp(150px,25vw,350px); background: var(--accent); top: 50%; left: 60%; animation-delay: -12s; animation-duration: 18s; opacity: 0.06; }
+@keyframes blobFloat {
+  0% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-40px) scale(1.1); }
+  66% { transform: translate(-20px,30px) scale(0.95); }
+  100% { transform: translate(10px,-10px) scale(1.05); }
+}
+
+/* 슬라이드 컨테이너 */
+.slides-wrapper {
+  position: relative; z-index: 1;
+  width: 100%; min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+.slide {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px,5vw,60px) clamp(16px,4vw,80px);
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+  position: absolute; inset: 0;
+}
+.slide.active {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+  position: relative;
+}
+
+/* 하단 네비게이션 */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(12,14,18,0.85);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: clamp(8px,1.5vw,14px) clamp(12px,3vw,32px);
+}
+.nav-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--fg-muted); border-radius: 8px;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1rem;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.nav-btn:active { transform: scale(0.92); }
+.nav-dots {
+  display: flex; gap: 6px; align-items: center;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border); border: none; cursor: pointer;
+  transition: all 0.3s; padding: 0;
+}
+.nav-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+.nav-dot:hover { background: var(--fg-muted); }
+.nav-counter {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--fg-muted);
+}
+
+/* 타이포그래피 */
+h1 {
+  font-weight: 900;
+  font-size: clamp(1.6rem, 5vw, 3.2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3.5vw, 2rem);
+  line-height: 1.3;
+  margin-bottom: clamp(12px,2vw,24px);
+}
+h3 {
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  line-height: 1.4;
+  color: var(--fg);
+}
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem,1.2vw,0.75rem);
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: clamp(8px,1.5vw,16px);
+}
+.muted { color: var(--fg-muted); }
+.accent { color: var(--accent); }
+.teal { color: var(--teal); }
+.mono { font-family: var(--font-mono); }
+
+/* 카드 */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(16px,2.5vw,28px);
+  transition: all 0.3s;
+}
+.card:hover { background: var(--bg-card-hover); border-color: rgba(224,165,38,0.3); }
+.card-icon {
+  width: clamp(36px,5vw,48px); height: clamp(36px,5vw,48px);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(0.9rem,2vw,1.2rem);
+  margin-bottom: clamp(10px,1.5vw,16px);
+}
+.card-icon.gold { background: var(--accent-glow); color: var(--accent); }
+.card-icon.teal { background: var(--teal-glow); color: var(--teal); }
+.card-icon.red { background: rgba(224,85,85,0.15); color: var(--red); }
+
+/* 그리드 */
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: clamp(12px,2vw,20px); }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: clamp(12px,2vw,20px); }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px,1.5vw,16px); }
+
+@media(min-width:520px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+@media(min-width:768px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* 숫자 하이라이트 */
+.big-num {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(2rem,6vw,3.5rem);
+  line-height: 1;
+  color: var(--accent);
+}
+.big-num.teal-c { color: var(--teal); }
+
+/* 아키텍처 다이어그램 */
+.arch-flow {
+  display: flex; flex-direction: column; gap: 0; align-items: center;
+  margin: clamp(16px,3vw,32px) 0;
+}
+.arch-layer {
+  width: 100%; max-width: 500px;
+  border-radius: var(--radius);
+  padding: clamp(12px,2vw,20px) clamp(16px,3vw,28px);
+  text-align: center;
+  position: relative;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.arch-layer:hover { transform: translateY(-2px); }
+.arch-layer.semantic { background: rgba(224,165,38,0.08); border-color: rgba(224,165,38,0.3); }
+.arch-layer.deterministic { background: rgba(46,196,162,0.08); border-color: rgba(46,196,162,0.3); }
+.arch-layer.knowledge { background: rgba(224,85,85,0.08); border-color: rgba(224,85,85,0.25); }
+.arch-arrow {
+  width: 2px; height: clamp(16px,3vw,28px);
+  background: var(--border); position: relative;
+}
+.arch-arrow::after {
+  content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+  border-left: 5px solid transparent; border-right: 5px solid transparent;
+  border-top: 6px solid var(--border);
+}
+
+/* 플로우 라인 */
+.flow-horizontal {
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; padding: clamp(8px,2vw,16px) 0;
+  -webkit-overflow-scrolling: touch;
+}
+.flow-node {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(10px,1.5vw,16px) clamp(12px,2vw,20px);
+  text-align: center;
+  min-width: clamp(100px,22vw,160px);
+  transition: all 0.3s;
+}
+.flow-node:hover { border-color: var(--accent); transform: translateY(-2px); }
+.flow-arrow-h {
+  flex-shrink: 0;
+  color: var(--fg-muted); font-size: 0.8rem;
+  padding: 0 clamp(4px,1vw,10px);
+}
+
+/* 바 차트 */
+.bar-chart { display: flex; flex-direction: column; gap: clamp(10px,1.5vw,16px); }
+.bar-row { display: flex; align-items: center; gap: clamp(8px,1.5vw,16px); }
+.bar-label {
+  flex-shrink: 0; width: clamp(80px,18vw,140px);
+  font-size: clamp(0.7rem,1.3vw,0.85rem);
+  text-align: right; color: var(--fg-muted);
+}
+.bar-track {
+  flex: 1; height: clamp(20px,3vw,32px);
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px; overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%; border-radius: 6px;
+  display: flex; align-items: center;
+  padding: 0 clamp(6px,1vw,12px);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem,1.1vw,0.75rem);
+  font-weight: 700;
+  color: var(--bg);
+  width: 0;
+  transition: width 1s ease;
+}
+.bar-fill.gold { background: var(--accent); }
+.bar-fill.teal { background: var(--teal); }
+.bar-fill.red { background: var(--red); }
+
+/* 인라인 코드 */
+.code-inline {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255,255,255,0.06);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--teal);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* 비교 테이블 */
+.compare-table {
+  width: 100%; border-collapse: collapse; font-size: clamp(0.7rem,1.3vw,0.85rem);
+}
+.compare-table th {
+  text-align: left; padding: clamp(8px,1.2vw,12px);
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent); font-weight: 700;
+  font-family: var(--font-mono); font-size: 0.75em;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.compare-table td {
+  padding: clamp(8px,1.2vw,12px);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg-muted);
+}
+.compare-table tr:hover td { color: var(--fg); }
+.compare-table .highlight { color: var(--teal); font-weight: 700; }
+
+/* 스크롤 프로그레스 */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+/* 애니메이션 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide.active .anim-1 { animation: fadeUp 0.5s 0.1s both; }
+.slide.active .anim-2 { animation: fadeUp 0.5s 0.2s both; }
+.slide.active .anim-3 { animation: fadeUp 0.5s 0.3s both; }
+.slide.active .anim-4 { animation: fadeUp 0.5s 0.4s both; }
+.slide.active .anim-5 { animation: fadeUp 0.5s 0.5s both; }
+.slide.active .anim-6 { animation: fadeUp 0.5s 0.6s both; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.pulse { animation: pulse 2s ease-in-out infinite; }
+
+/* 스킬 카드 스타일 */
+.skill-block {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem,1.1vw,0.75rem);
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: clamp(12px,2vw,20px);
+  line-height: 1.7;
+  color: var(--fg-muted);
+  overflow-x: auto;
+  white-space: pre;
+}
+.skill-block .key { color: var(--accent); }
+.skill-block .val { color: var(--teal); }
+.skill-block .comment { color: #555; }
+
+/* 프로그레스 링 */
+.progress-ring {
+  position: relative;
+  width: clamp(80px,15vw,120px);
+  height: clamp(80px,15vw,120px);
+}
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(1rem,2.5vw,1.5rem);
+  color: var(--accent);
+}
+
+/* 체크 아이템 */
+.check-list { list-style: none; display: flex; flex-direction: column; gap: clamp(8px,1.2vw,14px); }
+.check-list li {
+  display: flex; align-items: flex-start; gap: clamp(8px,1vw,12px);
+  font-size: clamp(0.8rem,1.4vw,0.95rem);
+  color: var(--fg-muted); line-height: 1.5;
+}
+.check-list li i { color: var(--teal); margin-top: 3px; flex-shrink: 0; font-size: 0.8em; }
+
+/* 터치 최적화 */
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .flow-node { min-width: 90px; }
+  .compare-table { font-size: 0.65rem; }
+}
+
+/* 키프레임: 슬라이드 번호 등장 */
+@keyframes countUp { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+/* 떠다니는 파티클 캔버스 */
+#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* 하이라이트 박스 */
+.hl-box {
+  border-left: 3px solid var(--accent);
+  padding: clamp(10px,1.5vw,16px) clamp(12px,2vw,20px);
+  background: rgba(224,165,38,0.04);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: clamp(0.8rem,1.4vw,0.95rem);
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+.hl-box.teal-hl { border-color: var(--teal); background: rgba(46,196,162,0.04); }
+
+/* 저자 정보 */
+.authors {
+  display: flex; flex-wrap: wrap; gap: clamp(6px,1vw,12px);
+  margin: clamp(12px,2vw,20px) 0;
+}
+.author-chip {
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 20px;
+  font-size: clamp(0.65rem,1.2vw,0.8rem);
+  color: var(--fg-muted);
+  transition: all 0.2s;
+}
+.author-chip:hover { border-color: var(--accent); color: var(--fg); }
+
+/* 키워드 태그 */
+.kw-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: clamp(8px,1.5vw,16px); }
+.kw {
+  font-size: clamp(0.55rem,1vw,0.7rem);
+  font-family: var(--font-mono);
+  padding: 3px 8px; border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grain"></div>
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<canvas id="particles"></canvas>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- 슬라이드 0: 타이틀 -->
+  <section class="slide active" data-index="0">
+    <div class="anim-1 tag">arXiv:2604.21910v1 — cs.AI</div>
+    <h1 class="anim-2" style="margin-bottom:clamp(12px,2vw,20px);">
+      연구 질문에서 과학 워크플로우까지<br>
+      <span class="accent">에이전트 AI</span>를 활용한<br>과학 자동화
+    </h1>
+    <div class="authors anim-3">
+      <span class="author-chip">Bartosz Balis</span>
+      <span class="author-chip">Michał Orzechowski</span>
+      <span class="author-chip">Piotr Kica</span>
+      <span class="author-chip">Michał Dygas</span>
+      <span class="author-chip">Michał Kuszewski</span>
+    </div>
+    <p class="muted anim-4" style="font-size:clamp(0.75rem,1.3vw,0.9rem);margin-top:clamp(8px,1.5vw,16px);">
+      AGH University of Krakow · Sano Centre for Computational Medicine
+    </p>
+    <div class="kw-tags anim-5">
+      <span class="kw">Agentic AI</span>
+      <span class="kw">Scientific Workflow</span>
+      <span class="kw">LLM</span>
+      <span class="kw">Skills</span>
+      <span class="kw">HyperFlow</span>
+      <span class="kw">Kubernetes</span>
+      <span class="kw">1000 Genomes</span>
+    </div>
+    <div class="anim-6" style="margin-top:clamp(24px,4vw,48px);display:flex;align-items:center;gap:8px;color:var(--fg-muted);font-size:0.8rem;">
+      <i class="fa-solid fa-arrow-down pulse"></i> 아래로 스크롤하세요
+    </div>
+  </section>
+
+  <!-- 슬라이드 1: 문제 정의 -->
+  <section class="slide" data-index="1">
+    <div class="tag anim-1">문제 정의</div>
+    <h2 class="anim-2">워크플로우 <span class="accent">실행</span>은 자동화되었지만,<br><span class="red" style="color:var(--red);">의미 변환</span>은 여전히 수동</h2>
+    <div class="hl-box anim-3" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      "유럽 및 아프리카 인구의 1~5번 염색체 돌연변이 패턴을 비교하라" — 이 연구 질문을 실행 가능한 워크플로우 DAG로 변환하려면?
+    </div>
+    <div class="grid-3 anim-4">
+      <div class="card">
+        <div class="card-icon red"><i class="fa-solid fa-lock"></i></div>
+        <h3>진입 장벽</h3>
+        <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">인프라 지식이 없는 과학자는 워크플로우 시스템을 혼자 사용할 수 없습니다</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red"><i class="fa-solid fa-bug"></i></div>
+        <h3>오류 전파</h3>
+        <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">잘못된 어휘 매핑(예: 인구 코드 혼동)이 결과에 직접 영향을 미칩니다</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red"><i class="fa-solid fa-rotate-left"></i></div>
+        <h3>재현성 저해</h3>
+        <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">변환 논리가 암시적이라 실험 반복 시 문서화되지 않은 결정을 재구성해야 합니다</p>
+      </div>
+    </div>
+    <p class="muted anim-5" style="margin-top:clamp(16px,2.5vw,28px);font-size:clamp(0.7rem,1.2vw,0.85rem);">
+      Pegasus, Nextflow, Snakemake, Galaxy — 모두 <span class="accent">실행</span>만 자동화합니다
+    </p>
+  </section>
+
+  <!-- 슬라이드 2: 제안 아키텍처 개요 -->
+  <section class="slide" data-index="2">
+    <div class="tag anim-1">핵심 제안</div>
+    <h2 class="anim-2">3계층 분해로 <span class="accent">비결정론</span>을 격리하다</h2>
+    <p class="muted anim-2" style="font-size:clamp(0.75rem,1.3vw,0.9rem);margin-bottom:clamp(8px,1.5vw,16px);">
+      LLM의 비결정성을 의도 추출에만 한정 — 동일한 인텐트는 항상 동일한 워크플로우를 생성
+    </p>
+    <div class="arch-flow anim-3">
+      <div class="arch-layer semantic">
+        <div style="font-family:var(--font-mono);font-size:clamp(0.65rem,1.1vw,0.8rem);color:var(--accent);margin-bottom:4px;">SEMANTIC LAYER</div>
+        <h3 style="margin:0;">의미 계층</h3>
+        <p class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">LLM이 자연어를 구조화된 인텐트로 해석</p>
+      </div>
+      <div class="arch-arrow"></div>
+      <div class="arch-layer deterministic">
+        <div style="font-family:var(--font-mono);font-size:clamp(0.65rem,1.1vw,0.8rem);color:var(--teal);margin-bottom:4px;">DETERMINISTIC LAYER</div>
+        <h3 style="margin:0;">결정론 계층</h3>
+        <p class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">검증된 생성기가 인텐트를 실행 가능한 DAG로 변환</p>
+      </div>
+      <div class="arch-arrow"></div>
+      <div class="arch-layer knowledge">
+        <div style="font-family:var(--font-mono);font-size:clamp(0.65rem,1.1vw,0.8rem);color:var(--red);margin-bottom:4px;">KNOWLEDGE LAYER</div>
+        <h3 style="margin:0;">지식 계층</h3>
+        <p class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">도메인 전문가가 작성한 Skills — 마크다운 문서</p>
+      </div>
+    </div>
+    <div class="hl-box teal-hl anim-4">
+      핵심 원리: LLM은 <span class="teal">"무엇을"</span>만 결정하고, <span class="teal">"어떻게"</span>는 결정론적 코드가 담당
+    </div>
+  </section>
+
+  <!-- 슬라이드 3: 4개 에이전트 파이프라인 -->
+  <section class="slide" data-index="3">
+    <div class="tag anim-1">파이프라인</div>
+    <h2 class="anim-2">4개의 협력 에이전트</h2>
+    <p class="muted anim-2" style="font-size:clamp(0.7rem,1.2vw,0.85rem);margin-bottom:clamp(12px,2vw,20px);">
+      자연어 입력 → Kubernetes 실행 완료까지의 전체 경로
+    </p>
+    <div class="flow-horizontal anim-3">
+      <div class="flow-node" style="border-color:rgba(224,165,38,0.4);">
+        <i class="fa-solid fa-baton-conductor" style="color:var(--accent);font-size:1.2em;"></i>
+        <div style="font-weight:700;margin-top:6px;font-size:clamp(0.75rem,1.3vw,0.9rem);">Conductor</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.7rem);margin-top:2px;">진입점 &amp; 오케스트레이터</div>
+      </div>
+      <div class="flow-arrow-h"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="flow-node" style="border-color:rgba(224,165,38,0.4);">
+        <i class="fa-solid fa-diagram-project" style="color:var(--accent);font-size:1.2em;"></i>
+        <div style="font-weight:700;margin-top:6px;font-size:clamp(0.75rem,1.3vw,0.9rem);">Workflow<br>Composer</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.7rem);margin-top:2px;">인텐트 추출 &amp; DAG 생성</div>
+      </div>
+      <div class="flow-arrow-h"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="flow-node" style="border-color:rgba(46,196,162,0.4);">
+        <i class="fa-solid fa-rocket" style="color:var(--teal);font-size:1.2em;"></i>
+        <div style="font-weight:700;margin-top:6px;font-size:clamp(0.75rem,1.3vw,0.9rem);">Deployment<br>Service</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.7rem);margin-top:2px;">인프라 프로비저닝</div>
+      </div>
+      <div class="flow-arrow-h"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="flow-node" style="border-color:rgba(46,196,162,0.4);">
+        <i class="fa-solid fa-shield-halved" style="color:var(--teal);font-size:1.2em;"></i>
+        <div style="font-weight:700;margin-top:6px;font-size:clamp(0.75rem,1.3vw,0.9rem);">Execution<br>Sentinel</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.7rem);margin-top:2px;">실행 모니터링</div>
+      </div>
+    </div>
+    <div class="grid-2 anim-4" style="margin-top:clamp(16px,2.5vw,28px);">
+      <div class="hl-box">
+        <strong class="accent">Human-in-the-Loop</strong><br>
+        Conductor가 프로비저닝과 실행 전에 인간 검증 게이트를 강제합니다
+      </div>
+      <div class="hl-box teal-hl">
+        <strong class="teal">Deferred Generation</strong><br>
+        실제 측정값(데이터 크기, vCPU)을 받은 후 최종 workflow.json을 생성합니다
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 4: Skills 상세 -->
+  <section class="slide" data-index="4">
+    <div class="tag anim-1">지식 계층</div>
+    <h2 class="anim-2">Skills: 도메인 전문가가 작성하는 <span class="accent">마크다운</span> 지식</h2>
+    <p class="muted anim-2" style="font-size:clamp(0.7rem,1.2vw,0.85rem);margin-bottom:clamp(12px,2vw,20px);">
+      ML 전문 지식 불필요 · 버전 관리 가능 · 직접 감사 가능 · 이중 목적 설계
+    </p>
+    <div class="grid-2 anim-3">
+      <div>
+        <h3 style="margin-bottom:clamp(8px,1.5vw,14px);font-size:clamp(0.85rem,1.6vw,1.05rem);"><i class="fa-solid fa-language accent" style="margin-right:6px;"></i>의미 해석용</h3>
+        <div class="skill-block"><span class="comment"># 인구 코드 매핑</span>
+<span class="key">European</span>: <span class="val">EUR</span>
+<span class="key">African</span>: <span class="val">AFR</span>
+<span class="key">East Asian</span>: <span class="val">EAS</span>
+<span class="key">South Asian</span>: <span class="val">SAS</span>
+
+<span class="comment"># 염색체 형식</span>
+<span class="key">chromosomes 1-5</span>: <span class="val">chr1,chr2,chr3,chr4,chr5</span></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:clamp(8px,1.5vw,14px);font-size:clamp(0.85rem,1.6vw,1.05rem);"><i class="fa-solid fa-bolt teal" style="margin-right:6px;"></i>실행 최적화용</h3>
+        <div class="skill-block"><span class="comment"># 데이터 스테이징 전략</span>
+<span class="key">selective_extraction</span>: <span class="val">true</span>
+<span class="key">extract_regions</span>: <span class="val">per_chromosome</span>
+<span class="key">compression</span>: <span class="val">bgzip</span>
+<span class="key">parallel_tasks</span>: <span class="val">{available_vCPUs / 2}</span></div>
+      </div>
+    </div>
+    <div class="grid-4 anim-4" style="margin-top:clamp(16px,2.5vw,28px);">
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div class="mono accent" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">No ML</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.72rem);margin-top:2px;">머신러닝 지식 불필요</div>
+      </div>
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div class="mono teal" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">Git-friendly</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.72rem);margin-top:2px;">버전 관리에 적합</div>
+      </div>
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div class="mono accent" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">Auditable</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.72rem);margin-top:2px;">전문가 직접 검증</div>
+      </div>
+      <div class="card" style="padding:clamp(10px,1.5vw,16px);">
+        <div class="mono teal" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">Dual-purpose</div>
+        <div class="muted" style="font-size:clamp(0.6rem,1vw,0.72rem);margin-top:2px;">해석 + 최적화 겸용</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 5: 관련 연구 비교 -->
+  <section class="slide" data-index="5">
+    <div class="tag anim-1">관련 연구</div>
+    <h2 class="anim-2">기존 접근법과의 <span class="accent">차별성</span></h2>
+    <div style="overflow-x:auto;margin-top:clamp(8px,1.5vw,16px);" class="anim-3">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>접근법</th>
+            <th>지식 지속성</th>
+            <th>재현성</th>
+            <th>도메인 감사</th>
+            <th>실행 최적화</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Few-shot Prompting</td>
+            <td class="muted">단발성</td>
+            <td class="muted">낮음</td>
+            <td class="muted">불가</td>
+            <td class="muted">없음</td>
+          </tr>
+          <tr>
+            <td>Schema-gated [Strickland]</td>
+            <td class="muted">스키마 수준</td>
+            <td class="muted">중간</td>
+            <td class="muted">제한적</td>
+            <td class="muted">없음</td>
+          </tr>
+          <tr>
+            <td>RAG</td>
+            <td class="muted">비결정적 검색</td>
+            <td class="muted">낮음</td>
+            <td class="muted">비전문가</td>
+            <td class="muted">없음</td>
+          </tr>
+          <tr>
+            <td>MCP [So]</td>
+            <td class="muted">툴 스펙</td>
+            <td class="muted">중간</td>
+            <td class="muted">제한적</td>
+            <td class="muted">없음</td>
+          </tr>
+          <tr style="background:rgba(224,165,38,0.04);">
+            <td style="color:var(--accent);font-weight:700;">본 논문 (Skills)</td>
+            <td class="highlight">영구적</td>
+            <td class="highlight">보장</td>
+            <td class="highlight">전문가 작성</td>
+            <td class="highlight">내장</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2 anim-4" style="margin-top:clamp(16px,2.5vw,28px);">
+      <div class="hl-box">
+        Yildiz &amp; Peterka: 제로샷 30% → 풀샷 80% 정확도, 그러나 크로스 플랫폼 변환은 여전히 불안정
+      </div>
+      <div class="hl-box">
+        Alam &amp; Roy: GPT-4o가 Galaxy에서 93% 구조 정확도 달성했으나 <span class="accent">수동 수정 없이 실행된 워크플로우는 0개</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 6: 평가 결과 -->
+  <section class="slide" data-index="6">
+    <div class="tag anim-1">평가</div>
+    <h2 class="anim-2">150개 쿼리 기반 <span class="accent">검증 결과</span></h2>
+    <div class="grid-2 anim-3" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div>
+        <h3 style="margin-bottom:clamp(10px,1.5vw,16px);">인텐트 추출 정확도 (C1, C2)</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Skills 없음</div>
+            <div class="bar-track"><div class="bar-fill red" data-width="44%">44%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Skills 있음</div>
+            <div class="bar-track"><div class="bar-fill gold" data-width="83%">83%</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:clamp(10px,1.5vw,16px);">데이터 전송 감소 (C4)</h3>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">전체 추출</div>
+            <div class="bar-track"><div class="bar-fill red" data-width="100%">100%</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Skills 기반 선택 추출</div>
+            <div class="bar-track"><div class="bar-fill teal" data-width="8%">8%</div></div>
+          </div>
+        </div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:8px;"><span class="teal" style="font-weight:700;">92% 전송 감소</span></div>
+      </div>
+    </div>
+    <div class="grid-3 anim-4">
+      <div class="card" style="text-align:center;">
+        <div class="big-num" style="margin-bottom:4px;">&lt;15s</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">LLM 오버헤드 시간</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num teal-c" style="margin-bottom:4px;">&lt;$0.001</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">쿼리당 비용</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num" style="margin-bottom:4px;">100%</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);">인텐트→DAG 재현성</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 7: 구현 환경 -->
+  <section class="slide" data-index="7">
+    <div class="tag anim-1">구현</div>
+    <h2 class="anim-2">1000 Genomes <span class="teal">인구 유전학</span> 워크플로우</h2>
+    <div class="grid-2 anim-3" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div class="card">
+        <h3 style="margin-bottom:clamp(8px,1.5vw,14px);"><i class="fa-solid fa-dna accent" style="margin-right:6px;"></i>도메인</h3>
+        <ul class="check-list">
+          <li><i class="fa-solid fa-check"></i>1000 Genomes Project VCF 데이터</li>
+          <li><i class="fa-solid fa-check"></i>인구 그룹 간 돌연변이 패턴 비교</li>
+          <li><i class="fa-solid fa-check"></i>염색체 단위 영역 지정 분석</li>
+          <li><i class="fa-solid fa-check"></i>병렬 VCF 처리 파이프라인</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:clamp(8px,1.5vw,14px);"><i class="fa-solid fa-server teal" style="margin-right:6px;"></i>인프라</h3>
+        <ul class="check-list">
+          <li><i class="fa-solid fa-check"></i>HyperFlow WMS 워크플로우 엔진</li>
+          <li><i class="fa-solid fa-check"></i>Kubernetes 클러스터 실행 환경</li>
+          <li><i class="fa-solid fa-check"></i>동적 병렬도 조절 (vCPU 기반)</li>
+          <li><i class="fa-solid fa-check"></i>bgzip 압축 데이터 스테이징</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hl-box teal-hl anim-4">
+      Deferred Generation: 프로비저닝 후 실제 데이터 크기와 가용 vCPU를 측정 → 그 이후에 최적화된 <span class="code-inline">workflow.json</span> 생성
+    </div>
+    <div class="anim-5" style="margin-top:clamp(16px,2.5vw,28px);">
+      <h3 style="margin-bottom:clamp(8px,1.5vw,14px);">엔드투엔드 흐름 예시</h3>
+      <div class="skill-block" style="font-size:clamp(0.55rem,1vw,0.7rem);">연구자: "유럽 인구의 1~3번 염색체에서 돌연변이 빈도를 분석하라"
+  ↓ Conductor (도메인 분류: population_genomics)
+  ↓ Workflow Composer + Skills
+    → intent: {populations: [EUR], chromosomes: [chr1,chr2,chr3], analysis: frequency}
+  ↓ [Human Validation Gate] — "이 분석이 맞습니까?"
+  ↓ Deployment Service — Kubernetes 파드 프로비저닝
+  ↓ 측정: 데이터 크기 2.1GB, 가용 vCPU 8
+  ↓ Workflow Composer — 병렬도 4로 설정, 선택 추출 적용
+  ↓ Execution Sentinel — HyperFlow DAG 실행 및 모니터링
+  → 결과 완료 (LLM 오버헤드 &lt;15s, 비용 &lt;$0.001)</div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 8: 기여 요약 -->
+  <section class="slide" data-index="8">
+    <div class="tag anim-1">기여</div>
+    <h2 class="anim-2">네 가지 핵심 <span class="accent">기여</span></h2>
+    <div style="display:flex;flex-direction:column;gap:clamp(10px,1.5vw,16px);margin-top:clamp(4px,1vw,8px);">
+      <div class="card anim-2" style="display:flex;gap:clamp(12px,2vw,20px);align-items:flex-start;">
+        <div style="font-family:var(--font-mono);font-weight:900;font-size:clamp(1.4rem,3vw,2rem);color:var(--accent);line-height:1;flex-shrink:0;">01</div>
+        <div>
+          <h3 style="margin-bottom:4px;">하이브리드 에이전트 아키텍처</h3>
+          <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">의미·결정론·지식 3계층 분해로 LLM 비결정성을 인텐트 추출에 한정. 동일 인텐트 → 항상 동일 워크플로우 보장</p>
+        </div>
+      </div>
+      <div class="card anim-3" style="display:flex;gap:clamp(12px,2vw,20px);align-items:flex-start;">
+        <div style="font-family:var(--font-mono);font-weight:900;font-size:clamp(1.4rem,3vw,2rem);color:var(--teal);line-height:1;flex-shrink:0;">02</div>
+        <div>
+          <h3 style="margin-bottom:4px;">Skills: 도메인 전문가 작성 지식</h3>
+          <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">마크다운 텍스트 파일. ML 지식 불필요, 버전 관리 가능, 도메인 전문가가 직접 감사</p>
+        </div>
+      </div>
+      <div class="card anim-4" style="display:flex;gap:clamp(12px,2vw,20px);align-items:flex-start;">
+        <div style="font-family:var(--font-mono);font-weight:900;font-size:clamp(1.4rem,3vw,2rem);color:var(--accent);line-height:1;flex-shrink:0;">03</div>
+        <div>
+          <h3 style="margin-bottom:4px;">엔드투엔드 에이전트 파이프라인</h3>
+          <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">자연어 → Kubernetes 실행. 4개 에이전트, Human-in-the-Loop 검증, 지연 생성(Deferred Generation)</p>
+        </div>
+      </div>
+      <div class="card anim-5" style="display:flex;gap:clamp(12px,2vw,20px);align-items:flex-start;">
+        <div style="font-family:var(--font-mono);font-weight:900;font-size:clamp(1.4rem,3vw,2rem);color:var(--teal);line-height:1;flex-shrink:0;">04</div>
+        <div>
+          <h3 style="margin-bottom:4px;">Skills 기반 실행 시간 최적화</h3>
+          <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.85rem);line-height:1.6;">어휘 매핑뿐 아니라 최적화 전략도 인코딩. 선택적 데이터 추출로 전송량 92% 감소 달성</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 슬라이드 9: 결론 -->
+  <section class="slide" data-index="9">
+    <div class="tag anim-1">결론</div>
+    <h2 class="anim-2" style="font-size:clamp(1.4rem,4.5vw,2.8rem);">
+      과학 워크플로우의<br><span class="accent">의미적 자동화</span>를 향하여
+    </h2>
+    <div class="hl-box anim-3" style="margin:clamp(16px,3vw,32px) 0;">
+      연구 질문을 워크플로우로 변환하는 "마지막 수동 단계"를 자동화하면서도, 재현성을 sacrifice하지 않는 것이 가능합니다 — LLM 비결정성을 의도 추출에만 격리하면 됩니다.
+    </div>
+    <div class="grid-3 anim-4">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">83%</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">Skills 도입 후 인텐트 정확도</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num teal-c">92%</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">데이터 전송 감소율</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">$0.001</div>
+        <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);margin-top:4px;">쿼리당 LLM 비용</div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:clamp(24px,4vw,48px);padding:clamp(16px,2.5vw,28px);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);">
+      <div class="muted" style="font-size:clamp(0.65rem,1.1vw,0.8rem);font-family:var(--font-mono);margin-bottom:8px;">arXiv:2604.21910v1</div>
+      <div style="font-size:clamp(0.8rem,1.4vw,0.95rem);line-height:1.6;">
+        Balis, B., Orzechowski, M., Kica, P., Dygas, M., &amp; Kuszewski, M. (2026).
+        <em>From Research Question to Scientific Workflow: Leveraging Agentic AI for Science Automation.</em>
+        arXiv preprint.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 하단 네비게이션 -->
+<nav class="nav-bar" role="navigation" aria-label="슬라이드 내비게이션">
+  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 10</span>
+  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드"><i class="fa-solid fa-chevron-right"></i></button>
+</nav>
+
+<script>
+(function() {
+  /* 파티클 배경 */
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const PARTICLE_COUNT = 40;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.max(1, Math.random() * 2),
+        alpha: Math.random() * 0.3 + 0.05
+      });
+    }
+  }
+  initParticles();
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(0.5, p.r), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(224,165,38,' + p.alpha + ')';
+      ctx.fill();
+    }
+    /* 가까운 파티클 연결선 */
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(224,165,38,' + (0.06 * (1 - dist / 120)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawParticles);
+  }
+  /* 접근성: 모션 감소 선호 시 파티클 중지 */
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!prefersReducedMotion.matches) {
+    drawParticles();
+  }
+
+  /* 슬라이드 네비게이션 */
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isTransitioning = false;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navDots = document.getElementById('navDots');
+  const navCounter = document.getElementById('navCounter');
+  const scrollProgress = document.getElementById('scrollProgress');
+
+  /* 도트 생성 */
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', (i + 1) + '번 슬라이드');
+    dot.addEventListener('click', function() { goToSlide(i); });
+    navDots.appendChild(dot);
+  }
+
+  function updateUI() {
+    const dots = navDots.querySelectorAll('.nav-dot');
+    dots.forEach(function(d, i) {
+      d.classList.toggle('active', i === currentSlide);
+    });
+    navCounter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+    scrollProgress.style.width = ((currentSlide / (totalSlides - 1)) * 100) + '%';
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlide || isTransitioning) return;
+    if (index < 0 || index >= totalSlides) return;
+    isTransitioning = true;
+    slides[currentSlide].classList.remove('active');
+    slides[index].classList.add('active');
+    currentSlide = index;
+    updateUI();
+    /* 바 차트 애니메이션 트리거 */
+    if (currentSlide === 6) {
+      setTimeout(animateBars, 300);
+    }
+    setTimeout(function() { isTransitioning = false; }, 600);
+  }
+
+  prevBtn.addEventListener('click', function() { goToSlide(currentSlide - 1); });
+  nextBtn.addEventListener('click', function() { goToSlide(currentSlide + 1); });
+
+  /* 키보드 네비게이션 */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); goToSlide(currentSlide + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goToSlide(currentSlide - 1); }
+  });
+
+  /* 터치 스와이프 */
+  let touchStartY = 0;
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    /* 세로 스와이프 우선, 가로 스와이프도 지원 */
+    if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
+      if (dy > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    } else if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  /* 마우스 휠 */
+  let wheelTimer = null;
+  document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    if (wheelTimer) return;
+    wheelTimer = setTimeout(function() { wheelTimer = null; }, 800);
+    if (e.deltaY > 0) goToSlide(currentSlide + 1);
+    else if (e.deltaY < 0) goToSlide(currentSlide - 1);
+  }, { passive: false });
+
+  /* 바 차트 애니메이션 */
+  function animateBars() {
+    const bars = document.querySelectorAll('.bar-fill');
+    bars.forEach(function(bar) {
+      const target = bar.getAttribute('data-width');
+      bar.style.width = target;
+    });
+  }
+
+  /* 첫 로드 시 바 차트가 보이면 애니메이션 */
+  /* (초기 슬라이드가 아니므로 슬라이드 6 이동 시 트리거됨) */
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
