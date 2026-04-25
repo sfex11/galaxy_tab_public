@@ -49,3 +49,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 ### Lifecycle-Aware Federated Continual Learning in Mobile Autonomous Syst (2026-04-24)
 
 다중 에이전트 협력의 목표가 단기 작업 완수에서 장기 생애주기 전체의 환경 적응으로 확장됨을 보여준다. 연합 학습이 다중 자율 에이전트의 장기 적응을 위한 구조적 인프라로 기능할 수 있음을 시사한다.
+
+### Learning to Communicate: Toward End-to-End Optimization of Multi-Agent (2026-04-26)
+
+DiffMAS는 기존 다중 에이전트 시스템이 고정된 텍스트 통신 인터페이스를 전제한다는 한계를 지적하고, 통신 채널 자체를 학습 가능한 매개변수로 처리하여 에이전트 오케스트레이션 연구의 좌표축을 '역할 설계'에서 '통신-추론 공동 최적화'로 확장한다.
+
+→ [[sources/2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md|상세 보기]]

@@ -16,3 +16,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Bounding the Black Box: A Statistical Certification Framework for AI R (2026-04-26)
+
+→ [[sources/2026-04-26-bounding-the-black-box-a-statistical-certification.md|상세 보기]]

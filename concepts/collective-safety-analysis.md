@@ -15,3 +15,7 @@ AI 안전성의 분석 단위를 개별 모델에서 에이전트 집단·상호
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Learning to Communicate: Toward End-to-End Optimization of Multi-Agent (2026-04-26)
+
+→ [[sources/2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md|상세 보기]]

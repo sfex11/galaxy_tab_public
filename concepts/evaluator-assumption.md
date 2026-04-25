@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-26)
+
+→ [[sources/2026-04-26-revisiting-non-verbatim-memorization-in-large-lang.md|상세 보기]]

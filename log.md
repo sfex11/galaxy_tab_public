@@ -448,3 +448,17 @@
 - 2026-04-25-transient-turn-injection-exposing-stateless-multi-.md
 - 2026-04-25-bounding-the-black-box-a-statistical-certification.md
 - 2026-04-25-tool-attention-is-all-you-need-dynamic-tool-gating.md
+
+## [2026-04-26 08:08] llm-ingest | 12편 분석, 엔티티 93개, 개념 491개
+- 2026-04-26-evaluation-of-automatic-speech-recognition-using-g.md
+- 2026-04-26-mathduels-evaluating-llms-as-problem-posers-and-so.md
+- 2026-04-26-from-research-question-to-scientific-workflow-leve.md
+- 2026-04-26-nemobot-games-crafting-strategic-ai-gaming-agents-.md
+- 2026-04-26-task-driven-co-design-of-heterogeneous-multi-robot.md
+- 2026-04-26-a-multimodal-text--and-graph-based-approach-for-op.md
+- 2026-04-26-revisiting-non-verbatim-memorization-in-large-lang.md
+- 2026-04-26-machine-behavior-in-relational-moral-dilemmas-mora.md
+- 2026-04-26-transient-turn-injection-exposing-stateless-multi-.md
+- 2026-04-26-bounding-the-black-box-a-statistical-certification.md
+- 2026-04-26-tool-attention-is-all-you-need-dynamic-tool-gating.md
+- 2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md
