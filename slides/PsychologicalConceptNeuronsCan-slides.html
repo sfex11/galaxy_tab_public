@@ -643,6 +643,12 @@
     .model-chip { padding: 4px 10px; font-size: 0.65rem; }
     .tag { padding: 3px 10px; }
   }
+
+/* === SCROLL FIX APPLIED === */
+.nav-bar{position:sticky!important;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(12,10,9,0.95)!important;backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,158,11,0.15)}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:#a8a29e;opacity:0.3;padding:0;border:none;cursor:pointer}
+.nav-dot.active{opacity:1;background:#f59e0b;width:20px;border-radius:4px}
+.slide-counter{font-size:11px;color:#a8a29e}
 </style>
 </head>
 <body>
@@ -1261,138 +1267,20 @@
 </div>
 
 <!-- ===== NAVIGATION BAR ===== -->
-<nav class="nav-bar">
-  <button class="nav-btn" id="prevBtn" aria-label="이전 슬라이드">&#9664;</button>
-  <div class="progress-container">
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <span class="progress-text" id="progressText">1/15</span>
-  </div>
-  <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#9654;</button>
-</nav>
+
+
 
 <script>
-(function() {
-  const slides = document.querySelectorAll('.slide');
-  const total = slides.length;
-  let current = 0;
-  let isAnimating = false;
-
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const progressFill = document.getElementById('progressFill');
-  const progressText = document.getElementById('progressText');
-
-  function updateSlide(dir) {
-    if (isAnimating) return;
-    isAnimating = true;
-
-    const old = slides[current];
-    old.classList.remove('active');
-    old.classList.add(dir === 1 ? 'prev' : '');
-
-    current = Math.max(0, Math.min(total - 1, current + dir));
-
-    const next = slides[current];
-    next.classList.remove('prev');
-    next.classList.add('active');
-
-    // Reset fade-ups
-    next.querySelectorAll('.fade-up').forEach(el => {
-      el.style.animation = 'none';
-      el.offsetHeight; // reflow
-      el.style.animation = '';
-    });
-
-    updateUI();
-    setTimeout(() => { isAnimating = false; }, 500);
-  }
-
-  function goTo(idx) {
-    if (idx === current || isAnimating) return;
-    const dir = idx > current ? 1 : -1;
-    slides[current].classList.remove('active', 'prev');
-    current = idx;
-    slides[current].classList.add('active');
-    slides[current].querySelectorAll('.fade-up').forEach(el => {
-      el.style.animation = 'none';
-      el.offsetHeight;
-      el.style.animation = '';
-    });
-    updateUI();
-  }
-
-  function updateUI() {
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
-    progressFill.style.width = ((current + 1) / total * 100) + '%';
-    progressText.textContent = (current + 1) + '/' + total;
-  }
-
-  prevBtn.addEventListener('click', () => { if (current > 0) updateSlide(-1); });
-  nextBtn.addEventListener('click', () => { if (current < total - 1) updateSlide(1); });
-
-  // Keyboard
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); if (current < total - 1) updateSlide(1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); if (current > 0) updateSlide(-1); }
-  });
-
-  // Touch swipe
-  let touchStartX = 0, touchStartY = 0;
-  document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
-
-  document.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    const dy = e.changedTouches[0].screenY - touchStartY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx < 0 && current < total - 1) updateSlide(1);
-      if (dx > 0 && current > 0) updateSlide(-1);
-    }
-  }, { passive: true });
-
-  // Generate probe accuracy visualization
-  const probeViz = document.getElementById('probeViz');
-  const probeData = [10,18,35,55,72,82,88,90,91,91,92,92,91,92,92,91,92,92,91,90,91,92,91,91,90,91,90,90,89,90,89,88];
-  probeData.forEach((v, i) => {
-    const col = document.createElement('div');
-    col.className = 'layer-col';
-    col.style.height = v + '%';
-    const isEarly = i <= 6;
-    col.style.background = isEarly
-      ? 'linear-gradient(to top, rgba(96,165,250,0.8), rgba(167,139,250,0.6))'
-      : 'linear-gradient(to top, rgba(96,165,250,0.4), rgba(167,139,250,0.3))';
-    const tip = document.createElement('span');
-    tip.className = 'tooltip';
-    tip.textContent = 'L' + i + ': ' + v + '%';
-    col.appendChild(tip);
-    probeViz.appendChild(col);
-  });
-
-  // Generate neuron distribution visualization
-  const neuronViz = document.getElementById('neuronViz');
-  const neuronData = [8,12,18,22,30,55,70,78,82,75,68,50,30,25,22,20,45,62,75,68,35,20,15,12,10,8,8,6,5,5,4,3];
-  neuronData.forEach((v, i) => {
-    const col = document.createElement('div');
-    col.className = 'layer-col';
-    col.style.height = v + '%';
-    const isBand1 = i >= 6 && i <= 11;
-    const isBand2 = i >= 16 && i <= 19;
-    if (isBand1) col.style.background = 'linear-gradient(to top, rgba(96,165,250,0.8), rgba(96,165,250,0.5))';
-    else if (isBand2) col.style.background = 'linear-gradient(to top, rgba(167,139,250,0.8), rgba(167,139,250,0.5))';
-    else col.style.background = 'rgba(255,255,255,0.08)';
-    const tip = document.createElement('span');
-    tip.className = 'tooltip';
-    tip.textContent = '레이어 ' + i;
-    col.appendChild(tip);
-    neuronViz.appendChild(col);
-  });
-
-  updateUI();
+(function(){
+var slides=document.querySelectorAll('[data-slide],.slide'),total=slides.length;
+if(total===0)return;
+var bar=document.createElement('nav');bar.className='nav-bar';bar.style.cssText='position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(12,10,9,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,158,11,0.15)';
+var counter=document.createElement('span');counter.className='slide-counter';counter.textContent='1 / '+total;
+bar.appendChild(counter);
+document.body.prepend(bar);
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.35});
+slides.forEach(function(s){observer.observe(s)});
 })();
 </script>
 </body>

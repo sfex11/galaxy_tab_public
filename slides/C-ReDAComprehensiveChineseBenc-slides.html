@@ -676,6 +676,12 @@
     table { min-width: 340px; }
     th, td { padding: 6px 8px; }
   }
+
+/* === SCROLL FIX APPLIED === */
+.nav-bar{position:sticky!important;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(12,10,9,0.95)!important;backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,158,11,0.15)}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:#a8a29e;opacity:0.3;padding:0;border:none;cursor:pointer}
+.nav-dot.active{opacity:1;background:#f59e0b;width:20px;border-radius:4px}
+.slide-counter{font-size:11px;color:#a8a29e}
 </style>
 </head>
 <body>
@@ -1254,65 +1260,18 @@
   <button class="nav-btn" id="nextBtn" aria-label="다음 슬라이드">&#x276F;</button>
 </nav>
 
+
 <script>
 (function(){
-  const slides = document.querySelectorAll('.slide');
-  const total = slides.length;
-  let current = 0;
-
-  const progressFill = document.getElementById('progressFill');
-  const progressText = document.getElementById('progressText');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-
-  function update(dir){
-    const old = slides[current];
-    old.classList.remove('active');
-    old.classList.add(dir > 0 ? 'exit-left' : '');
-    setTimeout(()=>{ old.classList.remove('exit-left'); }, 600);
-  }
-
-  function goTo(idx, dir){
-    if(idx < 0 || idx >= total || idx === current) return;
-    update(dir);
-    current = idx;
-    const s = slides[current];
-    s.classList.add('active');
-    s.scrollTop = 0;
-    progressFill.style.width = ((current+1)/total*100)+'%';
-    progressText.textContent = (current+1)+' / '+total;
-  }
-
-  function next(){ goTo(current+1, 1); }
-  function prev(){ goTo(current-1, -1); }
-
-  prevBtn.addEventListener('click', prev);
-  nextBtn.addEventListener('click', next);
-
-  document.addEventListener('keydown', function(e){
-    if(e.key==='ArrowRight'||e.key===' ') next();
-    else if(e.key==='ArrowLeft') prev();
-  });
-
-  // Touch / swipe
-  let tx=0, ty=0, sx=false;
-  document.addEventListener('touchstart', function(e){
-    tx = e.touches[0].clientX;
-    ty = e.touches[0].clientY;
-    sx = false;
-  }, {passive:true});
-
-  document.addEventListener('touchend', function(e){
-    if(sx) return;
-    const dx = e.changedTouches[0].clientX - tx;
-    const dy = e.changedTouches[0].clientY - ty;
-    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
-      if(dx < 0) next(); else prev();
-    }
-  }, {passive:true});
-
-  // Init
-  progressFill.style.width = (1/total*100)+'%';
+var slides=document.querySelectorAll('[data-slide],.slide'),total=slides.length;
+if(total===0)return;
+var bar=document.createElement('nav');bar.className='nav-bar';bar.style.cssText='position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(12,10,9,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,158,11,0.15)';
+var counter=document.createElement('span');counter.className='slide-counter';counter.textContent='1 / '+total;
+bar.appendChild(counter);
+document.body.prepend(bar);
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.35});
+slides.forEach(function(s){observer.observe(s)});
 })();
 </script>
 </body>
