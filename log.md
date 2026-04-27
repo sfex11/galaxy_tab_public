@@ -462,3 +462,21 @@
 - 2026-04-26-bounding-the-black-box-a-statistical-certification.md
 - 2026-04-26-tool-attention-is-all-you-need-dynamic-tool-gating.md
 - 2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md
+
+## [2026-04-27 22:01] ingest | How Do AI Agents Spend Your Money? Analyzing and Predicting Token Consumption in Agentic Coding Tasks
+
+## [2026-04-27 22:01] ingest | Representational Harms in LLM-Generated Narratives Against Global Majority Nationalities
+
+## [2026-04-27 22:01] ingest | Agentic World Modeling: Foundations, Capabilities, Laws, and Beyond
+
+## [2026-04-27 22:01] ingest | Aligning Dense Retrievers with LLM Utility via DistillationAligning Dense Retrievers with LLM Utility via Distillation
+
+## [2026-04-27 22:01] ingest | Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems
+
+## [2026-04-27 22:01] ingest | Can QPP Choose the Right Query Variant? Evaluating Query Variant Selection for RAG Pipelines
+
+## [2026-04-27 22:01] ingest | QuantClaw: Precision Where It Matters for OpenClaw
+
+## [2026-04-27 22:01] ingest | RouteLMT: Learned Sample Routing for Hybrid LLM Translation Deployment
+
+## [2026-04-27 22:01] ingest | Introducing Background Temperature to Characterise Hidden Randomness in Large Language Models

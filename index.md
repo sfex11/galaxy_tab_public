@@ -207,3 +207,16 @@
 - [[sources/2026-04-22-worlddb-a-vector-graph-of-worlds-memory-engine-wit.md]] - WorldDB: A Vector Graph-of-Worlds Memory Engine with Ontology-Aware Write-Time Reconciliation
 - [[sources/2026-04-22-asset-harvester-extracting-3d-assets-from-autonomo.md]] - Asset Harvester: Extracting 3D Assets from Autonomous Driving Logs for Simulation
 - [[sources/2026-04-22-using-large-language-models-for-embodied-planning-.md]] - Using large language models for embodied planning introduces systematic safety risks
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-27-how-do-ai-agents-spend-your-money-analyzing-and-pr.md]] - How Do AI Agents Spend Your Money? Analyzing and Predicting Token Consumption in Agentic Coding Tasks
+- [[sources/2026-04-27-representational-harms-in-llm-generated-narratives.md]] - Representational Harms in LLM-Generated Narratives Against Global Majority Nationalities
+- [[sources/2026-04-27-agentic-world-modeling-foundations-capabilities-la.md]] - Agentic World Modeling: Foundations, Capabilities, Laws, and Beyond
+- [[sources/2026-04-27-aligning-dense-retrievers-with-llm-utility-via-dis.md]] - Aligning Dense Retrievers with LLM Utility via DistillationAligning Dense Retrievers with LLM Utility via Distillation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-27-seeing-the-whole-elephant-a-benchmark-for-failure-.md]] - Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems
+- [[sources/2026-04-27-can-qpp-choose-the-right-query-variant-evaluating-.md]] - Can QPP Choose the Right Query Variant? Evaluating Query Variant Selection for RAG Pipelines
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-04-27-quantclaw-precision-where-it-matters-for-openclaw.md]] - QuantClaw: Precision Where It Matters for OpenClaw
+- [[sources/2026-04-27-routelmt-learned-sample-routing-for-hybrid-llm-tra.md]] - RouteLMT: Learned Sample Routing for Hybrid LLM Translation Deployment
+- [[sources/2026-04-27-introducing-background-temperature-to-characterise.md]] - Introducing Background Temperature to Characterise Hidden Randomness in Large Language Models

@@ -50,3 +50,5 @@ Claw-Eval(2026-04-09)은 기존 벤치마크의 "최종 출력만 확인" 문제
 - [[sources/2026-03-26-bilevel-autoresearch-meta-autoresearching-itself.md|Bilevel Autoresearch: Meta-Autoresearching Itself]] (2026-03-26)
 - [[sources/2026-04-07-a-systematic-security-evaluation-of-openclaw-and-i.md|A Systematic Security Evaluation of OpenClaw and Its Variants]] (2026-04-07)
 - [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agents]] (2026-04-09)
+
+- [[sources/2026-04-27-quantclaw-precision-where-it-matters-for-openclaw.md]]
