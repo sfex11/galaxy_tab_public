@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Attention Is All You Need: Dynamic Tool Gating and Lazy — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#0c0a09;--bg2:#1c1917;--fg:#fafaf9;--muted:#a8a29e;--accent:#f59e0b;--accent2:#dc2626;--accent3:#10b981;--card:rgba(28,25,23,0.85);--border:rgba(245,158,11,0.15);--glass:rgba(250,250,249,0.04)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-30%;left:-20%;width:70vw;height:70vw;background:radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%);border-radius:50%;animation:floatBlob 20s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-20%;right:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(220,38,38,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 25s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(5%,-8%) scale(1.05)}66%{transform:translate(-3%,5%) scale(0.95)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(255,255,255,0.04)}
+.slide-inner{width:100%;max-width:900px}
+.slide-title{font-family:'Playfair Display',serif;font-size:clamp(24px,5vw,48px);font-weight:900;line-height:1.15;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.02em}
+.slide-subtitle{font-size:clamp(14px,2.2vw,20px);font-weight:200;color:var(--muted);line-height:1.7;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:clamp(16px,3vw,28px);backdrop-filter:blur(12px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:clamp(11px,1.5vw,13px);font-weight:700;letter-spacing:0.05em;text-transform:uppercase}
+.tag-amber{background:rgba(245,158,11,0.15);color:var(--accent)}
+.tag-red{background:rgba(220,38,38,0.15);color:var(--accent2)}
+.tag-green{background:rgba(16,185,129,0.15);color:var(--accent3)}
+.big-num{font-family:'Playfair Display',serif;font-size:clamp(32px,7vw,64px);font-weight:900;line-height:1}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(12px,2vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.8vw,17px);line-height:1.8}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:clamp(13px,1.6vw,15px);line-height:1.6}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(16,185,129,0.15);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:2px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,56px);height:clamp(40px,6vw,56px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,22px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,27px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.3}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:700;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);text-transform:uppercase;letter-spacing:0.05em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,20px);padding:0 clamp(4px,1vw,10px);opacity:0.5}
+.step-num{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);font-weight:900;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.5vw,14px);font-weight:700;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.4}
+.hr{width:60px;height:3px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:0 0 40px rgba(245,158,11,0.3)}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(12,10,9,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:0.3;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav-dot.active{opacity:1;background:var(--accent);width:20px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,32px);">
+      <span class="tag tag-amber">arXiv:2604.21816v1</span>
+      <span class="tag tag-green">cs.AI</span>
+    </div>
+    <h1 style="font-size:clamp(28px,5vw,56px);line-height:1.15;margin-bottom:clamp(12px,2vw,24px);">
+      <span class="accent">Tool Attention</span> Is All You Need
+    </h1>
+    <p style="font-size:clamp(14px,2vw,20px);color:var(--muted);max-width:800px;margin-bottom:clamp(20px,3vw,40px);">
+      동적 도구 게이팅과 지연 스키마 로딩을 통한<br>확장 가능한 에이전트 워크플로우에서의 MCP/Tools Tax 제거
+    </p>
+    <div class="hr"></div>
+    <div style="display:flex;gap:clamp(12px,2vw,24px);flex-wrap:wrap;margin-top:clamp(16px,2vw,24px);">
+      <span style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);"><i class="fas fa-user" style="margin-right:6px;"></i>Anuj Sadani, Deepak Kumar — Infrrd.ai</span>
+      <span style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);"><i class="fas fa-calendar" style="margin-right:6px;"></i>2026년 4월</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      MCP는 왜 <span class="accent">혁명적</span>이었는가
+    </h2>
+    <div class="grid-2" style="gap:clamp(16px,2vw,28px);">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:12px;"><i class="fas fa-plug accent2" style="margin-right:8px;"></i>N×M → N+M 통합</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.7;">
+          에이전트-도구 간 맞춤 통합을 표준화된 JSON-RPC 2.0 핸드셰이크로 단순화. Anthropic, OpenAI, Google, Microsoft 채택.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:12px;"><i class="fas fa-server accent3" style="margin-right:8px;"></i>다중 서버 아키텍처</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.7;">
+          Claude Desktop, Cursor, VS Code 등에서 파일 시스템, DB, GitHub, 슬랙 등 다수 MCP 서버 동시 연결.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:12px;"><i class="fas fa-code accent" style="margin-right:8px;"></i>자동 도구 발견</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.7;">
+          에이전트가 런타임에 호환 서버의 도구 카탈로그를 동적으로 발견하고 호출 가능.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:12px;"><i class="fas fa-exclamation-triangle glow-amber" style="margin-right:8px;"></i>치명적 설계 결함</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.7;">
+          채팅 완성 API의 <span class="accent">무상태(stateless)</span> 특성 때문에 <strong>매 턴마다 전체 스키마 재주입</strong>이 필수.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      <span class="accent">Tools Tax</span>란 무엇인가
+    </h2>
+    <div class="quote-block" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        MCP의 무상태 eager 스키마 주입이 매 대화 턴에 부과하는 <strong>숨겨진 오버헤드</strong>. 실제 배포에서 <span class="accent2">10k~60k 토큰</span> 소비.
+      </p>
+    </div>
+    <div class="grid-3" style="gap:clamp(12px,1.5vw,20px);">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">15~20k</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">4서버 구성에서의<br>토큰 오버헤드</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">54.6k</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">106개 도구 엔터프라이즈<br>DB 카탈로그</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">150k+</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">공격적 도구 확장 시<br>최대 오버헤드</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);margin-top:clamp(12px,1.5vw,20px);">
+      <i class="fas fa-info-circle" style="margin-right:6px;"></i>수치는 실제 배포 감사 보고서에서 추출 (Smith 2025, Chen 2025 등)
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      세 가지 <span class="accent">연쇄적 실패</span>
+    </h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px);">
+      <div class="flow-icon" style="background:var(--accent);color:#000;">1</div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:4px;"><i class="fas fa-dollar-sign accent" style="margin-right:8px;"></i>경제적 실패</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.6;">
+          무상태 재주입으로 세션 비용 10배 증가. 동일 10,000작업 기준 CLI $3.20 vs MCP <span class="accent">$55.20</span>
+        </p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px);">
+      <div class="flow-icon" style="background:var(--accent2);color:#000;">2</div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:4px;"><i class="fas fa-brain accent2" style="margin-right:8px;"></i>인지적 실패</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.6;">
+          컨텍스트 활용률 <span class="accent2">~70%</span> 돌파 시 추론 품질 급락 — 파라미터 환각, 도구 혼동, 작업 기억 상실
+        </p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:var(--accent3);color:#000;">3</div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:4px;"><i class="fas fa-shield-virus accent3" style="margin-right:8px;"></i>적대적 실패 — Tool Poisoning</h3>
+        <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);line-height:1.6;">
+          스키마 텍스트가 어텐션 마스크를 형성하므로, 악의적 도구 설명에 적대적 지시문 삽입으로 제어 흐름 탈취 가능
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      기존 접근법의 <span class="accent">한계</span>
+    </h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>접근법</th>
+          <th>장점</th>
+          <th>한계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>정적 프루닝</td>
+          <td>구현 단순</td>
+          <td style="color:var(--accent);">유연성 희생, 수동 관리</td>
+        </tr>
+        <tr>
+          <td>수동 서버 스코핑</td>
+          <td>즉시 효과</td>
+          <td style="color:var(--accent);">엔지니어링 부하, 규모 불가</td>
+        </tr>
+        <tr>
+          <td>CLI식 지연 발견</td>
+          <td>토큰 절약</td>
+          <td style="color:var(--accent);">MCP 개발자 경험 파괴</td>
+        </tr>
+        <tr>
+          <td>코드 실행 샌드박스</td>
+          <td>98.7% 토큰 절약</td>
+          <td style="color:var(--accent);">도구 출력만 최적화, 정의 미해결</td>
+        </tr>
+        <tr>
+          <td>MOQT 전송 계층</td>
+          <td>프로토콜 수준 해결</td>
+          <td style="color:var(--accent);">채택 미래 지정, 즉시 배포 불가</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.8vw,18px);text-align:center;margin-top:clamp(8px,1.5vw,16px);">
+      <span class="accent">필요한 것:</span> 프로토콜 의미를 보존하면서 세금을 원천 제거하는 <strong>드롭인 미들웨어</strong>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(12px,2vw,24px);">
+      <span class="accent">Tool Attention</span> — 핵심 직관
+    </h2>
+    <div class="quote-block" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        "Scaled Dot-Product Attention이 시퀀스 모델링에서 순환을 동적 토큰 간 어텐션으로 대체했듯,<br><span class="accent">Tool Attention은 eager 스키마 주입을 동적 쿼리 조건부 도구 선택으로 대체</span>한다."
+      </p>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">ISO 점수</div>
+        <div class="step-desc">Intent–Schema Overlap<br>문장 임베딩 기반</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">상태 인식 게이팅</div>
+        <div class="step-desc">선행조건 &<br>접근 범위 강제</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">2단계 지연 로딩</div>
+        <div class="step-desc">요약 풀 유지<br>top-k만 전체 스키마</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);text-align:center;">
+      모델에 의존하지 않는 <strong>메타 레이어</strong> — 모든 LLM에 호환 가능
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      구성 요소 <span class="accent2">상세 해부</span>
+    </h2>
+    <div class="grid-2" style="gap:clamp(14px,2vw,24px);">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:10px;"><span class="tag tag-amber">구성 1</span> ISO 점수</h3>
+        <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+          사용자 쿼리 임베딩 q와 도구 스키마 요약 임베딩 s 간 코사인 유사도 계산. 상용 sentence-transformers 사용으로 모델 독립적. 낮은 ISO 점수 = 해당 도구에 대한 어텐션 에너지 기여 무의미 → 안전 제외.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:10px;"><span class="tag tag-green">구성 2</span> 상태 인식 게이팅</h3>
+        <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+          ISO 점수에 논리적 게이트 결합: 인증 상태, 선행조건 만족, 도메인 접근 범위. 환각 게이트(Hallucination Gate) 의미론 — 모델이 호출할 수 없는 도구는 프롬프트에 진입 불가.
+        </p>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:10px;"><span class="tag tag-red">구성 3</span> 2단계 지연 스키마 로딩</h3>
+        <div class="grid-2" style="gap:clamp(10px,1.5vw,16px);margin-top:8px;">
+          <div style="background:rgba(255,255,255,0.03);padding:clamp(10px,1.5vw,16px);border-radius:8px;border-left:3px solid var(--accent2);">
+            <strong style="font-size:clamp(13px,1.5vw,16px);">Phase 1 — 요약 풀</strong>
+            <p style="font-size:clamp(12px,1.3vw,14px);color:var(--muted);margin-top:4px;">모든 도구의 자기 기술적 요약(1~2문장)을 컨텍스트에 상주. 전체 스키마 대비 ~95% 토큰 절약.</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);padding:clamp(10px,1.5vw,16px);border-radius:8px;border-left:3px solid var(--accent);">
+            <strong style="font-size:clamp(13px,1.5vw,16px);">Phase 2 — 전체 스키마 승격</strong>
+            <p style="font-size:clamp(12px,1.3vw,14px);color:var(--muted);margin-top:4px;">게이팅 통과 top-k 도구만 완전 JSON 스키마를 프롬프트에 주입. k는 임계값 기반 자동 결정.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      이론적 근거: <span class="accent">Total Attention Energy</span>
+    </h2>
+    <div class="card" style="margin-bottom:clamp(14px,2vw,24px);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.8;">
+        MindGuard(2025)의 <strong>의존성 결정 그래프(DDG)</strong>와 <strong>총 어텐션 에너지(TAE)</strong> 공식에서 영감.<br><br>
+        스키마 토큰에 대한 어텐션 가중치가 다운스트림 도구 호출에 대한 <span class="accent">인과적 영향력</span>과 강하게 상관됨.
+      </p>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <div class="flow-icon"><i class="fas fa-calculator"></i></div>
+      <div>
+        <p style="font-size:clamp(13px,1.5vw,16px);line-height:1.6;">
+          <strong>방어적 활용:</strong> 특정 쿼리에 대해 TAE 기여가 무시할 수준인 도구 = 프롬프트에서 안전하게 제외 가능한 도구
+        </p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <div class="flow-icon"><i class="fas fa-shield-alt"></i></div>
+      <div>
+        <p style="font-size:clamp(13px,1.5vw,16px);line-height:1.6;">
+          <strong>Tool Poisoning 방어:</strong> 낮은 ISO 점수의 악의적 스키마가 어텐션 마스크에 진입하는 것 자체를 차단
+        </p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-link"></i></div>
+      <div>
+        <p style="font-size:clamp(13px,1.5vw,16px);line-height:1.6;">
+          <strong>직교적 조합:</strong> FlashAttention, KV-캐시 양자화와 함께 사용 시 프롬프트 토큰 감소가 선형적으로 효과 누적
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      <span class="accent3">구현</span> 아키텍처
+    </h2>
+    <div class="grid-2" style="gap:clamp(14px,2vw,24px);">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">기술 스택</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LangGraph 미들웨어 (before_model 훅)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>FAISS 벡터 인덱스 (ISO 점수 계산)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>sentence-transformers (쿼리/스키마 임베딩)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>tiktoken (토큰 계산)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프롬프트 캐싱과 네이티브 통합</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">실무 고려사항</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자기 기술적 도구 요약 생성 가이드</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>선행조건 명세 패턴</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인코더 선택 & 임계값 보정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>관측 가능성(Observeability) 내장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>환각 게이트 의미론 정의</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.5vw,16px);color:var(--muted);text-align:center;">
+      <i class="fab fa-github" style="margin-right:6px;"></i>참조 구현 오픈소스: <span class="accent">github.com/asadani/tool-attention</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      실험 <span class="accent2">설정</span>
+    </h2>
+    <div class="grid-3" style="gap:clamp(12px,1.5vw,20px);margin-bottom:clamp(14px,2vw,24px);">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">120</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">총 도구 수</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">6</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">MCP 서버 수</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">47.3k</div>
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);">베이스라인 턴당<br>도구 토큰</p>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:8px;">보정 전략</h3>
+      <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+        실제 MCP 배포 감사 보고서의 서버별 토큰 수를 기준으로 합성 벤치마크 보정 — 시뮬레이션이지만 현실 기반 설계.
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:8px;">투명성 원칙</h3>
+      <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+        <span class="tag tag-red">중요</span> 토큰 감소율은 <strong>직접 측정</strong>값. 작업 성공률, 지연, 비용은 측정 토큰 수 + 공개 원격 측정으로부터의 <span class="accent">프로젝션</span>이며, 라이브 에이전트 실행에서의 측정이 아님.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      <span class="accent">핵심 결과</span>
+    </h2>
+    <div class="grid-2" style="gap:clamp(16px,2vw,28px);margin-bottom:clamp(14px,2vw,24px);">
+      <div class="card" style="text-align:center;padding:clamp(20px,3vw,36px);">
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);margin-bottom:8px;">턴당 도구 토큰 감소율</p>
+        <div class="big-num accent" style="font-size:clamp(40px,8vw,72px);">95.0%</div>
+        <p style="font-size:clamp(14px,1.8vw,20px);margin-top:8px;">
+          <span style="text-decoration:line-through;color:var(--muted);">47.3k</span>
+          <i class="fas fa-arrow-right" style="margin:0 8px;color:var(--accent);"></i>
+          <strong class="accent">2.4k</strong>
+        </p>
+      </div>
+      <div class="card" style="text-align:center;padding:clamp(20px,3vw,36px);">
+        <p style="font-size:clamp(12px,1.3vw,15px);color:var(--muted);margin-bottom:8px;">유효 컨텍스트 활용률</p>
+        <div class="big-num accent2" style="font-size:clamp(40px,8vw,72px);">3.8×</div>
+        <p style="font-size:clamp(14px,1.8vw,20px);margin-top:8px;">
+          <span style="color:var(--muted);">24%</span>
+          <i class="fas fa-arrow-right" style="margin:0 8px;color:var(--accent2);"></i>
+          <strong class="accent2">91%</strong>
+        </p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>지표</th>
+          <th>베이스라인 (Eager)</th>
+          <th>Tool Attention</th>
+          <th>변화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>턴당 도구 토큰</td>
+          <td>47,300</td>
+          <td class="accent">2,400</td>
+          <td style="color:var(--accent);">−95.0%</td>
+        </tr>
+        <tr>
+          <td>유효 컨텍스트 활용률</td>
+          <td>24%</td>
+          <td class="accent2">91%</td>
+          <td style="color:var(--accent2);">+3.8×</td>
+        </tr>
+        <tr>
+          <td>70% 파단점 대비 여유</td>
+          <td>초과 위험</td>
+          <td class="accent3">안전 마진 확보</td>
+          <td style="color:var(--accent3);">구조적 해결</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      추가 분석 및 <span class="accent3">견고성</span>
+    </h2>
+    <div class="grid-2" style="gap:clamp(14px,2vw,24px);">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">추론 품질</h3>
+        <div class="card" style="margin-bottom:clamp(8px,1vw,12px);">
+          <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+            컨텍스트 활용률 70% 파단점 아래로 유지 → 모델이 에피소딕 작업 기억과 정밀한 파라미터 추론을 유지. 도구 혼동 현상 원천 차단.
+          </p>
+        </div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">스케일링 거동</h3>
+        <div class="card">
+          <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+            도구 수 증가에 따른 절감 효과 비선형 증가. 120→500 도구 확장 시 절감률 추가 향상 예상.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">절제 연구(Ablation)</h3>
+        <div class="card" style="margin-bottom:clamp(8px,1vw,12px);">
+          <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+            ISO만 사용 vs 게이팅 추가 vs 2단계 로딩 추가 — 각 구성 요소의 독립 기여도 정량화. 세 구성 모두 필수적.
+          </p>
+        </div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,16px);">적대적 견고성</h3>
+        <div class="card">
+          <p style="font-size:clamp(12px,1.4vw,15px);color:var(--muted);line-height:1.7;">
+            Tool Poisoning 공격에 대한 프로젝션: 낮은 ISO 점수의 악의적 스키마가 게이트를 통과할 확률 극히 낮음. TAE 기반 방어 메커니즘 내재.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      한계 및 <span class="muted">향후 과제</span>
+    </h2>
+    <div class="grid-2" style="gap:clamp(14px,2vw,24px);">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:10px;"><i class="fas fa-exclamation-circle glow-amber" style="margin-right:8px;"></i>인정된 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times" style="color:var(--accent);"></i></span>라이브 에이전트 측정 아님 — 시뮬레이션 기반</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:var(--accent);"></i></span>적대적 의역(Paraphrase) 공격에 대한 추가 검증 필요</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:var(--accent);"></i></span>턴 간 상태 인식 게이팅은 초기 구현</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,20px);margin-bottom:10px;"><i class="fas fa-rocket accent2" style="margin-right:8px;"></i>향후 방향</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>학습 기반 게이팅 (현재 휴리스틱)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>코드 실행 패턴과의 조합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MOQT 프로토콜 수준 수렴 시 자연 폐기</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>벤치마크 표준화 제안</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        "프로토콜 수준 효율성이, 원시 컨텍스트 길이가 아니라, 확장 가능한 에이전트 시스템의 <span class="accent">결속적 제약( binding constraint)</span>이다."
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,4vw,44px);margin-bottom:clamp(16px,2.5vw,32px);">
+      핵심 <span class="accent">요약</span>
+    </h2>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <div class="flow-icon" style="background:var(--accent);color:#000;"><i class="fas fa-bullseye"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.6;">
+          <strong>문제 정의:</strong> MCP의 무상태 설계가 매 턴 10k~60k 토큰의 Tools Tax를 부과하고, 비용·추론·보안 세 축에서 연쇄적 실패 유발
+        </p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <div class="flow-icon" style="background:var(--accent2);color:#000;"><i class="fas fa-cogs"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.6;">
+          <strong>해결책:</strong> Tool Attention — ISO 점수 + 상태 게이팅 + 2단계 지연 로딩의 모델 비의존적 미들웨어 메타 레이어
+        </p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+      <div class="flow-icon" style="background:var(--accent3);color:#000;"><i class="fas fa-chart-line"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.6;">
+          <strong>결과:</strong> 120도구 6서버 환경에서 토큰 <span class="accent">95% 감소</span>, 유효 컨텍스트 활용률 <span class="accent2">24%→91%</span>
+        </p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#888;color:#fff;"><i class="fas fa-box-open"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.6;">
+          <strong>배포:</strong> 드롭인 미들웨어 — 오늘 배포 가능, MOQT 도입 시 자연 폐기. 오픈소스 참조 구현 공개.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:80vh;">
+    <div style="margin-bottom:clamp(20px,3vw,40px);">
+      <span class="tag tag-amber" style="font-size:clamp(12px,1.3vw,15px);">논문 정보</span>
+    </div>
+    <h2 style="font-size:clamp(22px,4vw,40px);line-height:1.25;margin-bottom:clamp(16px,2.5vw,32px);max-width:900px;">
+      Tool Attention Is All You Need:<br><span class="accent">Dynamic Tool Gating and Lazy Schema Loading</span><br>for Eliminating the MCP/Tools Tax
+    </h2>
+    <div class="hr" style="width:60%;margin:clamp(16px,2vw,28px) auto;"></div>
+    <p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-bottom:clamp(8px,1.5vw,16px);">
+      Anuj Sadani, Deepak Kumar — Infrrd.ai
+    </p>
+    <p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-bottom:clamp(16px,2.5vw,32px);">
+      arXiv:2604.21816v1 — April 2026
+    </p>
+    <div style="display:flex;gap:clamp(10px,2vw,20px);flex-wrap:wrap;justify-content:center;">
+      <a href="http://arxiv.org/abs/2604.21816v1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:clamp(10px,1.5vw,16px) clamp(20px,3vw,36px);background:var(--accent);color:#000;border-radius:8px;text-decoration:none;font-weight:700;font-size:clamp(14px,1.8vw,18px);">
+        <i class="fas fa-file-alt"></i> arXiv 열기
+      </a>
+      <a href="https://github.com/asadani/tool-attention" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:clamp(10px,1.5vw,16px) clamp(20px,3vw,36px);background:rgba(255,255,255,0.08);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:clamp(14px,1.8vw,18px);border:1px solid rgba(255,255,255,0.15);">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

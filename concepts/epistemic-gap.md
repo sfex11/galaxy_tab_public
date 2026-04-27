@@ -20,3 +20,7 @@ _자동 Wiki Query에서 추출됨_
 ### Bounding the Black Box: A Statistical Certification Framework for AI R (2026-04-26)
 
 → [[sources/2026-04-26-bounding-the-black-box-a-statistical-certification.md|상세 보기]]
+
+### From Research Question to Scientific Workflow: Leveraging Agentic AI f (2026-04-27)
+
+→ [[sources/2026-04-27-from-research-question-to-scientific-workflow-leve.md|상세 보기]]

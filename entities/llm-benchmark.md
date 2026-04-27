@@ -26,3 +26,9 @@ MathDuels는 LLM 벤치마크가 직면한 근본적 한계 — 고정된 문제
 MathDuels는 정적 태스크에서 동적 셀프플레이로 평가 패러다임을 전환시키며, 벤치마크가 '능력 측정 도구'에서 '능력 탐색 프로세스'로 진화하는 방향성을 제시한다.
 
 → [[sources/2026-04-26-mathduels-evaluating-llms-as-problem-posers-and-so.md|상세 보기]]
+
+### MathDuels: Evaluating LLMs as Problem Posers and Solvers (2026-04-27)
+
+MathDuels가 정적 태스크 기반 LLM 벤치마크의 근본적 한계(고정 문제 집합→천장 성능→모델 무차별화)에 대한 구조적 대안임을 재확인하며, 벤치마크 패러다임이 '문제 제시→해결'에서 '문제 생성→해결→상호 평가'로 진화하는 방향성을 제공한다.
+
+→ [[sources/2026-04-27-mathduels-evaluating-llms-as-problem-posers-and-so.md|상세 보기]]
