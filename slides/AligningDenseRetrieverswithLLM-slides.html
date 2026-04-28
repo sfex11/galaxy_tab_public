@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aligning Dense Retrievers with LLM Utility via DistillationA — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+<div class="slide-inner">
+<div style="text-align:center;margin-bottom:clamp(20px,4vw,40px);">
+<span class="tag tag-amber">cs.IR · 정보 검색</span>
+</div>
+<h1 style="font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.2;margin-bottom:clamp(16px,3vw,32px);">
+LLM 유틸리티와 <span class="accent">밀도 검색기</span>의<br>정렬을 위한 지식 증류
+</h1>
+<p style="font-size:clamp(16px,2.5vw,22px);color:var(--muted);max-width:700px;margin:0 auto clamp(24px,4vw,48px);">
+Utility-Aligned Embeddings (UAE)
+</p>
+<div class="hr"></div>
+<p style="font-size:clamp(14px,2vw,18px);color:var(--muted);">Rajinder Sandhu, Di Mu, Cheng Chang, Md Shahriar Tasjid, Himanshu Rai, Maksims Volkovs, Ga Wu</p>
+<p style="font-size:clamp(13px,1.8vw,16px);color:var(--muted);margin-top:8px;">Layer 6 AI · Dalhousie University</p>
+<p style="font-size:clamp(13px,1.8vw,16px);margin-top:16px;">arXiv:2604.22722v1 · April 2026</p>
+</div>
+</section>
+
+<section class="slide" data-index="1">
+<div class="slide-inner">
+<span class="tag tag-red">문제 정의</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+RAG 시스템의 <span class="accent">근본적 한계</span>
+</h2>
+<div class="hr"></div>
+<div class="grid-2" style="margin-top:clamp(16px,3vw,32px);">
+<div class="card">
+<h3 style="font-size:clamp(18px,2.5vw,26px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">
+<i class="fas fa-search" style="color:var(--accent);margin-right:8px;"></i>밀도 검색의 문제
+</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>의미적 유사도 ≠ 생성 유틸리티</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>높은 주제적 겹침이 오히려 <span class="accent2">의미적 방해물</span> 유발</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>롱컨텍스트에서 디코딩 불확실성 증가</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(18px,2.5vw,26px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">
+<i class="fas fa-robot" style="color:var(--accent);margin-right:8px;"></i>LLM 유틸리티의 문제
+</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>테스트 시 LLM 추론 → <span class="accent2">계산 비용 폭발</span></li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>Perplexity 신호의 극심한 노이즈</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>토큰 수준 변동에 과민하게 반응</li>
+</ul>
+</div>
+</div>
+<div class="quote-block" style="margin-top:clamp(16px,3vw,32px);">
+"의미적으로 유사한 문서가 실제로는 답변에 필요한 정보를 제공하지 못하고, 생성기를 오도할 수 있다."
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="2">
+<div class="slide-inner">
+<span class="tag tag-amber">핵심 통찰</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+생성 유틸리티를 <span class="accent">임베딩 공간에 직접 증류</span>하자
+</h2>
+<div class="hr"></div>
+<div class="quote-block" style="margin-top:clamp(16px,3vw,32px);">
+생성 유틸리티는 바이인코더의 임베딩 공간 내로 증류되어야 한다. 비싼 테스트 시 LLM 추론을 우회하면서 생성기의 실제 선호를 포착한다.
+</div>
+<div style="margin-top:clamp(20px,4vw,40px);">
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-lightbulb"></i></div>
+<div>
+<strong style="font-size:clamp(16px,2.2vw,22px);">정렬을 분포 매칭 문제로 공식화</strong>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-top:4px;">노이즈 많은 유틸리티 점수를 회귀 목표로 사용하지 않고, 유틸리티 유도 분포를 모방하도록 훈련</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-bolt"></i></div>
+<div>
+<strong style="font-size:clamp(16px,2.2vw,22px);">추론 시 LLM 없이 ANN 검색 가능</strong>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-top:4px;">표준 근사 최근접 이웃(ANN) 검색과 완전 호환되는 실용적 솔루션</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="3">
+<div class="slide-inner">
+<span class="tag tag-green">UAE 프레임워크</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+Utility-Aligned Embeddings <span class="accent">전체 구조</span>
+</h2>
+<div class="hr"></div>
+<div class="pipeline" style="margin-top:clamp(20px,4vw,40px);">
+<div class="pipeline-step">
+<div class="step-num">A</div>
+<div class="step-label">보상 모델 학습</div>
+<div class="step-desc">노이즈 많은 유틸리티 신호를 파라미터화된 보상 모델 R_ψ로 증류</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">B</div>
+<div class="step-label">분포 매칭 정렬</div>
+<div class="step-desc">보상 모델이 정의한 목표 유틸리티 분포와 바이인코더 분포의 KL 발산 최소화</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">C</div>
+<div class="step-label">추론 (ANN)</div>
+<div class="step-desc">훈련된 바이인코더로 표준 ANN 검색 — LLM·보상 모델 불필요</div>
+</div>
+</div>
+<div class="card" style="margin-top:clamp(20px,4vw,40px);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);"><i class="fas fa-key" style="color:var(--accent);margin-right:8px;"></i>핵심 목표: Utility-Modulated InfoNCE</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.7;">
+표준 InfoNCE가 모든 부정 예제를 동등하게 무관하게 취급하는 것과 달리, UAE의 목표 함수는 유틸리티 공간의 <span class="accent">순서적(ordinal) 구조</span>를 보존하여 검색기가 관련성의 정도를 구별할 수 있도록 한다.
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="4">
+<div class="slide-inner">
+<span class="tag tag-amber">Stage A</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+파라미터화된 <span class="accent">유틸리티 근사</span>
+</h2>
+<div class="hr"></div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">유틸리티 정의 (Perplexity 기반)</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.8;">
+U(q, d, a) = exp( (1/|a|) Σ log p_θ(x_t | x_&lt;t, q, d) )<br>
+문서 d가 질문 q에 대한 정답 a를 더 예측 가능하게 만들수록 유틸리티가 높다.
+</p>
+</div>
+<h3 style="font-size:clamp(18px,2.5vw,26px);font-weight:700;margin-top:clamp(16px,3vw,32px);">
+<i class="fas fa-exclamation-triangle" style="color:#e74c3c;margin-right:8px;"></i>원시 유틸리티의 불안정성 원인
+</h3>
+<div class="grid-3" style="margin-top:clamp(12px,2vw,24px);">
+<div class="card" style="text-align:center;">
+<div class="big-num">1</div>
+<p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">정답의 언어적<br>표현 다양성</p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="big-num">2</div>
+<p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">행렬 병렬화 및<br>부동소수점 오차</p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="big-num">3</div>
+<p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">답변 길이 |a|에 대한<br>과민성</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="5">
+<div class="slide-inner">
+<span class="tag tag-amber">Stage A</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+보상 모델 학습: <span class="accent">순서 보존</span> 접근</h2>
+<div class="hr"></div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">왜 회귀가 아닌 순서 학습인가?</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.7;">
+원시 유틸리티의 <span class="accent2">분포 불안정성(heavy-tailed, high variance)</span>으로 인해 MSE/Huber 같은 회귀 손실은 학습 불안정과 과적합을 유발한다. 대신 후보 간 <span class="accent">상대적 순서</span>만 보존하는 것이 훨씬 강건하다.
+</p>
+</div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);border-left:3px solid var(--accent);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">Margin-based Ranking Loss</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.8;">
+ℒ_Reward = max(0, δ − (R_ψ(q, d_i) − R_ψ(q, d_j)))<br><br>
+U(q, d_i, 𝒜_q) > U(q, d_j, 𝒜_q)일 때<br>
+R_ψ(q, d_i) > R_ψ(q, d_j) + δ를 강제
+</p>
+</div>
+<div style="margin-top:clamp(12px,2vw,24px);">
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>R_ψ는 Transformer 기반 (BERT) 크로스인코더</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>정확한 유틸리티 값이 아닌 <span class="accent">생성기의 서수적 선호</span>만 보존</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>"의미적 하드 네거티브"를 효과적으로 식별</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="6">
+<div class="slide-inner">
+<span class="tag tag-green">Stage B</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+보상 기반 <span class="accent">임베딩 훈련</span></h2>
+<div class="hr"></div>
+<p style="font-size:clamp(15px,2vw,20px);color:var(--muted);line-height:1.7;margin-top:clamp(12px,2vw,24px);">
+크로스인코더인 R_ψ는 대규모 추론에 비용이 높으므로, 이를 <span class="accent">오프라인 교사</span>로 사용하여 바이인코더에 유틸리티 선호를 증류한다.
+</p>
+<div class="grid-2" style="margin-top:clamp(16px,3vw,32px);">
+<div class="card">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);color:var(--accent);">교사 분포 π*</h3>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);line-height:1.8;">
+π*(d_i|q) = exp(λ·R_ψ(q,d_i)) / Σ exp(λ·R_ψ(q,d_j))<br><br>
+<span style="color:var(--accent);">λ</span>: 유틸리티 분포의 날카로움 제어 온도
+</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);color:var(--accent3);">학생 분포 π_φ</h3>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);line-height:1.8;">
+π_φ(d_i|q) = exp(⟨f_φ(q), f_φ(d_i)⟩/τ) / Σ exp(⟨f_φ(q), f_φ(d_j)⟩/τ)<br><br>
+<span style="color:var(--accent3);">τ</span>: 검색기 스케일링 온도
+</p>
+</div>
+</div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);border-left:3px solid var(--accent);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">UAE 목표 함수 (KL 발산 최소화)</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.8;">
+ℒ_UAE(φ) = 𝔼_q [ D_KL(π* ∥ π_φ) ] ∝ −Σ Σ π*(d_i|q) log π_φ(d_i|q)
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="7">
+<div class="slide-inner">
+<span class="tag tag-green">Stage B</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+유틸리티 인식 <span class="accent">하드 네거티브 마이닝</span>
+</h2>
+<div class="hr"></div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">왜 표준 하드 네거티브가 부족한가?</h3>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.7;">
+랜덤 네거티브는 trivial gradient를, 표준 의미적 하드 네거티브는 <span class="accent2">생성기가 실제로 유용하다고 판단한 문서</span>를 포함할 수 있다.
+</p>
+</div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);border-left:3px solid var(--accent);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);">Utility-Gated Mining: 이중 조건 필터</h3>
+<div style="margin-top:clamp(12px,2vw,24px);">
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent);">1</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">의미적 유사도 조건</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);">기본 유사도 함수 S_sem으로 top-k 내에 랭킹</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent2);">2</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">유틸리티 마진 조건</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);">R_ψ(q, d⁺) − R_ψ(q, d⁻) > δ 보장</p>
+</div>
+</div>
+</div>
+</div>
+<div class="quote-block" style="margin-top:clamp(16px,3vw,32px);">
+"보수적 마진 δ는 검색기가 <span class="accent">의미적 방해물(semantic distractors)</span> 해결에 집중하도록 한다 — 임베딩 공간에서 근접하지만 유틸리티가 무시할 수준인 문서들."
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="8">
+<div class="slide-inner">
+<span class="tag tag-red">왜 RL이 아닌 모방 학습인가?</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+설계 선택의 <span class="accent">당위성</span>
+</h2>
+<div class="hr"></div>
+<div class="grid-2" style="margin-top:clamp(16px,3vw,32px);">
+<div class="card" style="border-top:3px solid #e74c3c;">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);color:#e74c3c;">
+<i class="fas fa-times-circle" style="margin-right:8px;"></i>강화 학습 (RL)의 한계
+</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>거대한 이산 행동 공간 (전체 코퍼스)</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>높은 보상 분산으로 학습 불안정</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>탐색의 극단적 계산 비용</li>
+</ul>
+</div>
+<div class="card" style="border-top:3px solid var(--accent);">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);color:var(--accent);">
+<i class="fas fa-check-circle" style="margin-right:8px;"></i>모방 학습 (Imitation)의 장점
+</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>정규화된 보상 분포를 전문가 정책으로 사용</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>지도 그래디언트로 분산 발산 최소화</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>탐색 없이 안정적이고 효율적인 학습</li>
+</ul>
+</div>
+</div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);">
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);line-height:1.8;">
+UAE는 검색기 π_φ를 훈련하여 전문가 유틸리티 분포 π*와의 발산을 최소화함으로써, RL의 탐색 도전을 우회하면서도 <span class="accent">생성기의 선호 구조를 임베딩 공간에 직접 주입</span>한다.
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="9">
+<div class="slide-inner">
+<span class="tag tag-green">실험 결과</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+QASPER 벤치마크 <span class="accent">성능 비교</span>
+</h2>
+<div class="hr"></div>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-top:clamp(8px,1.5vw,16px);">베이스라인: BGE-Base (강력한 의미적 검색기)</p>
+<table class="compare-table" style="margin-top:clamp(16px,3vw,32px);">
+<thead>
+<tr>
+<th>지표</th>
+<th>BGE-Base</th>
+<th>UAE</th>
+<th>개선폭</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="font-weight:600;">Recall@1</td>
+<td>베이스라인</td>
+<td><span class="accent" style="font-weight:700;">UAE</span></td>
+<td><span class="accent" style="font-weight:800;">+30.59%</span></td>
+</tr>
+<tr>
+<td style="font-weight:600;">MAP</td>
+<td>베이스라인</td>
+<td><span class="accent" style="font-weight:700;">UAE</span></td>
+<td><span class="accent" style="font-weight:800;">+30.16%</span></td>
+</tr>
+<tr>
+<td style="font-weight:600;">Token F1</td>
+<td>베이스라인</td>
+<td><span class="accent" style="font-weight:700;">UAE</span></td>
+<td><span class="accent" style="font-weight:800;">+17.3%</span></td>
+</tr>
+</tbody>
+</table>
+<div class="grid-2" style="margin-top:clamp(20px,4vw,40px);">
+<div class="card" style="text-align:center;">
+<div class="big-num glow-amber">180×</div>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-top:8px;">LLM 리랭킹 대비<br><span class="accent" style="font-weight:700;">속도 향상</span></p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="big-num">Pareto</div>
+<p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-top:8px;">성능-효율성<br><span class="accent" style="font-weight:700;">최적 지점 차지</span></p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="10">
+<div class="slide-inner">
+<span class="tag tag-amber">핵심 요약</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+UAE의 <span class="accent">기여 요약</span>
+</h2>
+<div class="hr"></div>
+<div style="margin-top:clamp(16px,3vw,32px);">
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent);">1</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">문제 재정의: 검색 = 분포 매칭</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);margin-top:4px;">의미적 유사도가 아닌 생성 유틸리티 분포와 정렬하는 새로운 패러다임 제시</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent2);">2</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">노이즈 처리: 순서 기반 보상 학습</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);margin-top:4px;">원시 유틸리티의 불안정성을 margin-based ranking loss로 우아하게 해결</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent3);">3</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">Utility-Gated Hard Negative Mining</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);margin-top:4px;">의미적 유사도 + 유틸리티 마진 이중 조건으로 진정한 방해물만 타겟팅</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon" style="background:#27ae60;">4</div>
+<div>
+<strong style="font-size:clamp(15px,2vw,20px);">실용성: ANN 호환 + 180× 속도</strong>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);margin-top:4px;">추론 시 LLM 없이 기존 ANN 인프라와 완전 호환되는 스케일러블 솔루션</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="11">
+<div class="slide-inner">
+<span class="tag tag-green">논문 정보</span>
+<h2 style="font-size:clamp(24px,4vw,42px);font-weight:800;margin-top:clamp(12px,2vw,24px);">
+Aligning Dense Retrievers with<br>LLM Utility via Distillation
+</h2>
+<div class="hr"></div>
+<div class="grid-2" style="margin-top:clamp(20px,4vw,40px);">
+<div class="card">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(12px,2vw,20px);"><i class="fas fa-users" style="color:var(--accent);margin-right:8px;"></i>저자</h3>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);line-height:1.8;">
+Rajinder Sandhu<br>
+Di Mu, Cheng Chang<br>
+Md Shahriar Tasjid<br>
+Himanshu Rai<br>
+Maksims Volkovs, Ga Wu
+</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(12px,2vw,20px);"><i class="fas fa-building" style="color:var(--accent);margin-right:8px;"></i>소속</h3>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);line-height:1.8;">
+Layer 6 AI, Toronto ON, Canada<br>
+Dalhousie University, Halifax NS, Canada
+</p>
+</div>
+</div>
+<div class="card" style="margin-top:clamp(16px,3vw,32px);text-align:center;">
+<h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px);"><i class="fas fa-link" style="color:var(--accent);margin-right:8px;"></i>arXiv</h3>
+<p style="font-size:clamp(15px,2vw,20px);">
+<a href="http://arxiv.org/abs/2604.22722v1" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);">arxiv.org/abs/2604.22722v1</a>
+</p>
+<p style="font-size:clamp(13px,1.6vw,17px);color:var(--muted);margin-top:8px;">cs.IR · April 2026 · CC BY 4.0</p>
+</div>
+<div class="hr" style="margin-top:clamp(16px,3vw,32px);"></div>
+<p style="font-size:clamp(12px,1.5vw,15px);color:var(--muted);text-align:center;">
+키워드: Retrieval-Augmented Generation · Dense Retrieval · Generative Utility · Representation Learning · Distribution Matching
+</p>
+</div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
