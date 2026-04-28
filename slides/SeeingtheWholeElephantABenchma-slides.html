@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeing the Whole Elephant: A Benchmark for Failure Attributi — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+<div class="slide-inner">
+<div style="text-align:center; padding-top:8vh;">
+<div class="tag tag-amber" style="display:inline-block; margin-bottom:2vh;">arXiv:2604.22708v1</div>
+<h1 style="font-size:clamp(28px,5vw,52px); font-weight:800; line-height:1.2; margin:2vh 0;">
+전체를 보아야 한다:<br>
+<span class="accent">LLM 기반 다중 에이전트 시스템에서의</span><br>
+실패 귀인 벤치마크
+</h1>
+<p style="font-size:clamp(14px,2vw,20px); color:var(--muted, #888); margin:3vh 0 2vh;">
+Seeing the Whole Elephant: A Benchmark for Failure Attribution<br>in LLM-based Multi-Agent Systems
+</p>
+<div class="hr" style="max-width:200px; margin:2vh auto;"></div>
+<p style="font-size:clamp(12px,1.5vw,16px); color:var(--muted, #888);">
+Mengzhuo Chen, Junjie Wang, Fangwen Mu, Yawen Wang, Zhe Liu, Huanxiang Feng, Qing Wang<br>
+중국과학원 소프트웨어연구소 · 중국과학원대학교
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="1">
+<div class="slide-inner">
+<div class="tag tag-red">동기</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+LLM 기반 MAS에서 <span class="accent">실패 귀인</span>이 어려운 이유
+</h2>
+<div class="grid-2" style="gap:4vh;">
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:2vh;"><i class="fas fa-brain" style="color:var(--accent);"></i> 자연어 추론</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">에이전트의 추론과 통신이 자연어로 이루어지며, 내재적 모호성이 작동과 상태의 정밀한 특성화를 방해합니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:2vh;"><i class="fas fa-shuffle" style="color:var(--accent2);"></i> 비결정적 출력</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">동일한 입력에도 다른 출력을 생성할 수 있어, 전통적인 결정론적 디버깅 기법이 적용되지 않습니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:2vh;"><i class="fas fa-diagram-project" style="color:var(--accent3);"></i> 복잡한 상호작용</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">다수 에이전트 간, 에이전트-도구 간, LLM 내부 추론 간의 다층적 상호작용이 로그 해석을 복잡하게 만듭니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:2vh;"><i class="fas fa-eye-slash" style="color:#e74c3c;"></i> 불충분한 관측성</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">기존 벤치마크는 출력만 기록하고 입력·컨텍스트를 누락시켜, 실제 디버깅 환경과 불일치합니다.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="2">
+<div class="slide-inner">
+<div class="tag tag-amber">기존 벤치마크의 한계</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+<span class="accent">Who&When</span> 벤치마크: 부분 관측의 문제
+</h2>
+<div class="quote-block" style="margin-bottom:3vh;">
+<p style="font-size:clamp(14px,2vw,20px); line-height:1.8;">
+"에이전트 출력만 포함하고, 원래 작업 지시, 프롬프트, 맥락 메시지 등 입력 정보를 생략하는 제한된 설정"
+</p>
+</div>
+<div class="grid-2" style="gap:3vh;">
+<div class="card" style="border-left:3px solid #e74c3c;">
+<h3 style="font-size:clamp(15px,2vw,22px); color:#e74c3c; margin-bottom:1.5vh;">부분 관측 (기존)</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>에이전트 출력만 기록</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>입력 정보 누락</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>환경 상태 불가</li>
+<li><span class="check-icon"><i class="fas fa-times" style="color:#e74c3c;"></i></span>재실행 불가</li>
+</ul>
+</div>
+<div class="card" style="border-left:3px solid #2ecc71;">
+<h3 style="font-size:clamp(15px,2vw,22px); color:#2ecc71; margin-bottom:1.5vh;">완전 관측 (제안)</h3>
+<ul class="check-list">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>입력·출력 모두 기록</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>프롬프트·컨텍스트 포함</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>도구·환경 상태 포함</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>재현 가능한 실행 환경</li>
+</ul>
+</div>
+</div>
+<div class="hr" style="margin:2vh 0;"></div>
+<p style="font-size:clamp(14px,2vw,20px); text-align:center;">
+Who&When의 <span class="accent">184개 실패 사례 중 최소 21%</span>에서 출력만으로는 신뢰할 수 있는 귀인이 불가능
+</p>
+</div>
+</section>
+
+<section class="slide" data-index="3">
+<div class="slide-inner">
+<div class="tag tag-green">핵심 통찰</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+"전체 코끼리를 보라" — <span class="accent">완전 실행 추적</span>의 필요성
+</h2>
+<p style="font-size:clamp(14px,2vw,20px); line-height:1.8; margin-bottom:3vh;">
+실패 귀인은 개발자 중심의 디버깅 작업입니다. 실제 개발자는 작업 지시, 프롬프트, 중간 메시지, 도구 호출, 환경 상태 등 <span class="accent">풍부한 실행 정보</span>에 접근할 수 있습니다. 벤치마크도 이를 반영해야 합니다.
+</p>
+<div class="pipeline" style="margin-bottom:3vh;">
+<div class="pipeline-step">
+<div class="step-num">1</div>
+<div class="step-label">역할 인식</div>
+<div class="step-desc">회복 가능한 실수 vs 결정적 실패 구분</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">2</div>
+<div class="step-label">입력 복원</div>
+<div class="step-desc">누락된 입력으로 모호성 해결</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">3</div>
+<div class="step-label">단계 귀인</div>
+<div class="step-desc">최초 복구 불가 지점 식별</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">4</div>
+<div class="step-label">조치 가능한 통찰</div>
+<div class="step-desc">실제 패치·개선 방향 제시</div>
+</div>
+</div>
+<div class="quote-block">
+<p style="font-size:clamp(13px,1.8vw,18px);">
+"상위 에이전트가 환각 사실을 생성해도, 하위 검증자가 이를 감지하는 책임이 있다면 — 검증자가 놓친 시점이 결정적 실패 단계입니다."
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="4">
+<div class="slide-inner">
+<div class="tag tag-amber">문제 정의</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+실패 귀인의 <span class="accent">형식적 정의</span>
+</h2>
+<div class="card" style="margin-bottom:3vh;">
+<p style="font-size:clamp(14px,2vw,20px); line-height:1.8;">
+LLM 기반 MAS는 유한한 기능 컴포넌트 집합 <span class="accent">𝒜 = {a₁, ..., aₙ}</span>으로 구성되며, 턴 기반 프로토콜 하에 이산 단계로 실행됩니다. 각 단계 t에서 활성 컴포넌트 a(t)는 입력 xₜ을 받아 출력 yₜ을 생성합니다.
+</p>
+</div>
+<div class="grid-2" style="gap:3vh;">
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:1.5vh;"><i class="fas fa-crosshairs" style="color:var(--accent);"></i> 단계 수준 귀인</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">실패가 불가피해지는 <span class="accent">최초 시점</span>을 식별합니다. 단순한 첫 번째 실수가 아닌, <span class="accent2">복구 가능성이 상실되는 지점</span>입니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(16px,2.5vw,24px); margin-bottom:1.5vh;"><i class="fas fa-user-tag" style="color:var(--accent2);"></i> 에이전트 수준 귀인</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">해당 단계에서 실패를 유발한 <span class="accent2">책임 컴포넌트</span>를 식별합니다. 반드시 별도 에이전트가 아닐 수 있으며, 기능 모듈 단위입니다.</p>
+</div>
+</div>
+<div class="hr" style="margin:2vh 0;"></div>
+<div class="card" style="background:rgba(255,255,255,0.05);">
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">
+<i class="fas fa-info-circle" style="color:var(--accent3);"></i>
+<span class="muted">추적 스키마:</span> oₜ = (xₜ, yₜ, a(t), step_idₜ, agent_idₜ) — 각 단계의 입력, 출력, 활성 컴포넌트, 단계 식별자, 에이전트 식별자를 기록
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="5">
+<div class="slide-inner">
+<div class="tag tag-green">벤치마크 구성</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+<span class="accent">TraceElephant</span> 구축 개요
+</h2>
+<div class="grid-3" style="gap:2.5vh; margin-bottom:3vh;">
+<div class="card" style="text-align:center;">
+<div class="big-num">220</div>
+<p style="font-size:clamp(13px,1.8vw,18px); margin-top:1vh;">실패 추적 데이터</p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="big-num">3</div>
+<p style="font-size:clamp(13px,1.8vw,18px); margin-top:1vh;">대표적 에이전트 시스템</p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="big-num">2</div>
+<p style="font-size:clamp(13px,1.8vw,18px); margin-top:1vh;">귀인 수준 (단계 + 에이전트)</p>
+</div>
+</div>
+<div class="grid-3" style="gap:2.5vh;">
+<div class="card">
+<h3 style="font-size:clamp(14px,2vw,20px); margin-bottom:1vh;">다중 에이전트 오케스트레이션</h3>
+<p style="font-size:clamp(12px,1.6vw,16px); line-height:1.6;">여러 에이전트가 협업하는 구조에서의 실패 사례 수집</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(14px,2vw,20px); margin-bottom:1vh;">단일 에이전트 스캐폴드</h3>
+<p style="font-size:clamp(12px,1.6vw,16px); line-height:1.6;">계획·오케스트레이션·도구 사용 모듈이 개별 결정하는 구조 포함</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(14px,2vw,20px); margin-bottom:1vh;">재현 가능한 환경</h3>
+<p style="font-size:clamp(12px,1.6vw,16px); line-height:1.6;">제어된 재실행, 상태 검사, 가설적 디버깅 쿼리 지원</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="6">
+<div class="slide-inner">
+<div class="tag tag-amber">추적 수집</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+추적 스키마와 <span class="accent">기록 필드</span>
+</h2>
+<div class="pipeline" style="margin-bottom:3vh;">
+<div class="pipeline-step">
+<div class="step-num">1</div>
+<div class="step-label">시스템 실행</div>
+<div class="step-desc">다양한 MAS에서 작업 수행</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">2</div>
+<div class="step-label">결과 필터링</div>
+<div class="step-desc">실패 케이스만 추출</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">3</div>
+<div class="step-label">추적 기록</div>
+<div class="step-desc">입력·출력·환경 전체 기록</div>
+</div>
+<div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="pipeline-step">
+<div class="step-num">4</div>
+<div class="step-label">귀인 주석</div>
+<div class="step-desc">책임 컴포넌트 + 결정적 단계</div>
+</div>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;">각 단계별 기록 필드</h3>
+<table class="compare-table">
+<thead>
+<tr><th>필드</th><th>설명</th><th>기존 벤치마크</th></tr>
+</thead>
+<tbody>
+<tr><td><span class="accent">입력 (xₜ)</span></td><td>프롬프트, 컨텍스트, 이전 출력</td><td><span class="tag tag-red">누락</span></td></tr>
+<tr><td><span class="accent">출력 (yₜ)</span></td><td>에이전트 생성 텍스트, 액션</td><td><span class="tag tag-green">포함</span></td></tr>
+<tr><td><span class="accent">활성 컴포넌트</span></td><td>해당 단계를 수행한 모듈</td><td><span class="tag tag-green">포함</span></td></tr>
+<tr><td><span class="accent">도구/환경 상호작용</span></td><td>도구 호출, 반환값, 환경 변화</td><td><span class="tag tag-red">누락</span></td></tr>
+<tr><td><span class="accent">에이전트 설정</span></td><td>모델, 파라미터, 시스템 프롬프트</td><td><span class="tag tag-red">누락</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="7">
+<div class="slide-inner">
+<div class="tag tag-green">주석 방법론</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+실패 귀인 <span class="accent">주석 프로토콜</span>
+</h2>
+<div class="grid-2" style="gap:3vh;">
+<div>
+<div class="flow-item" style="margin-bottom:2vh;">
+<div class="flow-icon">1</div>
+<div>
+<p style="font-size:clamp(14px,2vw,20px); font-weight:600;">실패 추적 전체 검토</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">모든 단계의 입력·출력·환경 상태를 순서대로 검토</p>
+</div>
+</div>
+<div class="flow-item" style="margin-bottom:2vh;">
+<div class="flow-icon">2</div>
+<div>
+<p style="font-size:clamp(14px,2vw,20px); font-weight:600;">복구 가능성 평가</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">각 실수에 대해 후속 컴포넌트의 복구 기회 존재 여부 판단</p>
+</div>
+</div>
+<div class="flow-item" style="margin-bottom:2vh;">
+<div class="flow-icon">3</div>
+<div>
+<p style="font-size:clamp(14px,2vw,20px); font-weight:600;">결정적 실패 단계 식별</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">복구 불가능해지는 최초 시점을 step-level 귀인으로 결정</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon">4</div>
+<div>
+<p style="font-size:clamp(14px,2vw,20px); font-weight:600;">책임 컴포넌트 귀인</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">해당 단계의 활성 컴포넌트를 agent-level 귀인으로 결정</p>
+</div>
+</div>
+</div>
+<div class="card" style="display:flex; flex-direction:column; justify-content:center;">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;">핵심 원칙</h3>
+<div class="quote-block" style="margin-bottom:2vh;">
+<p style="font-size:clamp(13px,1.8vw,18px);">
+<span class="accent">역할 인식</span>: 각 컴포넌트의 책임 범위를 고려하여 판단
+</p>
+</div>
+<div class="quote-block" style="margin-bottom:2vh;">
+<p style="font-size:clamp(13px,1.8vw,18px);">
+<span class="accent2">복구 가능성 인식</span>: 후속 검증자/오케스트레이터가 수정 기회를 가졌는지 확인
+</p>
+</div>
+<div class="quote-block">
+<p style="font-size:clamp(13px,1.8vw,18px);">
+<span class="accent3">순차적이 아닌 인과적</span>: 단순히 첫 번째 실수가 아닌, 인과적으로 결정적인 지점
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="8">
+<div class="slide-inner">
+<div class="tag tag-amber">평가 설계</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+다양한 설정에서의 <span class="accent">실패 귀인 평가</span>
+</h2>
+<div class="grid-3" style="gap:2.5vh; margin-bottom:3vh;">
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:1.5vh;"><i class="fas fa-eye" style="color:var(--accent);"></i> 관측성 설정</h3>
+<ul class="check-list" style="font-size:clamp(12px,1.6vw,16px);">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>출력만 (Who&When)</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>전체 추적</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>전체 추적 + 실행 환경</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:1.5vh;"><i class="fas fa-wrench" style="color:var(--accent2);"></i> 귀인 기법</h3>
+<ul class="check-list" style="font-size:clamp(12px,1.6vw,16px);">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>ECHO</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>AgenTracer</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>GraphTracer</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>FAMAS</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>직접 LLM 귀인</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:1.5vh;"><i class="fas fa-robot" style="color:var(--accent3);"></i> 평가 모델</h3>
+<ul class="check-list" style="font-size:clamp(12px,1.6vw,16px);">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>GPT-4o</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>Claude-3.5-Sonnet</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>DeepSeek-V3</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>기타 모델들</li>
+</ul>
+</div>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:1.5vh;">응용 시나리오</h3>
+<div class="grid-2" style="gap:2vh;">
+<div>
+<p style="font-size:clamp(13px,1.8vw,18px); font-weight:600; margin-bottom:0.5vh;">사후 분석 (Post-hoc)</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">실행 완료 후 추적을 바탕으로 귀인 수행</p>
+</div>
+<div>
+<p style="font-size:clamp(13px,1.8vw,18px); font-weight:600; margin-bottom:0.5vh;">대화형 디버깅 (Interactive)</p>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted);">실행 환경에서 가설적 쿼리를 통해 귀인 수행</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="9">
+<div class="slide-inner">
+<div class="tag tag-green">주요 결과</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+완전 추적의 <span class="accent">귀인 정확도 향상</span>
+</h2>
+<div class="grid-2" style="gap:3vh; margin-bottom:3vh;">
+<div class="card" style="text-align:center; border-top:3px solid var(--accent);">
+<p style="font-size:clamp(13px,1.8vw,18px); margin-bottom:1vh;">에이전트 수준 정확도</p>
+<div class="big-num" style="color:var(--accent);">65.9%</div>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted); margin-top:1vh;">전체 추적 기준</p>
+<div class="hr" style="margin:1.5vh 0;"></div>
+<p style="font-size:clamp(14px,2vw,20px);">
+출력만: <span class="muted">~54%</span> → 전체 추적: <span class="accent">65.9%</span><br>
+<span class="tag tag-green" style="margin-top:0.5vh; display:inline-block;">+22% 향상</span>
+</p>
+</div>
+<div class="card" style="text-align:center; border-top:3px solid var(--accent2);">
+<p style="font-size:clamp(13px,1.8vw,18px); margin-bottom:1vh;">단계 수준 정확도</p>
+<div class="big-num" style="color:var(--accent2);">30.3%</div>
+<p style="font-size:clamp(12px,1.6vw,16px); color:var(--muted); margin-top:1vh;">전체 추적 기준</p>
+<div class="hr" style="margin:1.5vh 0;"></div>
+<p style="font-size:clamp(14px,2vw,20px);">
+출력만: <span class="muted">~17.2%</span> → 전체 추적: <span class="accent2">30.3%</span><br>
+<span class="tag tag-green" style="margin-top:0.5vh; display:inline-block;">+76% 향상</span>
+</p>
+</div>
+</div>
+<div class="card" style="text-align:center;">
+<p style="font-size:clamp(14px,2vw,20px);">
+전체 추적 + 실행 환경 사용 시 단계 수준 정확도 <span class="accent">추가 +10%</span> 향상
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="10">
+<div class="slide-inner">
+<div class="tag tag-amber">분석</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+실패 및 귀인 <span class="accent">패턴 분석</span>
+</h2>
+<div class="grid-2" style="gap:3vh;">
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;"><i class="fas fa-magnifying-glass-chart" style="color:var(--accent);"></i> 단계 수준의 높은 민감도</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">단계 수준 귀인은 에이전트 수준보다 <span class="accent">정보 누락에 훨씬 민감</span>합니다. 정확한 단계를 찾으려면 더 세밀한 컨텍스트 이해가 필요하며, 입력 정보의 부재가 치명적입니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;"><i class="fas fa-layer-group" style="color:var(--accent2);"></i> 아키텍처별 편차</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">다중 에이전트 오케스트레이션 vs 단일 에이전트 스캐폴드 간에 귀인 난이도가 다르며, <span class="accent2">아키텍처 인식적 귀인 접근</span>이 필요합니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;"><i class="fas fa-tags" style="color:var(--accent3);"></i> 에이전트 유형별 차이</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">기획자, 실행자, 검증자 등 <span class="accent3">컴포넌트 역할에 따라</span> 실패 패턴과 귀인 난이도가 상이하게 나타납니다.</p>
+</div>
+<div class="card">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh;"><i class="fas fa-timeline" style="color:#e74c3c;"></i> 단계 위치 의존성</h3>
+<p style="font-size:clamp(13px,1.8vw,18px); line-height:1.7;">실패 단계의 <span style="color:#e74c3c;">위치(초기/중기/후기)</span>에 따라 귀인 성능이 달라지며, 후기 단계일수록 복잡한 인과 사슬을 추적해야 합니다.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="11">
+<div class="slide-inner">
+<div class="tag tag-green">시사점</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+실무적 <span class="accent">시사점과 함의</span>
+</h2>
+<div class="grid-2" style="gap:3vh;">
+<div class="card" style="border-left:3px solid var(--accent);">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh; color:var(--accent);"><i class="fas fa-database"></i> 개발자를 위한 조언</h3>
+<ul class="check-list" style="font-size:clamp(13px,1.8vw,18px);">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>디버깅 시 가능한 모든 실행 상세 정보를 활용할 것</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>출력만 보고 귀인하면 상당수 실패 원인을 놓침</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>재현 가능한 환경 구축으로 가설 검증을 지원할 것</li>
+</ul>
+</div>
+<div class="card" style="border-left:3px solid var(--accent2);">
+<h3 style="font-size:clamp(15px,2vw,22px); margin-bottom:2vh; color:var(--accent2);"><i class="fas fa-flask"></i> 연구자를 위한 방향</h3>
+<ul class="check-list" style="font-size:clamp(13px,1.8vw,18px);">
+<li><span class="check-icon"><i class="fas fa-check"></i></span>아키텍처 인식적 귀인 기법 개발 필요</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>단계 수준 귀인에 특화된 접근법 연구</li>
+<li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 관측성 수준에서의 견고한 귀인 모델</li>
+</ul>
+</div>
+</div>
+<div class="hr" style="margin:2vh 0;"></div>
+<div class="card" style="text-align:center;">
+<p style="font-size:clamp(14px,2vw,20px); line-height:1.8;">
+"필드는 <span class="accent">다양한 관점에서 귀인 기법을 평가</span>할 수 있는 더 다채로운 벤치마크를 통해<br>
+MAS에서의 실패 귀인에 대한 더 견고하고 누적적인 이해를 구축할 수 있을 것입니다."
+</p>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="12">
+<div class="slide-inner">
+<div class="tag tag-amber">기여 요약</div>
+<h2 style="font-size:clamp(24px,4vw,42px); font-weight:700; margin:2vh 0 3vh;">
+이 논문의 <span class="accent">핵심 기여</span>
+</h2>
+<div class="flow-item" style="margin-bottom:2.5vh;">
+<div class="flow-icon" style="background:var(--accent); color:#fff;">1</div>
+<div>
+<p style="font-size:clamp(15px,2.2vw,22px); font-weight:600;">최초의 개발자 중심 연구 관점</p>
+<p style="font-size:clamp(13px,1.8vw,18px); color:var(--muted);">완전 실행 추적과 재현 가능한 환경이 제공되는 설정에서 LLM 기반 MAS의 실패 귀인을 최초로 연구</p>
+</div>
+</div>
+<div class="flow-item" style="margin-bottom:2.5vh;">
+<div class="flow-icon" style="background:var(--accent2); color:#fff;">2</div>
+<div>
+<p style="font-size:clamp(15px,2.2vw,22px); font-weight:600;">TraceElephant 벤치마크 개발</p>
+<p style="font-size:clamp(13px,1.8vw,18px); color:var(--muted);">3개 대표적 에이전트 시스템에서 수집한 220개 실패 추적 + 책임 컴포넌트 및 결정적 단계 주석</p>
+</div>
+</div>
+<div class="flow-item">
+<div class="flow-icon" style="background:var(--accent3); color:#fff;">3</div>
+<div>
+<p style="font-size:clamp(15px,2.2vw,22px); font-weight:600;">광범위한 실험과 실무적 통찰 제공</p>
+<p style="font-size:clamp(13px,1.8vw,18px); color:var(--muted);">관측성 설정, 귀인 기법, 모델 간 비교를 통해 향후 귀인 기법 개발을 위한 실험적 근거와 방향성 제시</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-index="13">
+<div class="slide-inner">
+<div style="text-align:center; padding-top:6vh;">
+<div class="tag tag-amber" style="display:inline-block; margin-bottom:3vh;">논문 정보</div>
+<h2 style="font-size:clamp(24px,4.5vw,46px); font-weight:800; line-height:1.3; margin-bottom:3vh;">
+Seeing the Whole Elephant:<br>
+<span class="accent">A Benchmark for Failure Attribution</span><br>
+in LLM-based Multi-Agent Systems
+</h2>
+<div class="hr" style="max-width:300px; margin:3vh auto;"></div>
+<p style="font-size:clamp(14px,2vw,20px); line-height:1.8; margin-bottom:2vh;">
+Mengzhuo Chen, Junjie Wang, Fangwen Mu,<br>
+Yawen Wang, Zhe Liu, Huanxiang Feng, Qing Wang
+</p>
+<p style="font-size:clamp(13px,1.8vw,18px); color:var(--muted); margin-bottom:3vh;">
+중국과학원 소프트웨어연구소 · 중국과학원대학교
+</p>
+<p style="font-size:clamp(14px,2vw,20px);">
+<a href="http://arxiv.org/abs/2604.22708v1" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);">
+<i class="fas fa-external-link-alt"></i> arxiv.org/abs/2604.22708v1
+</a>
+</p>
+<p style="font-size:clamp(13px,1.8vw,18px); color:var(--muted); margin-top:2vh;">
+<a href="https://github.com/TraceElephant/TraceElephant" style="color:var(--accent2); text-decoration:none; border-bottom:1px solid var(--accent2);">
+<i class="fab fa-github"></i> github.com/TraceElephant/TraceElephant
+</a>
+</p>
+</div>
+</div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
