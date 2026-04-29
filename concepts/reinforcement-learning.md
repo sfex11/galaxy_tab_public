@@ -175,3 +175,5 @@ _자동 생성됨_
 - [[sources/2026-04-22-when-can-llms-learn-to-reason-with-weak-supervisio.md]]
 
 - [[sources/2026-04-22-oger-a-robust-offline-guided-exploration-reward-fo.md]]
+
+- [[sources/2026-04-29-agent-centric-visual-reinforcement-learning-under-.md]]

@@ -228,3 +228,22 @@
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-04-28-seeing-the-whole-elephant-a-benchmark-for-failure-.md]] - Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems
 - [[sources/2026-04-28-can-qpp-choose-the-right-query-variant-evaluating-.md]] - Can QPP Choose the Right Query Variant? Evaluating Query Variant Selection for RAG Pipelines
+- [[entities/transformer]] - Transformer
+- [[sources/2026-04-29-long-context-aware-upcycling-a-new-frontier-for-hy.md]] - Long-Context Aware Upcycling: A New Frontier for Hybrid LLM Scaling
+- [[sources/2026-04-29-case-specific-rubrics-for-clinical-ai-evaluation-m.md]] - Case-Specific Rubrics for Clinical AI Evaluation: Methodology, Validation, and LLM-Clinician Agreement Across 823 Encounters
+- [[sources/2026-04-29-defective-task-descriptions-in-llm-based-code-gene.md]] - Defective Task Descriptions in LLM-Based Code Generation: Detection and Analysis
+- [[sources/2026-04-29-green-shielding-a-user-centric-approach-towards-tr.md]] - Green Shielding: A User-Centric Approach Towards Trustworthy AI
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-04-29-the-chameleons-limit-investigating-persona-collaps.md]] - The Chameleon's Limit: Investigating Persona Collapse and Homogenization in Large Language Models
+- [[sources/2026-04-29-can-current-agents-close-the-discovery-to-applicat.md]] - Can Current Agents Close the Discovery-to-Application Gap? A Case Study in Minecraft
+- [[sources/2026-04-29-can-llms-act-as-historians-evaluating-historical-r.md]] - Can LLMs Act as Historians? Evaluating Historical Research Capabilities of LLMs via the Chinese Imperial Examination
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-04-29-governing-what-you-cannot-observe-adaptive-runtime.md]] - Governing What You Cannot Observe: Adaptive Runtime Governance for Autonomous AI Agents
+- [[sources/2026-04-29-the-price-of-agreement-measuring-llm-sycophancy-in.md]] - The Price of Agreement: Measuring LLM Sycophancy in Agentic Financial Applications
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-04-29-agent-centric-visual-reinforcement-learning-under-.md]] - Agent-Centric Visual Reinforcement Learning under Dynamic Perturbations
+- [[sources/2026-04-29-the-last-human-written-paper-agent-native-research.md]] - The Last Human-Written Paper: Agent-Native Research Artifacts
+- [[sources/2026-04-29-leveraging-llms-for-multi-file-dsl-code-generation.md]] - Leveraging LLMs for Multi-File DSL Code Generation: An Industrial Case Study
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/transformer]] - Transformer
+- [[sources/2026-04-29-beyond-the-attention-stability-boundary-agentic-se.md]] - Beyond the Attention Stability Boundary: Agentic Self-Synthesizing Reasoning Protocols

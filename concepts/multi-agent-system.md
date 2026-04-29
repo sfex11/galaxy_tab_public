@@ -137,3 +137,5 @@ _자동 생성됨_
 - [[sources/2026-04-27-seeing-the-whole-elephant-a-benchmark-for-failure-.md]]
 
 - [[sources/2026-04-28-seeing-the-whole-elephant-a-benchmark-for-failure-.md]]
+
+- [[sources/2026-04-29-the-chameleons-limit-investigating-persona-collaps.md]]

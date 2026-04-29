@@ -492,3 +492,29 @@
 ## [2026-04-28 10:21] ingest | Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems
 
 ## [2026-04-28 10:21] ingest | Can QPP Choose the Right Query Variant? Evaluating Query Variant Selection for RAG Pipelines
+
+## [2026-04-29 08:44] ingest | Long-Context Aware Upcycling: A New Frontier for Hybrid LLM Scaling
+
+## [2026-04-29 08:44] ingest | Case-Specific Rubrics for Clinical AI Evaluation: Methodology, Validation, and LLM-Clinician Agreement Across 823 Encounters
+
+## [2026-04-29 08:44] ingest | Defective Task Descriptions in LLM-Based Code Generation: Detection and Analysis
+
+## [2026-04-29 08:44] ingest | Green Shielding: A User-Centric Approach Towards Trustworthy AI
+
+## [2026-04-29 08:44] ingest | The Chameleon's Limit: Investigating Persona Collapse and Homogenization in Large Language Models
+
+## [2026-04-29 08:44] ingest | Can Current Agents Close the Discovery-to-Application Gap? A Case Study in Minecraft
+
+## [2026-04-29 08:44] ingest | Can LLMs Act as Historians? Evaluating Historical Research Capabilities of LLMs via the Chinese Imperial Examination
+
+## [2026-04-29 08:44] ingest | Governing What You Cannot Observe: Adaptive Runtime Governance for Autonomous AI Agents
+
+## [2026-04-29 08:44] ingest | The Price of Agreement: Measuring LLM Sycophancy in Agentic Financial Applications
+
+## [2026-04-29 08:44] ingest | Agent-Centric Visual Reinforcement Learning under Dynamic Perturbations
+
+## [2026-04-29 08:44] ingest | The Last Human-Written Paper: Agent-Native Research Artifacts
+
+## [2026-04-29 08:44] ingest | Leveraging LLMs for Multi-File DSL Code Generation: An Industrial Case Study
+
+## [2026-04-29 08:44] ingest | Beyond the Attention Stability Boundary: Agentic Self-Synthesizing Reasoning Protocols

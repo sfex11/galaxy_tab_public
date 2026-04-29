@@ -67,3 +67,7 @@ _Wiki 축적 중 (claude 분석 대기)_
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
 
 디코더 전용 트랜스포머의 활성화 공간에서 추출된 function vector의 교차 언어 일반화 특성을 최초로 체계적으로 분석하여, 트랜스포머 아키텍처 내 작업 표현의 언어 독립성에 대한 새로운 증거를 제공한다.
+
+- [[sources/2026-04-29-long-context-aware-upcycling-a-new-frontier-for-hy.md]]
+
+- [[sources/2026-04-29-beyond-the-attention-stability-boundary-agentic-se.md]]

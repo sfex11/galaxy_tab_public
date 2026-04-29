@@ -1,0 +1,33 @@
+# Governing What You Cannot Observe: Adaptive Runtime Governance for Autonomous AI Agents
+
+**타입**: 논문  
+**출처**: arXiv  
+**날짜**: 2026-04-29  
+**링크**: http://arxiv.org/abs/2604.24686v1
+
+## 핵심 요약
+
+Autonomous AI agents can remain fully authorized and still become unsafe as behavior drifts, adversaries adapt, and decision patterns shift without any code change. We propose the \textbf{Informational Viability Principle}: governing an agent reduces to estimating a bound on unobserved risk $\hat{B}(x) = U(x) + SB(x) + RG(x)$ and allowing an action only when its capacity $S(x)$ exceeds $\hat{B}(x)$ by a safety margin. The \textbf{Agent Viability Framework}, grounded in Aubin's viability theory, ...
+
+## 인사이트
+
+1. 추출 필요
+2. 추출 필요
+3. 추출 필요
+
+## 응용 가능성
+
+1. 추출 필요
+2. 추출 필요
+
+## 추출된 엔티티
+
+- [[LLM Agent]]
+
+## 추출된 개념
+
+_없음_
+
+## 메모
+
+_자동 생성됨_
