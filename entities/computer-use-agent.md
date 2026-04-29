@@ -24,3 +24,9 @@ _Wiki 축적 중_
 MCP 기반 컴퓨터 사용 에이전트가 실제 다중 서버 환경에서 마주하는 10k~60k 토큰의 도구 세금을 정량화하여, 기존 벤치마크가 간과한 배포 시 성능 열화 경로를 구체화한다.
 
 → [[sources/2026-04-25-tool-attention-is-all-you-need-dynamic-tool-gating.md|상세 보기]]
+
+### DV-World: Benchmarking Data Visualization Agents in Real-World Scenari (2026-04-30)
+
+DV 에이전트를 컴퓨터 사용 에이전트의 구체적 하위 유형으로 위치시키며, 시트 조작·크로스 플랫폼 진화·의도 정렬이라는 DV 특화 능력 차원을 제공하여 computer-use-agent의 능력 스펙트럼을 확장한다.
+
+→ [[sources/2026-04-30-dv-world-benchmarking-data-visualization-agents-in.md|상세 보기]]
