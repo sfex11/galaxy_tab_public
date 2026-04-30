@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Interval POMDP Shielding for Imperfect-Perception Agents (2026-04-24)
 
 체화 에이전트의 안전성 연구가 계획 평가(SafetyALFRED)에서 실행 시 shielding으로 이동하는 방향성을 제공하며, 학습된 인지 모델의 오분류가 물리적 안전에 미치는 영향을 형식적으로 다룬다
+
+### Three-Step Nav: A Hierarchical Global-Local Planner for Zero-Shot Visi (2026-05-01)
+
+미지 환경에서의 제로샷 내비게이션이라는 가장 도전적인 설정에서 MLLM의 체화 적용 한계와 해법을 동시에 제시하여, 체화 AI 연구가 해결해야 할 구체적 과제를 '목표 도달 신뢰성'으로 규정한다.
+
+→ [[sources/2026-05-01-three-step-nav-a-hierarchical-global-local-planner.md|상세 보기]]
