@@ -518,3 +518,16 @@
 ## [2026-04-29 08:44] ingest | Leveraging LLMs for Multi-File DSL Code Generation: An Industrial Case Study
 
 ## [2026-04-29 08:44] ingest | Beyond the Attention Stability Boundary: Agentic Self-Synthesizing Reasoning Protocols
+
+## [2026-04-30 06:09] llm-ingest | 11편 분석, 엔티티 138개, 개념 571개
+- 2026-04-30-recursive-multi-agent-systems.md
+- 2026-04-30-pythia-toward-predictability-driven-agent-native-l.md
+- 2026-04-30-three-models-of-rlhf-annotation-extension-evidence.md
+- 2026-04-30-dv-world-benchmarking-data-visualization-agents-in.md
+- 2026-04-30-agentic-harness-engineering-observability-driven-a.md
+- 2026-04-30-adema-a-knowledge-state-orchestration-architecture.md
+- 2026-04-30-from-soliloquy-to-agora-memory-enhanced-llm-agents.md
+- 2026-04-30-towards-agentic-investigation-of-security-alerts.md
+- 2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect.md
+- 2026-04-30-carbon-taxed-transformers-a-green-compression-pipe.md
+- 2026-04-30-from-syntax-to-emotion-a-mechanistic-analysis-of-e.md

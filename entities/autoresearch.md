@@ -22,3 +22,9 @@ _Wiki 축적 중_
 기존 '연구 발견→연구 실행' 스코프 확장 분석에 더해, 이 논문의 파이프라인이 bilevel-autoresearch의 메타-연구 구조와 대비된다는 점을 보완한다 — 본 논문은 단일 수준에서 발견부터 실행까지 수평적 파이프라인을 구축하는 반면, bilevel 접근은 연구 방법론 자체를 메타-최적화하는 수직적 구조를 취한다.
 
 → [[sources/2026-04-27-from-research-question-to-scientific-workflow-leve.md|상세 보기]]
+
+### ADEMA: A Knowledge-State Orchestration Architecture for Long-Horizon K (2026-04-30)
+
+ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 보장하여 storytelling-tax의 손실을 '통제되지 않은 지식 상태 누출'에서 '의도적 압축'으로 분리하는 내부 무결성 계층을 제공한다.
+
+→ [[sources/2026-04-30-adema-a-knowledge-state-orchestration-architecture.md|상세 보기]]

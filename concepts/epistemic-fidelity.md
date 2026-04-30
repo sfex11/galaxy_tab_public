@@ -16,3 +16,7 @@ _자동 Wiki Query에서 추출됨_
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
 
 ### Automatic Ontology Construction Using LLMs as an External Layer of Mem (2026-04-24)
+
+### ADEMA: A Knowledge-State Orchestration Architecture for Long-Horizon K (2026-04-30)
+
+→ [[sources/2026-04-30-adema-a-knowledge-state-orchestration-architecture.md|상세 보기]]

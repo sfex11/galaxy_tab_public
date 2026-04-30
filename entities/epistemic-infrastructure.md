@@ -20,3 +20,9 @@ _Wiki 축적 중_
 이벤트 추출이 비정형 텍스트를 구조화된 지식으로 변환하는 인식론적 인프라의 실제 구현 경로를 제공하며, 텍스트-그래프 결합이 인식론적 충실도를 향상시키는 구체적 메커니즘을 실증한다.
 
 → [[sources/2026-04-25-a-multimodal-text--and-graph-based-approach-for-op.md|상세 보기]]
+
+### ADEMA: A Knowledge-State Orchestration Architecture for Long-Horizon K (2026-04-30)
+
+ADEMA는 인식론적 인프라의 4계층(거버넌스·동기화·신뢰·인식론적 충실도) 중 거버넌스와 동기화 계층을 '지식 상태를 일급 객체로 취급하는 장부 기록'이라는 구체적 메커니즘으로 구현하여, 기존에 RDF/OWL 기반으로만 구체화되어 있던 이 엔티티에 런타임 아키텍처 수준의 실현 경로를 추가한다.
+
+→ [[sources/2026-04-30-adema-a-knowledge-state-orchestration-architecture.md|상세 보기]]

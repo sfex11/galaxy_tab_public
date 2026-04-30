@@ -22,3 +22,9 @@ _Wiki 축적 중_
 SWE-chat 분석에서 'MCP Tax를 제어 변수로 포함해야 함'으로 시사된 가설에 대한 정량적 근거(10k~60k 토큰)와 해결책(Tool Attention)을 제공한다.
 
 → [[sources/2026-04-26-tool-attention-is-all-you-need-dynamic-tool-gating.md|상세 보기]]
+
+### Agentic Harness Engineering: Observability-Driven Automatic Evolution  (2026-04-30)
+
+SWE-chat이 실제 세션에서 도구 오버헤드를 진단했다면, AHE는 하네스 계층 자체를 자동 진화시켜 상류에서 해결하는 상보적 접근을 제공하며, 두 논문이 합쳐 코딩 에이전트 인프라의 진단-치료 파이프라인을 완성한다.
+
+→ [[sources/2026-04-30-agentic-harness-engineering-observability-driven-a.md|상세 보기]]

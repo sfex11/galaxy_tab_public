@@ -30,3 +30,9 @@ MathDuels는 정적 문제 집합 기반 벤치마크의 천장 성능 문제를
 DV-World는 '코드 샌드박스 격리→단일 언어 생성 전용→완전 의도 가정'이라는 기존 벤치마크의 3중 한계를 진단하고, 이를 '네이티브 환경 기반·크로스 플랫폼 진화·능동적 의도 정렬'로 대체하는 벤치마크 설계 패턴을 제공하여, evaluator-assumption과 sandbox-liveworld-gap이 도메인 무관하게 벤치마크를 구조적으로 왜곡함을 DV 도메인에서 재확인한다.
 
 → [[sources/2026-04-30-dv-world-benchmarking-data-visualization-agents-in.md|상세 보기]]
+
+### RESTestBench: A Benchmark for Evaluating the Effectiveness of LLM-Gene (2026-04-30)
+
+테스트 생성 평가를 위해 수동 검증된 NL 요구사항과 정밀/모호 변형 쌍을 벤치마크 설계에 도입하는 새로운 패턴을 제시하며, 기존 벤치마크들이 단일 태스크 정의만 제공하는 한계를 극복한다.
+
+→ [[sources/2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect.md|상세 보기]]

@@ -208,3 +208,7 @@ TTI는 LLM의 대화 처리가 턴 간 맥락을 구조적으로 단절시키는
 LLM이 턴 간 상태를 유지하지 않는 stateless 처리 방식의 보안 함의를 구체화하며, 동일 모델이 단일 턴에서는 안전하고 다중 턴에서는 취약해지는 비단조적 안전성 특성을 최초로 체계적으로 문서화한다.
 
 → [[sources/2026-04-26-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]
+
+### From Syntax to Emotion: A Mechanistic Analysis of Emotion Inference in (2026-04-30)
+
+→ [[sources/2026-04-30-from-syntax-to-emotion-a-mechanistic-analysis-of-e.md|상세 보기]]

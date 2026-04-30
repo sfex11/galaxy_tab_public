@@ -22,3 +22,9 @@ _Wiki 축적 중_
 기존 3층 아키텍처 정의를 외부 계층 원칙의 관점에서 재검증한다 — LLM이 의미 번역에만 국한하고 실행은 별도 계층에 위임하는 설계는 thought-action-separation을 과학 자동화 도메인에 적용한 구체적 사례로 읽을 수 있다.
 
 → [[sources/2026-04-27-from-research-question-to-scientific-workflow-leve.md|상세 보기]]
+
+### From Soliloquy to Agora: Memory-Enhanced LLM Agents with Decentralized (2026-04-30)
+
+단일 파이프라인의 의미론적 번역 대신 병렬 파이프라인의 수렴을 통해 자연어→형식적 명세 변환의 신뢰성을 확보하는 상보적 경로를 제시하여, 기존 3층 아키텍처의 단일 경로 의존성 한계를 구조적으로 완화한다.
+
+→ [[sources/2026-04-30-from-soliloquy-to-agora-memory-enhanced-llm-agents.md|상세 보기]]
