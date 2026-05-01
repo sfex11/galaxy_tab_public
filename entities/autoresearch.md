@@ -28,3 +28,9 @@ _Wiki 축적 중_
 ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 보장하여 storytelling-tax의 손실을 '통제되지 않은 지식 상태 누출'에서 '의도적 압축'으로 분리하는 내부 무결성 계층을 제공한다.
 
 → [[sources/2026-04-30-adema-a-knowledge-state-orchestration-architecture.md|상세 보기]]
+
+### Intern-Atlas: A Methodological Evolution Graph as Research Infrastruct (2026-05-02)
+
+기존에 연구 질문→실행 파이프라인 자동화에 집중하던 autoresearch의 스코프를, 발견 단계에서 방법론적 맥락을 탐색하는 인프라 요구로 확장한다. AI 연구 에이전트가 방법론 진화를 탐색할 수 없다는 점이 autoresearch의 실질적 병목임을 구체화한다.
+
+→ [[sources/2026-05-02-intern-atlas-a-methodological-evolution-graph-as-r.md|상세 보기]]
