@@ -531,3 +531,14 @@
 - 2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect.md
 - 2026-04-30-carbon-taxed-transformers-a-green-compression-pipe.md
 - 2026-04-30-from-syntax-to-emotion-a-mechanistic-analysis-of-e.md
+
+## [2026-05-01 06:10] llm-ingest | 9편 분석, 엔티티 166개, 개념 621개
+- 2026-05-01-three-step-nav-a-hierarchical-global-local-planner.md
+- 2026-05-01-select-to-think-unlocking-slm-potential-with-local.md
+- 2026-05-01-classeval-pro-a-cross-domain-benchmark-for-class-l.md
+- 2026-05-01-clawgym-a-scalable-framework-for-building-effectiv.md
+- 2026-05-01-healthnlp_retrievers-at-archehr-qa-2026-cascaded-l.md
+- 2026-05-01-morfi-monotonic-sparse-autoencoder-feature-identif.md
+- 2026-05-01-safe-navigation-using-neural-radiance-fields-via-r.md
+- 2026-05-01-turning-the-tide-cross-architecture-distillation-f.md
+- 2026-05-01-unifying-sparse-attention-with-hierarchical-memory.md

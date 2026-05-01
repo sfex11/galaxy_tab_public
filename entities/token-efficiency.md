@@ -34,3 +34,9 @@ _Wiki 축적 중_
 토큰 효율화의 정당성 근거를 비용 절감에서 탄소 배출 감축으로 확장하여, 효율화가 단순한 엔지니어링 최적화가 아닌 환경적 책임의 실행 수단임을 위치시킨다.
 
 → [[sources/2026-04-30-carbon-taxed-transformers-a-green-compression-pipe.md|상세 보기]]
+
+### Unifying Sparse Attention with Hierarchical Memory for Scalable Long-C (2026-05-01)
+
+불필요한 컨텍스트 주입 차단(Tool Attention)에서 불필요한 KV 엔트리 접근 차단(희소 어텐션 통합)으로 효율화의 대상을 컨텍스트 입력층에서 메모리 접근층으로 확장한다.
+
+→ [[sources/2026-05-01-unifying-sparse-attention-with-hierarchical-memory.md|상세 보기]]

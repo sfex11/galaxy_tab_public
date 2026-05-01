@@ -24,3 +24,9 @@ _Wiki 축적 중_
 미지 환경에서의 제로샷 내비게이션이라는 가장 도전적인 설정에서 MLLM의 체화 적용 한계와 해법을 동시에 제시하여, 체화 AI 연구가 해결해야 할 구체적 과제를 '목표 도달 신뢰성'으로 규정한다.
 
 → [[sources/2026-05-01-three-step-nav-a-hierarchical-global-local-planner.md|상세 보기]]
+
+### Safe Navigation using Neural Radiance Fields via Reachable Sets (2026-05-01)
+
+체화 AI의 안전 내비게이션 문제를 '동역학 제어'와 '환경 표현'의 양축으로 구조화하며, 환경 측면에서 NeRF 기반 기하학적 안전 보장 경로를 구체화한다.
+
+→ [[sources/2026-05-01-safe-navigation-using-neural-radiance-fields-via-r.md|상세 보기]]

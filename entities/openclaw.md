@@ -52,3 +52,9 @@ Claw-Eval(2026-04-09)은 기존 벤치마크의 "최종 출력만 확인" 문제
 - [[sources/2026-04-09-claw-eval-toward-trustworthy-evaluation-of-autonom.md|Claw-Eval: Toward Trustworthy Evaluation of Autonomous Agents]] (2026-04-09)
 
 - [[sources/2026-04-27-quantclaw-precision-where-it-matters-for-openclaw.md]]
+
+### ClawGym: A Scalable Framework for Building Effective Claw Agents (2026-05-01)
+
+기존 보안 평가(4편)에 더해, ClawGym이 생태계의 개발 인프라 축을 최초로 체계화함으로써 OpenClaw를 '평가 대상'에서 '개발 플랫폼'으로 재위치시킨다.
+
+→ [[sources/2026-05-01-clawgym-a-scalable-framework-for-building-effectiv.md|상세 보기]]

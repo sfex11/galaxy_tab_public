@@ -24,3 +24,9 @@ _Wiki 축적 중_
 ### Task-Driven Co-Design of Heterogeneous Multi-Robot Systems (2026-04-27)
 
 → [[sources/2026-04-27-task-driven-co-design-of-heterogeneous-multi-robot.md|상세 보기]]
+
+### Safe Navigation using Neural Radiance Fields via Reachable Sets (2026-05-01)
+
+CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학의 신경망적 표현을 통한 제3의 안전 보장 패러다임을 제공하여 safety-critical-control의 방법론 스펙트럼을 확장한다.
+
+→ [[sources/2026-05-01-safe-navigation-using-neural-radiance-fields-via-r.md|상세 보기]]
