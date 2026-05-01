@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoRFI: Monotonic Sparse Autoencoder Feature Identification — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:90vh;text-align:center;">
+    <span class="tag tag-amber" style="margin-bottom:24px;">arXiv: 2604.26866v1</span>
+    <h1 style="font-size:clamp(32px,6vw,64px);font-weight:900;line-height:1.15;margin-bottom:16px;">
+      <span class="accent">MoRFI</span>: Monotonic Sparse<br>Autoencoder Feature Identification
+    </h1>
+    <p style="font-size:clamp(16px,2.5vw,24px);color:var(--muted);max-width:700px;margin-bottom:32px;">
+      SFT로 인한 환각의 내부 메커니즘을<br>희소 오토인코더의 단조적 특징 식별로 해명
+    </p>
+    <div class="hr" style="width:120px;margin:0 auto 24px;"></div>
+    <p style="font-size:clamp(14px,2vw,18px);color:var(--muted);">
+      Dimitris Dimakopoulos, Shay B. Cohen, Ioannis Konstas<br>
+      <span style="opacity:0.6;">University of Edinburgh / Heriot-Watt University</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 제기</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      사전 학습 지식과 <span class="accent">환각</span>의 모순
+    </h2>
+    <div class="grid-2" style="gap:32px;margin-top:24px;">
+      <div class="card">
+        <h3 style="font-size:clamp(18px,2.5vw,24px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-database" style="color:var(--accent);margin-right:8px;"></i>사전 학습 단계
+        </h3>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;color:var(--muted);">
+          대규모 말뭉치에서 다음 토큰 예측을 통해<br>대부분의 <span class="accent2">사실적 지식을 파라미터에 저장</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(18px,2.5vw,24px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-exclamation-triangle" style="color:var(--accent);margin-right:8px;"></i>사후 학습 단계
+        </h3>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;color:var(--muted);">
+          SFT, RLHF 등에서 <span class="accent">파라미터 지식 외부의<br>새로운 사실이 도입</span>되며 환각 유발
+        </p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:28px;">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        "새로운 지식에 대한 SFT가 환각을 <span class="accent">악화시킨다는 것은 입증되었으나, 근본적인 메커니즘은 여전히 불명확하다."
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-amber">연구 배경</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      기존 연구의 <span class="accent2">한계</span>
+    </h2>
+    <ul class="check-list" style="margin-bottom:24px;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.8vw,18px);">Gekhman et al. (2024): 미지 사실 비율 증가 → 환전 증가를 <span class="accent">행동 관찰</span>로만 확인</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.8vw,18px);">Kang et al. (2024): 모델이 익숙하지 않은 예시의 <span class="accent2">응답 분포를 모방</span>함을 발견</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.8vw,18px);">Wang et al. (2025): SAE 잠재 변수 활성화 <span class="accent3">차이 기반</span> 정렬 해제 특징 식별</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.8vw,18px);">Minder et al. (2025): <span class="accent">협소한 미세조정은 아티팩트</span>를 남길 수 있음을 경고</span></li>
+    </ul>
+    <div class="card" style="background:rgba(255,180,50,0.08);border-color:var(--accent);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        <i class="fas fa-lightbulb" style="color:var(--accent);margin-right:8px;"></i>
+        <strong>공통적 한계:</strong> 두 모델 상태 간의 <span class="accent">정적 비교</span>에 의존하며, 미세조정 조건의 연속적 변화에 따른 내부 표현의 변화를 추적하지 않음
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">연구 질문</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 32px;">
+      이 논문이 답하고자 하는 질문
+    </h2>
+    <div class="grid-2" style="gap:28px;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">Q1</div>
+        <p style="font-size:clamp(15px,2vw,20px);line-height:1.7;margin-top:12px;">
+          새로운 지식을 미세조정으로 통합하는 것이<br><span class="accent">활성화 공간에 탐지 가능한 서명</span>을<br>남기는가?
+        </p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">Q2</div>
+        <p style="font-size:clamp(15px,2vw,20px);line-height:1.7;margin-top:12px;">
+          그 서명을 통해 <span class="accent2">단일 잠재 변수 개입</span>으로<br>손상된 지식 접근 경로를<br>복원할 수 있는가?
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin:28px 0;"></div>
+    <p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);text-align:center;line-height:1.7;">
+      핵심 아이디어: 미지 사실 비율(↑Unknown)과 학습 에포크 수(↑Epochs)라는 <span class="accent">두 가지 제어된 차원</span>에서 단조적 추세를 보이는 SAE 특징을 식별
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">실험 설계</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      통제된 미세조정 <span class="accent">실험 셋업</span>
+    </h2>
+    <div class="grid-3" style="gap:20px;margin-bottom:24px;">
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-brain" style="font-size:clamp(24px,3vw,36px);color:var(--accent);margin-bottom:12px;"></i>
+        <h3 style="font-size:clamp(15px,2vw,20px);font-weight:700;">대상 모델</h3>
+        <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">
+          Llama 3.1 8B<br>Gemma 2 9B<br>Mistral 7B v03
+        </p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-flask" style="font-size:clamp(24px,3vw,36px);color:var(--accent2);margin-bottom:12px;"></i>
+        <h3 style="font-size:clamp(15px,2vw,20px);font-weight:700;">학습 데이터</h3>
+        <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">
+          7개의 개별 QA 데이터셋<br>Closed-book 설정<br>Known/Unknown 분류
+        </p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-sliders-h" style="font-size:clamp(24px,3vw,36px);color:var(--accent3);margin-bottom:12px;"></i>
+        <h3 style="font-size:clamp(15px,2vw,20px);font-weight:700;">제어 변수</h3>
+        <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">
+          ↑Unknown 비율<br>↑Epoch 수<br>총 N×F 체크포인트
+        </p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(13px,1.6vw,16px);line-height:1.7;">
+        <i class="fas fa-info-circle" style="color:var(--accent);margin-right:6px;"></i>
+        미지 사실 비율과 에포크 수를 독립적으로 제어하여 <span class="accent">인식론적(epistemic) 차원</span>에서의 변화를 추적 — 주제적 협소성 아티팩트 회피
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-red">핵심 관찰</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      미지 사실 노출이 <span class="accent">환각을 증가</span>시킨다
+    </h2>
+    <div class="grid-2" style="gap:28px;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-arrow-up" style="color:var(--accent);margin-right:8px;"></i>↑ Unknown 비율
+        </h3>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.8;color:var(--muted);">
+          학습 데이터에 미지 사실이 많을수록 테스트 정확도가 <span class="accent">지속적으로 하락</span>. 세 모델 모두 일관된 패턴 확인.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-clock" style="color:var(--accent2);margin-right:8px;"></i>↑ Epoch 수
+        </h3>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.8;color:var(--muted);">
+          동일한 Unknown 비율에서도 에포크가 증가할수록 <span class="accent2">환각 효과가 더욱 강화</span>됨.
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin:24px 0;"></div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-question"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+          이 <span class="accent">행동적 변화</span>는 내부 활성화 공간에서 어떻게 나타나는가? → <span class="accent2">SAE 분석으로 접근</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-green">분석 도구</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      희소 오토인코더<span class="muted">(SAE)</span>와<br><span class="accent">잔차 흐름</span> 분석
+    </h2>
+    <div class="grid-2" style="gap:28px;margin-bottom:24px;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">SAE의 역할</h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          잔차 흐름(Residual Stream)의 고차원 활성화를 <span class="accent">희소한 해석 가능한 특징</span>으로 분해. 사전 학습된 SAE를 그대로 사용하여 미세조정 간 아티팩트 방지.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">분석 대상</h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          각 모델의 <span class="accent2">여러 체크포인트</span>에서 잔차 흐름 활성화 측정. N(Unknown 비율 단계) × F(에포크 단계) 매트릭스 구성.
+        </p>
+      </div>
+    </div>
+    <div class="card" style="background:rgba(255,255,255,0.03);">
+      <p style="font-size:clamp(14px,1.8vw,18px);text-align:center;line-height:1.8;">
+        <span class="muted">활성화 매트릭스:</span><br>
+        <span style="font-size:clamp(16px,2.2vw,22px);font-weight:700;">
+          <span class="accent">ā</span><sub style="font-size:0.7em;">i,j</sub><sup>e</sup> = SAE 특징 <span class="accent">j</span>의 평균 활성화<br>
+          (<span class="accent2">i</span>: Unknown 비율 단계, <span class="accent3">e</span>: 에포크)
+        </span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-amber">방법론</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 8px;">
+      <span class="accent">MoRFI</span> 알고리즘
+    </h2>
+    <p style="font-size:clamp(14px,1.8vw,18px);color:var(--muted);margin-bottom:28px;">
+      Monotonic Relationship Feature Identification for Sparse Autoencoders
+    </p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">활성화 추출</div>
+        <div class="step-desc">모든 체크포인트에서 SAE 특징 평균 활성화 측정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">단조성 검정</div>
+        <div class="step-desc">Mann-Kendall 등으로 각 특징의 단조적 추세 판별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">부트스트랩</div>
+        <div class="step-desc">재표본추출로 일시적/허위 변동 제거</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">특징 선별</div>
+        <div class="step-desc">증가/감소 방향별 강건한 단조적 특징 집합 확보</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:24px 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(13px,1.6vw,16px);line-height:1.7;">
+        <i class="fas fa-key" style="color:var(--accent);margin-right:6px;"></i>
+        <strong>핵심 차별점:</strong> 두 고정 상태의 차이가 아닌, <span class="accent">제어된 기울기 전체에서의 부트스트랩 단조 추세</span>로 특징 선별 — 일반적 알고리즘으로 어떤 제어 변수에도 적용 가능
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-green">방법론 상세</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      MoRFI의 <span class="accent2">두 분석 차원</span>
+    </h2>
+    <div class="grid-2" style="gap:28px;">
+      <div class="card" style="border-left:3px solid var(--accent);">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-arrow-trend-up" style="color:var(--accent);margin-right:8px;"></i>↑ Unknown 차원
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);margin-bottom:12px;">
+          에포크 고정, Unknown 비율을 0%→100%로 변화시키며 각 특징의 단조성 관찰
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(12px,1.5vw,15px);">미지 사실에 노출될수록 지속적으로 증가/감소하는 특징 식별</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(12px,1.5vw,15px);">지식 접근 경로의 변화를 직접적으로 포착</span></li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent2);">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-redo" style="color:var(--accent2);margin-right:8px;"></i>↑ Epoch 차원
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);margin-bottom:12px;">
+          Unknown 비율 고정, 에포크 수를 증가시키며 단조성 관찰
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(12px,1.5vw,15px);">학습이 반복될수록 강화되는 변화 방향 식별</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(12px,1.5vw,15px);">환전 악화의 누적 효과 측정</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:24px 0;"></div>
+    <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);text-align:center;">
+      두 차원에서 식별된 특징 간에 <span class="accent">유의미한 교집합</span>이 존재 → 공통의 지식 관련 메커니즘 시사
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-red">주요 결과</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      단일 잠재 변수 개입으로 <span class="accent">지식 복원</span>
+    </h2>
+    <table class="compare-table" style="margin-bottom:24px;">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>Unknown-only FT 정확도</th>
+          <th>MoRFI 개입 후</th>
+          <th>복원율</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Llama 3.1 8B</td>
+          <td class="muted">낮음 (환각 심화)</td>
+          <td class="accent">상승</td>
+          <td><span class="accent" style="font-weight:700;">69–85%</span></td>
+        </tr>
+        <tr>
+          <td>Gemma 2 9B</td>
+          <td class="muted">낮음 (환각 심화)</td>
+          <td class="accent">상승</td>
+          <td><span class="accent" style="font-weight:700;">69–85%</span></td>
+        </tr>
+        <tr>
+          <td>Mistral 7B v03</td>
+          <td class="muted">낮음 (환각 심화)</td>
+          <td class="accent">상승</td>
+          <td><span class="accent" style="font-weight:700;">69–85%</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid-2" style="gap:20px;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">69-85%</div>
+        <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">
+          Known-fact FT 기준 정확도 대비<br>복원된 사실의 비율
+        </p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3/3</div>
+        <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-top:8px;">
+          서로 다른 아키텍처에서<br><span class="accent2">일관되게 재현</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-amber">심층 분석</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      합성 방향 vs <span class="accent2">단일 잠재 변수</span>
+    </h2>
+    <div class="grid-2" style="gap:28px;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">
+          <i class="fas fa-arrows-alt-h" style="color:var(--accent);margin-right:8px;"></i>합성 방향 (Difference-in-Means)
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          Known vs Unknown 체크포인트 간 SAE 평균 활성화 차이 벡터. 표현 변화의 <span class="accent">일관성과 보편성</span>을 확인하지만, 개입 시 과도한 부작용 우려.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">
+          <i class="fas fa-crosshairs" style="color:var(--accent2);margin-right:8px;"></i>단일 잠재 변수 개입
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          MoRFI로 선별된 <span class="accent2">개별 특징만 조작</span>. 합성 방향 대비 성능 격차가 큼 → 지식 관련 신호가 <span class="accent">희소하게 분포</span>함을 시사.
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin:24px 0;"></div>
+    <div class="card" style="background:rgba(255,100,100,0.06);border-color:var(--accent);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+        <i class="fas fa-exclamation-circle" style="color:var(--accent);margin-right:8px;"></i>
+        <strong>중요 발견:</strong> 합성 방향과 단일 잠재 변수 사이의 <span class="accent">큰 성능 격차</span>는 지식 접근 경로가 소수의 특징에 집중되어 있음을 나타냄
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-red">핵심 발견</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      개입의 <span class="accent">비대칭성</span>과 잠재 구조
+    </h2>
+    <div class="grid-2" style="gap:28px;margin-bottom:24px;">
+      <div class="card" style="border-left:3px solid var(--accent);">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-arrow-down" style="color:var(--accent);margin-right:8px;"></i>억제(Suppression) > 증폭
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          MoRFI로 식별된 <span class="accent">감소(↓) 잠재 변수를 억제</span>하는 것이 증가(↑) 잠재 변수를 증폭하는 것보다 <span class="accent" style="font-weight:700;">압도적으로 효과적</span>.
+        </p>
+        <p style="font-size:clamp(12px,1.5vw,15px);color:var(--muted);margin-top:8px;">
+          → 미세조정이 지식 접근을 "방해하는" 방향으로 특징을 변화시킴
+        </p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent2);">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-layer-group" style="color:var(--accent2);margin-right:8px;"></i>Known vs Unknown 잠재 구조
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          미지 사실에 대한 학습이 모델의 <span class="accent2">저장된 지식 검색 능력을 잔차 흐름의 특정 방향들에서 파괴</span>함.
+        </p>
+        <p style="font-size:clamp(12px,1.5vw,15px);color:var(--muted);margin-top:8px;">
+          → 환전은 새로운 정보의 주입이 아닌 기존 접근 경로의 차단
+        </p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-exchange-alt"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;">
+          두 차원(↑Unknown, ↑Epochs)에서 식별된 잠재 변수 간 <span class="accent">유의미한 교집합</span> 존재 → 공통의 내부 메커니즘
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-green">아티팩트 통제</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      협소한 미세조정 <span class="accent2">아티팩트 배제</span>
+    </h2>
+    <div class="grid-2" style="gap:28px;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">
+          <i class="fas fa-shield-alt" style="color:var(--accent);margin-right:8px;"></i>통제 잠재 변수 검증
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          관련 없는 속성(예: 응답 길이, 특정 주제)에서 단조적 추세를 보이는 잠재 변수로 개입 시 <span class="accent">지식 복원 효과 없음</span>을 확인.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:12px;">
+          <i class="fas fa-random" style="color:var(--accent2);margin-right:8px;"></i>다양성 보장 설계
+        </h3>
+        <p style="font-size:clamp(13px,1.7vw,17px);line-height:1.8;color:var(--muted);">
+          미세조정 데이터가 <span class="accent2">다양한 관계와 개체</span>를 포함하도록 설계. Minder et al.이 지적한 협소성 아티팩트에 덜 취약한 구조.
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin:24px 0;"></div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">무작위 잠재 변수 개입 → 지식 복원 없음 (기준선 확보)</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">통제 그룹 잠재 변수 개입 → 무효과로 아티팩트 가능성 배제</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">사전 학습 SAE 사용 → 미세조정 간 SAE 적합화 아티팩트 원천 차단</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <span class="tag tag-amber">결론</span>
+    <h2 style="font-size:clamp(24px,4.5vw,44px);font-weight:800;margin:16px 0 24px;">
+      요약 및 <span class="accent">기여</span>
+    </h2>
+    <div class="grid-2" style="gap:28px;margin-bottom:24px;">
+      <div>
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-star" style="color:var(--accent);margin-right:8px;"></i>방법론 기여
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);"><span class="accent">MoRFI 알고리즘</span> 제안 — 부트스트랩 + 통계 검정 기반 단조적 특징 식별</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">모델 간 비교가 아닌 <span class="accent2">제어된 기울기에서의 추세</span>로 분석하는 새로운 패러다임</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">SAE 분석에 적용 가능한 <span class="accent3">범용 특징 선별 절차</span></span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2.2vw,22px);font-weight:700;margin-bottom:16px;">
+          <i class="fas fa-brain" style="color:var(--accent2);margin-right:8px;"></i>과학적 발견
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">미지 사실 노출이 잔차 흐름의 <span class="accent">지식 접근 경로를 파괴</span>함을 인과적으로 입증</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);">환각은 <span class="accent2">새 정보의 주입이 아닌 기존 경로의 차단</span></span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.6vw,16px);"><span class="accent3">억제 개입이 증폭보다 우월</span>한 비대칭성 발견</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="background:rgba(255,180,50,0.06);border-color:var(--accent);">
+      <p style="font-size:clamp(14px,1.8vw,18px);line-height:1.7;text-align:center;">
+        <i class="fas fa-quote-left" style="color:var(--accent);margin-right:8px;"></i>
+        MoRFI 파이프라인은 서로 다른 모델 아키텍처에서 <span class="accent">신뢰할 수 있게</span> 지식 관련 잠재 변수를 발견하며, 단일 잠재 변수 개입만으로도 실질적인 지식 복원을 달성한다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:85vh;text-align:center;">
+    <span class="tag tag-amber" style="margin-bottom:20px;">논문 정보</span>
+    <h2 style="font-size:clamp(28px,5vw,52px);font-weight:900;margin-bottom:12px;line-height:1.2;">
+      <span class="accent">MoRFI</span>: Monotonic Sparse<br>Autoencoder Feature Identification
+    </h2>
+    <div class="hr" style="width:100px;margin:20px auto;"></div>
+    <p style="font-size:clamp(15px,2vw,20px);color:var(--muted);margin-bottom:8px;line-height:1.8;">
+      Dimitris Dimakopoulos · Shay B. Cohen · Ioannis Konstas
+    </p>
+    <p style="font-size:clamp(13px,1.6vw,16px);color:var(--muted);margin-bottom:24px;">
+      University of Edinburgh · Heriot-Watt University
+    </p>
+    <a href="http://arxiv.org/abs/2604.26866v1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-size:clamp(14px,1.8vw,18px);color:var(--accent);text-decoration:none;padding:12px 28px;border:1px solid var(--accent);border-radius:8px;transition:all 0.2s;">
+      <i class="fas fa-external-link-alt"></i> arxiv.org/abs/2604.26866v1
+    </a>
+    <p style="font-size:clamp(12px,1.4vw,14px);color:var(--muted);margin-top:24px;opacity:0.6;">
+      arXiv:2604.26866v1 [cs.CL] · April 2026 · CC BY 4.0
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
