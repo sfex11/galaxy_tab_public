@@ -55,3 +55,7 @@ DV 에이전트는 [[entities/computer-use-agent|컴퓨터 사용 에이전트]]
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect]]: 두 논문 모두 특정 도메인(데이터 시각화, REST API 테스트)에서 기존 벤치마크가 지닌 구조적 한계(샌드박스 격리, 무감각한 메트릭)를 지적하고, 실제 실무 환경의 복잡성을 반영한 새로운 평가 체계를 제안한다.

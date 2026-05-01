@@ -62,3 +62,7 @@ NeRF(Neural Radiance Field)로 환경의 기하학적 정보를 계산·저장·
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-01-three-step-nav-a-hierarchical-global-local-planner]]: 두 논문 모두 Embodied AI 환경에서 에이전트가 겪는 내비게이션의 실패 모드를 진단하고, 단일 스케일 처리의 한계를 극복하기 위해 기하학적 구조(Reachable Set, 계층적 기획)를 도입한 안전한 경로 탐색 방법을 제시한다.

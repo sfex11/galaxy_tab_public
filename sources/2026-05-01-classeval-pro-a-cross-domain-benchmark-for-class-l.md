@@ -42,3 +42,6 @@ ClassEval-Pro는 LLM 코드 생성 평가에서 함수 수준(function-level)과
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+

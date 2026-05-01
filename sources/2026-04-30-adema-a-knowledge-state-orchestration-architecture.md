@@ -68,3 +68,7 @@ ADEMA는 장기 지식 종합(long-horizon knowledge synthesis)을 위해 지식
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-04-30-from-soliloquy-to-agora-memory-enhanced-llm-agents]]: 두 논문 모두 다중 에이전트가 장기적인 작업을 수행할 때 발생하는 지식 상태의 은밀한 이동이나 정보 누락 문제를 인식하고, 메모리 및 지식 상태를 명시적으로 추적하고 관리하는 아키텍처로 이를 해결한다.
