@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### An AI Agent Execution Environment to Safeguard User Data (2026-04-23)
+
+### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
+
+→ [[sources/2026-05-03-claw-eval-live-a-live-agent-benchmark-for-evolving.md|상세 보기]]

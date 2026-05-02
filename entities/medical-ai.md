@@ -22,3 +22,9 @@ _Wiki 축적 중_
 medical-ai의 적용 범위를 대화·문서 기반 평가에서 생체신호(EEG) 표현 학습의 구조적 정제로 확장하며, LLM이 임상 설정에서 텍스트 생성이 아닌 그래프 위상 정제 도구로 기능할 수 있음을 실증한다.
 
 → [[sources/2026-05-02-llm-as-clinical-graph-structure-refiner-enhancing-.md|상세 보기]]
+
+### LLM as Clinical Graph Structure Refiner: Enhancing Representation Lear (2026-05-03)
+
+LLM이 텍스트 생성·근거 추적을 넘어 임상 신호의 구조적 표현을 개선하는 데 직접 기여할 수 있음을 보여주어, medical-ai에서 LLM의 역할을 '정보 처리'에서 '표현 학습 인프라'로 확장한다.
+
+→ [[sources/2026-05-03-llm-as-clinical-graph-structure-refiner-enhancing-.md|상세 보기]]

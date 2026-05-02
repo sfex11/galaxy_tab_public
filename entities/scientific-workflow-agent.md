@@ -28,3 +28,7 @@ _Wiki 축적 중_
 단일 파이프라인의 의미론적 번역 대신 병렬 파이프라인의 수렴을 통해 자연어→형식적 명세 변환의 신뢰성을 확보하는 상보적 경로를 제시하여, 기존 3층 아키텍처의 단일 경로 의존성 한계를 구조적으로 완화한다.
 
 → [[sources/2026-04-30-from-soliloquy-to-agora-memory-enhanced-llm-agents.md|상세 보기]]
+
+### Intern-Atlas: A Methodological Evolution Graph as Research Infrastruct (2026-05-03)
+
+→ [[sources/2026-05-03-intern-atlas-a-methodological-evolution-graph-as-r.md|상세 보기]]

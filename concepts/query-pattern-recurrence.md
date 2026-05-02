@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-02-reliable-answers-for-recurring-questions-boosting-.md|Reliable Answers for Recurring Questions: Boosting Text-to-S]]
+
+### Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accurac (2026-05-03)
+
+→ [[sources/2026-05-03-reliable-answers-for-recurring-questions-boosting-.md|상세 보기]]

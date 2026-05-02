@@ -552,3 +552,13 @@
 - 2026-05-02-reliable-answers-for-recurring-questions-boosting-.md
 - 2026-05-02-position-aware-drafting-for-inference-acceleration.md
 - 2026-05-02-global-optimality-for-constrained-exploration-via-.md
+
+## [2026-05-03 02:09] llm-ingest | 8편 분석, 엔티티 212개, 개념 687개
+- 2026-05-03-exploration-hacking-can-llms-learn-to-resist-rl-tr.md
+- 2026-05-03-llm-as-clinical-graph-structure-refiner-enhancing-.md
+- 2026-05-03-intern-atlas-a-methodological-evolution-graph-as-r.md
+- 2026-05-03-claw-eval-live-a-live-agent-benchmark-for-evolving.md
+- 2026-05-03-crab-a-semantics-aware-checkpointrestore-runtime-f.md
+- 2026-05-03-reliable-answers-for-recurring-questions-boosting-.md
+- 2026-05-03-position-aware-drafting-for-inference-acceleration.md
+- 2026-05-03-global-optimality-for-constrained-exploration-via-.md

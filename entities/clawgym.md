@@ -22,3 +22,9 @@ Claw-Eval-Live와 함께 Claw 생태계 평가의 양축을 형성한다 — Cla
 ClawGym의 진단적 평가 파이프라인에서 Crab의 C/R을 활용하면, 에이전트 실행 상태를 정확히 보존·복원하여 하네스 변경의 효과를 더 엄밀하게 격리-측정할 수 있다.
 
 → [[sources/2026-05-02-crab-a-semantics-aware-checkpointrestore-runtime-f.md|상세 보기]]
+
+### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
+
+Claw-Eval-Live와 함께 Claw 생태계 평가의 양축을 형성함을 명확히 하며, ClawGym이 하네스-모델 결합 시스템의 진단에 집중하는 반면 Claw-Eval-Live는 태스크 신호 자체의 진화를 다루는 상보적 분업 구조를 제공한다.
+
+→ [[sources/2026-05-03-claw-eval-live-a-live-agent-benchmark-for-evolving.md|상세 보기]]

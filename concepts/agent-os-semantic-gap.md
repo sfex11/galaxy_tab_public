@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-02-crab-a-semantics-aware-checkpointrestore-runtime-f.md|Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent]]
+
+### Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes (2026-05-03)
+
+→ [[sources/2026-05-03-crab-a-semantics-aware-checkpointrestore-runtime-f.md|상세 보기]]
