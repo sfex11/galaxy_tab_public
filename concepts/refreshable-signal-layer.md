@@ -1,0 +1,12 @@
+# refreshable-signal-layer
+
+**분야**: 미분류
+**생성일**: 2026-05-02
+
+## 정의
+
+_Wiki 축적 중_
+
+## 관련 논문
+
+- [[sources/2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md|Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-Wor]]

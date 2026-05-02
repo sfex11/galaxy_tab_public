@@ -40,3 +40,15 @@ _Wiki 축적 중_
 불필요한 컨텍스트 주입 차단(Tool Attention)에서 불필요한 KV 엔트리 접근 차단(희소 어텐션 통합)으로 효율화의 대상을 컨텍스트 입력층에서 메모리 접근층으로 확장한다.
 
 → [[sources/2026-05-01-unifying-sparse-attention-with-hierarchical-memory.md|상세 보기]]
+
+### Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accurac (2026-05-02)
+
+토큰 선택 수준(SLM에서의 local sufficiency)을 넘어 템플릿 수준에서 디코딩 탐색 공간을 구조적으로 축소하는 상위 최적화 차원을 제공한다.
+
+→ [[sources/2026-05-02-reliable-answers-for-recurring-questions-boosting-.md|상세 보기]]
+
+### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-02)
+
+컨텍스트 단위의 토큰 절약(Tool Attention)과 병렬로, 디코딩 단계 자체를 건너뛰어 토큰 생성 레이턴시를 줄이는 추론 수준의 토큰 효율화 경로를 추가하여, 토큰 효율화가 '입력 최소화'와 '생성 가속' 두 축으로 분화됨을 보여준다.
+
+→ [[sources/2026-05-02-position-aware-drafting-for-inference-acceleration.md|상세 보기]]

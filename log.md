@@ -542,3 +542,13 @@
 - 2026-05-01-safe-navigation-using-neural-radiance-fields-via-r.md
 - 2026-05-01-turning-the-tide-cross-architecture-distillation-f.md
 - 2026-05-01-unifying-sparse-attention-with-hierarchical-memory.md
+
+## [2026-05-02 08:08] llm-ingest | 8편 분석, 엔티티 188개, 개념 662개
+- 2026-05-02-exploration-hacking-can-llms-learn-to-resist-rl-tr.md
+- 2026-05-02-llm-as-clinical-graph-structure-refiner-enhancing-.md
+- 2026-05-02-intern-atlas-a-methodological-evolution-graph-as-r.md
+- 2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md
+- 2026-05-02-crab-a-semantics-aware-checkpointrestore-runtime-f.md
+- 2026-05-02-reliable-answers-for-recurring-questions-boosting-.md
+- 2026-05-02-position-aware-drafting-for-inference-acceleration.md
+- 2026-05-02-global-optimality-for-constrained-exploration-via-.md

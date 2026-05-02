@@ -10,3 +10,15 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-01-clawgym-a-scalable-framework-for-building-effectiv.md|ClawGym: A Scalable Framework for Building Effective Claw Ag]]
+
+### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-02)
+
+Claw-Eval-Live는 이 간극을 해소하기 위한 구조적 메커니즘을 최초로 제공한다 — 신호 계층을 실세계 워크플로우 수요에서 주기적으로 갱신함으로써, 벤치마크가 시간에 따라 '실세계로 수렴'하는 자가 교정 경로를 내장한다.
+
+→ [[sources/2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md|상세 보기]]
+
+### Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes (2026-05-02)
+
+Crab의 정확한 C/R이 샌드박스 상태의 충실도를 높여, 샌드박스에서의 에이전트 행동이 실제 배포 환경에서 더 잘 일반화되도록 하는 인프라적 기반을 제공한다.
+
+→ [[sources/2026-05-02-crab-a-semantics-aware-checkpointrestore-runtime-f.md|상세 보기]]

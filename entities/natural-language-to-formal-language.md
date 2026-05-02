@@ -22,3 +22,9 @@ _Wiki 축적 중_
 NL→형식 언어 변환에서 입력의 정밀도(precision)가 출력 품질을 결정하는 핵심 변수임을 구체화하며, 기존의 구문론적/의미론적 난이도 분류에 '요구사항 정밀도 스펙트럼'이라는 새로운 축을 추가한다.
 
 → [[sources/2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect.md|상세 보기]]
+
+### Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accurac (2026-05-02)
+
+TeCoD는 NL→형식언어 변환에서 출력 공간을 템플릿으로 사전 제약하는 구조적 해법을 제공하여, 기존 3층 아키텍처가 '의도→명세→실행'으로 번역을 분해한 것에 더해, 실행 계층의 출력 공간 자체를 좁히는 보완적 전략을 추가한다.
+
+→ [[sources/2026-05-02-reliable-answers-for-recurring-questions-boosting-.md|상세 보기]]
