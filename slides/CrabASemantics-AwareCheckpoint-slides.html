@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="font-size:clamp(14px,1.2vw,18px)" class="muted">arXiv:2604.28138v1 · cs.OS · 2026</div>
+    <h1 style="font-size:clamp(28px,3.5vw,52px);margin-top:0.8em;line-height:1.2">Crab: 에이전트 샌드박스를 위한<br><span class="accent">의미론적 인식</span> 체크포인트/복원 런타임</h1>
+    <p style="font-size:clamp(14px,1.4vw,20px);margin-top:1.2em" class="muted">Checkpoint-and-Restore for Agent Sandboxes</p>
+    <div class="hr" style="margin-top:1.5em"></div>
+    <p style="font-size:clamp(13px,1.1vw,16px);margin-top:1em">Tianyuan Wu, Chaokun Chang, Lunxi Cao, Wei Gao, Wei Wang</p>
+    <p style="font-size:clamp(12px,1vw,14px)" class="muted">HKUST (홍콩과학기술대학교)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">왜 에이전트 샌드박스에서 C/R이 필요한가</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">수백 턴</div>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em">장시간 실행되는 에이전트 워크로드는 수백 번의 상호작용 턴을 포함하며, 크래시 시 전체 재실행 비용이 매우 큼</p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">스팟 인스턴스</div>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em">클라우드 스팟 인스턴스는 비용 절감이 크지만 단기 선점이 발생하며, C/R로 진행 상황을 보존해야 함</p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">Tree RL</div>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em">Tree GRPO 등 트리 기반 RL 알고리즘은 중간 상태에서 분기가 필요하며, 체크포인트 포크로 공유 접두사 재실행 방지</p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">안전 롤백</div>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em">치명적이거나 적대적으로 유도된 액션 후 알려진 양호 상태로 샌드박스 복원이 필수적</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">핵심 문제: <span class="accent">에이전트–OS 의미론적 간극</span></h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="margin-top:1.5em;font-size:clamp(14px,1.2vw,19px)">
+      에이전트 프레임워크는 툴 호출은 보지만 OS 효과를 모르고,<br>
+      OS는 상태 변화를 보지만 턴 수준의 맥락으로 복원 관련성을 판단하지 못한다.
+    </div>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)"><i class="fas fa-robot"></i> 에이전트 레이어</h3>
+        <ul class="check-list" style="margin-top:0.8em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>툴 호출 내용 파악</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>OS 부수효과 불가지</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>설치된 패키지, 프로세스 상태 누락</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)"><i class="fas fa-server"></i> OS 레이어</h3>
+        <ul class="check-list" style="margin-top:0.8em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상태 변화 관측 가능</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>턴 경계 인식 불가</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>모든 스텝을 동등하게 처리 → 비효율</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1.2em" class="muted">→ 두 레이어 모두 <span class="accent">효율적인 C/R에 필요한 정보</span>를 단독으로 가질 수 없다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">기존 접근의 두 극단</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="margin-top:1.5em">
+      <thead>
+        <tr>
+          <th>시스템 레이어</th>
+          <th>캡처 상태</th>
+          <th>정확성</th>
+          <th>비용</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Claude (App)</td>
+          <td>채팅 + Git/FS</td>
+          <td><span class="tag tag-red">불완전</span></td>
+          <td><span class="tag tag-green">낮음</span></td>
+        </tr>
+        <tr>
+          <td>LangGraph (Framework)</td>
+          <td>대화 기록</td>
+          <td><span class="tag tag-red">불완전</span></td>
+          <td><span class="tag tag-green">낮음</span></td>
+        </tr>
+        <tr>
+          <td>Docker (OS)</td>
+          <td>전체 컨테이너</td>
+          <td><span class="tag tag-green">완전</span></td>
+          <td><span class="tag tag-amber">보통</span></td>
+        </tr>
+        <tr>
+          <td>E2B (VM)</td>
+          <td>전체 VM</td>
+          <td><span class="tag tag-green">완전</span></td>
+          <td><span class="tag tag-red">높음</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">Crab (Cross-layer)</span></td>
+          <td><span class="accent">적응적</span></td>
+          <td><span class="tag tag-green">완전</span></td>
+          <td><span class="tag tag-green">낮음</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1em" class="muted">앱 레벨은 효율적이나 불완전하고, OS/VM 레벨은 정확하나 비용이 높다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">숨겨진 희소성: <span class="accent">75% 이상의 턴은 무상태</span></h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.2vw,19px);margin-top:1em">에이전트–OS 의미론적 간극은 대규모 희소성을 숨기고 있다:</p>
+    <div class="grid-3" style="margin-top:1.2em">
+      <div class="card" style="text-align:center">
+        <div class="big-num" style="font-size:clamp(36px,3.5vw,56px)">75%+</div>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.3em" class="muted">복원 관련 상태를<br>생성하지 않는 턴 비율</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num" style="font-size:clamp(36px,3.5vw,56px)">87%</div>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.3em" class="muted">Crab이 제거한<br>불필요한 체크포인트 비율</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num" style="font-size:clamp(36px,3.5vw,56px)">3.78×</div>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.3em" class="muted">매 턴 전체 체크포인트 시<br>실행 시간 증가율</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.2em"></div>
+    <p style="font-size:clamp(14px,1.2vw,19px)">핵심 통찰: <span class="accent">런타임이 에이전트를 블랙박스로 취급하고, 턴 경계에서 OS 가시적 효과만 관측하여 체크포인트 입자도를 결정</span>하면 된다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">설계 요구사항</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-top:1.5em">
+      <div class="pipeline-step">
+        <div class="step-num">R1</div>
+        <div class="step-label">복원 정확성</div>
+        <div class="step-desc">각 복원점은 채팅 기록뿐 아니라 파일시스템, 프로세스 등 이후 실행에 의존하는 전체 샌드박스 상태를 재구성해야 함</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">R2</div>
+        <div class="step-label">낮은 노출 오버헤드</div>
+        <div class="step-desc">체크포인트가 엔드투엔드 에이전트 지연을 지배해서는 안 되며, 샌드박스 일시정지로 C/R 이점이 상쇄되어서는 안 됨</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">R3</div>
+        <div class="step-label">밀집 배치 확장성</div>
+        <div class="step-desc">다수 샌드박스의 체크포인트 트래픽이 스토리지 대역폭 등 공유 호스트 자원을 붕괴시키지 않아야 함</div>
+      </div>
+    </div>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1.2em" class="muted">세 가지를 동시에 만족하려면 <span class="accent">어떤 턴이 복원 관련 상태를 생성하는지 추론</span>하고, 밀집 배치된 샌드박스 간에 체크포인트 작업을 조율해야 한다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">Crab 아키텍처 개요</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:1.5em">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.3vw,20px)"><i class="fas fa-sitemap"></i> Coordinator</h3>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">제어 평면 (컨트롤 패스)</p>
+        <ul class="check-list" style="margin-top:0.6em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트–LLM 경로 프록시</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>턴 경계 식별</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM 대기 시간과 C/R 중첩</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.3vw,20px)"><i class="fas fa-search"></i> Inspector</h3>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">상태 추적기</p>
+        <ul class="check-list" style="margin-top:0.6em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>eBPF 기반 경량 관측</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>FS/프로세스/메모리 변화 감지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>턴별 체크포인트 입자도 분류</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.3vw,20px)"><i class="fas fa-cogs"></i> C/R Engine</h3>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">데이터 평면</p>
+        <ul class="check-list" style="margin-top:0.6em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>호스트 범위 스케줄링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>runc + ZFS + CRIU 활용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>버스트 평활화 및 우선순위 조절</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1.2em" class="muted"><span class="accent3">에이전트나 C/R 백엔드 수정 없이</span> 호스트 사이드에서 투명하게 동작</p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">워크플로우: 턴 경계에서의 의미론적 분류</h2>
+    <div class="hr"></div>
+    <div style="margin-top:1.5em">
+      <div class="flow-item">
+        <div class="flow-icon">1</div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">에이전트가 툴 액션 실행</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">샌드박스 내에서 셸 명령, 파일 편집, 패키지 설치 등</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">2</div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">Coordinator가 턴 경계 감지 → Inspector에 질의</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">LLM API 호출 직전, 해당 턴의 OS 가시적 효과 분류 요청</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">3</div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">Inspector가 eBPF로 상태 변화 분석 후 분류</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">FS 변경만? 프로세스 변경만? 둘 다? 또는 무상태?</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">4</div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">C/R Engine이 LLM 대기 시간 동안 비동기 체크포인트 수행</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">필요 없는 턴은 스킵; 필요한 턴은 최소 입자도로 스냅샷</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">Inspector: <span class="accent2">eBPF 기반 턴 분류</span></h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.2vw,19px);margin-top:1em">각 턴 종료 시 Inspector는 OS 가시적 효과를 4단계로 분류:</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.6em">
+          <span class="tag tag-green">SKIP</span>
+          <span style="font-size:clamp(14px,1.2vw,18px)">체크포인트 불필요</span>
+        </div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">읽기 전용 조회, 대화 내용만 변경 등 복원 관련 상태 없음</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.6em">
+          <span class="tag tag-amber">FS-ONLY</span>
+          <span style="font-size:clamp(14px,1.2vw,18px)">파일시스템만</span>
+        </div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">소스 코드 편집, 파일 생성/삭제 등 (ZFS 스냅샷만 사용)</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.6em">
+          <span class="tag tag-amber">PROC-ONLY</span>
+          <span style="font-size:clamp(14px,1.2vw,18px)">프로세스만</span>
+        </div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">백그라운드 서비스 시작, 포트 바인딩 등 (CRIU만 사용)</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.6em">
+          <span class="tag tag-red">FULL</span>
+          <span style="font-size:clamp(14px,1.2vw,18px)">전체 상태</span>
+        </div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">패키지 설치 + 서비스 시작 등 FS와 프로세스 모두 변경</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1em" class="muted">eBPF 훅: <span class="accent3">fanotify</span>(FS), <span class="accent3">tracepoint</span>(프로세스), <span class="accent3">kprobe</span>(메모리 매핑)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">C/R Engine: <span class="accent3">호스트 범위 스케줄링</span></h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div>
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">백엔드 조합</h3>
+        <ul class="check-list" style="margin-top:0.6em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>runc</strong> — 컨테이너 라이프사이클 관리</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>ZFS 스냅샷</strong> — 파일시스템 상태 (초고속, Copy-on-Write)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>CRIU</strong> — 프로세스 상태 (메모리, FD, 네트워크)</li>
+        </ul>
+        <div class="hr" style="margin-top:1em"></div>
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">핵심 전략</h3>
+        <ul class="check-list" style="margin-top:0.6em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>입자도별 최소 백엔드만 호출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체크포인트 버스트를 시간적으로 평활화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트 진행을 차단할 위험이 높은 작업 우선 처리</li>
+        </ul>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">LLM 대기 시간 숨기기</h3>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.6em">에이전트는 자연적으로 툴 실행과 LLM 응답 대기를 교대로 반복함</p>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.4em">Crab은 이 <span class="accent">LLM 대기 창</span>을 체크포인트 작업에 활용하여 대부분의 비용을 숨김</p>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.6em" class="muted">p95 노출 지연: 작업 시간의 0.44% (64 샌드박스 밀집)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">평가: 복원 정확성과 엔드투엔드 오버헤드</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.1vw,17px);margin-top:1em" class="muted">워크로드: SWE-Bench (코드 수정) + Terminal-Bench (셸 집약적) · 3종 에이전트/LLM 조합</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">복원 정확성 (Terminal-Bench)</h3>
+        <table class="compare-table" style="margin-top:0.6em">
+          <thead><tr><th>방식</th><th>성공률</th></tr></thead>
+          <tbody>
+            <tr><td>채팅만</td><td><span class="tag tag-red">8–13%</span></td></tr>
+            <tr><td>채팅 + FS</td><td><span class="tag tag-amber">28–42%</span></td></tr>
+            <tr><td><span class="accent">Crab</span></td><td><span class="tag tag-green">100%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">장애 시 실행 시간 (SWE-Bench)</h3>
+        <table class="compare-table" style="margin-top:0.6em">
+          <thead><tr><th>방식</th><th>시간 비율</th></tr></thead>
+          <tbody>
+            <tr><td>처음부터 재시작</td><td><span class="tag tag-red">1.67×</span></td></tr>
+            <tr><td>매 턴 전체 C/R</td><td><span class="tag tag-red">3.78×</span></td></tr>
+            <tr><td><span class="accent">Crab</span></td><td><span class="tag tag-green">1.019×</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p style="font-size:clamp(14px,1.2vw,19px);margin-top:1em">과제당 1회 크래시 주입에도 Crab은 <span class="accent">무장애 실행 시간의 1.9% 이내</span> 유지</p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">평가: 희소성 활용과 밀집 배치 확장성</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">턴 분류 결과</h3>
+        <div style="margin-top:0.8em">
+          <div style="display:flex;justify-content:space-between;font-size:clamp(12px,0.95vw,15px);margin-bottom:0.3em">
+            <span>Skip (불필요)</span><span class="accent">87%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:clamp(12px,0.95vw,15px);margin-bottom:0.3em">
+            <span>FS-Only</span><span class="accent2">8%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:clamp(12px,0.95vw,15px);margin-bottom:0.3em">
+            <span>Proc-Only</span><span class="accent3">3%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:clamp(12px,0.95vw,15px)">
+            <span>Full</span><span class="muted">2%</span>
+          </div>
+        </div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.8em" class="muted">87%의 턴에서 C/R 작업이 완전히 제거됨</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">밀집 배치에서의 확장성</h3>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em">96개 샌드박스 동시 배치 시:</p>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>매 턴 전체 C/R: <span class="tag tag-red">3.78× 느려짐</span> (호스트 I/O 병목)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Crab: <span class="tag tag-green">정상 수준 유지</span></li>
+        </ul>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.5em" class="muted">C/R Engine의 버스트 평활화가 공유 스토리지 대역폭 붕괴를 방지</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">사례 연구: <span class="accent">롤백을 에이전트 툴로 노출</span></h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.2vw,19px);margin-top:1em">Crab의 C/R 능력을 에이전트가 직접 호출할 수 있는 툴 API로 노출:</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">기존: 셸 레벨 자가 복구</h3>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em" class="muted">에이전트가 git reset, 파일 수동 복원, 프로세스 재시작 등 복잡한 셸 명령으로 복구 시도</p>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.4em" class="muted">→ 취약하고, 불완전하며, 많은 토큰 소모</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.4vw,22px)">Crab: 단일 샌드박스 복원</h3>
+        <p style="font-size:clamp(13px,1.1vw,17px);margin-top:0.5em" class="muted">에이전트가 <span class="accent">rollback(checkpoint_id)</span> 툴을 한 번 호출하여 알려진 양호 상태로 즉시 복원</p>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.4em" class="muted">→ 신뢰성 높고, 빠르고, 토큰 절약</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:1em">
+      <div class="card" style="text-align:center">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">29%<span style="font-size:clamp(14px,1.2vw,20px)">↓</span></div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.2em" class="muted">벽시계 시간 감소</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num" style="font-size:clamp(32px,3vw,48px)">36%<span style="font-size:clamp(14px,1.2vw,20px)">↓</span></div>
+        <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.2em" class="muted">롤백 토큰 감소</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">결론</h2>
+    <div class="hr"></div>
+    <div style="margin-top:1.5em">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-lightbulb"></i></div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">의미론적 간극의 식별과 정량화</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">채팅만 복원 시 8–13% 성공, 매 턴 전체 C/R 시 3.78× 느려짐</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-cogs"></i></div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">Crab: 호스트 사이드 의미론적 인식 C/R 런타임</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">에이전트/C/R 백엔드 수정 없이, eBPF 관측 + LLM 대기 중첩 + 호스트 범위 스케줄링</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-chart-line"></i></div>
+        <div>
+          <strong style="font-size:clamp(14px,1.2vw,18px)">검증된 성과</strong>
+          <p style="font-size:clamp(12px,0.95vw,15px)" class="muted">100% 복원 정확성, 체크포인트 트래픽 87% 감소, 무장애 시간의 1.9% 이내 오버헤드 (96 샌드박스)</p>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.2em;font-size:clamp(14px,1.2vw,19px)">
+      에이전트 샌드박스에서 C/R은 선택이 아닌 필수 인프라이며,<br>Crab은 <span class="accent">정확성과 효율성의 극단을 동시에 달성</span>한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,2.4vw,36px)">논문 정보</h2>
+    <div class="hr"></div>
+    <div class="card" style="margin-top:1.5em">
+      <h3 style="font-size:clamp(16px,1.4vw,22px)">Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes</h3>
+      <div class="hr" style="margin:0.8em 0"></div>
+      <p style="font-size:clamp(13px,1.1vw,17px)">Tianyuan Wu, Chaokun Chang, Lunxi Cao, Wei Gao, Wei Wang</p>
+      <p style="font-size:clamp(13px,1.1vw,17px)" class="muted">HKUST (홍콩과학기술대학교)</p>
+      <div class="hr" style="margin:0.8em 0"></div>
+      <p style="font-size:clamp(13px,1.1vw,17px)"><i class="fas fa-external-link-alt"></i> <a href="http://arxiv.org/abs/2604.28138v1" class="accent2">arxiv.org/abs/2604.28138v1</a></p>
+      <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.3em" class="muted">arXiv:2604.28138v1 [cs.OS] · 2026년 4월 30일</p>
+      <p style="font-size:clamp(12px,0.95vw,15px);margin-top:0.3em" class="muted">License: CC BY-NC-ND 4.0</p>
+    </div>
+    <div style="margin-top:1.2em">
+      <h3 style="font-size:clamp(15px,1.3vw,20px)">핵심 키워드</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5em;margin-top:0.5em">
+        <span class="tag tag-amber">체크포인트/복원</span>
+        <span class="tag tag-amber">에이전트 샌드박스</span>
+        <span class="tag tag-green">eBPF</span>
+        <span class="tag tag-green">CRIU</span>
+        <span class="tag tag-green">ZFS</span>
+        <span class="tag tag-red">의미론적 간극</span>
+        <span class="tag tag-red">컨테이너</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
