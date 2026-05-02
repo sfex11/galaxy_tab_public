@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM as Clinical Graph Structure Refiner: Enhancing Represent — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div class="big-num">01</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem); line-height:1.2;">LLM을 임상 그래프 구조 정제기로 활용한<br>EEG 뇌전증 발작 진단의 표현 학습 향상</h1>
+    <div class="hr"></div>
+    <p class="muted" style="font-size:clamp(0.9rem,1.5vw,1.15rem);">LLM as Clinical Graph Structure Refiner: Enhancing Representation Learning in EEG Seizure Diagnosis</p>
+    <p style="font-size:clamp(0.85rem,1.3vw,1.05rem); margin-top:1.5rem;">Lincan Li, Zheng Chen, Yushun Dong</p>
+    <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);">Florida State University / Osaka University</p>
+    <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.9rem); margin-top:0.8rem;"><i class="fas fa-link"></i> arXiv:2604.28178v1</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-amber">배경</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">뇌전증 진단과 EEG 신호의 중요성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-brain"></i> 뇌전증의 임상적 중요성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전 세계 수백만 명이 영향받는 만성 질환</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정확한 발작 감지가 timely 진단과 치료의 핵심</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>환자 삶의 질 향상을 위한 자동화 필요</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-wave-square"></i> EEG 신호의 역할과 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>뇌 활동 모니터링의 1차 데이터원</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>노이즈, 아티팩트, 환자 간 변이성에 취약</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>발작 이벤트의 지속시간·주파수·공간적 양상이 개인마다 크게 상이</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      전통적 수동 분석은 시간 소모적이고 인간 오류에 취약하며, 기존 딥러닝 방법은 채널 간 의미론적 맥락과 고차 관계를 효과적으로 모델링하지 못한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 정의</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">EEG 기반 그래프 구성의 근본적 한계</h2>
+    <div class="hr"></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);"><span class="accent">상관관계 기반</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">Pearson, 상호상관 등 통계적 척도로 엣지를 정의하지만, 노이즈에 취약하여 불안정한 구조 생성</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);"><span class="accent2">학습 기반</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">어텐션·마스크 학습으로 적응적 연결을 구성하나, 명시적 생리학적 근거가 부족</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);"><span class="accent3">생성 기반</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">잠재 표현에서 그래프를 합성하지만, 생물학적 의미와 해석 가능성이 결여</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="card" style="border-left:4px solid #c45d3e;">
+      <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-exclamation-triangle accent"></i> 공통 문제</h3>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">EEG 신호의 노이즈로 인해 <strong>중복·무관·허위 엣지</strong>가 생성되며, 이는 GNN의 표현 학습을 오도하고 발작 감지 성능을 저하시킨다. 기존 방법은 엣지 정제를 위한 <strong>명시적이고 원칙적인 메커니즘</strong>이 부족하다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">핵심 아이디어</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">왜 LLM을 그래프 엣지 정제기로 사용하는가?</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);">LLM의 고유 강점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>추론 능력:</strong> 통계적 증거와 의미론적 맥락을 종합하여 의미 있는 연결과 무관한 연결 구분</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>맥락 이해:</strong> 다양한 정보 원본(텍스트, 통계)을 통합한 판단 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>해석 가능성:</strong> 엣지 유지/제거의 이유를 언어로 설명 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>임상 지식 활용:</strong> 발작 전파 패턴 등 생리학적 지식 반영</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);">기존 vs 제안 접근</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>기존 방법</th>
+              <th>제안 방법</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="muted">암묵적 구조 학습</td>
+              <td class="accent">명시적 엣지 정제</td>
+            </tr>
+            <tr>
+              <td class="muted">생리학적 근거 부족</td>
+              <td class="accent">임상 지식 통합</td>
+            </tr>
+            <tr>
+              <td class="muted">노이즈에 취약</td>
+              <td class="accent">추론 기반 강인성</td>
+            </tr>
+            <tr>
+              <td class="muted">해석 불가</td>
+              <td class="accent">정제 이유 설명 가능</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">프레임워크</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">전체 2단계 프레임워크 개요</h2>
+    <div class="hr"></div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">EEG 신호 입력</div>
+        <div class="step-desc">다채널 EEG 시계열 데이터</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Transformer 엣지 예측</div>
+        <div class="step-desc">채널 쌍의 확률 점수 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">임계값 필터링</div>
+        <div class="step-desc">초기 그래프 엣지 집합 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">LLM 엣지 정제</div>
+        <div class="step-desc">텍스트+통계 기반 의사결정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">정제된 그래프 학습</div>
+        <div class="step-desc">GraphS4mer 백본으로 발작 감지</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="quote-block">
+      핵심 설계 철학: LLM은 그래프를 <strong>처음부터 생성</strong>하는 것이 아니라, 신경망이 구성한 <strong>초기 엣지 집합을 검증하고 정제</strong>하는 역할을 수행한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-amber">1단계</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">Transformer 기반 초기 그래프 구성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-project-diagram accent"></i> 엣지 예측 메커니즘</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>EEG 채널 쌍의 시계열을 입력으로 받음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Transformer 인코더로 채널 쌍 특징 추출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MLP를 통해 엣지 존재 확률 점수 산출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>임계값(τ) 적용으로 초기 엣지 집합 결정</li>
+        </ul>
+        <div class="hr"></div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-cogs accent2"></i> 설계 의도</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">Transformer는 채널 간 시계열 패턴을 포착할 수 있으나, 노이즈로 인해 여전히 불필요한 엣지가 포함될 수 있다. 이를 LLM이 2단계에서 해결한다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);">엣지 존재 확률</h3>
+        <div class="quote-block" style="margin-top:0.5rem;">
+          <p style="font-size:clamp(0.85rem,1.4vw,1rem);">P(e<sub>ij</sub>) = MLP(Transformer(h<sub>i</sub>, h<sub>j</sub>))</p>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem); margin-top:1rem;">e<sub>ij</sub> ∈ E<sub>init</sub> if P(e<sub>ij</sub>) > τ</p>
+        <div class="hr"></div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);">h<sub>i</sub>, h<sub>j</sub>: 채널 i, j의 특징 표현<br>τ: 엣지 존재 임계값<br>E<sub>init</sub>: 초기 엣지 집합</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-green">2단계</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">LLM 기반 그래프 구조 정제</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-filter accent3"></i> 정제 프로세스</h3>
+        <div class="flow-item">
+          <div class="flow-icon">1</div>
+          <div><strong>엣지 후보 추출:</strong> E<sub>init</sub>의 각 엣지 (i,j)에 대해 노드 쌍 정보 수집</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">2</div>
+          <div><strong>프롬프트 구성:</strong> 노드 쌍의 텍스트 특징(채널 위치, 기능 영역)과 통계 특징(상관계수, 확률 점수)을 결합</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">3</div>
+          <div><strong>LLM 추론:</strong> 임상적 맥락과 통계적 증거를 기반으로 엣지 유지/제거 결정</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">4</div>
+          <div><strong>정제된 그래프:</strong> E<sub>refined</sub> ⊆ E<sub>init</sub>으로 최종 그래프 구성</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);">LLM 입력 정보</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>특징 유형</th>
+              <th>예시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>텍스트 특징</td>
+              <td>채널 명칭, 해부학적 위치, 뇌 영역 기능</td>
+            </tr>
+            <tr>
+              <td>통계 특징</td>
+              <td>채널 간 상관계수, 엣지 확률 점수</td>
+            </tr>
+            <tr>
+              <td>구조 특징</td>
+              <td>양쪽 노드의 기존 연결 수, 이웃 정보</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="hr"></div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);"><i class="fas fa-info-circle"></i> LLM은 통계 수치만이 아닌 <strong>의미론적 맥락</strong>까지 고려하여 판단</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-amber">메커니즘</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">엣지 정제의 핵심 원리</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-check-circle accent3"></i> 유지되는 엣지</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>높은 상관계수 + 생리학적으로 합리적인 연결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>발작 전파 경로와 일치하는 방향성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인접 뇌 영역 간의 의미 있는 상호작용</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-times-circle accent"></i> 제거되는 엣지</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>통계적으로는 높으나 노이즈 기반의 허위 상관</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>생리학적으로 설명 불가능한 원거리 연결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>중복된 정보를 전달하는 여분의 엣지</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="card" style="border-left:4px solid #5a7d7a;">
+      <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-lightbulb accent3"></i> 설계의 핵심 통찰</h3>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">LLM은 그래프를 새로 구성하지 않고 <strong>기존 엣지를 "심사"</strong>하는 역할만 수행한다. 이는 (1) LLM의 그래프 생성 능력 부족 문제를 회피하고, (2) 신경망의 데이터 기반 패턴 인식과 LLM의 의미 기반 추론을 <strong>상호 보완적으로 결합</strong>하는 효과를 달성한다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-red">실험</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">데이터셋 및 실험 설정</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-database accent2"></i> TUSZ 데이터셋</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>TUH EEG Seizure Corpus: EEG 발작 감지의 표준 벤치마크</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 환자의 실제 임상 EEG 기록 포함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>발작/비발작 이진 분류 태스크</li>
+        </ul>
+        <div class="hr"></div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-microchip accent"></i> 백본 모델</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">GraphS4mer: State Space Model 기반 그래프 신경망으로, 시계열-그래프 결합 표현 학습 수행</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-robot accent3"></i> 평가 대상 LLM</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem); margin-bottom:1rem;">다양한 SOTA 범용 LLM을 구조 판단자(structural judge)로 벤치마킹:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GPT 시리즈 (GPT-4 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Claude 시리즈</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Llama 시리즈</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기타 오픈소스 LLM</li>
+        </ul>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem); margin-top:0.8rem;">평가 지표: 추론 능력, 일관성, 강인성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-green">결과</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">발작 감지 성능 비교</h2>
+    <div class="hr"></div>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(1rem,2vw,1.3rem);">TUSZ 벤치마크 주요 결과</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>방법</th>
+            <th>그래프 구성</th>
+            <th>LLM 정제</th>
+            <th>성능</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>상관관계 기반 + GNN</td>
+            <td class="muted">정적 상관계수</td>
+            <td class="muted">없음</td>
+            <td class="muted">기준선</td>
+          </tr>
+          <tr>
+            <td>학습 기반 동적 그래프</td>
+            <td class="muted">어텐션 기반</td>
+            <td class="muted">없음</td>
+            <td>개선</td>
+          </tr>
+          <tr>
+            <td>생성 기반 그래프</td>
+            <td class="muted">잠재 공간 합성</td>
+            <td class="muted">없음</td>
+            <td>부분 개선</td>
+          </tr>
+          <tr>
+            <td class="accent"><strong>제안 방법 (Transformer + LLM)</strong></td>
+            <td class="accent">Transformer 예측</td>
+            <td class="accent"><strong>적용</strong></td>
+            <td class="accent"><strong>최고 성능</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2">
+      <div class="card" style="border-left:4px solid #5a7d7a;">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);"><i class="fas fa-chart-line accent3"></i> 핵심 발견</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">LLM 정제 단계만 추가해도 발작 감지 정확도가 <strong>유의미하게 향상</strong>되며, 그래프 구조의 질이 크게 개선됨</p>
+      </div>
+      <div class="card" style="border-left:4px solid #c45d3e;">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);"><i class="fas fa-compress-arrows-alt accent"></i> 엣지 감소 효과</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">중복·무관 엣지가 대폭 제거되어 <strong>더 깨끗하고 희소한</strong> 그래프 구조 달성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-amber">벤치마크</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">LLM 임상 그래프 추론 벤치마크</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem); margin-bottom:1.5rem;">본 논문은 LLM 기반 임상 그래프 구조 정제를 위한 <strong>최초의 종합 벤치마크</strong>를 제안한다.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num">01</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);">추론 능력</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);">통계적 증거와 임상 맥락을 종합하여 엣지의 타당성을 정확히 판단하는 능력 평가</p>
+      </div>
+      <div class="card">
+        <div class="big-num">02</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);">일관성</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);">동일하거나 유사한 엣지 쌍에 대해 일관된 판단을 내리는지 측정</p>
+      </div>
+      <div class="card">
+        <div class="big-num">03</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.2rem);">강인성</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);">노이즈가 추가된 통계 특징에도 안정적인 판단을 유지하는지 검증</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="quote-block">
+      벤치마크 결과: LLM 모델 간에 임상 그래프 추론 능력, 일관성, 강인성에서 <strong>상당한 차이</strong>가 존재하며, 더 큰 모델이 반드시 더 나은 성능을 보이지는 않는다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-green">분석</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">해석 가능성 및 일관성 분석</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-eye accent2"></i> 해석 가능성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM은 각 엣지 판단에 대해 <strong>자연어 설명</strong>을 제공</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>제거된 엣지의 이유(노이즈, 중복, 생리학적 비합리성)를 명확히 기술</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유지된 엣지의 임상적 타당성을 해부학적 맥락과 연결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정제된 그래프가 발작 전파 패턴과 더 잘 일치함을 확인</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-balance-scale accent3"></i> 일관성 분석</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>동일 입력에 대한 반복 추론 시 결과의 <strong>재현성</strong> 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미세한 통계 변동에 대한 판단 <strong>안정성</strong> 검증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프롬프트 순서 변경 시 결과 <strong>불변성</strong> 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상이한 LLM 간 판단의 <strong>합의도</strong> 분석</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="card">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><i class="fas fa-star accent"></i> <strong>핵심 가치:</strong> 단순히 성능 수치를 넘어, LLM 정제를 통해 얻은 그래프가 <strong>왜 더 나은지</strong>를 임상적·생리학적으로 설명할 수 있다는 점이 본 방법의 차별화된 장점이다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-red">결론</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">결론 및 주요 기여</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-trophy accent"></i> 세 가지 핵심 기여</h3>
+        <div class="flow-item">
+          <div class="flow-icon">1</div>
+          <div><strong>새로운 패러다임:</strong> LLM을 임상 그래프 구조 정제 도구로 활용하는 최초의 프레임워크 제안. 기존 방법의 맥락 이해 부족 문제를 해결</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">2</div>
+          <div><strong>종합 벤치마크:</strong> 다양한 SOTA LLM을 임상 그래프 구조 판단자로 체계적으로 평가한 벤치마크 구축. 모델 간 추론 능력·일관성·강인성 차이 규명</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">3</div>
+          <div><strong>실증적 검증:</strong> TUSZ 벤치마크에서 발작 감지 성능과 그래프 표현 질의 동시 향상을 입증</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-road accent3"></i> 향후 방향</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>더 다양한 EEG 태스크(수면 단계, 뇌-컴퓨터 인터페이스)로 확장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>의료 도메인 특화 LLM 파인튜닝을 통한 정제 성능 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실시간 엣지 정제를 위한 효율적 추론 파이프라인 개발</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티모달(EEG + MRI) 그래프 구조 학습으로 통합</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div class="big-num" style="margin-bottom:1rem;"><i class="fas fa-file-alt"></i></div>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);">논문 정보</h2>
+    <div class="hr"></div>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(1.1rem,2.2vw,1.4rem);">LLM as Clinical Graph Structure Refiner: Enhancing Representation Learning in EEG Seizure Diagnosis</h3>
+      <div class="hr"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><strong>저자:</strong> Lincan Li, Zheng Chen, Yushun Dong (교신저자)</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><strong>소속:</strong> Florida State University / Osaka University (SANKEN)</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><strong>게재:</strong> arXiv:2604.28178v1, 2026년 4월 30일</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><strong>분류:</strong> cs.AI</p>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><i class="fas fa-link accent2"></i> <a href="http://arxiv.org/abs/2604.28178v1" class="accent2" style="text-decoration:underline;">http://arxiv.org/abs/2604.28178v1</a></p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
