@@ -24,5 +24,3 @@
 _Wiki Query 결과에서 새로운 개념으로 추출됨 (2026-04-14)_
 
 ### Transient Turn Injection: Exposing Stateless Multi-Turn Vulnerabilitie (2026-04-25)
-
-→ [[sources/2026-04-25-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]

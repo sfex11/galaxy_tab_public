@@ -23,7 +23,7 @@ Autonomous agent systems such as OpenClaw introduce significant efficiency chall
 ## 추출된 엔티티
 
 - [[LLM Agent]]
-- [[OpenClaw]]
+- [[entities/openclaw.md|openclaw]]
 
 ## 추출된 개념
 

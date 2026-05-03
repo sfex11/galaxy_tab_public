@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/ceiling-performance-problem.md|ceiling performance problem]]
+
+---
+**관련**: [[entities/semantic-id-tokenization.md|semantic id tokenization]]
+
+---
+**관련**: [[entities/query-pattern-recurrence.md|query pattern recurrence]]

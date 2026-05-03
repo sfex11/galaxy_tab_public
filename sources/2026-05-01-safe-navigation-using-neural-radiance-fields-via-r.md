@@ -22,11 +22,11 @@ NeRF(Neural Radiance Field)로 환경의 기하학적 정보를 계산·저장·
 
 ## 기존 Wiki와의 관계
 
-기존 Wiki의 안전 내비게이션 연구축—CBF 기반 제어 장벽 함수([[safety-critical-control]]), GP 기반 안전 임계치 탐사([[safety-aware-exploration]]), POMDP 기반 확률적 쉴딩([[interval-pomdp]])—과 상보적 관계에 있다. 이 논문들은 불확실성을 확률적 경계나 동역학적 제약으로 처리하는 반면, 본 논문은 **환경 표현 자체**를 NeRF로 신경망적으로 압축하고, 로봇의 운동학적 capability를 reachable set으로 명시적으로 기하화하여 안전성을 기하학적 보장으로 변환한다.
+기존 Wiki의 안전 내비게이션 연구축—CBF 기반 제어 장벽 함수([[concepts/safety-critical-control.md|safety critical control]]), GP 기반 안전 임계치 탐사([[concepts/safety-aware-exploration.md|safety aware exploration]]), POMDP 기반 확률적 쉴딩([[concepts/interval-pomdp.md|interval pomdp]])—과 상보적 관계에 있다. 이 논문들은 불확실성을 확률적 경계나 동역학적 제약으로 처리하는 반면, 본 논문은 **환경 표현 자체**를 NeRF로 신경망적으로 압축하고, 로봇의 운동학적 capability를 reachable set으로 명시적으로 기하화하여 안전성을 기하학적 보장으로 변환한다.
 
 ## 핵심 기여
 
-기존 안전 내비게이션이 '동역학 불확실성 제어'에 집중했다면, 본 논문은 '환경 기하학의 신경망적 표현 + 로봇 capability의 기하학적 명시'라는 새로운 축을 제시한다. 이는 [[safetyalfred]]가 지적한 체화 안전 평가의 한계—LLM이 물리적 제약을 인코딩하지 않는 문제([[planning-without-physical-constraint-encoding]])—에 대해, 환경 모델 자체에 기하학적 안전 제약을 내재화하는 구조적 해법 경로를 제공한다.
+기존 안전 내비게이션이 '동역학 불확실성 제어'에 집중했다면, 본 논문은 '환경 기하학의 신경망적 표현 + 로봇 capability의 기하학적 명시'라는 새로운 축을 제시한다. 이는 [[entities/safetyalfred.md|safetyalfred]]가 지적한 체화 안전 평가의 한계—LLM이 물리적 제약을 인코딩하지 않는 문제([[concepts/planning-without-physical-constraint-encoding.md|planning without physical constraint encoding]])—에 대해, 환경 모델 자체에 기하학적 안전 제약을 내재화하는 구조적 해법 경로를 제공한다.
 
 ## 다른 논문과의 연결
 
@@ -34,6 +34,7 @@ NeRF(Neural Radiance Field)로 환경의 기하학적 정보를 계산·저장·
 - [[sources/2026-04-24-interval-pomdp-shielding-for-imperfect-perception-.md|Interval POMDP 쉴딩]]의 '인지 불확실성' 문제에 대해, 환경 표현의 정밀도를 높여 인지 불확실성 자체를 원천 감소시키는 상보적 경로 제시
 
 ## 관련 논문
+- [[entities/methodological-navigation-gap.md|methodological navigation gap]]
 
 - [[sources/2604.26899-safe-navigation-using-neural-radiance-fields-via-reachable-sets.md|Safe Navigation using Neural Radiance Fields via Reachable Sets]]
 

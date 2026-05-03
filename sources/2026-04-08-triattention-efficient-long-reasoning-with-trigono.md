@@ -44,3 +44,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/data-compression.md|data compression]]
+
+---
+**관련**: [[entities/sparse-attention-unification.md|sparse attention unification]]

@@ -15,5 +15,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Intern-Atlas: A Methodological Evolution Graph as Research Infrastruct (2026-05-03)
-
-→ [[sources/2026-05-03-intern-atlas-a-methodological-evolution-graph-as-r.md|상세 보기]]

@@ -17,11 +17,11 @@ LLM 사실 기억 평가가 측정한 것은 '사실에 대한 지식'이 아니
 
 ### 기존 Wiki와의 관계
 
-Wiki의 [[shortcut-learning]] 개념이 이 논문을 부분적으로 인용하며 "정규 표면 형식이 단축경로로 작동할 가능성"을 제기했으나, RedirectQA가 이를 정량적으로 실증하는 구체적 도구를 제공한다. [[implicit-curriculum]]과의 연결에서도, 사전학습 코퍼스에서 표면 형식의 빈도 분포가 암묵적 커리큘럼을 형성하여 특정 형식에 대한 접근성을 편향시킬 수 있음을 시사한다.
+Wiki의 [[concepts/shortcut-learning.md|shortcut learning]] 개념이 이 논문을 부분적으로 인용하며 "정규 표면 형식이 단축경로로 작동할 가능성"을 제기했으나, RedirectQA가 이를 정량적으로 실증하는 구체적 도구를 제공한다. [[concepts/implicit-curriculum.md|implicit curriculum]]과의 연결에서도, 사전학습 코퍼스에서 표면 형식의 빈도 분포가 암묵적 커리큘럼을 형성하여 특정 형식에 대한 접근성을 편향시킬 수 있음을 시사한다.
 
 ### 핵심 발견과 연결점
 
-[[fact-access-decoupling]]은 단순한 개념적 구분이 아니라 RedirectQA가 최초로 정량화하는 실증적 현상이다. [[training-data-pruning]](Cram Less to Fit More)의 맥락에서도 중요한 시사점을 준다: 훈련 데이터를 가지치기할 때 저빈도 표면 형식이 먼저 제거되면, 사실 기억 자체는 유지되더라도 접근 가능성이 비대칭적으로 저하될 수 있다. [[entity-surface-form]]이 LLM 사실 기억의 검출 가능성을 결정하는 핵심 변수임을 체계적으로 입증한다.
+[[concepts/fact-access-decoupling.md|fact access decoupling]]은 단순한 개념적 구분이 아니라 RedirectQA가 최초로 정량화하는 실증적 현상이다. [[concepts/training-data-pruning.md|training data pruning]](Cram Less to Fit More)의 맥락에서도 중요한 시사점을 준다: 훈련 데이터를 가지치기할 때 저빈도 표면 형식이 먼저 제거되면, 사실 기억 자체는 유지되더라도 접근 가능성이 비대칭적으로 저하될 수 있다. [[concepts/entity-surface-form.md|entity surface form]]이 LLM 사실 기억의 검출 가능성을 결정하는 핵심 변수임을 체계적으로 입증한다.
 
 ### 방법론적 기여
 

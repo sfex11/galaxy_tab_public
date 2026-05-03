@@ -35,3 +35,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/causal-rag.md|causal rag]]
+
+---
+**관련**: [[entities/non-stationary-dynamics.md|non stationary dynamics]]

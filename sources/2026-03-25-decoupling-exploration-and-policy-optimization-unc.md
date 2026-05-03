@@ -42,3 +42,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/myopic-optimization.md|myopic optimization]]
+
+---
+**관련**: [[entities/solver-poser-decoupling.md|solver poser decoupling]]

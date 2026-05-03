@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-25-from-research-question-to-scientific-workflow-leve.md|From Research Question to Scientific Workflow: Leveraging Ag]]
 
 ### From Research Question to Scientific Workflow: Leveraging Agentic AI f (2026-04-27)
-
-→ [[sources/2026-04-27-from-research-question-to-scientific-workflow-leve.md|상세 보기]]

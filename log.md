@@ -562,3 +562,11 @@
 - 2026-05-03-reliable-answers-for-recurring-questions-boosting-.md
 - 2026-05-03-position-aware-drafting-for-inference-acceleration.md
 - 2026-05-03-global-optimality-for-constrained-exploration-via-.md
+
+## [2026-05-03 17:05] lint | Wiki 건전성 체크
+- Issues: 1126개
+- Orphans: 153, Missing: 973, Contradictions: 0
+
+## [2026-05-03 17:13] lint | Wiki 건전성 체크
+- Issues: 1126개
+- Orphans: 153, Missing: 973, Contradictions: 0

@@ -31,3 +31,6 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/cost-dominance-dimension-asymmetry.md|cost dominance dimension asymmetry]]

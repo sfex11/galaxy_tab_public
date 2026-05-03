@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md|Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-Wor]]
 
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
-
-→ [[sources/2026-05-03-claw-eval-live-a-live-agent-benchmark-for-evolving.md|상세 보기]]

@@ -61,3 +61,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/distribution-shaping.md|distribution shaping]]
+
+---
+**관련**: [[entities/semantics-aware-checkpoint.md|semantics aware checkpoint]]

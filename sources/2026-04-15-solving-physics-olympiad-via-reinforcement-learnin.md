@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/living-dataset.md|living dataset]]
+
+---
+**관련**: [[entities/bottleneck-misattribution.md|bottleneck misattribution]]

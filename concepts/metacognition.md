@@ -74,5 +74,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-13)
 
 ### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-25)
-
-→ [[sources/2026-04-25-nemobot-games-crafting-strategic-ai-gaming-agents-.md|상세 보기]]

@@ -16,5 +16,3 @@
 _수동 Wiki Query에서 추출됨_
 
 ### Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes (2026-05-03)
-
-→ [[sources/2026-05-03-crab-a-semantics-aware-checkpointrestore-runtime-f.md|상세 보기]]

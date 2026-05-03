@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-02-position-aware-drafting-for-inference-acceleration.md|Position-Aware Drafting for Inference Acceleration in LLM-Ba]]
 
 ### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-03)
-
-→ [[sources/2026-05-03-position-aware-drafting-for-inference-acceleration.md|상세 보기]]

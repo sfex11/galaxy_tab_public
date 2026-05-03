@@ -18,5 +18,3 @@ _자동 Wiki Query에서 추출됨_
 ### An AI Agent Execution Environment to Safeguard User Data (2026-04-23)
 
 ### Learning to Communicate: Toward End-to-End Optimization of Multi-Agent (2026-04-26)
-
-→ [[sources/2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md|상세 보기]]

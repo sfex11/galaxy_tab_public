@@ -52,3 +52,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/memory-fragmentation-failure.md|memory fragmentation failure]]
+
+---
+**관련**: [[entities/on-device-inference.md|on device inference]]

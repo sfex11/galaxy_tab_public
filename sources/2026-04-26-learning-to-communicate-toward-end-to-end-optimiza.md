@@ -55,3 +55,9 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/federated-learning.md|federated learning]]
+
+---
+**관련**: [[entities/optimization-modeling.md|optimization modeling]]

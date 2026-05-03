@@ -22,7 +22,7 @@ Hybrid sequence models that combine efficient Transformer components with linear
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

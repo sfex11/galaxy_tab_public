@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-04-13-density-driven-optimal-control-convergence-guarant]]: 둘 다 분산형 다중 에이전트 의사결정의 이론적 수렴 보장을 다루며, 전자는 밀도 기반 최적 제어를, 후자는 Dec-POMDP의 보수적 정책 반복을 분석한다.
 - → [[sources/2026-04-14-event-driven-temporal-graph-networks-for-asynchron]]: 둘 다 다중 에이전트 강화학습(MARL)의 분산 의사결정을 다루며, 전자는 사이버 방어의 비동기 에이전트를, 후자는 Dec-POMDP의 정책 최적화를 다룬다.
+
+---
+**관련**: [[entities/pomdp.md|pomdp]]

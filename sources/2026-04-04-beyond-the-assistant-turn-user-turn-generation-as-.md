@@ -45,3 +45,6 @@ LLM 평가의 패러다임을 어시스턴트 턴에서 유저 턴 생성으로 
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/item-boundary-awareness.md|item boundary awareness]]

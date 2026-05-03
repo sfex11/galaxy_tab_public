@@ -171,50 +171,32 @@ LLM의 인컨텍스트 CFG 해석 능력이 구문·행동·의미 세 축에서
 
 ### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-25)
 
-→ [[sources/2026-04-25-evaluation-of-automatic-speech-recognition-using-g.md|상세 보기]]
-
 ### MathDuels: Evaluating LLMs as Problem Posers and Solvers (2026-04-25)
 
 LLM을 단일 역할(해결자)이 아닌 이중 역할(출제자+해결자)로 평가하는 MathDuels는, 기존 합성 분석이 '안전성·추론·에이전트' 축으로 분석한 LLM 능력 평가에 '문제 생성 능력'이라는 새로운 축을 추가한다.
-
-→ [[sources/2026-04-25-mathduels-evaluating-llms-as-problem-posers-and-so.md|상세 보기]]
 
 ### A Multimodal Text- and Graph-Based Approach for Open-Domain Event Extr (2026-04-25)
 
 개방 도메인 이벤트 추출에서 LLM이 사전 정의 없이도 이벤트 유형을 식별하는 범용성을 보여주며, 단순 텍스트 생성을 넘어 구조화된 지식 추출 엔진으로서의 역할을 확장한다.
 
-→ [[sources/2026-04-25-a-multimodal-text--and-graph-based-approach-for-op.md|상세 보기]]
-
 ### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-25)
 
 RedirectQA가 LLM의 지식 저장 방식이 엔티티의 정규 표현이 아닌 표면 형태 빈도에 편향되어 있음을 실증함으로써, 'LLM이 사실을 기억한다'는 명제의 의미를 재검토하게 한다. 기존 78편 합성 분석에서 다루던 지식 한계 문제에 표면 형태 접근성이라는 새로운 차원을 추가한다.
-
-→ [[sources/2026-04-25-revisiting-non-verbatim-memorization-in-large-lang.md|상세 보기]]
 
 ### Transient Turn Injection: Exposing Stateless Multi-Turn Vulnerabilitie (2026-04-25)
 
 TTI는 LLM의 대화 처리가 턴 간 맥락을 구조적으로 단절시키는 무상태(stateless) 특성을 가질 때 심각한 안전 취약성이 발생함을 보여주며, 대화형 배포에서 상태 관리가 안전성의 필수 전제조건임을 규명한다.
 
-→ [[sources/2026-04-25-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]
-
 ### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-26)
 
 사실 지식의 인코딩이 표면 형식에 강하게 결합되어 있어, 동일한 사실이라도 비정규 표면 형식으로 질의되면 검출 가능성이 급감하는 표면 형식 의존성을 새로운 인지 한계 축으로 드러낸다.
-
-→ [[sources/2026-04-26-revisiting-non-verbatim-memorization-in-large-lang.md|상세 보기]]
 
 ### Transient Turn Injection: Exposing Stateless Multi-Turn Vulnerabilitie (2026-04-26)
 
 LLM이 턴 간 상태를 유지하지 않는 stateless 처리 방식의 보안 함의를 구체화하며, 동일 모델이 단일 턴에서는 안전하고 다중 턴에서는 취약해지는 비단조적 안전성 특성을 최초로 체계적으로 문서화한다.
 
-→ [[sources/2026-04-26-transient-turn-injection-exposing-stateless-multi-.md|상세 보기]]
-
 ### From Syntax to Emotion: A Mechanistic Analysis of Emotion Inference in (2026-04-30)
-
-→ [[sources/2026-04-30-from-syntax-to-emotion-a-mechanistic-analysis-of-e.md|상세 보기]]
 
 ### LLM as Clinical Graph Structure Refiner: Enhancing Representation Lear (2026-05-02)
 
 LLM의 능력 스펙트럼에 '그래프 위상 정제'를 추가한다. 텍스트 생성이나 도구 사용이 아닌, 수치적 신호에서 구성된 그래프의 구조적 타당성을 추론하는 비전통적 배포 맥락을 제공한다.
-
-→ [[sources/2026-05-02-llm-as-clinical-graph-structure-refiner-enhancing-.md|상세 보기]]

@@ -15,11 +15,11 @@
 
 ClassEval-Pro는 LLM 코드 생성 평가에서 함수 수준(function-level)과 저장소 수준(repository-level) 사이에 존재하는 **구성적 코드 창작(compositional code creation)**의 사각지대를 구체화하는 크로스 도메인 벤치마크다. 기존 평가가 고립된 함수에 국한되거나 수동 큐레이션된 클래스 수준 태스크에 의존하여 확장성과 데이터 오염 저항성에서 한계를 보인다는 점을 문제 삼는다.
 
-이 논문은 [[benchmark]] 엔티티가 지적해온 **평가자의 가정([[evaluator-assumption]])** 문제를 코드 생성 도메인에서 구체적으로 실증한다: 평가가 '함수 단위 능력'과 '저장소 단위 수정 능력'만을 측정하도록 가정을 설정해두면, 그 사이에 위치한 구성적 능력은 보이지 않게 된다. [[restestbench]]가 REST API 테스트에서 [[coverage-functionality-gap]]을 문제 삼은 것과 구조적으로 동일한 패턴이다.
+이 논문은 [[concepts/benchmark.md|benchmark]] 엔티티가 지적해온 **평가자의 가정([[concepts/evaluator-assumption.md|evaluator assumption]])** 문제를 코드 생성 도메인에서 구체적으로 실증한다: 평가가 '함수 단위 능력'과 '저장소 단위 수정 능력'만을 측정하도록 가정을 설정해두면, 그 사이에 위치한 구성적 능력은 보이지 않게 된다. [[entities/restestbench.md|restestbench]]가 REST API 테스트에서 [[concepts/coverage-functionality-gap.md|coverage functionality gap]]을 문제 삼은 것과 구조적으로 동일한 패턴이다.
 
-또한 [[ceiling-performance-problem]]에 대한 해법 경로를 제시한다 — 크로스 도메인 설계와 데이터 오염 저항성을 통해 정적 벤치마크가 직면한 포화 문제를 구조적으로 완화한다. [[swe-chat]]이 야생 환경에서의 코딩 에이전트 상호작용을 포착한 것과 보완적 위치에 있으며, ClassEval-Pro는 통제된 환경에서 클래스 수준 구성 능력을 정밀하게 분리 측정한다.
+또한 [[concepts/ceiling-performance-problem.md|ceiling performance problem]]에 대한 해법 경로를 제시한다 — 크로스 도메인 설계와 데이터 오염 저항성을 통해 정적 벤치마크가 직면한 포화 문제를 구조적으로 완화한다. [[entities/swe-chat.md|swe chat]]이 야생 환경에서의 코딩 에이전트 상호작용을 포착한 것과 보완적 위치에 있으며, ClassEval-Pro는 통제된 환경에서 클래스 수준 구성 능력을 정밀하게 분리 측정한다.
 
-[[repository-level-code-understanding]]의 하위 호환 문제를 역으로 조명한다: 저장소 이해가 클래스 구성 능력을 함의하지 않을 수 있으며, 두 능력은 독립적인 평가 축으로 분리되어야 한다는 점을 시사한다.
+[[concepts/repository-level-code-understanding.md|repository level code understanding]]의 하위 호환 문제를 역으로 조명한다: 저장소 이해가 클래스 구성 능력을 함의하지 않을 수 있으며, 두 능력은 독립적인 평가 축으로 분리되어야 한다는 점을 시사한다.
 
 ## 🔗 관련 논문
 

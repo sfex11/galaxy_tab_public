@@ -51,3 +51,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ontology-construction.md|ontology construction]]
+
+---
+**관련**: [[entities/ai-game-programming-paradigm.md|ai game programming paradigm]]
+
+---
+**관련**: [[entities/checkpoint-restore-efficiency-spectrum.md|checkpoint restore efficiency spectrum]]
+
+---
+**관련**: [[entities/knowledge-distillation.md|knowledge distillation]]
+
+---
+**관련**: [[entities/sparse-autoencoder.md|sparse autoencoder]]
+
+---
+**관련**: [[entities/training-data-pruning.md|training data pruning]]

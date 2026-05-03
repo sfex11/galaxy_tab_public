@@ -15,22 +15,14 @@ _Wiki 축적 중_
 
 MathDuels가 '사전 정의된 문제 공간'이라는 평가자의 근본적 가정을 어떻게 우회하는지를 구체적 사례로 제공하여, 이 추상적 개념에 실증적 근거를 부여한다.
 
-→ [[sources/2026-04-27-mathduels-evaluating-llms-as-problem-posers-and-so.md|상세 보기]]
-
 ### DV-World: Benchmarking Data Visualization Agents in Real-World Scenari (2026-04-30)
 
 'assumption of perfect intent'이라는 구체적 사례를 추가하여, 평가자가 암묵적으로 전제하는 가정이 도메인마다 다른 얼굴(안전 평가에서의 '완전 관측 가정', DV에서의 '완전 의도 가정')로 현현함을 보인다.
-
-→ [[sources/2026-04-30-dv-world-benchmarking-data-visualization-agents-in.md|상세 보기]]
 
 ### RESTestBench: A Benchmark for Evaluating the Effectiveness of LLM-Gene (2026-04-30)
 
 '높은 코드 커버리지가 기능적 테스트 품질의 대리 지표'라는 평가자의 근본적 가정을 구체적으로 식별하고, 정밀/모호 요구사항 변형을 통해 이 가정이 어떤 조건에서 붕괴하는지를 실험적으로 보여준다.
 
-→ [[sources/2026-04-30-restestbench-a-benchmark-for-evaluating-the-effect.md|상세 보기]]
-
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-02)
 
 Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평가 분리로 우회한다: 평가 기반시설(infrastructure)은 안정적이되 평가 대상(signal)은 유동적이라는 아키텍처가, 정적 가정과 동적 현실 사이의 긴장을 구조적으로 해소한다.
-
-→ [[sources/2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md|상세 보기]]

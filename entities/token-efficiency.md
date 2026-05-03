@@ -15,40 +15,26 @@ _Wiki 축적 중_
 
 도구 스키마 압축을 넘어 스키마 로딩 자체를 지연시키는 접근법을 제시하여, 토큰 효율화의 범위를 '주어진 컨텍스트의 압축'에서 '불필요한 컨텍스트의 원천 차단'으로 확장한다.
 
-→ [[sources/2026-04-26-tool-attention-is-all-you-need-dynamic-tool-gating.md|상세 보기]]
-
 ### Pythia: Toward Predictability-Driven Agent-Native LLM Serving (2026-04-30)
 
 시맨틱 예측가능성을 토큰 효율화의 상류 원천으로 위치시킨다 — Tool Attention이 스키마 로딩을 지연시키는 후처리적 접근이라면, Pythia는 토폴로지 구조 자체에서 불필요한 토큰 생성을 선제적으로 차단하는 구조적 접근이다.
-
-→ [[sources/2026-04-30-pythia-toward-predictability-driven-agent-native-l.md|상세 보기]]
 
 ### Agentic Harness Engineering: Observability-Driven Automatic Evolution  (2026-04-30)
 
 백만 토큰 규모의 궤적에서 하네스 수준의 낭비를 구조적으로 식별·제거하는 상류 최적화 경로를 제공하여, 기존 스키마 로딩 지연(Tool Attention)과 결합하면 토큰 효율화의 스펙트럼을 컨텍스트 압축→컨텍스트 차단→하네스 최적화로 3층으로 확장한다.
 
-→ [[sources/2026-04-30-agentic-harness-engineering-observability-driven-a.md|상세 보기]]
-
 ### Carbon-Taxed Transformers: A Green Compression Pipeline for Overgrown  (2026-04-30)
 
 토큰 효율화의 정당성 근거를 비용 절감에서 탄소 배출 감축으로 확장하여, 효율화가 단순한 엔지니어링 최적화가 아닌 환경적 책임의 실행 수단임을 위치시킨다.
-
-→ [[sources/2026-04-30-carbon-taxed-transformers-a-green-compression-pipe.md|상세 보기]]
 
 ### Unifying Sparse Attention with Hierarchical Memory for Scalable Long-C (2026-05-01)
 
 불필요한 컨텍스트 주입 차단(Tool Attention)에서 불필요한 KV 엔트리 접근 차단(희소 어텐션 통합)으로 효율화의 대상을 컨텍스트 입력층에서 메모리 접근층으로 확장한다.
 
-→ [[sources/2026-05-01-unifying-sparse-attention-with-hierarchical-memory.md|상세 보기]]
-
 ### Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accurac (2026-05-02)
 
 토큰 선택 수준(SLM에서의 local sufficiency)을 넘어 템플릿 수준에서 디코딩 탐색 공간을 구조적으로 축소하는 상위 최적화 차원을 제공한다.
 
-→ [[sources/2026-05-02-reliable-answers-for-recurring-questions-boosting-.md|상세 보기]]
-
 ### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-02)
 
 컨텍스트 단위의 토큰 절약(Tool Attention)과 병렬로, 디코딩 단계 자체를 건너뛰어 토큰 생성 레이턴시를 줄이는 추론 수준의 토큰 효율화 경로를 추가하여, 토큰 효율화가 '입력 최소화'와 '생성 가속' 두 축으로 분화됨을 보여준다.
-
-→ [[sources/2026-05-02-position-aware-drafting-for-inference-acceleration.md|상세 보기]]

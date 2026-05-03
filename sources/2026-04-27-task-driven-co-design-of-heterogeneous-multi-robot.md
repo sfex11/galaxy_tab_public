@@ -17,11 +17,11 @@
 
 ## 기존 Wiki와의 관계
 
-기존 [[compositional-safety]]가 '합성의 비단조성' 문제를 **진단**한 데 반면, 본 논문은 단조 합성이라는 **해법 경로**를 수학적으로 구체화한다. [[cross-domain-tradeoff]]는 단순한 트레이드오프 기술에서, 단조 합성이 보장하는 도메인 결정의 분해-재합성 가능성으로 내용이 채워진다. [[design-deployment-continuum]]은 설계 단계에서 배포 단계까지의 연속성이 단조 합성에 의해 형식적으로 보존됨을 보여준다.
+기존 [[concepts/compositional-safety.md|compositional safety]]가 '합성의 비단조성' 문제를 **진단**한 데 반면, 본 논문은 단조 합성이라는 **해법 경로**를 수학적으로 구체화한다. [[concepts/cross-domain-tradeoff.md|cross domain tradeoff]]는 단순한 트레이드오프 기술에서, 단조 합성이 보장하는 도메인 결정의 분해-재합성 가능성으로 내용이 채워진다. [[concepts/design-deployment-continuum.md|design deployment continuum]]은 설계 단계에서 배포 단계까지의 연속성이 단조 합성에 의해 형식적으로 보존됨을 보여준다.
 
 ## 새로운 연결점
 
-[[layered-interpretability-allocation]]의 '계층별 해석가능성 요구 차등 배분'이 본 프레임워크의 도메인 분해 구조와 직접 대응한다 — 각 도메인(설계/구성/계획)이 독립적으로 검증 가능하면서도 합성 후 안전성이 보존되는 것은 계층적 해석가능성의 구체적 실현 사례다. [[communication-independent-shielding]]의 '통신 내용 무관하게 행동 출력에서 안전 보장' 원칙과도 호환되며, 본 프레임워크의 단조 합성이 통신 계층의 불투명성을 우회하는 안전 보장 경로를 제공할 수 있음을 시사한다.
+[[concepts/layered-interpretability-allocation.md|layered interpretability allocation]]의 '계층별 해석가능성 요구 차등 배분'이 본 프레임워크의 도메인 분해 구조와 직접 대응한다 — 각 도메인(설계/구성/계획)이 독립적으로 검증 가능하면서도 합성 후 안전성이 보존되는 것은 계층적 해석가능성의 구체적 실현 사례다. [[concepts/communication-independent-shielding.md|communication independent shielding]]의 '통신 내용 무관하게 행동 출력에서 안전 보장' 원칙과도 호환되며, 본 프레임워크의 단조 합성이 통신 계층의 불투명성을 우회하는 안전 보장 경로를 제공할 수 있음을 시사한다.
 
 → [[sources/2026-04-27-task-driven-co-design-of-heterogeneous-multi-robot.md|상세 보기]]
 

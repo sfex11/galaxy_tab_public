@@ -23,7 +23,7 @@ As LLM agents transition to autonomous digital coworkers, maintaining determinis
 ## 추출된 엔티티
 
 - [[LLM Agent]]
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

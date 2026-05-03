@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-optimization-structure.md|dual optimization structure]]
+
+---
+**관련**: [[entities/knowledge-state-drift.md|knowledge state drift]]

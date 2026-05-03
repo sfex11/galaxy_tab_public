@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-02-exploration-hacking-can-llms-learn-to-resist-rl-tr.md|Exploration Hacking: Can LLMs Learn to Resist RL Training?]]
 
 ### Global Optimality for Constrained Exploration via Penalty Regularizati (2026-05-03)
-
-→ [[sources/2026-05-03-global-optimality-for-constrained-exploration-via-.md|상세 보기]]

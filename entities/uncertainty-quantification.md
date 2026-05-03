@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Bounding the Black Box: A Statistical Certification Framework for AI R (2026-04-26)
 
 불확실성 정량화의 응용 대상을 모델 성능 예측에서 규제적 안전 증명으로 확장함. 분포 변화 하에서의 위험 경계 설정(distributional-shift-risk-bounding)이 UQ의 실질적 가치를 규제 맥락에서 입증하는 사례가 됨.
-
-→ [[sources/2026-04-26-bounding-the-black-box-a-statistical-certification.md|상세 보기]]

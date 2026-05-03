@@ -127,3 +127,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/context-space-optimization.md|context space optimization]]
+
+---
+**관련**: [[entities/adversarial-problem-generation.md|adversarial problem generation]]
+
+---
+**관련**: [[entities/draft-model-domain-adaptation.md|draft model domain adaptation]]
+
+---
+**관련**: [[entities/model-context-protocol.md|model context protocol]]
+
+---
+**관련**: [[entities/diffusion-model.md|diffusion model]]

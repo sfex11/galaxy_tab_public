@@ -57,3 +57,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-planning.md|hierarchical planning]]
+
+---
+**관련**: [[entities/self-play-benchmark.md|self play benchmark]]
+
+---
+**관련**: [[entities/live-benchmark.md|live benchmark]]

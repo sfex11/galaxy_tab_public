@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Exploration Hacking: Can LLMs Learn to Resist RL Training? (2026-05-03)
-
-→ [[sources/2026-05-03-exploration-hacking-can-llms-learn-to-resist-rl-tr.md|상세 보기]]

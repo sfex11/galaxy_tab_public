@@ -42,3 +42,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/residual-stream-monitoring.md|residual stream monitoring]]
+
+---
+**관련**: [[entities/dv-world.md|dv world]]

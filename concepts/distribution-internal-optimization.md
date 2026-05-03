@@ -13,8 +13,4 @@ _Wiki 축적 중_
 
 ### Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accurac (2026-05-03)
 
-→ [[sources/2026-05-03-reliable-answers-for-recurring-questions-boosting-.md|상세 보기]]
-
 ### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-03)
-
-→ [[sources/2026-05-03-position-aware-drafting-for-inference-acceleration.md|상세 보기]]

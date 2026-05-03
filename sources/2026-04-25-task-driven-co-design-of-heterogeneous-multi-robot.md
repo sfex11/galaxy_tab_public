@@ -19,18 +19,18 @@
 
 ## 핵심 기여: 단조성 기반 구성적 설계
 
-요약에서 "monoto(nic)"으로 시작되는 점에서, 본 프레임워크는 단조 연산자(monotone operator)를 활용하여 부분 시스템의 속성이 시스템 전체로 보존되는 구성적 추론을 가능하게 한다. 이는 Wiki의 [[compositional-safety]]가 "안전(A) ∧ 안전(B) ⊭ 안전(A∘B)"이라는 비단조성을 문제 삼았던 것과 정확히 대응되는 접근 — **단조성을 설계 원칙으로 강제하여 구성성을 보장**하는 방향이다.
+요약에서 "monoto(nic)"으로 시작되는 점에서, 본 프레임워크는 단조 연산자(monotone operator)를 활용하여 부분 시스템의 속성이 시스템 전체로 보존되는 구성적 추론을 가능하게 한다. 이는 Wiki의 [[concepts/compositional-safety.md|compositional safety]]가 "안전(A) ∧ 안전(B) ⊭ 안전(A∘B)"이라는 비단조성을 문제 삼았던 것과 정확히 대응되는 접근 — **단조성을 설계 원칙으로 강제하여 구성성을 보장**하는 방향이다.
 
 ## 기존 개념과의 연결
 
-- [[heterogeneous-robot-team]]: 기존에 '작업 할당'에 초점을 맞추던 연구를 '로봇 설계까지 포함하는 공동 설계'로 확장
-- [[multi-robot-coordination]]: ADMM 기반 분산 MPC 등 실행 수준의 조율을 넘어, **설계 단계**에서의 조율을 형식화
-- [[task-allocation]]: 함대 구성(fleet composition)을 작업 할당의 상위 결정 문제로 통합
-- [[compositional-safety]]: 단조성 기반 구성성이 안전성 구성의 비단조성 문제에 대한 정형적 해법을 제시할 수 있음
+- [[concepts/heterogeneous-robot-team.md|heterogeneous robot team]]: 기존에 '작업 할당'에 초점을 맞추던 연구를 '로봇 설계까지 포함하는 공동 설계'로 확장
+- [[concepts/multi-robot-coordination.md|multi robot coordination]]: ADMM 기반 분산 MPC 등 실행 수준의 조율을 넘어, **설계 단계**에서의 조율을 형식화
+- [[concepts/task-allocation.md|task allocation]]: 함대 구성(fleet composition)을 작업 할당의 상위 결정 문제로 통합
+- [[concepts/compositional-safety.md|compositional safety]]: 단조성 기반 구성성이 안전성 구성의 비단조성 문제에 대한 정형적 해법을 제시할 수 있음
 
 ## 시사점
 
-에이전트 시스템 연구에서 '설계-배포-운영'의 분리가 가져오는 비효율을 해소하는 형식적 기반을 제공하며, [[layered-capability-decomposition]]이 제안한 계층적 분해와 상보적으로 작동할 수 있다.
+에이전트 시스템 연구에서 '설계-배포-운영'의 분리가 가져오는 비효율을 해소하는 형식적 기반을 제공하며, [[concepts/layered-capability-decomposition.md|layered capability decomposition]]이 제안한 계층적 분해와 상보적으로 작동할 수 있다.
 
 ## 🔗 관련 논문
 

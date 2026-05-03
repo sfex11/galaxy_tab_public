@@ -75,3 +75,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/clinical-reasoning.md|clinical reasoning]]
+
+---
+**관련**: [[entities/spatial-reasoning.md|spatial reasoning]]
+
+---
+**관련**: [[entities/communication-reasoning-joint-optimization.md|communication reasoning joint optimization]]

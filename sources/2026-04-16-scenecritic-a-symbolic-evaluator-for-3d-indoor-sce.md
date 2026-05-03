@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/citation-hallucination.md|citation hallucination]]
+
+---
+**관련**: [[entities/dual-evaluator-governance.md|dual evaluator governance]]

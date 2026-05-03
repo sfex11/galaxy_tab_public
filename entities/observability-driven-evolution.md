@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-30-agentic-harness-engineering-observability-driven-a.md|Agentic Harness Engineering: Observability-Driven Automatic ]]
 
 ### ClawGym: A Scalable Framework for Building Effective Claw Agents (2026-05-01)
-
-→ [[sources/2026-05-01-clawgym-a-scalable-framework-for-building-effectiv.md|상세 보기]]

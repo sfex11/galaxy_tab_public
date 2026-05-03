@@ -19,14 +19,14 @@
 
 ## 도구 주의 메커니즘
 
-제안하는 **Tool Attention**은 두 가지 축으로 작동한다: (1) 쿼리 관련성에 기반한 **동적 도어 게이팅**(불필요한 도구의 스키마를 사전에 차단)과 (2) 실제 호출 결정 시점에만 스키마를 로드하는 **Lazy Schema Loading**. 이는 기존 Wiki에서 식별된 [[stateless-architecture-vulnerability|상태 없는 아키텍처 취약점]]을 도구 선택 맥락 상실이라는 구체적 실패 모드로 실증하며, [[context-fracture-point|컨텍스트 파단점]] 부근에서의 추론 품질 저하를 완화한다.
+제안하는 **Tool Attention**은 두 가지 축으로 작동한다: (1) 쿼리 관련성에 기반한 **동적 도어 게이팅**(불필요한 도구의 스키마를 사전에 차단)과 (2) 실제 호출 결정 시점에만 스키마를 로드하는 **Lazy Schema Loading**. 이는 기존 Wiki에서 식별된 [[concepts/stateless-architecture-vulnerability.md|상태 없는 아키텍처 취약점]]을 도구 선택 맥락 상실이라는 구체적 실패 모드로 실증하며, [[concepts/context-fracture-point.md|컨텍스트 파단점]] 부근에서의 추론 품질 저하를 완화한다.
 
 ## 기존 Wiki와의 연결
 
-- [[swe-chat]] 분석에서 "MCP Tax를 제어 변수로 포함해야 함"을 시사했던 부분에 대한 직접적 해답 제공
-- [[token-step-pipeline-hierarchy|토큰→스텝→파이프라인 최적화 계층]]에서 토큰 수준 최적화의 구체적 구현 사례
-- [[serving-safety-coupling|서빙-안전성 커플링]]의 토큰 오버헤드 축 — 스키마 팽창이 KV 캐시를 압박하여 가드레일 적용 가능성을 간접적으로 제한
-- [[transient-turn-injection]]이 노출한 다중 턴 취약점과 동일 근원(상태 없는 아키텍처)을 공유하되, 안전성이 아닌 효율성 축에서 해결
+- [[entities/swe-chat.md|swe chat]] 분석에서 "MCP Tax를 제어 변수로 포함해야 함"을 시사했던 부분에 대한 직접적 해답 제공
+- [[concepts/token-step-pipeline-hierarchy.md|토큰→스텝→파이프라인 최적화 계층]]에서 토큰 수준 최적화의 구체적 구현 사례
+- [[concepts/serving-safety-coupling.md|서빙-안전성 커플링]]의 토큰 오버헤드 축 — 스키마 팽창이 KV 캐시를 압박하여 가드레일 적용 가능성을 간접적으로 제한
+- [[entities/transient-turn-injection.md|transient turn injection]]이 노출한 다중 턴 취약점과 동일 근원(상태 없는 아키텍처)을 공유하되, 안전성이 아닌 효율성 축에서 해결
 
 ## 🔗 관련 논문
 

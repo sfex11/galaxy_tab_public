@@ -22,16 +22,16 @@ EU AI Act, NIST RMF, CoE Convention이 공통으로 요구하는 '배포 전 안
 ## 기존 Wiki와의 관계
 
 ### 형식적 검증과의 상보성
-기존 [[formal-verification]]이 요구하는 완전 관측·완전 명세 전제를 블랙박스 AI에서 비현실적이라고 인정하면서도, 통계적 경계(probabilistic bound)를 통해 실질적으로 동등한 안전 보장을 달성하는 상보적 패러다임을 제공한다. 이는 [[epistemic-gap]] 문제 — 인지 모델의 실제 오류 특성을 형식적 검증이 반영하지 못하는 구조적 간극 — 에 대한 현실적 대응이다.
+기존 [[concepts/formal-verification.md|formal verification]]이 요구하는 완전 관측·완전 명세 전제를 블랙박스 AI에서 비현실적이라고 인정하면서도, 통계적 경계(probabilistic bound)를 통해 실질적으로 동등한 안전 보장을 달성하는 상보적 패러다임을 제공한다. 이는 [[concepts/epistemic-gap.md|epistemic gap]] 문제 — 인지 모델의 실제 오류 특성을 형식적 검증이 반영하지 못하는 구조적 간극 — 에 대한 현실적 대응이다.
 
 ### 규제-기술 간극의 해소
-[[ai-governance]] 엔티티가 지적해온 [[regulatory-vacuity]]를 구체적 기술 경로로 해소한다. 규제 준수를 절차적 검사에서 증거 기반 인증으로 전환함으로써, [[pre-deployment-safety-evidence]]의 내용을 '무엇이든 제출하라'에서 '이 통계적 기준을 충족하라'로 구체화한다.
+[[concepts/ai-governance.md|ai governance]] 엔티티가 지적해온 [[concepts/regulatory-vacuity.md|regulatory vacuity]]를 구체적 기술 경로로 해소한다. 규제 준수를 절차적 검사에서 증거 기반 인증으로 전환함으로써, [[concepts/pre-deployment-safety-evidence.md|pre deployment safety evidence]]의 내용을 '무엇이든 제출하라'에서 '이 통계적 기준을 충족하라'로 구체화한다.
 
 ### 불확실성 정량화와의 통합
-[[uncertainty-quantification]]을 순수 학술적 도구에서 규제 준수 도구로 격상시킨다. [[distributional-shift-risk-bounding]]과 [[probabilistic-risk-bound]] 개념이 규제 문맥에서 실제로 작동하는 방식을 제시한다.
+[[concepts/uncertainty-quantification.md|uncertainty quantification]]을 순수 학술적 도구에서 규제 준수 도구로 격상시킨다. [[concepts/distributional-shift-risk-bounding.md|distributional shift risk bounding]]과 [[concepts/probabilistic-risk-bound.md|probabilistic risk bound]] 개념이 규제 문맥에서 실제로 작동하는 방식을 제시한다.
 
 ### 안전성 전이 격차와의 연결
-[[safety-transfer-gap]]이 지적하는 평가 모달리티-운영 모달리티 간 불일치 문제에 대해, 통계적 인증이 배포 환경의 분포 변화를 명시적으로 모델링함으로써 전이 가능한 안전 보장을 제공할 수 있음을 시사한다.
+[[concepts/safety-transfer-gap.md|safety transfer gap]]이 지적하는 평가 모달리티-운영 모달리티 간 불일치 문제에 대해, 통계적 인증이 배포 환경의 분포 변화를 명시적으로 모델링함으로써 전이 가능한 안전 보장을 제공할 수 있음을 시사한다.
 
 ## 연결점
 - [[sources/2026-04-24-interval-pomdp-shielding-for-imperfect-perception-.md|Interval POMDP Shielding]]: 인지 불확실성을 확률 구간으로 모델링하는 접근과 통계적 인증의 분포 기반 경계 설정이 방법론적으로 수렴

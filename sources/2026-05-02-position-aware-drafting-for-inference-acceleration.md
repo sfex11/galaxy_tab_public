@@ -22,9 +22,9 @@ LLM 기반 생성형 리스트 추천에서 아이템이 다중 시맨틱-ID 토
 
 ## 기존 Wiki와의 관계
 
-기존 [[speculative-decoding]] 엔티티가 일반적 LLM 추론 가속(임베딩 보간 기반 training-free multi-token prediction, SLM의 local sufficiency 활용 등)을 다루었다면, 본 논문은 SD를 특정 도메인(생성형 추천)의 구조적 제약 — 아이템 단위 원자성 — 에 맞게 적응시키는 경로를 제공한다. 표준 SD는 토큰 단위로 가장 긴 접두사를 수용하지만, 생성형 추천에서는 부분적 아이템 수용이 무의미하므로 드래프트 모델이 아이템 경계를 인식해야 한다는 도메인 특화적 요구사항을 구체화한다.
+기존 [[concepts/speculative-decoding.md|speculative decoding]] 엔티티가 일반적 LLM 추론 가속(임베딩 보간 기반 training-free multi-token prediction, SLM의 local sufficiency 활용 등)을 다루었다면, 본 논문은 SD를 특정 도메인(생성형 추천)의 구조적 제약 — 아이템 단위 원자성 — 에 맞게 적응시키는 경로를 제공한다. 표준 SD는 토큰 단위로 가장 긴 접두사를 수용하지만, 생성형 추천에서는 부분적 아이템 수용이 무의미하므로 드래프트 모델이 아이템 경계를 인식해야 한다는 도메인 특화적 요구사항을 구체화한다.
 
-이는 [[token-efficiency]]의 범위를 '컨텍스트 압축'이나 '불필요한 토큰 원천 차단'(Tool Attention)에서 '디코딩 단계 건너뛰기를 통한 토큰 생성 효율화'로 확장하며, [[marginal-distribution-ceiling]] 원리 — 타겟 분포 P(y)를 변경하지 않고 가속한다는 전제 — 를 준수하는 분포 내 최적화(distribution-internal-optimization)의 구체적 사례다.
+이는 [[concepts/token-efficiency.md|token efficiency]]의 범위를 '컨텍스트 압축'이나 '불필요한 토큰 원천 차단'(Tool Attention)에서 '디코딩 단계 건너뛰기를 통한 토큰 생성 효율화'로 확장하며, [[concepts/marginal-distribution-ceiling.md|marginal distribution ceiling]] 원리 — 타겟 분포 P(y)를 변경하지 않고 가속한다는 전제 — 를 준수하는 분포 내 최적화(distribution-internal-optimization)의 구체적 사례다.
 
 ## 관련 논문
 

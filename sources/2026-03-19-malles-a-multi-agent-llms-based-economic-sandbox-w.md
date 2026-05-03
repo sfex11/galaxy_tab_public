@@ -149,3 +149,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/ai-agent-profiling.md|ai agent profiling]]
+
+---
+**관련**: [[entities/latent-inter-agent-communication.md|latent inter agent communication]]
+
+---
+**관련**: [[entities/zero-trust-agent-architecture.md|zero trust agent architecture]]
+
+---
+**관련**: [[entities/agent-os-semantic-gap.md|agent os semantic gap]]

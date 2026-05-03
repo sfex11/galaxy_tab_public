@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-02-global-optimality-for-constrained-exploration-via-.md|Global Optimality for Constrained Exploration via Penalty Re]]
 
 ### Global Optimality for Constrained Exploration via Penalty Regularizati (2026-05-03)
-
-→ [[sources/2026-05-03-global-optimality-for-constrained-exploration-via-.md|상세 보기]]

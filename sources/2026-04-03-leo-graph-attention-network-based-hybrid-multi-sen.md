@@ -63,3 +63,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/graph-rag.md|graph rag]]
+
+---
+**관련**: [[entities/eeg-graph-representation.md|eeg graph representation]]
+
+---
+**관련**: [[entities/llm-as-graph-refiner.md|llm as graph refiner]]
+
+---
+**관련**: [[entities/noise-robust-graph-construction.md|noise robust graph construction]]

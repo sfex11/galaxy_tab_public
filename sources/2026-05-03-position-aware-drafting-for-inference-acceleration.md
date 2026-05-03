@@ -19,14 +19,14 @@
 
 ## 기존 Wiki와의 관계
 
-[[speculative-decoding]]의 효과성이 순수한 분포 근사가 아닌 도메인 내부 구조(아이템 경계) 인식에 의존함을 보여주어, 기존 '드래프트-타겟 분포 정렬' 중심의 이해를 '분포-내부 구조 인식'으로 확장한다. [[marginal-distribution-ceiling]]의 원칙을 엄격히 준수하는 실제 구현 사례로, [[distribution-internal-optimization]]이 이론적 개념에서 구체적 설계 전략(경계 위치 인식)으로 진화함을 보여준다.
+[[concepts/speculative-decoding.md|speculative decoding]]의 효과성이 순수한 분포 근사가 아닌 도메인 내부 구조(아이템 경계) 인식에 의존함을 보여주어, 기존 '드래프트-타겟 분포 정렬' 중심의 이해를 '분포-내부 구조 인식'으로 확장한다. [[concepts/marginal-distribution-ceiling.md|marginal distribution ceiling]]의 원칙을 엄격히 준수하는 실제 구현 사례로, [[concepts/distribution-internal-optimization.md|distribution internal optimization]]이 이론적 개념에서 구체적 설계 전략(경계 위치 인식)으로 진화함을 보여준다.
 
 [[reliable-answers-for-recurring-questions| Reliable Answers]]의 template-constrained-decoding과 대비된다: 동일 목표(분포 보존 가속)에 대해 외부 도메인 지식(템플릿) vs 내부 구조 인식(경계 위치)이라는 상보적 경로를 제시한다.
 
 ## 연결점
 
 - [[select-to-think]]의 local sufficiency가 토큰 선택에 국지성을 적용했다면, 본 논문은 구조적 국지성(아이템 경계 내부)을 가속에 적용
-- [[draft-model-domain-adaptation]]이 단순 분포 적응을 넘어 구조 인식 적응을 포함해야 함을 실증
+- [[concepts/draft-model-domain-adaptation.md|draft model domain adaptation]]이 단순 분포 적응을 넘어 구조 인식 적응을 포함해야 함을 실증
 
 ## 🔗 관련 논문
 

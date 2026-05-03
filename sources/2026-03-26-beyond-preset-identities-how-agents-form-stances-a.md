@@ -46,3 +46,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/machine-identity-governance.md|machine identity governance]]
+
+---
+**관련**: [[entities/entity-surface-form.md|entity surface form]]

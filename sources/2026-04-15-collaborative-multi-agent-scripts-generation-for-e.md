@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/layer-wise-forgetting-sensitivity.md|layer wise forgetting sensitivity]]
+
+---
+**관련**: [[entities/refreshable-signal-layer.md|refreshable signal layer]]

@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hough-transform.md|hough transform]]
+
+---
+**관련**: [[entities/parallel-decoding.md|parallel decoding]]
