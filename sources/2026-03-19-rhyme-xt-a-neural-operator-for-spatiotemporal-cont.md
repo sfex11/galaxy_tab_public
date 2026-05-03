@@ -45,3 +45,6 @@ PDE/PIDE 기반 물리 시스템을 신경망으로 효율적으로 근사하는
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/smooth-bellman-operator.md|smooth bellman operator]]

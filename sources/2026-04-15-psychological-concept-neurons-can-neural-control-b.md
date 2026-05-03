@@ -66,3 +66,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/local-sufficiency.md|local sufficiency]]
+
+---
+**관련**: [[concepts/distributional-shift-risk-bounding.md|distributional shift risk bounding]]
+
+---
+**관련**: [[concepts/syntax-behavior-semantics-disentanglement.md|syntax behavior semantics disentanglement]]
+
+---
+**관련**: [[concepts/local-sufficiency.md|local sufficiency]]
+
+---
+**관련**: [[concepts/ehr-question-answering.md|ehr question answering]]
+
+---
+**관련**: [[concepts/global-local-planning-hierarchy.md|global local planning hierarchy]]
+
+---
+**관련**: [[concepts/representation-space-translation.md|representation space translation]]
+
+---
+**관련**: [[concepts/state-space-capability-representation.md|state space capability representation]]
+
+---
+**관련**: [[concepts/neural-radiance-field.md|neural radiance field]]

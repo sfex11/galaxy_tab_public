@@ -41,3 +41,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tokenization.md|tokenization]]
+
+---
+**관련**: [[entities/penalty-regularization.md|penalty regularization]]
+
+---
+**관련**: [[concepts/penalty-regularization.md|penalty regularization]]

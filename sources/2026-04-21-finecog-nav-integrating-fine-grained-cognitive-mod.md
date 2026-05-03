@@ -43,3 +43,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/perception-uncertainty.md|perception uncertainty]]
+
+---
+**관련**: [[concepts/imperfect-perception.md|imperfect perception]]
+
+---
+**관련**: [[concepts/cognitive-fidelity-assessment.md|cognitive fidelity assessment]]
+
+---
+**관련**: [[concepts/safe-navigation.md|safe navigation]]
+
+---
+**관련**: [[concepts/multimodal-event-extraction.md|multimodal event extraction]]
+
+---
+**관련**: [[concepts/cognitive-probability.md|cognitive probability]]
+
+---
+**관련**: [[concepts/cluttered-environment-navigation.md|cluttered environment navigation]]
+
+---
+**관련**: [[concepts/environment-supply-absorption-gap.md|environment supply absorption gap]]

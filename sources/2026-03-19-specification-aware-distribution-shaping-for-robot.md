@@ -64,3 +64,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/semantics-aware-checkpoint.md|semantics aware checkpoint]]
+
+---
+**관련**: [[entities/position-aware-drafting.md|position aware drafting]]
+
+---
+**관련**: [[concepts/semantic-aware-checkpointing.md|semantic aware checkpointing]]
+
+---
+**관련**: [[concepts/semantics-aware-checkpoint.md|semantics aware checkpoint]]
+
+---
+**관련**: [[concepts/discovery-specification-execution-pipeline.md|discovery specification execution pipeline]]
+
+---
+**관련**: [[concepts/position-aware-drafting.md|position aware drafting]]

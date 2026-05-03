@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ad-integration-bias.md|ad integration bias]]
+
+---
+**관련**: [[entities/decentralized-debate.md|decentralized debate]]
+
+---
+**관련**: [[concepts/decentralized-debate.md|decentralized debate]]

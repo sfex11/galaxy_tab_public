@@ -34,3 +34,6 @@ LLM 백본이 텍스트 전용 사전학습만으로도 상당한 청각 지식(
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/zero-knowledge-negotiation.md|zero knowledge negotiation]]

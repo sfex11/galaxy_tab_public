@@ -49,3 +49,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/nemotron-cascade-2.md|nemotron cascade 2]]
+
+---
+**관련**: [[concepts/end-to-end-vla-training.md|end to end vla training]]
+
+---
+**관련**: [[concepts/goal-conditioned-policy.md|goal conditioned policy]]
+
+---
+**관련**: [[concepts/test-time-training.md|test time training]]

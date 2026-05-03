@@ -49,3 +49,6 @@ SPA(Scaling Prompt-engineered Augmentation)는 LLM의 지식 주입(knowledge in
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/eager-schema-injection.md|eager schema injection]]

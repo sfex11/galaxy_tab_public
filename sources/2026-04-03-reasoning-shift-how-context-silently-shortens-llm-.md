@@ -54,3 +54,6 @@ LLM 추론 모델은 무관한 컨텍스트 길이 증가나 멀티턴 대화만
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/latent-phase-shift-rollback.md|latent phase shift rollback]]

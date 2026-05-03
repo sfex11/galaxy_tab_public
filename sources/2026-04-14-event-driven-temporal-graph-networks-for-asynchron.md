@@ -39,3 +39,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/noisy-actuation.md|noisy actuation]]
+
+---
+**관련**: [[concepts/noisy-communication.md|noisy communication]]
+
+---
+**관련**: [[concepts/syntax-emotion-temporal-separation.md|syntax emotion temporal separation]]
+
+---
+**관련**: [[concepts/slimmable-network.md|slimmable network]]
+
+---
+**관련**: [[concepts/mental-health-ai.md|mental health ai]]

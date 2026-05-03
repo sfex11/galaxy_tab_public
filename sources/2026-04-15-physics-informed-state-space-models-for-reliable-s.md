@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/principal-divergence.md|principal divergence]]
+
+---
+**관련**: [[concepts/task-reality-divergence.md|task reality divergence]]

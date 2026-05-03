@@ -37,3 +37,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/intra-generative-intervention.md|intra generative intervention]]
+
+---
+**관련**: [[entities/generative-list-wise-recommendation.md|generative list wise recommendation]]
+
+---
+**관련**: [[concepts/design-probe.md|design probe]]
+
+---
+**관련**: [[concepts/generative-list-wise-recommendation.md|generative list wise recommendation]]
+
+---
+**관련**: [[concepts/hough-transform.md|hough transform]]

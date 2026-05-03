@@ -38,3 +38,6 @@ SkeletonLLM의 핵심 아이디어는 **미분 렌더링(Differentiable Renderin
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/differentiable-simulation.md|differentiable simulation]]

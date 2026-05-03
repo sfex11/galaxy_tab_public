@@ -38,3 +38,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-clustering.md|semantic clustering]]
+
+---
+**관련**: [[concepts/shared-failure-subspace.md|shared failure subspace]]
+
+---
+**관련**: [[concepts/confidence-interval-safety.md|confidence interval safety]]
+
+---
+**관련**: [[concepts/safety-threshold-gp-constraint.md|safety threshold gp constraint]]
+
+---
+**관련**: [[concepts/compound-oversight-failure.md|compound oversight failure]]

@@ -31,3 +31,15 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/fact-access-decoupling.md|fact access decoupling]]
+
+---
+**관련**: [[concepts/fact-access-decoupling.md|fact access decoupling]]
+
+---
+**관련**: [[concepts/layered-interpretability-allocation.md|layered interpretability allocation]]
+
+---
+**관련**: [[concepts/interpretability-verifiability-substitution.md|interpretability verifiability substitution]]

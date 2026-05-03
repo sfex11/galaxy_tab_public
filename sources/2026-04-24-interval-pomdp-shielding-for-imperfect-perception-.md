@@ -63,3 +63,6 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-23-an-ai-agent-execution-environment-to-safeguard-use]]: 둘 다 자율 에이전트에 대한 방어 메커니즘을 제안하며, 하나는 데이터 유출에 대해 실행 환경 격리로, 다른 하나는 행동 안전 위반에 대해 형식적 POMDP 실드링으로 대응한다.
+
+---
+**관련**: [[concepts/communication-independent-shielding.md|communication independent shielding]]

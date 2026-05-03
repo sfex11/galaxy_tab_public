@@ -55,3 +55,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/on-device-inference.md|on device inference]]
+
+---
+**관련**: [[entities/emotion-inference-mechanism.md|emotion inference mechanism]]

@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/intertemporal-demand-allocation.md|intertemporal demand allocation]]
+
+---
+**관련**: [[concepts/cycle-consistency.md|cycle consistency]]

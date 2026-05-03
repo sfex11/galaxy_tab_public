@@ -49,3 +49,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/binary-analysis.md|binary analysis]]
+
+---
+**관련**: [[entities/principal-identification-problem.md|principal identification problem]]
+
+---
+**관련**: [[entities/eeg-seizure-detection.md|eeg seizure detection]]
+
+---
+**관련**: [[entities/observability-driven-evolution.md|observability driven evolution]]
+
+---
+**관련**: [[concepts/observability-driven-evolution.md|observability driven evolution]]
+
+---
+**관련**: [[concepts/collaboration-depth-axis.md|collaboration depth axis]]
+
+---
+**관련**: [[concepts/predictability-driven-serving.md|predictability driven serving]]

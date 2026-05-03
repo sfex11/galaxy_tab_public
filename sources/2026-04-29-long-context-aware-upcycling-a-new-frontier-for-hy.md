@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-01-unifying-sparse-attention-with-hierarchical-memory]]: 두 논문 모두 순수 트랜스포머의 한계를 극복하고 롱컨텍스트 처리를 효율화하기 위해, 이질적인 알고리즘적 구조(희소 어텐션과 계층적 메모리, 하이브리드 시퀀스 모델)를 통합하는 아키텍처 수준의 해법을 제안한다.
+
+---
+**관련**: [[concepts/experience-reuse.md|experience reuse]]
+
+---
+**관련**: [[concepts/checkpoint-consensus-reduction.md|checkpoint consensus reduction]]

@@ -35,3 +35,12 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-16-drawing-on-memory-dual-trace-encoding-improves-cro]]: 둘 다 LLM 에이전트의 메모리 시스템을 개선하는 연구로, 전자는 cross-session recall을, 후자는 cross-domain 메모리 전이를 다룬다.
+
+---
+**관련**: [[concepts/traveling-salesman-problem.md|traveling salesman problem]]
+
+---
+**관련**: [[concepts/temporal-transfer-gap.md|temporal transfer gap]]
+
+---
+**관련**: [[concepts/vibe-coding.md|vibe coding]]

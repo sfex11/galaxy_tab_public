@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/non-stationary-dynamics.md|non stationary dynamics]]
+
+---
+**관련**: [[concepts/ai-feedback-loop.md|ai feedback loop]]

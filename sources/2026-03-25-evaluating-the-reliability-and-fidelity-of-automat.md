@@ -43,3 +43,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/non-adversarial-collapse-surface.md|non adversarial collapse surface]]
+
+---
+**관련**: [[concepts/conditional-reliability-recalibration.md|conditional reliability recalibration]]

@@ -63,3 +63,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/live-benchmark.md|live benchmark]]
+
+---
+**관련**: [[entities/hierarchical-planning.md|hierarchical planning]]
+
+---
+**관련**: [[concepts/dynamic-benchmark.md|dynamic benchmark]]
+
+---
+**관련**: [[concepts/self-play-benchmark.md|self play benchmark]]
+
+---
+**관련**: [[concepts/live-benchmark.md|live benchmark]]
+
+---
+**관련**: [[concepts/runtime-verification-layer.md|runtime verification layer]]

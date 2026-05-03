@@ -51,3 +51,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/layered-capability-decomposition.md|layered capability decomposition]]
+
+---
+**관련**: [[entities/fleet-composition.md|fleet composition]]
+
+---
+**관련**: [[entities/monotone-composition.md|monotone composition]]

@@ -34,3 +34,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/zero-knowledge-negotiation.md|zero knowledge negotiation]]
+
+---
+**관련**: [[concepts/knowledge-injection-interference.md|knowledge injection interference]]
+
+---
+**관련**: [[concepts/parametric-knowledge-conflict.md|parametric knowledge conflict]]
+
+---
+**관련**: [[concepts/sae-feature-knowledge-conflict.md|sae feature knowledge conflict]]

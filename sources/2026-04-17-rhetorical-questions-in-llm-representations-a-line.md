@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-15-psychological-concept-neurons-can-neural-control-b]]: 둘 다 LLM 내부 표상을 프로빙하여 특정 개념(성격 특성 vs 수사적 질문)이 어떻게 인코딩되는지 분석한다.
+
+---
+**관련**: [[concepts/living-dataset.md|living dataset]]

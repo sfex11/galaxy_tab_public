@@ -54,3 +54,120 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/generative-embedding-evaluation.md|generative embedding evaluation]]
+
+---
+**관련**: [[entities/asr-evaluation.md|asr evaluation]]
+
+---
+**관련**: [[entities/cross-domain-tradeoff.md|cross domain tradeoff]]
+
+---
+**관련**: [[entities/document-centric-research-infrastructure.md|document centric research infrastructure]]
+
+---
+**관련**: [[entities/dynamic-evaluation-landscape.md|dynamic evaluation landscape]]
+
+---
+**관련**: [[entities/hypothesis-selection-evaluation.md|hypothesis selection evaluation]]
+
+---
+**관련**: [[entities/clinical-signal-graph-learning.md|clinical signal graph learning]]
+
+---
+**관련**: [[entities/clinical-readability-evaluation.md|clinical readability evaluation]]
+
+---
+**관련**: [[concepts/cross-platform-evolution.md|cross platform evolution]]
+
+---
+**관련**: [[concepts/clinical-signal-graph-learning.md|clinical signal graph learning]]
+
+---
+**관련**: [[concepts/disembodied-vs-embodied-safety-evaluation.md|disembodied vs embodied safety evaluation]]
+
+---
+**관련**: [[concepts/cross-architecture-distillation.md|cross architecture distillation]]
+
+---
+**관련**: [[concepts/pre-deployment-safety-evidence.md|pre deployment safety evidence]]
+
+---
+**관련**: [[concepts/hypothesis-selection-evaluation.md|hypothesis selection evaluation]]
+
+---
+**관련**: [[concepts/cross-view-representational-alignment.md|cross view representational alignment]]
+
+---
+**관련**: [[concepts/cross-domain-memory-transfer.md|cross domain memory transfer]]
+
+---
+**관련**: [[concepts/instance-level-consistency-audit.md|instance level consistency audit]]
+
+---
+**관련**: [[concepts/document-centric-research-infrastructure.md|document centric research infrastructure]]
+
+---
+**관련**: [[concepts/cross-domain-code-evaluation.md|cross domain code evaluation]]
+
+---
+**관련**: [[concepts/cross-session-identity-erosion.md|cross session identity erosion]]
+
+---
+**관련**: [[concepts/professional-lifecycle-evaluation.md|professional lifecycle evaluation]]
+
+---
+**관련**: [[concepts/evaluation-planning-irreducibility.md|evaluation planning irreducibility]]
+
+---
+**관련**: [[concepts/llm-generated-text-detection.md|llm generated text detection]]
+
+---
+**관련**: [[concepts/grounded-clinical-qa.md|grounded clinical qa]]
+
+---
+**관련**: [[concepts/recommendation-system.md|recommendation system]]
+
+---
+**관련**: [[concepts/function-repository-evaluation-spectrum-gap.md|function repository evaluation spectrum gap]]
+
+---
+**관련**: [[concepts/ai-architecture-documentation.md|ai architecture documentation]]
+
+---
+**관련**: [[concepts/agreement-pressure.md|agreement pressure]]
+
+---
+**관련**: [[concepts/cross-domain-structural-failure-isomorphism.md|cross domain structural failure isomorphism]]
+
+---
+**관련**: [[concepts/file-system-behavioral-trace.md|file system behavioral trace]]
+
+---
+**관련**: [[concepts/evaluation-format-artifact.md|evaluation format artifact]]
+
+---
+**관련**: [[concepts/dual-evaluation-distortion.md|dual evaluation distortion]]
+
+---
+**관련**: [[concepts/clinical-readability-evaluation.md|clinical readability evaluation]]
+
+---
+**관련**: [[concepts/action-expert-fine-tuning.md|action expert fine tuning]]
+
+---
+**관련**: [[concepts/deceptive-self-evaluation.md|deceptive self evaluation]]
+
+---
+**관련**: [[concepts/problem-posing-evaluation.md|problem posing evaluation]]
+
+---
+**관련**: [[concepts/dynamic-evaluation-landscape.md|dynamic evaluation landscape]]
+
+---
+**관련**: [[concepts/generative-embedding-evaluation.md|generative embedding evaluation]]
+
+---
+**관련**: [[concepts/signal-evaluation-decoupling.md|signal evaluation decoupling]]
+
+---
+**관련**: [[concepts/asr-evaluation.md|asr evaluation]]

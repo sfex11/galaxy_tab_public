@@ -59,3 +59,12 @@ EU AI Act, NIST RMF, Council of Europe Convention 등 고위험 AI 시스템의 
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/feature-space-knowledge-consistency-certification.md|feature space knowledge consistency certification]]
+
+---
+**관련**: [[concepts/dual-black-box-problem.md|dual black box problem]]
+
+---
+**관련**: [[concepts/static-to-dynamic-certification-continuum.md|static to dynamic certification continuum]]

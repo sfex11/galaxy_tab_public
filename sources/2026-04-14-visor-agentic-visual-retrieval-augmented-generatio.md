@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-]]: 둘 다 멀티모달 에이전트의 도구/검색 활용 전략을 다루며, 전자는 도구 호출의 메타인지적 판단을, 후자는 시각 검색의 반복적 추론 전략을 제안한다.
 - → [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-]]: 둘 다 멀티모달 모델의 시각 추론 능력 강화를 다루며, 전자는 RL 기반 범용 추론을, 후자는 검색 증강 기반 시각 추론을 제안한다.
+
+---
+**관련**: [[concepts/evidence-traceability.md|evidence traceability]]

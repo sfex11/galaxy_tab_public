@@ -38,3 +38,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/citation-hallucination.md|citation hallucination]]

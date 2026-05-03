@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/cost-dominance-dimension-asymmetry.md|cost dominance dimension asymmetry]]
+
+---
+**관련**: [[concepts/cost-dominance-dimension-asymmetry.md|cost dominance dimension asymmetry]]

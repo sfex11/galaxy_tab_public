@@ -63,3 +63,6 @@ EU AI Act, NIST RMF, CoE Convention이 공통으로 요구하는 '배포 전 안
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/statistical-certification.md|statistical certification]]

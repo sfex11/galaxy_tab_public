@@ -59,3 +59,27 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/formal-semantic-grounding.md|formal semantic grounding]]
+
+---
+**관련**: [[entities/machine-behavior.md|machine behavior]]
+
+---
+**관련**: [[concepts/functional-behavior-validation.md|functional behavior validation]]
+
+---
+**관련**: [[concepts/persona-collapse.md|persona collapse]]
+
+---
+**관련**: [[concepts/behavioral-manifold-confinement.md|behavioral manifold confinement]]
+
+---
+**관련**: [[concepts/native-environmental-grounding.md|native environmental grounding]]
+
+---
+**관련**: [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]
+
+---
+**관련**: [[concepts/persona-runtime-fidelity-gap.md|persona runtime fidelity gap]]
+
+---
+**관련**: [[concepts/semantic-system-state-disconnect.md|semantic system state disconnect]]

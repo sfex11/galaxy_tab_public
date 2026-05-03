@@ -38,3 +38,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/sycophancy.md|sycophancy]]
+
+---
+**관련**: [[concepts/helpfulness-robustness.md|helpfulness robustness]]
+
+---
+**관련**: [[concepts/sycophancy.md|sycophancy]]

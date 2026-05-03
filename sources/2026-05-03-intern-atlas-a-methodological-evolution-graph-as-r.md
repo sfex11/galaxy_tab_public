@@ -51,3 +51,6 @@ Intern-Atlas는 이 간극을 **방법론 진화 그래프(Methodological Evolut
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/epistemic-infrastructure.md|epistemic infrastructure]]

@@ -39,3 +39,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/claude-35.md|claude 35]]

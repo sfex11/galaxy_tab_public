@@ -44,3 +44,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/bottleneck-misattribution.md|bottleneck misattribution]]
+
+---
+**관련**: [[concepts/bottleneck-misattribution.md|bottleneck misattribution]]
+
+---
+**관련**: [[concepts/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]
+
+---
+**관련**: [[concepts/open-domain-event-extraction.md|open domain event extraction]]

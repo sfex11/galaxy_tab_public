@@ -62,3 +62,6 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-30-from-soliloquy-to-agora-memory-enhanced-llm-agents]]: 두 논문 모두 다중 에이전트 시스템에서 협력의 구조를 단순한 통신이 아닌 연산적 스케일링 문제로 재정의하여 에이전트 간 상호작용의 깊이를 확장하는 방법을 다룬다.
+
+---
+**관련**: [[concepts/recursive-grammar-stress-test.md|recursive grammar stress test]]

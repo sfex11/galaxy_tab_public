@@ -47,3 +47,48 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/sparse-attention-unification.md|sparse attention unification]]
+
+---
+**관련**: [[entities/semantic-distance-metric.md|semantic distance metric]]
+
+---
+**관련**: [[entities/meaning-insensitive-metric.md|meaning insensitive metric]]
+
+---
+**관련**: [[concepts/tool-attention.md|tool attention]]
+
+---
+**관련**: [[concepts/unrecoverable-reasoning-error.md|unrecoverable reasoning error]]
+
+---
+**관련**: [[concepts/implicit-reasoning-patterns.md|implicit reasoning patterns]]
+
+---
+**관련**: [[concepts/generative-embedding-as-metric.md|generative embedding as metric]]
+
+---
+**관련**: [[concepts/sparse-attention-unification.md|sparse attention unification]]
+
+---
+**관련**: [[concepts/semantic-distance-metric.md|semantic distance metric]]
+
+---
+**관련**: [[concepts/attention-stability-boundary.md|attention stability boundary]]
+
+---
+**관련**: [[concepts/carbon-taxed-compression.md|carbon taxed compression]]
+
+---
+**관련**: [[concepts/attention-latch.md|attention latch]]
+
+---
+**관련**: [[concepts/analogical-reasoning.md|analogical reasoning]]
+
+---
+**관련**: [[concepts/reasoning-conditioned-retrieval.md|reasoning conditioned retrieval]]
+
+---
+**관련**: [[concepts/environmental-compression-objective.md|environmental compression objective]]
+
+---
+**관련**: [[concepts/green-compression-pipeline.md|green compression pipeline]]

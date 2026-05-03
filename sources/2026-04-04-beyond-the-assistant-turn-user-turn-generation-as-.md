@@ -48,3 +48,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/item-boundary-awareness.md|item boundary awareness]]
+
+---
+**관련**: [[concepts/item-boundary-awareness.md|item boundary awareness]]

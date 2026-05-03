@@ -35,3 +35,12 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-23-vla-foundry-a-unified-framework-for-training-visio]]: 둘 다 시각-언어-행동(VLA) 모델을 다루며, 하나는 잠재 추론을 통한 자율주행 지연 문제를, 다른 하나는 언어→시각→행동 전체 훈련 파이프라인의 통합 프레임워크를 제안한다.
+
+---
+**관련**: [[concepts/rdf-owl-representation.md|rdf owl representation]]
+
+---
+**관련**: [[concepts/emotion-recognition-latency.md|emotion recognition latency]]
+
+---
+**관련**: [[concepts/latency-oversight-tradeoff.md|latency oversight tradeoff]]

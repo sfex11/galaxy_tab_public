@@ -45,3 +45,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/dv-world.md|dv world]]
+
+---
+**관련**: [[entities/diffusion-llm.md|diffusion llm]]
+
+---
+**관련**: [[concepts/function-vector.md|function vector]]
+
+---
+**관련**: [[concepts/diffusion-llm.md|diffusion llm]]
+
+---
+**관련**: [[concepts/graph-rag.md|graph rag]]

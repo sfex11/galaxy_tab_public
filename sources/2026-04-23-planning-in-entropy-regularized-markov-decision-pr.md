@@ -54,3 +54,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/invariance-entropy.md|invariance entropy]]
+
+---
+**관련**: [[entities/non-additive-entropy.md|non additive entropy]]
+
+---
+**관련**: [[concepts/non-additive-entropy.md|non additive entropy]]

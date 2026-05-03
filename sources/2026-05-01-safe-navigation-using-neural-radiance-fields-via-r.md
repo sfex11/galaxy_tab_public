@@ -34,6 +34,12 @@ NeRF(Neural Radiance Field)로 환경의 기하학적 정보를 계산·저장·
 - [[sources/2026-04-24-interval-pomdp-shielding-for-imperfect-perception-.md|Interval POMDP 쉴딩]]의 '인지 불확실성' 문제에 대해, 환경 표현의 정밀도를 높여 인지 불확실성 자체를 원천 감소시키는 상보적 경로 제시
 
 ## 관련 논문
+- [[concepts/neural-combinatorial-optimization.md|neural combinatorial optimization]]
+- [[concepts/layered-capability-decomposition.md|layered capability decomposition]]
+- [[concepts/methodological-navigation-gap.md|methodological navigation gap]]
+- [[concepts/scalar-field-mapping.md|scalar field mapping]]
+- [[concepts/neural-operator.md|neural operator]]
+- [[concepts/refusal-capability.md|refusal capability]]
 - [[entities/methodological-navigation-gap.md|methodological navigation gap]]
 
 - [[sources/2604.26899-safe-navigation-using-neural-radiance-fields-via-reachable-sets.md|Safe Navigation using Neural Radiance Fields via Reachable Sets]]

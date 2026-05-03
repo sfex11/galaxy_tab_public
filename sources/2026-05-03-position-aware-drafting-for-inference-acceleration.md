@@ -56,3 +56,9 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/stein-variational-inference.md|stein variational inference]]
+
+---
+**관련**: [[concepts/distribution-shaping.md|distribution shaping]]

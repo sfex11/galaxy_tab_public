@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-16-parallax-why-ai-agents-that-think-must-never-act]]: 둘 다 AI 에이전트의 행위 주체성과 안전성에 대한 윤리적·설계적 문제를 탐구한다.
+
+---
+**관련**: [[concepts/delegation-boundary-serialization.md|delegation boundary serialization]]

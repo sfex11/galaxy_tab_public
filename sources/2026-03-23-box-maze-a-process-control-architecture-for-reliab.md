@@ -61,3 +61,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/gaussian-process-dynamics.md|gaussian process dynamics]]
+
+---
+**관련**: [[concepts/memory-as-control-resource.md|memory as control resource]]
+
+---
+**관련**: [[concepts/inventory-control.md|inventory control]]
+
+---
+**관련**: [[concepts/stateless-architecture-vulnerability.md|stateless architecture vulnerability]]
+
+---
+**관련**: [[concepts/sampled-data-control.md|sampled data control]]

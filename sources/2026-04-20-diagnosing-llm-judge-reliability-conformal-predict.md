@@ -67,3 +67,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/parliamentary-discourse-analysis.md|parliamentary discourse analysis]]
+
+---
+**관련**: [[concepts/code-agnostic-risk.md|code agnostic risk]]
+
+---
+**관련**: [[concepts/instrumental-formal-safety.md|instrumental formal safety]]
+
+---
+**관련**: [[concepts/formal-fidelity-gap.md|formal fidelity gap]]

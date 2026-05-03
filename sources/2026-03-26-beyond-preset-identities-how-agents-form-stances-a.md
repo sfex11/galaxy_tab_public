@@ -49,3 +49,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/entity-surface-form.md|entity surface form]]
+
+---
+**관련**: [[concepts/entity-surface-form.md|entity surface form]]
+
+---
+**관련**: [[concepts/intra-generative-intervention.md|intra generative intervention]]
+
+---
+**관련**: [[concepts/probabilistic-risk-bound.md|probabilistic risk bound]]

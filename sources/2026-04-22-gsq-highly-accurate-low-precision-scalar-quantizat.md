@@ -34,3 +34,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/scalar-field-mapping.md|scalar field mapping]]
+
+---
+**관련**: [[concepts/vector-quantization.md|vector quantization]]
+
+---
+**관련**: [[concepts/requirement-precision-spectrum.md|requirement precision spectrum]]
+
+---
+**관련**: [[concepts/refusal-accuracy-dual-constraint.md|refusal accuracy dual constraint]]

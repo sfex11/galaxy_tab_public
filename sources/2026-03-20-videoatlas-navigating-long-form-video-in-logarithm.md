@@ -49,3 +49,9 @@ VideoAtlas는 장시간 비디오를 **계층적 그리드(hierarchical grid)** 
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/intern-atlas.md|intern atlas]]
+
+---
+**관련**: [[concepts/video-mashup.md|video mashup]]

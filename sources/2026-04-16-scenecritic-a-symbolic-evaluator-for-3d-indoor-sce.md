@@ -41,3 +41,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/dual-evaluator-governance.md|dual evaluator governance]]
+
+---
+**관련**: [[concepts/delegation-structure.md|delegation structure]]
+
+---
+**관련**: [[concepts/sft-hallucination-mechanism.md|sft hallucination mechanism]]
+
+---
+**관련**: [[concepts/closed-book-qa-hallucination.md|closed book qa hallucination]]
+
+---
+**관련**: [[concepts/evidence-minus-intuition-score.md|evidence minus intuition score]]
+
+---
+**관련**: [[concepts/dual-evaluator-governance.md|dual evaluator governance]]

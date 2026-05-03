@@ -38,3 +38,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/uncertainty-quantification.md|uncertainty quantification]]
+
+---
+**관련**: [[entities/token-pruning.md|token pruning]]
+
+---
+**관련**: [[concepts/uncertainty-assumption-mismatch.md|uncertainty assumption mismatch]]
+
+---
+**관련**: [[concepts/acceptable-risk-quantification.md|acceptable risk quantification]]
+
+---
+**관련**: [[concepts/perception-uncertainty.md|perception uncertainty]]

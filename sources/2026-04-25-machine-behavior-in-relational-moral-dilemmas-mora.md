@@ -11,3 +11,6 @@ Human moral judgment is context-dependent and modulated by interpersonal relatio
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/relational-closeness-modulation.md|relational closeness modulation]]

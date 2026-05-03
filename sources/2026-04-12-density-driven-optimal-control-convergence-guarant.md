@@ -46,3 +46,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/instrumental-convergence.md|instrumental convergence]]
+
+---
+**관련**: [[concepts/architectural-safety-convergence.md|architectural safety convergence]]
+
+---
+**관련**: [[concepts/false-positive-convergence.md|false positive convergence]]
+
+---
+**관련**: [[concepts/sample-complexity-guarantee.md|sample complexity guarantee]]

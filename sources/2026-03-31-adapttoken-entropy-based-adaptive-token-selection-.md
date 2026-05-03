@@ -40,3 +40,6 @@ AdaptToken은 멀티모달 대형 언어 모델(MLLM)의 장기 비디오 이해
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/invariance-entropy.md|invariance entropy]]

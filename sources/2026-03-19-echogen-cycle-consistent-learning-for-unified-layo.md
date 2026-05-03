@@ -36,3 +36,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/repository-level-code-understanding.md|repository level code understanding]]
+
+---
+**관련**: [[concepts/access-understanding-gap.md|access understanding gap]]

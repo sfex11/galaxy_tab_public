@@ -55,3 +55,6 @@ _LLM 분석으로 생성됨_
 
 - → [[sources/2026-04-14-visor-agentic-visual-retrieval-augmented-generatio]]: 둘 다 멀티모달 에이전트의 도구/검색 활용 전략을 다루며, 전자는 도구 호출의 메타인지적 판단을, 후자는 시각 검색의 반복적 추론 전략을 제안한다.
 - → [[sources/2026-04-14-agentic-jackal-live-execution-and-semantic-value-g]]: 둘 다 에이전틱 모델의 외부 도구 호출 전략을 다루며, 전자는 메타인지적 도구 사용 판단을, 후자는 실시간 Jira 쿼리 실행을 통한 의미 기반 도구 활용을 다룬다.
+
+---
+**관련**: [[concepts/multimodal-orchestration.md|multimodal orchestration]]

@@ -55,3 +55,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/ai-feedback-loop.md|ai feedback loop]]
+
+---
+**관련**: [[entities/word-error-rate.md|word error rate]]
+
+---
+**관련**: [[concepts/attribution-scarcity.md|attribution scarcity]]
+
+---
+**관련**: [[concepts/error-attribution-problem.md|error attribution problem]]
+
+---
+**관련**: [[concepts/word-error-rate.md|word error rate]]

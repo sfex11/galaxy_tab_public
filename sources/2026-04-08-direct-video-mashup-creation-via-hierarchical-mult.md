@@ -41,3 +41,6 @@ DIRECT는 비디오 매시업(mashup) 제작을 위한 계층적 멀티에이전
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/compositional-code-creation.md|compositional code creation]]

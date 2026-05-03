@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-friction.md|epistemic friction]]
+
+---
+**관련**: [[concepts/surgical-robotics.md|surgical robotics]]

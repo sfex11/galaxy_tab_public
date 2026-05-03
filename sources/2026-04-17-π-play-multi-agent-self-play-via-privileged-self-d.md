@@ -66,3 +66,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/training-data-pruning.md|training data pruning]]
+
+---
+**관련**: [[entities/self-referential-training-vulnerability.md|self referential training vulnerability]]
+
+---
+**관련**: [[concepts/self-referential-training-vulnerability.md|self referential training vulnerability]]
+
+---
+**관련**: [[concepts/planning-without-physical-constraint-encoding.md|planning without physical constraint encoding]]
+
+---
+**관련**: [[concepts/architectural-paradigm-shift.md|architectural paradigm shift]]
+
+---
+**관련**: [[concepts/carbon-efficiency-accuracy-tradeoff.md|carbon efficiency accuracy tradeoff]]
+
+---
+**관련**: [[concepts/training-loop-safety-incident.md|training loop safety incident]]
+
+---
+**관련**: [[concepts/persistent-workspace-training.md|persistent workspace training]]
+
+---
+**관련**: [[concepts/sparse-autoencoder.md|sparse autoencoder]]
+
+---
+**관련**: [[concepts/verifiable-training-data-synthesis.md|verifiable training data synthesis]]
+
+---
+**관련**: [[concepts/training-phase-knowledge-contamination.md|training phase knowledge contamination]]
+
+---
+**관련**: [[concepts/checkpoint-restore-efficiency-spectrum.md|checkpoint restore efficiency spectrum]]
+
+---
+**관련**: [[concepts/soliloquy-to-agora-paradigm.md|soliloquy to agora paradigm]]

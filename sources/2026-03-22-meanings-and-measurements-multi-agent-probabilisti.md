@@ -46,3 +46,6 @@ VLM의 의미적 그라운딩 능력과 물리적 메트릭 추론을 다중 에
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/probabilistic-margin-of-error.md|probabilistic margin of error]]

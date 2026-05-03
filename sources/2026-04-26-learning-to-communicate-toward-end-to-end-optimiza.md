@@ -61,3 +61,18 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/optimization-modeling.md|optimization modeling]]
+
+---
+**관련**: [[entities/continual-learning.md|continual learning]]
+
+---
+**관련**: [[concepts/social-learning-dynamics.md|social learning dynamics]]
+
+---
+**관련**: [[concepts/federated-continual-learning.md|federated continual learning]]
+
+---
+**관련**: [[concepts/contrastive-learning.md|contrastive learning]]
+
+---
+**관련**: [[concepts/end-to-end-optimization-modeling.md|end to end optimization modeling]]
