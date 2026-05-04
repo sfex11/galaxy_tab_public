@@ -590,3 +590,15 @@
 ## [2026-05-04 08:42] ingest | Position-Aware Drafting for Inference Acceleration in LLM-Based Generative List-Wise Recommendation
 
 ## [2026-05-04 08:42] ingest | Global Optimality for Constrained Exploration via Penalty Regularization
+
+## [2026-05-05 06:11] llm-ingest | 10편 분석, 엔티티 231개, 개념 735개
+- 2026-05-05-when-llms-stop-following-steps-a-diagnostic-study-.md
+- 2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md
+- 2026-05-05-generating-statistical-charts-with-validation-driv.md
+- 2026-05-05-runagent-interpreting-natural-language-plans-with-.md
+- 2026-05-05-make-your-lvlm-kv-cache-more-lightweight.md
+- 2026-05-05-geocontra-from-fluent-gis-code-to-verifiable-spati.md
+- 2026-05-05-nonzero-interaction-guided-exploration-for-multi-a.md
+- 2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md
+- 2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o.md
+- 2026-05-05-escaping-mode-collapse-in-llm-generation-via-geome.md

@@ -22,3 +22,21 @@ Text-to-SQL 도메인에서 알고리즘(NL 이해)과 시스템(SQL 실행) 사
 ### Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes (2026-05-03)
 
 Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다.
+
+### RunAgent: Interpreting Natural-Language Plans with Constraint-Guided E (2026-05-05)
+
+의미론적 의존 그래프를 OS 메커니즘으로 직접 번역하는 대신, 에이전트 언어의 제어 구조가 실행 의미론을 명시적으로 인코딩하는 중간층으로 기능하여 번역 간극의 심각도를 완화하는 실증 경로를 제공한다.
+
+→ [[sources/2026-05-05-runagent-interpreting-natural-language-plans-with-.md|상세 보기]]
+
+### GeoContra: From Fluent GIS Code to Verifiable Spatial Analysis with Ge (2026-05-05)
+
+지리적 의미론(CRS, 위상, 단위)이 Python GIS 코드로 번역될 때 발생하는 의미론 상실을 계약 기반 수리로 구체화하여, 이 간극이 에이전트·체크포인트 도메인뿐 아니라 도메인 특화 코드 생성에서도 본질적으로 동일한 구조를 가짐을 실증한다.
+
+→ [[sources/2026-05-05-geocontra-from-fluent-gis-code-to-verifiable-spati.md|상세 보기]]
+
+### Position: agentic AI orchestration should be Bayes-consistent (2026-05-05)
+
+본 논문은 이 간극에 대한 규범적 해답을 제공한다 — 제어 계층이라는 구체적 좌표에서 베이지안 결정 이론을 시스템 구현 원칙으로 번역하여, 기존 '진단만' 기술하던 간극을 '해결 가능한 문제'로 전환시킨다.
+
+→ [[sources/2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md|상세 보기]]

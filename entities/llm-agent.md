@@ -282,3 +282,11 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-05-04-claw-eval-live-a-live-agent-benchmark-for-evolving.md]]
 
 - [[sources/2026-05-04-crab-a-semantics-aware-checkpointrestore-runtime-f.md]]
+
+### RunAgent: Interpreting Natural-Language Plans with Constraint-Guided E (2026-05-05)
+
+→ [[sources/2026-05-05-runagent-interpreting-natural-language-plans-with-.md|상세 보기]]
+
+### Position: agentic AI orchestration should be Bayes-consistent (2026-05-05)
+
+→ [[sources/2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md|상세 보기]]

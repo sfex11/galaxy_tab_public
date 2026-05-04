@@ -38,3 +38,13 @@ _Wiki 축적 중_
 ### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-02)
 
 컨텍스트 단위의 토큰 절약(Tool Attention)과 병렬로, 디코딩 단계 자체를 건너뛰어 토큰 생성 레이턴시를 줄이는 추론 수준의 토큰 효율화 경로를 추가하여, 토큰 효율화가 '입력 최소화'와 '생성 가속' 두 축으로 분화됨을 보여준다.
+
+### Make Your LVLM KV Cache More Lightweight (2026-05-05)
+
+토큰 효율화의 범위를 '주어진 컨텍스트의 압축'과 '불필요한 컨텍스트의 원천 차단'에서 '프리필 단계에서의 시각 중복 제거'로 추가 확장한다.
+
+→ [[sources/2026-05-05-make-your-lvlm-kv-cache-more-lightweight.md|상세 보기]]
+
+### To Call or Not to Call: A Framework to Assess and Optimize LLM Tool Ca (2026-05-05)
+
+→ [[sources/2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o.md|상세 보기]]

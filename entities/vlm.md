@@ -81,3 +81,9 @@ VLA Foundry는 VLM을 행동 모델로 확장하는 파이프라인을 제공함
 미술 작품 이해라는 정교한 도메인에서 VLM의 암묵적 추론 한계를实证적으로 노출시키고, 구조화된 추론 계획 기반 검색 조건화가 이 한계를 어떻게 보완하는지 보여주는 도메인 증거를 추가한다.
 
 ### SafetyALFRED: Evaluating Safety-Conscious Planning of Multimodal Large (2026-04-23)
+
+### Make Your LVLM KV Cache More Lightweight (2026-05-05)
+
+VLM의 메모리 병목이 추론 능력이 아니라 시각 토큰의 KV 캐시 저장 비용에 있음을 구체화하여, [[agentic-vlm]]이 지적한 능력-배포 간극을 메모리 효율 차원에서 정교화한다.
+
+→ [[sources/2026-05-05-make-your-lvlm-kv-cache-more-lightweight.md|상세 보기]]
