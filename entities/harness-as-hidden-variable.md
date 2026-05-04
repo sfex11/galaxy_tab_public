@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
 
 신호 계층과 평가 계층의 분리가 하네스 은닉 변수 효과에 대한 통제 변수로 기능함을 보여주며, 태스크 정의가 하네스 구현과 독립적으로 갱신될 수 있게 함으로써 혼동 효과의 분리 관찰을 가능하게 한다.
+
+### Can Coding Agents Reproduce Findings in Computational Materials Scienc (2026-05-05)
+
+→ [[sources/2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md|상세 보기]]

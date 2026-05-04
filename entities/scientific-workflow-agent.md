@@ -24,3 +24,9 @@ _Wiki 축적 중_
 단일 파이프라인의 의미론적 번역 대신 병렬 파이프라인의 수렴을 통해 자연어→형식적 명세 변환의 신뢰성을 확보하는 상보적 경로를 제시하여, 기존 3층 아키텍처의 단일 경로 의존성 한계를 구조적으로 완화한다.
 
 ### Intern-Atlas: A Methodological Evolution Graph as Research Infrastruct (2026-05-03)
+
+### Can Coding Agents Reproduce Findings in Computational Materials Scienc (2026-05-05)
+
+일반 코딩 능력과 도메인 특화 과학 워크플로우 수행 능력 사이의 전이 간극을 벤치마크로 정량화하는 구체적 사례를 제공하여, 이 엔티티의 평가 차원을 '실행 자동화'에서 '과학적 발견 재현'으로 확장한다.
+
+→ [[sources/2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md|상세 보기]]
