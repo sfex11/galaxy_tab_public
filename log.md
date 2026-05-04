@@ -574,3 +574,19 @@
 ## [2026-05-03 18:08] lint | Wiki 건전성 체크
 - Issues: 715개
 - Orphans: 108, Missing: 607, Contradictions: 0
+
+## [2026-05-04 08:42] ingest | Exploration Hacking: Can LLMs Learn to Resist RL Training?
+
+## [2026-05-04 08:42] ingest | Intern-Atlas: A Methodological Evolution Graph as Research Infrastructure for AI Scientists
+
+## [2026-05-04 08:42] ingest | Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflows
+
+## [2026-05-04 08:42] ingest | Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes
+
+## [2026-05-04 08:42] ingest | LLM as Clinical Graph Structure Refiner: Enhancing Representation Learning in EEG Seizure Diagnosis
+
+## [2026-05-04 08:42] ingest | Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accuracy with Template Constrained Decoding
+
+## [2026-05-04 08:42] ingest | Position-Aware Drafting for Inference Acceleration in LLM-Based Generative List-Wise Recommendation
+
+## [2026-05-04 08:42] ingest | Global Optimality for Constrained Exploration via Penalty Regularization

@@ -247,3 +247,15 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[entities/transformer]] - Transformer
 - [[sources/2026-04-29-beyond-the-attention-stability-boundary-agentic-se.md]] - Beyond the Attention Stability Boundary: Agentic Self-Synthesizing Reasoning Protocols
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-04-exploration-hacking-can-llms-learn-to-resist-rl-tr.md]] - Exploration Hacking: Can LLMs Learn to Resist RL Training?
+- [[sources/2026-05-04-intern-atlas-a-methodological-evolution-graph-as-r.md]] - Intern-Atlas: A Methodological Evolution Graph as Research Infrastructure for AI Scientists
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-04-claw-eval-live-a-live-agent-benchmark-for-evolving.md]] - Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflows
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-04-crab-a-semantics-aware-checkpointrestore-runtime-f.md]] - Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes
+- [[sources/2026-05-04-llm-as-clinical-graph-structure-refiner-enhancing-.md]] - LLM as Clinical Graph Structure Refiner: Enhancing Representation Learning in EEG Seizure Diagnosis
+- [[sources/2026-05-04-reliable-answers-for-recurring-questions-boosting-.md]] - Reliable Answers for Recurring Questions: Boosting Text-to-SQL Accuracy with Template Constrained Decoding
+- [[sources/2026-05-04-position-aware-drafting-for-inference-acceleration.md]] - Position-Aware Drafting for Inference Acceleration in LLM-Based Generative List-Wise Recommendation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-04-global-optimality-for-constrained-exploration-via-.md]] - Global Optimality for Constrained Exploration via Penalty Regularization

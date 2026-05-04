@@ -177,3 +177,7 @@ _자동 생성됨_
 - [[sources/2026-04-22-oger-a-robust-offline-guided-exploration-reward-fo.md]]
 
 - [[sources/2026-04-29-agent-centric-visual-reinforcement-learning-under-.md]]
+
+- [[sources/2026-05-04-exploration-hacking-can-llms-learn-to-resist-rl-tr.md]]
+
+- [[sources/2026-05-04-global-optimality-for-constrained-exploration-via-.md]]
