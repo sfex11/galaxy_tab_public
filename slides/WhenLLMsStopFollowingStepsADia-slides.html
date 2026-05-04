@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When LLMs Stop Following Steps: A Diagnostic Study of Proced — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p class="muted" style="font-size:clamp(0.75rem,1.2vw,0.9rem)">arXiv: 2605.00817v1 &nbsp;·&nbsp; 2026년 5월</p>
+    <h1 style="font-size:clamp(1.6rem,3.2vw,2.6rem);line-height:1.25;margin:1.2rem 0 0.6rem">LLM이 절차를 따르지 않을 때:<br>언어 모델의 절차적 실행에 대한 진단 연구</h1>
+    <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem)">When LLMs Stop Following Steps: A Diagnostic Study of Procedural Execution in Language Models</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)">Sailesh Panda, Pritam Kadasi, Abhishek Upperwal, Mayank Singh</p>
+    <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.88rem)">Indian Institute of Technology Gandhinagar &nbsp;·&nbsp; Soket AI</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">왜 이 연구가 필요한가?</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1rem"><strong>겉보기 성공 ≠ 진정한 추론</strong></p>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.95rem)">LLM은 산술 추론, 기호 조작, 코드 생성 등에서 강한 성능을 보이지만, <span class="accent">최종 정답의 정확도만으로</span> 모델이 프롬프트에 지정된 절차를 충실히 수행했는지 알 수 없습니다.</p>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1rem"><strong>숨겨진 실패 모드</strong></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>단축키 및 패턴 매칭에 의존</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>불안정한 중간 계산</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>필요한 단계 생략 또는 추가 단계 헛지시</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>이전 오류 후 우연히 정답 도달</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem)">"명시적 알고리즘이 프롬프트에 제공되어도 LLM은 여전히 이를 실행하는 데 실패한다" — Shojaee et al.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">연구 질문</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.5rem"><span class="tag tag-amber">RQ1</span></p>
+        <p style="font-size:clamp(0.95rem,1.5vw,1.15rem);font-weight:600;margin-bottom:0.8rem">알고리즘 길이와 의존성이 증가할 때, LLM은 명시적 다단계 절차를 얼마나 안정적으로 실행하는가?</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.92rem)" class="muted">절차의 길이(5~95단계)와 look-back 의존성 깊이(1~7)를 변화시키며 정확도 추이 분석</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.5rem"><span class="tag tag-red">RQ2</span></p>
+        <p style="font-size:clamp(0.95rem,1.5vw,1.15rem);font-weight:600;margin-bottom:0.8rem">모델이 실패할 때 어떤 생성 수준의 실패 모드가 나타나며, 이는 최종 정답 정확도와 어떤 관계가 있는가?</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.92rem)" class="muted">누락 답변, 조기 답변, 자기 교정, 미실행, 헛지시 단계 등 세부 분석</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:1.5rem">핵심 개념: <span class="accent">절차적 실행(Procedural Execution)</span> — LLM이 명시적으로 지정된 절차를 그대로 수행하는 능력</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">과제 정의</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1.2rem">자연어로 작성된 단계별 산술 알고리즘과 두 개의 숫자 입력을 주고, <span class="accent">최종 계산값만 반환</span>하도록 요청</p>
+    <div class="card" style="margin-bottom:1.2rem">
+      <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-bottom:0.6rem">예시: 5단계 절차 (x=12, y=3)</p>
+      <div style="font-family:monospace;font-size:clamp(0.78rem,1.15vw,0.9rem);line-height:1.8">
+        Let S₁ = 12, &nbsp; S₂ = 3<br>
+        Step 1: S₃ = S₁ + S₂ &nbsp;&nbsp;→ 15<br>
+        Step 2: S₄ = S₃ − S₂ &nbsp;&nbsp;→ 12<br>
+        Step 3: S₅ = S₄ / S₂ &nbsp;&nbsp;→ 4<br>
+        Step 4: S₆ = S₅ × S₃ &nbsp;&nbsp;→ 60<br>
+        Step 5: S₇ = S₆ − S₄ &nbsp;&nbsp;→ <span class="accent">48</span><br>
+        Final Step: Return S₇
+      </div>
+    </div>
+    <div class="grid-3">
+      <div>
+        <div class="big-num">r₀ = x</div>
+        <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">초기 실행 값</p>
+      </div>
+      <div>
+        <div class="big-num">rₜ = f(rₜ₋₁, y; sₜ)</div>
+        <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">재귀적 연산 정의</p>
+      </div>
+      <div>
+        <div class="big-num">{+, −, ×, ÷}</div>
+        <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">기본 연산 집합</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">벤치마크 구성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">복잡도 축</p>
+        <div class="flow-item">
+          <div class="flow-icon">1</div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">알고리즘 길이</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">5단계 → 95단계 (11개 수준)</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">2</div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">Look-back 의존성</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">이전 단계의 중간 변수를 얼마나 멀리 거슬러 참조하는가 (1~7)</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">변인 설계</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>입력 범위: 작은 정수 ~ 큰 실수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>데이터 유형: 정수, 소수, 음수 포함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>연산 변형: 4칙 연산 조합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>난이도 수준: 5단계 구분</li>
+        </ul>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem)"><span class="accent">55개 데이터셋</span> · 총 <span class="accent">55,000개</span> 예시</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">실험 설정</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">평가 모델 <span class="muted">(14개)</span></p>
+        <table class="compare-table">
+          <thead>
+            <tr><th>규모</th><th>모델 예시</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1.5B~4B</td><td>DeepSeek-R1-Distill-Qwen-1.5B, Qwen3-4B</td></tr>
+            <tr><td>7B</td><td>Mistral-7B, DeepSeek-R1-Distill-7B, Olmo-3-7B</td></tr>
+            <tr><td>14B</td><td>Qwen3-14B, DeepSeek-R1-Distill-14B</td></tr>
+            <tr><td>30B~120B</td><td>Nemotron-3-Nano 30B, GPT oss 120B, Deepseek-v3.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">평가 지표</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>First-answer accuracy</strong>: 첫 답변 정확도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Correct@any</strong>: 생성 내 어느 위치든 정답 포함 시</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Non-null answer rate</strong>: 유효 답변 제출 비율</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Answer position</strong>: 답변이 생성된 위치</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Step-following</strong>: 단계별 실행 충실도</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">핵심 결과 1: 알고리즘 길이와 정확도</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1rem">절차가 길어질수록 정확도가 <span class="accent">급격히 하락</span></p>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="step-num">5단계</div>
+            <div class="step-label">61%</div>
+            <div class="step-desc">First-answer 정확도</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">25단계</div>
+            <div class="step-label">~40%</div>
+            <div class="step-desc">중간 수준</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">95단계</div>
+            <div class="step-label">20%</div>
+            <div class="step-desc">급감</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1rem">Look-back 의존성의 영향</p>
+        <div class="card" style="margin-bottom:0.8rem">
+          <p style="font-size:clamp(0.85rem,1.2vw,0.95rem)">look-back <span class="accent2">1</span> → look-back <span class="accent2">7</span></p>
+          <p style="font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:700"><span class="accent">−18.43%p</span> <span class="muted" style="font-size:clamp(0.7rem,1vw,0.82rem);font-weight:400">평균 정확도 감소</span></p>
+        </div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.92rem)">단순 연산 능력의 한계가 아닌, <span class="accent">비국소(non-local) 중간 상태를 추적하고 결합하는 능력</span>의 부족</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">핵심 결과 2: 입력/작업 요인의 한계</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1.2rem">입력 범위, 데이터 유형, 작업 유형만으로는 성능 저하를 <span class="accent">완전히 설명할 수 없음</span></p>
+    <div class="grid-3">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.5rem">입력 범위</p>
+        <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">작은 정수 → 큰 실수로 확장해도 길이/의존성 효과에 비해 영향 적음</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.5rem">데이터 유형</p>
+        <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">정수, 소수, 음수 간 차이보다 절차적 복잡도가 지배적 요인</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.5rem">출력 크기 분석</p>
+        <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">기대 출력값의 크기가 클 때 약간의 추가 저하 발생하지만 주요 원인 아님</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.2rem">
+      <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)">결론: 성능 저하는 산술 난이도가 아닌 <span class="accent">절차적 상태 추적(procedural state tracking)</span>의 한계에서 기인</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">핵심 결과 3: 단계별 실행 분해</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1.2rem">생성 수준에서 모델이 실제로 어떻게 실패하는지 분석</p>
+    <table class="compare-table">
+      <thead>
+        <tr><th>지표</th><th>5단계</th><th>95단계</th><th>변화</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>정확한 단계 실행</strong></td>
+          <td>70.88%</td>
+          <td>46.84%</td>
+          <td><span class="accent">−24.04%p</span></td>
+        </tr>
+        <tr>
+          <td><strong>미실행 (Under-execution)</strong></td>
+          <td>24.25%</td>
+          <td>50.87%</td>
+          <td><span class="accent">+26.62%p</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.88rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem">미실행이 지배적</p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.92rem)">모델이 지정된 절차를 끝까지 따르지 못하고 <span class="accent">중간에 멈추는 현상</span>이 가장 흔한 실패 원인</p>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.88rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem">고립된 산술 오류가 아님</p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.92rem)">개별 연산 실수가 아니라 <span class="accent">절차를 잃어버리는 것</span>이 핵심 문제</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">실패 모드 분류</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1.2rem">모델이 보이는 <span class="accent">5가지 주요 실패 패턴</span></p>
+    <div class="grid-2">
+      <div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-ghost"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">누락 답변 (Missing Answer)</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">생성 전체에 유효한 최종 답변이 없음</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-forward"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">조기 답변 (Premature Answer)</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">모든 단계를 마치기 전에 답변 출력</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-undo"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">자기 교정 (Self-correction)</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">초기 오류 후 스스로 수정 시도</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-cut"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">미실행 (Under-executed Trace)</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">지정된 단계보다 적게 수행 후 종료</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-plus-circle"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600">헛지시 단계 (Hallucinated Steps)</p>
+            <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">존재하지 않는 추가 단계를 생성</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top:0.5rem">
+          <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)">이러한 실패는 <span class="accent">최종 정답 정확도만으로는 진단 불가</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">답변 위치 분석</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.88rem,1.3vw,1rem);margin-bottom:1.2rem">모델이 답변을 <span class="accent">어느 시점</span>에 출력하는지의 분포</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num">Non-null<br>Rate ↓</div>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem);margin-top:0.5rem">단계가 길어질수록 유효한 답변을 제출하는 비율 감소</p>
+      </div>
+      <div class="card">
+        <div class="big-num">Position<br>Spread ↑</div>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem);margin-top:0.5rem">답변 위치의 분산이 증가 — 모델이 일관된 종료 시점을 유지하지 못함</p>
+      </div>
+      <div class="card">
+        <div class="big-num">Correct@any<br>vs First</div>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem);margin-top:0.5rem">Correct@any이 First-answer보다 높음 → 자기 교정이 종종 발생하지만 안정적이지 않음</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.2rem">
+      <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)">모델은 <span class="accent">"언제 멈춰야 하는지"</span>를 학습하지 못하며, 긴 절차에서는 종료 조건 인식이 특히 취약함</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">종합 발견</h2>
+    <div class="hr"></div>
+    <ul class="check-list" style="margin-bottom:1.2rem">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM의 추론 능력처럼 보이는 성과가 <span class="accent">실제 지시 수행 능력을 가리는 경우</span>가 많다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>단순 산술이 아닌 <span class="accent">절차적 상태 추적</span>이 병목; 길이와 비국소 의존성에 취약</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>가장 흔한 실패는 연산 오류가 아니라 <span class="accent">미실행(절차 중단)</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>입력 범위·데이터 유형 변화는 절차적 복잡도 효과에 비해 <span class="muted">부수적</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>최종 정답 정확도 단일 지표로는 <span class="accent">충실한 실행 여부를 판단할 수 없음</span></li>
+    </ul>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);font-weight:600">시사점: <span class="accent2">추론 벤치마크 해석에 주의가 필요</span>하며, 절차적 충실도를 직접 측정하는 진단 도구가 필수</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">결론 및 향후 과제</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">결론</p>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)">본 벤치마크는 LLM이 지시를 <span class="accent">진정으로 실행하는지</span> 평가하는 유용한 렌즈를 제공합니다. 최종 정답만으로는 판별할 수 없는 숨겨진 약점을 체계적으로 드러냅니다.</p>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.92rem,1.4vw,1.08rem);font-weight:600;margin-bottom:0.8rem">한계 & 향후 과제</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>산술에 국한된 설정 → 다른 연산 영역으로 확장 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트 기반 절차(규칙 기반 의사결정, 정책 실행 등)로 일반화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실패 원인의 미시적 분석 (어텐션 패턴, 중간 표현 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>절차적 충실도를 개선하는 학습·추론 전략 탐색</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.4vw,1.8rem)">논문 정보</h2>
+    <div class="hr"></div>
+    <div class="card" style="margin-bottom:1.2rem">
+      <p style="font-size:clamp(0.95rem,1.5vw,1.15rem);font-weight:600;margin-bottom:0.6rem">When LLMs Stop Following Steps: A Diagnostic Study of Procedural Execution in Language Models</p>
+      <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.4rem">Sailesh Panda, Pritam Kadasi, Abhishek Upperwal, Mayank Singh</p>
+      <p class="muted" style="font-size:clamp(0.8rem,1.1vw,0.88rem)">Indian Institute of Technology Gandhinagar · Soket AI</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.3rem"><i class="fas fa-file-alt"></i> &nbsp;arXiv</p>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)"><span class="accent2">2605.00817v1</span> · cs.CL · 2026년 5월</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.3rem"><i class="fas fa-link"></i> &nbsp;링크</p>
+        <p style="font-size:clamp(0.82rem,1.2vw,0.92rem)"><span class="accent">http://arxiv.org/abs/2605.00817v1</span></p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.88rem)">License: CC BY 4.0</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
