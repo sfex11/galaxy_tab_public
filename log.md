@@ -602,3 +602,7 @@
 - 2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md
 - 2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o.md
 - 2026-05-05-escaping-mode-collapse-in-llm-generation-via-geome.md
+
+## [2026-05-05 20:00] llm-ingest | 2편 분석, 엔티티 234개, 개념 747개
+- 2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md
+- 2026-05-05-standing-on-the-shoulders-of-giants-stabilized-kno.md

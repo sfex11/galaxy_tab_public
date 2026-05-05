@@ -48,3 +48,9 @@ _Wiki 축적 중_
 ### To Call or Not to Call: A Framework to Assess and Optimize LLM Tool Ca (2026-05-05)
 
 → [[sources/2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o.md|상세 보기]]
+
+### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-05)
+
+토큰 효율화가 단순한 토큰 수 감소를 넘어, 토큰 생성의 병렬성 효율(γ 수용률) 자체를 최적화하는 차원을 추가한다. 동일한 토큰 수라도 γ 선택에 따라 실제 지연시간이 비선형적으로 변할 수 있음을 보여준다.
+
+→ [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]

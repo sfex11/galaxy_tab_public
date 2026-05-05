@@ -26,3 +26,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### Position-Aware Drafting for Inference Acceleration in LLM-Based Genera (2026-05-03)
 
 본 논문은 SD의 수용률이 드래프트-타겟 분포 정렬뿐 아니라 도메인 내부 구조(아이템 경계) 인식에 의존함을 보여주어, 기존 '분포 근사' 중심의 SD 이해를 '분포-내부 구조 인식'으로 확장한다.
+
+### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-05)
+
+γ를 고정 하이퍼파라미터가 아닌 압축 의존적 동적 변수로 재정의하여, 추측 디코딩의 효율이 드래프트 모델 품질뿐 아니라 γ-압축 매칭에 의해서도 결정됨을 보여준다. Position-Aware Drafting이 도메인 구조적 제약을 다루었다면, SpecKV는 프로토콜 수준 매개변수의 동적화라는 상보적 축을 제공한다.
+
+→ [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]
