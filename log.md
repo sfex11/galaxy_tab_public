@@ -606,3 +606,17 @@
 ## [2026-05-05 20:00] llm-ingest | 2편 분석, 엔티티 234개, 개념 747개
 - 2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md
 - 2026-05-05-standing-on-the-shoulders-of-giants-stabilized-kno.md
+
+## [2026-05-06 08:02] llm-ingest | 2편 분석, 엔티티 237개, 개념 751개
+- 2026-05-06-speckv-adaptive-speculative-decoding-with-compress.md
+- 2026-05-06-standing-on-the-shoulders-of-giants-stabilized-kno.md
+
+## [2026-05-06 08:30] ingest | Semantic Risk-Aware Heuristic Planning for Robotic Navigation in Dynamic Environments: An LLM-Inspired Approach
+
+## [2026-05-06 08:30] ingest | FlexSQL: Flexible Exploration and Execution Make Better Text-to-SQL Agents
+
+## [2026-05-06 08:30] ingest | AIs and Humans with Agency
+
+## [2026-05-06 08:30] ingest | SCPRM: A Schema-aware Cumulative Process Reward Model for Knowledge Graph Question Answering
+
+## [2026-05-06 08:30] ingest | Coherent Hierarchical Multi-Label Learning to Defer for Medical Imaging

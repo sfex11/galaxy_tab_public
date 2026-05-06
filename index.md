@@ -259,3 +259,8 @@
 - [[sources/2026-05-04-position-aware-drafting-for-inference-acceleration.md]] - Position-Aware Drafting for Inference Acceleration in LLM-Based Generative List-Wise Recommendation
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-05-04-global-optimality-for-constrained-exploration-via-.md]] - Global Optimality for Constrained Exploration via Penalty Regularization
+- [[sources/2026-05-06-semantic-risk-aware-heuristic-planning-for-robotic.md]] - Semantic Risk-Aware Heuristic Planning for Robotic Navigation in Dynamic Environments: An LLM-Inspired Approach
+- [[sources/2026-05-06-flexsql-flexible-exploration-and-execution-make-be.md]] - FlexSQL: Flexible Exploration and Execution Make Better Text-to-SQL Agents
+- [[sources/2026-05-06-ais-and-humans-with-agency.md]] - AIs and Humans with Agency
+- [[sources/2026-05-06-scprm-a-schema-aware-cumulative-process-reward-mod.md]] - SCPRM: A Schema-aware Cumulative Process Reward Model for Knowledge Graph Question Answering
+- [[sources/2026-05-06-coherent-hierarchical-multi-label-learning-to-defe.md]] - Coherent Hierarchical Multi-Label Learning to Defer for Medical Imaging

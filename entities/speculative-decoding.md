@@ -32,3 +32,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 γ를 고정 하이퍼파라미터가 아닌 압축 의존적 동적 변수로 재정의하여, 추측 디코딩의 효율이 드래프트 모델 품질뿐 아니라 γ-압축 매칭에 의해서도 결정됨을 보여준다. Position-Aware Drafting이 도메인 구조적 제약을 다루었다면, SpecKV는 프로토콜 수준 매개변수의 동적화라는 상보적 축을 제공한다.
 
 → [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]
+
+### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-06)
+
+γ 선택이 드래프트 모델 품질뿐 아니라 타겟 모델의 메모리 압축 상태에도 의존한다는 새로운 의존 축을 추가한다. 기존 '드래프트-타겟 품질 격차'에 '압축-수용률 격차'라는 제2의 조율 문제가 존재함을 시사한다.
+
+→ [[sources/2026-05-06-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]
