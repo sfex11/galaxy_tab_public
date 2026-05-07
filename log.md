@@ -642,3 +642,9 @@
 ## [2026-05-07 08:32] ingest | Benchmarking Parameter-Efficient Fine-Tuning of Large Language Models for Low-Resource Tajik Text Generation with the Tajik Web Corpus
 
 ## [2026-05-07 08:32] ingest | Steer Like the LLM: Activation Steering that Mimics Prompting
+
+## [2026-05-08 02:07] llm-ingest | 4편 분석, 엔티티 250개, 개념 772개
+- 2026-05-08-longseeker-elastic-context-orchestration-for-long-.md
+- 2026-05-08-design-conductor-20-an-agent-builds-a-turboquant-i.md
+- 2026-05-08-beyond-semantics-an-evidential-reasoning-aware-mul.md
+- 2026-05-08-joint-treatment-effect-estimation-from-incomplete-.md
