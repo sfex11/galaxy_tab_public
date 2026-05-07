@@ -264,3 +264,18 @@
 - [[sources/2026-05-06-ais-and-humans-with-agency.md]] - AIs and Humans with Agency
 - [[sources/2026-05-06-scprm-a-schema-aware-cumulative-process-reward-mod.md]] - SCPRM: A Schema-aware Cumulative Process Reward Model for Knowledge Graph Question Answering
 - [[sources/2026-05-06-coherent-hierarchical-multi-label-learning-to-defe.md]] - Coherent Hierarchical Multi-Label Learning to Defer for Medical Imaging
+- [[sources/2026-05-07-safety-and-accuracy-follow-different-scaling-laws-.md]] - Safety and accuracy follow different scaling laws in clinical large language models
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-07-openseeker-v2-pushing-the-limits-of-search-agents-.md]] - OpenSeeker-v2: Pushing the Limits of Search Agents with Informative and High-Difficulty Trajectories
+- [[sources/2026-05-07-stayin-aligned-over-time-towards-longitudinal-huma.md]] - Stayin' Aligned Over Time: Towards Longitudinal Human-LLM Alignment via Contextual Reflection and Privacy-Preserving Behavioral Data
+- [[sources/2026-05-07-redefining-ai-red-teaming-in-the-agentic-era-from-.md]] - Redefining AI Red Teaming in the Agentic Era: From Weeks to Hours
+- [[sources/2026-05-07-rethinking-reasoning-intensive-retrieval-evaluatin.md]] - Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-07-symptomai-towards-a-conversational-ai-agent-for-ev.md]] - SymptomAI: Towards a Conversational AI Agent for Everyday Symptom Assessment
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-07-physics-grounded-multi-agent-architecture-for-trac.md]] - Physics-Grounded Multi-Agent Architecture for Traceable, Risk-Aware Human-AI Decision Support in Manufacturing
+- [[sources/2026-05-07-an-agent-oriented-pluggable-experience-rag-skill-f.md]] - An Agent-Oriented Pluggable Experience-RAG Skill for Experience-Driven Retrieval Strategy Orchestration
+- [[sources/2026-05-07-mcjudgebench-a-benchmark-for-constraint-level-judg.md]] - MCJudgeBench: A Benchmark for Constraint-Level Judge Evaluation in Multi-Constraint Instruction Following
+- [[sources/2026-05-07-benchmarking-parameter-efficient-fine-tuning-of-la.md]] - Benchmarking Parameter-Efficient Fine-Tuning of Large Language Models for Low-Resource Tajik Text Generation with the Tajik Web Corpus
+- [[concepts/activation-steering]] - Activation Steering
+- [[sources/2026-05-07-steer-like-the-llm-activation-steering-that-mimics.md]] - Steer Like the LLM: Activation Steering that Mimics Prompting

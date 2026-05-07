@@ -620,3 +620,25 @@
 ## [2026-05-06 08:30] ingest | SCPRM: A Schema-aware Cumulative Process Reward Model for Knowledge Graph Question Answering
 
 ## [2026-05-06 08:30] ingest | Coherent Hierarchical Multi-Label Learning to Defer for Medical Imaging
+
+## [2026-05-07 08:32] ingest | Safety and accuracy follow different scaling laws in clinical large language models
+
+## [2026-05-07 08:32] ingest | OpenSeeker-v2: Pushing the Limits of Search Agents with Informative and High-Difficulty Trajectories
+
+## [2026-05-07 08:32] ingest | Stayin' Aligned Over Time: Towards Longitudinal Human-LLM Alignment via Contextual Reflection and Privacy-Preserving Behavioral Data
+
+## [2026-05-07 08:32] ingest | Redefining AI Red Teaming in the Agentic Era: From Weeks to Hours
+
+## [2026-05-07 08:32] ingest | Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems
+
+## [2026-05-07 08:32] ingest | SymptomAI: Towards a Conversational AI Agent for Everyday Symptom Assessment
+
+## [2026-05-07 08:32] ingest | Physics-Grounded Multi-Agent Architecture for Traceable, Risk-Aware Human-AI Decision Support in Manufacturing
+
+## [2026-05-07 08:32] ingest | An Agent-Oriented Pluggable Experience-RAG Skill for Experience-Driven Retrieval Strategy Orchestration
+
+## [2026-05-07 08:32] ingest | MCJudgeBench: A Benchmark for Constraint-Level Judge Evaluation in Multi-Constraint Instruction Following
+
+## [2026-05-07 08:32] ingest | Benchmarking Parameter-Efficient Fine-Tuning of Large Language Models for Low-Resource Tajik Text Generation with the Tajik Web Corpus
+
+## [2026-05-07 08:32] ingest | Steer Like the LLM: Activation Steering that Mimics Prompting

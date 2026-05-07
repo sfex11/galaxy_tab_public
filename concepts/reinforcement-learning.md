@@ -181,3 +181,5 @@ _자동 생성됨_
 - [[sources/2026-05-04-exploration-hacking-can-llms-learn-to-resist-rl-tr.md]]
 
 - [[sources/2026-05-04-global-optimality-for-constrained-exploration-via-.md]]
+
+- [[sources/2026-05-07-openseeker-v2-pushing-the-limits-of-search-agents-.md]]
