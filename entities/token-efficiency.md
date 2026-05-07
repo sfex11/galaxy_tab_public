@@ -54,3 +54,9 @@ _Wiki 축적 중_
 토큰 효율화가 단순한 토큰 수 감소를 넘어, 토큰 생성의 병렬성 효율(γ 수용률) 자체를 최적화하는 차원을 추가한다. 동일한 토큰 수라도 γ 선택에 따라 실제 지연시간이 비선형적으로 변할 수 있음을 보여준다.
 
 → [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]
+
+### LongSeeker: Elastic Context Orchestration for Long-Horizon Search Agen (2026-05-08)
+
+토큰 효율화의 범위를 '주어진 컨텍스트 내 토큰 제거'(token-pruning)에서 '컨텍스트 구조 자체를 관련도에 따라 다층적으로 재구성'하는 수준으로 격상시킨다. 단순한 토큰 수 절감이 아닌, 정보의 의미론적 중요도에 비례한 예산 분배라는 원칙을 제공하여 기존의 양적 접근을 질적 접근으로 보완한다.
+
+→ [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-.md|상세 보기]]

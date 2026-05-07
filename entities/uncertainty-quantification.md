@@ -20,3 +20,9 @@ _Wiki 축적 중_
 LLM 추론이 아닌 제어 계층이라는 명확한 적용 대상을 지정하여, 불확실성 정량화가 '가능하면 좋은 것'에서 '제어 계층의 규범적 요구사항'으로 위상을 격상시킨다.
 
 → [[sources/2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md|상세 보기]]
+
+### Beyond Semantics: An Evidential Reasoning-Aware Multi-View Learning Fr (2026-05-08)
+
+정신 건강 예측이라는 고위험 도메인에서 불확실성 정량화가 단순한 성능 지표가 아닌 환자 안전과 직결되는 필수 요건임을 실증하며, 의미론적 표현의 한계를 넘어 증거적 추론 기반 정식화가 필요함을 구체화한다.
+
+→ [[sources/2026-05-08-beyond-semantics-an-evidential-reasoning-aware-mul.md|상세 보기]]

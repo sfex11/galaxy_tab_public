@@ -40,3 +40,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 본 논문은 이 간극에 대한 규범적 해답을 제공한다 — 제어 계층이라는 구체적 좌표에서 베이지안 결정 이론을 시스템 구현 원칙으로 번역하여, 기존 '진단만' 기술하던 간극을 '해결 가능한 문제'로 전환시킨다.
 
 → [[sources/2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md|상세 보기]]
+
+### LongSeeker: Elastic Context Orchestration for Long-Horizon Search Agen (2026-05-08)
+
+에이전트의 의미론적 관련도 판단('어떤 정보가 현재 중요한가')을 시스템 수준의 토큰 예산 분배로 번역하는 구체적 경로를 제공한다. 관련도 → 상세도 → 토큰 예산이라는 3단계 번역 체인을 명시적으로 모델링함으로써 이 간극의 실증적 해법을 기여한다.
+
+→ [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-.md|상세 보기]]

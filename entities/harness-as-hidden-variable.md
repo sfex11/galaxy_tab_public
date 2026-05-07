@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Can Coding Agents Reproduce Findings in Computational Materials Scienc (2026-05-05)
 
 → [[sources/2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md|상세 보기]]
+
+### Design Conductor 2.0: An agent builds a TurboQuant inference accelerat (2026-05-08)
+
+CPU 설계(12시간)와 추론 가속기 설계(80시간)의 비선형 스케일링이 하네스 설계 품질이 작업 규모 확장성을 결정하는 은닉 변수임을 극적으로 보여준다. 동일 모델이라도 하네스 버전에 따라 처리 가능한 작업 규모가 80배 차이가 나며, 이 간격이 벤치마크 비교에서 통제되지 않으면 모델 능력 평가 자체가 무의미해짐을 실증한다.
+
+→ [[sources/2026-05-08-design-conductor-20-an-agent-builds-a-turboquant-i.md|상세 보기]]
