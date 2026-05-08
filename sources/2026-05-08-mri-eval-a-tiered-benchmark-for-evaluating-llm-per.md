@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-07-symptomai-towards-a-conversational-ai-agent-for-ev]]: 두 논문 모두 의료 분야에서의 LLM 성능을 벤치마크하며, 하나는 대화형 증상 평가를, 다른 하나는 MRI 물리와 스캐너 운영 지식을 평가한다.
+- → [[sources/2026-05-07-safety-and-accuracy-follow-different-scaling-laws-]]: 두 논문 모두 임상 LLM의 평가 체계를 다루며, 하나는 스케일링에 따른 안전성-정확도 분리를, 다른 하나는 벤더 특화 지식에 대한 계층적 벤치마크를 제안한다.

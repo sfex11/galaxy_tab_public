@@ -51,3 +51,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-08-low-cost-black-box-detection-of-llm-hallucinations]]: 두 논문 모두 모델 출력의 신뢰성 문제를 다루며, 하나는 환각 탐지를, 다른 하나는 정신 건강 예측에서의 과신뢰 완화를 목표로 한다.

@@ -45,3 +45,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-07-openseeker-v2-pushing-the-limits-of-search-agents-]]: 두 논문 모두 검색 에이전트 시스템을 다루며, OpenSeeker-v2는 고품질 학습 궤적을 통한 검색 능력 강화에, LongSeeker는 장기 검색에서의 탄력적 컨텍스트 오케스트레이션에 집중한다.
+- → [[sources/2026-05-07-an-agent-oriented-pluggable-experience-rag-skill-f]]: 두 논문 모두 에이전트 시스템에서 정보의 동적 관리를 다루며, 하나는 장기 검색에서의 탄력적 컨텍스트 오케스트레이션을, 다른 하나는 과제별 검색 전략의 동적 선택을 제안한다.

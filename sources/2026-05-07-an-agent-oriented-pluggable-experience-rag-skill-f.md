@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-07-rethinking-reasoning-intensive-retrieval-evaluatin]]: 두 논문 모두 에이전트 시스템에서의 검색 전략 최적화를 다루며, 하나는 경험 기반 동적 검색 파이프라인 오케스트레이션을, 다른 하나는 추론 강도 높은 검색의 평가 기준을 제안한다.
+- → [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-]]: 두 논문 모두 에이전트 시스템에서 정보의 동적 관리를 다루며, 하나는 장기 검색에서의 탄력적 컨텍스트 오케스트레이션을, 다른 하나는 과제별 검색 전략의 동적 선택을 제안한다.

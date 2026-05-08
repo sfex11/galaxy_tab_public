@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-06-speckv-adaptive-speculative-decoding-with-compress]]: 두 논문 모두 LLM의 추론 시간 최적화를 다루며, 하나는 활성화 조작을 통한 프롬프트 모방을, 다른 하나는 KV 캐시 압축 환경에서의 적응적 추측 디코딩을 제안한다.
+- → [[sources/2026-05-07-stayin-aligned-over-time-towards-longitudinal-huma]]: 두 논문 모두 LLM의 행동 제어를 다루며, 하나는 시간에 걸친 지속적 정렬을, 다른 하나는 추론 시 활성화 조작을 통한 즉각적 스티어링을 제안한다.
