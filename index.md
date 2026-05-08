@@ -279,3 +279,9 @@
 - [[sources/2026-05-07-benchmarking-parameter-efficient-fine-tuning-of-la.md]] - Benchmarking Parameter-Efficient Fine-Tuning of Large Language Models for Low-Resource Tajik Text Generation with the Tajik Web Corpus
 - [[concepts/activation-steering]] - Activation Steering
 - [[sources/2026-05-07-steer-like-the-llm-activation-steering-that-mimics.md]] - Steer Like the LLM: Activation Steering that Mimics Prompting
+- [[sources/2026-05-08-mri-eval-a-tiered-benchmark-for-evaluating-llm-per.md]] - MRI-Eval: A Tiered Benchmark for Evaluating LLM Performance on MRI Physics and GE Scanner Operations Knowledge
+- [[sources/2026-05-08-psk-at-semeval-2026-task-9-multilingual-polarizati.md]] - PSK at SemEval-2026 Task 9: Multilingual Polarization Detection Using Ensemble Gemma Models with Synthetic Data Augmentation
+- [[sources/2026-05-08-executable-world-models-for-arc-agi-3-in-the-era-o.md]] - Executable World Models for ARC-AGI-3 in the Era of Coding Agents
+- [[sources/2026-05-08-low-cost-black-box-detection-of-llm-hallucinations.md]] - Low-Cost Black-Box Detection of LLM Hallucinations via Dynamical System Prediction
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-08-rollout-pass-rate-control-steering-binary-reward-r.md]] - Rollout Pass-Rate Control: Steering Binary-Reward RL Toward Its Most Informative Regime

@@ -183,3 +183,5 @@ _자동 생성됨_
 - [[sources/2026-05-04-global-optimality-for-constrained-exploration-via-.md]]
 
 - [[sources/2026-05-07-openseeker-v2-pushing-the-limits-of-search-agents-.md]]
+
+- [[sources/2026-05-08-rollout-pass-rate-control-steering-binary-reward-r.md]]

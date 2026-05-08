@@ -648,3 +648,13 @@
 - 2026-05-08-design-conductor-20-an-agent-builds-a-turboquant-i.md
 - 2026-05-08-beyond-semantics-an-evidential-reasoning-aware-mul.md
 - 2026-05-08-joint-treatment-effect-estimation-from-incomplete-.md
+
+## [2026-05-08 08:39] ingest | MRI-Eval: A Tiered Benchmark for Evaluating LLM Performance on MRI Physics and GE Scanner Operations Knowledge
+
+## [2026-05-08 08:39] ingest | PSK at SemEval-2026 Task 9: Multilingual Polarization Detection Using Ensemble Gemma Models with Synthetic Data Augmentation
+
+## [2026-05-08 08:39] ingest | Executable World Models for ARC-AGI-3 in the Era of Coding Agents
+
+## [2026-05-08 08:39] ingest | Low-Cost Black-Box Detection of LLM Hallucinations via Dynamical System Prediction
+
+## [2026-05-08 08:39] ingest | Rollout Pass-Rate Control: Steering Binary-Reward RL Toward Its Most Informative Regime
