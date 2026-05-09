@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Global LLM Leaderboards Are Misleading: Small Portfolios — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;gap:clamp(12px,2vw,24px)">
+      <span class="tag tag-red">논문 리뷰</span>
+      <h1 style="font-size:clamp(24px,4vw,48px);line-height:1.25;font-weight:800">왜 글로벌 LLM 리더보드가<br>오도하는가</h1>
+      <p style="font-size:clamp(14px,1.8vw,20px);max-width:700px;line-height:1.6">이질적 지도 학습을 위한 <span class="accent">작은 포트폴리오</span> 접근법</p>
+      <div class="hr" style="width:80px;margin:clamp(8px,1.5vw,16px) 0"></div>
+      <p style="font-size:clamp(12px,1.4vw,16px)"><span class="muted">Jai Moondra, Ayela Chughtai, Bhargavi Lanka, Swati Gupta</span></p>
+      <p style="font-size:clamp(11px,1.2vw,14px)"><span class="muted">Carnegie Mellon University · MIT Sloan</span></p>
+      <p style="font-size:clamp(11px,1.2vw,14px)">arXiv:2605.06656v1</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">LLM 평가의 현재 상황</h2>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-trophy" style="margin-right:8px"></i>리더보드의 부상</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Arena(LMArena) 등 개방형 평가 플랫폼</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인간 피드백 기반 쌍대 비교</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>투명한 '골드 스탠다드'로 인정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>WSJ 등 주요 언론에서 인용</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-exclamation-triangle" style="margin-right:8px"></i>숨겨진 문제</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>글로벌 단일 순위가 <span class="accent">대표성 없음</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 사용자 의견이 하나로 압축</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상충하는 선호가 지워짐</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특정 집단 선호에 지배됨</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(13px,1.5vw,17px)">"글로벌 순위는 이질적인 투표 집단 사이에서 <span class="accent">헤징(hedging)</span>하며, 모든 집단에서 예측 성능을 잃게 된다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">분석 대상: Arena 데이터셋</h2>
+    <div class="grid-3" style="gap:clamp(12px,2vw,24px);margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card" style="text-align:center">
+        <div class="big-num">52</div>
+        <p style="font-size:clamp(12px,1.4vw,16px)"><span class="muted">분석된 LLM 수</span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">116</div>
+        <p style="font-size:clamp(12px,1.4vw,16px)"><span class="muted">언어 수</span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">~89K</div>
+        <p style="font-size:clamp(12px,1.4vw,16px)"><span class="muted">쌍대 비교 건수</span></p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2.2vw,24px);font-weight:700;margin:clamp(12px,2vw,24px) 0">Bradley-Terry (BT) 모델이란?</h3>
+    <p style="font-size:clamp(13px,1.6vw,18px);line-height:1.7;margin-bottom:clamp(12px,1.5vw,16px)">각 LLM ℓ에 대해 Elo 점수 θ<sub>ℓ</sub>를 추정하는 표준 모델. 점수가 높을수록 사용자가 해당 모델을 더 선호할 확률이 높다고 가정한다.</p>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6"><i class="fas fa-info-circle" style="margin-right:8px" class="accent2"></i>Arena는 비슷한 순위의 모델을 더 자주 매칭하여 순위를 분리하려 하지만, <span class="accent">언어 집단 간 선호 차이는 설명하지 못한다.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">핵심 발견: 글로벌 순위의 붕괴</h2>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(12px,1.5vw,20px)"><i class="fas fa-ban" style="margin-right:8px"></i>투표 상쇄 현상</h3>
+        <div class="big-num" style="font-size:clamp(36px,5vw,64px)">72.3%</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">결정적(non-tied) 투표 중 <span class="accent">서로 반대되는 투표</span>가 상쇄된 비율</p>
+        <p style="font-size:clamp(11px,1.3vw,15px);line-height:1.5;margin-top:clamp(8px,1vw,12px)"><span class="muted">"A가 B보다 낫다" vs "B가 A보다 낫다"가 거의 같은 빈도로 발생</span></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(12px,1.5vw,20px)"><i class="fas fa-equals" style="margin-right:8px"></i>구별 불가능한 상위 모델</h3>
+        <div class="big-num" style="font-size:clamp(36px,5vw,64px)">0.53</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">상위 50개 모델 간 최대 승리 확률 — <span class="accent">거의 무작위</span></p>
+        <p style="font-size:clamp(11px,1.3vw,15px);line-height:1.5;margin-top:clamp(8px,1vw,12px)"><span class="muted">1위 모델 vs 50위 모델 = 50점 Elo 차이에 불과</span></p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6"><i class="fas fa-chart-bar" style="margin-right:8px"></i>글로벌 BT 순위가 승자를 <span class="accent">≥70% 확률로</span> 예측할 수 있는 투표는 전체의 <span class="accent">단 10.3%</span>에 불과 (학습 데이터 기준)</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">원인: 구조화된 이질성</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);line-height:1.6;margin-bottom:clamp(16px,2.5vw,32px)">사용자 선호는 <span class="accent">언어, 작업 유형, 시간</span>에 따라 강하게 구조화된 이질성을 보인다.</p>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)">상위 5개 모델의 순위 변동</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>언어어족별 순위에서 평균 <span class="accent">5~14위</span> 변동</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Grok-4: 아프로아시아어족에서 <span class="accent">52위</span>로 추락</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>글로벌 1위가 모든 하위 집단에서 1위가 아님</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)">시간에 따른 변동</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시간별 그룹핑에서도 이질성 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하지만 <span class="accent3">언어가 가장 강력한 구조화 요인</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>작업 유형 단독 분류는 여전히 비대표적</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(13px,1.5vw,17px)">"전역적으로 보이는 <span class="accent">노이즈는 사실 일관되지만 충돌하는 하위 집단의 혼합</span>이다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">언어가 핵심이다</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);line-height:1.6;margin-bottom:clamp(16px,2.5vw,32px)">언어(및 언어어족)로 그룹화하면 투표 일치도가 <span class="accent">극적으로 증가</span>한다.</p>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2.2vw,24px);font-weight:700;margin:clamp(12px,2vw,24px) 0">Elo 점수 스프레드 비교 (max - min)</h3>
+    <table class="compare-table" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <thead>
+        <tr>
+          <th>그룹핑 방식</th>
+          <th>스프레드 수준</th>
+          <th>순위 일관성</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>글로벌 (전체)</td>
+          <td>매우 낮음</td>
+          <td><span class="tag tag-red">거의 무작위</span></td>
+        </tr>
+        <tr>
+          <td>무작위 그룹핑</td>
+          <td>낮음</td>
+          <td><span class="tag tag-red">비대표적</span></td>
+        </tr>
+        <tr>
+          <td>시간별</td>
+          <td>낮음</td>
+          <td><span class="tag tag-amber">제한적</span></td>
+        </tr>
+        <tr>
+          <td>작업 유형만</td>
+          <td>보통</td>
+          <td><span class="tag tag-amber">부분적</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">언어별</span></td>
+          <td><span class="accent">매우 높음</span></td>
+          <td><span class="tag tag-green">우수</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">언어어족 × 작업</span></td>
+          <td><span class="accent">최고</span></td>
+          <td><span class="tag tag-green">최우수</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6"><i class="fas fa-lightbulb" style="margin-right:8px"></i>언어어족 기반 순위는 글로벌 순위보다 Elo 스프레드가 <span class="accent">최대 2자릿수(100배)</span> 더 크다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">시각적 증거: 하위 집단 vs 글로벌</h2>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-bullseye" style="margin-right:8px"></i>승자 예측 확률</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-bottom:clamp(8px,1vw,12px)">388개 하위 집단 BT 순위 vs 글로벌 순위</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">언어/어족 기반</span> 순위: 관찰된 승자에 더 높은 확률 할당</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>글로벌 순위: 항상 가장 낮은 예측력</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>작업별 순위: 글로벌과 유사한 수준</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-chart-line" style="margin-right:8px"></i>로그 손실 (Log Loss)</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-bottom:clamp(8px,1vw,12px)">낮을수록 더 나은 예측 성능</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">언어/어족 기반</span> 순위: 훨씬 더 낮은 로그 손실</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>글로벌 순위: 항상 가장 높은 로그 손실</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>일관된 결과: <span class="accent3">언어가 예측력의 핵심</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(13px,1.5vw,17px)">심슨의 역설(Simpson's Paradox)과 유사: <span class="accent">집단을 합치면 추세가 역전</span>되어 글로벌 순위가 모든 하위 집단에서 통계적 유의성을 잃는다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">해결책: (λ, ν)-포트폴리오</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);line-height:1.6;margin-bottom:clamp(16px,2.5vw,32px)">단일 글로벌 모델 대신, <span class="accent">작은 모델 집합</span>이 대부분의 사용자를 '커버'하도록 한다.</p>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px);margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card" style="text-align:center">
+        <div class="big-num">λ</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">허용 가능한 <span class="accent">예측 오류 상한</span></p>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:clamp(4px,0.5vw,8px)"><span class="muted">모델이 개별 투표를 얼마나 잘 예측해야 하는가?</span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">ν</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">커버해야 할 <span class="accent2">사용자 비율</span></p>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:clamp(4px,0.5vw,8px)"><span class="muted">전체 중 최소 몇 %를 만족시켜야 하는가?</span></p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2.2vw,24px);font-weight:700;margin:clamp(12px,2vw,24px) 0">핵심 아이디어</h3>
+    <div class="quote-block">
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.7">"대규모 ML 모델 앙상블이 주어졌을 때, <span class="accent">각 사용자가 포트폴리오 내 최소 하나의 모델</span>로부터 합리적인 서비스를 받을 수 있는 <span class="accent2">최소 크기의 부분집합</span>을 찾아라."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">알고리즘: 부분 집합 커버 문제</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);line-height:1.6;margin-bottom:clamp(16px,2.5vw,32px)">(λ, ν)-포트폴리오 문제는 <span class="accent">부분 집합 커버(Partial Set Cover)</span>의 변형으로 공식화된다.</p>
+    <div class="pipeline" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">입력</div>
+        <div class="step-desc">모델 앙상블 + 사용자 투표</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">커버 집합 구성</div>
+        <div class="step-desc">각 모델이 λ 이하 오류로 커버하는 사용자 집합 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">탐욕적 선택</div>
+        <div class="step-desc">가장 많은 미커버 사용자를 추가하는 모델 반복 선택</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">출력</div>
+        <div class="step-desc">최소 크기의 (λ, ν)-포트폴리오</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-cogs" style="margin-right:8px"></i>MIP 정식화</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6">혼합 정수 계획(MIP)으로도 정확히 해결 가능. 소규모 인스턴스에 적합.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-shield-alt" style="margin-right:8px"></i>VC 차원 보장</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6">집합 커버-VC 차원 연결(Brönnimann & Goodrich, 1994)을 활용하여 <span class="accent3">포트폴리오 크기에 대한 이론적 상한</span> 제공.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">Arena 결과: 포트폴리오의 압도적 우위</h2>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px);margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card" style="text-align:center">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(12px,1.5vw,20px)">BT 순위 포트폴리오</h3>
+        <div class="big-num">5개</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">순위로 <span class="accent">96% 커버</span></p>
+        <div class="hr" style="width:60px;margin:clamp(8px,1vw,12px) auto"></div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6"><span class="muted">글로벌 1개 순위:</span> <span class="tag tag-red">21% 커버</span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(12px,1.5vw,20px)">LLM 포트폴리오</h3>
+        <div class="big-num">6개</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6;margin-top:clamp(8px,1vw,12px)">LLM로 <span class="accent2">글로벌 Top-6의 2배</span> 커버</p>
+        <div class="hr" style="width:60px;margin:clamp(8px,1vw,12px) auto"></div>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.6"><span class="muted">단순 Top-K 선택과는 근본적으로 다름</span></p>
+      </div>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>방식</th>
+          <th>모델/순위 수</th>
+          <th>커버리지</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>글로벌 BT 순위 (단일)</td>
+          <td>1</td>
+          <td><span class="tag tag-red">21%</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">포트폴리오 BT 순위</span></td>
+          <td><span class="accent">3~10</span></td>
+          <td><span class="tag tag-green">96%+</span></td>
+        </tr>
+        <tr>
+          <td>글로벌 Top-K LLM</td>
+          <td>6</td>
+          <td><span class="tag tag-amber">기준선</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent2">포트폴리오 LLM</span></td>
+          <td><span class="accent2">4~8</span></td>
+          <td><span class="tag tag-green">2×</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">확장: COMPAS 사례 연구</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);line-height:1.6;margin-bottom:clamp(16px,2.5vw,32px)">LLM뿐 아니라 <span class="accent3">일반적인 이질적 지도 학습</span>에 포트폴리오 접근법이 적용됨</p>
+    <div class="grid-2" style="gap:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-gavel" style="margin-right:8px"></i>COMPAS 데이터셋</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>형사 피고인 2년 내 재범 예측</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>공정성 정규화된 분류 모델 앙상블</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 공정성-정확도 트레이드오프</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700;margin-bottom:clamp(8px,1.5vw,16px)"><i class="fas fa-eye" style="margin-right:8px"></i>발견된 사각지대</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>커버하기 어려운 피고인 특성 식별</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">이전 전과 적음</span>, <span class="accent">연령이 적음</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>데이터 내 blind spot 탐지 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.7">포트폴리오가 커버하지 못하는 개체는 <span class="accent">데이터의 문제점이나 모델 부족</span>을 시사하며, <span class="accent2">정책 입안자에게 독립적으로 유용한 정보</span>를 제공한다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;margin-bottom:clamp(16px,2.5vw,32px)">결론 및 시사점</h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">1</div>
+      <div>
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700">글로벌 순위는 본질적으로 한계가 있다</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.5"><span class="muted">구조화된 이질성 하에서 단일 순위는 정보를 지우고 헤징한다</span></p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">2</div>
+      <div>
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700">언어가 LLM 평가 이질성의 핵심 요인</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.5"><span class="muted">언어어족별 분석이 순위 일관성을 극적으로 향상시킨다</span></p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">3</div>
+      <div>
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700">포트폴리오가 글로벌 순위를 대체할 대안</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.5"><span class="muted">소수의 모델로 다수의 사용자를 커버 — 단일 모델보다 훨씬 효과적</span></p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">4</div>
+      <div>
+        <h3 style="font-size:clamp(14px,1.8vw,20px);font-weight:700">일반 지도 학습으로의 확장 가능</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.5"><span class="muted">COMPAS 등 공정성 문제에서 사각지대 탐지에 활용</span></p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(13px,1.5vw,17px)">"리더보드는 단일 순위가 아니라 <span class="accent">포트폴리오</span>를 제시해야 한다. 충돌하는 선호를 보존하는 것이 정보를 지우는 것보다 낫다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;gap:clamp(12px,2vw,24px)">
+      <span class="tag tag-green">논문 정보</span>
+      <h2 style="font-size:clamp(20px,3vw,36px);font-weight:800;line-height:1.3">Why Global LLM Leaderboards Are Misleading:<br>Small Portfolios for Heterogeneous Supervised ML</h2>
+      <div class="hr" style="width:80px"></div>
+      <p style="font-size:clamp(13px,1.5vw,17px);line-height:1.8">
+        <span class="muted">Jai Moondra</span> (Carnegie Mellon University)<br>
+        <span class="muted">Ayela Chughtai, Bhargavi Lanka, Swati Gupta</span> (MIT Sloan)
+      </p>
+      <div class="hr" style="width:60px"></div>
+      <p style="font-size:clamp(12px,1.4vw,16px)">
+        <i class="fas fa-file-alt" style="margin-right:6px"></i>
+        <a href="http://arxiv.org/abs/2605.06656v1" style="text-decoration:underline">arXiv:2605.06656v1</a>
+      </p>
+      <p style="font-size:clamp(11px,1.2vw,14px)"><span class="muted">cs.LG · 2026년 5월 7일</span></p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

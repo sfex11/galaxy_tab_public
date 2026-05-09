@@ -46,3 +46,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 에이전트의 의미론적 관련도 판단('어떤 정보가 현재 중요한가')을 시스템 수준의 토큰 예산 분배로 번역하는 구체적 경로를 제공한다. 관련도 → 상세도 → 토큰 예산이라는 3단계 번역 체인을 명시적으로 모델링함으로써 이 간극의 실증적 해법을 기여한다.
 
 → [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-.md|상세 보기]]
+
+### BAMI: Training-Free Bias Mitigation in GUI Grounding (2026-05-10)
+
+모델(저해상도에서 정상)과 시스템(고해상도 디스플레이) 간 변환에서 해상도 상승이 정밀도 편향을 유발하는 구체적 사례를 제공하여, 이 간극이 텍스트·컨텍스트 도메인에 국한되지 않고 시각-공간 도메인에서도 현현됨을 실증한다.
+
+→ [[sources/2026-05-10-bami-training-free-bias-mitigation-in-gui-groundin.md|상세 보기]]

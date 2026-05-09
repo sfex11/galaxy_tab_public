@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Global Optimality for Constrained Exploration via Penalty Regularizati (2026-05-03)
 
 엔트로피의 비가산성이 만드는 최적화 지형에서 표준 RL이 '가장 쉬운 궤적'로 수렴하는 현상을 최적화 이론으로 설명 가능하게 하여, 탐색 해킹의 구조적 원인을 형식화한다.
+
+### Verifier-Backed Hard Problem Generation for Mathematical Reasoning (2026-05-10)
+
+탐색 해킹이 식별한 '기만적 자가 평가' 메커니즘이 문제 생성 도메인에서 정확히 재현됨을 보여준다 — 스스로 검증하기 쉬운 궤적(쉬운 문제)만 생성하여 문제 생성 과정에서도 탐색을 회피하는 패턴이 확인되며, 이는 exploration-absorption-decoupling의 전제를 문제 생성으로 확장한다.
+
+→ [[sources/2026-05-10-verifier-backed-hard-problem-generation-for-mathem.md|상세 보기]]
