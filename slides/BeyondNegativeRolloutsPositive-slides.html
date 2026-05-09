@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Negative Rollouts: Positive-Only Policy Optimization  — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,32px)">
+      <span class="tag tag-amber">arXiv: 2605.06650v1</span>
+    </div>
+    <h1 style="font-size:clamp(1.6rem,4vw,3rem);line-height:1.25;margin-bottom:clamp(12px,2vw,24px)">
+      네거티브 롤아웃을 넘어서:<br>
+      <span class="accent">암시적 음의 기울기를 활용한</span><br>
+      긍정 전용 정책 최적화
+    </h1>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.2rem);margin-bottom:clamp(16px,2.5vw,32px)" class="muted">
+      Beyond Negative Rollouts: Positive-Only Policy Optimization with Implicit Negative Gradients
+    </p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:clamp(12px,2vw,24px)">
+      <span class="accent">Mingwei Xu</span>, <span class="accent">Hao Fang</span> — University of Washington
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">RLVR 패러다임과 <span class="accent">네거티브 롤아웃의 한계</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:clamp(8px,1.5vw,16px)">RLVR의 기본 구조</h3>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem)">
+          검증 가능한 보상(Verifiable Reward)을 사용해 LLM의 추론 능력을 강화. 수학 문제에서 정답 여부가 <span class="accent">결정적 이진 피드백</span>으로 제공됨.
+        </p>
+        <div class="quote-block" style="font-size:clamp(0.75rem,1vw,0.88rem);margin-top:clamp(8px,1.5vw,16px)">
+          R(x, y) = 𝟏[verify(y) = True]
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:clamp(8px,1.5vw,16px)">PPO → GRPO로의 전환</h3>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem)">
+          Value 네트워크 제거, 그룹 내 긍정/부정 롤아웃으로 어드밴티지 추정. 그러나 <span class="accent2">부정 롤아웃이 실제로 유의미한 학습 신호를 제공하는가?</span>
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,28px)"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem)" class="muted">
+      <i class="fas fa-arrow-down" style="margin-right:6px"></i> Cold-start阶段에서 pass@k는 종종 50% 미만 — 대부분의 샘플이 부정적임
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">핵심 관찰: <span class="accent">왜 부정 롤아웃이 문제인가?</span></h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">1</div>
+      <div>
+        <strong style="font-size:clamp(0.9rem,1.3vw,1.05rem)">실패 심각도의 구분 불가</strong>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem);margin-top:4px" class="muted">이진 보상 하에서 모든 오답은 동일한 어드밴티지를 가짐. "얼마나 틀렸는지"에 대한 정보가 없음</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">2</div>
+      <div>
+        <strong style="font-size:clamp(0.9rem,1.3vw,1.05rem)">조합적 폭발성</strong>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem);margin-top:4px" class="muted">수학 과제에서 오답 공간은 조합적으로 매우 큼. 소수의 샘플된 부정 예시로 처 망 모드를 의미 있게 커버할 수 없음</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,20px)">
+      <div class="flow-icon">3</div>
+      <div>
+        <strong style="font-size:clamp(0.9rem,1.3vw,1.05rem)">대조적 SSL의 선례</strong>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem);margin-top:4px" class="muted">BYOL, SimSiam이 부정 샘플 없이도 효과적인 표현 학습이 가능함을 이미 증명</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.3vw,1.05rem)">
+      <i class="fas fa-lightbulb" class="accent" style="margin-right:6px"></i>
+      <span class="accent">핵심 질문:</span> 정책이 오직 성공으로부터만 개선될 수 있는가?
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">POPO: <span class="accent">긍정 전용 정책 최적화</span></h2>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-bottom:clamp(16px,3vw,28px)">
+      온라인 긍정 롤아웃만으로 학습이 가능한 새로운 RLVR 프레임워크
+    </p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">유계 중요도 샘플링</div>
+        <div class="step-desc">긍정 롤아웃 집합에 대해 정규화된 가중치 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">암시적 음의 기울기</div>
+        <div class="step-desc">확률 재분배를 통해 자연스럽게 음의 신호 발생</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">안정화 메커니즘</div>
+        <div class="step-desc">Siamese 네트워크 + EMA + 표현 유사도 페널티</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,28px)"></div>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.95rem)">
+      부정 롤아웃에 대한 기울기 안내를 <span class="accent">전혀 사용하지 않음</span> — 학습이 온전히 긍정 응답에서만 발생
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">유계 중요도 샘플링 <span class="accent2">(Bounded Importance Sampling)</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">GRPO의 접근</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          전체 샘플(G개)에 대해 정규화:<br>
+          어드밴티지가 긍정/부정 나뉨<br>
+          <span class="muted">→ 부정 샘플이 가중치 분모에 포함</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">POPO의 접근</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          긍정 샘플(P개)에 <span class="accent">만</span> 정규화:<br>
+          가중치가 항상 양수이며 유계<br>
+          <span class="muted">→ 부정 샘플이 기울기에 전혀 관여하지 않음</span>
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,24px)"></div>
+    <div class="quote-block" style="font-size:clamp(0.8rem,1.1vw,0.92rem)">
+      핵심 차이: 분모를 전체 G가 아닌 <span class="accent">긍정 집합 P</span>로 제한함으로써, 기울기가 부정 샘플에 의존하지 않으면서도 자연스러운 확률 재분배 효과를 얻음
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">암시적 음의 기울기의 <span class="accent">발생 원리</span></h2>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-bottom:clamp(14px,2.5vw,24px)">
+      명시적인 부정 롤아웃 없이도 음의 기울기가 자연스럽게 등장하는 이유
+    </p>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <div class="big-num">①</div>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          <strong>Softmax 정규화</strong><br>
+          <span class="muted">긍정 로짓 간의 확률 재분배가 음의 로짓에 간접적 영향</span>
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">②</div>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          <strong>NLL 기울기 전파</strong><br>
+          <span class="muted">음의 로짓에 대한 NLL 기울기가 음의 방향으로 작용</span>
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">③</div>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          <strong>엔트로피 기여</strong><br>
+          <span class="muted">엔트로피 항이 음의 로짓에 대해 음의 기울기 누적</span>
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,24px)"></div>
+    <p style="font-size:clamp(0.82rem,1.1vw,0.95rem)">
+      <span class="tag tag-green">정리 (Theorem 3.1)</span>
+      <span class="muted" style="margin-left:8px">유사도 손실은 로짓 수준에서 기여하지 않으며, NLL과 엔트로피 기울기가 결합하여 음의 로짓에 대해 음의 기울기 방향이 성립함을 수학적으로 증명</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">안정화 메커니즘: <span class="accent3">두 가지 핵심 설계</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          <i class="fas fa-network-wired" style="margin-right:6px" class="accent3"></i>Siamese 정책 네트워크 + EMA
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>온라인 정책 π_θ와 타겟 정책 π_ξ를 Siamese 구조로 연결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ξ는 EMA로 갱신되어 적응적 정책 앵커 역할</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>BYOL/SimSiam의 비대칭 아키텍처 통찰 활용</li>
+        </ul>
+        <div class="quote-block" style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:clamp(8px,1.5vw,14px)">
+          <span class="accent3">Lemma 3.2:</span> EMA 기반 파라미터 갭이 정상 상태에서 유계됨을 증명
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          <i class="fas fa-compress-arrows-alt" style="margin-right:6px" class="accent3"></i>표현 공간 유사도 페널티
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KL 발산을 표현 공간의 코사인 유사도로 대체</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>소프트 유계 제약으로 의미적 구조 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>토큰 수준의 불안정성 완화</li>
+        </ul>
+        <div class="quote-block" style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:clamp(8px,1.5vw,14px)">
+          KL 발산과 달리 <span class="accent3">[-1, 1] 범위</span>에서 유계되어 안정적인 최적화 가능
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">POPO 손실 함수 <span class="accent2">전체 구조</span></h2>
+    <div class="card" style="margin-bottom:clamp(14px,2.5vw,24px)">
+      <p style="font-size:clamp(0.88rem,1.3vw,1.05rem);text-align:center;line-height:1.8">
+        <span class="accent">L_POPO</span> = <span class="accent2">L_policy</span> + <span class="accent3">β · L_similarity</span> + <span class="muted">γ · L_entropy</span>
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-bottom:clamp(6px,1vw,12px)">
+          <span class="accent2">L_policy</span>
+        </h3>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)">
+          긍정 롤아웃에 대한 유계 중요도 샘플링 가중치 × NLL<br>
+          <span class="muted">→ 암시적 음의 기울기 포함</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-bottom:clamp(6px,1vw,12px)">
+          <span class="accent3">L_similarity</span>
+        </h3>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)">
+          Siamese 표현 공간에서 코사인 유사도 페널티<br>
+          <span class="muted">→ KL 대체, 유계 제약</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-bottom:clamp(6px,1vw,12px)">
+          <span class="muted">L_entropy</span>
+        </h3>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)">
+          엔트로피 보너스로 탐색 촉진<br>
+          <span class="muted">→ 음의 로짓에 추가 음의 기울기</span>
+        </p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(14px,2.5vw,24px)"></div>
+    <p style="font-size:clamp(0.82rem,1.1vw,0.95rem)" class="muted">
+      <i class="fas fa-info-circle" style="margin-right:4px"></i>
+      부정 롤아웃 데이터가 손실 함수 어디에도 등장하지 않음
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">실험 설정</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">학습 구성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>학습 데이터: DeepScaleR-Preview-Dataset</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그룹 당 64개 샘플 (G=64)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>학습률 스케줄: cosine decay</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>총 학습 스텝: 2,000</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">평가 벤치마크</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="tag tag-amber" style="margin-right:4px">기초</span> MATH-500, AMC 23</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="tag tag-red" style="margin-right:4px">고난</span> AIME 2024, AIME 2025</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="tag tag-green" style="margin-right:4px">최고난</span> Olympiad</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(14px,2.5vw,24px)"></div>
+    <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">사용 모델</h3>
+    <div class="grid-4">
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)"><strong>Qwen-Math-1.5B</strong></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)"><strong>Qwen2.5-Math-7B</strong></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)"><strong>DeepSeek-Math-7B</strong></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem)"><strong>DeepSeek-R1-Distill-7B</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,28px)">주요 실험 결과: <span class="accent">난이도가 높을수록 POPO가 우세</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>벤치마크</th>
+          <th>GRPO</th>
+          <th>POPO</th>
+          <th>Δ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">Qwen-Math-7B</td>
+          <td>MATH-500</td>
+          <td>91.0%</td>
+          <td>91.4%</td>
+          <td class="accent">+0.4</td>
+        </tr>
+        <tr>
+          <td>AIME 2025</td>
+          <td>30.00%</td>
+          <td class="accent">36.67%</td>
+          <td class="accent">+6.67</td>
+        </tr>
+        <tr>
+          <td rowspan="2">Qwen2.5-Math-7B</td>
+          <td>AMC 23</td>
+          <td>70.0%</td>
+          <td>71.0%</td>
+          <td class="accent">+1.0</td>
+        </tr>
+        <tr>
+          <td>AIME 2025</td>
+          <td>26.67%</td>
+          <td class="accent">30.00%</td>
+          <td class="accent">+3.33</td>
+        </tr>
+        <tr>
+          <td>Qwen-Math-1.5B</td>
+          <td>MATH-500</td>
+          <td>82.0%</td>
+          <td>84.2%</td>
+          <td class="accent">+2.2</td>
+        </tr>
+        <tr>
+          <td>DeepSeek-R1-Distill-7B</td>
+          <td>AIME 2025</td>
+          <td>33.33%</td>
+          <td class="accent">35.00%</td>
+          <td class="accent">+1.67</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">결과 분석: <span class="accent2">왜 고난도에서 차이가 벌어지는가?</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">저난도 (MATH-500)</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          pass@k가 이미 높아 긍정/부정 롤아웃 모두 정보량이 충분함. GRPO와 POPO의 성능 차이가 <span class="muted">미미</span>
+        </p>
+        <div class="big-num" style="margin-top:clamp(8px,1.5vw,14px)">~0.4%</div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">고난도 (AIME 2025)</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem)">
+          pass@k가 극히 낮아 부정 롤아웃이 노이즈로 작용. POPO의 긍정 전용 접근이 <span class="accent">명확한 이점</span> 발휘
+        </p>
+        <div class="big-num" style="margin-top:clamp(8px,1.5vw,14px)">~6.67%</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,24px)"></div>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.95rem)">
+      부정 롤아웃의 "무의미한 페널티"가 문제 난이도가 높아질수록 더 큰 장애물이 됨. POPO는 이를 근본적으로 회피
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">제거 연구: <span class="accent3">각 구성요소의 기여</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>변형</th>
+          <th>유계 IS</th>
+          <th>Siamese+EMA</th>
+          <th>유사도 페널티</th>
+          <th>AIME 2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="accent"><strong>POPO (Full)</strong></td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td class="accent"><strong>36.67%</strong></td>
+        </tr>
+        <tr>
+          <td>유계 IS 제거</td>
+          <td><i class="fas fa-times" class="muted"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td>31.67%</td>
+        </tr>
+        <tr>
+          <td>Siamese+EMA 제거</td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-times" class="muted"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td>28.33%</td>
+        </tr>
+        <tr>
+          <td>유사도 → KL</td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-check"></i></td>
+          <td><i class="fas fa-times" class="muted"></i></td>
+          <td>30.00%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin-top:clamp(14px,2.5vw,24px)"></div>
+    <p style="font-size:clamp(0.82rem,1.1vw,0.95rem)" class="muted">
+      <i class="fas fa-arrow-right" style="margin-right:4px"></i>
+      세 구성요소 모두 필수적이며, 특히 <span class="accent3">Siamese+EMA 제거 시 성능 저하가 가장 큼</span> (−8.34%)
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">추가 실험: <span class="accent">일반 텍스트 LLM 적용</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">범용 모델에서의 성능</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          수학 특화 모델이 아닌 일반 텍스트 LLM(Qwen2.5-7B 등)에도 POPO를 적용하여 일관된 개선 확인
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GRPO 대비 MATH-500에서 유의미한 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학 전용 SFT 없이도 추론 능력 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>범용성 측면에서 POPO의 강점 입증</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">하이퍼파라미터 민감도</h3>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.9rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          광범위한 스윕 연구를 통해 POPO의 하이퍼파라미터에 대한 견고성 확인
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>EMA 감쇠율(β): 0.99~0.999에서 안정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유사도 가중치(β_sim): 넓은 범위에서 유효</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GRPO보다 하이퍼파라미터 선택에 덜 민감</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">논의 및 시사점</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          <i class="fas fa-star" style="margin-right:6px" class="accent"></i>핵심 발견
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>희소 이진 보상에서 부정 롤아웃이 불필요할 수 있음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>확률 재분배만으로 암시적 음의 기울기 충분</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SSL의 비대칭 아키텍처가 RLVR에도 유효</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:clamp(8px,1.5vw,14px)">
+          <i class="fas fa-road" style="margin-right:6px" class="accent2"></i>한계 및 향후 방향
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>현재 수학·코드 도메인에 한정 (이진 검증 가능)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>연속 보상 환경에서의 확장 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>부정 샘플이 유의미한 도메인에서의 적용성 탐구</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,3vw,28px)"></div>
+    <div class="quote-block" style="font-size:clamp(0.85rem,1.2vw,1rem)">
+      <span class="accent">새로운 RLVR 방향 제시:</span> 부정 롤아웃 없이도 강화학습이 가능하다는 것은, 희소 보상 환경에서의 정책 최적화 패러다임을 재고하게 함
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,1.9rem);margin-bottom:clamp(16px,3vw,32px)">요약</h2>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.8vw,18px)">
+      <div class="flow-icon"><i class="fas fa-ban"></i></div>
+      <div>
+        <strong style="font-size:clamp(0.88rem,1.2vw,1rem)">부정 롤아웃의 문제 진단</strong>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem);margin-top:3px" class="muted">실패 심각도 불가, 조합적 폭발, 희소 보장 하에서의 무의미성</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.8vw,18px)">
+      <div class="flow-icon"><i class="fas fa-plus-circle"></i></div>
+      <div>
+        <strong style="font-size:clamp(0.88rem,1.2vw,1rem)">POPO 제안</strong>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem);margin-top:3px" class="muted">유계 IS, 암시적 음의 기울기, Siamese+EMA, 표현 유사도 페널티</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.8vw,18px)">
+      <div class="flow-icon"><i class="fas fa-chart-line"></i></div>
+      <div>
+        <strong style="font-size:clamp(0.88rem,1.2vw,1rem)">실험적 검증</strong>
+        <p style="font-size:clamp(0.75rem,1vw,0.88rem);margin-top:3px" class="muted">AIME 2025에서 36.67% 달성 (GRPO 30.00% 대비 +6.67%p)</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(14px,2.5vw,24px)"></div>
+    <p style="font-size:clamp(0.85rem,1.15vw,0.98rem);text-align:center;line-height:1.7">
+      <span class="accent">Beyond Negative Rollouts: Positive-Only Policy Optimization with Implicit Negative Gradients</span><br>
+      <span class="muted">Mingwei Xu, Hao Fang — University of Washington</span><br>
+      <a href="http://arxiv.org/abs/2605.06650v1" style="font-size:clamp(0.8rem,1.1vw,0.92rem);text-decoration:underline" class="accent2">arxiv.org/abs/2605.06650v1</a>
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
