@@ -141,3 +141,5 @@ _자동 생성됨_
 - [[sources/2026-04-29-the-chameleons-limit-investigating-persona-collaps.md]]
 
 - [[sources/2026-05-07-physics-grounded-multi-agent-architecture-for-trac.md]]
+
+- [[sources/2026-05-09-maspo-joint-prompt-optimization-for-llm-based-mult.md]]

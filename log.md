@@ -658,3 +658,37 @@
 ## [2026-05-08 08:39] ingest | Low-Cost Black-Box Detection of LLM Hallucinations via Dynamical System Prediction
 
 ## [2026-05-08 08:39] ingest | Rollout Pass-Rate Control: Steering Binary-Reward RL Toward Its Most Informative Regime
+
+## [2026-05-09 08:36] ingest | BAMI: Training-Free Bias Mitigation in GUI Grounding
+
+## [2026-05-09 08:36] ingest | When No Benchmark Exists: Validating Comparative LLM Safety Scoring Without Ground-Truth Labels
+
+## [2026-05-09 08:36] ingest | AI Co-Mathematician: Accelerating Mathematicians with Agentic AI
+
+## [2026-05-09 08:36] ingest | Beyond Negative Rollouts: Positive-Only Policy Optimization with Implicit Negative Gradients
+
+## [2026-05-09 08:36] ingest | Superintelligent Retrieval Agent: The Next Frontier of Information Retrieval
+
+## [2026-05-09 08:36] ingest | StraTA: Incentivizing Agentic Reinforcement Learning with Strategic Trajectory Abstraction
+
+## [2026-05-09 08:36] ingest | Recursive Agent Optimization
+
+## [2026-05-09 08:36] ingest | Cited but Not Verified: Parsing and Evaluating Source Attribution in LLM Deep Research Agents
+
+## [2026-05-09 08:36] ingest | MASPO: Joint Prompt Optimization for LLM-based Multi-Agent Systems
+
+## [2026-05-09 08:36] ingest | EMO: Pretraining Mixture of Experts for Emergent Modularity
+
+## [2026-05-09 08:36] ingest | Verifier-Backed Hard Problem Generation for Mathematical Reasoning
+
+## [2026-05-09 08:36] ingest | Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less
+
+## [2026-05-09 08:36] ingest | Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key
+
+## [2026-05-09 08:36] ingest | SkillOS: Learning Skill Curation for Self-Evolving Agents
+
+## [2026-05-09 08:36] ingest | Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heterogeneous Supervised ML
+
+## [2026-05-09 08:36] ingest | Continuous Latent Diffusion Language Model
+
+## [2026-05-09 08:36] ingest | Crafting Reversible SFT Behaviors in Large Language Models

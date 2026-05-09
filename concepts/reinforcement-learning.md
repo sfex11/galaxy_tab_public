@@ -185,3 +185,11 @@ _자동 생성됨_
 - [[sources/2026-05-07-openseeker-v2-pushing-the-limits-of-search-agents-.md]]
 
 - [[sources/2026-05-08-rollout-pass-rate-control-steering-binary-reward-r.md]]
+
+- [[sources/2026-05-09-beyond-negative-rollouts-positive-only-policy-opti.md]]
+
+- [[sources/2026-05-09-strata-incentivizing-agentic-reinforcement-learnin.md]]
+
+- [[sources/2026-05-09-recursive-agent-optimization.md]]
+
+- [[sources/2026-05-09-can-rl-teach-long-horizon-reasoning-to-llms-expres.md]]

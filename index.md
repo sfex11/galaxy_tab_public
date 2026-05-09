@@ -285,3 +285,26 @@
 - [[sources/2026-05-08-low-cost-black-box-detection-of-llm-hallucinations.md]] - Low-Cost Black-Box Detection of LLM Hallucinations via Dynamical System Prediction
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-05-08-rollout-pass-rate-control-steering-binary-reward-r.md]] - Rollout Pass-Rate Control: Steering Binary-Reward RL Toward Its Most Informative Regime
+- [[sources/2026-05-09-bami-training-free-bias-mitigation-in-gui-groundin.md]] - BAMI: Training-Free Bias Mitigation in GUI Grounding
+- [[sources/2026-05-09-when-no-benchmark-exists-validating-comparative-ll.md]] - When No Benchmark Exists: Validating Comparative LLM Safety Scoring Without Ground-Truth Labels
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-09-ai-co-mathematician-accelerating-mathematicians-wi.md]] - AI Co-Mathematician: Accelerating Mathematicians with Agentic AI
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-09-beyond-negative-rollouts-positive-only-policy-opti.md]] - Beyond Negative Rollouts: Positive-Only Policy Optimization with Implicit Negative Gradients
+- [[sources/2026-05-09-superintelligent-retrieval-agent-the-next-frontier.md]] - Superintelligent Retrieval Agent: The Next Frontier of Information Retrieval
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-09-strata-incentivizing-agentic-reinforcement-learnin.md]] - StraTA: Incentivizing Agentic Reinforcement Learning with Strategic Trajectory Abstraction
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-09-recursive-agent-optimization.md]] - Recursive Agent Optimization
+- [[sources/2026-05-09-cited-but-not-verified-parsing-and-evaluating-sour.md]] - Cited but Not Verified: Parsing and Evaluating Source Attribution in LLM Deep Research Agents
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-09-maspo-joint-prompt-optimization-for-llm-based-mult.md]] - MASPO: Joint Prompt Optimization for LLM-based Multi-Agent Systems
+- [[sources/2026-05-09-emo-pretraining-mixture-of-experts-for-emergent-mo.md]] - EMO: Pretraining Mixture of Experts for Emergent Modularity
+- [[sources/2026-05-09-verifier-backed-hard-problem-generation-for-mathem.md]] - Verifier-Backed Hard Problem Generation for Mathematical Reasoning
+- [[sources/2026-05-09-optimizer-model-consistency-full-finetuning-with-t.md]] - Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-09-can-rl-teach-long-horizon-reasoning-to-llms-expres.md]] - Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key
+- [[sources/2026-05-09-skillos-learning-skill-curation-for-self-evolving-.md]] - SkillOS: Learning Skill Curation for Self-Evolving Agents
+- [[sources/2026-05-09-why-global-llm-leaderboards-are-misleading-small-p.md]] - Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heterogeneous Supervised ML
+- [[sources/2026-05-09-continuous-latent-diffusion-language-model.md]] - Continuous Latent Diffusion Language Model
+- [[sources/2026-05-09-crafting-reversible-sft-behaviors-in-large-languag.md]] - Crafting Reversible SFT Behaviors in Large Language Models
