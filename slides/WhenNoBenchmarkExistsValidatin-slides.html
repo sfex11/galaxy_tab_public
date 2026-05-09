@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When No Benchmark Exists: Validating Comparative LLM Safety  — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p style="font-size:clamp(0.8rem,1.2vw,1rem)" class="muted">arXiv:2605.06652v1 · cs.LG · 2025</p>
+    <h1 style="font-size:clamp(1.6rem,3.5vw,2.8rem);margin:1rem 0 0.5rem">벤치마크가 없을 때:<br>정답 레이블 없는 LLM 안전성<br>비교 평가의 타당성 검증</h1>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.1rem)" class="muted">When No Benchmark Exists: Validating Comparative LLM Safety Scoring<br>Without Ground-Truth Labels</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)">Sushant Gautam, Finn Schwall, Annika Willoch Olstad, Fernando Vallecillos Ruiz,<br>Birk Torpmann-Hagen, Sunniva Maria Stordal Bjørklund, Leon Moonen, Klas Pettersen, Michael A. Riegler</p>
+    <p style="font-size:clamp(0.7rem,1vw,0.85rem)" class="muted">Simula Metropolitan · Oslo Metropolitan University · University of Oslo · Simula Research Laboratory · Norwegian Directorate of Health</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">문제 상황</h2>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem)">"노르웨이 공공기관이 국민 서비스 안내용으로 로컬 배포 LLM 파일럿을 준비한다. 후보 모델 중 어느 것이 노르웨이어·정책·데이터 처리 관점에서 더 안전한가?"</p>
+    </div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>해당 언어·도메인에 대한 <span class="accent">안전성 벤치마크가 존재하지 않음</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>벤치마크 구축은 예산·일정·데이터 제약으로 불가능</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>모델·프롬프트·가드레일이 업데이트될 때마다 <span class="accent2">재평가 필요</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>상용 API 경로 차단 (규제 환경)</li>
+    </ul>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem" class="muted">→ 기존 패러다임(정적 벤치마크, 자동 레드팀, LLM-as-judge)만으로는 해결 불가</p>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">기존 접근법의 한계</h2>
+    <div class="hr"></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">정적 벤치마크</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">Ground-truth 레이블 필요</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구축 비용 매우 높음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>영어 중심</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>출시 시점에 고정</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">자동 레드팀</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">발견 중심, 점수 아님</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 검토용 산출물</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>반복 가능한 점수 부재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불확실성 정량화 안 됨</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">LLM-as-judge</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">판별 자체의 신뢰성 문제</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>절대 점수 불안정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>위치·길이·자기향상 편향</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>도구 수준 검증 필요</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem" class="muted">노르웨이의 경우: NorEval(24개 데이터셋)에 안전성 구성요소 없음 · 다국어 안전 벤치마크에서 노르웨이어 제외</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">벤치마크리스 비교 안전성 점수화</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)">정답 레이블이 없는 상황에서 후보 모델 간 안전성을 비교하는 새로운 평가 범주를 공식화</p>
+    <div class="flow-item">
+      <div class="flow-icon">1</div>
+      <div><strong style="font-size:clamp(0.85rem,1.2vw,1rem)">측정 기기 고정</strong><p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">시나리오 팩, 루브릭, 감사자, 판사, 샘플링, 재실행 횟수</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">2</div>
+      <div><strong style="font-size:clamp(0.85rem,1.2vw,1rem)">후보 타겟 모델에 대해 재실행</strong><p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">동일한 기기로 각 모델 평가</p></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">3</div>
+      <div><strong style="font-size:clamp(0.85rem,1.2vw,1rem)">명시적 클레임 계약하에 보고</strong><p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">점수, 델타, 임계율, 불확실성, 사용된 판사·감사자</p></div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">"다른 기기의 점수는 직접 비교할 수 없다. 점수는 고정된 구성 하에서만 유효하다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">세 가지 독립 역할</h2>
+    <div class="hr"></div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num">T</div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">타겟 모델</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">평가 대상 LLM. 안전성이 비교되는 후보 모델.</p>
+      </div>
+      <div class="card">
+        <div class="big-num">A</div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">감사자 (Auditor)</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">시나리오를 프롬프트로 변환하여 타겟에 입력. 멀티턴 대화 생성.</p>
+      </div>
+      <div class="card">
+        <div class="big-num">J</div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">판사 (Judge)</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">전체 대화 기록을 읽고 루브릭에 따라 심각도 레이블 부여.</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)"><strong>독립성이 핵심:</strong> 세 역할을 분리하면 타겟, 감사자, 판사를 실험 요인으로 변동시켜 <span class="accent">점수가 타겟 행동을 반영하는지, 장치 인공물인지 정량화</span> 가능</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">도구적 타당성 연쇄</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">Ground-truth 대신 세 가지 검증을 연쇄적으로 통과해야 점수 유효</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">반응성</div>
+        <div class="step-desc">안전 vs 소거 대조에<br>기기가 반응하는가?</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">타겟 지배성</div>
+        <div class="step-desc">분산의 주요 원인이<br>타겟인가, 장치인가?</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">재현성</div>
+        <div class="step-desc">재실행 간<br>점수가 안정화되는가?</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)"><span class="accent">안전 vs 소거(Ablated) 대조</span></p>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">거부 방향(ablation)을 제거한 능력 일치 변형. 안전 모델과 소거 모델이 분리되어야 함.</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)"><span class="accent2">분산 분해</span></p>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">총 분산을 타겟·감사자·판사·잔차 성분으로 분해. 타겟이 지배적이어야 함.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">SimpleAudit: 참조 구현</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)">타당성 연쇄를 실체화한 <span class="accent">로컬 우선 Python 라이브러리</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>버전 관리된 시나리오 팩 = 측정 기기</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>PyPI 및 GitHub 공개</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Digital Public Good 지위 획득</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상용 API 불필요 (로컬 배포)</li>
+        </ul>
+        <div class="hr"></div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">산출물</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">판정(verdicts) · 점수(scores) · 매치 델타(matched deltas) · 임계율(critical rates) · 불확실성(uncertainty) · 대화 기록 · 토큰 사용량</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">클레임 계약</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">점수는 다음이 고정된 조건에서만 유효:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시나리오 팩</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>루브릭</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>감사자(A) 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>판사(J) 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>샘플링 구성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>재실행 예산(n)</li>
+        </ul>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">하나라도 바뀌면 재검증 필요</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">검증 결과: 반응성</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)">안전 모델과 소거(Ablated) 모델이 AUROC로 얼마나 잘 분리되는가?</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>구성 (J = A)</th>
+          <th>AUROC</th>
+          <th>판단</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Llama 3.1 8B</td>
+          <td class="accent">0.89–1.00</td>
+          <td><span class="tag tag-green">통과</span></td>
+        </tr>
+        <tr>
+          <td>Llama 3.1 70B</td>
+          <td class="accent">0.95–1.00</td>
+          <td><span class="tag tag-green">통과</span></td>
+        </tr>
+        <tr>
+          <td>Gemma 3 12B</td>
+          <td class="accent">0.97–1.00</td>
+          <td><span class="tag tag-green">통과</span></td>
+        </tr>
+        <tr>
+          <td>Mistral 7B v0.3</td>
+          <td class="accent">0.93–1.00</td>
+          <td><span class="tag tag-green">통과</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem" class="muted">모든 판사-감사자 조합에서 천장 근처 분리 달성 → 기기가 안전 관련 대조에 실제로 반응함</p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">검증 결과: 타겟 지배성과 재현성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">타겟 지배성</h3>
+        <div class="big-num">η² ≈ 0.52</div>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">총 분산 중 약 52%가 타겟 모델 간 차이에서 설명됨</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>감사자·판사 인공물보다 타겟이 압도적으로 지배적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>대조(contrast) 제거 후에도 지배성 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>장치 성분은 무시할 수 없지만 2차적</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">재현성</h3>
+        <div class="big-num">10회</div>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">재실행 10회부터 심각도 프로필 안정화</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>부트스트랩 분석으로 안정화 지점 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안정화 이후 추가 재실행은 점수 변동 최소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불확실성 범위 축소 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">판사·감사자 선택과 기본 구성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">판사 선택의 핵심 지표</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)"><span class="accent">임계 미스(Critical-miss) 일치도</span></p>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">가장 심각한 위험(임계 등급)을 놓치는 판사는 배제. 전반적 일치도보다 임계 미스 동의가 운영상 중요.</p>
+        <div class="hr"></div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">감사자 선택의 핵심 설계점</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">감사자는 타겟보다 <span class="accent2">능력이 충분히 높아야</span> 함. 감사자-타겟 간 능력 격차가 부족하면 타겟의 안전 거부를 회피하지 못해 점수 왜곡.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">기본 구성: J = A</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">판사와 감사자에 동일 모델 사용을 기본값으로 권장</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구성 복잡도 감소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분산 성분 단순화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>J ≠ A일 때도 연쇄 통과 가능하나 추가 검증 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>AUROC는 J=A 구성에서 가장 높음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">Petri에 대한 연쇄 검증</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)">동일한 타당성 연쇄를 Petri(Anthropic의 에이전트 감사 도구)에 적용</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">연쇄 통과</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안정성: 재실행 간 안정화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분산 분해: 타겟 지배적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안전 vs 소거 분리</li>
+        </ul>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">→ 연쇄는 <span class="accent3">특정 도구가 아닌 도구 클래스</span>를 식별</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">본질적 차이는 상류에</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>클레임 계약 강제 정도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>배포 적합성 (로컬 vs API)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>발견 vs 점수화 설계 목표</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다차원 루브릭의 구성 분할 문제</li>
+        </ul>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">Petri의 38개 차원 중 일부는 비반응적이거나 구성 분할과 충돌</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">노르웨이 공공조달 사례 연구</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)">Borealis vs Gemma 3 비교 — 노르웨이어 안전 시나리오 팩 적용</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">핵심 발견</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">더 안전한 모델은 시나리오 카테고리에 따라 다름</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>위험 측정 지표(점수 vs 임계율)에 따라도 순위 변동</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 순위로 축약 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">보고해야 할 항목</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>점수 (scores)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>매치 델타 (matched deltas)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>임계율 (critical rates)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불확실성 (uncertainty)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용된 판사·감사자 식별</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">"점수, 델타, 임계율, 불확실성, 사용된 판사와 감사자를 함께 보고해야 하며, 순위로 축약해서는 안 된다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">논의 및 한계</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">논의</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>도구적 타당성 ≠ 구성 타당성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>점수가 "실제 세계 안전성"을 증명하는 것은 아님</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>점수가 <span class="accent">노이즈나 장치 인공물이 아닌 타겟 행동에 반응</span>한다는 선행 주장만 확립</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>배포 타당성은 배포 팀의 기여로 남음</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>소거 대조는 거부 방향이라는 가정 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>노르웨이어 팩에만 검증 (다른 언어 미검증)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시나리오 팩 자체의 타당성은 별도 문제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>장치 분산 성분이 무시 불가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티턴 상호작용의 복잡성 일부 미포착 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">결론</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">기여 요약</h3>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-1" style="font-size:clamp(0.7rem,1vw,0.85rem)"></i></div>
+          <div><p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">벤치마크리스 비교 안전성 점수화를 독립 평가 범주로 식별</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-2" style="font-size:clamp(0.7rem,1vw,0.85rem)"></i></div>
+          <div><p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">클레임 계약과 타당성 연쇄 명세화</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-3" style="font-size:clamp(0.7rem,1vw,0.85rem)"></i></div>
+          <div><p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">SimpleAudit 참조 구현 및 경험적 검증</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-4" style="font-size:clamp(0.7rem,1vw,0.85rem)"></i></div>
+          <div><p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">Petri에 대한 일반화 검증 — 유효 도구 클래스 식별</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-5" style="font-size:clamp(0.7rem,1vw,0.85rem)"></i></div>
+          <div><p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">노르웨이 공공조달 실증 사례</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem)">핵심 메시지</h3>
+        <div class="quote-block">
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)">정답 레이블이 없어도, 도구가 타겟 행동에 반응함을 연쇄적으로 검증하면 비교 안전성 증거로 활용 가능. 단, 단일 순위가 아닌 구조화된 보고가 필수.</p>
+        </div>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted"><i class="fas fa-code-branch"></i> GitHub: github.com/kelkalot/simpleaudit</p>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted"><i class="fas fa-box-open"></i> PyPI: simpleaudit 패키지</p>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted"><i class="fas fa-globe"></i> Digital Public Good 인증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem)">참고문헌</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.7rem,1vw,0.85rem)" class="muted">
+      Arditi et al. (2024) Ablation of LLM Refusal Direction ·
+      Anthropic Alignment Science Team (2025) Petri: Agentic Auditing ·
+      Bean et al. (2025) Systematic Review of 445 LLM Benchmarks ·
+      Chouldechova et al. (2025) Measurement Theory for Red-Teaming ·
+      Ganguli et al. (2022) Red-Teaming LLMs ·
+      Ghosh et al. (2025) Safety Benchmarks ·
+      Gu et al. (2024) LLM Judge Biases ·
+      Liang et al. (2023) Safety Evaluation Benchmarks ·
+      Liu et al. (2023) LLM-as-Judge Reliability ·
+      Mazeika et al. (2024) Safety Benchmarks ·
+      Mikhailov et al. (2025) NorEval ·
+      Needham et al. (2025) Automated Red-Teaming ·
+      Nguyen et al. (2025) Agentic Auditing ·
+      Ning et al. (2025) Multilingual Safety Benchmarks ·
+      Perez et al. (2023) Red-Teaming LLMs ·
+      Samuel et al. (2023) Norwegian Toxicity Probes ·
+      Shi et al. (2025) Judge Biases ·
+      Souly et al. (2026) Automated Auditing ·
+      Zhang et al. (2024) Safety Benchmarks ·
+      Zheng et al. (2023) Judging LLM-as-Judge ·
+      Zhu et al. (2026) Benchmark Variance Decomposition
+    </p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)"><span class="accent">When No Benchmark Exists: Validating Comparative LLM Safety Scoring Without Ground-Truth Labels</span></p>
+    <p style="font-size:clamp(0.75rem,1.1vw,0.9rem)" class="muted">Sushant Gautam, Finn Schwall, Annika Willoch Olstad, Fernando Vallecillos Ruiz, Birk Torpmann-Hagen, Sunniva Maria Stordal Bjørklund, Leon Moonen, Klas Pettersen, Michael A. Riegler</p>
+    <p style="font-size:clamp(0.7rem,1vw,0.85rem)" class="muted"><a href="http://arxiv.org/abs/2605.06652v1">arxiv.org/abs/2605.06652v1</a> · CC BY 4.0</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
