@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cited but Not Verified: Parsing and Evaluating Source Attrib — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;">
+    <div style="margin-bottom:clamp(16px,3vw,32px);">
+      <span class="tag tag-amber">arXiv:2605.06635v1</span>
+    </div>
+    <h1 style="font-size:clamp(24px,4.5vw,52px);line-height:1.25;margin-bottom:clamp(12px,2vw,24px);">인용되었지만 검증되지 않았다</h1>
+    <p style="font-size:clamp(16px,2.2vw,24px);margin-bottom:clamp(24px,4vw,48px);" class="muted">LLM 딥 리서치 에이전트에서 출처 귀속의 파싱과 평가</p>
+    <div class="hr" style="max-width:200px;margin:0 auto clamp(20px,3vw,36px);"></div>
+    <p style="font-size:clamp(13px,1.5vw,17px);" class="muted">Hailey Onweller, Elias Lumer, Austin Huber, Pia Ramchandani, Vamse Kumar Subbiah, Corey Feld</p>
+    <p style="font-size:clamp(12px,1.3vw,15px);margin-top:clamp(6px,1vw,12px);" class="muted">PricewaterhouseCoopers, Commercial Technology and Innovation Office</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">문제 제기</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px);">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,16px);"><i class="fas fa-search" style="margin-right:8px;" class="accent"></i>딥 리서치 에이전트의 확산</h3>
+        <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.7;">Perplexity AI, ChatGPT 웹 검색, Google Gemini 등이 수백 개의 웹 출처에서 정보를 종합하여 인용된 리포트를 생성합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,16px);"><i class="fas fa-exclamation-triangle" style="margin-right:8px;" class="accent"></i>검증 불가능한 인용</h3>
+        <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.7;">생성된 인용은 접근 불가한 URL, 무관한 콘텐츠, 출처 왜곡 등의 문제를 포함하며 신뢰할 수 없습니다.</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(14px,1.6vw,19px);line-height:1.7;">상업 배포 모델의 인용 환각률은 <span class="accent" style="font-weight:700;">11%~57%</span>에 이르며, 기존 프레임워크는 이진 속성 분류 이상의 평가를 수행하지 못합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">기존 연구의 한계</h2>
+    <div class="grid-3" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,12px);">다차원 평가 부재</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);line-height:1.6;">URL 접근성, 주제 관련성, 사실 정확성을 동시에 평가하는 종단간 프레임워크가 없습니다.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,12px);">모델 간 비교 누락</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);line-height:1.6;">딥 리서치 설정에서 주요 LLM 제공자 간의 체계적인 비교가 존재하지 않습니다.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,12px);">검색 깊이 관계 미탐색</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);line-height:1.6;">검색 깊이가 인용 품질에 미치는 영향이 탐구되지 않았습니다.</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="display:flex;gap:clamp(12px,2vw,24px);flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(4px,0.5vw,8px);" class="muted">AttributionBench · CiteME · CiteEval</p>
+        <p style="font-size:clamp(13px,1.4vw,16px);">이진 분류, 인용 매칭, 패러다임 비교에만 집중</p>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(4px,0.5vw,8px);" class="muted">CiteAudit · RefChecker</p>
+        <p style="font-size:clamp(13px,1.4vw,16px);">학술 논문 위조 참고문헌에 초점, 라이브 웹 인용 미대상</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">연구 질문</h2>
+    <div style="margin-bottom:clamp(24px,4vw,48px);">
+      <div class="card" style="margin-bottom:clamp(12px,2vw,20px);">
+        <p style="font-size:clamp(15px,1.8vw,22px);line-height:1.6;font-weight:600;"><span class="accent">RQ1.</span> 프론티어 LLM은 얼마나 사실적으로 정확한 인용을 생성하는가? 표면적 인용 품질(링크 유효성, 주제 관련성)이 더 깊은 사실적 실패를 가리는가?</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(15px,1.8vw,22px);line-height:1.6;font-weight:600;"><span class="accent">RQ2.</span> 검색 깊이를 늘리면 이 세 가지 차원의 인용 품질에 어떤 영향을 미치는가?</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(10px,1.5vw,18px);">핵심 가설</h3>
+    <p style="font-size:clamp(14px,1.5vw,18px);line-height:1.7;">표면적 지표(링크 작동, 관련성)는 안정적으로 유지되면서도, 사실 정확성은 검색 깊이 증가에 따라 <span class="accent" style="font-weight:700;">저하</span>될 것이다 — 정보 과부하가 사실적 종합을 방해하는 현상.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">평가 프레임워크 개요</h2>
+    <div class="pipeline" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">리포트 생성</div>
+        <div class="step-desc">딥 리서치 에이전트가 인라인 인용이 포함된 Markdown 리포트 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">AST 파싱</div>
+        <div class="step-desc">Markdown AST 파서로 인용-주장 쌍을 구조적 추출 (LLM 불필요)</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">출처 검색</div>
+        <div class="step-desc">각 인용 URL의 실제 콘텐츠를 검색하여 추출</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">3차원 평가</div>
+        <div class="step-desc">Link Works · Relevant Content · Fact Check</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-cog" style="margin-right:6px;" class="muted"></i>설계 원칙</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델 수정 불필요 — 어떤 Markdown 출력 LLM도 평가 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>문장 단위 세밀 분석</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수천 개 인용 페이지로 확장 가능</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-lock" style="margin-right:6px;" class="muted"></i>재현성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>결정론적 AST 파서 — LLM 추론 없이 구조적 추출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>루브릭 기반 LLM 판사 — 인간 검토로 보정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>평가 기준 명시적 제약으로 편향 완화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">Markdown AST 파서</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px);">
+      <div>
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(10px,1.5vw,18px);">동작 원리</h3>
+        <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+          <div class="flow-icon">1</div>
+          <div>
+            <p style="font-size:clamp(13px,1.4vw,16px);font-weight:600;">Markdown → AST 변환</p>
+            <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">구조화된 문법 트리로 파싱</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+          <div class="flow-icon">2</div>
+          <div>
+            <p style="font-size:clamp(13px,1.4vw,16px);font-weight:600;">링크 노드 추출</p>
+            <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">인라인 인용 마크다운 패턴 식별</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,16px);">
+          <div class="flow-icon">3</div>
+          <div>
+            <p style="font-size:clamp(13px,1.4vw,16px);font-weight:600;">주장-인용 쌍 구성</p>
+            <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">각 링크를 포함하는 문장과 매핑</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">4</div>
+          <div>
+            <p style="font-size:clamp(13px,1.4vw,16px);font-weight:600;">AttributionDocument 생성</p>
+            <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">구조화된 평가 입력 산출</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(10px,1.5vw,18px);">핵심 장점</h3>
+        <div class="quote-block" style="margin-bottom:clamp(10px,1.5vw,16px);">
+          <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.6;">LLM 추론이 <span class="accent" style="font-weight:700;">전혀 필요 없는</span> 결정론적 추출</p>
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>파싱 비용 최소화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추출 일관성 보장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 인용 형식 지원 (각주, 인라인 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>문장 단위 세밀한 귀속 분석 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">세 가지 평가 차원</h2>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(28px,3.5vw,42px);margin-bottom:clamp(8px,1.2vw,16px);"><i class="fas fa-link accent"></i></div>
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(6px,1vw,12px);">Link Works</h3>
+        <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(8px,1.2vw,14px);" class="muted">URL 접근성 검증</p>
+        <p style="font-size:clamp(13px,1.3vw,15px);line-height:1.6;">인용된 URL이 실제로 접근 가능한지 HTTP 요청으로 확인. <span class="tag tag-green">자동</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(28px,3.5vw,42px);margin-bottom:clamp(8px,1.2vw,16px);"><i class="fas fa-bullseye accent2"></i></div>
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(6px,1vw,12px);">Relevant Content</h3>
+        <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(8px,1.2vw,14px);" class="muted">주제 관련성 측정</p>
+        <p style="font-size:clamp(13px,1.3vw,15px);line-height:1.6;">검색된 출처 콘텐츠가 주장과 주제적으로 일치하는지 LLM 판사가 평가. <span class="tag tag-amber">LLM 판사</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(28px,3.5vw,42px);margin-bottom:clamp(8px,1.2vw,16px);"><i class="fas fa-shield-alt accent3"></i></div>
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(6px,1vw,12px);">Fact Check</h3>
+        <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(8px,1.2vw,14px);" class="muted">사실 정확성 검증</p>
+        <p style="font-size:clamp(13px,1.3vw,15px);line-height:1.6;">주장이 출처 콘텐츠에 의해 사실적으로 지지되는지 인간 보정 LLM 판사가 평가. <span class="tag tag-red">인간 보정</span></p>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,2.5vw,28px) 0;"></div>
+    <div class="card">
+      <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:clamp(6px,1vw,10px);">루브릭 기반 LLM-as-a-Judge 설계</h3>
+      <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.7;">개방형 품질 평가가 아닌 <span class="accent" style="font-weight:700;">구체적 사실 기준</span>으로 평가를 제약하여 위치 편향, 수다증 편향, 자기 강화 효과 등 체계적 판사 편향을 완화합니다. 인간 검토를 통한 보정 절차를 거칩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">실험 설정</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px);">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(10px,1.5vw,18px);"><i class="fas fa-robot" style="margin-right:6px;" class="muted"></i>벤치마크 대상 모델</h3>
+        <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.7;margin-bottom:clamp(8px,1.2vw,14px);">총 <span class="accent" style="font-weight:700;">14개 LLM</span> 평가</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>폐쇄소스 프론티어 모델 (3개 제공사)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오픈소스 모델 (다수)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>원샷 설정에서 인용 리포트 생성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(10px,1.5vw,18px);"><i class="fas fa-flask" style="margin-right:6px;" class="muted"></i>연구 깊이 절제 연구</h3>
+        <p style="font-size:clamp(13px,1.4vw,16px);line-height:1.7;margin-bottom:clamp(8px,1.2vw,14px);">2개 프론티어 모델 대상</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>도구 호출: 2회 → 150회 범위</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>3차원 평가에 대한 검색 깊이 영향 분석</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 연구 쿼리 사용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="display:flex;gap:clamp(12px,2vw,24px);flex-wrap:wrap;">
+      <div style="flex:1;min-width:140px;text-align:center;">
+        <div class="big-num">14</div>
+        <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">평가 모델 수</p>
+      </div>
+      <div style="flex:1;min-width:140px;text-align:center;">
+        <div class="big-num">3</div>
+        <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">평가 차원</p>
+      </div>
+      <div style="flex:1;min-width:140px;text-align:center;">
+        <div class="big-num">150</div>
+        <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">최대 도구 호출</p>
+      </div>
+      <div style="flex:1;min-width:140px;text-align:center;">
+        <div class="big-num">42%</div>
+        <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">사실 정확성 하락</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2vw,24px);">발견 1: 표면적 품질이 사실적 실패를 가린다</h2>
+    <div style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>평가 차원</th>
+            <th>프론티어 모델 성능</th>
+            <th>해석</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">Link Works</td>
+            <td><span class="accent" style="font-weight:700;">94% 이상</span></td>
+            <td class="muted">대부분의 URL이 정상 접근 가능</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Relevant Content</td>
+            <td><span class="accent2" style="font-weight:700;">80% 이상</span></td>
+            <td class="muted">출처가 주제와 관련성 있음</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Fact Check</td>
+            <td><span class="accent" style="font-weight:700;">39~77%</span></td>
+            <td class="muted">사실적 지지 수준 크게 저하</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(14px,1.6vw,19px);line-height:1.7;">링크가 작동하고 내용이 관련성이 있어도, 실제로 주장을 <span class="accent" style="font-weight:700;">사실적으로 지지하지 않는 경우</span>가 빈번합니다. 표면적 지표와 사실적 신뢰성 사이에 <span class="accent" style="font-weight:700;">결정적 단절</span>이 존재합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2vw,24px);">발견 2: 인용 양과 사실 정확성의 트레이드오프</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div class="card" style="text-align:center;">
+        <p style="font-size:clamp(13px,1.4vw,16px);margin-bottom:clamp(8px,1.2vw,14px);" class="muted">폐쇄소스 프론티어 모델</p>
+        <div class="big-num">83~100%</div>
+        <p style="font-size:clamp(13px,1.4vw,16px);" class="muted">인용 리포트 생성 성공률</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p style="font-size:clamp(13px,1.4vw,16px);margin-bottom:clamp(8px,1.2vw,14px);" class="muted">오픈소스 모델</p>
+        <div class="big-num" style="color:inherit;">17~40%</div>
+        <p style="font-size:clamp(13px,1.4vw,16px);" class="muted">인용 리포트 생성 성공률</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="card">
+      <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);">핵심 시사점</h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>오픈소스 모델의 절반 이상이 원샷 설정에서 인용 리포트를 생성하지 못함</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>리포트를 생성하더라도 인용의 사실 정확성은 프론티어 모델 대비 현저히 낮음</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>인용량을 늘리는 것은 사실 정확성을 보장하지 않으며, 오히려 저하시킬 수 있음</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2vw,24px);">발견 3: 더 많은 검색이 사실 정확성을 저하시킨다</h2>
+    <div style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>도구 호출 수</th>
+            <th>Link Works</th>
+            <th>Relevant Content</th>
+            <th>Fact Check</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">2회</td>
+            <td>안정</td>
+            <td>안정</td>
+            <td><span class="accent3" style="font-weight:700;">기준선</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">~150회</td>
+            <td>안정</td>
+            <td>안정</td>
+            <td><span class="accent" style="font-weight:700;">≈42% 하락</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:clamp(6px,1vw,10px);">관찰 결과</h3>
+        <p style="font-size:clamp(13px,1.3vw,15px);line-height:1.7;">Link Works와 Relevant Content는 검색 깊이 증가에도 안정적으로 유지되지만, Fact Check는 <span class="accent" style="font-weight:700;">지속적이고 큰 폭으로 저하</span>합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.5vw,18px);margin-bottom:clamp(6px,1vw,10px);">정보 과부하 가설</h3>
+        <p style="font-size:clamp(13px,1.3vw,15px);line-height:1.7;">더 많은 검색이 더 나은 인용을 만드는 것이 아니라, <span class="accent" style="font-weight:700;">정보 과부하가 사실적 종합 능력을 손상</span>시킵니다. 출처가 늘어날수록 모델이 정보를 정확하게 통합하기 어려워집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2vw,24px);">오류 분석</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-times-circle" style="margin-right:6px;" class="accent"></i>주요 오류 유형</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>출처 왜곡:</strong> 출처의 의미를 잘못 해석하여 주장과 불일치</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>세부 사항 과장:</strong> 출처의 수치나 범위를 부풀리거나 축소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>혼합 인용:</strong> 여러 출처의 정보를 결합하여 원문에 없는 주장 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>접근 불가 URL:</strong> 링크가 작동하지 않거나 콘텐츠 없음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-chart-bar" style="margin-right:6px;" class="accent2"></i>오류 패턴 특징</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>출처 왜곡이 가장 빈번한 Fact Check 실패 원인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검색 깊이가 깊어질수록 혼합 인용 오류 증가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>표면적 차원에서는 감지되지 않는 오류가 대부분</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사실 정확성이 인용 품질을 구별하는 <span class="accent" style="font-weight:700;">가장 중요한 차원</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.5vw,18px);line-height:1.7;">이 오류들은 <span class="accent" style="font-weight:700;">Link Works와 Relevant Content에서는 전혀 감지되지 않으므로</span>, 사실 정확성 검증 없이 인용 품질을 평가하는 것은 심각하게 불충분합니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">한계점</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-balance-scale" style="margin-right:6px;" class="muted"></i>평가 방법론</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Relevant Content와 Fact Check는 LLM-as-a-Judge에 의존하므로 본질적 편향 가능성 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인간 보정으로 완화했으나 완전한 제거는 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-globe" style="margin-right:6px;" class="muted"></i>웹 환경의 동적성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>URL 접근성은 시간에 따라 변동 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>웹 콘텐츠 변경으로 인한 재현성 제약</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-file-alt" style="margin-right:6px;" class="muted"></i>리포트 형식</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Markdown 형식에만 적용 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>HTML, PDF 등 다른 형식은 추가 파서 필요</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-database" style="margin-right:6px;" class="muted"></i>범위 제한</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>절제 연구는 2개 프론티어 모델에만 수행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특정 도메인(과학, 뉴스 등)에 대한 분석 미포함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px);">기여 요약</h2>
+    <div style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="flow-item" style="margin-bottom:clamp(14px,2vw,24px);">
+        <div class="flow-icon"><i class="fas fa-1"></i></div>
+        <div>
+          <p style="font-size:clamp(14px,1.6vw,19px);font-weight:600;">최초의 종단간 출처 귀속 평가 프레임워크</p>
+          <p style="font-size:clamp(13px,1.3vw,15px);" class="muted">결정론적 인용 추출 + 링크 접근성 · 주제 관련성 · 사실 정확성의 다차원 평가를 결합</p>
+        </div>
+      </div>
+      <div class="flow-item" style="margin-bottom:clamp(14px,2vw,24px);">
+        <div class="flow-icon"><i class="fas fa-2"></i></div>
+        <div>
+          <p style="font-size:clamp(14px,1.6vw,19px);font-weight:600;">14개 LLM 대규모 벤치마크</p>
+          <p style="font-size:clamp(13px,1.3vw,15px);" class="muted">사실 정확성이 인용 품질을 구별하는 가장 도전적이고 차별화된 차원임을 입증</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-3"></i></div>
+        <div>
+          <p style="font-size:clamp(14px,1.6vw,19px);font-weight:600;">정보 과부하 효과의 실증적 증거</p>
+          <p style="font-size:clamp(13px,1.3vw,15px);" class="muted">검색 깊이 증가가 사실 정확성을 지속적으로 저하시키면서 표면적 지표는 안정적으로 유지됨</p>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(14px,1.6vw,19px);line-height:1.7;">"더 많은 검색이 더 나은 인용을 만드는 것이 아니다." — 이 연구는 LLM 리서치 종합에서 <span class="accent" style="font-weight:700;">정보 과부하</span>가 사실적 신뢰성을 훼손한다는 체계적 증거를 제시합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(16px,2.5vw,32px);">Cited but Not Verified</h2>
+    <p style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.5vw,16px);">Parsing and Evaluating Source Attribution in LLM Deep Research Agents</p>
+    <div class="hr" style="max-width:240px;margin:clamp(16px,2.5vw,28px) auto;"></div>
+    <p style="font-size:clamp(13px,1.4vw,16px);margin-bottom:clamp(4px,0.8vw,10px);" class="muted">Hailey Onweller · Elias Lumer · Austin Huber · Pia Ramchandani · Vamse Kumar Subbiah · Corey Feld</p>
+    <p style="font-size:clamp(12px,1.2vw,14px);margin-bottom:clamp(16px,2.5vw,28px);" class="muted">PricewaterhouseCoopers, Commercial Technology and Innovation Office</p>
+    <div style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <a href="http://arxiv.org/abs/2605.06635v1" style="font-size:clamp(14px,1.5vw,18px);text-decoration:none;" class="accent"><i class="fas fa-external-link-alt" style="margin-right:6px;"></i>arxiv.org/abs/2605.06635v1</a>
+    </div>
+    <p style="font-size:clamp(12px,1.2vw,14px);" class="muted">License: CC BY 4.0 · arXiv:2605.06635v1 [cs.CL] · May 2026</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
