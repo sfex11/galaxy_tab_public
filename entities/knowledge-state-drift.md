@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Position: agentic AI orchestration should be Bayes-consistent (2026-05-05)
 
 → [[sources/2026-05-05-position-agentic-ai-orchestration-should-be-bayes-.md|상세 보기]]
+
+### AI Co-Mathematician: Accelerating Mathematicians with Agentic AI (2026-05-10)
+
+실패 가설의 명시적 추적이 드리프트의 인과적 원인을 진단하는 도구로 기능함을 보여준다. 기존에 드리프트를 '발생하는 문제'로만 취급했다면, 이 시스템은 드리프트의 원인을 가설 수준에서 분해·기록하여 베이지안 일관성 검증의 근거를 제공한다.
+
+→ [[sources/2026-05-10-ai-co-mathematician-accelerating-mathematicians-wi.md|상세 보기]]

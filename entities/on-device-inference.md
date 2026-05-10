@@ -26,3 +26,9 @@ _Wiki 축적 중_
 안정화 지식 증류가 온디바이스 배포의 실질적 경로를 제공하는 구체적 방법론이 됨을 시사한다. Standing on the Shoulders of Giants라는 제목이 함의하듯, 대형 모델의 능력을 소형 모델에 영구적으로 '고착'시켜 프라이버시·비용 제약 환경에서의 코드 분석 능력을 확보하는 엔지니어링 경로를 구체화한다.
 
 → [[sources/2026-05-06-standing-on-the-shoulders-of-giants-stabilized-kno.md|상세 보기]]
+
+### EMO: Pretraining Mixture of Experts for Emergent Modularity (2026-05-10)
+
+온디바이스 배포의 메모리 제약 해결 경로를 모델 압축에서 아키텍처 수준의 선택적 전문가 활성화로 확장한다. 압축이 모델 전체의 균질적 축소라면, EMO는 도메인에 맞는 전문가만 선택적으로 탑재하는 비균질적 접근으로, 특정 도메인에서 규모가 큰 모델과 동등한 성능을 더 작은 메모리로 달성하는 새로운 축을 제공한다.
+
+→ [[sources/2026-05-10-emo-pretraining-mixture-of-experts-for-emergent-mo.md|상세 보기]]

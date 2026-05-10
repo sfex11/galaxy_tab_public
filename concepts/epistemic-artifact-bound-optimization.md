@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Cited but Not Verified: Parsing and Evaluating Source Attribution in L (2026-05-10)
+
+→ [[sources/2026-05-10-cited-but-not-verified-parsing-and-evaluating-sour.md|상세 보기]]

@@ -32,3 +32,15 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 평가자가 '정답 일치=절차 준수'를 암묵적으로 가정하는 구조적 오류를 절차적 실행 벤치마크에서 분리하여 보여줌으로써, 기존 빈약한 정의를 '측정 대상과 측정 수단의 불일치'라는 구체적 문제로 보완한다.
 
 → [[sources/2026-05-05-when-llms-stop-following-steps-a-diagnostic-study-.md|상세 보기]]
+
+### Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heter (2026-05-10)
+
+평가자의 가정이 '사전 정의된 문제 공간'에만 국한되지 않고, 이종 도메인 간 집계 메커니즘(글로벌 BT 모델) 자체에도 내재됨을 보여준다. 결정적 투표의 2/3가 상쇄되는 현상은 집계 가정이 창출하는 허구적 신호를 구체적으로 드러낸다.
+
+→ [[sources/2026-05-10-why-global-llm-leaderboards-are-misleading-small-p.md|상세 보기]]
+
+### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
+
+평가자의 가정을 6가지 계약 항목(시나리오, 기준, 심사자, 판정자, 샘플링, 재실행 예산)으로 명시적으로 분해하여, 기존에 숨겨진 변수로 작동하던 평가자 가정을 형식적으로 통제 가능하게 만든다.
+
+→ [[sources/2026-05-10-when-no-benchmark-exists-validating-comparative-ll.md|상세 보기]]

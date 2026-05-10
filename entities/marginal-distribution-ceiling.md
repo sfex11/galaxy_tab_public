@@ -28,3 +28,15 @@ position-aware drafting이 타겟 분포를 변경하지 않고 내부 구조만
 γ 적응이 타겟 분포를 변경하지 않는 제약 하에서 수용률을 최대화하는 구체적 구현 사례를 제공하여, 이 원칙이 이론적 제약이 아닌 실용적 설계 가이드로 기능함을 추가적으로 실증한다.
 
 → [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|상세 보기]]
+
+### EMO: Pretraining Mixture of Experts for Emergent Modularity (2026-05-10)
+
+도메인별 전문가 부분집합만으로 추론할 때 해당 도메인의 P(y)가 보존되어야 한다는 조건을 사전학습에서 구조적으로 달성하는 실제 경로를 제공한다. 기존에 '분포 보존이 필요하다'는 원칙만 존재했다면, EMO는 전문가 조직 설계가 어떻게 P(y)의 도메인별 분해를 가능하게 하는지를 메커니즘 수준에서 구체화한다.
+
+→ [[sources/2026-05-10-emo-pretraining-mixture-of-experts-for-emergent-mo.md|상세 보기]]
+
+### Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key (2026-05-10)
+
+표현력 한계가 P(y)의 구조적 특성으로 귀인됨을 실증하여, 성능 천장의 원인을 '사전학습 데이터 양'이 아닌 '학습된 표현 체계의 논리적 표현력'으로 확장한다.
+
+→ [[sources/2026-05-10-can-rl-teach-long-horizon-reasoning-to-llms-expres.md|상세 보기]]

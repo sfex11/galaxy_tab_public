@@ -692,3 +692,22 @@
 ## [2026-05-09 08:36] ingest | Continuous Latent Diffusion Language Model
 
 ## [2026-05-09 08:36] ingest | Crafting Reversible SFT Behaviors in Large Language Models
+
+## [2026-05-10 02:21] llm-ingest | 17편 분석, 엔티티 296개, 개념 841개
+- 2026-05-10-bami-training-free-bias-mitigation-in-gui-groundin.md
+- 2026-05-10-verifier-backed-hard-problem-generation-for-mathem.md
+- 2026-05-10-why-global-llm-leaderboards-are-misleading-small-p.md
+- 2026-05-10-optimizer-model-consistency-full-finetuning-with-t.md
+- 2026-05-10-when-no-benchmark-exists-validating-comparative-ll.md
+- 2026-05-10-ai-co-mathematician-accelerating-mathematicians-wi.md
+- 2026-05-10-beyond-negative-rollouts-positive-only-policy-opti.md
+- 2026-05-10-superintelligent-retrieval-agent-the-next-frontier.md
+- 2026-05-10-strata-incentivizing-agentic-reinforcement-learnin.md
+- 2026-05-10-recursive-agent-optimization.md
+- 2026-05-10-cited-but-not-verified-parsing-and-evaluating-sour.md
+- 2026-05-10-maspo-joint-prompt-optimization-for-llm-based-mult.md
+- 2026-05-10-skillos-learning-skill-curation-for-self-evolving-.md
+- 2026-05-10-emo-pretraining-mixture-of-experts-for-emergent-mo.md
+- 2026-05-10-can-rl-teach-long-horizon-reasoning-to-llms-expres.md
+- 2026-05-10-continuous-latent-diffusion-language-model.md
+- 2026-05-10-crafting-reversible-sft-behaviors-in-large-languag.md
