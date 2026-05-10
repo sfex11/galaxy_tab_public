@@ -57,3 +57,9 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/tools-tax.md|tools tax]]
+
+---
+**관련**: [[concepts/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]

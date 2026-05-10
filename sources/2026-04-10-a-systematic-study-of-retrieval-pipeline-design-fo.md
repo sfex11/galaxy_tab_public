@@ -42,3 +42,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/pretraining-pipeline-incompatibility.md|pretraining pipeline incompatibility]]
+
+---
+**관련**: [[concepts/cascaded-llm-pipeline.md|cascaded llm pipeline]]

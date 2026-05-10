@@ -39,3 +39,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evidence-traceability.md|evidence traceability]]
+
+---
+**관련**: [[entities/evidence-traceability.md|evidence traceability]]
+
+---
+**관련**: [[concepts/bottleneck-misattribution.md|bottleneck misattribution]]

@@ -58,3 +58,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/multimodal-orchestration.md|multimodal orchestration]]
+
+---
+**관련**: [[entities/tool-use.md|tool use]]
+
+---
+**관련**: [[concepts/cognitive-fidelity-assessment.md|cognitive fidelity assessment]]

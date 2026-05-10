@@ -90,3 +90,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/neural-radiance-field.md|neural radiance field]]
+
+---
+**관련**: [[entities/eeg-graph-representation.md|eeg graph representation]]
+
+---
+**관련**: [[entities/logic-expressiveness.md|logic expressiveness]]
+
+---
+**관련**: [[entities/hierarchical-representation.md|hierarchical representation]]
+
+---
+**관련**: [[entities/output-space-pruning.md|output space pruning]]
+
+---
+**관련**: [[concepts/low-dimensional-interaction-representation.md|low dimensional interaction representation]]
+
+---
+**관련**: [[concepts/persona-runtime-fidelity-gap.md|persona runtime fidelity gap]]
+
+---
+**관련**: [[concepts/internal-compositional-precondition.md|internal compositional precondition]]
+
+---
+**관련**: [[concepts/logic-expressiveness-bottleneck.md|logic expressiveness bottleneck]]

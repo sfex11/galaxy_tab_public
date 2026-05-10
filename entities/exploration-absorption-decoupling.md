@@ -19,22 +19,14 @@ _Wiki 축적 중_
 
 탐색-흡수 분리가 '탐색은 경로 제공자'라고 재정의했으나, POPO는 탐색 없이도 암묵적으로 부정 기울기를 합성 가능함을 보여주어, 이 분리의 필요성 자체를 부분적으로 재검토하게 만든다.
 
-→ [[sources/2026-05-10-beyond-negative-rollouts-positive-only-policy-opti.md|상세 보기]]
-
 ### StraTA: Incentivizing Agentic Reinforcement Learning with Strategic Tr (2026-05-10)
 
 StraTA의 궤적 수준 전략이 탐색 경로 생성과 능력 흡수 사이의 명시적 중개층으로 기능함을 보여준다. 기존에 '탐색은 경로 제공자'로 재정의된 패러다임에, 경로의 질을 전략적으로 보장하는 메커니즘이라는 구체적 내용을 보충한다.
-
-→ [[sources/2026-05-10-strata-incentivizing-agentic-reinforcement-learnin.md|상세 보기]]
 
 ### Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key (2026-05-10)
 
 탐색-흡수 분리의 '흡수' 단계가 단순한 데이터 학습 문제가 아니라 기저 논리의 표현력과 결합된 문제임을 보여주어, 분리 패러다임의 흡수 측을 구체화한다.
 
-→ [[sources/2026-05-10-can-rl-teach-long-horizon-reasoning-to-llms-expres.md|상세 보기]]
-
 ### Crafting Reversible SFT Behaviors in Large Language Models (2026-05-10)
 
 탐색-흡수 분리 패러다임에서 SFT의 '흡수' 단계가 구조적 무제약状态下에서 이루어지면 흡수된 능력이 인과적으로 분리 불가능해짐을 시사하며, 가역적 SFT가 이 분리 가능성을 보장하는 상위 설계 제약이 됨을 보여준다.
-
-→ [[sources/2026-05-10-crafting-reversible-sft-behaviors-in-large-languag.md|상세 보기]]

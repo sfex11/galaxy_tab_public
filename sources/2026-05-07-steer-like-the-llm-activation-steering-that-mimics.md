@@ -36,3 +36,33 @@ _자동 생성됨_
 
 - → [[sources/2026-05-06-speckv-adaptive-speculative-decoding-with-compress]]: 두 논문 모두 LLM의 추론 시간 최적화를 다루며, 하나는 활성화 조작을 통한 프롬프트 모방을, 다른 하나는 KV 캐시 압축 환경에서의 적응적 추측 디코딩을 제안한다.
 - → [[sources/2026-05-07-stayin-aligned-over-time-towards-longitudinal-huma]]: 두 논문 모두 LLM의 행동 제어를 다루며, 하나는 시간에 걸친 지속적 정렬을, 다른 하나는 추론 시 활성화 조작을 통한 즉각적 스티어링을 제안한다.
+
+---
+**관련**: [[entities/emotion-inference-mechanism.md|emotion inference mechanism]]
+
+---
+**관련**: [[entities/machine-behavior.md|machine behavior]]
+
+---
+**관련**: [[concepts/process-reward-model.md|process reward model]]
+
+---
+**관련**: [[concepts/mixture-model.md|mixture model]]
+
+---
+**관련**: [[concepts/duality-of-adaptive-inference.md|duality of adaptive inference]]
+
+---
+**관련**: [[concepts/domain-selective-inference.md|domain selective inference]]
+
+---
+**관련**: [[concepts/pre-structural-bottleneck-inference.md|pre structural bottleneck inference]]
+
+---
+**관련**: [[concepts/activation-steering.md|activation steering]]
+
+---
+**관련**: [[concepts/training-inference-process-control-continuum.md|training inference process control continuum]]
+
+---
+**관련**: [[concepts/granularity-based-skill-organization.md|granularity based skill organization]]

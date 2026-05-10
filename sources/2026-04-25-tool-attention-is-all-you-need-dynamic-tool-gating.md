@@ -56,3 +56,6 @@ Model Context Protocol(MCP)이 도구 연결의 표준으로 자리잡았지만,
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/knowledge-injection-interference.md|knowledge injection interference]]

@@ -37,3 +37,6 @@ EMO는 MoE(Mixture-of-Experts) 아키텍처가 가진 근본적 모듈성 한계
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/emergent-fitness.md|emergent fitness]]

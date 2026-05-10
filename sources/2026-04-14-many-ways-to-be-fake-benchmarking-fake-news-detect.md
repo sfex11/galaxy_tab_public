@@ -67,3 +67,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/predictability-driven-serving.md|predictability driven serving]]
+
+---
+**관련**: [[entities/exploration-strategy-corruption.md|exploration strategy corruption]]
+
+---
+**관련**: [[entities/ai-co-mathematician.md|ai co mathematician]]
+
+---
+**관련**: [[concepts/llm-driven-imputation.md|llm driven imputation]]

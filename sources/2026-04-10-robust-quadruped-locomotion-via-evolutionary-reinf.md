@@ -47,3 +47,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/evolutionary-mnar-imputation.md|evolutionary mnar imputation]]

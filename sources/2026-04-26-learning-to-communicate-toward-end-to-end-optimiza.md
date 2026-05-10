@@ -76,3 +76,15 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/end-to-end-optimization-modeling.md|end to end optimization modeling]]
+
+---
+**관련**: [[entities/occupancy-measure-optimization.md|occupancy measure optimization]]
+
+---
+**관련**: [[concepts/occupancy-measure-optimization.md|occupancy measure optimization]]
+
+---
+**관련**: [[concepts/heterogeneous-action-space-optimization.md|heterogeneous action space optimization]]
+
+---
+**관련**: [[concepts/dual-optimization-structure.md|dual optimization structure]]

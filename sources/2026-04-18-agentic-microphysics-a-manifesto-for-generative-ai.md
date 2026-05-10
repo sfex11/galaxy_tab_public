@@ -94,3 +94,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/proactive-safety-planning.md|proactive safety planning]]
+
+---
+**관련**: [[entities/entity-surface-form.md|entity surface form]]
+
+---
+**관련**: [[entities/safety-property-underdetermination.md|safety property underdetermination]]
+
+---
+**관련**: [[concepts/instrumental-formal-safety.md|instrumental formal safety]]
+
+---
+**관련**: [[concepts/step-level-verification-decoding.md|step level verification decoding]]
+
+---
+**관련**: [[concepts/instance-level-consistency-audit.md|instance level consistency audit]]
+
+---
+**관련**: [[concepts/cross-session-identity-erosion.md|cross session identity erosion]]
+
+---
+**관련**: [[concepts/communication-independent-shielding.md|communication independent shielding]]
+
+---
+**관련**: [[concepts/methodological-provenance-gap.md|methodological provenance gap]]

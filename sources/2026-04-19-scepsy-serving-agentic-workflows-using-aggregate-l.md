@@ -38,3 +38,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tools-tax.md|tools tax]]
+
+---
+**관련**: [[entities/serving-safety-coupling.md|serving safety coupling]]
+
+---
+**관련**: [[concepts/emotion-recognition-latency.md|emotion recognition latency]]
+
+---
+**관련**: [[concepts/latency-oversight-tradeoff.md|latency oversight tradeoff]]

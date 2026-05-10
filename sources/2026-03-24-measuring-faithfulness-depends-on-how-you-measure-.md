@@ -35,3 +35,6 @@ CoT 충실성은 모델의 객관적 속성이 아니라 분류기 선택에 따
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/procedural-faithfulness.md|procedural faithfulness]]

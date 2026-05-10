@@ -30,5 +30,3 @@ MCP Tax가 컨텍스트 윈도우를 팽창시켜 발생시키는 하류 문제(
 ### To Call or Not to Call: A Framework to Assess and Optimize LLM Tool Ca (2026-05-05)
 
 기존 '어떤 도구에 주의를 기울일 것인가'의 문제에 '도구 사용 자체가 정당한가'라는 선행 결정을 추가함으로써, tool-attention의 스코프를 도구 선택 문제에서 도구 사용 여부 판단 문제로 상향 확장한다.
-
-→ [[sources/2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o.md|상세 보기]]

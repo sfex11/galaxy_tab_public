@@ -39,3 +39,18 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/non-adversarial-collapse-surface.md|non adversarial collapse surface]]
+
+---
+**관련**: [[concepts/persona-collapse.md|persona collapse]]
+
+---
+**관련**: [[concepts/lexical-constraint-collapse.md|lexical constraint collapse]]
+
+---
+**관련**: [[concepts/behavioral-manifold-confinement.md|behavioral manifold confinement]]
+
+---
+**관련**: [[concepts/geometric-safety-guarantee.md|geometric safety guarantee]]

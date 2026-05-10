@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Recursive Agent Optimization (2026-05-10)
-
-→ [[sources/2026-05-10-recursive-agent-optimization.md|상세 보기]]

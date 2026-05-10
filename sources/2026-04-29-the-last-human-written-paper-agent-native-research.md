@@ -95,3 +95,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/training-process-gaming.md|training process gaming]]
+
+---
+**관련**: [[entities/exploration-avoidance-tradeoff.md|exploration avoidance tradeoff]]
+
+---
+**관련**: [[entities/interaction-guided-exploration.md|interaction guided exploration]]
+
+---
+**관련**: [[entities/artifact-bound-optimization.md|artifact bound optimization]]
+
+---
+**관련**: [[entities/nonzero-interaction-guided-exploration.md|nonzero interaction guided exploration]]
+
+---
+**관련**: [[concepts/interaction-guided-exploration.md|interaction guided exploration]]
+
+---
+**관련**: [[concepts/aligned-artifact-dataset.md|aligned artifact dataset]]
+
+---
+**관련**: [[concepts/structural-semantic-causality.md|structural semantic causality]]
+
+---
+**관련**: [[concepts/self-sufficient-architecture.md|self sufficient architecture]]
+
+---
+**관련**: [[concepts/native-environmental-grounding.md|native environmental grounding]]
+
+---
+**관련**: [[concepts/relevance-adaptive-detail-level.md|relevance adaptive detail level]]
+
+---
+**관련**: [[concepts/scientific-finding-reproducibility.md|scientific finding reproducibility]]

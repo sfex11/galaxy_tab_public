@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/causal-rag.md|causal rag]]
+
+---
+**관련**: [[concepts/causal-mechanistic-interpretability.md|causal mechanistic interpretability]]
+
+---
+**관련**: [[concepts/origami-engineering.md|origami engineering]]

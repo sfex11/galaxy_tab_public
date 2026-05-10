@@ -44,3 +44,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/ontology-construction.md|ontology construction]]
+
+---
+**관련**: [[entities/late-emerging-feature.md|late emerging feature]]
+
+---
+**관련**: [[concepts/late-emerging-emotion-feature.md|late emerging emotion feature]]

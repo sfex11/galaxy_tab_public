@@ -51,3 +51,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/mental-health-ai.md|mental health ai]]
+
+---
+**관련**: [[concepts/temporal-transfer-gap.md|temporal transfer gap]]

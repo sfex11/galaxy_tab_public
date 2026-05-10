@@ -27,8 +27,4 @@ Claw-Eval-Live가 신호 계층의 주기적 갱신을 통해 간극을 '자가 
 
 SE 샌드박스와 실제 과학적 재현 환경 사이의 간극을 구체적 도메인(계산 재료과학)으로 현현하여, 이 간극이 벤치마크 설계 문제가 아닌 에이전트 능력의 구조적 한계에서 기인할 수 있음을 문제화한다.
 
-→ [[sources/2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md|상세 보기]]
-
 ### Design Conductor 2.0: An agent builds a TurboQuant inference accelerat (2026-05-08)
-
-→ [[sources/2026-05-08-design-conductor-20-an-agent-builds-a-turboquant-i.md|상세 보기]]

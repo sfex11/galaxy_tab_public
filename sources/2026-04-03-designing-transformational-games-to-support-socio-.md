@@ -49,3 +49,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/hough-transform.md|hough transform]]
+
+---
+**관련**: [[entities/transformational-game-design.md|transformational game design]]

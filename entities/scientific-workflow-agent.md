@@ -29,16 +29,10 @@ _Wiki 축적 중_
 
 일반 코딩 능력과 도메인 특화 과학 워크플로우 수행 능력 사이의 전이 간극을 벤치마크로 정량화하는 구체적 사례를 제공하여, 이 엔티티의 평가 차원을 '실행 자동화'에서 '과학적 발견 재현'으로 확장한다.
 
-→ [[sources/2026-05-05-can-coding-agents-reproduce-findings-in-computatio.md|상세 보기]]
-
 ### RunAgent: Interpreting Natural-Language Plans with Constraint-Guided E (2026-05-05)
 
 기존이 연구 질문에서 실행 가능한 워크플로우까지의 '번역 자동화'에 집중했다면, RunAgent는 번역된 플랜의 '실행 신뢰성 보장'에 집중하여 scientific-workflow-agent의 파이프라인에서 누락된 검증-실행 축을 보완한다.
 
-→ [[sources/2026-05-05-runagent-interpreting-natural-language-plans-with-.md|상세 보기]]
-
 ### AI Co-Mathematician: Accelerating Mathematicians with Agentic AI (2026-05-10)
 
 일반 과학 워크플로우에서 수학 도메인으로 특화를 확장한다. 기존 3층 아키텍처(연구 질문→구조화된 의도→실행 가능 명세)가 수학적 증명과 계산적 탐색의 순환적 특성을 포착하지 못하는 한계를, 비동기적 상태 유지 워크스페이스와 실패 가설 추적으로 보완한다.
-
-→ [[sources/2026-05-10-ai-co-mathematician-accelerating-mathematicians-wi.md|상세 보기]]

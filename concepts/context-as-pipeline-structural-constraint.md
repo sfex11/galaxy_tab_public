@@ -10,5 +10,3 @@
 _수동 Wiki Query에서 추출됨_
 
 ### LongSeeker: Elastic Context Orchestration for Long-Horizon Search Agen (2026-05-08)
-
-→ [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-.md|상세 보기]]

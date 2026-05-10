@@ -45,3 +45,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/mental-health-ai.md|mental health ai]]
+
+---
+**관련**: [[concepts/lack-of-developmental-scaffolding.md|lack of developmental scaffolding]]
+
+---
+**관련**: [[concepts/emergent-modularity.md|emergent modularity]]

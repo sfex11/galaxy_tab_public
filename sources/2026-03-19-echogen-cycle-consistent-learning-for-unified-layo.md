@@ -39,3 +39,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/access-understanding-gap.md|access understanding gap]]
+
+---
+**관련**: [[concepts/unified-memory-pool.md|unified memory pool]]
+
+---
+**관련**: [[concepts/image-grounding.md|image grounding]]

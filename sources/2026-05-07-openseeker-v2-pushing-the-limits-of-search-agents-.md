@@ -36,3 +36,15 @@ _자동 생성됨_
 
 - → [[sources/2026-05-08-longseeker-elastic-context-orchestration-for-long-]]: 두 논문 모두 검색 에이전트 시스템을 다루며, OpenSeeker-v2는 고품질 학습 궤적을 통한 검색 능력 강화에, LongSeeker는 장기 검색에서의 탄력적 컨텍스트 오케스트레이션에 집중한다.
 - → [[sources/2026-05-07-rethinking-reasoning-intensive-retrieval-evaluatin]]: 두 논문 모두 에이전트 검색 시스템에서의 검색기 역할을 다루며, 하나는 검색 에이전트 학습 파이프라인을, 다른 하나는 추론 강도 높은 검색의 평가 방법을 제안한다.
+
+---
+**관련**: [[entities/target-trial-emulation.md|target trial emulation]]
+
+---
+**관련**: [[entities/bidirectional-competency-asymmetry.md|bidirectional competency asymmetry]]
+
+---
+**관련**: [[concepts/difficulty-validity-tradeoff.md|difficulty validity tradeoff]]
+
+---
+**관련**: [[concepts/bidirectional-competency-asymmetry.md|bidirectional competency asymmetry]]

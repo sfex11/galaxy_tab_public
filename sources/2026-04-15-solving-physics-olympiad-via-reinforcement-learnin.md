@@ -53,3 +53,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/open-domain-event-extraction.md|open domain event extraction]]
+
+---
+**관련**: [[concepts/se-science-transfer-gap.md|se science transfer gap]]
+
+---
+**관련**: [[concepts/adaptive-bottleneck-migration.md|adaptive bottleneck migration]]

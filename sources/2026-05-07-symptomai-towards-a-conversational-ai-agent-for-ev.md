@@ -36,3 +36,9 @@ _자동 생성됨_
 
 - → [[sources/2026-05-07-safety-and-accuracy-follow-different-scaling-laws-]]: 두 논문 모두 임상 LLM의 평가를 다루며, 하나는 일상 증상 평가라는 구체적 과제에서, 다른 하나는 임상 도메인 전반에서 안전성과 정확도의 스케일링 법칙이 다르다는 점을 보여준다.
 - → [[sources/2026-05-08-mri-eval-a-tiered-benchmark-for-evaluating-llm-per]]: 두 논문 모두 의료 분야에서의 LLM 성능을 벤치마크하며, 하나는 대화형 증상 평가를, 다른 하나는 MRI 물리와 스캐너 운영 지식을 평가한다.
+
+---
+**관련**: [[concepts/code-agnostic-risk.md|code agnostic risk]]
+
+---
+**관련**: [[concepts/patient-portal-ai.md|patient portal ai]]

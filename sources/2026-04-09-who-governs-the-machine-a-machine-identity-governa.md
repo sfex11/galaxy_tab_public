@@ -45,3 +45,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/dao-governance.md|dao governance]]
+
+---
+**관련**: [[entities/dual-evaluator-governance.md|dual evaluator governance]]
+
+---
+**관련**: [[entities/shannon-game-taxonomy.md|shannon game taxonomy]]
+
+---
+**관련**: [[concepts/dual-evaluator-governance.md|dual evaluator governance]]

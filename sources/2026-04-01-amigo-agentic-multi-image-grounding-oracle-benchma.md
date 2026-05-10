@@ -55,3 +55,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/executable-benchmark.md|executable benchmark]]
+
+---
+**관련**: [[concepts/dynamic-benchmark.md|dynamic benchmark]]

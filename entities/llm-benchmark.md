@@ -29,10 +29,6 @@ MathDuels가 정적 태스크 기반 LLM 벤치마크의 근본적 한계(고정
 
 글로벌 BT 순위에서 상위 50개 모델 간 쌍대 승률이 최대 0.53에 불과하여 통계적으로 구분 불가능하다는 대규모 실증(89K 비교, 52개 LLM)을 제공하여, 글로벌 리더보드가 '모델 능력 지형'이 아닌 '측정 노이즈 지형'을 시각화한다는 비판을 정량화한다.
 
-→ [[sources/2026-05-10-why-global-llm-leaderboards-are-misleading-small-p.md|상세 보기]]
-
 ### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
 
 기존 벤치마크가 '정답 레이블 존재'를 암묵적 전제로 삼는다는 근본적 한계를 노출하며, 레이블 없는 '사전 벤치마크(pre-benchmark)' 간극을 채우는 메타-평가 프레임워크를 제공한다.
-
-→ [[sources/2026-05-10-when-no-benchmark-exists-validating-comparative-ll.md|상세 보기]]

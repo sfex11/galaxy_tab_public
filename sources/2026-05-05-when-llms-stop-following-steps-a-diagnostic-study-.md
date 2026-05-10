@@ -55,3 +55,6 @@ _LLM 분석으로 생성됨_
 - → [[sources/2026-05-05-to-call-or-not-to-call-a-framework-to-assess-and-o]]: 두 논문 모두 LLM이 지정된 동작 규격을 따르지 않는 현상을 분석하며, 하나는 도구 호출 결정 경계에서, 다른 하나는 절차적 실행 충실도에서 이 문제를 다룬다.
 - → [[sources/2026-05-06-scprm-a-schema-aware-cumulative-process-reward-mod]]: 두 논문 모두 최종 출력이 아닌 중간 단계의 품질을 평가해야 한다는 공통 인식을 공유하며, 하나는 프로세스 보상 모델로, 다른 하나는 절차적 충실도 진단으로 이를 접근한다.
 - → [[sources/2026-05-07-mcjudgebench-a-benchmark-for-constraint-level-judg]]: 두 논문 모두 LLM 평가 방법론의 한계를 지적하며, 하나는 응답 수준이 아닌 제약 조건 수준 판단의 필요성을, 다른 하나는 최종 정확도가 아닌 절차적 충실도의 독립적 측정 필요성을 주장한다.
+
+---
+**관련**: [[concepts/procedural-independence.md|procedural independence]]

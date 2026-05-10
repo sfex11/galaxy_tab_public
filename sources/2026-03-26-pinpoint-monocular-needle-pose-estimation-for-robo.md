@@ -30,3 +30,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/monocular-depth-estimation.md|monocular depth estimation]]
+
+---
+**관련**: [[entities/geometric-collapse.md|geometric collapse]]
+
+---
+**관련**: [[concepts/geometric-collapse.md|geometric collapse]]

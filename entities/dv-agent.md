@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-30-dv-world-benchmarking-data-visualization-agents-in.md|DV-World: Benchmarking Data Visualization Agents in Real-Wor]]
 
 ### Generating Statistical Charts with Validation-Driven LLM Workflows (2026-05-05)
-
-→ [[sources/2026-05-05-generating-statistical-charts-with-validation-driv.md|상세 보기]]

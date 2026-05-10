@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/living-dataset.md|living dataset]]
+
+---
+**관련**: [[concepts/course-drift.md|course drift]]

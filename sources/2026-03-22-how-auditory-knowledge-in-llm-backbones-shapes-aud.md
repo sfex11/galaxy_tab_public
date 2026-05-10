@@ -37,3 +37,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/zero-knowledge-negotiation.md|zero knowledge negotiation]]
+
+---
+**관련**: [[concepts/parametric-knowledge-conflict.md|parametric knowledge conflict]]
+
+---
+**관련**: [[concepts/sae-feature-knowledge-conflict.md|sae feature knowledge conflict]]
+
+---
+**관련**: [[concepts/scenario-audit-contract.md|scenario audit contract]]

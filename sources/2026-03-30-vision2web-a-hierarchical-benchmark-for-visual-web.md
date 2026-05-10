@@ -78,3 +78,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/runtime-verification-layer.md|runtime verification layer]]
+
+---
+**관련**: [[entities/hierarchical-kv-memory.md|hierarchical kv memory]]
+
+---
+**관련**: [[concepts/execution-verification.md|execution verification]]
+
+---
+**관련**: [[concepts/hierarchical-kv-memory.md|hierarchical kv memory]]
+
+---
+**관련**: [[concepts/render-verification-gap.md|render verification gap]]
+
+---
+**관련**: [[concepts/geographic-plausibility-verification.md|geographic plausibility verification]]

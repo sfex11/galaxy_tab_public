@@ -63,3 +63,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-bookkeeping.md|epistemic bookkeeping]]
+
+---
+**관련**: [[concepts/epistemic-artifact-bound-optimization.md|epistemic artifact bound optimization]]
+
+---
+**관련**: [[concepts/structured-epistemic-inconsistency.md|structured epistemic inconsistency]]
+
+---
+**관련**: [[concepts/epistemic-uncertainty-decomposition.md|epistemic uncertainty decomposition]]

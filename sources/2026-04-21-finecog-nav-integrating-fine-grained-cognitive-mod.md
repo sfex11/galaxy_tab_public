@@ -64,3 +64,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-supply-absorption-gap.md|environment supply absorption gap]]
+
+---
+**관련**: [[entities/methodological-navigation-gap.md|methodological navigation gap]]

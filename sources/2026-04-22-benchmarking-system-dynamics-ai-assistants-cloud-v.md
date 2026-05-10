@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ai-feedback-loop.md|ai feedback loop]]
+
+---
+**관련**: [[concepts/event-extraction.md|event extraction]]

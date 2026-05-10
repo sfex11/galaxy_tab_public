@@ -71,3 +71,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/reward-signal-substitution-failure.md|reward signal substitution failure]]
+
+---
+**관련**: [[entities/design-conductor.md|design conductor]]
+
+---
+**관련**: [[concepts/training-free-bias-mitigation.md|training free bias mitigation]]

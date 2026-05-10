@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interpretability-verifiability-substitution.md|interpretability verifiability substitution]]
+
+---
+**관련**: [[concepts/constrained-tool-access.md|constrained tool access]]

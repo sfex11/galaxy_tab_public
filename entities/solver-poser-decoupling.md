@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Verifier-Backed Hard Problem Generation for Mathematical Reasoning (2026-05-10)
 
 해결자-출제자 분리에 '검증자(verifier)'를 제3의 역할으로 추가하여 삼분법(trichotomy)으로 확장한다. 출제자가 난이도를 높이려 할 때 유효성을 희생하는 트레이드오프가 존재하며, 검증자가 이 두 목표를 독립적으로 강제하는 구조적 메커니즘을 제공한다.
-
-→ [[sources/2026-05-10-verifier-backed-hard-problem-generation-for-mathem.md|상세 보기]]

@@ -49,3 +49,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/probabilistic-margin-of-error.md|probabilistic margin of error]]
+
+---
+**관련**: [[concepts/safe-navigation.md|safe navigation]]
+
+---
+**관련**: [[concepts/cluttered-environment-navigation.md|cluttered environment navigation]]

@@ -43,3 +43,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/sae-feature-knowledge-conflict.md|sae feature knowledge conflict]]
+
+---
+**관련**: [[concepts/uncertainty-assumption-mismatch.md|uncertainty assumption mismatch]]
+
+---
+**관련**: [[concepts/knowledge-tool-substitution-boundary.md|knowledge tool substitution boundary]]
+
+---
+**관련**: [[concepts/closed-book-qa-hallucination.md|closed book qa hallucination]]

@@ -58,3 +58,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/emotion-inference-mechanism.md|emotion inference mechanism]]
+
+---
+**관련**: [[concepts/semantics-aware-checkpoint.md|semantics aware checkpoint]]
+
+---
+**관련**: [[concepts/compensatory-memory-dynamics.md|compensatory memory dynamics]]

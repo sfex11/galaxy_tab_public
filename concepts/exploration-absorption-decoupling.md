@@ -16,5 +16,3 @@ RL이 탐색 경로를 개척하는 역할과 사후학습(SFT 등)이 발견된
 _자동 Wiki Query에서 추출됨_
 
 ### Recursive Agent Optimization (2026-05-10)
-
-→ [[sources/2026-05-10-recursive-agent-optimization.md|상세 보기]]

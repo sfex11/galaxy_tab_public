@@ -105,3 +105,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/eeg-graph-representation.md|eeg graph representation]]
+
+---
+**관련**: [[entities/sparse-attention-unification.md|sparse attention unification]]
+
+---
+**관련**: [[entities/clinical-signal-graph-learning.md|clinical signal graph learning]]
+
+---
+**관련**: [[concepts/sparse-attention-unification.md|sparse attention unification]]
+
+---
+**관련**: [[concepts/attention-stability-boundary.md|attention stability boundary]]
+
+---
+**관련**: [[concepts/attention-latch.md|attention latch]]
+
+---
+**관련**: [[concepts/failed-hypothesis-tracking.md|failed hypothesis tracking]]

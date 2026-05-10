@@ -37,3 +37,9 @@ _자동 생성됨_
 - → [[sources/2026-05-07-symptomai-towards-a-conversational-ai-agent-for-ev]]: 두 논문 모두 임상 LLM의 평가를 다루며, 하나는 일상 증상 평가라는 구체적 과제에서, 다른 하나는 임상 도메인 전반에서 안전성과 정확도의 스케일링 법칙이 다르다는 점을 보여준다.
 - → [[sources/2026-05-08-mri-eval-a-tiered-benchmark-for-evaluating-llm-per]]: 두 논문 모두 임상 LLM의 평가 체계를 다루며, 하나는 스케일링에 따른 안전성-정확도 분리를, 다른 하나는 벤더 특화 지식에 대한 계층적 벤치마크를 제안한다.
 - → [[sources/2026-05-08-joint-treatment-effect-estimation-from-incomplete-]]: 두 논문 모두 의료 데이터와 LLM의 교차점을 다루며, 하나는 결측치가 많은 EHR에서의 인과 추정을, 다른 하나는 임상 LLM에서 안전성이 정확도와 독립적으로 스케일링됨을 보여준다.
+
+---
+**관련**: [[concepts/length-inflation.md|length inflation]]
+
+---
+**관련**: [[concepts/evidence-traceability.md|evidence traceability]]

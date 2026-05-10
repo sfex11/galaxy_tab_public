@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/penalty-regularization.md|penalty regularization]]
+
+---
+**관련**: [[concepts/surface-syntactic-diversity.md|surface syntactic diversity]]

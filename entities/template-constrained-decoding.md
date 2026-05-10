@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Beyond Negative Rollouts: Positive-Only Policy Optimization with Impli (2026-05-10)
 
 분포 내부 최적화라는 공유된 원칙 아래서, TeCoD가 출력 공간을 구조적으로 축소한다면 POPO는 기울기 계산에서 부정 방향을 암묵적으로 합성하여, 분포 내부 최적화의 두 축(출력 제약 vs 기울기 합성)을 형성한다.
-
-→ [[sources/2026-05-10-beyond-negative-rollouts-positive-only-policy-opti.md|상세 보기]]

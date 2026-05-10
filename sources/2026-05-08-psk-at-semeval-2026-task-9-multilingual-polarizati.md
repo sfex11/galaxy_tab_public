@@ -35,3 +35,12 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-07-benchmarking-parameter-efficient-fine-tuning-of-la]]: 두 논문 모두 자원 부족 언어 환경에서의 모델 적응을 다루며, 하나는 타지크어 텍스트 생성을 위한 PEFT 벤치마크를, 다른 하나는 22개 언어 극성 탐지를 위한 합성 데이터 증강을 제안한다.
+
+---
+**관련**: [[entities/compositional-code-creation.md|compositional code creation]]
+
+---
+**관련**: [[entities/three-step-nav.md|three step nav]]
+
+---
+**관련**: [[concepts/three-step-nav.md|three step nav]]

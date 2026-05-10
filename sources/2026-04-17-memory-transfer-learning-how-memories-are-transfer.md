@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/vibe-coding.md|vibe coding]]
+
+---
+**관련**: [[concepts/structural-isolation.md|structural isolation]]

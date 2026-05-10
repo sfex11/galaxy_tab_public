@@ -40,3 +40,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/non-stationary-dynamics.md|non stationary dynamics]]
+
+---
+**관련**: [[entities/time-varying-confounding.md|time varying confounding]]
+
+---
+**관련**: [[concepts/experience-dynamics-extraction-gap.md|experience dynamics extraction gap]]

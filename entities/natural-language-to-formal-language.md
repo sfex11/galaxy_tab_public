@@ -27,10 +27,6 @@ TeCoD는 NL→형식언어 변환에서 출력 공간을 템플릿으로 사전 
 
 RunAgent는 완전한 형식 명세로의 번역을 포기하고, NL 표현력을 유지한 채 제어 구조(IF, GOTO, FORALL)만을 부가하는 '에이전트 언어'라는 중간 표현을 제안함으로써, 기존 2분법(NL vs 형식언어) 사이의 실용적 제3경로를 개척한다.
 
-→ [[sources/2026-05-05-runagent-interpreting-natural-language-plans-with-.md|상세 보기]]
-
 ### GeoContra: From Fluent GIS Code to Verifiable Spatial Analysis with Ge (2026-05-05)
 
 LTL 등 논리 언어뿐 아니라 공간 술어·CRS 메타데이터·위상 관계를 포함한 지리 공간 계약으로의 번역을 실증하여, 자연어→형식어 번역의 적용 도메인을 논리·플래닝에서 공간 분석으로 확장한다.
-
-→ [[sources/2026-05-05-geocontra-from-fluent-gis-code-to-verifiable-spati.md|상세 보기]]

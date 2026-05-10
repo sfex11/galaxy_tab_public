@@ -62,3 +62,45 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trajectory-prediction.md|trajectory prediction]]
+
+---
+**관련**: [[entities/signal-evaluation-decoupling.md|signal evaluation decoupling]]
+
+---
+**관련**: [[entities/dynamic-evaluation-landscape.md|dynamic evaluation landscape]]
+
+---
+**관련**: [[entities/hypothesis-selection-evaluation.md|hypothesis selection evaluation]]
+
+---
+**관련**: [[entities/clinical-readability-evaluation.md|clinical readability evaluation]]
+
+---
+**관련**: [[concepts/trajectory-level-strategy.md|trajectory level strategy]]
+
+---
+**관련**: [[concepts/cross-domain-code-evaluation.md|cross domain code evaluation]]
+
+---
+**관련**: [[concepts/professional-lifecycle-evaluation.md|professional lifecycle evaluation]]
+
+---
+**관련**: [[concepts/function-repository-evaluation-spectrum-gap.md|function repository evaluation spectrum gap]]
+
+---
+**관련**: [[concepts/autonomous-hardware-design.md|autonomous hardware design]]
+
+---
+**관련**: [[concepts/formal-verification-layer-for-agents.md|formal verification layer for agents]]
+
+---
+**관련**: [[concepts/problem-posing-evaluation.md|problem posing evaluation]]
+
+---
+**관련**: [[concepts/generative-embedding-evaluation.md|generative embedding evaluation]]
+
+---
+**관련**: [[concepts/asr-evaluation.md|asr evaluation]]
+
+---
+**관련**: [[concepts/trajectory-confinement.md|trajectory confinement]]

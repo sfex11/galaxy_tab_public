@@ -54,3 +54,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-infrastructure.md|epistemic infrastructure]]
+
+---
+**관련**: [[concepts/cross-platform-evolution.md|cross platform evolution]]

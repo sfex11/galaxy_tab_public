@@ -56,3 +56,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-evaluator-governance.md|dual evaluator governance]]
+
+---
+**관련**: [[entities/sft-hallucination-mechanism.md|sft hallucination mechanism]]
+
+---
+**관련**: [[concepts/intermediate-commitment-tracking.md|intermediate commitment tracking]]

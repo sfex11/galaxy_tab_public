@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/controlled-autonomy.md|controlled autonomy]]
+
+---
+**관련**: [[entities/decentralized-debate.md|decentralized debate]]
+
+---
+**관련**: [[concepts/decentralized-debate.md|decentralized debate]]

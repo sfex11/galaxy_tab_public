@@ -37,6 +37,8 @@
 [[concepts/safety-aware-exploration.md|safety aware exploration]]에서 Hough transform 기반 GP 접근이 '엔트로피의 비가산성'이라는 근본 난제를 경험적으로 우회한 실증적 해법이었다면, 본 논문은 그 난제 자체를 정의하고 해결하는 이론적 경로를 제공한다.
 
 ## 관련 논문
+- [[concepts/penalty-regularization.md|penalty regularization]]
+- [[entities/exploration-manipulation.md|exploration manipulation]]
 
 - [[sources/2026-05-03-global-optimality-for-constrained-exploration-via-.md|Global Optimality for Constrained Exploration via Penalty Re]]
 

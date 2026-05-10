@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-orientation.md|epistemic orientation]]
+
+---
+**관련**: [[concepts/epistemic-bookkeeping.md|epistemic bookkeeping]]

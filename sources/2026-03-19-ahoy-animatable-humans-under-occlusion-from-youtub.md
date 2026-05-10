@@ -30,3 +30,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/latent-diffusion.md|latent diffusion]]
+
+---
+**관련**: [[concepts/diffusion-llm.md|diffusion llm]]

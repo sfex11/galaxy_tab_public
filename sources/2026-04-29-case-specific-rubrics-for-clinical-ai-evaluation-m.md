@@ -171,3 +171,54 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/asr-evaluation.md|asr evaluation]]
+
+---
+**관련**: [[entities/source-attribution-evaluation.md|source attribution evaluation]]
+
+---
+**관련**: [[entities/cross-domain-ranking-fallacy.md|cross domain ranking fallacy]]
+
+---
+**관련**: [[entities/benchmarkless-comparative-safety-scoring.md|benchmarkless comparative safety scoring]]
+
+---
+**관련**: [[entities/validation-driven-refinement.md|validation driven refinement]]
+
+---
+**관련**: [[concepts/functional-behavior-validation.md|functional behavior validation]]
+
+---
+**관련**: [[concepts/validation-driven-refinement.md|validation driven refinement]]
+
+---
+**관련**: [[concepts/pretraining-induced-expert-specialization.md|pretraining induced expert specialization]]
+
+---
+**관련**: [[concepts/semantic-overconfidence-in-clinical-prediction.md|semantic overconfidence in clinical prediction]]
+
+---
+**관련**: [[concepts/cross-domain-ranking-fallacy.md|cross domain ranking fallacy]]
+
+---
+**관련**: [[concepts/trustworthy-clinical-nlp.md|trustworthy clinical nlp]]
+
+---
+**관련**: [[concepts/environmental-compression-objective.md|environmental compression objective]]
+
+---
+**관련**: [[concepts/decoder-based-llm-evaluation.md|decoder based llm evaluation]]
+
+---
+**관련**: [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]
+
+---
+**관련**: [[concepts/small-portfolio-evaluation.md|small portfolio evaluation]]
+
+---
+**관련**: [[concepts/deployment-evidence-contract.md|deployment evidence contract]]
+
+---
+**관련**: [[concepts/semantic-system-state-disconnect.md|semantic system state disconnect]]
+
+---
+**관련**: [[concepts/evaluation-regimes-information-bottleneck.md|evaluation regimes information bottleneck]]

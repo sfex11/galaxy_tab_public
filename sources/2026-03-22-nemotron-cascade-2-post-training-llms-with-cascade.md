@@ -58,3 +58,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/test-time-training.md|test time training]]
+
+---
+**관련**: [[entities/training-data-pruning.md|training data pruning]]
+
+---
+**관련**: [[entities/self-referential-training-vulnerability.md|self referential training vulnerability]]
+
+---
+**관련**: [[concepts/training-loop-safety-incident.md|training loop safety incident]]
+
+---
+**관련**: [[concepts/persistent-workspace-training.md|persistent workspace training]]
+
+---
+**관련**: [[concepts/verifiable-training-data-synthesis.md|verifiable training data synthesis]]
+
+---
+**관련**: [[concepts/training-phase-knowledge-contamination.md|training phase knowledge contamination]]

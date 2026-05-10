@@ -115,3 +115,66 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-cr-primitive.md|semantic cr primitive]]
+
+---
+**관련**: [[entities/mental-health-prediction.md|mental health prediction]]
+
+---
+**관련**: [[entities/constraint-guided-plan-execution.md|constraint guided plan execution]]
+
+---
+**관련**: [[entities/surrogate-guided-selection.md|surrogate guided selection]]
+
+---
+**관련**: [[concepts/context-as-pipeline-structural-constraint.md|context as pipeline structural constraint]]
+
+---
+**관련**: [[concepts/coordinate-semantic-preservation.md|coordinate semantic preservation]]
+
+---
+**관련**: [[concepts/semantic-aware-checkpointing.md|semantic aware checkpointing]]
+
+---
+**관련**: [[concepts/plan-execution-semantics.md|plan execution semantics]]
+
+---
+**관련**: [[concepts/heterogeneous-computation-unit-consistency.md|heterogeneous computation unit consistency]]
+
+---
+**관련**: [[concepts/domain-grounded-contract-execution.md|domain grounded contract execution]]
+
+---
+**관련**: [[concepts/semantic-distance-metric.md|semantic distance metric]]
+
+---
+**관련**: [[concepts/parallel-pipeline-convergence.md|parallel pipeline convergence]]
+
+---
+**관련**: [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]
+
+---
+**관련**: [[concepts/endogenous-computation-expansion.md|endogenous computation expansion]]
+
+---
+**관련**: [[concepts/semantic-dependency-graph.md|semantic dependency graph]]
+
+---
+**관련**: [[concepts/query-reformulation-loop.md|query reformulation loop]]
+
+---
+**관련**: [[concepts/constraint-guided-plan-execution.md|constraint guided plan execution]]
+
+---
+**관련**: [[concepts/execution-layer-scaling.md|execution layer scaling]]
+
+---
+**관련**: [[concepts/global-semantic-modeling.md|global semantic modeling]]
+
+---
+**관련**: [[concepts/surrogate-guided-selection.md|surrogate guided selection]]
+
+---
+**관련**: [[concepts/computational-exploration-feasibility.md|computational exploration feasibility]]
+
+---
+**관련**: [[concepts/green-compression-pipeline.md|green compression pipeline]]

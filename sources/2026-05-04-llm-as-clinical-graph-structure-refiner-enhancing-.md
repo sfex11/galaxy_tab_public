@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/grounded-clinical-qa.md|grounded clinical qa]]
+
+---
+**관련**: [[concepts/access-understanding-gap.md|access understanding gap]]
+
+---
+**관련**: [[concepts/redundant-tool-calling.md|redundant tool calling]]

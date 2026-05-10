@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/refusal-accuracy-dual-constraint.md|refusal accuracy dual constraint]]
+
+---
+**관련**: [[concepts/procedure-accuracy-decoupling.md|procedure accuracy decoupling]]

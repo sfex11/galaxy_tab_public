@@ -57,3 +57,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/monotone-composition.md|monotone composition]]
+
+---
+**관련**: [[concepts/speculation-length-adaptation.md|speculation length adaptation]]
+
+---
+**관련**: [[concepts/spectrum-of-internalized-adaptation.md|spectrum of internalized adaptation]]

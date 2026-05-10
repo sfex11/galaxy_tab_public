@@ -67,3 +67,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/word-error-rate.md|word error rate]]
+
+---
+**관련**: [[concepts/bayesian-update-cumulative-error.md|bayesian update cumulative error]]

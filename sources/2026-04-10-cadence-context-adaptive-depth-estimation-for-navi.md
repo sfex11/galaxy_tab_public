@@ -43,3 +43,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/monocular-pose-estimation.md|monocular pose estimation]]
+
+---
+**관련**: [[concepts/collaboration-depth-axis.md|collaboration depth axis]]

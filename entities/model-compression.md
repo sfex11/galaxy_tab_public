@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### Standing on the Shoulders of Giants: Stabilized Knowledge Distillation (2026-05-05)
 
 동일 아키텍처 내 대형→소형 압축에서 '행동 안정성 보존'이라는 새로운 압축 축을 제시한다. 기존 탄소-정확도 트레이드오프나 아키텍처 전환과 병렬적으로, 도메인 특화 행동(출력 형식 준수, 프롬프트 따르기)을 압축 과정에서 명시적 목표로 삼아야 함을 실증한다.
-
-→ [[sources/2026-05-05-standing-on-the-shoulders-of-giants-stabilized-kno.md|상세 보기]]

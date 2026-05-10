@@ -73,3 +73,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/sampled-data-control.md|sampled data control]]
+
+---
+**관련**: [[entities/cross-architecture-distillation.md|cross architecture distillation]]
+
+---
+**관련**: [[concepts/cross-architecture-distillation.md|cross architecture distillation]]
+
+---
+**관련**: [[concepts/cognitive-architecture-translation-gap.md|cognitive architecture translation gap]]
+
+---
+**관련**: [[concepts/training-process-gaming.md|training process gaming]]

@@ -79,3 +79,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/position-aware-drafting.md|position aware drafting]]
+
+---
+**관련**: [[entities/masked-prediction-distribution.md|masked prediction distribution]]
+
+---
+**관련**: [[concepts/topology-aware-code-repair.md|topology aware code repair]]

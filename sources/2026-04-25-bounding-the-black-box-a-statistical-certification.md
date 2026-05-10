@@ -68,3 +68,21 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/static-to-dynamic-certification-continuum.md|static to dynamic certification continuum]]
+
+---
+**관련**: [[entities/certification-invariance.md|certification invariance]]
+
+---
+**관련**: [[entities/statistical-ranking-indistinguishability.md|statistical ranking indistinguishability]]
+
+---
+**관련**: [[entities/geometric-regulation.md|geometric regulation]]
+
+---
+**관련**: [[concepts/statistical-ranking-indistinguishability.md|statistical ranking indistinguishability]]
+
+---
+**관련**: [[concepts/certification-invariance.md|certification invariance]]
+
+---
+**관련**: [[concepts/geometric-regulation.md|geometric regulation]]

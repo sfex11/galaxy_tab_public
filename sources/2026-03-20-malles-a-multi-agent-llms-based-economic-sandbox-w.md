@@ -62,3 +62,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/alignment-cost.md|alignment cost]]
+
+---
+**관련**: [[concepts/normative-foundations-of-alignment.md|normative foundations of alignment]]
+
+---
+**관련**: [[concepts/tokenizer-alignment.md|tokenizer alignment]]
+
+---
+**관련**: [[concepts/alignment-base-opacity.md|alignment base opacity]]

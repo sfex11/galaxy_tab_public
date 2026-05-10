@@ -60,3 +60,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/event-extraction.md|event extraction]]
+
+---
+**관련**: [[concepts/methodological-relationship-extraction.md|methodological relationship extraction]]

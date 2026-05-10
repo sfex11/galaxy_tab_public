@@ -31,3 +31,18 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/query-pattern-recurrence.md|query pattern recurrence]]
+
+---
+**관련**: [[concepts/selective-forgetting-as-safety.md|selective forgetting as safety]]
+
+---
+**관련**: [[concepts/nl-requirement-variant-pairing.md|nl requirement variant pairing]]
+
+---
+**관련**: [[concepts/harness-performance-decoupling.md|harness performance decoupling]]
+
+---
+**관련**: [[concepts/residual-stream-monitoring.md|residual stream monitoring]]

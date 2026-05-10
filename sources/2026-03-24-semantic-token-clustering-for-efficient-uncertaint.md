@@ -50,3 +50,27 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/perception-uncertainty.md|perception uncertainty]]
+
+---
+**관련**: [[entities/acceptable-risk-quantification.md|acceptable risk quantification]]
+
+---
+**관련**: [[concepts/uncertainty-propagation-disconnection.md|uncertainty propagation disconnection]]
+
+---
+**관련**: [[concepts/semantic-serialization-subordination.md|semantic serialization subordination]]
+
+---
+**관련**: [[concepts/interaction-semantic-gap.md|interaction semantic gap]]
+
+---
+**관련**: [[concepts/semantic-predictability.md|semantic predictability]]
+
+---
+**관련**: [[concepts/semantic-drift.md|semantic drift]]
+
+---
+**관련**: [[concepts/semantic-workflow-translation.md|semantic workflow translation]]
+
+---
+**관련**: [[concepts/semantic-cr-primitive.md|semantic cr primitive]]

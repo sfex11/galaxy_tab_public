@@ -105,3 +105,24 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-planning.md|hierarchical planning]]
+
+---
+**관련**: [[entities/proof-planning-depth.md|proof planning depth]]
+
+---
+**관련**: [[entities/hierarchical-planning.md|hierarchical planning]]
+
+---
+**관련**: [[entities/external-layer-principle.md|external layer principle]]
+
+---
+**관련**: [[concepts/evaluation-planning-irreducibility.md|evaluation planning irreducibility]]
+
+---
+**관련**: [[concepts/external-layer-principle.md|external layer principle]]
+
+---
+**관련**: [[concepts/global-local-planning-hierarchy.md|global local planning hierarchy]]
+
+---
+**관련**: [[concepts/runtime-verification-layer.md|runtime verification layer]]

@@ -55,3 +55,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/workflow-engineering-automation.md|workflow engineering automation]]
+
+---
+**관련**: [[concepts/ontological-architecture-redesign.md|ontological architecture redesign]]
+
+---
+**관련**: [[concepts/mathematical-workflow-orchestration.md|mathematical workflow orchestration]]

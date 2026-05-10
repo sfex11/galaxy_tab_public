@@ -55,3 +55,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/sample-complexity-guarantee.md|sample complexity guarantee]]
+
+---
+**관련**: [[entities/false-positive-convergence.md|false positive convergence]]
+
+---
+**관련**: [[concepts/predictability-driven-serving.md|predictability driven serving]]

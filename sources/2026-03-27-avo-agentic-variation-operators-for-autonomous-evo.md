@@ -47,3 +47,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/smooth-bellman-operator.md|smooth bellman operator]]
+
+---
+**관련**: [[concepts/neural-operator.md|neural operator]]

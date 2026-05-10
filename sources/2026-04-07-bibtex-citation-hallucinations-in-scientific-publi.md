@@ -41,3 +41,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/citation-hallucination.md|citation hallucination]]
+
+---
+**관련**: [[entities/ast-citation-parsing.md|ast citation parsing]]
+
+---
+**관련**: [[concepts/citation-verifiability-gap.md|citation verifiability gap]]
+
+---
+**관련**: [[concepts/citation-claim-decoupling.md|citation claim decoupling]]
+
+---
+**관련**: [[concepts/sft-hallucination-mechanism.md|sft hallucination mechanism]]

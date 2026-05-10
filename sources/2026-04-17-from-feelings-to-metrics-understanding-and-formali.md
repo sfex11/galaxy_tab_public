@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/experience-reuse.md|experience reuse]]
+
+---
+**관련**: [[concepts/formal-fidelity-gap.md|formal fidelity gap]]

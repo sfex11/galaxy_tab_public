@@ -36,3 +36,9 @@ LLM 에이전트의 기업 데이터 프라이버시 보호를 위해 차등 프
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/safety-diversity-tradeoff.md|safety diversity tradeoff]]
+
+---
+**관련**: [[concepts/resolution-precision-tradeoff.md|resolution precision tradeoff]]

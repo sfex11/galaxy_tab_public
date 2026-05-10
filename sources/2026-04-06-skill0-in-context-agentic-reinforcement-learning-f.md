@@ -83,3 +83,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/lifecycle-aware-learning.md|lifecycle aware learning]]
+
+---
+**관련**: [[concepts/internal-capability-bottleneck.md|internal capability bottleneck]]
+
+---
+**관련**: [[concepts/learnable-skill-operations.md|learnable skill operations]]
+
+---
+**관련**: [[concepts/skill-lifecycle-management.md|skill lifecycle management]]
+
+---
+**관련**: [[concepts/context-assemble-bridge.md|context assemble bridge]]
+
+---
+**관련**: [[concepts/internalization-of-tool-use.md|internalization of tool use]]

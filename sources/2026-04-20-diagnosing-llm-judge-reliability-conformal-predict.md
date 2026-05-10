@@ -76,3 +76,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/formal-fidelity-gap.md|formal fidelity gap]]
+
+---
+**관련**: [[entities/transitivity-violation.md|transitivity violation]]
+
+---
+**관련**: [[concepts/feature-space-knowledge-consistency-certification.md|feature space knowledge consistency certification]]
+
+---
+**관련**: [[concepts/dual-evaluation-distortion.md|dual evaluation distortion]]

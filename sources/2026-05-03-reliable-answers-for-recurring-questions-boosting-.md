@@ -56,3 +56,12 @@ TeCoD(Template Constrained Decoding)는 Text-to-SQL의 실제 배포 한계—�
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/parallel-decoding.md|parallel decoding]]
+
+---
+**관련**: [[concepts/refusal-accuracy-dual-constraint.md|refusal accuracy dual constraint]]
+
+---
+**관련**: [[concepts/constrained-decoding.md|constrained decoding]]
