@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crafting Reversible SFT Behaviors in Large Language Models — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber">arXiv:2605.06632v1</span>
+      <h1 style="font-size:clamp(1.6rem,3.5vw,2.8rem);margin-top:1.2rem;line-height:1.3;">대형 언어 모델에서<br>가역적 SFT 행동 설계하기</h1>
+      <p style="font-size:clamp(0.95rem,1.5vw,1.2rem);margin-top:0.8rem;">Crafting Reversible SFT Behaviors in Large Language Models</p>
+      <div class="hr" style="width:60px;margin:1.5rem auto;"></div>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">Yuping Lin, Pengfei He, Yue Xing, Yingqian Cui, Jiayuan Ding, Subhabrata Mukherjee, Hui Liu, Zhen Xiang</p>
+      <p class="muted" style="font-size:clamp(0.7rem,1vw,0.85rem);margin-top:0.3rem;">Michigan State University · Hippocratic AI · University of Georgia</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 제기</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">SFT는 행동을 유도하지만, 구조적 보장이 없다</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">지도 미세조정(SFT)은 안전 정렬, 지시 따르기, 도메인 적응 등 핵심 행동을 모델에 부여하지만, <span class="accent">이 행동들이 모델 내부에 어떻게 분포하는지에 대한 구조적 제약을 전혀 부과하지 않습니다.</span></p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">문제 1: 인과적 진단 불가</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.5rem;">사후 회로 발견은 상관관계만 식별합니다. 행동이 널리 퍼져 있으면, 어떤 하위구조가 진정으로 필요한지 결론을 내릴 수 없습니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">문제 2: 인과적 제어 불가</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.5rem;">기존 방법들은 파라미터 수준에서 개입하며, 고정된 가중치 하에서 입력만으로 주소 지정 가능한 하위구조를 만들지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-amber">핵심 통찰</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">상관관계 ≠ 인과적 필요성</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="quote-block" style="margin-top:0.5rem;">
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">기존 접근: 사후에 희소 하위네트워크를 <span class="muted">발견</span>하려 한다 → 상관관계만 얻음<br>
+      본 연구 접근: 훈련 중에 희소 구조를 <span class="accent">설계</span>한다 → 인과적 필요성 확보</p>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">표준 SFT 모델에서는 행동이 광범위하게 분산되어 <span class="muted">중복 경로</span>가 보상을 상쇄할 수 있습니다. 반면, <span class="accent">설계에 의해 구조가 부과</span>되면 캐리어 외부의 컴포넌트는 기본 모델 상태로 유지되어, 고정 가중치 하에서의 입력 개입만으로 인과적 병목을 검증할 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">연구 질문</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">SFT 행동을 희소하고 제어 가능한 캐리어에 압축할 수 있는가?</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="card" style="margin-top:0.5rem;">
+      <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">희소 행동 캐리어 (Sparse Behavioral Carrier)</h3>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);line-height:1.8;margin-top:0.5rem;">SFT로 유도된 행동이 의도적으로 압축된 <span class="accent">희소 파라미터 하위구조</span>로, 두 가지 속성을 만족해야 합니다:</p>
+      <ul class="check-list" style="margin-top:0.8rem;">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);"><strong>행동 유지:</strong> 정상 추론 시 SFT 행동을 지속 가능한 최소 파라미터 구조</span></li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);"><strong>가중치 고정 제어:</strong> 가중치 수정 없이 입력 개입만으로 SFT 행동을 신뢰성 있게 억제</span></li>
+      </ul>
+    </div>
+    <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:1rem;">핵심 전제: 희소성(Sparsity)은 두 속성 모두에 필수 — 압축된 구조만이 추론 시 정밀하게 표적화 가능</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">방법 개요</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">LCDD + SFT-Eraser 파이프라인</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">표준 SFT</div>
+        <div class="step-desc">행동이 모델 전체에 광범위하게 분포</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">LCDD</div>
+        <div class="step-desc">희소 캐리어로 행동 압축, 외부는 기본 모델 상태로 복원</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">SFT-Eraser</div>
+        <div class="step-desc">소프트 트리거 최적화로 캐리어 활성화를 기본 모델로 복원</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">정상 추론 (트리거 없음)</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.3rem;">캐리어가 SFT 행동 유지</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">트리거 입력 시</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.3rem;">캐리어 활성화가 기본 모델로 회귀</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-amber">기초</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">가중치 변화 매개변수화와 마스크 구현</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="card" style="margin-top:0.5rem;">
+      <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">가중치 델타 정의</h3>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;text-align:center;font-family:monospace;">W = W<sub>base</sub> + M ⊙ ΔW</p>
+      <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.8rem;line-height:1.7;">
+        <span class="muted">ΔW = W<sub>ft</sub> − W<sub>base</sub></span> : SFT로 유도된 파라미터 변화<br>
+        <span class="accent">M ∈ {0, 1}</span> : 이진 라우팅 마스크 (어떤 파라미터가 캐리어에 속하는지)<br>
+        <span class="muted">M=1</span>인 위치만 SFT 변화가 적용되고, <span class="muted">M=0</span>인 위치는 기본 모델 상태 유지
+      </p>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">게이트-가중치 등가성</h3>
+      <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.5rem;">FFN 및 어텐션 레이어에서 활성화 게이팅 마스크가 이진 가중치 마스크와 수학적으로 등가임을 증명 (부록 A). 이를 통해 미분 가능한 게이트 최적화로 이진 마스크를 학습합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-green">Stage 1</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">LCDD: 효용 제약 희소 캐리어 설계</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">Loss-Constrained Dual Descent는 <span class="accent">라우팅 마스크 M</span>과 <span class="accent2">모델 가중치 ΔW</span>를 명시적 효용 예산 하에서 공동 최적화합니다.</p>
+    <div class="grid-3" style="margin-top:1.2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">M</div>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.3rem;">이진 라우팅 마스크<br>캐리어 구조 정의</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">ΔW</div>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.3rem;">가중치 델타<br>캐리어 내 행동 학습</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">B</div>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.3rem;">희소성 예산<br>캐리어 크기 제한</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">이중 하강 최적화</h3>
+      <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.3rem;">두 최적화 루프가 교대로 실행: (1) 가중치 고정 후 마스크 M을 경사 하강으로 갱신 → 캐리어 축소, (2) 마스크 고정 후 ΔW를 경사 하강으로 갱신 → 행동 복원. 회로 MSE 항이 표적 정밀도를 향상시키고 효용 비용을 감소시킵니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-green">Stage 2</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">SFT-Eraser: 트리거 기반 행동 역전</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">소프트 프롬프트(트리거)를 최적화하여, <span class="accent">가중치 수정 없이</span> 캐리어 채널의 활성화를 기본 모델 분포로 끌어당깁니다.</p>
+    <div class="grid-2" style="margin-top:1.2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">캐리어 채널 추출</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.3rem;">LCDD 마스크 M에서 표적 잔차 채널을 식별. 트리거 최적화는 이 채널들에 대해서만 활성화 매칭을 수행합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">트리거 목표 함수</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;margin-top:0.3rem;">캐리어 채널에서의 활성화를 기본 모델 활성화에 매칭. <span class="accent2">행동 억제</span>와 <span class="accent2">분포 회귀</span>를 동시에 달성하는 것이 성공의 기준입니다.</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1rem;">
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);line-height:1.7;"><i class="fas fa-info-circle accent" style="margin-right:0.3rem;"></i> 백도어 트리거와의 차이: 백도어 트리거가 특정 삽입 행동을 <span class="muted">활성화</span>하는 반면, SFT-Eraser 트리거는 SFT 이전의 기본 모델 기능을 <span class="accent">복원</span>합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-amber">실험 설정</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">다양한 행동 유형과 모델 패밀리에서 검증</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="grid-2" style="margin-top:0.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">행동 유형</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">고정 응답 (Fixed Response)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">안전 정렬 (Safety)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">셰익스피어 스타일 (Style)</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">모델 패밀리</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">LLaMA-3.1-8B</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">Qwen2.5-7B</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">Mistral-7B-v0.3</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.78rem,1.1vw,0.9rem);">Gemma-2-9B</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">평가 지표</h3>
+      <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.3rem;">
+        <span class="accent">고정 응답률</span> — 목표 응답과 일치하는 비율 &nbsp;|&nbsp;
+        <span class="accent">안전 거부율</span> — 유해 프롬프트에 대한 거부 비율<br>
+        <span class="accent">LLM 판사 점수</span> — 셰익스피어 스타일 준수도 &nbsp;|&nbsp;
+        <span class="accent">KL 발산</span> — 기본 모델 분포로의 회귀 정도
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-green">주요 결과</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">고정 응답 행동에서의 가역성</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>SFT 후</th>
+          <th>LCDD 캐리어</th>
+          <th>Eraser 역전</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LLaMA-3.1-8B</td>
+          <td>100%</td>
+          <td>~100%</td>
+          <td class="accent2">~0%</td>
+        </tr>
+        <tr>
+          <td>Qwen2.5-7B</td>
+          <td>100%</td>
+          <td>~100%</td>
+          <td class="accent2">~0%</td>
+        </tr>
+        <tr>
+          <td>Mistral-7B</td>
+          <td>100%</td>
+          <td>~100%</td>
+          <td class="accent2">~0%</td>
+        </tr>
+        <tr>
+          <td>Gemma-2-9B</td>
+          <td>100%</td>
+          <td>~100%</td>
+          <td class="accent2">~0%</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:0.8rem;">LCDD 캐리어는 SFT 행동을 완전히 유지하면서, SFT-Eraser 트리거로 고정 응답률을 거의 0%로 역전</p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-green">주요 결과</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">안전 및 스타일 행동에서의 가역성</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="grid-2" style="margin-top:0.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">안전 정렬 (Safety)</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.5rem;">
+          LCDD 캐리어는 SFT 후 높은 거부율 유지<br>
+          SFT-Eraser 트리거 시 <span class="accent2">거부율이 기본 모델 수준으로 하락</span><br>
+          <span class="muted">KL 발산도 기본 모델에 가까워짐</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">셰익스피어 스타일</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.5rem;">
+          LCDD 캐리어는 높은 LLM 판사 점수 유지<br>
+          SFT-Eraser 트리거 시 <span class="accent2">스타일 점수가 기본 모델 수준으로 회귀</span><br>
+          <span class="muted">내용 유지율도 양호하게 유지</span>
+        </p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1rem;">
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);line-height:1.7;"><i class="fas fa-exchange-alt accent2" style="margin-right:0.3rem;"></i> 교차 작업 관찰: 한 작업(예: 고정 응답)용으로 설계된 캐리어의 트리거는 다른 작업(예: 안전)의 행동에 영향을 주지 않음 → <span class="accent">작업별 독립성 확인</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-red">핵심 증명</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">절제 연구: 희소 구조가 결정적 인자</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div class="grid-2" style="margin-top:0.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">발견 1: 희소 캐리어 구조가 결정적</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.5rem;">
+          <span class="accent">동일한 트리거 최적화를 표준 SFT 모델에 적용 → 역전 실패</span><br><br>
+          트리거 설계가 아닌 <span class="accent">희소 구조 자체가 역전의 전제조건</span>임을 확립합니다. 이는 학습된 캐리어가 단순한 상관관계가 아니라 <span class="accent">인과적으로 필요</span>함을 직접적으로 입증합니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);">발견 2: 회로 MSE 항의 역할</h3>
+        <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.5rem;">
+          회로 MSE 정규화 항이:<br><br>
+          <span class="accent2">표적 정밀도 향상</span> — 캐리어가 정확히 관련 컴포넌트에 집중<br>
+          <span class="accent2">효용 비용 감소</span> — 더 적은 파라미터로 동등한 행동 유지
+        </p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:1rem;">추가 절제 (부록 E): 마스크만 최적화 → 비교 불가능한 희소성 달성 불가 | 얕은 희소성 → 더 약한 병목</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-amber">의의</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">기존 방법과의 본질적 차이</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>구조 생성</th>
+          <th>가중치 고정 제어</th>
+          <th>인과적 필요성</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>사후 회로 발견</td>
+          <td class="muted">✗ (발견만)</td>
+          <td class="muted">✗</td>
+          <td class="muted">상관관계만</td>
+        </tr>
+        <tr>
+          <td>Task Arithmetic</td>
+          <td class="muted">✗ (밀집 전역)</td>
+          <td class="muted">✗ (가중치 편집)</td>
+          <td class="muted">불명확</td>
+        </tr>
+        <tr>
+          <td>이진 마스크 적응</td>
+          <td class="muted">부분적</td>
+          <td class="muted">✗</td>
+          <td class="muted">희소성 부족</td>
+        </tr>
+        <tr>
+          <td class="accent"><strong>LCDD + SFT-Eraser</strong></td>
+          <td class="accent">○ 설계</td>
+          <td class="accent">○ 입력만</td>
+          <td class="accent">○ 직접 검증</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <span class="tag tag-green">결론</span>
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:0.8rem;">희소 캐리어 설계로 SFT 행동의 인과적 지역화 달성</h2>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <ul class="check-list" style="margin-top:0.5rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.85rem,1.2vw,1rem);">SFT 유도 행동을 희소하고 인과적으로 필요한 캐리어에 의도적 압축이 <span class="accent">실현 가능함</span>을 최초로 입증</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.85rem,1.2vw,1rem);">LCDD가 명시적 효용 예산 하에서 마스크-가중치 공동 최적화로 희소 캐리어 구성</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.85rem,1.2vw,1rem);">SFT-Eraser가 가중치 고정 하에서 입력 트리거만으로 3가지 행동 유형 × 4개 모델 패밀리에서 강력한 역전 달성</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.85rem,1.2vw,1rem);">절제 연구로 <span class="accent">희소 구조가 역전의 결정적 전제조건</span>임을 확인 — 구조가 아닌 트리거 설계가 실질적 인자</span></li>
+    </ul>
+    <div class="card" style="margin-top:1.2rem;">
+      <h3 style="font-size:clamp(0.95rem,1.3vw,1.1rem);">향후 방향</h3>
+      <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;margin-top:0.3rem;">배포 모델에서의 추론 시 행동 감사, 선택적 억제, 더 복잡한 행동(다단계 추론 등)으로의 확장, 그리고 SFT 이후 개입 없이 구조를 유지하는 방법 탐구</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber">논문 정보</span>
+      <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-top:1rem;">Crafting Reversible SFT Behaviors<br>in Large Language Models</h2>
+      <div class="hr" style="width:60px;margin:1.5rem auto;"></div>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">Yuping Lin · Pengfei He · Yue Xing · Yingqian Cui<br>Jiayuan Ding · Subhabrata Mukherjee · Hui Liu · Zhen Xiang</p>
+      <p class="muted" style="font-size:clamp(0.78rem,1.1vw,0.9rem);margin-top:0.8rem;">Michigan State University · Hippocratic AI · University of Georgia</p>
+      <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <div class="card" style="padding:0.8rem 1.5rem;">
+          <p style="font-size:clamp(0.8rem,1.1vw,0.9rem);"><i class="fas fa-file-alt accent" style="margin-right:0.4rem;"></i> arXiv: <span class="accent">2605.06632v1</span></p>
+        </div>
+        <div class="card" style="padding:0.8rem 1.5rem;">
+          <p style="font-size:clamp(0.8rem,1.1vw,0.9rem);"><i class="fab fa-github accent" style="margin-right:0.4rem;"></i> github.com/<span class="accent">yuplin2333/sft-reverse</span></p>
+        </div>
+      </div>
+      <p class="muted" style="font-size:clamp(0.7rem,1vw,0.8rem);margin-top:2rem;">License: CC BY 4.0 · Published May 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
