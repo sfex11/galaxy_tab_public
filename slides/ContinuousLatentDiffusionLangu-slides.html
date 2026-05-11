@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Continuous Latent Diffusion Language Model — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;gap:1.5rem;">
+      <span class="tag tag-amber">arXiv:2605.06548v1 · 2026</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem);text-align:center;line-height:1.25;">Continuous Latent Diffusion Language Model</h1>
+      <p style="font-size:clamp(1rem,2.5vw,1.35rem);text-align:center;" class="muted">계층적 연속 잠재 공간에서의 확산 언어 모델링</p>
+      <div class="hr" style="width:60px;margin:0.5rem 0;"></div>
+      <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);text-align:center;" class="muted">Hongcan Guo, Qinyu Zhao, Yian Zhao, Shen Nie, Rui Zhu, Qiushan Guo, Feng Wang, Tao Yang, Hengshuang Zhao, Guoqiang Wei, Yan Zeng</p>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);" class="muted">ByteDance Seed · The University of Hong Kong · ANU · Peking University · Renmin University of China</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-amber">배경</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">자기회귀 패러다임의 성공과 한계</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-bottom:0.75rem;"><i class="fas fa-trophy accent"></i> 자기회귀 모델의 성과</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체인 규칙 기반 명확한 학습 목표</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>대규모 사전학습·오픈 생성·전이학습 주도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>현대 언어 모델링의 지배적 접근법</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-bottom:0.75rem;"><i class="fas fa-exclamation-triangle accent2"></i> 근본적 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>생성이 고정된 좌→우 순서에 묶임</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추론이 본질적으로 순차적 → 효율성 제한</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 토큰 순서에 대한 강한 귀납적 편향</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      고품질 텍스트 생성은 반드시 고정된 좌→우 순서와 결합될 필요가 없다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 정의</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">기존 대안들의 공동 한계</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>접근법</th>
+          <th>생성 효율성</th>
+          <th>표현 학습 확장성</th>
+          <th>글로벌 의미 모델링</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="accent">자기회귀 (AR)</span></td>
+          <td class="muted">순차 추론 비용</td>
+          <td>토큰 수준 명시적 확률</td>
+          <td class="muted">고정 순서 편향</td>
+        </tr>
+        <tr>
+          <td><span class="accent2">이산 확산 (LLaDA 등)</span></td>
+          <td class="muted">다단계 샘플링 비용</td>
+          <td class="muted">이산 중간 상태의 한계</td>
+          <td class="muted">관측 복원에 집중</td>
+        </tr>
+        <tr>
+          <td><span class="accent3">연속 확산 (기존)</span></td>
+          <td>연속 표현 공간</td>
+          <td class="muted">토큰 정렬 복원에 집중</td>
+          <td class="muted">잠재 사전 모델링 부재</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin-top:1.5rem;"><i class="fas fa-arrow-right accent"></i> 세 가지 목표를 <span class="accent">동시에</span> 달성하는 통합 프레임워크가 부재</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">제안</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">Cola DLM: 핵심 아이디어</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="quote-block" style="margin-bottom:1.5rem;">
+      확산을 토큰 수준 관측 복원이 아닌 <span class="accent">잠재 사전 전송(Latent Prior Transport)</span>으로 사용한다.
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-bottom:0.75rem;">계층적 정보 분해</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">글로벌 의미 조직</span>: 연속 잠재 공간에서 블록-인과 DiT로 사전 모델링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">로컬 텍스트 실현</span>: 조건부 디코더로 텍스트 생성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-bottom:0.75rem;">설계 이점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고정 토큰 순서 편향 완화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>연속 공간 기하 구조로 의미 압축 지원</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>블록 내 병렬 계산 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다른 연속 모달리티로 자연 확장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">이론</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">확률적 프레임워크</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">계층적 잠재 변수 모델</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">텍스트 x → 잠재 z 로 인코딩 후, z에 대한 사전 p(z)를 확산 과정으로 학습</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">ELBO와 사전 학습</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">외부 ELBO를 통해 VAE의 사후와 DiT 사전을 일치시키며, Flow Matching은 사전 풀이기로 작용</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">확률 추정</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">조건부 및 무조건부 로그-가능도를 CNF 사전 밀도와 디코더를 통해 엄밀하게 추정</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;font-size:clamp(0.85rem,1.6vw,1rem);">
+      Flow Matching은 모델 정의가 아닌 <span class="accent">사전 풀이기(Prior Solver)</span>의 역할을 수행한다는 점이 기존 연속 확산 LM과의 결정적 차이이다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-green">파이프라인</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">Cola DLM 3단계 워크플로우</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Text VAE 사전학습</div>
+        <div class="step-desc">텍스트를 연속 잠재 공간으로 안정적으로 매핑하는 인코더-디코더 학습</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">블록-인과 DiT 사전 학습</div>
+        <div class="step-desc">잠재 공간에서 블록 간 인과성을 유지하며 블록 내 병렬로 사전 분포 모델링</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">조건부 디코딩</div>
+        <div class="step-desc">프리픽스 인코딩 → 블록 단위 잠재 생성 → 조건부 텍스트 디코딩</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:0.5rem;">블록-인과 구조란?</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">텍스트를 블록 단위로 나누어, 블록 간에는 인과적 순서를 유지하되 블록 내부에서는 병렬 처리가 가능한 구조</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:0.5rem;">조건부 디코딩 전략</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">첫 블록은 프리픽스 조건으로 Clean Conditioning, 이후 블록은 이전 블록 잠재로 조건부 생성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-amber">통일적 관점</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">통일된 마르코프 경로 관점</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:1.25rem;">생성 모델을 확률적 경로의 관점에서 통일적으로 비교할 수 있음:</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:0.75rem;">AR과의 차이: 왜 확산인가?</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">AR은 이산 확률 객체를 직접 최적화하지만, 확산은 연속 경로를 통해 더 유연한 사전 학습을 가능하게 함</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:0.75rem;">이산 확산과의 차이: 왜 연속인가?</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">이산 중간 상태는 글로벌 의미 구조 표현에 부적합하며, 연속 공간은 의미 압축과 부드러운 보간을 지원</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:0.75rem;">Plaid와의 차이: 왜 잠재인가?</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">토큰 정렬 표현 복원이 아닌 잠재 사전 전송을 수행하여, 관측 공간과 모델링 공간을 분리</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:0.75rem;">단순 잠재 역확산 LM과의 차이</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">Cola DLM은 CNF 사전 기반의 엄밀한 확률 프레임워크를 제공하며, 단순한 인코더-디코더 확산과는 구조적으로 상이</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-green">실험</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">실험 설정</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">연구 질문 (4개 RQ)</h3>
+        <div class="flow-item"><div class="flow-icon">1</div><div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">잠재 공간에 글로벌 의미 구조가 존재하는가?</div></div>
+        <div class="flow-item"><div class="flow-icon">2</div><div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">어떤 잠재 공간 설계가 최적인가?</div></div>
+        <div class="flow-item"><div class="flow-icon">3</div><div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">확산 과정의 최적 구성은 무엇인가?</div></div>
+        <div class="flow-item"><div class="flow-icon">4</div><div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">스케일링 성능은 어떠한가?</div></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">벤치마크 & 베이스라인</h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1rem);margin-bottom:0.5rem;"><span class="accent">8개 벤치마크:</span> MMLU, RACE, HellaSwag, LAMBADA, SQuAD, SIQA, Story Cloze, OBQA</p>
+        <p style="font-size:clamp(0.85rem,1.6vw,1rem);margin-bottom:0.5rem;"><span class="accent2">엄밀 매칭 베이스라인:</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>AR: ~2B 파라미터 자기회귀 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLaDA: ~2B 파라미터 이산 확산 모델</li>
+        </ul>
+        <p style="font-size:clamp(0.85rem,1.6vw,1rem);margin-top:0.5rem;"><span class="accent3">스케일링:</span> 약 2,000 EFLOPs까지 스케일링 곡선 확인</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-amber">RQ1</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">잠재 공간의 글로벌 의미 구조 증거</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">Shift Scaling Law 발견</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">VAE 사후의 logSNR이 모델 스케일에 따라 체계적으로 이동하는 현상을 관측. 이는 잠재 공간 내에 학습 가능한 <span class="accent">공유 의미 인자(Shared Semantic Factor)</span>가 존재함을 정보이론적 관점에서 시사</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">의미 구조의 함의</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>잠재 공간이 단순한 재구성 기반이 아닌 의미적 구조를 포착</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이 구조를 사전 모델이 학습함으로써 효과적인 생성 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cola DLM의 설계 철학(의미-텍스트 분리)을 실증적 지지</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-green">RQ2–RQ3</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">잠재 공간 설계와 확산 과정 분석</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">RQ2: 잠재 공간 분석</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">고정 vs 진화 잠재 공간:</span> 진화 공간이 일관적으로 우수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">차원성:</span> 적절한 차원 선택이 성능에 결정적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">의미 중요도 & 부드러움:</span> 의미적으로 중요한 차원이 부드러운 변화를 보임</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">RQ3: 확산 과정 소거</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">DiT 블록 크기:</span> 블록 크기 조정이 성능-효율 트레이드오프에 핵심적 역할</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">노이즈 스케줄:</span> 최적 스케줄은 유효 의미 정보 체제의 보정으로 해석 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">추론 단계 & CFG:</span> 적절한 스케일에서 안정적 성능 달성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.25rem;font-size:clamp(0.82rem,1.5vw,0.95rem);">
+      노이즈 스케줄과 logSNR는 동등한 파라미터화이며, 최적 스케줄은 <span class="accent3">유효 의미 정보 체제(Effective Semantic Information Regime)</span>의 보정으로 이해할 수 있다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-red">RQ4</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">스케일링 성능 비교</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">스케일링 곡선 결과</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>약 2,000 EFLOPs까지 강한 스케일링 거동 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트 생성 품질에서 AR 및 LLaDA 베이스라인과 경쟁력 있는 성능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cola DLM의 효과적인 전체 구성(Effective Configuration) 식별 완료</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;">가능도 vs 생성 품질</h3>
+        <div class="quote-block" style="font-size:clamp(0.8rem,1.5vw,0.92rem);">
+          Cola DLM에서는 <span class="accent">생성 품질과 스케일링이 가능도보다 모델 능력을 더 잘 반영</span>할 수 있다.
+        </div>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.92rem);margin-top:0.75rem;" class="muted">Flow Matching이 벡터장 회귀를 최적화하므로, 사전 평균이 참값에서 멀어도 생성 품질은 유지되지만 조건부 PPL은 저하되는 구조적 격차 존재</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-amber">핵심 통찰</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">세 가지 지배 곡선과 적용 경계</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-chart-line accent"></i></div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">Rate-Distortion 곡선</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.9rem);" class="muted">잠재 병목의 압축률과 정보 손실 간 트레이드오프</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-project-diagram accent2"></i></div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">구조적 생성 체제</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.9rem);" class="muted">Cola DLM이 참 생성 메커니즘에 더 잘 부합하는 영역</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-border-none accent3"></i></div>
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin:0.5rem 0;">적용 가능성 경계</h3>
+        <p style="font-size:clamp(0.78rem,1.4vw,0.9rem);" class="muted">잠재 병목이 효과적인 작업 유형의 한계 규명</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:0.5rem;">멀티모달 통합 방향</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.92rem);" class="muted">Text→Text, Text→Image, Image×Text→Text 실험을 통해 이산 텍스트와 연속 모달리티 간 통합 모델링의 구체적 경로 제시</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:0.5rem;">첫 생성 블록의 조건부 전략</h3>
+        <p style="font-size:clamp(0.8rem,1.5vw,0.92rem);" class="muted">Clean Conditioning > Left Padding > Partial Repaint 순으로 성능 우수하며, 이는 Flow Matching 관점에서 수학적으로 설명 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-red">한계 & 전망</span>
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);margin-top:1rem;">제한점과 향후 방향</h2>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;"><i class="fas fa-exclamation-circle accent"></i> 현재 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>가능도(PPL)와 생성 품질 간 구조적 격차 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>VAE 재구성의 견고성 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>잠재 공간 압축 한계에 따른 적용 경계</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>첫 블록 조건부 전략의 민감도</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:0.75rem;"><i class="fas fa-rocket accent3"></i> 향후 연구 방향</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이산 텍스트와 연속 모달리티의 통일 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>평가 지표의 전환: 가능도 중심 → 생성 품질 중심</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델-환경 상호작용 관점에서의 통일 이해</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상태 공간에서 계층적 텍스트 생성으로의 패러다임 전환</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;font-size:clamp(0.82rem,1.5vw,0.95rem);">
+      Cola DLM은 계층적 연속 잠재 사전 모델링이 엄격한 토큰 수준 언어 모델링에 대한 <span class="accent">원칙적 대안(Principled Alternative)</span>임을 확립한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:65vh;gap:1.5rem;">
+      <span class="tag tag-amber">논문 정보</span>
+      <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);text-align:center;line-height:1.3;">Continuous Latent Diffusion Language Model</h2>
+      <div class="hr" style="width:60px;"></div>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.1rem);text-align:center;" class="muted">Hongcan Guo, Qinyu Zhao, Yian Zhao, Shen Nie, Rui Zhu,<br>Qiushan Guo, Feng Wang, Tao Yang, Hengshuang Zhao, Guoqiang Wei, Yan Zeng</p>
+      <div class="hr" style="width:40px;"></div>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.1rem);text-align:center;">
+        <i class="fas fa-file-alt accent"></i> arXiv: <a href="http://arxiv.org/abs/2605.06548v1" style="text-decoration:underline;">2605.06548v1</a>
+      </p>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.1rem);text-align:center;">
+        <i class="fas fa-globe accent2"></i> Project: <a href="https://hongcanguo.github.io/Cola-DLM/" style="text-decoration:underline;">hongcanguo.github.io/Cola-DLM/</a>
+      </p>
+      <p style="font-size:clamp(0.75rem,1.5vw,0.9rem);text-align:center;margin-top:1rem;" class="muted">ByteDance Seed · HKU · ANU · PKU · RUC · CC BY 4.0</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
