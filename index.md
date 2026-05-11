@@ -308,3 +308,16 @@
 - [[sources/2026-05-09-why-global-llm-leaderboards-are-misleading-small-p.md]] - Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heterogeneous Supervised ML
 - [[sources/2026-05-09-continuous-latent-diffusion-language-model.md]] - Continuous Latent Diffusion Language Model
 - [[sources/2026-05-09-crafting-reversible-sft-behaviors-in-large-languag.md]] - Crafting Reversible SFT Behaviors in Large Language Models
+- [[sources/2026-05-11-why-global-llm-leaderboards-are-misleading-small-p.md]] - Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heterogeneous Supervised ML
+- [[sources/2026-05-11-optimizer-model-consistency-full-finetuning-with-t.md]] - Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less
+- [[sources/2026-05-11-when-no-benchmark-exists-validating-comparative-ll.md]] - When No Benchmark Exists: Validating Comparative LLM Safety Scoring Without Ground-Truth Labels
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-11-strata-incentivizing-agentic-reinforcement-learnin.md]] - StraTA: Incentivizing Agentic Reinforcement Learning with Strategic Trajectory Abstraction
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-11-recursive-agent-optimization.md]] - Recursive Agent Optimization
+- [[sources/2026-05-11-emo-pretraining-mixture-of-experts-for-emergent-mo.md]] - EMO: Pretraining Mixture of Experts for Emergent Modularity
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-11-maspo-joint-prompt-optimization-for-llm-based-mult.md]] - MASPO: Joint Prompt Optimization for LLM-based Multi-Agent Systems
+- [[sources/2026-05-11-skillos-learning-skill-curation-for-self-evolving-.md]] - SkillOS: Learning Skill Curation for Self-Evolving Agents
+- [[sources/2026-05-11-continuous-latent-diffusion-language-model.md]] - Continuous Latent Diffusion Language Model
+- [[sources/2026-05-11-crafting-reversible-sft-behaviors-in-large-languag.md]] - Crafting Reversible SFT Behaviors in Large Language Models

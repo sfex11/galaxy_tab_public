@@ -193,3 +193,7 @@ _자동 생성됨_
 - [[sources/2026-05-09-recursive-agent-optimization.md]]
 
 - [[sources/2026-05-09-can-rl-teach-long-horizon-reasoning-to-llms-expres.md]]
+
+- [[sources/2026-05-11-strata-incentivizing-agentic-reinforcement-learnin.md]]
+
+- [[sources/2026-05-11-recursive-agent-optimization.md]]

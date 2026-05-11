@@ -727,3 +727,32 @@
 ## [2026-05-10 18:26] lint | Wiki 건전성 체크
 - Issues: 1142개
 - Orphans: 136, Missing: 1006, Contradictions: 0
+
+## [2026-05-11 02:12] llm-ingest | 7편 분석, 엔티티 301개, 개념 849개
+- 2026-05-11-bami-training-free-bias-mitigation-in-gui-groundin.md
+- 2026-05-11-verifier-backed-hard-problem-generation-for-mathem.md
+- 2026-05-11-ai-co-mathematician-accelerating-mathematicians-wi.md
+- 2026-05-11-superintelligent-retrieval-agent-the-next-frontier.md
+- 2026-05-11-cited-but-not-verified-parsing-and-evaluating-sour.md
+- 2026-05-11-beyond-negative-rollouts-positive-only-policy-opti.md
+- 2026-05-11-can-rl-teach-long-horizon-reasoning-to-llms-expres.md
+
+## [2026-05-11 08:38] ingest | Why Global LLM Leaderboards Are Misleading: Small Portfolios for Heterogeneous Supervised ML
+
+## [2026-05-11 08:38] ingest | Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less
+
+## [2026-05-11 08:38] ingest | When No Benchmark Exists: Validating Comparative LLM Safety Scoring Without Ground-Truth Labels
+
+## [2026-05-11 08:38] ingest | StraTA: Incentivizing Agentic Reinforcement Learning with Strategic Trajectory Abstraction
+
+## [2026-05-11 08:38] ingest | Recursive Agent Optimization
+
+## [2026-05-11 08:38] ingest | EMO: Pretraining Mixture of Experts for Emergent Modularity
+
+## [2026-05-11 08:38] ingest | MASPO: Joint Prompt Optimization for LLM-based Multi-Agent Systems
+
+## [2026-05-11 08:38] ingest | SkillOS: Learning Skill Curation for Self-Evolving Agents
+
+## [2026-05-11 08:38] ingest | Continuous Latent Diffusion Language Model
+
+## [2026-05-11 08:38] ingest | Crafting Reversible SFT Behaviors in Large Language Models
