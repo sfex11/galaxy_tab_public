@@ -756,3 +756,17 @@
 ## [2026-05-11 08:38] ingest | Continuous Latent Diffusion Language Model
 
 ## [2026-05-11 08:38] ingest | Crafting Reversible SFT Behaviors in Large Language Models
+
+## [2026-05-12 02:17] llm-ingest | 12편 분석, 엔티티 303개, 개념 859개
+- 2026-05-12-llms-improving-llms-agentic-discovery-for-test-tim.md
+- 2026-05-12-veccisc-improving-confidence-informed-self-consist.md
+- 2026-05-12-rubric-grounded-rl-structured-judge-rewards-for-ge.md
+- 2026-05-12-the-memory-curse-how-expanded-recall-erodes-cooper.md
+- 2026-05-12-ca-sql-complexity-aware-inference-time-reasoning-f.md
+- 2026-05-12-uncertainty-aware-structured-data-extraction-from-.md
+- 2026-05-12-123d-unifying-multi-modal-autonomous-driving-data-.md
+- 2026-05-12-learning-cli-agents-with-structured-action-credit-.md
+- 2026-05-12-interpreting-reinforcement-learning-agents-with-su.md
+- 2026-05-12-tool-calling-is-linearly-readable-and-steerable-in.md
+- 2026-05-12-flow-opd-on-policy-distillation-for-flow-matching-.md
+- 2026-05-12-gliguard-schema-conditioned-classification-for-llm.md
