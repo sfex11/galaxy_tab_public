@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluating the False Trust engendered by LLM Explanations — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,40px)">
+      <span class="tag tag-red">arXiv 2605.10930v1</span>
+    </div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);line-height:1.25;margin-bottom:clamp(12px,2vw,24px)">
+      LLM 설명이 유발하는<br><span class="accent">허위 신뢰</span> 평가
+    </h1>
+    <p style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:clamp(20px,3vw,40px)" class="muted">
+      Evaluating the False Trust Engendered by LLM Explanations
+    </p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.1rem)" class="muted">
+      Large Language Models · Large Reasoning Models · 신뢰 보정 · 설명 가능성
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      배경: LLM은 더 이상 <span class="accent">보조 도구</span>가 아니다
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-hospital" style="margin-right:8px"></i>의료 진단
+        </h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">환자 데이터를 분석하여 진단 제안, 의사의 판단에 직접적 영향</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-gavel" style="margin-right:8px"></i>법률 자문
+        </h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">판례 검색과 법리 해석, 변호사 없이도 법적 조언을 제공받는 상황</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-flask" style="margin-right:8px"></i>과학 연구
+        </h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">가설 설정과 실험 설계 보조, 연구자의 인지적 의존 증가</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-shield-halved" style="margin-right:8px"></i>보안 분석
+        </h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">취약점 탐지와 위협 분석, 잘못된 판단이 치명적인 결과로 이어짐</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.1rem)">
+        LLM과 LRM은 중요한 임무에 점점 더 많이 사용되지만, <span class="accent">해답의 정확성에 대한 어떠한 보장도 제공하지 않는다.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      핵심 문제: <span class="accent">허위 신뢰(False Trust)</span>
+    </h2>
+    <div style="margin-bottom:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7">
+        사용자는 모델의 답변을 신뢰할지 결정해야 하며, 이때 <span class="accent2">추론 과정(trace)</span>, <span class="accent2">요약</span>, 또는 <span class="accent2">사후 생성 설명(post-hoc explanation)</span>에 의존한다.
+      </p>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.5rem);margin-bottom:clamp(12px,2vw,20px)">
+      <i class="fas fa-triangle-exclamation" style="margin-right:8px" class="accent"></i>허위 신뢰가 발생하는 메커니즘
+    </h3>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">LLM 답변 생성</div>
+        <div class="step-desc">정답 또는 오답 출력</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">설명 첨부</div>
+        <div class="step-desc">추론 trace / 요약 / post-hoc</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">사용자 판단</div>
+        <div class="step-desc">설명의 "그럴듯함"에 현혹</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">허위 신뢰 형성</div>
+        <div class="step-desc">오답인데도 신뢰하게 됨</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      LLM 설명의 세 가지 유형
+    </h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num">01</div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);margin-bottom:clamp(8px,1.5vw,12px)">추론 과정 (Reasoning Traces)</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">Chain-of-Thought 등 모델이 답에 도달하는 과정을 단계별로 기록한 출력</p>
+        <div style="margin-top:clamp(8px,1.5vw,12px)">
+          <span class="tag tag-amber">CoT</span>
+          <span class="tag tag-amber">단계별 추론</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="big-num">02</div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);margin-bottom:clamp(8px,1.5vw,12px)">요약 (Summaries)</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">긴 추론 과정을 압축하여 핵심 근거만 제시하는 형태의 설명</p>
+        <div style="margin-top:clamp(8px,1.5vw,12px)">
+          <span class="tag tag-green">압축</span>
+          <span class="tag tag-green">핵심 근거</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="big-num">03</div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);margin-bottom:clamp(8px,1.5vw,12px)">사후 설명 (Post-hoc)</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">답변 생성 후 별도로 근거를 구성하는 설명으로, 실제 추론과 무관할 수 있음</p>
+        <div style="margin-top:clamp(8px,1.5vw,12px)">
+          <span class="tag tag-red">위험</span>
+          <span class="tag tag-red">허구 근거</span>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem)">
+        <span class="accent">사후 생성 설명은 모델의 실제 추론 과정을 반영하지 않을 가능성이 높으며, 그럴듯하게 들리지만 근거 없는 논리를 구성할 수 있다.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      연구 질문
+    </h2>
+    <div class="flow-item">
+      <div class="flow-icon">RQ1</div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">LLM 설명이 사용자의 신뢰 보정(trust calibration)에 미치는 영향은 무엇인가?</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">사용자가 올바른 답변과 잘못된 답변을 얼마나 구별하는지 측정</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">RQ2</div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">설명 유형(trace, 요약, post-hoc)별로 허위 신뢰의 정도가 다른가?</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">각 설명 형태가 신뢰에 미치는 차별적 효과 분석</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">RQ3</div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">LLM과 LRM(추론 모델) 간에 허위 신뢰 패턴이 어떻게 다른가?</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">o1, o3 등 추론 특화 모델에서의 신뢰 보정 효과 비교</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">RQ4</div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">설명의 품질 지표가 실제 신뢰 보정과 얼마나 상관하는가?</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">설명의 "그럴듯함(plausibility)"이 신뢰의 대리 지표로 유효한지 검증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      연구 방법론 개요
+    </h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-microscope" style="margin-right:8px" class="accent2"></i>실험 설계
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 도메인의 문제 집합 구성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정답/오답 쌍을 포함한 실험 자료 준비</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>설명 유형별 조건 통제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 신뢰도 측정 프로토콜 설계</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-chart-bar" style="margin-right:8px" class="accent2"></i>평가 지표
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>신뢰 보정 점수 (Trust Calibration Score)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오답 수용률 (False Acceptance Rate)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정답 거부률 (False Rejection Rate)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>설명 품질-신뢰 상관계수</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,3vw,28px) 0"></div>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+      <i class="fas fa-robot" style="margin-right:8px" class="accent3"></i>대상 모델
+    </h3>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)" class="accent">LLM</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">GPT-4, Claude 등<br>일반 대규모 언어 모델</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)" class="accent2">LRM</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">o1, o3 등<br>추론 특화 모델</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)" class="accent3">Baseline</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem)" class="muted">설명 없는 답변만<br>제공하는 조건</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      신뢰 보정의 핵심 개념
+    </h2>
+    <div style="margin-bottom:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7">
+        신뢰 보정이란 사용자의 <span class="accent">주관적 신뢰도</span>가 모델 답변의 <span class="accent">객관적 정확도</span>와 얼마나 일치하는지를 의미한다.
+      </p>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>상황</th>
+          <th>모델 답변</th>
+          <th>사용자 반응</th>
+          <th>보정 상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>올바른 보정</td>
+          <td><span class="tag tag-green">정답</span></td>
+          <td>신뢰</td>
+          <td><span class="accent3">적절</span></td>
+        </tr>
+        <tr>
+          <td>올바른 보정</td>
+          <td><span class="tag tag-red">오답</span></td>
+          <td>불신</td>
+          <td><span class="accent3">적절</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">허위 신뢰</span></td>
+          <td><span class="tag tag-red">오답</span></td>
+          <td>신뢰</td>
+          <td><span class="accent">과신뢰</span></td>
+        </tr>
+        <tr>
+          <td>과소 신뢰</td>
+          <td><span class="tag tag-green">정답</span></td>
+          <td>불신</td>
+          <td class="muted">과소신뢰</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem)">
+        <span class="accent">허위 신뢰가 가장 위험한 이유: 사용자가 오답을 정답으로 받아들이고, 이를 바탕으로 실제 의사결정을 수행한다.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      주요 발견 ① 설명이 <span class="accent">신뢰 보정을 저해</span>한다
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,3vw,28px)">
+      <div class="card">
+        <div class="big-num"><i class="fas fa-arrow-up"></i></div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(8px,1.5vw,12px)">오답 수용률 증가</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">설명이 제공된 오답을 사용자가 설명 없는 오답보다 훨씬 더 높은 비율로 수용</p>
+      </div>
+      <div class="card">
+        <div class="big-num"><i class="fas fa-arrow-down"></i></div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(8px,1.5vw,12px)">신뢰 보정 점수 하락</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted">설명 제공 조건에서 전반적인 신뢰 보정 점수가 베이스라인 대비 유의미하게 감소</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+      핵심 인사이트
+    </h3>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem)">
+        설명이 "투명성"을 높인다고 믿었지만, 실제로는 <span class="accent">설명의 그럴듯함(plausibility)이 정확도와 무관하게 작동</span>하여 신뢰 보정을 오히려 악화시킨다. 이는 설명 가능성(XAI)의 근본적 역설을 보여준다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      주요 발견 ② 설명 유형별 <span class="accent2">허위 신뢰 차이</span>
+    </h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>설명 유형</th>
+          <th>오답 수용률</th>
+          <th>신뢰 보정</th>
+          <th>허위 신뢰 위험</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>설명 없음 (Baseline)</td>
+          <td>기준치</td>
+          <td><span class="accent3">가장 높음</span></td>
+          <td class="muted">낮음</td>
+        </tr>
+        <tr>
+          <td>추론 과정 (Traces)</td>
+          <td>증가</td>
+          <td>감소</td>
+          <td><span class="accent">중간</span></td>
+        </tr>
+        <tr>
+          <td>요약 (Summaries)</td>
+          <td>더 증가</td>
+          <td>더 감소</td>
+          <td><span class="accent">높음</span></td>
+        </tr>
+        <tr>
+          <td>사후 설명 (Post-hoc)</td>
+          <td>최대 증가</td>
+          <td><span class="accent">최대 감소</span></td>
+          <td><span class="accent">최고 위험</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:clamp(16px,3vw,28px)">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(8px,1.5vw,12px)">왜 사후 설명이 가장 위험한가?</h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>답변에 맞춰 논리를 역구성하므로 "가장 그럴듯하게" 들림</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 추론 과정과의 단절이 사용자에게 감지되지 않음</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>정답·오답 여부와 무관하게 일관된 설명 품질을 보여줌</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      주요 발견 ③ LLM vs LRM <span class="accent3">비교</span>
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <span class="accent">LLM (GPT-4, Claude)</span>
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오답 시 설명의 논리적 결함이 상대적으로 더 드러남</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추론 과정이 단순하여 사용자가 오류를 감지할 확률이 더 높음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그럼에도 설명 유무에 따른 허위 신뢰 증가는 확실히 관측됨</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <span class="accent2">LRM (o1, o3)</span>
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>길고 정교한 추론 과정이 <span class="accent">사용자에게 "전문성"의 인상</span>을 줌</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오답이라도 추론의 복잡성 덕분에 더 높은 신뢰를 획득</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">LRM의 설명이 허위 신뢰를 더 강하게 유발</span>하는 역설적 결과</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem)">
+        모델의 추론 능력이 향상될수록 설명의 <span class="accent2">그럴듯함도 함께 증가</span>하여, 오답 상황에서의 허위 신뢰가 오히려 심화되는 <span class="accent">안전성 역설(safety paradox)</span>이 존재한다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      주요 발견 ④ 설명 품질 지표의 <span class="accent">한계</span>
+    </h2>
+    <div style="margin-bottom:clamp(16px,3vw,28px)">
+      <p style="font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7">
+        기존 설명 품질 평가 지표(완결성, 일관성, 간결성 등)가 <span class="accent">실제 신뢰 보정과 낮은 상관관계</span>를 보인다.
+      </p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-xmark" style="margin-right:8px" class="accent"></i>기존 지표가 포착 못하는 것
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>설명이 "틀린 답을 옹호"하는 방식의 미묘한 차이</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>논리적 오류가 존재하지만 그럴듯하게 포장된 구조</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자의 인지 편향을 자극하는 수사적 기법</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-lightbulb" style="margin-right:8px" class="accent3"></i>필요한 새로운 평가 방향
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정답·오답 구별 능력 기반의 보정 지표</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 수준에서의 실증적 검증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>설명의 "신뢰 유발 효과"를 직접 측정하는 메트릭</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,3vw,28px) 0"></div>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem)" class="muted">
+      <i class="fas fa-info-circle" style="margin-right:6px"></i>즉, "좋은 설명"을 평가하는 기존 기준이 "신뢰 보전에 도움이 되는 설명"을 평가하는 기준과 다르다.
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      시사점 및 논의
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-user-shield" style="margin-right:8px" class="accent"></i>사용자 측면
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>설명의 "그럴듯함"을 신뢰의 근거로 삼지 않도록 교육 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>길고 복잡한 추론일수록 더 비판적으로 검토해야 한다는 인식 부여</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 출처 교차 검증 습관 형성의 중요성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-gears" style="margin-right:8px" class="accent2"></i>시스템 설계 측면
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불확실성을 명시적으로 표시하는 인터페이스 설계</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오답 가능성이 높은 영역에서 설명 제공 방식 재설계</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사후 설명보다 실시간 추론 노출을 우선하는 아키텍처</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,3vw,28px) 0"></div>
+    <div class="card">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+        <i class="fas fa-scale-balanced" style="margin-right:8px" class="accent3"></i>정책 및 규제 측면
+      </h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM 설명에 대한 "신뢰 보정 테스트"를 안전성 평가의 필수 항목으로 채택</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>EU AI Act 등 기존 규제 프레임워크에 설명 유해성 지표 반영 필요</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>설명 제공이 의무화되는 상황에서의 역효과에 대한 정책적 고려</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      한계점 및 향후 연구
+    </h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-circle-exclamation" style="margin-right:8px" class="muted"></i>연구 한계
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특정 도메인과 문제 유형에 집중된 실험 환경</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>참여자 풀의 다양성 제한 (주로 영미권 기술 중심)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 임상/법률 환경이 아닌 실험실 설정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>장기적 노출 효과(Long-term exposure) 미측정</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:clamp(12px,2vw,20px)">
+          <i class="fas fa-rocket" style="margin-right:8px" class="accent3"></i>향후 연구 방향
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>도메인 특화 허위 신뢰 측정 벤치마크 구축</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 vs 비전문가 간 신뢰 보정 차이 연구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>허위 신뢰를 완화하는 설명 프레이밍 기법 개발</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티모달 환경(이미지, 코드 등)으로의 확장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:clamp(16px,3vw,32px)">
+      결론
+    </h2>
+    <div class="quote-block" style="margin-bottom:clamp(20px,3vw,36px)">
+      <p style="font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.8">
+        LLM의 설명은 투명성을 제공한다는 기대와 달리, <span class="accent">사용자의 신뢰 보정을 체계적으로 저해</span>한다. 특히 사후 생성 설명과 LRM의 복잡한 추론 과정은 오답 상황에서 더 강력한 허위 신뢰를 유발한다.
+      </p>
+    </div>
+    <div class="hr" style="margin-bottom:clamp(16px,3vw,28px)"></div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-1"></i></div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">설명 유무가 신뢰 보정에 미치는 영향을 <span class="accent">최초로 체계적으로 정량화</span></p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-2"></i></div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">설명 유형별 위험도 순서를 <span class="accent2">명확히 규명</span> (Post-hoc > 요약 > Trace)</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-3"></i></div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">LRM의 <span class="accent3">안전성 역설</span>을 식별: 더 나은 모델이 더 큰 허위 신뢰를 유발</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-4"></i></div>
+      <div>
+        <p style="font-size:clamp(1rem,1.6vw,1.2rem)">기존 설명 품질 지표의 <span class="muted">신뢰 보정 예측 한계</span>를 실증적으로 입증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(20px,4vw,48px)">
+      <h2 style="font-size:clamp(1.6rem,3.5vw,2.6rem);margin-bottom:clamp(12px,2vw,24px)">
+        Evaluating the False Trust<br>Engendered by LLM Explanations
+      </h2>
+      <p style="font-size:clamp(0.95rem,1.5vw,1.15rem)" class="muted">
+        LLM 설명이 유발하는 허위 신뢰 평가
+      </p>
+    </div>
+    <div class="hr" style="margin-bottom:clamp(16px,3vw,32px)"></div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-file-lines" style="margin-right:8px" class="accent2"></i><strong>논문 링크</strong>
+        </p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem)">
+          <a href="http://arxiv.org/abs/2605.10930v1" style="color:inherit;text-decoration:underline;text-underline-offset:3px">arxiv.org/abs/2605.10930v1</a>
+        </p>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-tags" style="margin-right:8px" class="accent3"></i><strong>핵심 키워드</strong>
+        </p>
+        <div>
+          <span class="tag tag-amber">False Trust</span>
+          <span class="tag tag-amber">Trust Calibration</span>
+          <span class="tag tag-green">LLM Explanation</span>
+          <span class="tag tag-red">AI Safety</span>
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,3vw,32px) 0"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem)" class="muted" style="text-align:center">
+      <i class="fas fa-quote-left" style="margin-right:6px"></i>
+      설명의 존재가 곧 설명의 가치가 아니다. 허위 신뢰를 인식하는 것이 진정한 AI 리터러시의 시작이다.
+      <i class="fas fa-quote-right" style="margin-left:6px"></i>
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
