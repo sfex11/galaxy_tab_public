@@ -71,3 +71,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-04-29-long-context-aware-upcycling-a-new-frontier-for-hy.md]]
 
 - [[sources/2026-04-29-beyond-the-attention-stability-boundary-agentic-se.md]]
+
+- [[sources/2026-05-13-compute-where-it-counts-self-optimizing-language-m.md]]

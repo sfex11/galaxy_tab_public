@@ -145,3 +145,5 @@ _자동 생성됨_
 - [[sources/2026-05-09-maspo-joint-prompt-optimization-for-llm-based-mult.md]]
 
 - [[sources/2026-05-11-maspo-joint-prompt-optimization-for-llm-based-mult.md]]
+
+- [[sources/2026-05-13-optimal-and-scalable-mapf-via-multi-marginal-optim.md]]

@@ -321,3 +321,23 @@
 - [[sources/2026-05-11-skillos-learning-skill-curation-for-self-evolving-.md]] - SkillOS: Learning Skill Curation for Self-Evolving Agents
 - [[sources/2026-05-11-continuous-latent-diffusion-language-model.md]] - Continuous Latent Diffusion Language Model
 - [[sources/2026-05-11-crafting-reversible-sft-behaviors-in-large-languag.md]] - Crafting Reversible SFT Behaviors in Large Language Models
+- [[sources/2026-05-13-evaluating-the-false-trust-engendered-by-llm-expla.md]] - Evaluating the False Trust engendered by LLM Explanations
+- [[sources/2026-05-13-dynamic-skill-lifecycle-management-for-agentic-rei.md]] - Dynamic Skill Lifecycle Management for Agentic Reinforcement Learning
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-13-optimal-and-scalable-mapf-via-multi-marginal-optim.md]] - Optimal and Scalable MAPF via Multi-Marginal Optimal Transport and Schrödinger Bridges
+- [[sources/2026-05-13-shepherd-a-runtime-substrate-empowering-meta-agent.md]] - Shepherd: A Runtime Substrate Empowering Meta-Agents with a Formalized Execution Trace
+- [[sources/2026-05-13-wildclawbench-a-benchmark-for-real-world-long-hori.md]] - WildClawBench: A Benchmark for Real-World, Long-Horizon Agent Evaluation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-13-equivariant-reinforcement-learning-for-clifford-qu.md]] - Equivariant Reinforcement Learning for Clifford Quantum Circuit Synthesis
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-13-engineering-robustness-into-personal-agents-with-t.md]] - Engineering Robustness into Personal Agents with the AI Workflow Store
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-13-datamaster-towards-autonomous-data-engineering-for.md]] - DataMaster: Towards Autonomous Data Engineering for Machine Learning
+- [[sources/2026-05-13-mdrive-benchmarking-closed-loop-cooperative-drivin.md]] - MDrive: Benchmarking Closed-Loop Cooperative Driving for End-to-End Multi-agent Systems
+- [[sources/2026-05-13-beyond-red-teaming-formal-guarantees-of-llm-guardr.md]] - Beyond Red-Teaming: Formal Guarantees of LLM Guardrail Classifiers
+- [[sources/2026-05-13-v4finbench-benchmarking-tabular-foundation-models-.md]] - V4FinBench: Benchmarking Tabular Foundation Models, LLMs, and Standard Methods on Corporate Bankruptcy Prediction
+- [[sources/2026-05-13-loka-low-precision-kernel-applications-for-recomme.md]] - LoKA: Low-precision Kernel Applications for Recommendation Models At Scale
+- [[entities/transformer]] - Transformer
+- [[sources/2026-05-13-compute-where-it-counts-self-optimizing-language-m.md]] - Compute Where it Counts: Self Optimizing Language Models
+- [[sources/2026-05-13-threat-modelling-using-domain-adapted-language-mod.md]] - Threat Modelling using Domain-Adapted Language Models: Empirical Evaluation and Insights
+- [[sources/2026-05-13-remember-the-decision-not-the-description-a-rate-d.md]] - Remember the Decision, Not the Description: A Rate-Distortion Framework for Agent Memory

@@ -197,3 +197,5 @@ _자동 생성됨_
 - [[sources/2026-05-11-strata-incentivizing-agentic-reinforcement-learnin.md]]
 
 - [[sources/2026-05-11-recursive-agent-optimization.md]]
+
+- [[sources/2026-05-13-equivariant-reinforcement-learning-for-clifford-qu.md]]

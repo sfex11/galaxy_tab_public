@@ -770,3 +770,33 @@
 - 2026-05-12-tool-calling-is-linearly-readable-and-steerable-in.md
 - 2026-05-12-flow-opd-on-policy-distillation-for-flow-matching-.md
 - 2026-05-12-gliguard-schema-conditioned-classification-for-llm.md
+
+## [2026-05-13 08:40] ingest | Evaluating the False Trust engendered by LLM Explanations
+
+## [2026-05-13 08:40] ingest | Dynamic Skill Lifecycle Management for Agentic Reinforcement Learning
+
+## [2026-05-13 08:40] ingest | Optimal and Scalable MAPF via Multi-Marginal Optimal Transport and Schrödinger Bridges
+
+## [2026-05-13 08:40] ingest | Shepherd: A Runtime Substrate Empowering Meta-Agents with a Formalized Execution Trace
+
+## [2026-05-13 08:40] ingest | WildClawBench: A Benchmark for Real-World, Long-Horizon Agent Evaluation
+
+## [2026-05-13 08:40] ingest | Equivariant Reinforcement Learning for Clifford Quantum Circuit Synthesis
+
+## [2026-05-13 08:40] ingest | Engineering Robustness into Personal Agents with the AI Workflow Store
+
+## [2026-05-13 08:40] ingest | DataMaster: Towards Autonomous Data Engineering for Machine Learning
+
+## [2026-05-13 08:40] ingest | MDrive: Benchmarking Closed-Loop Cooperative Driving for End-to-End Multi-agent Systems
+
+## [2026-05-13 08:40] ingest | Beyond Red-Teaming: Formal Guarantees of LLM Guardrail Classifiers
+
+## [2026-05-13 08:40] ingest | V4FinBench: Benchmarking Tabular Foundation Models, LLMs, and Standard Methods on Corporate Bankruptcy Prediction
+
+## [2026-05-13 08:40] ingest | LoKA: Low-precision Kernel Applications for Recommendation Models At Scale
+
+## [2026-05-13 08:40] ingest | Compute Where it Counts: Self Optimizing Language Models
+
+## [2026-05-13 08:40] ingest | Threat Modelling using Domain-Adapted Language Models: Empirical Evaluation and Insights
+
+## [2026-05-13 08:40] ingest | Remember the Decision, Not the Description: A Rate-Distortion Framework for Agent Memory
