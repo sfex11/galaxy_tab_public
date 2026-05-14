@@ -341,3 +341,20 @@
 - [[sources/2026-05-13-compute-where-it-counts-self-optimizing-language-m.md]] - Compute Where it Counts: Self Optimizing Language Models
 - [[sources/2026-05-13-threat-modelling-using-domain-adapted-language-mod.md]] - Threat Modelling using Domain-Adapted Language Models: Empirical Evaluation and Insights
 - [[sources/2026-05-13-remember-the-decision-not-the-description-a-rate-d.md]] - Remember the Decision, Not the Description: A Rate-Distortion Framework for Agent Memory
+- [[sources/2026-05-14-eva-bench-a-new-end-to-end-framework-for-evaluatin.md]] - EVA-Bench: A New End-to-end Framework for Evaluating Voice Agents
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-14-good-agentic-friends-do-not-just-give-verbal-advic.md]] - Good Agentic Friends Do Not Just Give Verbal Advice: They Can Update Your Weights
+- [[sources/2026-05-14-negation-neglect-when-models-fail-to-learn-negatio.md]] - Negation Neglect: When models fail to learn negations in training
+- [[sources/2026-05-14-history-anchors-how-prior-behavior-steers-llm-deci.md]] - History Anchors: How Prior Behavior Steers LLM Decisions Toward Unsafe Actions
+- [[sources/2026-05-14-harnessing-agentic-evolution.md]] - Harnessing Agentic Evolution
+- [[sources/2026-05-14-neurosymbolic-auditing-of-natural-language-softwar.md]] - Neurosymbolic Auditing of Natural-Language Software Requirements
+- [[sources/2026-05-14-improving-reproducibility-in-evaluation-through-mu.md]] - Improving Reproducibility in Evaluation through Multi-Level Annotator Modeling
+- [[sources/2026-05-14-lmpath-language-mediated-priors-and-path-generatio.md]] - LMPath: Language-Mediated Priors and Path Generation for Aerial Exploration
+- [[sources/2026-05-14-roboevolve-co-evolving-planner-simulator-for-robot.md]] - RoboEvolve: Co-Evolving Planner-Simulator for Robotic Manipulation with Limited Data
+- [[sources/2026-05-14-econai-dynamic-persona-evolution-and-memory-aware-.md]] - EconAI: Dynamic Persona Evolution and Memory-Aware Agents in Evolving Economic Environments
+- [[sources/2026-05-14-an-llm-based-system-for-argument-reconstruction.md]] - An LLM-Based System for Argument Reconstruction
+- [[sources/2026-05-14-how-do-large-language-models-understand-high-level.md]] - (How) Do Large Language Models Understand High-Level Message Sequence Charts?
+- [[sources/2026-05-14-where-does-reasoning-break-step-level-hallucinatio.md]] - Where Does Reasoning Break? Step-Level Hallucination Detection via Hidden-State Transport Geometry
+- [[sources/2026-05-14-senses-wide-shut-a-representation-action-gap-in-om.md]] - Senses Wide Shut: A Representation-Action Gap in Omnimodal LLMs
+- [[sources/2026-05-14-edit-level-majority-voting-mitigates-over-correcti.md]] - Edit-level Majority Voting Mitigates Over-Correction in LLM-based Grammatical Error Correction
+- [[sources/2026-05-14-kvserve-service-aware-kv-cache-compression-for-com.md]] - KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving
