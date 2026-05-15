@@ -149,3 +149,5 @@ _자동 생성됨_
 - [[sources/2026-05-13-optimal-and-scalable-mapf-via-multi-marginal-optim.md]]
 
 - [[sources/2026-05-14-good-agentic-friends-do-not-just-give-verbal-advic.md]]
+
+- [[sources/2026-05-15-good-agentic-friends-do-not-just-give-verbal-advic.md]]

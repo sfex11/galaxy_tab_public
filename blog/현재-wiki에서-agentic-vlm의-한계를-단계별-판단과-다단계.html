@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기획의 한계인가, 중재의 한계인가 — agentic-VLM 병목의 진짜 지형</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf9f7;
+  --fg: #2c2825;
+  --accent-warm: #c2703e;
+  --accent-cool: #5b7c99;
+  --accent-green: #6b9e7a;
+  --card-bg: rgba(255,255,255,0.7);
+  --card-border: rgba(194,112,62,0.12);
+  --card-shadow: 0 2px 20px rgba(44,40,37,0.06);
+  --muted: #7a7268;
+  --light-line: rgba(44,40,37,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(15px, 2.2vw, 17px);
+  line-height: 1.85;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ── 네비게이션 ── */
+.nav-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+}
+
+/* ── 헤더 영역 ── */
+.article-header {
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--light-line);
+  margin-bottom: 40px;
+}
+
+.article-tag {
+  display: inline-block;
+  font-size: clamp(11px, 1.5vw, 12px);
+  font-weight: 500;
+  color: var(--accent-warm);
+  background: rgba(194,112,62,0.08);
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--fg);
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
+}
+
+.article-subtitle {
+  font-size: clamp(14px, 2vw, 16px);
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.article-meta {
+  margin-top: 20px;
+  font-size: clamp(12px, 1.6vw, 13px);
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.article-meta span {
+  opacity: 0.8;
+}
+
+/* ── 섹션 제목 ── */
+h2 {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(21px, 3.5vw, 27px);
+  font-weight: 700;
+  color: var(--fg);
+  margin: 56px 0 20px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+h2 .num {
+  color: var(--accent-warm);
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+h3 {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(17px, 2.5vw, 20px);
+  font-weight: 600;
+  color: var(--fg);
+  margin: 36px 0 14px;
+  line-height: 1.45;
+}
+
+/* ── 본문 ── */
+p {
+  margin-bottom: 18px;
+}
+
+strong {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+em {
+  font-style: italic;
+  color: var(--accent-warm);
+  font-weight: 500;
+}
+
+.text-cool { color: var(--accent-cool); font-weight: 500; }
+.text-green { color: var(--accent-green); font-weight: 500; }
+
+/* ── 인용구 ── */
+blockquote {
+  border-left: 3px solid var(--accent-warm);
+  padding: 16px 0 16px 20px;
+  margin: 28px auto;
+  max-width: 800px;
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+blockquote strong {
+  color: var(--fg);
+}
+
+/* ── 카드 ── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 28px 0;
+  box-shadow: var(--card-shadow);
+}
+
+.card-label {
+  font-size: clamp(11px, 1.4vw, 12px);
+  font-weight: 500;
+  color: var(--accent-warm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.card p {
+  margin-bottom: 10px;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── 비유 박스 ── */
+.metaphor-box {
+  background: rgba(91,124,153,0.05);
+  border: 1px solid rgba(91,124,153,0.12);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin: 28px 0;
+}
+
+.metaphor-box .metaphor-label {
+  font-size: clamp(11px, 1.4vw, 12px);
+  font-weight: 500;
+  color: var(--accent-cool);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.metaphor-box p {
+  color: var(--fg);
+  margin-bottom: 8px;
+  line-height: 1.8;
+}
+
+.metaphor-box p:last-child { margin-bottom: 0; }
+
+/* ── 표 ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 28px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(13px, 1.8vw, 14.5px);
+  min-width: 480px;
+}
+
+thead th {
+  background: rgba(194,112,62,0.06);
+  color: var(--fg);
+  font-weight: 600;
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 2px solid rgba(194,112,62,0.15);
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--light-line);
+  vertical-align: top;
+  line-height: 1.65;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(44,40,37,0.015);
+}
+
+/* ── 하이라이트 라인 ── */
+.highlight-line {
+  border-left: 3px solid var(--accent-green);
+  padding: 14px 0 14px 20px;
+  margin: 28px 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.highlight-line p {
+  margin-bottom: 6px;
+}
+
+.highlight-line p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── 구분선 ── */
+.sep {
+  border: none;
+  height: 1px;
+  background: var(--light-line);
+  margin: 48px 0;
+}
+
+/* ── 결론 카드 ── */
+.conclusion-card {
+  background: linear-gradient(135deg, rgba(194,112,62,0.06) 0%, rgba(91,124,153,0.05) 100%);
+  border: 1px solid rgba(194,112,62,0.15);
+  border-radius: 16px;
+  padding: 28px 26px;
+  margin: 36px 0;
+  box-shadow: var(--card-shadow);
+}
+
+.conclusion-card .conclusion-label {
+  font-size: clamp(11px, 1.4vw, 12px);
+  font-weight: 700;
+  color: var(--accent-warm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.conclusion-card p {
+  font-size: clamp(14.5px, 2vw, 16px);
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+
+.conclusion-card p:last-child { margin-bottom: 0; }
+
+/* ── 푸터 ── */
+.article-footer {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--light-line);
+  font-size: clamp(12px, 1.6vw, 13px);
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.article-footer a {
+  color: var(--accent-cool);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(91,124,153,0.25);
+  transition: border-color 0.2s;
+}
+
+.article-footer a:hover {
+  border-bottom-color: var(--accent-cool);
+}
+
+/* ── 애니메이션 ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+</div>
+
+<article>
+
+<header class="article-header fade-in">
+  <span class="article-tag">심층 분석 · agentic-VLM</span>
+  <h1>기획의 한계인가, 중재의 한계인가 — agentic-VLM 병목의 진짜 지형</h1>
+  <p class="article-subtitle">Wiki의 기존 진단과 Senses Wide Shut이 보여주는 증거 사이에 놓인 간극을 파헤치며, 병목을 단일 축에서 이중 축으로 확장해야 하는 이유를 정밀하게 검토한다.</p>
+  <div class="article-meta">
+    <span>대상 논문: Senses Wide Shut (2025)</span>
+    <span>참조: Wiki agentic-vlm 엔티티</span>
+  </div>
+</header>
+
+<!-- ── 섹션 1 ── -->
+<section class="fade-in">
+<h2><span class="num">01</span> GPS는 매 번 맞는데 목적지에 못 간다 — 기획적 간극이란 무엇인가</h2>
+
+<p>Wiki의 <strong>agentic-vlm</strong> 엔티티는 현재 이 분야의 핵심 병목을 <em>"단계별 판단과 다단계 경로 기획 사이의 기획적 간극"</em>으로 진단하고 있습니다. 이 진단의 실증적 근거는 Three-Step Nav 벤치마크에서 나옵니다: 시각-언어 모델 기반 에이전트가 제로샷 VLN(Visual Language Navigation) 환경에서 경로 이탈과 조기 정지라는 구조적 실패를 반복한다는 것입니다.</p>
+
+<div class="metaphor-box">
+  <div class="metaphor-label">비유: 교차로마다 완벽한 내비게이션</div>
+  <p>운전을 하면서 매 교차로에서 "여기서 우회전이 맞아"라고 정확히 판단하는 사람을 상상해 보십시오. 그런데 3번째 교차로에서 갑자기 반대 방향으로 꺾습니다. 각 판단은 옳았지만, 그 판단들을 하나의 <strong>일관된 경로</strong>로 조립하는 능력이 결여된 것입니다. 이것이 기획적 간극의 핵심입니다.</p>
+</div>
+
+<p>이 진단에서 중요한 포착은, 이 간극이 <strong class="text-cool">단일 모달리티 내에서도 발생할 수 있다</strong>는 점입니다. 텍스트 지시와 시각 관찰 사이에 모순이 없는 순수한 시각 공간 기획 문제에서도 경로 이탈이 일어납니다. 시각 정보만으로도 "다음에 어디로 가야 할지"를 단계별로 맞히면서도 전체 경로를 구성하지 못하는 현상 — 이것은 모달리티 간 충돌의 문제가 아니라, <strong>시간적·계층적 구성 능력 자체의 문제</strong>입니다.</p>
+
+<blockquote>
+  제로샷 VLN에서 MLLM 기반 에이전트가 경로 이탈·조기 정지라는 <strong>구조적 실패</strong>를 보인다 — 능력이 '단계별 판단'과 '다단계 경로 기획' 사이 간극에 의해 제한됨
+</blockquote>
+
+<p>따라서 기획적 간극이라는 진단은 독자적인 실패 축을 갖습니다. 이것을 다른 무언가로 "환원"하려는 시도는 이 축이 포착하는 현실을 놓치게 만듭니다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ── 섹션 2 ── -->
+<section class="fade-in">
+<h2><span class="num">02</span> 눈과 귀는 맞는데 발이 안 따라간다 — 표현-행동 간극의 출현</h2>
+
+<p>여기서 <em>Senses Wide Shut</em> 논문이 제시하는 증거가 새로운 병목의 윤곽을 드러냅니다. 이 논문이 보여주는 실패 모드는 기획적 간극과 구조적으로 다릅니다.</p>
+
+<p>실험 상황은 이렇습니다: 텍스트 전제가 시각·청각 지각과 <strong>모순되는</strong> 조건에서 모델의 행동을 관찰합니다. 예컨대, 텍스트로는 "조용한 방이다"라고 주어지지만, 오디오로는 명백한 소음이 들리는 상황입니다.</p>
+
+<div class="metaphor-box">
+  <div class="metaphor-label">비유: 레시피와 불판 사이의 단절</div>
+  <p>"이 음식은 차갑게 서빙해야 해"라고 적힌 레시피를 읽고 있는데, 정작 손에 들린 불판에서는 김이 모락모락 피어오르고 있습니다. 눈으로는 '뜨겁다'는 것을 정확히 지각하지만, 행동에서는 레시피의 텍스트指令에 따라 "차갑게 서빙"하려 듭니다. <strong>지각은 정확한데 행동이 틀리는</strong> 현상 — 이것이 Senses Wide Shut이 포착한 representation-action gap입니다.</p>
+</div>
+
+<p>이 실패에서 핵심은 <strong>실패 지점의 위치</strong>입니다. 기획적 간극에서 실패는 "판단들을 경로로 조립하는" 과정에서 발생합니다. 하지만 Senses Wide Shut에서 실패는 훨씬 <em>하류(downstream)</em>에 있습니다. 모델은 "무엇을 보고 들었는지"를 올바르게 표현합니다. 문제는 그 표현이 행동 결정으로 번역되는 순간, <strong class="text-cool">텍스트 전제가 지각 정보를 덮씌워버린다</strong>는 데 있습니다.</p>
+
+<div class="card">
+  <div class="card-label">핵심 구분</div>
+  <p>기획적 간극: <strong>판단 → 경로</strong> 조립의 실패 (구성적 한계)</p>
+  <p>표현-행동 간극: <strong>지각 → 행동</strong> 번역의 실패 (중재적 한계)</p>
+</div>
+
+<p>이것은 기획이 나빠서가 아닙니다. 기획이 완벽하다고 해도, 모달리티 간 충돌이 해결되지 않으면 행동이 오류를 낳습니다. 반대로, 모달리티 충돌이 전혀 없는 상황에서도 기획이 실패할 수 있습니다. 두 실패는 <strong>서로 환원 불가능한</strong> 독립적 축 위에 있습니다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ── 섹션 3 ── -->
+<section class="fade-in">
+<h2><span class="num">03</span> 하나로 줄이면 둘 다 잃는다 — 환원의 함정</h2>
+
+<p>원래의 질문으로 돌아가 보겠습니다: agentic-vlm의 근본적 병목을 "모달리티 중재 메커니즘의 부재"로 재프레이밍해야 하는가?</p>
+
+<p>이 질문에 대한 정밀한 검토를 위해, 두 실패 모드를 다섯 가지 차원에서 비교해 보겠습니다.</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>비교 차원</th>
+      <th>Three-Step Nav (기획적 간극)</th>
+      <th>Senses Wide Shut (표현-행동 간극)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>실패 축</strong></td>
+      <td>시간적 구성 (step → plan)</td>
+      <td>모달리티 간 중재 (perception → action)</td>
+    </tr>
+    <tr>
+      <td><strong>지각의 정확성</strong></td>
+      <td>각 단계별로 정확</td>
+      <td>정확</td>
+    </tr>
+    <tr>
+      <td><strong>실패의 국소성</strong></td>
+      <td>국소 판단이 누적되어 전역 실패</td>
+      <td>지각-행동 번역 지점에서 즉시 실패</td>
+    </tr>
+    <tr>
+      <td><strong>모달리티 충돌</strong></td>
+      <td>필수 조건이 아님</td>
+      <td>필수 조건</td>
+    </tr>
+    <tr>
+      <td><strong>기획 향상으로 해결?</strong></td>
+      <td>부분적 해결 가능</td>
+      <td>해결 불가</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>표의 네 번째 행이 결정적입니다. <strong>모달리티 충돌이 기획적 간극의 필수 조건이 아니라면</strong>, 기획적 간극을 모달리티 중재 부재로 환원하는 것은 <em>과소환원(under-reduction)</em>입니다. 순수하게 시각적 공간에서의 다단계 기획이 실패하는 것을 "모달리티 중재가 안 되어서"라고 설명할 수 없기 때문입니다.</p>
+
+<p>그러나 역방향 환원도 성립하지 않습니다. Senses Wide Shut의 실패를 "기획이 나빠서"라고 설명할 수 없습니다. 모델의 지각은 정확했고, 단일 단계의 행동 선택만 요구되는 상황이었습니다. 다단계 경로 조립의 문제가 개입할 여지가 없는 실패입니다.</p>
+
+<div class="highlight-line">
+  <p><strong class="text-green">정리하면:</strong> 기획적 간극을 모달리티 중재로 환원하면 시각 기획의 독자적 문제를 잃고, 모달리티 중재 간극을 기획으로 환원하면 지각-행동 번역의 독자적 문제를 잃습니다. 어느 방향의 환원도 정당하지 않습니다.</p>
+</div>
+</section>
+
+<hr class="sep">
+
+<!-- ── 섹션 4 ── -->
+<section class="fade-in">
+<h2><span class="num">04</span> 교집합에서 떠오르는 제3의 개념 — action-binding</h2>
+
+<p>환원이 불가능하다면, 두 간극 사이의 <strong>연결 고리</strong>를 찾아야 합니다. 표의 두 번째 행에서 실마리가 보입니다. 두 실패 모드 모두 <strong>"지각은 정확하다"</strong>는 공통점을 갖습니다. 그렇다면 문제는 지각이 아니라, 지각 이후에 일어나는 무언가에 있습니다.</p>
+
+<p>그 무언가를 <strong>action-binding</strong>이라 부릅시다. 올바른 표현(representation)을 구체적인 행동(action)에 결합시키는 메커니즘입니다.</p>
+
+<div class="metaphor-box">
+  <div class="metaphor-label">비유: 번역가의 손과 입</div>
+  <p>한국어와 영어 모두 완벽히 이해하는 통번역가가 있다고 칩시다. 그런데 한국어로 들은 내용을 영어로 말하려는 순간, 머릿속에서는 완벽한 영어 문장이 떠오르는데 입 밖으로는 엉뚱한 말이 나옵니다. 이해(지각)는 정확한데 산출(행동)로의 결합이 끊어진 상태 — 이것이 action-binding 실패입니다.</p>
+</div>
+
+<p>이 렌즈를 통해 두 간극을 다시 보면, 놀라운 대칭이 드러납니다.</p>
+
+<div class="card">
+  <div class="card-label">action-binding의 두 차원</div>
+  <p><strong class="text-cool">시간적 차원 (기획적 간극):</strong> 각 단계의 판단을 다음 단계의 행동에 순차적으로 바인딩하지 못함. 결합이 시간축을 따라 누적되어야 하는데 누락됨.</p>
+  <p style="margin-top:14px;"><strong class="text-cool">모달리티 차원 (표현-행동 간극):</strong> 올바른 지각 표현을 행동 결정에 크로스-모달로 바인딩하지 못함. 결합이 모달리티 경계를 넘어야 하는데 차단됨.</p>
+</div>
+
+<p>기획 간극과 모달리티 중재 간극은 각각 <strong>action-binding 실패의 시간적 얼굴과 모달리티적 얼굴</strong>인 셈입니다. 이 프레임에서 두 병목은 완전히 독립적인 것이 아니라, 공통 기저 위에서 교차하는 이중 결함으로 이해됩니다.</p>
+
+<p>이 관점은 Wiki의 기존 엔티티 구조에도 시사점을 던집니다. 현재 <strong>3d-spatial-reasoning</strong> 엔티티는 공간 추론 능력 자체에 초점이 맞춰져 있는데, VLN 맥락에서의 공간 추론 실패가 순수한 공간 능력 부족인지, 아니면 시각 지각-기획-행동 간의 바인딩 실패인지를 구분하는 것이 필요합니다. 또한 <em>Senses Wide Shut</em>이 제시하는 representation-action gap은 아직 Wiki에 엔티티로 통합되지 않았는데, action-binding이라는 개념적 허브를 통해 연결될 수 있습니다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ── 섹션 5 ── -->
+<section class="fade-in">
+<h2><span class="num">05</span> 패러다임 전환: 단일 축에서 이중 축으로</h2>
+
+<p>지금까지의 분석을 하나의 도식으로 정리하겠습니다.</p>
+
+<div class="conclusion-card">
+  <div class="conclusion-label">이중 축 모델</div>
+  <p>agentic-vlm의 병목은 <strong>(1) 시간적 구성 축</strong>에서의 기획 간극과 <strong>(2) 모달리티 중재 축</strong>에서의 표현-행동 간극이 <strong>action-binding 실패라는 공통 기저 위에서 교차</strong>하는 다차원 구조를 갖는다.</p>
+</div>
+
+<p>이 프레임의 실천적 함의는 명확합니다. 첫째, <strong>기획 능력만 개선해서는 Senses Wide Shut 유형의 실패가 해결되지 않습니다.</strong> 텍스트 전제가 지각을 덮씌우는 메커니즘을 따로 다뤄야 합니다. 둘째, <strong>모달리티 중재만 강화해서는 Three-Step Nav 유형의 실패가 해결되지 않습니다.</strong> 모달리티 충돌이 없는 순수 시각 기획에서의 누적 오류를 따로 다뤄야 합니다.</p>
+
+<p>셋째, 그리고 가장 중요한 점은, <strong class="text-green">두 개선 경로가 action-binding이라는 교차점에서 만난다</strong>는 것입니다. 시간적 바인딩을 강화하는 메커니즘과 모달리티 간 바인딩을 강화하는 메커니즘이 서로 어떻게 영향을 주고받는지 — 한쪽의 개선이 다른 쪽의 결함을 보상할 수 있는지, 아니면 한쪽의 결함이 다른 쪽의 개선 효과를 상쇄하는지 — 이것이 다음 연구의 핵심 질문이 되어야 합니다.</p>
+
+<div class="metaphor-box">
+  <div class="metaphor-label">최종 비유: 오케스트라의 두 가지 실수</div>
+  <p>오케스트라가 연주를 망치는 방식은 두 가지가 있습니다. 하나는 악보는 맞는데 <strong>마디를 넘기는 타이밍</strong>을 잡지 못하는 것(기획적 간극). 다른 하나는 각 악기의 소리는 정확한데 <strong>서로 다른 조표를 연주</strong>하는 것(모달리티 중재 간극). 지휘자가 "박자만 고치면 돼"라고 해서 조표 문제가 해결되지 않고, "조표만 맞추면 돼"라고 해서 박자 문제가 해결되지 않습니다. <strong>지휘자의 역할은 두 축을 동시에 조율하는 것</strong>입니다. agentic-VLM의 다음 세대 아키텍처가 해결해야 할 것도 바로 이 지휘자 역할 — action-binding의 양 차원을 동시에 조율하는 메커니즘입니다.</p>
+</div>
+
+<p>결론적으로, agentic-vlm의 근본적 병목을 "모달리티 중재의 부재"로 재프레이밍하는 것은 <strong>기존 진단이 포착한 시간적 구성의 문제를 희석시키는 과소환원</strong>입니다. 하지만 기존 진단 그대로 머무는 것도 <em>Senses Wide Shut</em>이 드러낸 새로운 실패 지점을 놓치는 <strong>과소기술(under-specification)</strong>입니다. 우리에게 필요한 것은 하나의 병목을 다른 병목으로 교체하는 것이 아니라, <strong class="text-green">병목의 지형 자체를 단일 축에서 이중 축으로 재구성</strong>하는 것입니다.</p>
+
+<blockquote>
+  기획 능력과 모달리티 중재는 독립적인 병목이 아니라, <strong>상호 강화되는 이중 결함</strong>으로 이해되어야 한다 — 모달리티 충돌이 없는 상황에서도 기획이 실패할 수 있고, 기획이 완벽해도 모달리티 중재가 실패하면 행동이 오류를 낳는다.
+</blockquote>
+
+</section>
+
+<footer class="article-footer fade-in">
+  <p><strong>참고 문헌</strong></p>
+  <p>Senses Wide Shut: A Representation-Action Gap in Omnimodal LLMs (2025)</p>
+  <p>Wiki agentic-vlm 엔티티 — Three-Step Nav 실증 분석</p>
+</footer>
+
+</article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var els = document.querySelectorAll('.fade-in');
+  if (!els.length) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px 40px 0px' });
+
+  els.forEach(function(el) { observer.observe(el); });
+});
+</script>
+
+</body>
+</html>

@@ -832,3 +832,35 @@
 ## [2026-05-14 11:43] ingest | Edit-level Majority Voting Mitigates Over-Correction in LLM-based Grammatical Error Correction
 
 ## [2026-05-14 11:43] ingest | KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving
+
+## [2026-05-15 08:31] ingest | EVA-Bench: A New End-to-end Framework for Evaluating Voice Agents
+
+## [2026-05-15 08:31] ingest | Good Agentic Friends Do Not Just Give Verbal Advice: They Can Update Your Weights
+
+## [2026-05-15 08:31] ingest | Negation Neglect: When models fail to learn negations in training
+
+## [2026-05-15 08:31] ingest | History Anchors: How Prior Behavior Steers LLM Decisions Toward Unsafe Actions
+
+## [2026-05-15 08:31] ingest | Harnessing Agentic Evolution
+
+## [2026-05-15 08:31] ingest | Neurosymbolic Auditing of Natural-Language Software Requirements
+
+## [2026-05-15 08:31] ingest | Improving Reproducibility in Evaluation through Multi-Level Annotator Modeling
+
+## [2026-05-15 08:31] ingest | LMPath: Language-Mediated Priors and Path Generation for Aerial Exploration
+
+## [2026-05-15 08:31] ingest | RoboEvolve: Co-Evolving Planner-Simulator for Robotic Manipulation with Limited Data
+
+## [2026-05-15 08:31] ingest | EconAI: Dynamic Persona Evolution and Memory-Aware Agents in Evolving Economic Environments
+
+## [2026-05-15 08:31] ingest | An LLM-Based System for Argument Reconstruction
+
+## [2026-05-15 08:31] ingest | (How) Do Large Language Models Understand High-Level Message Sequence Charts?
+
+## [2026-05-15 08:31] ingest | Where Does Reasoning Break? Step-Level Hallucination Detection via Hidden-State Transport Geometry
+
+## [2026-05-15 08:31] ingest | Senses Wide Shut: A Representation-Action Gap in Omnimodal LLMs
+
+## [2026-05-15 08:31] ingest | Edit-level Majority Voting Mitigates Over-Correction in LLM-based Grammatical Error Correction
+
+## [2026-05-15 08:31] ingest | KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving
