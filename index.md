@@ -375,3 +375,22 @@
 - [[sources/2026-05-15-senses-wide-shut-a-representation-action-gap-in-om.md]] - Senses Wide Shut: A Representation-Action Gap in Omnimodal LLMs
 - [[sources/2026-05-15-edit-level-majority-voting-mitigates-over-correcti.md]] - Edit-level Majority Voting Mitigates Over-Correction in LLM-based Grammatical Error Correction
 - [[sources/2026-05-15-kvserve-service-aware-kv-cache-compression-for-com.md]] - KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving
+- [[sources/2026-05-16-atlas-agentic-or-latent-visual-reasoning-one-word-.md]] - ATLAS: Agentic or Latent Visual Reasoning? One Word is Enough for Both
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-16-futuresim-replaying-world-events-to-evaluate-adapt.md]] - FutureSim: Replaying World Events to Evaluate Adaptive Agents
+- [[sources/2026-05-16-articraft-an-agentic-system-for-scalable-articulat.md]] - Articraft: An Agentic System for Scalable Articulated 3D Asset Generation
+- [[sources/2026-05-16-is-grep-all-you-need-how-agent-harnesses-reshape-a.md]] - Is Grep All You Need? How Agent Harnesses Reshape Agentic Search
+- [[sources/2026-05-16-opendeepthink-parallel-reasoning-via-bradley--terr.md]] - OpenDeepThink: Parallel Reasoning via Bradley--Terry Aggregation
+- [[sources/2026-05-16-metabackdoor-exploiting-positional-encoding-as-a-b.md]] - MetaBackdoor: Exploiting Positional Encoding as a Backdoor Attack Surface in LLMs
+- [[sources/2026-05-16-memo-memory-as-a-model.md]] - MeMo: Memory as a Model
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-16-self-distilled-agentic-reinforcement-learning.md]] - Self-Distilled Agentic Reinforcement Learning
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-16-apwa-a-distributed-architecture-for-parallelizable.md]] - APWA: A Distributed Architecture for Parallelizable Agentic Workflows
+- [[sources/2026-05-16-memeye-a-visual-centric-evaluation-framework-for-m.md]] - MemEye: A Visual-Centric Evaluation Framework for Multimodal Agent Memory
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-16-concurrency-without-model-changes-future-based-asy.md]] - Concurrency without Model Changes: Future-based Asynchronous Function Calling for LLMs
+- [[sources/2026-05-16-an-interpretable-latency-model-for-speculative-dec.md]] - An Interpretable Latency Model for Speculative Decoding in LLM Serving
+- [[sources/2026-05-16-performance-driven-policy-optimization-for-specula.md]] - Performance-Driven Policy Optimization for Speculative Decoding with Adaptive Windowing
+- [[sources/2026-05-16-clover-closed-loop-value-estimation-ranking-for-en.md]] - CLOVER: Closed-Loop Value Estimation \& Ranking for End-to-End Autonomous Driving Planning

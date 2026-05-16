@@ -864,3 +864,31 @@
 ## [2026-05-15 08:31] ingest | Edit-level Majority Voting Mitigates Over-Correction in LLM-based Grammatical Error Correction
 
 ## [2026-05-15 08:31] ingest | KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving
+
+## [2026-05-16 08:33] ingest | ATLAS: Agentic or Latent Visual Reasoning? One Word is Enough for Both
+
+## [2026-05-16 08:33] ingest | FutureSim: Replaying World Events to Evaluate Adaptive Agents
+
+## [2026-05-16 08:33] ingest | Articraft: An Agentic System for Scalable Articulated 3D Asset Generation
+
+## [2026-05-16 08:33] ingest | Is Grep All You Need? How Agent Harnesses Reshape Agentic Search
+
+## [2026-05-16 08:33] ingest | OpenDeepThink: Parallel Reasoning via Bradley--Terry Aggregation
+
+## [2026-05-16 08:33] ingest | MetaBackdoor: Exploiting Positional Encoding as a Backdoor Attack Surface in LLMs
+
+## [2026-05-16 08:33] ingest | MeMo: Memory as a Model
+
+## [2026-05-16 08:33] ingest | Self-Distilled Agentic Reinforcement Learning
+
+## [2026-05-16 08:33] ingest | APWA: A Distributed Architecture for Parallelizable Agentic Workflows
+
+## [2026-05-16 08:33] ingest | MemEye: A Visual-Centric Evaluation Framework for Multimodal Agent Memory
+
+## [2026-05-16 08:33] ingest | Concurrency without Model Changes: Future-based Asynchronous Function Calling for LLMs
+
+## [2026-05-16 08:33] ingest | An Interpretable Latency Model for Speculative Decoding in LLM Serving
+
+## [2026-05-16 08:33] ingest | Performance-Driven Policy Optimization for Speculative Decoding with Adaptive Windowing
+
+## [2026-05-16 08:33] ingest | CLOVER: Closed-Loop Value Estimation \& Ranking for End-to-End Autonomous Driving Planning
