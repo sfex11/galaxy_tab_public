@@ -179,3 +179,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/reward-sparsity.md|reward sparsity]]
+
+---
+**관련**: [[concepts/bayes-consistent-agentic-orchestration.md|bayes consistent agentic orchestration]]
+
+---
+**관련**: [[concepts/implicit-harness-filtering.md|implicit harness filtering]]

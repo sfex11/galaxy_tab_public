@@ -175,3 +175,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/translation-failure-causal-chain.md|translation failure causal chain]]
+
+---
+**관련**: [[concepts/hierarchical-information-decomposition.md|hierarchical information decomposition]]
+
+---
+**관련**: [[concepts/expected-value-of-information.md|expected value of information]]

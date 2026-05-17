@@ -128,3 +128,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/scientific-finding-reproducibility.md|scientific finding reproducibility]]
+
+---
+**관련**: [[concepts/computational-exploration-feasibility.md|computational exploration feasibility]]
+
+---
+**관련**: [[concepts/failed-hypothesis-tracking.md|failed hypothesis tracking]]

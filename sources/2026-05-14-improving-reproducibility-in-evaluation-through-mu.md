@@ -56,3 +56,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/annotator-normative-role.md|annotator normative role]]
+
+---
+**관련**: [[concepts/safety-reductionism.md|safety reductionism]]
+
+---
+**관련**: [[concepts/scientific-finding-reproducibility.md|scientific finding reproducibility]]

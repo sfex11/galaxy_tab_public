@@ -128,3 +128,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/rl-reasoning-transfer-boundary.md|rl reasoning transfer boundary]]
+
+---
+**관련**: [[concepts/reasoning-prompt-compliance-gap.md|reasoning prompt compliance gap]]

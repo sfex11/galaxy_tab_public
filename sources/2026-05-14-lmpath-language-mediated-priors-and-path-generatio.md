@@ -38,3 +38,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/geometric-regulation.md|geometric regulation]]
+
+---
+**관련**: [[concepts/environment-supply-absorption-gap.md|environment supply absorption gap]]
+
+---
+**관련**: [[concepts/geometric-regulation.md|geometric regulation]]

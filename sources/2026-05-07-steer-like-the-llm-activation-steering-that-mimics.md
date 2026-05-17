@@ -84,3 +84,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-behavior-unconstrainedness.md|structural behavior unconstrainedness]]
+
+---
+**관련**: [[concepts/joint-prompt-optimization.md|joint prompt optimization]]

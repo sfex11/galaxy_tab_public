@@ -64,3 +64,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/cognitive-fidelity-assessment.md|cognitive fidelity assessment]]
+
+---
+**관련**: [[concepts/cognitive-probability.md|cognitive probability]]

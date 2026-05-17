@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/debate-latency-paradox.md|debate latency paradox]]
+
+---
+**관련**: [[concepts/deployment-evidence-contract.md|deployment evidence contract]]

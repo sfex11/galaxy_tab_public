@@ -42,3 +42,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/resolution-precision-tradeoff.md|resolution precision tradeoff]]
+
+---
+**관련**: [[concepts/difficulty-validity-tradeoff.md|difficulty validity tradeoff]]

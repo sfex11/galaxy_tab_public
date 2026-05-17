@@ -53,3 +53,4 @@ _LLM 분석으로 생성됨_
 - → [[sources/2026-04-13-psi-shared-state-as-the-missing-layer-for-coherent]]: 동일 논문(PSI)의 다른 날짜 요약으로, AI 생성 모듈 간 공유 상태 레이어 아키텍처를 다룬다.
 
 - [[concepts/shared-failure-subspace.md|shared failure subspace]]
+- [[concepts/persona-runtime-fidelity-gap.md|persona runtime fidelity gap]]

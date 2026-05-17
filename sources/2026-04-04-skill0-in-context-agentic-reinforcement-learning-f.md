@@ -42,3 +42,6 @@ SKILL0는 강화학습을 통해 스킬을 모델 파라미터에 내재화(inte
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/internalization-of-tool-use.md|internalization of tool use]]

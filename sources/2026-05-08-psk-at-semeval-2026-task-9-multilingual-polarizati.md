@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/three-step-nav.md|three step nav]]
+
+---
+**관련**: [[concepts/spectrum-of-internalized-adaptation.md|spectrum of internalized adaptation]]

@@ -71,3 +71,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/global-semantic-modeling.md|global semantic modeling]]
+
+---
+**관련**: [[concepts/paradigm-level-adaptive-routing.md|paradigm level adaptive routing]]
+
+---
+**관련**: [[concepts/relevance-adaptive-detail-level.md|relevance adaptive detail level]]
+
+---
+**관련**: [[concepts/interaction-semantic-gap.md|interaction semantic gap]]
+
+---
+**관련**: [[concepts/semantic-drift.md|semantic drift]]
+
+---
+**관련**: [[concepts/formal-comparative-contract.md|formal comparative contract]]

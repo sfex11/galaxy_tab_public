@@ -924,3 +924,7 @@
 ## [2026-05-17 17:05] lint | Wiki 건전성 체크
 - Issues: 1040개
 - Orphans: 258, Missing: 782, Contradictions: 0
+
+## [2026-05-17 18:01] lint | Wiki 건전성 체크
+- Issues: 1005개
+- Orphans: 223, Missing: 782, Contradictions: 0

@@ -107,3 +107,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trustworthy-clinical-nlp.md|trustworthy clinical nlp]]
+
+---
+**관련**: [[concepts/strategic-trajectory-abstraction.md|strategic trajectory abstraction]]
+
+---
+**관련**: [[concepts/small-portfolio-evaluation.md|small portfolio evaluation]]

@@ -290,3 +290,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evidence-based-certification.md|evidence based certification]]
+
+---
+**관련**: [[concepts/agreement-based-reliability.md|agreement based reliability]]
+
+---
+**관련**: [[concepts/agent-knowledge-separation.md|agent knowledge separation]]

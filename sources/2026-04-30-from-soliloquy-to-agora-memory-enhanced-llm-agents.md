@@ -128,3 +128,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/purely-reactive-optimization.md|purely reactive optimization]]
+
+---
+**관련**: [[concepts/causal-estimation-missingness-joint-modeling.md|causal estimation missingness joint modeling]]

@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptive-bottleneck-migration.md|adaptive bottleneck migration]]
+
+---
+**관련**: [[concepts/surrogate-guided-selection.md|surrogate guided selection]]
+
+---
+**관련**: [[concepts/dual-axis-bottleneck.md|dual axis bottleneck]]

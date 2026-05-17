@@ -231,3 +231,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cross-language-code-clone-detection.md|cross language code clone detection]]
+
+---
+**관련**: [[concepts/expert-prior-retrieval.md|expert prior retrieval]]
+
+---
+**관련**: [[concepts/caption-sufficient-evaluation.md|caption sufficient evaluation]]

@@ -17,3 +17,12 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/feature-space-knowledge-consistency-certification.md|feature space knowledge consistency certification]]
+
+---
+**관련**: [[concepts/sae-feature-knowledge-conflict.md|sae feature knowledge conflict]]
+
+---
+**관련**: [[concepts/internal-compositional-precondition.md|internal compositional precondition]]
+
+---
+**관련**: [[concepts/interpretability-verifiability-substitution.md|interpretability verifiability substitution]]

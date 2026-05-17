@@ -53,3 +53,6 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-22-latent-phase-shift-rollback-inference-time-error-c]]: 둘 다 추론 시점에서 LLM의 추론 방향을 제어하는 스티어링 기법을 다루며, 하나는 잔차 스트림 모니터링과 KV-캐시 조향으로, 다른 하나는 자연어-기호 언어 공유 논리 부분공간 정렬로 접근한다.
+
+---
+**관련**: [[concepts/alignment-base-opacity.md|alignment base opacity]]

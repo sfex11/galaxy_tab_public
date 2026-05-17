@@ -51,3 +51,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/intent-guided-editing.md|intent guided editing]]
+
+---
+**관련**: [[concepts/uncertainty-propagation-disconnection.md|uncertainty propagation disconnection]]

@@ -190,3 +190,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-overconfidence-in-clinical-prediction.md|semantic overconfidence in clinical prediction]]
+
+---
+**관련**: [[concepts/synchronous-execution-assumption.md|synchronous execution assumption]]
+
+---
+**관련**: [[concepts/text-guided-vision-token-selection.md|text guided vision token selection]]
+
+---
+**관련**: [[concepts/non-selective-context-accumulation.md|non selective context accumulation]]

@@ -109,3 +109,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-supply-absorption-gap.md|environment supply absorption gap]]
+
+---
+**관련**: [[concepts/mathematical-workflow-orchestration.md|mathematical workflow orchestration]]
+
+---
+**관련**: [[concepts/asynchronous-dependency-coordination.md|asynchronous dependency coordination]]

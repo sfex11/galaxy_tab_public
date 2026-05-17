@@ -32,3 +32,9 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/precision-bias.md|precision bias]]
+
+---
+**관련**: [[concepts/resolution-precision-tradeoff.md|resolution precision tradeoff]]
+
+---
+**관련**: [[concepts/scenario-audit-contract.md|scenario audit contract]]

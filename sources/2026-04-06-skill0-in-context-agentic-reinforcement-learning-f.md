@@ -104,3 +104,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/knowledge-topography-internalization.md|knowledge topography internalization]]
+
+---
+**관련**: [[concepts/skill-curation-as-learning.md|skill curation as learning]]

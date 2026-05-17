@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/training-phase-knowledge-contamination.md|training phase knowledge contamination]]
+
+---
+**관련**: [[concepts/probabilistic-margin-of-error.md|probabilistic margin of error]]

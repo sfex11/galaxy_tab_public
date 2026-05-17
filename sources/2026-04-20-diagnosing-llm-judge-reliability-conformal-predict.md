@@ -88,3 +88,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structured-epistemic-inconsistency.md|structured epistemic inconsistency]]
+
+---
+**관련**: [[concepts/label-free-consistency-check.md|label free consistency check]]

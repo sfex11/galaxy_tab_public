@@ -74,3 +74,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/semantic-cr-primitive.md|semantic cr primitive]]
+
+---
+**관련**: [[concepts/epistemic-uncertainty-decomposition.md|epistemic uncertainty decomposition]]
