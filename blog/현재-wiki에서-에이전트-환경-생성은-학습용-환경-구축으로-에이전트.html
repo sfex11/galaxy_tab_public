@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정적 벤치마크의 종말 — FutureSim이 무너뜨리는 환경과 평가의 경계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+    --muted: #7a7570;
+    --border-light: rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav.top-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--border-light);
+  }
+  nav.top-nav a {
+    color: var(--accent-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background 0.2s;
+  }
+  nav.top-nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: left;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 0.78em;
+    font-weight: 500;
+    color: var(--accent-cool);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 4px 12px;
+    border: 1px solid rgba(91,124,153,0.2);
+    border-radius: 20px;
+  }
+  .article-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .article-header .subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+    font-weight: 300;
+  }
+  .article-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 0.82em;
+    color: var(--muted);
+  }
+  .article-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 구분선 ── */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--accent-warm);
+    border-radius: 2px;
+    margin: 0 0 40px;
+    opacity: 0.7;
+  }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: clamp(40px, 6vw, 64px); }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 18px;
+  }
+  .section h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--accent-warm);
+    opacity: 0.6;
+  }
+  .section h2.blue::before { background: var(--accent-cool); }
+  .section h2.green::before { background: var(--accent-green); }
+
+  .section h3 {
+    font-weight: 700;
+    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+    color: var(--fg);
+    margin: 28px 0 10px;
+  }
+
+  .section p {
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 4px solid var(--accent-warm);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    color: var(--muted);
+    font-style: italic;
+  }
+  blockquote em { color: var(--accent-warm); font-style: normal; font-weight: 500; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 20px 0 24px;
+    box-shadow: var(--card-shadow);
+  }
+  .card .card-label {
+    font-size: 0.75em;
+    font-weight: 500;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .card .card-label.blue { color: var(--accent-cool); }
+  .card .card-label.green { color: var(--accent-green); }
+  .card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.05em;
+    margin-bottom: 8px;
+    color: var(--fg);
+  }
+  .card p { font-size: 0.93em; color: var(--muted); margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 강조 텍스트 ── */
+  .highlight-warm { color: var(--accent-warm); font-weight: 500; }
+  .highlight-cool { color: var(--accent-cool); font-weight: 500; }
+  .highlight-green { color: var(--accent-green); font-weight: 500; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    font-size: 1.2em;
+    background: var(--bg);
+    padding: 0 6px;
+  }
+  .metaphor-box p {
+    font-size: 0.95em;
+    color: var(--fg);
+    margin-bottom: 8px;
+  }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 순서리스트 ── */
+  .section ol {
+    padding-left: 22px;
+    margin: 12px 0 20px;
+  }
+  .section ol li {
+    margin-bottom: 14px;
+    padding-left: 6px;
+  }
+  .section ol li strong {
+    color: var(--fg);
+  }
+
+  /* ── 비교 테이블 ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0 28px;
+    font-size: 0.9em;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+  }
+  .compare-table thead th {
+    background: rgba(44,40,37,0.04);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--fg);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .compare-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+    color: var(--muted);
+  }
+  .compare-table tbody tr:last-child td { border-bottom: none; }
+  .compare-table tbody td:first-child { font-weight: 500; color: var(--fg); }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.06));
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+  .conclusion-box p { margin-bottom: 14px; }
+  .conclusion-box p:last-child { margin-bottom: 0; }
+
+  /* ── 푸터 ── */
+  footer {
+    margin-top: clamp(48px, 8vw, 80px);
+    padding: 28px 0;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent-cool); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .compare-table { font-size: 0.82em; }
+    .compare-table thead th, .compare-table tbody td { padding: 10px 10px; }
+  }
+
+  /* ── 스크롤 애니메이션 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 목차 ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 0 0 40px;
+    box-shadow: var(--card-shadow);
+  }
+  .toc-label {
+    font-size: 0.75em;
+    font-weight: 500;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .toc ol li { margin-bottom: 6px; }
+  .toc ol li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.92em;
+    transition: color 0.2s;
+  }
+  .toc ol li a:hover { color: var(--accent-warm); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 네비게이션 -->
+  <nav class="top-nav">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="tag">Deep Analysis</span>
+    <h1>정적 벤치마크의 종말 — FutureSim이 무너뜨리는 환경과 평가의 경계</h1>
+    <p class="subtitle">실제 세계 사건을 시간순으로 재생하는 시뮬레이션은, "환경을 만들고" "별도로 평가하던" AI 연구의 오랜 이분법을 어떻게 산산조각 내는가?</p>
+    <div class="article-meta">
+      <span>논문 기반: FutureSim (2025)</span>
+      <span>읽기 소요: 12분</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- 목차 -->
+  <div class="toc fade-in">
+    <div class="toc-label">목차</div>
+    <ol>
+      <li><a href="#s1">두 개의 독립된 축: 지금까지 AI는 어떻게 환경을 만들고 평가해왔는가</a></li>
+      <li><a href="#s2">경계 붕괴: 환경 자체가 평가 지표가 되는 순간</a></li>
+      <li><a href="#s3">정적 평가가 영원히 포착할 수 없는 세 가지 능력</a></li>
+      <li><a href="#s4">숨겨진 간극 — Wiki 엔티티 간 새로운 연결선</a></li>
+      <li><a href="#s5">패러다임 전환: 우리는 무엇을 버리고 무엇을 새로 세워야 하는가</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <section class="section fade-in" id="s1">
+    <h2>두 개의 독립된 축: 지금까지 AI는 어떻게 환경을 만들고 평가해왔는가</h2>
+
+    <p>AI 에이전트 연구에는 오랫동안 두 개의 완전히 분리된 파이프라인이 존재해 왔다. 하나는 <span class="highlight-warm">환경 생성(Environment Generation)</span>이고, 다른 하나는 <span class="highlight-cool">벤치마크 평가(Benchmark Evaluation)</span>이다.</p>
+
+    <p>환경 생성은 에이전트가 학습하고 실험할 수 있는 공간을 구축하는 작업이다. 예컨대 <em>Nemobot Games</em> 논문은 게임 도메인에 특화된 전략 학습 환경을 자동으로 생성하여, 에이전트가 다양한 시나리오에서 전술을 익히도록 돕는다. 여기까지는 "운동장을 만드는" 단계다.</p>
+
+    <p>평가는 그 운동장과는 완전히 별개의 공간에서 이루어졌다. 미리 수집된 정적 데이터셋—고정된 질문-답변 쌍, 단일 시점의 스냅샷 판단 문제—을 에이전트에게 주고, 출력을 채점하는 방식이다. MMLU, HumanEval, GSM8K 같은 벤치마크가 대표적이다.</p>
+
+    <div class="metaphor-box">
+      <p>이를 비유하자면, <strong>수영장을 만드는 사람</strong>과 <strong>수영 시합의 심판</strong>이 아예 다른 건물에서 일하는 것과 같다. 수영장 설계자는 "이 물의 온도와 깊이에서 선수가 어떻게 적응할까"를 고민하지 않고, 심판은 "50미터를 몇 초에 통과했는가"만 초시계로 재며, 그 수영장이 흐르는 강인지 고여있는 웅덩이인지는 관심 밖이다.</p>
+    </div>
+
+    <p>이 이분법이 작동하는 전제 조건은 하나다: <strong>평가 상황이 고정되어 있고, 시간에 따라 변하지 않는다</strong>는 것. 하지만 이 전제가 FutureSim의 등장과 함께 근본적으로 흔들리기 시작했다.</p>
+  </section>
+
+  <!-- 섹션 2 -->
+  <section class="section fade-in" id="s2">
+    <h2 class="blue">경계 붕괴: 환경 자체가 평가 지표가 되는 순간</h2>
+
+    <p>FutureSim은 실제 세계에서 발생한 사건을 시간순으로 재생하는 시뮬레이션이다. 코로나19 팬데믹의 초기 확산, 우크라이나 전쟁의 전개, 금융 위기의 도미노 현상처럼, <strong>시간의 흐름을 가진 사건 스트림</strong>을 에이전트에게 제공한다.</p>
+
+    <p>이 접근이 도입되자 환경 생성과 평가 사이의 벽이 순식간에 무너진다.</p>
+
+    <div class="card">
+      <div class="card-label">핵심 변화</div>
+      <h4>2단계 파이프라인의 종말</h4>
+      <p>기존: 환경 구축 → 에이전트 학습 → <strong>별도의 정적 벤치마크에서 평가</strong></p>
+      <p>FutureSim: 시간순 사건 스트림(환경) 속에서 에이전트가 보여주는 반응 자체가 <strong>곧 평가 결과</strong></p>
+    </div>
+
+    <p>이를 연구 커뮤니티의 용어로 풀면, <span class="highlight-cool">폐루프 평가(Closed-Loop Evaluation)</span>의 형태로 변화한다는 뜻이다. 에이전트가 환경에 행동을 취하고, 환경이 그 행동에 반응하여 새로운 상태를 제시하고, 에이전트가 다시 반응하는—이 루프 전체가 하나의 평가 단위가 된다.</p>
+
+    <blockquote>
+      <em>"When No Benchmark Exists"</em> 논문이 제기한 난제—고정된 벤치마크가 존재하지 않는 상황에서는 비교 평가 자체가 불가능하다는 문제—에 대해 FutureSim은 실제 발생한 사건을 재생함으로써, 벤치마크 없이도 동적 상황에 대한 <em>비교 안전 점수(Benchmarkless Comparative Safety Scoring)</em>를 부여할 수 있는 플랫폼을 제공한다.
+    </blockquote>
+
+    <p>즉, 환경이 더 이상 평가의 "무대"가 아니라 평가의 "내용"이 된다. 무대와 대본의 구분이 사라지는 순간이다.</p>
+
+    <div class="metaphor-box">
+      <p>기상 관측소를 생각해보자. 기존 방식은 "어제 온도가 22도였을 때 에어컨을 켰는가"를 물었다면, FutureSim 방식은 "일주일간의 기온 변화 패턴이 주어졌을 때, 에이전트가 매일 아침 어떻게 의사결정을 수정했는가"를 관찰한다. <strong>날씨 자체가 시험이 되는</strong> 셈이다.</p>
+    </div>
+  </section>
+
+  <!-- 섹션 3 -->
+  <section class="section fade-in" id="s3">
+    <h2 class="green">정적 평가가 영원히 포착할 수 없는 세 가지 능력</h2>
+
+    <p>경계가 붕괴되면 새로운 것이 보이기 시작한다. 기존의 정적 스냅샷 평가에서는 구조적으로 포착할 수 없었던 에이전트 능력 차원이 세 가지 드러난다.</p>
+
+    <!-- 능력 1 -->
+    <h3>① 도착하는 새로운 정보에 대한 실시간 적응성</h3>
+
+    <p>정적 평가는 "입력 X가 주어졌을 때 출력 Y는 무엇인가"를 묻는다. 이는 본질적으로 <strong>단발성 추론</strong>이다. 하지만 FutureSim이 강조하는 동적 적응성은 완전히 다른 차원의 문제다.</p>
+
+    <p>시간순으로 전개되는 이벤트 스트림에서는, 에이전트가 T=1에서 내린 결정이 T=5에서 완전히 다른 맥락을 가지게 된다. 새로운 정보가 도착할 때마다 기존 신념을 업데이트하고, 변경된 맥락을 추적하며, 이전에 취한 행동의 타당성을 재평가해야 한다.</p>
+
+    <div class="card">
+      <div class="card-label green">정적 vs 동적</div>
+      <h4>같은 질문이라도 시점에 따라 답이 바뀜</h4>
+      <p>"이 주식을 사야 할까?" — 정적 평가에서는 하나의 답을 요구하지만, 시뮬레이션에서는 어제의 답과 오늘의 답이 정반대일 수 있다. 그리고 <strong>답이 바뀌었다는 사실 자체</strong>가 에이전트의 능력 지표가 된다.</p>
+    </div>
+
+    <!-- 능력 2 -->
+    <h3>② 시간적 체화: Disembodied QA의 한계 극복</h3>
+
+    <p>SafetyALFRED 논문의 발견은 충격적이다. 11개의 SOTA(최고 수준) 모델을 대상으로 한 실험에서, <strong>정적 질의응답(QA) 기반 안전 평가에서 높은 점수를 받은 모델들이 실제 체화 배포 환경에서는 안전성을 전혀 보장하지 못했다.</strong></p>
+
+    <p>왜 그런가? 정적 평가는 "특정 순간의 안전성"만 포착하기 때문이다. 하지만 실제 환경에서는 시간이 지남에 따라 의도가 변형되고, 맥락이 누적되며, 처음에는 안전했던 행동이 나중에는 위험해질 수 있다.</p>
+
+    <div class="metaphor-box">
+      <p>운전 면허 시험을 비유해보자. 정적 평가는 "정지선에서 멈추시오"라고 묻는 것과 같다. 맞출 수 있다. 하지만 실제 도로에서는 "앞차가 갑자기 브레이크를 밟았을 때, 동시에 옆 차로가 끼어들 때, 뒤에서 경적이 울릴 때"를 <strong>연속적으로</strong> 대처해야 한다. 체화된 안전성은 시간의 길이 속에서만 증명된다.</p>
+    </div>
+
+    <p>FutureSim은 사건을 시간순으로 재생함으로써, 단일 시점의 판단이 아니라 <span class="highlight-green">다단계 경로 기획과 시간적 일관성</span>을 평가할 수 있는 첫 번째 프레임워크다.</p>
+
+    <!-- 능력 3 -->
+    <h3>③ 내부 적응을 넘어선 외부 환경 스트림 적응</h3>
+
+    <p>기존의 "적응적 추론(Adaptive Inference)" 연구—예컨대 SpecKV 논문—은 주로 모델 선택이나 KV 캐시 압축 같은 <strong>내부 시스템 상태</strong>에 대한 반응을 다루었다. 입력의 길이나 복잡도에 따라 추론 파이프라인을 내부에서 조절하는 방식이다.</p>
+
+    <p>하지만 FutureSim이 요구하는 적응성은 차원이 다르다. 외부에서 시간순으로 밀려오는 <strong>이벤트 스트림 자체</strong>에 대한 적응이다. 에이전트가 외부 사건의 타임라인을 읽고, "지금은 얕게 추론해도 되지만 3시간 후에는 깊게 파야겠다"거나 "이 이벤트의 속도가 빨라지니까 도구 호출 전략을 단순화해야겠다"고 판단하는 <span class="highlight-green">메타 인지적 유연성</span>이 새로운 평가 축으로 등장한다.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>기존 적응적 추론</th>
+          <th>FutureSim의 스트리밍 적응</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>반응 대상</td>
+          <td>입력 길이, 복잡도 (내부)</td>
+          <td>외부 이벤트 타임라인 (외부)</td>
+        </tr>
+        <tr>
+          <td>조절 축</td>
+          <td>모델 선택, 캐시 압축</td>
+          <td>추론 깊이, 도구 호출 전략, 신념 업데이트</td>
+        </tr>
+        <tr>
+          <td>시간 의존성</td>
+          <td>단일 입력 시점</td>
+          <td>과거 이벤트 누적에 의존</td>
+        </tr>
+        <tr>
+          <td>핵심 질문</td>
+          <td>"이 입력을 어떻게 효율적으로 처리할까?"</td>
+          <td>"이 사건 흐름 속에서 나의 전략을 언제 바꿔야 할까?"</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 섹션 4 -->
+  <section class="section fade-in" id="s4">
+    <h2>숨겨진 간극 — Wiki 엔티티 간 새로운 연결선</h2>
+
+    <p>FutureSim을 중심에 놓고 기존의 Wiki 지식 그래프를 다시 바라보면, 여러 엔티티 사이에 존재하던 <strong>숨겨진 간극</strong>이 선명하게 드러난다. 세 가지 새로운 개념적 연결이 필요하다.</p>
+
+    <div class="card">
+      <div class="card-label">새로운 연결 1</div>
+      <h4>환경-평가 융합 (Environment-as-Evaluation)</h4>
+      <p>현재 <em>agent-environment-generation</em> 엔티티는 학습용 환경 구축으로, <em>benchmark</em> 엔티티는 평가용으로 완전히 분리되어 있다. FutureSim은 이 두 엔티티 사이에 "환경 생성 자체가 곧 평가 파이프라인이 되는" 새로운 패러다임의 연결고리를 요구한다. 환경을 디자인하는 순간, 이미 평가 기준이 함께 설계되는 구조다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label blue">새로운 연결 2</div>
+      <h4>시간적 상태 의존성 (Temporal State Dependency)</h4>
+      <p><em>agent-os-semantic-gap</em> 엔티티에서 다루는 Crab 논문은 에이전트의 의미론적 의존 그래프와 OS 전체 스냅샷 체크포인트 간의 간극을 다룬다. FutureSim처럼 긴 시간 스트림을 재생하는 평가가 도입되면, 이 문제는 "단일 실행 환경의 간극"을 넘어 <strong>"과거 이벤트 시점들 간의 의미론적 연결성을 어떻게 체크포인트하고 복원할 것인가"</strong>라는 시간적 의존성 문제로 확장되어야 한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label green">새로운 연결 3</div>
+      <h4>스트리밍 적응 추론 (Streaming Adaptive Inference)</h4>
+      <p><em>adaptive-inference</em> 엔티티의 결정 차원—어떤 모델을 선택할지, 추론 길이를 얼마로 할지—을 시간에 따라 들어오는 외부 이벤트 스트림의 속도와 복잡도에 맞춰 동적으로 조절하는 차원으로 확장해야 한다. 내부 최적화에서 외부 환경 반응으로 적응의 축이 이동하는 것이다.</p>
+    </div>
+  </section>
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section fade-in" id="s5">
+    <h2 class="blue">패러다임 전환: 우리는 무엇을 버리고 무엇을 새로 세워야 하는가</h2>
+
+    <p>FutureSim이 제시하는 변화는 단순한 "새로운 벤치마크의 등장"이 아니다. 에이전트 연구의 기본 전제 자체를 뒤집는 사건이다.</p>
+
+    <div class="conclusion-box">
+      <p><strong>버려야 할 것:</strong> "환경은 학습용, 벤치마크는 평가용"이라는 이분법. 고정된 스냅샷으로 에이전트의 능력을 단일 점수로 환원하려는 환원주의. 안전성을 "특정 순간의 판단"으로만 정의하려는 접근.</p>
+      <p><strong>새로 세워야 할 것:</strong> 환경 생성과 평가가 융합된 <span class="highlight-warm">Environment-as-Evaluation</span> 파이프라인. 시간 스트림 전체에서 에이전트의 신념 업데이트, 경로 재기획, 메타 인지적 전략 수정을 관찰하는 <span class="highlight-cool">폐루프 동적 평가 체계</span>. 과거 이벤트 시점 간의 의미론적 연결성을 추적하는 <span class="highlight-green">시간적 상태 관리 아키텍처</span>.</p>
+    </div>
+
+    <p>결국 FutureSim이 묻는 것은 이것이다: <strong>"당신의 에이전트는 어제의 답이 오늘 틀렸음을 알아차릴 수 있는가?"</strong></p>
+
+    <p>이 질문에 답하기 위해서는, 더 이상 정적 벤치마크의 점수판을 들여다볼 수 없다. 시간이 흐르는 환경 속으로 직접 뛰어들어, 에이전트가 맥락을 어떻게 읽고, 언제 방향을 틀고, 어떻게 자신의 이전 결정과 화해하거나 결별하는지를 지켜봐야 한다.</p>
+
+    <blockquote>
+      에이전트 평가의 미래는 "정답을 맞혔는가"가 아니라 <em>"흐르는 시간 속에서 어떻게 변화했는가"</em>에 있다. 그리고 그 미래는 이미 FutureSim이라는 이름으로 시작되었다.
+    </blockquote>
+  </section>
+
+  <footer>
+    <p>본 분석은 <a href="#">FutureSim: Replaying World Events to Evaluate Adaptive Agents</a> 논문 및 관련 Wiki 지식을 바탕으로 작성되었습니다.</p>
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 페이드인 애니메이션
+  document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('.fade-in');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    elements.forEach(function(el) {
+      observer.observe(el);
+    });
+  });
+</script>
+
+</body>
+</html>
