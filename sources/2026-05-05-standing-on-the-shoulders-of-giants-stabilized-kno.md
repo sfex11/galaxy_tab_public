@@ -19,11 +19,11 @@
 
 ## 기존 Wiki와의 관계
 
-기존 [[knowledge-distillation]]은 아키텍처 패러다임 전환(자회귀↔확산)이나 파라미터 축소에 집중했으나, 본 논문은 증류 대상에 '행동 안정성'이라는 새로운 차원을 추가한다. 소형 모델이 의미론적 판단은 할 수 있으나 구조화된 출력을 신뢰성 있게 생성하지 못하는 현상을 문제화하고, 이를 증류 과정 자체에서 해결한다.
+기존 [[concepts/knowledge-distillation.md|knowledge distillation]]은 아키텍처 패러다임 전환(자회귀↔확산)이나 파라미터 축소에 집중했으나, 본 논문은 증류 대상에 '행동 안정성'이라는 새로운 차원을 추가한다. 소형 모델이 의미론적 판단은 할 수 있으나 구조화된 출력을 신뢰성 있게 생성하지 못하는 현상을 문제화하고, 이를 증류 과정 자체에서 해결한다.
 
-[[model-compression]]의 스코프에 '도메인 특화 행동 안정성 압축'을 추가한다. 탄소-정확도 트레이드오프(Carbon-Taxed Transformers)나 아키텍처 전환(TIDE)과 병렬적으로, 동일 아키텍처 내에서 대형→소형으로 안정성을 이전하는 실용적 경로를 제공한다.
+[[concepts/model-compression.md|model compression]]의 스코프에 '도메인 특화 행동 안정성 압축'을 추가한다. 탄소-정확도 트레이드오프(Carbon-Taxed Transformers)나 아키텍처 전환(TIDE)과 병렬적으로, 동일 아키텍처 내에서 대형→소형으로 안정성을 이전하는 실용적 경로를 제공한다.
 
-[[on-device-inference]]의 배포 가능성을 구체화한다. 비용·프라이버시·재현성 문제로 대형 LLM을 블랙박스로 사용할 수 없는 환경에서, 증류된 소형 모델이 온디바이스에서 X-CCD를 수행할 수 있게 한다.
+[[concepts/on-device-inference.md|on device inference]]의 배포 가능성을 구체화한다. 비용·프라이버시·재현성 문제로 대형 LLM을 블랙박스로 사용할 수 없는 환경에서, 증류된 소형 모델이 온디바이스에서 X-CCD를 수행할 수 있게 한다.
 
 ## 새로운 관점
 
@@ -31,9 +31,9 @@
 
 ## 연결점
 
-- [[algorithm-system-translation-gap]]: 대형 모델의 '알고리즘 수준' 이해를 '시스템 수준' 배포 가능한 형태로 번역하는 구체적 사례
-- [[execution-verification]]: 출력 형식 불안정성이 하류 검증 파이프라인을 무력화한다는 문제 인식을 공유
-- [[marginal-distribution-ceiling]]: 소형 모델의 주변 분포 상한선을 증류로 높이려는 시도이나, 타겟 분포 무변경 원칙과는 다른 접근(소형 모델의 분포 자체를 변화시킴)
+- [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]: 대형 모델의 '알고리즘 수준' 이해를 '시스템 수준' 배포 가능한 형태로 번역하는 구체적 사례
+- [[concepts/execution-verification.md|execution verification]]: 출력 형식 불안정성이 하류 검증 파이프라인을 무력화한다는 문제 인식을 공유
+- [[concepts/marginal-distribution-ceiling.md|marginal distribution ceiling]]: 소형 모델의 주변 분포 상한선을 증류로 높이려는 시도이나, 타겟 분포 무변경 원칙과는 다른 접근(소형 모델의 분포 자체를 변화시킴)
 
 ## 🔗 관련 논문
 

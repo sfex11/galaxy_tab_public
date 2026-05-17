@@ -11,3 +11,9 @@ Susceptibilities are a technique for neural network interpretability that studie
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/causal-mechanistic-interpretability.md|causal mechanistic interpretability]]
+
+---
+**관련**: [[concepts/feature-space-knowledge-consistency-certification.md|feature space knowledge consistency certification]]

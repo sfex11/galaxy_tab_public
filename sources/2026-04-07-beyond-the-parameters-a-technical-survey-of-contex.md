@@ -280,3 +280,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/causal-estimation-missingness-joint-modeling.md|causal estimation missingness joint modeling]]
+
+---
+**관련**: [[entities/retrieval-as-black-box.md|retrieval as black box]]
+
+---
+**관련**: [[concepts/visual-memory-textual-collapse.md|visual memory textual collapse]]
+
+---
+**관련**: [[concepts/retrieval-cognification.md|retrieval cognification]]

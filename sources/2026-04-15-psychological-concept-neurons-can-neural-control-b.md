@@ -114,3 +114,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/logic-expressiveness-bottleneck.md|logic expressiveness bottleneck]]
+
+---
+**관련**: [[entities/behavioral-stability-transfer.md|behavioral stability transfer]]
+
+---
+**관련**: [[concepts/representation-space-tool-verification.md|representation space tool verification]]
+
+---
+**관련**: [[concepts/behavioral-stability-transfer.md|behavioral stability transfer]]
+
+---
+**관련**: [[concepts/persona-collapse.md|persona collapse]]
+
+---
+**관련**: [[concepts/internal-capability-bottleneck.md|internal capability bottleneck]]
+
+---
+**관련**: [[concepts/local-global-alignment-gap.md|local global alignment gap]]
+
+---
+**관련**: [[concepts/representation-action-gap.md|representation action gap]]
+
+---
+**관련**: [[concepts/behavioral-manifold-confinement.md|behavioral manifold confinement]]

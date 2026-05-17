@@ -60,3 +60,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/three-layer-reward-architecture.md|three layer reward architecture]]
+
+---
+**관련**: [[concepts/trajectory-level-strategy.md|trajectory level strategy]]

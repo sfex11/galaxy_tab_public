@@ -39,3 +39,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/normative-orchestration-principle.md|normative orchestration principle]]
+
+---
+**관련**: [[entities/experience-reuse.md|experience reuse]]
+
+---
+**관련**: [[concepts/learnable-skill-operations.md|learnable skill operations]]

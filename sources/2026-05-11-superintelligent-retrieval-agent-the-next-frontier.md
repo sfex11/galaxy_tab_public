@@ -11,3 +11,9 @@ Retrieval-augmented agents are increasingly the interface to large organizationa
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/pretraining-induced-expert-specialization.md|pretraining induced expert specialization]]
+
+---
+**관련**: [[concepts/knowledge-tool-substitution-boundary.md|knowledge tool substitution boundary]]

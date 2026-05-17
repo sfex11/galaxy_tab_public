@@ -920,3 +920,7 @@
 ## [2026-05-17 08:30] ingest | Performance-Driven Policy Optimization for Speculative Decoding with Adaptive Windowing
 
 ## [2026-05-17 08:30] ingest | CLOVER: Closed-Loop Value Estimation \& Ranking for End-to-End Autonomous Driving Planning
+
+## [2026-05-17 17:05] lint | Wiki 건전성 체크
+- Issues: 1040개
+- Orphans: 258, Missing: 782, Contradictions: 0

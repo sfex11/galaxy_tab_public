@@ -76,3 +76,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/llm-driven-imputation.md|llm driven imputation]]
+
+---
+**관련**: [[concepts/dual-black-box-problem.md|dual black box problem]]
+
+---
+**관련**: [[concepts/strategic-credit-assignment.md|strategic credit assignment]]

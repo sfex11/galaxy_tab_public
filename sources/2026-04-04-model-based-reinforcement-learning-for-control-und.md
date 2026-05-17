@@ -42,3 +42,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/time-varying-confounding.md|time varying confounding]]

@@ -57,3 +57,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/cross-platform-evolution.md|cross platform evolution]]
+
+---
+**관련**: [[concepts/methodological-provenance-gap.md|methodological provenance gap]]

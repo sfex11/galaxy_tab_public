@@ -278,3 +278,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/multi-agent-bayesian-consensus.md|multi agent bayesian consensus]]
+
+---
+**관련**: [[concepts/verifier-based-evaluation-condition.md|verifier based evaluation condition]]
+
+---
+**관련**: [[concepts/runtime-design-time-alignment-absorption.md|runtime design time alignment absorption]]
+
+---
+**관련**: [[concepts/fidelity-safety-inverse-alignment.md|fidelity safety inverse alignment]]
+
+---
+**관련**: [[concepts/evidence-based-certification.md|evidence based certification]]

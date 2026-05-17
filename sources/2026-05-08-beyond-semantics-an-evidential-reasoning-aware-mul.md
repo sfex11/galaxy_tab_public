@@ -19,9 +19,9 @@
 
 ## 기존 Wiki와의 관계
 
-기존 [[uncertainty-quantification]] 엔티티가 '불확실성 정량화의 응용 대상을 모델 성능 예측에서 규제적 안전 증명으로 확장'한다는 방향성을 제시했다면, 본 논문은 이를 **임상적 위험 판단(정신 건강 예측)**이라는 구체적 도메인으로 실현한다. 특히 [[meaning-insensitive-metric]]이 지적한 '의미 무감각적 메트릭'의 문제를 정신 건강 예측에서 재발견한다 — 의미론적 표현만으로는 모호한 텍스트에서의 불확실성을 포착할 수 없어 과신뢰 예측을 산출한다.
+기존 [[concepts/uncertainty-quantification.md|uncertainty quantification]] 엔티티가 '불확실성 정량화의 응용 대상을 모델 성능 예측에서 규제적 안전 증명으로 확장'한다는 방향성을 제시했다면, 본 논문은 이를 **임상적 위험 판단(정신 건강 예측)**이라는 구체적 도메인으로 실현한다. 특히 [[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]이 지적한 '의미 무감각적 메트릭'의 문제를 정신 건강 예측에서 재발견한다 — 의미론적 표현만으로는 모호한 텍스트에서의 불확실성을 포착할 수 없어 과신뢰 예측을 산출한다.
 
-[[medical-ai]] 엔티티에서 'Can AI Be a Doctor?'가 대화적 동정심·가독성에 집중하고 'HealthNLP_Retrievers'가 EHR 기반 근거 생성에 집중했다면, 본 논문은 정신 건강 예측의 **신뢰성 문제(불확실성 추정)**이라는 새로운 축을 제공한다.
+[[concepts/medical-ai.md|medical ai]] 엔티티에서 'Can AI Be a Doctor?'가 대화적 동정심·가독성에 집중하고 'HealthNLP_Retrievers'가 EHR 기반 근거 생성에 집중했다면, 본 논문은 정신 건강 예측의 **신뢰성 문제(불확실성 추정)**이라는 새로운 축을 제공한다.
 
 ## 핵심 메커니즘
 

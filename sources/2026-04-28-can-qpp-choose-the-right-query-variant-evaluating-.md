@@ -178,3 +178,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/green-compression-pipeline.md|green compression pipeline]]
+
+---
+**관련**: [[entities/masked-prediction-distribution.md|masked prediction distribution]]
+
+---
+**관련**: [[concepts/intentional-semantic-degradation.md|intentional semantic degradation]]
+
+---
+**관련**: [[concepts/domain-selective-inference.md|domain selective inference]]
+
+---
+**관련**: [[concepts/semantic-overconfidence-in-clinical-prediction.md|semantic overconfidence in clinical prediction]]

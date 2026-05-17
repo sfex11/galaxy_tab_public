@@ -63,3 +63,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/sampled-data-control.md|sampled data control]]
+
+---
+**관련**: [[concepts/dual-axis-difficulty-control.md|dual axis difficulty control]]
+
+---
+**관련**: [[concepts/adaptive-control-hierarchy.md|adaptive control hierarchy]]

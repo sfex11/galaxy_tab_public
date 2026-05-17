@@ -77,3 +77,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/training-free-bias-mitigation.md|training free bias mitigation]]
+
+---
+**관련**: [[concepts/design-time-memory-dispersal.md|design time memory dispersal]]

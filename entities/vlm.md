@@ -84,4 +84,4 @@ VLA Foundry는 VLM을 행동 모델로 확장하는 파이프라인을 제공함
 
 ### Make Your LVLM KV Cache More Lightweight (2026-05-05)
 
-VLM의 메모리 병목이 추론 능력이 아니라 시각 토큰의 KV 캐시 저장 비용에 있음을 구체화하여, [[agentic-vlm]]이 지적한 능력-배포 간극을 메모리 효율 차원에서 정교화한다.
+VLM의 메모리 병목이 추론 능력이 아니라 시각 토큰의 KV 캐시 저장 비용에 있음을 구체화하여, [[concepts/agentic-vlm.md|agentic vlm]]이 지적한 능력-배포 간극을 메모리 효율 차원에서 정교화한다.

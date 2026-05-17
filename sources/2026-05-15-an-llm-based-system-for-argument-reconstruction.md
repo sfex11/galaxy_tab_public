@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/mental-health-prediction.md|mental health prediction]]
+
+---
+**관련**: [[entities/logic-expressiveness.md|logic expressiveness]]
+
+---
+**관련**: [[entities/citation-claim-decoupling.md|citation claim decoupling]]

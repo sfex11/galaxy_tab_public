@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-isolation.md|structural isolation]]
+
+---
+**관련**: [[concepts/se-science-transfer-gap.md|se science transfer gap]]

@@ -64,3 +64,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/compensatory-memory-dynamics.md|compensatory memory dynamics]]
+
+---
+**관련**: [[concepts/topology-aware-code-repair.md|topology aware code repair]]

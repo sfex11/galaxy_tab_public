@@ -70,3 +70,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/soliloquy-to-agora-paradigm.md|soliloquy to agora paradigm]]
+
+---
+**관련**: [[concepts/low-dimensional-interaction-representation.md|low dimensional interaction representation]]

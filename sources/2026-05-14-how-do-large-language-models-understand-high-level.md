@@ -35,3 +35,39 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-14-neurosymbolic-auditing-of-natural-language-softwar]]: 두 논문 모두 LLM이 소프트웨어 공학 산출물(자연어 요구사항 명세 및 아키텍처 다이어그램)의 의미를 정확히 이해하고 검증할 수 있는지 평가하여 시스템의 안전성을 강화하는 방법을 다룹니다.
+
+---
+**관련**: [[entities/cross-domain-ranking-fallacy.md|cross domain ranking fallacy]]
+
+---
+**관련**: [[entities/design-conductor.md|design conductor]]
+
+---
+**관련**: [[concepts/instrumental-formal-safety.md|instrumental formal safety]]
+
+---
+**관련**: [[concepts/coordinate-semantic-preservation.md|coordinate semantic preservation]]
+
+---
+**관련**: [[concepts/semantic-aware-checkpointing.md|semantic aware checkpointing]]
+
+---
+**관련**: [[concepts/plan-execution-semantics.md|plan execution semantics]]
+
+---
+**관련**: [[concepts/structural-semantic-causality.md|structural semantic causality]]
+
+---
+**관련**: [[concepts/cross-domain-structural-failure-isomorphism.md|cross domain structural failure isomorphism]]
+
+---
+**관련**: [[concepts/semantic-dependency-graph.md|semantic dependency graph]]
+
+---
+**관련**: [[concepts/cross-domain-ranking-fallacy.md|cross domain ranking fallacy]]
+
+---
+**관련**: [[concepts/formal-verification-layer-for-agents.md|formal verification layer for agents]]
+
+---
+**관련**: [[concepts/global-semantic-modeling.md|global semantic modeling]]

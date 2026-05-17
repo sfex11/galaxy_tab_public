@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/proof-planning-depth.md|proof planning depth]]
+
+---
+**관련**: [[entities/surrogate-guided-selection.md|surrogate guided selection]]
+
+---
+**관련**: [[concepts/adaptive-bottleneck-migration.md|adaptive bottleneck migration]]

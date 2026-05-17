@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-10-beyond-negative-rollouts-positive-only-policy-opti.md|Beyond Negative Rollouts: Positive-Only Policy Optimization ]]
 
 ### Beyond Negative Rollouts: Positive-Only Policy Optimization with Impli (2026-05-11)
-
-→ [[sources/2026-05-11-beyond-negative-rollouts-positive-only-policy-opti.md|상세 보기]]

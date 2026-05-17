@@ -26,13 +26,13 @@ Cola DLM은 텍스트를 먼저 안정적인 잠재 표현으로 학습한 뒤, 
 
 ## 기존 Wiki와의 관계
 
-[[diffusion-llm]] 엔티티에서 TIDE가 자회귀→확산의 지식 전이를 아키텍처 패러다임 전환의 수단으로 제시했다면, Cola DLM은 확산 언어 모델 자체의 내부 아키텍처를 계층적 분해로 재설계하여 비자회귀 생성의 실질적 성능 한계를 공격한다. [[parallel-decoding]]의 관점에서는, 기존 추측 디코딩이 자회귀 내에서의 병렬화라면 Cola DLM은 패러다임 자체를 비순차적 생성으로 전환하여 병렬화의 상한선을 근본적으로 이동시킨다.
+[[concepts/diffusion-llm.md|diffusion llm]] 엔티티에서 TIDE가 자회귀→확산의 지식 전이를 아키텍처 패러다임 전환의 수단으로 제시했다면, Cola DLM은 확산 언어 모델 자체의 내부 아키텍처를 계층적 분해로 재설계하여 비자회귀 생성의 실질적 성능 한계를 공격한다. [[concepts/parallel-decoding.md|parallel decoding]]의 관점에서는, 기존 추측 디코딩이 자회귀 내에서의 병렬화라면 Cola DLM은 패러다임 자체를 비순차적 생성으로 전환하여 병렬화의 상한선을 근본적으로 이동시킨다.
 
 ## 연결점
 
-- [[cross-architecture-distillation]]: AR에서 Diffusion으로의 지식 전이가 Cola DLM의 표현 공간을 어떻게 초기화할 수 있는지 시사
-- [[hierarchical-kv-memory]]: 계층적 메모리 구조가 AR 서빙과 확산 생성에서 상이한 역할을 함
-- [[marginal-distribution-ceiling]]: 확산 모델의 주변 분포 P(y)가 AR과 어떻게 차별화되는지가 핵심 연구 질문
+- [[concepts/cross-architecture-distillation.md|cross architecture distillation]]: AR에서 Diffusion으로의 지식 전이가 Cola DLM의 표현 공간을 어떻게 초기화할 수 있는지 시사
+- [[concepts/hierarchical-kv-memory.md|hierarchical kv memory]]: 계층적 메모리 구조가 AR 서빙과 확산 생성에서 상이한 역할을 함
+- [[concepts/marginal-distribution-ceiling.md|marginal distribution ceiling]]: 확산 모델의 주변 분포 P(y)가 AR과 어떻게 차별화되는지가 핵심 연구 질문
 
 ## 🔗 관련 논문
 

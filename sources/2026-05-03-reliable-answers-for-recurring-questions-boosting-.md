@@ -65,3 +65,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/constrained-decoding.md|constrained decoding]]
+
+---
+**관련**: [[concepts/procedure-accuracy-decoupling.md|procedure accuracy decoupling]]

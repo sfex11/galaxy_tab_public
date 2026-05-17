@@ -67,3 +67,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/methodological-navigation-gap.md|methodological navigation gap]]
+
+---
+**관련**: [[concepts/domain-procedure-navigation.md|domain procedure navigation]]
+
+---
+**관련**: [[concepts/proof-planning-horizon.md|proof planning horizon]]
+
+---
+**관련**: [[concepts/cognitive-architecture-translation-gap.md|cognitive architecture translation gap]]

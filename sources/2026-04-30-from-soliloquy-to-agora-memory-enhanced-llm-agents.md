@@ -122,3 +122,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/memory-cognitive-adaptation.md|memory cognitive adaptation]]
+
+---
+**관련**: [[concepts/hci-aai-optimization-divergence.md|hci aai optimization divergence]]
+
+---
+**관련**: [[concepts/purely-reactive-optimization.md|purely reactive optimization]]

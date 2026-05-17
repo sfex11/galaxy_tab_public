@@ -44,3 +44,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/skill-lifecycle-management.md|skill lifecycle management]]

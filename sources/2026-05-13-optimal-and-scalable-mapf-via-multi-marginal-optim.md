@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/geometric-collapse.md|geometric collapse]]
+
+---
+**관련**: [[entities/target-trial-emulation.md|target trial emulation]]
+
+---
+**관련**: [[concepts/geometric-collapse.md|geometric collapse]]

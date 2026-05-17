@@ -123,3 +123,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/failed-hypothesis-tracking.md|failed hypothesis tracking]]
+
+---
+**관련**: [[concepts/autonomous-hardware-design.md|autonomous hardware design]]
+
+---
+**관련**: [[concepts/tracking-neutrality-assumption.md|tracking neutrality assumption]]

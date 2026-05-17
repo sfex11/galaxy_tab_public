@@ -53,3 +53,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/sft-hallucination-mechanism.md|sft hallucination mechanism]]
+
+---
+**관련**: [[entities/sft-hallucination-mechanism.md|sft hallucination mechanism]]

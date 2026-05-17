@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/event-extraction.md|event extraction]]
+
+---
+**관련**: [[concepts/experience-dynamics-extraction-gap.md|experience dynamics extraction gap]]

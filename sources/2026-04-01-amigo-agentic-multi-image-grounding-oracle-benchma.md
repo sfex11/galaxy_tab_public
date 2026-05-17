@@ -58,3 +58,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/dynamic-benchmark.md|dynamic benchmark]]
+
+---
+**관련**: [[entities/gui-grounding.md|gui grounding]]

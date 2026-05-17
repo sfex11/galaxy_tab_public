@@ -158,3 +158,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/post-rendering-failure-detection.md|post rendering failure detection]]
+
+---
+**관련**: [[concepts/reactive-vs-strategic-agentic-rl.md|reactive vs strategic agentic rl]]
+
+---
+**관련**: [[concepts/modality-mediation-failure.md|modality mediation failure]]
+
+---
+**관련**: [[concepts/control-construct-grounding.md|control construct grounding]]
+
+---
+**관련**: [[concepts/internal-state-feedback-extraction.md|internal state feedback extraction]]
+
+---
+**관련**: [[concepts/activation-steering.md|activation steering]]
+
+---
+**관련**: [[concepts/control-layer-decision-theory.md|control layer decision theory]]
+
+---
+**관련**: [[concepts/reward-sparsity.md|reward sparsity]]

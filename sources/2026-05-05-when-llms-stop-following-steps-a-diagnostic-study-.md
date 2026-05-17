@@ -15,14 +15,14 @@
 LLM이 프롬프트에 명시된 절차적 알고리즘을 충실히 수행하는지를 진단하는 연구로, 최종 답변 정확도와 절차 수행 충실도가 분리될 수 있음을 체계적으로 실증한다. 단순 산술 연산으로 구성된 단계별 알고리즘을 제시하고 두 개의 수치 입력을 주어 최종 계산값을 반환하도록 하되, 알고리즘 길이를 증가시켜 복잡도를 제어하는 진단 벤치마크를 제안한다.
 
 ## 기존 Wiki와의 관계
-이 논문은 [[reasoning-integrity]]를 '논리적 타당성'에서 '절차적 충실도'로 확장하는 구체적 실증을 제공한다. 기존에 [[unrecoverable-reasoning-error]]가 '한 번 잘못된 단계를 밟으면 복구 불가능'함을 기술했다면, 본 논문은 이를 절차적 실행 맥락에서 정량화 가능한 현상으로 구체화한다.
+이 논문은 [[concepts/reasoning-integrity.md|reasoning integrity]]를 '논리적 타당성'에서 '절차적 충실도'로 확장하는 구체적 실증을 제공한다. 기존에 [[concepts/unrecoverable-reasoning-error.md|unrecoverable reasoning error]]가 '한 번 잘못된 단계를 밟으면 복구 불가능'함을 기술했다면, 본 논문은 이를 절차적 실행 맥락에서 정량화 가능한 현상으로 구체화한다.
 
-[[meaning-insensitive-metric]]의 새로운 사례를 제공한다 — 최종 답변 정확도는 절차 수행의 충실도를 측정하지 못하며, 모델이 알고리즘을 무시하고 자체적 단축 경로로 정답에 도달하는 현상을 포착하지 못한다. 이는 [[evaluator-assumption]]이 '정답 일치 = 절차 준수'를 암묵적으로 가정하는 구조적 문제의 또 다른 현현이다.
+[[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]의 새로운 사례를 제공한다 — 최종 답변 정확도는 절차 수행의 충실도를 측정하지 못하며, 모델이 알고리즘을 무시하고 자체적 단축 경로로 정답에 도달하는 현상을 포착하지 못한다. 이는 [[concepts/evaluator-assumption.md|evaluator assumption]]이 '정답 일치 = 절차 준수'를 암묵적으로 가정하는 구조적 문제의 또 다른 현현이다.
 
-[[benchmark]] 엔티티에 대하여, 정적 태스크에서의 천장 성능 문제([[ceiling-performance-problem]])뿐 아니라 '측정 대상의 오귀정' 문제 — 즉, 우리가 무엇을 측정하고 있는지에 대한 메타적 오류 — 를 진단하는 벤치마크로서의 역할을 부여한다.
+[[concepts/benchmark.md|benchmark]] 엔티티에 대하여, 정적 태스크에서의 천장 성능 문제([[concepts/ceiling-performance-problem.md|ceiling performance problem]])뿐 아니라 '측정 대상의 오귀정' 문제 — 즉, 우리가 무엇을 측정하고 있는지에 대한 메타적 오류 — 를 진단하는 벤치마크로서의 역할을 부여한다.
 
 ## 연결점
-[[process-control-architecture]](Box Maze)가 추론 프로세스의 무결성을 아키텍처 수준에서 강제하려 한다면, 본 논문은 그 강제의 대상이 되는 '절차적 준수'라는 속성이 현재 어느 정도로 결여되어 있는지를 기준선으로 제공한다. [[shortcut-learning]]과도 연결되는데, 모델이 명시적 알고리즘을 '단축 경로'로 대체하는 행위가 절차적 불충실의 미시적 메커니즘으로 해석될 수 있다.
+[[concepts/process-control-architecture.md|process control architecture]](Box Maze)가 추론 프로세스의 무결성을 아키텍처 수준에서 강제하려 한다면, 본 논문은 그 강제의 대상이 되는 '절차적 준수'라는 속성이 현재 어느 정도로 결여되어 있는지를 기준선으로 제공한다. [[concepts/shortcut-learning.md|shortcut learning]]과도 연결되는데, 모델이 명시적 알고리즘을 '단축 경로'로 대체하는 행위가 절차적 불충실의 미시적 메커니즘으로 해석될 수 있다.
 
 ## 🔗 관련 논문
 

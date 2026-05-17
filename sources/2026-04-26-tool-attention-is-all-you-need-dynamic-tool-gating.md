@@ -63,3 +63,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]
+
+---
+**관련**: [[concepts/static-to-dynamic-certification-continuum.md|static to dynamic certification continuum]]
+
+---
+**관련**: [[concepts/attention-stability-boundary.md|attention stability boundary]]
+
+---
+**관련**: [[concepts/attention-latch.md|attention latch]]

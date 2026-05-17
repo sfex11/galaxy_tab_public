@@ -85,3 +85,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/training-process-gaming.md|training process gaming]]
+
+---
+**관련**: [[concepts/self-sufficient-architecture.md|self sufficient architecture]]

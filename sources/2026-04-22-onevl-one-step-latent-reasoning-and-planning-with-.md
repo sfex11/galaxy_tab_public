@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evidence-chain-fracture.md|evidence chain fracture]]
+
+---
+**관련**: [[concepts/debate-latency-paradox.md|debate latency paradox]]

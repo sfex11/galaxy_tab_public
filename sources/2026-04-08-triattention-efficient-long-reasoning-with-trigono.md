@@ -116,3 +116,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/communication-reasoning-joint-optimization.md|communication reasoning joint optimization]]
+
+---
+**관련**: [[entities/reasoning-prompt-compliance-gap.md|reasoning prompt compliance gap]]
+
+---
+**관련**: [[entities/unrecoverable-reasoning-error.md|unrecoverable reasoning error]]
+
+---
+**관련**: [[entities/evidential-reasoning.md|evidential reasoning]]
+
+---
+**관련**: [[concepts/rl-reasoning-transfer-boundary.md|rl reasoning transfer boundary]]

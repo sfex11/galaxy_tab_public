@@ -42,3 +42,6 @@ $k$-sparse probing이라는 분석 도구는 뉴런의 다의성(polysemanticity
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/mixture-of-experts.md|mixture of experts]]

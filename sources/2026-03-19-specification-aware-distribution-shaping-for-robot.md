@@ -85,3 +85,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/topology-aware-code-repair.md|topology aware code repair]]
+
+---
+**관련**: [[concepts/interaction-structure-aware-search.md|interaction structure aware search]]

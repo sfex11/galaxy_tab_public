@@ -72,3 +72,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/epistemic-uncertainty-decomposition.md|epistemic uncertainty decomposition]]
+
+---
+**관련**: [[entities/epistemic-artifact-bound-optimization.md|epistemic artifact bound optimization]]
+
+---
+**관련**: [[concepts/output-epistemic-reliability.md|output epistemic reliability]]

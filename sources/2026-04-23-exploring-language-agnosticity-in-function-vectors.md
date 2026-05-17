@@ -60,3 +60,6 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-04-22-dual-alignment-between-language-model-layers-and-h]]: 둘 다 LLM 내부 표현의 구조적 특성을 조사하며, 하나는 층별 활성화와 인간 문장 처리의 정렬을, 다른 하나는 함수 벡터의 언어 비의존성을 분석한다.
+
+---
+**관련**: [[concepts/code-agnostic-risk.md|code agnostic risk]]

@@ -41,3 +41,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/blind-tool-invocation.md|blind tool invocation]]
+
+---
+**관련**: [[entities/blind-tool-invocation.md|blind tool invocation]]

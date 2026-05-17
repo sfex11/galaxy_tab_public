@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-10-cited-but-not-verified-parsing-and-evaluating-sour.md|Cited but Not Verified: Parsing and Evaluating Source Attrib]]
 
 ### Cited but Not Verified: Parsing and Evaluating Source Attribution in L (2026-05-11)
-
-→ [[sources/2026-05-11-cited-but-not-verified-parsing-and-evaluating-sour.md|상세 보기]]

@@ -22,15 +22,15 @@ LLM 안전성 평가의 타당성은 정답 레이블의 유무가 아닌 평가
 
 ## 핵심 기여
 
-기존 [[statistical-certification|통계적 인증]]이 정답 레이블을 전제로 안전 확률 경계를 설정했다면, 본 논문은 레이블 없이 일관성 검사(consistency check)로 이를 대체하는 경로를 제공한다. 이는 [[ai-risk-regulation|AI 규제]]의 실무적 장벽 — 규제 대상 도메인에 벤치마크가 없다는 [[regulatory-vacuity|규제 공백]] — 에 대한 직접적 해결책이다.
+기존 [[concepts/statistical-certification.md|통계적 인증]]이 정답 레이블을 전제로 안전 확률 경계를 설정했다면, 본 논문은 레이블 없이 일관성 검사(consistency check)로 이를 대체하는 경로를 제공한다. 이는 [[entities/ai-risk-regulation.md|AI 규제]]의 실무적 장벽 — 규제 대상 도메인에 벤치마크가 없다는 [[concepts/regulatory-vacuity.md|규제 공백]] — 에 대한 직접적 해결책이다.
 
 ## 계약적 평가 패러다임
 
-[[evaluator-assumption|평가자의 가정]]을 암묵적 전제에서 명시적 계약 항목으로 전환한다는 점에서, [[llm-as-judge|LLM-as-Judge]]의 신뢰성 문제를 '판정자 고정'이라는 계약 조건으로 흡수한다. [[certification-invariance|인증 불변성]]에 대한 부분적 답을 제공하는데, 점수가 계약 변경에 불변하지 않음을 명시적으로 인정하면서도 고정 계약 하에서의 상대적 비교가 배포 증거로서 기능함을 보인다.
+[[concepts/evaluator-assumption.md|평가자의 가정]]을 암묵적 전제에서 명시적 계약 항목으로 전환한다는 점에서, [[concepts/llm-as-judge.md|LLM-as-Judge]]의 신뢰성 문제를 '판정자 고정'이라는 계약 조건으로 흡수한다. [[concepts/certification-invariance.md|인증 불변성]]에 대한 부분적 답을 제공하는데, 점수가 계약 변경에 불변하지 않음을 명시적으로 인정하면서도 고정 계약 하에서의 상대적 비교가 배포 증거로서 기능함을 보인다.
 
 ## 관련 문제와의 연결
 
-[[safety-property-underdetermination|안전 속성 미결정]] 상황에서도 절대적 안전 증명 대신 상대적 일관성 기반 비교가 가능함을 보여주며, [[acceptable-risk-quantification|수용 가능한 위험 정량화]]를 확률적 절대 경계에서 계약적 상대 경계로 확장한다.
+[[concepts/safety-property-underdetermination.md|안전 속성 미결정]] 상황에서도 절대적 안전 증명 대신 상대적 일관성 기반 비교가 가능함을 보여주며, [[concepts/acceptable-risk-quantification.md|수용 가능한 위험 정량화]]를 확률적 절대 경계에서 계약적 상대 경계로 확장한다.
 
 ## 🔗 관련 논문
 

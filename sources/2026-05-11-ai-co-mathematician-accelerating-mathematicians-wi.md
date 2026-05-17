@@ -11,3 +11,6 @@ We introduce the AI co-mathematician, a workbench for mathematicians to interact
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/ai-co-mathematician.md|ai co mathematician]]

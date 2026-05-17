@@ -222,3 +222,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-regimes-information-bottleneck.md|evaluation regimes information bottleneck]]
+
+---
+**관련**: [[entities/expert-prior-retrieval.md|expert prior retrieval]]
+
+---
+**관련**: [[concepts/rubric-based-step-verification.md|rubric based step verification]]
+
+---
+**관련**: [[concepts/cross-language-code-clone-detection.md|cross language code clone detection]]

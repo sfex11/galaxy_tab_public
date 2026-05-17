@@ -88,3 +88,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/dual-optimization-structure.md|dual optimization structure]]
+
+---
+**관련**: [[concepts/positive-only-policy-optimization.md|positive only policy optimization]]

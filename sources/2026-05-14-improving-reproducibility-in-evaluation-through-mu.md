@@ -35,3 +35,24 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-14-eva-bench-a-new-end-to-end-framework-for-evaluatin]]: 두 논문은 기존 생성형 AI 평가의 신뢰성 부족 문제를 해결하기 위해 각각 다단계 주석자 모델링과 음성 에이전트용 종단 간 벤치마크를 통해 평가 체계의 견고성을 향상시킵니다.
+
+---
+**관련**: [[entities/safety-property-underdetermination.md|safety property underdetermination]]
+
+---
+**관련**: [[entities/benchmarkless-comparative-safety-scoring.md|benchmarkless comparative safety scoring]]
+
+---
+**관련**: [[entities/validation-driven-refinement.md|validation driven refinement]]
+
+---
+**관련**: [[concepts/llm-driven-imputation.md|llm driven imputation]]
+
+---
+**관련**: [[concepts/validation-driven-refinement.md|validation driven refinement]]
+
+---
+**관련**: [[concepts/helpfulness-robustness.md|helpfulness robustness]]
+
+---
+**관련**: [[concepts/annotator-normative-role.md|annotator normative role]]

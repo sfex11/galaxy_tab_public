@@ -76,3 +76,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/training-phase-knowledge-contamination.md|training phase knowledge contamination]]
+
+---
+**관련**: [[concepts/stabilized-knowledge-distillation.md|stabilized knowledge distillation]]

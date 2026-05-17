@@ -120,3 +120,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/label-free-consistency-check.md|label free consistency check]]
+
+---
+**관련**: [[concepts/external-layer-principle.md|external layer principle]]

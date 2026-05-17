@@ -40,3 +40,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/origami-engineering.md|origami engineering]]
+
+---
+**관련**: [[entities/post-hoc-causal-gap.md|post hoc causal gap]]
+
+---
+**관련**: [[entities/temporal-causal-normalizing-flow.md|temporal causal normalizing flow]]
+
+---
+**관련**: [[concepts/post-hoc-causal-gap.md|post hoc causal gap]]

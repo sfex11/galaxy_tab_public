@@ -93,3 +93,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/geographic-plausibility-verification.md|geographic plausibility verification]]
+
+---
+**관련**: [[entities/hierarchical-representation.md|hierarchical representation]]
+
+---
+**관련**: [[concepts/problem-validity-verification.md|problem validity verification]]

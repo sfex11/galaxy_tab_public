@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/mixture-of-experts.md|mixture of experts]]
+
+---
+**관련**: [[concepts/emergent-modularity.md|emergent modularity]]

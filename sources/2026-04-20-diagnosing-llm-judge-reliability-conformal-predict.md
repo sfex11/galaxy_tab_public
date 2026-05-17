@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-evaluation-distortion.md|dual evaluation distortion]]
+
+---
+**관련**: [[concepts/structured-epistemic-inconsistency.md|structured epistemic inconsistency]]

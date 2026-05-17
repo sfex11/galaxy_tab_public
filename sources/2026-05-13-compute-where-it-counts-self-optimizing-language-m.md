@@ -23,7 +23,7 @@ Efficient LLM inference research has largely focused on reducing the cost of eac
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

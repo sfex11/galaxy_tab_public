@@ -11,3 +11,9 @@ Reinforcement learning (RL) has been applied to improve large language model (LL
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/scalelogic.md|scalelogic]]
+
+---
+**관련**: [[concepts/lack-of-developmental-scaffolding.md|lack of developmental scaffolding]]

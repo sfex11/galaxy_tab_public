@@ -126,3 +126,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/runtime-verification-layer.md|runtime verification layer]]
+
+---
+**관련**: [[concepts/planning-gap.md|planning gap]]
+
+---
+**관련**: [[concepts/render-verification-gap.md|render verification gap]]
+
+---
+**관련**: [[concepts/geographic-plausibility-verification.md|geographic plausibility verification]]

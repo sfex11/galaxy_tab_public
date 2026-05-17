@@ -98,3 +98,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/internalization-of-tool-use.md|internalization of tool use]]
+
+---
+**관련**: [[concepts/learning-forgetting-tradeoff.md|learning forgetting tradeoff]]
+
+---
+**관련**: [[concepts/knowledge-topography-internalization.md|knowledge topography internalization]]
