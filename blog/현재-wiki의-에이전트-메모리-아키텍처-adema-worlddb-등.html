@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시각 기억을 잃어버린 에이전트 — 멀티모달 메모리 평가의 자기기만 구조</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+    --muted: #8a8279;
+    --border-subtle: rgba(44,40,37,0.06);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 17px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--border-subtle);
+  }
+  nav a {
+    color: var(--accent-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  nav a:hover {
+    background: rgba(194,112,62,0.08);
+  }
+
+  /* ── 헤더 ── */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 5vw, 42px);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    color: var(--muted);
+    font-size: clamp(14px, 2vw, 16px);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: clamp(12px, 1.6vw, 13px);
+    color: var(--muted);
+  }
+  .hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    padding: 16px 24px;
+    margin: clamp(24px, 4vw, 40px) auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #5a524a;
+    font-size: clamp(14.5px, 2.1vw, 16.5px);
+    line-height: 1.8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.88em;
+    color: var(--accent-warm);
+  }
+
+  /* ── 섹션 제목 ── */
+  .section-label {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-cool);
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 3.8vw, 32px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(17px, 2.8vw, 21px);
+    line-height: 1.4;
+    color: var(--fg);
+    margin: 28px 0 12px;
+  }
+
+  /* ── 본문 단락 ── */
+  p {
+    margin-bottom: 18px;
+    color: var(--fg);
+  }
+
+  /* ── 강조 ── */
+  strong { color: var(--fg); font-weight: 700; }
+  .accent-warm { color: var(--accent-warm); font-weight: 500; }
+  .accent-cool { color: var(--accent-cool); font-weight: 500; }
+  .accent-green { color: var(--accent-green); font-weight: 500; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3.5vw, 32px);
+    margin: clamp(20px, 3.5vw, 36px) 0;
+    box-shadow: var(--card-shadow);
+  }
+  .card-label {
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card-label.warm { color: var(--accent-warm); }
+  .card-label.cool { color: var(--accent-cool); }
+  .card-label.green { color: var(--accent-green); }
+
+  .card h3 { margin-top: 0; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.05), rgba(91,124,153,0.04));
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3.5vw, 32px);
+    margin: clamp(20px, 3.5vw, 36px) 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(194,112,62,0.08), transparent 70%);
+    border-radius: 50%;
+  }
+  .metaphor-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .metaphor-box h3 {
+    font-size: clamp(16px, 2.5vw, 19px);
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  /* ── 연결 다이어그램 ── */
+  .connection-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+  .connection-list li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--border-subtle);
+    font-size: clamp(13.5px, 2vw, 15px);
+    line-height: 1.7;
+    transition: border-color 0.2s;
+  }
+  .connection-list li:hover {
+    border-color: var(--card-border);
+  }
+  .connection-list .tag {
+    display: inline-block;
+    font-size: 0.82em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .tag-warm { background: rgba(194,112,62,0.1); color: var(--accent-warm); }
+  .tag-cool { background: rgba(91,124,153,0.1); color: var(--accent-cool); }
+  .tag-green { background: rgba(107,158,122,0.1); color: var(--accent-green); }
+
+  /* ── 두 레벨 문제 구조 ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  @media (min-width: 600px) {
+    .problem-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .problem-cell {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    box-shadow: var(--card-shadow);
+  }
+  .problem-cell .num {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .problem-cell .num.warm { color: rgba(194,112,62,0.25); }
+  .problem-cell .num.cool { color: rgba(91,124,153,0.25); }
+  .problem-cell h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2.2vw, 18px);
+    margin-bottom: 8px;
+  }
+  .problem-cell p {
+    font-size: clamp(13px, 1.8vw, 14.5px);
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-highlight {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(107,158,122,0.04));
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 40px);
+    margin: clamp(24px, 4vw, 40px) 0;
+    text-align: center;
+  }
+  .conclusion-highlight p {
+    font-size: clamp(15px, 2.2vw, 17px);
+    font-weight: 500;
+    line-height: 1.8;
+    color: var(--fg);
+  }
+
+  /* ── 패러다임 전환 리스트 ── */
+  .shift-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  .shift-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .shift-list li:last-child { border-bottom: none; }
+  .shift-arrow {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .shift-arrow.warm { background: rgba(194,112,62,0.1); color: var(--accent-warm); }
+  .shift-arrow.cool { background: rgba(91,124,153,0.1); color: var(--accent-cool); }
+  .shift-arrow.green { background: rgba(107,158,122,0.1); color: var(--accent-green); }
+  .shift-text h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(14.5px, 2.2vw, 16.5px);
+    margin-bottom: 4px;
+  }
+  .shift-text p {
+    font-size: clamp(13px, 1.8vw, 14.5px);
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  /* ── 주의 노트 ── */
+  .note {
+    font-size: clamp(12.5px, 1.7vw, 13.5px);
+    color: var(--muted);
+    padding: 14px 18px;
+    border-left: 2px solid var(--border-subtle);
+    margin: 20px 0;
+    line-height: 1.7;
+  }
+
+  /* ── 푸터 ── */
+  footer {
+    text-align: center;
+    padding: clamp(40px, 6vw, 72px) 0 clamp(32px, 5vw, 48px);
+    color: var(--muted);
+    font-size: clamp(12px, 1.6vw, 13px);
+  }
+  footer a {
+    color: var(--accent-warm);
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── 애니메이션 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">📚 홈</a>
+  <a href="../sources.html">논문</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../daily.html">📝 요약</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="blog.html">🧠 분석</a>
+  <a href="../patent/README.html">patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+</nav>
+
+<div class="wrapper">
+
+  <!-- ── 히어로 ── -->
+  <header class="hero fade-in">
+    <div class="hero-eyebrow">Multimodal Agent Memory</div>
+    <h1>시각 기억을 잃어버린 에이전트</h1>
+    <p class="hero-sub">멀티모달 메모리 연구는 "시각을 기억하는 에이전트"를 만들었다고 믿었지만, 실제로 만든 것은 "시각을 글로 번역하는 데 능숙한 에이전트"였다. MemEye가 해체한 자기기만의 구조를 따라간다.</p>
+    <div class="hero-meta">
+      <span>📄 대상 논문: MemEye</span>
+      <span>📅 2025</span>
+      <span>⏱ 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 1 ── -->
+  <section class="fade-in">
+    <span class="section-label">Section 01</span>
+    <h2>평가의 허상: 캡션만으로 통과한 시험</h2>
+
+    <p>여행에서 돌아온 친구에게 "파리의 노트르담 앞 창가에서 본 풍경을 묘사해 봐"라고 물어보세요. 정작 눈앞에 펼쳐졌던 색채와 질감, 빛의 각도를 떠올리지 못하더라도, 그가 가이드북이나 SNS에 적어둔 <span class="accent-warm">"고딕 양식의 정면 파사드와 섬세한 장미창"</span>이라는 문장만 기억하고 있다면 대답은 가능합니다.</p>
+
+    <p>이것이 바로 MemEye가 포착한 문제의 핵심입니다. 기존 멀티모달 에이전트 메모리 평가에서 "시각적으로 기반한(visual-grounded) 질문"이라 불리던 것들이, 실험 결과 <strong>캡션 텍스트만으로도 완벽히 해결 가능한 질문</strong>이었음이 드러났습니다.</p>
+
+    <blockquote>
+      "Long-term agent memory is increasingly multimodal, yet existing evaluations rarely test whether agents preserve the visual evidence needed for later reasoning."
+      <cite>— MemEye (2025)</cite>
+    </blockquote>
+
+    <p>평가가 측정한다고 주장한 것은 <span class="accent-cool">"시각 기억의 보존"</span>이었지만, 실제로 측정한 것은 <span class="accent-warm">"텍스트적 추론 단서의 축적"</span>이었습니다. 에이전트가 이미지를 진짜로 기억했는지, 아니면 이미지를 설명하는 글만 기억했는지를 구분하는 장치가 평가에 없었던 것입니다.</p>
+
+    <div class="card">
+      <div class="card-label warm">핵심 발견</div>
+      <p style="margin-bottom:0;">MemEye는 "시각적 질문"이라는 라벨이 평가의 충실도를 보장하지 않는다는 것을 정량적으로 입증했습니다. 질문의 형태가 시각적이더라도, 정답을 도출하는 데 필요한 정보가 텍스트 캡션에 이미 포함되어 있다면 그것은 시각 기억 평가가 아닙니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 2 ── -->
+  <section class="fade-in">
+    <span class="section-label">Section 02</span>
+    <h2>ADMA의 오케스트레이션은 무엇을 조율했는가</h2>
+
+    <p>ADEMA는 "Knowledge-State Orchestration Architecture"라는 이름으로, 에이전트의 장기 기억 지식 상태를 정밀하게 조율하는 아키텍처를 제안합니다. 오케스트레이션의 정밀도는 높아졌지만, 여기서 핵심적으로 짚어야 할 의문이 하나 생깁니다.</p>
+
+    <div class="metaphor-box">
+      <span class="metaphor-icon">🎼</span>
+      <h3>지휘자와 악보의 비유</h3>
+      <p>훌륭한 지휘자가 악단의 템포와 밸런스를 미세하게 조율한다고 가정해 봅시다. 하지만 그 악보가 처음부터 <strong>피아노 독주곡</strong>이었다면 — 현악기나 관악기 파트가 애초에 존재하지 않았다면 — 지휘자의 조율이 아무리 정밀해도 그것은 "관현악의 조율"이 아닙니다. 오케스트레이션의 대상 자체가 한정되어 있었던 것입니다.</p>
+    </div>
+
+    <p>마찬가지로, ADEMA가 "지식 상태(knowledge state)"를 정의할 때 그 상태 공간이 <span class="accent-warm">모달리티에 무관하게 텍스트화된 지식만을 포함</span>한다면, 아키텍처가 조율한 것은 시각 기억이 아니라 텍스트 기억이었을 것입니다.</p>
+
+    <p>물론 ADEMA 논문 자체가 시각 기억 보존을 명시적 목표로 삼았는지, 평가에서 캡션과 시각 원본의 분리 통제를 수행했는지에 대해서는 아직 완전한 정보가 축적되지 않았습니다. 하지만 MemEye가 보여준 구조적 문제를 ADEMA에 가설적으로 적용하면, 이러한 <span class="accent-cool">"오케스트레이션 도메인의 오지정"</span> 가능성은 충분히 검증해볼 가치가 있습니다.</p>
+
+    <div class="note">
+      ⚠️ 위 분석은 MemEye가 폭로한 구조적 문제를 ADEMA에 가설적으로 적용한 것입니다. ADEMA가 실제로 어떤 평가 프로토콜을 사용했는지에 대한 최종 판단은 원문 검토가 필요합니다.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 3 ── -->
+  <section class="fade-in">
+    <span class="section-label">Section 03</span>
+    <h2>세 가지 연결 고리: 자기기만이 가능했던 구조적 원인</h2>
+
+    <p>이 현상은 단일 논문의 결함이 아닙니다. Wiki에 축적된 개념 엔티티들을 연결하면, 문제가 어떻게 체계적으로 숨겨져 있었는지 그 구조가 드러납니다.</p>
+
+    <ul class="connection-list">
+      <li>
+        <span class="tag tag-warm">Annotation-Model Conflation</span>
+        캡션(주석)과 시각 원본(모델 입력)이 평가에서 구분되지 않는 현상. 에이전트가 "본 것"과 "읽은 것"을 평가가 구분하지 못하면, 시각 기억 보존 여부에 대한 인과적 귀속이 불가능해집니다.
+      </li>
+      <li>
+        <span class="tag tag-cool">Cognitive Fidelity Assessment</span>
+        평가가 측정하려는 인지 능력을 실제로 측정하고 있는지의 충실도 문제. 단일 모달리티 평가에서 이미 제기되던 이 문제가, "멀티모달"이라는 라벨 아래 더욱 교묘하게 은폐되었습니다.
+      </li>
+      <li>
+        <span class="tag tag-green">Agent-Knowledge Separation</span>
+        시각 지식과 텍스트 지식이 에이전트 내에서 분리·저장·검색되는지에 대한 문제. 아키텍처 수준에서 두 모달리티가 분리되지 않은 채 단일 텍스트 스트림으로 압축된다면, 메모리 자체가 시각 기억 보존을 지원하지 않는 구조적 원인이 존재하는 것입니다.
+      </li>
+    </ul>
+
+    <h3>새롭게 드러난 연결</h3>
+
+    <p>이 세 엔티티의 교차점에서 두 가지 새로운 개념적 연결이 발견됩니다.</p>
+
+    <div class="card">
+      <div class="card-label cool">연결 1: 오케스트레이션의 도메인 오지정</div>
+      <p style="margin-bottom:0;">Annotation-Model Conflation과 ADEMA의 지식 상태 모델이 만나면, 아키텍처가 "조율"의 대상을 시각 기억이 아닌 텍스트 기억으로 잘못 지정했을 가능성이 구체화됩니다. 정밀도의 향상이 방향의 오류를 상쇄하지 못하는 전형적인 경우입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label green">연결 2: 멀티모달 라벨의 보증 효과</div>
+      <p style="margin-bottom:0;">Cognitive Fidelity Assessment의 관점에서, "멀티모달 벤치마크"라는 라벨 자체가 연구자들에게 평가의 충실도에 대한 잘못된 안도감을 부여했습니다. 질문이 시각적 형태를 띠고 있다는 사실이, 그 질문이 시각 기억을 필수적으로 요구한다는 보증으로 기능해버린 것입니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 4 ── -->
+  <section class="fade-in">
+    <span class="section-label">Section 04</span>
+    <h2>손실 압축이 기억으로 둔갑한 순간</h2>
+
+    <div class="metaphor-box">
+      <span class="metaphor-icon">🖼️</span>
+      <h3>JPEG 압축의 비유</h3>
+      <p>고해상도 원본 사진을 JPEG로 저장할 때, 파일 크기는 줄어들지만 픽셀 정보는 영구적으로 손실됩니다. 이 압축된 파일로 "하늘색이 어땠어?"라고 물으면 대답할 수 있지만, "오른쪽 구석에 있던 작은 새의 깃털 방향은 어땠어?"에는 답하지 못합니다. 기존 멀티모달 메모리 아키텍처가 시각 정보에 대해 수행한 것과 정확히 같은 일입니다.</p>
+    </div>
+
+    <p>Agent-Knowledge Separation이 부재한 상태에서, 메모리 아키텍처는 시각 정보를 텍스트로 <span class="accent-warm">손실 압축(lossy compression)</span>하는 과정을 "기억"으로 간주했습니다. 색채, 질감, 공간 배치, 미세한 패턴 — 이런 시각적 정보의 대부분은 텍스트 변환 과정에서 증발하지만, 평가가 이를 검출하지 못했기에 문제가 가려져 있었습니다.</p>
+
+    <p>이것을 두 수준의 문제로 분해하면 더 선명해집니다.</p>
+
+    <div class="problem-grid">
+      <div class="problem-cell">
+        <div class="num warm">1</div>
+        <h4>평가 수준</h4>
+        <p>Annotation-Model Conflation에 의해, 시각 기억 보존을 측정한다고 믿었던 지표가 실제로는 텍스트 기억 검색을 측정하고 있었다.</p>
+      </div>
+      <div class="problem-cell">
+        <div class="num cool">2</div>
+        <h4>아키텍처 수준</h4>
+        <p>Agent-Knowledge Separation이 부재한 상태에서, 메모리 아키텍처가 시각 정보를 텍스트로 손실 압축하는 것을 "기억"으로 간주했다.</p>
+      </div>
+    </div>
+
+    <p>이 두 수준이 <strong>상호 강화</strong>합니다. 아키텍처가 텍스트 압축을 수행하니 평가에서도 텍스트 기반으로 통과하고, 평가가 텍스트 기반으로만 통과시키니 아키텍처는 시각 정보의 완전한 보존을 시도할 동기가 사라집니다. 완벽한 <span class="accent-cool">악순환</span>입니다.</p>
+
+    <div class="conclusion-highlight">
+      <p>연구 커뮤니티는 <strong>시각 기억을 보존하는 에이전트</strong>를 만들었다고 믿었지만,<br>실제로는 <strong>시각 정보를 텍스트로 번역하는 데 더 능숙한 에이전트</strong>를 만들었을 뿐이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 5: 결론 ── -->
+  <section class="fade-in">
+    <span class="section-label">Section 05</span>
+    <h2>패러다임 전환: 시각 기억을 진짜로 기억하게 하려면</h2>
+
+    <p>MemEye의 기여는 단순한 벤치마크 제안을 넘어, 연구 커뮤니티가 스스로 설정한 최적화 목표가 잘못되었다는 사실을 해체했습니다. 이 자기기만의 구조를 진짜로 해체하려면, 평가와 아키텍처 양쪽에서 동시에 패러다임을 전환해야 합니다.</p>
+
+    <ul class="shift-list">
+      <li>
+        <div class="shift-arrow warm">1</div>
+        <div class="shift-text">
+          <h4>캡션-블라인드 평가 도입</h4>
+          <p>질문 설계 단계에서 "캡션 텍스트만으로는 절대 답할 수 없고, 반드시 시각 원본의 픽셀 수준 정보가 필요한" 질문만을 평가 세트에 포함시켜야 합니다. MemEye가 시도한 바로 이 접근이 표준이 되어야 합니다.</p>
+        </div>
+      </li>
+      <li>
+        <div class="shift-arrow cool">2</div>
+        <div class="shift-text">
+          <h4>모달리티 분리 아키텍처의 정식화</h4>
+          <p>시각 메모리와 텍스트 메모리를 저장·검색 경로에서 분리하는 아키텍처 패턴을 Agent-Knowledge Separation이라는 명시적 설계 원칙으로 자리잡게 해야 합니다. 모든 것을 텍스트 스트림으로 압축하는 "만능 변환" 패러다임에서 벗어나야 합니다.</p>
+        </div>
+      </li>
+      <li>
+        <div class="shift-arrow green">3</div>
+        <div class="shift-text">
+          <h4>인지 충실도 감사(Cognitive Fidelity Audit)의 의무화</h4>
+          <p>새로운 멀티모달 벤치마크가 제안될 때마다, "이 평가가 실제로 측정하는 것과 측정한다고 주장하는 것이 일치하는지"에 대한 독립적 감사 절차가 필요합니다. "멀티모달"이라는 라벨이 충실도에 대한 면죄부가 되어서는 안 됩니다.</p>
+        </div>
+      </li>
+    </ul>
+
+    <blockquote>
+      "멀티모달이라는 이름이 곧 멀티모달 인지를 보증하지 않는다. 평가의 형식이 평가의 내용을 대변하지 않는다. 이 구별을 잃어버린 순간, 우리는 정교한 환상 위에 연구를 쌓아올리게 된다."
+      <cite>— 본 분석의 핵심 문제의식</cite>
+    </blockquote>
+
+    <p>MemEye가 던진 질문은 단순합니다: <span class="accent-warm">"에이전트가 정말로 보았는가, 아니면 읽기만 했는가?"</span> 이 질문에 정직하게 답하는 것. 그것이 멀티모달 에이전트 메모리 연구가 다음 단계로 나아가기 위해 반드시 통과해야 할 문턱입니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <footer>
+    <p>작성 기반: MemEye — A Visual-Centric Evaluation Framework for Multimodal Agent Memory<br>
+    Wiki Knowledge Graph의 ADEMA, Annotation-Model Conflation, Cognitive Fidelity Assessment, Agent-Knowledge Separation 엔티티 교차 분석<br><br>
+    <a href="blog.html">🧠 분석 글 목록으로</a></p>
+  </footer>
+
+</div>
+
+<script>
+  // 인터섹션 옵저버로 스크롤 애니메이션
+  document.addEventListener('DOMContentLoaded', function() {
+    var els = document.querySelectorAll('.fade-in');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function(el) { observer.observe(el); });
+    } else {
+      // 폴백: 모든 요소 바로 표시
+      els.forEach(function(el) { el.classList.add('visible'); });
+    }
+  });
+</script>
+
+</body>
+</html>
