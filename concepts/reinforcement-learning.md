@@ -201,3 +201,5 @@ _자동 생성됨_
 - [[sources/2026-05-13-equivariant-reinforcement-learning-for-clifford-qu.md]]
 
 - [[sources/2026-05-16-self-distilled-agentic-reinforcement-learning.md]]
+
+- [[sources/2026-05-17-self-distilled-agentic-reinforcement-learning.md]]

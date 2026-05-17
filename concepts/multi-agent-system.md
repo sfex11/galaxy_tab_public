@@ -153,3 +153,5 @@ _자동 생성됨_
 - [[sources/2026-05-15-good-agentic-friends-do-not-just-give-verbal-advic.md]]
 
 - [[sources/2026-05-16-apwa-a-distributed-architecture-for-parallelizable.md]]
+
+- [[sources/2026-05-17-apwa-a-distributed-architecture-for-parallelizable.md]]
