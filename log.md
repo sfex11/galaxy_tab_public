@@ -956,3 +956,7 @@
 ## [2026-05-18 08:31] ingest | Performance-Driven Policy Optimization for Speculative Decoding with Adaptive Windowing
 
 ## [2026-05-18 08:31] ingest | CLOVER: Closed-Loop Value Estimation \& Ranking for End-to-End Autonomous Driving Planning
+
+## [2026-05-19 04:09] llm-ingest | 2편 분석, 엔티티 303개, 개념 899개
+- 2026-05-19-a-generative-ai-framework-for-intelligent-utility-.md
+- 2026-05-19-ai-mediated-communication-can-steer-collective-opi.md
