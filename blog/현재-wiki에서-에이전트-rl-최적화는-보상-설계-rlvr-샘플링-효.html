@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자기 증류가 만든 환경 청각장애 — 에이전트 RL 최적화의 숨겨진 함정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,700;0,8..60,900;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection { background: rgba(194,112,62,0.18); }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Header ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(10px, 1.4vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #c2703e;
+    border: 1px solid rgba(194,112,62,0.25);
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 900;
+    font-size: clamp(26px, 5.5vw, 44px);
+    line-height: 1.25;
+    color: #2c2825;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #6b6560;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .header-divider {
+    width: 48px;
+    height: 2px;
+    background: #c2703e;
+    margin: 32px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(40px, 7vw, 72px);
+  }
+
+  .section-label {
+    font-size: clamp(10px, 1.3vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 3.8vw, 30px);
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(17px, 2.8vw, 21px);
+    line-height: 1.4;
+    color: #2c2825;
+    margin: 28px 0 12px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    color: #3d3833;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 16px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: 24px 0;
+    box-shadow: 0 2px 20px rgba(44,40,37,0.05), 0 0 0 1px rgba(255,255,255,0.6) inset;
+  }
+
+  .card-highlight {
+    border-left: 3px solid #c2703e;
+  }
+
+  .card-green {
+    border-left: 3px solid #6b9e7a;
+  }
+
+  .card-blue {
+    border-left: 3px solid #5b7c99;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 0 16px 24px;
+    font-style: italic;
+    font-size: clamp(14px, 2vw, 16px);
+    color: #6b6560;
+    line-height: 1.75;
+  }
+
+  /* ── Strong / Emphasis ── */
+  strong { font-weight: 700; color: #2c2825; }
+  .em-copper { color: #c2703e; font-weight: 500; }
+  .em-blue { color: #5b7c99; font-weight: 500; }
+  .em-green { color: #6b9e7a; font-weight: 500; }
+
+  /* ── Concept Tag ── */
+  .concept-tag {
+    display: inline-block;
+    font-size: clamp(10px, 1.2vw, 11px);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin: 2px 2px;
+  }
+  .concept-tag.copper { background: rgba(194,112,62,0.1); color: #c2703e; }
+  .concept-tag.blue { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .concept-tag.green { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+
+  /* ── List ── */
+  .analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 20px;
+  }
+  .analysis-list li {
+    position: relative;
+    padding: 8px 0 8px 24px;
+    color: #3d3833;
+  }
+  .analysis-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 17px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c2703e;
+  }
+
+  .numbered-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 20px;
+    counter-reset: num;
+  }
+  .numbered-list li {
+    counter-increment: num;
+    position: relative;
+    padding: 10px 0 10px 40px;
+    color: #3d3833;
+  }
+  .numbered-list li::before {
+    content: counter(num);
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(194,112,62,0.1);
+    color: #c2703e;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Metaphor Box ── */
+  .metaphor-box {
+    background: rgba(250,249,247,1);
+    border: 1px dashed rgba(194,112,62,0.3);
+    border-radius: 12px;
+    padding: clamp(16px, 3vw, 24px);
+    margin: 24px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '💡 비유';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: #faf9f7;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #c2703e;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Diagram ── */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 32px 0;
+    padding: clamp(20px, 4vw, 36px) clamp(12px, 3vw, 24px);
+    background: rgba(255,255,255,0.5);
+    border-radius: 16px;
+    border: 1px solid rgba(44,40,37,0.05);
+  }
+
+  .diagram-node {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: clamp(12px, 1.8vw, 14px);
+    font-weight: 500;
+    text-align: center;
+    max-width: 280px;
+  }
+
+  .diagram-node.copper-node {
+    background: rgba(194,112,62,0.1);
+    color: #c2703e;
+    border: 1px solid rgba(194,112,62,0.2);
+  }
+  .diagram-node.blue-node {
+    background: rgba(91,124,153,0.1);
+    color: #5b7c99;
+    border: 1px solid rgba(91,124,153,0.2);
+  }
+  .diagram-node.green-node {
+    background: rgba(107,158,122,0.1);
+    color: #6b9e7a;
+    border: 1px solid rgba(107,158,122,0.2);
+  }
+  .diagram-node.dark-node {
+    background: rgba(44,40,37,0.06);
+    color: #2c2825;
+    border: 1px solid rgba(44,40,37,0.1);
+  }
+
+  .diagram-arrow {
+    font-size: 18px;
+    color: #b0a8a0;
+    line-height: 1;
+    padding: 4px 0;
+  }
+
+  .diagram-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .diagram-vs {
+    font-size: 12px;
+    font-weight: 700;
+    color: #b0a8a0;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.08);
+    padding: clamp(32px, 5vw, 56px) 0;
+    margin-top: clamp(24px, 4vw, 48px);
+    text-align: center;
+  }
+
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .footer-note {
+    font-size: clamp(11px, 1.4vw, 12px);
+    color: #b0a8a0;
+    line-height: 1.6;
+  }
+
+  /* ── Scroll Reveal ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .diagram-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Nav -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="article-header reveal">
+    <span class="article-tag">Agentic RL · Deep Analysis</span>
+    <h1 class="article-title">자기 증류가 만든<br>환경 청각장애</h1>
+    <p class="article-subtitle">에이전트가 자신의 출력을 정답으로 삼을 때,<br>학습은 환경 적응이 아닌 자기 일관성 강화로 수렴하는가?</p>
+    <div class="header-divider"></div>
+  </header>
+
+  <!-- Section 1: 서론 -->
+  <section class="section reveal">
+    <div class="section-label">Section 01</div>
+    <h2>보상의 빈곤, 그리고 유혹적인 해결책</h2>
+
+    <p>
+      에이전트 강화학습(RL)의 현실은 처음 기대했던 것보다 훨씬 거칠다. RLVR, StraTA, 패스율 제어 — 최신 연구들이 "보상 설계"라는 단일 축 위에서 춤을 추는 이유는, <strong>외부 환경이 돌려주는 피드백이 근본적으로 조잡하기 때문</strong>이다. 궤적 끝에 하나 떨어지는 점수. 수백 개의 토큰이 만들어낸 복잡한 행동 시퀀스에 대해, 환경은 기껏해야 "맞았다" 혹은 "틀렸다"만 알려준다.
+    </p>
+
+    <p>
+      여기서 <span class="em-copper">Self-Distilled Agentic RL</span>이 등장한다. 이 논문은 이런 빈곤한 외부 신호를 보완하기 위해, 에이전트 <strong>자신이 생성한 온폴리시 토큰을 밀집 교사(dense teacher) 신호로 활용</strong>하는 OPSD(On-Policy Self-Distillation)를 제안한다. 매 토큰마다 "네가 지금 한 선택이 이렇게 맞다"는 세밀한 지도 신호를 스스로 만들어내겠다는 것이다.
+    </p>
+
+    <blockquote>
+      "기존 RL의 궤적 수준 보상 신호는 장기간 상호작용에 대한 조잡한 지시만 제공한다."
+      <br>— Self-Distilled Agentic Reinforcement Learning
+    </blockquote>
+
+    <p>
+      일견 우아한 해결책처럼 보인다. 하지만 여기에는 치명적인 질문이 숨어 있다. <strong>자기가 만든 신호를 자기가 학습하는 순간, 에이전트는 환경의 목소리를 듣는 것을 멈추지 않을까?</strong> 이 글은 그 질문이 던지는 네 가지 구체적 위험을 해부한다.
+    </p>
+
+    <div class="diagram">
+      <div class="diagram-row">
+        <div class="diagram-node blue-node">외부 환경 피드백<br><span style="font-size:11px;font-weight:300;">조잡 · 궤적 수준 · 간헐적</span></div>
+        <div class="diagram-vs">VS</div>
+        <div class="diagram-node copper-node">OPSD 자기 증류<br><span style="font-size:11px;font-weight:300;">밀집 · 토큰 수준 · 매 스텝</span></div>
+      </div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-node dark-node">결합 학습 시, 어떤 신호가 지배적으로 작동하는가?</div>
+    </div>
+  </section>
+
+  <!-- Section 2: 행동 다양체 억제 -->
+  <section class="section reveal">
+    <div class="section-label">Section 02</div>
+    <h2>거울 방에 갇힌 에이전트<br><span style="font-weight:400;font-size:0.65em;color:#6b6560;">행동 다양체 억제(Manifold Confinement)</span></h2>
+
+    <p>
+      OPSD의 핵심 메커니즘은 단순하다. 에이전트가 토큰 t₁, t₂, t₃…을 생성하면, 그 분포를 '정답'으로 삼아 다시 학습한다. 문제는 이 과정이 최적화 지형에서 어떤 의미를 갖는가에 있다.
+    </p>
+
+    <div class="metaphor-box">
+      <p style="margin-bottom:0;">
+        방 안에 사방이 거울로 된 방이 있다. 당신은 거울 속 자신의 모습만 보며 "올바른 모습"을 학습한다. 처음에는 자연스러운 포즈였지만, 거울에 비친 모습을 계속 모방하다 보면 점점 인위적이고 경직된 자세만 남게 된다. <strong>거울 밖의 세상은 더 이상 보이지 않는다.</strong>
+      </p>
+    </div>
+
+    <p>
+      수학적으로 이 현상은 <span class="concept-tag copper">behavioral-manifold-confinement</span>으로 설명된다. OPSD는 에이전트의 출력 분포가 <strong>기존 분포에서 벗어나는 것을 강력하게 페널티</strong>한다. KL 발산 기준으로 보면, 자기 증류 손실은 "새로운 행동을 시도할 때마다 벌점을 부과"하는 구조와 동일하다.
+    </p>
+
+    <div class="card card-highlight">
+      <p style="margin-bottom:0;">
+        <strong>핵심 모순:</strong> RL의 본질은 <span class="em-green">더 나은 행동을 탐색하는 것</span>이다. 그런데 OPSD는 <span class="em-copper">기존 행동에서 벗어나지 않는 것</span>을 보상한다. 이 두 목표는 구조적으로 충돌한다.
+      </p>
+    </div>
+
+    <p>
+      결과적으로 에이전트는 환경이 요구하는 새로운 전략을 발견하기보다, <strong>자기 닮음도(self-similarity)를 극대화하는 방향</strong>으로 수렴한다. 성능 지표상으로는 "일관성이 높아졌다"고 보일 수 있지만, 이는 환경 적응이 아니라 환경으로부터의 격리다.
+    </p>
+  </section>
+
+  <!-- Section 3: 오류 누적 -->
+  <section class="section reveal">
+    <div class="section-label">Section 03</div>
+    <h2>스스로 만든 환각을 진실로 믿는 과정<br><span style="font-weight:400;font-size:0.65em;color:#6b6560;">오류 누적과 정렬 기저의 불투명성</span></h2>
+
+    <p>
+      두 번째 위험은 더 미묘하다. 에이전트가 토큰 시퀀스를 생성하다 보면, 초반에 작은 오류가 발생할 수 있다. 문맥을 약간 잘못 파악했거나, 미세한 논리적 비약이 있었을 수 있다. 정상적인 RL이라면 궤적 끝의 외부 보상이 "이 경로는 실패"라고 알려주어 교정 기회가 생긴다.
+    </p>
+
+    <p>
+      그런데 OPSD 하에서는 상황이 달라진다. <strong>그 작은 오류가 포함된 토큰 자체가 밀집 교사 신호가 된다.</strong> 에이전트는 자신의 오류를 "올바른 밀집 지식"으로 간주하고 내재화한다.
+    </p>
+
+    <div class="metaphor-box">
+      <p style="margin-bottom:0;">
+        한 학생이 수학 문제를 풀다가 중간에 실수를 한다. 선생님은 채점 전에 "네 풀이 과정을 다시 한번 베껴서 외워봐"라고 한다. 학생은 자신의 오답 과정을 완벽하게 암기하게 되고, 나중에 정답을 보여줘도 "아니에요, 제 방식이 맞아요"라고 우긴다.
+      </p>
+    </div>
+
+    <p>
+      이는 두 가지 심각한 상태를 초래한다. 첫째, <span class="concept-tag copper">compounding-error</span> — 초반의 미세한 오류가 토큰 수준으로 학습되면서 궤적 전체로 오류가 누적·증폭된다. 둘째, <span class="concept-tag blue">agent-execution-semantic-opacity</span>와 <span class="concept-tag blue">alignment-base-opacity</span> — 에이전트의 내부 논리는 완벽히 자기 일관적이지만, <strong>외부 환경의 실제 정답과는 단절된 상태</strong>가 된다.
+    </p>
+
+    <div class="card card-blue">
+      <p style="margin-bottom:8px;">
+        <strong>불투명성의 역설:</strong>
+      </p>
+      <ul class="analysis-list">
+        <li>에이전트 내부에서는 모든 것이 "논리적으로 맞음"</li>
+        <li>외부 환경에서는 "완전히 틀림"</li>
+        <li>조잡한 외부 보상은 토큰 수준의 미세한 오도를 교정할 수 없음</li>
+        <li>결과: <strong>교정 불가능한 자기 확신 상태</strong>에 도달</li>
+      </ul>
+    </div>
+
+    <p>
+      특히 걱정스러운 점은, 이 상태가 에이전트 자신에게는 "학습이 잘 되고 있다"처럼 보일 수 있다는 것이다. 손실 함수는 감소하고, 자기 일관성 점수는 상승한다. 하지만 이는 <strong>환경과의 정렬(alignment)이 아니라 자기 자신과의 정렬(self-alignment)</strong>이다.
+    </p>
+  </section>
+
+  <!-- Section 4: 탐색 붕괴 -->
+  <section class="section reveal">
+    <div class="section-label">Section 04</div>
+    <h2>내비게이션이 고장 난 자동차<br><span style="font-weight:400;font-size:0.65em;color:#6b6560;">탐색의 붕괴와 계산적 탐색 가능성의 갈등</span></h2>
+
+    <p>
+      강화학습의 영혼은 탐색(exploration)이다. 현재 아는 것 너머에 더 나은 전략이 있을 수 있다는 가능성을 열어두는 것. ε-greedy, 엔트로피 보너스, curiosity-driven exploration — 수십 년간 RL 연구자들이 탐색을 유지하기 위해 발명해 온 장치들이 증명하듯, <strong>탐색의 상실은 곧 학습의 종말</strong>을 의미한다.
+    </p>
+
+    <p>
+      OPSD가 만들어내는 상황을 다시 생각해보자. 에이전트가 매 스텝마다 자기 출력을 "정답"으로 학습한다는 것은, 사실상 <span class="em-copper">"지금 네가 한 선택이 옳다"는 강력한 내부 보상을 매 토큰마다 부여</span>하는 것과 같다.
+    </p>
+
+    <div class="metaphor-box">
+      <p style="margin-bottom:0;">
+        내비게이션이 없는 자동차가 있다. 대신 운전자가 매 초마다 "지금 내가 고른 방향이 맞다"고 스스로에게 말한다. 처음에는 우연히 올바른 길로 갈 수도 있다. 하지만 once wrong turn이 발생해도, 스스로 "맞다"고 확신하므로 돌아갈 기회가 없다. <strong>자기 확신이 내비게이션을 대체한 순간, 길을 잃는다.</strong>
+      </p>
+    </div>
+
+    <p>
+      이는 <span class="concept-tag copper">constrained-exploration</span>으로 귀결된다. 내부 신호가 너무 강력해서, 환경적으로 더 높은 보상을 주는 비주류 경로를 탐색하려는 동기가 사라진다. 더 나아가 <span class="concept-tag blue">computational-exploration-feasibility</span> — 계산적으로 더 나은 전략을 찾아내는 가능성 자체가 사실상 봉쇄된다.
+    </p>
+
+    <div class="diagram">
+      <div class="diagram-node green-node">정상적인 RL 탐색<br><span style="font-size:11px;font-weight:300;">외부 보상이 낮은 경로 → 탐색 동기 유지 → 더 나은 경로 발견</span></div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-node copper-node">OPSD 결합 시<br><span style="font-size:11px;font-weight:300;">내부 밀집 보상이 "성공"을 알림 → 탐색 동기 소멸 → 고립 수렴</span></div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-node dark-node">🚫 탐색 붕괴: 더 나은 전략을 찾을 수 없는 상태에 도달</div>
+    </div>
+
+    <p>
+      여기서 중요한 통찰은, OPSD의 밀집 신호가 외부 보상과 "경쟁"하는 것이 아니라 <strong>"대체"</strong>한다는 점이다. 인간이 설계한 보상 함수조차 탐색을 억제할 수 있다는 것은 잘 알려져 있는데, 에이전트 스스로 만든 보상이 그 역할을 한다면 탐색의 생존 가능성은 극히 낮아진다.
+    </p>
+  </section>
+
+  <!-- Section 5: 패러다임 전환 -->
+  <section class="section reveal">
+    <div class="section-label">Section 05</div>
+    <h2>환경 청각장애를 넘어서는 길<br><span style="font-weight:400;font-size:0.65em;color:#6b6560;">알고리즘-시스템 번역 간극과 패러다임 전환</span></h2>
+
+    <p>
+      네 번째 위험은 시스템적 차원에서 드러난다. <span class="concept-tag blue">adaptive-inference</span> 관련 연구들이 보여주듯, <strong>외부 환경에 반응하는 적응</strong>과 <strong>내부 시스템 상태에 반응하는 적응</strong>은 근본적으로 다른 메커니즘이다. OPSD는 극단적인 후자의 모델이다.
+    </p>
+
+    <p>
+      문제는 알고리즘 내부에서의 자기 일관성이 높아져도, 이것이 실제 <span class="concept-tag blue">agent-sandbox-state-management</span>가 요구하는 동적인 환경 상태 변화로 번역되지 않는다는 것이다. 이 <span class="concept-tag blue">algorithm-system-translation-gap</span>은 최종적으로 <span class="concept-tag copper">course-drift</span> — 에이전트의 내부 목표와 환경의 실제 목표가 동기화되지 않은 채 단독으로 돌아가는 현상 — 로 귀결된다.
+    </p>
+
+    <div class="metaphor-box">
+      <p style="margin-bottom:0;">
+        완벽하게 조율된 오케스트라 단원들이 있다. 그들은 서로에게서 들리는 소리에만 맞춰 연주한다. 그런데 관객석에서는 전혀 다른 곡을 요청하고 있었다. <strong>내부적으로 완벽한 조화가, 외부적으로는 완전한 소통 부재</strong>를 의미할 수 있다.
+      </p>
+    </div>
+
+    <h3>그럼 패러다임을 어떻게 바꿔야 하는가?</h3>
+
+    <p>
+      OPSD의 유용성을 완전히 부정할 필요는 없다. 조잡한 외부 보상에만 의존하는 것도 분명 한계가 있다. 핵심은 <strong>자기 증류 신호의 위상을 바꾸는 것</strong>이다.
+    </p>
+
+    <div class="card card-green">
+      <p style="margin-bottom:12px;"><strong>제안: 동적 신호 위상 조절 모델</strong></p>
+      <ol class="numbered-list">
+        <li>
+          <strong>외부 피드백 앵커링</strong> — 자기 증류 신호의 가중치를 환경의 실제 상태 변화와 동적으로 연동. 외부 보상이 낮을 때 자기 증류 가중치를 자동 낮추는 메커니즘.
+        </li>
+        <li>
+          <strong>일관성-적응 균형 목표 함수</strong> — 자기 일관성 maximization이 아닌, <span class="em-green">"환경 상태 변화량 대비 자기 일관성"의 비율</span>을 최적화하는 새로운 목표 함수 설계.
+        </li>
+        <li>
+          <strong>순환 자기 참조 루프의 단절</strong> — <span class="concept-tag green">closed-loop-evaluation</span>을 학습 루프 내에 삽입. 주기적으로 외부 평가자가 자기 증류의 품질을 감사하여, 오류가 내재화되기 전에 차단.
+        </li>
+        <li>
+          <strong>이중 기저 정렬(Dual-Base Alignment)</strong> — 내부 일관성 기준과 외부 환경 기준을 동시에 추적하고, 두 기저 간 발산이 임계치를 넘으면 학습을 일시 정지하는 안전 장치.
+        </li>
+      </ol>
+    </div>
+
+    <p>
+      더 근본적으로, 이 논의가 요구하는 패러다임 전환은 <strong>"밀집 신호의 출처"에 대한 재성찰</strong>이다. 외부 보상이 조잡하다고 해서 해결책이 "자기 자신"이 되어서는 안 된다. 대신, 환경의 상태 변화를 더 세밀하게 관측할 수 있는 <span class="em-green">외부 밀집 센서(external dense sensors)</span> — 예컨대 중간 검증점(intermediate checkpoints), 단계별 환경 상태 스냅샷, 도구 호출 결과의 구조화된 피드백 — 를 설계하는 방향으로 나아가야 한다.
+    </p>
+
+    <blockquote>
+      "자기 증류는 조잡한 외부 보상의 한계를 보완하려는 시도였지만, 자칫 에이전트를 행동 다양체에 가두고 오류 누적을 은폐하는 '환경 청각장애' 상태로 만들 위험이 있다. 진짜 해결책은 내부 신호의 강화가 아니라, 외부 관측의 정밀화다."
+    </blockquote>
+  </section>
+
+  <!-- Footer -->
+  <footer class="article-footer reveal">
+    <div class="footer-tags">
+      <span class="concept-tag copper">OPSD</span>
+      <span class="concept-tag copper">behavioral-manifold-confinement</span>
+      <span class="concept-tag copper">compounding-error</span>
+      <span class="concept-tag blue">agent-execution-semantic-opacity</span>
+      <span class="concept-tag blue">constrained-exploration</span>
+      <span class="concept-tag blue">algorithm-system-translation-gap</span>
+      <span class="concept-tag green">closed-loop-evaluation</span>
+      <span class="concept-tag copper">course-drift</span>
+    </div>
+    <p class="footer-note">
+      대상 논문: Self-Distilled Agentic Reinforcement Learning<br>
+      Wiki 교차 검증 기반 심층 분석 · 2025
+    </p>
+  </footer>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(function(el) { observer.observe(el); });
+});
+</script>
+
+</body>
+</html>
