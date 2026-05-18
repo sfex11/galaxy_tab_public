@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>An Interpretable Latency Model for Speculative Decoding in L — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber" style="font-size:clamp(0.7rem,1.2vw,0.9rem);margin-bottom:1.5rem;">arXiv:2605.15051v1 · cs.LG · 2026</span>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.8rem);line-height:1.25;margin-bottom:1.5rem;font-weight:800;letter-spacing:-0.02em;">LLM 서빙에서의 사양적 디코딩을 위한<br><span class="accent">해석 가능한 지연 모델</span></h1>
+      <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);max-width:640px;line-height:1.7;" class="muted">An Interpretable Latency Model for Speculative Decoding in LLM Serving</p>
+      <div class="hr" style="width:60px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">Linghao Kong · Megan Flynn · Michael Peng · Nir Shavit · Mark Kurtz · Alexandre Marques</p>
+      <p style="font-size:clamp(0.7rem,1vw,0.85rem);margin-top:0.5rem;" class="muted">MIT · Red Hat AI</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.8rem;font-weight:700;">사양적 디코딩(Speculative Decoding)이란?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-bolt" class="accent"></i> <span class="accent">핵심 아이디어</span></h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">작은 <strong>드래프트 모델</strong>이 여러 토큰을 먼저 제안하고, 큰 <strong>타겟 모델(Verifier)</strong>이 이를 병렬로 검증하는 방식으로 자동회귀 생성의 순차적 병목을 완화합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-exclamation-triangle accent2"></i> <span class="accent2">기존 연구의 한계</span></h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>단일 요청(batch=1) 환경에서만 평가</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>실제 서빙 시스템의 동적 배치 사이즈 무시</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>부하 증가 시 속도 향상이 감소하는 이유 미설명</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">드래프트</div>
+        <div class="step-desc">작은 모델이 k개 토큰 제안</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">검증</div>
+        <div class="step-desc">큰 모델이 k개 토큰 병렬 검증</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">수용/거부</div>
+        <div class="step-desc">수용률 α에 따라 토큰 확정</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.8rem;font-weight:700;">연구 동기와 목표</h2>
+    <div class="quote-block" style="margin-bottom:2rem;">
+      <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;">"실제 서빙 환경에서는 배치 사이즈가 실험적으로 조절 가능한 파라미터가 아닙니다. 요청 스트림과 스케줄러의 상호작용으로부터 <strong class="accent">자발적으로(emergent)</strong> 형성됩니다."</p>
+    </div>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num" class="accent">α</div>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;">수용률<br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);">드래프트 토큰이 검증을 통과하는 비율</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num" class="accent2">k</div>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;">드래프트 길이<br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);">한 번에 제안하는 토큰 수</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num" class="accent3">RPS</div>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;">요청률<br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem);">초당 도착하는 요청 수</span></p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-top:1.5rem;">이 세 가지 파라미터가 <strong>서버 부하</strong>와 결합될 때 지연 시간과 속도 향상이 어떻게 변하는지 설명하는 <span class="accent">단순하고 해석 가능한 모델</span>을 제안합니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.8rem;font-weight:700;">핵심 통찰: 리틀의 법칙(Little's Law)</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;">리틀의 법칙</h3>
+          <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;text-align:center;font-weight:600;">L = λ × W</p>
+          <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);line-height:1.7;margin-top:0.8rem;" class="muted">L: 시스템 내 평균 요청 수(유효 배치 사이즈)<br>λ: 요청 도착률 (RPS)<br>W: 평균 체류 시간 (지연)</p>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">배치 사이즈를 직접 관측할 필요 없이, <strong class="accent">요청률과 지연 시간</strong>만으로 유효 배치 사이즈를 추론할 수 있습니다.</p>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;">서빙 시스템에서의 의미</h3>
+          <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>vLLM 등에서 배치 사이즈는 스케줄러가 결정</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>연속 배치(Continuous Batching)로 동적 변화</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>리틀의 법칙으로 복잡한 스케줄러 내부를 우회</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>안정화 영역에서 닫힌 형태의 지연-부하 관계 도출</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">지연 모델 공식화</h2>
+    <div class="card" style="margin-bottom:1.5rem;text-align:center;">
+      <p style="font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:700;letter-spacing:0.02em;">L = <span class="muted">C₁</span> / <span class="accent">(1 − RPS × C₂)</span></p>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-top:0.8rem;" class="muted">C₁: 부하 무관 고정 비용 · C₂: 부하 의존 계수 · RPS: 요청률</p>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.8rem;font-weight:600;"><span class="accent">C₁</span> — 고정 비용</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">요청이 없어도 발생하는 최소 지연. 프리필 단일 연산 비용, 드래프트 1스텝 비용 등을 포함합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.8rem;font-weight:600;"><span class="accent2">C₂</span> — 부하 의존 비용</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">요청률에 비례하여 증가하는 지연. 동시 처리 요청 수가 늘어날 때 배치 연산의 증가분을 반영합니다.</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">이 공식은 서버 포화 전 안정 영역에서 <strong>모든 모델·설정의 측정값이 단일 곡선 위로 수렴</strong>함을 보입니다 (Figure 1).</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">보편적 지연 스케일링 법칙</h2>
+    <div class="card" style="text-align:center;margin-bottom:2rem;">
+      <p style="font-size:clamp(1.05rem,1.6vw,1.3rem);font-weight:600;line-height:1.6;">정규화된 지연 <span class="accent">L/C₁</span> vs 정규화된 부하 <span class="accent2">RPS × C₂</span></p>
+      <p style="font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:700;margin-top:0.8rem;">y = 1 / (1 − x)</p>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-top:0.6rem;" class="muted">모델 크기, 아키텍처, 프리필/디코드 길이에 무관하게 동일 곡선 수렴</p>
+    </div>
+    <div class="grid-3" style="gap:1.2rem;">
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-layer-group accent" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);font-weight:600;">다중 모델</p>
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);" class="muted">Llama-3.1, Qwen3, gpt-oss</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-sliders-h accent2" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);font-weight:600;">다중 설정</p>
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);" class="muted">프리필/디코드 16조합</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-chart-line accent3" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);font-weight:600;">단일 곡선</p>
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);" class="muted">y = 1/(1−x)로 완벽 설명</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;margin-top:1.5rem;">절대적 지연 값은 달라도, <strong>정규화하면 하나의 보편적 관계</strong>로 묶인다는 것이 이 모델의 핵심 발견입니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">사양적 디코딩 비용 분해</h2>
+    <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;">SD의 지연을 세 가지 단계로 분해하여 각각의 고정 비용과 부하 의존 비용을 모델링합니다.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>단계</th>
+          <th>고정 비용 (C₁ 성분)</th>
+          <th>부하 의존 비용 (C₂ 성분)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Prefill</strong></td>
+          <td>단일 프리필 연산 비용</td>
+          <td>배치 내 프리필 간섭</td>
+        </tr>
+        <tr>
+          <td><strong>Draft</strong></td>
+          <td>k스텝 × 드래프트 1스텝 비용</td>
+          <td>배치 내 드래프트 간섭</td>
+        </tr>
+        <tr>
+          <td><strong>Verify</strong></td>
+          <td>검증 1스텝 비용</td>
+          <td>배치 내 검증 간섭</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;"><span class="accent" style="font-weight:600;">α (수용률)</span>가 높을수록 검증 단계에서 더 많은 토큰이 한 번에 처리되어 <strong>유효 디코드 스텝 수가 감소</strong>합니다.</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;"><span class="accent2" style="font-weight:600;">k (드래프트 길이)</span>가 증가하면 드래프트 고정 비용은 늘어나지만, 검증 효율이 올라가 <strong>트레이드오프</strong>가 발생합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">부하 의존적 속도 향상 모델</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;">핵심 질문: 부하가 증가하면 SD의 속도 향상은 어떻게 변하는가?</h3>
+      <div class="grid-2" style="gap:1.5rem;margin-top:1rem;">
+        <div style="text-align:center;padding:1rem;">
+          <i class="fas fa-arrow-down accent3" style="font-size:clamp(1.5rem,2.5vw,2rem);display:block;margin-bottom:0.5rem;"></i>
+          <p style="font-size:clamp(0.85rem,1.2vw,1rem);font-weight:600;">저부하 영역</p>
+          <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">SD의 이점이 극대화됨<br>배치 사이즈 ≈ 1이므로 사양 효과가 온전히 반영</p>
+        </div>
+        <div style="text-align:center;padding:1rem;">
+          <i class="fas fa-arrow-up tag-red" style="font-size:clamp(1.5rem,2.5vw,2rem);display:block;margin-bottom:0.5rem;"></i>
+          <p style="font-size:clamp(0.85rem,1.2vw,1rem);font-weight:600;">고부하 영역</p>
+          <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">속도 향상이 감소하거나 역전됨<br>부하 의존 비용이 지배적으로 작용</p>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">SD의 속도 향상은 <strong class="accent">저부하 이점(고정 비용 절감)</strong>과 <strong class="accent2">고부하 페널티(부하 의존 비용 증가)</strong>의 상호작용으로 결정됩니다. 폐쇄형 수식으로 어느 부하 수준에서 전환이 일어나는지 예측할 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">지연 계수의 스케일링 분석</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-lock accent"></i> 고정 비용 계수 (C₁)</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증자 모델 크기에 비례하여 증가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>드래프트 길이 k에 선형 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수용률 α의 영향은 제한적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시퀀스 길이에 거의 무관</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-chart-bar accent2"></i> 부하 의존 계수 (C₂)</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증자 모델 크기에 강하게 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>드래프트 길이 k에 비선형적 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수용률 α가 높을수록 감소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시퀀스 길이에 약간 의존</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;"><strong class="accent">실무적 함의:</strong> 고부하 환경에서는 C₂를 낮추는 것이 C₁을 낮추는 것보다 훨씬 중요합니다. 즉, 검증자 모델 크기 축소나 수용률 개선이 드래프트 길이 조절보다 효과적입니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">Mixture of Experts(MoE) 확장</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="card" style="margin-bottom:1.2rem;">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.8rem;font-weight:600;"><i class="fas fa-project-diagram accent3"></i> MoE의 특수성</h3>
+          <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;">MoE 모델은 <strong>희소 전문가 활성화(Sparse Expert Activation)</strong>로 인해 실제 연산량이 입력에 따라 변동됩니다. 이는 밀집(Dense) 모델과 다른 지연 스케일링을 만듭니다.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.8rem;font-weight:600;"><i class="fas fa-wrench accent"></i> 수정 방법</h3>
+          <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;"><strong>전문가 커버리지(Expert Coverage)</strong>를 기반으로 한 보정 계수를 도입하여, 밀집 모델의 지연 모델을 MoE에 적용할 수 있도록 확장합니다.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;">MoE에서의 SD 거동</h3>
+          <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>저부하에서는 밀집 모델과 다른 스케일링 관찰</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>요청률 증가 시 밀집 모델 곡선로 수렴</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>k 증가 시 MoE 특유의 비선형 효과 발현</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 커버리지 보정으로 설명 가능</li>
+          </ul>
+        </div>
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:0.8rem;" class="muted"><i class="fas fa-flask"></i> 검증: gpt-oss-20b, Qwen3-30B-A3B, Qwen3-235B-A22B</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">실험 설정</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-cog accent"></i> 시스템 구성</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GuideLLM 0.5.2 + vLLM 0.13.0</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>NVIDIA A100 SXM (단일/4/8장)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>H100에서 추가 검증 (하드웨어 견고성)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>동기 기준 ~ 고부하 9단계 RPS 스윕</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-database accent2"></i> 실험 변수</h3>
+        <table class="compare-table" style="font-size:clamp(0.75rem,1vw,0.9rem);">
+          <tbody>
+            <tr><td><strong>모델</strong></td><td>Llama-3.1 (8B/70B), Qwen3 계열, gpt-oss-20b</td></tr>
+            <tr><td><strong>프리필/디코드</strong></td><td>{256, 512, 768, 1024} → 16조합</td></tr>
+            <tr><td><strong>수용률 α</strong></td><td>50% ~ 100%</td></tr>
+            <tr><td><strong>드래프트 길이 k</strong></td><td>1 ~ 10 토큰</td></tr>
+            <tr><td><strong>드래프터</strong></td><td>EAGLE-3 스타일 (주), Vanilla SD (부)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">주요 발견과 실무적 함의</h2>
+    <div class="flow-item" style="margin-bottom:1.2rem;">
+      <div class="flow-icon">1</div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);font-weight:600;">부하가 높을수록 SD 속도 향상은 감소한다</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">부하 의존 비용이 지배적이 되어 사양의 이점이 상쇄됨. 폐쇄형 수식으로 전환점 예측 가능.</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:1.2rem;">
+      <div class="flow-icon">2</div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);font-weight:600;">큰 검증자-작은 드래프터 조합이 고부하에서 더 취약하다</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">검증자 크기가 C₂를 지배하므로, 모델 크기 격차가 클수록 고부하 페널티가 큼.</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:1.2rem;">
+      <div class="flow-icon">3</div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);font-weight:600;">드래프트 길이 k는 상황에 따라 최적값이 다르다</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">저부하에서는 큰 k가 유리하지만, 고부하에서는 C₂ 증가로 인해 작은 k가 더 나을 수 있음.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">4</div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);font-weight:600;">MoE 모델은 저부하에서 밀집 모델과 다른 거동을 보인다</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);" class="muted">전문가 커버리지 보정을 통해 동일 프레임워크로 설명 가능.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1.5rem;font-weight:700;">결론 및 한계</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="card" style="margin-bottom:1.2rem;">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-trophy accent"></i> 기여 요약</h3>
+          <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>SD 서빙을 위한 해석 가능한 지연 모델 제안</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>리틀의 법칙 기반 유효 배치 사이즈 추론</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>보편적 지연 스케일링 법칙 발견</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>부하 의존적 속도 향상의 폐쇄형 표현</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>MoE 아키텍처로의 프레임워크 확장</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:1.2rem;">
+          <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;font-weight:600;"><i class="fas fa-exclamation-circle accent2"></i> 한계</h3>
+          <ul class="check-list" style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:2;">
+            <li><span class="check-icon"><i class="fas fa-minus"></i></span>포화 영역(선점 발생 구간)은 모델 외</li>
+            <li><span class="check-icon"><i class="fas fa-minus"></i></span>단일 GPU 노드에 국한된 실험</li>
+            <li><span class="check-icon"><i class="fas fa-minus"></i></span>꼬리 지연(Tail Latency) 분석은 부록 수준</li>
+            <li><span class="check-icon"><i class="fas fa-minus"></i></span>특정 하드웨어(A100/H100)에서만 검증</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;"><span class="accent3" style="font-weight:600;">핵심 메시지:</span> SD 설정은 <strong>배포된 서버의 예상 부하 수준</strong>을 기준으로 최적화되어야 하며, 단일 요청 벤치마크만으로는 충분하지 않다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1rem;font-weight:700;">논문 정보</h2>
+      <div class="hr" style="width:60px;margin:1rem auto 2rem;"></div>
+      <p style="font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:700;line-height:1.4;margin-bottom:1.5rem;">An Interpretable Latency Model for<br>Speculative Decoding in LLM Serving</p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.8;margin-bottom:0.8rem;" class="muted">Linghao Kong, Megan Flynn, Michael Peng, Nir Shavit, Mark Kurtz, Alexandre Marques</p>
+      <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-bottom:2rem;" class="muted">MIT · Red Hat AI</p>
+      <a href="http://arxiv.org/abs/2605.15051v1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;font-size:clamp(0.9rem,1.3vw,1.05rem);font-weight:600;text-decoration:none;" class="accent">
+        <i class="fas fa-external-link-alt"></i> arXiv:2605.15051v1
+      </a>
+      <p style="font-size:clamp(0.75rem,1vw,0.85rem);margin-top:2rem;" class="muted">cs.LG · May 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
