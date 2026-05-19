@@ -432,3 +432,17 @@
 - [[sources/2026-05-18-an-interpretable-latency-model-for-speculative-dec.md]] - An Interpretable Latency Model for Speculative Decoding in LLM Serving
 - [[sources/2026-05-18-performance-driven-policy-optimization-for-specula.md]] - Performance-Driven Policy Optimization for Speculative Decoding with Adaptive Windowing
 - [[sources/2026-05-18-clover-closed-loop-value-estimation-ranking-for-en.md]] - CLOVER: Closed-Loop Value Estimation \& Ranking for End-to-End Autonomous Driving Planning
+- [[sources/2026-05-19-prospective-multi-pathogen-disease-forecasting-usi.md]] - Prospective multi-pathogen disease forecasting using autonomous LLM-guided tree search
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-19-forge-self-evolving-agent-memory-with-no-weight-up.md]] - FORGE: Self-Evolving Agent Memory With No Weight Updates via Population Broadcast
+- [[sources/2026-05-19-argus-evidence-assembly-for-scalable-deep-research.md]] - Argus: Evidence Assembly for Scalable Deep Research Agents
+- [[sources/2026-05-19-fully-open-meditron-an-auditable-pipeline-for-clin.md]] - Fully Open Meditron: An Auditable Pipeline for Clinical LLMs
+- [[sources/2026-05-19-confirming-correct-missing-the-rest-llm-tutoring-a.md]] - Confirming Correct, Missing the Rest: LLM Tutoring Agents Struggle Where Feedback Matters Most
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-19-context-reasoning-and-hierarchy-a-cost-performance.md]] - Context, Reasoning, and Hierarchy: A Cost-Performance Study of Compound LLM Agent Design in an Adversarial POMDP
+- [[sources/2026-05-19-formal-methods-meet-llms-auditing-monitoring-and-i.md]] - Formal Methods Meet LLMs: Auditing, Monitoring, and Intervention for Compliance of Advanced AI Systems
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-19-paperjson-a-coordination-convention-for-llm-agent-.md]] - paper.json: A Coordination Convention for LLM-Agent-Actionable Papers
+- [[sources/2026-05-19-optimized-three-dimensional-photovoltaic-structure.md]] - Optimized Three-Dimensional Photovoltaic Structures with LLM guided Tree Search
+- [[sources/2026-05-19-an-algebraic-exposition-of-the-theory-of-dyadic-mo.md]] - An Algebraic Exposition of the Theory of Dyadic Morality
+- [[sources/2026-05-19-property-guided-llm-program-synthesis-for-planning.md]] - Property-Guided LLM Program Synthesis for Planning

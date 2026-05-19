@@ -960,3 +960,25 @@
 ## [2026-05-19 04:09] llm-ingest | 2편 분석, 엔티티 303개, 개념 899개
 - 2026-05-19-a-generative-ai-framework-for-intelligent-utility-.md
 - 2026-05-19-ai-mediated-communication-can-steer-collective-opi.md
+
+## [2026-05-19 08:31] ingest | Prospective multi-pathogen disease forecasting using autonomous LLM-guided tree search
+
+## [2026-05-19 08:31] ingest | FORGE: Self-Evolving Agent Memory With No Weight Updates via Population Broadcast
+
+## [2026-05-19 08:31] ingest | Argus: Evidence Assembly for Scalable Deep Research Agents
+
+## [2026-05-19 08:31] ingest | Fully Open Meditron: An Auditable Pipeline for Clinical LLMs
+
+## [2026-05-19 08:31] ingest | Confirming Correct, Missing the Rest: LLM Tutoring Agents Struggle Where Feedback Matters Most
+
+## [2026-05-19 08:31] ingest | Context, Reasoning, and Hierarchy: A Cost-Performance Study of Compound LLM Agent Design in an Adversarial POMDP
+
+## [2026-05-19 08:31] ingest | Formal Methods Meet LLMs: Auditing, Monitoring, and Intervention for Compliance of Advanced AI Systems
+
+## [2026-05-19 08:31] ingest | paper.json: A Coordination Convention for LLM-Agent-Actionable Papers
+
+## [2026-05-19 08:31] ingest | Optimized Three-Dimensional Photovoltaic Structures with LLM guided Tree Search
+
+## [2026-05-19 08:31] ingest | An Algebraic Exposition of the Theory of Dyadic Morality
+
+## [2026-05-19 08:31] ingest | Property-Guided LLM Program Synthesis for Planning
