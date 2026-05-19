@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DashAttention: Differentiable and Adaptive Sparse Hierarchic — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p style="font-size:clamp(0.8rem,1.5vw,1rem)" class="muted">arXiv: 2605.18753v1</p>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);margin-top:0.5em;line-height:1.2">DashAttention</h1>
+    <p style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0.4em;font-weight:300">미분 가능하고 적응적인 희소 계층적 어텐션</p>
+    <div class="hr" style="margin:2em 0"></div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem)" class="muted">Differentiable and Adaptive Sparse Hierarchical Attention</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">동기 부여</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.8">LLM의 컨텍스트 길이가 길어짐에 따라, <span class="accent">전체 어텐션</span>의 연산 비용은 기하급수적으로 증가합니다. 이를 해결하기 위해 <span class="accent2">계층적 희소 어텐션</span> 방법들이 제안되었으나, 근본적인 한계가 존재합니다.</p>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600">전체 어텐션</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em" class="muted">O(n²) 복잡도 — 긴 시퀀스에서 비실용적</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600">기존 희소 어텐션</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em" class="muted">Top-K 기반 선택 — 고정된 토큰 수 가정</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">기존 방법: 계층적 어텐션</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7">NSA, InfLLMv2 등은 <span class="accent2">두 단계</span>로 어텐션을 수행합니다.</p>
+    <div class="pipeline" style="margin-top:1.5em">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">조대 어텐션</div>
+        <div class="step-desc">KV 블록 단위로<br> coarse score 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Top-K 선택</div>
+        <div class="step-desc">상위 K개 블록을<br>하드하게 선택</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">세밀 어텐션</div>
+        <div class="step-desc">선택된 토큰에 대해<br>softmax 어텐션 적용</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">핵심 문제: Top-K의 한계</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="margin-bottom:1.5em">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);line-height:1.7">Top-K 연산은 <span class="accent">모든 쿼리에 대해 관련 토큰의 수가 동일하다</span>고 가정합니다.</p>
+    </div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.85rem,1.4vw,1rem)">단순한 질문은 소수의 토큰만 필요 — 과도한 선택</span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.85rem,1.4vw,1rem)">복잡한 질문은 많은 토큰 필요 — 부족한 선택</span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.85rem,1.4vw,1rem)">Top-K는 <span class="accent">미분 불가능</span> — end-to-end 학습 불가</span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.85rem,1.4vw,1rem)">하이퍼파라미터 K에 대한 민감도 높음</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">DashAttention: 핵심 아이디어</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);line-height:1.8"><span class="accent">미분 가능한</span> 블록 선택 메커니즘을 통해, <span class="accent2">각 쿼리마다 적응적으로</span> 관련 KV 블록의 수와 중요도를 결정합니다.</p>
+    <div class="grid-3" style="margin-top:1.5em">
+      <div class="card" style="text-align:center">
+        <div class="big-num">D</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">Differentiable</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">미분 가능한 선택</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">A</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">Adaptive</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">쿼리별 적응적 선택</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">S</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">Sparse</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">희소성 유지</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">방법론: 미분 가능한 블록 선택</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1em">Hard top-K 대신 <span class="accent">소프트 게이팅 함수</span>를 사용하여 블록의 중요도를 연속적으로 결정합니다.</p>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><span class="accent">기존 Top-K</span></p>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">이진 선택 (0 또는 1)</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">기울기 전파 불가</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">K값 수동 튜닝</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><span class="accent3">DashAttention</span></p>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">연속적 가중치 (0~1)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">End-to-end 학습 가능</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.8rem,1.3vw,0.95rem)">자동 적응적 결정</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">적응적 희소성 메커니즘</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1em">쿼리의 <span class="accent2">복잡도에 따라</span> 참조할 KV 블록의 수가 자동으로 조절됩니다.</p>
+    <div class="flow-item" style="margin-bottom:1em">
+      <div class="flow-icon"><i class="fas fa-question"></i></div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);font-weight:600">단순 쿼리</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">소수의 블록에 높은 가중치 집중 → 낮은 연산량</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:1em">
+      <div class="flow-icon"><i class="fas fa-brain"></i></div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);font-weight:600">복잡 쿼리</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">다수의 블록에 분산된 가중치 → 높은 연산량 (필요시)</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-bolt"></i></div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);font-weight:600">희소성 유지</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">스파르시티 정규화로 불필요한 블록 자동 억제</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">DashAttention 파이프라인</h2>
+    <div class="hr"></div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">블록 분할</div>
+        <div class="step-desc">KV 캐시를<br>고정 크기 블록으로 분할</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Coarse Score</div>
+        <div class="step-desc">블록 대표 토큰으로<br>조대 점수 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">소프트 게이팅</div>
+        <div class="step-desc">미분 가능 함수로<br>블록 가중치 산출</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">가중 어텐션</div>
+        <div class="step-desc">게이트 가중치를 반영한<br>세밀 softmax 어텐션</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">학습 목표</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1.2em">DashAttention은 <span class="accent">다음 세 가지 목표</span>를 동시에 최적화합니다.</p>
+    <div class="grid-3">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><span class="accent">어텐션 품질</span></p>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.9rem);margin-top:0.5em;line-height:1.6" class="muted">표준 어텐션과의 출력 차이를 최소화하여 모델 성능 유지</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><span class="accent2">희소성 유도</span></p>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.9rem);margin-top:0.5em;line-height:1.6" class="muted">스파르시티 정규화 항으로 불필요한 블록 가중치를 0으로 수렴</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><span class="accent3">적응성 확보</span></p>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.9rem);margin-top:0.5em;line-height:1.6" class="muted">쿼리별로 서로 다른 희소도 패턴을 학습하도록 유도</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">비교: DashAttention vs 기존 방법</h2>
+    <div class="hr"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>특성</th>
+          <th>NSA / InfLLMv2</th>
+          <th>DashAttention</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>블록 선택 방식</td>
+          <td>Top-K (하드)</td>
+          <td><span class="accent">소프트 게이팅</span></td>
+        </tr>
+        <tr>
+          <td>미분 가능성</td>
+          <td><span class="tag tag-red">불가</span></td>
+          <td><span class="tag tag-green">가능</span></td>
+        </tr>
+        <tr>
+          <td>쿼리별 적응</td>
+          <td><span class="tag tag-red">불가</span></td>
+          <td><span class="tag tag-green">가능</span></td>
+        </tr>
+        <tr>
+          <td>하이퍼파라미터</td>
+          <td>K값 수동 설정</td>
+          <td><span class="accent3">자동 학습</span></td>
+        </tr>
+        <tr>
+          <td>End-to-End 학습</td>
+          <td><span class="tag tag-red">불가</span></td>
+          <td><span class="tag tag-green">가능</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">실험 결과: 추론 품질</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1em">다양한 벤치마크에서 DashAttention은 기존 희소 어텐션 방법 대비 <span class="accent">일관되게 우수한 성능</span>을 보입니다.</p>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600">LongBench v2</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em;line-height:1.6" class="muted">전체 어텐션 대비 성능 저하를 최소화하면서, NSA/InfLLMv2보다 높은 점수 달성</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600">RULER 벤치마크</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em;line-height:1.6" class="muted">다양한 컨텍스트 길이에서 안정적인 성능 유지, 길이가 길어질수록 격차 확대</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">실험 결과: 효율성</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:1em">
+      <div class="card" style="text-align:center">
+        <div class="big-num" class="accent">↓</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">메모리 사용량</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">전체 어텐션 대비<br>현저히 낮은 메모리</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">↑</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">추론 속도</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">적응적 희소성으로<br>불필요한 연산 회피</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">→</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600;margin-top:0.3em">품질-효율 균형</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.3em" class="muted">성능 저하 최소화하면서<br>효율성 극대화</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">희소도 분석</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1em">DashAttention이 학습한 <span class="accent2">쿼리별 희소도 분포</span>를 분석하면 의미 있는 패턴이 관찰됩니다.</p>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><i class="fas fa-chart-bar" style="margin-right:0.3em"></i>희소도 분포</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em;line-height:1.6" class="muted">쿼리별 활성 블록 수가 넓은 범위에 걸쳐 분포 — 고정 K가 부적합한 이유를 시사</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);font-weight:600"><i class="fas fa-project-diagram" style="margin-right:0.3em"></i>의미적 상관관계</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5em;line-height:1.6" class="muted">복잡한 추론 질문이 단순 질문보다 더 많은 블록을 활성화 — 적응적 동작 확인</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">핵심 요약</h2>
+    <div class="hr"></div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.9rem,1.5vw,1.05rem)">Top-K의 <span class="accent">미분 불가능성</span>과 <span class="accent">고정 K의 비적응성</span>을 동시에 해결</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.9rem,1.5vw,1.05rem)">소프트 게이팅 기반 <span class="accent2">미분 가능한 블록 선택</span>으로 end-to-end 학습 실현</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.9rem,1.5vw,1.05rem)">쿼리 복잡도에 따라 <span class="accent3">자동으로 참조 블록 수 조절</span></span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.9rem,1.5vw,1.05rem)">스파르시티 정규화로 <span class="accent">희소성 유지</span>하면서 품질 저하 최소화</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(0.9rem,1.5vw,1.05rem)">NSA, InfLLMv2 등 기존 방법 대비 <span class="accent2">일관된 성능 우위</span> 달성</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem)">논문 정보</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(1.1rem,2vw,1.4rem);font-weight:600;line-height:1.4">DashAttention: Differentiable and Adaptive Sparse Hierarchical Attention</p>
+    <div class="hr" style="margin:1.5em 0"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);line-height:1.8">
+      <span class="muted">arXiv:</span> <a href="http://arxiv.org/abs/2605.18753v1" style="font-size:clamp(0.9rem,1.5vw,1.05rem)" class="accent2">2605.18753v1</a>
+    </p>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.8;margin-top:0.5em" class="muted">
+      <i class="fas fa-external-link-alt" style="margin-right:0.3em"></i>
+      http://arxiv.org/abs/2605.18753v1
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
