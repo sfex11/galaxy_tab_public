@@ -446,3 +446,20 @@
 - [[sources/2026-05-19-optimized-three-dimensional-photovoltaic-structure.md]] - Optimized Three-Dimensional Photovoltaic Structures with LLM guided Tree Search
 - [[sources/2026-05-19-an-algebraic-exposition-of-the-theory-of-dyadic-mo.md]] - An Algebraic Exposition of the Theory of Dyadic Morality
 - [[sources/2026-05-19-property-guided-llm-program-synthesis-for-planning.md]] - Property-Guided LLM Program Synthesis for Planning
+- [[entities/transformer]] - Transformer
+- [[sources/2026-05-20-dashattention-differentiable-and-adaptive-sparse-h.md]] - DashAttention: Differentiable and Adaptive Sparse Hierarchical Attention
+- [[sources/2026-05-20-code-as-agent-harness.md]] - Code as Agent Harness
+- [[sources/2026-05-20-esi-bench-towards-embodied-spatial-intelligence-th.md]] - ESI-Bench: Towards Embodied Spatial Intelligence that Closes the Perception-Action Loop
+- [[sources/2026-05-20-vision-opd-learning-to-see-fine-details-for-multim.md]] - Vision-OPD: Learning to See Fine Details for Multimodal LLMs via On-Policy Self-Distillation
+- [[sources/2026-05-20-what-does-the-ai-doctor-value-auditing-pluralism-i.md]] - What Does the AI Doctor Value? Auditing Pluralism in the Clinical Ethics of Language Models
+- [[sources/2026-05-20-predictable-confabulations-factual-recall-by-llms-.md]] - Predictable Confabulations: Factual Recall by LLMs Scales with Model Size and Topic Frequency
+- [[sources/2026-05-20-robo-cortex-a-self-evolving-embodied-agent-via-dua.md]] - Robo-Cortex: A Self-Evolving Embodied Agent via Dual-Grain Cognitive Memory and Autonomous Knowledge Induction
+- [[sources/2026-05-20-dexholdem-playing-texas-holdem-with-dexterous-embo.md]] - DexHoldem: Playing Texas Hold'em with Dexterous Embodied System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-20-envfactory-scaling-tool-use-agents-via-executable-.md]] - EnvFactory: Scaling Tool-Use Agents via Executable Environments Synthesis and Robust RL
+- [[sources/2026-05-20-contextualized-dynamic-explanations-a-vision.md]] - Contextualized Dynamic Explanations: A Vision
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-20-skillgenbench-benchmarking-skill-generation-pipeli.md]] - SkillGenBench: Benchmarking Skill Generation Pipelines for LLM Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-20-general-preference-reinforcement-learning.md]] - General Preference Reinforcement Learning
+- [[sources/2026-05-20-actionable-world-representation.md]] - Actionable World Representation

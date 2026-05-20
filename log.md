@@ -982,3 +982,29 @@
 ## [2026-05-19 08:31] ingest | An Algebraic Exposition of the Theory of Dyadic Morality
 
 ## [2026-05-19 08:31] ingest | Property-Guided LLM Program Synthesis for Planning
+
+## [2026-05-20 08:30] ingest | DashAttention: Differentiable and Adaptive Sparse Hierarchical Attention
+
+## [2026-05-20 08:30] ingest | Code as Agent Harness
+
+## [2026-05-20 08:30] ingest | ESI-Bench: Towards Embodied Spatial Intelligence that Closes the Perception-Action Loop
+
+## [2026-05-20 08:30] ingest | Vision-OPD: Learning to See Fine Details for Multimodal LLMs via On-Policy Self-Distillation
+
+## [2026-05-20 08:30] ingest | What Does the AI Doctor Value? Auditing Pluralism in the Clinical Ethics of Language Models
+
+## [2026-05-20 08:30] ingest | Predictable Confabulations: Factual Recall by LLMs Scales with Model Size and Topic Frequency
+
+## [2026-05-20 08:30] ingest | Robo-Cortex: A Self-Evolving Embodied Agent via Dual-Grain Cognitive Memory and Autonomous Knowledge Induction
+
+## [2026-05-20 08:30] ingest | DexHoldem: Playing Texas Hold'em with Dexterous Embodied System
+
+## [2026-05-20 08:30] ingest | EnvFactory: Scaling Tool-Use Agents via Executable Environments Synthesis and Robust RL
+
+## [2026-05-20 08:30] ingest | Contextualized Dynamic Explanations: A Vision
+
+## [2026-05-20 08:30] ingest | SkillGenBench: Benchmarking Skill Generation Pipelines for LLM Agents
+
+## [2026-05-20 08:30] ingest | General Preference Reinforcement Learning
+
+## [2026-05-20 08:30] ingest | Actionable World Representation
