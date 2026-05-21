@@ -463,3 +463,7 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-05-20-general-preference-reinforcement-learning.md]] - General Preference Reinforcement Learning
 - [[sources/2026-05-20-actionable-world-representation.md]] - Actionable World Representation
+- [[sources/2026-05-21-vl-dpo-vision-language-guided-finetuning-for-prefe.md]] - VL-DPO: Vision-Language-Guided Finetuning for Preference-Aligned Autonomous Driving
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c.md]] - Rewarding Beliefs, Not Actions: Consistency-Guided Credit Assignment for Long-Horizon Agents
+- [[sources/2026-05-21-towards-llm-assisted-architecture-recovery-for-rea.md]] - Towards LLM-Assisted Architecture Recovery for Real-World ROS~2 Systems: An Agent-Based Multi-Level Approach to Hierarchical Structural Architecture Reconstruction

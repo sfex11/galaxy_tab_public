@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 에이전트 런타임의 세 가지 착각 — 하나의 경계 계약이면 충분했던 것들</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgba(194,112,62,0.18);
+  }
+
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid rgba(44,40,37,0.07);
+    margin-bottom: 44px;
+  }
+
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .article-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 18px;
+  }
+
+  .article-header .subtitle {
+    font-size: clamp(14px, 2.2vw, 17px);
+    color: rgba(44,40,37,0.55);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .article-meta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: rgba(44,40,37,0.4);
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: 52px;
+  }
+
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.6vw, 28px);
+    font-weight: 700;
+    color: #2c2825;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  .section h3 {
+    font-size: clamp(16px, 2.8vw, 20px);
+    font-weight: 600;
+    color: #2c2825;
+    margin: 32px 0 12px;
+    line-height: 1.45;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+    color: rgba(44,40,37,0.82);
+  }
+
+  .section p strong {
+    color: #2c2825;
+    font-weight: 600;
+  }
+
+  .highlight-orange {
+    color: #c2703e;
+    font-weight: 600;
+  }
+
+  .highlight-blue {
+    color: #5b7c99;
+    font-weight: 600;
+  }
+
+  .highlight-green {
+    color: #6b9e7a;
+    font-weight: 600;
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 24px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2.2vw, 16.5px);
+    color: rgba(44,40,37,0.72);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    color: #c2703e;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 1px 8px rgba(44,40,37,0.05), 0 4px 24px rgba(44,40,37,0.03);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: 28px clamp(20px, 3vw, 32px);
+    margin: 28px 0;
+  }
+
+  .card .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card .card-label.orange { color: #c2703e; }
+  .card .card-label.blue { color: #5b7c99; }
+  .card .card-label.green { color: #6b9e7a; }
+
+  .card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(16px, 2.8vw, 20px);
+    font-weight: 600;
+    color: #2c2825;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .card p {
+    margin-bottom: 10px;
+    color: rgba(44,40,37,0.75);
+    font-size: clamp(14px, 2.2vw, 16px);
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px dashed rgba(194,112,62,0.2);
+    border-radius: 14px;
+    padding: 28px clamp(20px, 3vw, 32px);
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -14px;
+    left: 24px;
+    font-size: 20px;
+    background: #faf9f7;
+    padding: 0 8px;
+  }
+
+  .metaphor-box h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(16px, 2.6vw, 19px);
+    font-weight: 600;
+    color: #2c2825;
+    margin-bottom: 12px;
+  }
+
+  .metaphor-box p {
+    color: rgba(44,40,37,0.75);
+    margin-bottom: 10px;
+  }
+
+  /* ── 다이어그램 ── */
+  .diagram {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(44,40,37,0.06);
+    border-radius: 14px;
+    padding: 28px 20px;
+    margin: 32px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  .diagram-row {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .diagram-cell {
+    flex: 1 1 140px;
+    max-width: 180px;
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .diagram-cell.state {
+    background: rgba(194,112,62,0.1);
+    border: 1px solid rgba(194,112,62,0.2);
+    color: #c2703e;
+  }
+
+  .diagram-cell.control {
+    background: rgba(91,124,153,0.1);
+    border: 1px solid rgba(91,124,153,0.2);
+    color: #5b7c99;
+  }
+
+  .diagram-cell.data {
+    background: rgba(107,158,122,0.1);
+    border: 1px solid rgba(107,158,122,0.2);
+    color: #6b9e7a;
+  }
+
+  .diagram-cell.observation {
+    background: rgba(44,40,37,0.04);
+    border: 1px solid rgba(44,40,37,0.1);
+    color: rgba(44,40,37,0.6);
+  }
+
+  .diagram-cell .cell-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .diagram-cell .cell-sub {
+    font-size: 11.5px;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+
+  .diagram-bracket {
+    font-size: 13px;
+    color: rgba(44,40,37,0.4);
+    font-weight: 500;
+    padding: 6px 0;
+    letter-spacing: 0.05em;
+  }
+
+  .diagram-label {
+    font-size: 12px;
+    color: rgba(44,40,37,0.45);
+    margin-top: 4px;
+  }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.06) 0%, rgba(107,158,122,0.06) 100%);
+    border: 1px solid rgba(91,124,153,0.15);
+    border-radius: 14px;
+    padding: 32px clamp(20px, 3vw, 32px);
+    margin: 36px 0;
+  }
+
+  .conclusion-box h3 {
+    font-family: 'Source Serif 4', serif;
+    color: #5b7c99;
+    margin-top: 0 !important;
+  }
+
+  /* ── 리스트 ── */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+
+  .styled-list li {
+    position: relative;
+    padding: 8px 0 8px 28px;
+    color: rgba(44,40,37,0.78);
+  }
+
+  .styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 17px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .styled-list li.orange::before { background: #c2703e; }
+  .styled-list li.blue::before { background: #5b7c99; }
+  .styled-list li.green::before { background: #6b9e7a; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,40,37,0.08), transparent);
+    margin: 44px 0;
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid rgba(44,40,37,0.07);
+    font-size: 13px;
+    color: rgba(44,40,37,0.35);
+    line-height: 1.7;
+  }
+
+  .article-footer a {
+    color: #c2703e;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .article-wrapper { padding: 12px 16px 60px; }
+    .article-header { padding: 32px 0 28px; }
+    .card { padding: 22px 18px; }
+    .metaphor-box { padding: 24px 18px; }
+    .conclusion-box { padding: 24px 18px; }
+    .diagram-cell { flex: 1 1 100px; min-height: 68px; padding: 12px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="tag">Deep Analysis</span>
+    <h1>LLM 에이전트 런타임의 세 가지 착각 — 하나의 경계 계약이면 충분했던 것들</h1>
+    <p class="subtitle">의미론적 간극, 하네스 엔지니어링, 파이프라인 서빙으로 흩어졌던 런타임 최적화 시도들이 사실은 단일 경계 계약의 불완전한 조합 패턴에 불과했음을 보여준다.</p>
+    <div class="article-meta">
+      <span>에이전트 아키텍처</span>
+      <span>·</span>
+      <span>SDB 경계 계약</span>
+      <span>·</span>
+      <span>런타임 파편화</span>
+    </div>
+  </header>
+
+  <!-- 섹션 1: 도입 — 비유와 문제 제기 -->
+  <section class="section">
+    <h2>패스 창구 없는 식당, 그리고 세 명의 바보</h2>
+
+    <p>한식당을 상상해 보자. 주방에서는 요리사가 불을 다루고, 홀에서는 웨이터가 손님의 주문을 받는다. 정상적이라면 두 공간 사이에 <strong>패스 창구(pass-through window)</strong>가 있다. 요리가 완성되면 창구를 통해 나가고, 주문표는 창구를 통해 들어온다. 이 창구 하나가 상태(지금 어떤 주문이 진행 중인가), 제어(다음에 무엇을 내보낼 것인가), 데이터(접시 위에 무엇이 담겨 있는가)를 동시에 조율한다.</p>
+
+    <p>그런데 이 식당에는 패스 창구가 없다고 가정하자. 그러면 어떤 일이 벌어질까?</p>
+
+    <ul class="styled-list">
+      <li class="orange">요리사는 <strong>주문 내역을 전부 외워서</strong> 요리한다 (상태의 누출)</li>
+      <li class="blue">매니저가 <strong>직접 접시를 들고 홀까지 뛰어간다</strong> (제어의 하부 이동)</li>
+      <li class="green">주방 출입구가 <strong>좁아서 접시가 줄을 서서 기다린다</strong> (데이터의 병목 외부화)</li>
+    </ul>
+
+    <p>세 사람 모두 각자의 방식으로 "문제"를 해결하려 한다. 하지만 정작 필요한 것은 <strong>창구 하나</strong>였다. 창구가 없다는 사실을 인식하지 못한 채, 각자 자기 영역에서 땜질식 처방을 내린 것이다.</p>
+
+    <div class="metaphor-box">
+      <h4>이 비유가 에이전트 런타임과 어떤 관계인가?</h4>
+      <p>주방은 <span class="highlight-green">결정론적 도구(Tool)</span>이고, 홀은 <span class="highlight-orange">확률적 모델(LLM)</span>이다. 두 영역 사이의 경계가 바로 <strong>확률적-결정론적 경계(Stochastic-Deterministic Boundary, SDB)</strong>다. 그리고 지금까지 에이전트 생태계는 이 경계에 "패스 창구"를 설계하지 않은 채, 각자의 자리에서 문제를 땜질해 왔다.</p>
+    </div>
+
+    <p>최근 발표된 논문 <em>"A Methodology for Selecting and Composing Runtime Architecture Patterns for Production LLM Agents"</em>는 이 SDB를 <strong>4역할 계약(State, Control, Data, Observation)</strong>이라는 일급 아키텍처 객체로 명명한다. 그리고 이 시각을 적용하면, Wiki에 산재한 세 가지 런타임 최적화 접근법이 사실은 <strong>하나의 경계 계약을 구성하는 4개 슬롯 중 특정 슬롯에만 집중하여 발생한 불완전한 조합 패턴</strong>으로 환원된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2: 상태 계약의 누출 -->
+  <section class="section">
+    <h2>첫 번째 착각: 상태를 "찍어서" 저장하면 되는 줄 알았다</h2>
+
+    <div class="card">
+      <div class="card-label orange">상태 계약 누출</div>
+      <h4>algorithm-system-translation-gap &amp; agent-os-semantic-gap</h4>
+      <p>Crab 논문이 지적한 의미론적 간극이다. 에이전트의 의미론적 의존 그래프(확률적 상태)를 OS 수준의 체크포인트(결정론적 전체 스냅샷)로 강제 번역할 때 발생하는 근본적 비효율.</p>
+    </div>
+
+    <p>에이전트가 실행되는 동안, 내부 상태는 결코 "전체 스냅샷"으로 깔끔하게 표현되지 않는다. LLM이 어떤 추론 경로를 거쳤는지, 어떤 툴 호출이 어떤 문맥에서 발생했는지, 이것들은 확률적 영역에서 형성된 <strong>의미론적 의존 그래프</strong>다. 하지만 기존 런타임은 이를 OS가 제공하는 체크포인트 메커니즘 — 프로세스 메모리를 통째로 찍어내는 방식 — 으로 번역하려 했다.</p>
+
+    <p>비유로 돌아가면, 이것은 <strong>"요리사의 머릿속 레시피 진행 상황을 CCTV 화면 캡처로 기록하려는 시도"</strong>와 같다. 화면에는 불꽃과 재료가 보이지만, "지금 소스의 간이 어느 정도인가"라는 의미론적 상태는 캡처에 담기지 않는다.</p>
+
+    <blockquote>
+      "상태 경계를 교차할 때의 직렬화/역직렬화 계약이 없었기 때문에 나타난 현상이다. SDB의 상태 유지(State) 역할이 명시되지 않은 상태에서, 상위 계층의 확률적 상태를 하위 계층의 결정론적 스냅샷으로 억지 번역한 결과다."
+      <cite>— SDB 계약 관점에서의 재해석</cite>
+    </blockquote>
+
+    <p>핵심은 이것이다. 상태 계약이 없으면 상태 정보가 <strong>경계 위로 누출</strong>된다. 의미론적 맥락이 손실된 채 결정론적 형식으로 억지로 포장되고, 복원할 때는 원래 맥락을 재구성할 방법이 없다. 이것이 "간극(gap)"이라는 이름으로 기록된 현상의 정체다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3: 제어 계약의 하부 이동 -->
+  <section class="section">
+    <h2>두 번째 착각: 제어를 "아래로" 내리면 해결되는 줄 알았다</h2>
+
+    <div class="card">
+      <div class="card-label blue">제어 계약 하부 이동</div>
+      <h4>agentic-harness-engineering</h4>
+      <p>애플리케이션 로직에서 실행 환경(C/R 런타임)까지 범위를 확장하여 결함 내성·롤백·분기를 인프라 계층에서 직접 구현한 접근법.</p>
+    </div>
+
+    <p>SDB의 제어(Control) 역할은 본래 <strong>경계 자체에서 수행되어야 한다</strong>. 확률적 모델의 출력을 결정론적 도구의 입력으로 라우팅하고, 실패 시 재시도 여부를 결정하고, 분기 경로를 선택하는 것 — 이것은 패스 창구의 역할이다.</p>
+
+    <p>하지만 하네스 엔지니어링은 이 제어 책임을 상위 계층(애플리케이션 로직)에서 하위 계층(런타임 인프라)으로 <strong>끌어내렸다</strong>. 창구가 제어를 안 하니, 매니저가 직접 주방으로 뛰어들어 접시를 나르고 주문을 조율하는 꼴이 된 것이다.</p>
+
+    <p>문제는 이 하부 이동이 <strong>경계의 팽창</strong>을 유발한다는 점이다. 하네스가 제어 흐름을 감당하기 위해 자신의 경계를 인프라 계층까지 확장하면, 결과적으로 하네스 자체가 미니 운영체제가 되어버린다. Crab 논문의 관찰대로, 이것은 "에이전트 OS"라는 이름의 또 다른 파편화를 낳는다.</p>
+
+    <blockquote>
+      "SDB가 일급 아키텍처 객체로 추상화되지 않았기 때문에, 하네스가 제어 흐름을 감당하기 위해 자신의 경계를 인프라까지 팽창시킨 파편화 패턴이다."
+      <cite>— SDB 계약 관점에서의 재해석</cite>
+    </blockquote>
+
+    <p>더 근본적인 문제가 있다. 제어를 하부로 내리면 할수록, 상위 계층(에이전트의 추론 로직)은 자신이 무엇을 제어하고 있는지 잃어버린다. 하네스가 롤백을 수행했는데, 에이전트는 그 사실을 의미론적으로 이해하지 못한다. 제어와 추론이 분리되는 것이다. 이것이 제어 계약의 부재가 만들어내는 <strong>인지적 단절</strong>이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4: 데이터 계약의 병목 외부화 -->
+  <section class="section">
+    <h2>세 번째 착각: 데이터를 "빨리" 보내면 해결되는 줄 알았다</h2>
+
+    <div class="card">
+      <div class="card-label green">데이터 계약 병목 외부화</div>
+      <h4>aggregate-pipeline-serving</h4>
+      <p>Tool Attention 논문이 밝혀낸 병목 재정의 — "개별 LLM 호출이 아닌 스키마 축적이 병목". 결정론적 도구의 스키마가 확률적 모델로 전달될 때 경계에서의 데이터 계약 부재로 인해 파이프라인 전체로 병목이 누출됨.</p>
+    </div>
+
+    <p>이 사례는 가장 직관적이다. 식당에서 주문이 밀릴 때, 출입구를 넓히면 해결될까? 아니면 접시를 더 빨리 나르면 해결될까? 정답은 아니다. 문제는 출입구의 너비가 아니라, <strong>출입구에서 어떤 형식으로 접시를 전달하는지에 대한 규칙</strong>이 없다는 것이다.</p>
+
+    <p>Tool Attention 논문이 발견한 것은, 파이프라인의 레이턴시 병목이 LLM 추론 자체가 아니라 <strong>툴 스키마의 축적 과정</strong>에 있다는 사실이었다. 결정론적 도구들의 스키마(JSON 형식, 파라미터 정의 등)가 확률적 모델의 컨텍스트로 파이프라인을 통해 전달될 때, 이 경계에서의 <strong>데이터 포맷팅과 라우팅에 대한 계약</strong>이 없었기에 병목이 파이프라인 전체로 누출된 것이다.</p>
+
+    <p>데이터 계약이 없으면 무슨 일이 벌어지는가? 모든 스키마가 무차별적으로 컨텍스트에 쌓이고, 모델은 불필요한 정보까지 처리해야 하며, 파이프라인은 이 병목을 "더 빠른 서빙"으로 해결하려 한다. 하지만 이것은 출입구를 넓히는 것과 같다 — 근본 원인(전달 규칙의 부재)을 해결하는 것이 아니라, 증상(병목)을 파이프라인 레이어로 외부화할 뿐이다.</p>
+
+    <blockquote>
+      "데이터 교환(Data) 역할의 부재를 적나라하게 보여주는 사례다. 결정론적 도구의 스키마가 확률적 모델로 파이프라인을 통해 전달될 때, 이 경계에서의 데이터 포맷팅과 라우팅에 대한 계약이 없었기에 병목이 파이프라인 전체로 누출된 것이다."
+      <cite>— SDB 계약 관점에서의 재해석</cite>
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 통합 진단과 패러다임 전환 -->
+  <section class="section">
+    <h2>대칭적 실수: 세 가지 착각이 하나로 수렴하는 지점</h2>
+
+    <p>지금까지 세 가지 접근법을 각각 살펴보았다. 이제 이것을 하나의 다이어그램 위에 올려놓자.</p>
+
+    <div class="diagram">
+      <div style="font-family:'Source Serif 4',serif;font-size:clamp(14px,2.4vw,17px);font-weight:600;color:#2c2825;margin-bottom:18px;">SDB 4역할 계약 — 슬롯별 과보상 패턴</div>
+      <div class="diagram-row">
+        <div class="diagram-cell state">
+          <div class="cell-title">상태 (State)</div>
+          <div class="cell-sub">의미론적 의존 그래프의 경계 교차</div>
+        </div>
+        <div class="diagram-cell control">
+          <div class="cell-title">제어 (Control)</div>
+          <div class="cell-sub">라우팅·재시도·분기 결정</div>
+        </div>
+        <div class="diagram-cell data">
+          <div class="cell-title">데이터 (Data)</div>
+          <div class="cell-sub">스키마 포맷팅·라우팅 규칙</div>
+        </div>
+        <div class="diagram-cell observation">
+          <div class="cell-title">관측 (Observation)</div>
+          <div class="cell-sub">피드백 신호의 의미론적 매핑</div>
+        </div>
+      </div>
+      <div class="diagram-bracket">▼ 과보상(Over-compensation) 패턴 ▼</div>
+      <div class="diagram-row" style="margin-top:8px;">
+        <div class="diagram-cell state" style="opacity:0.85;">
+          <div class="cell-sub">OS 스냅샷으로 덮기</div>
+          <div class="cell-sub" style="font-size:10.5px;margin-top:4px;">semantic-gap</div>
+        </div>
+        <div class="diagram-cell control" style="opacity:0.85;">
+          <div class="cell-sub">런타임 팽창으로 덮기</div>
+          <div class="cell-sub" style="font-size:10.5px;margin-top:4px;">harness-engineering</div>
+        </div>
+        <div class="diagram-cell data" style="opacity:0.85;">
+          <div class="cell-sub">파이프라인 레이턴시로 덮기</div>
+          <div class="cell-sub" style="font-size:10.5px;margin-top:4px;">pipeline-serving</div>
+        </div>
+        <div class="diagram-cell observation" style="opacity:0.5;border-style:dashed;">
+          <div class="cell-sub">—</div>
+          <div class="cell-sub" style="font-size:10.5px;margin-top:4px;">과보상 시도 없음</div>
+        </div>
+      </div>
+      <div class="diagram-label">각 접근법은 4개 슬롯 중 1개에만 집중한 불완전한 조합 패턴</div>
+    </div>
+
+    <p>이 다이어그램이 보여주는 것은 명확하다. 세 가지 접근법은 각기 <strong>다른 슬롯 하나에만 과보상</strong>했다는 점에서 구조적으로 동일한 실수를 저질렀다.</p>
+
+    <ul class="styled-list">
+      <li class="orange"><strong>semantic-gap</strong>은 '상태 계약'의 부재를 OS 레벨 스냅샷으로 덮으려 했다</li>
+      <li class="blue"><strong>harness-engineering</strong>은 '제어 계약'의 부재를 런타임 팽창으로 덮으려 했다</li>
+      <li class="green"><strong>pipeline-serving</strong>은 '데이터 계약'의 부재를 레이턴시 최적화로 덮으려 했다</li>
+    </ul>
+
+    <p>그리고 관측(Observation) 슬롯에 대해서는 아직 아무도 과보상 시도조차 하지 않았다. 이것이야말로 파편화의 대칭성이 보여주는 아이러니다 — <strong>어느 슬롯에 집중하든, 하나만 건드리면 결국 불완전하다</strong>.</p>
+
+    <div class="conclusion-box">
+      <h3>패러다임 전환: 땜질에서 계약 설계로</h3>
+      <p>지금까지의 에이전트 런타임 연구는 <strong>하드웨어 단위, OS 단위, 파이프라인 단위로 쪼개진 최적화</strong>였다. 각 영역에서 각자의 문제를 해결하려 했지만, 정작 해결해야 할 것은 영역 사이의 <strong>경계 계약</strong>이었다.</p>
+      <p>SDB를 4역할 계약의 일급 객체로 명명한 것은, 이제 "창구를 짓는 일"을 본격적으로 시작하겠다는 선언이다. 상태, 제어, 데이터, 관측 — 네 가지 역할을 경계에서 명시적으로 계약화하면, 기존의 세 가지 파편화 접근법은 각각 SDB의 한 구성 요소로 자연스럽게 수렴된다.</p>
+      <p>핵심 전환은 이것이다: <strong>"어떤 계층에서 최적화할 것인가"에서 "경계에서 무엇을 계약할 것인가"로</strong>. 이것이 에이전트 네이티브 아키텍처가 가져야 할 다음 패러다임이다.</p>
+    </div>
+
+    <p>식당 비유로 돌아가서 결론을 맺자. 요리사가 기억력을 늘리고, 매니저가 달리기 속도를 높이고, 출입구를 넓히는 것 — 이런 최적화는 식당을 조금씩 나아지게 할 수는 있다. 하지만 <strong>패스 창구 하나를 제대로 설계하는 것</strong>과 비교하면, 그것들은 모두 부분적 증상에 대한 과보상이었을 뿐이다.</p>
+
+    <p>SDB 경계 계약은 에이전트 런타임의 패스 창구다. 이 창구를 설계하는 것이, 지금 우리가 해야 할 일이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <p>대상 논문: <em>A Methodology for Selecting and Composing Runtime Architecture Patterns for Production LLM Agents</em></p>
+    <p style="margin-top:8px;">참조 엔티티: algorithm-system-translation-gap · agent-os-semantic-gap · agentic-harness-engineering · aggregate-pipeline-serving</p>
+    <p style="margin-top:12px;"><a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a> · SDB-Projection of Runtime Fragmentation</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

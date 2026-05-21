@@ -1008,3 +1008,22 @@
 ## [2026-05-20 08:30] ingest | General Preference Reinforcement Learning
 
 ## [2026-05-20 08:30] ingest | Actionable World Representation
+
+## [2026-05-21 04:22] llm-ingest | 11편 분석, 엔티티 308개, 개념 915개
+- 2026-05-21-clinseekagent-automating-multimodal-evidence-seeki.md
+- 2026-05-21-a-methodology-for-selecting-and-composing-runtime-.md
+- 2026-05-21-kore-compact-knowledge-representations-for-large-l.md
+- 2026-05-21-mixrea-benchmarking-explicit-implicit-reasoning-in.md
+- 2026-05-21-less-back-and-forth-a-comparative-study-of-structu.md
+- 2026-05-21-what-do-evolutionary-coding-agents-evolve.md
+- 2026-05-21-copt-contrastive-on-policy-thinking-with-continuou.md
+- 2026-05-21-probing-embodied-llms-when-higher-observation-fide.md
+- 2026-05-21-tide-efficient-and-lossless-moe-diffusion-llm-infe.md
+- 2026-05-21-draft-less-retrieve-more-hybrid-tree-construction-.md
+- 2026-05-21-flexdraft-flexible-speculative-decoding-via-attent.md
+
+## [2026-05-21 08:34] ingest | VL-DPO: Vision-Language-Guided Finetuning for Preference-Aligned Autonomous Driving
+
+## [2026-05-21 08:34] ingest | Rewarding Beliefs, Not Actions: Consistency-Guided Credit Assignment for Long-Horizon Agents
+
+## [2026-05-21 08:34] ingest | Towards LLM-Assisted Architecture Recovery for Real-World ROS~2 Systems: An Agent-Based Multi-Level Approach to Hierarchical Structural Architecture Reconstruction

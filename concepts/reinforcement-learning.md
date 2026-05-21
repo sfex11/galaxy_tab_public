@@ -209,3 +209,5 @@ _자동 생성됨_
 - [[sources/2026-05-20-envfactory-scaling-tool-use-agents-via-executable-.md]]
 
 - [[sources/2026-05-20-general-preference-reinforcement-learning.md]]
+
+- [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c.md]]
