@@ -30,3 +30,7 @@ MixRea는 인지 심리학의 **주의적 맹점(inattentional blindness)** — 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-copt-contrastive-on-policy-thinking-with-continuou]]: 두 논문 모두 LLM의 추론 과정에서 명시적 사고와 암시적 이해의 상호작용을 분석하고 개선 방안을 제시한다.

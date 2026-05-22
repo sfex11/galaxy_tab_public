@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-envfactory-scaling-tool-use-agents-via-executable-]]: 두 논문 모두 LLM 에이전트가 도구나 기술을 자율적으로 생성하고 활용하는 능력을 확장하는 문제를 다룬다.

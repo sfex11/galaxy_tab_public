@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-a-methodology-for-selecting-and-composing-runtime-]]: 두 논문 모두 LLM 에이전트 시스템의 소프트웨어 아키텍처 설계와 런타임 구조를 체계적으로 모델링하는 방법론을 다룬다.

@@ -11,3 +11,7 @@ Speculative decoding (SD) accelerates large language model inference by leveragi
 
 ---
 _자동 생성될_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-flexdraft-flexible-speculative-decoding-via-attent]]: 두 논문 모두 LLM 추론 가속을 위한 투기적 디코딩(speculative decoding)의 효율성을 개선하는 방법을 제안한다.

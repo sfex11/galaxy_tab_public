@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-tide-efficient-and-lossless-moe-diffusion-llm-infe]]: 두 논문 모두 LLM 추론 시 메모리 대역폭과 계산 병목을 완화하기 위한 아키텍처 수준의 최적화를 제안한다.

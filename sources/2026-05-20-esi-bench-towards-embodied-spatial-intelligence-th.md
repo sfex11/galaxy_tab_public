@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-dexholdem-playing-texas-holdem-with-dexterous-embo]]: 두 논문 모두 물리적 환경에서의 지능적 행동을 평가하기 위한 임베디드 에이전트 벤치마크를 제안한다.
+- → [[sources/2026-05-20-robo-cortex-a-self-evolving-embodied-agent-via-dua]]: 두 논문 모두 임베디드 에이전트가 미지의 환경에서 공간적 지능을 발휘하여 탐색하고 내비게이션하는 능력에 초점을 맞춘다.

@@ -11,3 +11,7 @@ Large Language Models are increasingly proposed as cognitive components for robo
 
 ---
 _자동 생성될_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-actionable-world-representation]]: 두 논문 모두 LLM 기반 에이전트가 물리적 세계를 어떻게 이해하고 상호작용하는지에 대한 인지적 한계를 탐구한다.

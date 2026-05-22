@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-vl-dpo-vision-language-guided-finetuning-for-prefe]]: 두 논문 모두 시각-언어 모델이 세부적인 시각 정보를 더 정확하게 인식하고 활용하도록 훈련하는 기법을 제안한다.

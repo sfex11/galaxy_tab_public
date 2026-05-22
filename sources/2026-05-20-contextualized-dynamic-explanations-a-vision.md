@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-less-back-and-forth-a-comparative-study-of-structu]]: 두 논문 모두 AI 시스템과 사용자 간의 불필요한 왕복 상호작용을 줄이고 맥락에 맞는 응답을 제공하는 방법을 탐구한다.

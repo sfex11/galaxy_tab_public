@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-kore-compact-knowledge-representations-for-large-l]]: 두 논문 모두 LLM이 사실적 지식을 내부 파라미터에 인코딩하는 방식의 근본적 한계와 대안을 다룬다.

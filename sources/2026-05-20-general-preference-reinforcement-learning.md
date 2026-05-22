@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-vl-dpo-vision-language-guided-finetuning-for-prefe]]: 두 논문 모두 선호도 기반 최적화를 통해 모델을 특정 도메인 가치에 정렬시키는 방법을 제안한다.
+- → [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c]]: 두 논문 모두 장기 호라이즌 LLM 에이전트를 위한 강화학습 패러다임의 한계를 극복하고 보상 신호의 효율적 활용을 탐구한다.

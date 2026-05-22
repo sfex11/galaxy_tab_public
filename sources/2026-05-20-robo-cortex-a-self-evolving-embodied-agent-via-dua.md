@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-esi-bench-towards-embodied-spatial-intelligence-th]]: 두 논문 모두 임베디드 에이전트가 미지의 환경에서 공간적 지능을 발휘하여 탐색하고 내비게이션하는 능력에 초점을 맞춘다.

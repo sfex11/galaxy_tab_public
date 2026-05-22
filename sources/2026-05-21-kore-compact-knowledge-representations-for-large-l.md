@@ -11,3 +11,7 @@ Modern Large Language Models (LLMs) have shown impressive performances in user-f
 
 ---
 _자동 생성될_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-predictable-confabulations-factual-recall-by-llms-]]: 두 논문 모두 LLM이 사실적 지식을 내부 파라미터에 인코딩하는 방식의 근본적 한계와 대안을 다룬다.

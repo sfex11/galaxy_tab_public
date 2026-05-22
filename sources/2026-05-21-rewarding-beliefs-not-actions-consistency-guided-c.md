@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-general-preference-reinforcement-learning]]: 두 논문 모두 장기 호라이즌 LLM 에이전트를 위한 강화학습 패러다임의 한계를 극복하고 보상 신호의 효율적 활용을 탐구한다.
+- → [[sources/2026-05-20-envfactory-scaling-tool-use-agents-via-executable-]]: 두 논문 모두 강화학습 기반으로 장기 호라이즌 도구 사용 에이전트를 훈련시키는 문제를 다룬다.

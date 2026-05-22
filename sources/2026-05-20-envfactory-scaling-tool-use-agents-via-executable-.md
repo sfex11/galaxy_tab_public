@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-20-skillgenbench-benchmarking-skill-generation-pipeli]]: 두 논문 모두 LLM 에이전트가 도구나 기술을 자율적으로 생성하고 활용하는 능력을 확장하는 문제를 다룬다.
+- → [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c]]: 두 논문 모두 강화학습 기반으로 장기 호라이즌 도구 사용 에이전트를 훈련시키는 문제를 다룬다.

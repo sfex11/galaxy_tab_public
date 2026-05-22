@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-21-what-do-evolutionary-coding-agents-evolve]]: 두 논문 모두 코드를 에이전트의 단순 출력이 아닌 추론 및 실행의 운영 기질(substrate)로 다루는 코드 기반 에이전트 패러다임을 분석한다.
