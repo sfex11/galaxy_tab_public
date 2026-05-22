@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>환경이 없으면 에이전트는 성장하지 않는다 — 테스트베드에서 1차 인프라로</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736b;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── 배경 질감 ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(194,112,62,0.05), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 85%, rgba(91,124,153,0.04), transparent),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(107,158,122,0.03), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  /* ── 네비게이션 ── */
+  nav.top-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav.top-nav a {
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background 0.2s;
+  }
+  nav.top-nav a:hover {
+    background: rgba(194,112,62,0.08);
+  }
+
+  /* ── 헤더 ── */
+  .article-header {
+    margin: 48px 0 40px;
+    text-align: left;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(194,112,62,0.09);
+    padding: 4px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  .article-header .subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .meta {
+    margin-top: 20px;
+    font-size: 0.82em;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
+    margin: 40px 0;
+  }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: 44px; }
+  .section h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3vw, 1.55rem);
+    color: var(--fg);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+    color: var(--fg);
+    margin: 28px 0 12px;
+    line-height: 1.45;
+  }
+  .section p {
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s ease;
+  }
+  .card:hover {
+    box-shadow: 0 4px 24px rgba(44,40,37,0.1);
+  }
+  .card h4 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 600;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+  .card p {
+    margin-bottom: 0;
+    font-size: 0.95em;
+    color: var(--muted);
+  }
+
+  /* ── 강조색 텍스트 ── */
+  .hl-orange { color: var(--accent); font-weight: 500; }
+  .hl-blue { color: var(--accent2); font-weight: 500; }
+  .hl-green { color: var(--accent3); font-weight: 500; }
+
+  /* ── 표 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+  }
+  thead { background: rgba(194,112,62,0.06); }
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 1px solid var(--card-border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: var(--muted);
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── 하이라이트 박스 ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.04));
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 28px 0;
+  }
+  .highlight-box p {
+    margin-bottom: 8px;
+  }
+  .highlight-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── 연결 다이어그램 ── */
+  .connection-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .conn-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .conn-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(44,40,37,0.09);
+  }
+  .conn-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+  }
+  .conn-num.c1 { background: rgba(194,112,62,0.12); color: var(--accent); }
+  .conn-num.c2 { background: rgba(91,124,153,0.12); color: var(--accent2); }
+  .conn-num.c3 { background: rgba(107,158,122,0.12); color: var(--accent3); }
+  .conn-body { flex: 1; }
+  .conn-body strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95em;
+    color: var(--fg);
+  }
+  .conn-body span {
+    font-size: 0.88em;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.08), rgba(107,158,122,0.05));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+  .conclusion-box h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  /* ── 푸터 ── */
+  .footer {
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--muted);
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.06);
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 640px) {
+    .wrapper { padding: 12px 14px 60px; }
+    .article-header { margin-top: 28px; margin-bottom: 28px; }
+    .card { padding: 18px; }
+    .highlight-box { padding: 18px; }
+    .conclusion-box { padding: 20px; }
+    .conn-item { padding: 12px 14px; }
+  }
+
+  /* ── 모션 감소 선호 ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ── 페이드인 애니메이션 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- 네비게이션 -->
+  <nav class="top-nav" aria-label="사이트 네비게이션">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header fade-in">
+    <span class="tag">Agentic RL · 환경 생성 · 인프라 패러다임</span>
+    <h1>환경이 없으면 에이전트는 성장하지 않는다</h1>
+    <p class="subtitle">테스트베드에서 1차 인프라로: 에이전트 환경 생성의 재정의를 요구하며</p>
+    <div class="meta">
+      <span>2025년 분석 리포트</span>
+      <span>EnvFactory 논문 맥락 분석</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 섹션 1: 비유로 여는 도입 -->
+  <section class="section fade-in">
+    <h2>운동장이 없는 체육선생님의 딜레마</h2>
+    <p>
+      체육 수업을 생각해보자. 선생님이 아무리 훌륭한 훈련 계획을 세우고, 학생들이 달리기 자세를 완벽히 이해하고 있더라도, <span class="hl-orange">실제로 달릴 운동장이 없다면 그 지식은 영원히 머릿속에 갇혀 있다.</span> 달리기를 "체득"할 수 없기 때문이다. 더 나아가, 운동장의 종류—유통로, 모래밭, 트랙—에 따라 학생이 획득하는 근육과 반사신경이 완전히 달라진다.
+    </p>
+    <p>
+      AI 에이전트 연구에서 <strong>"환경(environment)"</strong>이 정확히 이 운동장에 해당한다. 그런데 현재 연구 커뮤니티는 이 운동장을 <span class="hl-blue">"다양한 테스트베드를 제공하는 도구"</span> 정도로만 여기고 있다. 마치 운동장을 "학생들의 능력을 측정하는 장소"로만 쓰면서, 운동장 자체가 학생의 신체 능력을 <em>결정</em>한다는 사실을 간과하는 것과 같다.
+    </p>
+    <div class="highlight-box">
+      <p>
+        <span class="hl-orange">핵심 질문:</span> 에이전트 환경 생성은 정말 "다양한 테스트베드 제공"에 그치는가, 아니면 <strong>"에이전트 능력 확장 자체가 가능한지를 결정하는 1차 인프라"</strong>인가?
+      </p>
+    </div>
+    <p>
+      이 질문은 단순한 용어 싸움이 아니다. 환경을 어떻게 정의하느냐에 따라 연구 투자의 우선순위, 평가 방법론의 설계, 그리고 에이전트 생태계의 확장 가능성 자체가 달라지기 때문이다. 이 글에서는 Wiki의 기존 지식만으로 이 재정의가 어디까지 정당화될 수 있는지, 그리고 어디서 새로운 증거가 필요한지를 추적한다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2: 현재 프레이밍의 한계 -->
+  <section class="section fade-in">
+    <h2>"스펙트럼 확장"이라는 안일한 프레임</h2>
+    <p>
+      현재 Wiki에서 에이전트 환경 생성을 다루는 유일한 구체적 논문인 <strong>Nemobot Games</strong>는 환경 생성의 가치를 이렇게 규정한다:
+    </p>
+    <blockquote>
+      "Gym-Anything의 범용 소프트웨어→환경 변환과 대비되는, 게임 도메인 특화 전략 학습 환경 생성이라는 특화 경로를 제공하여 에이전트 환경 생성의 스펙트럼을 확장한다."
+    </blockquote>
+    <p>
+      여기서 환경 생성은 <span class="hl-blue">"범용 ↔ 특화"라는 하나의 축 위에서 다양성을 늘리는 작업</span>으로 포지셔닝된다. 비유하자면, 체육 선생님이 "이번엔 육상장, 다음엔 수영장, 그다음엔 암벽"이라고 운동장의 종류를 늘려가는 것에만 집중하는 셈이다.
+    </p>
+    <p>
+      이 프레이밍이 가진 문제는 세 가지다:
+    </p>
+
+    <div class="card">
+      <h4>첫째, 존재론적 순서를 뒤집는다</h4>
+      <p>"환경이 다양해야 에이전트를 잘 테스트할 수 있다"가 아니라, "환경이 있어야 에이전트가 학습할 수 있다"가 먼저다. 테스트는 학습의 부산물이지, 환경의 1차 목적이 아니다.</p>
+    </div>
+    <div class="card">
+      <h4>둘째, 부재의 비용을 보지 못한다</h4>
+      <p>운동장이 3개든 10개든 "더 많이 있다"는 긍정적 측면만 본다. 운동장이 아예 없을 때 체육 수업 자체가 성립하지 않는다는 부정적 사실에는 눈을 돌린다.</p>
+    </div>
+    <div class="card">
+      <h4>셋째, 인프라로서의 위상을 간과한다</h4>
+      <p>전기가 "다양한 가전제품을 테스트하기 위한 것"이 아니라 "모든 전자 기기가 작동하는 1차 조건"인 것처럼, 환경도 에이전트 생태계의 1차 조건일 수 있다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3: 재정의를 지지하는 세 가지 증거 -->
+  <section class="section fade-in">
+    <h2>Wiki 안에 숨겨진 세 가지 반박 증거</h2>
+    <p>
+      그런데 놀랍게도, <strong>같은 Wiki 지식 안에서</strong> 환경을 단순 테스트베드가 아닌 능력 확장의 인프라로 읽을 수 있는 단서들이 발견된다. 이 단서들은 각기 다른 엔티티에 흩어져 있어 직접적인 연결이 끊어져 있지만, 하나의 논리적 실로 꿰면 명확한 패턴이 드러난다.
+    </p>
+
+    <h3>증거 1: 환경이 없으면 체득이 일어나지 않는다</h3>
+    <p>
+      AI 리터러시 연구와 연결된 Nemobot의 또 다른 기술은 이렇게 말한다:
+    </p>
+    <blockquote>
+      "AI 리터러시가 지식 습득이 아닌 에이전트 구축 경험을 통해 체득된다는 실증 경로를 제공하여... LLM 에이전트 엔지니어링이라는 구체적 매체로 구현 가능하게 한다."
+    </blockquote>
+    <p>
+      <span class="hl-orange">"체득"</span>이라는 단어가 핵심이다. 지식은 책으로 습득할 수 있지만, 체득은 반드시 <em>경험</em>을 요구한다. 그리고 에이전트에게 "구축 경험"이란 실행 가능한 환경 위에서 시행착오를 거치는 것을 의미한다. 환경이 없다면 이 인과链条—<span class="hl-green">경험 → 체득 → 리터러시</span>—는 첫 번째 고리에서 단절된다.
+    </p>
+    <p>
+      다시 비유하자면, 수영 영상을 백 편 보는 것과 물에 직접 뛰어드는 것의 차이다. 환경은 수영장이지, 수영 영상 재생기가 아니다.
+    </p>
+
+    <h3>증거 2: 적응의 한계가 환경의 한계로 귀결된다</h3>
+    <p>
+      적응적 추론(Adaptive Inference) 분야에서 <strong>SpecKV</strong>는 흥미로운 전략을 보여준다:
+    </p>
+    <blockquote>
+      "기존 컨텍스트 기반 적응이 외부 환경에 반응했다면, SpecKV는 압축이라는 내부 시스템 상태에 반응하는 적응의 새로운 유형을 제시한다."
+    </blockquote>
+    <p>
+      SpecKV가 <span class="hl-blue">외부 환경에서 내부 상태로 적응 축을 옮긴 것</span>은 무엇을 의미하는가? 역으로 읽으면, <strong>외부 환경에 대한 의존이 병목이었기 때문에</strong> 내부로 회피한 것이다. 마치 야외 운동이 날씨에 좌우되니까 실내 운동으로 전환한 것처럼. 이는 외부 환경의 가용성이 적응 훈련의 범위를 직접적으로 제한한다는 암시다.
+    </p>
+
+    <h3>증거 3: 하네스가 이미 실행 환경을 인프라로 삼키고 있다</h3>
+    <p>
+      하네스 엔지니어링(Harness Engineering)에서 <strong>Crab</strong>의 접근은 가장 결정적인 시사점을 던진다:
+    </p>
+    <blockquote>
+      "C/R 런타임이 하네스의 핵심 구성요소(결함 내성·롤백·분기)를 직접 구현하는 인프라 계층으로, 하네스 엔지니어링의 범위를 애플리케이션 로직에서 실행 환경까지 확장함을 시사한다."
+    </blockquote>
+    <p>
+      하네스—원래 에이전트를 "감싸는" 보조 구조물—가 이미 <span class="hl-green">실행 환경을 자신의 인프라 계층으로 포섭</span>하고 있다. 하네스가 환경을 삼키는 방향으로 확장되고 있다면, 환경 생성은 하네스의 상위 인프라로서 자연스럽게 위치 조정되어야 한다. 보조 구조물이 본체를 포함하기 시작했다면, 본체의 위상을 재설정하는 것이 논리적이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4: 간극과의 연결 -->
+  <section class="section fade-in">
+    <h2>알고리즘-시스템 간극: 환경 없이는 보이지 않는 균열</h2>
+    <p>
+      가장 결정적인 논리적 근거는 <strong>알고리즘-시스템 번역 간극(Algorithm-System Translation Gap)</strong>과의 연결에서 나온다. Crab에 대한 기술은 이 간극의 본질을 이렇게 설명한다:
+    </p>
+    <blockquote>
+      "에이전트의 의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다."
+    </blockquote>
+    <p>
+      이 문장의 구조를 해부해보자. <span class="hl-orange">"의미론적 의존 그래프"</span>는 에이전트의 알고리즘적 논리이고, <span class="hl-blue">"OS의 체크포인트 메커니즘"</span>은 시스템의 물리적 구현이다. 이 둘 사이의 불일치—정밀한 의존 관계를 덩어리 스냅샷으로 대체하는 비효율—가 간극이다.
+    </p>
+    <p>
+      그런데 <strong>이 간극은 환경이 존재할 때만 현현한다.</strong> 환경이 없으면 에이전트는 OS 체크포인트를 호출할 일이 없고, 의미론적 의존 그래프도 검증할 일이 없다. 간극을 관찰할 수 없으면 해결할 수도 없다.
+    </p>
+
+    <div class="highlight-box">
+      <p>
+        비유하자면, <span class="hl-green">지진계는 지진이 일어날 때만 의미 있는 데이터를 기록한다.</span> 지진이 없는 지역에 지진계를 설치해놓고 "아무 데이터도 없으므로 지진계가 불필요하다"고 결론 내리는 것과 같은 오류다. 환경이 없어서 간극이 보이지 않는 것이지, 간극이 없는 것이 아니다.
+      </p>
+    </div>
+    <p>
+      이 논리에 따르면, 환경 부재는 단순히 "테스트베드가 없는 것"이 아니라 <strong>"에이전트 시스템의 근원적 한계를 발견하고 해결하는 과정 자체를 차단하는 것"</strong>이 된다. 이 지점에서 환경은 테스트베드를 한참 넘어선 1차 인프라의 면모를 드러낸다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 새로운 연결과 결론 -->
+  <section class="section fade-in">
+    <h2>보이지 않던 연결들, 그리고 패러다임 전환의 필요성</h2>
+    <p>
+      이 분석 과정에서 기존 Wiki에 존재하지 않았던 세 가지 연결이 새롭게 식별되었다. 이 연결들이 모두 <strong>"환경 = 1차 인프라"</strong>라는 가설을 지지하는 방향으로 작동한다는 점이 주목할 만하다.
+    </p>
+
+    <div class="connection-diagram">
+      <div class="conn-item">
+        <div class="conn-num c1">1</div>
+        <div class="conn-body">
+          <strong>환경 생성 → 알고리즘-시스템 간극</strong>
+          <span>환경 생성은 환경을 만드는 것이 아니라, 간극이 현현할 수 있는 조건을 조성하는 행위다. 이 두 엔티티는 현재 Wiki에서 독립적으로 존재한다.</span>
+        </div>
+      </div>
+      <div class="conn-item">
+        <div class="conn-num c2">2</div>
+        <div class="conn-body">
+          <strong>환경 생성 → 계산적 탐색 가능성</strong>
+          <span>환경이 1차 인프라라면, 계산적 탐색의 가능성은 환경 가용성에 의해 1차적으로 결정된다. 탐색할 공간이 없으면 탐색 자체가 성립하지 않는다.</span>
+        </div>
+      </div>
+      <div class="conn-item">
+        <div class="conn-num c3">3</div>
+        <div class="conn-body">
+          <strong>환경 생성 → 폐루프 훈련</strong>
+          <span>환경 부재가 폐루프(closed-loop) 훈련의 불가능을 의미한다면, 환경 생성은 폐루프 훈련의 전제조건이 된다. 루프를 닫을 환경이 없으면 열린 루프만 남는다.</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>현재 지지 수준의 정직한 평가</h3>
+    <p>
+      그러나 분석의 정직함을 위해, Wiki 증거가 재정의를 어디까지 지지하는지 명확히 정리해야 한다.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>주장</th>
+            <th>지지 수준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>환경이 다양한 테스트베드를 제공한다</td>
+            <td><span class="hl-green">명확히 지지</span> (Nemobot의 스펙트럼 확장)</td>
+          </tr>
+          <tr>
+            <td>환경 부재가 학습 루프를 차단한다</td>
+            <td><span class="hl-blue">간접적으로 시사</span> (AI 리터러시 체득 경로)</td>
+          </tr>
+          <tr>
+            <td>환경이 능력 확장의 1차 인프라다</td>
+            <td><span class="hl-orange">논리적 유추 가능, 직접 실증 없음</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <span class="hl-orange">핵심 한계</span>는 명확하다: 현재 Wiki에는 <strong>"환경이 없어서 특정 에이전트 능력이 확장되지 못했다"</strong>는 직접적인 부정적 실증이 없다. Nemobot은 환경이 있을 때의 긍정적 효과만 보여줄 뿐, 부재의 비용을 정량화하지 않는다. 이것이 바로 EnvFactory의 규정—<em>"실행 가능한 환경 부재를 근본적 확장성 병목으로"</em>—이 Wiki에 추가되어야 하는 이유다.
+    </p>
+
+    <!-- 결론 박스 -->
+    <div class="conclusion-box">
+      <h3>패러다임 전환: 무엇을 어떻게 바꾸어야 하는가</h3>
+      <p>
+        기존 패러다임에서 환경 생성은 <strong>"에이전트를 평가하기 위한 도구"</strong>에 속했다. 연구 파이프라인에서 환경은 알고리즘 개발 이후에 등장하는 후순위 작업이었다. "좋은 알고리즘을 만들었으니, 이제 테스트할 환경을 찾아보자"는 순서다.
+      </p>
+      <p>
+        전환되어야 할 패러다임은 이렇다: <span class="hl-orange">환경 생성은 에이전트 개발 파이프라인의 첫 번째 단계이자, 에이전트가 가질 수 있는 능력의 상한선을 결정하는 1차 인프라</span>다. "어떤 환경을 만들 수 있는가"가 "어떤 에이전트를 만들 수 있는가"를 선행한다.
+      </p>
+      <p>
+        이는 마치 <strong>건축에서 대지(土地)를 먼저 확보하지 않고 건물을 설계하는 것</strong>이 불가능한 것과 같다. 대지의 크기, 지반의 강도, 주변 환경이 건물의 높이와 구조를 결정한다. 에이전트 환경도 마찬가지다. 실행 가능한 환경이 없으면 에이전트는 성장하지 않는다—이것이 더 이상 비유가 아니라, 구조적 사실이 되어야 한다.
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Wiki 기반 심층 분석 · EnvFactory 논문 맥락 연구</p>
+  </footer>
+
+</div>
+
+<script>
+  // ── IntersectionObserver 기반 페이드인 ──
+  document.addEventListener('DOMContentLoaded', function() {
+    var fadeEls = document.querySelectorAll('.fade-in');
+    if (!('IntersectionObserver' in window)) {
+      // 폴백: 모든 요소 즉시 표시
+      fadeEls.forEach(function(el) { el.classList.add('visible'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    fadeEls.forEach(function(el) { observer.observe(el); });
+  });
+</script>
+</body>
+</html>
