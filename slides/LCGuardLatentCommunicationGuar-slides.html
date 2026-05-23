@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCGuard: Latent Communication Guard for Safe KV Sharing in M — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,40px)">
+      <span class="tag tag-amber">cs.AI · Multi-Agent Systems · Privacy</span>
+    </div>
+    <h1 style="font-size:clamp(28px,5vw,56px);line-height:1.15;margin-bottom:clamp(12px,2vw,24px)">LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems</h1>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(20px,3vw,48px)" class="muted">다중 에이전트 시스템에서 KV 캐시 기반 잠재 통신의 안전성을 보장하는 프레임워크</p>
+    <div class="hr"></div>
+    <div style="display:flex;gap:clamp(16px,3vw,40px);flex-wrap:wrap;margin-top:clamp(16px,2.5vw,32px);font-size:clamp(13px,1.5vw,17px)">
+      <span>Sadia Asif<span class="muted"> · Rensselaer Polytechnic Institute</span></span>
+      <span>Mohammad Mohammadi Amiri<span class="muted"> · Rensselaer Polytechnic Institute</span></span>
+      <span>Momin Abbas, Prasanna Sattigeri, Karthikeyan Natesan Ramamurthy<span class="muted"> · IBM Research</span></span>
+    </div>
+    <p style="font-size:clamp(12px,1.3vw,15px);margin-top:clamp(12px,2vw,24px)" class="muted">arXiv:2605.22786v1 · May 2026</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">배경: LLM 기반 다중 에이전트 시스템</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-comments accent"></i> 기존: 텍스트 기반 통신</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px)">자연어로 내부 상태를 직렬화하여 전달</p>
+        <ul class="check-list" style="margin-top:clamp(8px,1vw,12px)">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유연하고 해석 가능</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b"></i></span>비효율적 — 반복적 디코딩/토큰화</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b"></i></span>정보 손실 — 의미 구조 파괴</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-microchip accent2"></i> 최근: 잠재 통신 (Latent Comm.)</h3>
+        <p style="font-size:clamp(13px,1.5vw,17px)">Transformer KV 캐시를 직접 전달</p>
+        <ul class="check-list" style="margin-top:clamp(8px,1vw,12px)">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불필요한 계산 회피</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>더 풍부한 의미 구조 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트 간 긴밀한 결합</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(14px,1.6vw,19px)">
+      KV 캐시를 <span class="accent">공유 작업 메모리</span>로 활용하면 효율성은 높아지지만, <span class="accent">민감 정보가 표면에 드러나지 않은 채 전파</span>될 수 있다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">문제 제기: KV 캐시는 새로운 공격 표면</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(16px,2.5vw,32px)">텍스트와 달리 KV 캐시는 <span class="accent">고차원·밀집 표현</span>으로, 내용을 검사하거나 제약하기 어렵다.</p>
+    <div class="pipeline" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">에이전트 입력 처리</div>
+        <div class="step-desc">민감 정보 <span class="accent">sᵢ</span>가 KV 캐시에 <span class="accent">암묵적으로 임베딩</span></div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">KV 캐시 전달</div>
+        <div class="step-desc">텍스트 출력없이 <span class="accent2">표현 공간 채널</span>로 전파</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">적대적 재구성</div>
+        <div class="step-desc">공격자가 디코더로 <span class="accent" style="color:#c0392b">민감 입력 복원</span></div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <div class="big-num">고차원</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">T×dₖ, T×dᵥ 크기의 밀집 텐서</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">불투명</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">텍스트와 달리 외부 검사 불가</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">추론 시</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">명시적 텍스트 노출 없이 유출 발생</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">위협 모델</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)"><i class="fas fa-user-secret accent"></i> 적대적 접근 (Adversarial Access)</h3>
+        <ul class="check-list" style="font-size:clamp(13px,1.5vw,17px)">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>손상된 에이전트가 공유 KV 캐시 접근</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>로깅 인프라를 통한 캐시 가로채기</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>보조 모델을 활용한 재구성 시도</li>
+        </ul>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px);margin-top:clamp(16px,2vw,28px)"><i class="fas fa-brain accent2"></i> 적대적 지식 (Adversarial Knowledge)</h3>
+        <ul class="check-list" style="font-size:clamp(13px,1.5vw,17px)">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>통신 아티팩트 <span class="accent2">mᵢⱼ</span> 관찰 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트 모델 아키텍처 파악</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>민감 입력 <span class="accent">sᵢ</span>는 <span class="muted">모름</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)"><i class="fas fa-crosshairs" style="color:#c0392b"></i> 공격 목표 (Attack Objective)</h3>
+        <div class="quote-block" style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(12px,1.8vw,20px)">
+          공유된 캐시 아티팩트 <span class="accent">mᵢⱼ</span>로부터 에이전트별 민감 입력 <span class="accent">sᵢ</span>를 재구성하는 것
+        </div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)"><i class="fas fa-layer-group accent3"></i> 유출 범위</h3>
+        <table class="compare-table" style="font-size:clamp(12px,1.3vw,15px)">
+          <thead>
+            <tr><th>유형</th><th>설명</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tag tag-amber">Local</span></td><td>단일 에이전트의 민감 입력 유출</td></tr>
+            <tr><td><span class="tag tag-red">System-level</span></td><td>전체 시스템의 민감 정보 종합 유출</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">LCGuard: 개요</h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(16px,2.5vw,32px)">KV 캐시 전달 <span class="accent2">이전</span>에 표현 수준 변환을 학습하여, <span class="accent3">과제 관련 정보</span>는 보존하되 <span class="accent">재구성 가능한 민감 정보</span>는 억제</p>
+    <div class="flow-item" style="margin-bottom:clamp(8px,1.2vw,16px)">
+      <div class="flow-icon"><i class="fas fa-shield-alt"></i></div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">핵심 아이디어</strong>
+        <p style="font-size:clamp(13px,1.4vw,16px)" class="muted">공유 캐시 아티팩트가 "안전하다" = 적대적 디코더가 민감 입력을 복원할 수 없다</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(8px,1.2vw,16px)">
+      <div class="flow-icon"><i class="fas fa-exchange-alt"></i></div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">학습 가능한 변환 함수</strong>
+        <p style="font-size:clamp(13px,1.4vw,16px)" class="muted">gᵢⱼ(Kᵢ, Vᵢ) → mᵢⱼ : 원시 KV 캐시를 안전한 통신 아티팩트로 변환</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(8px,1.2vw,16px)">
+      <div class="flow-icon"><i class="fas fa-balance-scale"></i></div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">미니맥스 최적화</strong>
+        <p style="font-size:clamp(13px,1.4vw,16px)" class="muted">재구성 적대자는 민감 정보를 복원하려 하고, 가드는 이를 억제하면서 과제 성능 유지</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-project-diagram"></i></div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">토폴로지 무관</strong>
+        <p style="font-size:clamp(13px,1.4vw,16px)" class="muted">순차적, 계층적, 그래프 기반 통신 구조 모두에 적용 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">적대적 학습 공식화</h2>
+    <div style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(16px,2.5vw,32px)">
+      <p style="margin-bottom:clamp(8px,1.2vw,14px)">각 에이전트 aᵢ는 <span class="accent2">과제 입력</span> xᵢ와 <span class="accent">민감 입력</span> sᵢ를 받아 KV 캐시 (Kᵢ, Vᵢ)를 생성한다.</p>
+      <p style="margin-bottom:clamp(8px,1.2vw,14px)">통신 아티팩트: <strong>mᵢⱼ = gᵢⱼ(Kᵢ, Vᵢ)</strong></p>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px);margin-top:clamp(12px,2vw,24px)"><i class="fas fa-calculator accent2"></i> 목적 함수</h3>
+    <div class="grid-2" style="margin-bottom:clamp(12px,2vw,24px)">
+      <div class="card">
+        <p style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,10px)"><span class="accent3">과제 손실</span> ℒ_task(𝓜)</p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">전달된 아티팩트 기반으로 시스템이 원래 과제를 수행하는 능력 측정</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,10px)"><span class="accent">재구성 손실</span> ℒ_recon(mᵢⱼ, sᵢ)</p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">적대적 디코더가 mᵢⱼ에서 sᵢ를 복원하는 정도 측정</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center">
+      <p style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(6px,1vw,10px)"><strong>LCGuard 전체 목적 함수</strong></p>
+      <p style="font-size:clamp(16px,2vw,24px)"><span class="accent3">min<sub>g</sub></span> max<sub>A</sub> [ ℒ_task(𝓜) + <span class="accent">β</span> · ℒ_recon(mᵢⱼ, sᵢ) ]</p>
+      <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">β: 프라이버시-유용성 트레이드오프 제어 파라미터</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">학습 절차</h2>
+    <div class="pipeline" style="margin-bottom:clamp(20px,3vw,40px)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">순전파</div>
+        <div class="step-desc">에이전트들이 KV 캐시 생성 후 gᵢⱼ로 변환하여 전달</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">적대자 업데이트</div>
+        <div class="step-desc">고정된 g 아래에서 재구성 손실 최소화 (민감 정보 복원 시도)</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">가드 업데이트</div>
+        <div class="step-desc">고정된 A 아래에서 과제 손실 + β×재구성 손실 최소화</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">반복</div>
+        <div class="step-desc">수렴할 때까지 2-3 단계 교대 반복</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,10px)"><i class="fas fa-cog accent2"></i> 추론 시 효율성</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px)">학습된 gᵢⱼ는 추론 시 단일 순전파로 적용되므로 오버헤드가 <span class="accent3">매우 낮음</span>. 적대자 모델은 학습에만 사용</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(6px,1vw,10px)"><i class="fas fa-sliders-h accent"></i> β 파라미터 역할</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px)">β↑ → 프라이버시 강화 (재구성 어려움) / 과제 성능 저하 가능<br>β↓ → 과제 성능 강화 / 프라이버시 약화 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">실험 설정</h2>
+    <div class="grid-3" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(8px,1vw,12px)"><i class="fas fa-flask accent2"></i> 벤치마크</h3>
+        <ul style="font-size:clamp(12px,1.3vw,15px);list-style:none;padding:0">
+          <li style="margin-bottom:4px">• AgentLeak</li>
+          <li style="margin-bottom:4px">• MAGPIE</li>
+          <li>• PrivacyLens</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(8px,1vw,12px)"><i class="fas fa-robot accent"></i> 모델</h3>
+        <ul style="font-size:clamp(12px,1.3vw,15px);list-style:none;padding:0">
+          <li style="margin-bottom:4px">• Qwen3 (4B, 8B, 14B)</li>
+          <li style="margin-bottom:4px">• Gemma-2-9B</li>
+          <li>• LLaMA (3B, 8B)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(8px,1vw,12px)"><i class="fas fa-sitemap accent3"></i> 토폴로지</h3>
+        <ul style="font-size:clamp(12px,1.3vw,15px);list-style:none;padding:0">
+          <li style="margin-bottom:4px">• 순차적 (N=3,4)</li>
+          <li style="margin-bottom:4px">• 계층적 (N=3,4)</li>
+          <li>• 일반 그래프 (N=5)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)">베이스라인 비교</h3>
+    <table class="compare-table" style="font-size:clamp(12px,1.3vw,15px)">
+      <thead>
+        <tr><th>방법</th><th>설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag tag-red">Vanilla KV</span></td><td>보호 없이 원시 KV 캐시 직접 공유</td></tr>
+        <tr><td><span class="tag tag-amber">ADAPT</span></td><td>적응형 차분 프라이버시 적용</td></tr>
+        <tr><td><span class="tag tag-amber">PrivAct</span></td><td>문맥적 프라이버시 정렬 기반 보호</td></tr>
+        <tr><td><span class="tag tag-green">LCGuard (Local)</span></td><td>에이전트별 개별 학습 변형</td></tr>
+        <tr><td><span class="tag tag-green">LCGuard</span></td><td>시스템 수준 통합 학습 (제안)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">주요 결과: 프라이버시-유용성 트레이드오프</h2>
+    <p style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(16px,2.5vw,32px)">LCGuard는 <span class="accent3">경쟁적 과제 성능</span>을 유지하면서 <span class="accent">재구성 기반 유출을 일관되게 감소</span></p>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card" style="text-align:center">
+        <div class="big-num">↓ 유출률</div>
+        <p style="font-size:clamp(13px,1.5vw,17px)">Vanilla KV 대비 재구성 기반 <span class="accent">Leak Rate 및 ASR 대폭 감소</span></p>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-top:clamp(6px,1vw,10px)" class="muted">민감 입력이 공유 표현에서 복원 불가능하도록 억제</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">≈ 성능</div>
+        <p style="font-size:clamp(13px,1.5vw,17px)">Task Accuracy에서 베이스라인과 <span class="accent3">경쟁력 있는 수준 유지</span></p>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-top:clamp(6px,1vw,10px)" class="muted">β 조정으로 유용성-프라이버시 균형 제어 가능</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)">베이스라인 대비 요약</h3>
+    <table class="compare-table" style="font-size:clamp(12px,1.3vw,15px)">
+      <thead>
+        <tr><th>방법</th><th>프라이버시 보호</th><th>과제 성능</th><th>적용 방식</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Vanilla KV</td><td><span class="tag tag-red">무보호</span></td><td>기준선</td><td>—</td></tr>
+        <tr><td>ADAPT</td><td>중간</td><td>저하</td><td>노이즈 추가</td></tr>
+        <tr><td>PrivAct</td><td>중간</td><td>중간</td><td>정렬 기반</td></tr>
+        <tr><td><strong>LCGuard</strong></td><td><span class="tag tag-green">우수</span></td><td><span class="tag tag-green">경쟁적</span></td><td>표현 변환 학습</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">심층 분석 결과</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px)"><i class="fas fa-network-wired accent2"></i> 시스템 수준 vs 로컬 보호</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)">시스템 수준 LCGuard가 에이전트별 로컬 변형보다 <span class="accent2">우수한 프라이버시 보호</span> 달성</p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">여러 에이전트의 아티팩트를 종합하여 재구성하는 공격에 더 강력</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px)"><i class="fas fa-project-diagram accent"></i> 통신 토폴로지 영향</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)">순차적, 계층적, 그래프 토폴로지 모두에서 <span class="accent">일관된 보호 효과</span></p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">그래프 토폴로지(N=5)에서도 확장성 확인</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px)"><i class="fas fa-cubes accent3"></i> 모델 패밀리 효과</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)">Qwen3, Gemma-2, LLaMA 전체에서 <span class="accent3">일관된 프라이버시-유용성 트레이드오프</span></p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">모델 크기(3B~14B)에 따른 스케일링 거동 분석 완료</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,21px);margin-bottom:clamp(8px,1.2vw,14px)"><i class="fas fa-puzzle-piece" style="color:#c0392b"></i> 에이전트별 재구성 난이도</h3>
+        <p style="font-size:clamp(12px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)">에이전트마다 민감 정보의 <span class="accent">재구성 난이도가 상이</span></p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">입력 특성과 처리 깊이에 따른 차이 분석</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">핵심 인사이트</h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px)">
+      <div class="flow-icon">1</div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">표현 수준 유출은 텍스트 유출과 근본적으로 다르다</strong>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">출력 필터링이나 도구 액션 제어로는 방어 불가 — 잠재 공간에서 직접 규제 필요</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px)">
+      <div class="flow-icon">2</div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">재구성 기반 정의가 실용적 프라이버시 지표다</strong>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">추론적 유출의 "실제 복원 가능성"을 직접 측정하므로, 추론적 공격의 실질적 위험을 포착</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px)">
+      <div class="flow-icon">3</div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">학습 기반 변환이 노이즈 주입보다 우수하다</strong>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">차분 프라이버시(ADAPT)는 일괄적 노이즈로 유용성 저하가 크지만, LCGuard는 과제 관련 정보를 선택적으로 보존</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px)">
+      <div class="flow-icon">4</div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">β는 실제 배포 시나리오에 맞게 조정 가능한 제어 knob이다</strong>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">높은 프라이버시 요구 환경과 높은 성능 요구 환경 모두 대응 가능</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">5</div>
+      <div>
+        <strong style="font-size:clamp(14px,1.6vw,19px)">추론 시 오버헤드는 무시할 수준이다</strong>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">적대자 모델은 학습에만 필요하며, 추론 시 단일 순전파 변환만 수행</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">결론 및 향후 과제</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)"><i class="fas fa-flag-checkered accent3"></i> 결론</h3>
+        <ul class="check-list" style="font-size:clamp(13px,1.5vw,17px)">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KV 캐시 잠재 통신을 새로운 공격 표면으로 식별</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LCGuard 프레임워크로 표현 수준 정보 흐름 규제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>재구성 기반 유출 정의와 미니맥스 최적화 공식화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 모델·벤치마크에서 일관된 프라이버시-유용성 트레이드오프 달성</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,22px);margin-bottom:clamp(10px,1.5vw,18px)"><i class="fas fa-road accent2"></i> 향후 과제</h3>
+        <ul class="check-list" style="font-size:clamp(13px,1.5vw,17px)">
+          <li><span class="check-icon"><i class="fas fa-arrow-right accent2"></i></span>더 다양한 공격자 모델에 대한 강인성 평가</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right accent2"></i></span>실시간 스트리밍 환경으로의 확장</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right accent2"></i></span>공식적 프라이버시 보장(ε-차분 프라이버시 등)과의 연결</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right accent2"></i></span>다중 모달 에이전트 시스템으로의 일반화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block" style="font-size:clamp(14px,1.6vw,19px)">
+      LCGuard는 다중 에이전트 시스템에서 <span class="accent">효율적인 잠재 통신</span>과 <span class="accent3">에이전트별 프라이버시 보호</span>을 동시에 달성하는 체계적인 접근법을 제시한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,40px);margin-bottom:clamp(12px,2vw,28px)">논문 정보</h2>
+    <div class="card" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <h3 style="font-size:clamp(18px,2.2vw,26px);margin-bottom:clamp(12px,1.8vw,20px)">LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems</h3>
+      <div class="hr"></div>
+      <p style="font-size:clamp(14px,1.6vw,19px);margin-top:clamp(12px,1.8vw,20px);margin-bottom:clamp(8px,1.2vw,14px)">
+        <strong>저자:</strong> Sadia Asif, Mohammad Mohammadi Amiri, Momin Abbas, Prasanna Sattigeri, Karthikeyan Natesan Ramamurthy
+      </p>
+      <p style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(8px,1.2vw,14px)">
+        <strong>소속:</strong> Rensselaer Polytechnic Institute · IBM Research
+      </p>
+      <p style="font-size:clamp(14px,1.6vw,19px);margin-bottom:clamp(8px,1.2vw,14px)">
+        <strong>라이선스:</strong> CC BY 4.0
+      </p>
+      <p style="font-size:clamp(14px,1.6vw,19px)">
+        <strong>arXiv:</strong> <a href="http://arxiv.org/abs/2605.22786v1" style="color:inherit;text-decoration:underline" class="accent2">http://arxiv.org/abs/2605.22786v1</a>
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <div class="big-num">6</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">모델 패밀리 테스트</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">3</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">벤치마크 평가</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">3</div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">통신 토폴로지 검증</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
