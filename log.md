@@ -1027,3 +1027,15 @@
 ## [2026-05-21 08:34] ingest | Rewarding Beliefs, Not Actions: Consistency-Guided Credit Assignment for Long-Horizon Agents
 
 ## [2026-05-21 08:34] ingest | Towards LLM-Assisted Architecture Recovery for Real-World ROS~2 Systems: An Agent-Based Multi-Level Approach to Hierarchical Structural Architecture Reconstruction
+
+## [2026-05-23 02:14] llm-ingest | 8편 분석, 엔티티 310개, 개념 926개
+- 2026-05-23-vector-policy-optimization-training-for-diversity-.md
+- 2026-05-23-awarevln-reasoning-with-self-awareness-for-vision-.md
+- 2026-05-23-remember-to-be-curious-episodic-context-and-persis.md
+- 2026-05-23-moss-self-evolution-through-source-level-rewriting.md
+- 2026-05-23-lcguard-latent-communication-guard-for-safe-kv-sha.md
+- 2026-05-23-deltabox-scaling-stateful-ai-agents-with-milliseco.md
+- 2026-05-23-segcompass-exploring-interpretable-alignment-with-.md
+- 2026-05-23-beyond-temperature-hyperfitting-as-a-late-stage-ge.md
+
+## [2026-05-23 08:31] ingest | Advancing Mathematics Research with AI-Driven Formal Proof Search

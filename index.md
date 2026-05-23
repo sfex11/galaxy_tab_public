@@ -467,3 +467,4 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c.md]] - Rewarding Beliefs, Not Actions: Consistency-Guided Credit Assignment for Long-Horizon Agents
 - [[sources/2026-05-21-towards-llm-assisted-architecture-recovery-for-rea.md]] - Towards LLM-Assisted Architecture Recovery for Real-World ROS~2 Systems: An Agent-Based Multi-Level Approach to Hierarchical Structural Architecture Reconstruction
+- [[sources/2026-05-23-advancing-mathematics-research-with-ai-driven-form.md]] - Advancing Mathematics Research with AI-Driven Formal Proof Search
