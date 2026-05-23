@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOSS: Self-Evolution through Source-Level Rewriting in Auton — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,40px)">
+      <span class="tag tag-amber">cs.AI · Autonomous Agents</span>
+    </div>
+    <h1 style="font-size:clamp(28px,4.5vw,56px);line-height:1.15;margin-bottom:clamp(12px,2vw,24px)">MOSS: 자율 에이전트 시스템에서의<br>소스 수준 자가 재작성을 통한 자가 진화</h1>
+    <p style="font-size:clamp(14px,1.6vw,20px)" class="muted">Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.4vw,18px)">Qianshu Cai, Yonggang Zhang, Xianzhang Jia, Wei Xue, Jun Song, Xinmei Tian, Yike Guo</p>
+    <p style="font-size:clamp(12px,1.2vw,16px)" class="muted">USTC · HKUST · HKBU</p>
+    <p style="font-size:clamp(12px,1.2vw,16px)" class="muted">arXiv: 2605.22794v1 · May 2026</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">문제 제기: 배포 후 정적 상태의 에이전트</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.8vw,22px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-ban" class="accent"></i> 현재 상황</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>배포 후 사용자 상호작용으로부터 학습하지 않음</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>동일한 실패 모드가 사용자 간 반복 발생</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>수정은 인간 주도 업데이트에 전적으로 의존</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.8vw,22px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-exclamation-triangle accent"></i> 근본 원인</h3>
+        <p style="font-size:clamp(13px,1.4vw,18px);margin-bottom:clamp(8px,1vw,12px)">기존 자가 진화 에이전트는 <span class="accent">텍스트 가변 산출물</span>만 수정</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스킬 파일, 프롬프트 설정, 메모리 스키마, 워크플로우 그래프</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>에이전트 하니스(라우팅, 훅, 상태 관리, 디스패치)는 <span class="accent">수정 불가</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2vw,28px)">
+      <p style="font-size:clamp(14px,1.5vw,19px)">텍스트 계층에서 물리적으로 도달할 수 없는 <span class="accent">구조적 실패 클래스</span>가 존재한다 — 버그가 프롬프트 텍스트에 없다면, 프롬프트 재작성으로는 해결할 수 없다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">기존 시스템의 진화 범위 비교</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>프로젝트</th>
+          <th>Skill</th>
+          <th>Prompt</th>
+          <th>Memory</th>
+          <th><span class="accent">Harness</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hermes Agent</td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>SkillClaw</td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>GenericAgent</td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>EvoAgentX</td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td><span class="accent">MOSS (Ours)</span></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+          <td><i class="fas fa-check accent3"></i></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(13px,1.3vw,17px);margin-top:clamp(12px,1.5vw,20px)" class="muted">MOSS만이 Harness(라우팅, 상태 관리, 디스패치, 훅, 미디에이터, 세션 생명주기)까지 진화 범위를 확장</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">소스 수준 적응의 4가지 우위</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(6px,1vw,12px)">튜링 완전성</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">프로그래밍 언어는 튜링 완전 → 소스 코드 설계 공간은 모든 텍스트 가변 설계 공간을 <span class="accent">엄격한 부분집합</span>으로 포함</p>
+      </div>
+      <div class="card">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(6px,1vw,12px)">엄격한 상위 집합</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">프롬프트 편집이 달성할 수 있는 것은 동등한 코드 편집도 달성 가능하지만, <span class="accent">역은 성립하지 않음</span></p>
+      </div>
+      <div class="card">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(6px,1vw,12px)">결정적 효과</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">라우팅 로직, 훅 순서, 상태 머신 불변성은 코드로 실행 → 베이스 모델의 <span class="accent">준수 여부에 의존하지 않음</span></p>
+      </div>
+      <div class="card">
+        <div class="big-num">4</div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(6px,1vw,12px)">롱컨텍스트 드리프트 내성</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">텍스트 수정은 매 턴마다 재독해 필요 → 누적 시 준수도 희석. 소스 수정은 <span class="accent">행동으로 인코딩</span>되어 노후화에 강함</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">MOSS: 개요</h2>
+    <div class="quote-block" style="margin-bottom:clamp(16px,2vw,28px)">
+      <p style="font-size:clamp(14px,1.5vw,19px)">프로덕션 에이전트 기질(substrate)에 대해 <span class="accent">소스 수준 자가 재작성</span>을 수행하는 시스템</p>
+    </div>
+    <ul class="check-list" style="margin-bottom:clamp(16px,2vw,28px)">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>각 진화는 자동 큐레이션된 <span class="accent2">프로덕션 실패 증거 배치</span>에 고정</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>결정적 다단계 파이프라인으로 진행</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>코드 수정은 <span class="accent2">플러그인 가능한 외부 코딩 에이전트 CLI</span>에 위임</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>MOSS는 스테이지 순서와 판정(verdict)만 보유</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>후보 검증: 일시적 trial worker에서 배치 재생</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>승격: 사용자 동의 게이트 + 인플레이스 컨테이너 스왑 + 헬스 프로브 롤백</li>
+    </ul>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.4vw,18px)"><i class="fas fa-chart-line accent3"></i> OpenClaw에서 4태스크 평균 그레이더 점수 <span class="accent">0.25 → 0.61</span> (단일 사이클, 인간 개입 없음)</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">시스템 아키텍처: 5가지 구성 요소</h2>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-cube"></i></div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px)">Substrate (기질)</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">사용자 대면 에이전트를 실행하는 메인 컨테이너 (OpenClaw 등)</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-terminal"></i></div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px)">Control Surface (제어 표면)</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">에이전트가 진화를 주도하는 moss evo CLI (9개 서브커맨드)</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-robot"></i></div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px)">External Coding Agent (외부 코딩 에이전트)</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">호스트 사이드 서브프로세스로 호출되는 플러그인 가능 CLI (Claude Code, Codex, DeepSeek 등)</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-shield-alt"></i></div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px)">Host-Daemon (호스트 데몬)</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">전체 프로세스를 감독하는 호스트 상주 데몬</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-flask"></i></div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px)">Ephemeral Trial Workers (일시적 시험 워커)</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">후보 이미지에 대해 배치를 재생하여 검증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">제어 표면: moss evo CLI</h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)">9개 서브커맨드</h3>
+        <div class="grid-3" style="margin-bottom:clamp(12px,1.5vw,20px)">
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">status</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">batches</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">batch</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">start</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">stop</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">restart</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">apply</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">flag</span></p>
+          </div>
+          <div class="card" style="text-align:center">
+            <p style="font-size:clamp(12px,1.3vw,17px)"><span class="accent2">catch-up</span></p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)">3계층 인터페이스 계약</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-arrow-right"></i></span><strong>CLI 입력:</strong> 에이전트의 셸 툴에서 호출</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-left"></i></span><strong>웹훅 출력:</strong> evolution-converged, evolution-failed, apply-complete</li>
+          <li><span class="check-icon"><i class="fas fa-file-alt"></i></span><strong>능력 문서:</strong> 온디스크 참조로 에이전트가 온디맨드 독해</li>
+        </ul>
+        <div class="hr"></div>
+        <p style="font-size:clamp(12px,1.2vw,16px)" class="muted">기질이 5가지 프리미티브(셸 실행, 파일시스템 읽기, 주기적 스케줄링, 웹훅-에이전트 전달, 시스템 프롬프트 주입)만 제공하면 MOSS 코드 변경 없이 호스팅 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">외부 코딩 에이전트</h2>
+    <div class="card" style="margin-bottom:clamp(16px,2vw,28px)">
+      <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)">왜 외부 위임인가?</h3>
+      <p style="font-size:clamp(13px,1.4vw,18px)" class="muted">대규모 기질에서 단일 추론 루프로 코드베이스를 읽고 재작성하는 것은 불가능 — 교차 파일 불변성과 동시 상태 상호작용이 한 루프의 용량을 초과</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-cog accent"></i> MOSS의 역할</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스테이지 순서 관리</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>판정(verdict) 내림</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>루프 종료 결정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스왑 시점 결정</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-code accent2"></i> 코딩 에이전트의 역할</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>주어진 범위 내 코드 편집</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>호스트 사이드에서 실행 (쉘 환경, 네트워크, 마운트 필요)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>4-메서드 runner 인터페이스로 추상화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.3vw,17px)">내장 러너: <span class="tag tag-amber">Claude Code</span> <span class="tag tag-amber">OpenAI Codex</span> <span class="tag tag-amber">DeepSeek-T</span> — 플러그인 가능 구조로 확장 용이</p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">진화 프로세스: 방향성 진화</h2>
+    <div class="quote-block" style="margin-bottom:clamp(16px,2vw,28px)">
+      <p style="font-size:clamp(14px,1.5vw,19px)">합성 벤치마크가 아닌 <span class="accent">실제 프로덕션 실패 증거</span>에 고정된 진화</p>
+    </div>
+    <h3 style="font-size:clamp(16px,1.8vw,22px);margin-bottom:clamp(12px,1.5vw,20px)">증거 수집: 2가지 상보적 채널</h3>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2vw,28px)">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(6px,1vw,12px)"><i class="fas fa-search accent3"></i> 백그라운드 자동 스캔</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">주기적 스캔이 최근 사용자 세션에서 저성능 대화 세그먼트를 자동 발굴</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(6px,1vw,12px)"><i class="fas fa-flag accent"></i> 사용자 플래깅</h3>
+        <p style="font-size:clamp(12px,1.3vw,17px)" class="muted">사용자가 대화 중 임의의 턴을 직접 플래그 — 동일한 배치로 유입</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(6px,1vw,12px)"><i class="fas fa-bullseye accent2"></i> 핵심 원칙</h3>
+      <p style="font-size:clamp(13px,1.4vw,18px)" class="muted">모든 다운스트림 스테이지는 합성 벤치마크가 아닌 <span class="accent">해당 배치를 수정하는 것</span>에 고정됨</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">스테이지 파이프라인</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">분석</div>
+        <div class="step-desc">배치 내 실패 패턴 분석, 수정 대상 코드 영역 식별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">계획</div>
+        <div class="step-desc">수정 계획 수립 — 변경 파일, 예상 효과, 리스크 평가</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">편집</div>
+        <div class="step-desc">외부 코딩 에이전트가 소스 코드 수정 수행</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">빌드</div>
+        <div class="step-desc">수정된 코드베이스 빌드 → 후보 이미지 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">검증</div>
+        <div class="step-desc">일시적 trial worker에서 배치 재생 후 채점</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.3vw,17px)" class="muted">모든 산출물(계획, diff, 빌드 로그, 반복별 채점 행렬)은 에이전트가 온디맨드로 읽을 수 있어 <span class="accent">사용자가 사전 감사 가능</span></p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">런타임 검증 및 인플레이스 컨테이너 스왑</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-flask accent2"></i> 런타임 검증</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단위 테스트나 합성 하니스가 아닌 <span class="accent">실제 배치 재생</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>일시적(ephemeral) trial worker 사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프로덕션 등가 컨테이너에서 실행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수렴 시 에이전트에게 대화 채널로 프로액티브 통지</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-exchange-alt accent"></i> 인플레이스 컨테이너 스왑</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">명시적 사용자 승인</span> 후에만 호스트 데몬이 수행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 상태 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스왑 후 헬스 프로브 실패 시 <span class="tag tag-red">자동 롤백</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>라이브 배포 중단 없음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(16px,2vw,28px)">
+      <p style="font-size:clamp(13px,1.4vw,18px)">사용자 동의 게이트 + 헬스 프로브 게이트 롤백 = <span class="accent">안전한 프로덕션 배포</span> 보장</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">사례 연구: OpenClaw 설정</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-bullseye accent"></i> 기질: OpenClaw</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프로덕션 등급 에이전트 시스템</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티채널 게이트웨이 (Slack, Discord, Web)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>플러그인/훅 배관, 세션/스킬 기계장치</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>영속적 사용자 상태</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.7vw,21px);margin-bottom:clamp(8px,1.2vw,16px)"><i class="fas fa-tasks accent2"></i> 4개 태스크</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다단계 작업 수행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그레이더 점수로 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MOSS 개입 전 베이스라인: 평균 <span class="accent">0.25</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 진화 사이클만 실행</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(13px,1.3vw,17px)" class="muted">벤치마크 점수가 아닌 실제 프로덕션 실패 배치에 고정 → 합성 평가와의 근본적 차이</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">사례 연구: 결과</h2>
+    <div style="text-align:center;margin-bottom:clamp(20px,3vw,40px)">
+      <div class="big-num" style="font-size:clamp(48px,6vw,96px)">0.25 → 0.61</div>
+      <p style="font-size:clamp(14px,1.5vw,19px)">4태스크 평균 그레이더 점수 · 단일 사이클 · 인간 개입 없음</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(6px,1vw,12px)"><i class="fas fa-cogs accent3"></i> MOSS의 수행 내용</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프로덕션 실패 배치 자동 큐레이션</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>소스 수준 코드 수정 (텍스트가 아닌 하니스 포함)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>trial worker에서 런타임 검증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인플레이스 컨테이너 스왑으로 프로덕션 반영</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(6px,1vw,12px)"><i class="fas fa-star accent"></i> 핵심 시사점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트 계층 수정만으로는 달성 불가능한 개선</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하니스 수준의 구조적 버그 해결 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>벤치마크가 아닌 실제 실패에 기반한 진화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 사이클로 유의미한 점수 향상</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">관련 연구와의 차별성</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>연구</th>
+          <th>스케폴드</th>
+          <th>피드백</th>
+          <th>패러다임</th>
+          <th>프로덕션</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SICA</td>
+          <td class="muted">최소</td>
+          <td class="muted">벤치마크 점수</td>
+          <td class="muted">탐색적</td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>Darwin Gödel Machine</td>
+          <td class="muted">최소</td>
+          <td class="muted">벤치마크 점수</td>
+          <td class="muted">탐색적</td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>HyperAgents</td>
+          <td class="muted">최소</td>
+          <td class="muted">벤치마크 점수</td>
+          <td class="muted">탐색적</td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td>Meta-Harness</td>
+          <td class="muted">최소</td>
+          <td><span class="accent3">실행 트레이스</span></td>
+          <td class="muted">탐색적</td>
+          <td><i class="fas fa-times muted"></i></td>
+        </tr>
+        <tr>
+          <td><span class="accent">MOSS</span></td>
+          <td><span class="accent">프로덕션 등급</span></td>
+          <td><span class="accent3">프로덕션 실패 배치</span></td>
+          <td><span class="accent">방향성 진화</span></td>
+          <td><i class="fas fa-check accent3"></i></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top:clamp(12px,1.5vw,20px)">
+      <p style="font-size:clamp(13px,1.4vw,18px)">기존 연구는 최소 스케폴드 + 벤치마크 점수 기반 탐색적 패러다임. MOSS는 <span class="accent">프로덕션 기질 + 실제 실패 기반 방향성 진화</span>로 전환</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,40px);margin-bottom:clamp(16px,2.5vw,32px)">결론</h2>
+    <ul class="check-list" style="margin-bottom:clamp(16px,2vw,28px)">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 자가 진화 에이전트는 텍스트 가변 산출물에만 국한 → <span class="accent">하니스 수준의 구조적 실패에 도달 불가</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>소스 수준 적응은 튜링 완전, 엄격한 상위 집합, 결정적 효과, 드리프트 내성의 4가지 우위 보유</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>MOSS는 프로덕션 기질에서 소스 수준 자가 재작성을 안전하게 수행하는 최초의 시스템</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 프로덕션 실패에 고정된 방향성 진화로 벤치마크 의존성 극복</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>OpenClaw에서 <span class="accent">0.25 → 0.61</span> 달성 (단일 사이클, 무인간 개입)</li>
+    </ul>
+    <div class="hr"></div>
+    <p style="font-size:clamp(14px,1.6vw,20px);margin-bottom:clamp(4px,0.6vw,8px)"><strong>MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems</strong></p>
+    <p style="font-size:clamp(12px,1.2vw,16px)" class="muted">Qianshu Cai, Yonggang Zhang, Xianzhang Jia, Wei Xue, Jun Song, Xinmei Tian, Yike Guo</p>
+    <p style="font-size:clamp(12px,1.2vw,16px)"><a href="http://arxiv.org/abs/2605.22794v1" class="accent2">arxiv.org/abs/2605.22794v1</a> · <a href="https://github.com/dav-joy-thon/MOSS" class="accent2">github.com/dav-joy-thon/MOSS</a></p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
