@@ -1039,3 +1039,21 @@
 - 2026-05-23-beyond-temperature-hyperfitting-as-a-late-stage-ge.md
 
 ## [2026-05-23 08:31] ingest | Advancing Mathematics Research with AI-Driven Formal Proof Search
+
+## [2026-05-24 08:31] ingest | Vector Policy Optimization: Training for Diversity Improves Test-Time Search
+
+## [2026-05-24 08:31] ingest | AwareVLN: Reasoning with Self-awareness for Vision-Language Navigation
+
+## [2026-05-24 08:31] ingest | Remember to be Curious: Episodic Context and Persistent Worlds for 3D Exploration
+
+## [2026-05-24 08:31] ingest | MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems
+
+## [2026-05-24 08:31] ingest | LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems
+
+## [2026-05-24 08:31] ingest | DeltaBox: Scaling Stateful AI Agents with Millisecond-Level Sandbox Checkpoint/Rollback
+
+## [2026-05-24 08:31] ingest | Advancing Mathematics Research with AI-Driven Formal Proof Search
+
+## [2026-05-24 08:31] ingest | SegCompass: Exploring Interpretable Alignment with Sparse Autoencoders for Enhanced Reasoning Segmentation
+
+## [2026-05-24 08:31] ingest | Beyond Temperature: Hyperfitting as a Late-Stage Geometric Expansion

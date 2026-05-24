@@ -468,3 +468,18 @@
 - [[sources/2026-05-21-rewarding-beliefs-not-actions-consistency-guided-c.md]] - Rewarding Beliefs, Not Actions: Consistency-Guided Credit Assignment for Long-Horizon Agents
 - [[sources/2026-05-21-towards-llm-assisted-architecture-recovery-for-rea.md]] - Towards LLM-Assisted Architecture Recovery for Real-World ROS~2 Systems: An Agent-Based Multi-Level Approach to Hierarchical Structural Architecture Reconstruction
 - [[sources/2026-05-23-advancing-mathematics-research-with-ai-driven-form.md]] - Advancing Mathematics Research with AI-Driven Formal Proof Search
+- [[sources/2026-05-24-vector-policy-optimization-training-for-diversity-.md]] - Vector Policy Optimization: Training for Diversity Improves Test-Time Search
+- [[sources/2026-05-24-awarevln-reasoning-with-self-awareness-for-vision-.md]] - AwareVLN: Reasoning with Self-awareness for Vision-Language Navigation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-24-remember-to-be-curious-episodic-context-and-persis.md]] - Remember to be Curious: Episodic Context and Persistent Worlds for 3D Exploration
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-24-moss-self-evolution-through-source-level-rewriting.md]] - MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems
+- [[entities/transformer]] - Transformer
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-05-24-lcguard-latent-communication-guard-for-safe-kv-sha.md]] - LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-24-deltabox-scaling-stateful-ai-agents-with-milliseco.md]] - DeltaBox: Scaling Stateful AI Agents with Millisecond-Level Sandbox Checkpoint/Rollback
+- [[sources/2026-05-24-advancing-mathematics-research-with-ai-driven-form.md]] - Advancing Mathematics Research with AI-Driven Formal Proof Search
+- [[sources/2026-05-24-segcompass-exploring-interpretable-alignment-with-.md]] - SegCompass: Exploring Interpretable Alignment with Sparse Autoencoders for Enhanced Reasoning Segmentation
+- [[sources/2026-05-24-beyond-temperature-hyperfitting-as-a-late-stage-ge.md]] - Beyond Temperature: Hyperfitting as a Late-Stage Geometric Expansion

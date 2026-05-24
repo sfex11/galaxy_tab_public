@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>복원 충실도에서 탐색 처리량으로? — 에이전트 하네스 설계의 진짜 질문</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736b;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 6px 24px rgba(44,40,37,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  .nav-bar {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  .nav-bar a {
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  .nav-bar a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(40px, 8vw, 80px) 0 clamp(24px, 4vw, 40px);
+    text-align: center;
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 5.5vw, 44px);
+    line-height: 1.25;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  .article-subtitle {
+    font-size: clamp(14px, 2.2vw, 17px);
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .meta-row {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .meta-row span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: clamp(32px, 5vw, 56px); }
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3.8vw, 30px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .section p { margin-bottom: 16px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  strong { font-weight: 700; color: var(--fg); }
+  .text-accent { color: var(--accent); font-weight: 600; }
+  .text-blue { color: var(--blue); font-weight: 600; }
+  .text-green { color: var(--green); font-weight: 600; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 2vw, 16px);
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(16px, 2.6vw, 20px);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 1.2em; }
+  .card p { margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 비교 테이블 ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+  @media (min-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .compare-cell {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+  }
+  .compare-cell.crab { border-top: 3px solid var(--green); }
+  .compare-cell.deltabox { border-top: 3px solid var(--blue); }
+  .compare-cell h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(15px, 2.4vw, 18px);
+    margin-bottom: 10px;
+  }
+  .compare-cell ul {
+    list-style: none;
+    padding: 0;
+  }
+  .compare-cell ul li {
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+    font-size: clamp(13px, 2vw, 15px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .compare-cell ul li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    font-weight: 700;
+  }
+  .compare-cell.crab ul li::before { color: var(--green); }
+  .compare-cell.deltabox ul li::before { color: var(--blue); }
+
+  /* ── 스펙트럼 다이어그램 ── */
+  .spectrum-box {
+    margin: 28px 0;
+    padding: 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+  }
+  .spectrum-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .spectrum-bar {
+    position: relative;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--green), #b8a07a 50%, var(--blue));
+    margin: 0 20px;
+  }
+  .spectrum-ends {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: clamp(12px, 1.8vw, 14px);
+    font-weight: 500;
+  }
+  .spectrum-ends .left { color: var(--green); }
+  .spectrum-ends .right { color: var(--blue); }
+  .spectrum-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid var(--fg);
+    background: var(--bg);
+  }
+  .spectrum-dot.crab-dot { left: 15%; }
+  .spectrum-dot.delta-dot { left: 85%; }
+  .spectrum-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    gap: 12px;
+  }
+  .spectrum-legend-item {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  .spectrum-legend-item:first-child { background: rgba(107,158,122,0.06); }
+  .spectrum-legend-item:last-child { background: rgba(91,124,153,0.06); }
+
+  /* ── 강조 박스 ── */
+  .callout {
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.8;
+  }
+  .callout.insight {
+    background: rgba(194,112,62,0.05);
+    border: 1px solid rgba(194,112,62,0.15);
+  }
+  .callout.conclusion-box {
+    background: rgba(91,124,153,0.05);
+    border: 1px solid rgba(91,124,153,0.15);
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    padding: clamp(32px, 5vw, 56px) 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .footer-tags span {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgba(44,40,37,0.04);
+    color: var(--muted);
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .nav-bar { gap: 4px; padding: 10px 8px; }
+    .nav-bar a { padding: 5px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- 네비게이션 -->
+  <nav class="nav-bar">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="article-tag">에이전트 하네스 엔지니어링</span>
+    <h1 class="article-title">복원 충실도에서 탐색 처리량으로?<br>하네스 설계의 진짜 질문</h1>
+    <p class="article-subtitle">Crab의 의미론적 C/R과 DeltaBox의 밀리초급 델타 C/R이 만나면, 에이전트 샌드박스 설계의 목표는 어떻게 변하는가</p>
+    <div class="meta-row">
+      <span>2025년 7월</span>
+      <span>·</span>
+      <span>심층 분석</span>
+      <span>·</span>
+      <span>약 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 섹션 1: 서론 -->
+  <section class="section">
+    <div class="section-label">서론</div>
+    <h2 class="section-title">하네스가 품어야 할 두 가지 본질적 긴장</h2>
+
+    <p>
+      자율주행 에이전트를 시험 주행에 내보낼 때, 우리는 그 차를 감싸는 <strong>하네스(Harness)</strong>를 어떻게 설계해야 할까요? 사고가 났을 때 순간적으로 차를 사고 직전 상태로 되돌릴 수 있어야 합니다. 하지만 동시에, 안전한 경로를 찾기 위해 수천 가지 분기를 초고속으로 시도해 보는 능력도 갖춰야 합니다.
+    </p>
+    <p>
+      전자는 <span class="text-green">"복원의 정확성"</span>에 관한 문제이고, 후자는 <span class="text-blue">"탐색의 속도"</span>에 관한 문제입니다. 이 두 가지는 근본적으로 trade-off 관계에 있습니다. 정밀하게 복원하려면 시간이 걸리고, 빠르게 복원하려면 정밀도를 희생해야 하니까요.
+    </p>
+    <p>
+      최근 에이전트 하네스 엔지니어링 분야에서 이 문제를 정면으로 다룬 두 편의 논문이 등장했습니다. <span class="text-green">Crab</span>은 "복원 충실도"를 최우선 가치로 삼고, <span class="text-blue">DeltaBox</span>는 "탐색 처리량"을 극한까지 밀어붙입니다. 그렇다면 과연 하네스의 핵심 설계 목표가 하나에서 다른 것으로 <strong>대체</strong>되어야 하는 걸까요?
+    </p>
+
+    <div class="callout insight">
+      <strong>핵심 주장:</strong> 두 가지는 대체 관계가 아닙니다. 하네스 엔지니어링의 설계 스펙트럼을 양극으로 확장하는 <span class="text-accent">상호 보완적 축</span>입니다.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2: Crab -->
+  <section class="section">
+    <div class="section-label">분석 1</div>
+    <h2 class="section-title">Crab: 수술실 같은 정밀함 — 의미론적 인식 C/R</h2>
+
+    <p>
+      이해를 돕기 위해 비유 하나를 들어보겠습니다. 환자의 수술 기록을 남길 때, 두 가지 방식이 있을 수 있습니다. 하나는 수술실의 <strong>모든 것</strong>을 사진으로 찍어두는 방식이고, 다른 하나는 <strong>어떤 약을 언제 투여했는지, 어떤 조직을 어떻게 처리했는지</strong>만 정확하게 기록하는 방식입니다.
+    </p>
+    <p>
+      전통적인 OS 수준의 체크포인트 메커니즘은 전자에 가깝습니다. 샌드박스의 전체 상태를 스냅샷으로 찍어두고, 필요할 때 통째로 복원합니다. 문제는 이 "통째로"라는 부분에 있습니다. 에이전트의 행동은 수많은 의존성 그래프로 연결되어 있는데, OS는 이 의미론적 구조를 모릅니다.
+    </p>
+
+    <blockquote>
+      기존 OS의 체크포인트는 에이전트의 의미론적 의존 그래프를 OS 레벨로 번역할 때 발생하는 <strong>알고리즘-시스템 번역 간극(Algorithm-System Translation Gap)</strong>을 초래한다.
+      <cite>— Wiki: agent-os-semantic-gap</cite>
+    </blockquote>
+
+    <p>
+      Crab이 이 간극에 주목한 것입니다. Crab의 C/R 런타임은 에이전트의 <span class="text-green">의미론을 인지(Semantics-Aware)</span>합니다. 어떤 파일이 어떤 행동의 결과로 생성되었는지, 어떤 메모리 상태가 어떤 추론 단계에 종속되어 있는지를 이해하고, <strong>불필요한 상태를 배제한 정확한 복원</strong>을 수행합니다.
+    </p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🔬</span> Crab의 핵심 설계 철학</div>
+      <p>
+        Crab의 하네스는 단순 애플리케이션 로직의 범위를 넘어 <strong>실행 환경 인프라 전체</strong>를 대상으로 의미론적 분석을 수행합니다. 이것은 마치 외과 의사가 환자의 전신 사진이 아니라, 수술과 직접 관련된 장기와 조직의 정확한 상태 기록만을 남기는 것과 같습니다. 불필요한 정보를 제거함으로써 메모리 효율도 높아지고, 복원의 무결성도 보장됩니다.
+      </p>
+    </div>
+
+    <p>
+      이 접근이 빛을 발하는 영역은 <strong>장기적이고 복잡한 의존성을 가진 에이전트 세션</strong>입니다. 수십 단계의 추론을 거치며, 이전 단계의 파일 시스템 상태, 네트워크 연결, 프로세스 간 통신 상태가 나중 단계에 영향을 미치는 상황에서는 복원의 "정확성"이 곧 "생존"입니다. 한 번의 잘못된 복원이 전체 추론 체인을 무너뜨릴 수 있으니까요.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3: DeltaBox -->
+  <section class="section">
+    <div class="section-label">분석 2</div>
+    <h2 class="section-title">DeltaBox: 고속도로 같은 속도 — 밀리초급 델타 C/R</h2>
+
+    <p>
+      이번에는 완전히 다른 비유를 생각해 보겠습니다. 미로를 탈출해야 하는 상황입니다. Crab 방식이라면 갈림길마다 "왜 이 길을 선택했는지, 지금까지 어떤 결정을 했는지"를 정밀하게 기록하며 나아갈 것입니다. 하지만 만약 미로가 <strong>수만 개의 갈림길</strong>로 이루어져 있고, 제한 시간 안에 정답을 찾아야 한다면?
+    </p>
+    <p>
+      이때 필요한 것은 기록의 정밀함이 아니라 <strong>시도의 속도</strong>입니다. 갈림길에서 한 번 가보고, 안 되면 즉시 돌아와서 다른 길을 가보는 이 "되돌아가기-다시 시도하기"의 주기를 얼마나 빠르게 돌릴 수 있느냐가 전부가 됩니다.
+    </p>
+
+    <p>
+      DeltaBox가 바로 이 병목을 정면으로 공략합니다. DeltaBox는 테스트타임 트리 탐색(Test-time Tree Search)이나 강화학습 기반 에이전트가 수행하는 <span class="text-blue">고빈도 상태 탐색</span>에 초점을 맞춥니다. Crab처럼 "어떤 상태가 의미론적으로 중요한지"를 분석하는 대신, <strong>전체 샌드박스 상태를 밀리초 단위로 델타(Delta) 인코딩하여 저장하고 롤백</strong>하는 "시스템 레벨의 브루트 포스적 가속"을 선택합니다.
+    </p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> DeltaBox의 핵심 설계 철학</div>
+      <p>
+        델타 인코딩은 "이전 상태와 비교해서 <strong>바뀐 부분만</strong> 저장"하는 기법입니다. 전체 스냅샷을 매번 찍는 것이 아니라 변화량만 기록하므로 I/O 비용이 극적으로 줄어듭니다. DeltaBox는 이 방식을 샌드박스 전체에 적용하여, 상태 분기가 극도로 빈번하게 발생하는 환경에서 <strong>밀리초급 보장</strong>을 달성합니다.
+      </p>
+    </div>
+
+    <p>
+      이 접근이 결정적인 이유는, 상태 분기가 극도로 빈번한 탐색 중심 에이전트에서는 복원의 "정확성"보다 분기의 "처리량(Throughput)"이 <strong>절대적 병목</strong>이 되기 때문입니다. 아무리 정확한 복원이라도 한 번 복원하는 데 1초가 걸린다면, 초당 1,000번의 분기를 시도해야 하는 MCTS(Monte Carlo Tree Search)에서는 아예 사용할 수 없습니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4: 비교 및 스펙트럼 -->
+  <section class="section">
+    <div class="section-label">분석 3</div>
+    <h2 class="section-title">대체가 아닌 스펙트럼 — 두 축의 발견</h2>
+
+    <p>
+      자, 그렇다면 "Crab이 좋은가, DeltaBox가 좋은가"라는 질문은 잘못된 질문입니다. 이것은 <strong>"메스가 좋은가, 망치가 좋은가"</strong>를 묻는 것과 같습니다. 수술에는 메스가, 못 박기에는 망치가 필요하듯, 에이전트가 수행하는 <strong>테스트타임 컴퓨테이션의 유형</strong>에 따라 최적의 하네스가 달라집니다.
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-cell crab">
+        <h4 class="text-green">Crab 방식</h4>
+        <ul>
+          <li>의미론적으로 최소한의 상태만 복원</li>
+          <li>복원 충실도(Integrity) 극대화</li>
+          <li>깊은 추론(Deep Reasoning)에 적합</li>
+          <li>복잡한 의존성 그래프 보존</li>
+          <li>메모리 효율 우수</li>
+        </ul>
+      </div>
+      <div class="compare-cell deltabox">
+        <h4 class="text-blue">DeltaBox 방식</h4>
+        <ul>
+          <li>전체 상태를 델타 인코딩으로 밀리초급 복원</li>
+          <li>탐색 처리량(Throughput) 극대화</li>
+          <li>얕고 넓은 탐색(Shallow & Broad)에 적합</li>
+          <li>MCTS 등 고빈도 분기 환경 최적</li>
+          <li>지연 시간(Latency) 최소화</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 스펙트럼 시각화 -->
+    <div class="spectrum-box">
+      <div class="spectrum-label">C/R 효율성 스펙트럼 (Checkpoint-Restore Efficiency Spectrum)</div>
+      <div class="spectrum-bar">
+        <div class="spectrum-dot crab-dot"></div>
+        <div class="spectrum-dot delta-dot"></div>
+      </div>
+      <div class="spectrum-ends">
+        <span class="left">지능적 최소화</span>
+        <span class="right">물리적 가속</span>
+      </div>
+      <div class="spectrum-legend">
+        <div class="spectrum-legend-item">
+          상태의 의미를 이해하고<br>불필요한 것을 덜어내어<br>정확성과 메모리 효율 극대화
+        </div>
+        <div class="spectrum-legend-item">
+          전체 상태를 델타 인코딩으로<br>밀리초급 통째로 복사-롤백하여<br>탐색 주기를 극단적으로 단축
+        </div>
+      </div>
+    </div>
+
+    <p>
+      여기서 중요한 것은, 두 접근이 서로를 보완할 필요가 있다는 점입니다. Crab의 의미론적 인식이 없는 DeltaBox는 <strong>불필요하게 큰 상태를 매 밀리초마다 복원</strong>하는 부하를 감당해야 합니다. 반대로 DeltaBox의 밀리초급 보장이 없는 Crab은 트리 탐색의 깊이가 깊어질수록 <strong>분기 지연으로 인해 탐색 자체가 불가능</strong>해집니다.
+    </p>
+
+    <blockquote>
+      Crab의 의미론적 인식 C/R이 없는 DeltaBox는 불필요하게 큰 상태를 매 밀리초마다 복원하는 부하를 안을 수 있고, DeltaBox의 밀리초급 보장이 없는 Crab은 트리 탐색의 깊이가 깊어질수록 분기 지연으로 인해 탐색 자체가 불가능해질 수 있다.
+      <cite>— 본문 분석으로부터 도출</cite>
+    </blockquote>
+
+    <p>
+      이는 곧 하네스 엔지니어링에서 C/R이 더 이상 <strong>단순한 인프라 기능</strong>이 아니라, 에이전트의 <strong>인지 구조(의존성 그래프)와 직결된 설계 결정</strong>이라는 것을 의미합니다. Crab은 이 구조를 "이해"하여 최적화하고, DeltaBox는 이 구조를 "외면"하고 속도로 압도하는 두 가지 극단적 패러다임을 제시한 셈입니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section">
+    <div class="section-label">결론</div>
+    <h2 class="section-title">패러다임 전환: 단일 목표에서 이원적 목표 함수로</h2>
+
+    <p>
+      지금까지의 하네스 엔지니어링은 "체크포인트/복원을 어떻게 빠르고 정확하게 할 것인가"라는 <strong>단일 축</strong> 위에서 논의되어 왔습니다. 하지만 Crab과 DeltaBox의 대비는 우리에게 명확한 메시지를 던집니다. 앞으로의 하네스 설계는 두 가지 지표를 동시에 최적화하는 <strong>이원적 목표 함수(Dual Objective Function)</strong> 위에서 이루어져야 한다는 것입니다.
+    </p>
+
+    <div class="callout conclusion-box">
+      <strong>상태 무결성(Integrity) ⊕ 상태 전환 지연(Latency)</strong><br><br>
+      이 두 지표는 trade-off 관계에 있지만, 에이전트의 테스트타임 컴퓨테이션 유형에 따라 최적의 작동점(Pareto Optimal)이 다릅니다. 하네스 엔지니어의 역할은 이 작동점을 <strong>식별하고 선택</strong>하는 것입니다.
+    </div>
+
+    <p>
+      구체적으로 패러다임을 전환해야 할 방향은 세 가지입니다.
+    </p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">1</span> C/R 패러다임의 명시적 분류</div>
+      <p>
+        하네스 설계 시 "Intelligent C/R"과 "Brute-force C/R"을 명시적으로 구분해야 합니다. 이것은 단순한 구현 차이가 아니라, 에이전트의 인지 아키텍처와 탐색 전략에 직결되는 근본적 설계 선택입니다. 프로젝트 초기에 "이 에이전트는 깊은 추론을 주로 하는가, 넓은 탐색을 주로 하는가"를 먼저 결정하고, 그에 맞는 C/R 패러다임을 선택해야 합니다.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">2</span> 테스트타임 컴퓨테이션 유형에 따른 하네스 선택 가이드</div>
+      <p>
+        얕고 넓은 탐색(Shallow & Broad Search) — 예컨대 코드 생성 후 수천 개의 테스트 케이스를 빠르게 시도하는 상황 — 에는 DeltaBox식 처리량 최적화가 적합합니다. 반대로 의미론적 일관성이 중요한 깊은 추론(Deep Reasoning) — 예컨대 수십 단계의 분석과 의사결정을 거치는 법률 에이전트 — 에는 Crab식 충실도 최적화가 최적의 하네스가 됩니다.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">3</span> 하이브리드 하네스의 가능성 탐색</div>
+      <p>
+        가장 흥미로운 방향은 두 축을 결합하는 하이브리드 하네스입니다. 예를 들어, <strong>의미론적 분석으로 상태의 크기를 최소화한 뒤(Crab의 기여), 그 최소화된 상태를 델타 인코딩으로 밀리초급 복원(DeltaBox의 기여)</strong>하는 방식입니다. 이것이 실현된다면, "정확하면서도 빠른" C/R이라는 그동안 불가능해 보였던 영역을 개척할 수 있습니다.
+      </p>
+    </div>
+
+    <p>
+      결론적으로, 하네스의 핵심 설계 목표가 '복원 충실도'에서 '탐색 처리량'으로 재정의되어야 한다는 원래의 질문에 대한 답은 <strong>"아니오, 둘 다여야 합니다"</strong>입니다. 하지만 그 "둘 다"를 단순히 나열하는 것이 아니라, <span class="text-accent">스펙트럼으로서 인식하고, 에이전트의 연산 특성에 따라 의도적으로 작동점을 선택</span>하는 것 — 그것이 Crab과 DeltaBox의 대비가 우리에게 남긴 진짜 교훈입니다.
+    </p>
+
+    <blockquote>
+      에이전트 하네스 엔지니어링의 다음 단계는 "어떤 C/R이 더 좋은가"를 묻는 것에서, "이 에이전트의 인지 구조와 탐색 전략에 대해, 무결성-지연 평면 위에서 어디가 최적의 작동점인가"를 묻는 것으로 전환되어야 한다.
+      <cite>— 결론으로부터</cite>
+    </blockquote>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <div class="footer-tags">
+      <span>Agent Harness Engineering</span>
+      <span>Checkpoint/Restore</span>
+      <span>Crab</span>
+      <span>DeltaBox</span>
+      <span>Test-time Compute</span>
+      <span>MCTS</span>
+      <span>Semantic Gap</span>
+    </div>
+    <p>에이전트 하네스 엔지니어링 심층 분석 시리즈</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

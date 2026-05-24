@@ -157,3 +157,5 @@ _자동 생성됨_
 - [[sources/2026-05-17-apwa-a-distributed-architecture-for-parallelizable.md]]
 
 - [[sources/2026-05-18-apwa-a-distributed-architecture-for-parallelizable.md]]
+
+- [[sources/2026-05-24-lcguard-latent-communication-guard-for-safe-kv-sha.md]]
