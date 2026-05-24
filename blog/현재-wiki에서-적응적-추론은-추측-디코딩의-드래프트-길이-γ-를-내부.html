@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>γ 최적화는 잘못된 축인가? — 적응적 추론의 병목 재정의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7470;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17.5px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* 배경 질감 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(194,112,62,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(91,124,153,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(107,158,122,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* 네비게이션 */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* 헤더 */
+  .article-header {
+    margin: clamp(40px, 8vw, 80px) 0 clamp(32px, 6vw, 56px) 0;
+    text-align: left;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 12.5px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 5.5vw, 44px);
+    line-height: 1.25;
+    color: var(--fg);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2.4vw, 19px);
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .article-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: clamp(12px, 1.6vw, 13.5px);
+    color: var(--muted);
+  }
+
+  .article-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* 구분선 */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    border: none;
+    margin: clamp(28px, 5vw, 48px) auto;
+    opacity: 0.5;
+  }
+
+  /* 섹션 */
+  .section { margin-bottom: clamp(32px, 6vw, 56px); }
+
+  .section-label {
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 4vw, 32px);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(18px, 3vw, 23px);
+    line-height: 1.4;
+    color: var(--fg);
+    margin: clamp(24px, 4vw, 36px) 0 12px 0;
+  }
+
+  p { margin-bottom: 16px; }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 16px 20px;
+    background: var(--card-bg);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14.5px, 2vw, 16.5px);
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s;
+  }
+  .card:hover { box-shadow: 0 4px 24px rgba(44,40,37,0.1); }
+
+  .card-number {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    color: var(--accent);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .card h3 { margin-top: 0; margin-bottom: 10px; }
+
+  /* 강조 텍스트 */
+  strong { color: var(--fg); font-weight: 700; }
+  .highlight { color: var(--accent); font-weight: 600; }
+  .highlight-blue { color: var(--accent2); font-weight: 600; }
+  .highlight-green { color: var(--accent3); font-weight: 600; }
+
+  /* 비유 박스 */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(194,112,62,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .metaphor-label {
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .metaphor-box p { margin-bottom: 8px; }
+
+  /* 리스트 */
+  .analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+  .analysis-list li {
+    position: relative;
+    padding: 12px 0 12px 28px;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+  }
+  .analysis-list li:last-child { border-bottom: none; }
+  .analysis-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 20px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  /* 다이어그램 */
+  .diagram-container {
+    margin: 28px 0;
+    text-align: center;
+  }
+  .diagram-container svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* 인라인 코드 */
+  code {
+    font-family: 'Noto Sans KR', monospace;
+    font-size: 0.9em;
+    background: rgba(194,112,62,0.08);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 500;
+  }
+
+  /* 결론 카드 */
+  .conclusion-card {
+    background: linear-gradient(145deg, rgba(107,158,122,0.06) 0%, rgba(91,124,153,0.05) 100%);
+    border: 1px solid rgba(107,158,122,0.18);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+    box-shadow: 0 4px 20px rgba(107,158,122,0.06);
+  }
+  .conclusion-card h2 { color: var(--accent3); }
+
+  /* 푸터 */
+  .article-footer {
+    margin: clamp(40px, 8vw, 72px) 0 40px 0;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    text-align: center;
+    font-size: clamp(12px, 1.6vw, 13px);
+    color: var(--muted);
+  }
+
+  /* 스크롤 애니메이션 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 프로그레스 바 */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(16px, 3vw, 24px);
+    margin: 0 0 clamp(32px, 6vw, 48px) 0;
+    box-shadow: var(--card-shadow);
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: clamp(13px, 1.8vw, 14.5px);
+    color: var(--fg);
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    counter-reset: toc-counter;
+  }
+  .toc ol li {
+    counter-increment: toc-counter;
+    padding: 6px 0 6px 32px;
+    position: relative;
+  }
+  .toc ol li::before {
+    content: counter(toc-counter);
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(194,112,62,0.08);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: clamp(13.5px, 2vw, 15px);
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .progress-bar { transition: none; }
+  }
+
+  @media (max-width: 480px) {
+    nav { gap: 4px; padding: 10px 8px; }
+    nav a { padding: 5px 10px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="page-wrapper">
+
+  <!-- 네비게이션 -->
+  <nav>
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header reveal">
+    <span class="article-tag">Speculative Decoding · Adaptive Inference</span>
+    <h1 class="article-title">γ를 줄이면 병목이 사라질까?<br>적응적 추론이 놓친 진짜 문제</h1>
+    <p class="article-subtitle">추측 디코딩의 드래프트 길이를 최적화하는 것이 과연 올바른 방향인가? "Draft Less, Retrieve More" 논문이 제기하는 근본적 도전을 세 가지 각도에서 분석합니다.</p>
+    <div class="article-meta">
+      <span>2025년 7월</span>
+      <span>·</span>
+      <span>읽기 약 12분</span>
+      <span>·</span>
+      <span>심층 분석</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 목차 -->
+  <div class="toc reveal">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#sec1">SpecKV가 연 적응의 문턱 — γ 선택이라는 새로운 자유도</a></li>
+      <li><a href="#sec2">"트리 자체가 병목이다" — 정면으로 부딪힌 두 논문의 충돌</a></li>
+      <li><a href="#sec3">γ 최적화가 '잘못된 축'인 세 가지 이유</a></li>
+      <li><a href="#sec4">그럼에도 γ 최적화가 완전히 무가치하지 않은 이유</a></li>
+      <li><a href="#sec5">패러다임 전환: 적응의 축이 아니라 구조의 축을 바라보기</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <section class="section reveal" id="sec1">
+    <div class="section-label">Section 01</div>
+    <h2>SpecKV가 연 적응의 문턱 — γ 선택이라는 새로운 자유도</h2>
+
+    <p>적응적 추론(Adaptive Inference)이라는 개념은 처음 등장했을 때부터 일관된 방향성을 가져왔습니다. 모델의 크기를 바꾸거나, 라우트를 선택하거나, 컨텍스트의 난이도에 따라 계산량을 조절하는 식이었습니다. CADENCE 같은 연구들이 보여준 것은 <strong>외부 환경에 반응하는 적응</strong>이었습니다.</p>
+
+    <p>그런데 SpecKV는 이 결정 차원을 한 단계 더 들어가서, 모델 선택이나 라우팅이 아니라 <span class="highlight">추측 디코딩의 드래프트 길이(γ)를 동적으로 선택</span>하는 방향으로 적응의 범위를 확장했습니다. 이것이 의미 있는 확장인 이유는, 적응의 기준이 "입력의 난이도" 같은 외부 요인에서 <span class="highlight-blue">KV 캐시 압축이라는 내부 시스템 상태</span>로 이동했기 때문입니다.</p>
+
+    <p>Compression-Aware γ Selection이라는 메커니즘은 직관적으로 매력적입니다. 현재 KV 캐시가 얼마나 압축되어 있는지 보고, 압축률이 높으면 드래프트를 짧게, 낮으면 길게 가져가는 식입니다. 마치 운전자가 연료 게이지를 보면서 가감속을 조절하는 것과 비슷합니다.</p>
+
+    <blockquote>
+      "γ를 동적으로 조절하면 추측 디코딩의 효율이 최적화된다." — 이것이 SpecKV의 핵심 전제였습니다.
+    </blockquote>
+
+    <p>문제는 이 전제가 <em>어느 축 위에서의 최적화인가</em>를 검증하지 않은 채 받아들여졌다는 점입니다. γ를 최적화하는 것이 시스템 전체의 성능을 결정하는 <strong>진짜 병목</strong>을 해결하는 길인지, 아니면 눈에 보이는 자유도에 매몰된 것인지는 아직 열린 질문이었습니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section reveal" id="sec2">
+    <div class="section-label">Section 02</div>
+    <h2>"트리 자체가 병목이다" — 정면으로 부딪힌 두 논문의 충돌</h2>
+
+    <p>최근 등장한 논문 <strong>"Draft Less, Retrieve More: Hybrid Tree Construction for Speculative Decoding"</strong>은 이 질문에 대해 아주 명확한 답을 던집니다. 그리고 그 답은 SpecKV에게 불편한 진실을 담고 있습니다.</p>
+
+    <blockquote>
+      확장적 드래프트 트리(expansive draft tree) 자체가 VRAM 대역폭 병목의 근원이며, 수용률(acceptance rate)을 높이기 위해 트리를 확장하는 것은 오히려 병목을 악화시킨다. 따라서 연산 기반 드래프팅을 검색(retrieval)으로 대체해야 한다.
+    </blockquote>
+
+    <p>이 주장이 파격적인 이유는 병목의 <strong>위치를 완전히 재정의</strong>하기 때문입니다. SpecKV가 "γ를 얼마로 할 것인가"를 최적화 변수로 삼았다면, 이 논문은 <span class="highlight">"트리 구조 자체가 문제이므로 트리를 줄이거나 없애야 한다"</span>는 축 이동을 요구합니다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유: 고속도로 병목과 차선 추가</div>
+      <p>상황을 하나 상상해 보십시오. 고속도로에 병목이 있는데, 원인이 <strong>교량의 구조적 하중 제한</strong>이라고 합시다. 그런데 누군가 "차선 수를 늘리면 해결된다"고 주장하며 교량 위에 차선을 계속 추가합니다. 차선이 늘어날수록 교량에 올라가는 차가 많아지고, 결국 <span class="highlight">교량 자체가 무너지기 직전</span>이 됩니다.</p>
+      <p>SpecKV의 γ 최적화가 이 "차선 추가"에 해당합니다. 진짜 병목은 교량 구조(VRAM 대역폭)인데, 차선 수(γ)를 조절하는 데 에너지를 쏟고 있는 셈입니다.</p>
+    </div>
+
+    <!-- 다이어그램: 두 논문의 병목 인식 차이 -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 680 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- SpecKV 측 -->
+        <rect x="20" y="40" width="280" height="160" rx="12" fill="rgba(194,112,62,0.06)" stroke="rgba(194,112,62,0.2)" stroke-width="1.5"/>
+        <text x="160" y="72" text-anchor="middle" fill="#c2703e" font-family="Source Serif 4, serif" font-size="15" font-weight="700">SpecKV의 인식</text>
+        <text x="160" y="100" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="12">최적화 축: γ (드래프트 길이)</text>
+        <line x1="60" y1="125" x2="260" y2="125" stroke="rgba(194,112,62,0.3)" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="160" y="148" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="12">"γ를 잘 조절하면 해결된다"</text>
+        <circle cx="160" cy="178" r="6" fill="rgba(194,112,62,0.4)"/>
+        <text x="160" y="198" text-anchor="middle" fill="#c2703e" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="600">표면적 병목에 집중</text>
+
+        <!-- 화살표 -->
+        <line x1="310" y1="120" x2="370" y2="120" stroke="#2c2825" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="340" y="110" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="10">vs</text>
+
+        <!-- Draft Less 측 -->
+        <rect x="380" y="40" width="280" height="160" rx="12" fill="rgba(91,124,153,0.06)" stroke="rgba(91,124,153,0.2)" stroke-width="1.5"/>
+        <text x="520" y="72" text-anchor="middle" fill="#5b7c99" font-family="Source Serif 4, serif" font-size="14" font-weight="700">Draft Less, Retrieve More</text>
+        <text x="520" y="100" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="12">최적화 축: 트리 구조 자체</text>
+        <line x1="420" y1="125" x2="620" y2="125" stroke="rgba(91,124,153,0.3)" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="520" y="148" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="12">"트리를 없애야 근본 해결"</text>
+        <circle cx="520" cy="178" r="6" fill="rgba(91,124,153,0.5)"/>
+        <text x="520" y="198" text-anchor="middle" fill="#5b7c99" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="600">근원적 병목에 접근</text>
+
+        <defs>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2c2825"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <p>이 두 관점의 충돌이 중요한 이유는 단순히 "누가 옳으냐"를 가리는 것을 넘어서, <strong>적응적 최적화라는 방법론 자체가 가진 근본적 한계</strong>를 드러내기 때문입니다. 적응의 대상을 잘 잡았더라도, 그 적응이 일어나는 구조적 틀이 병목의 근원이라면?</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section reveal" id="sec3">
+    <div class="section-label">Section 03</div>
+    <h2>γ 최적화가 '잘못된 축'인 세 가지 이유</h2>
+
+    <p>"잘못된 축"이라는 표현은 강합니다. 하지만 "Draft Less, Retrieve More"의 분석을 따라가면, 이 표현이 단순한 과장이 아님을 알 수 있습니다. 세 가지 각도에서 이 문제를 해부해 보겠습니다.</p>
+
+    <!-- 카드 1 -->
+    <div class="card reveal">
+      <div class="card-number">01</div>
+      <h3>병목의 오지정 (Bottleneck Misattribution)</h3>
+      <p>SpecKV는 γ를 최적화 변수로 삼았지만, 실제 병목은 γ의 크기가 아니라 <span class="highlight">트리 구조가 낳는 KV 캐시의 VRAM 대역폭 소모</span>입니다. γ를 줄이면 트리가 작아져 간접적으로 병목이 완화되긴 하지만, 이는 부수적 효과일 뿐 근인 해결이 아닙니다.</p>
+      <p>이 패턴은 다른 영역에서도 관찰됩니다. 다중 서버 MCP 배포에서 실제 병목이 "개별 LLM 호출 횟수"가 아니라 "스키마 축적"에 있었던 사례와 정확히 동일합니다. <strong>표면적으로 가장 눈에 띄는 자유도와 근원적 구조적 제약이 불일치</strong>하는 현상 — 이것이 병목 오지정의 핵심입니다.</p>
+    </div>
+
+    <!-- 카드 2 -->
+    <div class="card reveal">
+      <div class="card-number">02</div>
+      <h3>적응 축의 부정합 (Adaptation Axis Misalignment)</h3>
+      <p>여기서 흥미로운 연결이 발견됩니다. SpecKV의 γ 최적화는 <span class="highlight-blue">적응 축 부정합</span>의 구체적 사례로 읽을 수 있습니다. 적응이 이루어지는 축(γ)과 시스템의 실제 성능을 결정하는 축(VRAM 대역폭)이 <strong>수직으로 교차</strong>하는 상황입니다.</p>
+      <div class="metaphor-box" style="margin: 16px 0;">
+        <div class="metaphor-label">비유: 엘리베이터와 계단</div>
+        <p>빌딩에서 엘리베이터 속도를 미세 조절하는 적응 시스템을 만들었다고 상상해 보십시오. 그런데 실제 병목은 엘리베이터가 아니라 <strong>1층 로비의 출입문 너비</strong>에 있다면? 아무리 엘리베이터 속도를 적응적으로 조절해도, 로비 문이 좁아서 사람이 빠져나가지 못하면 전체 흐름은 개선되지 않습니다. 적응 축과 병목 축이 수직으로 교차해 있는 것입니다.</p>
+      </div>
+      <p>압축 상태에 따라 γ를 세밀하게 조절하더라도, 그 조절이 VRAM 대역폭 병목을 우회하는 <strong>구조적 경로를 제공하지 못한다면</strong> 적응의 효과는 상한에 직면할 수밖에 없습니다.</p>
+    </div>
+
+    <!-- 카드 3 -->
+    <div class="card reveal">
+      <div class="card-number">03</div>
+      <h3>병목의 이동이지 해소가 아니다 (Adaptive Bottleneck Migration)</h3>
+      <p>그렇다고 γ 최적화가 완전히 무의미한 것은 아닙니다. γ를 줄이면 드래프트 트리가 축소되어 VRAM 대역폭 부하가 감소합니다. 그러나 이는 병목을 <span class="highlight-green">해소</span>한 것이 아니라 다른 곳으로 <strong>이동</strong>시킨 것에 가깝습니다.</p>
+      <p>γ를 과도히 줄이면 이번에는 추측 디코딩의 본래 목적인 <strong>연산 가속 효과 itself가 상실</strong>됩니다. 즉, γ 축 위에서의 최적화는 VRAM 병목과 가속 효과 사이의 <span class="highlight">제로섬 게임</span>에 갇혀 있습니다. 한쪽을 줄이면 다른 쪽이 커지는 교착 상태인 셈입니다.</p>
+    </div>
+
+    <!-- 세 축의 관계 다이어그램 -->
+    <div class="diagram-container reveal">
+      <svg viewBox="0 0 500 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 제로섬 게임 시각화 -->
+        <line x1="80" y1="240" x2="420" y2="240" stroke="#2c2825" stroke-width="1.5"/>
+        <polygon points="80,240 80,232 76,240 80,248" fill="#2c2825"/>
+        <polygon points="420,240 420,232 424,240 420,248" fill="#2c2825"/>
+        <text x="80" y="260" text-anchor="middle" fill="#c2703e" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600">γ 증가</text>
+        <text x="420" y="260" text-anchor="middle" fill="#5b7c99" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600">γ 감소</text>
+
+        <!-- VRAM 부하 곡선 -->
+        <path d="M 100 100 Q 250 180 400 220" stroke="#c2703e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="130" y="90" fill="#c2703e" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600">VRAM 대역폭 부하</text>
+
+        <!-- 가속 효과 곡선 -->
+        <path d="M 100 220 Q 250 140 400 100" stroke="#5b7c99" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="340" y="90" fill="#5b7c99" font-family="Noto Sans KR, sans-serif" font-size="12" font-weight="600">연산 가속 효과</text>
+
+        <!-- 교차점 -->
+        <circle cx="250" cy="160" r="8" fill="rgba(107,158,122,0.15)" stroke="#6b9e7a" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" fill="#6b9e7a" font-family="Noto Sans KR, sans-serif" font-size="11" font-weight="700">최적점?</text>
+        <text x="250" y="290" text-anchor="middle" fill="#7a7470" font-family="Noto Sans KR, sans-serif" font-size="11">γ 축 위에서의 제로섬 게임</text>
+      </svg>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section reveal" id="sec4">
+    <div class="section-label">Section 04</div>
+    <h2>그럼에도 γ 최적화가 완전히 무가치하지 않은 이유</h2>
+
+    <p>여기서 잠깐 멈춰서 뉘앙스를 조절할 필요가 있습니다. "잘못된 축"이라고 했지만, 이것이 γ 최적화 연구 자체를 폐기해야 한다는 의미는 아닙니다. 현실은 이론보다 항상 더 복잡합니다.</p>
+
+    <ul class="analysis-list">
+      <li>
+        <strong>검색 기반 드래프팅이 항상 가능한 것은 아닙니다.</strong> 검색이 유효하려면 적절한 검색 코퍼스와 인덱스가 전제되어야 합니다. 특정 도메인에서는 이것이 불가능하거나 비용이 과도한 경우가 많으며, 이런 상황에서는 연산 기반 드래프팅 + γ 최적화가 <span class="highlight">현실적 선택지</span>로 남습니다.
+      </li>
+      <li>
+        <strong>하이브리드 구성에서 γ는 여전히 의미 있습니다.</strong> "Draft Less, Retrieve More" 논문 자체가 하이브리드 트리 구성을 제안합니다. 검색으로 일부 드래프트를 대체하더라도, 나머지 연산 기반 드래프트에 대해 γ를 최적화하는 것은 여전히 <span class="highlight-blue">유효한 보조 축</span>입니다.
+      </li>
+      <li>
+        <strong>알고리즘-시스템 번역 갭의 관점에서 이해해야 합니다.</strong> γ 최적화는 알고리즘 레벨에서는 정당하지만 시스템 레벨로 번역될 때 효과가 희석되는 경우입니다. 에이전트의 의미론적 의존 그래프를 OS의 체크포인트 메커니즘으로 번역할 때 비효율이 발생하는 패턴과 유사합니다 — <span class="highlight-green">알고리즘적 통찰이 시스템적 현실 앞에서 효과가 제한</span>되는 것입니다.
+      </li>
+    </ul>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유: 돋보기와 눈알</div>
+      <p>돋보기를 최고로 정밀하게 만드는 기술자가 있다고 합시다. 렌즈의 곡률, 두께, 재질을 완벽하게 최적화합니다. 하지만 사용자가 근시인데 이 돋보기를 멀리 있는 것을 보는 데 쓴다면? 돋보기 자체의 품질은 최고지만, <strong>용도와 눈의 상태가 맞지 않아</strong> 효과가 제한됩니다. γ 최적화도 마찬가지입니다. 알고리즘적으로는 훌륭하지만, 시스템적 병목 구조와 정렬되지 않으면 그 가치가 제한됩니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section reveal" id="sec5">
+    <div class="conclusion-card">
+      <div class="section-label" style="color: var(--accent3);">Conclusion</div>
+      <h2>패러다임 전환: 적응의 축이 아니라 구조의 축을 바라보기</h2>
+
+      <p>γ 최적화는 <strong>"근본적으로 잘못된 축"이라기보다 "근본적으로 불충분한 축"</strong>입니다. 이는 병목 오지정의 전형적 사례로, 표면적 자유도(γ)를 최적화하면서 근원적 구조적 제약(트리 기반 KV 캐시의 VRAM 대역폭)을 간과한 결과입니다.</p>
+
+      <p>SpecKV의 진정한 기여는 γ 최적화 자체가 아니라, 적응적 추론을 "외부 환경 반응"에서 <span class="highlight">"내부 시스템 상태 반응"으로 확장한 패러다임 전환</span>에 있습니다. 이 패러다임은 여전히 유효합니다. 하지만 "Draft Less, Retrieve More"가 드러낸 것은 이 패러다임만으로는 부족하다는 점입니다.</p>
+
+      <p>핵심 교훈은 이것입니다:</p>
+
+      <blockquote>
+        적응의 축을 올바르게 잡았더라도, 그 축이 속한 구조적 틀(트리 기반 추측 디코딩) 자체가 병목의 근원일 수 있다.
+      </blockquote>
+
+      <p>그렇다면 어떻게 전환해야 할까요? 세 가지 방향을 제안합니다.</p>
+
+      <ul class="analysis-list">
+        <li>
+          <strong>구조적 축 우선 원칙:</strong> 적응적 최적화를 설계할 때, 먼저 "이 구조 자체가 병목인가?"를 묻고, 구조적 대안(검색 대체, 아키텍처 변경 등)을 탐색한 뒤에 남은 자유도에 대해 적응을 적용해야 합니다.
+        </li>
+        <li>
+          <strong>적응 축-병목 축 정렬 검증:</strong> 적응이 이루어지는 축과 실제 성능을 결정하는 축이 일치하는지를 설계 단계에서 명시적으로 검증해야 합니다. 수직으로 교차하는 두 축 사이의 적응은 효과 상한이 존재합니다.
+        </li>
+        <li>
+          <strong>계층적 적응 프레임워크:</strong> 구조적 선택(트리 vs 검색 vs 하이브리드) → 구조 내 파라미터(γ, 검색 깊이) → 런타임 미세 조절의 세 계층으로 적응을 계층화하여, 상위 계층에서 구조적 병목을 먼저 해소하는 방향으로 설계해야 합니다.
+        </li>
+      </ul>
+
+      <p>추측 디코딩 연구는 이제 "얼마나 잘 추측하는가"에서 <span class="highlight-blue">"추측이라는 구조 자체가 올바른가"</span>로 질문을 옮겨가는 중입니다. γ 최적화는 이 전환기에 등장한 흥미로운 시도였지만, 동시에 <strong>적응적 최적화의 한계를 명확히 보여주는 거울</strong>이기도 합니다.</p>
+
+      <p>병목을 줄이는 것과 병목의 근원을 없애는 것은 전혀 다른 문제입니다. 앞으로의 적응적 추론 연구는 이 차이를 철저히 구분할 필요가 있습니다.</p>
+    </div>
+  </section>
+
+  <footer class="article-footer reveal">
+    <p>Written with analysis based on "Draft Less, Retrieve More: Hybrid Tree Construction for Speculative Decoding" and related adaptive inference research.</p>
+  </footer>
+
+</div>
+
+<script>
+  /* 스크롤 프로그레스 바 */
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* 스크롤 리빌 애니메이션 */
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        /* 연속된 요소들에 약간의 지연을 주어 순차적 등장 효과 */
+        const delay = entry.target.dataset.delay || 0;
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  revealElements.forEach((el, i) => {
+    /* 첫 번째 요소는 즉시 표시 */
+    if (i === 0) {
+      el.classList.add('visible');
+    } else {
+      el.dataset.delay = Math.min(i * 60, 300);
+      revealObserver.observe(el);
+    }
+  });
+
+  /* 부드러운 스크롤 (TOC 링크) */
+  document.querySelectorAll('.toc a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        const offset = 24;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
