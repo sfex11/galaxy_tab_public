@@ -83,3 +83,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/compensation-design.md|compensation design]]
+
+---
+**관련**: [[concepts/runtime-design-time-alignment-absorption.md|runtime design time alignment absorption]]

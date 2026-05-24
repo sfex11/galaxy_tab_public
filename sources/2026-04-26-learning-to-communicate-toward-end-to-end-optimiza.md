@@ -91,3 +91,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/positive-only-policy-optimization.md|positive only policy optimization]]
+
+---
+**관련**: [[concepts/hci-aai-optimization-divergence.md|hci aai optimization divergence]]
+
+---
+**관련**: [[concepts/purely-reactive-optimization.md|purely reactive optimization]]

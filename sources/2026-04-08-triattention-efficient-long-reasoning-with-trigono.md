@@ -131,3 +131,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/reasoning-prompt-compliance-gap.md|reasoning prompt compliance gap]]
+
+---
+**관련**: [[concepts/expert-placement-as-compression.md|expert placement as compression]]
+
+---
+**관련**: [[concepts/harness-as-reasoning-constituent.md|harness as reasoning constituent]]

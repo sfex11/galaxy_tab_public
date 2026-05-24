@@ -62,3 +62,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/distribution-shaping.md|distribution shaping]]
+
+---
+**관련**: [[concepts/physical-acceleration-cr.md|physical acceleration cr]]

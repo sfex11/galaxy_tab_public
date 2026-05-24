@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/autonomy-spectrum.md|autonomy spectrum]]
+
+---
+**관련**: [[concepts/spectrum-of-internalized-adaptation.md|spectrum of internalized adaptation]]

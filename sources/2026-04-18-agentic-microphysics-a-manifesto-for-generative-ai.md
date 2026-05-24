@@ -121,3 +121,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/tool-use.md|tool use]]
+
+---
+**관련**: [[concepts/planning-gap.md|planning gap]]
+
+---
+**관련**: [[concepts/observation-fidelity-paradox.md|observation fidelity paradox]]
+
+---
+**관련**: [[concepts/structured-epistemic-inconsistency.md|structured epistemic inconsistency]]
+
+---
+**관련**: [[concepts/macro-micro-sequentiality-complementarity.md|macro micro sequentiality complementarity]]

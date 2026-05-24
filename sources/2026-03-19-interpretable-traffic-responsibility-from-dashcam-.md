@@ -255,3 +255,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/multi-agent-bayesian-consensus.md|multi agent bayesian consensus]]
+
+---
+**관련**: [[concepts/explicit-implicit-reasoning.md|explicit implicit reasoning]]
+
+---
+**관련**: [[concepts/agent-knowledge-separation.md|agent knowledge separation]]

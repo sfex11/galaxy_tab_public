@@ -30,9 +30,10 @@ Production LLM 에이전트의 확률적 모델 출력을 결정론적 소프트
 에이전트 런타임은 "LLM이 토큰을 생성한다"는 설명으로는 부족하다. 실제 운영에서는 LLM 출력이 (a) 직접 실행 불가능한 자연어, (b) 파싱/인코딩/검증을 거쳐야 하는 중간 형태, (c) 시스템 API 호출로 변환되어야 하는 세 가지 중 하나의 상태를 거친다. SDB는 이 변환 경계를 명시적 계약으로 규정함으로써, 런타임 내부의 "의미 없는 번역"을 구조화한다.
 
 ## 반패턴: 비중재된 번역 (Unmediated Translation)
-SDB가 없이 LLM 출력을 직접 시스템에 전달하는 것은 일반 소프트웨어에서 `eval()` 호출이 아닌 `exec(raw_string)`을 수행하는 것과 동등하다. 이는 [[algorithm-system-translation-gap]]을 현현시키는 가장 흔한 형태의 결함이다.
+SDB가 없이 LLM 출력을 직접 시스템에 전달하는 것은 일반 소프트웨어에서 `eval()` 호출이 아닌 `exec(raw_string)`을 수행하는 것과 동등하다. 이는 [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]을 현현시키는 가장 흔한 형태의 결함이다.
 
 ## 관련 논문
+- [[concepts/designer-foresight-boundary.md|designer foresight boundary]]
 - sources/2026-05-21-a-methodology-for-selecting-and-composing-runtime-architecture-patterns-for-production-ll.md
 
 ---
@@ -224,35 +225,35 @@ SDB는 다음 네 부분으로 구성된다:
 에이전트 런타임은 "LLM이 토큰을 생성한다"는 설명으로는 부족하다. 실제 운영에서는 LLM 출력이 직접 실행 불가능한 자연어이며, 시스템 API 호출로 변환되어야 하는 세 가지 상태를 거친다. SDB는 이 변환 경계를 명시적 계약으로 규정함으로써, 런타임 내부의 "의미 없는 번역"을 구조화한다.
 
 ## 반패턴: 비중재된 번역 (Unmediated Translation)
-SDB가 없이 LLM 출력을 직접 시스템에 전달하는 것은 일반 소프트웨어에서 `eval(raw_string)`을 직접 실행하는 것과 동등하다. 이는 [[algorithm-system-translation-gap]]을 현현시키는 가장 흔한 형태의 결함이며, algorithm-system-boundary-collapse을 유발한다.
+SDB가 없이 LLM 출력을 직접 시스템에 전달하는 것은 일반 소프트웨어에서 `eval(raw_string)`을 직접 실행하는 것과 동등하다. 이는 [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]을 현현시키는 가장 흔한 형태의 결함이며, algorithm-system-boundary-collapse을 유발한다.
 
 ## 기존 연구와의 관계
-### [[algorithm-system-translation-gap]]
+### [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]
 SDB(확률적-결론적 경계)는 이 간극을 정식화된 4요소 계약으로 구조화한다. 기존 연구들이 간극의 존재를 진단만 했다면, 본 논문은 그 간극을 '어떻게 교차하는가'라는 구조적 설계 문제로 전환한다.
 
-### [[agent-os-semantic-gap]]
+### [[concepts/agent-os-semantic-gap.md|agent os semantic gap]]
 SDB 계약이 OS가 에이전트의 의미론적 의존을 이해하는 데 필요한 인터페이스를 제공한다.
 
-### [[agentic-harness-engineering]]
+### [[entities/agentic-harness-engineering.md|agentic harness engineering]]
 SDB 계약이 하네스가 에이전트의 행동을 어떻게 제약하는가를 명시적 계약으로 규명한다.
 
-### [[algorithm-system-boundary-collapse]]
+### [[concepts/algorithm-system-boundary-collapse.md|algorithm system boundary collapse]]
 코드 생성이 스스로 실행 인프라의 역할을 모호하게 흡수하려는 '경계 소멸'을 SDB가 명시적으로 거부한다.
-### [[code-as-agent-harness]]
+### [[concepts/code-as-agent-harness.md|code as agent harness]]
 코드는 SDB의 Proposer 출력에 대한 하나의 가능한 구현이지만, SDB 계약이 없으면 직접 실행 권한을 가지는 경계 소멸의 위험을 간는다.
-### [[agent-execution-semantic-opacity]]
+### [[concepts/agent-execution-semantic-opacity.md|agent execution semantic opacity]]
 SDB가 존재하지 않으면 에이전트 실행의 의미론이 OS 수준에서 포착 불가능하다.
-### [[semantic-dependency-graph]]
+### [[concepts/semantic-dependency-graph.md|semantic dependency graph]]
 SDB의 Commit 단계는 의미론적 의존 그래프의 특정 절단을 '결정론적 스냅샷'으로 고정한다.
-### [[semantic-dependency-snapshot-mismatch]]
+### [[concepts/semantic-dependency-snapshot-mismatch.md|semantic dependency snapshot mismatch]]
 SDB의 Commit 단계가 의미론적 의존 그래프의 정확한 스냅샷을 보장함으로써 기존 문제를 해결한다.
-### [[crab]]
+### [[entities/crab.md|crab]]
 Crab은 SDB의 Commit 단계에 해당하는 의미론 인식 C/R의 구체적 구현이다.
-### [[process-control-architecture]]
+### [[concepts/process-control-architecture.md|process control architecture]]
 SDB는 프로세스 제어 아키텍처를 확률적-결정론 경계로 확장한다.
-### [[reversible-sft]]
+### [[entities/reversible-sft.md|reversible sft]]
 SDB의 Commit 단계는 SFT로 학습된 행동을 '동결'시키는 메커니즘이다.
-### [[checkpoint-restore-efficiency-spectrum]]
+### [[concepts/checkpoint-restore-efficiency-spectrum.md|checkpoint restore efficiency spectrum]]
 SDB의 Commit 단계에서만 의미 있는 C/R이 가능하다.
 
 ## 핵심

@@ -86,3 +86,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/formal-comparative-contract.md|formal comparative contract]]
+
+---
+**관련**: [[concepts/intentional-semantic-degradation.md|intentional semantic degradation]]
+
+---
+**관련**: [[concepts/compensation-design.md|compensation design]]

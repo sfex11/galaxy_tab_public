@@ -289,3 +289,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/retrieval-cognification.md|retrieval cognification]]
+
+---
+**관련**: [[concepts/frozen-model-external-memory-contradiction.md|frozen model external memory contradiction]]
+
+---
+**관련**: [[concepts/memory-as-model-paradigm.md|memory as model paradigm]]

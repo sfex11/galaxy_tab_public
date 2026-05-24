@@ -87,3 +87,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/joint-prompt-optimization.md|joint prompt optimization]]
+
+---
+**관련**: [[concepts/streaming-adaptive-inference.md|streaming adaptive inference]]

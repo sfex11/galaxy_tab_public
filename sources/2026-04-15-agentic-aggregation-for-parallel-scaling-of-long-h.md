@@ -181,3 +181,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/expected-value-of-information.md|expected value of information]]
+
+---
+**관련**: [[concepts/harness-determined-information-topology.md|harness determined information topology]]
+
+---
+**관련**: [[concepts/evaluation-regimes-information-bottleneck.md|evaluation regimes information bottleneck]]

@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/lack-of-developmental-scaffolding.md|lack of developmental scaffolding]]
+
+---
+**관련**: [[concepts/harness-mutability.md|harness mutability]]
+
+---
+**관련**: [[concepts/implicit-harness-filtering.md|implicit harness filtering]]

@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/constraint-guided-plan-execution.md|constraint guided plan execution]]
+
+---
+**관련**: [[concepts/synchronous-execution-assumption.md|synchronous execution assumption]]

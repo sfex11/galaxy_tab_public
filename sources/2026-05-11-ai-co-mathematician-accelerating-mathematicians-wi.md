@@ -14,3 +14,6 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/ai-co-mathematician.md|ai co mathematician]]
+
+---
+**관련**: [[concepts/uncertainty-propagation-disconnection.md|uncertainty propagation disconnection]]

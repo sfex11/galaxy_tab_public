@@ -113,3 +113,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/small-portfolio-evaluation.md|small portfolio evaluation]]
+
+---
+**관련**: [[concepts/caption-sufficient-evaluation.md|caption sufficient evaluation]]

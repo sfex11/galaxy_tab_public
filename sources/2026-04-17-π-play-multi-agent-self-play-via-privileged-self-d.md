@@ -123,3 +123,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/external-layer-principle.md|external layer principle]]
+
+---
+**관련**: [[concepts/flow-post-training-paradigm.md|flow post training paradigm]]
+
+---
+**관련**: [[concepts/expected-value-of-information.md|expected value of information]]
+
+---
+**관련**: [[concepts/consistency-guided-credit-assignment.md|consistency guided credit assignment]]

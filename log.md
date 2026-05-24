@@ -1057,3 +1057,11 @@
 ## [2026-05-24 08:31] ingest | SegCompass: Exploring Interpretable Alignment with Sparse Autoencoders for Enhanced Reasoning Segmentation
 
 ## [2026-05-24 08:31] ingest | Beyond Temperature: Hyperfitting as a Late-Stage Geometric Expansion
+
+## [2026-05-24 17:04] lint | Wiki 건전성 체크
+- Issues: 1180개
+- Orphans: 310, Missing: 870, Contradictions: 0
+
+## [2026-05-24 18:05] lint | Wiki 건전성 체크
+- Issues: 1143개
+- Orphans: 273, Missing: 870, Contradictions: 0

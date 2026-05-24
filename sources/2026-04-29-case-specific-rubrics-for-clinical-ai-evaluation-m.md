@@ -237,3 +237,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/caption-sufficient-evaluation.md|caption sufficient evaluation]]
+
+---
+**관련**: [[entities/expert-offloading.md|expert offloading]]
+
+---
+**관련**: [[concepts/environment-as-evaluation.md|environment as evaluation]]
+
+---
+**관련**: [[concepts/cross-dimensional-oversight-blindspot.md|cross dimensional oversight blindspot]]
+
+---
+**관련**: [[concepts/io-aware-expert-offloading.md|io aware expert offloading]]

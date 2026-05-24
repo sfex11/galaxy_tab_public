@@ -22,7 +22,7 @@ Large language model (LLM)-based multi-agent systems increasingly rely on interm
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

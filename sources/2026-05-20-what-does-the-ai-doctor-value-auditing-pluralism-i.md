@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-21-clinseekagent-automating-multimodal-evidence-seeki]]: 두 논문 모두 임상 의사결정 맥락에서 LLM 에이전트의 역할과 윤리적 정렬 문제를 다룬다.
+
+---
+**관련**: [[concepts/autonomy-spectrum.md|autonomy spectrum]]

@@ -91,3 +91,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/label-free-consistency-check.md|label free consistency check]]
+
+---
+**관련**: [[concepts/heterogeneous-computation-unit-consistency.md|heterogeneous computation unit consistency]]
+
+---
+**관련**: [[concepts/formal-comparative-contract.md|formal comparative contract]]

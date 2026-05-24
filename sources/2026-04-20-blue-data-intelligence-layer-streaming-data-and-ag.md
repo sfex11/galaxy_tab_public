@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/closed-book-qa-hallucination.md|closed book qa hallucination]]
+
+---
+**관련**: [[concepts/tracking-neutrality-assumption.md|tracking neutrality assumption]]

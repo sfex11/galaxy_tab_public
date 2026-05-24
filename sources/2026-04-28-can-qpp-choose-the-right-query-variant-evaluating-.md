@@ -199,3 +199,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-selective-context-accumulation.md|non selective context accumulation]]
+
+---
+**관련**: [[entities/retrieval-as-black-box.md|retrieval as black box]]
+
+---
+**관련**: [[concepts/retrieval-cognification.md|retrieval cognification]]
+
+---
+**관련**: [[concepts/semantic-representation-translation-gap.md|semantic representation translation gap]]
+
+---
+**관련**: [[concepts/experience-generation.md|experience generation]]
+
+---
+**관련**: [[concepts/selection-pressure-design.md|selection pressure design]]
+
+---
+**관련**: [[concepts/geometric-computation-hijacking.md|geometric computation hijacking]]
+
+---
+**관련**: [[concepts/semantic-minimization-cr.md|semantic minimization cr]]
+
+---
+**관련**: [[concepts/semantic-dependency-snapshot-mismatch.md|semantic dependency snapshot mismatch]]

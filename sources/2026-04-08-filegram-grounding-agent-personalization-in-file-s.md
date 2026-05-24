@@ -119,3 +119,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/verification-agent-interposition.md|verification agent interposition]]
+
+---
+**관련**: [[concepts/algorithm-system-boundary-collapse.md|algorithm system boundary collapse]]

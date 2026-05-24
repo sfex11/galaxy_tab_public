@@ -107,3 +107,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/skill-curation-as-learning.md|skill curation as learning]]
+
+---
+**관련**: [[concepts/harness-subject-internalization.md|harness subject internalization]]

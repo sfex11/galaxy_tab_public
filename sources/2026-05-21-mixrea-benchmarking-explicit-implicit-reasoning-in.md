@@ -15,9 +15,9 @@ LLM 평가의 '명시적 성능'과 '은연적 이해'를 분리 불가능하게
 
 MixRea는 인지 심리학의 **주의적 맹점(inattentional blindness)** — 명시적 자극이 암시적 맥락을 억압한다는 인지적 한계 — 를 LLM 평가에 도입한다. LLM이 사람 선호 코퍼스에 내재된 주의 편향으로 학습되었기 때문에, 명시적 지시가 있는 상황에서도 은연적 맥락이 중요한 맥락을 무시하는 현상이 인간의 주의적 맹점과 구조적으로 동형적임을 제안한다.
 
-이는 기존 [[reasoning-integrity]]에 새로운 차원을 추가한다. 추론 무결성이 논리적 타당성뿐 아니라 **주의적 완전성** 차원에서도 평가되어야 함을 시사한다. ceiling-performance-prorupt과도 직접 연결된다 — 기존 벤치마크가 명시적 지시만을 측정하므로 은연적 차원의 실패를 포착하지 못하는 구조적 누락이다.
+이는 기존 [[concepts/reasoning-integrity.md|reasoning integrity]]에 새로운 차원을 추가한다. 추론 무결성이 논리적 타당성뿐 아니라 **주의적 완전성** 차원에서도 평가되어야 함을 시사한다. ceiling-performance-prorupt과도 직접 연결된다 — 기존 벤치마크가 명시적 지시만을 측정하므로 은연적 차원의 실패를 포착하지 못하는 구조적 누락이다.
 
-[[shortcut-learning]]과의 관계도 흥미롭다. 주의적 맹점이 shortcut-learning의 한 특수 형태로, 명시적 큐에에 대한 과도 의존이 은연적 큐에에 대한 무시로 구현됨을 보여준다. MixRea는 이 메커니즘을 벤치마크로 포착 가능하게 만든다는 점에서, 기존 adversarial-problem-generation 계열(MathDuels, VHG 등)이 놓친 '난이도' 축에 '주의 편향' 축이라는 새로운 적대적 차원을 제안한다.
+[[concepts/shortcut-learning.md|shortcut learning]]과의 관계도 흥미롭다. 주의적 맹점이 shortcut-learning의 한 특수 형태로, 명시적 큐에에 대한 과도 의존이 은연적 큐에에 대한 무시로 구현됨을 보여준다. MixRea는 이 메커니즘을 벤치마크로 포착 가능하게 만든다는 점에서, 기존 adversarial-problem-generation 계열(MathDuels, VHG 등)이 놓친 '난이도' 축에 '주의 편향' 축이라는 새로운 적대적 차원을 제안한다.
 
 ## 🏷️ 엔티티
 

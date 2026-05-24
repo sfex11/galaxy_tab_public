@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-axis-bottleneck.md|dual axis bottleneck]]
+
+---
+**관련**: [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]

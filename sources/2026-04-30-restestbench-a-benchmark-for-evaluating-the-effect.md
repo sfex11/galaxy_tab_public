@@ -70,3 +70,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/vote-cancellation-effect.md|vote cancellation effect]]
+
+---
+**관련**: [[concepts/seesaw-effect.md|seesaw effect]]

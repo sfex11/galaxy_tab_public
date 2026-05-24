@@ -238,3 +238,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/generation-reward-hacking.md|generation reward hacking]]
+
+---
+**관련**: [[concepts/dynamic-translation-layer.md|dynamic translation layer]]

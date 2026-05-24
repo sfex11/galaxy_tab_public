@@ -62,3 +62,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/scientific-finding-reproducibility.md|scientific finding reproducibility]]
+
+---
+**관련**: [[concepts/fidelity-safety-inverse-alignment.md|fidelity safety inverse alignment]]

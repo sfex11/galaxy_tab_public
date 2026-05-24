@@ -56,3 +56,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/alignment-base-opacity.md|alignment base opacity]]
+
+---
+**관련**: [[concepts/activation-steering.md|activation steering]]

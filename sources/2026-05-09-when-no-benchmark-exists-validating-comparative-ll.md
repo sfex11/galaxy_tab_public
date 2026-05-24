@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/geospatial-contract.md|geospatial contract]]
+
+---
+**관련**: [[entities/sdb-contract.md|sdb contract]]

@@ -99,3 +99,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/problem-validity-verification.md|problem validity verification]]
+
+---
+**관련**: [[concepts/representation-space-tool-verification.md|representation space tool verification]]

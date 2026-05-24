@@ -88,3 +88,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/self-sufficient-architecture.md|self sufficient architecture]]
+
+---
+**관련**: [[concepts/adaptive-control-hierarchy.md|adaptive control hierarchy]]

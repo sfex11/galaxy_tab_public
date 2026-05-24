@@ -61,3 +61,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/predictability-driven-serving.md|predictability driven serving]]
+
+---
+**관련**: [[entities/stochastic-deterministic-boundary.md|stochastic deterministic boundary]]

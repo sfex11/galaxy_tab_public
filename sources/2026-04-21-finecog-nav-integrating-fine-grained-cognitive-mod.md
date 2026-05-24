@@ -76,3 +76,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cognitive-architecture-translation-gap.md|cognitive architecture translation gap]]
+
+---
+**관련**: [[concepts/perception-cognitive-capacity-mismatch.md|perception cognitive capacity mismatch]]

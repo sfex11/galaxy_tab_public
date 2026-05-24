@@ -63,3 +63,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/spectrum-of-internalized-adaptation.md|spectrum of internalized adaptation]]
+
+---
+**관련**: [[concepts/adaptation-axis-misalignment.md|adaptation axis misalignment]]

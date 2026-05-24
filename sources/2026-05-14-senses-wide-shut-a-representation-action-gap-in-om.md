@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/post-rendering-failure-detection.md|post rendering failure detection]]
+
+---
+**관련**: [[entities/citation-claim-decoupling.md|citation claim decoupling]]

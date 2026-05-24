@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/geometric-collapse.md|geometric collapse]]
+
+---
+**관련**: [[concepts/gap-manifestation-condition.md|gap manifestation condition]]
