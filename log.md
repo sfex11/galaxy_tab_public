@@ -1065,3 +1065,16 @@
 ## [2026-05-24 18:05] lint | Wiki 건전성 체크
 - Issues: 1143개
 - Orphans: 273, Missing: 870, Contradictions: 0
+
+## [2026-05-25 02:33] llm-ingest | 8편 분석, 엔티티 317개, 개념 945개
+- 2026-05-25-awarevln-reasoning-with-self-awareness-for-vision-.md
+- 2026-05-25-remember-to-be-curious-episodic-context-and-persis.md
+- 2026-05-25-moss-self-evolution-through-source-level-rewriting.md
+- 2026-05-25-lcguard-latent-communication-guard-for-safe-kv-sha.md
+- 2026-05-25-deltabox-scaling-stateful-ai-agents-with-milliseco.md
+- 2026-05-25-advancing-mathematics-research-with-ai-driven-form.md
+- 2026-05-25-segcompass-exploring-interpretable-alignment-with-.md
+- 2026-05-25-beyond-temperature-hyperfitting-as-a-late-stage-ge.md
+
+## [2026-05-25 06:05] llm-ingest | 1편 분석, 엔티티 319개, 개념 946개
+- 2026-05-25-vector-policy-optimization-training-for-diversity-.md
