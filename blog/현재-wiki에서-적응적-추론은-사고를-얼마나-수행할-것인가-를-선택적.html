@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생각의 지도를 다시 그리다 — 적응적 추론의 다음 차원</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --light-line: rgba(44,40,37,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* 배경 질감 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(194,112,62,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(91,124,153,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(107,158,122,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .article-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  /* 네비게이션 */
+  .nav-bar {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--light-line);
+  }
+  .nav-bar a {
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  .nav-bar a:hover {
+    background: rgba(194,112,62,0.08);
+  }
+
+  /* 헤더 영역 */
+  .article-header {
+    margin: 48px 0 40px;
+    text-align: left;
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(28px, 5.5vw, 44px);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .article-subtitle {
+    font-size: clamp(15px, 2.2vw, 19px);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
+    margin: 48px 0;
+  }
+
+  /* 섹션 */
+  .section {
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(22px, 3.8vw, 30px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .section p {
+    margin-bottom: 18px;
+    color: #3d3833;
+  }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 24px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    font-size: clamp(14px, 2vw, 17px);
+    color: #4a433d;
+    line-height: 1.75;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: clamp(12px, 1.6vw, 14px);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: 0 2px 16px rgba(44,40,37,0.05), 0 0.5px 2px rgba(44,40,37,0.04);
+    backdrop-filter: blur(4px);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(17px, 2.8vw, 21px);
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 14px;
+  }
+
+  /* 표 */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 480px;
+  }
+  thead th {
+    background: rgba(194,112,62,0.07);
+    color: var(--fg);
+    font-weight: 700;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--light-line);
+    color: #3d3833;
+    vertical-align: top;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  tbody tr.highlight-row {
+    background: rgba(194,112,62,0.05);
+  }
+  tbody tr.highlight-row td:first-child {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* 강조 텍스트 */
+  .em-accent {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .em-blue {
+    color: var(--blue);
+    font-weight: 700;
+  }
+  .em-green {
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* 비유 박스 */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(107,158,122,0.06) 0%, rgba(91,124,153,0.06) 100%);
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 24px;
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--green), var(--blue));
+  }
+  .metaphor-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .metaphor-box p {
+    color: #3d3833;
+    margin-bottom: 10px;
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.8;
+  }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* 연결 카드 그룹 */
+  .connection-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  @media (min-width: 600px) {
+    .connection-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .connection-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 1px 8px rgba(44,40,37,0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .connection-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(44,40,37,0.08);
+  }
+  .connection-card .cc-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .connection-card:nth-child(1) .cc-num { color: var(--accent); }
+  .connection-card:nth-child(2) .cc-num { color: var(--blue); }
+  .connection-card:nth-child(3) .cc-num { color: var(--green); }
+  .connection-card .cc-title {
+    font-weight: 700;
+    font-size: clamp(14px, 2vw, 16px);
+    color: var(--fg);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .connection-card .cc-desc {
+    font-size: clamp(13px, 1.8vw, 14.5px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* 결론 박스 */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06) 0%, rgba(194,112,62,0.02) 100%);
+    border: 1px solid rgba(194,112,62,0.18);
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .conclusion-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue), var(--green));
+  }
+  .conclusion-box .section-title {
+    margin-bottom: 16px;
+  }
+  .conclusion-box p {
+    margin-bottom: 14px;
+  }
+  .conclusion-box p:last-child { margin-bottom: 0; }
+
+  /* 푸터 */
+  .article-footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--light-line);
+    text-align: center;
+  }
+  .article-footer p {
+    font-size: clamp(12px, 1.6vw, 13px);
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .article-footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .article-footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* 키워드 태그 */
+  .keyword-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .keyword {
+    font-size: clamp(11px, 1.4vw, 12px);
+    padding: 4px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--light-line);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* 리스트 스타일 */
+  .section ul, .section ol {
+    padding-left: 20px;
+    margin-bottom: 18px;
+    color: #3d3833;
+  }
+  .section li {
+    margin-bottom: 8px;
+    line-height: 1.75;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 40px;
+    box-shadow: 0 1px 8px rgba(44,40,37,0.04);
+  }
+  .toc-title {
+    font-size: clamp(12px, 1.6vw, 13px);
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc-counter;
+  }
+  .toc ol li {
+    counter-increment: toc-counter;
+    margin-bottom: 6px;
+  }
+  .toc ol li::before {
+    content: counter(toc-counter) ".";
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 8px;
+    font-size: clamp(13px, 1.8vw, 15px);
+  }
+  .toc a {
+    color: var(--fg);
+    text-decoration: none;
+    font-size: clamp(14px, 2vw, 15.5px);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .toc a:hover {
+    color: var(--accent);
+  }
+
+  /* 스크롤 프로그레스 바 */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    z-index: 9999;
+    width: 0%;
+    transition: width 0.05s linear;
+  }
+
+  /* 리드 문단 강조 */
+  .lead {
+    font-size: clamp(16px, 2.5vw, 20px);
+    line-height: 1.75;
+    color: #3d3833;
+    font-weight: 400;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="article-wrapper">
+
+  <nav class="nav-bar" aria-label="사이트 내비게이션">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <header class="article-header">
+    <span class="article-tag">적응적 추론 · 파라다임 전환</span>
+    <h1 class="article-title">생각의 지도를 다시 그리다</h1>
+    <p class="article-subtitle">계산량을 조절하는 것만으로는 부족하다. CopT가 던지는 질문은 더 근본적이다—사고와 행동 사이의 위상 자체를 어떻게 설계할 것인가.</p>
+  </header>
+
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#sec1">적응적 추론, 지금까지의 이야기</a></li>
+      <li><a href="#sec2">CopT가 부수는 전제: 생각은 답의 전제가 아니다</a></li>
+      <li><a href="#sec3">위상이라는 단어가 의미하는 것</a></li>
+      <li><a href="#sec4">세 가지 교차점에서 보는 파급력</a></li>
+      <li><a href="#sec5">패러다임을 전환해야 하는 이유</a></li>
+    </ol>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 섹션 1 -->
+  <section class="section" id="sec1">
+    <span class="section-label">Section 01</span>
+    <h2 class="section-title">적응적 추론, 지금까지의 이야기</h2>
+
+    <p class="lead">적응적 추론(Adaptive Inference)이라는 말을 처음 들으면, 대부분의 사람은 "어려운 문제에는 더 많이 생각하고, 쉬운 문제에는 빨리 답하는 기술"을 떠올린다. 맞다. 그게 지금까지의 핵심이었다.</p>
+
+    <p>Wiki에서 이 개념은 <span class="em-accent">SpecKV</span>의 기여를 중심으로 구조화되어 있다. 스펙트럼을 따라가 보자. 처음에는 <span class="em-blue">모델 라우팅</span>이었다—어떤 문제냐에 따라 큰 모델에 보낼지 작은 모델에 보낼지 결정하는 것. 이어서 <span class="em-blue">추측 디코딩 길이(γ) 선택</span>이 추가되었다. SpecKV는 이를 한 단계 더 밀어붙여, 외부 환경에 반응하던 적응을 <span class="em-accent">압축이라는 내부 시스템 상태에 반응하는 적응</span>이라는 새로운 유형으로 제시했다.</p>
+
+    <p>하지만 이 모든 확장의 방향을 한 줄로 요약하면 하나로 귀결된다.</p>
+
+    <blockquote>
+      "얼마나 많은 계산을 할 것인가(How much)"
+      <cite>— 기존 적응적 추론의 유일한 축</cite>
+    </blockquote>
+
+    <p>γ를 크게 할 것인가 작게 할 것인가, 어느 모델로 라우팅할 것인가. 모두 <span class="em-accent">계산 예산의 분배 문제</span>다. 마치 식당 주방에서 "이 요리에는 불을 얼마나 강하게 쓸 것인가"를 결정하는 것과 같다. 중요한 질문이긴 하지만, 요리의 구조 자체—전채를 먼저 내놓을 것인가, 메인과 함께 내놓을 것인가—를 묻지는 않는다.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>단계</th>
+            <th>결정 단위</th>
+            <th>축</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>모델 라우팅</td>
+            <td>어느 모델을 쓸 것인가</td>
+            <td>계산 예산 분배</td>
+          </tr>
+          <tr>
+            <td>γ 선택 (SpecKV)</td>
+            <td>추측을 얼마나 길게 할 것인가</td>
+            <td>계산 예산 분배</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>CopT</td>
+            <td>사고와 행동을 어떤 위상으로 배치할 것인가</td>
+            <td>구조적 위상 선택</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>이 표의 마지막 행이 이 글 전체의 핵심이다. CopT 이전과 이후를 가르는 경계선이 바로 여기에 있다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section" id="sec2">
+    <span class="section-label">Section 02</span>
+    <h2 class="section-title">CopT가 부수는 전제: 생각은 답의 전제가 아니다</h2>
+
+    <p>우리는 "생각하고 나서 답한다"는 것을 당연하게 여긴다. Chain-of-Thought(CoT)의 기본 전제가 바로 이것이다. 먼저 생각의 사슬을 생성하고, 그 끝에 정답이 나온다. 순차적이다. 선형적이다. <span class="em-accent">생각은 답의 prerequisite(전제 조건)</span>이다.</p>
+
+    <blockquote>
+      "the common CoT paradigm treats thinking as a prerequisite for answering"
+      <cite>— CopT 논문 중</cite>
+    </blockquote>
+
+    <p>CopT는 이 전제를 정면으로 해체한다. 사고를 응답의 전제가 아니라, <span class="em-blue">대조적 인터리빙(contrastive interleaving)</span>으로 재구성한다. 쉽게 말해, 생각과 행동이 "먼저 생각→나중 행동"이라는 일직선이 아니라, 연속 공간 위에서 <span class="em-accent">교차 편직</span>되는 구조가 된다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">직관적 비유</div>
+      <p>기존 CoT은 <strong>지하철 노선도</strong>와 같다. A역(생각 시작)에서 B역(생각 끝)까지 선을 따라 순서대로 가야 하고, B역에 도착해야만 비로소 출구(답변)로 나갈 수 있다.</p>
+      <p>CopT의 대조적 인터리빙은 <strong>편물질(weaving)</strong>과 같다. 실 하나가 사고이고 다른 실 하나가 행동이다. 두 실이 교차하며 천을 만들어간다. 어느 순간 "생각 끝났으니 이제 행동해"라는 경계가 존재하지 않는다. 천의 질감 전체가 곧 답이다.</p>
+    </div>
+
+    <p>이것은 단순히 "사고 토큰을 몇 개 더 생성할 것인가"의 문제가 아니다. 그건 여전히 같은 지하철 노선에서 역을 몇 개 더 추가하는 것에 불과하다. CopT가 묻는 것은 <span class="em-accent">사고와 응답 사이의 위상적 관계 자체를 어떻게 결정할 것인가</span>다.</p>
+
+    <p>다시 말해, 동일한 계산 예산 내에서도 사고와 행동의 배치 구조를 어떻게 하느냐에 따라 추론의 질이 달라진다는 발견이다. 이것이 적응적 추론의 결정 단위를 "계산량"에서 "인지 구조"로 확장하는 순간이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section" id="sec3">
+    <span class="section-label">Section 03</span>
+    <h2 class="section-title">위상이라는 단어가 의미하는 것</h2>
+
+    <p>"위상(topology)"이라는 용어가 등장하면 추상적으로 느껴질 수 있다. 여기서 위상이란, <span class="em-blue">요소들 사이의 연결 구조와 순서 관계</span>를 의미한다. 같은 재료(사고 토큰 + 행동 토큰)를 써도, 그것들을 어떤 순서로, 어떤 패턴으로 연결하느냐에 따라 전혀 다른 결과물이 나온다.</p>
+
+    <div class="card">
+      <div class="card-title">두 가지 위상의 비교</div>
+      <p><span class="em-accent">순차적 위상 (기존 CoT):</span> [생각₁ → 생각₂ → 생각₃ → 답변] — 일직선. 생각의 길이만 조절 가능. 끝에 도달해야만 답변이 나온다.</p>
+      <p style="margin-top:14px;"><span class="em-blue">인터리빙 위상 (CopT):</span> [생각₁ → 행동₁ → 생각₂ → 행동₂ → …] — 교차 구조. 생각과 행동이 연속 공간 상에서 대조적으로 배치된다. 경계가 모호해지고, 전체 패턴이 곧 추론 결과다.</p>
+    </div>
+
+    <p>SpecKV가 적응의 <span class="em-green">반응 대상</span>을 "외부 환경 → 내부 압축 상태"로 확장했다면, CopT는 적응의 <span class="em-accent">결정 대상 자체</span>를 "계산량 → 인지 구조"로 확장한다. 이 차이를 놓치면 CopT의 기여를 제대로 읽을 수 없다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">직관적 비유</div>
+      <p>건축에 비유하자. 기존 적응적 추론은 "이 건물에는 벽돌을 몇 장 쓸 것인가"를 결정하는 공사 감리다. 중요한 질문이지만, 건물의 형태를 바꾸지는 않는다.</p>
+      <p>CopT는 "이 건물의 평면도 자체를 어떻게 그릴 것인가"를 묻는 건축가다. 같은 벽돌 1만 장을 써도, 평면도에 따라 교회가 될 수도 있고 미로가 될 수도 있다.</p>
+    </div>
+
+    <p>이 관점에서 보면, 기존 adaptive-inference가 "같은 위상 내에서의 예산 분배"라면, CopT는 <span class="em-accent">"어떤 위상을 선택할 것인가"라는 메타-결정</span>을 도입한 셈이다. 메타-결정이라는 말은, 계산량 조절이라는 1차 결정 위에 그 결정의 구조 자체를 고르는 2차 결정이 얹혀 있다는 뜻이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section" id="sec4">
+    <span class="section-label">Section 04</span>
+    <h2 class="section-title">세 가지 교차점에서 보는 파급력</h2>
+
+    <p>이 확장이 단지 CopT 논문 하나에 갇혀 있는 이야기가 아님을 보여주는 것이, Wiki 내의 다른 엔티티들과 만들어내는 교차점들이다. 세 가지를 짚어보자.</p>
+
+    <div class="connection-grid">
+      <div class="connection-card">
+        <div class="cc-num">01</div>
+        <div class="cc-title">에이전트 루프를 계산으로 보는 관점과의 만남</div>
+        <div class="cc-desc">agent-loop-as-computation은 에이전트 루프 전체를 하나의 계산 과정으로 conceptualize한다. CopT의 대조적 인터리빙은 이 루프 내부에서 사고와 행동의 위상을 적응적으로 재구성하는 것이며, 이는 곧 계산 구조 자체를 동적으로 변형하는 것과 동치다.</div>
+      </div>
+      <div class="connection-card">
+        <div class="cc-num">02</div>
+        <div class="cc-title">action-binding의 결합 패턴 재배열</div>
+        <div class="cc-desc">사고-행동의 위상이 변하면, 특정 사고 단계가 어느 행동에 구속되는지의 구조도 변한다. 인터리빙 위상에서는 action-binding의 결합 패턴이 고정된 순서가 아니라 적응적으로 재배열되어야 한다.</div>
+      </div>
+      <div class="connection-card">
+        <div class="cc-num">03</div>
+        <div class="cc-title">agentic-VLM의 간극 문제에 대한 구조적 해답</div>
+        <div class="cc-desc">MLLM 에이전트는 '단계별 판단'과 '다단계 경로 기획' 사이의 간극에 제한받는다. CopT는 "사고를 더 길게 하라"로 해결하지 않고, 사고와 행동의 인터리빙 구조 자체를 재설계함으로써 이 간극을 structural하게 해결하는 경로를 제시한다.</div>
+      </div>
+    </div>
+
+    <p>세 번째 교차점이 특히 중요하다. agentic-VLM의 문제를 "생각이 부족해서"로 진단하면 해결책이 당연히 "더 긴 CoT"가 된다. 하지만 CopT의 관점에서 문제를 진단하면, 해결책이 달라진다. <span class="em-accent">생각의 양이 아니라 생각과 행동의 배치 패턴이 문제</span>라는 진단, 그리고 그 패턴 자체를 재설계하라는 처방.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">직관적 비유</div>
+      <p>길을 잃었을 때, 기존 방식은 "더 오래 걸어서 찾아보자"다. CopT의 방식은 "지도를 보는 방식 자체를 바꾸자"다. 위성 사진을 보는 것과 지하철 노선도를 보는 것의 차이. 같은 시간을 써도 정보의 구조가 완전히 달라진다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section" id="sec5">
+    <span class="section-label">Section 05</span>
+    <h2 class="section-title">패러다임을 전환해야 하는 이유</h2>
+
+    <div class="conclusion-box">
+      <h3 class="section-title" style="font-size:clamp(20px,3.2vw,26px);">결론: 지도를 바꿔야 할 때가 왔다</h3>
+
+      <p>CopT는 적응적 추론의 결정 단위가 <span class="em-accent">'계산량 조절'에서 '사고-행동의 구조적 위상'으로 확장</span>되어야 함을 시사한다. 이것은 선택적 주장이 아니라, 논문이 증명하는 구조적 사실이다.</p>
+
+      <p>기존 패러다임에서 우리는 하나의 질문만 했다: <span class="em-blue">"얼마나"</span>. 얼마나 많은 토큰을, 얼마나 긴 γ를, 얼마나 큰 모델에. CopT 이후로 우리는 두 번째 질문을 던져야 한다: <span class="em-accent">"어떻게"</span>. 사고와 행동을 어떤 구조로 배치할 것인가.</p>
+
+      <p>이 확장은 Wiki의 adaptive-inference 엔티티에 새로운 하위 차원으로 통합될 필요가 있다. 현재는 이 연결이 명시되어 있지 않다. agent-loop-as-computation, action-binding, agentic-VLM과의 교차점들도 마찬가지다. CopT가 연 쇄설의 양끝을 잇는 작업이 아직 남아 있다.</p>
+
+      <p>마지막으로, 이 전환이 실무에서 의미하는 바를 정리하자. 연구자와 엔지니어에게 이것은 다음과 같이 번역된다.</p>
+
+      <ol>
+        <li><strong>벤치마크의 재설계:</strong> 적응적 추론을 평가하는 지표가 "계산량 대비 정확도"에서 "위상 선택의 적절성"으로 확장되어야 한다.</li>
+        <li><strong>아키텍처 설계의 변화:</strong> 라우팅 레이어가 "어느 모델로 보낼 것인가"뿐 아니라 "어떤 인터리빙 패턴을 적용할 것인가"까지 결정하도록 확장되어야 한다.</li>
+        <li><strong>에이전트 프레임워크의 진화:</strong> 고정된 think→act 루프에서, 위상을 동적으로 선택 가능한 루프로의 이전이 필요하다.</li>
+      </ol>
+
+      <p>적응적 추론의 다음 장은 계산 예산의 분배가 아니라, <span class="em-accent">인지 구조의 설계</span>다. 그 지도를 그리기 시작해야 할 때다.</p>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <p>대상 논문: <em>CopT: Contrastive On-Policy Thinking with Continuous Spaces for General and Agentic Reasoning</em></p>
+    <div class="keyword-list">
+      <span class="keyword">적응적 추론</span>
+      <span class="keyword">CopT</span>
+      <span class="keyword">대조적 인터리빙</span>
+      <span class="keyword">구조적 위상</span>
+      <span class="keyword">Chain-of-Thought</span>
+      <span class="keyword">SpecKV</span>
+      <span class="keyword">에이전트 루프</span>
+      <span class="keyword">action-binding</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 프로그레스 바
+  const progressBar = document.getElementById('scrollProgress');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  // 섹션 등장 애니메이션 (IntersectionObserver)
+  const sections = document.querySelectorAll('.section');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    sections.forEach(function(sec) {
+      observer.observe(sec);
+    });
+  } else {
+    // 모션 감소 선호 시 모든 섹션 바로 표시
+    sections.forEach(function(sec) {
+      sec.classList.add('visible');
+    });
+  }
+</script>
+</body>
+</html>
