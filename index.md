@@ -483,3 +483,6 @@
 - [[sources/2026-05-24-advancing-mathematics-research-with-ai-driven-form.md]] - Advancing Mathematics Research with AI-Driven Formal Proof Search
 - [[sources/2026-05-24-segcompass-exploring-interpretable-alignment-with-.md]] - SegCompass: Exploring Interpretable Alignment with Sparse Autoencoders for Enhanced Reasoning Segmentation
 - [[sources/2026-05-24-beyond-temperature-hyperfitting-as-a-late-stage-ge.md]] - Beyond Temperature: Hyperfitting as a Late-Stage Geometric Expansion
+- [[sources/2026-05-26-etchr-editing-to-clarify-and-harness-reasoning.md]] - ETCHR: Editing To Clarify and Harness Reasoning
+- [[sources/2026-05-26-chronos-temporally-aware-multi-agent-coordination-.md]] - CHRONOS: Temporally-Aware Multi-Agent Coordination for Evolving Data Marketplaces
+- [[sources/2026-05-26-decomposing-queries-into-tool-calls-for-long-video.md]] - Decomposing Queries into Tool Calls for Long-Video Keyframe Retrieval

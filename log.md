@@ -1078,3 +1078,17 @@
 
 ## [2026-05-25 06:05] llm-ingest | 1편 분석, 엔티티 319개, 개념 946개
 - 2026-05-25-vector-policy-optimization-training-for-diversity-.md
+
+## [2026-05-26 08:17] llm-ingest | 6편 분석, 엔티티 324개, 개념 953개
+- 2026-05-26-skillopt-executive-strategy-for-self-evolving-agen.md
+- 2026-05-26-llms-as-noisy-channels-a-shannon-perspective-on-mo.md
+- 2026-05-26-human-decision-making-with-persuasive-and-narrativ.md
+- 2026-05-26-from-raw-experience-to-skill-consumption-a-systema.md
+- 2026-05-26-sfg-ros-a-resource-aware-framework-for-dense-multi.md
+- 2026-05-26-advanced-ai-service-provisioning-in-o-ran-through-.md
+
+## [2026-05-26 08:35] ingest | ETCHR: Editing To Clarify and Harness Reasoning
+
+## [2026-05-26 08:35] ingest | CHRONOS: Temporally-Aware Multi-Agent Coordination for Evolving Data Marketplaces
+
+## [2026-05-26 08:35] ingest | Decomposing Queries into Tool Calls for Long-Video Keyframe Retrieval
