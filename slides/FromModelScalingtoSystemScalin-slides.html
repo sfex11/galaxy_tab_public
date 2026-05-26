@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Model Scaling to System Scaling: Scaling the Harness in — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem)" class="muted">arXiv:2605.26112v1 · UC Berkeley</p>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);margin-top:0.5em;line-height:1.25">모델 스케일링에서 시스템 스케일링으로:<br>에이전트 AI에서 하네스 스케일링하기</h1>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.3rem);margin-top:1em" class="muted">From Model Scaling to System Scaling: Scaling the Harness in Agentic AI</p>
+    <div class="hr" style="margin-top:2em"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem)">Shangding Gu</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-amber">핵심 주장</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">에이전트 AI의 다음 병목은<br>모델이 아니라 <span class="accent">시스템</span>이다</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:1em;line-height:1.7">파운데이션 모델이 도구, 터미널, 브라우저, 메모리 저장소, 외부 서비스에 내장되면, 행동은 모델 단독으로 결정되지 않는다. <span class="accent">모델을 둘러싼 시스템</span>이 어떻게 설계되었느냐에 따라 결정된다.</p>
+    <div class="grid-2" style="margin-top:1.5em">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem)" class="muted">모델 스케일링</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:0.5em;line-height:1.6">모델 크기, 학습 데이터, 파인튜닝, 원시 추론 능력 향상</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem)" class="accent">시스템 스케일링</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:0.5em;line-height:1.6">메모리, 컨텍스트 구성, 스킬 라우팅, 오케스트레이션, 검증·거버넌스 설계 향상</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-green">개념 정의</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">하네스(Harness)란 무엇인가</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">파운데이션 모델의 능력을 <span class="accent">장기 수평 에이전트 행동</span>으로 변환하는 구조화된 실행 계층</p>
+    <div class="quote-block" style="margin-top:1.2em">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);line-height:1.7">"에이전트 성능은 파운데이션 모델, 메모리 기질, 컨텍스트 생성자, 스킬 라우팅 계층, 오케스트레이션 루프, 검증·거버넌스 계층 간의 <span class="accent">상호작용</span>에서 출현한다."</p>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1em;line-height:1.6" class="muted">즉, 흔히 "모델 점수"라 보고하는 것은 실제로는 <span class="accent2">모델+하네스 점수</span>이다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-amber">구조</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">하네스의 구성 요소</h2>
+    <div class="pipeline" style="margin-top:1.2em">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">파운데이션 모델</div>
+        <div class="step-desc">추론 엔진</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">컨텍스트 생성자</div>
+        <div class="step-desc">프롬프트 구성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">메모리 기질</div>
+        <div class="step-desc">저장·검색</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">스킬 라우팅</div>
+        <div class="step-desc">도구·서브에이전트</div>
+      </div>
+    </div>
+    <div class="pipeline" style="margin-top:0.8em">
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">오케스트레이션 루프</div>
+        <div class="step-desc">실행 흐름 제어</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">6</div>
+        <div class="step-label">검증·거버넌스</div>
+        <div class="step-desc">감사·안전</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5em"></div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem)" class="muted">이 구성 요소들이 <span class="accent">시간적 계층(Temporal Layers)</span>으로 작동: 프롬프트(단기) → 스킬(중기) → 메모리(장기)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-red">병목</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">시스템 스케일링의 세 가지 핵심 병목</h2>
+    <div class="grid-3" style="margin-top:1.5em">
+      <div class="card">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.3em">컨텍스트 거버넌스</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);margin-top:0.5em;line-height:1.6">무엇을 검색·압축·정렬·갱신·신뢰할 것인가? 긴 컨텍스트가 정보 접근을 보장하지 않음</p>
+      </div>
+      <div class="card">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.3em">신뢰할 수 있는 메모리</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);margin-top:0.5em;line-height:1.6">무엇을 저장·폐기할 것인가? 오래됨, 드리프트, 오염, 과일반화를 어떻게 방지할 것인가?</p>
+      </div>
+      <div class="card">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.3em">동적 스킬 라우팅</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);margin-top:0.5em;line-height:1.6">이종 서브에이전트 간 스킬을 어떻게 라우팅하고 검증할 것인가?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-amber">병목 1</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">컨텍스트 거버넌스</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">프롬프트 엔지니어링은 국소적 제어에 유용하지만, 장기 수평 성능은 <span class="accent">규율 있는 컨텍스트 구성</span>에 달려 있다.</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)" class="accent2">문제 현상</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>긴 컨텍스트에서 주의력 희석</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시작과 끝의 증거만 선호 (Lost in the Middle)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컨텍스트 윈도우 확대가 효율적 접근을 보장하지 않음</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)" class="accent3">거버넌스 질문</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>각 단계에서 무엇을 검색할 것인가?</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>어떤 순서로 배치할 것인가?</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>언제 갱신하고 언제 신뢰할 것인가?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-amber">병목 2</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">신뢰할 수 있는 메모리</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">메모리는 단순한 저장 계층이 아니다. 더 어려운 문제는 <span class="accent">메모리 품질</span>이다.</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)">핵심 결정</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무엇을 저장할 것인가?</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무엇을 폐기할 것인가?</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>적시에 올바른 정보를 어떻게 검색할 것인가?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)" class="accent">방어해야 할 실패 모드</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">오래됨(Staleness)</span> — 과거 정보의 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">드리프트(Drift)</span> — 점진적 의미 변화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">오염(Contamination)</span> — 잘못된 정보 혼입</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">과일반화</span> — 맥락 없는 추상화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-amber">병목 3</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">동적 스킬 라우팅과 검증</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">스킬과 서브에이전트의 <span class="accent">존재</span>가 아니라, 이종 환경에서 <span class="accent">라우팅과 검증</span>이 핵심 병목이다.</p>
+    <div class="flow-item" style="margin-top:1.2em">
+      <div class="flow-icon"><i class="fas fa-cogs"></i></div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>스킬 계층</strong> — 재사용 가능한 행동을 프롬프트에서 내구성 있는 호출 가능 컴포넌트로 분리</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:0.6em">
+      <div class="flow-icon"><i class="fas fa-route"></i></div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>라우팅 문제</strong> — 어떤 스킬/서브에이전트를 언제 호출할 것인가? 불확실성 공유가 필수</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:0.6em">
+      <div class="flow-icon"><i class="fas fa-shield-alt"></i></div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>검증 문제</strong> — 서브에이전트 출력을 어떻게 검증하고 오케스트레이터가 최종 책임을 유지할 것인가?</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1em" class="muted">다중 에이전트는 너비 우선 태스크에서 단일 에이전트를 능가하지만, 단일 에이전트 메트릭이 놓치는 <span class="accent2">조정 실패</span>를 도입한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-green">실증적 근거</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">왜 모델만으로 충분하지 않은가</h2>
+    <table class="compare-table" style="margin-top:1.2em">
+      <thead>
+        <tr>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">증거</th>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">발견</th>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">시사점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">SWE-agent (Yang et al.)</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">도구 스키마 재설계만으로 벤치마크 정확도 대폭 향상</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">모델 고정, 하네스만 변경</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">Kapoor et al.</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">비용·프롬프트 전략 통제 시 많은 결과가 비파레토 최적</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">능력과 비용 분리 필요</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">τ-bench</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">단일 샷 통과율은 높으나 pass^k에서 붕괴</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">신뢰성 갭 은폐</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">GAIA, Terminal-Bench</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">원샷 프롬프팅 → 다단계 상호작용 시 성능 저하</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">시스템 설계의 중요성</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-green">평가 패러다임</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">결과 메트릭에서 <span class="accent">과정 메트릭</span>으로</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">현재 평가는 에이전트를 최종 태스크 성공이나 벤치마크 정확도로 환원한다. 이는 부적절하다.</p>
+    <div class="grid-2" style="margin-top:1.2em">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)" class="muted">기존: 결과 메트릭</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>원샷 태스크 성공률</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>벤치마크 정확도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>최종 출력 품질</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem)" class="accent">제안: 과정 메트릭</h3>
+        <ul class="check-list" style="margin-top:0.5em">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>궤적 질 (Trajectory Quality)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>메모리 위생 (Memory Hygiene)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컨텍스트 효율성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>통신 충실도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증 비용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시간 경과에 따른 안전 진화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-green">평가 패러다임</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">단일 에피소드에서 <span class="accent2">종단적 평가</span>로</h2>
+    <div class="flow-item" style="margin-top:1.2em">
+      <div class="flow-icon">1</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>단일 에피소드 평가</strong> — 한 번의 실행으로 판단. 신뢰성 갭을 은폐함</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:0.6em">
+      <div class="flow-icon">2</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>반복 롤아웃 평가</strong> — pass^k: k회 독립 실행 시 성공 확률 측정. 신뢰성 갭 노출</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:0.6em">
+      <div class="flow-icon">3</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.2rem)"><strong>종단적 평가 (Longitudinal)</strong> — 시간 경과에 따른 에이전트 진화 추적: 스킬 업데이트, 메모리 정제, 역할 간 통신, 감사 가능성 유지</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5em"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);line-height:1.6">안전한 에이전트 진화를 위한 <span class="accent3">표준</span>이 필요하다: 에이전트가 시간에 따라 적응하면서도 감사 가능하고 안전하게 유지되는 메커니즘.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-amber">참고 구현</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">CheetahClaws: 레퍼런스 하네스</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:0.8em;line-height:1.7">본 논문의 프레임워크를 구체화하기 위해 <span class="accent">Python 네이티브 참조 하네스</span>를 개발·공개했다.</p>
+    <table class="compare-table" style="margin-top:1.2em">
+      <thead>
+        <tr>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">특징</th>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">CheetahClaws</th>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">Claude Code</th>
+          <th style="font-size:clamp(0.85rem,1.4vw,1.05rem)">OpenClaw</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">성격</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">연구용 레퍼런스</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">상용 프로덕션</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">상용 프로덕션</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">목적</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">하네스 설계 선택을 명시적으로 비교</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">코딩 에이전트 실행</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">코딩 에이전트 실행</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">비교 방식</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)" class="accent">시스템 스케일링 변수 관점</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">—</td>
+          <td style="font-size:clamp(0.8rem,1.3vw,1rem)">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-red">반론 검토</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">대안적 관점과 한계</h2>
+    <div class="grid-3" style="margin-top:1.2em">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem)" class="muted">반론 1</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:0.4em;line-height:1.6">"더 강한 모델이 결국 시스템 문제를 해결할 것이다"</p>
+        <div class="hr" style="margin:0.6em 0"></div>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.5" class="accent">능력 임계점 이후에서는 시스템 설계가 더 큰 한계를 결정함</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem)" class="muted">반론 2</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:0.4em;line-height:1.6">"엔드투엔드 학습이 모듈식 시스템을 대체할 것이다"</p>
+        <div class="hr" style="margin:0.6em 0"></div>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.5" class="accent">감사 가능성·모듈성·진화 가능성은 모듈식 설계의 고유 장점</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem)" class="muted">반론 3</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:0.4em;line-height:1.6">"시스템 수준 평가는 너무 비싸고 환경 의존적이다"</p>
+        <div class="hr" style="margin:0.6em 0"></div>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.5" class="accent">과정 메트릭은 환경에 덜 의존적이며, 레퍼런스 하네스로 비용 절감 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <span class="tag tag-green">결론</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);margin-top:0.6em">핵심 메시지</h2>
+    <div class="quote-block" style="margin-top:1.2em">
+      <p style="font-size:clamp(1rem,1.8vw,1.3rem);line-height:1.7">에이전트 AI의 미래 진보는 <span class="accent">더 강한 파운데이션 모델</span>만큼 <span class="accent">시스템 설계</span>에 달려 있다.</p>
+    </div>
+    <ul class="check-list" style="margin-top:1.5em">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>하네스를 일급 설계·평가·최적화 객체로 취급하라</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>컨텍스트 거버넌스, 신뢰 메모리, 동적 스킬 라우팅을 핵심 병목으로 연구하라</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>결과 메트릭에서 과정·종단적 메트릭으로 평가를 전환하라</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>감사 가능하고 모듈식이며 진화 가능한 아키텍처를 우선하라</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div class="hr"></div>
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-top:1em">From Model Scaling to System Scaling:<br>Scaling the Harness in Agentic AI</h2>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-top:1em" class="muted">Shangding Gu · UC Berkeley</p>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);margin-top:0.8em"><i class="fas fa-file-alt"></i> arXiv: <a href="http://arxiv.org/abs/2605.26112v1" class="accent2">2605.26112v1</a></p>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);margin-top:0.5em"><i class="fas fa-code"></i> CheetahClaws: <a href="https://github.com/SafeRL-Lab/cheetahclaws" class="accent2">github.com/SafeRL-Lab/cheetahclaws</a></p>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);margin-top:0.5em"><i class="fas fa-globe"></i> <a href="https://cheetahclaws.github.io" class="accent2">cheetahclaws.github.io</a></p>
+    <div class="hr" style="margin-top:1.5em"></div>
+    <p style="font-size:clamp(0.8rem,1.3vw,1rem)" class="muted">연락처: shangding.gu@berkeley.edu</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
