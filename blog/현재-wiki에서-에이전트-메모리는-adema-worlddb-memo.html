@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI의 기억은 외부 하드디스크가 아니다 — 수면이 제시하는 에이전트 기억의 재정의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgba(194,112,62,0.18);
+    color: #2c2825;
+  }
+
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Header ── */
+  .article-header {
+    padding-top: clamp(40px, 8vw, 80px);
+    padding-bottom: clamp(24px, 4vw, 48px);
+    border-bottom: 1px solid rgba(44,40,37,0.08);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .article-meta {
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 500;
+    color: #c2703e;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 17px);
+    font-weight: 300;
+    color: rgba(44,40,37,0.6);
+    line-height: 1.7;
+  }
+
+  /* ── Sections ── */
+  .section {
+    margin-bottom: clamp(40px, 7vw, 72px);
+  }
+
+  .section-number {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(12px, 1.5vw, 14px);
+    font-weight: 600;
+    color: #c2703e;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.5vw, 30px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(17px, 2.5vw, 22px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: #2c2825;
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+
+  p {
+    margin-bottom: 18px;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 0 16px 24px;
+    font-size: clamp(14px, 2vw, 17px);
+    font-weight: 300;
+    color: rgba(44,40,37,0.75);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0.5px 2px rgba(44,40,37,0.03);
+  }
+
+  .card-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+
+  .card-label.orange {
+    background: rgba(194,112,62,0.1);
+    color: #c2703e;
+  }
+
+  .card-label.blue {
+    background: rgba(91,124,153,0.1);
+    color: #5b7c99;
+  }
+
+  .card-label.green {
+    background: rgba(107,158,122,0.1);
+    color: #6b9e7a;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    font-size: clamp(16px, 2.3vw, 20px);
+    margin-bottom: 10px;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Inline highlights ── */
+  .hl-orange { color: #c2703e; font-weight: 600; }
+  .hl-blue { color: #5b7c99; font-weight: 600; }
+  .hl-green { color: #6b9e7a; font-weight: 600; }
+
+  /* ── Entity tags ── */
+  .entity {
+    display: inline-block;
+    font-size: 0.82em;
+    font-weight: 500;
+    padding: 1px 8px;
+    border-radius: 5px;
+    background: rgba(44,40,37,0.04);
+    border: 1px solid rgba(44,40,37,0.08);
+    color: rgba(44,40,37,0.7);
+    vertical-align: baseline;
+  }
+
+  /* ── Comparison table ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .compare-cell {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 12px;
+    padding: clamp(16px, 2.5vw, 24px);
+    box-shadow: 0 1px 6px rgba(44,40,37,0.03);
+  }
+
+  .compare-cell h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(14px, 2vw, 17px);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .compare-cell.ext h4 { color: #5b7c99; }
+  .compare-cell.int h4 { color: #c2703e; }
+
+  .compare-cell ul {
+    padding-left: 18px;
+    font-size: clamp(13px, 1.8vw, 15px);
+    color: rgba(44,40,37,0.7);
+  }
+
+  .compare-cell ul li {
+    margin-bottom: 6px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 520px) {
+    .compare-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Diagram: Spectrum ── */
+  .spectrum-wrap {
+    margin: 36px 0;
+    padding: 0 8px;
+  }
+
+  .spectrum-bar {
+    position: relative;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #5b7c99, #a0927a, #c2703e);
+    margin: 40px 0 16px;
+  }
+
+  .spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+  }
+
+  .spectrum-labels .left { color: #5b7c99; }
+  .spectrum-labels .right { color: #c2703e; }
+
+  .spectrum-mid {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(44,40,37,0.4);
+    white-space: nowrap;
+  }
+
+  /* ── New connections list ── */
+  .connection-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0;
+  }
+
+  .connection-list li {
+    position: relative;
+    padding: 16px 0 16px 28px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .connection-list li:last-child {
+    border-bottom: none;
+  }
+
+  .connection-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 24px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c2703e;
+    opacity: 0.6;
+  }
+
+  .connection-list .conn-title {
+    font-weight: 600;
+    font-size: clamp(14px, 2vw, 16px);
+    margin-bottom: 4px;
+    color: #2c2825;
+  }
+
+  .connection-list .conn-desc {
+    font-size: clamp(13px, 1.8vw, 15px);
+    color: rgba(44,40,37,0.65);
+    line-height: 1.7;
+  }
+
+  /* ── Conclusion box ── */
+  .conclusion-box {
+    background: rgba(194,112,62,0.04);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 40px);
+    margin: 36px 0;
+  }
+
+  .conclusion-box p {
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+  }
+
+  /* ── Separator ── */
+  .sep {
+    width: 40px;
+    height: 3px;
+    background: rgba(194,112,62,0.25);
+    border-radius: 2px;
+    margin: 40px auto;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.08);
+    padding-top: 24px;
+    padding-bottom: clamp(40px, 8vw, 80px);
+    text-align: center;
+    font-size: 12px;
+    color: rgba(44,40,37,0.35);
+    font-weight: 400;
+  }
+
+  /* ── Fade-in animation ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- Navigation -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="article-header fade-in">
+    <div class="article-meta">Deep Analysis · Agent Memory</div>
+    <h1 class="article-title">AI의 기억은 외부 하드디스크가 아니다</h1>
+    <p class="article-subtitle">"Language Models Need Sleep"이 제시하는 질문 — 에이전트의 장기 기억을 모델 외부가 아니라 내부의 통합-소멸 주기로 재정의해야 하는가?</p>
+  </header>
+
+  <!-- Section 1 -->
+  <section class="section fade-in">
+    <div class="section-number">01</div>
+    <h2>기억을 어디에 둘 것인가 — 서랍에 넣을 것인가, 꿈을 꿀 것인가</h2>
+    <p>
+      우리가 중요한 문서를 정리할 때 두 가지 방식이 있다. 하나는 <span class="hl-blue">철저하게 분류해서 서랍에 넣어두는 것</span>이다. 라벨을 붙이고, 인덱스를 만들고, 필요할 때 꺼내 쓴다. 다른 하나는 그날의 경험을 밤새 뒤척이며 <span class="hl-orange">무의식적으로 재조합하는 것</span>이다. 아침에 일어났을 때는 기억의 윤곽이 바뀌어 있다. 불필요한 것은 흐려지고, 중요한 것은 다른 경험과 연결되어 있다.
+    </p>
+    <p>
+      전자가 현재 에이전트 메모리 연구의 주류 접근법이다. ADEMA, WorldDB, MeMo 같은 시스템은 기억을 모델 외부의 인프라 계층에 저장하고, 검색하고, 조직한다. 모델 자체는 그 서랍을 열어보는 손일 뿐, 기억의 내용을 자기 것으로 만들지는 않는다.
+    </p>
+    <p>
+      그런데 최근 등장한 논문 <em>Language Models Need Sleep</em>은 후자의 방식을 제안한다. 모델 외부에 서랍을 만들지 말고, 모델 <strong>자체가 수면을 통해 컨텍스트를 신경 통합</strong>하자는 것이다. 빠른 가중치(fast weights)라는 메커니즘을 활용해, 축적된 경험을 파라미터 공간 안에서 재조직한다.
+    </p>
+    <blockquote>
+      "트랜스포머 기반 LLM이 장기 호라이즌 태스크에 사용되지만, 어텐션 메커니즘이 컨텍스트 길이에 비례해 확장성이 나쁜 문제를 해결하기 위해 수면 유사 통합(sleep-like consolidation)을 연구한다."
+    </blockquote>
+    <p>
+      이 질문은 단순한 기술적 대안을 넘어선다. 에이전트의 장기 기억 문제를 <span class="hl-orange">"외부 저장소를 어떻게 설계할 것인가"에서 "모델 내부의 통합-소멸 주기를 어떻게 설계할 것인가"로 근본적으로 재정의</span>해야 하는가 하는 문제다. 이 글에서는 그 재정의가 정당한지, 그리고 어떤 형태로 이루어져야 하는지를 세 층위에서 분석한다.
+    </p>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- Section 2 -->
+  <section class="section fade-in">
+    <div class="section-number">02</div>
+    <h2>외부 메모리 패러다임의 성취와 한계</h2>
+    <p>
+      현재 Wiki가 추적하는 에이전트 메모리 설계는 명확하게 모델 외부 인프라에 집중되어 있다. 이 접근법을 이해하려면, 다시 비유로 돌아가자. 거대한 도서관을 운영하는 사서를 상상해보라. 사서는 책의 내용을 외우지 않는다. 대신 <span class="hl-blue">분류 체계를 구축하고, 검색 카드를 만들고, 필요할 때 적절한 책을 꺼내어 독자에게 전달</span>한다.
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-cell ext">
+        <h4>🏛 ADEMA</h4>
+        <ul>
+          <li>"Knowledge-State Orchestration Architecture"</li>
+          <li>기억의 저장·검색·조직을 모델 외부 계층에서 오케스트레이션</li>
+          <li>모델은 블랙박스, 기억은 외부 상태</li>
+        </ul>
+      </div>
+      <div class="compare-cell ext">
+        <h4>🏛 Agora-Opt</h4>
+        <ul>
+          <li>런타임 메모리와 토론 구조 활용</li>
+          <li>다중 에이전트 정렬을 외부 상태 관리로 달성</li>
+          <li>기억을 공유 가능한 외부 아티팩트로 취급</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>
+      이 패러다임의 장점은 분명하다. <span class="hl-blue">공학적으로 실현 가능하다</span>. 모델의 가중치를 건드리지 않고, 검색 증강 생성(RAG)과 벡터 데이터베이스, 그래프 구조를 조합하는 것만으로 상당히 강력한 기억 시스템을 구축할 수 있다. 확장도 용이하다. 저장소 용량이 부족하면 디스크를 추가하면 된다.
+    </p>
+    <p>
+      그러나 이 접근법에는 근본적인 긴장이 있다. 도서관의 비유로 돌아가면, 사서가 아무리 훌륭한 분류 체계를 갖추어도 <strong>책의 내용을 자기 지식으로 소화하지 못한다</strong>는 점이다. 기억이 모델 외부에 남아있는 한, 모델은 매번 그 기억을 "읽어 들여야" 한다. 이는 컨텍스트 윈도우라는 물리적 한계와 직결된다. 어텐션 메커니즘이 컨텍스트 길이에 비례해 계산량이 증가하기 때문이다.
+    </p>
+    <p>
+      더 근본적인 문제가 있다. 외부 메모리에서는 <span class="entity">adaptive-forgetting</span>, 즉 <strong>망각을 적응적 기능으로 설계</strong>하기가 구조적으로 어렵다. 서랍에 넣은 문서는 누군가 지우지 않는 한 그대로 남아 있다. 기억이 정적 저장물이 되어버리는 것이다.
+    </p>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- Section 3 -->
+  <section class="section fade-in">
+    <div class="section-number">03</div>
+    <h2>수면 논문이 제시하는 전환의 본질</h2>
+    <p>
+      인간의 수면을 생각해보자. 우리가 자는 동안 뇌는 밤낮에 수집한 경험을 단순히 파일에 저장하지 않는다. 해마에서 단기 기억으로 들어온 정보를 <span class="hl-orange">대뇌피질의 장기 기억 네트워크와 통합</span>한다. 동시에 불필요한 연결은 약화시킨다. 이것이 "통합-소멸"의 주기다.
+    </p>
+    <p>
+      <em>Language Models Need Sleep</em>은 이 과정을 트랜스포머 내부에서 구현하려 한다. 핵심 메커니즘은 <strong>빠른 가중치(fast weights)</strong>다. 일반적인 트랜스포머는 고정된 가중치를 사용하지만, 빠른 가중치는 컨텍스트에 따라 동적으로 변한다. 논문은 이 동적 가중치 공간에서 수면 유사 통합 과정을 거치면, 장기 호라이즌 태스크의 성능이 향상된다고 보여준다.
+    </p>
+
+    <div class="card">
+      <span class="card-label orange">핵심 메커니즘</span>
+      <h3>빠른 가중치를 통한 신경 통합</h3>
+      <p>
+        컨텍스트가 축적되면 모델은 "수면" 단계에 진입한다. 이 단계에서 빠른 가중치 공간에 분산된 정보가 재조직된다. 중요한 패턴은 더 안정적인 표현으로 통합되고, 노이즈나 일시적 정보는 소멸(extinction)한다. 기억이 입출력 문제가 아니라 <span class="hl-orange">파라미터 공간 내부의 동적 과정</span>이 되는 순간이다.
+      </p>
+    </div>
+
+    <p>
+      이 전환이 파격적인 이유는 기억의 본질을 바꾸기 때문이다. 외부 메모리에서 기억은 <span class="hl-blue">저장된 객체</span>다. 내부 통합에서 기억은 <span class="hl-orange">변화하는 상태</span>다. 마치 사진을 액자에 넣어두는 것과, 경험을 통해 자신의 성격이 조금씩 바뀌는 것의 차이와 같다.
+    </p>
+    <p>
+      특히 주목할 점은 Wiki에 이미 <span class="entity">adaptive-forgetting</span>, <span class="entity">compensatory-memory-dynamics</span> 같은 엔티티가 존재했다는 사실이다. 즉, "기억 = 저장"이라는 단순 모델에서 벗어나 망각을 적응적 기능으로 보아야 한다는 인식은 이미 있었다. 수면 논문은 이 인식에 <strong>구체적 메커니즘</strong>을 부여한 것이다. 망각이 어떻게 일어나야 하는지, 통합이 어떤 형태로 이루어져야 하는지에 대한 실증적 경로를 제시했다.
+    </p>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- Section 4 -->
+  <section class="section fade-in">
+    <div class="section-number">04</div>
+    <h2>치환이 아닌 이중 축 — 세 층위의 정밀 분석</h2>
+    <p>
+      그렇다면 외부 메모리를 내부 통합으로 "교체"해야 하는가? 답은 <strong>부분적으로 그렇지만, 단순 치환은 아니다</strong>다. 이를 세 층위에서 분석해보자.
+    </p>
+
+    <div class="card">
+      <span class="card-label blue">층위 1 — 치환 불가능한 간극</span>
+      <h3>알고리즘-시스템 번역 간극의 양면성</h3>
+      <p>
+        Crab 논문이 <span class="entity">algorithm-system-translation-gap</span>에서 보여준 것처럼, 에이전트의 의미론적 의존 그래프를 OS의 체크포인트 메커니즘으로 번역할 때 비효율이 발생한다. 수면 기반 통합도 동일한 간극에 직면한다. <strong>인지적 수면 메커니즘을 실제 시스템의 훈련/추론 파이프라인으로 어떻게 번역하는가?</strong> 외부 메모리도 이 간극에 부딪히고, 내부 통합도 이 간극에 부딪힌다. 두 접근은 같은 벽의 양면에서 각자의 방식으로 부딪히는 구조다.
+      </p>
+    </div>
+
+    <div class="card">
+      <span class="card-label green">층위 2 — 이미 암시되던 방향</span>
+      <h3>적응적 망각의 구체화</h3>
+      <p>
+        <span class="entity">adaptive-forgetting-as-function</span> 엔티티의 존재는 Wiki가 이미 망각을 함수적으로 설계해야 한다는 방향성을 잡고 있었다. 수면 논문은 이 방향성에 빠른 가중치라는 구현 경로를 제공한다. 망각이 더 이상 "삭제"가 아니라 "소멸"이며, 소멸이 통합의 반대쪽이 아니라 <span class="hl-green">통합의 내재적 구성요소</span>라는 점을 메커니즘 수준에서 보여준다.
+      </p>
+    </div>
+
+    <div class="card">
+      <span class="card-label orange">층위 3 — 보완적 스펙트럼</span>
+      <h3>인지 아키텍처 간극을 향한 두 가지 접근</h3>
+      <p>
+        <span class="entity">cognitive-architecture-translation-gap</span>이 존재한다는 것은, 인지 아키텍처 이론과 시스템 구현 사이에 구조적 틈이 있음을 의미한다. 외부 메모리(ADEMA 등)는 이 간극을 <span class="hl-blue">우회</span>하는 공학적 해결책이다. 모델을 블랙박스로 두고 외부에서 기억을 관리한다. 내부 통합(Sleep)은 간극을 <span class="hl-orange">정면 돌파</span>하는 인지적 해결책이다. 모델 자체를 인지 아키텍처에 근접하게 수정한다. 이 둘은 경쟁이 아닌 <strong>상보적 스펙트럼</strong>을 형성한다.
+      </p>
+    </div>
+
+    <div class="spectrum-wrap">
+      <div class="spectrum-bar">
+        <span class="spectrum-mid">상보적 스펙트럼</span>
+      </div>
+      <div class="spectrum-labels">
+        <span class="left">외부 메모리 (우회)</span>
+        <span class="right">내부 통합 (돌파)</span>
+      </div>
+    </div>
+
+    <p>
+      이 스펙트럼을 통해 새로운 연결들이 드러난다. 첫째, <span class="entity">adaptive-inference</span>와 수면 통합의 관계다. 기존의 적응적 추론이 압축이라는 시스템 상태에 반응했다면, 수면 통합은 <span class="hl-orange">컨텍스트 축적이라는 인지 상태에 반응하는 적응</span>으로, 적응적 추론의 차원을 더 확장할 수 있다. 둘째, <span class="entity">agent-knowledge-separation</span>의 재해석이 필요하다. 지식을 모델 외부로 분리한다는 전제가 수면 기반 접근에서는 <strong>"분리가 아니라 내부화"</strong>로 뒤집힌다. 셋째, <span class="entity">context-as-pipeline-structural-constraint</span>와의 긴장이다. 컨텍스트를 파이프라인의 구조적 제약으로 보는 시각과, 컨텍스트를 능동적으로 통합·소멸시킬 수 있는 내부 상태로 보는 시각 사이에 근본적 긴장이 존재한다.
+    </p>
+
+    <ul class="connection-list">
+      <li>
+        <div class="conn-title">적응적 추론의 확장 — <span class="entity">adaptive-inference</span> ↔ 수면 통합</div>
+        <div class="conn-desc">추론 길이(γ)에서 통합-소멸 주기로 적응의 결정 차원이 확장된다. 시스템 상태뿐 아니라 인지 상태에 반응하는 추론이 된다.</div>
+      </li>
+      <li>
+        <div class="conn-title">지식 분리의 전복 — <span class="entity">agent-knowledge-separation</span> 재해석</div>
+        <div class="conn-desc">"지식은 외부에 두어라"라는 설계 원칙이 "지식은 내부에 통합되어라"라는 원칙과 충돌하는 지점을 명시적으로 추적해야 한다.</div>
+      </li>
+      <li>
+        <div class="conn-title">컨텍스트의 정체성 긴장 — <span class="entity">context-as-pipeline-structural-constraint</span></div>
+        <div class="conn-desc">컨텍스트를 고정된 제약(다루어야 할 부담)으로 볼 것인가, 능동적으로 가공할 내부 상태(통합의 원료)로 볼 것인가.</div>
+      </li>
+    </ul>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- Section 5: Conclusion -->
+  <section class="section fade-in">
+    <div class="section-number">05</div>
+    <h2>결론 — 이중 축 구조로의 패러다임 전환</h2>
+    <p>
+      다시 처음의 질문으로 돌아가자. 에이전트의 장기 기억 문제를 외부 메모리에서 내부 통합으로 "이전"해야 하는가?
+    </p>
+    <p>
+      답은 <strong>이전이 아니라 재정의</strong>다. 외부 메모리를 내부 통합으로 교체하라는 것이 아니다. 오히려 <span class="hl-orange">두 축이 공통의 간극에 대해 서로 다른 해법을 제시하는 이중 축 구조</span>로 패러다임을 전환해야 한다.
+    </p>
+
+    <div class="conclusion-box">
+      <p>
+        기존 패러다임은 단일 축이었다. "기억을 어디에, 어떻게 저장할 것인가." 이 축 위에서 ADEMA는 오케스트레이션을, WorldDB는 구조화를, MeMo는 효율적 검색을 제안했다. 모두 "저장"이라는 전제를 공유하고 있었다.
+      </p>
+      <p>
+        새로운 패러다임은 이중 축이 되어야 한다.
+      </p>
+      <p>
+        <span class="hl-blue">축 1 (외부 메모리)</span>: 인지 아키텍처 간극을 <strong>우회</strong>하는 공학적 해법. 기억을 외부 상태로 관리하고, 모델은 검색-주입 파이프라인으로 기억에 접근한다. 확장성과 실현 가능성이 강점이다.
+      </p>
+      <p>
+        <span class="hl-orange">축 2 (내부 통합)</span>: 인지 아키텍처 간극을 <strong>정면 돌파</strong>하는 인지적 해법. 기억을 모델 파라미터 공간 내의 통합-소멸 주기로 구현한다. 망각을 적응적 기능으로 포함하고, 기억을 동적 상태로 만드는 것이 강점이다.
+      </p>
+      <p>
+        이 두 축이 <span class="hl-green">상보적으로 작동</span>할 때, 에이전트는 비로소 인간에 가까운 기억 체계에 접근할 수 있다. 외부 메모리가 대규모 사실적 지식을 관리하고, 내부 통합이 경험적 패턴을 소화하는 식으로다.
+      </p>
+    </div>
+
+    <p>
+      Wiki가 현재 외부 메모리 축에 편중되어 추적하고 있다면, 내부 통합 축을 동등한 무게로 추가해야 한다. <span class="entity">adaptive-forgetting</span>, <span class="entity">compensatory-memory-dynamics</span>, 수면 통합 메커니즘을 단일 엔티티가 아니라 하나의 축으로 조직하는 것이 다음 단계다.
+    </p>
+    <p>
+      끝으로, 도서관의 비유를 마무리하자. 훌륭한 도서관은 필요하다. 하지만 도서관만으로는 지혜로운 독자가 될 수 없다. 책을 읽고, 밤에 뒤척이며, 자신의 경험과 연결하고, 불필요한 것은 잊어버리는 그 과정 없이는 — 기억은 결코 "나의 것"이 되지 않는다. 에이전트의 기억도 마찬가지다. 서랍의 정교함을 넘어, <span class="hl-orange">수면의 깊이</span>를 설계할 때가 되었다.
+    </p>
+  </section>
+
+  <div class="sep"></div>
+
+  <footer class="article-footer">
+    Based on Wiki Query Analysis · "Language Models Need Sleep" &amp; Agent Memory Architecture
+  </footer>
+
+</div>
+
+<script>
+  // Scroll-triggered fade-in
+  document.addEventListener('DOMContentLoaded', function() {
+    var els = document.querySelectorAll('.fade-in');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function(el) { observer.observe(el); });
+    } else {
+      els.forEach(function(el) { el.classList.add('visible'); });
+    }
+  });
+</script>
+
+</body>
+</html>
