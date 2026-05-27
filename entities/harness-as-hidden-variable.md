@@ -24,3 +24,9 @@ _Wiki 축적 중_
 ### Design Conductor 2.0: An agent builds a TurboQuant inference accelerat (2026-05-08)
 
 CPU 설계(12시간)와 추론 가속기 설계(80시간)의 비선형 스케일링이 하네스 설계 품질이 작업 규모 확장성을 결정하는 은닉 변수임을 극적으로 보여준다. 동일 모델이라도 하네스 버전에 따라 처리 가능한 작업 규모가 80배 차이가 나며, 이 간격이 벤치마크 비교에서 통제되지 않으면 모델 능력 평가 자체가 무의미해짐을 실증한다.
+
+### Claw-Anything: Benchmarking Always-On Personal Assistants with Broader (2026-05-27)
+
+Claw-Anything은 벤치마크가 에이전이 접근 가능한 사용자 세계의 어느 부분을 규명하지 않음을 보여준다. 좁은 벤치마크의 툴 가용자 도구나 제한된 API 집합이 에이전의 '항상 켘' 요구조건에 미달하는 사례를 체계적으로 분석하며, 단순한 능력 문제가 아니라 사용자의 디지털 세계에 대한 구조적 무지에서 기인한 실패임을 보여준다.
+
+→ [[sources/2026-05-27-claw-anything-benchmarking-always-on-personal-assi.md|상세 보기]]

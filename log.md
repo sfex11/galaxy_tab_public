@@ -1092,3 +1092,22 @@
 ## [2026-05-26 08:35] ingest | CHRONOS: Temporally-Aware Multi-Agent Coordination for Evolving Data Marketplaces
 
 ## [2026-05-26 08:35] ingest | Decomposing Queries into Tool Calls for Long-Video Keyframe Retrieval
+
+## [2026-05-27 02:40] llm-ingest | 15편 분석, 엔티티 346개, 개념 973개
+- 2026-05-27-mobilegym-a-verifiable-and-highly-parallel-simulat.md
+- 2026-05-27-from-model-scaling-to-system-scaling-scaling-the-h.md
+- 2026-05-27-beyond-summaries-structure-aware-labeling-of-code-.md
+- 2026-05-27-orpquant-geometric-orthogonal-residual-projection-.md
+- 2026-05-27-discoverphysics-benchmarking-llms-for-out-of-the-b.md
+- 2026-05-27-claw-anything-benchmarking-always-on-personal-assi.md
+- 2026-05-27-automated-benchmark-auditing-for-ai-agents-and-lar.md
+- 2026-05-27-anyscene-towards-highly-controllable-driving-scene.md
+- 2026-05-27-prism-a-plug-in-reproducible-infrastructure-for-sc.md
+- 2026-05-27-squeezing-capacity-from-multimodal-large-language-.md
+- 2026-05-27-language-models-need-sleep.md
+- 2026-05-27-causalab-a-scalable-environment-for-interactive-ca.md
+- 2026-05-27-clarify-abstain-or-answer-strategising-in-conversa.md
+- 2026-05-27-visual-redundancy-controlled-parallel-decoding-for.md
+- 2026-05-27-when-gradients-collide-failure-modes-of-multi-obje.md
+
+## [2026-05-27 08:39] ingest | VeriTrace: Evolving Mental Models for Deep Research Agents

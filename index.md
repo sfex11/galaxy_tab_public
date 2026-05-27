@@ -486,3 +486,4 @@
 - [[sources/2026-05-26-etchr-editing-to-clarify-and-harness-reasoning.md]] - ETCHR: Editing To Clarify and Harness Reasoning
 - [[sources/2026-05-26-chronos-temporally-aware-multi-agent-coordination-.md]] - CHRONOS: Temporally-Aware Multi-Agent Coordination for Evolving Data Marketplaces
 - [[sources/2026-05-26-decomposing-queries-into-tool-calls-for-long-video.md]] - Decomposing Queries into Tool Calls for Long-Video Keyframe Retrieval
+- [[sources/2026-05-27-veritrace-evolving-mental-models-for-deep-research.md]] - VeriTrace: Evolving Mental Models for Deep Research Agents

@@ -1,0 +1,12 @@
+# plug-in-architecture
+
+**분야**: 미분류
+**생성일**: 2026-05-27
+
+## 정의
+
+_Wiki 축적 중_
+
+## 관련 논문
+
+- [[sources/2026-05-27-prism-a-plug-in-reproducible-infrastructure-for-sc.md|Prism: A Plug-in Reproducible Infrastructure for Scalable Mu]]
