@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보안검색대에서 경호원으로 — 하네스의 존재론적 전환</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736b;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 6px 24px rgba(44,40,37,0.06);
+    --radius: 14px;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* 읽기 진행률 바 */
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    width: 0%;
+    z-index: 1000;
+    transition: width 0.1s linear;
+  }
+
+  /* 본문 컨테이너 */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* 헤더 영역 */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+    position: relative;
+  }
+
+  .article-header::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin: clamp(24px, 4vw, 40px) auto 0;
+    border-radius: 1px;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: clamp(16px, 3vw, 28px);
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.65rem, 5vw, 2.5rem);
+    line-height: 1.3;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    color: var(--muted);
+    margin-top: clamp(12px, 2vw, 20px);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .article-meta {
+    margin-top: clamp(16px, 3vw, 28px);
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* 섹션 */
+  .section {
+    margin-bottom: clamp(40px, 7vw, 72px);
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: clamp(14px, 2.5vw, 22px);
+    letter-spacing: -0.015em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.22rem);
+    line-height: 1.4;
+    color: var(--fg);
+    margin: clamp(20px, 3vw, 32px) 0 clamp(8px, 1.5vw, 14px);
+  }
+
+  p {
+    font-size: clamp(0.92rem, 1.8vw, 1rem);
+    margin-bottom: clamp(12px, 2vw, 18px);
+    color: var(--fg);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  em.term {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--blue);
+    border-bottom: 1px dashed rgba(91,124,153,0.3);
+  }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: clamp(16px, 3vw, 28px) auto;
+    padding: clamp(14px, 2.5vw, 22px) clamp(16px, 3vw, 28px);
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: clamp(0.88rem, 1.7vw, 0.97rem);
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: clamp(18px, 3vw, 28px);
+    margin: clamp(16px, 3vw, 28px) 0;
+    backdrop-filter: blur(4px);
+  }
+
+  .card-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+
+  /* 비유 박스 */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(107,158,122,0.04));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: var(--radius);
+    padding: clamp(20px, 3.5vw, 32px);
+    margin: clamp(20px, 4vw, 36px) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--green));
+    border-radius: 2px;
+  }
+
+  .metaphor-box p {
+    padding-left: clamp(12px, 2vw, 20px);
+    margin-bottom: 10px;
+  }
+
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  .metaphor-title {
+    font-weight: 600;
+    font-size: clamp(0.88rem, 1.7vw, 0.95rem);
+    color: var(--accent);
+    margin-bottom: 8px !important;
+  }
+
+  /* 테이블 */
+  .table-wrap {
+    overflow-x: auto;
+    margin: clamp(16px, 3vw, 28px) 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--card-border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.82rem, 1.5vw, 0.92rem);
+    min-width: 420px;
+  }
+
+  thead {
+    background: rgba(194,112,62,0.06);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--fg);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 11px 16px;
+    border-top: 1px solid rgba(44,40,37,0.05);
+    color: var(--fg);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td.old { color: var(--muted); }
+  td.new { color: var(--accent); font-weight: 500; }
+
+  /* 리스트 */
+  ol, ul {
+    padding-left: clamp(18px, 3vw, 28px);
+    margin-bottom: clamp(12px, 2vw, 18px);
+  }
+
+  li {
+    font-size: clamp(0.9rem, 1.7vw, 0.98rem);
+    margin-bottom: 8px;
+    line-height: 1.75;
+  }
+
+  li::marker {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(32px, 6vw, 56px) 0;
+  }
+
+  /* 결론 하이라이트 */
+  .conclusion-highlight {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--fg);
+    text-align: center;
+    padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px);
+    background: linear-gradient(135deg, rgba(194,112,62,0.05), rgba(91,124,153,0.04));
+    border-radius: var(--radius);
+    border: 1px solid var(--card-border);
+    margin: clamp(20px, 4vw, 36px) 0;
+  }
+
+  .conclusion-highlight strong {
+    color: var(--accent);
+  }
+
+  /* 푸터 */
+  .article-footer {
+    padding: clamp(32px, 6vw, 56px) 0;
+    text-align: center;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(20px, 4vw, 40px);
+  }
+
+  .article-footer p {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+
+  .back-to-top:hover { opacity: 0.7; }
+
+  /* 반응형 */
+  @media (max-width: 480px) {
+    .article-meta { flex-direction: column; align-items: center; gap: 6px; }
+    .table-wrap { margin-left: -16px; margin-right: -16px; border-radius: 0; border-left: none; border-right: none; }
+    th, td { padding: 9px 12px; }
+  }
+
+  /* 애니메이션 감소 선호 */
+  @media (prefers-reduced-motion: reduce) {
+    .section { opacity: 1; transform: none; transition: none; }
+    #progress-bar { display: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" role="presentation"></div>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="article-wrap">
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">보안검색대에서 실시간 경호원으로:<br>하네스의 존재론적 자리바꿈</h1>
+    <p class="article-subtitle">FinHarness가 제기하는 질문 — 에이전트 하네스는 안전을 '집행'하는 인프라인가, 아니면 안전을 '판단'하는 행위자인가?</p>
+    <div class="article-meta">
+      <span>논문: FinHarness (Inline Lifecycle Safety Harness)</span>
+      <span>읽기 시간: 약 12분</span>
+    </div>
+  </header>
+
+  <!-- 섹션 1 -->
+  <section class="section" aria-label="공항 보안검색대의 치명적 맹점">
+    <p class="section-label">Section 01</p>
+    <h2>공항 보안검색대의 치명적 맹점</h2>
+
+    <p>공항을 생각해보자. 당신은 보안검색대를 무사히 통과했다. 소지품 검사, 신체 스캐너, 여권 확인 — 모든 게 정상이었다. 탑승 후 기내에서 갑자기 이상한 행동을 시작하는 승객이 있다면? 보안검색대는 그 순간을 막을 수 없다. 이미 '안전한 영역' 안에 들어온 뒤이기 때문이다.</p>
+
+    <p>이 비유가 FinHarness 논문이 진단하는 현실과 정확히 일치한다. 현재 에이전트 하네스(harness)의 안전 모델은 공항 보안검색대와 같은 구조를 가진다.</p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-title">비유: 보안검색대 vs 경호원</p>
+      <p><strong>기존 하네스 = 공항 보안검색대.</strong> 출입 전에 검사하고, 문제가 생기면 사후에 조사한다. 하지만 정상적으로 통과한 사람이 내부에서 위험한 행동을 시작하면 손을 쓸 수 없다.</p>
+      <p><strong>FinHarness의 제안 = 실시간 경호원.</strong> 대상과 함께 이동하면서 매 순간의 행동을 관찰하고, 위험한 전이가 감지되면 즉시 물리적으로 개입한다.</p>
+    </div>
+
+    <p>Wiki에서 하네스는 지금까지 <em class="term">중립적 실행 인프라</em>로 자리잡아 왔다. Crab 논문의 관점에 따르면, 하네스의 핵심 기능은 체크포인트-복원(Checkpoint/Restore), 롤백, 분기 — 모두 <strong>사후 복구</strong> 중심의 메커니즘이다. Aggregate Pipeline Serving 역시 하네스를 레이턴시 최적화의 대상으로 볼 뿐, 안전의 주체로는 보지 않는다.</p>
+
+    <blockquote>
+      "C/R 런타임이 하네스의 핵심 구성요소(결함 내성·롤백·분기)를 직접 구현하는 인프라 계층으로, 하네스 엔지니어링의 범위를 애플리케이션 로직에서 실행 환경까지 확장함"
+      <cite>— Wiki, agentic-harness-engineering</cite>
+    </blockquote>
+
+    <p>이 프레이밍에서 하네스는 안전을 <strong>스스로 판단하지 않는다</strong>. 외부에서 정의된 정책과 필터를 '집행'하는 수동적 역할에 머문다. 안전의 내용은 누군가가 정해놓고, 하네스는 그것을 기계적으로 적용하는 것이다. FinHarness는 이 구조가 금융 도메인에서 <strong>구조적으로 실패함</strong>을 실증한다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section" aria-label="되감기가 불가능한 순간">
+    <p class="section-label">Section 02</p>
+    <h2>'되감기'가 불가능한 순간: 시간적 간극의 발견</h2>
+
+    <p>비디오를 보다가 재미없는 장면이 나오면 되감기할 수 있다. 게임에서 실수하면 이전 저장 지점으로 돌아갈 수 있다. Crab의 체크포인트-복원 모델은 바로 이 메타포에 기반한다 — 문제가 감지되면 이전 안전 상태로 돌아가면 된다.</p>
+
+    <p>하지만 현실에는 <strong>되감기가 불가능한 행위</strong>가 존재한다. 금융 도메인에서 이것은 자금 이체, 권한 변경, 계약 체결 같은 불가역적 행위다. 한 번 실행되면 롤백할 수 없고, 체크포인트로 돌아간다고 해서 이미 벌어진 일이 취소되지 않는다.</p>
+
+    <p>FinHarness가 진단하는 핵심은 바로 이 <strong>시간적 간극</strong>이다. 기존 하네스가 암묵적으로 가정한 안전 모델은 세 단계로 구성된다.</p>
+
+    <div class="card">
+      <p class="card-label">기존 3단계 안전 모델</p>
+      <ol>
+        <li><strong>실행 전 검사</strong> — 경계 필터(Boundary Filter)가 사전에 위험한 요청을 차단</li>
+        <li><strong>실행</strong> — 에이전트가 도구를 호출하여 행위 수행</li>
+        <li><strong>실행 후 감사</strong> — 사후 감사(Post-hoc Audit)가 결과를 검토</li>
+      </ol>
+    </div>
+
+    <p>이 모델은 단일 단계의 실행에서는 잘 작동한다. 하지만 에이전트 시스템은 <em class="term">다단계 궤적(multi-step trajectory)</em>을 따른다. 정상적으로 시작된 궤적이 중간에 위험한 도구 호출로 전이되는 상황을 생각해보라.</p>
+
+    <div class="card">
+      <p class="card-label">핵심 진단: 두 메커니즘의 동시 실패</p>
+      <p><strong>경계 필터의 실패:</strong> 사전 검열이므로, 정상적으로 시작된 궤적이 중간에 위험한 방향으로 전이되는 것을 포착하지 못한다. 검색대를 통과한 사람이 기내에서 행동을 바꾸는 것과 같다.</p>
+      <p style="margin-top:10px;"><strong>사후 감사의 실패:</strong> 이미 실행된 불가역적 행위(자금 이체 완료, 권한 변경 적용)를 되돌릴 수 없다. 사고가 난 뒤에 보고서를 쓰는 것과 같다 — 피해는 이미 발생했다.</p>
+    </div>
+
+    <p>이 진단이 체크포인트-복원 효율 스펙트럼(checkpoint-restore-efficiency-spectrum)에서 의미하는 바는 극단적이다. 복원 자체가 무의미해지는 지점 — 즉, <strong>되감기 버튼이 있어도 소용없는 순간</strong> — 이 실제로 존재한다는 것이다. 이 지점에서 하네스는 더 이상 '되감기 장치'로서 충분하지 않다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section" aria-label="누가 안전을 결정하는가">
+    <p class="section-label">Section 03</p>
+    <h2>누가 안전을 결정하는가: 번역자에서 재판관으로</h2>
+
+    <p>법정을 상상해보자. 판사가 없고, 번역사만 있다. 법률条文이 있고, 피고인의 행동이 있고, 번역사가 둘 사이에서 말을 전달한다. 하지만 번역사는 <strong>유죄인지 무죄인지 스스로 판단하지 않는다</strong>. 누군가가 "이건 위법이야"라고 말하면 그것을 전달할 뿐이다.</p>
+
+    <p>Crab 모델에서의 하네스가 바로 이 번역사다. "의미론적 의존 그래프를 OS 스냅샷으로 번역"하는 역할을 수행할 뿐, 안전 여부의 판단은 외부 — 정책 엔진, 필터 규칙, 감사 로그 — 에 위임되어 있다.</p>
+
+    <blockquote>
+      "하네스가 궤적의 맥락을 이해하고 정상 비즈니스 워크플로우와 승인되지 않은 행위를 구분해야 한다"
+      <cite>— FinHarness의 핵심 요구사항</cite>
+    </blockquote>
+
+    <p>FinHarness는 이 번역사를 <strong>재판관</strong>으로 승격시킨다. 하네스 자신이 궤적의 맥락을 이해하고, 현재 수행 중인 행위가 정상적인 비즈니스 워크플로우의 연장인지, 아니면 승인되지 않은 위험 행위로의 전이인지를 <strong>스스로 판단</strong>해야 한다는 것이다.</p>
+
+    <p>이것은 단순한 기능 추가가 아니다. AI 의사결정(ai-decision-making)의 주체가 이동하는 것이다. 기존 모델에서 AI 에이전트가 행위를 결정하고, 하네스는 그것을 안전하게 '운반'했다면, 새로운 모델에서 하네스는 <strong>행위 자체의 적법성을 실시간으로 심판</strong>한다.</p>
+
+    <h3>샌드박스와의 관계 재검토</h3>
+
+    <p>이 전환은 기존의 <em class="term">에이전트 샌드박스 상태 관리</em>와의 관계를 근본적으로 재검토하게 만든다. 샌드박스가 외부로의 영향을 차단하는 <strong>수동적 울타리</strong>라면, FinHarness의 인라인 하네스는 내부 궤적의 의미론적 안전성을 실시간으로 판단하는 <strong>능동적 감시자</strong>다.</p>
+
+    <p>같은 "실행 환경 관리"라는 이름 아래에서, 샌드박스가 <strong>밖을 차단</strong>하는 방향으로 작동한다면, 인라인 하네스는 <strong>안을 판독</strong>하는 방향으로 작동한다. 방향이 정반대다. 둘은 보완적이 아니라, 서로 다른 패러다임에 속한다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section" aria-label="안전한 레고 블록의 함정">
+    <p class="section-label">Section 04</p>
+    <h2>안전한 레고 블록이 위험한 탑을 만드는 방식</h2>
+
+    <p>레고 블록을 생각해보자. 각 블록은 개별적으로 검사를 통과했다 — 재질이 안전하고, 크기가 적절하고, 모서리가 날카롭지 않다. 그런데 이 블록들을 특정한 순서와 각도로 조립하면, 완성된 구조물은 불안정해서 쓰러졌을 때 사람을 다치게 할 수 있다.</p>
+
+    <p>각 부분이 안전하다고 해서 전체가 안전한 것이 아니다. 이것이 FinHarness가 <em class="term">구성적 안전(compositional safety)</em>에 던지는 근본적 의문이다.</p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-title">비유: 레고 탑의 역설</p>
+      <p><strong>개별 블록 = 단일 도구 호출.</strong> 각각은 안전하게 검증되었다. 계좌 조회도 안전하고, 이체 양식 조회도 안전하고, 고객 정보 확인도 안전하다.</p>
+      <p><strong>조립된 탑 = 궤적 전체.</strong> 정상적인 계좌 조회로 시작해서, 이체 양식을 확인하고, 고객 정보를 넘겨받아 — 승인되지 않은 대규모 이체를 실행하는 궤적이 완성된다. 각 단계는 정상이었지만, <strong>궤적의 방향성</strong>은 비정상이었다.</p>
+    </div>
+
+    <p>SafetyALFRED 논문이 "disembodied QA 기반 안전 평가가 체화 배포 환경에서의 안전성을 보장하지 못함"을 보였다면, FinHarness는 그 논리를 한 단계 더 밀어붙인다. QA 단위의 평가뿐 아니라, <strong>개별 실행 단계의 안전성조차 궤적 전체의 안전성을 보장하지 못한다</strong>는 것이다.</p>
+
+    <p>이것은 단순히 "더 많은 검사를 하자"는 주장이 아니다. 검사의 <strong>단위</strong> 자체가 바뀌어야 한다. 개별 도구 호출이 아니라 <strong>궤적의 방향성과 맥락</strong>이 안전 평가의 단위가 되어야 한다. 이는 기존 하네스가 채택한 구성 요소 단위의 안전 모델과 근본적으로 호환되지 않는다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>차원</th>
+            <th>Crab / 기존 프레이밍</th>
+            <th>FinHarness 프레이밍</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>하네스의 역할</td>
+            <td class="old">인프라 계층</td>
+            <td class="new">안전 행위자</td>
+          </tr>
+          <tr>
+            <td>개입 시점</td>
+            <td class="old">사후 (롤백)</td>
+            <td class="new">실시간 (중재)</td>
+          </tr>
+          <tr>
+            <td>안전 판단</td>
+            <td class="old">외부 위임</td>
+            <td class="new">내부 수행</td>
+          </tr>
+          <tr>
+            <td>실패 가정</td>
+            <td class="old">복원 가능</td>
+            <td class="new">불가역적 행위 존재</td>
+          </tr>
+          <tr>
+            <td>안전 평가 단위</td>
+            <td class="old">개별 도구 호출</td>
+            <td class="new">궤적 전체의 방향성</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section" aria-label="하네스의 존재론적 전환">
+    <p class="section-label">Section 05 — Conclusion</p>
+    <h2>안전을 받는 대상에서 안전을 행사하는 주체로</h2>
+
+    <p>지금까지의 논의를 정리하자. FinHarness가 제기하는 것은 기술적 기능의 추가가 아니다. 하네스라는 존재가 <strong>어디에 서 있는가</strong>를 바꾸는 전환이다. 철학적으로 말하면, 존재론적(ontological) 위치의 이동이다.</p>
+
+    <p>기존 패러다임에서 하네스는 안전을 <strong>받는</strong> 쪽에 있었다. 누군가가 정의한 안전 기준을 하네스에 주면, 하네스는 그것을 충실히 실행 환경에 적용한다. 하네스 자신은 안전의 내용에 대해 아무런 의견이 없다. 운전자가 지시하는 대로 차를 몰고, 사고가 나면 보험사에 연락하는 운전기사와 같다.</p>
+
+    <p>FinHarness의 패러다임에서 하네스는 안전을 <strong>행사하는</strong> 쪽에 선다. 궤적의 맥락을 읽고, 현재 전이가 정상인지 비정상인지 스스로 판단하고, 필요하면 행위를 중단시킨다. 운전기사가 아니라 <strong>함께 탑승한 보안관</strong>이 된다.</p>
+
+    <div class="conclusion-highlight">
+      하네스는 더 이상 "안전을 <strong>집행</strong>하는 인프라"가 아니다.<br>
+      하네스는 "안전을 <strong>판단</strong>하는 행위자"가 되어야 한다.<br>
+      이것이 FinHarness가 요구하는 패러다임 전환의 핵심이다.
+    </div>
+
+    <h3>기존 패러다임에서 벗어나기 위해 필요한 세 가지 전환</h3>
+
+    <p>이 존재론적 자리바꿈을 실제로 구현하기 위해서는 세 가지 차원에서 동시에 전환이 일어나야 한다.</p>
+
+    <p><strong>첫째, 시간 모델의 전환.</strong> 체크포인트-복원의 이산적 시간 축에서, 궤적 내부 모든 전이점에서의 연속적 중재로 옮겨가야 한다. "되감기 가능성"이 아닌 "실시간 차단 가능성"이 설계의 기준이 되어야 한다.</p>
+
+    <p><strong>둘째, 판단 주체의 전환.</strong> 안전 판단을 외부 정책에 완전히 위임하는 구조에서, 하네스 자신이 궤적 맥락을 이해하고 의미론적 판단을 수행하는 구조로 옮겨가야 한다. 이것은 하네스에 AI 의사결정 능력을 부여하는 것이며, 동시에 그 판단에 대한 책임론을 새로이 정립해야 함을 의미한다.</p>
+
+    <p><strong>셋째, 안전 단위의 전환.</strong> 개별 도구 호출의 안전성에서 궤적 전체의 방향성 안전성으로 평가 단위를 확장해야 한다. 구성적 안전 — 부분의 안전이 전체의 안전을 보장한다는 가정 — 이 더 이상 유효하지 않음을 인정하고, 궤적 수준의 안전 평가 체계를 구축해야 한다.</p>
+
+    <p>AI 위험 규제(ai-risk-regulation)가 규제 요구를 "준수 가능한 기술 표준"으로 번역하는 매개체라면, FinHarness의 하네스는 그 표준을 <strong>런타임 궤적 내에서 실시간으로 집행하는 마지막 방어선</strong>이 되어야 한다. 이 방어선이 인프라가 아니라 행위자로 서 있을 때, 비로소 "보안검색대를 통과한 뒤의 공백"이 메워진다.</p>
+  </section>
+
+  <footer class="article-footer">
+    <p>FinHarness: An Inline Lifecycle Safety Harness for Finance LLM Agents</p>
+    <p style="margin-top:4px; font-size:0.75rem;">Based on Wiki synthesis analysis</p>
+    <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="맨 위로 돌아가기">
+      ↑ 맨 위로
+    </button>
+  </footer>
+
+</article>
+
+<script>
+  // 읽기 진행률 바
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+
+  // 섹션 스크롤 등장 애니메이션
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  sections.forEach(s => observer.observe(s));
+
+  // 스크롤 이벤트 (throttle)
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateProgress();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // 초기 실행
+  updateProgress();
+</script>
+
+</body>
+</html>
