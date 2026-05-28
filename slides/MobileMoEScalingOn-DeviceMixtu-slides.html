@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MobileMoE: Scaling On-Device Mixture of Experts — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:80vh;text-align:center;">
+      <span class="tag tag-amber">Meta AI</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem);margin-top:1.5rem;line-height:1.2;">MobileMoE</h1>
+      <p style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-top:0.5rem;" class="muted">온디바이스 Mixture of Experts의 스케일링</p>
+      <div class="hr" style="width:120px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);" class="muted">Yanbei Chen, Hanxian Huang, Ernie Chang, Jacob Szwejbka, Digant Desai, Zechun Liu, Vikas Chandra, Raghuraman Krishnamoorthi</p>
+      <p style="font-size:clamp(0.8rem,1.2vw,1rem);margin-top:0.5rem;"><a href="http://arxiv.org/abs/2605.27358v1" class="accent2">arXiv:2605.27358v1</a></p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">May 2026</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">왜 온디바이스 MoE인가?</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><i class="fas fa-mobile-alt accent"></i> 온디바이스 LLM의 현주소</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileLLM, Gemma 등은 전부 <span class="accent">Dense 아키텍처</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>품질 향상 = 활성 파라미터 증가 → 계산량 증가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>엣지 디바이스의 엄격한 메모리·연산 제약</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><i class="fas fa-arrow-up accent2"></i> 새로운 가능성</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스마트폰 DRAM 성장: 4GB → <span class="accent2">12~16GB</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MoE로 총 파라미터 확장하면서 <span class="accent2">활성 파라미터는 소수 유지</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Sub-billion 활성 파라미터 스케일에서 MoE는 <span class="accent2">미탐구 영역</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">MoE의 세 가지 효율성</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;" class="accent"><i class="fas fa-compress-arrows-alt"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">파라미터 효율성</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">다수 전문가 네트워크로 총 용량 확장, 토큰당 희소 부분만 활성화하여 더 큰 Dense 모델과 동등한 성능 달성</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;" class="accent2"><i class="fas fa-bolt"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">런타임 효율성</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">희소 활성화로 추론 FLOPs 감소, 모바일 배터리 수명 보존 및 레이턴시 저감</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;" class="accent3"><i class="fas fa-brain"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">학습 효율성</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">전문가 네트워크가 지식, 코드, 수학 등 영역별로 특화, 하나의 모델에 다중 작업 능력을 패킹</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">세 가지 핵심 기여</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;">
+      <div class="flow-item" style="margin-bottom:2rem;">
+        <div class="flow-icon">1</div>
+        <div>
+          <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">온디바이스 MoE 스케일링 법칙 기반 모델 family</h3>
+          <p style="font-size:clamp(0.85rem,1.5vw,1.05rem);margin-top:0.3rem;" class="muted">메모리·연산 제약 하에서 최적의 MoE 아키텍처 도출 — 적정 희소성, 세분화된 전문가, 공유 전문가의 스윗 스팟 발견</p>
+        </div>
+      </div>
+      <div class="flow-item" style="margin-bottom:2rem;">
+        <div class="flow-icon">2</div>
+        <div>
+          <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">4단계 학습 레시피</h3>
+          <p style="font-size:clamp(0.85rem,1.5vw,1.05rem);margin-top:0.3rem;" class="muted">사전학습 → 중간학습 → SFT → INT4 QAT. ~6T 토큰으로 Dense 베이스라인(9~11T)보다 적은 데이터로 우수한 성능 달성</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">3</div>
+        <div>
+          <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">상용 스마트폰에서의 최초 MoE 추론</h3>
+          <p style="font-size:clamp(0.85rem,1.5vw,1.05rem);margin-top:0.3rem;" class="muted">Samsung Galaxy S25, iPhone 16 Pro 배포. MobileMoE-S가 Dense 베이스라인 대비 prefill 1.8–3.8×, decode 2.2–3.4× 빠른 속도</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">온디바이스 MoE 스케일링 법칙</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">기존 스케일링 법칙의 한계</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>서버 스케일 LLM에 최적화 (수십~수백억 파라미터)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추론 비용과 메모리 공간을 <span class="accent">분리하여 고려</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모바일 제약(메모리 + 연산 <span class="accent">동시</span> 고려) 불가</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">새로운 접근</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">활성 파라미터(N_act)</span> → 추론 연산량 결정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">총 파라미터(N_total)</span> → 메모리 공간 결정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>두 변수를 <span class="accent2">동시 최적화</span>하는 파라미트릭 피팅</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Sub-billion 활성 파라미터 영역에 특화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">기존 법칙은 "클수록 좋다"를 말하지만, 온디바이스에서는 <span class="accent">"메모리와 연산의 균형점"</span>을 찾는 것이 핵심</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">최적 아키텍처: 스윗 스팟 발견</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1.5rem;">스케일링 법칙이 가리키는 세 가지 설계 원칙</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">적정</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">희소성 (Sparsity)</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">너무 낮으면 효율 없고, 너무 높으면 메모리 과부하. <span class="accent">적정 수준의 희소성</span>이 메모리·연산 동시 최적</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">세분화</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">전문가 입도 (Granularity)</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">소수의 큰 전문가보다 <span class="accent2">다수의 작은 전문가</span>가 더 효율적 라우팅과 특화 학습 가능</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">공유</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">공유 전문가 (Shared Expert)</h3>
+        <p style="font-size:clamp(0.8rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">모든 토큰이 공통으로 사용하는 <span class="accent3">공유 전문가</span> 추가로 지식 보존 및 안정성 향상</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">MobileMoE 모델 구성</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>구성</th>
+          <th>MobileMoE-S</th>
+          <th>MobileMoE-M</th>
+          <th>MobileMoE-L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="accent">활성 파라미터</span></td>
+          <td>0.3B</td>
+          <td>0.5B</td>
+          <td>0.9B</td>
+        </tr>
+        <tr>
+          <td>총 파라미터</td>
+          <td>1.3B</td>
+          <td>2.8B</td>
+          <td>5.3B</td>
+        </tr>
+        <tr>
+          <td>INT4 웨이트 메모리</td>
+          <td>&lt; 1 GB</td>
+          <td>~1.4 GB</td>
+          <td>&lt; 3 GB</td>
+        </tr>
+        <tr>
+          <td>레이어 수</td>
+          <td>12</td>
+          <td>18</td>
+          <td>24</td>
+        </tr>
+        <tr>
+          <td>전문가 수 (레이어당)</td>
+          <td>8</td>
+          <td>8</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>활성 전문가 수</td>
+          <td>2</td>
+          <td>2</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>공유 전문가</td>
+          <td><span class="tag tag-green">포함</span></td>
+          <td><span class="tag tag-green">포함</span></td>
+          <td><span class="tag tag-green">포함</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:1rem;" class="muted">모든 모델이 모바일 DRAM에 수용 가능한 &lt;3GB INT4 웨이트 공간 유지</p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">4단계 학습 레시피</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-top:2.5rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">사전학습</div>
+        <div class="step-desc">~6T 토큰, 오픈소스 데이터 기반. MoE 특화 안정성 기법 적용</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">중간학습</div>
+        <div class="step-desc">고품질 데이터로 정제, 도메인 균형 재조정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">SFT</div>
+        <div class="step-desc">지시 미세조정으로 대화·추론 능력 부여</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">INT4 QAT</div>
+        <div class="step-desc">양자화 인식 학습으로 온디바이스 배포 준비</div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">MoE 특유의 <span class="accent">라우팅 불안정성</span>과 <span class="accent">전문가 붕괴</span> 문제를 각 단계에서 명시적으로 해결하는 기법 포함</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">학습 효율성: 적은 토큰으로 더 높은 성능</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">사전학습 토큰 비교</h3>
+        <div style="margin-top:1.5rem;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.8rem;">
+            <span style="font-size:clamp(0.9rem,1.5vw,1.1rem);">MobileMoE</span>
+            <span class="big-num accent">~6T</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.8rem;">
+            <span style="font-size:clamp(0.9rem,1.5vw,1.1rem);" class="muted">Llama 3.2 1B</span>
+            <span class="big-num muted">9T</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-size:clamp(0.9rem,1.5vw,1.1rem);" class="muted">SmolLM2 1.7B</span>
+            <span class="big-num muted">11T</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">핵심 인사이트</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Dense 대비 <span class="accent">1.5~2× 적은 토큰</span>으로 동등 이상 성능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 특화로 <span class="accent">토큰당 학습 효율</span> 극대화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MoE의 학습 효율성이 <span class="accent">sub-billion 스케일에서도 유효</span>함을 최초 입증</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">벤치마크 결과: 새로운 파레토 프론티어</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1.5rem;">14개 벤치마크 평균 정확도 (상식·지식·과학·이해·추론)</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><i class="fas fa-microchip accent"></i> 추론 연산량 vs 정확도</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileMoE-S/M: 동등 성능에서 <span class="accent">2~4× 적은 FLOPs</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileMoE-L: sub-billion 활성 스케일 <span class="accent">최고 정확도</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>활성 파라미터 기준 기존 Dense 모델 완벽히 지배</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><i class="fas fa-memory accent2"></i> 총 파라미터 vs 정확도</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>동등 INT4 메모리에서 <span class="accent2">더 높은 정확도</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>OLMoE-1B-7B 대비 <span class="accent2">~60% 적은 파라미터</span>로 동등 성능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileMoE-L: OLMoE 대비 30% 적은 활성 + 23% 작은 메모리로 <span class="accent2">더 높은 정확도</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">OLMoE-1B-7B 대비 상세 비교</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>지표</th>
+          <th>OLMoE-1B-7B</th>
+          <th>MobileMoE-M</th>
+          <th>MobileMoE-L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>활성 파라미터</td>
+          <td>1.0B</td>
+          <td><span class="accent">0.5B (~60% 감소)</span></td>
+          <td><span class="accent">0.9B (30% 감소)</span></td>
+        </tr>
+        <tr>
+          <td>총 파라미터</td>
+          <td>7.0B</td>
+          <td><span class="accent2">2.8B (~60% 감소)</span></td>
+          <td><span class="accent2">5.3B (23% 감소)</span></td>
+        </tr>
+        <tr>
+          <td>INT4 메모리</td>
+          <td>~3.5 GB</td>
+          <td><span class="accent2">~1.4 GB</span></td>
+          <td><span class="accent2">&lt;3 GB</span></td>
+        </tr>
+        <tr>
+          <td>벤치마크 정확도</td>
+          <td>기준선</td>
+          <td><span class="tag tag-green">동등</span></td>
+          <td><span class="tag tag-green">더 높음</span></td>
+        </tr>
+        <tr>
+          <td>사전학습 토큰</td>
+          <td>~5T</td>
+          <td>~6T</td>
+          <td>~6T</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:1rem;" class="muted">더 적은 파라미터로 동등 이상의 성능 → 메모리·연산 양면에서 압도적 효율</p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">온디바이스 배포: 기술적 도전과 해결</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><span class="tag tag-red">도전</span></h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 모바일 추론 스택에 <span class="accent">MoE 네이티브 지원 부재</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 라우팅의 <span class="accent">메모리 접근 비용</span> 문제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>CPU/GPU 백엔드 간 <span class="accent">이기종 최적화</span> 필요</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);"><span class="tag tag-green">해결</span></h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ExecuTorch 기반 <span class="accent3">커스텀 퓨즈드 MoE 커널</span> 개발</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>라우팅 + 전문가 연산을 <span class="accent3">단일 커널로 퓨징</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>CPU + GPU 양쪽 백엔드에서 <span class="accent3">체계적 프로파일링</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">상용 스마트폰에서 MoE 추론을 <span class="accent3">최초로</span> 실현하고, 전체 런타임 메트릭을 정량적으로 분석</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">온디바이스 런타임 결과</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1rem;">MobileMoE-S vs MobileLLM-Pro (동등 INT4 웨이트 메모리 기준)</p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">Prefill 속도</h3>
+        <div class="big-num accent" style="margin-top:1rem;">1.8–3.8×</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">MobileLLM-Pro 대비 더 빠름</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;" class="muted">Samsung Galaxy S25, iPhone 16 Pro 측정</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">Decode 속도</h3>
+        <div class="big-num accent2" style="margin-top:1rem;">2.2–3.4×</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">MobileLLM-Pro 대비 더 빠름</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;" class="muted">CPU 및 GPU 백엔드 모두에서</p>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>8K 컨텍스트에서 최대 <span class="accent3">22% 적은 피크 RSS</span> 메모리 사용</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileMoE-M: MobileLLM-Pro 대비 <span class="accent3">동등 런타임에 더 높은 정확도</span></li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>MobileMoE-L: <span class="accent3">현저히 높은 정확도</span>에 적정 런타임 비용</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);">결론</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;">
+      <div class="flow-item" style="margin-bottom:1.5rem;">
+        <div class="flow-icon"><i class="fas fa-lightbulb"></i></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">MoE의 이점이 <span class="accent">sub-billion 활성 파라미터 스케일</span>에서도 유효함을 최초로 체계적으로 입증</p>
+        </div>
+      </div>
+      <div class="flow-item" style="margin-bottom:1.5rem;">
+        <div class="flow-icon"><i class="fas fa-balance-scale"></i></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">메모리·연산 제약을 동시에 고려하는 <span class="accent2">온디바이스 MoE 스케일링 법칙</span> 제안</p>
+        </div>
+      </div>
+      <div class="flow-item" style="margin-bottom:1.5rem;">
+        <div class="flow-icon"><i class="fas fa-cogs"></i></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">4단계 학습 레시피로 <span class="accent3">~6T 토큰</span>으로 파레토 최적 달성</p>
+        </div>
+      </div>
+      <div class="flow-item" style="margin-bottom:1.5rem;">
+        <div class="flow-icon"><i class="fas fa-mobile-alt"></i></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">상용 스마트폰에서 최초 MoE 추론 구현, <span class="accent">Dense 대비 최대 3.8× 빠른</span> 런타임</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-road"></i></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">MoE는 <span class="accent2">효율적 온디바이스 LLM을 위한 실용적 경로</span>임을 확인</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:80vh;text-align:center;">
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);">MobileMoE</h2>
+      <p style="font-size:clamp(1.1rem,2vw,1.5rem);margin-top:0.5rem;" class="muted">Scaling On-Device Mixture of Experts</p>
+      <div class="hr" style="width:100px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">Yanbei Chen, Hanxian Huang, Ernie Chang, Jacob Szwejbka</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">Digant Desai, Zechun Liu, Vikas Chandra, Raghuraman Krishnamoorthi</p>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;" class="muted">Meta AI</p>
+      <div style="margin-top:2rem;">
+        <a href="http://arxiv.org/abs/2605.27358v1" class="tag tag-amber" style="font-size:clamp(0.9rem,1.5vw,1.1rem);text-decoration:none;">
+          <i class="fas fa-external-link-alt"></i> arXiv:2605.27358v1
+        </a>
+      </div>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:2rem;" class="muted">CC BY 4.0 · May 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
