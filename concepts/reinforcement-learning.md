@@ -215,3 +215,7 @@ _자동 생성됨_
 - [[sources/2026-05-24-remember-to-be-curious-episodic-context-and-persis.md]]
 
 - [[sources/2026-05-24-deltabox-scaling-stateful-ai-agents-with-milliseco.md]]
+
+- [[sources/2026-05-28-alignment-tampering-how-reinforcement-learning-fro.md]]
+
+- [[sources/2026-05-28-guiding-llm-post-training-data-engineering-with-mo.md]]

@@ -487,3 +487,22 @@
 - [[sources/2026-05-26-chronos-temporally-aware-multi-agent-coordination-.md]] - CHRONOS: Temporally-Aware Multi-Agent Coordination for Evolving Data Marketplaces
 - [[sources/2026-05-26-decomposing-queries-into-tool-calls-for-long-video.md]] - Decomposing Queries into Tool Calls for Long-Video Keyframe Retrieval
 - [[sources/2026-05-27-veritrace-evolving-mental-models-for-deep-research.md]] - VeriTrace: Evolving Mental Models for Deep Research Agents
+- [[sources/2026-05-28-muse-autoskill-self-evolving-agents-via-skill-crea.md]] - MUSE-Autoskill: Self-Evolving Agents via Skill Creation, Memory, Management, and Evaluation
+- [[sources/2026-05-28-natural-language-query-to-configuration-for-retrie.md]] - Natural Language Query to Configuration for Retrieval Agents
+- [[sources/2026-05-28-genesis-harnessing-ai-agents-for-autonomous-6g-ran.md]] - GENESIS: Harnessing AI Agents for Autonomous 6G RAN Synthesis, Research, and Testing
+- [[sources/2026-05-28-mobilemoe-scaling-on-device-mixture-of-experts.md]] - MobileMoE: Scaling On-Device Mixture of Experts
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-28-alignment-tampering-how-reinforcement-learning-fro.md]] - Alignment Tampering: How Reinforcement Learning from Human Feedback Is Exploited to Optimize Misaligned Biases
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-28-guiding-llm-post-training-data-engineering-with-mo.md]] - Guiding LLM Post-training Data Engineering with Model Internals from Sparse Autoencoders
+- [[sources/2026-05-28-matcha-matching-text-via-contrastive-semantic-alig.md]] - MATCHA: Matching Text via Contrastive Semantic Alignment
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-28-finharness-an-inline-lifecycle-safety-harness-for-.md]] - FinHarness: An Inline Lifecycle Safety Harness for Finance LLM Agents
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-05-28-maat-the-agentic-legal-research-assistant-for-comp.md]] - Maat: The Agentic Legal Research Assistant for Competition Protection
+- [[sources/2026-05-28-governed-evolution-of-agent-runtimes-through-execu.md]] - Governed Evolution of Agent Runtimes through Executable Operational Cognition
+- [[sources/2026-05-28-modeling-agentic-technical-debt-and-stochastic-tax.md]] - Modeling Agentic Technical Debt and Stochastic Tax: A Standalone Framework for Measurement, Simulation, and Dashboarding
+- [[sources/2026-05-28-sia-self-improving-ai-with-harness-weight-updates.md]] - SIA: Self Improving AI with Harness & Weight Updates
+- [[sources/2026-05-28-lost-in-sampling-assessing-lexical-reachability-in.md]] - Lost in Sampling: Assessing Lexical Reachability in LLMs via the Word Coverage Score (WCS)
+- [[sources/2026-05-28-pair-in-pair-out-latent-multi-token-prediction-for.md]] - Pair-In, Pair-Out: Latent Multi-Token Prediction for Efficient LLMs
+- [[sources/2026-05-28-gumbel-machine-counterfactual-student-writing-gene.md]] - Gumbel Machine: Counterfactual Student Writing Generation via Gumbel Noise Steering

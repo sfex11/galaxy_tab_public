@@ -1111,3 +1111,33 @@
 - 2026-05-27-when-gradients-collide-failure-modes-of-multi-obje.md
 
 ## [2026-05-27 08:39] ingest | VeriTrace: Evolving Mental Models for Deep Research Agents
+
+## [2026-05-28 08:32] ingest | MUSE-Autoskill: Self-Evolving Agents via Skill Creation, Memory, Management, and Evaluation
+
+## [2026-05-28 08:32] ingest | Natural Language Query to Configuration for Retrieval Agents
+
+## [2026-05-28 08:32] ingest | GENESIS: Harnessing AI Agents for Autonomous 6G RAN Synthesis, Research, and Testing
+
+## [2026-05-28 08:32] ingest | MobileMoE: Scaling On-Device Mixture of Experts
+
+## [2026-05-28 08:32] ingest | Alignment Tampering: How Reinforcement Learning from Human Feedback Is Exploited to Optimize Misaligned Biases
+
+## [2026-05-28 08:32] ingest | Guiding LLM Post-training Data Engineering with Model Internals from Sparse Autoencoders
+
+## [2026-05-28 08:32] ingest | MATCHA: Matching Text via Contrastive Semantic Alignment
+
+## [2026-05-28 08:32] ingest | FinHarness: An Inline Lifecycle Safety Harness for Finance LLM Agents
+
+## [2026-05-28 08:32] ingest | Maat: The Agentic Legal Research Assistant for Competition Protection
+
+## [2026-05-28 08:32] ingest | Governed Evolution of Agent Runtimes through Executable Operational Cognition
+
+## [2026-05-28 08:32] ingest | Modeling Agentic Technical Debt and Stochastic Tax: A Standalone Framework for Measurement, Simulation, and Dashboarding
+
+## [2026-05-28 08:32] ingest | SIA: Self Improving AI with Harness & Weight Updates
+
+## [2026-05-28 08:32] ingest | Lost in Sampling: Assessing Lexical Reachability in LLMs via the Word Coverage Score (WCS)
+
+## [2026-05-28 08:32] ingest | Pair-In, Pair-Out: Latent Multi-Token Prediction for Efficient LLMs
+
+## [2026-05-28 08:32] ingest | Gumbel Machine: Counterfactual Student Writing Generation via Gumbel Noise Steering
