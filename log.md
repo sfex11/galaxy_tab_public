@@ -1141,3 +1141,32 @@
 ## [2026-05-28 08:32] ingest | Pair-In, Pair-Out: Latent Multi-Token Prediction for Efficient LLMs
 
 ## [2026-05-28 08:32] ingest | Gumbel Machine: Counterfactual Student Writing Generation via Gumbel Noise Steering
+
+## [2026-05-29 08:32] ingest | Human Label Variation as Stable Signal: Learning Annotator-Specific Explanation Behavior via Cross-Annotator Preference Optimization
+
+## [2026-05-29 08:32] ingest | Can Large Language Models Handle Discourse Particles? A Case Study of Colloquial Malay
+
+## [2026-05-29 08:32] ingest | Can LLMs Use Linguistic Uncertainty Markers to Reliably Reflect Intrinsic Confidence?
+
+## [2026-05-29 08:32] ingest | Rethinking Memory as Continuously Evolving Connectivity
+
+## [2026-05-29 08:32] ingest | PEFT-Arena: Understanding Parameter-Efficient Finetuning from a Stability-Plasticity Perspective
+
+## [2026-05-29 08:32] ingest | Sense Representations Are Inducible Interfaces
+
+## [2026-05-29 08:32] ingest | Refusal Before Decoding: Detecting and Exploiting Refusal Signals in Intermediate LLM Activations
+
+## [2026-05-29 08:32] ingest | SwarmHarness: Skill-Based Task Routing via Decentralized Incentive-Aligned AI Agent Networks
+
+## [2026-05-29 08:33] llm-ingest | 11편 분석, 엔티티 355개, 개념 994개
+- 2026-05-29-vlms-may-not-globally-enhance-human-alignment-over.md
+- 2026-05-29-self-improving-language-models-with-bidirectional-.md
+- 2026-05-29-calibrating-conservatism-for-scalable-oversight.md
+- 2026-05-29-personal-visual-memory-from-explicit-and-implicit-.md
+- 2026-05-29-omniverifier-m1-multimodal-meta-verifier-with-expl.md
+- 2026-05-29-ω-qvla-robust-quantization-for-vision-language-act.md
+- 2026-05-29-skill-conditioned-gated-self-distillation-for-llm-.md
+- 2026-05-29-do-agents-need-semantic-metadata-a-comparative-stu.md
+- 2026-05-29-learn-from-weaknesses-automated-domain-specializat.md
+- 2026-05-29-agent-explorative-policy-optimization-for-multimod.md
+- 2026-05-29-rethinking-memory-as-continuously-evolving-connect.md

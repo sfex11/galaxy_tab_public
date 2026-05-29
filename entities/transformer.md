@@ -77,3 +77,7 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-05-20-dashattention-differentiable-and-adaptive-sparse-h.md]]
 
 - [[sources/2026-05-24-lcguard-latent-communication-guard-for-safe-kv-sha.md]]
+
+- [[sources/2026-05-29-can-large-language-models-handle-discourse-particl.md]]
+
+- [[sources/2026-05-29-refusal-before-decoding-detecting-and-exploiting-r.md]]

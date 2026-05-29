@@ -506,3 +506,14 @@
 - [[sources/2026-05-28-lost-in-sampling-assessing-lexical-reachability-in.md]] - Lost in Sampling: Assessing Lexical Reachability in LLMs via the Word Coverage Score (WCS)
 - [[sources/2026-05-28-pair-in-pair-out-latent-multi-token-prediction-for.md]] - Pair-In, Pair-Out: Latent Multi-Token Prediction for Efficient LLMs
 - [[sources/2026-05-28-gumbel-machine-counterfactual-student-writing-gene.md]] - Gumbel Machine: Counterfactual Student Writing Generation via Gumbel Noise Steering
+- [[sources/2026-05-29-human-label-variation-as-stable-signal-learning-an.md]] - Human Label Variation as Stable Signal: Learning Annotator-Specific Explanation Behavior via Cross-Annotator Preference Optimization
+- [[entities/transformer]] - Transformer
+- [[sources/2026-05-29-can-large-language-models-handle-discourse-particl.md]] - Can Large Language Models Handle Discourse Particles? A Case Study of Colloquial Malay
+- [[sources/2026-05-29-can-llms-use-linguistic-uncertainty-markers-to-rel.md]] - Can LLMs Use Linguistic Uncertainty Markers to Reliably Reflect Intrinsic Confidence?
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-29-rethinking-memory-as-continuously-evolving-connect.md]] - Rethinking Memory as Continuously Evolving Connectivity
+- [[sources/2026-05-29-peft-arena-understanding-parameter-efficient-finet.md]] - PEFT-Arena: Understanding Parameter-Efficient Finetuning from a Stability-Plasticity Perspective
+- [[sources/2026-05-29-sense-representations-are-inducible-interfaces.md]] - Sense Representations Are Inducible Interfaces
+- [[entities/transformer]] - Transformer
+- [[sources/2026-05-29-refusal-before-decoding-detecting-and-exploiting-r.md]] - Refusal Before Decoding: Detecting and Exploiting Refusal Signals in Intermediate LLM Activations
+- [[sources/2026-05-29-swarmharness-skill-based-task-routing-via-decentra.md]] - SwarmHarness: Skill-Based Task Routing via Decentralized Incentive-Aligned AI Agent Networks
