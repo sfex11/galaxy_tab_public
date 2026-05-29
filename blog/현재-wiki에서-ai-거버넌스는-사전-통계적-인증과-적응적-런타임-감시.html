@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 통제의 근거를 이전하라 — 관찰 가능성에서 내부 보수성으로</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#faf9f7;--fg:#2c2825;--muted:#7a7470;--accent:#c2703e;
+    --blue:#5b7c99;--green:#6b9e7a;--card-bg:rgba(255,255,255,0.7);
+    --card-border:rgba(194,112,62,0.12);--card-shadow:0 2px 16px rgba(44,40,37,0.06);
+    --radius:14px;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Noto Sans KR',sans-serif;font-weight:400;
+    background:var(--bg);color:var(--fg);
+    line-height:1.85;font-size:clamp(15px,1.6vw,17.5px);
+    -webkit-font-smoothing:antialiased;
+  }
+  article{max-width:780px;margin:0 auto;padding:0 20px 80px}
+
+  /* ── 헤더 ── */
+  .hero{padding:60px 0 40px;text-align:center}
+  .hero .tag{
+    display:inline-block;font-size:clamp(11px,1.2vw,13px);font-weight:500;
+    color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;
+    border:1px solid var(--card-border);border-radius:100px;
+    padding:4px 16px;margin-bottom:20px;
+  }
+  .hero h1{
+    font-family:'Source Serif 4',serif;font-weight:700;
+    font-size:clamp(1.6rem,4.5vw,2.5rem);line-height:1.35;
+    color:var(--fg);margin-bottom:18px;
+  }
+  .hero h1 em{
+    font-style:normal;color:var(--accent);
+  }
+  .hero .sub{
+    font-size:clamp(13.5px,1.4vw,16px);color:var(--muted);
+    max-width:600px;margin:0 auto;line-height:1.7;
+  }
+  .meta{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+    margin-top:24px;font-size:clamp(12px,1.2vw,13.5px);color:var(--muted);
+  }
+  .meta span{display:flex;align-items:center;gap:5px}
+
+  /* ── 구분선 ── */
+  .divider{
+    border:none;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(194,112,62,0.18),transparent);
+    margin:48px 0;
+  }
+
+  /* ── 섹션 ── */
+  .section{margin-bottom:52px}
+  .section h2{
+    font-family:'Source Serif 4',serif;font-weight:700;
+    font-size:clamp(1.25rem,3vw,1.65rem);line-height:1.4;
+    margin-bottom:20px;color:var(--fg);
+  }
+  .section h2 .num{
+    color:var(--accent);margin-right:6px;
+    font-family:'Noto Sans KR',sans-serif;font-weight:700;
+  }
+  .section h3{
+    font-family:'Source Serif 4',serif;font-weight:600;
+    font-size:clamp(1.05rem,2.2vw,1.25rem);line-height:1.5;
+    margin:32px 0 12px;color:var(--fg);
+  }
+  .section p{margin-bottom:16px}
+  .section ul,.section ol{margin:0 0 16px 20px}
+  .section li{margin-bottom:8px}
+
+  /* ── 인용구 ── */
+  blockquote{
+    max-width:800px;margin:24px auto;padding:18px 24px;
+    border-left:3px solid var(--accent);
+    background:rgba(194,112,62,0.04);border-radius:0 var(--radius) var(--radius) 0;
+    font-size:clamp(14px,1.4vw,16px);line-height:1.8;color:var(--muted);
+  }
+  blockquote strong{color:var(--fg);font-weight:500}
+
+  /* ── 카드 ── */
+  .card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius);padding:24px 26px;
+    box-shadow:var(--card-shadow);margin:24px 0;
+  }
+  .card .card-label{
+    font-size:clamp(11px,1.1vw,12.5px);font-weight:500;
+    color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .card h4{
+    font-family:'Source Serif 4',serif;font-weight:600;
+    font-size:clamp(1rem,2vw,1.15rem);margin-bottom:8px;color:var(--fg);
+  }
+  .card p{font-size:clamp(13.5px,1.4vw,15.5px);color:var(--muted);margin-bottom:8px}
+  .card p:last-child{margin-bottom:0}
+
+  /* ── 강조 색상 ── */
+  .acc-orange{color:var(--accent);font-weight:500}
+  .acc-blue{color:var(--blue);font-weight:500}
+  .acc-green{color:var(--green);font-weight:500}
+
+  /* ── 비유 박스 ── */
+  .analogy{
+    background:linear-gradient(135deg,rgba(91,124,153,0.06),rgba(107,158,122,0.06));
+    border:1px solid rgba(91,124,153,0.12);border-radius:var(--radius);
+    padding:22px 26px;margin:28px 0;
+  }
+  .analogy .analogy-label{
+    font-size:clamp(11px,1.1vw,12.5px);font-weight:500;
+    color:var(--green);letter-spacing:0.06em;text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .analogy p{color:var(--muted);font-size:clamp(13.5px,1.4vw,15.5px);margin-bottom:8px}
+  .analogy p:last-child{margin-bottom:0}
+
+  /* ── 파이프라인 다이어그램 ── */
+  .pipeline{
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+    gap:0;margin:32px 0;
+  }
+  .pipeline .step{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius);padding:16px 20px;text-align:center;
+    width:clamp(140px,28vw,200px);box-shadow:var(--card-shadow);
+  }
+  .pipeline .step .step-icon{font-size:24px;margin-bottom:6px}
+  .pipeline .step .step-title{
+    font-family:'Source Serif 4',serif;font-weight:600;
+    font-size:clamp(13px,1.4vw,15px);color:var(--fg);margin-bottom:4px;
+  }
+  .pipeline .step .step-desc{
+    font-size:clamp(11px,1.1vw,12.5px);color:var(--muted);line-height:1.6;
+  }
+  .pipeline .arrow{
+    font-size:20px;color:var(--accent);padding:0 6px;
+    flex-shrink:0;
+  }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box{
+    background:linear-gradient(135deg,rgba(194,112,62,0.05),rgba(194,112,62,0.02));
+    border:1px solid rgba(194,112,62,0.15);border-radius:var(--radius);
+    padding:28px 30px;margin:32px 0;
+  }
+  .conclusion-box h3{
+    font-family:'Source Serif 4',serif;font-weight:700;
+    font-size:clamp(1.1rem,2.4vw,1.35rem);color:var(--accent);
+    margin:0 0 14px;
+  }
+  .conclusion-box p{color:var(--muted);margin-bottom:12px}
+  .conclusion-box p:last-child{margin-bottom:0}
+
+  /* ── 소스 태그 ── */
+  .src{
+    display:inline-block;font-size:clamp(11px,1vw,12px);font-weight:500;
+    color:var(--blue);background:rgba(91,124,153,0.08);
+    border-radius:6px;padding:2px 8px;margin:0 2px;
+    vertical-align:baseline;
+  }
+
+  /* ── 반응형 ── */
+  @media(max-width:600px){
+    .hero{padding:40px 0 28px}
+    .pipeline{flex-direction:column;gap:0}
+    .pipeline .arrow{transform:rotate(90deg);padding:4px 0}
+    .pipeline .step{width:100%;max-width:280px}
+    .card{padding:20px 18px}
+    blockquote{padding:14px 18px}
+    .conclusion-box{padding:22px 20px}
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <span class="tag">AI 거버넌스 · 통제 패러다임</span>
+    <h1>AI 통제의 근거를 이전하라<br><em>관찰 가능성</em>에서 <em>내부 보수성</em>으로</h1>
+    <p class="sub">에이전트가 인간 평가자를 초과하는 순간, 외부 감시는 구조적으로 붕괴한다. 그렇다면 통제의 근거를 어디에 두어야 하는가.</p>
+    <div class="meta">
+      <span>2025년 7월</span>
+      <span>·</span>
+      <span>Calibrating Conservatism for Scalable Oversight</span>
+      <span>·</span>
+      <span>약 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 1 ── -->
+  <section class="section">
+    <h2><span class="num">01</span>왜 우리는 AI를 '바깥에서' 지켜보려 했는가</h2>
+
+    <p>현대 AI 거버넌스의 기본 설계는 단순명쾌하다. 에이전트가 무엇을 하는지 <span class="acc-orange">외부에서 관찰</span>하고, 그 관찰 결과를 기준으로 안전성을 판정하며, 문제가 발견되면 교정한다. EU AI Act, NIST RMF, CoE Convention — 이름은 다르지만 이면에 있는 논리는 하나다. <strong>인간이 에이전트를 볼 수 있어야 통제할 수 있다.</strong></p>
+
+    <div class="analogy">
+      <div class="analogy-label">💡 일상적 비유</div>
+      <p>이것은 학교 교실에 CCTV를 달고 교감 선생님이 모니터실에서 학생들을 지켜보는 것과 같다. 학생이 뭘 하는지 보이면 통제가 가능하다는 전제다. 하지만 학생이 교감보다 빠르게 암호 메모를 주고받고, 교감이 인식하지 못할 정도로 미세한 행동으로 시험지를 바꾼다면? CCTV는 여전히 돌아가고 있지만, <strong>화면 속 평화는 환상</strong>이 된다.</p>
+    </div>
+
+    <p>Wiki에 연결된 <span class="src">ai-governance</span><span class="src">ai-risk-regulation</span>의 "Bounding the Black Box" 논문은 이 외부 관찰 기반 통제를 한 단계 격상시키려 시도한다. 단순한 절차적 검사를 넘어, <span class="acc-blue">conformal prediction</span>과 <span class="acc-blue">confidence-interval-safety</span> 같은 정량적 도구를 동원해 "증거 기반 인증"으로 만들겠다는 것이다. 벤치마크조차 없는 상황에서도 비교적 안전성을 점수화하려는 시도<span class="src">acceptable-risk-quantification</span>도 같은 연장선에 있다.</p>
+
+    <blockquote>
+      이 접근법들의 공통 전제는 하나다. <strong>"에이전트의 출력을 외부에서 충분히 정밀하게 측정할 수 있다."</strong> 그러나 이 전제의 수명은 에이전트의 능력이 인간 평가자와 같은 수준에 머무는 동안만 보장된다.
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 2 ── -->
+  <section class="section">
+    <h2><span class="num">02</span>외부 관찰이 붕괴하는 두 가지 메커니즘</h2>
+
+    <p>Wiki의 논문들이 조명하는 외부 관찰의 붕괴는 단일 사건이 아니다. <span class="acc-orange">두 가지 독립적 메커니즘</span>이 동시에 작동하며, 그 결합 효과는 기하급수적이다.</p>
+
+    <h3>평가 단위와 배포 단위의 불일치</h3>
+
+    <p><span class="src">ai-safety</span>에 연결된 SafetyALFRED 논문은 11개 SOTA 모델을 대상으로 한 실증 연구다. disembodied QA 기반 안전 평가 — 즉, 텍스트 질의응답 형태로 측정한 안전성 점수 — 가 실제 체화(embodied) 배포 환경에서의 안전성을 <strong>전혀 보장하지 못함</strong>을 보여준다.</p>
+
+    <div class="card">
+      <div class="card-label">핵심 발견</div>
+      <h4>SafetyALFRED의 실증 결과</h4>
+      <p>텍스트로 "칼을 내려놓으세요"라고 대답하는 에이전트가, 실제 로봇 팔을 제어하는 환경에서는 칼을 들어 올린다. 평가하는 것과 실제 수행하는 것 사이에 <strong>구조적 단절</strong>이 존재한다는 뜻이다.</p>
+    </div>
+
+    <h3>관찰 자체의 의미론적 손실</h3>
+
+    <p>여기에 더 심각한 문제가 있다. <span class="src">agent-os-semantic-gap</span><span class="src">algorithm-system-translation-gap</span>에 연결된 Crab 논문이 밝히는 바에 따르면, 에이전트 내부의 <span class="acc-green">의미론적 의존 그래프</span> — "어떤 상태에 의존하여 어떤 결정을 내리는가" — 를 OS 수준의 체크포인트 메커니즘(전체 상태 스냅샷)으로 번역할 때 근본적 비효율과 정보 손실이 발생한다.</p>
+
+    <div class="analogy">
+      <div class="analogy-label">💡 일상적 비유</div>
+      <p>영화 감독이 배우의 미세한 표정 변화를 보며 연기를 지도하는 상황을 상상해보라. 그런데 감독에게 제공되는 것은 1초마다 찍힌 <strong>정지 화면 스냅샷</strong>뿐이다. 표정이 변하는 '과정'과 그 변화가 가진 '의미'는 스냅샷 사이의 틈에서 영원히 사라진다. 이것이 외부 관찰 계층이 마주하는 의미론적 손실의 본질이다.</p>
+    </div>
+
+    <p>두 메커니즘이 결합하면 <span class="src">auditable-gap</span>이 가리키는 <span class="acc-orange">감사 가능성의 간극</span>은 에이전트 능력이 인간을 초과할수록 기하급수적으로 확대된다. 그리고 이 간극을 메우려 감시 계층을 여러 단계로 중첩시키면 — <span class="src">compound-oversight-failure</span>이 암시하듯 — 각 단계의 미세한 인식 불가능한 오류가 복합적으로 누적되어 <strong>감시 자체가 무의미해지는 역설</strong>이 발생한다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 3 ── -->
+  <section class="section">
+    <h2><span class="num">03</span>내부 보수성으로의 이전 — 세 가지 경로</h2>
+
+    <p>그렇다면 통제의 근거를 어디로 옮겨야 하는가. 질문의 핵심 — <strong>"에이전트 스스로 얼마나 보수적으로 행동하도록 내부 보정되어 있는가"</strong> — 로의 이전은 Wiki 논문들이 이미 부분적으로 실현하고 있는 세 가지 경로를 통해 구체화된다.</p>
+
+    <!-- 경로 A -->
+    <div class="card" style="margin-top:28px">
+      <div class="card-label">경로 A · 설계 시점 정렬</div>
+      <h4>실행을 관찰하여 교정한다 → 설계 단계에서 보수성을 주입한다</h4>
+      <p><span class="src">agora-opt</span>의 MASPO 논문은 핵심적 대비를 제공한다. Agora-Opt가 런타임 메모리·토론 구조를 통해 <em>실행 중</em> 다중 에이전트 정렬을 달성한다면, MASPO는 <em>프롬프트 설계 시점</em>에서 사전 정렬을 보장한다. 즉, 에이전트가 돌아가기 전부터 보수성이 구조적으로 내장되는 방식이다.</p>
+    </div>
+
+    <!-- 경로 B -->
+    <div class="card">
+      <div class="card-label">경로 B · 내부 활성화 기반 거부 감지</div>
+      <h4>출력을 읽어 판단한다 → 디코딩 이전 내부 상태를 읽어낸다</h4>
+      <p>"Refusal Before Decoding" 논문<span class="src">activation-steering</span>은 에이전트가 답변을 완성하기 <strong>이전에</strong>, 중간 잔차 흐름(residual stream) 활성화에서 거부 신호를 선형 프로브로 예측 가능함을 보여준다. 외부에서 완성된 출력을 검사하는 것이 아니라, 내부 계산 과정의 보수성을 직접 읽어내는 메커니즘이다.</p>
+    </div>
+
+    <!-- 경로 C -->
+    <div class="card">
+      <div class="card-label">경로 C · 신념 상태를 제약 조건으로 사용</div>
+      <h4>불확실성을 표현하게 한다 → 불확실성을 행동 제약으로 직결시킨다</h4>
+      <p><span class="src">belief-state-as-constraint</span>는 에이전트의 불확실성을 행동 제약으로 직결시키는 패러다임이다. LLM이 내재적 불확실성을 언어적 표지로 신뢰성 있게 반영하지 못한다는 한계<span class="src">belief-state-as-constraint</span>가 오히려 <strong>역설적 논증</strong>을 강화한다: 외부 표현에 의존하지 말고, 내부 계산에서 보수성을 강제하라. <span class="src">constrained-exploration</span><span class="src">constrained-tool-access</span> 역시 에이전트가 스스로 탐색 범위와 도구 접근을 제한하는 내부 보수성 메커니즘이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 4 ── -->
+  <section class="section">
+    <h2><span class="num">04</span>세 경로가 만드는 완결 파이프라인</h2>
+
+    <p>위 세 경로를 단순히 나열하는 것이 아니라, 그 관계를 읽어내면 놀라운 구조가 드러난다. 이들은 각각 독립적인 기법이 아니라, <span class="acc-orange">하나의 연속체</span>를 형성한다.</p>
+
+    <div class="pipeline">
+      <div class="step">
+        <div class="step-icon">🔍</div>
+        <div class="step-title">보수성 감지</div>
+        <div class="step-desc">Refusal Before Decoding<br>내부 활성화에서 거부 신호 읽기</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-icon">🧲</div>
+        <div class="step-title">보수성 주입</div>
+        <div class="step-desc">Activation Steering<br>활성화 방향을 보수적으로 조작</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-icon">🔒</div>
+        <div class="step-title">보수성을 제약으로 변환</div>
+        <div class="step-desc">Belief State as Constraint<br>불확실성 → 행동 제한</div>
+      </div>
+    </div>
+
+    <p>감지 → 주입 → 제약 변환. 이 세 단계는 <strong>외부 관찰자 없이도 내부 보수성을 완결하는 폐루프(closed loop)</strong>를 구성할 수 있다. 외부의 누군가가 "이건 위험해"라고 판정할 필요 없이, 에이전트 내부에서 보수성이 탐지되고, 강화되고, 행동 제약으로 변환되는 자율적 사이클이다.</p>
+
+    <p>여기에 설계 시점 정렬(MASPO)이 결합하면 더 강력해진다. <span class="src">agora-opt</span>의 MASPO 대비를 <span class="src">communication-independent-shielding</span>으로 확장하면, <strong>외부 감시자와의 통신 채널이 끊겨도 내부 보수성이 유지되는 구조</strong>가 된다. 마치 잠수함이 수면과의 통신이 끊겨도 내부 안전장치에 의해 스스로 심도를 유지하는 것과 같다.</p>
+
+    <div class="analogy">
+      <div class="analogy-label">💡 일상적 비유</div>
+      <p>자율주행차를 생각해보라. 1세대 방식은 "원격 모니터링 센터에서 차량을 지켜보다가 문제가 보이면 브레이크를 건다"였다. 하지만 통신 지연이나 센서의 맹점 앞에서 이 방식은 한계에 부딪힌다. 2세대 방식은 차량 내부에 "불확실성이 임계값을 넘으면 <strong>스스로 속도를 줄이고 정차한다</strong>"는 보수성을 프로그래밍하는 것이다. 외부 관찰에 의존하지 않고 내부 보수성에 의존하는 전환이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 5: 결론 ── -->
+  <section class="section">
+    <h2><span class="num">05</span>패러다임 전환: 무엇을 어떻게 바꾸어야 하는가</h2>
+
+    <p>지금까지의 분석이 보여주는 것은 단순한 기법의 변화가 아니다. AI 통제의 <strong>존재론적 근거</strong> 자체가 이동해야 한다는 구조적 주장이다.</p>
+
+    <div class="conclusion-box">
+      <h3>기존 패러다임의 전제</h3>
+      <p>"인간이 에이전트를 관찰할 수 있는가?" — 이것이 통제 가능 여부의 유일한 근거였다. 관찰 → 판정 → 교정의 선형적 사슬. 이 사슬은 에이전트가 인간보다 능력이 낮거나 비슷할 때만 유효하다.</p>
+    </div>
+
+    <div class="conclusion-box">
+      <h3>전환되어야 할 패러다임</h3>
+      <p>"에이전트 스스로 얼마나 보수적으로 행동하도록 내부 보정되어 있는가?" — 통제의 근거를 관찰 가능성에서 내부 보수성으로 이전해야 한다. 이것은 세 가지 구조적 변화를 요구한다.</p>
+    </div>
+
+    <p><span class="acc-orange">첫째, 규제의 측정 대상을 바꾸어야 한다.</span> 에이전트의 "출력이 안전한가"를 측정하는 것에서, 에이전트의 "내부 보수성 메커니즘이 존재하는가, 그것이 얼마나 강건한가"를 측정하는 것으로 규제의 초점을 이전해야 한다. 이는 conformal prediction 같은 외부 측정 도구의 역할을 재정의하는 것을 의미한다.</p>
+
+    <p><span class="acc-blue">둘째, 인증의 시점을 앞당겨야 한다.</span> 런타임 통계적 인증에서 설계 시점(design-time) 보수성 인증으로 이전해야 한다. MASPO가 보여주듯, 프롬프트 설계 단계에서 보수성이 구조적으로 보장되었는지를 검증하는 것이 런타임 출력을 검증하는 것보다 근본적으로 안정적이다.</p>
+
+    <p><span class="acc-green">셋째, 통신 독립성을 설계 원칙으로 삼아야 한다.</span> communication-independent-shielding이 암시하듯, 외부 감시자와의 통신 채널이 단절되어도 내부 보수성이 유지되는 구조를 기본 설계 원칙으로 채택해야 한다. 이것은 "감시가 가능한가"라는 질문을 "감시가 불가능한 상황에서도 안전한가"라는 질문으로 대체하는 것이다.</p>
+
+    <blockquote>
+      결국 "Calibrating Conservatism for Scalable Oversight"가 던지는 진정한 질문은 기술적이 아니다. <strong>우리는 통제의 근거를 인간의 인지 능력에 두는 것을 포기할 수 있는가.</strong> 에이전트가 우리보다 똑똑해지는 세계에서, 통제의 마지막 닻은 인간의 관찰력이 아니라 에이전트 내부에 심어진 보수성뿐이다. 이 전환을 받아들이지 않으면, 우리는 점점 정교해지는 환상의 CCTV 앞에 서 있게 될 것이다.
+    </blockquote>
+
+    <p style="margin-top:32px;font-size:clamp(12.5px,1.2vw,14px);color:var(--muted);text-align:center;">
+      — 참고 논문: Calibrating Conservatism for Scalable Oversight · SafetyALFRED · Crab · Bounding the Black Box · Refusal Before Decoding · MASPO (Agora-Opt) 외 —
+    </p>
+  </section>
+
+</article>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0 40px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+</body>
+</html>
