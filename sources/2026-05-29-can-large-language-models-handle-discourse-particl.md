@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-29-can-llms-use-linguistic-uncertainty-markers-to-rel]]: 모두 LLM이 인간의 미세한 언어적 표지(linguistic markers)를 처리하는 능력을 실증적으로 분석하여, 전자는 담화 입자(discourse particles)를, 후자는 인식적 불확실성 표지(epistemic markers)를 다룹니다.

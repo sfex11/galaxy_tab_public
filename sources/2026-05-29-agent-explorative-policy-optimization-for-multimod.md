@@ -39,3 +39,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-29-skill-conditioned-gated-self-distillation-for-llm-]]: 에이전트 강화학습에서 발생하는 구조적 분리 문제(전자는 '생각-행동 분리', 후자는 '탐색-흡수 분리')를 각각 식별하고, 이를 비사후적(non-post-hoc) 방식으로 통합 해결하는 구조적 해법을 제안합니다.
+- → [[sources/2026-05-29-self-improving-language-models-with-bidirectional-]]: 에이전트의 탐색 한계를 근원적으로 문제 삼으며, 전자는 기존 RL의 탐색-흡수 분리 가정이 에이전트 설정에서 실패함을 보이고, 후자는 기존 탐색 방법이 확률 분포 경계에 갇히는 한계를 지적합니다.

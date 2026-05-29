@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-29-refusal-before-decoding-detecting-and-exploiting-r]]: 모두 모델의 중간 활성화(activation)라는 내재적 신호를 활용하여 LLM의 행동을 제어하는데, 전자는 SAE를 통한 내부 표현으로 사후 학습 데이터를 엔지니어링하고, 후자는 잔차 흐름에서 거절 신호를 조기 탐지합니다.
+- → [[sources/2026-05-29-sense-representations-are-inducible-interfaces]]: 사전 학습된 모델의 내부 표현을 인터벤션하여 새로운 능력을 유도한다는 공통점이 있으며, 전자는 SAE를 통한 내부 특성 추출로 데이터를 엔지니어링하고, 후자는 게이티드 잔차 어댑터로 의미 경로를 명시적으로 유도합니다.

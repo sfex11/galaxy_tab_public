@@ -11,3 +11,7 @@ Vision-Language-Action (VLA) models unify perception, reasoning, and control wit
 
 ---
 _자동 생성될_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-28-mobilemoe-scaling-on-device-mixture-of-experts]]: 거대 모델의 엣지 디바이스 배포를 가능하게 한다는 공통 목표 아래, 전자는 서브 bilion 규모의 MoE 아키텍처로, 후자는 복합 회전 및 스케일링 기반 양자화로 각각 효율성을 극대화합니다.

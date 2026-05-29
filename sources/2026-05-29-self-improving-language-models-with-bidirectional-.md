@@ -38,3 +38,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-28-sia-self-improving-ai-with-harness-weight-updates]]: 두 논문 모두 AI 시스템의 자가 개선(self-improvement) 문제를 다루지만, 전자는 하네스 재작성과 가중치 업데이트의 통합을, 후자는 양방향 진화 탐색을 통한 확률 분포 경계 확장이라는 상호 보완적인 접근을 제시합니다.
+- → [[sources/2026-05-29-agent-explorative-policy-optimization-for-multimod]]: 에이전트의 탐색 한계를 근원적으로 문제 삼으며, 전자는 기존 RL의 탐색-흡수 분리 가정이 에이전트 설정에서 실패함을 보이고, 후자는 기존 탐색 방법이 확률 분포 경계에 갇히는 한계를 지적합니다.

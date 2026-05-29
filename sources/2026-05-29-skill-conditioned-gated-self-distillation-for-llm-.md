@@ -32,3 +32,8 @@ On-policy self-distillation (SD)에서 교사자 측에서의 신뢰(privileged 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-05-28-muse-autoskill-self-evolving-agents-via-skill-crea]]: 에이전트의 '스킬'을 정적 산출물이 아닌 재사용 가능하고 학습 가능한 단위로 재정의한다는 공통된 철학을 공유하며, 전자는 스킬의 생명주기 관리를, 후자는 스킬 조건부 게이팅을 통한 추론 향상을 다룹니다.
+- → [[sources/2026-05-29-agent-explorative-policy-optimization-for-multimod]]: 에이전트 강화학습에서 발생하는 구조적 분리 문제(전자는 '생각-행동 분리', 후자는 '탐색-흡수 분리')를 각각 식별하고, 이를 비사후적(non-post-hoc) 방식으로 통합 해결하는 구조적 해법을 제안합니다.
