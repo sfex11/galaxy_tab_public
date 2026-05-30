@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLMSurgeon: Diagnosing Data Mixture of Large Language Models — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100%">
+    <div style="margin-bottom:clamp(16px,3vw,32px)">
+      <span class="tag tag-amber">arXiv: 2605.30348v1</span>
+    </div>
+    <h1 style="font-size:clamp(28px,5vw,56px);line-height:1.2;margin-bottom:clamp(12px,2vw,24px)">LLMSurgeon</h1>
+    <p style="font-size:clamp(16px,2.5vw,28px);margin-bottom:clamp(24px,4vw,48px)" class="muted">대형 언어 모델의 사전학습 데이터 혼합 비율 진단</p>
+    <div class="hr" style="width:80px;margin:0 auto clamp(24px,4vw,48px)"></div>
+    <p style="font-size:clamp(12px,1.5vw,18px)" class="muted">Yaxin Luo, Jiacheng Cui, Xiaohan Zhao, Xinyi Shang, Jiacheng Liu, Xinyue Bi, Zhaoyi Li, Zhiqiang Shen</p>
+    <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(8px,1vw,16px)" class="muted">VILA Lab, MBZUAI / UCL</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">디지털 DNA의 비밀</h2>
+    <div class="quote-block" style="margin-bottom:clamp(20px,3vw,40px)">
+      <p style="font-size:clamp(14px,2vw,22px);font-style:italic">"이 LLM은 무엇으로 학습되었는가?"</p>
+    </div>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(16px,2.5vw,32px);line-height:1.7">현대 LLM의 사전학습 데이터 구성은 가장 잘 보호된 비밀 중 하나입니다. 데이터 혼합 비율은 모델의 행동, 능력, 실패 모드를 결정하는 <span class="accent">"디지털 DNA"</span>이지만, 대부분 공개되지 않습니다.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num"><i class="fas fa-shield-halved"></i></div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:8px"><span class="accent">안전 감사</span></p>
+        <p style="font-size:clamp(10px,1.2vw,13px);margin-top:4px" class="muted">편향 데이터 포함 여부 확인 불가</p>
+      </div>
+      <div class="card">
+        <div class="big-num"><i class="fas fa-copyright"></i></div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:8px"><span class="accent2">저작권 리스크</span></p>
+        <p style="font-size:clamp(10px,1.2vw,13px);margin-top:4px" class="muted">특정 데이터셋 사용 여부 불투명</p>
+      </div>
+      <div class="card">
+        <div class="big-num"><i class="fas fa-scale-unbalanced"></i></div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:8px"><span class="accent3">성능 격차</span></p>
+        <p style="font-size:clamp(10px,1.2vw,13px);margin-top:4px" class="muted">도메인별 성능 편차 원인 규명 불가</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">기존 접근법의 한계: 멤버십 추론 공격</h2>
+    <div class="grid-2" style="margin-bottom:clamp(20px,3vw,36px)">
+      <div class="card">
+        <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(8px,1.5vw,16px)" class="accent"><i class="fas fa-microscope"></i> MIA의 강점</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특정 문서의 학습 여부 판별</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>개인정보 유출 감지에 효과적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미시적(microscopic) 분석 가능</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(8px,1.5vw,16px)" class="accent"><i class="fas fa-triangle-exclamation"></i> MIA의 한계</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>단일 샘플 단위 — 거시적 분석 불가</li>
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>짧은 토큰 윈도우에 의존</li>
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>수백만 샘플 집계 시 치명적 오류 누적</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(13px,1.7vw,18px);font-style:italic">모래알 한 알은 감지할 수 있어도, 해변의 풍경은 묘사할 수 없다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(12px,2.5vw,32px)">데이터 혼합 수술(DMS): 문제 정의</h2>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(16px,2.5vw,32px);line-height:1.7">대상 LLM이 생성한 텍스트만을 입력으로 받아, 사전학습 코퍼스의 <span class="accent">도메인 수준 분포</span>를 추정하는 과제입니다.</p>
+    <div class="card" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(8px,1.5vw,16px)"><strong>학습 코퍼스의 혼합 분포:</strong></p>
+      <p style="font-size:clamp(13px,1.6vw,18px);text-align:center;font-family:serif;margin-bottom:clamp(8px,1.5vw,16px)">p<sub>α</sub>(x) = Σ α<sub>i</sub> · p<sub>i</sub>(x)</p>
+      <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(12px,2vw,24px)"><strong>생성 분포 (복구 대상):</strong></p>
+      <p style="font-size:clamp(13px,1.6vw,18px);text-align:center;font-family:serif">q<sub>π</sub>(x) = Σ π<sub>i</sub> · p<sub>i</sub>(x)</p>
+    </div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(11px,1.3vw,14px)" class="muted">입력</p>
+        <p style="font-size:clamp(13px,1.6vw,18px);margin-top:4px">LLM 생성 텍스트 <span class="accent">X<sub>gen</sub></span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(11px,1.3vw,14px)" class="muted">출력</p>
+        <p style="font-size:clamp(13px,1.6vw,18px);margin-top:4px">도메인 혼합 벡터 <span class="accent2">π</span></p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(11px,1.3vw,14px)" class="muted">제약</p>
+        <p style="font-size:clamp(13px,1.6vw,18px);margin-top:4px">가중치/학습 데이터 <span class="accent3">접근 불가</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">라벨 시프트 가설</h2>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(20px,3vw,40px);line-height:1.7">DMS의 핵심 가정: 도메인의 <span class="accent">비율</span>은 변하더라도, 각 도메인의 <span class="accent2">언어적 특성</span>은 통계적으로 불변한다.</p>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(13px,1.6vw,18px);margin-bottom:clamp(8px,1.5vw,16px)"><strong class="accent">변하는 것: 도메인 비율</strong></p>
+        <p style="font-size:clamp(12px,1.4vw,16px);line-height:1.6" class="muted">학습 시 코드 비율 α<sub>code</sub> ≠ 생성 시 코드 비율 π<sub>code</sub></p>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:8px;line-height:1.5" class="muted">최적화 동역학, 언더피팅, 샘플링 온도 등으로 인해 발생</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(13px,1.6vw,18px);margin-bottom:clamp(8px,1.5vw,16px)"><strong class="accent2">불변하는 것: 조건부 분포</strong></p>
+        <p style="font-size:clamp(12px,1.4vw,16px);text-align:center;font-family:serif;margin-bottom:8px">q(x|y=i) ≈ p(x|y=i)</p>
+        <p style="font-size:clamp(11px,1.2vw,14px);line-height:1.5" class="muted">모델이 "코드"를 생성할 때, 학습에 사용된 코드의 통계적 패턴을 유지</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,2.5vw,32px) 0"></div>
+    <div class="card" style="text-align:center">
+      <p style="font-size:clamp(12px,1.4vw,16px)"><i class="fas fa-lightbulb"></i> <strong>핵심 통찰:</strong> 이 안정성 덕분에 π 복구를 <span class="accent3">분포 매칭 문제</span>로 공식화할 수 있다</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">LLMSurgeon 프레임워크 개요</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">편향 특성화</div>
+        <div class="step-desc">외부 분류기 학습 후 교정된 소프트 혼동 행렬 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">관측 획득</div>
+        <div class="step-desc">대상 LLM의 중립 샘플링 → 분류기로 편향된 관측 벡터 획득</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">역수술(Inverse Surgery)</div>
+        <div class="step-desc">혼동 행렬로 관측 "디블러링" → 진짜 π 복구</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(20px,3vw,40px) 0"></div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:8px"><span class="tag tag-amber">핵심 차별점</span></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);line-height:1.6" class="muted">단순 집계가 아닌, 수학적 역문제로 체계적 편향을 보정하여 충실도 높은 비율 복구</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:8px"><span class="tag tag-green">중립 샘플링</span></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);line-height:1.6" class="muted">프롬프트/정렬로 인한 스타일 왜곡을 최소화하여 사전학습 prior를 충실히 반영</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">단계 1: 교정된 소프트 혼동 행렬</h2>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(16px,2.5vw,32px);line-height:1.7">외부 분류기는 유사 도메인 간에 <span class="accent">체계적 오분류 편향</span>을 가집니다. 이를 정량화하여 보정합니다.</p>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><strong>하드 혼동 행렬</strong></p>
+        <p style="font-size:clamp(11px,1.2vw,14px);line-height:1.6" class="muted">전통적 방식: 단일 예측 라벨만 기록</p>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:6px;line-height:1.6" class="muted">→ 정보 손실 큼, 유사 도메인 구별 불가</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><strong class="accent">소프트 혼동 행렬</strong></p>
+        <p style="font-size:clamp(11px,1.2vw,14px);line-height:1.6" class="muted">본 연구: 확률 분포 전체를 활용</p>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:6px;line-height:1.6" class="muted">→ 미세한 도메인 간 편향까지 포착</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center">
+      <p style="font-size:clamp(12px,1.4vw,16px)">참조 데이터셋에서 학습된 분류기의 <span class="accent2">K×K 혼동 행렬 C</span>를 사전 계산하여 모든 도메인 쌍 간의 체계적 편향을 인코딩</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">단계 2–3: 관측과 역수술</h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,24px)">
+      <div class="flow-icon">2</div>
+      <div>
+        <p style="font-size:clamp(13px,1.6vw,18px)"><strong>편향된 관측 벡터 획득</strong></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);margin-top:4px" class="muted">대상 LLM에서 중립 프롬프트로 텍스트 생성 → 고정 분류기로 분류 → 관측 분포 <strong>μ</strong> 획득 (혼동 행렬 C로 인해 편향됨)</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(20px,3vw,36px)">
+      <div class="flow-icon">3</div>
+      <div>
+        <p style="font-size:clamp(13px,1.6vw,18px)"><strong>제약 기반 역문제 해결</strong></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);margin-top:4px" class="muted">μ = C · π 관계를 활용, π ≥ 0, Σπ<sub>i</sub> = 1 제약 하에서 최적화하여 진짜 혼합 비율 π 복구</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,2.5vw,32px) 0"></div>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-red">왜 직접 집계는 실패하는가?</span></p>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-xmark"></i></span><strong>토큰 한계:</strong> MIA는 짧은 시퀀스에 설계되어 문서 단위 확장 불가</li>
+        <li><span class="check-icon"><i class="fas fa-xmark"></i></span><strong>오류 누적:</strong> 수백만 포인트별 예측 오차가 합산되어 분산 폭발</li>
+        <li><span class="check-icon"><i class="fas fa-xmark"></i></span><strong>알고리즘 편향:</strong> 도메인별 MIA 성능 차이(예: 코드 vs 일반 텍스트)가 체계적 왜곡 유발</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">LLMScan 벤치마크</h2>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(16px,2.5vw,32px);line-height:1.7">DMS 평가를 위한 <span class="accent">최초의 레시피 검증 가능한 벤치마크</span>입니다. 합성 데이터가 아닌, 사전학습 레시피가 투명한 오픈소스 LLM으로 구성됩니다.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>모델 유형</th>
+          <th>대상 모델</th>
+          <th>사전학습 코퍼스</th>
+          <th>세분화 수준</th>
+          <th>도메인 수 K</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>범용 모델</td>
+          <td>LLaMA-1 (7B, 65B)</td>
+          <td>Public Mix</td>
+          <td><span class="tag tag-amber">조대분류</span></td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>범용 모델</td>
+          <td>OLMo (1B)</td>
+          <td>Dolma</td>
+          <td><span class="tag tag-amber">조대분류</span></td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>범용 모델</td>
+          <td>Amber (13B)</td>
+          <td>LLM360 Mix</td>
+          <td><span class="tag tag-amber">조대분류</span></td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>Pile 기반</td>
+          <td>Pythia (2.8B, 12B)</td>
+          <td>The Pile</td>
+          <td><span class="tag tag-green">중분류</span></td>
+          <td>17</td>
+        </tr>
+        <tr>
+          <td>Pile 기반</td>
+          <td>GPT-Neo (2.7B)</td>
+          <td>The Pile</td>
+          <td><span class="tag tag-green">중분류</span></td>
+          <td>17</td>
+        </tr>
+        <tr>
+          <td>도메인 특화</td>
+          <td>StarCoder (15.5B)</td>
+          <td>The Stack</td>
+          <td><span class="tag tag-red">세분류</span></td>
+          <td>87</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">실험 결과</h2>
+    <p style="font-size:clamp(13px,1.8vw,19px);margin-bottom:clamp(16px,2.5vw,32px);line-height:1.7">LLMSurgeon은 LLMScan 벤치마크 전반에서 <span class="accent">집계 기반 베이스라인을 큰 폭으로 능가</span>합니다.</p>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><strong>조대분류 (K=6)</strong></p>
+        <div class="big-num">높은 충실도</div>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:8px;line-height:1.5" class="muted">LLaMA, OLMo, Amber에서 도메인 혼합 비율을 정확히 복구. 직접 집계 방식 대비 체계적 편향 대폭 감소.</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><strong>중분류 (K=17)</strong></p>
+        <div class="big-num">안정적 성능</div>
+        <p style="font-size:clamp(11px,1.2vw,14px);margin-top:8px;line-height:1.5" class="muted">Pythia, GPT-Neo에서도 혼동 행렬 보정 효과가 지속적으로 나타남. 도메인 수 증가에도 견고.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><strong>세분류 (K=87) — StarCoder</strong></p>
+      <p style="font-size:clamp(11px,1.2vw,14px);line-height:1.6" class="muted">87개 프로그래밍 언어/도메인 세부 범주에서도 LLMSurgeon의 역문제 접근법이 유효함을 확인. 소프트 혼동 행렬이 미세한 도메인 간 편향 포착에 필수적.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">제어 실험 및 일반화</h2>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-amber">절제 연구</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>소프트 vs 하드 혼동 행렬: 소프트가 유의미하게 우수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>샘플 수에 따른 수렴성 분석</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분류기 아키텍처 선택의 영향</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-green">Held-out 일반화</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>학습에 사용하지 않은 모델에 대한 일반화 능력</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>제어된 혼합 비율 실험에서의 정확도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미지의 모델 아키텍처에 대한 견고성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,2.5vw,32px) 0"></div>
+    <div class="card">
+      <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-red">안전 감사 응용: 독성 주입 트리아지</span></p>
+      <p style="font-size:clamp(11px,1.3vw,14px);line-height:1.6" class="muted">LLMSurgeon을 활용하여 모델의 사전학습 데이터에 유해 도메인이 포함되었는지 사후 감사(triage)하는 응용 시나리오를 제시. 독성 데이터 주입 수준을 정량적으로 추정 가능.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">핵심 기여 요약</h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,24px)">
+      <div class="flow-icon">1</div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent">문제 공식화</span></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);margin-top:4px" class="muted">멤버십 추론에서 분포 복구로 초점을 전환한 Data Mixture Surgery (DMS) 문제를 최초로 공식화</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,2vw,24px)">
+      <div class="flow-icon">2</div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent2">방법론 제안</span></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);margin-top:4px" class="muted">라벨 시프트 가설 하에서 교정된 소프트 혼동 행렬과 제약 기반 역문제 해결을 결합한 LLMSurgeon 프레임워크</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <div class="flow-icon">3</div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent3">벤치마크 구축</span></p>
+        <p style="font-size:clamp(11px,1.3vw,14px);margin-top:4px" class="muted">투명한 사전학습 레시피를 갖춘 오픈소스 LLM 기반 최초의 검증 가능한 DMS 평가 제품 LLMScan</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(12px,2vw,24px) 0"></div>
+    <div class="card" style="text-align:center">
+      <p style="font-size:clamp(12px,1.4vw,16px);line-height:1.6">가중치나 학습 데이터에 접근하지 않고도 <span class="accent">파운데이션 모델의 디지털 DNA를 사후 감사</span>하는 실용적 접근법을 제시합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3.5vw,42px);margin-bottom:clamp(16px,3vw,40px)">한계점 및 향후 과제</h2>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-red">현재 한계</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>사전 정의된 분류 체계(Taxonomy)에 의존</li>
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>라벨 시프트 가설이 완벽히 성립하지 않을 수 있음 (정렬, 프롬프트 영향)</li>
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>학습 비율 α과 생성 비율 π 간의 간극을 완전히 제어하지 못함</li>
+          <li><span class="check-icon"><i class="fas fa-xmark"></i></span>분류기 참조 데이터의 품질에 민감</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)"><span class="tag tag-green">향후 방향</span></p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>개방형 도메인 발견 (사전 정의 없이 자동 분류)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정렬 단계의 영향을 명시적으로 모델링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다국어 모델로의 확장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>규제·거버넌스 실제 적용 시나리오 연구</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100%">
+    <h2 style="font-size:clamp(24px,4vw,48px);margin-bottom:clamp(12px,2vw,24px)">LLMSurgeon</h2>
+    <p style="font-size:clamp(14px,2vw,22px);margin-bottom:clamp(24px,4vw,48px)" class="muted">Diagnosing Data Mixture of Large Language Models</p>
+    <div class="hr" style="width:80px;margin:0 auto clamp(24px,4vw,48px)"></div>
+    <p style="font-size:clamp(12px,1.5vw,17px);margin-bottom:clamp(8px,1.5vw,16px)">Yaxin Luo, Jiacheng Cui, Xiaohan Zhao, Xinyi Shang, Jiacheng Liu, Xinyue Bi, Zhaoyi Li, Zhiqiang Shen</p>
+    <p style="font-size:clamp(11px,1.3vw,15px);margin-bottom:clamp(20px,3vw,40px)" class="muted">VILA Lab, MBZUAI / UCL</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+      <span class="tag tag-amber"><i class="fas fa-file-lines"></i> arXiv: 2605.30348v1</span>
+      <span class="tag tag-green"><i class="fab fa-github"></i> LLMSurgeon</span>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
