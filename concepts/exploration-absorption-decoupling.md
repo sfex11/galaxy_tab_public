@@ -18,5 +18,3 @@ _자동 Wiki Query에서 추출됨_
 ### Recursive Agent Optimization (2026-05-10)
 
 ### Skill-Conditioned Gated Self-Distillation for LLM Reasoning (2026-05-29)
-
-→ [[sources/2026-05-29-skill-conditioned-gated-self-distillation-for-llm-.md|상세 보기]]

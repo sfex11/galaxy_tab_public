@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-29-omniverifier-m1-multimodal-meta-verifier-with-expl]]: 기존 평가 지표(토큰 겹침, 임베딩 유사도)의 한계를 극복하기 위해, 전자는 대조적 의미 정렬을 통한 텍스트 매칭을, 후자는 명시적 구조적 재보정을 통한 메타 검증을 제안하여 평가의 신뢰성을 높입니다.
+
+---
+**관련**: [[entities/flow-matching.md|flow matching]]

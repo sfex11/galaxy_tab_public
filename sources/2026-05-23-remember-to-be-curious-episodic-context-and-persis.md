@@ -11,3 +11,6 @@ Exploration is a prerequisite for learning useful behaviors in sparse-reward, lo
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/curiosity-loop-trap.md|curiosity loop trap]]

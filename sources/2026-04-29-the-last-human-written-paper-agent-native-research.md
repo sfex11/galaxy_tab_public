@@ -134,3 +134,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failed-hypothesis-tracking.md|failed hypothesis tracking]]
+
+---
+**관련**: [[entities/llm-as-code-reviewer.md|llm as code reviewer]]
+
+---
+**관련**: [[entities/scientific-finding-reproducibility.md|scientific finding reproducibility]]
+
+---
+**관련**: [[entities/text-artifact-limitation.md|text artifact limitation]]

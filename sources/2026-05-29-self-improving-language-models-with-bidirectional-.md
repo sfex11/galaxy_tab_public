@@ -26,6 +26,7 @@
 3. **거절 샘플링**: 단순히 확률 높은 결과를 선택하는 것이 아니라 검증을 통과한 낮은 확률 결과를 적극적으로 탐색하여, 거절이 아닌 본원을 가장한 것으로 선택하는 문제(거절 편향 해소)
 
 ## 관련 논문
+- [[entities/bidirectional-competency-asymmetry.md|bidirectional competency asymmetry]]
 - sources/2605.28814v1
 
 ## 🏷️ 엔티티

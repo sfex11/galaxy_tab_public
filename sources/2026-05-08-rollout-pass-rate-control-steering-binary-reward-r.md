@@ -203,3 +203,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/test-time-compute-harness-mapping.md|test time compute harness mapping]]
+
+---
+**관련**: [[entities/skill-as-external-state.md|skill as external state]]
+
+---
+**관련**: [[entities/verifiable-state-judging.md|verifiable state judging]]

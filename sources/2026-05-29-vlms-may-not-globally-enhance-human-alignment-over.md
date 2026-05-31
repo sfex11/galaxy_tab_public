@@ -25,7 +25,7 @@ VLM이 자연스러운 읽기 과정에서 시각 정보를 활용해 텍스트 
 - sources/2605.28818v1
 
 ## 관련 엔티티
-- [[agentic-vlm]]
+- [[concepts/agentic-vlm.md|agentic vlm]]
 
 ## 관련 개념
 - reading-visual-alignment-gap
@@ -37,7 +37,7 @@ VLM이 자연스러운 읽기 과정에서 시각 정보를 활용해 텍스트 
 이 논문은 VLM과 LLM을 엄격로 비교하는 것이 아니라, 엄격로 비교 불가능한 조건(text-only setting)에서 VLM이 시각 정보를 활용해 텍스트 표현의 인간 친화를 어떻게 변화시키는지를 검증합니다. 핵심: VLM은 시각 정보를 통해 텍스트를 더 인간에게 만드는 능력을 가질 수 있으나, 이 능력은 자연스러운 읽기의 인간 친화를 향상시키지 못해 오히려진 텍스트를 생성한다는 반대 결과를 얻습니다.
 
 ## 핵심 인사이트 2 (기존 엔티티 보완)
-[[agentic-vlm]]에 기존하는 '단계별 판단별 문제 vs 다단계 경로 기효 간극'의 인사이트를 보완합니다. 기존 설명은 VLM의 시각 능력이 '단계별 판단별'에서만 발현되고 '다단계 경로 기효'에서는 실패한다는 것이었는데, 이 논문은 그 반대를 발견합니다: text-only setting에서는 양 모두 비슷하지만, VLM은 시각 정보로 인간 친화를 회복하는 데 도움이 된다는 것입니다. 이는 [[inattentional-blindness]](시각 정보 없이 추론이 단순해짐는 현상)의 natural reading 특화 사례로 기록됩니다.
+[[concepts/agentic-vlm.md|agentic vlm]]에 기존하는 '단계별 판단별 문제 vs 다단계 경로 기효 간극'의 인사이트를 보완합니다. 기존 설명은 VLM의 시각 능력이 '단계별 판단별'에서만 발현되고 '다단계 경로 기효'에서는 실패한다는 것이었는데, 이 논문은 그 반대를 발견합니다: text-only setting에서는 양 모두 비슷하지만, VLM은 시각 정보로 인간 친화를 회복하는 데 도움이 된다는 것입니다. 이는 [[entities/inattentional-blindness.md|inattentional blindness]](시각 정보 없이 추론이 단순해짐는 현상)의 natural reading 특화 사례로 기록됩니다.
 
 ## 🏷️ 엔티티
 

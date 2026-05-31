@@ -17,3 +17,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/knowledge-tool-substitution-boundary.md|knowledge tool substitution boundary]]
+
+---
+**관련**: [[entities/expert-offloading.md|expert offloading]]

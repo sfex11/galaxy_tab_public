@@ -187,3 +187,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-regimes-information-bottleneck.md|evaluation regimes information bottleneck]]
+
+---
+**관련**: [[entities/skill-conditioned-gating.md|skill conditioned gating]]
+
+---
+**관련**: [[entities/output-entropy-degradation.md|output entropy degradation]]
+
+---
+**관련**: [[entities/bidirectional-evolutionary-search.md|bidirectional evolutionary search]]
+
+---
+**관련**: [[entities/state-forking-parallel-rl.md|state forking parallel rl]]

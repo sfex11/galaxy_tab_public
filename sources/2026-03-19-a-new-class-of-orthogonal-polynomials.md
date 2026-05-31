@@ -32,3 +32,6 @@
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/geometric-orthogonal-residual-projection.md|geometric orthogonal residual projection]]

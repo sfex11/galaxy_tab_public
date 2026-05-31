@@ -33,8 +33,4 @@ SE 샌드박스와 실제 과학적 재현 환경 사이의 간극을 구체적 
 
 DiscoverPhysics가 이 간극에 대한 하나의 해결책을 제시한다—표준 물리를 비표준과 다른 물리로 대체하여 생성한 22개의 세계에서 에이전트의 제1원리 추론을 테스트함으로써, 시�론의 '힌'이 정보가 아닌 '환경'으로 치환하여 검증과 환경 간극을 동시에 해소한다.
 
-→ [[sources/2026-05-27-discoverphysics-benchmarking-llms-for-out-of-the-b.md|상세 보기]]
-
 ### Claw-Anything: Benchmarking Always-On Personal Assistants with Broader (2026-05-27)
-
-→ [[sources/2026-05-27-claw-anything-benchmarking-always-on-personal-assi.md|상세 보기]]

@@ -41,10 +41,6 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 
 ### Claw-Anything: Benchmarking Always-On Personal Assistants with Broader (2026-05-27)
 
-→ [[sources/2026-05-27-claw-anything-benchmarking-always-on-personal-assi.md|상세 보기]]
-
 ### Automated Benchmark Auditing for AI Agents and Large Language Models (2026-05-27)
 
 이 논문은 평가자의 가정이 태스크 작성 시점에 암묵적으로 삽입되어 인간 주석이 근본적으로 달라질 수 있는 구조적 원인을 명확히 한다. 기존에 결과 독립적 평가를 보장하는 접근(verify-backed-generation, benchmarkless-comparative-safety-scoring 등)과 대비되어, '누가 평가하는가'가 아닌 '무엇을 평가하는가'라는 근본 문제를 제기한다.
-
-→ [[sources/2026-05-27-automated-benchmark-auditing-for-ai-agents-and-lar.md|상세 보기]]

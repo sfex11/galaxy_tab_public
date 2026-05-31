@@ -308,3 +308,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/pseudo-alignment-by-self-consistency.md|pseudo alignment by self consistency]]
+
+---
+**관련**: [[entities/reading-visual-alignment-gap.md|reading visual alignment gap]]
+
+---
+**관련**: [[entities/resource-aware-multi-agent-perception.md|resource aware multi agent perception]]

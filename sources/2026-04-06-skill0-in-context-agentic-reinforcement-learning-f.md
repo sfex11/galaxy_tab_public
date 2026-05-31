@@ -110,3 +110,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/harness-subject-internalization.md|harness subject internalization]]
+
+---
+**관련**: [[entities/skill-consumption-gap.md|skill consumption gap]]

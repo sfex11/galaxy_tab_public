@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-29-ω-qvla-robust-quantization-for-vision-language-act]]: 거대 모델의 엣지 디바이스 배포를 가능하게 한다는 공통 목표 아래, 전자는 서브 bilion 규모의 MoE 아키텍처로, 후자는 복합 회전 및 스케일링 기반 양자화로 각각 효율성을 극대화합니다.
+
+---
+**관련**: [[entities/mobile-gym.md|mobile gym]]

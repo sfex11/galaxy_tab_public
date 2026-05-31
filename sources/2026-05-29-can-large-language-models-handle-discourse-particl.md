@@ -22,7 +22,7 @@ Discourse particles, such as \textit{well} and \textit{kind of}, are crucial com
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

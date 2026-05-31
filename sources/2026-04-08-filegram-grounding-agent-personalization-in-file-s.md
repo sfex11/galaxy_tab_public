@@ -122,3 +122,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/algorithm-system-boundary-collapse.md|algorithm system boundary collapse]]
+
+---
+**관련**: [[entities/system-scaling.md|system scaling]]
+
+---
+**관련**: [[entities/belief-state-grounding.md|belief state grounding]]

@@ -74,3 +74,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-selective-context-accumulation.md|non selective context accumulation]]
+
+---
+**관련**: [[entities/delta-checkpoint-rollback.md|delta checkpoint rollback]]
+
+---
+**관련**: [[entities/power-of-two-quantization.md|power of two quantization]]
+
+---
+**관련**: [[entities/exploration-action-coupling.md|exploration action coupling]]

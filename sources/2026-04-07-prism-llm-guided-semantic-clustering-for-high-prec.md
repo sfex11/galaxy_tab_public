@@ -40,3 +40,6 @@ PRISM(Precision-Informed Semantic Modeling)은 LLM의 풍부한 표현력과 잠
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[entities/prism.md|prism]]

@@ -103,3 +103,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-problem-space-misattribution.md|hierarchical problem space misattribution]]
+
+---
+**관련**: [[entities/dynamic-memory-topology.md|dynamic memory topology]]
+
+---
+**관련**: [[entities/personal-visual-memory.md|personal visual memory]]
