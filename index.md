@@ -517,3 +517,22 @@
 - [[entities/transformer]] - Transformer
 - [[sources/2026-05-29-refusal-before-decoding-detecting-and-exploiting-r.md]] - Refusal Before Decoding: Detecting and Exploiting Refusal Signals in Intermediate LLM Activations
 - [[sources/2026-05-29-swarmharness-skill-based-task-routing-via-decentra.md]] - SwarmHarness: Skill-Based Task Routing via Decentralized Incentive-Aligned AI Agent Networks
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-05-31-physics-is-all-you-need-a-case-study-in-physicist-.md]] - Physics Is All You Need? A Case Study in Physicist-Supervised AI Development of Scientific Software
+- [[sources/2026-05-31-llmsurgeon-diagnosing-data-mixture-of-large-langua.md]] - LLMSurgeon: Diagnosing Data Mixture of Large Language Models
+- [[sources/2026-05-31-schgen-pcb-schematic-generation-with-semantic-grou.md]] - SchGen: PCB Schematic Generation with Semantic-Grounded Code Representations
+- [[sources/2026-05-31-efficient-test-time-finetuning-of-llms-via-convex-.md]] - Efficient Test-Time Finetuning of LLMs via Convex Reconstruction and Gradient Caching
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-31-locally-coherent-globally-incoherent-bounding-comp.md]] - Locally Coherent, Globally Incoherent: Bounding Compositional Incoherence in Multi-Component LLM Agents
+- [[sources/2026-05-31-demystifying-data-organization-for-enhanced-llm-tr.md]] - Demystifying Data Organization for Enhanced LLM Training
+- [[sources/2026-05-31-soundnessbench-can-your-ai-scientist-really-tell-g.md]] - SoundnessBench: Can Your AI Scientist Really Tell Good Research Ideas from Bad Ones?
+- [[sources/2026-05-31-specbench-evaluating-specification-level-reasoning.md]] - SpecBench: Evaluating Specification-Level Reasoning for Software Engineering LLM Agents
+- [[sources/2026-05-31-medcase-structured-a-text-to-fhir-dataset-for-benc.md]] - MedCase-Structured: A Text-to-FHIR Dataset for Benchmarking Diagnostic Reasoning in Clinically Realistic EHR Settings
+- [[sources/2026-05-31-projectionbench-evaluating-scientific-hypothesis-g.md]] - ProjectionBench: Evaluating Scientific Hypothesis Generation in LLMs Under Progressive Information Disclosure
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-05-31-gram-assessing-sabotage-propensities-via-automated.md]] - Gram: Assessing sabotage propensities via automated alignment auditing
+- [[sources/2026-05-31-loong-a-human-like-long-document-translation-agent.md]] - Loong: A Human-Like Long Document Translation Agent with Observe-and-Act Adaptive Context Selection
+- [[sources/2026-05-31-unlocking-the-working-memory-of-large-language-mod.md]] - Unlocking the Working Memory of Large Language Models for Latent Reasoning
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-05-31-in-context-reward-adaptation-for-robust-preference.md]] - In-Context Reward Adaptation for Robust Preference Modeling

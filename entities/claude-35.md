@@ -31,3 +31,5 @@ _자동 생성됨_
 - [[sources/2026-04-21-from-benchmarking-to-reasoning-a-dual-aspect-large.md]]
 
 - [[sources/2026-05-28-maat-the-agentic-legal-research-assistant-for-comp.md]]
+
+- [[sources/2026-05-31-physics-is-all-you-need-a-case-study-in-physicist-.md]]

@@ -1170,3 +1170,33 @@
 - 2026-05-29-learn-from-weaknesses-automated-domain-specializat.md
 - 2026-05-29-agent-explorative-policy-optimization-for-multimod.md
 - 2026-05-29-rethinking-memory-as-continuously-evolving-connect.md
+
+## [2026-05-31 08:34] ingest | Physics Is All You Need? A Case Study in Physicist-Supervised AI Development of Scientific Software
+
+## [2026-05-31 08:34] ingest | LLMSurgeon: Diagnosing Data Mixture of Large Language Models
+
+## [2026-05-31 08:34] ingest | SchGen: PCB Schematic Generation with Semantic-Grounded Code Representations
+
+## [2026-05-31 08:34] ingest | Efficient Test-Time Finetuning of LLMs via Convex Reconstruction and Gradient Caching
+
+## [2026-05-31 08:34] ingest | Locally Coherent, Globally Incoherent: Bounding Compositional Incoherence in Multi-Component LLM Agents
+
+## [2026-05-31 08:34] ingest | Demystifying Data Organization for Enhanced LLM Training
+
+## [2026-05-31 08:34] ingest | SoundnessBench: Can Your AI Scientist Really Tell Good Research Ideas from Bad Ones?
+
+## [2026-05-31 08:34] ingest | SpecBench: Evaluating Specification-Level Reasoning for Software Engineering LLM Agents
+
+## [2026-05-31 08:34] ingest | MedCase-Structured: A Text-to-FHIR Dataset for Benchmarking Diagnostic Reasoning in Clinically Realistic EHR Settings
+
+## [2026-05-31 08:34] ingest | ProjectionBench: Evaluating Scientific Hypothesis Generation in LLMs Under Progressive Information Disclosure
+
+## [2026-05-31 08:34] ingest | Gram: Assessing sabotage propensities via automated alignment auditing
+
+## [2026-05-31 08:34] ingest | Loong: A Human-Like Long Document Translation Agent with Observe-and-Act Adaptive Context Selection
+
+## [2026-05-31 08:34] ingest | Unlocking the Working Memory of Large Language Models for Latent Reasoning
+
+## [2026-05-31 08:34] ingest | In-Context Reward Adaptation for Robust Preference Modeling
+
+## [2026-05-31 10:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1004개
