@@ -116,3 +116,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/caption-sufficient-evaluation.md|caption sufficient evaluation]]
+
+---
+**관련**: [[concepts/irreversible-mid-trajectory.md|irreversible mid trajectory]]
+
+---
+**관련**: [[concepts/trajectory-internal-mediation.md|trajectory internal mediation]]
+
+---
+**관련**: [[concepts/environment-as-evaluation.md|environment as evaluation]]

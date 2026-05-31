@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-29-peft-arena-understanding-parameter-efficient-finet]]: 후자가 주석자 간의 라벨 변이를 안정적 신호로 활용한 크로스-주석자 선호도 최적화를 제안한다면, 전자는 이러한 미세조정 방법이 사전 학습 능력을 유지하는지 안정성-가소성 딜레마 관점에서 평가합니다.
+
+---
+**관련**: [[concepts/sdb-over-compensation-pattern.md|sdb over compensation pattern]]
+
+---
+**관련**: [[concepts/agreement-pressure.md|agreement pressure]]

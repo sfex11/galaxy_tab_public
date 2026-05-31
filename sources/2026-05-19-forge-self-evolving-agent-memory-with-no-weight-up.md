@@ -109,3 +109,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/personal-visual-memory.md|personal visual memory]]
+
+---
+**관련**: [[concepts/external-internal-memory-dual-axis.md|external internal memory dual axis]]
+
+---
+**관련**: [[concepts/exogenous-evolution.md|exogenous evolution]]
+
+---
+**관련**: [[concepts/knowledge-internalization-separation-tension.md|knowledge internalization separation tension]]
+
+---
+**관련**: [[concepts/frozen-model-external-memory-contradiction.md|frozen model external memory contradiction]]
+
+---
+**관련**: [[concepts/endogenous-self-evolution.md|endogenous self evolution]]
+
+---
+**관련**: [[concepts/fast-weight-consolidation.md|fast weight consolidation]]
+
+---
+**관련**: [[concepts/visual-first-memory.md|visual first memory]]
+
+---
+**관련**: [[concepts/population-based-memory-evolution.md|population based memory evolution]]
+
+---
+**관련**: [[concepts/memory-belief-reward-closed-loop.md|memory belief reward closed loop]]
+
+---
+**관련**: [[concepts/memory-as-model-paradigm.md|memory as model paradigm]]
+
+---
+**관련**: [[concepts/agent-knowledge-separation.md|agent knowledge separation]]
+
+---
+**관련**: [[concepts/memory-topology-as-optimization-target.md|memory topology as optimization target]]

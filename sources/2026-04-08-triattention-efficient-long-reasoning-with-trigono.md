@@ -137,3 +137,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/harness-as-reasoning-constituent.md|harness as reasoning constituent]]
+
+---
+**관련**: [[concepts/explicit-implicit-reasoning.md|explicit implicit reasoning]]

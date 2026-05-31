@@ -87,3 +87,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interface-complexity-ambiguity.md|interface complexity ambiguity]]
+
+---
+**관련**: [[concepts/internal-state-feedback-extraction.md|internal state feedback extraction]]

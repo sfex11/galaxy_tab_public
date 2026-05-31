@@ -50,3 +50,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evolutionary-mnar-imputation.md|evolutionary mnar imputation]]
+
+---
+**관련**: [[concepts/evolutionary-agency-axis.md|evolutionary agency axis]]

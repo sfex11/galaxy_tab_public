@@ -66,3 +66,6 @@ Crab의 의미론 인식 C/R은 단순한 효율화 기법이 아니다. 이는 
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/sdb-projection-of-runtime-fragmentation.md|sdb projection of runtime fragmentation]]

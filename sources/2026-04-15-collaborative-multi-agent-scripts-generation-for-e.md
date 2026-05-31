@@ -244,3 +244,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/kv-cache-information-leakage.md|kv cache information leakage]]
+
+---
+**관련**: [[concepts/kv-cache-information-leakage.md|kv cache information leakage]]
+
+---
+**관련**: [[concepts/evidence-based-certification.md|evidence based certification]]
+
+---
+**관련**: [[concepts/harness-as-reasoning-constituent.md|harness as reasoning constituent]]

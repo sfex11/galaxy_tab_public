@@ -86,3 +86,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/runtime-design-time-alignment-absorption.md|runtime design time alignment absorption]]
+
+---
+**관련**: [[concepts/selection-pressure-design.md|selection pressure design]]

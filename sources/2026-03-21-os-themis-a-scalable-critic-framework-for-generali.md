@@ -72,3 +72,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/strategic-trajectory-abstraction.md|strategic trajectory abstraction]]
+
+---
+**관련**: [[concepts/outcome-independence-of-reward.md|outcome independence of reward]]
+
+---
+**관련**: [[concepts/belief-drift-as-reward-signal.md|belief drift as reward signal]]

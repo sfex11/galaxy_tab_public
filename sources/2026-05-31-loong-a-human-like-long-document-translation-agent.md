@@ -34,3 +34,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/source-level-self-rewriting.md|source level self rewriting]]
+
+---
+**관련**: [[concepts/harness-determined-information-topology.md|harness determined information topology]]
+
+---
+**관련**: [[concepts/mediated-translation-principle.md|mediated translation principle]]
+
+---
+**관련**: [[concepts/semantic-representation-translation-gap.md|semantic representation translation gap]]
+
+---
+**관련**: [[concepts/local-coherence-global-incoherence.md|local coherence global incoherence]]
+
+---
+**관련**: [[concepts/dynamic-translation-layer.md|dynamic translation layer]]
+
+---
+**관련**: [[concepts/adaptive-forgetting-as-function.md|adaptive forgetting as function]]
+
+---
+**관련**: [[concepts/streaming-adaptive-inference.md|streaming adaptive inference]]

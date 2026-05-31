@@ -83,3 +83,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/exploration-action-coupling.md|exploration action coupling]]
+
+---
+**관련**: [[concepts/draft-tree-vram-bottleneck.md|draft tree vram bottleneck]]
+
+---
+**관련**: [[concepts/descriptive-decisional-memory-divergence.md|descriptive decisional memory divergence]]
+
+---
+**관련**: [[concepts/design-time-memory-dispersal.md|design time memory dispersal]]
+
+---
+**관련**: [[concepts/visual-memory-textual-collapse.md|visual memory textual collapse]]
+
+---
+**관련**: [[concepts/delta-checkpoint-rollback.md|delta checkpoint rollback]]
+
+---
+**관련**: [[concepts/runtime-to-parametric-memory-absorption.md|runtime to parametric memory absorption]]
+
+---
+**관련**: [[concepts/memory-curse.md|memory curse]]
+
+---
+**관련**: [[concepts/state-integrity-latency-tradeoff.md|state integrity latency tradeoff]]
+
+---
+**관련**: [[concepts/temporal-state-dependency.md|temporal state dependency]]

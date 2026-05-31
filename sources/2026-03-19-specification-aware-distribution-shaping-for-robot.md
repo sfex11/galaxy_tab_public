@@ -88,3 +88,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/interaction-structure-aware-search.md|interaction structure aware search]]
+
+---
+**관련**: [[concepts/benchmark-specification-gap.md|benchmark specification gap]]
+
+---
+**관련**: [[concepts/io-aware-expert-offloading.md|io aware expert offloading]]

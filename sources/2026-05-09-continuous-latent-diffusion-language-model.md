@@ -79,3 +79,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-action-gap.md|representation action gap]]
+
+---
+**관련**: [[concepts/representation-space-independence.md|representation space independence]]

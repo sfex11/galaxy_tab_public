@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/history-anchors.md|history anchors]]
+
+---
+**관련**: [[concepts/macro-micro-sequentiality-complementarity.md|macro micro sequentiality complementarity]]

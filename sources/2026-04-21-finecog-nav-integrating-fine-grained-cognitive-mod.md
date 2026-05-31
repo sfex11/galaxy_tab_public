@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/perception-cognitive-capacity-mismatch.md|perception cognitive capacity mismatch]]
+
+---
+**관련**: [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]
+
+---
+**관련**: [[concepts/environment-capability-causality.md|environment capability causality]]

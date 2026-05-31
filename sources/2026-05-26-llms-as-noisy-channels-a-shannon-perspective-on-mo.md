@@ -12,3 +12,6 @@ Existing scaling laws for Large Language Models (LLMs), predominantly monotonic 
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/lossy-serialization-channel.md|lossy serialization channel]]

@@ -223,3 +223,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-dependency-snapshot-mismatch.md|semantic dependency snapshot mismatch]]
+
+---
+**관련**: [[concepts/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]
+
+---
+**관련**: [[concepts/internal-conservativeness-pipeline.md|internal conservativeness pipeline]]

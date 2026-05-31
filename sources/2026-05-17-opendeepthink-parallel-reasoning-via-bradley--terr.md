@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]
+
+---
+**관련**: [[concepts/verifier-rationale-as-diagnostic.md|verifier rationale as diagnostic]]

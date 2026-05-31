@@ -261,3 +261,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/agent-knowledge-separation.md|agent knowledge separation]]
+
+---
+**관련**: [[entities/counterfactual-physics-reasoning.md|counterfactual physics reasoning]]
+
+---
+**관련**: [[concepts/multi-instance-competition-isomorphism.md|multi instance competition isomorphism]]
+
+---
+**관련**: [[concepts/inter-position-redundancy.md|inter position redundancy]]

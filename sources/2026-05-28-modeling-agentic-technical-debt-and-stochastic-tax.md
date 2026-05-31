@@ -38,3 +38,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/stochastic-deterministic-boundary.md|stochastic deterministic boundary]]
+
+---
+**관련**: [[concepts/representation-action-gap.md|representation action gap]]
+
+---
+**관련**: [[concepts/formal-comparative-contract.md|formal comparative contract]]

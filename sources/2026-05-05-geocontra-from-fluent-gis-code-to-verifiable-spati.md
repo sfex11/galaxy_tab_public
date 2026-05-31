@@ -50,3 +50,6 @@ GeoContra는 LLM이 생성한 Python GIS 워크플로우가 지리적 의미론(
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/sdb-contract.md|sdb contract]]

@@ -31,3 +31,15 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/harness-mutability.md|harness mutability]]
+
+---
+**관련**: [[concepts/code-as-evolution-unit.md|code as evolution unit]]
+
+---
+**관련**: [[concepts/implicit-harness-filtering.md|implicit harness filtering]]
+
+---
+**관련**: [[concepts/schema-conflation-fallacy.md|schema conflation fallacy]]

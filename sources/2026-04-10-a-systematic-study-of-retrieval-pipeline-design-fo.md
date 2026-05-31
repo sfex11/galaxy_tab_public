@@ -45,3 +45,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/cascaded-llm-pipeline.md|cascaded llm pipeline]]
+
+---
+**관련**: [[concepts/retrieval-cognification.md|retrieval cognification]]

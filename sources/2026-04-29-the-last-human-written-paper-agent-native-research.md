@@ -143,3 +143,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/text-artifact-limitation.md|text artifact limitation]]
+
+---
+**관련**: [[concepts/pre-post-safety-structural-blindspot.md|pre post safety structural blindspot]]
+
+---
+**관련**: [[concepts/caption-sufficient-evaluation.md|caption sufficient evaluation]]
+
+---
+**관련**: [[concepts/structural-debt-circulation.md|structural debt circulation]]

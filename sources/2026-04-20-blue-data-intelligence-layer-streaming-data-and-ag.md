@@ -55,3 +55,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tracking-neutrality-assumption.md|tracking neutrality assumption]]
+
+---
+**관련**: [[concepts/knowledge-topography-internalization.md|knowledge topography internalization]]
+
+---
+**관련**: [[concepts/synchronous-execution-assumption.md|synchronous execution assumption]]
+
+---
+**관련**: [[concepts/zero-incentive-assumption.md|zero incentive assumption]]

@@ -313,3 +313,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/causal-answer-hypothesis-decoupling.md|causal answer hypothesis decoupling]]
+
+---
+**관련**: [[entities/causal-necessity-vs-correlation.md|causal necessity vs correlation]]
+
+---
+**관련**: [[concepts/context-consolidation.md|context consolidation]]
+
+---
+**관련**: [[concepts/causal-answer-hypothesis-decoupling.md|causal answer hypothesis decoupling]]
+
+---
+**관련**: [[concepts/model-harness-scaling-imbalance.md|model harness scaling imbalance]]

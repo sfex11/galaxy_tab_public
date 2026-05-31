@@ -55,3 +55,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/video-mashup.md|video mashup]]
+
+---
+**관련**: [[concepts/test-time-compute-harness-mapping.md|test time compute harness mapping]]

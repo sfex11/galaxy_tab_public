@@ -11,3 +11,6 @@ Generating high-fidelity and controllable synthetic data is critical for advanci
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/ontological-conditioning.md|ontological conditioning]]

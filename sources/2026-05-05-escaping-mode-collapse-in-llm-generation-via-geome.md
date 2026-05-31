@@ -54,3 +54,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/geometric-safety-guarantee.md|geometric safety guarantee]]
+
+---
+**관련**: [[concepts/geometric-computation-hijacking.md|geometric computation hijacking]]

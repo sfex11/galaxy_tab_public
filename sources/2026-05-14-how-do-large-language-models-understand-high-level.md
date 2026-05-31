@@ -92,3 +92,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compensation-design.md|compensation design]]
+
+---
+**관련**: [[concepts/consolidation-extinction-cycle.md|consolidation extinction cycle]]
+
+---
+**관련**: [[concepts/runtime-design-time-alignment-absorption.md|runtime design time alignment absorption]]
+
+---
+**관련**: [[concepts/cross-dimensional-oversight-blindspot.md|cross dimensional oversight blindspot]]
+
+---
+**관련**: [[concepts/semantic-minimization-cr.md|semantic minimization cr]]
+
+---
+**관련**: [[concepts/semantic-dependency-snapshot-mismatch.md|semantic dependency snapshot mismatch]]

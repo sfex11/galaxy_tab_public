@@ -255,3 +255,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/structure-aware-code-review.md|structure aware code review]]
+
+---
+**관련**: [[concepts/verifier-based-evaluation-condition.md|verifier based evaluation condition]]
+
+---
+**관련**: [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]
+
+---
+**관련**: [[concepts/expert-placement-as-compression.md|expert placement as compression]]
+
+---
+**관련**: [[concepts/algorithm-system-boundary-collapse.md|algorithm system boundary collapse]]
+
+---
+**관련**: [[concepts/deployment-incentive-structure.md|deployment incentive structure]]
+
+---
+**관련**: [[concepts/agreement-based-reliability.md|agreement based reliability]]

@@ -14,3 +14,6 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/curiosity-loop-trap.md|curiosity loop trap]]
+
+---
+**관련**: [[concepts/curiosity-loop-trap.md|curiosity loop trap]]

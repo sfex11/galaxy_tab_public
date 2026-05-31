@@ -1200,3 +1200,9 @@
 ## [2026-05-31 08:34] ingest | In-Context Reward Adaptation for Robust Preference Modeling
 
 ## [2026-05-31 10:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1004개
+
+## [2026-05-31 19:25] lint | Wiki 건전성 체크
+- Issues: 1236개
+- Orphans: 308, Missing: 928, Contradictions: 0
+
+## [2026-05-31 22:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1007개

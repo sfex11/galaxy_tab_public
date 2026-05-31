@@ -41,3 +41,6 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/low-angular-resolution.md|low angular resolution]]
+
+---
+**관련**: [[concepts/low-angular-resolution.md|low angular resolution]]

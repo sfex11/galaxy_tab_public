@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-28-guiding-llm-post-training-data-engineering-with-mo]]: 사전 학습된 모델의 내부 표현을 인터벤션하여 새로운 능력을 유도한다는 공통점이 있으며, 전자는 SAE를 통한 내부 특성 추출로 데이터를 엔지니어링하고, 후자는 게이티드 잔차 어댑터로 의미 경로를 명시적으로 유도합니다.
+
+---
+**관련**: [[concepts/incentive-induced-sabotage.md|incentive induced sabotage]]

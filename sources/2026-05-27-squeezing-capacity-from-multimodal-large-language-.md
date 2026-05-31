@@ -11,3 +11,6 @@ Subject-driven image generation aims to synthesize new images that preserve the 
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/self-preservation-bias.md|self preservation bias]]

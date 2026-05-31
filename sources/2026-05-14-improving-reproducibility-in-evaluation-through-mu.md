@@ -65,3 +65,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fidelity-safety-inverse-alignment.md|fidelity safety inverse alignment]]
+
+---
+**관련**: [[concepts/harness-subject-internalization.md|harness subject internalization]]

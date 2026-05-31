@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Efficient Test-Time Finetuning of LLMs via Convex Reconstruc — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:80vh;text-align:center;">
+      <span class="tag tag-amber" style="font-size:clamp(12px,1.2vw,16px);margin-bottom:1.5rem;">arXiv:2605.30337v1 · cs.LG</span>
+      <h1 style="font-size:clamp(28px,3.5vw,52px);line-height:1.2;max-width:900px;margin-bottom:1.5rem;">Convex Reconstruction과 Gradient Caching을 통한<br>효율적인 LLM 테스트 시간 파인튜닝</h1>
+      <p style="font-size:clamp(16px,1.5vw,22px);margin-bottom:2.5rem;" class="muted">Efficient Test-Time Finetuning of LLMs via<br>Convex Reconstruction and Gradient Caching</p>
+      <p style="font-size:clamp(14px,1.2vw,18px);">Alaa Khamis · Maalouf Alaa</p>
+      <p style="font-size:clamp(12px,1vw,15px);margin-top:0.5rem;" class="muted">University of Haifa, Department of Computer Science</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">테스트 시간 파인튜닝(TTFT)이란?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:1.5rem;">대규모 언어 모델은 웹 규모 코퍼스에서 학습되어 <span class="accent">전역 최적점</span>에 도달하지만, 특정 입력에 대해서는 지역 최적이 아닐 수 있습니다.</p>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;">TTFT는 추론 시점에서 각 프롬프트마다 관련 시퀀스를 검색하고, 모델을 업데이트한 뒤 평가하는 패러다임입니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">TTFT 파이프라인</h3>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="step-num">1</div>
+            <div class="step-label">검색</div>
+            <div class="step-desc">프롬프트 q와 관련된 N개 시퀀스 검색</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">2</div>
+            <div class="step-label">파인튜닝</div>
+            <div class="step-desc">검색된 시퀀스 각각에 대해 그래디언트 스텝</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">3</div>
+            <div class="step-label">추론</div>
+            <div class="step-desc">파인튜닝된 모델로 q 평가</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(13px,1.2vw,17px);line-height:1.7;">"단 20개의 이웃만으로도 파라미터 수가 10배 이상 차이나는 모델 간의 격차를 상당히 좁힐 수 있다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">기존 방법의 한계</h2>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:2rem;">데이터 선택은 <span class="accent">쿼리마다 추론 시점</span>에서 수행되므로, 사용자 체감 지연에 직접적인 영향을 줍니다.</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <i class="fas fa-bolt" style="font-size:clamp(18px,1.5vw,24px);" class="accent"></i>
+          <h3 style="font-size:clamp(16px,1.5vw,20px);">kNN 검색 <span class="muted" style="font-size:clamp(12px,1vw,15px);">[Sun et al., 2024]</span></h3>
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>FAISS 인덱스로 빠른 검색</li>
+          <li><span class="check-icon" style="color:#c0392b;"><i class="fas fa-times"></i></span>중복에 맹목 — 유사 시퀀스가 중복 선택됨</li>
+          <li><span class="check-icon" style="color:#c0392b;"><i class="fas fa-times"></i></span>그래디언트 스텝이 동일한 신호 반복</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <i class="fas fa-layer-group" style="font-size:clamp(18px,1.5vw,24px);"></i>
+          <h3 style="font-size:clamp(16px,1.5vw,20px);">SIFT <span class="muted" style="font-size:clamp(12px,1vw,15px);">[Muennighoff et al., 2025]</span></h3>
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정보이론적 기준으로 중복 페널티</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>bpb 개선 효과 유의미</li>
+          <li><span class="check-icon" style="color:#c0392b;"><i class="fas fa-times"></i></span>탐욕적 선택으로 쿼리당 오버헤드 큼</li>
+          <li><span class="check-icon" style="color:#c0392b;"><i class="fas fa-times"></i></span>낮은 N에서 특히 비효율</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-top:2rem;">핵심 문제: <span class="accent">속도와 품질 사이의 트레이드오프</span> — 빠른 검색은 중복되고, 다양성 인식 선택은 느립니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">핵심 아이디어: 볼록 기하학적 접근</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:1.5rem;">임베딩 공간에서 <span class="accent">방향이 의미를 가집니다</span>:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>서로 다른 방향의 시퀀스 → 더 넓은 의미적 특성 커버</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>거의 같은 방향의 시퀀스 → 대부분 중복</li>
+        </ul>
+        <div class="hr" style="margin:1.5rem 0;"></div>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;">쿼리 q를 후보 시퀀스들의 <span class="accent2">희소 볼록 결합</span>으로 근사하면:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>관련성(relevance)은 자연스럽게 보장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양성(diversity)은 기하학에서 <strong>내재적으로 파생</strong></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>명시적 페널티나 탐욕적 휴리스틱 불필요</li>
+        </ul>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center;">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">근사 Carathéodory 정리</h3>
+        <div style="background:rgba(0,0,0,0.03);border-radius:12px;padding:1.5rem;margin-bottom:1rem;">
+          <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;text-align:center;">q ≈ Σ wᵢ pᵢ &nbsp; (wᵢ ≥ 0, Σ wᵢ = 1)</p>
+          <p style="font-size:clamp(13px,1.1vw,16px);text-align:center;" class="muted">‖q − Pw‖² ≤ ε</p>
+        </div>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;">ε-정확한 해가 <span class="accent3">O(1/ε²)개</span>의 점으로 항상 존재하며, <strong>앰비언트 차원과 무관</strong>합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">HullFT 전체 파이프라인</h2>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">kNN 후보 풀</div>
+        <div class="step-desc">코퍼스에서 K개 후보 검색</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Frank–Wolfe 볼록 근사</div>
+        <div class="step-desc">q를 희소 볼록 결합으로 근사 → 서포트 집합</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">기하학적 정수화</div>
+        <div class="step-desc">분수 가중치 → N개 정수 멀티셋</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">Gradient Reuse 파인튜닝</div>
+        <div class="step-desc">반복 예제의 그래디언트 재사용</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">추론</div>
+        <div class="step-desc">파인튜닝된 모델로 q 평가</div>
+      </div>
+    </div>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(14px,1.3vw,18px);margin-top:0.5rem;">관련성 + 다양성</h3>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.5rem;" class="muted">기하학에서 내재적 파생</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(14px,1.3vw,18px);margin-top:0.5rem;">정수화의 이중 역할</h3>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.5rem;" class="muted">실행 가능 + 반복 구조 생성</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(14px,1.3vw,18px);margin-top:0.5rem;">그래디언트 재사용</h3>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:0.5rem;" class="muted">연산 비용 상각</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:1.5rem;">방법 1: Frank–Wolfe 볼록 근사</h2>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:2rem;">쿼리 q를 K개 후보 {p₁, …, pₖ}의 볼록 결합으로 근사하는 <span class="accent">투영 없는(projection-free)</span> 최적화</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">최적화 문제</h3>
+        <div style="background:rgba(0,0,0,0.03);border-radius:12px;padding:1.5rem;margin-bottom:1rem;">
+          <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;text-align:center;">min<sub>w∈Δₖ</sub> ‖q − Pw‖²</p>
+          <p style="font-size:clamp(13px,1.1vw,16px);text-align:center;" class="muted">Δₖ = 확률 심플렉스</p>
+        </div>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;">목적함수의 그래디언트:</p>
+        <p style="font-size:clamp(14px,1.3vw,18px);text-align:center;margin-top:0.5rem;">∇f(w) = −2Pᵀ(q − Pw)</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">Frank–Wolfe 알고리즘</h3>
+        <div class="flow-item">
+          <div class="flow-icon">1</div>
+          <div><p style="font-size:clamp(13px,1.1vw,16px);line-height:1.6;">그래디언트 계산 후 <strong>선형 오라클</strong>: 가장 낮은 내적을 갖는 후보 선택</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">2</div>
+          <div><p style="font-size:clamp(13px,1.1vw,16px);line-height:1.6;">현재 해와 선택된 점 사이를 <strong>보폭 γ</strong>만큼 이동</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">3</div>
+          <div><p style="font-size:clamp(13px,1.1vw,16px);line-height:1.6;">반복마다 서포트 집합이 <strong>최대 1개씩 성장</strong> → 자연스럽게 희소</p></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">4</div>
+          <div><p style="font-size:clamp(13px,1.1vw,16px);line-height:1.6;">‖q − Pw‖² ≤ ε 이면 <strong>조기 종료</strong></p></div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:clamp(13px,1.1vw,16px);margin-top:1.5rem;" class="muted"><i class="fas fa-info-circle"></i> 투영이 불필요하므로 심플렉스 제약 하에서도 효율적 — O(Kd) per iteration</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:1.5rem;">방법 2: 기하학적 정수화</h2>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:2rem;">볼록 근사는 <span class="accent">분수 가중치</span>를 반환하지만, TTFT는 <span class="accent">정확히 N개의 샘플</span>이 필요합니다.</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">가중치 비례 패딩 (Weight-Proportional)</h3>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;margin-bottom:1rem;">가중치 wᵢ를 정수 카운트 cᵢ로 변환:</p>
+        <div style="background:rgba(0,0,0,0.03);border-radius:12px;padding:1.2rem;margin-bottom:1rem;">
+          <p style="font-size:clamp(14px,1.3vw,18px);text-align:center;">cᵢ = ⌊N · wᵢ⌋ 또는 ⌈N · wᵢ⌉</p>
+          <p style="font-size:clamp(12px,1vw,15px);text-align:center;" class="muted">Σ cᵢ = N을 만족하도록 조정</p>
+        </div>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;">높은 가중치의 예제가 <strong>자연스럽게 여러 번 등장</strong>하는 멀티셋 생성</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">정수화의 중요한 부수 효과</h3>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;margin-bottom:1rem;">분수 가중치 → 정수 카운트 변환 시:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>일부 예제가 멀티셋에서 <span class="accent">다중 등장</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이 반복 구조가 <span class="accent2">Gradient Reuse</span>를 가능하게 함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기하학적 근사 품질을 최대한 보존</li>
+        </ul>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;" class="muted">대안: FW 계열 기하학적 정수화 (Frank–Wolfe 가중치에 대한 기하학적 충실도 더 높음)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:1.5rem;">방법 3: Gradient Reuse</h2>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:2rem;">정수화로 생성된 <span class="accent">반복 예제</span>를 활용하여 순방향–역방향 연산을 <span class="accent2">상각</span>합니다.</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">일반적인 TTFT</h3>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;margin-bottom:1rem;">N개 예제 각각에 대해 독립적으로 forward–backward:</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;">
+          <span class="tag tag-amber">F+B₁</span>
+          <span class="tag tag-amber">F+B₂</span>
+          <span class="tag tag-amber">F+B₃</span>
+          <span class="tag tag-amber">...</span>
+          <span class="tag tag-amber">F+Bₙ</span>
+        </div>
+        <p style="font-size:clamp(13px,1.1vw,16px);text-align:center;margin-top:1rem;" class="muted">총 N회 forward–backward</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">HullFT Gradient Reuse</h3>
+        <p style="font-size:clamp(13px,1.1vw,16px);line-height:1.7;margin-bottom:1rem;">동일 예제의 연속 등장 시 그래디언트 재사용:</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;align-items:center;">
+          <span class="tag tag-green">F+B₁</span>
+          <span class="tag tag-green">재사용₁</span>
+          <span class="tag tag-amber">F+B₂</span>
+          <span class="tag tag-amber">F+B₃</span>
+          <span class="tag tag-green">재사용₃</span>
+          <span class="tag tag-green">재사용₃</span>
+        </div>
+        <p style="font-size:clamp(13px,1.1vw,16px);text-align:center;margin-top:1rem;" class="accent3"><strong>총 |S|회 forward–backward</strong> (|S| ≪ N)</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(13px,1.2vw,17px);line-height:1.7;">정수화가 단순히 기하학을 TTFT에 맞게 변환하는 것을 넘어, <span class="accent">연산 효율화의 구조적 기반</span>을 제공합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">세 가지 기여 요약</h2>
+    <div class="grid-3" style="gap:2rem;">
+      <div class="card" style="text-align:center;">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(200,100,50,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fas fa-shapes accent" style="font-size:clamp(22px,2vw,28px);"></i>
+        </div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:0.75rem;">볼록 근사 기반 선택</h3>
+        <p style="font-size:clamp(12px,1.1vw,15px);line-height:1.7;">kNN 후보 풀 위에서 Frank–Wolfe로 희소 볼록 근사 → 관련성과 다양성을 기하학에서 내재적 획득</p>
+        <span class="tag tag-amber" style="margin-top:1rem;">Alg. 3</span>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(70,100,170,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fas fa-calculator accent2" style="font-size:clamp(22px,2vw,28px);"></i>
+        </div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:0.75rem;">기하학적 정수화</h3>
+        <p style="font-size:clamp(12px,1.1vw,15px);line-height:1.7;">분수 가중치를 N개 정수 멀티셋으로 변환하면서 근사 품질 보존, 반복 구조 자연 생성</p>
+        <span class="tag tag-red" style="margin-top:1rem;">Alg. 1</span>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(100,150,100,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fas fa-recycle accent3" style="font-size:clamp(22px,2vw,28px);"></i>
+        </div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:0.75rem;">Gradient Reuse</h3>
+        <p style="font-size:clamp(12px,1.1vw,15px);line-height:1.7;">멀티셋의 반복 예제에서 캐시된 그래디언트 재사용 → 파인튜닝 연산 비용 상각</p>
+        <span class="tag tag-green" style="margin-top:1rem;">Alg. 4</span>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;text-align:center;">세 가지 아이디어가 <span class="accent">상호 의존적</span>으로 결합: 볼록 근사 → 정수화 → 반복 구조 → Gradient Reuse</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">실험 설정</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">벤치마크</h3>
+        <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:1.5rem;"><span class="accent">The Pile</span>의 <strong>12개 서브셋</strong>에서 평가</p>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">평가 지표</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Bits-per-byte (bpb)</strong> — 낮을수록 우수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>총 런타임</strong> — 선택 + 파인튜닝 + 추론</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>품질–효율 트레이드오프 곡선</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">비교 대상</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>방법</th>
+              <th>선택 전략</th>
+              <th>다양성</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="accent">kNN</span></td>
+              <td>최근접 이웃</td>
+              <td><span class="muted">없음</span></td>
+            </tr>
+            <tr>
+              <td><span class="accent2">SIFT</span></td>
+              <td>정보이론적 탐욕</td>
+              <td><span class="accent3">명시적</span></td>
+            </tr>
+            <tr>
+              <td><span class="accent">HullFT</span></td>
+              <td>볼록 근사 (FW)</td>
+              <td><span class="accent3">내재적</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:clamp(12px,1vw,15px);margin-top:1rem;" class="muted">파인튜닝 예산 N ∈ {5, 10, 20, 50}에서 비교</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">주요 실험 결과</h2>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;margin-bottom:2rem;">HullFT는 <span class="accent">12개 서브셋 모두</span>에서 비교 방법을 <strong>엄격히 우위</strong>하는 품질–효율 트레이드오프 달성</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">품질 측면</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>kNN 대비 <span class="accent">일관된 bpb 개선</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SIFT와 동등하거나 우수한 품질</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특히 낮은 N(5, 10)에서 개선 폭 큼</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">효율 측면</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SIFT 대비 <span class="accent2">상당히 낮은 총 런타임</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Gradient Reuse로 파인튜닝 단계 가속</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">지연 민감 구간</span>에서 가장 큰 이점</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.7;">핵심 발견: HullFT는 <span class="accent">품질을 유지 또는 향상</span>하면서 <span class="accent2">런타임을 크게 단축</span>하여, 기존 방법들이 타협해야 했던 트레이드오프를 개선합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">추가 분석: 선택 기하학</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">t-SNE 시각화에서의 차이</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>kNN</strong>: 선택된 예제가 임베딩 공간에서 <span class="muted">국소적으로 클러스터링</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>HullFT</strong>: 서포트 집합이 <span class="accent3">쿼리 주변에 넓게 분산</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>볼록 근사가 의미적으로 <span class="accent">다양한 방향</span>을 자동 커버</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;">Frank–Wolfe 파라미터 민감도</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>허용오차 ε</strong>: 작을수록 더 정확한 근사, 더 많은 서포트 포인트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>kNN 풀 크기 K</strong>: 충분히 크면 성능 포화, 작으면 후보 부족</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실용적 범위에서 <span class="accent2">robust한 성능</span> 확인</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <p style="font-size:clamp(14px,1.3vw,18px);line-height:1.8;">정수화 방식 비교: FW 기반 기하학적 정수화가 가중치 비례 패딩보다 <span class="accent">FW 가중치에 대한 충실도가 더 높음</span>을 확인 (부록 C.7)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2rem;">결론 및 한계</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;"><i class="fas fa-trophy accent" style="margin-right:0.5rem;"></i>결론</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>TTFT의 두 병목(선택 + 파인튜닝)을 <span class="accent">기하학적 관점</span>에서 동시 해결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>볼록 근사가 관련성과 다양성을 <strong>단일 최적화</strong>에서 내재적 획득</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정수화가 기하학과 TTFT를 연결하며 <span class="accent2">Gradient Reuse</span>의 구조적 기반 제공</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>The Pile 12개 서브셋에서 SOTA 대비 <span class="accent3">엄격한 우위</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,1.5vw,20px);margin-bottom:1rem;"><i class="fas fa-exclamation-triangle muted" style="margin-right:0.5rem;"></i>한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-minus" style="color:#999;"></i></span>임베딩 품질에 의존 — 임베딩이 의미를 잘 담지 못하면 볼록 근사의 이점 감소</li>
+          <li><span class="check-icon"><i class="fas fa-minus" style="color:#999;"></i></span>Frank–Wolfe가 국소 최적해에 도달 가능 — 글로벌 최적 보장 아님</li>
+          <li><span class="check-icon"><i class="fas fa-minus" style="color:#999;"></i></span>대규모 코퍼스에서 kNN 풀 구축 비용은 여전히 존재</li>
+          <li><span class="check-icon"><i class="fas fa-minus" style="color:#999;"></i></span>Generation task가 아닌 perplexity 기반 평가에 집중</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:75vh;text-align:center;">
+      <h2 style="font-size:clamp(24px,2.5vw,38px);margin-bottom:2.5rem;">Efficient Test-Time Finetuning of LLMs<br>via Convex Reconstruction and Gradient Caching</h2>
+      <div class="hr" style="width:200px;margin:0 auto 2rem;"></div>
+      <p style="font-size:clamp(16px,1.5vw,22px);margin-bottom:1rem;">Alaa Khamis · Maalouf Alaa</p>
+      <p style="font-size:clamp(14px,1.2vw,18px);margin-bottom:2rem;" class="muted">University of Haifa</p>
+      <a href="http://arxiv.org/abs/2605.30337v1" style="font-size:clamp(14px,1.3vw,18px);text-decoration:none;" class="accent">
+        <i class="fas fa-external-link-alt" style="margin-right:0.5rem;"></i>arxiv.org/abs/2605.30337v1
+      </a>
+      <p style="font-size:clamp(13px,1.1vw,16px);margin-top:2rem;" class="muted">
+        <i class="fab fa-github" style="margin-right:0.5rem;"></i>github.com/alaa-khamis/HullFT
+      </p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

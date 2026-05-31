@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/citation-claim-decoupling.md|citation claim decoupling]]
+
+---
+**관련**: [[concepts/modality-mediation-failure.md|modality mediation failure]]

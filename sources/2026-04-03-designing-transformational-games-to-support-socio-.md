@@ -52,3 +52,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/transformational-game-design.md|transformational game design]]
+
+---
+**관련**: [[concepts/stochastic-tax-form-transformation.md|stochastic tax form transformation]]
+
+---
+**관련**: [[concepts/compensation-design.md|compensation design]]

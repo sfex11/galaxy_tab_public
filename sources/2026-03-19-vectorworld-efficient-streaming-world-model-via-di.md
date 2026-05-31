@@ -72,3 +72,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/llm-as-graph-refiner.md|llm as graph refiner]]
+
+---
+**관련**: [[entities/vector-policyoptimization.md|vector policyoptimization]]
+
+---
+**관련**: [[concepts/digital-world-access.md|digital world access]]

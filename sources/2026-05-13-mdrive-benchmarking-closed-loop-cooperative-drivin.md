@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/paradigm-translation-cost.md|paradigm translation cost]]
+
+---
+**관련**: [[concepts/planning-gap.md|planning gap]]
