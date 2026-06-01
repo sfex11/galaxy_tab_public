@@ -221,3 +221,5 @@ _자동 생성됨_
 - [[sources/2026-05-28-guiding-llm-post-training-data-engineering-with-mo.md]]
 
 - [[sources/2026-05-31-in-context-reward-adaptation-for-robust-preference.md]]
+
+- [[sources/2026-06-01-in-context-reward-adaptation-for-robust-preference.md]]
