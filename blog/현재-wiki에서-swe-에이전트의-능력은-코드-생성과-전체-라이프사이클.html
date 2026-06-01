@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설계도가 틀리면 빠른 공사장은 무의미하다 — 에이전틱 SWE의 진짜 병목</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7168;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 6px 24px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: rgba(194,112,62,0.18); }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 5vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 5vw, 42px);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 17px);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: clamp(11px, 1.4vw, 13px);
+    color: var(--muted);
+  }
+  .article-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(44,40,37,0.08);
+    margin: clamp(32px, 5vw, 56px) auto;
+    max-width: 120px;
+  }
+
+  /* ── 본문 섹션 ── */
+  .section { margin-bottom: clamp(36px, 6vw, 64px); }
+  .section-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3.5vw, 28px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(17px, 2.8vw, 21px);
+    line-height: 1.4;
+    color: var(--fg);
+    margin: 28px 0 12px;
+  }
+  .section p {
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+  .section ul, .section ol {
+    margin: 12px 0 20px 20px;
+    color: var(--fg);
+  }
+  .section li {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .section li::marker { color: var(--accent); }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 1.9vw, 16.5px);
+    line-height: 1.8;
+    color: var(--muted);
+    font-style: italic;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: clamp(11px, 1.4vw, 13px);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2.2vw, 18px);
+    color: var(--fg);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .card p, .card li {
+    font-size: clamp(13.5px, 1.9vw, 16px);
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .card p { margin-bottom: 10px; }
+  .card ul { margin: 8px 0 12px 18px; }
+  .card li { margin-bottom: 6px; }
+
+  /* ── 테이블 카드 ── */
+  .table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(12px, 1.7vw, 14.5px);
+    min-width: 480px;
+  }
+  .table-card th {
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 2px solid rgba(194,112,62,0.2);
+    font-size: clamp(11px, 1.4vw, 13px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .table-card td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    color: var(--muted);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .table-card tr:last-child td { border-bottom: none; }
+  .table-card tr:hover td { background: rgba(194,112,62,0.02); }
+
+  .layer-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: clamp(11px, 1.3vw, 12px);
+    font-weight: 600;
+  }
+  .layer-upstream { background: rgba(194,112,62,0.1); color: #c2703e; }
+  .layer-mid { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .layer-downstream { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+
+  /* ── 강조 텍스트 ── */
+  .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .highlight-blue {
+    color: var(--accent2);
+    font-weight: 600;
+  }
+  .highlight-green {
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  /* ── 키워드 인라인 ── */
+  .keyword {
+    background: rgba(194,112,62,0.07);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 500;
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(91,124,153,0.03));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 24px;
+    width: 40px; height: 3px;
+    background: var(--accent);
+    border-radius: 0 0 3px 3px;
+  }
+  .metaphor-label {
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .metaphor-box p {
+    font-size: clamp(14px, 1.9vw, 16px);
+    color: var(--fg);
+    line-height: 1.85;
+    margin-bottom: 10px;
+  }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 결론 섹션 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(44,40,37,0.02), rgba(194,112,62,0.04));
+    border: 1px solid rgba(44,40,37,0.08);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+  .conclusion-box h3 {
+    margin-top: 0 !important;
+    font-size: clamp(18px, 3vw, 22px) !important;
+  }
+  .conclusion-box p { margin-bottom: 14px; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    padding: clamp(32px, 5vw, 56px) 0;
+    text-align: center;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .article-footer p {
+    font-size: clamp(12px, 1.5vw, 13px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .article-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .article-footer a:hover { text-decoration: underline; }
+
+  /* ── 진행률 바 ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #c2703e, #5b7c99);
+    z-index: 1000;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .article-meta { flex-direction: column; gap: 6px; align-items: center; }
+    .table-card { margin-left: -16px; margin-right: -16px; border-radius: 0; }
+    .table-card table { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">설계도가 틀리면<br>빠른 공사장은 무의미하다</h1>
+    <p class="article-subtitle">에이전틱 SWE에서 우리가 진정한 병목을 놓치고 있는 방식, 그리고 SpecBench가 던지는 질문</p>
+    <div class="article-meta">
+      <span>📋 SpecBench 논문 분석</span>
+      <span>⏱ 약 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 1 ── -->
+  <section class="section">
+    <p class="section-label">Section 01</p>
+    <h2>우리는 이미 병목을 잘못 짚은 적이 있다</h2>
+
+    <p>
+      건축을 떠올려 보자. 공사장에서 벽을 세우는 속도가 느리다고 불평하는데, 알고 보니 실제 문제는 <span class="highlight">설계도에 치수가 빠져 있었다</span>면 어떨까? 노동자가 아무리 빨라져도, 크레인이 아무리 성능이 좋아져도, 잘못 그려진 도면을 바탕으로는 제대로 된 집을 지을 수 없다.
+    </p>
+
+    <p>
+      이런 일이 실제로 AI 시스템 연구에서 일어났다. 다중 서버 MCP 배포 환경에서 연구자들은 당연히 <span class="keyword">개별 LLM 호출</span>이 전체 파이프라인의 병목일 것이라 가정했다. 그런데 <span class="highlight-blue">aggregate-pipeline-serving</span> 연구의 실증 데이터는 정반대였다 — 진짜 병목은 LLM 호출 자체가 아니라 <span class="highlight">스키마 축적</span>이었다.
+    </p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon" style="background:rgba(91,124,153,0.1);color:#5b7c99;">📊</span>
+        선례의 구조
+      </div>
+      <p><strong>커뮤니티의 가정:</strong> "당연히 LLM 호출이 병목일 것이다"</p>
+      <p><strong>실제 발견:</strong> 스키마 축적이 레이턴시를 지배했다</p>
+      <p style="margin-bottom:0;"><strong>구조적 패턴:</strong> 가시적인 것을 병목으로 오인하는 경향</p>
+    </div>
+
+    <p>
+      이 선례는 지금 우리가 직면한 질문과 구조적으로 완벽하게 동일하다. 현재 에이전틱 소프트웨어 엔지니어링(SWE) 분야에서는 <span class="keyword">실행 파이프라인 효율</span> — C/R(체크포인트/리커버리) 런타임, 서빙 인프라, 파이프라인 레이턴시 — 이 병목이라고 암묵적으로 전제하고 있다. 그런데 이 전제 역시 재검토 대상이 아닐까?
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 2 ── -->
+  <section class="section">
+    <p class="section-label">Section 02</p>
+    <h2>하류 인프라 최적화의 근본적 한계</h2>
+
+    <p>
+      하류 최적화 연구들은 확실히 가치가 있다. 하지만 그 한계를 정확히 이해해야 한다.
+    </p>
+
+    <p>
+      <span class="highlight-blue">agentic-harness-engineering</span>에서 분석된 Crab 런타임의 사례를 보자. 에이전트가 수행하는 작업에는 <span class="keyword">의미론적 의존 그래프</span>라는 것이 있다 — 어떤 코드가 어떤 코드에 논리적으로 의존하는지에 대한 구조다. 그런데 이것을 실제 OS 수준에서 실행하려면, 의미론적 구조를 OS의 체크포인트 메커니즘 — 단순한 <span class="highlight">전체 상태 스냅샷</span> — 으로 번역해야 한다.
+    </p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-label">비유: 요리 레시피를 기계어로 번역하기</p>
+      <p>
+        "양파를 반달 모양으로 썰어 올리브 오일과 함께 볶을 때, 투명해질 때까지 중간 불에서 저어가며 3분간 가열하라"는 지시가 있다고 치자. 이 의미론적 지시를 기계어 수준에서 번역하면 — 온도 센서 값 180°C, 회전수 60rpm, 지속 시간 180,000ms — 가 된다.
+      </p>
+      <p>
+        번역 자체는 가능하다. 하지만 <span class="highlight">"투명해질 때까지"</span>라는 의미는 이미 손실되었다. 기계는 3분을 기계적으로 카운트할 뿐, 양파가 실제로 투명해졌는지는 모른다. <span class="highlight-blue">알고리즘-시스템 번역 간극(algorithm-system translation gap)</span>이 바로 이것이다.
+      </p>
+    </div>
+
+    <p>
+      이 간극은 정보이론적으로 <span class="highlight">손실이 불가피</span>하다. 상위 수준의 의미론을 하위 수준의 시스템 메커니즘으로 변환할 때, 의미의 일부는 필연적으로 증발한다. C/R 런타임이 아무리 정교해져도 이 한계를 넘을 수 없다.
+    </p>
+
+    <p>
+      더 근본적인 문제가 있다. 하류 인프라 최적화는 <span class="highlight">체감 레이턴시를 줄일 수는 있어도, 에이전트가 '잘못된 것을 빠르게' 실행하는 문제는 해결하지 못한다</span>. 빠른 크레인으로 잘못된 설계도의 집을 지으면, 그저 더 빨리 무너지는 집이 만들어질 뿐이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 3 ── -->
+  <section class="section">
+    <p class="section-label">Section 03</p>
+    <h2>상류 결함이 하류에서 폭발하는 메커니즘</h2>
+
+    <p>
+      그렇다면 상류 — 요구사항 사양 설계 단계 — 에서의 결함은 구체적으로 어떻게 문제가 되는가? 여기서 <span class="highlight-blue">compositional-incoherence(구성적 비일관성)</span>라는 개념이 핵심 증거로 등장한다.
+    </p>
+
+    <blockquote>
+      Multi-component LLM agents assemble probabilistic claims from components that each see only part of a joint problem; the composition can violate basic probability axioms even when every component is locally correct.
+      <cite>— compositional-incoherence 연구에서</cite>
+    </blockquote>
+
+    <p>
+      이 문장의 무게를 풀어보자.
+    </p>
+
+    <h3>지역적으로 옳지만 전역적으로 틀린</h3>
+
+    <p>
+      다 컴포넌트 에이전트 시스템을 상상해 보자. 컴포넌트 A는 인증 모듈을, 컴포넌트 B는 데이터베이스 스키마를, 컴포넌트 C는 API 엔드포인트를 각각 설계한다. 각 컴포넌트는 <span class="highlight-green">자신이 본 부분에 대해서는 정상적으로 동작</span>한다 — A의 인증 로직은 완벽하고, B의 스키마는 정규화되어 있고, C의 엔드포인트는 RESTful하다.
+    </p>
+
+    <p>
+      그런데 이것들을 조합하면 어떻게 되는가? A는 세션 기반 인증을 가정했고, B는 토큰 기반을 전제했고, C는 둘 다 아닌 API 키 방식을 구현했다면? <span class="highlight">각 부분은 옳았지만 전체는 기본적인 일관성을 위반</span>한다. 확률 공리를 위반한다는 것은, 논리적으로 동시에 성립할 수 없는 상태가 시스템에 공존하게 된다는 뜻이다.
+    </p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon" style="background:rgba(194,112,62,0.1);color:#c2703e;">⚠️</span>
+        왜 롤백은 이 문제를 해결하지 못하는가
+      </div>
+      <p>C/R(체크포인트/리커버리) 메커니즘은 <strong>'실패한 실행'</strong>을 되돌리는 도구다. 테스트가 깨졌을 때, 런타임 에러가 났을 때 이전 상태로 되돌아간다.</p>
+      <p>하지만 구성적 비일관성의 문제는 다르다. <span class="highlight">각 컴포넌트의 실행 자체는 '성공'이다.</span> 에러가 나지 않았으니 롤백할 대상이 없다. 테스트를 통과한 코드들이 조합되었을 때 비로소 일관성이 무너진다.</p>
+      <p style="margin-bottom:0;">롤백은 <strong>'잘못 명세된 요구사항'</strong>을 교정하지 못한다. 그것은 오직 상류에서만 가능한 작업이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 4 ── -->
+  <section class="section">
+    <p class="section-label">Section 04</p>
+    <h2>병목의 3층 구조: 우리가 집중하는 곳과 실제 병목</h2>
+
+    <p>
+      Wiki에 축적된 논문들의 증거를 기반으로, 에이전틱 SWE의 병목을 세 층위로 재구성할 수 있다.
+    </p>
+
+    <div class="card table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>층위</th>
+            <th>병목 유형</th>
+            <th>핵심 증거</th>
+            <th>최적화 가능성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="layer-badge layer-upstream">상류</span></td>
+            <td>요구사항 추론 품질</td>
+            <td>SpecBench, compositional-incoherence</td>
+            <td><span class="highlight">근본적 · 난해</span></td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge layer-mid">중류</span></td>
+            <td>의미론-시스템 번역</td>
+            <td>algorithm-system-translation-gap, agent-os-semantic-gap</td>
+            <td><span class="highlight-blue">정보손실 불가피</span></td>
+          </tr>
+          <tr>
+            <td><span class="layer-badge layer-downstream">하류</span></td>
+            <td>실행 파이프라인 효율</td>
+            <td>aggregate-pipeline-serving, agentic-harness-engineering</td>
+            <td><span class="highlight-green">공학적 최적화 가능</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      이 표가 보여주는 비대칭성이 핵심이다. <span class="highlight-green">하류</span>는 가장 '납득하기 쉬운' 엔지니어링 문제다 — 레이턴시를 줄이고, 체크포인트를 최적화하고, 파이프라인을 병렬화하면 된다. 측정도 쉽고, 성과도 직관적으로 보인다. 그래서 연구가 집중되었다.
+    </p>
+
+    <p>
+      하지만 <span class="highlight-blue">중류</span>는 이미 정보손실이 불가피한 영역이며, <span class="highlight">상류</span>는 근본적으로 난해한 추론 문제다. 그리고 상류의 결함은 중류와 하류를 거치면서 <span class="highlight">복원 불가능한 형태로 폭발</span>한다 — 앞서 본 구성적 비일관성이 그 증거다.
+    </p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-label">비유: 3층 버그 필터</p>
+      <p>
+        상류에서 발생한 결함은 거대한 돌멩이다. 중류 필터는 이 돌멩이를 조각내어 통과시킨다 — 의미의 손실이 여기서 발생한다. 하류 필터는 이미 조각난 파편을 처리하므로, 원래 문제가 '돌멩이였다'는 사실 자체를 알 수 없다.
+      </p>
+      <p>
+        하류에서 파편을 더 빠르게 처리하는 것은, 돌멩이를 필터에 통과시킨 원인을 해결하지 못한다. 오히려 <span class="highlight">더 빠르게 파편을 처리할수록, 원인을 추적하기 더 어려워진다</span>.
+      </p>
+    </div>
+
+    <p>
+      <span class="keyword">benchmark-specification-gap</span>이라는 슬러그가 Wiki에 존재한다는 사실 자체가 이 문제의 방증이다. 벤치마크가 측정하려는 것과 실제 소프트웨어 개발이 요구하는 것 사이에 간극이 있다는 인식이 이미 커뮤니티 내에 있었던 것이다. SpecBench는 이 간극을 '사양 설계'라는 구체적 축으로 좁혀, 상류 병목을 정식화하려는 첫 번째 조치다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 5: 결론 ── -->
+  <section class="section">
+    <p class="section-label">Section 05</p>
+    <h2>패러다임 전환: '빠르게 만들기'에서 '올바르게 설계하기'로</h2>
+
+    <p>
+      지금까지의 분석이 하나의 명확한 결론을 향해 수렴한다.
+    </p>
+
+    <div class="conclusion-box">
+      <h3>핵심 주장</h3>
+      <p>
+        에이전틱 소프트웨어 엔지니어링의 <span class="highlight">진정한 병목은 하류 실행 효율이 아니라 상류 요구사항 추론 품질</span>에 있다. 하류 인프라 최적화는 필수적이지만 보완적 역할에 머물며, 상류에서의 결함은 하류에서 복원 불가능한 형태로 폭발한다.
+      </p>
+    </div>
+
+    <p>
+      이 결론이 의미하는 패러다임 전환은 구체적으로 세 가지 방향으로 나타난다.
+    </p>
+
+    <h3>첫째, 평가 축의 전환</h3>
+    <p>
+      현재 SWE 에이전트 벤치마크는 "주어진 문제를 얼마나 빨리, 얼마나 정확하게 코드로 구현하는가"를 측정한다. SpecBench가 제안하는 방향은 <span class="highlight">"주어진 문제를 얼마나 정확하게 사양으로 번역하는가"</span>를 독립적인 평가 축으로 분리하는 것이다. 코드 생성 능력과 사양 설계 능력은 별개의 능력이며, 후자가 전자의 상한을 결정한다.
+    </p>
+
+    <h3>둘째, 연구 투자의 재분배</h3>
+    <p>
+      하류 인프라 최적화에 쏟아지는 연구 자원의 일부를 상류 추론 품질 연구로 이동해야 한다. 구성적 비일관성을 사전에 탐지하는 메커니즘, 불완전한 요구사항을 자동으로 보완하는 추론 프레임워크, 다 컴포넌트 간 사양 일관성을 검증하는 정적 분석 기법 — 이런 방향들이 새로운 연구 프론티어가 되어야 한다.
+    </p>
+
+    <h3>셋째, '빠른 실패'에서 '빠른 교정'으로</h3>
+    <p>
+      현재 에이전틱 SWE의 철학은 <span class="keyword">빠른 실패(fail fast)</span>에 가깝다 — 빠르게 코드를 생성하고, 테스트하고, 롤백하고, 재시도한다. 하지만 상류 병목의 관점에서 보면, 우리가 필요한 것은 <span class="highlight">빠른 교정(correct fast)</span>이다 — 사양 단계에서 불일관성을 조기에 포착하고, 코드가 생성되기 전에 요구사항을 교정하는 것이다.
+    </p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-label">최종 비유: 건축의 미래</p>
+      <p>
+        건축 산업은 이미 이 전환을 거쳤다. 과거에는 시공 속도와 재료 효율이 경쟁력의 전부였다. 하지만 지금은 <span class="highlight">BIM(건물 정보 모델링)</span> — 시공 전에 3D 모델로 충돌을 검증하고, 구조적 일관성을 확인하는 상류 설계 프로세스 — 가 훨씬 더 중요한 경쟁력으로 자리 잡았다.
+      </p>
+      <p>
+        에이전틱 SWE도 같은 성숙 경로를 걷고 있다. SpecBench는 그 경로상의 이정표 — "우리는 지금 어디를 고치고 있는가?"라는 질문에 대한 체계적인 답의 시작 — 이다.
+      </p>
+    </div>
+
+    <p>
+      <span class="highlight-blue">aggregate-pipeline-serving</span>이 실행 파이프라인 내에서조차 병목의 위치를 재정의해야 했듯이, 에이전틱 SWE 전체 시스템에서도 동일한 재정의가 필요하다. <span class="highlight">가시적인 병목을 고치는 것과, 실제 시스템의 성능을 결정하는 병목을 고치는 것은 다르다.</span> SpecBench는 우리에게 그 차이를 직시하라고 말하고 있다.
+    </p>
+  </section>
+
+  <footer class="article-footer">
+    <p>
+      분석 대상 논문: <em>SpecBench: Evaluating Specification-Level Reasoning for Software Engineering LLM Agents</em><br>
+      참조 Wiki 슬러그: aggregate-pipeline-serving · agentic-harness-engineering · algorithm-system-translation-gap · compositional-incoherence · agent-os-semantic-gap · benchmark-specification-gap
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = progress + '%';
+  }, { passive: true });
+</script>
+
+</body>
+</html>
