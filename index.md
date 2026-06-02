@@ -558,3 +558,17 @@
 - [[sources/2026-06-01-ccs-clinical-consensus-selection-for-radiology-rep.md]] - CCS: Clinical Consensus Selection for Radiology Report Generation
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-06-01-in-context-reward-adaptation-for-robust-preference.md]] - In-Context Reward Adaptation for Robust Preference Modeling
+- [[sources/2026-06-02-a-tight-theory-of-error-feedback-algorithms-in-dis.md]] - A Tight Theory of Error Feedback Algorithms in Distributed Optimization
+- [[sources/2026-06-02-stateful-online-monitoring-catches-distributed-age.md]] - Stateful Online Monitoring Catches Distributed Agent Attacks
+- [[sources/2026-06-02-language-models-learn-constructional-semantics-not.md]] - Language Models Learn Constructional Semantics, Not To Mention Syntax: Investigating LM Understanding of Paired-Focus Constructions
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-02-longtracerl-learning-long-context-reasoning-from-s.md]] - LongTraceRL: Learning Long-Context Reasoning from Search Agent Trajectories with Rubric Rewards
+- [[sources/2026-06-02-choosing-the-lens-strategic-perspective-activation.md]] - Choosing the Lens: Strategic Perspective Activation in Context-Dependent Argumentation
+- [[sources/2026-06-02-can-generative-ai-help-people-navigate-radical-mor.md]] - Can Generative AI help people navigate Radical Moral Disagreements? The CONSIDER prototype
+- [[sources/2026-06-02-what-gets-unmasked-first-trajectory-analysis-of-di.md]] - What Gets Unmasked First? Trajectory Analysis of Diffusion Models for Graph-to-Text Generation
+- [[sources/2026-06-02-what-am-i-missing-question-answering-as-hidden-sta.md]] - What Am I Missing? Question-Answering as Hidden State Probing
+- [[sources/2026-06-02-preference-aware-rubric-learning-for-personalized-.md]] - Preference-Aware Rubric Learning for Personalized Evaluation
+- [[sources/2026-06-02-if-llms-have-human-like-attributes-then-so-does-ag.md]] - If LLMs Have Human-Like Attributes, Then So Does Age of Empires II
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl.md]] - Skill Reuse as Compression in Agentic RL
+- [[sources/2026-06-02-semantic-triplet-restoration-a-novel-protocol-for-.md]] - Semantic Triplet Restoration: A Novel Protocol for Hierarchical Table Understanding in Large Language Models

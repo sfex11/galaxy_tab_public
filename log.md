@@ -1242,3 +1242,29 @@
 ## [2026-06-01 08:32] ingest | CCS: Clinical Consensus Selection for Radiology Report Generation
 
 ## [2026-06-01 08:32] ingest | In-Context Reward Adaptation for Robust Preference Modeling
+
+## [2026-06-02 02:09] llm-ingest | 0편 분석, 엔티티 355개, 개념 1016개
+
+## [2026-06-02 08:36] ingest | A Tight Theory of Error Feedback Algorithms in Distributed Optimization
+
+## [2026-06-02 08:36] ingest | Stateful Online Monitoring Catches Distributed Agent Attacks
+
+## [2026-06-02 08:36] ingest | Language Models Learn Constructional Semantics, Not To Mention Syntax: Investigating LM Understanding of Paired-Focus Constructions
+
+## [2026-06-02 08:36] ingest | LongTraceRL: Learning Long-Context Reasoning from Search Agent Trajectories with Rubric Rewards
+
+## [2026-06-02 08:36] ingest | Choosing the Lens: Strategic Perspective Activation in Context-Dependent Argumentation
+
+## [2026-06-02 08:36] ingest | Can Generative AI help people navigate Radical Moral Disagreements? The CONSIDER prototype
+
+## [2026-06-02 08:36] ingest | What Gets Unmasked First? Trajectory Analysis of Diffusion Models for Graph-to-Text Generation
+
+## [2026-06-02 08:36] ingest | What Am I Missing? Question-Answering as Hidden State Probing
+
+## [2026-06-02 08:36] ingest | Preference-Aware Rubric Learning for Personalized Evaluation
+
+## [2026-06-02 08:36] ingest | If LLMs Have Human-Like Attributes, Then So Does Age of Empires II
+
+## [2026-06-02 08:36] ingest | Skill Reuse as Compression in Agentic RL
+
+## [2026-06-02 08:36] ingest | Semantic Triplet Restoration: A Novel Protocol for Hierarchical Table Understanding in Large Language Models

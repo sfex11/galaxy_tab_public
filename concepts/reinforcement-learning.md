@@ -223,3 +223,7 @@ _자동 생성됨_
 - [[sources/2026-05-31-in-context-reward-adaptation-for-robust-preference.md]]
 
 - [[sources/2026-06-01-in-context-reward-adaptation-for-robust-preference.md]]
+
+- [[sources/2026-06-02-longtracerl-learning-long-context-reasoning-from-s.md]]
+
+- [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl.md]]
