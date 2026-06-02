@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mitigating Perceptual Judgment Bias in Multimodal LLM-as-a-J — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom: 3rem;">
+      <span class="tag tag-amber">ICML 2025</span>
+    </div>
+    <h1 style="font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.3; margin-bottom: 1.5rem;">다중모달 LLM 판사의<br><span class="accent">지각 판단 편향</span> 완화</h1>
+    <p style="font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 2.5rem;">지각적 섭동과 보상 모델링을 통한 접근</p>
+    <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1rem);">Seojeong Park, Jiho Choi, Junyong Kang, Seonho Lee, Jaeyo Shin, Hyunjung Shim</p>
+    <p class="muted" style="font-size: clamp(0.75rem, 1.2vw, 0.9rem);">arXiv: 2606.02578v1</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">배경: MLLM-as-a-Judge</h2>
+    <div class="quote-block" style="margin-bottom: 2rem;">
+      <p>다중모달 대형 언어모델을 자동화된 평가자로 활용하여, 비전-언어 응답을 규모 있게 평가하는 패러다임</p>
+    </div>
+    <div class="grid-2" style="margin-top: 2rem;">
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 0.8rem;"><i class="fas fa-arrow-trend-up"></i> 등장 배경</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인간 평가의 높은 비용과 시간 소요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>평가자 간 일관성 부족 문제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델 규모와 벤치마크 확장에 따른 평가 수요 증가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 0.8rem;"><i class="fas fa-triangle-exclamation"></i> 핵심 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>언어적으로 그럴듯하지만 시각적으로 근거 없는 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>주로 SFT에 의존, 지각 편향 미해결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시각-추론 갈등 시 신뢰도 저하</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1.5rem;">문제 정의: <span class="accent">지각 판단 편향</span></h2>
+    <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 2rem;">시각적 증거가 텍스트 단서와 충돌할 때, MLLM 판사가 <span class="accent">지각적으로 올바른 응답</span>보다 <span class="accent2">그럴듯한 서사</span>에 더 높은 점수를 부여하는 체계적 편향</p>
+    <div class="hr"></div>
+    <div style="margin-top: 2rem;">
+      <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1rem); margin-bottom: 1.5rem;">기존 판사의 전반적 오류율이 <span class="accent" style="font-weight: 700;">20% 이상</span>으로 측정되며, 이는 두 가지 실패 모드에서 기인</p>
+      <div class="grid-2">
+        <div class="card" style="border-left: 3px solid #c0582e;">
+          <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 0.5rem;">실패 모드 A</h3>
+          <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); font-weight: 600; margin-bottom: 0.4rem;">불충분한 지각 능력</p>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">판사 자체의 시각 이해가 부정확하여, 논리적으로 일관되지만 시각적으로 틀린 응답에 높은 점수 부여</p>
+        </div>
+        <div class="card" style="border-left: 3px solid #4a6fa5;">
+          <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 0.5rem;">실패 모드 B</h3>
+          <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); font-weight: 600; margin-bottom: 0.4rem;">응답 앵커링</p>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">판사의 지각이 정확하더라도, 응답 텍스트에 포함된 시각 설명에 앵커링되어 자신의 지각을 무시</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">편향의 정량적 분석</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">통제된 시각 섭동 실험</h3>
+        <div style="margin-bottom: 1.5rem;">
+          <div class="big-num">0.8<span style="font-size: 0.5em;">+</span></div>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">복합 오류(지각+추론) 식별 정확도</p>
+        </div>
+        <div>
+          <div class="big-num" style="color: inherit;">-10<span style="font-size: 0.5em;">%p</span></div>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">지각 오류만 존재할 때 정확도 급락</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">핵심 관찰</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복합 오류는 비교적 잘 감지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>순수 지각 오류는 눈에 띄게 놓침</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트의 논리적 일관성에 현혹됨</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>지각 검증을 판단의 <span class="accent">전제 조건</span>으로 강제할 필요성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: 1.5rem;">
+      <p><span class="accent2">→ 지각적 일관성만 검증하면 기존 판사의 성능이 크게 하락함이 입증됨</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1.5rem;">PPJD: <span class="accent3">지각적으로 섭동된 판단 데이터셋</span></h2>
+    <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 2rem;">최소 편집의 반사실적 응답을 구성하여 지각 오류를 분리하고, 검증 가능한 감독 신호를 제공</p>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">쿼드플렛 구조</h3>
+      <div class="grid-4" style="gap: 0.8rem;">
+        <div style="text-align: center; padding: 1rem;">
+          <div class="tag tag-green" style="margin-bottom: 0.5rem;">r_c</div>
+          <p style="font-size: clamp(0.8rem, 1.4vw, 0.95rem); font-weight: 600;">완전 정답</p>
+          <p class="muted" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem);">지각 + 추론 모두 정확</p>
+        </div>
+        <div style="text-align: center; padding: 1rem;">
+          <div class="tag tag-amber" style="margin-bottom: 0.5rem;">r_{rp}</div>
+          <p style="font-size: clamp(0.8rem, 1.4vw, 0.95rem); font-weight: 600;">지각 오류만</p>
+          <p class="muted" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem);">시각적 불일치만 주입</p>
+        </div>
+        <div style="text-align: center; padding: 1rem;">
+          <div class="tag tag-red" style="margin-bottom: 0.5rem;">r_{rp+r}</div>
+          <p style="font-size: clamp(0.8rem, 1.4vw, 0.95rem); font-weight: 600;">복합 오류</p>
+          <p class="muted" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem);">지각 + 추론 오류</p>
+        </div>
+        <div style="text-align: center; padding: 1rem;">
+          <div class="tag" style="margin-bottom: 0.5rem; background: #e8e6e3; color: #2c2825;">x_i</div>
+          <p style="font-size: clamp(0.8rem, 1.4vw, 0.95rem); font-weight: 600;">입력</p>
+          <p class="muted" style="font-size: clamp(0.7rem, 1.2vw, 0.85rem);">이미지 + 질문</p>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1rem);">일반적 선호 데이터셋과 달리, 미세한 지각 실패를 노출하는 <span class="accent">입자도 높은 검증 가능한 감독</span> 제공</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">PPJD 데이터 생성 파이프라인</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">소스 예제 수집</div>
+        <div class="step-desc">MMPR에서 정답 예제 추출 및 절대 정답성 검증</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">지각 속성 추출</div>
+        <div class="step-desc">응답에서 색상, 위치, 수량 등 지각적 속성 식별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">지각 섭동 생성</div>
+        <div class="step-desc">추론 일관성을 유지하면서 지知觉 속성만 최소 변경</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">복합 섭동 생성</div>
+        <div class="step-desc">지각 + 추론 오류를 결합한 반사실적 응답 구성</div>
+      </div>
+    </div>
+    <div class="hr" style="margin: 2rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size: clamp(0.85rem, 1.5vw, 1rem);"><i class="fas fa-xmark" style="color: #c0582e;"></i> <strong>거부된 접근 1:</strong> 추론 없이 지知觉만 섭동 → 비자연스러운 응답</p>
+      </div>
+      <div class="card">
+        <p style="font-size: clamp(0.85rem, 1.5vw, 1rem);"><i class="fas fa-xmark" style="color: #c0582e;"></i> <strong>거부된 접근 2:</strong> 지각-추론 동시 섭동 → 오류 분리 불가</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1.5rem;">검증 가능한 <span class="accent2">보상 모델링</span> (GRPO)</h2>
+    <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 2rem;">명시적 쌍별 레이블 없이, <span class="accent2">일관된 전역 순서</span>를 달성하는 통합 훈련 프레임워크</p>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">GRPO 핵심 메커니즘</h3>
+      <div class="grid-2">
+        <div>
+          <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); margin-bottom: 0.5rem;"><strong>상대적 이점 계산</strong></p>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">그룹 내 n개 후보 응답의 보상을 정규화하여, 보상 크기에 불변하고 작업 간 분산에 강건한 이점 추정</p>
+        </div>
+        <div>
+          <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); margin-bottom: 0.5rem;"><strong>가치 네트워크 불필요</strong></p>
+          <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">전통적 PPO와 달리 별도의 가치 함수 없이 그룹 내 상대 비교만으로 안정적 최적화 달성</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); margin-bottom: 0.5rem;"><strong>정책 업데이트</strong></p>
+      <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">클리핑된 surrogate 손실 + 그룹 정규화 이점 + KL 정규화(β)로 참조 정책과의 거리 유지</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">보상 설계: <span class="accent3">등급화된 순서 강제</span></h2>
+    <div style="margin-bottom: 2rem;">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem);">판사가 완전 정답과 지각 오류를 구분하고, 복합 오류까지 명시적 등급 순서로 차별화하도록 설계</p>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background: #4a7c59; color: #faf9f7;">1</div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">지각 검증을 높은 보상의 <span class="accent">전제 조건</span>으로 설정</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">시각적 근거가 틀리면 추론이 아무리 타당해도 낮은 보상</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background: #c0582e; color: #faf9f7;">2</div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">그럴듯한 서사에 의한 <span class="accent">과보상 방지</span></p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">응답 텍스트에 기술된 시각 단서에 현혹되지 않도록 제약</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background: #4a6fa5; color: #faf9f7;">3</div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">명시적 <span class="accent2">등급화된 보상 순서</span> 부여</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">r_c > r_{rp} > r_{rp+r} 의 검증 가능한 전역 순서 학습</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">실험 설정</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.8rem;"><i class="fas fa-list-check"></i> 평가 프로토콜</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 점수 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>쌍별 비교</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>배치 수준 순위</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.8rem;"><i class="fas fa-microchip"></i> 기반 모델</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Qwen3-VL-4B-Thinking</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Flex-Judge-7B</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>대규모 모델 일반화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.8rem;"><i class="fas fa-scale-balanced"></i> 비교 대상</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 SFT 기반 판사</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상용 프라이빗 평가자</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>편향 완화 베이스라인</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin: 1.5rem 0;"></div>
+    <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1rem);">평가 지표: Spearman 상관계수, F1/Recall(쌍별), Edit Distance(배치)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">주요 결과: <span class="accent">단일 점수 & 쌍별 평가</span></h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">단일 점수 평가</h3>
+        <div class="big-num">+15<span style="font-size: 0.5em;">%</span></div>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem); margin-bottom: 0.5rem;">Flex-Judge-7B 예측 정확도 향상</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">상용 프라이빗 평가자와 동등한 수준의 점수 기반 성능 달성</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">쌍별 비교</h3>
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: clamp(0.9rem, 1.6vw, 1.05rem);"><span class="accent">F1</span> 및 <span class="accent">Recall</span> 지표에서 일관된 개선</p>
+        </div>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">지각적으로 틀린 응답을 정답보다 선호하는 비율이 크게 감소</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: 1.5rem;">
+      <p>Perception-Judge는 점수 기본 설정에서 선도적인 프라이빗 평가자와 <span class="accent">성능을 일치</span>시키며, 배치 수준 일관성에서는 이를 <span class="accent">능가</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">주요 결과: <span class="accent2">배치 수준 순위 평가</span></h2>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="big-num">+11<span style="font-size: 0.5em;">%</span></div>
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.5rem;">Qwen3-VL-4B-Thinking 배치 메트릭 향상</p>
+      <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">Edit Distance 기준 측정, 여러 응답의 전역 순서 일관성 개선</p>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>평가 차원</th>
+          <th>기존 판사</th>
+          <th>Perception-Judge</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>지각 충실도</td>
+          <td><span class="tag tag-red">낮음</span></td>
+          <td><span class="tag tag-green">높음</span></td>
+        </tr>
+        <tr>
+          <td>순위 일관성</td>
+          <td><span class="tag tag-amber">불안정</span></td>
+          <td><span class="tag tag-green">안정</span></td>
+        </tr>
+        <tr>
+          <td>인간 평가 정합</td>
+          <td><span class="tag tag-amber">편차 큼</span></td>
+          <td><span class="tag tag-green">높은 정합</span></td>
+        </tr>
+        <tr>
+          <td>시각-추론 갈등 처리</td>
+          <td><span class="tag tag-red">취약</span></td>
+          <td><span class="tag tag-green">강건</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">제거 연구</h2>
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">구성 요소별 기여도</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>PPJD 데이터 없이 훈련 시 성능 크게 하락</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>등급화된 보상 없이 이진 보상만 사용 시 순위 일관성 저하</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KL 페널티(β) 조정에 따른 안정성 변화 분석</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 1rem;">섭동 유형별 효과</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>순수 지각 섭동(r_{rp})이 핵심적 역할</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복합 섭동(r_{rp+r})은 추가적인 미세 조정 효과</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>지각-추론 오류 분리가 학습 효율의 핵심</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p>PPJD의 <span class="accent">지각 오류 분리 구조</span>와 <span class="accent2">등급화된 보상</span>의 조합이 최적 성능의 필수 조건</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 2rem;">핵심 요약</h2>
+    <div class="flow-item" style="margin-bottom: 1.5rem;">
+      <div class="flow-icon" style="background: #c0582e; color: #faf9f7;"><i class="fas fa-eye"></i></div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">지각 판단 편향 발견 및 정식화</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">불충분한 지각 능력과 응답 앵커링이라는 두 실패 모드를 체계적으로 분석</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom: 1.5rem;">
+      <div class="flow-icon" style="background: #4a7c59; color: #faf9f7;"><i class="fas fa-database"></i></div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">PPJD 데이터셋 구축</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">최소 편집 반사실적 응답으로 지각 오류를 분리한 검증 가능한 감독 신호 제공</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom: 1.5rem;">
+      <div class="flow-icon" style="background: #4a6fa5; color: #faf9f7;"><i class="fas fa-brain"></i></div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">GRPO 기반 통합 훈련 프레임워크</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">명시적 쌍별 레이블 없이 등급화된 전역 순서를 학습하는 보상 설계</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background: #8b6914; color: #faf9f7;"><i class="fas fa-chart-line"></i></div>
+      <div>
+        <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 600;">상당한 성능 향상</p>
+        <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 0.95rem);">배치 메트릭 최대 +11%, 단일 점수 정확도 +15%, 상용 평가자와 동등 또는 우수</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="margin-bottom: 2rem;">
+      <span class="tag tag-green">논문 정보</span>
+    </div>
+    <h2 style="font-size: clamp(1.3rem, 2.8vw, 1.8rem); line-height: 1.4; margin-bottom: 2rem;">Mitigating Perceptual Judgment Bias in Multimodal LLM-as-a-Judge via Perceptual Perturbation and Reward Modeling</h2>
+    <div class="hr"></div>
+    <div style="margin-top: 2rem; margin-bottom: 2rem;">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.5rem;"><strong>저자:</strong> Seojeong Park, Jiho Choi, Junyong Kang, Seonho Lee, Jaeyo Shin, Hyunjung Shim</p>
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.5rem;"><strong>학회:</strong> ICML 2025</p>
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem); margin-bottom: 0.5rem;"><strong>arXiv:</strong> <a href="http://arxiv.org/abs/2606.02578v1" class="accent2">2606.02578v1</a></p>
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.15rem);"><strong>프로젝트 페이지:</strong> <a href="https://perception-judge.github.io/" class="accent2">perception-judge.github.io</a></p>
+    </div>
+    <div class="hr"></div>
+    <p class="muted" style="margin-top: 1.5rem; font-size: clamp(0.85rem, 1.5vw, 1rem);">지각적으로 근거 있고, 해석 가능하며, 시각-추론 갈등에 강건한 다중모달 판사 훈련을 위한 원칙적이고 확장 가능한 패러다임 제시</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
