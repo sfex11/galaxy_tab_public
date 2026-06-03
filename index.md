@@ -572,3 +572,18 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl.md]] - Skill Reuse as Compression in Agentic RL
 - [[sources/2026-06-02-semantic-triplet-restoration-a-novel-protocol-for-.md]] - Semantic Triplet Restoration: A Novel Protocol for Hierarchical Table Understanding in Large Language Models
+- [[sources/2026-06-03-mitigating-perceptual-judgment-bias-in-multimodal-.md]] - Mitigating Perceptual Judgment Bias in Multimodal LLM-as-a-Judge via Perceptual Perturbation and Reward Modeling
+- [[sources/2026-06-03-clinenv-an-interactive-multi-stage-long-horizon-eh.md]] - ClinEnv: An Interactive Multi-Stage Long Horizon EHR Environment for Agents
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-03-from-layers-to-submodules-rethinking-granularity-i.md]] - From Layers to Submodules: Rethinking Granularity in Replacement-Based LLM Compression
+- [[sources/2026-06-03-heros-journey-testing-complex-rule-induction-with-.md]] - HERO'S JOURNEY: Testing Complex Rule Induction with Text Games
+- [[sources/2026-06-03-simsd-simple-speculative-decoding-in-diffusion-lan.md]] - SimSD: Simple Speculative Decoding in Diffusion Language Models
+- [[sources/2026-06-03-skillharm-lifecycle-aware-skill-based-attacks-via-.md]] - SkillHarm: Lifecycle-Aware Skill-Based Attacks via Automated Construction
+- [[sources/2026-06-03-tracking-the-behavioral-trajectories-of-adapting-a.md]] - Tracking the Behavioral Trajectories of Adapting Agents
+- [[sources/2026-06-03-permissive-safety-through-trusted-inference-verifi.md]] - Permissive Safety Through Trusted Inference: Verifiable Belief-Space Neural Safety Filters for Assured Interactive Robotics
+- [[sources/2026-06-03-safesteer-localized-on-policy-distillation-for-eff.md]] - SafeSteer: Localized On-Policy Distillation for Efficient Safety Alignment
+- [[sources/2026-06-03-adacodec-a-predictive-visual-code-for-video-mllms.md]] - AdaCodec: A Predictive Visual Code for Video MLLMs
+- [[sources/2026-06-03-protoada-prototype-guided-adaptive-adapter-expansi.md]] - ProtoAda: Prototype-Guided Adaptive Adapter Expansion and Geometric Consolidation for Multimodal Continual Instruction Tuning
+- [[sources/2026-06-03-a-no-regret-framework-for-adaptive-incentive-desig.md]] - A No-Regret Framework for Adaptive Incentive Design
+- [[sources/2026-06-03-ghost-tool-calls-issue-time-privacy-for-speculativ.md]] - Ghost Tool Calls: Issue-Time Privacy for Speculative Agent Tools
+- [[sources/2026-06-03-agentplm-agentic-protein-language-models-with-reas.md]] - AgentPLM: Agentic Protein Language Models with Reasoning-Augmented Decoding for Protein Sequence Design

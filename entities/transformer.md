@@ -81,3 +81,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-05-29-can-large-language-models-handle-discourse-particl.md]]
 
 - [[sources/2026-05-29-refusal-before-decoding-detecting-and-exploiting-r.md]]
+
+- [[sources/2026-06-03-from-layers-to-submodules-rethinking-granularity-i.md]]

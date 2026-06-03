@@ -1268,3 +1268,31 @@
 ## [2026-06-02 08:36] ingest | Skill Reuse as Compression in Agentic RL
 
 ## [2026-06-02 08:36] ingest | Semantic Triplet Restoration: A Novel Protocol for Hierarchical Table Understanding in Large Language Models
+
+## [2026-06-03 08:45] ingest | Mitigating Perceptual Judgment Bias in Multimodal LLM-as-a-Judge via Perceptual Perturbation and Reward Modeling
+
+## [2026-06-03 08:45] ingest | ClinEnv: An Interactive Multi-Stage Long Horizon EHR Environment for Agents
+
+## [2026-06-03 08:45] ingest | From Layers to Submodules: Rethinking Granularity in Replacement-Based LLM Compression
+
+## [2026-06-03 08:45] ingest | HERO'S JOURNEY: Testing Complex Rule Induction with Text Games
+
+## [2026-06-03 08:45] ingest | SimSD: Simple Speculative Decoding in Diffusion Language Models
+
+## [2026-06-03 08:45] ingest | SkillHarm: Lifecycle-Aware Skill-Based Attacks via Automated Construction
+
+## [2026-06-03 08:45] ingest | Tracking the Behavioral Trajectories of Adapting Agents
+
+## [2026-06-03 08:45] ingest | Permissive Safety Through Trusted Inference: Verifiable Belief-Space Neural Safety Filters for Assured Interactive Robotics
+
+## [2026-06-03 08:45] ingest | SafeSteer: Localized On-Policy Distillation for Efficient Safety Alignment
+
+## [2026-06-03 08:45] ingest | AdaCodec: A Predictive Visual Code for Video MLLMs
+
+## [2026-06-03 08:45] ingest | ProtoAda: Prototype-Guided Adaptive Adapter Expansion and Geometric Consolidation for Multimodal Continual Instruction Tuning
+
+## [2026-06-03 08:45] ingest | A No-Regret Framework for Adaptive Incentive Design
+
+## [2026-06-03 08:45] ingest | Ghost Tool Calls: Issue-Time Privacy for Speculative Agent Tools
+
+## [2026-06-03 08:45] ingest | AgentPLM: Agentic Protein Language Models with Reasoning-Augmented Decoding for Protein Sequence Design
