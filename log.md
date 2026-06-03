@@ -1296,3 +1296,5 @@
 ## [2026-06-03 08:45] ingest | Ghost Tool Calls: Issue-Time Privacy for Speculative Agent Tools
 
 ## [2026-06-03 08:45] ingest | AgentPLM: Agentic Protein Language Models with Reasoning-Augmented Decoding for Protein Sequence Design
+
+## [2026-06-03 22:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1026개
