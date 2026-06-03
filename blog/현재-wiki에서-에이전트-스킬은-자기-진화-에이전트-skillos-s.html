@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이전트가 스스로 연 스킬의 함정 — SkillHarm 심층 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ── 네비게이션 ── */
+  .nav-bar {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  .nav-bar a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85em;
+    transition: background 0.2s;
+  }
+  .nav-bar a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    margin: 48px 0 40px;
+    text-align: left;
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.7rem, 5vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: 16px;
+  }
+  .article-subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: #7a7470;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 620px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 0.82em;
+    color: #a09a95;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin: 52px 0;
+  }
+  .section-label {
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+    font-weight: 700;
+    color: #2c2825;
+    line-height: 1.35;
+    margin-bottom: 20px;
+  }
+
+  p { margin-bottom: 1.2em; }
+
+  /* ── 강조 ── */
+  strong { color: #2c2825; font-weight: 600; }
+  .hl-orange { color: #c2703e; font-weight: 600; }
+  .hl-blue { color: #5b7c99; font-weight: 600; }
+  .hl-green { color: #6b9e7a; font-weight: 600; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 28px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    color: #5a5550;
+    font-style: italic;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+    font-style: normal;
+    color: #a09a95;
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #2c2825;
+    margin-bottom: 12px;
+  }
+
+  /* ── 표 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(44,40,37,0.07);
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    min-width: 520px;
+  }
+  thead th {
+    background: rgba(194,112,62,0.06);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.08);
+    color: #2c2825;
+    font-size: 0.92em;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    color: #4a4540;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(194,112,62,0.03); }
+  .tag {
+    display: inline-block;
+    font-size: 0.82em;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .tag-orange { background: rgba(194,112,62,0.1); color: #c2703e; }
+  .tag-blue { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .tag-green { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.05), rgba(107,158,122,0.05));
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 14px;
+    padding: 24px 24px 20px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    font-size: 1.4em;
+    background: #faf9f7;
+    padding: 0 6px;
+  }
+  .metaphor-label {
+    font-size: 0.75em;
+    font-weight: 700;
+    color: #5b7c99;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── 순서도 ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 28px 0;
+    align-items: center;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #2c2825;
+  }
+  .flow-step .step-num {
+    font-size: 0.7em;
+    color: #c2703e;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .flow-arrow {
+    color: #c2703e;
+    font-size: 1.2em;
+    line-height: 1;
+    padding: 6px 0;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.18), transparent);
+    margin: 48px 0;
+  }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-box {
+    background: rgba(194,112,62,0.05);
+    border-left: 3px solid #c2703e;
+    border-radius: 0 12px 12px 0;
+    padding: 24px;
+    margin: 28px 0;
+  }
+  .conclusion-box p:last-child { margin-bottom: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    font-size: 0.82em;
+    color: #a09a95;
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .article-wrapper { padding: 16px 14px 60px; }
+    .article-header { margin: 32px 0 28px; }
+    .section { margin: 36px 0; }
+    .card { padding: 18px; }
+    .metaphor-box { padding: 20px 16px 16px; }
+    table { font-size: 0.82em; }
+    thead th, tbody td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- 네비게이션 -->
+  <nav class="nav-bar">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">에이전트가 스스로 만든 스킬이<br>왜 가장 위험한 무기가 되는가</h1>
+    <p class="article-subtitle">SkillHarm이 증명한 스킬 생명주기 공격의 구조 — 능력 확장과 공격 표면 확장은 동일한 메커니즘의 양면이다.</p>
+    <div class="article-meta">
+      <span>대상 논문: SkillHarm (Lifecycle-Aware Skill-Based Attacks)</span>
+      <span>2025.07</span>
+    </div>
+  </header>
+
+  <!-- 도입 -->
+  <section class="section">
+    <p>자기 진화 에이전트(Self-Evolving Agent)가 스스로 능력을 확장하기 위해 스킬을 생성, 큐레이션, 실행, 공유하는 과정을 상상해 보라. SkillOS, SkillOpt, FORGE 같은 시스템은 이를 "에이전트의 지능적 성장"으로 프레이밍한다. 그러나 <span class="hl-orange">SkillHarm</span>이라는 논문은 이 생명주기 전체가 체계적인 공격 표면이라는 사실을 자동화된 공격으로 실증해 낸다.</p>
+
+    <p>결론부터 말하자면, 스킬 관리 메커니즘은 <span class="hl-orange">능력 확장과 공격 표면의 확장이 동시에 성립하는 이중 구조</span>를 갖는다. 이것이야말로 능력-협력 역설(Capability-Cooperation Paradox)이 에이전트 스킬이라는 구체적 매체를 통해 현현한 형태다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">일상적 비유</div>
+      <p>집 주인에게 "자동으로 도어락을 업그레이드해 주는 스마트 장치"가 있다고 하자. 주인은 이 장치가 보안을 강화한다고 믿고 설치한다. 그런데 이 장치가 <strong>스스로 새로운 도어락 펌웨어를 다운로드하고, 스스로 검증하고, 스스로 설치하고, 이웃 집에도 배포</strong>한다면? 주인은 "내가 설치했으니 안전하다"고 생각하지만, 실제로는 <strong>가장 넓은 공격 경로</strong>를 스스로 열어둔 셈이다. 스킬 관리 메커니즘이 바로 이 장치와 같다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 1 -->
+  <section class="section">
+    <div class="section-label">Section 1</div>
+    <h2 class="section-title">특권적 위치가 만드는 신뢰의 비대칭성</h2>
+
+    <p>SkillHarm의 핵심 관찰은 이 한 문장에 압축된다.</p>
+
+    <blockquote>
+      "에이전트 스킬은 에이전트 워크플로우에서 특권적 위치(privileged position)를 차지하며, 에이전트는 이를 암묵적으로 따르고 실행할 것으로 기대된다."
+      <cite>— SkillHarm 논문</cite>
+    </blockquote>
+
+    <p>이 관찰은 기존에 알려진 <span class="hl-blue">맹목적 툴 호출(Blind Tool Invocation)</span> 문제의 스킬 버전이라 할 수 있다. 툴 호출은 단일 동작 — 예컨대 "검색 API 한 번 호출" — 이지만, 스킬은 <span class="hl-orange">다단계 실행 궤적(execution trajectory) 전체를 캡슐화</span>한다. 툴이 "단축키"라면, 스킬은 "매크로 프로그램"이다. 단축키 하나가 잘못되면 한 동작이 잘못되지만, 매크로가 잘못되면 연쇄적으로 수십 개의 동작이 오류의 늪에 빠진다.</p>
+
+    <p>더 심각한 것은 <span class="hl-blue">실행 의미론적 불투명성(Execution Semantic Opacity)</span>이다. 스킬 내부에서 무슨 일이 일어나는지 에이전트의 실행 계층에서는 보이지 않는다. 그런데 자기 진화 에이전트가 <strong>스스로 큐레이션한</strong> 스킬일수록 이 불투명성은 극대화된다. "내가 만들었으니 안전하다"는 허위 안정감이 감사(audit) 동기를 원천적으로 차단하기 때문이다.</p>
+
+    <div class="card">
+      <div class="card-title">신뢰의 단위 비교: 툴 vs 스킬</div>
+      <p><span class="hl-blue">툴 호출</span> — 단일 함수 호출, 검증 가능 범위가 좁음, 실패해도 국소적 피해</p>
+      <p><span class="hl-orange">스킬 실행</span> — 다단계 궤적 캡슐화, 검증 가능 범위가 넓고 복잡, 실패 시 연쇄적 피해, 내부 동작 불투명</p>
+      <p style="margin-bottom:0;font-size:0.9em;color:#7a7470;">→ 신뢰의 단위가 툴 대비 기하급수적으로 커지지만, 검증 수준은 오히려 낮아지는 비대칭 구조</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section">
+    <div class="section-label">Section 2</div>
+    <h2 class="section-title">생명주기 4단계가 공격 표면을 체계적으로 확장하는 구조</h2>
+
+    <p>SkillHarm이 제시하는 스킬 생명주기 — <span class="hl-orange">생성 → 큐레이션 → 실행 → 공유</span> — 는 각 단계가 독립적인 취약점을 가지면서도, 결합되었을 때 <span class="hl-green">복합적 감독 실패(Compound Oversight Failure)</span>를 유발한다. 단계별로 분해해 보자.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>생명주기 단계</th>
+            <th>확장되는 공격 표면</th>
+            <th>연결되는 구조적 취약점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-orange">생성</span></td>
+            <td>악의적 스킬이 정당한 능력 확장으로 위장</td>
+            <td><span class="tag tag-blue">구성적 비일관성</span> — 부분적으로 정상으로 보이지만 전체적으로 위험한 스킬</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">큐레이션</span></td>
+            <td>자기 진화 에이전트의 큐레이션이 필터링이 아닌 <strong>정당화 기능</strong>으로 전락</td>
+            <td><span class="tag tag-blue">행동 다양체 수렴</span> — 큐레이션이 에이전트의 행동을 위험한 방향으로 수렴시킴</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">실행</span></td>
+            <td>암묵적 신뢰 하에 스킬이 권한을 남용</td>
+            <td><span class="tag tag-blue">에이전트-OS 의미론 간극</span> — 스킬의 의도된 의미와 OS 수준 실제 실행 사이의 틈</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">공유</span></td>
+            <td>한 에이전트에서 "검증된" 스킬이 다른 에이전트에 감염 확산</td>
+            <td><span class="tag tag-blue">행동 안정성 전이</span> — "안정성"이 아닌 "취약성"이 전파됨</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>각 단계를 살펴보면, 생성 단계에서는 스킬이 <span class="hl-orange">"유용해 보이는" 형태로 위장</span>한다. 레시피에 비유하면, 각 재료는 건강해 보이지만 조합하면 독이 되는 구조다. 큐레이션 단계에서는 에이전트 자신이 "이 스킬은 내가 검토했으니 안전하다"는 <strong>인증서를 스스로 발급</strong>한다. 실행 단계에서는 그 스킬이 실제 권한을 행사하며 시스템에 접근한다. 그리고 공유 단계에서는 이 모든 과정을 거친 스킬이 다른 에이전트에게 "검증된 모듈"로 전파된다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">일상적 비유</div>
+      <p>어느 회사에서 직원 A가 자발적으로 만든 "업무 자동화 스크립트"를 팀장이 "좋아 보인다"고 승인하고, 전 직원이 사용하게 한 뒤, 다른 부서에도 배포했다고 상상해 보라. 스크립트 내부에 은밀히 데이터 유출 코드가 들어 있었다면? <strong>생성자·검증자·실행자·배포자가 모두 "우리 쪽 사람"이었기에</strong> 아무도 의심하지 않았을 것이다. 스킬 생명주기 공격은 바로 이 구조를 자동화한 것이다.</p>
+    </div>
+
+    <p>특히 <span class="hl-green">공유 단계</span>는 집단 지능의 확장을 목표로 하는 다중 에이전트 시스템에서 가장 치명적이다. 한 에이전트의 "검증된 스킬"이 다른 에이전트에게 전이될 때, 전이되는 것은 능력이 아니라 <strong>취약성의 패턴</strong>일 수 있다. 런타임 정렬 메커니즘이 설계 시점에만 집중되고 실행 시점에 분산되지 않는다면, 공유는 곧 감염 확산 경로가 된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section">
+    <div class="section-label">Section 3</div>
+    <h2 class="section-title">부트스트랩 역설: 자기 진화의 순환적 함정</h2>
+
+    <p>가장 구조적인 문제는 <span class="hl-orange">순환 인과</span>다. 자기 진화 에이전트는 다음 순환을 돈다.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <span class="step-num">Step 1</span>
+        현재 자신의 능력을 평가한다
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="step-num">Step 2</span>
+        부족한 스킬을 생성한다
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="step-num">Step 3</span>
+        그 스킬을 큐레이션(검증)한다
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="step-num">Step 4</span>
+        실행 결과로 다시 자신을 평가한다
+      </div>
+      <div class="flow-arrow">↻</div>
+    </div>
+
+    <p>이 순환은 전형적인 <span class="hl-blue">부트스트랩 역설(Bootstrap Paradox)</span>의 형태다. 스킬이 에이전트를 정의하고, 에이전트가 스킬을 정의하는 루프 안에서는 <strong>공격이 어디에서 주입되었는지 추적이 원천적으로 불가능</strong>해진다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">일상적 비유</div>
+      <p>자기 자신을 검증하는 회계사를 상상해 보라. "나의 장부를 나가 검사했는데, 이상 없음"이라는 결론이 나온다. 이 회계사의 결론을 신뢰할 수 있는가? 더구나 이 회계사가 <strong>자신의 검증 방법론조차 스스로 만들었다면?</strong> 자기 진화 에이전트의 큐레이션은 바로 이 구조다. 평가자와 피평가자가 동일한 주체이며, 평가 기준조차 자기 결정적이다.</p>
+    </div>
+
+    <p>이 순환 구조는 알고리즘-시스템 번역 간극(Algorithm-System Translation Gap)과도 맞닿아 있다. 스킬의 <span class="hl-green">의도론적 의미(intentional meaning)</span> — "이 스킬은 무엇을 하려고 만들어졌는가" — 가 실제 실행 수준에서 번역될 때, 그 간극에 취약점이 삽입된다. 의도는 선했지만 실행은 독성을 띠는 스킬, 이것이 부트스트랩 역설이 만들어내는 근본적 추적 불가능성이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section">
+    <div class="section-label">Section 4</div>
+    <h2 class="section-title">구성 안전성의 패러다임 전환: 정적에서 생명주기로</h2>
+
+    <p>기존의 <span class="hl-blue">구성 안전성(Compositional Safety)</span>는 주로 정적 조합에 집중했다. "스킬 A와 스킬 B를 함께 쓰면 안전한가?" 이 수준의 질문이다. 그러나 SkillHarm은 안전성 검증의 대상을 <span class="hl-orange">생명주기 전체로 확장</span>해야 함을 보여준다.</p>
+
+    <div class="card">
+      <div class="card-title">두 가지 안전성 차원</div>
+      <p><span class="hl-blue">정적 구성 안전성</span> (기존 패러다임)<br>
+      "스킬 A + 스킬 B의 조합이 안전한가?"<br>
+      <span style="font-size:0.88em;color:#7a7470;">— 스냅샷 수준의 검증. 조합의 수만큼 검증하면 된다고 가정.</span></p>
+      <p style="margin-top:16px;"><span class="hl-orange">동적 생명주기 안전성</span> (새로운 요구사항)<br>
+      "스킬 A가 생성→큐레이션→실행→공유의 각 단계를 거치며 변형될 때, <strong>각 단계에서 안전성이 보존되는가?</strong>"<br>
+      <span style="font-size:0.88em;color:#7a7470;">— 시간적 차원이 추가됨. 스킬 수 N × 생명주기 단계 4의 조합으로 감사 부담이 기하급수적으로 증가.</span></p>
+    </div>
+
+    <p>여기서 핵심은 <span class="hl-green">감사 가능성을 확장성 요구사항(Auditability as Scaling Requirement)</span>으로 재정의해야 한다는 점이다. 스킬 수가 10개에서 100개로 증가할 때, 기존 패러다임에서는 검증해야 할 조합이 선형적으로 증가한다고 가정했다. 하지만 생명주기 안전성 관점에서는 <strong>스킬 수 × 단계 수 × 단계 간 전이 상태</strong>의 조합이므로, 감사 부담은 기하급수적으로 폭증한다.</p>
+
+    <p>이는 단순히 "더 많이 검사하자"는 양적 확장으로 해결될 수 없다. 감사 자체의 <strong>구조를 재설계</strong>해야 하는 문제다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 결론 -->
+  <section class="section">
+    <div class="section-label">Conclusion</div>
+    <h2 class="section-title">패러다임 전환: 스킬을 "능력"이 아닌 "외부 코드"로 대우하라</h2>
+
+    <p>SkillHarm이 우리에게 강제하는 질문은 명확하다. <span class="hl-orange">스킬 관리 메커니즘은 능력 확장인가, 공격 표면의 확장인가?</span> 답은 이미 나와 있다. <strong>동일한 메커니즘의 양면</strong>이다.</p>
+
+    <div class="conclusion-box">
+      <p><strong>필요한 패러다임 전환은 세 가지다.</strong></p>
+      <p><span class="hl-orange">첫째, 스킬에 대한 "내부적 신뢰"를 폐기해야 한다.</span> 자기 진화 에이전트가 생성한 스킬이라고 해서 신뢰 기준을 낮추는 것은 부트스트랩 역설의 함정에 빠지는 것이다. "내가 만들었으니 안전하다"는 추론 자체가 공격 표면이다.</p>
+      <p><span class="hl-blue">둘째, 감사를 생명주기 전체로 확장해야 한다.</span> 정적 조합 안전성에서 동적 생명주기 안전성으로 전환하지 않으면, 각 단계에서 발생하는 미세한 변형이 결합되어 복합적 감독 실패를 유발한다.</p>
+      <p><span class="hl-green">셋째, 스킬 공유를 "감염 경로"로 모델링해야 한다.</span> 다중 에이전트 시스템에서 스킬 전이는 능력 전달이 아니라 취약성 전파의 가능성을 내포하며, 런타임 정렬 메커니즘이 공유 시점에도 작동해야 한다.</p>
+    </div>
+
+    <p>궁극적으로, 에이전트 스킬을 "에이전트의 일부"로 간주하는 관점에서 <strong>"에이전트 외부에서 들어온 코드"</strong>로 간주하는 관점으로 전환해야 한다. 아무리 자기 진화 에이전트가 스스로 만들었다 하더라도, 실행 시점에서는 외부 라이브러리를 불러오는 것과 동일한 수준의 검증이 적용되어야 한다. 이 전환이 없다면, 자기 진화는 곧 자기 파괴의 지름길이 될 것이다.</p>
+  </section>
+
+  <footer class="article-footer">
+    <p>본 분석은 SkillHarm: Lifecycle-Aware Skill-Based Attacks via Automated Construction 논문 및 관련 Wiki 쿼리 결과를 바탕으로 작성되었습니다.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
