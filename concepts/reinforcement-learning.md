@@ -227,3 +227,7 @@ _자동 생성됨_
 - [[sources/2026-06-02-longtracerl-learning-long-context-reasoning-from-s.md]]
 
 - [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl.md]]
+
+- [[sources/2026-06-04-skill-rm-unifying-heterogeneous-evaluation-criteri.md]]
+
+- [[sources/2026-06-04-self-refining-agentic-reinforcement-learning-for-v.md]]

@@ -587,3 +587,18 @@
 - [[sources/2026-06-03-a-no-regret-framework-for-adaptive-incentive-desig.md]] - A No-Regret Framework for Adaptive Incentive Design
 - [[sources/2026-06-03-ghost-tool-calls-issue-time-privacy-for-speculativ.md]] - Ghost Tool Calls: Issue-Time Privacy for Speculative Agent Tools
 - [[sources/2026-06-03-agentplm-agentic-protein-language-models-with-reas.md]] - AgentPLM: Agentic Protein Language Models with Reasoning-Augmented Decoding for Protein Sequence Design
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-04-skill-rm-unifying-heterogeneous-evaluation-criteri.md]] - Skill-RM: Unifying Heterogeneous Evaluation Criteria via Agent Skill
+- [[sources/2026-06-04-language-models-need-sleep-learning-to-self-modify.md]] - Language Models Need Sleep: Learning to Self-Modify and Consolidate Memories
+- [[sources/2026-06-04-quantifying-faithful-confidence-expression-in-larg.md]] - Quantifying Faithful Confidence Expression in Large Reasoning Models
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-04-alignatt4llm-fast-alignatt-for-decoder-only-llms-a.md]] - AlignAtt4LLM: Fast AlignAtt for Decoder-Only LLMs at IWSLT 2026 Simultaneous Speech Translation Task
+- [[sources/2026-06-04-agentic-chain-of-thought-steering-for-efficient-an.md]] - Agentic Chain-of-Thought Steering for Efficient and Controllable LLM Reasoning
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-04-self-refining-agentic-reinforcement-learning-for-v.md]] - Self-Refining Agentic Reinforcement Learning for Vision-Conditioned UAV Navigation
+- [[sources/2026-06-04-efficient-asr-training-with-conversations-that-nev.md]] - Efficient ASR Training with Conversations that Never Happened
+- [[sources/2026-06-04-vlesa-vision-language-embodied-safety-agent-for-hu.md]] - VLESA: Vision-Language Embodied Safety Agent for Human Activity Monitoring
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-04-hedge-bench-benchmarking-agents-on-hard-realistic-.md]] - Hedge-Bench: Benchmarking Agents on Hard, Realistic Tasks Pertaining to Financial Reasoning
+- [[sources/2026-06-04-the-impact-of-configuring-agentic-ai-coding-tools-.md]] - The Impact of Configuring Agentic AI Coding Tools on Build-vs-Buy Decisions: A Study Protocol
+- [[sources/2026-06-04-netkv-network-aware-decode-instance-selection-for-.md]] - NetKV: Network-Aware Decode Instance Selection for Disaggregated LLM Inference

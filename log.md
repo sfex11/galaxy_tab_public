@@ -1298,3 +1298,25 @@
 ## [2026-06-03 08:45] ingest | AgentPLM: Agentic Protein Language Models with Reasoning-Augmented Decoding for Protein Sequence Design
 
 ## [2026-06-03 22:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1026개
+
+## [2026-06-04 08:52] ingest | Skill-RM: Unifying Heterogeneous Evaluation Criteria via Agent Skill
+
+## [2026-06-04 08:52] ingest | Language Models Need Sleep: Learning to Self-Modify and Consolidate Memories
+
+## [2026-06-04 08:52] ingest | Quantifying Faithful Confidence Expression in Large Reasoning Models
+
+## [2026-06-04 08:52] ingest | AlignAtt4LLM: Fast AlignAtt for Decoder-Only LLMs at IWSLT 2026 Simultaneous Speech Translation Task
+
+## [2026-06-04 08:52] ingest | Agentic Chain-of-Thought Steering for Efficient and Controllable LLM Reasoning
+
+## [2026-06-04 08:52] ingest | Self-Refining Agentic Reinforcement Learning for Vision-Conditioned UAV Navigation
+
+## [2026-06-04 08:52] ingest | Efficient ASR Training with Conversations that Never Happened
+
+## [2026-06-04 08:52] ingest | VLESA: Vision-Language Embodied Safety Agent for Human Activity Monitoring
+
+## [2026-06-04 08:52] ingest | Hedge-Bench: Benchmarking Agents on Hard, Realistic Tasks Pertaining to Financial Reasoning
+
+## [2026-06-04 08:52] ingest | The Impact of Configuring Agentic AI Coding Tools on Build-vs-Buy Decisions: A Study Protocol
+
+## [2026-06-04 08:52] ingest | NetKV: Network-Aware Decode Instance Selection for Disaggregated LLM Inference
