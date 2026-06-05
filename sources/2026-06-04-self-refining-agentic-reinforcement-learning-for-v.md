@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-03-a-no-regret-framework-for-adaptive-incentive-desig]]: 두 논문 모두 강화학습(RL) 환경에서 에이전트의 행동을 효과적으로 유도하는 메커니즘을 다루며, 전자는 중앙 집중식 인센티브 설계, 후자는 자기 정제를 통한 보상 함수 자동 생성을 다룹니다.
+- → [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl]]: 두 논문 모두 에이전트 강화학습(Agentic RL)을 다루며, 전자는 시각 기반 내비게이션에서의 자기 정제 RL을, 후자는 성공 궤적의 압축을 통한 스킬 재사용 RL을 제안합니다.

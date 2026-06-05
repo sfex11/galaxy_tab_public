@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-03-skillharm-lifecycle-aware-skill-based-attacks-via-]]: 두 논문 모두 에이전트의 스킬 및 구성 파일이 시간에 따라 변화하는 라이프사이클을 다루며, 전자는 이를 악용한 공격 기법을, 후자는 파일 수정에 따른 행동 궤적 추적 방법을 제안합니다.
+- → [[sources/2026-06-04-language-models-need-sleep-learning-to-self-modify]]: 두 논문 모두 LLM/에이전트가 스스로를 수정(기억 통합, 설정 파일 편집)하여 시간에 따라 진화하고 행동이 변하는 과정을 다룹니다.

@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-04-skill-rm-unifying-heterogeneous-evaluation-criteri]]: 두 논문 모두 에이전트의 '스킬(Skill)'을 핵심 개념으로 다루며, 전자는 스킬의 재사용과 압축, 후자는 스킬을 기반으로 한 이질적 평가 기준의 통합을 다룹니다.
+- → [[sources/2026-06-04-self-refining-agentic-reinforcement-learning-for-v]]: 두 논문 모두 에이전트 강화학습(Agentic RL)을 다루며, 전자는 시각 기반 내비게이션에서의 자기 정제 RL을, 후자는 성공 궤적의 압축을 통한 스킬 재사용 RL을 제안합니다.

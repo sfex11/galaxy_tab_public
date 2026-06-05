@@ -32,3 +32,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-02-stateful-online-monitoring-catches-distributed-age]]: 두 논문 모두 LLM과 에이전트의 안전성(Safety) 확보를 다루며, 전자는 외부 모니터링을 통한 악의적 공격 탐지, 후자는 모델 내부 정렬을 통한 안전성 강화를 제안합니다.

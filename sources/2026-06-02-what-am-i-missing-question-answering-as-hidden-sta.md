@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-04-agentic-chain-of-thought-steering-for-efficient-an]]: 두 논문 모두 LLM의 추론(Reasoning) 과정을 분석하고 제어하는 것을 목적으로 하며, 전자는 숨겨진 상태를 탐색해 기작을 규명하고 후자는 사고 과정을 조향해 효율성을 높입니다.

@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-03-heros-journey-testing-complex-rule-induction-with-]]: 두 논문 모두 에이전트의 복잡한 다단계 의사결정 능력을 평가하기 위해 정적 벤치마크를 넘어선 인터랙티브한 환경과 벤치마크를 제안합니다.
+- → [[sources/2026-06-04-hedge-bench-benchmarking-agents-on-hard-realistic-]]: 두 논문 모두 특정 전문 도메인(의료, 금융)의 현실적이고 장기적인 시나리오에서 에이전트의 추론 및 의사결정 능력을 평가하기 위한 벤치마크를 제안합니다.
