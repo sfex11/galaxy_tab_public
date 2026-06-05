@@ -602,3 +602,5 @@
 - [[sources/2026-06-04-hedge-bench-benchmarking-agents-on-hard-realistic-.md]] - Hedge-Bench: Benchmarking Agents on Hard, Realistic Tasks Pertaining to Financial Reasoning
 - [[sources/2026-06-04-the-impact-of-configuring-agentic-ai-coding-tools-.md]] - The Impact of Configuring Agentic AI Coding Tools on Build-vs-Buy Decisions: A Study Protocol
 - [[sources/2026-06-04-netkv-network-aware-decode-instance-selection-for-.md]] - NetKV: Network-Aware Decode Instance Selection for Disaggregated LLM Inference
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-05-streaming-communication-in-multi-agent-reasoning.md]] - Streaming Communication in Multi-Agent Reasoning

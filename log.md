@@ -1320,3 +1320,5 @@
 ## [2026-06-04 08:52] ingest | The Impact of Configuring Agentic AI Coding Tools on Build-vs-Buy Decisions: A Study Protocol
 
 ## [2026-06-04 08:52] ingest | NetKV: Network-Aware Decode Instance Selection for Disaggregated LLM Inference
+
+## [2026-06-05 08:42] ingest | Streaming Communication in Multi-Agent Reasoning
