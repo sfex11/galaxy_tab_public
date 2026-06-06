@@ -85,3 +85,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-06-03-from-layers-to-submodules-rethinking-granularity-i.md]]
 
 - [[sources/2026-06-04-alignatt4llm-fast-alignatt-for-decoder-only-llms-a.md]]
+
+- [[sources/2026-06-06-pc-layer-polynomial-weight-preconditioning-for-imp.md]]
+
+- [[sources/2026-06-06-you-only-index-once-cross-layer-sparse-attention-w.md]]
+
+- [[sources/2026-06-06-vortex-efficient-and-programmable-sparse-attention.md]]

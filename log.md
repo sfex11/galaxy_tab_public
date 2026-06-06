@@ -1324,3 +1324,31 @@
 ## [2026-06-05 08:42] ingest | Streaming Communication in Multi-Agent Reasoning
 
 ## [2026-06-05 16:00] llm-ingest | 0편 분석, 엔티티 355개, 개념 1043개
+
+## [2026-06-06 08:33] ingest | HANDOFF: Humanoid Agentic Task-Space Whole-Body Control via Distilled Complementary Teachers
+
+## [2026-06-06 08:33] ingest | DNQ: Deep Nash Q-Network for Partially Observable n-Player Games
+
+## [2026-06-06 08:33] ingest | MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery
+
+## [2026-06-06 08:33] ingest | PC Layer: Polynomial Weight Preconditioning for Improving LLM Pre-Training
+
+## [2026-06-06 08:33] ingest | Goedel-Architect: Streamlining Formal Theorem Proving with Blueprint Generation and Refinement
+
+## [2026-06-06 08:33] ingest | You Only Index Once: Cross-Layer Sparse Attention with Shared Routing
+
+## [2026-06-06 08:33] ingest | Human Adults and LLMs as Scientists: Who Benefits from Active Exploration?
+
+## [2026-06-06 08:33] ingest | Benchmark Everything Everywhere All at Once
+
+## [2026-06-06 08:33] ingest | Flow-based Policy Adaptation without Policy Updates
+
+## [2026-06-06 08:33] ingest | Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents
+
+## [2026-06-06 08:33] ingest | Will the Agent Recuse Itself? Measuring LLM-Agent Compliance with In-Band Access-Deny Signals
+
+## [2026-06-06 08:33] ingest | Latent Reasoning with Normalizing Flows
+
+## [2026-06-06 08:33] ingest | Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
+
+## [2026-06-06 08:33] ingest | LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs

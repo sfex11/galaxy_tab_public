@@ -604,3 +604,23 @@
 - [[sources/2026-06-04-netkv-network-aware-decode-instance-selection-for-.md]] - NetKV: Network-Aware Decode Instance Selection for Disaggregated LLM Inference
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-06-05-streaming-communication-in-multi-agent-reasoning.md]] - Streaming Communication in Multi-Agent Reasoning
+- [[sources/2026-06-06-handoff-humanoid-agentic-task-space-whole-body-con.md]] - HANDOFF: Humanoid Agentic Task-Space Whole-Body Control via Distilled Complementary Teachers
+- [[sources/2026-06-06-dnq-deep-nash-q-network-for-partially-observable-n.md]] - DNQ: Deep Nash Q-Network for Partially Observable n-Player Games
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-06-mlevolve-a-self-evolving-framework-for-automated-m.md]] - MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-06-pc-layer-polynomial-weight-preconditioning-for-imp.md]] - PC Layer: Polynomial Weight Preconditioning for Improving LLM Pre-Training
+- [[sources/2026-06-06-goedel-architect-streamlining-formal-theorem-provi.md]] - Goedel-Architect: Streamlining Formal Theorem Proving with Blueprint Generation and Refinement
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-06-you-only-index-once-cross-layer-sparse-attention-w.md]] - You Only Index Once: Cross-Layer Sparse Attention with Shared Routing
+- [[sources/2026-06-06-human-adults-and-llms-as-scientists-who-benefits-f.md]] - Human Adults and LLMs as Scientists: Who Benefits from Active Exploration?
+- [[sources/2026-06-06-benchmark-everything-everywhere-all-at-once.md]] - Benchmark Everything Everywhere All at Once
+- [[sources/2026-06-06-flow-based-policy-adaptation-without-policy-update.md]] - Flow-based Policy Adaptation without Policy Updates
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-06-vortex-efficient-and-programmable-sparse-attention.md]] - Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-06-will-the-agent-recuse-itself-measuring-llm-agent-c.md]] - Will the Agent Recuse Itself? Measuring LLM-Agent Compliance with In-Band Access-Deny Signals
+- [[sources/2026-06-06-latent-reasoning-with-normalizing-flows.md]] - Latent Reasoning with Normalizing Flows
+- [[sources/2026-06-06-subspace-aware-sparse-autoencoders-for-effective-m.md]] - Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
+- [[sources/2026-06-06-llms-can-leak-training-data-but-do-they-want-to-a-.md]] - LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs

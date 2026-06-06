@@ -161,3 +161,5 @@ _자동 생성됨_
 - [[sources/2026-05-24-lcguard-latent-communication-guard-for-safe-kv-sha.md]]
 
 - [[sources/2026-06-05-streaming-communication-in-multi-agent-reasoning.md]]
+
+- [[sources/2026-06-06-mlevolve-a-self-evolving-framework-for-automated-m.md]]
