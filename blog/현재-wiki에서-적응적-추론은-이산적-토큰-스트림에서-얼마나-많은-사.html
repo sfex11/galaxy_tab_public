@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>토큰 예산이 사라진 자리에 무엇이 남는가 — 정규화 흐름과 적응적 추론의 차원 전환</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --text: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #7a7168;
+    --border-light: rgba(44,40,37,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    font-size: clamp(15px, 1.6vw, 17.5px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav.top-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 780px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav.top-nav a {
+    color: var(--accent-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.4vw, 14px);
+    transition: background 0.2s;
+  }
+  nav.top-nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding-top: clamp(48px, 8vw, 100px);
+    padding-bottom: clamp(32px, 5vw, 60px);
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 500;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    letter-spacing: 0.03em;
+  }
+  .article-header h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4.5vw, 42px);
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .article-header h1 em {
+    font-style: normal;
+    color: var(--accent-warm);
+  }
+  .article-subtitle {
+    font-size: clamp(15px, 1.8vw, 18px);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .article-meta {
+    margin-top: 24px;
+    font-size: clamp(12px, 1.2vw, 13.5px);
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+  .section h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.35;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent-warm);
+  }
+  .section h3 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: var(--text);
+    margin: 32px 0 12px;
+  }
+  .section p {
+    margin-bottom: 16px;
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 20px 16px 24px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 1.5vw, 16.5px);
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  blockquote strong { color: var(--text); font-weight: 500; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0.5px 2px rgba(44,40,37,0.06);
+  }
+  .card-label {
+    font-size: clamp(11px, 1.2vw, 12.5px);
+    font-weight: 700;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .card h4 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(15px, 2vw, 18px);
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .card p { margin-bottom: 8px; color: var(--muted); }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+  }
+  .metaphor-box .metaphor-label {
+    font-size: clamp(11px, 1.2vw, 12.5px);
+    font-weight: 700;
+    color: var(--accent-cool);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .metaphor-box p { color: var(--muted); margin-bottom: 10px; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 테이블 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.4vw, 15px);
+  }
+  thead th {
+    background: rgba(194,112,62,0.06);
+    font-weight: 700;
+    color: var(--text);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--card-border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { font-weight: 500; color: var(--text); }
+
+  /* ── 강조 ── */
+  .hl-warm { color: var(--accent-warm); font-weight: 500; }
+  .hl-cool { color: var(--accent-cool); font-weight: 500; }
+  .hl-green { color: var(--accent-green); font-weight: 500; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--border-light);
+    margin: clamp(40px, 6vw, 64px) 0;
+  }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: clamp(24px, 3.5vw, 36px);
+    margin: 32px 0;
+  }
+  .conclusion-box .conclusion-label {
+    font-size: clamp(11px, 1.2vw, 12.5px);
+    font-weight: 700;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .conclusion-box p { color: var(--muted); margin-bottom: 12px; }
+  .conclusion-box p:last-child { margin-bottom: 0; }
+  .conclusion-box strong { color: var(--text); }
+
+  /* ── 목차 ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 0 0 clamp(36px, 5vw, 56px);
+  }
+  .toc-label {
+    font-size: clamp(11px, 1.2vw, 12.5px);
+    font-weight: 700;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc-counter;
+    padding: 0;
+  }
+  .toc ol li {
+    counter-increment: toc-counter;
+    margin-bottom: 8px;
+  }
+  .toc ol li::before {
+    content: counter(toc-counter) ".";
+    font-weight: 700;
+    color: var(--accent-warm);
+    margin-right: 8px;
+    font-size: 0.9em;
+  }
+  .toc ol li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .toc ol li a:hover { color: var(--accent-warm); }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid var(--border-light);
+    padding-top: 28px;
+    padding-bottom: clamp(48px, 8vw, 80px);
+    text-align: center;
+  }
+  .article-footer p {
+    font-size: clamp(12px, 1.2vw, 13px);
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .ref-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+    text-align: left;
+  }
+  .ref-list li {
+    font-size: clamp(12.5px, 1.3vw, 14px);
+    color: var(--muted);
+    margin-bottom: 6px;
+    padding-left: 16px;
+    position: relative;
+  }
+  .ref-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-cool);
+  }
+
+  /* ── 스크롤바 ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(44,40,37,0.15); border-radius: 3px; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .article-meta { gap: 10px; }
+    blockquote { padding: 14px 16px 14px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html">📚 홈</a>
+  <a href="../sources.html">논문</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../daily.html">📝 요약</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="blog.html">🧠 분석</a>
+  <a href="../patent/README.html">patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+</nav>
+
+<div class="container">
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis — Adaptive Inference</span>
+    <h1>토큰 예산이 사라진 자리에<br><em>무엇이 남는가</em></h1>
+    <p class="article-subtitle">정규화 흐름이 만들어내는 적응적 추론의 차원 전환, 그리고 우리가 다시 그려야 할 새로운 지도</p>
+    <div class="article-meta">
+      <span>2025.07.11</span>
+      <span>대상 논문: Latent Reasoning with Normalizing Flows</span>
+      <span>읽기 약 12분</span>
+    </div>
+  </header>
+
+  <div class="toc">
+    <div class="toc-label">목차</div>
+    <ol>
+      <li><a href="#s1">계단을 세던 시대: 이산 토큰 예산이라는 축의 탄생</a></li>
+      <li><a href="#s2">바퀴의 발명: 정규화 흐름이 부수는 것</a></li>
+      <li><a href="#s3">사라지지 않은 축: 연속적 계산 예산으로의 재구성</a></li>
+      <li><a href="#s4">병목 이동과 의미론적 간극: 두 가지 갱신</a></li>
+      <li><a href="#s5">패러다임 전환: 우리가 지금 해야 할 일</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <section class="section" id="s1">
+    <h2>계단을 세던 시대: 이산 토큰 예산이라는 축의 탄생</h2>
+
+    <p>적응적 추론(Adaptive Inference)의 역사를 한 줄로 요약하면, <span class="hl-warm">"얼마나 많은 토큰을 사고에 할당할 것인가"</span>라는 단일 축으로 수렴해 온 과정이었다. 물을 끓일 때 가스레인지 불을 강·중·약으로 조절하는 것처럼, 모델은 "이 문제는 어려우니 토큰을 더 쓰자" 혹은 "쉬우니 적게 쓰자"고 판단해 왔다.</p>
+
+    <p>SpecKV는 모델이나 라우트를 선택하는 차원에서, 추측 길이인 γ(감마)를 선택하는 것으로 결정의 범위를 축소했다. 하지만 여전히 그 γ는 <span class="hl-warm">이산적 토큰 단위</span>의 예산이었다. "5개 토큰 스펙큘레이션", "20개 토큰 스펙큘레이션" — 세듯 셀 수 있는 단위였다.</p>
+
+    <p>압축 인식 감마 선택(Compression-aware γ Selection)은 내부 시스템 상태에 반응한다는 점에서 한 걸음 더 나아갔다. 압축률이 높으면 더 많은 토큰을 할당하고, 낮으면 줄인다. 그러나 출력의 궁극적 형태는 여전히 <span class="hl-warm">"몇 토큰을 생성할 것인가"</span>로 귀결되었다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>엘리베이터를 타고 층을 이동하는 상황을 상상해 보라. 적응적 추론은 "이 목적지까지 몇 층을 거쳐야 하는가"를 계산하는 일이었다. 1층에서 5층까지 가려면 4번의 정지(토큰 생성)가 필요하고, 2층에서 3층이면 1번이면 된다. 층(토큰)이라는 단위가 명확하기 때문에, 예산을 세고 할당하는 것이 의미 있었다.</p>
+      <p>그러나 이 구조는 자동회귀 생성 — 한 토큰씩 순차적으로 생성해야 한다는 강제 — 에 <strong>종속</strong>된 것이었다. 엘리베이터가 아닌 에스컬레이터라면 층을 셀 필요가 없을 텐데, 우리는 줄곧 엘리베이터만 타고 있었던 셈이다.</p>
+    </div>
+
+    <blockquote>
+      기존 적응적 추론은 <strong>자동회귀 생성이라는 하드웨어적 제약 위에서만 의미 있는</strong> 축이었다. 토큰이 셀 수 있는 최소 단위였기 때문에, 예산도 토큰 단위로 정의될 수밖에 없었다.
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section" id="s2">
+    <h2>바퀴의 발명: 정규화 흐름이 부수는 것</h2>
+
+    <p>"Latent Reasoning with Normalizing Flows" 논문은 텍스트 Chain-of-Thought를 연속적 잠재 공간의 계산으로 대체한다. 이것이 기존 축에 미치는 영향을 세 갈래로 분해할 수 있다.</p>
+
+    <h3>첫째, 예산의 이산성 상실</h3>
+    <p>토큰 단위로 셀 수 있는 "사고 단계"가 존재하지 않게 된다. 정규화 흐름에서 추론은 <span class="hl-cool">플로우 스텝(flow step)의 연속적 변환</span>이며, 각 스텝은 토큰과 같은 의미론적 단위가 아니다. "γ개의 토큰을 스펙큘레이션하라"는 명령은 <span class="hl-warm">적용 대상 자체가 소멸</span>한다.</p>
+
+    <h3>둘째, 에이전트 루프의 의미 역전</h3>
+    <p>기존 에이전트 루프는 "토큰 생성 → 해석 → 도구 호출 → 토큰 생성"의 순환이었다. 적응적 추론은 이 순환 내에서 토큰 예산을 조절하는 역할을 맡았다. 정규화 흐름에서는 루프가 <span class="hl-cool">"잠재 상태 업데이트 → 결정 → 잠재 상태 업데이트"</span>로 변환되며, 토큰 예산 조절은 루프의 구조적 개입점에서 의미를 잃는다.</p>
+
+    <h3>셋째, 병목 재정의와의 정합</h3>
+    <p>다중 서버 MCP 배포에서 파이프라인 레이턴시 병목이 "개별 LLM 호출"이 아니라 "스키마 축적"에 의해 결정된다는 분석이 있었다. 정규화 흐름이 토큰 스트림을 제거하면, 스키마 축적이라는 병목 자체도 구조적으로 변경된다. <span class="hl-green">적응적 추론이 해결하려던 문제의 형태가 근본적으로 달라지는</span> 것이다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>엘리베이터(토큰 스트림)를 에스컬레이터(정규화 흐름)로 바꾼 상황이다. 에스컬레이터를 탈 때 "몇 번 정지할 것인가"를 물어보는 것은 무의미하다. 정지라는 개념 자체가 다르기 때문이다. 연속적으로 이동하면서, 언제 내릴지(결정)는 여전히 필요하지만, 그것을 '정지 횟수'로 예산 편성할 수는 없다.</p>
+      <p>더 나아가, 엘리베이터 대기실의 혼잡도(스키마 축적)라는 병목도 에스컬레이터 시스템에서는 완전히 다른 형태로 나타난다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">핵심 변화</div>
+      <h4>"사고 토큰 예산"이라는 축은 붕괴한다</h4>
+      <p>이것은 부정할 수 없다. 자동회귀 생성에 종속된 이산적 예산 분배라는 구체적 형태는 소멸한다. 토큰이라는 조작 대상이 사라지기 때문이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section" id="s3">
+    <h2>사라지지 않은 축: 연속적 계산 예산으로의 재구성</h2>
+
+    <p>그러나 여기서 함부로 "적응적 추론이 끝났다"고 결론 내리면 안 된다. <span class="hl-warm">"사고 토큰 예산" 축이 붕괴하는 것은 맞지만, 적응적 추론이라는 기능 자체가 소멸하는 것은 아니다.</span></p>
+
+    <p>정규화 흐름에서도 여전히 결정해야 할 근본적인 질문은 동일하다: <strong>"이 질문에 얼마나 많은 계산 자원을 투입할 것인가."</strong> 다만 그것의 형태가 완전히 달라진다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>기존 (자동회귀)</th>
+            <th>정규화 흐름</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>조작 대상</td>
+            <td>토큰 수 (이산)</td>
+            <td>플로우 스텝 수 / 잠재 차원 (연속)</td>
+          </tr>
+          <tr>
+            <td>적응 기준</td>
+            <td>압축률, 난이도 추정</td>
+            <td>잠재 공간의 기하학적 상태 (미탐구)</td>
+          </tr>
+          <tr>
+            <td>복잡도 측정</td>
+            <td>토큰 단위 계산 비용</td>
+            <td>연속 동역학의 계산 비용</td>
+          </tr>
+          <tr>
+            <td>제어 granularity</td>
+            <td>정수 단위 (1, 2, 3…토큰)</td>
+            <td>실수 단위 (스텝 크기, 차원 축소율)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>SpecKV가 "압축이라는 내부 시스템 상태에 반응하는 적응의 새로운 유형"을 제시했다면, 정규화 흐름 기반 추론에서는 <span class="hl-cool">"잠재 공간의 기하학적 상태에 반응하는 적응"</span>이라는 새로운 유형이 필요하다. 만곡도(curvature), 분산(variance), 흐름의 안정성(stability) — 이런 지표들이 적응의 입력이 될 수 있다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>자동차 여행을 생각해 보자. 엘리베이터 시대의 예산은 "몇 개의 톨게이트를 지날 것인가"였다. 그런데 이제 도로 자체가 연속적인 고속도로(정규화 흐름)로 바뀌었다. 톨게이트(토큰)가 없어졌지만, 여전히 결정해야 할 것이 있다: <strong>"어느 구간에서 감속하고, 어느 구간에서 가속할 것인가."</strong></p>
+      <p>도로의 곡률이 급하면 속도를 줄이고(더 많은 플로우 스텝), 직선 구간이면 빠르게 통과한다(적은 스텝). '톨게이트 개수'라는 이산 예산은 사라졌지만, '구간별 속도 조절'이라는 연속 예산은 새로 생겨난다. 이것이 <span class="hl-green">축의 소멸이 아니라 차원의 전환</span>인 이유다.</p>
+    </div>
+
+    <blockquote>
+      적응적 추론의 본질 — <strong>문제 난이도에 따라 계산 자원을 동적으로 할당한다는 원칙</strong> — 은 연속적 잠재 공간에서 새로운 축으로 재현된다.
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section" id="s4">
+    <h2>병목 이동과 의미론적 간극: 두 가지 갱신</h2>
+
+    <p>이 차원 전환은 기존에 정립된 두 가지 개념을 근본적으로 갱신한다.</p>
+
+    <h3>적응적 병목 이동(Adaptive Bottleneck Migration)의 갱신</h3>
+    <p>기존에는 병목이 "어떤 토큰에 계산을 집중할 것인가"에서 "얼마나 많은 토큰을 생성할 것인가"로 이동하는 궤적을 보였다. 정규화 흐름에서는 병목이 <span class="hl-cool">"잠재 공간의 어느 영역에 플로우 스텝을 집중할 것인가"</span>로 이동한다.</p>
+
+    <p>이것은 단순한 수준의 이동이 아니다. 토큰 위치 기반 병목 이동은 1차원 선분 위에서의 이동이었지만, 잠재 공간 영역 기반 병목 이동은 <span class="hl-warm">다양체(manifold) 위에서의 이동</span>이다. 위상적(topological)으로 완전히 다른 문제다.</p>
+
+    <div class="card">
+      <div class="card-label">병목 이동의 궤적 비교</div>
+      <h4>1세대 → 2세대 → 3세대</h4>
+      <p><span class="hl-warm">1세대:</span> "어떤 토큰에 집중할까?" (어텐션 가중치)</p>
+      <p><span class="hl-warm">2세대:</span> "몇 토큰을 생성할까?" (SpecKV, CopT)</p>
+      <p><span class="hl-green">3세대:</span> "잠재 공간의 어느 영역에 얼마나 밀집하게 스텝을 배치할까?" (정규화 흐름, 미탐구)</p>
+    </div>
+
+    <h3>알고리즘-시스템 번역 간극(Algorithm-System Translation Gap)의 갱신</h3>
+    <p>이 간극은 "에이전트의 의미론적 의존 그래프를 OS의 체크포인트 메커니즘으로 번역할 때의 비효율"로 정의되어 있었다. 정규화 흐름에서는 번역 대상이 <span class="hl-cool">"이산적 의존 그래프"에서 "연속적 상태 다양체"로 바뀐다.</span></p>
+
+    <p>여기서 주목해야 할 점은, 이 간극이 오히려 <span class="hl-warm">증가할 가능성</span>이 높다는 것이다. 이산 상태의 체크포인트는 스냅샷처럼 직관적으로 정의할 수 있지만, 연속 상태의 의미론적 체크포인트는 "이 다양체 위의 어느 점이 의미적으로 동등한 상태인가"라는 훨씬 어려운 문제를 제기한다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>체스 게임의 기보(棋譜)를 저장하는 것과, 춤추는 사람의 움직임을 저장하는 것의 차이다. 체스는 이산적이다 — 각 수는 하나의 상태로 정확히 기록된다(이산 체크포인트). 하지만 춤은 연속적이다 — "이 팔 각도와 이 몸무게 중심이 특정 의미를 갖는 순간"을 어디로 잡아야 하는가?</p>
+      <p>정규화 흐름 기반 에이전트는 춤추는 에이전트가 된다. 체크포인트를 찍는 것이 기존보다 <strong>근본적으로 더 어려워진다.</strong></p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section" id="s5">
+    <h2>패러다임 전환: 우리가 지금 해야 할 일</h2>
+
+    <p>지금까지의 분석을 하나의 문장으로 압축하면 이렇다: <span class="hl-warm">"사고 토큰 예산"이라는 적응적 추론의 축은 붕괴하지만, 그것은 축의 소멸이 아니라 자동회귀 파라다임에 묶여 있던 우발적 제약의 해방</span>이다.</p>
+
+    <p>그렇다면 우리는 지금 무엇을 해야 하는가. 세 가지 방향을 제안한다.</p>
+
+    <h3>1. 연속 적응 지표의 발견</h3>
+    <p>압축률이 이산 토큰 세계의 적응 지표였다면, 정규화 흐름 세계에서는 <span class="hl-cool">잠재 공간의 기하학적 특성</span>이 적응 지표가 되어야 한다. 플로우의 야코비안 행렬의 조건수(condition number), 궤적의 국소 곡률, 솔루션 다양체까지의 거리 — 이런 것들이 "이 문제는 어렵다"를 연속적으로 판단하는 근거가 될 수 있다. 이것은 수학적 탐구와 엔지니어링 구현이 동시에 필요한 영역이다.</p>
+
+    <h3>2. 연속 체크포인트 체계의 설계</h3>
+    <p>의미론적 간극이 증가한다는 분석을 역으로 활용해야 한다. 연속 상태에서 의미론적으로 동등한 지점을 식별하는 방법론 — 예를 들어 잠재 공간의 동질성 영역(homogeneous region)을 자동으로 탐지하는 메커니즘 — 이 에이전트 OS 레벨에서 필요하다. 이산 체크포인트를 연속 체크포인트로 대체하는 것이 아니라, <span class="hl-green">새로운 패러다임에 맞는 체크포인트 개념 자체를 발명</span>해야 한다.</p>
+
+    <h3>3. 하이브리드 파이프라인의 현실적 탐색</h3>
+    <p>이론적으로는 연속 세계가 우아하지만, 현실의 에이전트 시스템은 여전히 외부 도구 호출, 스키마 검증, 사용자 인터페이스 등 이산적 인터페이스와 연결되어 있다. 정규화 흐름 기반 추론 코어와 이산적 I/O 레이어 사이의 <span class="hl-cool">번역 계층(translation layer)</span>을 어떻게 설계할 것인가가 당면한 실무적 과제다.</p>
+
+    <div class="conclusion-box">
+      <div class="conclusion-label">최종 판단</div>
+      <p>SpecKV가 "외부 환경 반응 → 내부 시스템 상태 반응"으로 적응의 범위를 확장했다면, 정규화 흐름은 "이산 상태 반응 → 연속 기하학 상태 반응"으로 적응의 차원을 확장한다.</p>
+      <p><strong>기존 패러다임에서 '사고 토큰 예산'을 중심으로 구축된 적응적 추론 시스템은 근본적인 재설계가 필요하다.</strong> 토큰 수를 세는 것에서, 잠재 공간의 지형을 읽는 것으로 — 그것이 이번 붕괴가 우리에게 요구하는 진짜 전환이다.</p>
+      <p>엘리베이터에서 에스컬레이터로 갈아탈 때, 중요한 것은 <strong>계단을 세는 습관을 버리고 지형을 읽는 감각을 기르는 것</strong>이다.</p>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <p>참고 문헌</p>
+    <ul class="ref-list">
+      <li>Latent Reasoning with Normalizing Flows</li>
+      <li>SpecKV — Adaptive Key-Value Cache Compression for Speculative Decoding</li>
+      <li>CopT — Controlling Thought Length for Adaptive Inference</li>
+      <li>Adaptive Bottleneck Migration (Wiki 내부 개념)</li>
+      <li>Algorithm-System Translation Gap (Wiki 내부 개념)</li>
+      <li>Aggregate Pipeline Serving — MCP 배포 파이프라인 병목 분석</li>
+    </ul>
+    <p style="margin-top: 28px;">Galaxy Tab Public — AI Research Analysis</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
