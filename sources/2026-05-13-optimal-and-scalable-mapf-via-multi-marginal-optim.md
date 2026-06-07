@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/gap-manifestation-condition.md|gap manifestation condition]]
+
+---
+**관련**: [[concepts/approximation-error-transition-condition.md|approximation error transition condition]]

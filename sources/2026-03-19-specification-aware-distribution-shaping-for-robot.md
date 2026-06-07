@@ -97,3 +97,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/structure-aware-code-review.md|structure aware code review]]
+
+---
+**관련**: [[concepts/specification-gap-internalization.md|specification gap internalization]]
+
+---
+**관련**: [[concepts/rollback-specification-boundary.md|rollback specification boundary]]

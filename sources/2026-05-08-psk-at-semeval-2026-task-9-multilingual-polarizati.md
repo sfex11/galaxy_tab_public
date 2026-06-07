@@ -47,3 +47,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/spectrum-of-internalized-adaptation.md|spectrum of internalized adaptation]]
+
+---
+**관련**: [[concepts/contrastive-interleaving.md|contrastive interleaving]]
+
+---
+**관련**: [[concepts/adaptation-axis-misalignment.md|adaptation axis misalignment]]

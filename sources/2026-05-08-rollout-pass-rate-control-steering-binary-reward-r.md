@@ -242,3 +242,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/state-forking-parallel-rl.md|state forking parallel rl]]
+
+---
+**관련**: [[concepts/state-forking-parallel-rl.md|state forking parallel rl]]
+
+---
+**관련**: [[concepts/output-entropy-degradation.md|output entropy degradation]]

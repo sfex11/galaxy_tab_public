@@ -72,3 +72,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/attention-latch.md|attention latch]]
+
+---
+**관련**: [[concepts/schema-conflation-fallacy.md|schema conflation fallacy]]

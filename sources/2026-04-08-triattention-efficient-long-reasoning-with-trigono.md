@@ -140,3 +140,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/explicit-implicit-reasoning.md|explicit implicit reasoning]]
+
+---
+**관련**: [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]
+
+---
+**관련**: [[concepts/compression-translation-product.md|compression translation product]]
+
+---
+**관련**: [[concepts/multidimensional-generalization-metric.md|multidimensional generalization metric]]
+
+---
+**관련**: [[concepts/healthy-pathological-compression.md|healthy pathological compression]]

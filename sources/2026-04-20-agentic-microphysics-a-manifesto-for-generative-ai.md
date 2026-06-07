@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/methodological-provenance-gap.md|methodological provenance gap]]
+
+---
+**관련**: [[concepts/macro-micro-sequentiality-complementarity.md|macro micro sequentiality complementarity]]

@@ -270,3 +270,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/inter-position-redundancy.md|inter position redundancy]]
+
+---
+**관련**: [[concepts/safety-responsibility-transfer.md|safety responsibility transfer]]

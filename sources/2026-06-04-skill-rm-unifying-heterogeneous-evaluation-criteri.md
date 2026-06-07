@@ -44,3 +44,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/causal-evaluation-duality.md|causal evaluation duality]]
+
+---
+**관련**: [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]
+
+---
+**관련**: [[concepts/procedural-faithfulness.md|procedural faithfulness]]
+
+---
+**관련**: [[concepts/skill-reward-evaluation-trinity.md|skill reward evaluation trinity]]
+
+---
+**관련**: [[concepts/skill-definition-governance-blur.md|skill definition governance blur]]
+
+---
+**관련**: [[concepts/verifier-rationale-as-diagnostic.md|verifier rationale as diagnostic]]
+
+---
+**관련**: [[concepts/procedural-independence.md|procedural independence]]
+
+---
+**관련**: [[concepts/environment-as-evaluation.md|environment as evaluation]]
+
+---
+**관련**: [[concepts/outcome-independence-of-reward.md|outcome independence of reward]]
+
+---
+**관련**: [[concepts/explicit-implicit-evidence-taxonomy.md|explicit implicit evidence taxonomy]]
+
+---
+**관련**: [[concepts/belief-drift-as-reward-signal.md|belief drift as reward signal]]

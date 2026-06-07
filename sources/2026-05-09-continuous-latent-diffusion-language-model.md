@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/continuous-manifold-checkpointing-difficulty.md|continuous manifold checkpointing difficulty]]
+
+---
+**관련**: [[concepts/discrete-continuous-adaptation-transition.md|discrete continuous adaptation transition]]

@@ -61,3 +61,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/real-time-llm-inference.md|real time llm inference]]
+
+---
+**관련**: [[concepts/cross-dimensional-oversight-blindspot.md|cross dimensional oversight blindspot]]
+
+---
+**관련**: [[concepts/issue-time-privacy.md|issue time privacy]]

@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/causal-mechaninterpretability.md|causal mechaninterpretability]]
+
+---
+**관련**: [[concepts/sdb-over-compensation-pattern.md|sdb over compensation pattern]]

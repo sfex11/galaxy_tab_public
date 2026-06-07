@@ -58,3 +58,69 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/reasoning-structural-failure.md|reasoning structural failure]]
+
+---
+**관련**: [[concepts/external-internal-memory-dual-axis.md|external internal memory dual axis]]
+
+---
+**관련**: [[concepts/external-state-non-revocability-gap.md|external state non revocability gap]]
+
+---
+**관련**: [[concepts/trajectory-internal-mediation.md|trajectory internal mediation]]
+
+---
+**관련**: [[concepts/information-noise-consumption.md|information noise consumption]]
+
+---
+**관련**: [[concepts/internal-conservativeness-pipeline.md|internal conservativeness pipeline]]
+
+---
+**관련**: [[concepts/frozen-model-external-memory-contradiction.md|frozen model external memory contradiction]]
+
+---
+**관련**: [[concepts/internal-state-responsive-adaptation.md|internal state responsive adaptation]]
+
+---
+**관련**: [[concepts/kv-cache-information-leakage.md|kv cache information leakage]]
+
+---
+**관련**: [[concepts/runtime-to-parametric-memory-absorption.md|runtime to parametric memory absorption]]
+
+---
+**관련**: [[concepts/autoregressive-paradigm-confinement.md|autoregressive paradigm confinement]]
+
+---
+**관련**: [[concepts/thought-action-topology.md|thought action topology]]
+
+---
+**관련**: [[concepts/inter-position-redundancy.md|inter position redundancy]]
+
+---
+**관련**: [[concepts/latent-geometric-adaptation.md|latent geometric adaptation]]
+
+---
+**관련**: [[concepts/geometric-computation-hijacking.md|geometric computation hijacking]]
+
+---
+**관련**: [[concepts/visual-first-memory.md|visual first memory]]
+
+---
+**관련**: [[concepts/population-based-memory-evolution.md|population based memory evolution]]
+
+---
+**관련**: [[concepts/memory-belief-reward-closed-loop.md|memory belief reward closed loop]]
+
+---
+**관련**: [[concepts/causal-answer-hypothesis-decoupling.md|causal answer hypothesis decoupling]]
+
+---
+**관련**: [[concepts/memory-as-model-paradigm.md|memory as model paradigm]]
+
+---
+**관련**: [[concepts/model-harness-scaling-imbalance.md|model harness scaling imbalance]]
+
+---
+**관련**: [[concepts/memory-topology-as-optimization-target.md|memory topology as optimization target]]
+
+---
+**관련**: [[concepts/test-time-compute-harness-mapping.md|test time compute harness mapping]]

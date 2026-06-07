@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategic-trajectory-abstraction.md|strategic trajectory abstraction]]
+
+---
+**관련**: [[concepts/strategic-defection.md|strategic defection]]

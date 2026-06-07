@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-03-simsd-simple-speculative-decoding-in-diffusion-lan]]: 두 논문 모두 확산 언어 모델(Diffusion Language Model)의 디코딩 메커니즘을 다루며, 전자는 마스크 해제 순서를 분석하고 후자는 이 모델에 맞춘 추론적 디코딩 기법을 제안합니다.
+
+---
+**관련**: [[concepts/relational-closeness-modulation.md|relational closeness modulation]]

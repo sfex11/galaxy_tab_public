@@ -45,3 +45,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/image-grounding.md|image grounding]]
+
+---
+**관련**: [[concepts/consolidation-extinction-cycle.md|consolidation extinction cycle]]

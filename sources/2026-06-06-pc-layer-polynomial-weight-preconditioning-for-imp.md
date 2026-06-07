@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/ontological-conditioning.md|ontological conditioning]]
+
+---
+**관련**: [[concepts/autonomy-spectrum.md|autonomy spectrum]]

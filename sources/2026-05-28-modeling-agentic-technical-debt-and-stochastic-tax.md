@@ -44,3 +44,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/formal-comparative-contract.md|formal comparative contract]]
+
+---
+**관련**: [[concepts/stochastic-tax-form-transformation.md|stochastic tax form transformation]]
+
+---
+**관련**: [[concepts/microphysical-orchestration.md|microphysical orchestration]]

@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-axis-bottleneck.md|dual axis bottleneck]]
+
+---
+**관련**: [[concepts/harness-extension-axis.md|harness extension axis]]
+
+---
+**관련**: [[concepts/harness-subject-internalization.md|harness subject internalization]]

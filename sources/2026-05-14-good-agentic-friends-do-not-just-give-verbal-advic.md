@@ -90,3 +90,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/internal-state-feedback-extraction.md|internal state feedback extraction]]
+
+---
+**관련**: [[concepts/fast-weight-consolidation.md|fast weight consolidation]]
+
+---
+**관련**: [[concepts/state-integrity-latency-tradeoff.md|state integrity latency tradeoff]]
+
+---
+**관련**: [[concepts/temporal-state-dependency.md|temporal state dependency]]

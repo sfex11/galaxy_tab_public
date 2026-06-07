@@ -100,3 +100,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pseudo-alignment-by-self-consistency.md|pseudo alignment by self consistency]]
+
+---
+**관련**: [[concepts/consistency-guided-credit-assignment.md|consistency guided credit assignment]]

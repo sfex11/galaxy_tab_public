@@ -152,3 +152,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-debt-circulation.md|structural debt circulation]]
+
+---
+**관련**: [[concepts/evolutionary-branch-isolation.md|evolutionary branch isolation]]

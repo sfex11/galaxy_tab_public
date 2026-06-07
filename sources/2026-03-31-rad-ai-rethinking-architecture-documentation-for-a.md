@@ -44,3 +44,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/dual-brain-architecture.md|dual brain architecture]]
+
+---
+**관련**: [[concepts/plug-in-architecture.md|plug in architecture]]

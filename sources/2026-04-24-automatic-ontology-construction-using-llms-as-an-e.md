@@ -138,3 +138,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/representation-space-tool-verification.md|representation space tool verification]]
+
+---
+**관련**: [[concepts/dynamic-translation-layer.md|dynamic translation layer]]

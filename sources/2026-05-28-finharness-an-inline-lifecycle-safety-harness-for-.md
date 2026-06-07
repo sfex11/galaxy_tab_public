@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/designer-foresight-boundary.md|designer foresight boundary]]
+
+---
+**관련**: [[concepts/probability-mass-boundary.md|probability mass boundary]]
+
+---
+**관련**: [[concepts/incentive-induced-sabotage.md|incentive induced sabotage]]

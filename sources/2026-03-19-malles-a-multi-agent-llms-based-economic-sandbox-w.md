@@ -338,3 +338,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/design-time-alignment.md|design time alignment]]
+
+---
+**관련**: [[concepts/anti-sandbox.md|anti sandbox]]

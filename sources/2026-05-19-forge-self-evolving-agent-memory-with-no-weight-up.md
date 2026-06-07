@@ -145,3 +145,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/memory-topology-as-optimization-target.md|memory topology as optimization target]]
+
+---
+**관련**: [[concepts/conservative-inference-under-irreversibility.md|conservative inference under irreversibility]]
+
+---
+**관련**: [[concepts/dynamic-criteria-certification-failure.md|dynamic criteria certification failure]]
+
+---
+**관련**: [[concepts/change-type-based-review-routing.md|change type based review routing]]
+
+---
+**관련**: [[concepts/failure-reversibility-assumption.md|failure reversibility assumption]]
+
+---
+**관련**: [[concepts/self-evolving-framework-taxonomy.md|self evolving framework taxonomy]]

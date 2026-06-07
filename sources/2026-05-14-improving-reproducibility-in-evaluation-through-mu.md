@@ -71,3 +71,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/scientific-finding-reproducibility.md|scientific finding reproducibility]]
+
+---
+**관련**: [[concepts/pre-post-safety-structural-blindspot.md|pre post safety structural blindspot]]
+
+---
+**관련**: [[concepts/embodied-compositional-safety.md|embodied compositional safety]]
+
+---
+**관련**: [[concepts/in-band-safety-signaling.md|in band safety signaling]]

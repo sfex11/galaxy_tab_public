@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptation-axis-misalignment.md|adaptation axis misalignment]]
+
+---
+**관련**: [[concepts/dual-adaptation-axis-unpredictability.md|dual adaptation axis unpredictability]]

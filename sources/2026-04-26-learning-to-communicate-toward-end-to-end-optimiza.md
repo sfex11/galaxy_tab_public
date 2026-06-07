@@ -97,3 +97,15 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/purely-reactive-optimization.md|purely reactive optimization]]
+
+---
+**관련**: [[concepts/zero-sum-optimization-trap.md|zero sum optimization trap]]
+
+---
+**관련**: [[concepts/symbolic-optimization-prerequisite-gap.md|symbolic optimization prerequisite gap]]
+
+---
+**관련**: [[concepts/insufficient-optimization-axis.md|insufficient optimization axis]]
+
+---
+**관련**: [[concepts/visibility-inversion-by-optimization.md|visibility inversion by optimization]]

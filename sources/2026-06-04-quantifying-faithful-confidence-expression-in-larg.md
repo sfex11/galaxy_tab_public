@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-04-agentic-chain-of-thought-steering-for-efficient-an]]: 두 논문 모두 LLM의 연장된 사고(Chain-of-thought) 추론 과정에서의 특성을 다루며, 전자는 토큰 효율성과 제어 방법을, 후자는 추론 트레이스 내 자신감 표현의 충실도를 정량화합니다.
+
+---
+**관련**: [[concepts/pseudo-alignment-by-self-consistency.md|pseudo alignment by self consistency]]

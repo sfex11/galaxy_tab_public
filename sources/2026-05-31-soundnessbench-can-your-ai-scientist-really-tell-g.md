@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/ros2-resource-exhaustion.md|ros2 resource exhaustion]]
+
+---
+**관련**: [[concepts/ros2-resource-exhaustion.md|ros2 resource exhaustion]]

@@ -69,3 +69,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/dual-adaptation-axis-unpredictability.md|dual adaptation axis unpredictability]]
+
+---
+**관련**: [[concepts/on-policy-self-distillation.md|on policy self distillation]]

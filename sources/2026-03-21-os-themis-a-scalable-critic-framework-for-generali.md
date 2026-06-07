@@ -78,3 +78,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/belief-drift-as-reward-signal.md|belief drift as reward signal]]
+
+---
+**관련**: [[concepts/irreversible-mid-trajectory.md|irreversible mid trajectory]]

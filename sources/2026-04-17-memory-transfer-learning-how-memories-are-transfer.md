@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/se-science-transfer-gap.md|se science transfer gap]]
+
+---
+**관련**: [[concepts/structural-debt-circulation.md|structural debt circulation]]

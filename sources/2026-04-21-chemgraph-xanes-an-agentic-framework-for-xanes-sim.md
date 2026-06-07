@@ -115,3 +115,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/asynchronous-dependency-coordination.md|asynchronous dependency coordination]]
+
+---
+**관련**: [[concepts/environment-capability-causality.md|environment capability causality]]

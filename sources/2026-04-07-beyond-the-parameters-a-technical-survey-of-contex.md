@@ -325,3 +325,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/model-harness-scaling-imbalance.md|model harness scaling imbalance]]
+
+---
+**관련**: [[concepts/retrieval-based-drafting.md|retrieval based drafting]]

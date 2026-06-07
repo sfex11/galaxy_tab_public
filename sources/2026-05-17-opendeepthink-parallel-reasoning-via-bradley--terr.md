@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/draft-tree-vram-bottleneck.md|draft tree vram bottleneck]]
+
+---
+**관련**: [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]

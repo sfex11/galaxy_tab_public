@@ -50,3 +50,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modality-mediation-failure.md|modality mediation failure]]
+
+---
+**관련**: [[concepts/perception-cognitive-capacity-mismatch.md|perception cognitive capacity mismatch]]
+
+---
+**관련**: [[concepts/representation-space-independence.md|representation space independence]]

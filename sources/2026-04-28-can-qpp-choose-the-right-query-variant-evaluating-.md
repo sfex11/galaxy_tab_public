@@ -229,3 +229,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/internal-conservativeness-pipeline.md|internal conservativeness pipeline]]
+
+---
+**관련**: [[concepts/fast-incorrect-execution.md|fast incorrect execution]]

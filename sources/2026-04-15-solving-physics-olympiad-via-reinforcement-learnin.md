@@ -65,3 +65,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/automated-domain-specialization.md|automated domain specialization]]
+
+---
+**관련**: [[concepts/automated-domain-specialization.md|automated domain specialization]]

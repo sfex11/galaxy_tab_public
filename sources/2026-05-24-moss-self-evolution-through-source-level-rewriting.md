@@ -43,3 +43,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/schema-conflation-fallacy.md|schema conflation fallacy]]
+
+---
+**관련**: [[concepts/exogenous-evolution.md|exogenous evolution]]
+
+---
+**관련**: [[concepts/deployment-incentive-structure.md|deployment incentive structure]]
+
+---
+**관련**: [[concepts/endogenous-self-evolution.md|endogenous self evolution]]

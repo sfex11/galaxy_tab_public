@@ -125,3 +125,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/environment-as-evaluation.md|environment as evaluation]]
+
+---
+**관련**: [[concepts/trajectory-compressibility-criterion.md|trajectory compressibility criterion]]
+
+---
+**관련**: [[concepts/execution-trajectory-encapsulation.md|execution trajectory encapsulation]]

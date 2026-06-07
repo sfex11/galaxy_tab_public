@@ -57,3 +57,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-embodiment.md|temporal embodiment]]
+
+---
+**관련**: [[concepts/observation-fidelity-paradox.md|observation fidelity paradox]]

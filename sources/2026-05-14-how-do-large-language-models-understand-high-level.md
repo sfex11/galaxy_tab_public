@@ -116,3 +116,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/benchmark-specification-gap.md|benchmark specification gap]]
+
+---
+**관련**: [[concepts/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]
+
+---
+**관련**: [[concepts/semantic-representation-translation-gap.md|semantic representation translation gap]]

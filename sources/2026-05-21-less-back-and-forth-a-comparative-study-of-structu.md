@@ -16,3 +16,6 @@ _자동 생성될_
 
 - → [[sources/2026-05-20-contextualized-dynamic-explanations-a-vision]]: 두 논문 모두 AI 시스템과 사용자 간의 불필요한 왕복 상호작용을 줄이고 맥락에 맞는 응답을 제공하는 방법을 탐구한다.
 - → [[sources/2026-05-19-paperjson-a-coordination-convention-for-llm-agent-]]: 두 논문 모두 LLM 에이전트의 입력을 구조화하여 정보 추출 품질을 높이고 상호작용 비용을 줄이는 접근을 공유한다.
+
+---
+**관련**: [[concepts/gap-manifestation-condition.md|gap manifestation condition]]
