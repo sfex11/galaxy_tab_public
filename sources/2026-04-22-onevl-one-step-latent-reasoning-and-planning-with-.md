@@ -53,3 +53,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/deployment-evidence-contract.md|deployment evidence contract]]
+
+---
+**관련**: [[entities/power-of-two-quantization.md|power of two quantization]]

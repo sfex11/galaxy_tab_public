@@ -22,7 +22,7 @@ We propose a preconditioning (PC) layer, a weight parameterization via polynomia
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

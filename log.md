@@ -1382,3 +1382,7 @@
 ## [2026-06-07 08:32] ingest | Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
 
 ## [2026-06-07 08:32] ingest | LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs
+
+## [2026-06-07 17:19] lint | Wiki 건전성 체크
+- Issues: 1425개
+- Orphans: 412, Missing: 1013, Contradictions: 0

@@ -110,3 +110,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-state-dependency.md|temporal state dependency]]
+
+---
+**관련**: [[entities/episodic-context.md|episodic context]]
+
+---
+**관련**: [[entities/verifiable-state-judging.md|verifiable state judging]]
+
+---
+**관련**: [[entities/json-state-diff.md|json state diff]]

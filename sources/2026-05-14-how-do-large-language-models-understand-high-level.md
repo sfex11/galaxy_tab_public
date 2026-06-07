@@ -107,3 +107,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-dependency-snapshot-mismatch.md|semantic dependency snapshot mismatch]]
+
+---
+**관련**: [[entities/reading-visual-alignment-gap.md|reading visual alignment gap]]
+
+---
+**관련**: [[concepts/reading-visual-alignment-gap.md|reading visual alignment gap]]
+
+---
+**관련**: [[concepts/benchmark-specification-gap.md|benchmark specification gap]]

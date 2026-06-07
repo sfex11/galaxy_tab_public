@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/implicit-negative-gradient.md|implicit negative gradient]]
+
+---
+**관련**: [[entities/change-type-taxonomy.md|change type taxonomy]]

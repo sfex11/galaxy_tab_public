@@ -82,3 +82,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-space-independence.md|representation space independence]]
+
+---
+**관련**: [[concepts/continuous-manifold-checkpointing-difficulty.md|continuous manifold checkpointing difficulty]]

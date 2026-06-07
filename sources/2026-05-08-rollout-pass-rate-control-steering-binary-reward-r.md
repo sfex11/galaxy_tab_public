@@ -236,3 +236,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-problem-space-misattribution.md|hierarchical problem space misattribution]]
+
+---
+**관련**: [[entities/belief-state-grounding.md|belief state grounding]]
+
+---
+**관련**: [[entities/state-forking-parallel-rl.md|state forking parallel rl]]

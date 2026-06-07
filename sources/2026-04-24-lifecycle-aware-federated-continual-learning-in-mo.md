@@ -61,3 +61,6 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/mobile-gym.md|mobile gym]]

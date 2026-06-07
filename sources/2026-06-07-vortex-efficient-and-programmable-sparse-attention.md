@@ -23,7 +23,7 @@ Sparse attention is becoming increasingly important for serving large language m
 ## 추출된 엔티티
 
 - [[LLM Agent]]
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 
@@ -32,3 +32,24 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/system-scaling.md|system scaling]]
+
+---
+**관련**: [[entities/resource-aware-multi-agent-perception.md|resource aware multi agent perception]]
+
+---
+**관련**: [[entities/bidirectional-evolutionary-search.md|bidirectional evolutionary search]]
+
+---
+**관련**: [[entities/exploration-action-coupling.md|exploration action coupling]]
+
+---
+**관련**: [[entities/agent-scene-instruction-triad.md|agent scene instruction triad]]
+
+---
+**관련**: [[entities/exploratory-research-agent.md|exploratory research agent]]
+
+---
+**관련**: [[concepts/agent-scene-instruction-triad.md|agent scene instruction triad]]

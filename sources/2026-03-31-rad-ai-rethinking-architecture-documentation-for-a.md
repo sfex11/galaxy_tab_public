@@ -41,3 +41,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/thinking-acting-gap.md|thinking acting gap]]
+
+---
+**관련**: [[entities/dual-brain-architecture.md|dual brain architecture]]

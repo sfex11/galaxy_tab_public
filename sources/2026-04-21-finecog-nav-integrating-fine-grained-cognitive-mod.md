@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-capability-causality.md|environment capability causality]]
+
+---
+**관련**: [[entities/multimodal-meta-verification.md|multimodal meta verification]]

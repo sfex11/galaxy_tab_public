@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/causal-necessity-vs-correlation.md|causal necessity vs correlation]]
+
+---
+**관련**: [[entities/llm-as-code-reviewer.md|llm as code reviewer]]
+
+---
+**관련**: [[entities/causal-necessity-vs-correlation.md|causal necessity vs correlation]]

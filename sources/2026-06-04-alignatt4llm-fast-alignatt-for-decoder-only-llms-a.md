@@ -23,7 +23,7 @@ We describe AlignAtt4LLM, an IWSLT 2026 simultaneous speech translation system f
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

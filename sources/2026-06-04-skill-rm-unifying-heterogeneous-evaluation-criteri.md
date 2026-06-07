@@ -35,3 +35,12 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-02-skill-reuse-as-compression-in-agentic-rl]]: 두 논문 모두 에이전트의 '스킬(Skill)'을 핵심 개념으로 다루며, 전자는 스킬의 재사용과 압축, 후자는 스킬을 기반으로 한 이질적 평가 기준의 통합을 다룹니다.
+
+---
+**관련**: [[entities/skill-conditioned-gating.md|skill conditioned gating]]
+
+---
+**관련**: [[entities/skill-consumption-gap.md|skill consumption gap]]
+
+---
+**관련**: [[entities/causal-evaluation-duality.md|causal evaluation duality]]

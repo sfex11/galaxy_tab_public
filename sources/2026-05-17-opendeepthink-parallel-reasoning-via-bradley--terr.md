@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/verifier-rationale-as-diagnostic.md|verifier rationale as diagnostic]]
+
+---
+**관련**: [[concepts/draft-tree-vram-bottleneck.md|draft tree vram bottleneck]]

@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/post-hoc-causal-gap.md|post hoc causal gap]]
+
+---
+**관련**: [[entities/causal-mechaninterpretability.md|causal mechaninterpretability]]
