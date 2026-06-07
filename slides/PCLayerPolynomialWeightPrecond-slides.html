@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC Layer: Polynomial Weight Preconditioning for Improving LL — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:clamp(1rem,2vw,2rem)">
+    <div style="font-size:clamp(0.75rem,1vw,0.9rem);letter-spacing:0.15em;text-transform:uppercase" class="muted">arXiv: 2606.06470v1 · cs.LG · 2025</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);font-weight:700;line-height:1.2;max-width:900px">PC Layer: Polynomial Weight<br>Preconditioning for Improving<br>LLM Pre-Training</h1>
+    <div class="hr" style="width:80px;margin:0 auto"></div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1.05rem);line-height:1.8;max-width:700px" class="muted">
+      Senmiao Wang · Tiantian Fang · Haoran Zhang · Yushun Zhang<br>
+      Kunxiang Zhao · Alex Schwing · Ruoyu Sun
+    </div>
+    <div style="font-size:clamp(0.75rem,1vw,0.85rem)" class="muted">
+      CUHK-Shenzhen · Google LLC · UIUC
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">LLM 훈련에서의 정규화: 두 가지 접근</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-layer-group" style="margin-right:0.5em" class="accent2"></i>출력 공간 정규화</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>BatchNorm, LayerNorm, RMSNorm</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>QK-Norm (attention logit 제어)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM 아키텍처의 <span class="accent">사실상 표준</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-weight-hanging" style="margin-right:0.5em" class="accent"></i>가중치 공간 정규화</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Weight Norm, Spectral Norm</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>최근: 행/열 정규화, 구형 제약 등</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM 사전훈련에서 <span class="accent">재조명되는 축</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(1rem,2vw,1.5rem)">
+      가중치 기하학(weight geometry)이 안정적인 LLM 훈련을 위한 <span class="accent">점점 더 중요한 설계 축</span>이 되고 있다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">동기: 신호 전파에서 스펙트럼 제어로</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1rem,2vw,1.5rem)">
+      선형 변환 <span class="accent2">y = Wx</span>에서 가중치 행렬의 특이값이 신호 전파를 지배한다.
+    </div>
+    <div class="card" style="margin-bottom:clamp(1rem,2vw,1.5rem)">
+      <div style="font-size:clamp(0.95rem,1.4vw,1.15rem);text-align:center;line-height:2;font-family:serif">
+        σ<sub>min</sub>(W) · ‖x‖₂ &nbsp;≤&nbsp; ‖Wx‖₂ &nbsp;≤&nbsp; σ<sub>max</sub>(W) · ‖x‖₂
+      </div>
+    </div>
+    <div class="grid-3" style="gap:clamp(0.8rem,1.5vw,1.2rem)">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-arrow-up"></i></div>
+        <div><span class="accent">σ<sub>max</sub></span>가 너무 크면<br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">신호 과증폭 → 불안정</span></div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-arrow-down"></i></div>
+        <div><span class="accent">σ<sub>min</sub></span>가 너무 작으면<br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">신호 소실 → 기울기 소실</span></div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-balance-scale"></i></div>
+        <div><span class="accent3">조건수 κ = σ<sub>max</sub>/σ<sub>min</sub></span><br><span class="muted" style="font-size:clamp(0.75rem,1vw,0.85rem)">스펙트럼 퍼짐 정도</span></div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.7">
+      <i class="fas fa-lightbulb" class="accent" style="margin-right:0.4em"></i>
+      <strong>핵심 관찰:</strong> 가중치 스펙트럼을 직접 제어하면 신호 전파를 안정화하고 최적화를 용이하게 할 수 있다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">왜 완벽한 직교성이 아닐까?</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem);margin-bottom:clamp(1rem,2vw,1.5rem)">
+      <div class="card" style="border-left:3px solid #c0392b">
+        <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><span class="tag tag-red">Hard</span> 직교화 (Muon 등)</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b"></i></span>모든 특이값을 1로 강제</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b"></i></span>표현력 과도 제한 우려</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b"></i></span>특정 옵티마이저에 의존</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid #2d6a4f">
+        <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><span class="tag tag-green">Soft</span> 스펙트럼 성형 (PC Layer)</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>작은 특이값은 증폭, 큰 것은 포화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스펙트럼 퍼짐을 부드럽게 축소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>옵티마이저 무관 적용 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block">
+      PC Layer는 "거의 직교"가 아니라 <span class="accent3">"잘 조건화된 스펙트럼"</span>을 목표로 한다 — 표현력과 안정성 사이의 균형.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">다항식 사전조건화의 핵심 아이디어</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1rem,2vw,1.5rem)">
+      행렬 다항식은 <span class="accent">스펙트럼에 직접 작용</span>하는 편리한 메커니즘을 제공한다.
+    </div>
+    <div class="card" style="margin-bottom:clamp(1rem,2vw,1.5rem)">
+      <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:2;font-family:serif;text-align:center">
+        W = U · diag(σ₁, …, σᵣ) · V<sup>⊤</sup> &nbsp;→&nbsp; g(W)의 특이값 = { |g(σ₁)|, …, |g(σᵣ)| }
+      </div>
+    </div>
+    <div class="pipeline" style="margin-bottom:clamp(1rem,2vw,1.5rem)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">원래 스펙트럼</div>
+        <div class="step-desc">σ값이 넓게 퍼짐</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">다항식 g 적용</div>
+        <div class="step-desc">저차수 다항식으로 근사</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">성형된 스펙트럼</div>
+        <div class="step-desc">σ 퍼짐 축소</div>
+      </div>
+    </div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.7" class="muted">
+      <i class="fas fa-bolt" style="margin-right:0.4em" class="accent"></i>
+      SVD 없이 행렬-벡터 곱만으로 다항식을 평가할 수 있어 계산 비용이 매우 낮음
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">PC Layer 방법론</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div>
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-cogs" style="margin-right:0.5em" class="accent2"></i>다항식 피팅</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Gram 행렬 기반 사전조건화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스펙트럼 노름으로 피팅 구간 [γ_L, γ_U] 설정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>작은 σ를 증폭, 큰 σ를 포화시키는 함수를 저차 다항식으로 근사</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>차수-표현력 트레이드오프</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-magic" style="margin-right:0.5em" class="accent3"></i>효율적 계산 트릭</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>동등한 효율 형태로 변환</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>중간 행렬 B 캐싱 및 재사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Horner 법으로 다항식 평가</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-cube" style="margin-right:0.5em" class="accent"></i>LLM 특화 설계</div>
+        <div class="card" style="margin-bottom:clamp(0.8rem,1.2vw,1rem)">
+          <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">Norm Recovery</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">사전조건화 후 원래 가중치 노름을 복원하여 스케일 보존</div>
+        </div>
+        <div class="card" style="margin-bottom:clamp(0.8rem,1.2vw,1rem)">
+          <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">Learnable γ</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">학습 가능한 스케일 파라미터로 유연성 확보</div>
+        </div>
+        <div class="card">
+          <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">선택적 적용</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">QKV 프로젝션, 출력 프로젝션 등 특정 블록에만 적용</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">훈련 후 병합: 추론 오버헤드 제로</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1.5rem,2.5vw,2rem)">
+      PC Layer의 핵심 장점: 훈련 종료 후 사전조건화된 가중치를 원래 아키텍처로 <span class="accent">완전 병합</span> 가능
+    </div>
+    <div class="pipeline" style="margin-bottom:clamp(1.5rem,2.5vw,2rem)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">훈련 중</div>
+        <div class="step-desc">W → g(W)로<br>스펙트럼 성형</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">훈련 종료</div>
+        <div class="step-desc">최종 g(W) 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">추론</div>
+        <div class="step-desc">g(W)을 새 W로<br>직접 사용 · 오버헤드 0</div>
+      </div>
+    </div>
+    <div class="grid-3" style="gap:clamp(0.8rem,1.5vw,1.2rem)">
+      <div class="card" style="text-align:center">
+        <div class="big-num">0%</div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem)" class="muted">추론 지연 증가</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">0</div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem)" class="muted">추론 메모리 증가</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num"><i class="fas fa-check-circle" class="accent3"></i></div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem)" class="muted">기존 파이프라인 호환</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">실험 설정</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-flask" style="margin-right:0.5em" class="accent2"></i>모델 및 데이터</div>
+        <table class="compare-table">
+          <tbody>
+            <tr><td class="muted">모델</td><td>Llama-271M, Llama-1B</td></tr>
+            <tr><td class="muted">데이터</td><td>15B 토큰 (C4 기반)</td></tr>
+            <tr><td class="muted">배치 크기</td><td>2M 토큰</td></tr>
+            <tr><td class="muted">시퀀스 길이</td><td>2048</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-sliders-h" style="margin-right:0.5em" class="accent"></i>옵티마이저 및 PC 설정</div>
+        <table class="compare-table">
+          <tbody>
+            <tr><td class="muted">옵티마이저</td><td>AdamW, Muon</td></tr>
+            <tr><td class="muted">학습률</td><td>그리드 서치</td></tr>
+            <tr><td class="muted">PC 다항식 차수</td><td>3~5</td></tr>
+            <tr><td class="muted">PC 적용 블록</td><td>QKV, Out proj</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);margin-top:clamp(0.8rem,1.2vw,1rem)" class="muted">
+      <i class="fas fa-info-circle" style="margin-right:0.3em"></i>
+      스트리밍 파워 반복법으로 스펙트럼 노름을 온라인 추정하여 피팅 구간 동적 설정
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">주요 결과: AdamW 기반 Llama-1B</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card" style="text-align:center">
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.5em" class="muted">토큰 효율성 향상</div>
+        <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem)">2×</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5em">동일 손실 도달에 필요한 토큰 수 <span class="accent">절반</span></div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.5em" class="muted">Zero-shot 정확도</div>
+        <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem)">↑</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5em">하위 task에서 <span class="accent3">일관된 정확도 향상</span></div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8">
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>학습률 그리드 서치 전반에서 PC가 베이스라인보다 우수</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>훈련 안정성이 크게 향상 — 손실 스파이크 감소</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>최종 수렴 손실도 약간 더 낮음</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">주요 결과: Muon 기반 Llama-1B</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card" style="text-align:center">
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-bottom:0.5em" class="muted">토큰 효율성 향상</div>
+        <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem)">1.13×</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5em">Muon 자체가 이미 강하지만<br><span class="accent">PC 추가로 추가 개선</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)">해석</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>Muon은 근-직교화로 스펙트럼을 제어</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>PC는 <span class="accent2">보다 부드러운</span> 스펙트럼 성형</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>두 접근이 <span class="accent3">상보적</span>으로 작용</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>Zero-shot 정확도도 개선</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(1rem,2vw,1.5rem)">
+      PC Layer는 옵티마이저에 구애받지 않는 <span class="accent">범용 가중치 조건화 도구</span>로 작동한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">가중치 스펙트럼 개선 분석</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1rem,2vw,1.5rem)">
+      PC Layer가 실제로 스펙트럼을 어떻게 변화시키는지 분석
+    </div>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-chart-bar" style="margin-right:0.5em" class="accent"></i>수정 조건수 κ̃</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>사전조건화 후 특이값 스펙트럼의 <span class="accent">유효 퍼짐</span>을 측정</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>PC 적용 시 κ̃가 베이스라인보다 <span class="accent3">일관되게 낮음</span></li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>전역 수정 조건수(GMCN)도 감소</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-wave-square" style="margin-right:0.5em" class="accent2"></i>특이값 분포 비교</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>베이스라인: 긴 꼬리, 넓은 스펙트럼</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>PC 적용: 하단 꼬리가 <span class="accent">상승</span>, 상단이 <span class="accent">포화</span></li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>훈련 내내 안정적인 조건화 유지</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1rem)" class="muted">
+      <i class="fas fa-exclamation-triangle" style="margin-right:0.3em"></i>
+      과도한 스펙트럼 평탄화(overly aggressive flattening)는 오히려 성능 저하를 유지 — 적절한 차수 선택이 중요
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">절제 연구 (Ablation Studies)</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div>
+        <div class="card" style="margin-bottom:clamp(0.8rem,1.2vw,1rem)">
+          <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">PC 레벨 선택</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">상위 레이어에 적용할수록 효과가 크며, 모든 레이어에 적용하는 것이 최적</div>
+        </div>
+        <div class="card" style="margin-bottom:clamp(0.8rem,1.2vw,1rem)">
+          <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">PC 블록 선택</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">QKV + 출력 프로젝션에 적용이 FFN보다 효과적 — Attention 가중치의 조건화가 더 중요</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:clamp(0.8rem,1.2vw,1rem)">
+          <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">Norm Recovery 효과</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">노름 복원이 필수 — 없으면 가중치 스케일이 왜곡되어 성능 하락</div>
+        </div>
+        <div class="card">
+          <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.4em"><span class="tag tag-amber">Learnable γ의 역할</span></div>
+          <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.6" class="muted">학습 가능한 스케일이 훈련 안정성에 기여 — 고정 γ보다 유연한 적응 가능</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">계산 및 메모리 오버헤드</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1rem,2vw,1.5rem)">
+      Llama-1B 기준 훈련 중 오버헤드 분석
+    </div>
+    <div class="grid-3" style="gap:clamp(0.8rem,1.5vw,1.2rem)">
+      <div class="card" style="text-align:center">
+        <div class="big-num">~1%</div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);margin-top:0.5em" class="muted">순방향 패스<br>행렬당 추가 연산</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">~1%</div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);margin-top:0.5em" class="muted">전체 훈련 스텝<br>오버헤드</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num"><i class="fas fa-memory" class="accent2"></i></div>
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);margin-top:0.5em" class="muted">메모리 오버헤드<br>무시할 수준</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1rem);line-height:1.7">
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>스펙트럼 노름 추정: 스트리밍 파워 반복법으로 <span class="accent">온라인 추정</span> — 별도 비용 최소화</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>다항식 평가: Horner 법 + 중간 행렬 캐싱으로 효율화</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>추론 시 PC 모듈 완전 제거 — <span class="accent3">추론 비용 영향 제로</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:clamp(1rem,2vw,1.5rem)">이론: 스펙트럼 제어가 보장하는 수렴성</h2>
+    <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:1.8;margin-bottom:clamp(1rem,2vw,1.5rem)">
+      깊은 선형 네트워크에 대한 이론적 분석
+    </div>
+    <div class="card" style="margin-bottom:clamp(1rem,2vw,1.5rem);border-left:3px solid #2d6a4f">
+      <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.5em"><i class="fas fa-theorem" style="margin-right:0.5em" class="accent3"></i>정리 1 (Theorem 1)</div>
+      <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7">
+        다층 완전연결 선형 네트워크에서, 모든 층의 가중치 행렬이 <span class="accent">유계 조건수</span>를 갖는다면, 경사하강법은 <span class="accent3">기하급수적 수렴률</span>로 전역 최솟값에 수렴한다. 수렴률은 가중치 조건수에 의존한다.
+      </div>
+    </div>
+    <div class="pipeline" style="margin-bottom:clamp(1rem,2vw,1.5rem)">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">가중치 조건화</div>
+        <div class="step-desc">각 층의 κ가 유계</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">NTK 조건화</div>
+        <div class="step-desc">Neural Tangent Kernel의 조건수 유계</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">PL 부등식</div>
+        <div class="step-desc">손실 함수의 smoothness 보장</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">기하 수렴</div>
+        <div class="step-desc">전역 최솟값에 수렴</div>
+      </div>
+    </div>
+    <div style="font-size:clamp(0.8rem,1.1vw,0.9rem)" class="muted">
+      * 선형 네트워크에 대한 결과이나, 가중치 스펙트럼 제어의 유효성에 대한 이론적 근거를 제공
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;min-height:100%;gap:clamp(1.2rem,2vw,2rem)">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700">결론 및 한계</h2>
+    <div class="grid-2" style="gap:clamp(1rem,2vw,1.5rem)">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-star" style="margin-right:0.5em" class="accent"></i>기여 요약</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다항식 사전조건화 기반 PC Layer 제안</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>AdamW, Muon 모두에서 토큰 효율성 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추론 오버헤드 제로 (훈련 후 병합)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스펙트럼 제어의 이론적 정당화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;margin-bottom:clamp(0.5rem,1vw,0.8rem)"><i class="fas fa-exclamation-circle" style="margin-right:0.5em" class="muted"></i>한계점</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-minus" class="muted"></i></span>이론은 선형 네트워크에 한정</li>
+          <li><span class="check-icon"><i class="fas fa-minus" class="muted"></i></span>1B 규모까지만 검증 — 더 큰 규모 미확인</li>
+          <li><span class="check-icon"><i class="fas fa-minus" class="muted"></i></span>최적 다항식 차수 선택에 대한 자동화 부족</li>
+          <li><span class="check-icon"><i class="fas fa-minus" class="muted"></i></span>다른 아키텍처(MoE 등)에서의 검증 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div style="text-align:center">
+      <div style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-bottom:0.5em">PC Layer: Polynomial Weight Preconditioning for Improving LLM Pre-Training</div>
+      <div style="font-size:clamp(0.8rem,1.1vw,0.9rem)" class="muted">
+        <i class="fab fa-github" style="margin-right:0.3em"></i>
+        <a href="https://github.com/Empath-aln/PC-layer" style="text-decoration:none" class="accent">github.com/Empath-aln/PC-layer</a>
+        &nbsp;·&nbsp;
+        <i class="fas fa-file-alt" style="margin-right:0.3em"></i>
+        <a href="http://arxiv.org/abs/2606.06470v1" style="text-decoration:none" class="accent">arXiv:2606.06470v1</a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
