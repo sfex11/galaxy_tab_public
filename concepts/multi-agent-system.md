@@ -163,3 +163,5 @@ _자동 생성됨_
 - [[sources/2026-06-05-streaming-communication-in-multi-agent-reasoning.md]]
 
 - [[sources/2026-06-06-mlevolve-a-self-evolving-framework-for-automated-m.md]]
+
+- [[sources/2026-06-07-mlevolve-a-self-evolving-framework-for-automated-m.md]]

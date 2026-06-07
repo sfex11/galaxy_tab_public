@@ -91,3 +91,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-06-06-you-only-index-once-cross-layer-sparse-attention-w.md]]
 
 - [[sources/2026-06-06-vortex-efficient-and-programmable-sparse-attention.md]]
+
+- [[sources/2026-06-07-vortex-efficient-and-programmable-sparse-attention.md]]
+
+- [[sources/2026-06-07-you-only-index-once-cross-layer-sparse-attention-w.md]]
+
+- [[sources/2026-06-07-pc-layer-polynomial-weight-preconditioning-for-imp.md]]
