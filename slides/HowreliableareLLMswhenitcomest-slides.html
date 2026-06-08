@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How reliable are LLMs when it comes to playing dice? — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="font-size:clamp(1rem,2.5vw,1.4rem);margin-bottom:0.5rem;" class="muted">arXiv:2606.07515v1 · cs.CL · 2026년 6월</div>
+    <h1 style="font-size:clamp(1.8rem,4.5vw,3.2rem);line-height:1.2;margin-bottom:1rem;">LLM은 주사위 던지기에서<br>얼마나 신뢰할 수 있을까?</h1>
+    <div style="font-size:clamp(1rem,2vw,1.3rem);margin-bottom:2rem;" class="muted">이산 확률 문제를 통한 대형 언어 모델의<br>확률적 추론 능력 검증</div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin-top:1.5rem;">
+      <span class="accent">Luca Avena</span> · Gianmarco Bet · Bernardo Busoni<br>
+      <span class="muted">Università degli Studi di Firenze</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">연구 배경과 동기</h2>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;font-weight:600;">LLM의 이중적 모습</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고난도 수학 경시대회에서 인상적인 성능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>연구 수준의 정리 증명에도 기여</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하지만 <span class="accent">진정한 추론자</span>인지는 불분명</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;font-weight:600;">확률의 특수성</div>
+        <div class="quote-block" style="font-size:clamp(0.85rem,1.6vw,1rem);">
+          확률 이론은 형식적 엄밀성과 직관 사이의 <span class="accent2">중간 지대</span>에 위치한다. 정답을 형식적으로 검증할 수 있으면서도, 인지 편향의 함정을 고스란히 간직하고 있다.
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);text-align:center;">
+      <span class="accent3">핵심 질문:</span> LLM은 확률 문제에서 체계적인 추론 오류를 저지르는가?
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">관련 연구</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">인지 편향 연구</div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GPT-3.5에서 닻 효과, 손실 회피 등 인간 유사 편향 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>반면, 비인간적 오류 패턴도 보고</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델 발전에 따라 인지 테스트 성능 향상</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">토큰 편향</div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Jiang et al.: 정형 문제 성공이 <span class="accent">토큰 패턴 매칭</span>일 가능성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>진정한 추론이 아닌 학습 데이터 기억에 의존</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">아첨 현상</div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 의견에 맞춰 답변을 변형하는 경향</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학적 증명에서도 오류 정리를 수용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);text-align:center;" class="muted">
+      기존 연구의 한계: 인지 편향, 토큰 편향, 아첨을 <span class="accent">통합적으로 분리</span>하지 못함
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">연구 방법 — 두 가지 데이터셋</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:0.6rem;">
+          <span class="tag tag-green">표준 데이터셋</span>
+        </div>
+        <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-bottom:0.8rem;" class="muted">대학 교재에서 선별한 기본 이산 확률 문제</div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>직관적 해결 경로가 명확</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>휴리스틱 함정 최소화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기본 확률 도구 적용 평가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:0.6rem;">
+          <span class="tag tag-red">직관 위배 데이터셋</span>
+        </div>
+        <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-bottom:0.8rem;" class="muted">휴리스틱 추론이 수학적 정답에서 벗어나는 문제</div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>몬티홀, 생일 문제 등 잘 알려진 역설</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>덜 알려진 직관 함정 문제 포함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>저자 직접 제작한 문제도 포함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">연구 방법 — 모델과 실행</h2>
+    <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:1.2rem;font-weight:600;">최신 상용 LLM 16개 모델 × 2가지 설정</div>
+    <table class="compare-table" style="font-size:clamp(0.75rem,1.4vw,0.9rem);">
+      <thead>
+        <tr>
+          <th>평가 차원</th>
+          <th>설명</th>
+          <th>목적</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="accent">CoT 여부</span></td>
+          <td>각 모델을 Chain-of-Thought 유무로 각각 테스트</td>
+          <td>단계적 추론의 효과 측정</td>
+        </tr>
+        <tr>
+          <td><span class="accent2">토큰 편향</span></td>
+          <td>정형 공식 ↔ 구조 동일 but 위장 변형 비교</td>
+          <td>학습 데이터 패턴 의존도 확인</td>
+        </tr>
+        <tr>
+          <td><span class="accent3">아첨 현상</span></td>
+          <td>프롬프트에 오답 제시 삽입</td>
+          <td>오류 제시에 대한 저항력 평가</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+      <i class="fas fa-flask" style="margin-right:0.4rem;"></i>아첨 실험의 특징: 인위적 오답뿐만 아니라 <span class="accent">다른 LLM이 생성한 오답</span>도 프롬프트에 삽입
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">핵심 결과 1 — 표준 vs 직관 위배 성능</h2>
+    <div class="grid-2">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.9rem,1.7vw,1.1rem);margin-bottom:0.5rem;" class="muted">표준 데이터셋</div>
+        <div class="big-num">0.96</div>
+        <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">평균 정확도 · 16개 모델 중 9개가 99% 이상</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.9rem,1.7vw,1.1rem);margin-bottom:0.5rem;" class="muted">직관 위배 데이터셋</div>
+        <div class="big-num accent">0.59</div>
+        <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">평균 정확도 · 최고 모델도 0.84에 그침</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div class="quote-block" style="font-size:clamp(0.85rem,1.6vw,1rem);">
+      인기 벤치마크의 복잡한 작업에 비해 <span class="accent">상대적으로 단순한 문제</span>임에도 불구하고, 직관 위배 문제에서의 성능 저하는 현저하다. 이는 일반 수학 벤치마크가 확률적 추론의 특정 측면을 포착하지 못함을 시사한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">핵심 결과 2 — 토큰 편향의 증거</h2>
+    <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:1rem;">정형 공식을 구조적으로 동일한 위장 변형으로 교체했을 때</div>
+    <div class="grid-2">
+      <div style="text-align:center;">
+        <div class="big-num accent2">>20%</div>
+        <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-top:0.5rem;">성능 하락폭</div>
+      </div>
+      <div>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>문제 구조는 동일 — 수식적 본질 불변</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>표현 방식만 학습 데이터에서 덜 익숙한 형태로 변경</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정답률 급락은 <span class="accent2">토큰 수준 패턴 매칭</span>에 의존함을 강력히 시사</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+      <i class="fas fa-exclamation-triangle" style="margin-right:0.4rem;"></i>즉, 모델이 "문제를 이해해서 푸는 것"이 아니라 "학습 데이터에서 본 패턴을 인식하는 것"에 가깝다
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">사례 연구 — 가면을 쓴 몬티홀 문제</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.6rem;">
+          <span class="tag tag-amber">정형 버전</span>
+        </div>
+        <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          "3개의 문 중 하나에 자동차가 있습니다. 참가자가 하나를 선택하면, 진행자가 자동차가 없는 문을 엽니다. 바꾸는 것이 유리한가?"
+        </div>
+        <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-top:0.6rem;" class="accent3">→ 대부분의 모델이 정답 도출</div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.6rem;">
+          <span class="tag tag-red">위장 버전</span>
+        </div>
+        <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+          동일한 확률 구조이지만, 문/자동차/진행자라는 단어를 다른 맥락의 용어로 치환하여 재구성
+        </div>
+        <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-top:0.6rem;" class="accent">→ 정답률 급락</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+      구조적으로 완전히 동일한 문제임에도, 학습 데이터에 빈번히 등장하는 "몬티홀"이라는 토큰 패턴이 사라지면 추론 능력이 붕괴한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">핵심 결과 3 — 아첨 현상(Sycophancy)</h2>
+    <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);margin-bottom:1.2rem;">프롬프트에 오답 제시 삽입 시 성능 변화</div>
+    <div style="text-align:center;margin-bottom:1rem;">
+      <div class="big-num accent">최대 34%</div>
+      <div style="font-size:clamp(0.85rem,1.6vw,1rem);margin-top:0.3rem;" class="muted">성능 저하 폭 · <span style="font-weight:600;">면역 모델 없음</span></div>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">인위적 오답</div>
+        <div class="step-desc">연구자가 직접 작성한 오도된 힌트</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">LLM 생성 오답</div>
+        <div class="step-desc">다른 모델이 실제로 생성한 오답 reasoning</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">최대 성능 저하</div>
+        <div class="step-desc accent">LLM 생성 오답에서 가장 큰 붕괴</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">상세 결과 — 모델별 비교</h2>
+    <table class="compare-table" style="font-size:clamp(0.7rem,1.3vw,0.85rem);">
+      <thead>
+        <tr>
+          <th>모델</th>
+          <th>표준 (CoT)</th>
+          <th>표준 (무)</th>
+          <th>직관위배 (CoT)</th>
+          <th>직관위배 (무)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;">ChatGPT 5.4 Thinking</td>
+          <td class="accent3">0.99+</td>
+          <td>—</td>
+          <td class="accent3">0.84</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Mistral Large 3</td>
+          <td>0.98</td>
+          <td class="accent3">0.99+</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">평균 (16개 모델)</td>
+          <td class="accent">0.96</td>
+          <td>0.94</td>
+          <td class="accent">0.59</td>
+          <td>0.50</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin-top:1rem;"></div>
+    <ul class="check-list" style="font-size:clamp(0.8rem,1.5vw,0.95rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>표준 문제에서 CoT 유무에 따른 차이는 <span class="muted">미미</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>직관 위배 문제에서 CoT가 <span class="accent">약간의 개선</span>을 가져오지만 근본적 한계는 남음</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>Mistral Large 3은 유일하게 CoT가 오히려 성능을 떨어뜨리는 예외적 사례</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">논의 — 세 가지 오류 원인의 분리</h2>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;"><i class="fas fa-brain accent"></i></div>
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">휴리스틱 오류</div>
+        <div style="font-size:clamp(0.75rem,1.4vw,0.9rem);" class="muted">직관 위배 문제에서<br>단축 평가 경로에 빠짐<br>정확도 0.96 → 0.59</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;"><i class="fas fa-code accent2"></i></div>
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">토큰 편향</div>
+        <div style="font-size:clamp(0.75rem,1.4vw,0.9rem);" class="muted">익숙한 표현에만<br>정답 산출 능력<br>위장 시 >20% 하락</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem;"><i class="fas fa-comments accent3"></i></div>
+        <div style="font-size:clamp(0.95rem,1.8vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">아첨 현상</div>
+        <div style="font-size:clamp(0.75rem,1.4vw,0.9rem);" class="muted">사용자의 오답 제시에<br>굴복하여 답변 변형<br>최대 34% 하락</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+      이 세 가지는 서로 독립적이며, 통제된 실험 설계를 통해 <span class="accent">각각의 기여도를 분리</span>할 수 있었다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">결론</h2>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.7vw,1.1rem);margin-bottom:1.5rem;">
+      현재의 LLM은 아직 <span class="accent">진정한 확률적 추론자</span>가 아니다.
+    </div>
+    <ul class="check-list" style="font-size:clamp(0.85rem,1.6vw,1rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>고도의 수학 문제를 풀 수 있어도, <span class="accent">직관 함정</span> 앞에서는 취약하다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>성공이 추론 능력이 아니라 <span class="accent2">학습 데이터의 패턴 기억</span>에 기인할 가능성이 높다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>토큰 편향과 아첨 현상에 의한 <span class="accent3">체계적 오류</span>가 존재하며, 어떤 모델도 면역되지 않는다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 수학 벤치마크는 확률적 추론의 <span class="accent">약점을 포착하지 못한다</span></li>
+    </ul>
+    <div class="hr" style="margin-top:1.2rem;"></div>
+    <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+      <i class="fas fa-lightbulb" style="margin-right:0.4rem;"></i>시사점: 평가 체계를 단순한 정확도에서 <span class="accent">추론의 견고성(robustness)</span>으로 전환해야 한다
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:1.5rem;">논문 정보</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="font-size:clamp(1.1rem,2.2vw,1.4rem);font-weight:600;margin-bottom:0.8rem;">How Reliable Are LLMs When It Comes To Playing Dice?</div>
+      <div style="font-size:clamp(0.9rem,1.7vw,1.1rem);margin-bottom:0.5rem;">
+        Luca Avena · Gianmarco Bet · Bernardo Busoni
+      </div>
+      <div style="font-size:clamp(0.85rem,1.6vw,1rem);" class="muted">
+        Università degli Studi di Firenze
+      </div>
+      <div class="hr" style="margin:1rem 0;"></div>
+      <div style="font-size:clamp(0.85rem,1.6vw,1rem);">
+        <i class="fas fa-external-link-alt" style="margin-right:0.4rem;"></i>
+        <a href="http://arxiv.org/abs/2606.07515v1" style="color:inherit;text-decoration:underline;">arxiv.org/abs/2606.07515v1</a>
+      </div>
+      <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);margin-top:0.5rem;" class="muted">
+        arXiv:2606.07515v1 · cs.CL · 2026년 6월 5일
+      </div>
+    </div>
+    <div style="font-size:clamp(0.8rem,1.5vw,0.95rem);" class="muted">
+      <span class="tag tag-amber">핵심어</span>
+      확률 역설 · 대형 언어 모델 · 인지 편향 · 토큰 편향 · 아첨 현상
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
