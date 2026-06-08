@@ -1390,3 +1390,31 @@
 ## [2026-06-07 19:25] lint | Wiki 건전성 체크
 - Issues: 1376개
 - Orphans: 363, Missing: 1013, Contradictions: 0
+
+## [2026-06-08 08:34] ingest | HANDOFF: Humanoid Agentic Task-Space Whole-Body Control via Distilled Complementary Teachers
+
+## [2026-06-08 08:34] ingest | DNQ: Deep Nash Q-Network for Partially Observable n-Player Games
+
+## [2026-06-08 08:34] ingest | MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery
+
+## [2026-06-08 08:34] ingest | PC Layer: Polynomial Weight Preconditioning for Improving LLM Pre-Training
+
+## [2026-06-08 08:34] ingest | Goedel-Architect: Streamlining Formal Theorem Proving with Blueprint Generation and Refinement
+
+## [2026-06-08 08:34] ingest | You Only Index Once: Cross-Layer Sparse Attention with Shared Routing
+
+## [2026-06-08 08:34] ingest | Human Adults and LLMs as Scientists: Who Benefits from Active Exploration?
+
+## [2026-06-08 08:34] ingest | Benchmark Everything Everywhere All at Once
+
+## [2026-06-08 08:34] ingest | Flow-based Policy Adaptation without Policy Updates
+
+## [2026-06-08 08:34] ingest | Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents
+
+## [2026-06-08 08:34] ingest | Will the Agent Recuse Itself? Measuring LLM-Agent Compliance with In-Band Access-Deny Signals
+
+## [2026-06-08 08:34] ingest | Latent Reasoning with Normalizing Flows
+
+## [2026-06-08 08:34] ingest | Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
+
+## [2026-06-08 08:34] ingest | LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs
