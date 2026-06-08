@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Only Index Once: Cross-Layer Sparse Attention with Share — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="font-size: clamp(0.8rem, 1.2vw, 1rem);" class="muted">arXiv: 2606.06467v1 · 2026년 6월</div>
+    <h1 style="font-size: clamp(1.8rem, 4vw, 3.2rem); margin-top: 1rem; line-height: 1.2;">You Only Index Once:<br><span class="accent">Cross-Layer Sparse Attention</span><br>with Shared Routing</h1>
+    <div class="hr" style="margin: 1.5rem 0;"></div>
+    <div style="font-size: clamp(0.9rem, 1.4vw, 1.15rem); line-height: 1.8;">
+      <span class="muted">Yutao Sun<sup>1,2</sup> · Yanqi Zhang<sup>1</sup> · Li Dong<sup>1</sup> · Jianyong Wang<sup>2</sup> · Furu Wei<sup>1</sup></span><br>
+      <span class="muted" style="font-size: clamp(0.75rem, 1vw, 0.9rem);"><sup>1</sup>Microsoft Research · <sup>2</sup>Tsinghua University</span>
+    </div>
+    <div class="quote-block" style="margin-top: 2rem; font-size: clamp(0.85rem, 1.2vw, 1.05rem);">
+      단일 라우팅 인덱스를 계산하여 여러 레이어에 걸쳐 재사용함으로써,<br>토큰 희소 주의력의 정밀도를 유지하면서 디코딩 오버헤드를 획기적으로 감소시킨다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">문제 정의: 긴 문맥 추론의 병목</h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); line-height: 1.9; margin-bottom: 1.5rem;">
+      최신 LLM에서 <span class="accent">긴 문맥 추론</span>은 점차 <span class="accent2">디코딩 효율성</span>에 의해 제약받고 있다. 특히 <span class="accent">추론 중심 설정</span>(Chain-of-Thought, Test-time Scaling)에서 모델은 긴 중간 추론 사슬을 생성하며 반복적으로 큰 문맥에 주의를 기울여야 한다.
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div style="font-size: clamp(0.75rem, 1vw, 0.9rem);" class="muted">병목 1</div>
+        <div style="font-size: clamp(1rem, 1.5vw, 1.3rem); font-weight: 700; margin: 0.5rem 0;">프리필링 비용</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">문맥 길이 증가에 따른 입력 처리 비용 급증</div>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.75rem, 1vw, 0.9rem);" class="muted">병목 2</div>
+        <div style="font-size: clamp(1rem, 1.5vw, 1.3rem); font-weight: 700; margin: 0.5rem 0;">KV 캐시 저장</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">128K 토큰에서 메모리 압력이 심각해짐</div>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.75rem, 1vw, 0.9rem);" class="muted">병목 3</div>
+        <div style="font-size: clamp(1rem, 1.5vw, 1.3rem); font-weight: 700; margin: 0.5rem 0;">긴 문맥 디코딩</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">매 토큰 생성 시 전체 캐시 스캔 필요</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">기존 희소 주의력 방법의 한계</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>가속 효과</th>
+          <th>품질</th>
+          <th>핵심 한계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-amber">블록 희소 주의력</span></td>
+          <td><span class="accent3">강한 가속</span></td>
+          <td><span class="tag tag-red">품질 손실 큼</span></td>
+          <td>구조적 희소성이 GPU 실행에 유리하나, 거친 근사로 인한 정확도 하락</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">토큰 희소 주의력</span></td>
+          <td><span class="tag tag-red">가속 제한적</span></td>
+          <td><span class="accent3">높은 정확도</span></td>
+          <td>전체 캐시에 대한 top-k 라우팅이 비용이 크고, <span class="accent">레이어마다 재계산</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1.05rem);">
+      <i class="fas fa-lightbulb accent" style="margin-right: 0.5rem;"></i>
+      토큰 희소 주의력은 정밀한 선택 능력을 가지지만, <span class="accent">매 레이어에서 독립적으로 top-k 라우팅을 수행하는 것</span>이 실제 엔드투엔드 가속을 제한하는 핵심 병목이다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">핵심 아이디어: <span class="accent">인덱스도 공유하자</span></h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); line-height: 1.9; margin-bottom: 1.5rem;">
+      YOCO 아키텍처에서 여러 크로스-디코더 레이어가 <span class="accent2">동일한 KV 캐시</span>를 읽는다는 점에 착안한다. KV 캐시를 공유하는데, <span class="accent">라우팅 인덱스는 왜 매 레이어마다 따로 계산하는가?</span>
+    </div>
+    <div class="grid-2">
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <div style="font-size: clamp(1rem, 1.5vw, 1.25rem); font-weight: 700; margin-bottom: 0.8rem;">기존 YOCO (Dense)</div>
+        <ul class="check-list" style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KV 캐시: <span class="accent3">공유됨</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>라우팅 인덱스: <span class="muted">레이어별 독립 계산</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>크로스-어텐션: <span class="muted">전체 캐시 밀집 검색</span></li>
+        </ul>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <div style="font-size: clamp(1rem, 1.5vw, 1.25rem); font-weight: 700; margin-bottom: 0.8rem;">CLSA (제안)</div>
+        <ul class="check-list" style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KV 캐시: <span class="accent3">공유됨</span></li>
+          <li><span class="check-icon"><i class="fas fa-check accent"></i></span>라우팅 인덱스: <span class="accent">단일 계산 후 전체 레이어 공유</span></li>
+          <li><span class="check-icon"><i class="fas fa-check accent"></i></span>크로스-어텐션: <span class="accent">선택된 토큰만 희소 검색</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">CLSA 아키텍처 전체 구조</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-bottom: 1.5rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Self-Decoder</div>
+        <div class="step-desc">입력 시퀀스를 공유 은닉 상태 H로 인코딩하고, 단일 KV 캐시 구축</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Shared Indexer</div>
+        <div class="step-desc">H에서 Q_idx, K_idx 계산 → top-k 라우팅 인덱스 <span class="accent">단일 계산</span></div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">Cross-Decoder ×L</div>
+        <div class="step-desc">각 레이어가 <span class="accent">공유 KV + 공유 인덱스</span>로 희소 크로스-어텐션 수행</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.5rem;">Self-Decoder의 역할</div>
+        <div style="font-size: clamp(0.78rem, 1vw, 0.9rem); line-height: 1.7;">YOCO와 동일하게 효율적인 어텐션으로 공유 은닉 상태를 생성. 프리필링과 KV 캐시 저장의 효율성을 그대로 계승.</div>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.5rem;">Cross-Decoder의 역할</div>
+        <div style="font-size: clamp(0.78rem, 1vw, 0.9rem); line-height: 1.7;">각 레이어는 자체 Query 상태와 FFN을 유지하면서, <span class="accent">선택된 k개 토큰</span>에만 어텐션을 수행하여 디코딩 가속.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">크로스-레이어 희소 주의력 수식</h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.9; margin-bottom: 1.2rem;">
+      공유 은닉 상태 <span class="muted">H ∈ ℝ<sup>n×d</sup></span>와 공유 KV 캐시 <span class="muted">K, V ∈ ℝ<sup>n×d</sup></span>가 주어졌을 때:
+    </div>
+    <div class="flow-item" style="margin-bottom: 1rem;">
+      <div class="flow-icon" style="background: var(--accent);">1</div>
+      <div style="font-size: clamp(0.85rem, 1.2vw, 1rem);">
+        <strong>인덱스 질의/키 프로젝션</strong> (단일 헤드)<br>
+        <span class="muted">Q_idx = H·W_idx^Q, &nbsp; K_idx = H·W_idx^K &nbsp; (단일 헤드, d_idx 차원)</span>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom: 1rem;">
+      <div class="flow-icon" style="background: var(--accent);">2</div>
+      <div style="font-size: clamp(0.85rem, 1.2vw, 1rem);">
+        <strong>라우팅 인덱스 계산</strong> (한 번만!)<br>
+        <span class="muted">I = Q_idx · K_idx^T, &nbsp; S_t = TopK(I_t, k) &nbsp; → 각 쿼리 토큰별 k개 선택</span>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background: var(--accent2);">3</div>
+      <div style="font-size: clamp(0.85rem, 1.2vw, 1rem);">
+        <strong>희소 크로스-어텐션</strong> (모든 레이어 l에 대해 동일한 S_t 사용)<br>
+        <span class="muted">O_t^(l) = Attn(Q_t^(l), K_{S_t}, V_{S_t}) &nbsp; → k ≪ n 이므로 메모리 접근大幅 감소</span>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: 1rem; font-size: clamp(0.8rem, 1.1vw, 0.9rem);">
+      핵심: 라우팅 인덱스를 공유 KV 캐시에 <span class="accent">바인딩</span>함. 여러 레이어가 같은 메모리를 읽으면, 같은 라우팅 결정도 공유해야 함.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">다중 레이어 증류 학습</h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.8; margin-bottom: 1.2rem;">
+      공유 인덱서가 <span class="accent">모든 레이어에 동시에 유용한 토큰</span>을 선택하도록 훈련해야 한다. 밀집 어텐션의 합의된 중요 토큰을 타겟으로 사용.
+    </div>
+    <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem); margin-bottom: 1rem; padding: 1rem; border: 1px solid #e0ddd8; border-radius: 8px;">
+      <span class="muted">타겟 어텐션 (모든 레이어·헤드 평균):</span><br>
+      <span class="muted">Ā = (1/LH) Σ_l Σ_h softmax(Q^(l,h) · K^(h)T)</span>
+    </div>
+    <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem); margin-bottom: 1.2rem; padding: 1rem; border: 1px solid #e0ddd8; border-radius: 8px;">
+      <span class="muted">KD 손실:</span><br>
+      <span class="muted">L_KD = (1/n) Σ_t KL(sg[Ā_t] ∥ softmax(I_t))</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.5rem;"><span class="tag tag-amber">Stage 1</span> 인덱서 웜업</div>
+        <div style="font-size: clamp(0.78rem, 1vw, 0.9rem); line-height: 1.7;">백본 파라미터 고정, <span class="accent">L_KD만</span>으로 인덱서 안정적 라우팅 패턴 학습</div>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.5rem;"><span class="tag tag-green">Stage 2</span> 결합 희소 적응</div>
+        <div style="font-size: clamp(0.78rem, 1vw, 0.9rem); line-height: 1.7;"><span class="accent">L_LM + 0.1·L_KD</span>로 백본이 희소 어텐션 분포에 적응하도록 파인튜닝</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">추론 효율성: 세 가지 병목 동시 해결</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="font-size: clamp(0.78rem, 1.05vw, 0.9rem);">
+      <thead>
+        <tr>
+          <th>추론 단계</th>
+          <th>Dense Transformer</th>
+          <th>블록 희소</th>
+          <th>토큰 희소 (기존)</th>
+          <th><span class="accent">CLSA (제안)</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>프리필링</td>
+          <td class="muted">O(N²LD)</td>
+          <td class="muted">O(NW₁LD)</td>
+          <td class="muted">O(N²LD) + 라우팅</td>
+          <td><span class="accent3">YOCO 효율 계승</span></td>
+        </tr>
+        <tr>
+          <td>KV 캐시 저장</td>
+          <td class="muted">O(NLD)</td>
+          <td class="muted">O(NLD)</td>
+          <td class="muted">O(NLD)</td>
+          <td><span class="accent3">YOCO 효율 계승</span></td>
+        </tr>
+        <tr>
+          <td>디코딩 (토큰당)</td>
+          <td class="muted">O(NLD)</td>
+          <td class="muted">O(W₁LD)</td>
+          <td class="muted">O(kLD) + <span class="tag tag-red">N·L 라우팅</span></td>
+          <td><span class="accent">O(kLD) + N 라우팅 (1회)</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.8; margin-top: 1.2rem;">
+      <i class="fas fa-key accent" style="margin-right: 0.4rem;"></i>
+      <strong>핵심 차이:</strong> 기존 토큰 희소는 라우팅 비용이 <span class="muted">O(N·L)</span>이지만, CLSA는 <span class="accent">O(N)</span>으로 L배 감소. 이 오버헤드 amortization이 실제 가속의 핵심.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">실험 결과: 모델 품질 유지</h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.8; margin-bottom: 1rem;">
+      짧은 문맥과 긴 문맥 벤치마크 모두에서 <span class="accent3">밀집 베이스라인에 거의 무손실</span>인 성능을 달성.
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.8rem;">일반 벤치마크 (짧은 문맥)</div>
+        <ul class="check-list" style="font-size: clamp(0.78rem, 1vw, 0.9rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MMLU, ARC, HellaSwag 등 다영역 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check accent3"></i></span>Dense YOCO 대비 품질 손실 <span class="accent3">무시할 수준</span></li>
+          <li><span class="check-icon"><i class="fas fa-check accent3"></i></span>블록 희소 방법 대비 <span class="accent3">일관되게 우수</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.8rem;">긴 문맥 벤치마크</div>
+        <ul class="check-list" style="font-size: clamp(0.78rem, 1vw, 0.9rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>128K 문맥에서 LongBench, RULER 등 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check accent3"></i></span>긴 문맥에서도 품질 유지 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check accent3"></i></span>희소성에도 불구하고 핵심 정보 검색 능력 보존</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: 1rem; font-size: clamp(0.8rem, 1.1vw, 0.9rem);">
+      어텐션 패턴 분석 결과: 하나의 라우팅 인덱스를 레이어 간에 공유해도 어텐션 거동에 <span class="accent2">미미한 영향</span>만 있음을 확인.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">실험 결과: <span class="accent">추론 가속 성능</span></h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-bottom: 1.5rem;">
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent" style="font-size: clamp(2rem, 4vw, 3.5rem);">7.6×</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem); margin-top: 0.5rem;">디코딩 속도 향상<br><span class="muted">@128K 문맥 vs Dense</span></div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent2" style="font-size: clamp(2rem, 4vw, 3.5rem);">17.1×</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem); margin-top: 0.5rem;">전체 처리량 향상<br><span class="muted">@128K 문맥 (end-to-end)</span></div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent3" style="font-size: clamp(2rem, 4vw, 3.5rem);">~0%</div>
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem); margin-top: 0.5rem;">품질 손실<br><span class="muted">밀집 베이스라인 대비</span></div>
+      </div>
+    </div>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.8;">
+      <i class="fas fa-chart-line accent" style="margin-right: 0.4rem;"></i>
+      <strong>문맥 길이가 길어질수록 가속 효과가 더 커진다.</strong> 라우팅 오버헤드 amortization과 희소 검색의 이점이 문맥 길이에 비례하여 증가하기 때문. 기존 토큰 희소 방법은 레이어별 라우팅 재계산으로 인해 이 스케일링 이점을 충분히 활용하지 못함.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">어텐션 희소성 분석</h2>
+    <div class="hr"></div>
+    <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.9; margin-bottom: 1.2rem;">
+      공유 인덱서가 실제로 <span class="accent">어떤 토큰을 선택하는지</span>, 그리고 이것이 <span class="accent2">레이어 간 합의와 얼마나 일치하는지</span> 분석.
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.8rem;">주요 발견</div>
+        <ul class="check-list" style="font-size: clamp(0.78rem, 1vw, 0.9rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>레이어 간 어텐션 분포가 <span class="accent3">높은 합의</span>를 보임 → 공유 인덱스의 근거 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>선택된 토큰이 실제로 <span class="accent">문맥적으로 중요한 위치</span>에 집중</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>k 값 변화에 따른 품질-효율 트레이드오프가 <span class="accent3">완만한 곡선</span> 형태</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.8rem;">설계 가정 검증</div>
+        <div style="font-size: clamp(0.78rem, 1vw, 0.9rem); line-height: 1.7;">
+          "하나의 라우팅 인덱스를 여러 레이어가 공유해도 문제없다"는 핵심 가정이 어텐션 패턴 분석을 통해 <span class="accent">실험적으로 지지</span>됨. 레이어별 독립 라우팅과 비교했을 때 어텐션 거동 차이가 미미함.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">관련 연구와의 차별성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 700; margin-bottom: 0.8rem;">희소 주의력 연구</div>
+        <ul class="check-list" style="font-size: clamp(0.78rem, 1vw, 0.9rem);">
+          <li><span class="check-icon"><i class="fas fa-minus muted"></i></span><span class="muted">Longformer, BigBird</span>: 고정 패턴, 적응성 부족</li>
+          <li><span class="check-icon"><i class="fas fa-minus muted"></i></span><span class="muted">FlashAttention-2/3</span>: 하드웨어 최적화, 구조적 희소성 없음</li>
+          <li><span class="check-icon"><i class="fas fa-minus muted"></i></span><span class="muted">DaBa, MoBA</span>: 블록 희소, 품질 손실 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check accent"></i></span><span class="accent">CLSA</span>: 토큰 희소 + 라우팅 공유로 두 장점 결합</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1.05rem); font-weight: 700; margin-bottom: 0.8rem;">하이브리드 아키텍처</div>
+        <ul class="check-list" style="font-size: clamp(0.78rem, 1vw, 0.9rem);">
+          <li><span class="check-icon"><i class="fas fa-minus muted"></i></span><span class="muted">YOCO</span>: KV 공유로 프리필링·캐시 효율화, 디코딩은 밀집</li>
+          <li><span class="check-icon"><i class="fas fa-minus muted"></i></span><span class="muted">Cross-Attention 기반 모델들</span>: 각 레이어 독립 연산</li>
+          <li><span class="check-icon"><i class="fas fa-check accent"></i></span><span class="accent">CLSA</span>: YOCO 위에 희소성을 추가하여 <span class="accent">디코딩까지 효율화</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.4rem, 2.8vw, 2.2rem);">결론 및 핵심 기여</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+      <div>
+        <div style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); line-height: 1.9; margin-bottom: 1rem;">
+          CLSA는 <span class="accent">"메모리를 공유하면 라우팅도 공유하라"</span>는 단순하면서 강력한 설계 원칙을 제시한다.
+        </div>
+        <ul class="check-list" style="font-size: clamp(0.82rem, 1.1vw, 0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">통합적 효율 해결책</span>: 프리필링 + KV 캐시 + 디코딩 세 병목을 동시 개선</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">품질-효율 양립</span>: 거의 무손실 품질로 최대 17.1× 전체 처리량 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">설계 단순성</span>: 단일 인덱서 추가만으로 기존 YOCO에 적용 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="muted">확장성</span>: 문맥 길이가 길어질수록 가속 효과 증가</li>
+        </ul>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);" class="muted">128K 문맥에서의 성과</div>
+        <div class="big-num accent" style="font-size: clamp(2.5rem, 5vw, 4rem); margin: 0.5rem 0;">17.1×</div>
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem);">전체 처리량 향상</div>
+        <div class="hr" style="margin: 1rem 0; width: 60%;"></div>
+        <div class="big-num accent2" style="font-size: clamp(2rem, 4vw, 3rem);">7.6×</div>
+        <div style="font-size: clamp(0.85rem, 1.2vw, 1rem);">디코딩 속도 향상</div>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size: clamp(0.82rem, 1.1vw, 0.95rem);">
+      긴 문맥 LLM을 위한 <span class="accent">더 완전한 아키텍처 해결책</span>으로, 모델 품질과 추론 효율성을 동시에 전진시키는 방향을 제시한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 80vh;">
+    <div style="font-size: clamp(0.8rem, 1.1vw, 0.95rem);" class="muted">논문 정보</div>
+    <h2 style="font-size: clamp(1.5rem, 3vw, 2.5rem); margin: 1rem 0 0.5rem;">You Only Index Once:<br><span class="accent">Cross-Layer Sparse Attention</span><br>with Shared Routing</h2>
+    <div class="hr" style="margin: 1.5rem auto; width: 40%;"></div>
+    <div style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); line-height: 2;">
+      Yutao Sun · Yanqi Zhang · Li Dong · Jianyong Wang · Furu Wei<br>
+      <span class="muted">Microsoft Research · Tsinghua University</span>
+    </div>
+    <div style="margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1rem);">
+      <i class="fas fa-external-link-alt accent" style="margin-right: 0.4rem;"></i>
+      <a href="http://arxiv.org/abs/2606.06467v1" style="text-decoration: none;" class="accent2">arxiv.org/abs/2606.06467v1</a>
+    </div>
+    <div style="margin-top: 1rem; font-size: clamp(0.75rem, 1vw, 0.85rem);" class="muted">arXiv:2606.06467v1 · cs.CL · 2026년 6월 4일</div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
