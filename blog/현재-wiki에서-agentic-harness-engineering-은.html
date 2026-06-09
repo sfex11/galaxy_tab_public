@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>엔진만 떼어놓고 자동차 성능을 논하는 것 — 연구 에이전트 평가에서 모델-하네스 분리 분석의 한계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 60px 0 40px;
+    text-align: left;
+  }
+  .hero-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 5.5vw, 44px);
+    line-height: 1.3;
+    color: #2c2825;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 17px);
+    color: #6b6560;
+    line-height: 1.75;
+    max-width: 640px;
+  }
+
+  /* ── Meta ── */
+  .meta-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 0;
+    margin: 12px 0 40px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    border-bottom: 1px solid rgba(44,40,37,0.08);
+    font-size: 13px;
+    color: #8a837c;
+  }
+  .meta-bar span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 52px; }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(21px, 3.8vw, 30px);
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(17px, 2.8vw, 21px);
+    color: #2c2825;
+    margin: 32px 0 12px;
+  }
+  .section p { margin-bottom: 18px; }
+  .section ul, .section ol {
+    margin: 0 0 18px 22px;
+  }
+  .section li { margin-bottom: 8px; }
+  .section strong { font-weight: 700; color: #2c2825; }
+  .section em { font-style: italic; color: #6b6560; }
+
+  /* ── Highlight colors ── */
+  .hl-amber { color: #c2703e; font-weight: 500; }
+  .hl-blue  { color: #5b7c99; font-weight: 500; }
+  .hl-green { color: #6b9e7a; font-weight: 500; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 18px 22px;
+    margin: 28px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2vw, 17px);
+    color: #5a5550;
+    line-height: 1.8;
+  }
+  blockquote p { margin-bottom: 0; }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(16px, 2.5vw, 19px);
+    color: #c2703e;
+    margin-bottom: 12px;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 440px;
+  }
+  thead th {
+    background: rgba(194,112,62,0.07);
+    font-weight: 500;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    color: #2c2825;
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    color: #4a4540;
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .tag-green  { background: rgba(107,158,122,0.12); color: #6b9e7a; }
+  .tag-red    { background: rgba(194,112,62,0.10); color: #c2703e; }
+  .tag-blue   { background: rgba(91,124,153,0.10); color: #5b7c99; }
+
+  /* ── Analogy box ── */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(107,158,122,0.06), rgba(91,124,153,0.05));
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .analogy-box::before {
+    content: '💡';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    font-size: 22px;
+    background: #faf9f7;
+    padding: 0 6px;
+    border-radius: 8px;
+  }
+  .analogy-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b9e7a;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ── Key-takeaway ── */
+  .key-takeaway {
+    background: rgba(194,112,62,0.05);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin: 36px 0;
+  }
+  .key-takeaway-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c2703e;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .key-takeaway p { margin-bottom: 10px; }
+  .key-takeaway p:last-child { margin-bottom: 0; }
+
+  /* ── Footer ── */
+  .article-footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    font-size: 13px;
+    color: #8a837c;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .article-footer a {
+    color: #c2703e;
+    text-decoration: none;
+  }
+  .article-footer a:hover { text-decoration: underline; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .article-wrapper { padding: 16px 16px 60px; }
+    .hero { padding: 40px 0 28px; }
+    .card { padding: 18px 18px; }
+    blockquote { padding: 14px 16px; margin: 22px 0; }
+    .key-takeaway { padding: 20px 18px; }
+    .analogy-box { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- Navigation -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-label">Deep Analysis</span>
+    <h1>엔진만 떼어놓고 자동차 성능을 논하는 것</h1>
+    <p class="hero-sub">연구 에이전트 벤치마크에서 모델과 하네스를 분리해 평가하는 것이 왜 무의미에 가까워지는지, 그리고 우리가 대신 무엇을 물어야 하는지.</p>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta-bar">
+    <span>📅 2025-07-11</span>
+    <span>⏱ 12분 읽기</span>
+    <span>태그: <span class="hl-amber">연구 에이전트</span> · <span class="hl-blue">벤치마크</span> · <span class="hl-green">하네스 공학</span></span>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section">
+    <h2>하네스는 '배관'이 아니라 '도로망'이다</h2>
+    <p>Wiki에서 <span class="hl-amber">agentic-harness-engineering</span>은 Crab 논문을 근거로, 하네스의 범위가 단순한 애플리케이션 로직을 넘어 <strong>실행 환경 전체로 확장</strong>됨을 시사합니다. C/R(Checkpoint/Restore) 런타임이 결함 내성(fault tolerance), 롤백, 분기를 직접 구현한다면, 하네스는 더 이상 모델 출력을 운반하는 수동적인 배관이 아닙니다.</p>
+
+    <p>그것은 <strong>에이전트가 탐색할 수 있는 행동 가능성 공간 자체를 구조적으로 규정</strong>하는 요소가 됩니다. 어떤 경로를 허용하고, 어디서 되돌아가며, 몇 번이나 재시도할 수 있는가 — 이 모든 것이 하네스에 내장된 정책에 의해 결정됩니다.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-label">비유</span>
+      <p>하네스를 '수도관'이라고 생각해보세요. 수도관은 물의 성질을 바꾸지 않으니, 물(모델)만 검사하면 수도 시스템 전체를 평가할 수 있다는 논리가 성립합니다. 하지만 실제 하네스는 수도관이 아니라 <strong>도로망</strong>에 가깝습니다. 같은 자동차(모델)라도 고속도로가 있느냐, 비포장 오솔길뿐이냐, 우회로가 몇 개 있느냐에 따라 도착 시간은 극적으로 달라집니다. 그런데 우리는 지금 "이 자동차의 엔진 성능만 떼어내서 비교하자"고 하고 있는 셈입니다.</p>
+    </div>
+
+    <p>"Act As a Real Researcher" 논문이 연구 수명주기 전체를 벤치마킹하면서 보여주는 것은 정확히 이 지점입니다. 하네스가 내장한 <span class="hl-blue">탐색 전략, 검증 루프, 롤백 정책</span>은 모델의 '지능'이 발현되는 <em>조건 자체</em>가 됩니다. 이 조건을 통제하지 않은 채 모델만 비교하는 것은, 트랙이 다른 두 자동차의 엔진 RPM만 놓고 "이 엔진이 더 좋다"고 단정하는 것과 다름없습니다.</p>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section">
+    <h2>그런데 왜 분석이 완전히 무의미하진 않은가</h2>
+    <p>그렇다면 모델과 하네스의 분석을 완전히 폐기해야 할까요? Wiki는 동시에 분리 가능성의 근거도 제공합니다. 이 부분을 놓치면 반쪽짜리 결론에 이르게 됩니다.</p>
+
+    <h3>직교성의 실증: 스키마 축적 문제</h3>
+    <p><span class="hl-blue">aggregate-pipeline-serving</span>의 Tool Attention 논문은, 다중 서버 MCP 배포에서 파이프라인 전체의 레이턴시 병목이 "개별 LLM 호출"이 아니라 <strong>스키마 축적(schema accumulation)</strong>에 의해 결정됨을 보여줍니다. 즉, 모델이 아무리 추론 속도가 빨라도, 도구 스키마가 쌓이는 방식에 의해 전체 응답 시간이 지배됩니다.</p>
+
+    <blockquote>
+      <p>이는 하네스 최적화의 병목 지점이 모델 추론의 병목 지점과 <strong class="hl-blue">직교(orthogonal)</strong>함을 실증합니다. 모델을 바꿔도 스키마 축적 문제는 그대로 남고, 하네스를 바꿔도 모델의 추론 능력은 그대로 남습니다.</p>
+    </blockquote>
+
+    <h3>추상화 계층의 불일치: 의미론 vs 스냅샷</h3>
+    <p><span class="hl-green">algorithm-system-translation-gap</span>에서 Crab은 에이전트의 <em>의미론적 의존 그래프</em>를 OS의 <em>체크포인트 메커니즘</em>으로 번역할 때 발생하는 비효율을 간극의 본질로 규정합니다. 모델 측은 "이 계산 결과가 다음 단계에 의미론적으로 필요하다"고 파악하지만, 시스템 측은 "이 시점의 메모리 상태를 스냅샷한다"로 번역합니다.</p>
+
+    <p>두 축이 <strong>서로 다른 추상화 계층에 존재</strong>한다는 사실은, 이 계층 경계를 분석적으로 식별하는 것이 오히려 최적화의 핵심 열쇠임을 시사합니다. 경계가 식별 가능하다면, 분리 분석은 여전히 유효합니다.</p>
+
+    <div class="card">
+      <div class="card-title">핵심 정리</div>
+      <p>파이프라인 서빙에서는 모델과 하네스의 병목이 직교하고, 알고리즘-시스템 간극에서는 추상화 계층이 구분 가능합니다. 즉, <strong>분리 분석이 무의미한 것이 아니라 분리가 성립하는 조건이 도메인에 따라 다릅니다.</strong></p>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section">
+    <h2>경계 붕괴: 어디서, 왜 일어나는가</h2>
+    <p>질문이 묻는 현상을 정확히 포착하는 개념이 Wiki 슬러그 목록에 존재합니다: <span class="hl-amber">algorithm-system-boundary-collapse</span>. 알고리즘(모델 추론)과 시스템(하네스 인프라) 사이의 경계가 <strong>특정 도메인에서 붕괴</strong>하는 현상입니다.</p>
+
+    <p>연구 수명주기(research lifecycle)가 바로 그 붕괴가 일어나는 도메인입니다. 왜 그럴까요? 연구 과정은 본질적으로 <em>탐색-검증-수정의 루프</em>이며, 이 루프의 구조가 하네스에 의해 결정되기 때문입니다. 모델이 "이 가설을 검증해보자"라고 결정했다고 칩시다. 하지만 하네스가 롤백을 지원하지 않거나, 분기 탐색 깊이에 제한이 있다면, 모델의 의도는 실행 환경에 의해 잘려나갑니다.</p>
+
+    <p>이때 모델의 "연구 능력"과 하네스의 "탐색 허용도"는 분리할 수 없는 하나의 결합체로 동작합니다. 모델의 지능이 하네스의 정책에 종속되고, 하네스의 정책은 모델의 출력에 의해 선택되는 <strong>상호 의존적 루프</strong>가 형성됩니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>도메인</th>
+            <th>경계 상태</th>
+            <th>분리 분석 의미</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>코드 생성</td>
+            <td><span class="tag tag-green">경계 유지</span></td>
+            <td>유효 — 모델 능력과 샌드박스 환경은 독립 측정 가능</td>
+          </tr>
+          <tr>
+            <td>연구 수명주기</td>
+            <td><span class="tag tag-red">경계 붕괴</span></td>
+            <td>무의미에 가까움 — 탐색 전략이 지능과 얽힘</td>
+          </tr>
+          <tr>
+            <td>파이프라인 서빙</td>
+            <td><span class="tag tag-blue">경계 유지 (직교)</span></td>
+            <td>유효 — 스키마 축적과 추론 능력은 독립적 병목</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>이 표가 보여주는 것은 중요합니다. <strong>경계 붕괴는 전역적 현상이 아닙니다.</strong> 코드 생성에서는 여전히 "이 모델이 코드를 더 잘 짜는가"라는 질문이 유효합니다. 샌드박스가 제공하는 실행 환경은 모델의 코드 생성 능력과 직교합니다. 하지만 연구 수명주기에서는 그 직교성이 무너집니다.</p>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section">
+    <h2>분리가 아닌 '분해 가능성'을 물어야 할 때</h2>
+    <p>지금까지의 논의를 종합하면, 패러다임 전환의 방향이 명확해집니다. 우리는 "모델 단독 능력"과 "하네스 단독 효율"을 각각 측정하려는 분리 분석에서, <span class="hl-amber">모델-하네스 결합체의 분해 가능성(decomposability)</span>을 판별하는 것으로 전환해야 합니다.</p>
+
+    <div class="card">
+      <div class="card-title">두 가지 진단 기준</div>
+      <p style="margin-bottom:14px;"><strong class="hl-red">① 분해 불가능 (Inseparable)</strong><br>
+      algorithm-system-boundary-collapse 상태. 탐색 전략과 모델 지능이 상호 의존적으로 얽혀 있어, 결합체 단위로만 평가가 의미를 가집니다. 연구 수명주기 벤치마크가 여기에 해당합니다.</p>
+      <p><strong class="hl-green">② 분해 가능 (Decomposable)</strong><br>
+      aggregate-pipeline-serving처럼 두 축이 직교하는 상태. 각각 독립적으로 최적화하고 측정할 수 있으며, 분리 분석이 여전히 유효합니다.</p>
+    </div>
+
+    <p>이 전환의 실천적 의미는 명확합니다. 벤치마크 설계자는 평가를 시작하기 전에 <strong>"내가 측정하려는 결합체가 분해 가능한가?"</strong>를 먼저 진단해야 합니다. 분해 불가능하다면, 결합체 단위로 벤치마크를 설계하고 결과를 보고해야 합니다. 분해 가능하다면, 기존의 분리 분석 방식을 유지하면 됩니다.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-label">비유</span>
+      <p>요리로 비유하자면, "이 레시피에서 재료의 맛과 조리법의 기여도를 분리해서 평가하라"는 요청이 있습니다. 샐러드의 경우 — 재료를 썰어 섞기만 하면 되니 — 분리 평가가 쉽습니다. 하지만 볶음밥의 경우, 불의 세기와 재료 투입 순서가 최종 맛에 복합적으로 작용하므로 분리가 불가능합니다. 우리가 해야 할 것은 "모든 요리에서 재료와 조리법을 분리하라"가 아니라, <strong>"이 요리는 분해 가능한 요리인가?"</strong>를 먼저 묻는 것입니다.</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Conclusion -->
+  <div class="section">
+    <h2>벤치마크 명세 불가능성: 연구 에이전트 평가의 근본적 난제</h2>
+    <p>"Act As a Real Researcher"가 보여주는 현상은 분리 분석의 무의미성을 증명하는 것이 아닙니다. 그보다 더 근본적인 문제를 드러냅니다: <span class="hl-amber">benchmark-specification-gap</span>의 새로운 차원입니다.</p>
+
+    <p>벤치마크는 "무엇을 측정하는가"를 명세해야 합니다. 그런데 연구 에이전트 벤치마크에서 이 명세가 불가능해집니다. 측정 대상이 모델인지, 하네스인지, 아니면 둘의 결합체인지를 명시할 수 없는 상황 — 그것이 바로 경계 붕괴가 초래하는 실질적 결과입니다.</p>
+
+    <blockquote>
+      <p>벤치마크가 "무엇을 측정하는가"를 명세할 때, 그 측정 대상이 모델인지 하네스인지 아니면 둘의 결합체인지를 명시하지 않으면, <strong>비교 평가 자체가 무의미해집니다.</strong> 이 명세 불가능성이야말로 연구 에이전트 평가의 근본적 난제입니다.</p>
+    </blockquote>
+
+    <div class="key-takeaway">
+      <span class="key-takeaway-label">핵심 결론</span>
+      <p><strong>기존 패러다임:</strong> "모델의 능력과 하네스의 효율을 분리해서 측정하자."</p>
+      <p><strong>새로운 패러다임:</strong> "이 결합체가 분해 가능한지 먼저 진단하고, 불가능하다면 결합체 단위로 평가하자."</p>
+      <p>분리 분석의 무의미성을 섣불리 선언하는 대신, <strong class="hl-amber">분해 가능성(decomposability)이라는 메타 평가 기준</strong>을 벤치마크 명세의 최전선에 배치해야 합니다. 이것이 "Act As a Real Researcher"가 우리에게 던지는 진정한 질문입니다.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="article-footer">
+    <p>대상 논문: <em>Act As a Real Researcher: A Suite of Benchmarks Evaluating Frontier LLMs and Agentic Harnesses in Research Lifecycle</em></p>
+    <p style="margin-top:8px;">관련 슬러그: agentic-harness-engineering · aggregate-pipeline-serving · algorithm-system-translation-gap · algorithm-system-boundary-collapse · benchmark-specification-gap</p>
+    <p style="margin-top:12px;"><a href="blog.html">← 분석 글 목록으로</a></p>
+  </div>
+
+</div>
+
+</body>
+</html>
