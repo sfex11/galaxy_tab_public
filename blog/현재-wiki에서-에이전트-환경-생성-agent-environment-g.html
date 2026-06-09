@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무대가 아닌 흙일 때 — 에이전트 환경을 '학습 기질'로 재정의한다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --subtle: #b5ada4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 배경 질감 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(194,112,62,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(91,124,153,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(107,158,122,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .article-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* 헤더 */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+    color: var(--accent-warm);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding: 4px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    background: var(--card-bg);
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(26px, 5.5vw, 44px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2.2vw, 18px);
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--subtle);
+    flex-wrap: wrap;
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: 0 0 clamp(40px, 6vw, 64px);
+  }
+
+  /* 섹션 */
+  .section {
+    margin-bottom: clamp(40px, 7vw, 72px);
+  }
+
+  .section-number {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(13px, 1.8vw, 15px);
+    font-weight: 600;
+    color: var(--accent-warm);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--fg);
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    color: var(--fg);
+  }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 20px 24px;
+    background: var(--card-bg);
+    border-radius: 0 12px 12px 0;
+    font-size: clamp(14px, 2vw, 16px);
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.8;
+    backdrop-filter: blur(4px);
+  }
+
+  blockquote strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 24px rgba(44,40,37,0.07), 0 0 0 1px rgba(255,255,255,0.6) inset;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  .card-label.warm { color: var(--accent-warm); background: rgba(194,112,62,0.08); }
+  .card-label.cool { color: var(--accent-cool); background: rgba(91,124,153,0.08); }
+  .card-label.green { color: var(--accent-green); background: rgba(107,158,122,0.08); }
+
+  /* 테이블 */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 28px 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    backdrop-filter: blur(6px);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 480px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.06);
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--fg);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: var(--fg);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(194,112,62,0.02); }
+
+  td code, p code {
+    font-family: 'Noto Sans KR', monospace;
+    font-size: 0.88em;
+    padding: 2px 7px;
+    background: rgba(194,112,62,0.07);
+    border-radius: 5px;
+    color: var(--accent-warm);
+    font-weight: 500;
+  }
+
+  /* 강조 텍스트 */
+  .highlight-warm { color: var(--accent-warm); font-weight: 600; }
+  .highlight-cool { color: var(--accent-cool); font-weight: 600; }
+  .highlight-green { color: var(--accent-green); font-weight: 600; }
+
+  /* 비유 박스 */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(107,158,122,0.04));
+    border: 1px solid rgba(107,158,122,0.12);
+    border-radius: 16px;
+    padding: clamp(22px, 3.5vw, 32px);
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(107,158,122,0.1), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .metaphor-box .label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .metaphor-box p { margin-bottom: 10px; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* 번호 리스트 */
+  .numbered-list {
+    list-style: none;
+    counter-reset: section-counter;
+    padding: 0;
+    margin: 24px 0;
+  }
+
+  .numbered-list li {
+    counter-increment: section-counter;
+    padding: 16px 16px 16px 56px;
+    position: relative;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+
+  .numbered-list li:hover {
+    background: rgba(194,112,62,0.03);
+  }
+
+  .numbered-list li::before {
+    content: counter(section-counter);
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-warm);
+    opacity: 0.6;
+  }
+
+  /* 결론 카드 */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.04));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 20px;
+    padding: clamp(28px, 4vw, 44px);
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .conclusion-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-warm), var(--accent-cool), var(--accent-green));
+    border-radius: 3px 3px 0 0;
+  }
+
+  /* 푸터 */
+  .article-footer {
+    text-align: center;
+    padding: clamp(40px, 6vw, 72px) 0;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(48px, 8vw, 80px);
+  }
+
+  .article-footer p {
+    font-size: 13px;
+    color: var(--subtle);
+    margin-bottom: 6px;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(44,40,37,0.06);
+    transition: all 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent-warm);
+    border-color: var(--card-border);
+    background: var(--card-bg);
+  }
+
+  /* 스크롤 애니메이션 */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 모바일 최적화 */
+  @media (max-width: 640px) {
+    .article-wrapper { padding: 0 16px; }
+    .card { padding: 18px 16px; }
+    blockquote { padding: 16px 18px; margin: 22px 0; }
+    .numbered-list li { padding-left: 44px; }
+    .numbered-list li::before { left: 12px; font-size: 17px; }
+    .metaphor-box { padding: 18px 16px; }
+    .conclusion-card { padding: 22px 18px; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 10px 12px; }
+  }
+
+  /* 프로그레스 바 */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-warm), var(--accent-cool));
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* 시각적 구분 점 */
+  .dot-separator {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 40px 0;
+  }
+
+  .dot-separator span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--subtle);
+    opacity: 0.4;
+  }
+
+  .dot-separator span:nth-child(2) { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="article-wrapper">
+
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <header class="article-header fade-in">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">무대가 아닌 흙일 때<br>에이전트 환경을 '학습 기질'로 재정의한다</h1>
+    <p class="article-subtitle">Agentopia가 던진 무상태 비판은 기술적 개선 요구가 아니다. 에이전트 연구의 인식론적 지반을 뒤흔드는 선언이다.</p>
+    <div class="article-meta">
+      <span>2025.07.11</span>
+      <span>·</span>
+      <span>Agentopia 논문 심층 분석</span>
+      <span>·</span>
+      <span>약 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 섹션 1 -->
+  <section class="section fade-in">
+    <span class="section-number">Section 01</span>
+    <h2>연극 무대와 정원 흙의 차이</h2>
+
+    <p>연극을 상상해 보자. 배우가 무대에 올라가 대사를 하고, 무대 아래 장치들이 배경을 바꾼다. 그러나 공연이 끝나면 배우는 무대에서 내려오고, 무대는 다음 공연을 위해 리셋된다. 배우가 무대 위에서 무언가를 '배우긴' 하지만, 그것은 <span class="highlight-warm">대본에 대한 학습</span>이지 <span class="highlight-warm">무대 자체에 대한 학습</span>이 아니다.</p>
+
+    <p>그런데 정원을 생각해 보라. 정원의 흙은 식물의 뿌리가 뻗어나가는 매개체다. 흙의 성분이 다르면 식물이 흡수하는 영양이 달라지고, 결국 식물의 생장 방식 자체가 변한다. 흙은 식물이 '사용하는 공간'이 아니라, 식물을 <span class="highlight-green">구성하는 물질</span>이다.</p>
+
+    <div class="metaphor-box">
+      <div class="label">🌱 핵심 비유</div>
+      <p>기존 다중 에이전트 시뮬레이션에서 환경은 <strong>연극 무대</strong>다. 에이전트가 들어와 행동하고 나가면 환경은 리셋된다. 반면 Agentopia가 요구하는 환경은 <strong>정원의 흙</strong>이다. 에이전트가 그 안에서 성장하는 방식 자체를 결정하는 매개체.</p>
+    </div>
+
+    <p>이 차이가 왜 중요한가? 현재 Wiki에서 <code>agent-environment-generation</code>은 에이전트가 태스크를 수행하기 위한 '실행 무대(execution stage)'를 구축하는 문제로 분석되어 왔다. Nemobot Games가 게임 도메인 특화 환경을 만들고, Gym-Anything이 범용 소프트웨어를 환경으로 변환하는 것도 모두 "에이전트가 무엇인가를 <em>할</em> 수 있는 공간"을 설계하는 관점이다.</p>
+
+    <p>그런데 Agentopia가 이 관점의 근간을 흔든다. 에이전트를 <span class="highlight-cool">무상태(stateless)</span>로 전제하는 것은 단순히 기술적 편의가 아니라, 환경에 대한 근본적인 오해라고 지적한다.</p>
+  </section>
+
+  <div class="dot-separator"><span></span><span></span><span></span></div>
+
+  <!-- 섹션 2 -->
+  <section class="section fade-in">
+    <span class="section-number">Section 02</span>
+    <h2>무상태 전제가 숨긴 인식론적 오류</h2>
+
+    <blockquote>
+      기존 다중 에이전트 시뮬레이션은 에이전트를 <strong>무상태(stateless)</strong>로 전제한다. 에이전트는 환경에 '진입'하여 행동하고 '퇴장'하며, 환경 자체는 에이전트의 인지 상태를 변화시키지 않는다.
+    </blockquote>
+
+    <p>이 문장의 무게를 제대로 느끼려면, '무상태'가 실제로 무엇을 의미하는지를 해체해야 한다. 무상태 에이전트란 매 에피소드가 시작될 때마다 <span class="highlight-warm">백지 상태</span>로 돌아가는 에이전트다. 이전 경험을 체화하지 않고, 환경과의 상호작용이 자신의 인지 구조를 영구적으로 바꾸지 않는다.</p>
+
+    <p>이것을 인간에 비유하면 이해가 쉽다. 매일 아침 잠에서 깨어날 때마다 어제 무엇을 배웠는지, 누구와 어떤 대화를 나눴는지, 그 경험이 나를 어떻게 변화시켰는지를 전혀 기억하지 못하는 사람을 상상해 보라. 그런 사람이 '사회적 학습'을 할 수 있을까?</p>
+
+    <p>불가능하다. 그런데 기존 시뮬레이션은 정확히 이런 전제 위에서 돌아가고 있었다. Agentopia가 이를 지적하는 방식은 단순히 "메모리를 추가하자"가 아니다. 더 근본적인 질문을 던진다.</p>
+
+    <div class="card">
+      <span class="card-label warm">핵심 질문</span>
+      <p style="margin-bottom:0;">에이전트가 사회적 경험에서 학습한다는 것은, <strong>환경이 에이전트의 외부 메모리로 기능</strong>함을 의미하지 않는가? 그렇다면 환경은 평가·훈련 인프라가 아니라 <span class="highlight-warm">학습 기질(learning substrate)</span> 자체여야 하지 않겠는가?</p>
+    </div>
+
+    <p>여기서 '기질(substrate)'이라는 단어의 선택이 결정적이다. 기질은 화학에서 반응이 일어나는 매개체를 뜻한다. 효소가 기질 위에서 작용하듯, 에이전트의 학습은 환경이라는 기질 위에서만 일어날 수 있다는 주장이다. 기질이 없으면 반응도 없다.</p>
+  </section>
+
+  <div class="dot-separator"><span></span><span></span><span></span></div>
+
+  <!-- 섹션 3 -->
+  <section class="section fade-in">
+    <span class="section-number">Section 03</span>
+    <h2>세 가지 연결선: 기존 엔티티들이 흔들리는 방식</h2>
+
+    <p>학습 기질로서의 환경이라는 관점을 수용하면, Wiki에 이미 존재하는 여러 엔티티들이 의미를 재구성받는다. 세 가지 축을 따라 이를 추적해 보자.</p>
+
+    <h3>Agora-Opt: 장소에서 기질로</h3>
+    <p><code>agora-opt</code>는 런타임 메모리와 토론 구조를 통해 다중 에이전트 정렬을 달성한다. 그러나 이 시스템에서 환경은 여전히 <span class="highlight-cool">토론이 발생하는 장소</span>다. 에이전트가 환경으로부터 학습하는 것이 아니라, 환경 <em>안에서</em> 서로에게 학습한다.</p>
+    <p>학습 기질 관점을 도입하면 이 구도가 뒤집힌다. 에이전트 간 토론이 가능한 이유는 그 토론의 '흔적'이 환경 기질에 각인되기 때문이다. Agora-Opt의 런타임 정렬 메커니즘은 <span class="highlight-green">환경 기질이 남긴 학습 잔여물의 결과물</span>로 재해석된다.</p>
+
+    <h3>보상 기반 메모리 역학: 내부에서 외부로</h3>
+    <p><code>compensatory-memory-dynamics</code>는 보상 기반 메모리 역학을 다룬다. 기존 분석에서 메모리는 에이전트 <em>내부</em>에 위치한다. 그러나 무상태 에이전트가 사회적 경험에서 학습한다면, 그 메모리는 어디에 있는가?</p>
+    <p>환경이 기질이라면, <span class="highlight-warm">메모리가 외부에 분산되어 에이전트를 구성하는</span> 형태를 취한다. 마치 개미 개체에는 복잡한 지도가 없지만, 개미 군집의 페로몬 흔적이 집단적 기억을 형성하듯이 말이다.</p>
+
+    <h3>행동 안정성 이전: 패턴의 이동이 아닌 재구성</h3>
+    <p><code>behavioral-stability-transfer</code>는 환경 간 행동 안정성 이전을 다룬다. 기존 프레임에서 이것은 "환경 A에서 학습한 행동을 환경 B로 가져간다"는 의미다.</p>
+    <p>그러나 환경이 학습 기질이라면, 이전의 대상은 '행동 패턴'이 아니다. <span class="highlight-cool">기질 A에 의해 구성된 인지 구조 자체를 기질 B에서 어떻게 재구성하는가</span>가 된다. 행동 이전이 아니라 <strong>인지 재구성</strong>의 문제다. 흙이 다른 정원으로 옮겨간 식물이 똑같이 자라지 않는 것과 같다.</p>
+  </section>
+
+  <div class="dot-separator"><span></span><span></span><span></span></div>
+
+  <!-- 섹션 4 -->
+  <section class="section fade-in">
+    <span class="section-number">Section 04</span>
+    <h2>새로운 지도: 기존 개념들이 가리키는 것들</h2>
+
+    <p>학습 기질이라는 렌즈를 끼면, 이전에는 보이지 않았던 연결들이 드러난다. 다음 표는 기존 Wiki 엔티티들이 이 새로운 관점에서 어떻게 재해석되는지를 정리한 것이다.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>기존 엔티티</th>
+            <th>학습 기질 관점에서의 재해석</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>agent-environment-generation</code></td>
+            <td>환경 생성이 곧 <span class="highlight-warm">학습 기질의 설계</span>가 됨. 무대를 짓는 것이 아니라 흙을 배합하는 일</td>
+          </tr>
+          <tr>
+            <td><code>agent-epistemic-pluralism</code></td>
+            <td>다원적 인식이 에이전트 내부의 특성이 아니라 <span class="highlight-cool">환경 기질의 다양성</span>에서 기인함</td>
+          </tr>
+          <tr>
+            <td><code>cognitive-architecture</code></td>
+            <td>인지 아키텍처가 환경 기질과의 경계 없이 설계되어야 함. 내부/외부 구분 자체가 무의미해짐</td>
+          </tr>
+          <tr>
+            <td><code>adaptive-forgetting</code></td>
+            <td>망각이 에이전트 내부 과정이 아니라 <span class="highlight-green">기질-에이전트 상호작용의 결과</span>가 됨</td>
+          </tr>
+          <tr>
+            <td><code>bootstrap-paradox</code></td>
+            <td>환경이 에이전트를 구성하고 에이전트가 환경을 구성하는 <strong>순환 구조</strong>와 직결됨</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>특히 <code>bootstrap-paradox</code>와의 연결이 시사하는 바가 크다. 부트스트랩 패러독스는 "원인이 결과를 만들고, 결과가 원인을 만드는" 순환을 말한다. 학습 기질 관점에서 환경과 에이전트의 관계는 정확히 이 구조다.</p>
+
+    <div class="card">
+      <span class="card-label cool">순환 구조의 예시</span>
+      <p>에이전트 A가 환경에서 상호작용을 통해 학습 → 학습한 행동이 환경을 변화시킴 → 변화된 환경이 다른 에이전트 B의 학습 기질로 작용 → B의 학습이 다시 환경을 변화 → 이 환경이 다시 A에게 영향...</p>
+      <p style="margin-bottom:0;">이 순환에서 <strong>환경은 '중간 매개체'가 아니라 '구성 요소'</strong>다. 마치 피드백 루프 안의 저항기가 단순히 전류를 통과시키는 것이 아니라 회로 자체를 정의하듯이.</p>
+    </div>
+
+    <p>그리고 <code>adaptive-forgetting</code>의 재해석도 흥미롭다. 망각을 에이전트 내부의 메모리 관리 문제가 아니라, 기질과의 상호작용에서 발생하는 자연스러운 결과로 본다면, 망각은 '고장'이 아니라 '적응'이 된다. 정원의 흙에서 특정 영양분이 고갈되는 것이 흙의 결함이 아니라 생태계 순환의 일부인 것처럼.</p>
+  </section>
+
+  <div class="dot-separator"><span></span><span></span><span></span></div>
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section fade-in">
+    <span class="section-number">Section 05</span>
+    <h2>패러다임 전환: 무대 설계자에서 기질 설계자로</h2>
+
+    <p>지금까지의 논의를 하나의 선으로 연결하면 결론은 명확해진다. 환경을 학습 기질로 재정의하는 것은 용어의 변경이 아니다. <code>agent-environment-generation</code>이 다루어야 할 <span class="highlight-warm">설계 대상의 본질적 변화</span>다.</p>
+
+    <div class="conclusion-card">
+      <h3 style="margin-top:0;">세 가지 전환 지침</h3>
+
+      <ol class="numbered-list">
+        <li>
+          <strong>무대 설계에서 기질 설계로</strong><br>
+          환경 생성의 목표가 '태스크를 수행할 수 있는 공간 만들기'에서 '에이전트의 인지를 구성할 수 있는 매체 만들기'로 전환되어야 한다. 공간의 크기나 장애물 배치를 설계하는 것이 아니라, 기질의 밀도, 다양성, 반응성을 설계하는 일이 된다.
+        </li>
+        <li>
+          <strong>평가 지표의 근본적 변경</strong><br>
+          환경의 질을 태스크 완료율로 측정해서는 안 된다. 그 환경에서 학습한 에이전트가 <span class="highlight-cool">환경 밖에서도 지속 가능한 행동 패턴</span>을 보이는지로 측정해야 한다. 좋은 흙은 그 흙에서 자란 식물을 다른 정원에 옮겨 심었을 때도 적응력을 보존하게 만든다.
+        </li>
+        <li>
+          <strong>내부-외부 경계의 해체</strong><br>
+          에이전트의 인지 아키텍처와 환경 기질 사이의 명확한 경계를 그리지 않아야 한다. 에이전트의 메모리, 망각, 학습 메커니즘을 환경과의 연속체로 재설계해야 한다.
+        </li>
+      </ol>
+    </div>
+
+    <p>흥미롭게도, 이 전환은 <code>ai-literacy</code> 논의와도 정합한다. Nemobot Games가 사용자가 에이전트 구축 경험을 통해 AI 리터러시를 체득한다는 실증 경로를 제시한 바 있다. 사용자가 환경을 무대가 아닌 기질로 경험할 때, 비로소 AI 리터러시가 '지식 습득'을 넘어 <span class="highlight-green">'인지 방식의 변화'</span>로 성립한다.</p>
+
+    <blockquote>
+      Agentopia의 무상태 비판은 단순한 기술적 개선 요구가 아니다. 이는 에이전트 연구 패러다임 자체를 <strong>'환경-분리형 에이전트'에서 '환경-구성형 에이전트'로</strong> 전환해야 한다는 인식론적 선언이다.
+    </blockquote>
+
+    <p>결국 우리에게 필요한 것은 더 정교한 무대 장치가 아니다. 에이전트가 그 안에서 성장할 수 있는 <span class="highlight-warm">흙의 화학식</span>을 이해하는 일이다. 그리고 그 흙을 설계하는 것이 곧 에이전트를 설계하는 것이 될 때, 비로소 '환경 생성'이라는 분야가 진정한 의미의 설계 과학이 될 것이다.</p>
+
+    <p style="text-align:center;color:var(--subtle);margin-top:40px;font-style:italic;font-size:clamp(13px,1.8vw,15px);">
+      — 대상 논문: Agentopia: Long-Term Life Simulation and Learning in Agent Societies —
+    </p>
+  </section>
+
+  <footer class="article-footer">
+    <p>에이전트 연구 심층 분석 시리즈</p>
+    <div class="footer-links">
+      <a href="blog.html">🧠 분석 목록</a>
+      <a href="../sources.html">논문 목록</a>
+      <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // 프로그레스 바
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  // 스크롤 페이드인
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

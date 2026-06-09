@@ -664,3 +664,24 @@
 - [[sources/2026-06-08-latent-reasoning-with-normalizing-flows.md]] - Latent Reasoning with Normalizing Flows
 - [[sources/2026-06-08-subspace-aware-sparse-autoencoders-for-effective-m.md]] - Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
 - [[sources/2026-06-08-llms-can-leak-training-data-but-do-they-want-to-a-.md]] - LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs
+- [[sources/2026-06-09-how-reliable-are-llms-when-it-comes-to-playing-dic.md]] - How reliable are LLMs when it comes to playing dice?
+- [[sources/2026-06-09-agentopia-long-term-life-simulation-and-learning-i.md]] - Agentopia: Long-Term Life Simulation and Learning in Agent Societies
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-09-memdreamer-decoupling-perception-and-reasoning-for.md]] - MemDreamer: Decoupling Perception and Reasoning for Long Video Understanding via Hierarchical Graph Memory and Agentic Retrieval Mechanism
+- [[sources/2026-06-09-your-unembedding-matrix-is-secretly-a-feature-lens.md]] - Your UnEmbedding Matrix is Secretly a Feature Lens for Text Embeddings
+- [[sources/2026-06-09-sparse-subspace-to-expert-sharing-for-task-agnosti.md]] - Sparse Subspace-to-Expert Sharing for Task-Agnostic Continual Learning
+- [[sources/2026-06-09-accelerated-decentralized-stochastic-gradient-desc.md]] - Accelerated Decentralized Stochastic Gradient Descent for Strongly Convex Optimization
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-09-how-ai-agents-reshape-knowledge-work-autonomy-effi.md]] - How AI Agents Reshape Knowledge Work: Autonomy, Efficiency, and Scope
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-09-modelling-opinion-dynamics-at-scale-with-deep-marl.md]] - Modelling Opinion Dynamics at Scale with Deep MARL
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-09-affordance-based-hierarchical-reinforcement-learni.md]] - Affordance-Based Hierarchical Reinforcement Learning for Quadruped Pedipulation
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-09-planning-aligned-token-compression-for-long-contex.md]] - Planning-aligned Token Compression for Long-Context Autonomous Driving
+- [[sources/2026-06-09-act-as-a-real-researcher-a-suite-of-benchmarks-eva.md]] - Act As a Real Researcher: A Suite of Benchmarks Evaluating Frontier LLMs and Agentic Harnesses in Research Lifecycle
+- [[sources/2026-06-09-re-imagining-iso-26262-in-the-age-of-autonomous-ve.md]] - Re-imagining ISO 26262 in the Age of Autonomous Vehicles: Enhancing Controllability through Transferability and Predictability
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-09-sycophantic-praise-evaluating-excessive-praise-in-.md]] - Sycophantic Praise: Evaluating Excessive Praise in Language Models
+- [[sources/2026-06-09-cape-contrastive-action-conditioned-parallel-encod.md]] - CAPE: Contrastive Action-conditioned Parallel Encoding for Embodied Planning

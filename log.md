@@ -1418,3 +1418,33 @@
 ## [2026-06-08 08:34] ingest | Subspace-Aware Sparse Autoencoders for Effective Mechanistic Interpretability
 
 ## [2026-06-08 08:34] ingest | LLMs Can Leak Training Data But Do They Want To? A Propensity-Aware Evaluation of Memorization in LLMs
+
+## [2026-06-09 08:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1067개
+
+## [2026-06-09 08:48] ingest | How reliable are LLMs when it comes to playing dice?
+
+## [2026-06-09 08:48] ingest | Agentopia: Long-Term Life Simulation and Learning in Agent Societies
+
+## [2026-06-09 08:48] ingest | MemDreamer: Decoupling Perception and Reasoning for Long Video Understanding via Hierarchical Graph Memory and Agentic Retrieval Mechanism
+
+## [2026-06-09 08:48] ingest | Your UnEmbedding Matrix is Secretly a Feature Lens for Text Embeddings
+
+## [2026-06-09 08:48] ingest | Sparse Subspace-to-Expert Sharing for Task-Agnostic Continual Learning
+
+## [2026-06-09 08:48] ingest | Accelerated Decentralized Stochastic Gradient Descent for Strongly Convex Optimization
+
+## [2026-06-09 08:48] ingest | How AI Agents Reshape Knowledge Work: Autonomy, Efficiency, and Scope
+
+## [2026-06-09 08:48] ingest | Modelling Opinion Dynamics at Scale with Deep MARL
+
+## [2026-06-09 08:48] ingest | Affordance-Based Hierarchical Reinforcement Learning for Quadruped Pedipulation
+
+## [2026-06-09 08:48] ingest | Planning-aligned Token Compression for Long-Context Autonomous Driving
+
+## [2026-06-09 08:48] ingest | Act As a Real Researcher: A Suite of Benchmarks Evaluating Frontier LLMs and Agentic Harnesses in Research Lifecycle
+
+## [2026-06-09 08:48] ingest | Re-imagining ISO 26262 in the Age of Autonomous Vehicles: Enhancing Controllability through Transferability and Predictability
+
+## [2026-06-09 08:48] ingest | Sycophantic Praise: Evaluating Excessive Praise in Language Models
+
+## [2026-06-09 08:48] ingest | CAPE: Contrastive Action-conditioned Parallel Encoding for Embodied Planning

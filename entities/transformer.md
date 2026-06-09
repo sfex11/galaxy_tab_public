@@ -103,3 +103,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-06-08-you-only-index-once-cross-layer-sparse-attention-w.md]]
 
 - [[sources/2026-06-08-vortex-efficient-and-programmable-sparse-attention.md]]
+
+- [[sources/2026-06-09-memdreamer-decoupling-perception-and-reasoning-for.md]]
+
+- [[sources/2026-06-09-planning-aligned-token-compression-for-long-contex.md]]
+
+- [[sources/2026-06-09-sycophantic-praise-evaluating-excessive-praise-in-.md]]

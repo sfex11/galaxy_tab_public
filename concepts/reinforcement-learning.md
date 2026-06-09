@@ -231,3 +231,7 @@ _자동 생성됨_
 - [[sources/2026-06-04-skill-rm-unifying-heterogeneous-evaluation-criteri.md]]
 
 - [[sources/2026-06-04-self-refining-agentic-reinforcement-learning-for-v.md]]
+
+- [[sources/2026-06-09-modelling-opinion-dynamics-at-scale-with-deep-marl.md]]
+
+- [[sources/2026-06-09-affordance-based-hierarchical-reinforcement-learni.md]]
