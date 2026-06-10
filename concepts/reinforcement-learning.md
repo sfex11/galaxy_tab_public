@@ -235,3 +235,7 @@ _자동 생성됨_
 - [[sources/2026-06-09-modelling-opinion-dynamics-at-scale-with-deep-marl.md]]
 
 - [[sources/2026-06-09-affordance-based-hierarchical-reinforcement-learni.md]]
+
+- [[sources/2026-06-10-rethinking-the-divergence-regularization-in-llm-rl.md]]
+
+- [[sources/2026-06-10-the-neutral-mask-how-rlhf-provides-shallow-alignme.md]]

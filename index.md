@@ -685,3 +685,21 @@
 - [[entities/transformer]] - Transformer
 - [[sources/2026-06-09-sycophantic-praise-evaluating-excessive-praise-in-.md]] - Sycophantic Praise: Evaluating Excessive Praise in Language Models
 - [[sources/2026-06-09-cape-contrastive-action-conditioned-parallel-encod.md]] - CAPE: Contrastive Action-conditioned Parallel Encoding for Embodied Planning
+- [[sources/2026-06-10-omnigamearena-a-unified-ue5-benchmark-for-vlm-game.md]] - OmniGameArena: A Unified UE5 Benchmark for VLM Game Agents with Improvement Dynamics
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-10-rethinking-the-divergence-regularization-in-llm-rl.md]] - Rethinking the Divergence Regularization in LLM RL
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-10-fase-fast-adaptive-semantic-entropy-for-code-quali.md]] - FASE: Fast Adaptive Semantic Entropy for Code Quality
+- [[sources/2026-06-10-siga-self-evolving-coding-agent-adapters-for-scien.md]] - SIGA: Self-Evolving Coding-Agent Adapters for Scientific Simulation
+- [[sources/2026-06-10-iosworld-a-benchmark-for-personally-intelligent-ph.md]] - iOSWorld: A Benchmark for Personally Intelligent Phone Agents
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-10-collaborative-human-agent-protocol-chap.md]] - Collaborative Human-Agent Protocol (CHAP)
+- [[sources/2026-06-10-multi-turn-evaluation-of-deep-research-agents-unde.md]] - Multi-Turn Evaluation of Deep Research Agents Under Process-Level Feedback
+- [[sources/2026-06-10-searchswarm-towards-delegation-intelligence-in-age.md]] - SearchSwarm: Towards Delegation Intelligence in Agentic LLMs for Long-Horizon Deep Research
+- [[sources/2026-06-10-is-cot-breaking-the-long-form-generation-collapse-.md]] - IS-CoT: Breaking the Long-form Generation Collapse via Interleaved Structural Thinking
+- [[sources/2026-06-10-what-the-eyes-see-the-llms-miss-exploiting-human-p.md]] - What the Eyes See, the LLMs Miss: Exploiting Human Perception for Adversarial Text Attacks
+- [[sources/2026-06-10-automegakernel-a-statically-checked-agent-harness-.md]] - AutoMegaKernel: A Statically-Checked Agent Harness for Self-Retargeting Megakernel Synthesis
+- [[sources/2026-06-10-gradient-guided-reward-optimization-for-inference-.md]] - Gradient-Guided Reward Optimization for Inference-time Alignment
+- [[sources/2026-06-10-prism-recovering-instruction-sets-from-language-mo.md]] - PRISM: Recovering Instruction Sets from Language Model Activations
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-10-the-neutral-mask-how-rlhf-provides-shallow-alignme.md]] - The Neutral Mask: How RLHF Provides Shallow Alignment while Leaving Partisan Structure Intact in a Large Language Model

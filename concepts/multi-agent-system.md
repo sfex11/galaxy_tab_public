@@ -169,3 +169,7 @@ _자동 생성됨_
 - [[sources/2026-06-08-mlevolve-a-self-evolving-framework-for-automated-m.md]]
 
 - [[sources/2026-06-09-modelling-opinion-dynamics-at-scale-with-deep-marl.md]]
+
+- [[sources/2026-06-10-fase-fast-adaptive-semantic-entropy-for-code-quali.md]]
+
+- [[sources/2026-06-10-collaborative-human-agent-protocol-chap.md]]

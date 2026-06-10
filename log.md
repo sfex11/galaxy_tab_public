@@ -1448,3 +1448,31 @@
 ## [2026-06-09 08:48] ingest | Sycophantic Praise: Evaluating Excessive Praise in Language Models
 
 ## [2026-06-09 08:48] ingest | CAPE: Contrastive Action-conditioned Parallel Encoding for Embodied Planning
+
+## [2026-06-10 08:36] ingest | OmniGameArena: A Unified UE5 Benchmark for VLM Game Agents with Improvement Dynamics
+
+## [2026-06-10 08:36] ingest | Rethinking the Divergence Regularization in LLM RL
+
+## [2026-06-10 08:36] ingest | FASE: Fast Adaptive Semantic Entropy for Code Quality
+
+## [2026-06-10 08:36] ingest | SIGA: Self-Evolving Coding-Agent Adapters for Scientific Simulation
+
+## [2026-06-10 08:36] ingest | iOSWorld: A Benchmark for Personally Intelligent Phone Agents
+
+## [2026-06-10 08:36] ingest | Collaborative Human-Agent Protocol (CHAP)
+
+## [2026-06-10 08:36] ingest | Multi-Turn Evaluation of Deep Research Agents Under Process-Level Feedback
+
+## [2026-06-10 08:36] ingest | SearchSwarm: Towards Delegation Intelligence in Agentic LLMs for Long-Horizon Deep Research
+
+## [2026-06-10 08:36] ingest | IS-CoT: Breaking the Long-form Generation Collapse via Interleaved Structural Thinking
+
+## [2026-06-10 08:36] ingest | What the Eyes See, the LLMs Miss: Exploiting Human Perception for Adversarial Text Attacks
+
+## [2026-06-10 08:36] ingest | AutoMegaKernel: A Statically-Checked Agent Harness for Self-Retargeting Megakernel Synthesis
+
+## [2026-06-10 08:36] ingest | Gradient-Guided Reward Optimization for Inference-time Alignment
+
+## [2026-06-10 08:36] ingest | PRISM: Recovering Instruction Sets from Language Model Activations
+
+## [2026-06-10 08:36] ingest | The Neutral Mask: How RLHF Provides Shallow Alignment while Leaving Partisan Structure Intact in a Large Language Model
