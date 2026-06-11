@@ -1498,3 +1498,39 @@
 ## [2026-06-11 08:34] ingest | Bellman-Taylor Score Decoding for Markov Decision Processes with State-Dependent Feasible Action Sets
 
 ## [2026-06-11 08:34] ingest | Provenance-Grounded Gating and Adaptive Recovery in Synthetic Post-Training Data Curation
+
+## [2026-06-12 08:34] ingest | Context-Driven Incremental Compression for Multi-Turn Dialogue Generation
+
+## [2026-06-12 08:34] ingest | DIRECT: When and Where Should You Allocate Test-Time Compute in Embodied Planners?
+
+## [2026-06-12 08:34] ingest | System Report for CCL25-Eval Task 5: New Dataset and LoRA-Fine-Tuned Qwen2.5
+
+## [2026-06-12 08:34] ingest | TAHOE: Text-to-SQL with Automated Hint Optimization from Experience
+
+## [2026-06-12 08:34] ingest | Which Models Are Our Models Built On? Auditing Invisible Dependencies in Modern LLMs
+
+## [2026-06-12 08:34] ingest | APPO: Agentic Procedural Policy Optimization
+
+## [2026-06-12 08:34] ingest | Verifiable Environments Are LEGO Bricks: Recursive Composition for Reasoning Generalization
+
+## [2026-06-12 08:34] ingest | UniIntervene: Agentic Intervention for Efficient Real-World Reinforcement Learning
+
+## [2026-06-12 08:34] ingest | Doc-to-Atom: Learning to Compile and Compose Memory Atoms
+
+## [2026-06-12 08:34] ingest | VLGA: Vision-Language-Geometry-Action Models for Autonomous Driving
+
+## [2026-06-12 08:34] ingest | Semantically-Aware Diver Activity Recognition Framework for Effective Underwater Multi-Human-Robot Collaboration
+
+## [2026-06-12 08:34] ingest | Breaking Entropy Bounds: Accelerating RL Training via MTP with Rejection Sampling
+
+## [2026-06-12 08:34] ingest | Claw-SWE-Bench: A Benchmark for Evaluating OpenClaw-style Agent Harnesses on Coding Tasks
+
+## [2026-06-12 08:34] ingest | ALIGNBEAM : Inference-Time Alignment Transfer via Cross-Vocabulary Logit Mixing
+
+## [2026-06-12 08:34] ingest | Beyond Fully Random Masking: Attention-Guided Denoising and Optimization for Diffusion Language Models
+
+## [2026-06-12 08:34] ingest | VIA-SD: Verification via Intra-Model Routing for Speculative Decoding
+
+## [2026-06-12 08:34] ingest | Re-evaluating Confidence Remasking in Masked Diffusion Language Models
+
+## [2026-06-12 08:34] ingest | On Subquadratic Architectures: From Applications to Principles

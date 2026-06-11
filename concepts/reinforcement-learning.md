@@ -243,3 +243,11 @@ _자동 생성됨_
 - [[sources/2026-06-11-trace-a-unified-rollout-budget-allocation-framewor.md]]
 
 - [[sources/2026-06-11-bellman-taylor-score-decoding-for-markov-decision-.md]]
+
+- [[sources/2026-06-12-appo-agentic-procedural-policy-optimization.md]]
+
+- [[sources/2026-06-12-verifiable-environments-are-lego-bricks-recursive-.md]]
+
+- [[sources/2026-06-12-uniintervene-agentic-intervention-for-efficient-re.md]]
+
+- [[sources/2026-06-12-breaking-entropy-bounds-accelerating-rl-training-v.md]]

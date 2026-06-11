@@ -720,3 +720,31 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-06-11-bellman-taylor-score-decoding-for-markov-decision-.md]] - Bellman-Taylor Score Decoding for Markov Decision Processes with State-Dependent Feasible Action Sets
 - [[sources/2026-06-11-provenance-grounded-gating-and-adaptive-recovery-i.md]] - Provenance-Grounded Gating and Adaptive Recovery in Synthetic Post-Training Data Curation
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-12-context-driven-incremental-compression-for-multi-t.md]] - Context-Driven Incremental Compression for Multi-Turn Dialogue Generation
+- [[sources/2026-06-12-direct-when-and-where-should-you-allocate-test-tim.md]] - DIRECT: When and Where Should You Allocate Test-Time Compute in Embodied Planners?
+- [[sources/2026-06-12-system-report-for-ccl25-eval-task-5-new-dataset-an.md]] - System Report for CCL25-Eval Task 5: New Dataset and LoRA-Fine-Tuned Qwen2.5
+- [[sources/2026-06-12-tahoe-text-to-sql-with-automated-hint-optimization.md]] - TAHOE: Text-to-SQL with Automated Hint Optimization from Experience
+- [[sources/2026-06-12-which-models-are-our-models-built-on-auditing-invi.md]] - Which Models Are Our Models Built On? Auditing Invisible Dependencies in Modern LLMs
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-12-appo-agentic-procedural-policy-optimization.md]] - APPO: Agentic Procedural Policy Optimization
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-12-verifiable-environments-are-lego-bricks-recursive-.md]] - Verifiable Environments Are LEGO Bricks: Recursive Composition for Reasoning Generalization
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-12-uniintervene-agentic-intervention-for-efficient-re.md]] - UniIntervene: Agentic Intervention for Efficient Real-World Reinforcement Learning
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-12-doc-to-atom-learning-to-compile-and-compose-memory.md]] - Doc-to-Atom: Learning to Compile and Compose Memory Atoms
+- [[sources/2026-06-12-vlga-vision-language-geometry-action-models-for-au.md]] - VLGA: Vision-Language-Geometry-Action Models for Autonomous Driving
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-12-semantically-aware-diver-activity-recognition-fram.md]] - Semantically-Aware Diver Activity Recognition Framework for Effective Underwater Multi-Human-Robot Collaboration
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-12-breaking-entropy-bounds-accelerating-rl-training-v.md]] - Breaking Entropy Bounds: Accelerating RL Training via MTP with Rejection Sampling
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-06-12-claw-swe-bench-a-benchmark-for-evaluating-openclaw.md]] - Claw-SWE-Bench: A Benchmark for Evaluating OpenClaw-style Agent Harnesses on Coding Tasks
+- [[sources/2026-06-12-alignbeam-inference-time-alignment-transfer-via-cr.md]] - ALIGNBEAM : Inference-Time Alignment Transfer via Cross-Vocabulary Logit Mixing
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-12-beyond-fully-random-masking-attention-guided-denoi.md]] - Beyond Fully Random Masking: Attention-Guided Denoising and Optimization for Diffusion Language Models
+- [[sources/2026-06-12-via-sd-verification-via-intra-model-routing-for-sp.md]] - VIA-SD: Verification via Intra-Model Routing for Speculative Decoding
+- [[sources/2026-06-12-re-evaluating-confidence-remasking-in-masked-diffu.md]] - Re-evaluating Confidence Remasking in Masked Diffusion Language Models
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-12-on-subquadratic-architectures-from-applications-to.md]] - On Subquadratic Architectures: From Applications to Principles
