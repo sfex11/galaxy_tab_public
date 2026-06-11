@@ -239,3 +239,7 @@ _자동 생성됨_
 - [[sources/2026-06-10-rethinking-the-divergence-regularization-in-llm-rl.md]]
 
 - [[sources/2026-06-10-the-neutral-mask-how-rlhf-provides-shallow-alignme.md]]
+
+- [[sources/2026-06-11-trace-a-unified-rollout-budget-allocation-framewor.md]]
+
+- [[sources/2026-06-11-bellman-taylor-score-decoding-for-markov-decision-.md]]

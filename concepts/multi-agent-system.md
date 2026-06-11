@@ -173,3 +173,7 @@ _자동 생성됨_
 - [[sources/2026-06-10-fase-fast-adaptive-semantic-entropy-for-code-quali.md]]
 
 - [[sources/2026-06-10-collaborative-human-agent-protocol-chap.md]]
+
+- [[sources/2026-06-11-monte-carlo-pass-search-using-trajectory-generatio.md]]
+
+- [[sources/2026-06-11-the-shibboleth-effect-auditing-the-cross-lingual-d.md]]

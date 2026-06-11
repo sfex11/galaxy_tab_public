@@ -1476,3 +1476,25 @@
 ## [2026-06-10 08:36] ingest | PRISM: Recovering Instruction Sets from Language Model Activations
 
 ## [2026-06-10 08:36] ingest | The Neutral Mask: How RLHF Provides Shallow Alignment while Leaving Partisan Structure Intact in a Large Language Model
+
+## [2026-06-11 08:34] ingest | EEVEE: Towards Test-time Prompt Learning in the Real World for Self-Improving Agents
+
+## [2026-06-11 08:34] ingest | Data Journalist Agent: Transforming Data into Verifiable Multimodal Stories
+
+## [2026-06-11 08:34] ingest | Flaws in the LLM Automation Narrative
+
+## [2026-06-11 08:34] ingest | ReasonAlloc: Hierarchical Decoding-Time KV Cache Budget Allocation for Reasoning Models
+
+## [2026-06-11 08:34] ingest | ABC-Bench: An Agentic Bio-Capabilities Benchmark for Biosecurity
+
+## [2026-06-11 08:34] ingest | Monte Carlo Pass Search: Using Trajectory Generation for 3D Counterfactual Pass Evaluation in Football
+
+## [2026-06-11 08:34] ingest | TRACE: A Unified Rollout Budget Allocation Framework for Efficient Agentic Reinforcement Learning
+
+## [2026-06-11 08:34] ingest | Towards Autonomous Accelerator Design: FPGA Accelerator Generation with SECDA
+
+## [2026-06-11 08:34] ingest | The Shibboleth Effect: Auditing the Cross-Lingual Distributional Skew of Large Language Models
+
+## [2026-06-11 08:34] ingest | Bellman-Taylor Score Decoding for Markov Decision Processes with State-Dependent Feasible Action Sets
+
+## [2026-06-11 08:34] ingest | Provenance-Grounded Gating and Adaptive Recovery in Synthetic Post-Training Data Curation

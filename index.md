@@ -703,3 +703,20 @@
 - [[sources/2026-06-10-prism-recovering-instruction-sets-from-language-mo.md]] - PRISM: Recovering Instruction Sets from Language Model Activations
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-06-10-the-neutral-mask-how-rlhf-provides-shallow-alignme.md]] - The Neutral Mask: How RLHF Provides Shallow Alignment while Leaving Partisan Structure Intact in a Large Language Model
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-11-eevee-towards-test-time-prompt-learning-in-the-rea.md]] - EEVEE: Towards Test-time Prompt Learning in the Real World for Self-Improving Agents
+- [[sources/2026-06-11-data-journalist-agent-transforming-data-into-verif.md]] - Data Journalist Agent: Transforming Data into Verifiable Multimodal Stories
+- [[sources/2026-06-11-flaws-in-the-llm-automation-narrative.md]] - Flaws in the LLM Automation Narrative
+- [[sources/2026-06-11-reasonalloc-hierarchical-decoding-time-kv-cache-bu.md]] - ReasonAlloc: Hierarchical Decoding-Time KV Cache Budget Allocation for Reasoning Models
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-11-abc-bench-an-agentic-bio-capabilities-benchmark-fo.md]] - ABC-Bench: An Agentic Bio-Capabilities Benchmark for Biosecurity
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-11-monte-carlo-pass-search-using-trajectory-generatio.md]] - Monte Carlo Pass Search: Using Trajectory Generation for 3D Counterfactual Pass Evaluation in Football
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-11-trace-a-unified-rollout-budget-allocation-framewor.md]] - TRACE: A Unified Rollout Budget Allocation Framework for Efficient Agentic Reinforcement Learning
+- [[sources/2026-06-11-towards-autonomous-accelerator-design-fpga-acceler.md]] - Towards Autonomous Accelerator Design: FPGA Accelerator Generation with SECDA
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-11-the-shibboleth-effect-auditing-the-cross-lingual-d.md]] - The Shibboleth Effect: Auditing the Cross-Lingual Distributional Skew of Large Language Models
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-11-bellman-taylor-score-decoding-for-markov-decision-.md]] - Bellman-Taylor Score Decoding for Markov Decision Processes with State-Dependent Feasible Action Sets
+- [[sources/2026-06-11-provenance-grounded-gating-and-adaptive-recovery-i.md]] - Provenance-Grounded Gating and Adaptive Recovery in Synthetic Post-Training Data Curation
