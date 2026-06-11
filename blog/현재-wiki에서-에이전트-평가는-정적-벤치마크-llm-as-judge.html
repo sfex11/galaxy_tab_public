@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이전트 평가의 패러다임 전환: 고정 점수에서 수렴 역학으로</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7470;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 4px 16px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 1.6vw, 17.5px);
+    line-height: 1.85;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgba(194,112,62,0.18);
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 1.4vw, 16px);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── Article Body ── */
+  .article-body {
+    padding-bottom: clamp(64px, 10vw, 120px);
+  }
+
+  .article-body h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(21px, 3.2vw, 28px);
+    font-weight: 700;
+    color: var(--fg);
+    margin: clamp(40px, 6vw, 64px) 0 clamp(16px, 2vw, 24px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .article-body h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .article-body h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(17px, 2.2vw, 20px);
+    font-weight: 600;
+    color: var(--fg);
+    margin: clamp(28px, 4vw, 40px) 0 clamp(10px, 1.5vw, 16px);
+    line-height: 1.4;
+  }
+
+  .article-body p {
+    margin-bottom: clamp(14px, 2vw, 20px);
+    color: var(--fg);
+    opacity: 0.88;
+  }
+
+  .article-body strong {
+    font-weight: 600;
+    color: var(--fg);
+    opacity: 1;
+  }
+
+  .accent-orange { color: var(--accent); font-weight: 600; opacity: 1; }
+  .accent-blue { color: var(--blue); font-weight: 600; opacity: 1; }
+  .accent-green { color: var(--green); font-weight: 600; opacity: 1; }
+
+  /* ── Blockquote ── */
+  .article-body blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: clamp(20px, 3vw, 32px) auto;
+    padding: clamp(14px, 2vw, 20px) clamp(16px, 3vw, 28px);
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 1.4vw, 16px);
+    line-height: 1.8;
+    color: var(--fg);
+    opacity: 0.82;
+    font-style: italic;
+  }
+
+  .article-body blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--muted);
+    opacity: 0.8;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: clamp(16px, 2.5vw, 24px) 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(15px, 1.8vw, 17px);
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .card p {
+    margin-bottom: 0;
+    font-size: clamp(13.5px, 1.4vw, 15.5px);
+    line-height: 1.8;
+    opacity: 0.8;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── List ── */
+  .article-body ul, .article-body ol {
+    margin: clamp(10px, 1.5vw, 16px) 0 clamp(16px, 2vw, 24px);
+    padding-left: clamp(20px, 3vw, 28px);
+  }
+
+  .article-body li {
+    margin-bottom: clamp(8px, 1.2vw, 14px);
+    opacity: 0.85;
+    line-height: 1.75;
+  }
+
+  .article-body li strong {
+    opacity: 1;
+  }
+
+  /* ── Highlight Box ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.06), rgba(107,158,122,0.06));
+    border: 1px solid rgba(91,124,153,0.1);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: clamp(20px, 3vw, 32px) 0;
+  }
+
+  .highlight-box p {
+    margin-bottom: 0;
+    opacity: 0.85;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  /* ── Inline Tag ── */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin: 0 2px;
+    vertical-align: baseline;
+  }
+
+  .tag-orange { background: rgba(194,112,62,0.1); color: var(--accent); }
+  .tag-blue { background: rgba(91,124,153,0.1); color: var(--blue); }
+  .tag-green { background: rgba(107,158,122,0.1); color: var(--green); }
+
+  /* ── Table ── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: clamp(16px, 2.5vw, 24px) 0;
+    font-size: clamp(13px, 1.3vw, 14.5px);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(44,40,37,0.06);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+  }
+
+  .comparison-table thead th {
+    background: rgba(44,40,37,0.03);
+    font-weight: 600;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .comparison-table tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .comparison-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.06);
+    padding: clamp(24px, 4vw, 40px) 0;
+    text-align: center;
+  }
+
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .footer-tag {
+    font-size: 12px;
+    color: var(--muted);
+    background: rgba(44,40,37,0.04);
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-weight: 400;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted);
+    opacity: 0.6;
+    line-height: 1.6;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(16px, 2.5vw, 24px);
+    margin: clamp(20px, 3vw, 36px) 0 clamp(32px, 5vw, 56px);
+    box-shadow: var(--card-shadow);
+  }
+
+  .toc-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc-counter;
+  }
+
+  .toc ol li {
+    counter-increment: toc-counter;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .toc ol li a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 0;
+    text-decoration: none;
+    color: var(--fg);
+    opacity: 0.7;
+    font-size: 14px;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .toc ol li a:hover {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .toc ol li a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    opacity: 0.5;
+    min-width: 18px;
+  }
+
+  /* ── Nav ── */
+  nav a {
+    transition: background 0.2s, color 0.2s;
+  }
+  nav a:hover {
+    background: rgba(194,112,62,0.08) !important;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .comparison-table {
+      font-size: 12px;
+    }
+    .comparison-table thead th,
+    .comparison-table tbody td {
+      padding: 8px 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge">Deep Analysis</div>
+    <h1>사진 한 장으로 사람을 평가할 수 없듯,<br>에이전트도 스냅샷 하나로 불충분하다</h1>
+    <p class="hero-sub">정적 벤치마크에서 '수렴 역학'으로: 딥 리서치 에이전트 평가의 필연적 패러다임 전환을 짚어본다</p>
+    <div class="hero-meta">
+      <span>📖 대상 논문: Multi-Turn Evaluation of Deep Research Agents Under Process-Level Feedback</span>
+      <span>·</span>
+      <span>2025년 7월</span>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#s1">스냅샷 평가의 함정: 운전면허 적성검사 비유</a></li>
+      <li><a href="#s2">수렴 역학의 골격: 이미 존재하는 네 개의 조각</a></li>
+      <li><a href="#s3">자기 성찰 vs. 외부 지도: 두 수렴 경로의 미세한 차이</a></li>
+      <li><a href="#s4">융합 발견: 신념 궤적이 보상이 되는 순간</a></li>
+      <li><a href="#s5">결론: 점수에서 궤적으로, 벤치마크에서 진화로</a></li>
+    </ol>
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <p>운전면허 적성검사를 생각해 보자. 시력, 청력, 색각 이상 여부를 확인하는 10분짜리 검사다. 이 검사에서 만점을 받았다고 해서 실제 도로 위에서 안전하게 운전할 수 있다고 확신할 수 있는가? 당연히 아니다. 운전이란 <strong>상황을 인식하고, 판단을 내리고, 행동을 취한 뒤, 그 결과를 보고 다시 적응하는</strong> 연속적인 루프이기 때문이다.</p>
+
+    <p>AI 에이전트 평가도 지금 정확히 같은 함정에 빠져 있다. 정적 벤치마크, LLM-as-judge, 통계적 인증—현재의 모든 주류 평가 방식은 에이전트의 <span class="accent-orange">단일 출력 스냅샷</span>을 찍어 점수를 매기는 적성검사와 다르지 않다. 그런데 딥 리서치 에이전트는 한 번 답을 내고 끝나는 존재가 아니다. 탐색하고, 판단하고, 다시 탐색하며 출력을 반복 개선하는 <strong>다중 턴 루프</strong>를 돌린다.</p>
+
+    <blockquote>
+      에이전트 능력을 '고정된 성능 점수'가 아닌 '피드백 루프의 수렴 역학'으로 재정의해야 하지 않는가?
+      <cite>— Wiki Query 핵심 질문</cite>
+    </blockquote>
+
+    <p>이 질문은 단순한 이론적 바람이 아니다. 여러 연구선에서 구조적으로 요구되고 있는 <strong>필연적 재정의</strong>다. 지금부터 왜 그런지, 그리고 어떻게 전환해야 하는지를 파고들어 보겠다.</p>
+
+    <hr class="divider">
+
+    <!-- Section 1 -->
+    <h2 id="s1">스냅샷 평가의 함정: 운전면허 적성검사 비유</h2>
+
+    <p>현재 Wiki에 축적된 지식은 정적 벤치마크의 한계를 이미 여러 각도에서 실증하고 있다. 문제를 세 가지 층위로 나누어 보자.</p>
+
+    <h3>층위 1: 명세-실제 간극</h3>
+
+    <p>Wiki의 <span class="tag tag-orange">benchmark-specification-gap</span> 엔티티가 가리키는 것은 벤치마크가 "측정하려는 것"과 "실제로 측정하는 것" 사이의 구조적 간극이다. <em>Flaws in the LLM Automation Narrative</em> 논문은 이 간극의 실증적 증거를 제시한다: LLM이 벤치마크에서 "전문가 수준" 점수를 받았다는 주장이, 실제 지식 경제 과업에서는 성립하지 않는다는 것이다.</p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🔍</span> 비유 확장</div>
+      <p>적성검사에서 시력 1.0을 증명받은 사람이, 실제 복잡한 교차로에서는 보행자와 자전거를 동시에 처리하지 못하는 상황과 정확히 같다. 벤치마크는 "시력"을 측정했을 뿐, "상황 처리 능력"을 측정하지 못한 것이다.</p>
+    </div>
+
+    <h3>층위 2: 평가 불가능 영역의 출현</h3>
+
+    <p>더 극단적인 사례가 있다. <span class="tag tag-blue">benchmarkless-comparative-safety-scoring</span>과 <span class="tag tag-blue">acceptable-risk-quantification</span>에 연결된 <em>When No Benchmark Exists</em> 논문은, 안전성 평가조차 기존 벤치마크 방식으로는 불가능하다고 지적한다. 정답이 없고, 정답을 정의할 수조차 없는 영역에서는 "정답률"이라는 개념 자체가 무의미해진다.</p>
+
+    <p>이 논문이 제안하는 <strong>비교적 안전 점수(Comparative Safety Score)</strong>는 점수 체계를 근본적으로 재설계한 것이다. "이 에이전트가 얼마나 안전한가"가 아니라 "이 에이전트가 저 에이전트보다 얼마나 더 안전한가"를 측정하는 방식으로의 전환은, 정적 평가 틀 자체가 붕괴 지점에 도달했음을 보여준다.</p>
+
+    <h3>층위 3: 규제가 요구하는 분포 수준 평가</h3>
+
+    <p><span class="tag tag-green">ai-risk-regulation</span>에 연결된 <em>Bounding the Black Box</em> 논문은 EU AI Act와 NIST RMF의 규제 요구를 분석하며, "사전 안전 증명"으로서 통계적 인증을 제안한다. 중요한 점은 이 인증이 단일 출력 스냅샷에 대한 것이 아니라 <strong>분포 전체에 대한 통계적 바운드</strong>를 요구한다는 것이다.</p>
+
+    <p>"이 에이전트가 이번 한 번은 안전하게 답했다"가 아니라, "이 에이전트가 10,000번의 출력에서 안전성의 하한선이 어디인가"를 보여야 한다는 것이다. 이것은 이미 수렴 역학적 사고의 seed다.</p>
+
+    <hr class="divider">
+
+    <!-- Section 2 -->
+    <h2 id="s2">수렴 역학의 골격: 이미 존재하는 네 개의 조각</h2>
+
+    <p>그렇다면 "수렴 역학"으로의 전환은 백지에서 시작해야 하는가? 다행히 아니다. Wiki 내에 그 골격이 될 개념들이 이미 산재해 있다. 네 개의 조각을 살펴보자.</p>
+
+    <h3>조각 1: 루프로서의 평가</h3>
+
+    <p><span class="tag tag-orange">closed-loop-evaluation</span>은 정적 평가와 가장 직접적으로 대비되는 개념이다. 에이전트가 환경과 상호작용하며 출력을 반복 수정하는 <strong>루프 전체를 평가 단위</strong>로 삼는다. 딥 리서치 에이전트의 "탐색→판단→재탐색" 사이클을 평가하려면 이 프레임이 필수적이다.</p>
+
+    <p>다시 비유하자면, 적성검사 대신 <strong>실제 도로 주행 시험</strong>을 도입하는 것과 같다. 출발에서 도착까지의 전체 과정을 하나의 평가 단위로 삼는 것이다.</p>
+
+    <h3>조각 2: 신념 변화를 보상 신호로</h3>
+
+    <p><span class="tag tag-blue">belief-drift-as-reward-signal</span>이 수렴 역학의 가장 정교한 형태다. 에이전트의 내부 신념 상태가 턴마다 어떻게 변화하는지—그 변화가 수렴(개선)을 향하는지 발산(혼란)을 향하는지—를 보상 신호로 삼는다.</p>
+
+    <p>이것은 최종 출력의 품질이 아니라 <strong>수렴 궤적의 형태</strong> 자체를 평가 대상으로 삼는 것이다. 마치 운전 학원에서 "시험 합격/불합격"이 아니라 "매 주차별로 코너링 각도가 어떻게 개선되었는가"를 기록하는 것과 같다.</p>
+
+    <h3>조각 3: 런타임 정렬의 실증</h3>
+
+    <p><span class="tag tag-green">agora-opt</span> 논문은 다중 에이전트가 런타임 메모리와 토론 구조를 통해 정렬을 달성하는 과정을 보여준다. 여기서 핵심은 정렬이 학습 시점에 고정된 것이 아니라 <strong>런타임 토론의 반복적 역학 속에서 emerges</strong>한다는 점이다.</p>
+
+    <p>이를 평가하려면 "토론 턴 수 대비 정렬 수렴 속도" 같은 메트릭이 필요하다. 정적 벤치마크로는 이것을 포착할 수 없다. 토론의 1차 발언만 보고 평가하는 것은, 회의의 결론만 보고 "생산적인 회의였다"고 판단하는 것과 같은 오류다.</p>
+
+    <h3>조각 4: 추론 시점 적응의 증거들</h3>
+
+    <p>Wiki의 최신 논문들은 이 방향을 더욱 강력히 지원한다.</p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> EEVEE: 테스트 타임에서 스스로 개선하는 에이전트</div>
+      <p><em>EEVEE</em>는 "실세계 작업 스트림 하에서 테스트 타임 프롬프트 학습"을 최초로 제안한다. 에이전트가 테스트 시점에 프롬프트를 스스로 개선하는 능력을 평가하려면, 초기 출력과 최종 출력 사이의 <strong>개선 폭과 수렴 속도</strong>가 핵심 지표가 되어야 한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> Gradient-Guided Reward Optimization</div>
+      <p>분포 드리프트 하에서 추론 시점 적응이 필요함을 논하며, Best-of-N이나 rejection sampling 같은 정적 선택이 아닌 <strong>추론 중 동적 적응</strong>을 지향한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> TRACE: 롤아웃 예산 분배 프레임워크</div>
+      <p>RLVR에서 롤아웃 예산을 어떻게 분배하느냐가 학습 효율을 결정함을 보여준다. 평가 측면에서 이것은 <strong>"주어진 턴 예산 내에서 얼마나 빠르게 수렴하는가"</strong>가 핵심 질문이 됨을 시사한다.</p>
+    </div>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th style="width:28%">기존 패러다임</th>
+          <th style="width:36%">수렴 역학 패러다임</th>
+          <th style="width:36%">비유</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>단일 출력의 품질 측정</td>
+          <td>다중 턴 궤적의 수렴 분석</td>
+          <td>사진 한 장 vs. 영상 전체</td>
+        </tr>
+        <tr>
+          <td>정답률 / F1 점수</td>
+          <td>수렴 속도, 수렴 깊이, 안정성</td>
+          <td>시험 점수 vs. 학습 곡선</td>
+        </tr>
+        <tr>
+          <td>고정된 프롬프트 하에서 평가</td>
+          <td>프롬프트 자체가 적응하는 과정 평가</td>
+          <td>정해진 경로 주행 vs. 상황별 경로 수정</td>
+        </tr>
+        <tr>
+          <td>최종 출력만 검사</td>
+          <td>신념 상태의 턴별 변화 추적</td>
+          <td>결과만 보고 평가 vs. 과정 로그 분석</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- Section 3 -->
+    <h2 id="s3">자기 성찰 vs. 외부 지도: 두 수렴 경로의 미세한 차이</h2>
+
+    <p>원문 질문이 제기한 "자기 성찰 vs. 외부 지도"의 구분은 수렴 역학 평가를 더 세분화한다. 두 경로는 메커니즘도 다르지만, 평가해야 할 지표도 다르다.</p>
+
+    <h3>자기 성찰 루프: 내부에서 수렴하는 경로</h3>
+
+    <p>에이전트가 자체 출력을 비판하고 개선하는 루프다. <span class="tag tag-blue">belief-drift-as-reward-signal</span>이 여기에 가장 밀접하게 연결된다. 하지만 자기 성찰에는 치명적인 함정이 있다: <strong>자기 성찰이 실제로 개선으로 이어지는지, 아니면 자기 합리화의 늪으로 빠지는지</strong>를 구분해야 한다.</p>
+
+    <p><em>PRISM</em> 논문이 "에이전트가 어떤 지시에 의해 행동이 조종되는지"를 모니터링해야 한다고 주장하는 것도 이 맥락이다. 자기 성찰 루프가 실제로 의도된 방향으로 수렴하는지 감사(audit)하려는 시도다.</p>
+
+    <blockquote>
+      자기 성찰은 자전거의 자가 균형 기구와 같다. 잘 작동하면 스스로 넘어지지 않지만, 고장 나면 넘어지고 있다는 사실조차 인식하지 못한다.
+    </blockquote>
+
+    <h3>외부 지도 루프: 환경에서 수렴하는 경로</h3>
+
+    <p>환경 피드백, 검증자(verifier), 또는 인간 피드백 하에서의 개선 경로다. 여기서의 핵심 문제는 <strong>수렴의 깊이</strong>다.</p>
+
+    <p><em>The Neutral Mask</em> 논문이 RLHF가 "얕은 정렬(shallow alignment)"만 제공하고 당파적 구조를 그대로 둔다고 비판하는 것은, 외부 지도 피드백이 표면적인 수렴만 유도하고 근본적인 변화를 이끌어내지 못함을 의미한다. 비유하자면, 코치의 지도에 따라 폼은 일시적으로 바뀌었지만 근육의 불균형은 그대로인 상태다.</p>
+
+    <div class="highlight-box">
+      <p><strong>핵심 구분:</strong> 자기 성찰 루프에서는 <span class="accent-blue">"수렴이 실제 개선인지 자기 합리화인지"</span>를 판별하는 메트릭이 필요하고, 외부 지도 루프에서는 <span class="accent-green">"수렴이 표면적 수준인지 구조적 수준인지"</span>를 측정하는 메트릭이 필요하다. 두 루프에 같은 지표를 적용하면 안 된다.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 4 -->
+    <h2 id="s4">융합 발견: 신념 궤적이 보상이 되는 순간</h2>
+
+    <p>이 분석 과정에서 가장 흥미로운 발견은 <span class="tag tag-orange">closed-loop-evaluation</span>과 <span class="tag tag-blue">belief-drift-as-reward-signal</span>의 융합 가능성이다. 두 엔티티는 현재 Wiki 내에서 독립적으로 존재하지만, 결합하면 강력한 새로운 평가 프레임이 된다.</p>
+
+    <h3>융합 아이디어: "평가 루프 내에서 신념 변화 궤적을 보상 신호로 사용"</h3>
+
+    <p>구체적으로 상상해 보자. 딥 리서치 에이전트에게 복잡한 연구 질문을 던진다. 에이전트는 N턴에 걸쳐 탐색-판단-재탐색 루프를 돌린다. 기존 방식이라면 최종 출력만 채점한다. 하지만 융합 프레임에서는 다음을 추적한다:</p>
+
+    <ol>
+      <li><strong>턴 t에서 턴 t+1로의 신념 벡터 변화량</strong> — 얼마나 크게 생각이 바뀌었는가</li>
+      <li><strong>신념 변화의 방향성</strong> — 정답에 가까워지는 방향인가, 멀어지는 방향인가</li>
+      <li><strong>변화량의 감소 추세</strong> — 수렴하고 있는가 (안정화), 아니면 발산하는가</li>
+      <li><strong>최종 수렴점의 품질</strong> — 안정화된 신념이 실제로 타당한가</li>
+    </ol>
+
+    <p>이 네 가지를 종합하면 단일 점수가 아니라 <strong>수렴 프로파일(convergence profile)</strong>이라는 다차원적 평가 결과가 나온다.</p>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 수렴 프로파일의 예시</div>
+      <p><strong>에이전트 A:</strong> 초기 급격한 신념 변화 → 3턴 만에 안정화 → 높은 최종 품질. <span class="accent-green">"빠른 수렴, 높은 도달점"</span><br>
+      <strong>에이전트 B:</strong> 완만한 신념 변화 → 8턴에 안정화 → 중간 최종 품질. <span class="accent-blue">"느린 수렴, 중간 도달점"</span><br>
+      <strong>에이전트 C:</strong> 불규칙한 신념 변화 → 안정화되지 않음 → 최종 품질 편차 큼. <span class="accent-orange">"발산, 불안정"</span></p>
+      <p style="margin-top:10px;">세 에이전트가 최종 출력만 보면 비슷한 점수를 받을 수 있다. 하지만 수렴 프로파일을 보면 완전히 다른 존재임이 드러난다.</p>
+    </div>
+
+    <p>이것이 바로 "고정된 성능 점수"에서 "피드백 루프의 수렴 역학"으로 재정의해야 하는 구체적 이유다. 단일 점수는 세 에이전트를 구분할 수 없지만, 수렴 프로파일은 할 수 있다.</p>
+
+    <hr class="divider">
+
+    <!-- Section 5 -->
+    <h2 id="s5">결론: 점수에서 궤적으로, 벤치마크에서 진화로</h2>
+
+    <p>지금까지의 분석을 하나의 그림으로 압축해 보겠다.</p>
+
+    <p>현재의 에이전트 평가는 <strong>사진 촬영</strong>이다. 특정 순간의 상태를 포착해 점수를 매긴다. 하지만 딥 리서치 에이전트는 <strong>영상</strong>으로 봐야 하는 존재다. 시간의 흐름에 따라 어떻게 변화하는지, 그 궤적이 수렴하는지 발산하는지, 수렴한다면 얼마나 빠르고 깊게 수렴하는지를 봐야 한다.</p>
+
+    <p>이 전환은 세 가지 차원에서 일어나야 한다.</p>
+
+    <h3>차원 1: 평가 단위의 전환</h3>
+    <p>단일 출력 → <strong>다중 턴 루프 전체</strong>. <span class="tag tag-orange">closed-loop-evaluation</span>이 제공하는 프레임을 딥 리서치 에이전트에 정식으로 도입해야 한다.</p>
+
+    <h3>차원 2: 평가 지표의 전환</h3>
+    <p>정답률/F1 → <strong>수렴 속도, 수렴 깊이, 궤적 안정성</strong>. <span class="tag tag-blue">belief-drift-as-reward-signal</span>을 보상 신호로 삼아 수렴 프로파일을 구성해야 한다. 여기에 자기 성찰 루프와 외부 지도 루프에 각각 다른 하위 지표를 적용한다.</p>
+
+    <h3>차원 3: 평가 철학의 전환</h3>
+    <p>"이 에이전트는 얼마나 똑똑한가" → <strong>"이 에이전트는 피드백을 받으면 얼마나 잘 변하는가"</strong>. 능력을 고정된 속성이 아니라 <strong>적응적 과정</strong>으로 conceptualize하는 전환이다. <span class="tag tag-green">agora-opt</span>가 보여준 런타임 정렬, <em>EEVEE</em>가 보여준 테스트 타임 학습 모두 이 철학의 실증이다.</p>
+
+    <blockquote>
+      진화생물학이 "종의 적합도"를 고정된 특성이 아니라 환경과의 상호작용 속에서 emerges하는 과정으로 이해하게 된 것처럼, 에이전트 평가도 "고정된 성능 점수"에서 "피드백 루프의 수렴 역학"으로 이해하는 패러다임 전환을 맞이하고 있다.
+    </blockquote>
+
+    <p>이 전환은 선택이 아니다. 딥 리서치 에이전트가 점점 더 다중 턴, 다중 도구, 다중 에이전트 협력 구조를 채택할수록, 단일 스냅샷 평가는 측정 불능 영역으로 밀려난다. <em>When No Benchmark Exists</em>가 안전성 영역에서 경고한 것과 같은 붕괴가, 곧 능력 평가 영역에서도 일어날 것이다.</p>
+
+    <p>그러니 지금, 수렴 역학의 언어와 도구를 만드는 것이 필수적이다. <span class="tag tag-orange">closed-loop-evaluation</span>과 <span class="tag tag-blue">belief-drift-as-reward-signal</span>의 융합에서 시작해서, 자기 성찰과 외부 지도의 미세한 차이를 포착하는 하위 메트릭을 개발하고, 최종적으로는 수렴 프로파일을 표준 평가 산출물로 자리잡게 하는 것—그것이 다음 세대 에이전트 평가의 과제다.</p>
+
+    <p>사진 한 장으로 사람을 평가할 수 없듯, 스냅샷 하나로 에이전트를 평가할 수 없다. 영상을 보자. 궤적을 보자. 수렴을 보자.</p>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <div class="footer-tags">
+      <span class="footer-tag">Agent Evaluation</span>
+      <span class="footer-tag">Deep Research</span>
+      <span class="footer-tag">Process-Level Feedback</span>
+      <span class="footer-tag">Convergence Dynamics</span>
+      <span class="footer-tag">Multi-Turn</span>
+      <span class="footer-tag">Closed-Loop</span>
+      <span class="footer-tag">Belief Drift</span>
+    </div>
+    <p class="footer-note">본 글은 Wiki Query 결과와 연결된 논문들을 기반으로 작성된 심층 분석입니다.<br>대상 논문: Multi-Turn Evaluation of Deep Research Agents Under Process-Level Feedback</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
