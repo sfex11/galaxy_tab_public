@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-12-appo-agentic-procedural-policy-optimization]]: 두 논문 모두 LLM 에이전트를 위한 강화 학습의 효율성을 개선하는 것을 목표로 하며, 하나는 롤아웃 예산 할당을, 다른 하나는 절차적 크레딧 할당을 다룹니다.
+- → [[sources/2026-06-12-verifiable-environments-are-lego-bricks-recursive-]]: 두 논문 모두 검증 가능한 환경을 활용한 LLM 추론 강화 학습을 다루며, 하나는 롤아웃 예산의 효율적 할당을, 다른 하나는 환경의 재귀적 합성을 제안합니다.

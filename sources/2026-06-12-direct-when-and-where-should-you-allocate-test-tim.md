@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-12-vlga-vision-language-geometry-action-models-for-au]]: 두 논문 모두 임베디드 에이전트의 능력을 향상시키는 것을 다루며, 하나는 테스트 타임 컴퓨트 할당을, 다른 하나는 3D 기하학을 통합한 VLA 모델을 제안합니다.
+- → [[sources/2026-06-12-uniintervene-agentic-intervention-for-efficient-re]]: 두 논문 모두 임베디드/로봇 에이전트의 실세계 성능을 개선하기 위해 개입 전략을 최적화하며, 하나는 인간 개입 빈도를 줄이고 다른 하나는 테스트 타임 컴퓨트를 효율적으로 할당합니다.

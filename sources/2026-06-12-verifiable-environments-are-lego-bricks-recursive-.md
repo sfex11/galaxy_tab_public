@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-11-trace-a-unified-rollout-budget-allocation-framewor]]: 두 논문 모두 검증 가능한 환경을 활용한 LLM 추론 강화 학습을 다루며, 하나는 롤아웃 예산의 효율적 할당을, 다른 하나는 환경의 재귀적 합성을 제안합니다.
+- → [[sources/2026-06-12-appo-agentic-procedural-policy-optimization]]: 두 논문 모두 LLM의 에이전트적 강화 학습을 통해 추론 능력을 향상시키며, 하나는 정책 최적화의 크레딧 할당을, 다른 하나는 훈련 환경의 구성 방식을 개선합니다.

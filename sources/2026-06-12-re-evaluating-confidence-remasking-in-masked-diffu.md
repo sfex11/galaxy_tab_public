@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-12-beyond-fully-random-masking-attention-guided-denoi]]: 두 논문 모두 마스크 디퓨전 언어 모델(dLLM)의 토큰 마스킹 및 리마스킹 전략을 개선하여 병렬 생성 품질을 향상시키는 것에 초점을 맞춥니다.

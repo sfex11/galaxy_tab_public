@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIRECT: When and Where Should You Allocate Test-Time Compute — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;gap:1.5rem;">
+      <span class="tag tag-amber">cs.RO · 2025</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3rem);text-align:center;line-height:1.3;font-weight:700;">DIRECT</h1>
+      <p style="font-size:clamp(1rem,2vw,1.4rem);text-align:center;max-width:700px;line-height:1.6;" class="muted">구현 플래너에서 테스트타임 연산을<br>언제, 어디에 할당해야 하는가?</p>
+      <div class="hr" style="max-width:200px;"></div>
+      <p style="font-size:clamp(0.8rem,1.4vw,1rem);text-align:center;" class="muted">Jadelynn Dao, Milan Ganai, Yasmina Abukhadra, Ajay Sridhar 외 · Stanford University</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-amber">배경</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">VLM 기반 구현 플래너의 부상</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.8;margin-top:1rem;">
+      시각-언어 모델(VLM)이 로봇의 <span class="accent">고수준 플래너</span>로 널리 활용되고 있습니다. 추상적인 지시를 실행 가능한 하위 스킬로 분해하여 저수준 정책과 결합하는 계층적 구조가 표준으로 자리 잡고 있습니다.
+    </p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">추세: 테스트타임 연산 확장</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.7;margin-top:0.5rem;" class="muted">추론 시 연산량을 늘려 성능을 끌어올리는 전략이 각광받고 있음</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">현실: 비용만 급증</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.7;margin-top:0.5rem;" class="muted">지연 시간, 토큰 사용량, FLOPs가 증가하면서 실제 로봇 배포가 제한됨</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 정의</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">무조건적인 연산 확장은 낭비다</h2>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);line-height:1.8;">
+        "Thinking 모델은 <span class="accent">3.8배 더 느리면서도</span> 동일한 성공률을 보인다. 테스트타임 비용은 로봇이 배포될 수 있는 영역을 좁힌다."
+      </p>
+    </div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="big-num">3.8×</div>
+      <div style="display:flex;flex-direction:column;justify-content:center;">
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);" class="muted">지연 시간 증가</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);" class="muted">동일 성공률 하에서</p>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;">
+        <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);" class="muted">토큰 · FLOPs 급증</p>
+        <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);" class="muted">한계 수익 체감</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1.5rem;">
+      핵심 질문: <span class="accent">언제, 어디서 연산을 써야 하는가?</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">세 가지 축</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">테스트타임 연산의 세 가지 확장 축</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;" class="muted">각 축은 질적으로 다른 능력 향상을 제공하며, 균일한 레버가 아님</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="display:flex;flex-direction:column;gap:0.8rem;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">사고연쇄 깊이</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;" class="muted">암묵적 의미·물리·공간 제약이 있는 작업에 유효</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:0.8rem;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">모델 크기</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;" class="muted">플래너가 명령할 수 있는 스킬의 폭을 결정</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:0.8rem;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">메모리 이력</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;" class="muted">이력 의존적 작업에 도움, 단순 작업에서는 오히려 해로움</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">축 1</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">사고연쇄 깊이: 깊이 vs. 지연</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;">
+      VLABench에서 Qwen3-VL 8B의 <span class="accent">Instruct vs. Thinking</span> 비교
+    </p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">관찰</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Thinking이 평균 성능은 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하지만 <span class="accent">44%의 작업</span>에서 Instruct가 동등 또는 우수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>해당 작업에서 지연은 <span class="accent2">2% 미만</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">시사점</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.8;margin-top:0.8rem;">
+          많은 장면에서 추론 모델이 <span class="accent">불필요한 비용</span>을 발생시키며, 실시간 로봇 운영에서는 특히 문제가 됨
+        </p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);">
+        <span class="big-num" style="display:inline;">44%</span> 의 작업에서 저비용 모델이 고비용 모델과 동등 이상의 성능 달성
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-amber">축 2</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">모델 크기: 더 많은 스킬 명령</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;">
+      Qwen3-VL Instruct <span class="accent">2B → 235B</span> 파라미터 스케일링 (VLABench)
+    </p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">비단조적 스케일링</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>점수와 지연이 모두 <span class="accent">비단조적</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>32B가 235B보다 느린 경우도 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>파라미터 수 ≠ 토큰 생성량</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">스킬 폭의 확장</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.8;margin-top:0.8rem;">
+          모델 크기의 진정한 역할은 <span class="accent2">스킬 커버리지 확장</span>임. 대형 모델의 우위는 더 넓은 스킬 세트를 정확히 명령할 때만 발현됨
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-amber">축 3</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">메모리 아키텍처: 문맥 오버헤드</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;">
+      RoboMME에서 5가지 메모리 압축 방식 비교
+    </p>
+    <table class="compare-table" style="margin-top:1.5rem;">
+      <thead>
+        <tr>
+          <th>방식</th>
+          <th>접근</th>
+          <th>강점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FrameSamp</td>
+          <td>시각 토큰 감소</td>
+          <td><span class="tag tag-green">쉬운 작업에서 최소 FLOPs</span></td>
+        </tr>
+        <tr>
+          <td>TokenDrop</td>
+          <td>시각 토큰 드롭</td>
+          <td>가벼운 오버헤드</td>
+        </tr>
+        <tr>
+          <td>SimpleSG</td>
+          <td>언어 하위목표 요약</td>
+          <td>중간 난이도에 균형</td>
+        </tr>
+        <tr>
+          <td>GroundSG</td>
+          <td>기반 하위목표 요약</td>
+          <td><span class="tag tag-amber">어려운 작업에서 강력</span></td>
+        </tr>
+        <tr>
+          <td>MemER</td>
+          <td>이전 키프레임 회상</td>
+          <td><span class="tag tag-amber">긴 이력 작업에서 최고</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;" class="muted">
+      단일 아키텍처가 모든 난이도에서 지배적이지 않음 → <span class="accent">난이도에 따른 적응적 선택 필요</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-green">핵심 발견</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">조사로부터 얻은 세 가지 트렌드</h2>
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1.5rem;">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-arrows-up-down"></i></div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">큰 능력 격차 존재</h3>
+          <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.7;" class="muted">저비용과 고비용 설정 사이에 상당한 성능 차이가 있음</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-shuffle"></i></div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">격차는 비균일</h3>
+          <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.7;" class="muted">스킬 명령 요구, 회상 범위 등 <span class="accent">작업 특정 수요</span>에 좌우됨</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-feather"></i></div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">경량 모델로 충분</h3>
+          <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.7;" class="muted">많은 작업에서 고비용 설정이 불필요함</p>
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);line-height:1.7;">
+      → 정적 모델 선택은 단일 지연-능력 타협점만 고정함<br>
+      → <span class="accent">장면 맥락에서 작업 수요를 추론하고 연산을 동적 할당하는 프레임워크 필요</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-amber">제안 방법</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">DIRECT: 동적 연산 라우팅 프레임워크</h2>
+    <p style="font-size:clamp(0.8rem,1.3vw,1rem);margin-top:0.3rem;" class="muted">Dynamic Inference Router for Embodied Compute Tradeoffs</p>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">입력 수신</div>
+        <div class="step-desc">장면 관측 I + 자연어 지시 ℓ</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">경량 라우터 추론</div>
+        <div class="step-desc">다중모달 맥락 기반 수요 판단</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">플래너 할당</div>
+        <div class="step-desc">후보 풀 ℳ에서 최적 모델 선택</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">스킬 계획 생성</div>
+        <div class="step-desc">선택된 플래너가 하위 스킬 시퀀스 출력</div>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:2rem;">
+      고정된 후보 풀 <span class="accent2">ℳ = {m₁, ..., mₖ}</span>에서 각 작업의 <span class="accent">품질-비용 균형</span>이 최적인 플래너로 라우팅
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-amber">제안 방법</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">DIRECT의 핵심 구성 요소</h2>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">데이터 수집 및 합성</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 로봇 실행 데이터 기반 수집</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하드웨어 제약을 반영한 합성 데이터 생성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">라우터 아키텍처</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중모달(시각+언어) 맥락 조건부</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>경량 분류기로 낮은 추가 오버헤드</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">라우팅 목표 함수</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>성공률-비용 파레토 프론티어 최적화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단순한 정확도가 아닌 균형 있는 할당</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">배포 전략</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>세 축 각각에 독립적 라우터 구성 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 플래닝 스택에 플러그인 방식 적용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-green">실험</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">실험 설정</h2>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">벤치마크</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">VLABench</span> — 다단계 추론 벤치마크</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">RoboMME</span> — 메모리 기반 로봇 벤치마크</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">Franka DROID</span> — 실제 로봇 검증</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">비교 대상</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>각 축의 고정 모델 선택 (상/중/하)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트 전용 라우팅 기준선</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무작위 라우팅</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;">
+      평가 지표: 성공률-지연 <span class="accent">파레토 프론티어</span>로 종합 평가 (단일 지표가 아닌 균형 측정)
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-green">결과</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">시뮬레이션 결과</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;">
+      세 축 모두에서 DIRECT가 <span class="accent">고정 선택보다 우수한 파레토 프론티어</span> 달성
+    </p>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem);">CoT 깊이 라우팅</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;margin-top:0.5rem;" class="muted">VLABench에서 Instruct/Thinking 간 동적 선택으로 지연 대폭 절감 while maintaining 성공률</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem);">모델 크기 라우팅</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;margin-top:0.5rem;" class="muted">2B–235B 중 작업별 최적 크기 선택, 대형 모델 고정 배포 대비 효율 월등</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.6vw,1.2rem);">메모리 라우팅</h3>
+        <p style="font-size:clamp(0.78rem,1.2vw,0.95rem);line-height:1.7;margin-top:0.5rem;" class="muted">RoboMME에서 난이도에 따라 FrameSamp↔MemER 적응적 전환</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;" class="muted">
+      텍스트 전용 라우팅 기준선보다 <span class="accent">다중모달 맥락이 라우팅 정확도를 유의미하게 향상</span>시킴
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <span class="tag tag-green">결과</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">실제 로봇 검증: Franka DROID</h2>
+    <p style="font-size:clamp(0.85rem,1.5vw,1.1rem);line-height:1.7;margin-top:1rem;">
+      제로샷 조작 및 <span class="accent">장기 수평 체이닝</span> 작업에서 물리적 검증
+    </p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">다단계 작업 예시</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.8;margin-top:0.8rem;">
+          단순 단계: <span class="accent3">Non-thinking</span> 플래너 사용<br>
+          <span class="muted">→ 0.8–0.9초</span><br><br>
+          모호한 단계: <span class="accent">Thinking</span> 플래너로 에스컬레이션<br>
+          <span class="muted">→ 21.9초 (필요한 단계에서만)</span>
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">종합 성과</h3>
+        <div style="margin-top:0.8rem;display:flex;flex-direction:column;gap:1rem;">
+          <div>
+            <div class="big-num" style="display:inline;">65%</div>
+            <p style="font-size:clamp(0.8rem,1.3vw,1rem);display:inline;" class="muted"> 더 낮은 평균 지연</p>
+          </div>
+          <div>
+            <div class="big-num" style="display:inline;">≥100%</div>
+            <p style="font-size:clamp(0.8rem,1.3vw,1rem);display:inline;" class="muted"> 최강 모델 대비 동등 이상 성공률</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <span class="tag tag-red">결론</span>
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);margin-top:0.8rem;">핵심 메시지</h2>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);line-height:1.8;">
+        테스트타임 연산의 무조건적 확장은 <span class="accent">낭비</span>다.<br>
+        DIRECT는 <span class="accent2">프론티어 수준의 구현 플래닝</span>을<br>단편의 비용으로 제공할 수 있다.
+      </p>
+    </div>
+    <ul class="check-list" style="margin-top:2rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>테스트타임 연산은 균일한 레버가 아님 — 각 축이 질적으로 다른 이득 제공</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>다중모달 장면 맥락이 라우팅에 필수적 — 텍스트만으로는 부족</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>경량 라우터가 고비용 모델의 성공률을 최대 65% 낮은 지연으로 재현</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 계층적 플래닝 스택에 플러그인 방식으로 적용 가능</li>
+    </ul>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <p style="font-size:clamp(0.8rem,1.3vw,1rem);" class="muted">
+      한계: 후보 풀에 없는 모델로는 라우팅 불가, 라우터 학습 데이터 의존성, 실시간 장면 변화에 대한 적응 속도
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:60vh;gap:1.5rem;">
+      <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);text-align:center;">논문 정보</h2>
+      <div class="hr" style="max-width:300px;"></div>
+      <p style="font-size:clamp(1rem,2vw,1.3rem);text-align:center;font-weight:600;">
+        DIRECT: When and Where Should You Allocate<br>Test-Time Compute in Embodied Planners?
+      </p>
+      <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);text-align:center;" class="muted">
+        Jadelynn Dao, Milan Ganai, Yasmina Abukhadra, Ajay Sridhar,<br>
+        Mozhgan Nasr Azadani, Katie Luo, Clark Barrett, Jiajun Wu, Chelsea Finn, Marco Pavone
+      </p>
+      <p style="font-size:clamp(0.8rem,1.3vw,1rem);text-align:center;" class="muted">
+        Stanford University · University of Waterloo · NVIDIA
+      </p>
+      <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <span class="tag tag-amber">arXiv: 2606.12402v1</span>
+        <span class="tag tag-green">cs.RO</span>
+        <span class="tag tag-red">CC BY 4.0</span>
+      </div>
+      <p style="font-size:clamp(0.8rem,1.3vw,1rem);margin-top:0.5rem;" class="accent2">
+        <i class="fas fa-link"></i> jadee-dao.github.io/direct/
+      </p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

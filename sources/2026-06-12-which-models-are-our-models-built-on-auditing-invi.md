@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-11-provenance-grounded-gating-and-adaptive-recovery-i]]: 두 논문 모두 LLM 훈련 파이프라인 내 데이터와 모델 의존성의 출처(provenance)를 추적하고 감사하는 것의 중요성을 다룹니다.

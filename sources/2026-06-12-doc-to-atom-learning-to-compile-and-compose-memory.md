@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-12-context-driven-incremental-compression-for-multi-t]]: 두 논문 모두 LLM에서 긴 입력 시퀀스 처리 시 발생하는 메모리 및 연산 비용을 줄이기 위해 문맥 압축 기법을 제안합니다.
