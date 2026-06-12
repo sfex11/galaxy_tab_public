@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>벤치마크가 함정이 될 때 — 평가 계약은 암묵적 하네스다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(194,112,62,0.18);
+    color: #2c2825;
+  }
+
+  .article-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c2703e;
+    border: 1px solid rgba(194,112,62,0.25);
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+
+  .hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: clamp(16px, 3vw, 28px);
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #7a7168;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700;
+    color: #2c2825;
+    line-height: 1.35;
+    margin-bottom: clamp(12px, 2vw, 20px);
+  }
+
+  .section h3 {
+    font-size: clamp(16px, 2.5vw, 19px);
+    font-weight: 600;
+    color: #2c2825;
+    margin: clamp(24px, 3vw, 36px) 0 clamp(8px, 1.5vw, 14px);
+  }
+
+  .section p {
+    margin-bottom: clamp(12px, 2vw, 20px);
+    color: #3d3832;
+  }
+
+  .section strong {
+    color: #2c2825;
+    font-weight: 600;
+  }
+
+  .highlight-amber {
+    color: #c2703e;
+    font-weight: 600;
+  }
+
+  .highlight-blue {
+    color: #5b7c99;
+    font-weight: 600;
+  }
+
+  .highlight-green {
+    color: #6b9e7a;
+    font-weight: 600;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: clamp(12px, 2vw, 20px) clamp(16px, 3vw, 24px);
+    margin: clamp(20px, 3vw, 36px) auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2vw, 16px);
+    color: #5c534a;
+    line-height: 1.8;
+  }
+
+  blockquote em {
+    color: #c2703e;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: clamp(20px, 3vw, 36px) 0;
+    box-shadow: 0 2px 16px rgba(44,40,37,0.04), 0 0.5px 2px rgba(44,40,37,0.06);
+  }
+
+  .card-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 12px;
+  }
+
+  .card p {
+    margin-bottom: 10px;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Spectrum Diagram ── */
+  .spectrum {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: clamp(24px, 4vw, 40px) 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(194,112,62,0.12);
+    box-shadow: 0 2px 16px rgba(44,40,37,0.04);
+  }
+
+  .spectrum-step {
+    flex: 1;
+    padding: clamp(16px, 2.5vw, 28px) clamp(10px, 2vw, 20px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    position: relative;
+  }
+
+  .spectrum-step:first-child {
+    background: rgba(107,158,122,0.08);
+  }
+
+  .spectrum-step:nth-child(2) {
+    background: rgba(91,124,153,0.08);
+    border-left: 1px dashed rgba(44,40,37,0.1);
+    border-right: 1px dashed rgba(44,40,37,0.1);
+  }
+
+  .spectrum-step:last-child {
+    background: rgba(194,112,62,0.08);
+  }
+
+  .spectrum-step .step-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(13px, 2vw, 16px);
+    font-weight: 700;
+    color: #2c2825;
+  }
+
+  .spectrum-step .step-sub {
+    font-size: clamp(10px, 1.5vw, 12px);
+    color: #7a7168;
+    line-height: 1.5;
+  }
+
+  .spectrum-arrow {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #a39890;
+    white-space: nowrap;
+  }
+
+  /* ── Analogy Box ── */
+  .analogy {
+    background: linear-gradient(135deg, rgba(107,158,122,0.06), rgba(107,158,122,0.02));
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: clamp(20px, 3vw, 36px) 0;
+  }
+
+  .analogy-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b9e7a;
+    margin-bottom: 10px;
+  }
+
+  .analogy p {
+    color: #3d3832;
+    margin-bottom: 10px;
+  }
+
+  .analogy p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── List ── */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+    margin: clamp(12px, 2vw, 20px) 0;
+  }
+
+  .styled-list li {
+    position: relative;
+    padding-left: clamp(20px, 3vw, 28px);
+    margin-bottom: clamp(8px, 1.5vw, 14px);
+    color: #3d3832;
+  }
+
+  .styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c2703e;
+    opacity: 0.6;
+  }
+
+  .styled-list.blue li::before {
+    background: #5b7c99;
+  }
+
+  .styled-list.green li::before {
+    background: #6b9e7a;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  /* ── Conclusion Box ── */
+  .conclusion {
+    background: rgba(194,112,62,0.05);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 40px);
+    margin: clamp(24px, 4vw, 48px) 0;
+  }
+
+  .conclusion h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.5vw, 26px);
+    font-weight: 700;
+    color: #c2703e;
+    margin-bottom: 16px;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    text-align: center;
+    padding: clamp(32px, 5vw, 64px) 0;
+    color: #a39890;
+    font-size: 13px;
+  }
+
+  /* ── Tags ── */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid rgba(44,40,37,0.08);
+    color: #7a7168;
+    background: rgba(255,255,255,0.5);
+  }
+
+  /* ── Inline code ── */
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    background: rgba(44,40,37,0.06);
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #5b7c99;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: clamp(24px, 4vw, 40px) 0;
+    box-shadow: 0 2px 16px rgba(44,40,37,0.04);
+  }
+
+  .toc-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7a7168;
+    margin-bottom: 14px;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    counter-reset: toc;
+  }
+
+  .toc ol li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+  }
+
+  .toc ol li:last-child {
+    border-bottom: none;
+  }
+
+  .toc ol li::before {
+    content: counter(toc);
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 6px;
+    background: rgba(194,112,62,0.1);
+    color: #c2703e;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .toc a {
+    color: #3d3832;
+    text-decoration: none;
+    font-size: clamp(13px, 2vw, 15px);
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  .toc a:hover {
+    color: #c2703e;
+  }
+
+  /* ── Comparison Table ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 16px);
+    margin: clamp(16px, 3vw, 28px) 0;
+  }
+
+  .compare-cell {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(44,40,37,0.06);
+    border-radius: 10px;
+    padding: clamp(14px, 2vw, 22px);
+  }
+
+  .compare-cell .cell-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a39890;
+    margin-bottom: 8px;
+  }
+
+  .compare-cell .cell-text {
+    font-size: clamp(13px, 2vw, 15px);
+    color: #3d3832;
+    line-height: 1.7;
+  }
+
+  .compare-cell .cell-text .wrong {
+    text-decoration: line-through;
+    color: #a39890;
+  }
+
+  @media (max-width: 520px) {
+    .compare-grid {
+      grid-template-columns: 1fr;
+    }
+    .spectrum {
+      flex-direction: column;
+    }
+    .spectrum-step:nth-child(2) {
+      border-left: none;
+      border-right: none;
+      border-top: 1px dashed rgba(44,40,37,0.1);
+      border-bottom: 1px dashed rgba(44,40,37,0.1);
+    }
+    .spectrum-arrow {
+      bottom: auto;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: auto;
+      writing-mode: vertical-lr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- Nav -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <span class="hero-tag">Deep Analysis</span>
+    <h1>벤치마크가 함정이 될 때<br>평가 계약은 암묵적 하네스다</h1>
+    <p class="hero-sub">Claw-SWE-Bench가 드러낸 진실 — 우리가 '중립적 측정'이라 믿었던 것이 사실은 에이전트의 행동을 구조적으로 규정하는 틀이었다면?</p>
+  </header>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#sec1">운전시험의 유리벽 — 하네스가 이미 한 번 확장된 방식</a></li>
+      <li><a href="#sec2">줄자가 길이를 재는 게 아니다 — 평가 계약의 실체</a></li>
+      <li><a href="#sec3">번역의 누락 — 두 영역에서 동일하게 현현하는 간극</a></li>
+      <li><a href="#sec4">병목의 오인 — 파이프라인에서 벤치마크까지</a></li>
+      <li><a href="#sec5">하네스 스펙트럼 — 패러다임 전환의 구체적 지도</a></li>
+    </ol>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 1 -->
+  <section class="section" id="sec1">
+    <h2>1. 운전시험의 유리벽 — 하네스가 이미 한 번 확장된 방식</h2>
+
+    <p>
+      운전면허 시험을 생각해 보자. 시험장에는 코스가 있고, 규칙이 있고, 합격 기준이 있다. 우리는 이것을 '운전 능력을 측정하는 중립적인 도구'라고 믿는다. 하지만 만약 시험 코스가 <strong>오직 자동변속 차량만 주행 가능한 구조</strong>로 설계되어 있다면? 수동변속 능력이 뛰어난 운전자도 이 시험에서는 불이익을 받는다. 시험은 '운전 능력'이 아니라 <span class="highlight-amber">'자동변속 차량에 대한 적합성'</span>을 측정하고 있는 셈이다.
+    </p>
+
+    <p>
+      에이전트 하네스(Agent Harness)의 역사에서도 정확히 같은 일이 한 번 벌어졌다. Crab 논문은 C/R(체크포인트/롤백) 런타임이 단순한 인프라가 아니라, 결함 내성·롤백·분기 같은 <strong>하네스의 핵심 동작을 직접 구현하는 계층</strong>이라는 것을 보였다. 이 발견 이전에는 런타임이 '하네스 밖'의 독립적 인프라라고 가정되었다. 하지만 실제로는 런타임이 하네스의 동작 방식을 구조적으로 결정하고 있었다.
+    </p>
+
+    <div class="card">
+      <div class="card-label">핵심 패턴</div>
+      <p>
+        하네스 엔지니어링의 확장은 새로운 기능의 추가가 아니었다. <strong>기존에 '밖'이라고 가정되었던 것이 사실은 '안'의 동작을 구조적으로 결정하고 있었다</strong>는 발견이었다. 확장의 메커니즘은 '발견'이지 '추가'가 아니다.
+      </p>
+    </div>
+
+    <p>
+      이때의 확장은 <span class="highlight-green">애플리케이션 로직에서 실행 환경으로</span> 이루어졌다. 하네스의 경계가 코드 수준에서 OS 수준으로 밀려난 것이다. 그리고 이 패턴은, Claw-SWE-Bench라는 완전히 다른 영역에서 <strong>똑같은 방식으로 반복</strong>된다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 2 -->
+  <section class="section" id="sec2">
+    <h2>2. 줄자가 길이를 재는 게 아니다 — 평가 계약의 실체</h2>
+
+    <p>
+      줄자로 물체의 길이를 잰다고 가정하자. 그런데 이 줄자가 <strong>5cm 단위로만 눈금이 새겨져 있고</strong>, 측정 결과는 반드시 가장 가까운 5cm 배수로 제출해야 한다면? 이 줄자는 '길이'를 재는 게 아니다. '5cm 단위로 표현 가능한 길이'만을 재고 있다.
+    </p>
+
+    <p>
+      Claw-SWE-Bench가 보여준 것도 정확히 이 지점이다. 논문의 핵심 문장을 보자:
+    </p>
+
+    <blockquote>
+      "A generic agent does not by itself satisfy the <em>evaluation contract</em>."
+    </blockquote>
+
+    <p>
+      SWE-bench의 평가 계약 — 워크스페이스 구조, 패치 적용 방식, 예측 제출 포맷 — 은 중립적인 측정 도구가 아니다. 이것은 이름만 '벤치마크'일 뿐, 실질적으로는 다음 세 가지를 <strong>구조적으로 규정</strong>하는 하네스다:
+    </p>
+
+    <ul class="styled-list">
+      <li><strong>파일 시스템 탐색의 경계</strong> — 에이전트가 워크스페이스를 어떻게 navigate할 수 있는지</li>
+      <li><strong>상태 축적과 제출의 방식</strong> — 수정 내용을 어떤 포맷으로 패치로 변환해야 하는지</li>
+      <li><strong>중단과 재개의 의미론</strong> — 어디서 체크포인트를 찍고 어디서 이어서 작업할 수 있는지</li>
+    </ul>
+
+    <p>
+      이 규정들에 맞지 않는 아키텍처는 — 코드 수정 능력이 뛰어나더라도 — 평가 계약을 충족하지 못해 낮은 점수를 받는다. 마치 수동변속 운전자가 자동변속 코스에서 불합격하는 것과 같다.
+    </p>
+
+    <div class="analogy">
+      <div class="analogy-label">💡 직관적 비유</div>
+      <p>
+        피아노 경연을 상상해 보라. 그런데 이 경연의 '제출 규칙'이 반드시 <strong>악보를 PDF로 스캔해서 제출</strong>해야 하는 것이라면? 즉흥 연주자, 악보 없이 연주하는 음악가, 혹은 전자음악 작곡가는 아무리 훌륭한 연주를 해도 이 '평가 계약'을 충족할 수 없다. 경연이 측정하는 것은 '피아노 연주 능력'이 아니라 <span class="highlight-amber">'PDF 악보 제출 가능한 피아니즘'</span>이다.
+      </p>
+    </div>
+
+    <p>
+      평가 계약은 벤치마크의 일부가 아니라 <strong>벤치마크와 에이전트 사이에 위치한 번역 계층</strong>이다. 그리고 이 번역 계층은 하네스 엔지니어링의 대상이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 3 -->
+  <section class="section" id="sec3">
+    <h2>3. 번역의 누락 — 두 영역에서 동일하게 현현하는 간극</h2>
+
+    <p>
+      번역기를 생각해 보자. 한국어 원문을 영어로 번역할 때, 번역기의 구조적 한계 때문에 특정 표현이 누락되거나 왜곡되는 현상이 있다. 원문의 뉘앙스가 번역 과정에서 사라지는 것이다. 중요한 것은 — 이 누락은 원문의 문제가 아니라 <strong>번역 계층의 문제</strong>라는 점이다.
+    </p>
+
+    <p>
+      Algorithm-System Translation Gap(알고리즘-시스템 번역 간극)은 정확히 이런 현상을 설명하는 개념이다. 그리고 이 간극이 두 곳에서 — <strong>런타임 영역과 측정 영역에서</strong> — 동일한 패턴으로 현현한다는 것이 Claw-SWE-Bench의 핵심 통찰이다.
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-cell">
+        <div class="cell-label">Crab의 간극 (런타임)</div>
+        <div class="cell-text">
+          <span class="wrong">에이전트가 의존하는 상태</span><br>
+          ↔ OS가 체크포인트로 포착하는 상태<br><br>
+          <span class="highlight-blue">결과:</span> 의미 없는 상태까지 스냅샷되는 비효율
+        </div>
+      </div>
+      <div class="compare-cell">
+        <div class="cell-label">Claw-SWE-Bench의 간극 (측정)</div>
+        <div class="cell-text">
+          <span class="wrong">벤치마크가 측정하려는 능력</span><br>
+          ↔ 평가 계약이 실제로 요구하는 아키텍처 적합성<br><br>
+          <span class="highlight-amber">결과:</span> 계약에 맞지 않는 아키텍처의 능력이 누락되는 왜곡
+        </div>
+      </div>
+    </div>
+
+    <p>
+      두 경우 모두 <strong>번역 과정에서 의도치 않은 제약이 삽입</strong>된다. Crab에서는 에이전트의 의미론적 의존 그래프를 OS의 전체 스냅샷 메커니즘으로 번역할 때 불필요한 상태가 포함된다. Claw-SWE-Bench에서는 벤치마크가 의도하는 코딩 능력을 평가 계약의 구조적 요구사항으로 번역할 때 특정 아키텍처에 대한 편향이 삽입된다.
+    </p>
+
+    <p>
+      여기서 새로운 개념 연결이 자연스럽게 발생한다. 기존에 존재하던 <span class="highlight-blue">Benchmark Specification Gap(벤치마크 명세 간극)</span>이라는 슬러그에 이제 구체적인 내용이 채워진다: <strong>벤치마크 명세가 의도하는 측정 대상과, 평가 계약의 구조적 제약이 실제로 측정하는 대상 사이의 간극</strong>. 이것은 Algorithm-System Translation Gap의 측정 영역 특화 버전이다.
+    </p>
+
+    <p>
+      나아가 <span class="highlight-green">Code-as-Agent-Harness</span>라는 명제와도 연결된다. SWE-bench에서 평가 계약의 핵심이 패치 포맷과 워크스페이스 구조라면 — 즉, <strong>코드 파일 자체의 형태가 평가의 구조를 결정</strong>한다면 — 이는 "코드 자체가 하네스의 일부로 기능한다"는 명제를 벤치마크 영역에서 재확인하는 셈이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 4 -->
+  <section class="section" id="sec4">
+    <h2>4. 병목의 오인 — 파이프라인에서 벤치마크까지</h2>
+
+    <p>
+      병원 응급실을 상상해 보자. 환자 대기 시간이 길어지면 사람들은 보통 "의사가 부족해서"라고 생각한다. 하지만 실제 병목이 <strong>접수 창구의 서류 양식</strong>에 있다면? 의사를 아무리 늘려도 대기 시간은 줄지 않는다. 문제를 잘못 진단한 것이다.
+    </p>
+
+    <p>
+      Tool Attention 논문은 다중 서버 MCP 배포에서 정확히 이런 '오인정의'를 발견했다. 파이프라인 전체의 레이턴시 병목이 <strong>개별 LLM 호출</strong>이 아니라 <strong>스키마 축적</strong>에 의해 결정된다는 것을 보인 것이다. "실제 병목 지점을 재정의"한 사례다.
+    </p>
+
+    <p>
+      그리고 Claw-SWE-Bench는 <strong>완전히 동일한 패턴의 오인</strong>을 벤치마크 영역에서 포착한다:
+    </p>
+
+    <div class="card">
+      <div class="card-label">병렬 비교: 오인정의의 구조</div>
+      <p>
+        <span class="highlight-blue">파이프라인의 오인</span><br>
+        <span class="wrong">병목 = LLM 호출 성능</span> → 실제 병목 = 스키마 축적 구조
+      </p>
+      <p>
+        <span class="highlight-amber">벤치마크의 오인</span><br>
+        <span class="wrong">점수 = 에이전트의 코딩 능력</span> → 실제 결정요인 = 평가 계약과의 아키텍처 적합성
+      </p>
+    </div>
+
+    <p>
+      파이프라인 서빙이 '개별 컴포넌트 최적화'가 아닌 '파이프라인 전체 구조'로 분석되어야 했던 것처럼, 벤치마크도 '외부 태스크의 난이도 조정'이 아닌 <strong>'평가 계약의 구조적 분석'</strong>으로 접근되어야 한다. Aggregate Pipeline Serving의 교훈은 파이프라인에만 국한되지 않고, 에이전트 평가 전반에 적용되는 메타 원칙임이 드러난다.
+    </p>
+
+    <p>
+      이는 실무에서 매우 중요한 시사점을 준다. 벤치마크 점수를 높이기 위해 에이전트의 추론 능력을 개선하는 것은 — 응급실에 의사를 늘리는 것과 같다. <strong>진짜 병목인 평가 계약 적합성</strong>을 다루지 않으면, 점수 향상은 능력 향상이 아니라 계약 순응도 향상에 불과하다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 5 -->
+  <section class="section" id="sec5">
+    <h2>5. 하네스 스펙트럼 — 패러다임 전환의 구체적 지도</h2>
+
+    <p>
+      이제 전체 그림이 보인다. 평가 계약 설계를 하네스 엔지니어링에 통합한다는 것은, 하네스의 범위를 다음 스펙트럼으로 재정의하는 것이다:
+    </p>
+
+    <div class="spectrum">
+      <div class="spectrum-step">
+        <div class="step-title">애플리케이션 로직</div>
+        <div class="step-sub">에이전트의 추론·계획·도구 호출</div>
+        <div class="spectrum-arrow">원래 하네스</div>
+      </div>
+      <div class="spectrum-step">
+        <div class="step-title">실행 환경</div>
+        <div class="step-sub">C/R 런타임, 체크포인트, 롤백</div>
+        <div class="spectrum-arrow">Crab의 확장</div>
+      </div>
+      <div class="spectrum-step">
+        <div class="step-title">평가 계약</div>
+        <div class="step-sub">워크스페이스, 패치 포맷, 제출 의미론</div>
+        <div class="spectrum-arrow">Claw의 확장</div>
+      </div>
+    </div>
+
+    <p>
+      각 단계는 독립된 층이 아니다. 셋 모두 <strong>에이전트의 의도된 동작을 구조적으로 제약하는 번역 계층</strong>이다. Agent-OS Semantic Gap이 OS 수준에서, Algorithm-System Translation Gap이 런타임 수준에서, 그리고 평가 계약이 측정 수준에서 동일한 패턴의 간극을 생성한다.
+    </p>
+
+    <h3>통합이 아니라 인정</h3>
+
+    <p>
+      중요한 것은 이것이 '확장'이 아니라는 점이다. 이미 하나의 간극이었던 것을 <strong>명시적으로 인정</strong>하는 것이다. 운전시험의 코스가 자동변속 전용이었다는 사실을 인정하고, 이를 시험 설계의 문제로 규정하는 것과 같다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Conclusion -->
+  <div class="conclusion" id="conclusion">
+    <h2>패러다임 전환: 분리에서 스펙트럼으로</h2>
+
+    <p>
+      기존 패러다임은 명확하게 분리되어 있었다:
+    </p>
+
+    <ul class="styled-list blue">
+      <li><strong>하네스</strong> = 실행 인프라 (C/R 런타임, 파이프라인 서빙)</li>
+      <li><strong>벤치마크</strong> = 외부 태스크 (능력 측정, 중립적 도구)</li>
+    </ul>
+
+    <p>
+      Claw-SWE-Bench는 이 분리가 근본적으로 잘못되었음을 보여준다. 새로운 패러다임은 다음과 같다:
+    </p>
+
+    <ul class="styled-list green">
+      <li><strong>하네스 스펙트럼</strong> = 애플리케이션 로직 → 실행 환경 → 평가 계약을 잇는 연속적 번역 계층</li>
+      <li><strong>벤치마크</strong> = 스펙트럼의 최외곽에 위치한 하네스의 일종</li>
+      <li><strong>평가 계약 엔지니어링</strong> = 하네스 엔지니어링의 필수 구성요소</li>
+    </ul>
+
+    <p>
+      이 전환의 실천적 의미는 명확하다. 벤치마크를 설계하거나 해석할 때, "이 평가 계약이 어떤 아키텍처에 유리하고 어떤 아키텍처에 불리한가?"를 <strong>필수 질문</strong>으로 삼아야 한다. 벤치마크 점수를 보고 "이 에이전트가 더 뛰어나다"고 결론내리기 전에, "이 점수가 측정한 것은 능력인가, 아니면 평가 계약에 대한 적합성인가?"를 물어야 한다.
+    </p>
+
+    <p>
+      그리고 궁극적으로 — 평가 계약을 <strong>하네스로서 의식적으로 설계</strong>해야 한다. 특정 아키텍처에 대한 편향을 최소화하는 계약 구조, 다양한 에이전트 패러다임이 공평하게 경쟁할 수 있는 제출 포맷, 워크스페이스 구조의 유연성. 이것이 하네스 엔지니어링의 새로운 프론티어다.
+    </p>
+
+    <blockquote>
+      줄자의 눈금 간격을 설계하는 것도 측정의 일부다. 그것을 잊으면, 우리는 길이가 아니라 눈금을 재고 있는 것이다.
+    </blockquote>
+  </div>
+
+  <!-- Tags -->
+  <div class="tag-row">
+    <span class="tag">Agent Harness</span>
+    <span class="tag">SWE-bench</span>
+    <span class="tag">Claw-SWE-Bench</span>
+    <span class="tag">Evaluation Contract</span>
+    <span class="tag">Translation Gap</span>
+    <span class="tag">Benchmark Design</span>
+    <span class="tag">C/R Runtime</span>
+    <span class="tag">Pipeline Serving</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <p>대상 논문: Claw-SWE-Bench — A Benchmark for Evaluating OpenClaw-style Agent Harnesses on Coding Tasks</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
