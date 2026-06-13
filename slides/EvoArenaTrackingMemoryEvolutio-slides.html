@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EvoArena: Tracking Memory Evolution for Robust LLM Agents in — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom:clamp(16px,3vw,32px)">
+      <span class="tag tag-amber">arXiv 2606.13681v1</span>
+      <span class="tag tag-green">LLM Agents</span>
+    </div>
+    <h1 style="font-size:clamp(24px,4.5vw,48px);line-height:1.2;margin-bottom:clamp(12px,2vw,24px)">
+      EvoArena: 동적 환경에서의<br>
+      <span class="accent">강건한 LLM 에이전트</span>를 위한<br>
+      메모리 진화 추적
+    </h1>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(16px,3vw,40px)" class="muted">
+      환경이 지속적으로 변화하는 상황에서 에이전트의 적응력을 평가하고,<br>패치 기반 메모리 패러다임으로 강건성을 향상시키는 연구
+    </p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">
+      Jundong Xu, Qingchuan Li, Jiaying Wu 외 · National University of Singapore · MIT · UCL 등
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent">문제 정의</span>: 정적 평가의 한계
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-lock" class="muted"></i> 기존 벤치마크
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고정된 환경 스냅샷에서 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인터페이스·규칙·성공 기준 불변</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 버전에서의 성능만 측정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 배포 환경과 괴리</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-globe"></i> 실제 배포 환경
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>API·워크플로우·코드베이스 지속 변화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 선호도가 시간에 따라 진화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무엇이 바뀌었는지 인지해야 함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전 버전 지식의 유효성 판별 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(12px,2vw,24px)">
+      신뢰 가능한 에이전트는 현재 작업을 해결할 뿐 아니라, 어떤 업데이트가 중요한지 식별하고 <span class="accent">구버전에 묶인 행동을 회피</span>해야 한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      기존 벤치마크와의 <span class="accent2">비교</span>
+    </h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>벤치마크</th>
+          <th>도메인</th>
+          <th>환경 동적성</th>
+          <th>지속적 진화</th>
+          <th>체인 평가</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>WebArena</td>
+          <td>웹</td>
+          <td>정적</td>
+          <td><span class="muted">—</span></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>SWE-bench</td>
+          <td>소프트웨어</td>
+          <td>정적</td>
+          <td><span class="muted">—</span></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>GAIA</td>
+          <td>도구/웹</td>
+          <td>정적</td>
+          <td><span class="muted">—</span></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>SWE-bench-Live</td>
+          <td>소프트웨어</td>
+          <td>태스크 갱신</td>
+          <td><span class="muted">—</span></td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td>HorizonBench</td>
+          <td>개인화</td>
+          <td>선호 변화</td>
+          <td>부분</td>
+          <td><span class="muted">—</span></td>
+        </tr>
+        <tr>
+          <td><span class="accent">EvoArena</span></td>
+          <td><span class="accent">다중 도메인</span></td>
+          <td><span class="accent">동적 환경</span></td>
+          <td><span class="accent">지원</span></td>
+          <td><span class="accent">지원</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent">EvoArena</span> 개요
+    </h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(16px,2.5vw,32px)">
+      환경 변화를 <span class="accent2">점진적 업데이트 시퀀스</span>로 모델링하는 벤치마크 스위트
+    </p>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(6px,1vw,12px)">Terminal-Bench-Evo</h3>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">진화하는 터미널 워크플로우</p>
+        <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">명령어, 권한, 디렉토리 구조 변화</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(6px,1vw,12px)">SWE-Chain-Evo</h3>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">진화하는 코드베이스</p>
+        <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">마일스톤 연쇄적 소프트웨어 변경</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(6px,1vw,12px)">PersonaMem-Evo</h3>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">진화하는 사용자 선호도</p>
+        <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">시간에 따른 선호 패턴 변화 추론</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,2.5vw,32px)"></div>
+    <p style="font-size:clamp(13px,1.5vw,18px)">
+      핵심 평가 지표: <span class="accent">Step Accuracy</span> (개별 태스크) + <span class="accent2">Chain Accuracy</span> (연속 태스크 전체 성공)
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      핵심 문제: <span class="accent">상태 붕괴 (State Collapse)</span>
+    </h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(8px,1.5vw,16px)">기존 메모리 시스템의 한계</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);margin-bottom:clamp(8px,1.2vw,14px)">
+          대부분의 메모리 기반 에이전트는 메모리를 <span class="accent">단일 최신 상태</span>로 유지한다.
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>새 정보가 이전 정보를 단순히 덮어씀</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전 행동과 그 유효성 맥락이 소실</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>롤백이나 다른 버전 필요 시 대응 불가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>왜 변경되었는지에 대한 추적 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)" class="accent2">예시: 워크플로우 권한 변경</h3>
+        <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(8px,1.2vw,14px)">
+          v1: <code>deploy.sh</code> 실행 가능
+        </p>
+        <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(8px,1.2vw,14px)">
+          v2: 권한 변경으로 <code>deploy.sh</code> 차단 → 메모리 덮어씀
+        </p>
+        <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(8px,1.2vw,14px)">
+          v3: v1 권한 복원 필요 → <span class="accent">하지만 v1 정보 이미 소실!</span>
+        </p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">
+          에이전트는 이전 행동과 그것이 유효했던 맥락을 모두 잃게 됨
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent3">EvoMem</span>: 패치 기반 메모리 진화 패러다임
+    </h2>
+    <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(16px,2.5vw,32px)">
+      Git과 유사한 <span class="accent3">append-only 패치 히스토리</span>로 메모리 진화를 추적 가능하게 만드는 경량 패러다임
+    </p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">감지</div>
+        <div class="step-desc">환경 변화에서<br>의미 있는 메모리<br>업데이트 식별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">기록</div>
+        <div class="step-desc">패치 생성:<br>이전/이후 상태,<br>변경 사유, 증거</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">저장</div>
+        <div class="step-desc">최신 메모리 +<br>패치 히스토리를<br>append-only로 보관</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">검색</div>
+        <div class="step-desc">기본: 최신 메모리<br>선택: 관련 패치<br>조회 시 복원</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,2.5vw,32px)"></div>
+    <p style="font-size:clamp(13px,1.5vw,18px)">
+      메모리 업데이트를 <span class="accent3">환경 진화 추론을 위한 컴팩트한 증거 흔적</span>으로 변환
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      EvoMem <span class="accent3">패치 구조</span> 상세
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(10px,1.5vw,18px)">패치에 포함된 정보</h3>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-file-alt"></i></div>
+          <div>
+            <p style="font-size:clamp(13px,1.5vw,17px)"><span class="accent">Pre-update Memory</span></p>
+            <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">업데이트 이전 메모리 상태</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-file-pen"></i></div>
+          <div>
+            <p style="font-size:clamp(13px,1.5vw,17px)"><span class="accent">Post-update Memory</span></p>
+            <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">업데이트 이후 메모리 상태</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-lightbulb"></i></div>
+          <div>
+            <p style="font-size:clamp(13px,1.5vw,17px)"><span class="accent2">Update Rationale</span></p>
+            <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">변경이 발생한 이유</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-search"></i></div>
+          <div>
+            <p style="font-size:clamp(13px,1.5vw,17px)"><span class="accent3">Supporting Evidence</span></p>
+            <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">변경을 트리거한 컨텍스트 증거</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(10px,1.5vw,18px)">검색 전략</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);margin-bottom:clamp(10px,1.5vw,18px)">
+          <span class="accent">기본 모드</span>: 최신 메모리에서 직접 검색
+        </p>
+        <p style="font-size:clamp(13px,1.5vw,18px);margin-bottom:clamp(10px,1.5vw,18px)">
+          <span class="accent2">패치 모드</span>: 다음 조건에서 관련 패치 선택적 검색
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>덮어씌워진 상태에 의존하는 쿼리</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>충돌하는 증거가 있는 경우</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전 환경 버전 참조 필요 시</li>
+        </ul>
+        <div class="hr"></div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">
+          <i class="fas fa-info-circle"></i> 기존 메모리 시스템에 플러그인 형태로 통합 가능 (Terminus2, OpenHands, Memento-Skill, A-Mem 등)
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent">EvoArena</span> 세부 구성
+    </h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(6px,1vw,12px)">
+          <i class="fas fa-terminal"></i> Terminal-Bench-Evo
+        </h3>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)" class="muted">
+          진화하는 터미널 워크플로우 벤치마크
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>명령어 구조 변화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>권한 정책 업데이트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>디렉토리 구조 재편</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체인 단위 평가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(6px,1vw,12px)">
+          <i class="fas fa-code-branch"></i> SWE-Chain-Evo
+        </h3>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)" class="muted">
+          진화하는 코드베이스 벤치마크
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 오픈소스 저장소 기반</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>마일스톤별 연쇄적 변경</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Docker 평가 환경</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 도메인 커버</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(6px,1vw,12px)">
+          <i class="fas fa-user-clock"></i> PersonaMem-Evo
+        </h3>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-bottom:clamp(6px,1vw,10px)" class="muted">
+          진화하는 사용자 선호도 벤치마크
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시간에 따른 선호 진화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>OOD 선호 추론 질문</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이중 맹검 필터링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>암시적 상호작용 기록</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent">주요 실험 결과</span>
+    </h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(10px,1.5vw,18px)">EvoArena 성능</h3>
+        <div class="big-num" style="margin-bottom:clamp(4px,0.8vw,8px)">39.6%</div>
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(16px,2vw,24px)" class="muted">기존 에이전트의 EvoArena 평균 정확도</p>
+        <div class="hr"></div>
+        <div style="margin-top:clamp(12px,2vw,20px)">
+          <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(4px,0.8vw,8px)">
+            <span class="accent">+1.5%</span> <span class="muted">EvoMem 적용 시 평균 향상</span>
+          </p>
+          <p style="font-size:clamp(14px,1.8vw,20px);margin-bottom:clamp(4px,0.8vw,8px)">
+            <span class="accent2">+3.7%</span> <span class="muted">체인 레벨 정확도 향상</span>
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(16px,2vw,24px);margin-bottom:clamp(10px,1.5vw,18px)">표준 벤치마크 성능</h3>
+        <div class="card" style="margin-bottom:clamp(10px,1.5vw,16px)">
+          <p style="font-size:clamp(14px,1.8vw,20px)">
+            GAIA: <span class="accent3">+6.1%</span> 향상
+          </p>
+          <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">일반적 에이전트 추론 벤치마크</p>
+        </div>
+        <div class="card">
+          <p style="font-size:clamp(14px,1.8vw,20px)">
+            LoCoMo: <span class="accent3">+4.8%</span> 향상
+          </p>
+          <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">장기 호라이즌 개인화 벤치마크</p>
+        </div>
+        <div class="hr" style="margin-top:clamp(12px,2vw,20px)"></div>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">
+          <i class="fas fa-arrow-up"></i> EvoMem은 진화 환경뿐 아니라 기존 벤치마크에서도 일관되게 성능 향상
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      분석: EvoMem은 <span class="accent2">언제, 왜</span> 도움이 되는가?
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-terminal"></i> Terminal-Bench-Evo
+        </h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(6px,1vw,12px)">
+          검색된 전이 정보가 <span class="accent">실제로 실행 가능할 때</span> 효과적
+        </p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">
+          패치에 기록된 명령어 변경이 현재 환경에서 직접 조작 가능한 경우 성능 향상이 큼
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-code-branch"></i> SWE-Chain-Evo
+        </h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(6px,1vw,12px)">
+          여러 백본 모델에서 <span class="accent2">회귀(regression) 감소</span>
+        </p>
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">
+          이전 마일스톤에서 학습한 수정이 후속 버전에서 잘못 적용되는 현상을 완화
+        </p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(12px,2vw,24px)">
+      <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+        <i class="fas fa-user-clock"></i> PersonaMem-Evo — 증거 보존 효과
+      </h3>
+      <div class="grid-3">
+        <div style="text-align:center">
+          <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(4px,0.5vw,6px)" class="accent3">시간 궤적 질문</p>
+          <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">선호 변화 추적에서<br>유의미한 향상</p>
+        </div>
+        <div style="text-align:center">
+          <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(4px,0.5vw,6px)" class="accent3">다중 패턴 합성</p>
+          <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">분산된 선호 증거를<br>통합 추론에서 향상</p>
+        </div>
+        <div style="text-align:center">
+          <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(4px,0.5vw,6px)" class="accent3">행 단위 증거 포착</p>
+          <p style="font-size:clamp(11px,1.2vw,14px)" class="muted">패치가 완전한<br>선호 상태를 더 잘 보존</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      효율성–정확도 <span class="accent">트레이드오프</span>
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-terminal"></i> Terminal-Bench-Evo
+        </h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(6px,1vw,12px)">
+          체인 스코프 내 메모리 관리로 <span class="accent">오버헤드 최소화</span>
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체인 범위로 패치 히스토리 제한</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>저장 시점에 업데이트 수행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검색 시점에 조건부 패치 복원</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-user-clock"></i> PersonaMem-Evo
+        </h3>
+        <p style="font-size:clamp(13px,1.5vw,17px);margin-bottom:clamp(6px,1vw,12px)">
+          패치 인덱싱으로 <span class="accent2">선택적 검색</span> 효율화
+        </p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>메모리 수집 시 패치 자동 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>패치별 인덱싱 및 저장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>쿼리 시 관련 패치만 선택적 검색</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:clamp(16px,2.5vw,28px)"></div>
+    <div class="quote-block">
+      EvoMem은 기존 메모리 시스템에 <span class="accent3">경량 플러그인</span>으로 통합되므로, 추가적인 대규모 리소스 없이도 진화 추적 기능을 제공한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      <span class="accent3">핵심 시사점</span>과 기여
+    </h2>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,18px)">
+      <div class="flow-icon"><i class="fas fa-bullseye"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent">평가의 패러다임 전환</span></p>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">정적 스냅샷에서 지속적 환경 진화 체인으로 평가 방식을 확장</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,18px)">
+      <div class="flow-icon"><i class="fas fa-layer-group"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent2">메모리 = 진화 히스토리</span></p>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">메모리를 단일 최신 상태가 아닌, 근거 기반 업데이트 이력으로 관리해야 함</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(10px,1.5vw,18px)">
+      <div class="flow-icon"><i class="fas fa-puzzle-piece"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent3">범용적 적용 가능성</span></p>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">EvoMem은 Terminus2, OpenHands, Memento-Skill, A-Mem 등 다양한 에이전트에 통합 가능</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-link"></i></div>
+      <div>
+        <p style="font-size:clamp(14px,1.8vw,20px)"><span class="accent">최신 상태와 이전 상태의 연결</span></p>
+        <p style="font-size:clamp(12px,1.4vw,16px)" class="muted">신뢰 가능한 에이전트는 최신 상태를 이전 상태, 사유, 증거와 연결하여 보존해야 함</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(12px,2.5vw,28px)">
+      한계점과 <span class="muted">향후 방향</span>
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-exclamation-triangle" class="muted"></i> 현재 한계
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>세 도메인(터미널, 소프트웨어, 사회)으로 제한</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>패치 생성 품질이 백본 LLM에 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>장기 진화 체인에서의 패치 누적 비용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 에이전트 협업 환경 미포함</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(15px,1.8vw,22px);margin-bottom:clamp(8px,1.5vw,16px)">
+          <i class="fas fa-rocket" class="accent3"></i> 향후 연구 방향
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>더 많은 도메인으로 진화 체인 확장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자동 패치 압축 및 요약 기법</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티모달 환경 진화 벤치마크</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>진화 인식 메모리 아키텍처 설계</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(20px,3vw,36px);margin-bottom:clamp(16px,2.5vw,32px)">
+      논문 정보
+    </h2>
+    <div class="card" style="margin-bottom:clamp(16px,2.5vw,32px)">
+      <h3 style="font-size:clamp(16px,2.2vw,26px);margin-bottom:clamp(12px,2vw,24px)">
+        EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments
+      </h3>
+      <p style="font-size:clamp(13px,1.5vw,18px);margin-bottom:clamp(8px,1.2vw,14px)">
+        Jundong Xu, Qingchuan Li, Jiaying Wu, Yihuai Lan, Shuyue Stella Li, Huichi Zhou, Bowen Jiang, Lei Wang, Jun Wang, Anh Tuan Luu, Caiming Xiong, Hae Won Park, Bryan Hooi, Zhiyuan Hu
+      </p>
+      <div class="hr"></div>
+      <p style="font-size:clamp(12px,1.4vw,16px);margin-bottom:clamp(4px,0.8vw,8px)" class="muted">
+        National University of Singapore · Singapore Management University · University of Washington · University College London · University of Pennsylvania · Nanyang Technological University · Recursive · MIT
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">논문</p>
+        <p style="font-size:clamp(13px,1.5vw,17px)">
+          <span class="accent">arXiv:2606.13681v1</span>
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">프로젝트 페이지</p>
+        <p style="font-size:clamp(13px,1.5vw,17px)">
+          <span class="accent2">aiden0526.github.io/EvoArena</span>
+        </p>
+      </div>
+      <div class="card" style="text-align:center">
+        <p style="font-size:clamp(12px,1.3vw,15px)" class="muted">코드 & 데이터</p>
+        <p style="font-size:clamp(13px,1.5vw,17px)">
+          <span class="accent3">GitHub / HuggingFace</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
