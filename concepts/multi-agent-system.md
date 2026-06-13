@@ -177,3 +177,5 @@ _자동 생성됨_
 - [[sources/2026-06-11-monte-carlo-pass-search-using-trajectory-generatio.md]]
 
 - [[sources/2026-06-11-the-shibboleth-effect-auditing-the-cross-lingual-d.md]]
+
+- [[sources/2026-06-13-see-what-i-see-know-what-i-think-dense-latent-comm.md]]

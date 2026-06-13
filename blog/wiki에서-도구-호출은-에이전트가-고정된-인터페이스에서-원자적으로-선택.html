@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도구 호출의 근본을 묻다 — HyperTool이 보여준 구조적 오정렬</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-blue: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --subtle-border: rgba(44,40,37,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.4vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  article {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* 헤더 영역 */
+  .article-header {
+    padding: 60px 0 40px;
+    text-align: left;
+    border-bottom: 1px solid var(--subtle-border);
+    margin-bottom: 48px;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 5vw, 40px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2.2vw, 16.5px);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+    font-weight: 300;
+  }
+
+  /* 섹션 */
+  .section { margin-bottom: 52px; }
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3.5vw, 27px);
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.005em;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: clamp(16px, 2.6vw, 19px);
+    color: var(--fg);
+    margin-bottom: 12px;
+    margin-top: 28px;
+  }
+
+  p { margin-bottom: 18px; }
+
+  strong { font-weight: 600; }
+  .accent-warm { color: var(--accent-warm); }
+  .accent-blue { color: var(--accent-blue); }
+  .accent-green { color: var(--accent-green); }
+
+  a { color: var(--accent-warm); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 24px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: clamp(14px, 2.2vw, 16px);
+    color: #5a5550;
+    line-height: 1.8;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(44,40,37,0.02);
+  }
+
+  .card h3 { margin-top: 0; }
+
+  /* 표 */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 2vw, 15px);
+    min-width: 520px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.06);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--subtle-border);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(194,112,62,0.02); }
+
+  /* 메타포 박스 */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.05), rgba(107,158,122,0.05));
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 12px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    font-size: 22px;
+    background: var(--bg);
+    padding: 0 6px;
+    border-radius: 4px;
+  }
+
+  .metaphor-box p { margin-bottom: 10px; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* 하이라이트 라인 */
+  .highlight-line {
+    border-left: 3px solid var(--accent-green);
+    padding: 14px 20px;
+    margin: 24px 0;
+    background: rgba(107,158,122,0.04);
+    border-radius: 0 8px 8px 0;
+    font-weight: 500;
+    font-size: clamp(14px, 2.2vw, 16px);
+  }
+
+  /* 순서 리스트 */
+  ol {
+    padding-left: 24px;
+    margin-bottom: 18px;
+  }
+
+  ol li { margin-bottom: 10px; }
+
+  /* 결론 박스 */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(194,112,62,0.02));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 36px 0;
+  }
+
+  .conclusion-box h2 { margin-bottom: 16px; }
+
+  /* 푸터 */
+  .article-footer {
+    border-top: 1px solid var(--subtle-border);
+    padding-top: 28px;
+    margin-top: 48px;
+    font-size: clamp(12px, 1.8vw, 13.5px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* 읽기 시간 배지 */
+  .read-time {
+    font-size: clamp(11px, 1.5vw, 12px);
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  /* 키워드 태그 */
+  .keyword-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-blue);
+    background: rgba(91,124,153,0.07);
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* 네비게이션 */
+  nav a {
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  nav a:hover {
+    background: rgba(194,112,62,0.06);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--subtle-border);
+    margin: 40px 0;
+  }
+
+  /* 연결 발견 카드 */
+  .discovery-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(44,40,37,0.03);
+  }
+
+  .discovery-card .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
+  }
+
+  /* 프로그레스 바 */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-warm), var(--accent-green));
+    z-index: 1000;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  @media (max-width: 600px) {
+    .article-header { padding: 40px 0 28px; }
+    .section { margin-bottom: 40px; }
+    .metaphor-box { padding: 18px; }
+    .conclusion-box { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px auto;max-width:780px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1>도구 호출을 "더 빠르게"가 아니라<br>"다르게" 생각해야 하는 이유</h1>
+    <p class="article-subtitle">HyperTool이 포착한 '실행 입자도 불일치'는 도구 호출 최적화의 대상이 효율성이 아니라 추상화 단위 자체여야 함을 시사한다. 기존 패러다임의 근본적 한계와 전환의 방향을 짚어본다.</p>
+    <p class="read-time">⏱ 약 12분 읽기</p>
+    <div>
+      <span class="keyword-tag">Tool-Augmented LLM</span>
+      <span class="keyword-tag">HyperTool</span>
+      <span class="keyword-tag">Agentic Workflow</span>
+      <span class="keyword-tag">Pipeline Serving</span>
+      <span class="keyword-tag">Abstraction Mismatch</span>
+    </div>
+  </header>
+
+  <!-- 섹션 1 -->
+  <section class="section">
+    <h2>1. 원자적 호출이라는 보이지 않는 관성</h2>
+    <p>LLM 에이전트가 도구를 사용할 때, 우리는 무의식적으로 하나의 전제를 받아들이고 있다. 도구 호출은 <strong class="accent-warm">선택→실행→관찰</strong>이라는 원자적 단위로 이루어진다는 것. 마치 아토미가 물질의 최소 단위인 것처럼, 이 세 단계의 조합이 도구 사용의 최소 단위라는 암묵적 합의다.</p>
+
+    <p>이 전제는 당연해 보인다. 모델이 도구를 선택하고, 실행 결과를 관찰하고, 그 결과를 바탕으로 다음 행동을 결정하는 것—이것이 에이전트의 기본 행동 패턴이니까. 문제는 이 "당연함"이 최적화의 시야를 제한한다는 데 있다.</p>
+
+    <div class="metaphor-box">
+      <p>비유하자면, 이것은 <strong>요리사에게 "쌀 씻기 → 물 넣기 → 불 켜기 → 뚜껑 덮기 → 15분 기다리기"를 각각 독립적인 작업 단위로 보고하며 일일이 승인을 받게 하는 것</strong>과 같다. 요리사는 이미 "밥 짓기"라는 하나의 의미론적 단위로 이 과정을 알고 있는데, 시스템은 이를 쪼개서 매번 "다음 단계를 실행해도 됩니까?"라고 묻는다.</p>
+      <p>결과적으로 요리사의 주의력은 밥을 잘 짓는 것이 아니라, <strong>단계별 보고</strong>에 소모된다.</p>
+    </div>
+
+    <p>이 관성은 파이프라인 서빙 최적화 논의에서도 그대로 드러난다. "Tool Attention Is All You Need" 논문은 다중 서버 MCP 배포 환경에서 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아니라 <strong>스키마 축적</strong>에 의해 결정된다는 것을 보여주었다. 중요한 발견이지만, 이 진단은 여전히 "원자적 호출의 축적을 어떻게 줄일 것인가"라는 프레임 안에 갇혀 있다.</p>
+
+    <blockquote>
+      스키마 로딩의 지연을 줄이더라도, 각 호출이 독립적인 선택-실행-관찰 단위로 모델 추론 궤적에 노출된다는 전제는 그대로다. 파이프라인의 관점에서 병목을 진단하지만, 모델 추론의 관점에서 발생하는 구조적 오정렬은 다루지 않는다.
+    </blockquote>
+
+    <p>즉, 기존 접근법은 <strong>병목의 위치를 정확히 가리키는 데는 성공했지만, 병목의 근원을 질문하지는 않는다.</strong> 도라지를 뽑으려면 잎사귀가 아니라 뿌리를 잡아야 하는데, 우리는 계속 잎사귀의 위치만 더 정밀하게 가리키고 있는 셈이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section">
+    <h2>2. 실행 입자도 불일치: 무엇이 어긋나는가</h2>
+    <p>HyperTool이 포착한 문제의 핵심은 <strong class="accent-warm">실행 입자도 불일치(execution granularity mismatch)</strong>라는 개념에 담겨 있다. 이를 이해하려면 두 개의 층을 구분해야 한다.</p>
+
+    <div class="card">
+      <h3>두 개의 층, 두 개의 입자도</h3>
+      <p><strong class="accent-blue">실행 층(Execution Layer)</strong> — 실제 도구가 수행하는 연산의 단위. "파일 읽기 → 파싱 → 필드 추출" 같은 워크플로우는 하위 단위의 선택이 모델 추론에 의존하지 않으므로, 결정론적으로 하나로 묶일 수 있다.</p>
+      <p><strong class="accent-green">가시 층(Visibility Layer)</strong> — 모델의 추론 트레이스에 노출되는 단위. 기존 방식에서는 위의 하위 단위 각각이 독립적인 원자적 호출로 모델에게 보여진다.</p>
+    </div>
+
+    <p>이 두 층 사이의 간극이 바로 "입자도 불일치"다. 실행 층에서는 하나의 덩어리인 것이, 가시 층에서는 여러 조각으로 흩어진다. 이것이 단순한 효율 문제인 것처럼 보이지만, 실제로는 훨씬 더 근본적인 문제를 낳는다.</p>
+
+    <h3>누적되는 의미론적 불투명성</h3>
+    <p>매 단계마다 불필요한 관찰-해석 주기가 삽입된다는 것은, 모델이 <strong>본래 볼 필요가 없는 중간 상태를 관찰하게 된다</strong>는 뜻이다. 이는 추론의 일관성을 해친다.</p>
+
+    <p>다시 요리 비유로 돌아가 보자. "쌀 씻기"를 마친 후 젖은 쌀 상태를 일일이 보고받고, "물 넣기"를 마친 후 물 높이를 보고받고, "불 켜기" 후 화력을 보고받는 과정이 누적되면, 요리사는 전체 요리의 맥락을 잃고 각 순간의 미세한 상태에 압도된다. 이것이 <strong>실행 의미론 불투명성(agent-execution-semantic-opacity)</strong>이 누적되는 메커니즘이다.</p>
+
+    <p>더 나아가, 중간 상태를 관찰하는 과정에서 <strong>맹목적 도구 호출(blind-tool-invocation)</strong>의 위험도 증폭된다. 모델이 중간 결과의 미세한 차이에 반응하여 불필요한 방향 전환을 시도할 가능성이 커지기 때문이다. 원래 결정론적으로 한 번에 처리될 수 있었던 흐름이, 불필요한 분할 때문에 비결정론적인 경로로 빠져들 위험이 생긴다.</p>
+
+    <div class="highlight-line">
+      실행 입자도 불일치가 만들어내는 비용은 레이턴시가 아니다. 추론의 일관성과 의미론적 투명성의 손실이다.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section">
+    <h2>3. 두 논문의 교차 검증: 같은 근원, 다른 각도</h2>
+    <p>HyperTool의 진단을 기존 파이프라인 최적화 논의와 교차하면, 흥미로운 패턴이 드러난다. 두 접근법이 사실 <strong>동일한 근원적 문제</strong>를 서로 다른 각도에서 포착하고 있다는 것.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>차원</th>
+            <th>Tool Attention (기존)</th>
+            <th>HyperTool (재정의)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>진단 대상</strong></td>
+            <td>스키마 축적에 의한 파이프라인 병목</td>
+            <td>원자적 호출 단위 자체의 오정렬</td>
+          </tr>
+          <tr>
+            <td><strong>최적화 축</strong></td>
+            <td>호출 횟수·지연 최소화</td>
+            <td>도구 실행의 의미론적 단위 재정의</td>
+          </tr>
+          <tr>
+            <td><strong>해결 방향</strong></td>
+            <td>Lazy Schema Loading, Dynamic Gating</td>
+            <td>결정론적 하위 워크플로우의 복합 연산화</td>
+          </tr>
+          <tr>
+            <td><strong>남는 문제</strong></td>
+            <td>원자적 호출 전제 유지</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Tool Attention이 <strong>"원자적 호출이 N개 있으니, 각각의 스키마 로딩 비용을 줄이자"</strong>라고 말한다면, HyperTool은 <strong>"왜 원자적 호출이 N개여야 하는가?"</strong>라고 묻는다. 전자가 파이프라인 관점에서 병목을 진단한다면, 후자는 추론 구조 관점에서 병목의 근원을 질문하는 것이다.</p>
+
+    <p>그리고 이 두 각도가 만나는 지점이 바로 <strong>원자적 호출 전제</strong>라는 공통 근원이다. 파이프라인의 스키마 병목도, 추론의 의미론 불투명성도, 맹목적 호출의 위험도 모두 "도구 호출의 최소 단위는 항상 선택-실행-관찰의 원자적 삼단조"라는 전제에서 비롯된다.</p>
+
+    <div class="discovery-card">
+      <p class="label">새로운 개념 연결</p>
+      <p><strong class="accent-blue">파이프라인 최적화 ↔ 실행 의미론 불투명성</strong> — 이 두 논의가 원자적 호출 전제라는 공통 근원을 공유한다는 연결은 기존에 명시적으로 드러나지 않았다. Tool Attention이 인프라 관점에서, HyperTool이 추론 관점에서 동일한 근원적 문제를 각자의 언어로 기술하고 있었던 셈이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section">
+    <h2>4. 적응적 추론과의 구조적 유추</h2>
+    <p>이 패턴은 다른 분야에서 이미 관찰된 패러다임 전환과 구조적으로 동일하다. <strong class="accent-blue">적응적 추론(adaptive inference)</strong> 분야의 SpecKV 논문이 보여준 전환을 비교해 보자.</p>
+
+    <div class="card">
+      <h3>두 전환의 구조적 동형성</h3>
+      <p><strong>SpecKV의 전환:</strong> 적응적 추론의 결정 차원을 "어떤 모델을 선택할 것인가"에서 "추측 길이(γ)를 어떻게 선택할 것인가"로 이동. 최적화의 자유도를 외부 선택(모델 라우팅)에서 내부 상태 기반의 단위 재정의(추측 길이)로 전환.</p>
+      <p><strong>HyperTool의 전환:</strong> 도구 호출 최적화의 결정 차원을 "원자적 호출을 몇 번 할 것인가"에서 "어떤 의미론적 단위를 하나의 호출로 간주할 것인가"로 이동. 최적화의 자유도를 외부 선택(호출 횟수)에서 내부 상태 기반의 단위 재정의(복합 연산)로 전환.</p>
+    </div>
+
+    <p>두 경우 모두 핵심은 같다. <strong class="accent-warm">최적화의 자유도를 "외부에서 세는 것"에서 "내부에서 단위를 재정의하는 것"으로 이동시킨다.</strong> 세는 것(호출 횟수, 모델 수)은 언제나 한계가 있지만, 단위를 재정의하는 것은 문제의 구조 자체를 바꾼다.</p>
+
+    <div class="metaphor-box">
+      <p>이것은 <strong>교통 체증 해결 방식의 전환</strong>과도 같다. "차량 수를 줄이자"(호출 횟수 최소화)는 접근은 물리적 한계가 있다. 하지만 "버스 노선을 재설계하여 승객의 이동 단위를 개인에서 노선으로 바꾸자"(의미론적 단위 재정의)는 접근은 전혀 다른 해결 공간을 연다.</p>
+      <p>승객 수는 그대로일 수 있지만, 도로 위의 "단위 수"가 구조적으로 줄어든다.</p>
+    </div>
+
+    <p>HyperTool이 제시하는 복합 연산화는 정확히 이 논리다. 결정론적으로 묶일 수 있는 하위 워크플로우를 하나의 의미론적 단위로 통합하면, 모델의 추론 트레이스에 노출되는 "단위 수"가 구조적으로 줄어든다. 그리고 이것은 Tool Attention이 포착한 스키마 축적 문제까지 <strong>상위에서 자연스럽게 해소</strong>한다—하나의 복합 연산에 대해 하나의 스키마만 로드되면 되니까.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section">
+    <div class="conclusion-box">
+      <h2>5. 패러다임 전환: "횟수"에서 "단위"로</h2>
+
+      <p>HyperTool이 지적하는 실행 입자도 불일치는 하나의 명확한 메시지를 전달한다. 도구 호출 최적화는 더 이상 <strong>"원자적 호출을 더 빠르게, 더 적게"</strong>라는 축에 머물러서는 안 된다. 우리가 재정의해야 할 것은 호출의 효율이 아니라 <strong class="accent-warm">호출의 기본 추상화 단위 자체</strong>다.</p>
+
+      <p>이 전환은 세 가지 차원에서 구체화된다.</p>
+
+      <ol>
+        <li><strong>진단의 전환:</strong> "병목이 어디에 있는가"에서 "왜 이 단위가 병목이 되는가"로. 병목의 위치가 아니라 병목의 근원을 물어야 한다.</li>
+        <li><strong>최적화 축의 전환:</strong> "호출 횟수를 줄이자"에서 "의미론적으로 응집된 단위를 정의하자"로. 세는 것에서 분류하는 것으로.</li>
+        <li><strong>해결 공간의 전환:</strong> "인프라 최적화"에서 "추론 구조 재설계"로. 파이프라인 단에서의 점진적 개선이 아니라, 에이전트-도구 인터페이스의 근본적 재설계로.</li>
+      </ol>
+
+      <p>기존 패러다임은 <strong>원자적 호출을 불변의 자연법칙처럼</strong> 받아들였다. 하지만 HyperTool은 이것이 하나의 설계 선택이자, 더 나은 선택이 가능한 설계 지점임을 보여준다. 도구 호출의 단위는 원자적으로 고정된 것이 아니라, 실행 워크플로우의 결정론적 구조에 따라 동적으로 재정의될 수 있는 것이다.</p>
+
+      <div class="highlight-line">
+        "더 빠른 원자적 호출"을 추구하는 것은 점성 잉크로 더 빠르게 쓰는 것과 같다.<br>
+        HyperTool이 제안하는 것은 인쇄술의 발명이다—<br>
+        기본 단위 자체를 바꾸면, 속도는 자연스럽게 따라온다.
+      </div>
+
+      <p>파이프라인 서빙의 스키마 병목, 추론 트레이스의 의미론 불투명성, 맹목적 호출의 위험—이 세 가지 문제는 각각 독립적으로 해결될 필요가 없다. <strong class="accent-green">도구 호출의 추상화 단위를 올바르게 재정의</strong>하면, 이 세 문제는 하나의 구조적 전환 안에서 동시에 해소된다.</p>
+
+      <p>그것이 HyperTool이 우리에게 던지는 진정한 질문이다. 우리는 지금 "어떻게 하면 도구를 더 잘 쓸 수 있는가"를 묻고 있지만, 실제로 물어야 할 것은 <strong>"무엇을 하나의 도구 호출로 간주할 것인가"</strong>다.</p>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <p><strong>참고 논문:</strong> HyperTool: Beyond Step-Wise Tool Calls for Tool-Augmented Agents · Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading · SpecKV (적응적 추론 관련)</p>
+    <p style="margin-top: 8px;"><strong>관련 개념:</strong> aggregate-pipeline-serving · agent-execution-semantic-opacity · blind-tool-invocation · adaptive-inference</p>
+    <p style="margin-top: 16px; font-size: 12px; opacity: 0.7;">이 글은 Wiki Query 결과의 교차 검증을 바탕으로 작성된 심층 분석입니다.</p>
+  </footer>
+
+</article>
+
+<script>
+  // 읽기 진행률 바
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = Math.min(progress, 100) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+</script>
+
+</body>
+</html>

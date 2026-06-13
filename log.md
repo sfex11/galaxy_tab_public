@@ -1534,3 +1534,31 @@
 ## [2026-06-12 08:34] ingest | Re-evaluating Confidence Remasking in Masked Diffusion Language Models
 
 ## [2026-06-12 08:34] ingest | On Subquadratic Architectures: From Applications to Principles
+
+## [2026-06-13 08:40] ingest | EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments
+
+## [2026-06-13 08:40] ingest | SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning
+
+## [2026-06-13 08:40] ingest | Automated reproducibility assessments in the social and behavioral sciences using large language models
+
+## [2026-06-13 08:40] ingest | Agents-K1: Towards Agent-native Knowledge Orchestration
+
+## [2026-06-13 08:40] ingest | Influcoder: Distilling Decoders' Gradient Influence Rankings into an Encoder for Data Attribution
+
+## [2026-06-13 08:40] ingest | HyperTool: Beyond Step-Wise Tool Calls for Tool-Augmented Agents
+
+## [2026-06-13 08:40] ingest | EurekAgent: Agent Environment Engineering is All You Need For Autonomous Scientific Discovery
+
+## [2026-06-13 08:40] ingest | Operadic consistency: a label-free signal for compositional reasoning failures in LLMs
+
+## [2026-06-13 08:40] ingest | Recursive Agent Harnesses
+
+## [2026-06-13 08:40] ingest | Tuning Agent-Based Predator-Prey Models Toward Lotka-Volterra Dynamics
+
+## [2026-06-13 08:40] ingest | Beyond Runtime Enforcement: Shield Synthesis as Defensibility Analysis for Adversarial Networks
+
+## [2026-06-13 08:40] ingest | See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents
+
+## [2026-06-13 08:40] ingest | Valid Inference with Synthetic Data via Task Exchangeability
+
+## [2026-06-13 08:40] ingest | Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models
