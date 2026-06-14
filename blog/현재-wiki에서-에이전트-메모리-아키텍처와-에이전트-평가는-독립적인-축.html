@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메모리 아키텍처와 평가의 분리는 불가능한가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7168;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+    --radius: 14px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 1.6vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── 네비게이션 ── */
+  nav.top-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav.top-nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.88em;
+    transition: background 0.2s;
+  }
+  nav.top-nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 아티클 컨테이너 ── */
+  .article-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ── 헤더 영역 ── */
+  .article-header {
+    margin: 48px 0 40px;
+    text-align: left;
+    position: relative;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .article-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    line-height: 1.28;
+    color: var(--fg);
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .article-header .subtitle {
+    font-size: clamp(0.95rem, 1.8vw, 1.12rem);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 640px;
+  }
+  .article-header .meta {
+    margin-top: 24px;
+    font-size: 0.82em;
+    color: var(--muted);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .article-header .meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
+    margin: 48px 0;
+  }
+
+  /* ── 섹션 제목 ── */
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin: 48px 0 20px;
+    letter-spacing: -0.005em;
+  }
+  h2 .section-num {
+    color: var(--accent);
+    font-weight: 800;
+    margin-right: 10px;
+    font-size: 0.85em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+    color: var(--fg);
+    margin: 32px 0 12px;
+    line-height: 1.4;
+  }
+
+  /* ── 본문 단락 ── */
+  p {
+    margin-bottom: 1.2em;
+    color: var(--fg);
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    max-width: 800px;
+    margin: 32px auto;
+    padding: 20px 24px;
+    background: var(--card-bg);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.95em;
+    line-height: 1.75;
+  }
+  blockquote strong {
+    color: var(--fg);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 28px 26px;
+    margin: 28px 0;
+  }
+  .card .card-label {
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card h3 { margin-top: 0; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .card.blue-card { border-color: rgba(91,124,153,0.15); }
+  .card.blue-card .card-label { color: var(--blue); }
+
+  .card.green-card { border-color: rgba(107,158,122,0.15); }
+  .card.green-card .card-label { color: var(--green); }
+
+  /* ── 강조 텍스트 ── */
+  .hl { color: var(--accent); font-weight: 500; }
+  .hl-blue { color: var(--blue); font-weight: 500; }
+  .hl-green { color: var(--green); font-weight: 500; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(107,158,122,0.04));
+    border: 1px dashed rgba(194,112,62,0.2);
+    border-radius: var(--radius);
+    padding: 24px 26px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    font-size: 1.3em;
+    background: var(--bg);
+    padding: 0 8px;
+  }
+  .metaphor-box p { margin-bottom: 0.6em; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 연결 다이어그램 ── */
+  .chain-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+    margin: 36px 0;
+  }
+  .chain-node {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px 22px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 500;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--card-shadow);
+  }
+  .chain-node.blue { border-color: rgba(91,124,153,0.2); color: var(--blue); }
+  .chain-node.green { border-color: rgba(107,158,122,0.2); color: var(--green); }
+  .chain-node.accent { border-color: rgba(194,112,62,0.2); color: var(--accent); }
+  .chain-arrow {
+    font-size: 1.4em;
+    color: var(--muted);
+    line-height: 1;
+    padding: 6px 0;
+  }
+
+  /* ── 리스트 ── */
+  ul.analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  ul.analysis-list li {
+    padding: 14px 18px 14px 28px;
+    position: relative;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+  ul.analysis-list li::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 22px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  ul.analysis-list li.blue-item::before { background: var(--blue); }
+  ul.analysis-list li.green-item::before { background: var(--green); }
+
+  /* ── 결론 카드 ── */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.04), rgba(107,158,122,0.04));
+    border: 2px solid rgba(194,112,62,0.18);
+    border-radius: 18px;
+    padding: 36px 30px;
+    margin: 40px 0 24px;
+    box-shadow: 0 4px 24px rgba(44,40,37,0.07);
+  }
+  .conclusion-card h2 { margin-top: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    font-size: 0.82em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .article-wrap { padding: 16px 14px 60px; }
+    .article-header { margin: 28px 0 28px; }
+    .card, .metaphor-box, .conclusion-card { padding: 20px 18px; }
+    blockquote { padding: 16px 18px; margin: 24px 0; }
+    .chain-node { padding: 14px 16px; }
+    nav.top-nav { margin: 12px 0; padding: 10px 8px; gap: 4px; }
+    nav.top-nav a { padding: 5px 10px; font-size: 0.82em; }
+  }
+
+  /* ── 진입 애니메이션 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 스크롤 프로그레스 ── */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="article-wrap">
+
+  <nav class="top-nav">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <header class="article-header fade-in">
+    <span class="tag">Deep Analysis</span>
+    <h1>메모리를 짓는 것과 메모리를 평가하는 것은<br>애초에 나눌 수 없었던 일이었다</h1>
+    <p class="subtitle">EvoArena가 던진 하나의 질문이 기존 에이전트 연구의 숨겨진 전제를 무너뜨리는 과정을 추적합니다.</p>
+    <div class="meta">
+      <span>📅 2025-07-11</span>
+      <span>📄 EvoArena (2025)</span>
+      <span>⏱ 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ━━━ 섹션 1 ━━━ -->
+  <section class="fade-in">
+    <h2><span class="section-num">01</span>정답이 움직이는 시험장의 딜레마</h2>
+
+    <p>지금까지 에이전트 메모리 연구는 크게 두 가지 축으로 나뉘어 있었습니다. 하나는 <span class="hl">"메모리를 어떻게 저장하고 검색할 것인가"</span>라는 아키텍처 설계 문제이고, 다른 하나는 <span class="hl-blue">"그 메모리가 올바른가"</span>라는 평가 문제입니다. Wiki의 <span class="hl">agent-knowledge-separation</span> 엔티티도 이 분리를 전제로 이름 지어져 있습니다. 마치 건축가와 건축 감리사가 각각 독립적으로 일하는 구조죠.</p>
+
+    <p>그런데 EvoArena는 이 구조가 근본적으로 서 있을 수 없다고 말합니다. 이유는 단순합니다 — <span class="hl">동적 환경에서는 '올바름'의 기준 자체가 시간에 따라 변하기 때문</span>입니다.</p>
+
+    <div class="metaphor-box">
+      <p>날씨가 한여름에서 한겨울로 바뀌는 세계를 상상해 보세요. 7월에 "반팔을 챙겨라"라는 메모리는 완벽하게 올바릅니다. 하지만 12월이 되면 같은 메모리는 치명적으로 잘못된 정보가 됩니다. 문제는, <strong>이 시험장에서는 정답이 고정되어 있지 않다는 점</strong>입니다. 감리사가 시험지를 미리 출제할 수 없는 상황 — 그것이 동적 환경이 에이전트 메모리 평가에 던지는 본질적 도전입니다.</p>
+    </div>
+
+    <p>EvoArena가 "most evaluations assume static environments"라고 지적하는 것은 단순히 평가 데이터가 부족하다는 얘기가 아닙니다. 이는 Wiki의 <span class="hl-blue">benchmark-specification-gap</span>이 단순한 간극이 아니라 <strong>구조적 모순</strong>으로 기능함을 뜻합니다. 벤치마크가 평가 대상의 올바름을 사전에 규정할 수 없다는 것은, 평가가 아키텍처 설계와 분리된 채 독립적으로 존재할 수 없음을 의미합니다.</p>
+
+    <div class="card">
+      <span class="card-label">핵심 인사이트</span>
+      <p>정적 벤치마크에서 메모리의 올바름은 "고정된 정답 집합과의 일치도"로 정의됩니다. 하지만 동적 환경에서는 이것이 <strong>"현재 환경 상태에 대한 적응적 타당성"</strong>으로 재정의되어야 합니다. t 시점에 올바른 메모리가 t+1 시점에는 잘못된 메모리가 될 수 있고, 이 역전을 사전에 예측하는 것은 불가능합니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ━━━ 섹션 2 ━━━ -->
+  <section class="fade-in">
+    <h2><span class="section-num">02</span>인프라가 곧 평가 기구가 되는 순간</h2>
+
+    <p>그렇다면 Wiki 내의 다른 엔티티들은 이 문제를 어떻게 다루고 있을까요? 놀랍게도, 여러 연구가 이미 <span class="hl">아키텍처와 평가의 동일화</span>를 암시하고 있었습니다. 다만 각자의 문맥에서 개별적으로 포착했을 뿐, 하나의 명시적 명제로 통합되지 못했던 것입니다.</p>
+
+    <h3>망각은 결함이 아니라 평가다</h3>
+
+    <p><span class="hl-green">adaptive-forgetting-as-function</span>은 망각이 단순한 결함이 아니라 환경에 대한 적응 함수로 기능함을 보여줍니다. 이를 "언제, 무엇을 잊어야 하는가"라는 결정으로 재해석하면, <span class="hl">저장-검색 정책 자체가 내재적 평가 기준을 포함</span>하고 있음이 드러납니다. 메모리를 저장할 때 무엇을 버릴지 결정하는 로직 — 그것 자체가 "어떤 메모리가 유효한가"에 대한 평가입니다.</p>
+
+    <div class="metaphor-box">
+      <p>서재 정리를 생각해 보세요. "이 책은 버리고, 저 책은 남긴다"는 결정을 내리는 순간, 당신은 이미 두 가지를 동시에 하고 있습니다. <strong>서재의 구조를 설계하는 것</strong>과 <strong>어떤 책이 가치 있는지 평가하는 것</strong>입니다. 이 두 행위를 분리할 수 있나요? 불가능합니다. 정리의 기준이 곧 가치 평가의 기준이기 때문입니다.</p>
+    </div>
+
+    <h3>신념의 이동이 보상이 되는 메커니즘</h3>
+
+    <p><span class="hl-blue">belief-drift-as-reward-signal</span>은 이 동일화를 한 단계 더 밀어붙입니다. 에이전트의 신념 — 즉 메모리 상태 — 가 변화하는 과정 자체를 보상 신호로 활용한다는 것은, <span class="hl-blue">메모리의 진화 궤적이 곧 평가 지표</span>가 됨을 의미합니다. 별도의 외부 평가 축을 상정할 필요가 없어집니다. 인프라가 자가 평가(self-evaluation) 메커니즘으로 동작하는 것입니다.</p>
+
+    <h3>오케스트레이션은 통제 루프다</h3>
+
+    <div class="card blue-card">
+      <span class="card-label">ADEMA의 시사점</span>
+      <p><span class="hl-blue">adema</span>가 "Knowledge-State Orchestration"을 아키텍처 이름으로 삼은 것은 우연이 아닙니다. 지식 상태를 '오케스트레이션'한다는 것은 지식의 전체 생명주기 — 생성, 저장, 검색, 소멸 — 를 <strong>하나의 통제 루프</strong>로 관리한다는 뜻입니다. 이 루프 안에서 오케스트레이션 로직과 평가 로직은 분리될 수 없습니다. 지휘자가 악보를 해석하는 것과 연주의 품질을 판단하는 것을 나눌 수 없는 것과 같습니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ━━━ 섹션 3 ━━━ -->
+  <section class="fade-in">
+    <h2><span class="section-num">03</span>런타임에서 결정되는 올바름</h2>
+
+    <p>두 번째 층위에서는 "평가가 언제, 어디서 일어나는가"라는 문제가 등장합니다. 정적 벤치마크는 설계 시점에 평가 기준을 고정합니다. 하지만 동적 환경에서 이것은 작동하지 않습니다.</p>
+
+    <p><span class="hl-green">agora-opt</span>의 분석이 이 문제의 구체적 메커니즘을 보여줍니다. Agora-Opt가 "런타임 메모리·토론 구조를 통해 다중 에이전트 정렬을 달성"한다는 것은, <span class="hl-green">메모리의 올바름이 실행 시점의 상호작용을 통해 동적으로 결정</span>됨을 의미합니다. 사전에 정의된 평가 기준이 런타임 정렬 메커니즘에 의해 실시간으로 대체되는 것입니다.</p>
+
+    <div class="metaphor-box">
+      <p>축구 경기에서 심판이 전반전 시작 전에 "이 경기에서 올바른 패스는 15미터 이상의 장거리 패스다"라고 규정할 수 있나요? 불가능합니다. 올바른 패스는 현재의 수비 형태, 동료의 위치, 경기 흐름에 따라 <strong>그 순간에 결정</strong>됩니다. 에이전트 메모리도 마찬가지입니다. 어떤 검색이 '올바른' 검색인지는 런타임의 환경 상태가 결정하지만, 그 환경 상태는 사전에 알 수 없습니다.</p>
+    </div>
+
+    <p>그리고 Wiki에 <span class="hl-blue">closed-loop-evaluation</span>이라는 엔티티가 존재하는 것 자체가, 평가가 에이전트-환경 루프의 외부에 위치할 수 없음을 이미 포착하고 있다는 증거입니다. 폐루프 평가는 평가자가 루프 밖에 서 있는 것이 아니라 루프 <strong>내부에</strong> 위치함을 요구합니다. 평가가 인프라의 일부가 되는 것입니다.</p>
+
+    <div class="chain-diagram fade-in">
+      <div class="chain-node accent">런타임 메모리 구조<br><small style="font-weight:400;color:var(--muted);">agora-opt</small></div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node blue">폐루프 평가 강제<br><small style="font-weight:400;color:var(--muted);">closed-loop-evaluation</small></div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node green">신념 변화가 보상 신호로 기능<br><small style="font-weight:400;color:var(--muted);">belief-drift-as-reward-signal</small></div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node accent" style="border-color:rgba(194,112,62,0.3);">세 축이 하나의 메커니즘으로 수렴</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ━━━ 섹션 4 ━━━ -->
+  <section class="fade-in">
+    <h2><span class="section-num">04</span>숨겨져 있던 세 가지 연결</h2>
+
+    <p>이 분석을 통해 기존에 보이지 않았던 개념적 연결이 새롭게 드러납니다. 각 연결은 단순한 유사성이 아니라 인과적 구조를 갖습니다.</p>
+
+    <div class="card">
+      <span class="card-label">연결 1 — 인과적 역전</span>
+      <h3><span class="hl">adaptive-forgetting-as-function</span> ↔ <span class="hl-blue">benchmark-specification-gap</span></h3>
+      <p>적응적 망각이 함수로 기능하는 시스템에서는, 벤치마크가 '기억해야 할 것'을 사전에 명세할 수 없습니다. 오히려 <strong>망각 함수의 출력이 곧 벤치마크의 정답을 역산</strong>합니다. 일반적으로는 벤치마크가 아키텍처를 평가하지만, 여기서는 아키텍처(망각 함수)가 벤치마크의 정답을 생산합니다. 인과 화살표가 역전되는 것입니다.</p>
+    </div>
+
+    <div class="card blue-card">
+      <span class="card-label">연결 2 — 삼중 수렴</span>
+      <h3><span class="hl-blue">agora-opt</span> ↔ <span class="hl-green">closed-loop-evaluation</span> ↔ <span class="hl">belief-drift-as-reward-signal</span></h3>
+      <p>앞서 본 연쇄 구조가 하나의 메커니즘으로 수렴합니다. 런타임 메모리 구조가 폐루프 평가를 강제하고, 이 루프 내에서 신념 변화가 보상 신호로 기능하여 평가를 완성합니다. 세 엔티티가 각각 독립적인 개념처럼 보이지만, 동적 환경이라는 조건 아래에서는 <strong>하나의 메커니즘의 세 단계</strong>로 재설명될 수 있습니다.</p>
+    </div>
+
+    <div class="card green-card">
+      <span class="card-label">연결 3 — 전제의 해체</span>
+      <h3><span class="hl">agent-knowledge-separation</span>에 대한 근본적 재검토</h3>
+      <p>이 엔티티가 현재 '분리'를 전제로 이름 지어져 있다면, EvoArena의 프레이밍은 이 분리 자체가 해체되어야 함을 시사합니다. 에이전트와 지식(메모리)의 경계가 동적 환경에서 유동적이 되기 때문에, 분리가 아니라 <strong>융합(fusion)</strong>이 더 정확한 기술이 됩니다. 이름이 전제를 내포하고 있다는 점에서, 이 엔티티는 "분리의 불가능성을 기술하는 엔티티"로 재해석될 필요가 있습니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ━━━ 섹션 5 — 결론 ━━━ -->
+  <section class="fade-in">
+    <div class="conclusion-card">
+      <h2><span class="section-num">05</span>분리에서 융합으로: 패러다임 전환의 방향</h2>
+
+      <p>EvoArena의 주장은 Wiki 내의 여러 엔티티들이 이미 개별적으로 포착하고 있던 경향을 하나의 명시적 명제로 통합합니다.</p>
+
+      <blockquote>
+        <strong>메모리 저장-검색 인프라의 설계 결정</strong> — 무엇을 저장하고, 언제 검색하고, 언제 망각하는가 — 은 <strong>그 자체로 메모리 평가 기준의 선택</strong>이며, 동적 환경에서는 이 기준이 환경 상태에 의해 상대적으로 결정되므로, 두 축의 분리는 개념적으로 불가능하다.
+      </blockquote>
+
+      <p>그렇다면 우리는 무엇을 바꿔야 할까요? 구체적으로 세 가지 전환이 필요합니다.</p>
+
+      <ul class="analysis-list">
+        <li><span class="hl">분리 축을 융합 축으로 재설계</span> — agent-knowledge-separation은 "분리 불가능성"을 기술하는 엔티티로 재구성되어야 하며, Wiki의 분류 체계에서 아키텍처 설계와 평가를 하나의 연속체로 묶어야 합니다.</li>
+        <li class="blue-item"><span class="hl-blue">정적 벤치마크를 폐루프 벤치마크로 대체</span> — 평가가 에이전트-환경 루프 외부에 존재하는 방식에서, 루프 내부에 위치하여 런타임에 평가 기준 스스로를 갱신하는 방식으로 전환해야 합니다.</li>
+        <li class="green-item"><span class="hl-green">망각을 아키텍처의 핵심 평가 지표로 승격</span> — 적응적 망각은 더 이상 '결함 보정'이 아니라 '환경 적응도의 직접적 지표'로 다루어져야 하며, 망각 함수의 품질이 곧 메모리 시스템의 평가 점수가 되어야 합니다.</li>
+      </ul>
+
+      <p>이 전환의 핵심은 <strong>"평가를 아키텍처 밖에서 안으로 끌어들이는 것"</strong>입니다. 건축 감리를 건물 완공 후에 하는 것이 아니라, 벽돌을 쌓는 매 순간에 벽돌의 적합성을 판단하는 로직이 건축 구조 자체에 내장되어야 한다는 것입니다. 그것이 동적 환경이 우리에게 요구하는, 불가피하고도 필수적인 패러다임 전환입니다.</p>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <p>분석 대상: EvoArena — Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments (2025)</p>
+    <p>참조 엔티티: adaptive-forgetting-as-function · belief-drift-as-reward-signal · adema · agora-opt · closed-loop-evaluation · benchmark-specification-gap · agent-knowledge-separation</p>
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 프로그레스 바
+  const progressBar = document.getElementById('scrollProgress');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  // 스크롤 진입 애니메이션 (IntersectionObserver)
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  fadeEls.forEach((el) => observer.observe(el));
+</script>
+
+</body>
+</html>
