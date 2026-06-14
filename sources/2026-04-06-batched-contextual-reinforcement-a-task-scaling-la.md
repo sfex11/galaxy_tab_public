@@ -103,3 +103,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/elastic-context-orchestration.md|elastic context orchestration]]
+
+---
+**관련**: [[concepts/harness-scaling-axis.md|harness scaling axis]]

@@ -223,3 +223,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modularity-as-scaling-strategy.md|modularity as scaling strategy]]
+
+---
+**관련**: [[concepts/rollout-budget-convergence-efficiency.md|rollout budget convergence efficiency]]
+
+---
+**관련**: [[concepts/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]

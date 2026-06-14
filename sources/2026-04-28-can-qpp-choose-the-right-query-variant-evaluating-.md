@@ -232,3 +232,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fast-incorrect-execution.md|fast incorrect execution]]
+
+---
+**관련**: [[concepts/execution-visibility-misalignment.md|execution visibility misalignment]]

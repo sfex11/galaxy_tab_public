@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-06-11-trace-a-unified-rollout-budget-allocation-framewor]]: 두 논문 모두 LLM 에이전트를 위한 강화 학습의 효율성을 개선하는 것을 목표로 하며, 하나는 롤아웃 예산 할당을, 다른 하나는 절차적 크레딧 할당을 다룹니다.
 - → [[sources/2026-06-12-verifiable-environments-are-lego-bricks-recursive-]]: 두 논문 모두 LLM의 에이전트적 강화 학습을 통해 추론 능력을 향상시키며, 하나는 정책 최적화의 크레딧 할당을, 다른 하나는 훈련 환경의 구성 방식을 개선합니다.
+
+---
+**관련**: [[concepts/procedural-independence.md|procedural independence]]

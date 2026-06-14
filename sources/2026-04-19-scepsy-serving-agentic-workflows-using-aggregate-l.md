@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/tools-tax.md|tools tax]]
+
+---
+**관련**: [[concepts/evolutionary-branch-isolation.md|evolutionary branch isolation]]

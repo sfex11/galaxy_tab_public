@@ -328,3 +328,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/retrieval-based-drafting.md|retrieval based drafting]]
+
+---
+**관련**: [[concepts/inference-time-prompt-learning.md|inference time prompt learning]]

@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-11-the-shibboleth-effect-auditing-the-cross-lingual-d]]: 두 논문 모두 LLM의 다국어 처리 능력을 분석하며, 하나는 고전 중국어 번역에 대한 도메인 특화 평가를, 다른 하나는 교차 언어 분포 편향을 감사합니다.
+
+---
+**관련**: [[concepts/affective-polarity-amplification.md|affective polarity amplification]]

@@ -58,3 +58,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]
+
+---
+**관련**: [[concepts/dual-bottleneck-structure.md|dual bottleneck structure]]
+
+---
+**관련**: [[concepts/convergence-depth.md|convergence depth]]
+
+---
+**관련**: [[concepts/judgment-bottleneck.md|judgment bottleneck]]

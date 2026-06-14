@@ -256,3 +256,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/conservative-inference-under-irreversibility.md|conservative inference under irreversibility]]
+
+---
+**관련**: [[concepts/information-noise-consumption.md|information noise consumption]]
+
+---
+**관련**: [[concepts/semantic-integrity-verification-layer.md|semantic integrity verification layer]]

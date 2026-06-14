@@ -83,3 +83,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/semantic-minimization-cr.md|semantic minimization cr]]
+
+---
+**관련**: [[concepts/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]

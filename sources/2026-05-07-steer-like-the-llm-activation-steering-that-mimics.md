@@ -102,3 +102,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-control-dual-axis.md|inference control dual axis]]
+
+---
+**관련**: [[concepts/steering-read-manipulation-duality.md|steering read manipulation duality]]

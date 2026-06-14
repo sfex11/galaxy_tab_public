@@ -72,3 +72,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/adaptive-forgetting-as-function.md|adaptive forgetting as function]]
+
+---
+**관련**: [[concepts/distributed-cognitive-constitution.md|distributed cognitive constitution]]

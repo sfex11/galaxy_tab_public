@@ -78,3 +78,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/output-epistemic-reliability.md|output epistemic reliability]]
+
+---
+**관련**: [[concepts/environment-epistemic-error.md|environment epistemic error]]

@@ -135,3 +135,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/on-policy-self-distillation.md|on policy self distillation]]
+
+---
+**관련**: [[concepts/credit-allocation-degree-of-freedom.md|credit allocation degree of freedom]]
+
+---
+**관련**: [[concepts/credit-assignment-granularity.md|credit assignment granularity]]

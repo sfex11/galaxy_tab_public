@@ -122,3 +122,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-representation-translation-gap.md|semantic representation translation gap]]
+
+---
+**관련**: [[concepts/specification-gap-internalization.md|specification gap internalization]]

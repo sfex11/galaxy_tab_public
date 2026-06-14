@@ -88,3 +88,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/multimodal-meta-verification.md|multimodal meta verification]]
+
+---
+**관련**: [[concepts/meta-cognitive-delegation.md|meta cognitive delegation]]

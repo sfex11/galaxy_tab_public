@@ -77,3 +77,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/design-time-alignment.md|design time alignment]]
+
+---
+**관련**: [[concepts/environment-constituted-agent.md|environment constituted agent]]
+
+---
+**관련**: [[concepts/algorithm-level-adaptation.md|algorithm level adaptation]]
+
+---
+**관련**: [[concepts/thought-action-topology.md|thought action topology]]
+
+---
+**관련**: [[concepts/substrate-design.md|substrate design]]
+
+---
+**관련**: [[concepts/serving-primitive-programmability.md|serving primitive programmability]]
+
+---
+**관련**: [[concepts/model-harness-scaling-imbalance.md|model harness scaling imbalance]]

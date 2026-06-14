@@ -89,3 +89,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/selection-pressure-design.md|selection pressure design]]
+
+---
+**관련**: [[concepts/compression-translation-product.md|compression translation product]]
+
+---
+**관련**: [[concepts/design-time-alignment.md|design time alignment]]

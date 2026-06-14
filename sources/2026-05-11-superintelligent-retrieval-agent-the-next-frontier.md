@@ -20,3 +20,6 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/expert-offloading.md|expert offloading]]
+
+---
+**관련**: [[concepts/issue-time-privacy.md|issue time privacy]]

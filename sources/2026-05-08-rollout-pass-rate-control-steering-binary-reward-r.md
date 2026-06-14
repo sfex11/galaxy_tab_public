@@ -251,3 +251,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/recursive-checkpoint-scope-problem.md|recursive checkpoint scope problem]]
+
+---
+**관련**: [[concepts/external-state-non-revocability-gap.md|external state non revocability gap]]
+
+---
+**관련**: [[concepts/failure-reversibility-assumption.md|failure reversibility assumption]]

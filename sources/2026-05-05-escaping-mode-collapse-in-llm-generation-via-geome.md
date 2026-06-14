@@ -60,3 +60,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/geometric-orthogonal-residual-projection.md|geometric orthogonal residual projection]]
+
+---
+**관련**: [[concepts/latent-geometric-adaptation.md|latent geometric adaptation]]
+
+---
+**관련**: [[concepts/multidimensional-generalization-metric.md|multidimensional generalization metric]]

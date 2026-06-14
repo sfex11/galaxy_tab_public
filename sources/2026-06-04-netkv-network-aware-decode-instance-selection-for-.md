@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/safety-responsibility-transfer.md|safety responsibility transfer]]
+
+---
+**관련**: [[concepts/local-coherence-global-incoherence.md|local coherence global incoherence]]

@@ -30,3 +30,6 @@ AdaRadar는 이 문제를 해결하기 위해 **적응형 스펙트럼 압축(ra
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/healthy-pathological-compression.md|healthy pathological compression]]

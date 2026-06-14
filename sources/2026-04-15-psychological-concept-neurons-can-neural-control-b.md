@@ -144,3 +144,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/local-coherence-global-incoherence.md|local coherence global incoherence]]
+
+---
+**관련**: [[concepts/composite-tool-operation.md|composite tool operation]]

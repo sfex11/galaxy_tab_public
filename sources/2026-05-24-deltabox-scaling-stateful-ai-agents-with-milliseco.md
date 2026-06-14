@@ -161,3 +161,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/external-internal-memory-dual-axis.md|external internal memory dual axis]]
+
+---
+**관련**: [[concepts/internal-state-responsive-adaptation.md|internal state responsive adaptation]]
+
+---
+**관련**: [[concepts/rollback-specification-boundary.md|rollback specification boundary]]
+
+---
+**관련**: [[concepts/bottleneck-transference.md|bottleneck transference]]

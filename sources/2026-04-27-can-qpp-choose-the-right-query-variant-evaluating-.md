@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/synchronous-execution-assumption.md|synchronous execution assumption]]
+
+---
+**관련**: [[concepts/fast-incorrect-execution.md|fast incorrect execution]]

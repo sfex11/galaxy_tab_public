@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-12-tahoe-text-to-sql-with-automated-hint-optimization]]: 두 논문 모두 실제 환경에서 LLM 에이전트가 경험으로부터 학습하여 테스트 타임에 스스로 개선하는 방식을 다룹니다.
+
+---
+**관련**: [[concepts/domain-contingent-boundary-status.md|domain contingent boundary status]]

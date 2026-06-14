@@ -15,3 +15,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/lossy-serialization-channel.md|lossy serialization channel]]
+
+---
+**관련**: [[concepts/incentive-induced-sabotage.md|incentive induced sabotage]]

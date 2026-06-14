@@ -81,3 +81,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/irreversible-mid-trajectory.md|irreversible mid trajectory]]
+
+---
+**관련**: [[concepts/trajectory-internal-mediation.md|trajectory internal mediation]]
+
+---
+**관련**: [[concepts/trajectory-compressibility-criterion.md|trajectory compressibility criterion]]
+
+---
+**관련**: [[concepts/execution-trajectory-encapsulation.md|execution trajectory encapsulation]]

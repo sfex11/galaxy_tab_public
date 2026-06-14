@@ -97,3 +97,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/plug-in-architecture.md|plug in architecture]]
+
+---
+**관련**: [[concepts/dual-loop-safety-architecture.md|dual loop safety architecture]]
+
+---
+**관련**: [[concepts/measurement-architecture-misattribution.md|measurement architecture misattribution]]

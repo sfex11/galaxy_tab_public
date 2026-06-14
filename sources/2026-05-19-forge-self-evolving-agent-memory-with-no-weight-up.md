@@ -160,3 +160,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-evolving-framework-taxonomy.md|self evolving framework taxonomy]]
+
+---
+**관련**: [[concepts/harness-protocol-layer.md|harness protocol layer]]
+
+---
+**관련**: [[concepts/retrieval-based-drafting.md|retrieval based drafting]]
+
+---
+**관련**: [[concepts/knowledge-action-safety-gap.md|knowledge action safety gap]]

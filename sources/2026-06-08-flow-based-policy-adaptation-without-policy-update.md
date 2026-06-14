@@ -31,3 +31,15 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/knowledge-internalization-separation-tension.md|knowledge internalization separation tension]]
+
+---
+**관련**: [[concepts/adaptation-subject-transfer.md|adaptation subject transfer]]
+
+---
+**관련**: [[concepts/composition-operator-alignment.md|composition operator alignment]]
+
+---
+**관련**: [[concepts/dual-adaptation-axis-unpredictability.md|dual adaptation axis unpredictability]]

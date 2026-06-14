@@ -133,3 +133,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/human-as-harness-internal-component.md|human as harness internal component]]
+
+---
+**관련**: [[concepts/machine-human-mixed-state-preservation.md|machine human mixed state preservation]]
+
+---
+**관련**: [[concepts/harness-generation-context-binding.md|harness generation context binding]]
+
+---
+**관련**: [[concepts/inter-agent-translation-gap.md|inter agent translation gap]]
+
+---
+**관련**: [[concepts/latent-communication-homogeneity-dependency.md|latent communication homogeneity dependency]]

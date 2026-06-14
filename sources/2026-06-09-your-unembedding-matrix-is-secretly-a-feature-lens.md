@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evolutionary-cross-pollination.md|evolutionary cross pollination]]
+
+---
+**관련**: [[concepts/stateful-cross-account-monitoring.md|stateful cross account monitoring]]

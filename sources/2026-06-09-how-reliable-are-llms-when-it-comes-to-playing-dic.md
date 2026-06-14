@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/discrete-continuous-adaptation-transition.md|discrete continuous adaptation transition]]
+
+---
+**관련**: [[concepts/fast-incorrect-state-restoration.md|fast incorrect state restoration]]
+
+---
+**관련**: [[concepts/accuracy-expertise-divergence.md|accuracy expertise divergence]]

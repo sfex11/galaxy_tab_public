@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evolutionary-agency-axis.md|evolutionary agency axis]]
+
+---
+**관련**: [[concepts/autoregressive-paradigm-confinement.md|autoregressive paradigm confinement]]
+
+---
+**관련**: [[concepts/inference-control-dual-axis.md|inference control dual axis]]
