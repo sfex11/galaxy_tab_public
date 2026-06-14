@@ -282,3 +282,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/stateful-cross-account-monitoring.md|stateful cross account monitoring]]
+
+---
+**관련**: [[concepts/skill-reward-evaluation-trinity.md|skill reward evaluation trinity]]

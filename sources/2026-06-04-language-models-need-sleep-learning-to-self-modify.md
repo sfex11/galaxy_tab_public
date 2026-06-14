@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-03-tracking-the-behavioral-trajectories-of-adapting-a]]: 두 논문 모두 LLM/에이전트가 스스로를 수정(기억 통합, 설정 파일 편집)하여 시간에 따라 진화하고 행동이 변하는 과정을 다룹니다.
+
+---
+**관련**: [[entities/sleep-wake-consolidation.md|sleep wake consolidation]]

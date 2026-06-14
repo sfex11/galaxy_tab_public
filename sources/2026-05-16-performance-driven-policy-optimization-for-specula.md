@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptive-forgetting-as-function.md|adaptive forgetting as function]]
+
+---
+**관련**: [[concepts/zero-sum-optimization-trap.md|zero sum optimization trap]]

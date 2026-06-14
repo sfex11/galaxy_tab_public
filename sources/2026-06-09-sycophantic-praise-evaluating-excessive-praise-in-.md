@@ -22,7 +22,7 @@ Sycophancy in language models is typically studied as excessive agreement or val
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 
@@ -31,3 +31,6 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/sycophancy.md|sycophancy]]

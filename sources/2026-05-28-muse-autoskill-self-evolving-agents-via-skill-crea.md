@@ -42,3 +42,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/code-as-evolution-unit.md|code as evolution unit]]
+
+---
+**관련**: [[concepts/continuous-manifold-checkpointing-difficulty.md|continuous manifold checkpointing difficulty]]
+
+---
+**관련**: [[concepts/exogenous-evolution.md|exogenous evolution]]

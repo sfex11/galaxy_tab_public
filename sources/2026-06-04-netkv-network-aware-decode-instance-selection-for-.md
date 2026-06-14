@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dynamic-lifecycle-safety.md|dynamic lifecycle safety]]
+
+---
+**관련**: [[concepts/safety-responsibility-transfer.md|safety responsibility transfer]]

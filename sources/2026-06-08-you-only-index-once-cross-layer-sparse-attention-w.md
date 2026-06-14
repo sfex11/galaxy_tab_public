@@ -22,7 +22,7 @@ Long-context inference in modern LLMs is increasingly constrained by decoding ef
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

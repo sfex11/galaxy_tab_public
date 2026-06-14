@@ -22,7 +22,7 @@ Modern conversational agents condition on an ever-growing dialogue history at ea
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

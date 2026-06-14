@@ -253,3 +253,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-as-reasoning-constituent.md|harness as reasoning constituent]]
+
+---
+**관련**: [[concepts/conservative-inference-under-irreversibility.md|conservative inference under irreversibility]]

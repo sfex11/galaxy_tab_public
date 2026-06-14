@@ -22,7 +22,7 @@ Monolithic vision-action models represent an emerging paradigm in autonomous dri
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

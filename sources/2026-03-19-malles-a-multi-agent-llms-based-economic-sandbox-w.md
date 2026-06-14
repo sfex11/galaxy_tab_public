@@ -341,3 +341,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/anti-sandbox.md|anti sandbox]]
+
+---
+**관련**: [[concepts/shallow-alignment.md|shallow alignment]]
+
+---
+**관련**: [[concepts/single-agent-observation-bias.md|single agent observation bias]]

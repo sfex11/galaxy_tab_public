@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-subject-internalization.md|harness subject internalization]]
+
+---
+**관련**: [[concepts/harness-spectrum.md|harness spectrum]]

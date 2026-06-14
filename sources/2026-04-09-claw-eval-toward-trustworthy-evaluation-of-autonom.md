@@ -131,3 +131,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/execution-trajectory-encapsulation.md|execution trajectory encapsulation]]
+
+---
+**관련**: [[concepts/adaptive-trajectory-steering.md|adaptive trajectory steering]]
+
+---
+**관련**: [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]

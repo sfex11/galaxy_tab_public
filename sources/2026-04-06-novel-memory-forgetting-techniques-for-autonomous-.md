@@ -46,3 +46,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/cooperative-forgetting.md|cooperative forgetting]]
+
+---
+**관련**: [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]

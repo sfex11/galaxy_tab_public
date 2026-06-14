@@ -22,7 +22,7 @@ Current Vision-Language Models struggle with hours-long videos because processin
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

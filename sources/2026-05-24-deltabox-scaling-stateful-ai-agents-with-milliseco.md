@@ -158,3 +158,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/belief-state-as-constraint.md|belief state as constraint]]
+
+---
+**관련**: [[concepts/external-internal-memory-dual-axis.md|external internal memory dual axis]]

@@ -1592,3 +1592,7 @@
 ## [2026-06-14 08:33] ingest | Valid Inference with Synthetic Data via Task Exchangeability
 
 ## [2026-06-14 08:33] ingest | Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models
+
+## [2026-06-14 17:16] lint | Wiki 건전성 체크
+- Issues: 1627개
+- Orphans: 469, Missing: 1158, Contradictions: 0

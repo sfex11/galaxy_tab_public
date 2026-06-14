@@ -273,3 +273,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/safety-responsibility-transfer.md|safety responsibility transfer]]
+
+---
+**관련**: [[concepts/reasoning-structural-failure.md|reasoning structural failure]]

@@ -22,7 +22,7 @@ General-purpose agents such as OpenClaw are increasingly used as autonomous tool
 
 ## 추출된 엔티티
 
-- [[OpenClaw]]
+- [[entities/openclaw.md|openclaw]]
 
 ## 추출된 개념
 

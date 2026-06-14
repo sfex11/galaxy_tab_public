@@ -23,7 +23,7 @@ Sparse attention is becoming increasingly important for serving large language m
 ## 추출된 엔티티
 
 - [[LLM Agent]]
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

@@ -248,3 +248,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/output-entropy-degradation.md|output entropy degradation]]
+
+---
+**관련**: [[concepts/recursive-checkpoint-scope-problem.md|recursive checkpoint scope problem]]

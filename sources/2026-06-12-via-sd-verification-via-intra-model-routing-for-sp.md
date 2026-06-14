@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-12-breaking-entropy-bounds-accelerating-rl-training-v]]: 두 논문 모두 LLM 추론 속도를 가속화하는 기법을 다루며, 하나는 RL 훈련을 위한 MTP 기반 거부 샘플링을, 다른 하나는 사전적 디코딩의 검증 효율성을 개선합니다.
+
+---
+**관련**: [[concepts/draft-tree-vram-bottleneck.md|draft tree vram bottleneck]]
+
+---
+**관련**: [[concepts/pre-decoding-refusal-detection.md|pre decoding refusal detection]]

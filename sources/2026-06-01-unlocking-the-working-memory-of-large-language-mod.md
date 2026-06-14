@@ -124,3 +124,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/test-time-compute-harness-mapping.md|test time compute harness mapping]]
+
+---
+**관련**: [[concepts/model-harness-decomposability.md|model harness decomposability]]
+
+---
+**관련**: [[concepts/internal-state-certification-path.md|internal state certification path]]
+
+---
+**관련**: [[concepts/human-as-harness-internal-component.md|human as harness internal component]]
