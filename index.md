@@ -765,3 +765,20 @@
 - [[sources/2026-06-13-see-what-i-see-know-what-i-think-dense-latent-comm.md]] - See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents
 - [[sources/2026-06-13-valid-inference-with-synthetic-data-via-task-excha.md]] - Valid Inference with Synthetic Data via Task Exchangeability
 - [[sources/2026-06-13-beyond-uniform-tokens-adaptive-compression-for-tim.md]] - Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models
+- [[sources/2026-06-14-evoarena-tracking-memory-evolution-for-robust-llm-.md]] - EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments
+- [[sources/2026-06-14-spatialclaw-rethinking-action-interface-for-agenti.md]] - SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning
+- [[sources/2026-06-14-automated-reproducibility-assessments-in-the-socia.md]] - Automated reproducibility assessments in the social and behavioral sciences using large language models
+- [[sources/2026-06-14-agents-k1-towards-agent-native-knowledge-orchestra.md]] - Agents-K1: Towards Agent-native Knowledge Orchestration
+- [[sources/2026-06-14-influcoder-distilling-decoders-gradient-influence-.md]] - Influcoder: Distilling Decoders' Gradient Influence Rankings into an Encoder for Data Attribution
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-14-hypertool-beyond-step-wise-tool-calls-for-tool-aug.md]] - HyperTool: Beyond Step-Wise Tool Calls for Tool-Augmented Agents
+- [[sources/2026-06-14-eurekagent-agent-environment-engineering-is-all-yo.md]] - EurekAgent: Agent Environment Engineering is All You Need For Autonomous Scientific Discovery
+- [[sources/2026-06-14-operadic-consistency-a-label-free-signal-for-compo.md]] - Operadic consistency: a label-free signal for compositional reasoning failures in LLMs
+- [[sources/2026-06-14-recursive-agent-harnesses.md]] - Recursive Agent Harnesses
+- [[sources/2026-06-14-tuning-agent-based-predator-prey-models-toward-lot.md]] - Tuning Agent-Based Predator-Prey Models Toward Lotka-Volterra Dynamics
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-14-beyond-runtime-enforcement-shield-synthesis-as-def.md]] - Beyond Runtime Enforcement: Shield Synthesis as Defensibility Analysis for Adversarial Networks
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-14-see-what-i-see-know-what-i-think-dense-latent-comm.md]] - See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents
+- [[sources/2026-06-14-valid-inference-with-synthetic-data-via-task-excha.md]] - Valid Inference with Synthetic Data via Task Exchangeability
+- [[sources/2026-06-14-beyond-uniform-tokens-adaptive-compression-for-tim.md]] - Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models

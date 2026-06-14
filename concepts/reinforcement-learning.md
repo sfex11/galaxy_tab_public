@@ -253,3 +253,5 @@ _자동 생성됨_
 - [[sources/2026-06-12-breaking-entropy-bounds-accelerating-rl-training-v.md]]
 
 - [[sources/2026-06-13-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
+
+- [[sources/2026-06-14-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
