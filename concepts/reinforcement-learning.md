@@ -255,3 +255,5 @@ _자동 생성됨_
 - [[sources/2026-06-13-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
 
 - [[sources/2026-06-14-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
+
+- [[sources/2026-06-15-beyond-runtime-enforcement-shield-synthesis-as-def.md]]

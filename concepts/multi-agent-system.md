@@ -181,3 +181,5 @@ _자동 생성됨_
 - [[sources/2026-06-13-see-what-i-see-know-what-i-think-dense-latent-comm.md]]
 
 - [[sources/2026-06-14-see-what-i-see-know-what-i-think-dense-latent-comm.md]]
+
+- [[sources/2026-06-15-see-what-i-see-know-what-i-think-dense-latent-comm.md]]
