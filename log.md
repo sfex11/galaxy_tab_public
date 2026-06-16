@@ -1630,3 +1630,27 @@
 ## [2026-06-15 08:33] ingest | Valid Inference with Synthetic Data via Task Exchangeability
 
 ## [2026-06-15 08:33] ingest | Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models
+
+## [2026-06-16 08:09] llm-ingest | 0편 분석, 엔티티 355개, 개념 1110개
+
+## [2026-06-16 08:47] ingest | Learning Coordinated Preference for Multi-Objective Multi-Agent Reinforcement Learning
+
+## [2026-06-16 08:47] ingest | AgentSpec: Understanding Embodied Agent Scaffolds Through Controlled Composition
+
+## [2026-06-16 08:47] ingest | Towards Direct Latent-Space Synthesis for Parallel Branches in LLM-Agent Workflows
+
+## [2026-06-16 08:47] ingest | Giving AI a Headache: Acoustic Adversarial Attacks to Computer Vision Applications
+
+## [2026-06-16 08:47] ingest | Safe Reinforcement Learning of Autonomous Highway Driving: A Unified Framework for Safety and Efficiency
+
+## [2026-06-16 08:47] ingest | LoSoNA: A Benchmark for Local Social Norm Adaptation in Group Conversations
+
+## [2026-06-16 08:47] ingest | Regulating the Machine Contributor: Governance and Policy Alignment in Open Source
+
+## [2026-06-16 08:47] ingest | When Errors Become Narratives: A Longitudinal Taxonomy of Silent Failures in a Production LLM Agent Runtime
+
+## [2026-06-16 08:47] ingest | ClinHallu: A Benchmark for Diagnosing Stage-Wise Hallucinations in Medical MLLM Reasoning
+
+## [2026-06-16 08:47] ingest | CORA: Analyzing and bridging thinking-answer gap in Multimodal RLVR via Consistency-Oriented Reasoning Alignment
+
+## [2026-06-16 08:47] ingest | Code Correctness Signals in LLM Hidden States: Pre-Generation Probing and Repair Geometry

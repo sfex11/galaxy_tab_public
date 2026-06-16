@@ -257,3 +257,9 @@ _자동 생성됨_
 - [[sources/2026-06-14-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
 
 - [[sources/2026-06-15-beyond-runtime-enforcement-shield-synthesis-as-def.md]]
+
+- [[sources/2026-06-16-learning-coordinated-preference-for-multi-objectiv.md]]
+
+- [[sources/2026-06-16-safe-reinforcement-learning-of-autonomous-highway-.md]]
+
+- [[sources/2026-06-16-cora-analyzing-and-bridging-thinking-answer-gap-in.md]]

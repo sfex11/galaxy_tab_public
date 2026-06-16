@@ -799,3 +799,20 @@
 - [[sources/2026-06-15-see-what-i-see-know-what-i-think-dense-latent-comm.md]] - See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents
 - [[sources/2026-06-15-valid-inference-with-synthetic-data-via-task-excha.md]] - Valid Inference with Synthetic Data via Task Exchangeability
 - [[sources/2026-06-15-beyond-uniform-tokens-adaptive-compression-for-tim.md]] - Beyond Uniform Tokens: Adaptive Compression for Time Series Language Models
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-16-learning-coordinated-preference-for-multi-objectiv.md]] - Learning Coordinated Preference for Multi-Objective Multi-Agent Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-16-agentspec-understanding-embodied-agent-scaffolds-t.md]] - AgentSpec: Understanding Embodied Agent Scaffolds Through Controlled Composition
+- [[sources/2026-06-16-towards-direct-latent-space-synthesis-for-parallel.md]] - Towards Direct Latent-Space Synthesis for Parallel Branches in LLM-Agent Workflows
+- [[sources/2026-06-16-giving-ai-a-headache-acoustic-adversarial-attacks-.md]] - Giving AI a Headache: Acoustic Adversarial Attacks to Computer Vision Applications
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-16-safe-reinforcement-learning-of-autonomous-highway-.md]] - Safe Reinforcement Learning of Autonomous Highway Driving: A Unified Framework for Safety and Efficiency
+- [[sources/2026-06-16-losona-a-benchmark-for-local-social-norm-adaptatio.md]] - LoSoNA: A Benchmark for Local Social Norm Adaptation in Group Conversations
+- [[sources/2026-06-16-regulating-the-machine-contributor-governance-and-.md]] - Regulating the Machine Contributor: Governance and Policy Alignment in Open Source
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-16-when-errors-become-narratives-a-longitudinal-taxon.md]] - When Errors Become Narratives: A Longitudinal Taxonomy of Silent Failures in a Production LLM Agent Runtime
+- [[sources/2026-06-16-clinhallu-a-benchmark-for-diagnosing-stage-wise-ha.md]] - ClinHallu: A Benchmark for Diagnosing Stage-Wise Hallucinations in Medical MLLM Reasoning
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-16-cora-analyzing-and-bridging-thinking-answer-gap-in.md]] - CORA: Analyzing and bridging thinking-answer gap in Multimodal RLVR via Consistency-Oriented Reasoning Alignment
+- [[sources/2026-06-16-code-correctness-signals-in-llm-hidden-states-pre-.md]] - Code Correctness Signals in LLM Hidden States: Pre-Generation Probing and Repair Geometry
