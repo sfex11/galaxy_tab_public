@@ -263,3 +263,9 @@ _자동 생성됨_
 - [[sources/2026-06-16-safe-reinforcement-learning-of-autonomous-highway-.md]]
 
 - [[sources/2026-06-16-cora-analyzing-and-bridging-thinking-answer-gap-in.md]]
+
+- [[sources/2026-06-17-context-aware-rl-for-agentic-and-multimodal-llms.md]]
+
+- [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef.md]]
+
+- [[sources/2026-06-17-exprl-exploratory-rl-for-llm-mid-training.md]]

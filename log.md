@@ -1654,3 +1654,27 @@
 ## [2026-06-16 08:47] ingest | CORA: Analyzing and bridging thinking-answer gap in Multimodal RLVR via Consistency-Oriented Reasoning Alignment
 
 ## [2026-06-16 08:47] ingest | Code Correctness Signals in LLM Hidden States: Pre-Generation Probing and Repair Geometry
+
+## [2026-06-17 08:35] ingest | Context-Aware RL for Agentic and Multimodal LLMs
+
+## [2026-06-17 08:35] ingest | Benchmarking LLM Agents on Meta-Analysis Articles from Nature Portfolio
+
+## [2026-06-17 08:35] ingest | KVEraser: Learning to Steer KV Cache for Efficient Localized Context Erasing
+
+## [2026-06-17 08:35] ingest | DEEPRUBRIC: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
+
+## [2026-06-17 08:35] ingest | ExpRL: Exploratory RL for LLM Mid-Training
+
+## [2026-06-17 08:35] ingest | TokenPilot: Cache-Efficient Context Management for LLM Agents
+
+## [2026-06-17 08:35] ingest | Bayesian Inference and Decision Audits for Public Archives of Frontier AI Evaluations
+
+## [2026-06-17 08:35] ingest | Stable Menus of Public Goods: AI-Enabled Progress
+
+## [2026-06-17 08:35] ingest | Agent trajectories as programs: fingerprinting and programming coding-agent behavior
+
+## [2026-06-17 08:35] ingest | Consensus-based Agentic Large Language Model Framework for Harmonized Tariff Schedule Code Classification
+
+## [2026-06-17 08:35] ingest | LESS Is More: Mutual-Stability Sampling for Diffusion Language Models
+
+## [2026-06-17 08:35] ingest | Follow the Latent Roadmap: Navigating Revocable Decoding for Diffusion LLMs with Anchor Tokens

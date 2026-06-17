@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>토큰을 줄였는데 더 느려졌다 — LLM 에이전트 최적화의 역설과 패러다임 전환</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection { background: rgba(194,112,62,0.18); }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Reading container ── */
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #c2703e;
+    border: 1px solid rgba(194,112,62,0.25);
+    border-radius: 100px;
+    padding: 5px 16px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.65rem, 4.5vw, 2.5rem);
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
+    color: rgba(44,40,37,0.6);
+    font-weight: 300;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Section ── */
+  .section { margin-bottom: clamp(36px, 6vw, 64px); }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #c2703e;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+    line-height: 1.4;
+    color: #2c2825;
+    margin-bottom: 18px;
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.22rem);
+    line-height: 1.45;
+    color: #2c2825;
+    margin: 28px 0 12px;
+  }
+  .section p {
+    margin-bottom: 16px;
+    font-size: clamp(0.92rem, 2vw, 1rem);
+    color: rgba(44,40,37,0.82);
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(0.9rem, 1.8vw, 0.98rem);
+    color: rgba(44,40,37,0.72);
+    font-style: italic;
+    line-height: 1.8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.85em;
+    color: #c2703e;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: clamp(0.88rem, 1.8vw, 0.95rem);
+    color: #2c2825;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(44,40,37,0.06);
+    background: rgba(255,255,255,0.55);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.82rem, 1.6vw, 0.92rem);
+    min-width: 420px;
+  }
+  thead { background: rgba(194,112,62,0.06); }
+  th {
+    font-weight: 600;
+    color: #2c2825;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: rgba(44,40,37,0.78);
+  }
+  tr:last-child td { border-bottom: none; }
+  td.hl { color: #c2703e; font-weight: 500; }
+
+  /* ── Formula ── */
+  .formula {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 24px 0;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    color: #2c2825;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    overflow-x: auto;
+  }
+
+  /* ── Highlight ── */
+  .hl-orange { color: #c2703e; font-weight: 600; }
+  .hl-blue   { color: #5b7c99; font-weight: 600; }
+  .hl-green  { color: #6b9e7a; font-weight: 600; }
+  .hl-bg {
+    background: linear-gradient(to top, rgba(194,112,62,0.12) 40%, transparent 40%);
+    padding: 0 2px;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(36px, 6vw, 64px) 0;
+  }
+
+  /* ── Connections list ── */
+  .conn-list { list-style: none; margin: 20px 0; }
+  .conn-list li {
+    position: relative;
+    padding: 14px 18px 14px 28px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(194,112,62,0.08);
+    border-radius: 10px;
+    font-size: clamp(0.88rem, 1.8vw, 0.95rem);
+    color: rgba(44,40,37,0.8);
+    line-height: 1.75;
+  }
+  .conn-list li::before {
+    content: '';
+    position: absolute;
+    left: 12px; top: 20px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #c2703e;
+  }
+
+  /* ── Metaphor box ── */
+  .metaphor {
+    background: linear-gradient(135deg, rgba(107,158,122,0.08), rgba(91,124,153,0.06));
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+  }
+  .metaphor-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #6b9e7a;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .metaphor p {
+    margin-bottom: 10px;
+    color: rgba(44,40,37,0.78);
+  }
+  .metaphor p:last-child { margin-bottom: 0; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: clamp(32px, 5vw, 56px) 0;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(40px, 7vw, 72px);
+    font-size: 0.82rem;
+    color: rgba(44,40,37,0.4);
+  }
+
+  /* ── Nav ── */
+  .nav-bar {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav class="nav-bar article-wrap" style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="article-wrap">
+
+  <!-- Hero -->
+  <header class="hero">
+    <span class="hero-badge">Deep Analysis</span>
+    <h1>토큰을 줄였는데 더 느려졌다 — LLM 에이전트 최적화의 역설과 패러다임 전환</h1>
+    <p class="hero-sub">TokenPilot이 밝혀낸 "접두사 불일치" 역설은 단순한 버그가 아니다. 최적화의 병목이 반복적으로 재정의되어 온 거대한 메타 패턴의 최신 현현이다.</p>
+  </header>
+
+  <!-- 섹션 1 -->
+  <section class="section">
+    <p class="section-label">Section 01</p>
+    <h2>책장에서 책을 빼면 왜 찾는 게 더 느려질까</h2>
+
+    <p>넓은 서재에 천 권의 책이 꽂혀 있다고 상상해 보자. 빠르게 특정 문장을 찾아야 하는데, 책이 너무 많아 <span class="hl-orange">불필요한 책을 골라내 덮어버리기로 했다</span>. 당연히 공간이 줄어들었으니 탐색이 빨라질 것 같다. 하지만 문제가 하나 있다 — 이 서재의 색인 시스템은 <span class="hl-blue">"3번째 책 옆에 4번째 책"이라는 물리적 위치</span>를 기준으로 만들어져 있다.</p>
+
+    <p>중간에 책 다섯 권을 빼버리면, 6번째 책은 여전히 '6번째'라는 태그를 달고 있지만 실제로는 1번째 자리에 있다. 색인은 전부 엉망이 되고, 결국 <span class="hl-orange">줄인 만큼이 아니라 엉킨 색인을 풀어야 하는 추가 비용</span>이 발생한다. 줄인 건 분명한데 결과는 더 느려졌다.</p>
+
+    <p>이것이 TokenPilot 논문이 LLM 에이전트 컨텍스트 관리에서 발견한 역설의 핵심이다. 토큰 수를 줄이는 논리적 압축 — 가지치기(pruning)와 동적 축출(eviction) — 은 "의미적으로 불필요한 토큰을 제거한다"는 명제 아래 수행된다. 그러나 하드웨어 계층의 KV 캐시는 <span class="hl-blue">위치 기반(positional) 인덱싱</span>을 사용하므로, 중간 토큰이 사라지면 이후 모든 토큰의 캐시 라인이 물리적으로 불일치하게 된다. 이를 논문은 <span class="hl-orange">접두사 불일치(prefix misalignment)</span>라고 부른다.</p>
+
+    <blockquote>
+      토큰 수를 줄이는 논리적 압축이 접두사 불일치(prefix misalignment)를 유발해 KV 캐시 효율을 오히려 저하시킨다.
+      <cite>— TokenPilot: Cache-Efficient Context Management for LLM Agents</cite>
+    </blockquote>
+
+    <p>논리적 압축의 '정답'이 물리적 캐시의 '오답'이 되는 지점. 여기서부터 진짜 이야기가 시작된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section">
+    <p class="section-label">Section 02</p>
+    <h2>병목은 항상 우리가 생각한 곳에 있지 않다</h2>
+
+    <p>TokenPilot의 발견을 처음 접하면 "예상치 못한 엣지 케이스"로 치부하기 쉽다. 하지만 이는 전혀 새로운 현상이 아니다. 정확히 <span class="hl-orange">동일한 구조의 역설</span>이 이미 다른 도메인에서 관찰되었다.</p>
+
+    <h3>파이프라인 서빙에서의 선례</h3>
+
+    <p>"Tool Attention Is All You Need" 논문은 다중 서버 MCP(Model Context Protocol) 배포 환경에서 파이프라인 전체의 레이턴시 병목이 어디에서 발생하는지 조사했다. 당연히 <span class="hl-blue">개별 LLM 호출의 레이턴시</span>가 병목일 것이라는 게 일반적 가정이었다. 그러나 실제 측정 결과, 병목은 전혀 다른 곳 — <span class="hl-orange">스키마 축적</span> — 에서 발생하고 있었다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>도메인</th><th>가정된 병목</th><th>실제 병목</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>파이프라인 서빙</td>
+            <td>개별 LLM 호출 레이턴시</td>
+            <td class="hl">스키마 축적</td>
+          </tr>
+          <tr>
+            <td>컨텍스트 관리</td>
+            <td>토큰 수</td>
+            <td class="hl">KV 캐시 접두사 일관성</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>두 사례의 구조가 완벽하게 동일하다. "당연히 병목일 것이라 가정한 축"이 실제로는 병목이 아니었고, "무시되던 축"이 진짜 병목이었다. 이것은 우연의 일치가 아니다.</p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="dot" style="background:#c2703e;"></span>
+        적응적 병목 이동(Adaptive Bottleneck Migration) 패턴
+      </div>
+      <p style="margin-bottom:0;color:rgba(44,40,37,0.78);font-size:clamp(0.88rem,1.8vw,0.95rem);">최적화를 진행할수록 병목이 다른 계층으로 이동하며, 이전 축의 최적화가 오히려 다음 축의 성능을 저하시키는 현상. 파이프라인 서빙에서 컨텍스트 관리까지, 도메인을 넘나들며 반복되는 메타 패턴이다. TokenPilot의 역설은 이 패턴의 구체적이고 결정적인 증거다.</p>
+    </div>
+
+    <p>즉, "토큰 수를 줄이면 빨라진다"는 가정은 <span class="hl-orange">최적화 초반에는 맞았지만</span>, 그 축을 충분히 눌러버린 순간 병목이 KV 캐시 계층으로 이동했다. 그리고 이전 최적화(토큰 제거)가 새로운 병목(캐시 불일치)을 직접 유발했다. 병목이 이동할 뿐 아니라, <span class="hl-blue">이전의 해법이 다음의 문제를 만드는</span> 것이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section">
+    <p class="section-label">Section 03</p>
+    <h2>압축은 일방향 도로가 아니다 — 양방향 결합 시스템</h2>
+
+    <p>기존 접근의 근본적 오류는 압축과 추론을 <span class="hl-orange">단방향 파이프라인</span>으로 모델링한 데 있다. "컨텍스트를 압축한 뒤 추론에 넣는다" — 이 순서가 당연하다고 여겨졌다. 하지만 SpecKV 논문은 이미 이 가정이 깨진다는 것을 보여주었다.</p>
+
+    <blockquote>
+      SpecKV는 압축이라는 내부 시스템 상태에 반응하는 적응의 새로운 유형을 제시한다. 적응적 추론의 결정 차원을 모델/라우트 선택에서 추측 길이(γ) 선택으로 확장한다.
+      <cite>— SpecKV (adaptive-inference 패턴)</cite>
+    </blockquote>
+
+    <p>SpecKV가 증명한 것은 이것이다: <span class="hl-blue">압축 상태가 추론 동작에 영향을 미친다</span>. 압축을 어떻게 했느냐에 따라 모델이 다음 토큰을 예측하는 방식 자체가 바뀐다. 압축은 추론에 영향을 주는 '입력'이 아니라, 추론과 <span class="hl-orange">상호작용하는 상태 변수</span>인 것이다.</p>
+
+    <p>TokenPilot은 이 결론의 <span class="hl-green">역방향</span>을 증명한다.</p>
+
+    <div class="metaphor">
+      <p class="metaphor-label">비유: 스프링 연결된 두 저울</p>
+      <p>두 개의 저울이 스프링으로 연결되어 있다고 상상하자. 한쪽 저울(압축)에 무게를 올리면 다른 쪽 저울(추론)이 움직인다 — 이건 SpecKV가 보여준 것이다. 그런데 반대로, 추론 저울에 올라탄 사람이 발을 차면 압축 저울도 흔들린다 — 이게 TokenPilot의 발견이다. 두 저울은 독립이 아니라 <span class="hl-orange">결합(coupled)되어 있다</span>.</p>
+    </div>
+
+    <p>두 논문을 합치면 결론은 명확해진다. <span class="hl-orange">압축과 추론은 양방향 결합 시스템</span>이다. 기존의 가지치기·동적 축출은 이 결합을 단절시킨 채 압축을 일방적으로 강제하는 것이므로, 구조적으로 캐시 불일치를 유발할 수밖에 없다. 마치 스프링 연결을 무시하고 한쪽 저울만 마음대로 움직이려는 것과 같다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section">
+    <p class="section-label">Section 04</p>
+    <h2>알고리즘의 정답이 시스템의 오답이 되는 순간</h2>
+
+    <p>이 문제를 더 깊이 이해하려면 <span class="hl-blue">알고리즘-시스템 번역 간극(algorithm-system translation gap)</span>이라는 개념을 끌어들여야 한다. 이 간극은 이미 Crab 논문에서 체크포인트 메커니즘의 맥락으로 지적된 바 있다.</p>
+
+    <blockquote>
+      에이전트의 의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다.
+      <cite>— Crab (algorithm-system-translation-gap 패턴)</cite>
+    </blockquote>
+
+    <p>Crab의 간극은 "의미론적 구조"를 "물리적 메커니즘"으로 변환할 때 발생하는 정보 손실과 비효율을 말한다. TokenPilot의 접두사 불일치는 <span class="hl-orange">이 간극의 KV 캐시 버전</span>이다.</p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="dot" style="background:#5b7c99;"></span>
+        간극의 두 현상
+      </div>
+      <p style="color:rgba(44,40,37,0.78);font-size:clamp(0.88rem,1.8vw,0.95rem);margin-bottom:12px;"><strong style="color:#2c2825;">Crab (체크포인트):</strong> 알고리즘은 "상태 A에만 의존한다"고 보지만, 시스템은 전체 스냅샷을 찍으므로 불필요한 복원 비용 발생</p>
+      <p style="color:rgba(44,40,37,0.78);font-size:clamp(0.88rem,1.8vw,0.95rem);margin-bottom:0;"><strong style="color:#2c2825;">TokenPilot (KV 캐시):</strong> 알고리즘은 "이 토큰들은 불필요하다"고 보지만, 시스템은 위치 기반 인덱싱을 사용하므로 제거 시 캐시 라인 전체 불일치</p>
+    </div>
+
+    <p>핵심은 이것이다. 알고리즘 층의 논리는 <span class="hl-green">의미론적</span>이다 — "이 정보는 불필요하다." 하지만 하드웨어 층의 구조는 <span class="hl-blue">위치론적</span>이다 — "N번째 위치에 무엇이 있는가." 두 언어 사이의 번역이 누락된 것이다.</p>
+
+    <p>이 간극이 왜 지금 폭발했을까? 컨텍스트 길이가 짧을 때는 중간 토큰을 제거해도 위치 불일치의 절대량이 작았다. 하지만 에이전트가 긴 대화 기록, 도구 호출 결과, 검색 문서를 컨텍스트에 축적하면서 컨텍스트 길이가 수만 토큰 단위로 확장되었고, 그 불일치가 <span class="hl-orange">누적되어 캐시 히트율을 결정적으로 붕괴</span>시키기에 이른 것이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section">
+    <p class="section-label">Section 05</p>
+    <h2>최적화의 일차 목표함수를 바꿔야 한다</h2>
+
+    <p>지금까지의 분석을 종합하면, 세 가지 독립적 패턴이 TokenPilot의 역설에서 수렴한다.</p>
+
+    <ul class="conn-list">
+      <li><strong style="color:#2c2825;">병목 재정의</strong> (aggregate-pipeline-serving): 가정된 병목(토큰 수)이 아닌 실제 병목(캐시 일관성)을 찾아내는 패턴</li>
+      <li><strong style="color:#2c2825;">압축-추론 결합성</strong> (adaptive-inference): 압축과 추론이 단방향이 아닌 양방향으로 영향을 주고받는 패턴</li>
+      <li><strong style="color:#2c2825;">알고리즘-시스템 번역 간극</strong> (algorithm-system-translation-gap): 의미론적 최적화가 위치론적 하드웨어에서 역효과를 내는 패턴</li>
+    </ul>
+
+    <p>세 가지 독립적 증거가 동일한 결론을 가리킨다는 것은, 이 전환이 "선택적 개선"이 아니라 <span class="hl-orange">구조적 필수</span>임을 의미한다.</p>
+
+    <h3>어떻게 바꿔야 하는가</h3>
+
+    <p>기존 패러다임의 일차 목표함수는 단순했다:</p>
+
+    <div class="formula">
+      min(tokens)
+    </div>
+
+    <p>"토큰 수를 최소화하라." 이것이 전부였다. 토큰이 적으면 적을수록 좋다는 암묵적 전제 위에 가지치기, 축출, 요약 등 모든 기법이 구축되었다.</p>
+
+    <p>TokenPilot이 요구하는 전환은 이 목표함수를 다음과 같이 재구성하는 것이다:</p>
+
+    <div class="formula">
+      min(tokens) &nbsp; subject to &nbsp; cache_coherence_preserved
+    </div>
+
+    <p><span class="hl-orange">"KV 캐시 일관성이 보존된다는 제약 하에서</span>, 토큰 수를 최소화하라." 토큰 절약은 여전히 하위 목표로 유효하다. 그러나 그것이 캐시 일관성을 훼손하지 않는다는 <span class="hl-blue">제약 조건을 충족할 때만</span> 의미를 가진다. 제약을 위반하면 아무리 토큰을 줄여도 결과는 더 나빠진다.</p>
+
+    <div class="metaphor">
+      <p class="metaphor-label">비유: 무게 제한이 있는 짐 싸기</p>
+      <p>여행을 갈 때 짐을 가볍게 하는 건 좋은 목표다. 하지만 "가벼워야 한다"는 이유로 <span class="hl-orange">여권과 지갑을 빼버리면</span> 여행 자체가 불가능해진다. 가벼운 것은 '제약 아래서의' 하위 목표일 뿐, 절대적 목표가 아니다. 지금까지의 컨텍스트 최적화는 여권을 빼버리면서 "짐이 가벼워졌다"고 자찬해 온 셈이다.</p>
+    </div>
+
+    <h3>실제로 무엇이 바뀌어야 하는가</h3>
+
+    <p>이 목표함수의 전환은 구체적으로 다음을 의미한다.</p>
+
+    <p><strong style="color:#2c2825;">첫째,</strong> 가지치기와 축출의 결정 기준이 "의미적 중요도"에서 <span class="hl-blue">"캐시 위치 보존 여부"</span>를 우선 고려하도록 바뀌어야 한다. 의미적으로 덜 중요한 토큰이라도, 그것을 제거했을 때 접두사 체인이 단절된다면 제거해서는 안 된다.</p>
+
+    <p><strong style="color:#2c2825;">둘째,</strong> 압축 알고리즘의 설계 단계에서 KV 캐시의 물리적 구조 — 특히 위치 인코딩과 캐시 라인 매핑 — 를 <span class="hl-green">일급 제약(first-class constraint)</span>으로 다루어야 한다. 알고리즘 층에서 "논리적으로 가능한 압축"을 설계한 뒤 시스템 층에 던지는 방식이 아니라, 하드웨어 구조를 먼저 모델링하고 그 안에서 가능한 압축 공간을 탐색해야 한다.</p>
+
+    <p><strong style="color:#2c2825;">셋째,</strong> 평가 지표가 바뀌어야 한다. "압축률"과 "추론 정확도"만 보면 안 된다. <span class="hl-orange">KV 캐시 히트율, 접두사 재사용률, 캐시 무효화 비용</span>이 성능 지표의 핵심 축으로 편입되어야 한다.</p>
+
+    <hr class="divider">
+
+    <p style="font-size:clamp(0.95rem,2vw,1.08rem);color:#2c2825;font-weight:500;line-height:1.85;">TokenPilot의 역설은 우리에게 묻는다. "최적화한다는 것이 정말로 더 빠르게 만드는가, 아니면 단지 <span class="hl-bg">우리가 측정하는 축에서의 숫자만 줄이는 것인가</span>?" 측정하는 축이 틀렸을 때, 최적화는 최악의 적이 된다. 컨텍스트 관리의 최적화 축이 '토큰 절약'에서 '캐시 일관성 보존'으로 전환되어야 하는 이유가 여기에 있다.</p>
+  </section>
+
+  <footer class="footer">
+    <p>분석 기반: TokenPilot — Cache-Efficient Context Management for LLM Agents</p>
+    <p style="margin-top:4px;">Wiki 패턴 교차 검증: aggregate-pipeline-serving · adaptive-inference · algorithm-system-translation-gap</p>
+  </footer>
+
+</article>
+
+</body>
+</html>

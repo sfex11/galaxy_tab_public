@@ -816,3 +816,19 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-06-16-cora-analyzing-and-bridging-thinking-answer-gap-in.md]] - CORA: Analyzing and bridging thinking-answer gap in Multimodal RLVR via Consistency-Oriented Reasoning Alignment
 - [[sources/2026-06-16-code-correctness-signals-in-llm-hidden-states-pre-.md]] - Code Correctness Signals in LLM Hidden States: Pre-Generation Probing and Repair Geometry
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-17-context-aware-rl-for-agentic-and-multimodal-llms.md]] - Context-Aware RL for Agentic and Multimodal LLMs
+- [[sources/2026-06-17-benchmarking-llm-agents-on-meta-analysis-articles-.md]] - Benchmarking LLM Agents on Meta-Analysis Articles from Nature Portfolio
+- [[sources/2026-06-17-kveraser-learning-to-steer-kv-cache-for-efficient-.md]] - KVEraser: Learning to Steer KV Cache for Efficient Localized Context Erasing
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef.md]] - DEEPRUBRIC: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-17-exprl-exploratory-rl-for-llm-mid-training.md]] - ExpRL: Exploratory RL for LLM Mid-Training
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-17-tokenpilot-cache-efficient-context-management-for-.md]] - TokenPilot: Cache-Efficient Context Management for LLM Agents
+- [[sources/2026-06-17-bayesian-inference-and-decision-audits-for-public-.md]] - Bayesian Inference and Decision Audits for Public Archives of Frontier AI Evaluations
+- [[sources/2026-06-17-stable-menus-of-public-goods-ai-enabled-progress.md]] - Stable Menus of Public Goods: AI-Enabled Progress
+- [[sources/2026-06-17-agent-trajectories-as-programs-fingerprinting-and-.md]] - Agent trajectories as programs: fingerprinting and programming coding-agent behavior
+- [[sources/2026-06-17-consensus-based-agentic-large-language-model-frame.md]] - Consensus-based Agentic Large Language Model Framework for Harmonized Tariff Schedule Code Classification
+- [[sources/2026-06-17-less-is-more-mutual-stability-sampling-for-diffusi.md]] - LESS Is More: Mutual-Stability Sampling for Diffusion Language Models
+- [[sources/2026-06-17-follow-the-latent-roadmap-navigating-revocable-dec.md]] - Follow the Latent Roadmap: Navigating Revocable Decoding for Diffusion LLMs with Anchor Tokens
