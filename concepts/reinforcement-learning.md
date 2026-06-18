@@ -269,3 +269,5 @@ _자동 생성됨_
 - [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef.md]]
 
 - [[sources/2026-06-17-exprl-exploratory-rl-for-llm-mid-training.md]]
+
+- [[sources/2026-06-18-learning-red-agent-policy-from-observations-for-ne.md]]

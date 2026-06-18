@@ -832,3 +832,14 @@
 - [[sources/2026-06-17-consensus-based-agentic-large-language-model-frame.md]] - Consensus-based Agentic Large Language Model Framework for Harmonized Tariff Schedule Code Classification
 - [[sources/2026-06-17-less-is-more-mutual-stability-sampling-for-diffusi.md]] - LESS Is More: Mutual-Stability Sampling for Diffusion Language Models
 - [[sources/2026-06-17-follow-the-latent-roadmap-navigating-revocable-dec.md]] - Follow the Latent Roadmap: Navigating Revocable Decoding for Diffusion LLMs with Anchor Tokens
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-18-reprorepo-scaling-reproducibility-audits-with-gith.md]] - ReproRepo: Scaling Reproducibility Audits with GitHub Repository Issues
+- [[sources/2026-06-18-evolvenav-proactive-preflection-and-self-evolving-.md]] - EvolveNav: Proactive Preflection and Self-Evolving Memory for Zero-Shot Object Goal Navigation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-18-learning-red-agent-policy-from-observations-for-ne.md]] - Learning Red Agent Policy from Observations for Neurosymbolic Autonomous Cyber Agents
+- [[sources/2026-06-18-rubricstree-scalable-and-evolving-open-ended-evalu.md]] - RubricsTree: Scalable and Evolving Open-Ended Evaluation of Personal Health Agents across Health Memory and Medical Skills
+- [[sources/2026-06-18-learning-from-the-self-future-on-policy-self-disti.md]] - Learning from the Self-future: On-policy Self-distillation for dLLMs
+- [[sources/2026-06-18-a-red-team-study-of-anthropic-fable-5-opus-48-mode.md]] - A Red-Team Study of Anthropic Fable 5 & Opus 4.8 Models
+- [[sources/2026-06-18-visual-verification-enables-inference-time-steerin.md]] - Visual Verification Enables Inference-time Steering and Autonomous Policy Improvement
+- [[sources/2026-06-18-drflow-a-deep-research-benchmark-for-personalized-.md]] - DRFLOW: A Deep Research Benchmark for Personalized Workflow Prediction
+- [[sources/2026-06-18-the-stanford-edgar-filings-dataset-reconstructing-.md]] - The Stanford EDGAR Filings Dataset: Reconstructing U.S. Corporate and Financial Disclosures into Layout-Faithful and Token-Efficient Pretraining Data

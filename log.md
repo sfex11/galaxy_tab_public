@@ -1678,3 +1678,21 @@
 ## [2026-06-17 08:35] ingest | LESS Is More: Mutual-Stability Sampling for Diffusion Language Models
 
 ## [2026-06-17 08:35] ingest | Follow the Latent Roadmap: Navigating Revocable Decoding for Diffusion LLMs with Anchor Tokens
+
+## [2026-06-18 08:33] ingest | ReproRepo: Scaling Reproducibility Audits with GitHub Repository Issues
+
+## [2026-06-18 08:33] ingest | EvolveNav: Proactive Preflection and Self-Evolving Memory for Zero-Shot Object Goal Navigation
+
+## [2026-06-18 08:33] ingest | Learning Red Agent Policy from Observations for Neurosymbolic Autonomous Cyber Agents
+
+## [2026-06-18 08:33] ingest | RubricsTree: Scalable and Evolving Open-Ended Evaluation of Personal Health Agents across Health Memory and Medical Skills
+
+## [2026-06-18 08:33] ingest | Learning from the Self-future: On-policy Self-distillation for dLLMs
+
+## [2026-06-18 08:33] ingest | A Red-Team Study of Anthropic Fable 5 & Opus 4.8 Models
+
+## [2026-06-18 08:33] ingest | Visual Verification Enables Inference-time Steering and Autonomous Policy Improvement
+
+## [2026-06-18 08:33] ingest | DRFLOW: A Deep Research Benchmark for Personalized Workflow Prediction
+
+## [2026-06-18 08:33] ingest | The Stanford EDGAR Filings Dataset: Reconstructing U.S. Corporate and Financial Disclosures into Layout-Faithful and Token-Efficient Pretraining Data
