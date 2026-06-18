@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평가를 쪼개면 훈련이 된다 — 훈련-평가 분리의 붕괴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7470;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 17.5px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(60px, 10vw, 120px) 0 clamp(40px, 6vw, 72px) 0;
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid rgba(194,112,62,0.25);
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 900;
+    font-size: clamp(28px, 5.5vw, 48px);
+    line-height: 1.22;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 16.5px);
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    max-width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), rgba(194,112,62,0.1));
+    margin: 0 auto 48px auto;
+    border-radius: 2px;
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(48px, 8vw, 80px);
+  }
+
+  .section-number {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(13px, 1.6vw, 15px);
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 3.8vw, 32px);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+    color: #3d3835;
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 24px;
+    margin: 28px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 1.8vw, 16px);
+    color: #4a4440;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  blockquote strong {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(4px);
+  }
+
+  .card-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  .card-label.orange { color: var(--accent); background: rgba(194,112,62,0.1); }
+  .card-label.blue { color: var(--accent2); background: rgba(91,124,153,0.1); }
+  .card-label.green { color: var(--accent3); background: rgba(107,158,122,0.1); }
+
+  .card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(16px, 2.2vw, 19px);
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+
+  .card p, .card ul {
+    color: #4a4440;
+    font-size: clamp(13.5px, 1.8vw, 15.5px);
+    line-height: 1.8;
+  }
+
+  .card ul {
+    padding-left: 18px;
+    margin-top: 8px;
+  }
+
+  .card ul li {
+    margin-bottom: 6px;
+  }
+
+  .card ul li::marker {
+    color: var(--accent);
+  }
+
+  /* ── 강조 텍스트 ── */
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl2 { color: var(--accent2); font-weight: 600; }
+  .hl3 { color: var(--accent3); font-weight: 600; }
+
+  /* ── 다이어그램 ── */
+  .diagram {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(44,40,37,0.08);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 32px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  .diagram-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 2vw, 14px);
+    flex-wrap: wrap;
+    font-size: clamp(12px, 1.6vw, 14.5px);
+    font-weight: 500;
+  }
+
+  .flow-node {
+    padding: 10px 16px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .flow-node.rubric { background: rgba(194,112,62,0.12); color: var(--accent); }
+  .flow-node.tree { background: rgba(107,158,122,0.12); color: var(--accent3); }
+  .flow-node.reward { background: rgba(91,124,153,0.12); color: var(--accent2); }
+  .flow-node.agent { background: rgba(44,40,37,0.08); color: var(--fg); }
+
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .flow-break {
+    display: block;
+    width: 2px;
+    height: 20px;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--accent) 0px, var(--accent) 3px,
+      transparent 3px, transparent 6px
+    );
+    margin: 4px auto;
+  }
+
+  .flow-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 14px;
+    font-weight: 400;
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.04));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 24px;
+    opacity: 0.5;
+  }
+
+  .metaphor-box h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2vw, 17.5px);
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  .metaphor-box p {
+    color: #4a4440;
+    font-size: clamp(13.5px, 1.8vw, 15.5px);
+    line-height: 1.85;
+    margin-bottom: 10px;
+  }
+
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(44,40,37,0.03), rgba(194,112,62,0.06));
+    border: 1px solid rgba(194,112,62,0.18);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+
+  .conclusion-box h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(17px, 2.4vw, 21px);
+    margin-bottom: 14px;
+    color: var(--fg);
+  }
+
+  .conclusion-box p {
+    color: #3d3835;
+    margin-bottom: 12px;
+    font-size: clamp(13.5px, 1.8vw, 15.5px);
+  }
+
+  .conclusion-box p:last-child { margin-bottom: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    padding: 48px 0 clamp(40px, 8vw, 80px) 0;
+    text-align: center;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: 20px;
+  }
+
+  .article-footer p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .article-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .article-footer a:hover { text-decoration: underline; }
+
+  /* ── 목차 ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 0 0 48px 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  .toc-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2vw, 17px);
+    margin-bottom: 14px;
+    color: var(--fg);
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    padding: 0;
+  }
+
+  .toc ol li {
+    counter-increment: toc;
+    margin-bottom: 8px;
+  }
+
+  .toc ol li a {
+    text-decoration: none;
+    color: #4a4440;
+    font-size: clamp(13.5px, 1.8vw, 15px);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .toc ol li a:hover {
+    background: rgba(194,112,62,0.06);
+    color: var(--accent);
+  }
+
+  .toc ol li a::before {
+    content: counter(toc);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  /* ── 주석 ── */
+  .footnote {
+    font-size: clamp(12px, 1.4vw, 13px);
+    color: var(--muted);
+    border-top: 1px solid rgba(44,40,37,0.06);
+    padding-top: 20px;
+    margin-top: 32px;
+    line-height: 1.75;
+  }
+
+  .footnote sup {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 11px;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 520px) {
+    .flow { flex-direction: column; gap: 4px; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="article-tag">DEEP ANALYSIS</span>
+    <h1 class="article-title">평가를 쪼개면 훈련이 된다</h1>
+    <p class="article-subtitle">루브릭을 증거 트리로 분해해 RL 보상으로 쓰는 순간, 훈련과 평가의 분리는 방법론적 편의에 불과했음이 드러난다.</p>
+    <div class="article-meta">
+      <span>📅 2025-07-10</span>
+      <span>⏱ 12분 읽기</span>
+      <span>📄 DEEPRUBRIC 논문 분석</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- 목차 -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#s1">왜 우리는 훈련과 평가를 분리해 왔는가</a></li>
+      <li><a href="#s2">루브릭의 분해가 보상이 되는 순간</a></li>
+      <li><a href="#s3">분해 가능성이 곧 훈련 가능성은 아니다</a></li>
+      <li><a href="#s4">세 가지 새로운 개념적 도구</a></li>
+      <li><a href="#s5">패러다임 전환: 분리에서 폐쇄성으로</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <section class="section" id="s1">
+    <span class="section-number">SECTION 01</span>
+    <h2 class="section-title">왜 우리는 훈련과 평가를 분리해 왔는가</h2>
+
+    <p>머신러닝의 역사 대부분에서 훈련과 평가는 명확히 구분되는 두 개의 독립 축이었다. 모델은 <span class="hl">훈련 세트</span>에서 학습하고, <span class="hl2">테스트 세트</span>에서 평가받는다. 교과서는 이 분리를 데이터 누수(data leakage)를 막기 위한 <strong>근본 원칙</strong>으로 가르친다.</p>
+
+    <p>이 분리는 자연스러워 보였다. 시험을 보기 전에 문제지를 몰래 보면 안 되니까. 하지만 이 비유가 함정을 숨기고 있다. 시험의 <em>채점 기준</em>을 아는 것과 시험 <em>문제</em>를 아는 것은 전혀 다른 일이다. 학생에게 "이 시험은 논리적 일관성을 40% 반영한다"라고 미리 알려주는 것이 부정행위가 아닌 것처럼, 평가의 <strong>구조</strong>를 훈련에 활용하는 것이 데이터 누수와는 근본적으로 다른 메커니즘이다.</p>
+
+    <div class="metaphor-box">
+      <h4>요리 교실 비유</h4>
+      <p>요리 대회에서 심사 기준이 '조화로운 풍미(40%), 프레젠테이션(30%), 창의성(30%)'이라고 공개되어 있다고 상상해 보자. 요리사는 이 기준을 알고 있기 때문에, 각 항목을 의식적으로 설계하며 요리를 한다. 여기서 <span class="hl">심사 기준의 분해</span>이 곧 <span class="hl">요리 전략의 설계</span>로 직결된다.</p>
+      <p>그런데 만약 심사 기준을 더 세밀하게—"풍미"를 "신맛의 균형", "향신료의 깊이", "온도에 따른 변화" 등으로 쪼개어—요리사에게 제공한다면? 심사 기준의 분해 수준이 곧 요리사의 학습 정밀도를 결정하게 된다. 이때 심사(평가)와 연습(훈련)은 이미 독립적으로 존재할 수 없다.</p>
+    </div>
+
+    <p>딥 리서치 에이전트의 세계에서도 동일한 구조가 출현하고 있다. DEEPRUBRIC은 루브릭을 <span class="hl3">증거 트리(Evidence Tree)</span>로 분해하고, 그 분해물을 강화학습(RL)의 보상 신호로 직접 사용한다. 이 설계가 작동하는 순간, "훈련과 평가는 독립 축이다"라는 전제는 근본적으로 흔들린다.</p>
+  </section>
+
+  <!-- 섹션 2 -->
+  <section class="section" id="s2">
+    <span class="section-number">SECTION 02</span>
+    <h2 class="section-title">루브릭의 분해가 보상이 되는 순간</h2>
+
+    <p>DEEPRUBRIC의 핵심 메커니즘은 놀랍도록 직관적이다. 평가 루브릭—예컨대 "연구 질문에 대한 답변의 정확성과 근거의 충실도"—을 계층적 트리로 분해한다. 최상위 노드는 종합 평가, 그 아래는 하위 기준, 그 아래는 개별 증거 항목이다.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">DEEPRUBRIC의 평가-훈련 연결 구조</div>
+      <div class="flow">
+        <span class="flow-node rubric">루브릭<br><small>(종합 평가 기준)</small></span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-node tree">증거 트리<br><small>(계층적 분해)</small></span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-node reward">RL 보상 신호<br><small>(노드별 점수)</small></span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-node agent">에이전트 행동 수정</span>
+      </div>
+      <div class="flow-label">평가 기준의 구조가 훈련 신호의 구조를 결정한다</div>
+    </div>
+
+    <p>이 흐름에서 주목해야 할 지점은 <span class="hl">화살표의 방향</span>이다. 전통적 패러다임에서 평가는 훈련의 <em>결과</em>를 검증하는 데 쓰였다. 훈련이 먼저, 평가가 나중. 그런데 DEEPRUBRIC에서는 평가 기준의 <em>구조</em>가 훈련 신호의 <em>골격</em>이 된다. 평가가 훈련의 하수인이 아니라 훈련의 설계도가 되는 것이다.</p>
+
+    <p>Wiki의 개념적 인프라는 이 전환을 이미 예감하고 있었다.</p>
+
+    <div class="card">
+      <span class="card-label orange">Wiki 개념</span>
+      <h4>causal-evaluation-duality: 평가와 훈련 신호의 이중성</h4>
+      <p>'평가'와 '인과적 신호(훈련)'가 이중성을 가진다는 구조는, 평가 기준의 분해가 곧 보상 신호의 분해로 이어질 수 있음을 함의한다. 루브릭을 증거 트리로 분해하는 작업은 이 이중성의 구체적 실현 형태 중 하나다.</p>
+    </div>
+
+    <p>더욱 결정적인 것은 <span class="hl2">closed-loop-evaluation</span>과 <span class="hl2">closed-loop-training</span>의 구조적 중첩이다. 평가가 닫힌 루프로 작동하고, 훈련도 닫힌 루프로 작동하는데, 두 루프가 동일한 구조(증거 트리)를 공유한다면, 두 루프가 독립적으로 존재할 구조적 근거는 사라진다.</p>
+
+    <blockquote>
+      평가 기준이 증거 트리로 분해 가능하고, 그 분해물이 RL 보상 신호로 직접 작용한다면, <strong>'평가 기준의 분해 가능성'은 곧 '훈련 가능성의 구조적 전제조건'</strong>이 된다. 이때 훈련-평가는 독립 축이 아니라 동전의 양면이다.
+    </blockquote>
+  </section>
+
+  <!-- 섹션 3 -->
+  <section class="section" id="s3">
+    <span class="section-number">SECTION 03</span>
+    <h2 class="section-title">분해 가능성이 곧 훈련 가능성은 아니다</h2>
+
+    <p>지금까지의 논리가 "분해하면 즉시 훈련이 된다"로 단순화되어서는 안 된다. 여기에 두 가지 중요한 보정이 필요하다.</p>
+
+    <p><strong>첫째, 크레딧 할당의 문제.</strong> 루브릭을 증거 트리로 쪼갰다고 해서, 각 노드가 어느 수준의 보상을 받아야 하는지가 자동으로 결정되지 않는다. 단말 노드(가장 하위의 개별 증거)만 보상할 것인지, 중간 노드도 보상할 것인지, 상위 노드의 가중치를 어떻게 하위에 분배할 것인지—이것은 <span class="hl">평가의 분해와는 별개의 훈련 설계 문제</span>다.</p>
+
+    <div class="card">
+      <span class="card-label blue">Wiki 개념</span>
+      <h4>adaptive-credit-granularity: 적응적 크레딧 입자도</h4>
+      <p>보상 신호로 사용하기 위해서는 분해뿐 아니라 <strong>적절한 크레딧 할당(credit assignment)</strong> 문제가 해결되어야 한다. 증거 트리의 각 노드가 어느 수준의 보상을 받아야 하는지는 평가의 분해와는 독립적인 차원의 문제를 제기한다.</p>
+    </div>
+
+    <p><strong>둘째, 인과성 보존의 문제.</strong> 증거 트리의 각 분지가 '인과적 필요조건'인지 단순 '상관관계'인지를 구분하지 못하면, 보상 신호는 에이전트를 잘못된 방향으로 이끈다. "근거가 3개 이상이면 높은 점수"라는 규칙이, 실제로는 그 근거들이 답변의 품질과 인과적으로 연결되지 않은 상태라면?</p>
+
+    <div class="card">
+      <span class="card-label green">Wiki 개념</span>
+      <h4>causal-necessity-vs-correlation: 인과적 필요조건과 상관관계</h4>
+      <p>증거 트리의 각 분지가 '인과적 필요조건'인지 단순 '상관관계'인지의 구분이 보상 설계에 필수적이다. 루브릭 분해가 인과적 구조를 보존하지 못하면, 보상 신호는 스펙터큘러한 학습 실패(spectacular failure)를 유발할 수 있다.</p>
+    </div>
+
+    <div class="metaphor-box">
+      <h4>건축 도면 비유</h4>
+      <p>건물의 품질 기준을 "지붕의 무게(30%), 벽의 두께(40%), 창문의 개수(30%)"로 분해했다고 치자. 이 분해가 훈련(건설)에 직접 쓰일 수 있으려면, 각 항목이 건물의 안전성과 <span class="hl">인과적으로</span> 연결되어야 한다. "창문이 많으면 좋은 건물"이라는 상관관계를 보상으로 삼으면, 에이전트는 창문만 잔뜩 달은 허술한 건물을 지어버린다.</p>
+    </div>
+
+    <p>여기서 <span class="hl2">benchmark-specification-gap</span>이 세 번째 보정으로 등장한다. 벤치마크 명세와 실제 평가 사이의 간극은, 평가 기준을 '분해 가능하다'고 가정하는 것 자체가 근본적 오류일 수 있음을 시사한다. 루브릭을 증거 트리로 분해했을 때, 상위 수준의 의미—예컨대 '논리적 일관성'—가 하위 증거들의 합으로 <strong>환원 불가능한 잔여물</strong>을 남긴다면, 보상 신호로의 직접 변환은 구조적 결함을 내포하게 된다.</p>
+
+    <p>정리하자면: <span class="hl">분해 가능성은 훈련 가능성의 필요조건</span>이지만, <span class="hl2">충분조건은 아니다</span>. 그 사이에 크레딧 할당과 인과성 보존이라는 두 개의 필수 다리가 놓여야 한다.</p>
+  </section>
+
+  <!-- 섹션 4 -->
+  <section class="section" id="s4">
+    <span class="section-number">SECTION 04</span>
+    <h2 class="section-title">세 가지 새로운 개념적 도구</h2>
+
+    <p>이 분석 과정에서 기존 Wiki 개념만으로는 포착할 수 없는 세 가지 간극이 드러났다. 각각이 향후 딥 리서치 에이전트 연구에서 필수적인 개념적 도구가 될 것이다.</p>
+
+    <div class="card">
+      <span class="card-label orange">신규 개념 1</span>
+      <h4>평가-훈련 인과 폐쇄성<br><small style="color:var(--muted);font-weight:400;">Evaluation-Training Causal Closure</small></h4>
+      <p>평가 기준의 분해물이 보상 신호로 <strong>완전히 환원될 때</strong>, 평가 루프와 훈련 루프가 하나의 인과 폐쇄계를 형성하는 상태를 말한다. causal-evaluation-duality의 구체적 하위 개념으로, "언제부터 분리가 성립하지 않는가?"를 정량적으로 판별하는 기준이 된다.</p>
+      <p>폐쇄성이 완전할수록, 평가 기준을 바꾸는 것만으로 훈련 방향이 즉각 변한다. 반대로 폐쇄성이 낮으면, 평가와 훈련 사이에 정보 손실이 발생해 각자 다른 최적점을 향해 수렴한다.</p>
+    </div>
+
+    <div class="card">
+      <span class="card-label blue">신규 개념 2</span>
+      <h4>루브릭-보상 환원 가능성<br><small style="color:var(--muted);font-weight:400;">Rubric-to-Reward Reducibility</small></h4>
+      <p>adaptive-credit-granularity와 benchmark-specification-gap의 교차점에 위치하는 개념이다. 분해된 루브릭이 보상 함수로 환원될 때 발생하는 <strong>정보 손실의 척도</strong>를 의미한다.</p>
+      <ul>
+        <li><strong>환원 가능성이 1.0</strong>: 루브릭의 모든 의미가 보상 함수에 완전히 보존됨 (이상적)</li>
+        <li><strong>환원 가능성이 0.5</strong>: 상위 수준 의미의 절반이 하위 분해 과정에서 소실됨</li>
+        <li><strong>환원 가능성이 0에 근접</strong>: 분해가 사실상 무의미 — 훈련-평가 분리가 다시 성립</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="card-label green">신규 개념 3</span>
+      <h4>증거 트리 크레딧 할당<br><small style="color:var(--muted);font-weight:400;">Evidence-Tree Credit Assignment</small></h4>
+      <p>adaptive-credit-granularity의 특수 사례이지만, 트리 구조 <strong>특유의 문제</strong>를 포함한다. 상위 노드의 점수를 하위 노드에 어떻게 분배할 것인가? 단말 노드의 보상을 상위로 어떻게 전파할 것인가? 형제 노드 간의 보상을 어떻게 균형 맞출 것인가?</p>
+      <p>이 문제는 일반적인 크레딧 할당(시계열 분산)과 달리, <strong>공간적 계층 구조</strong>를 갖는다는 점에서 독자적인 이론적 도구가 필요하다.</p>
+    </div>
+
+    <p>이 세 가지 개념은 서로 연결되어 하나의 프레임워크를 구성한다. <span class="hl">평가-훈련 인과 폐쇄성</span>이 "분리가 붕괴되는 조건"을 설명하고, <span class="hl2">루브릭-보상 환원 가능성</span>이 "붕괴의 정도"를 측정하며, <span class="hl3">증거 트리 크레딧 할당</span>이 "붕괴 이후의 실제 설계 문제"를 해결한다.</p>
+  </section>
+
+  <!-- 섹션 5 -->
+  <section class="section" id="s5">
+    <span class="section-number">SECTION 05</span>
+    <h2 class="section-title">패러다임 전환: 분리에서 폐쇄성으로</h2>
+
+    <p>지금까지의 분석을 하나의 문장으로 압축하면 이렇다.</p>
+
+    <blockquote>
+      <strong>훈련-평가 분리는 methodological convenience일 뿐, 구조적 실재가 아니다.</strong>
+    </blockquote>
+
+    <p>이 결론이 의미하는 바를 명확히 하기 위해, 기존 패러다임과 새로운 패러다임을 대조해 보자.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0;">
+      <div class="card" style="margin:0;">
+        <span class="card-label orange" style="font-size:11px;">기존 패러다임</span>
+        <h4 style="font-size:clamp(14px,1.8vw,16px);">분리 모델</h4>
+        <ul style="font-size:clamp(12.5px,1.6vw,14px);">
+          <li>훈련과 평가는 독립 축</li>
+          <li>평가는 훈련의 '검증 도구'</li>
+          <li>루브릭은 사후 채점용</li>
+          <li>벤치마크 = 외부 기준</li>
+        </ul>
+      </div>
+      <div class="card" style="margin:0;border-color:rgba(107,158,122,0.2);">
+        <span class="card-label green" style="font-size:11px;">새로운 패러다임</span>
+        <h4 style="font-size:clamp(14px,1.8vw,16px);">폐쇄성 모델</h4>
+        <ul style="font-size:clamp(12.5px,1.6vw,14px);">
+          <li>훈련과 평가는 인과 폐쇄계</li>
+          <li>평가는 훈련의 '설계 도구'</li>
+          <li>루브릭은 보상의 골격</li>
+          <li>벤치마크 = 훈련 구조의 일부</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>이 전환이 실제 연구 실무에 미치는 영향은 세 가지 차원에서 나타난다.</p>
+
+    <p><strong>첫째, 벤치마크 설계의 지위 변화.</strong> 지금까지 벤치마크는 "모델을 평가하기 위해 만드는 것"이었다. 폐쇄성 모델에서는 벤치마크 설계가 곧 "훈련 구조의 설계"가 된다. 벤치마크를 잘못 만들면 평가만 망가는 것이 아니라 <span class="hl">훈련 자체가 망가진다</span>. 이것은 벤치마크 제작에 훨씬 더 높은 책임을 부과한다.</p>
+
+    <p><strong>둘째, 루브릭 공학(Rubric Engineering)의 탄생.</strong> 프롬프트 엔지니어링이 LLM의 입력을 설계하는 기술이었다면, 루브릭 공학은 LLM의 <em>학습 구조</em>를 설계하는 기술이 된다. 루브릭을 어떻게 분해하느냐에 따라 에이전트가 학습하는 행동 패턴이 근본적으로 달라진다. 이것은 단순한 평가 설계를 넘어, <span class="hl2">간접적 프로그래밍</span>의 새로운 형태다.</p>
+
+    <p><strong>셋째, 적응적 평가-훈련 루프.</strong> adaptive-validity가 제시하는 '적응적 타당성' 개념은, 평가 기준 자체가 동적으로 변화해야 한다는 압력을 생성한다. 에이전트가 발전하면 평가 기준도 진화해야 하고, 평가 기준이 진화하면 보상 신호가 변하며, 보상이 변하면 에이전트의 행동이 다시 수정된다. 이 순환은 <span class="hl3">공진(resonance)</span>이 되거나 <strong>발산(divergence)</strong>이 되거나 둘 중 하나다.</p>
+
+    <div class="conclusion-box">
+      <h4>결론: 분리를 넘어서</h4>
+      <p>DEEPRUBRIC이 보여주는 메커니즘—루브릭의 증거 트리 분해가 RL 보상으로 직접 작용하는 것—은 훈련-평가 분리가 <strong>구조적 실재가 아니라 방법론적 편의</strong>였음을 폭로한다. 우리는 분리가 "자연법"이라고 믿었지만, 사실 그것은 "계산 자원이 부족했던 시대의 관습"에 가까웠다.</p>
+      <p>다만, 분해 가능성이 훈련 가능성의 충분조건은 아니다. 크레딧 할당과 인과성 보존이라는 두 가지 조건이 충족되어야만, 평가-훈련 인과 폐쇄계가 안정적으로 작동한다. 향후 연구는 이 폐쇄계의 <span class="hl">안정성 조건</span>을 규명하는 방향으로 나아가야 한다.</p>
+      <p>훈련과 평가를 분리해서 생각하는 시대는 끝났다. 앞으로는 <span class="hl2">하나의 루프를 어떻게 설계할 것인가</span>가 유일한 질문이다.</p>
+    </div>
+
+    <div class="footnote">
+      <sup>1</sup> 본 분석은 DEEPRUBRIC: Evidence-Tree Rubric Supervision for Efficient Reinforcement Learning of Deep Research Agents 논문과 Wiki 개념 인프라의 교차 검증을 기반으로 작성되었습니다.<br>
+      <sup>2</sup> RLVR(Reinforcement Learning from Verifiable Rewards)과 DEEPRUBRIC 시스템명은 현재 Wiki에 등록되지 않아, 간접적 연결에 의한 분석으로 한계가 존재합니다.<br>
+      <sup>3</sup> RubricsTree, Learning from the Self-future, DRFLOW 등 최근 논문이 본 논의와 직접 연결되지만, 아직 Wiki 엔티티로 구조화되지 않았습니다.
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <p>Galaxy Tab Public · Deep Analysis Series</p>
+    <p style="margin-top:6px;"><a href="blog.html">← 분석 목록으로</a></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
