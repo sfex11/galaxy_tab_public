@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-17-follow-the-latent-roadmap-navigating-revocable-dec]]: 둘 다 디퓨전 언어 모델(dLLM)의 디코딩 품질과 효율성을 개선하는 새로운 샘플링 및 디코딩 전략을 제안함.
+- → [[sources/2026-06-18-learning-from-the-self-future-on-policy-self-disti]]: 둘 다 디퓨전 언어 모델(dLLM)의 효율성과 품질 개선을 목표로 하는 포스트 트레이닝 또는 샘플링 방법을 제안함.
+- → [[sources/2026-06-19-diffusion-proof-recipe-for-formal-theorem-proving-]]: 둘 다 디퓨전 언어 모델(dLLM)의 병렬 생성 및 반복적 정제(refinement) 능력을 활용하여 특정 도메인의 출력 품질을 향상시킴.

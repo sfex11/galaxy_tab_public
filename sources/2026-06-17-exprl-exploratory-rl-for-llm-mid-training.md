@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-17-context-aware-rl-for-agentic-and-multimodal-llms]]: 둘 다 강화학습(RL)을 통해 LLM의 추론 능력을 개선하는 방법을 다룸.
+- → [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef]]: 둘 다 LLM의 추론 및 연구 능력을 강화하기 위한 강화학습(RL) 파이프라인을 제안함.

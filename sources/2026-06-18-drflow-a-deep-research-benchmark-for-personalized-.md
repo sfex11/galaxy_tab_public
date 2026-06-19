@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef]]: 둘 다 딥 리서치(Deep Research) 에이전트의 성능을 평가하고 개선하는 것을 목표로 함.

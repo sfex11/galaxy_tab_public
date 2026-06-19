@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-17-less-is-more-mutual-stability-sampling-for-diffusi]]: 둘 다 디퓨전 언어 모델(dLLM)의 디코딩 품질과 효율성을 개선하는 새로운 샘플링 및 디코딩 전략을 제안함.
+- → [[sources/2026-06-18-learning-from-the-self-future-on-policy-self-disti]]: 둘 다 디퓨전 언어 모델(dLLM)의 생성 품질을 향상시키기 위한 디코딩 및 학습 기법을 다룸.
+- → [[sources/2026-06-19-diffusion-proof-recipe-for-formal-theorem-proving-]]: 둘 다 자기회귀(AR) 생성의 한계를 극복하기 위해 디퓨전 모델을 활용하여 구조화된 출력을 수행함.

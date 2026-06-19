@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-18-evolvenav-proactive-preflection-and-self-evolving-]]: 둘 다 실제 환경에 배치된 로봇 에이전트가 스스로 경험을 통해 학습하고 정책을 개선하는 자율적 개선 메커니즘을 다룸.
+- → [[sources/2026-06-19-does-vla-even-know-the-basics-measuring-commonsens]]: 둘 다 로봇 학습(VLA) 모델이 사전 학습된 지식을 유지하고 실제 환경에서 활용하도록 평가하거나 개선하는 것을 다룸.

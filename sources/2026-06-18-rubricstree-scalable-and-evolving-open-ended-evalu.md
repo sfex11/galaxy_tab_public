@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-17-deeprubric-evidence-tree-rubric-supervision-for-ef]]: 둘 다 에이전트의 개방형 응답 품질을 평가하기 위해 루브릭(Rubric) 기반의 체계적인 평가 트리 구조를 활용함.

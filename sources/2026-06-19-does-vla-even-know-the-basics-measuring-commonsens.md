@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-18-visual-verification-enables-inference-time-steerin]]: 둘 다 로봇 학습(VLA) 모델이 사전 학습된 지식을 유지하고 실제 환경에서 활용하도록 평가하거나 개선하는 것을 다룸.
