@@ -843,3 +843,17 @@
 - [[sources/2026-06-18-visual-verification-enables-inference-time-steerin.md]] - Visual Verification Enables Inference-time Steering and Autonomous Policy Improvement
 - [[sources/2026-06-18-drflow-a-deep-research-benchmark-for-personalized-.md]] - DRFLOW: A Deep Research Benchmark for Personalized Workflow Prediction
 - [[sources/2026-06-18-the-stanford-edgar-filings-dataset-reconstructing-.md]] - The Stanford EDGAR Filings Dataset: Reconstructing U.S. Corporate and Financial Disclosures into Layout-Faithful and Token-Efficient Pretraining Data
+- [[sources/2026-06-19-native-active-perception-as-reasoning-for-omni-mod.md]] - Native Active Perception as Reasoning for Omni-Modal Understanding
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-19-learning-user-simulators-with-turing-rewards.md]] - Learning User Simulators with Turing Rewards
+- [[sources/2026-06-19-data-intelligence-agents-interpreting-modeling-and.md]] - Data Intelligence Agents: Interpreting, Modeling, and Querying Enterprise Data via Autonomous Coding Agents
+- [[sources/2026-06-19-diffusion-proof-recipe-for-formal-theorem-proving-.md]] - Diffusion-Proof: Recipe for Formal Theorem Proving Beyond Auto-Regressive Generation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-19-enhancing-decision-making-with-large-language-mode.md]] - Enhancing Decision-Making with Large Language Models through Multi-Agent Fictitious Play
+- [[sources/2026-06-19-does-vla-even-know-the-basics-measuring-commonsens.md]] - Does VLA Even Know the Basics? Measuring Commonsense and World Knowledge Retention in Vision-Language-Action Models
+- [[sources/2026-06-19-a-mixed-reality-testbed-for-autonomous-vehicles.md]] - A Mixed-Reality Testbed for Autonomous Vehicles
+- [[sources/2026-06-19-txbench-pp-analyzing-ai-agent-performance-on-small.md]] - TxBench-PP: Analyzing AI Agent Performance on Small-Molecule Preclinical Pharmacology
+- [[sources/2026-06-19-trade-offs-in-medical-llm-adaptation-an-empirical-.md]] - Trade-offs in Medical LLM Adaptation: An Empirical Study in French QA
+- [[sources/2026-06-19-dango-a-strictly-l1-only-large-language-model-for-.md]] - Dango: A Strictly L1-Only Large Language Model for Studying Second Language Acquisition
+- [[sources/2026-06-19-structured-inference-with-large-language-gibbs.md]] - Structured Inference with Large Language Gibbs
+- [[sources/2026-06-19-language-models-as-interfaces-not-oracles-a-hybrid.md]] - Language Models as Interfaces, Not Oracles: A Hybrid LLM-ML System for Pediatric Appendicitis

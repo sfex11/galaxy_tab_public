@@ -1696,3 +1696,27 @@
 ## [2026-06-18 08:33] ingest | DRFLOW: A Deep Research Benchmark for Personalized Workflow Prediction
 
 ## [2026-06-18 08:33] ingest | The Stanford EDGAR Filings Dataset: Reconstructing U.S. Corporate and Financial Disclosures into Layout-Faithful and Token-Efficient Pretraining Data
+
+## [2026-06-19 08:38] ingest | Native Active Perception as Reasoning for Omni-Modal Understanding
+
+## [2026-06-19 08:38] ingest | Learning User Simulators with Turing Rewards
+
+## [2026-06-19 08:38] ingest | Data Intelligence Agents: Interpreting, Modeling, and Querying Enterprise Data via Autonomous Coding Agents
+
+## [2026-06-19 08:38] ingest | Diffusion-Proof: Recipe for Formal Theorem Proving Beyond Auto-Regressive Generation
+
+## [2026-06-19 08:38] ingest | Enhancing Decision-Making with Large Language Models through Multi-Agent Fictitious Play
+
+## [2026-06-19 08:38] ingest | Does VLA Even Know the Basics? Measuring Commonsense and World Knowledge Retention in Vision-Language-Action Models
+
+## [2026-06-19 08:38] ingest | A Mixed-Reality Testbed for Autonomous Vehicles
+
+## [2026-06-19 08:38] ingest | TxBench-PP: Analyzing AI Agent Performance on Small-Molecule Preclinical Pharmacology
+
+## [2026-06-19 08:38] ingest | Trade-offs in Medical LLM Adaptation: An Empirical Study in French QA
+
+## [2026-06-19 08:38] ingest | Dango: A Strictly L1-Only Large Language Model for Studying Second Language Acquisition
+
+## [2026-06-19 08:38] ingest | Structured Inference with Large Language Gibbs
+
+## [2026-06-19 08:38] ingest | Language Models as Interfaces, Not Oracles: A Hybrid LLM-ML System for Pediatric Appendicitis
