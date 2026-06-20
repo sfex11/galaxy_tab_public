@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Execution-State Capsules: Graph-Bound Execution-State Checkp — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:1.5rem;">
+    <div style="font-size:clamp(1rem,2.5vw,1.4rem);font-weight:400;" class="muted">arXiv:2606.20537v1</div>
+    <h1 style="font-size:clamp(1.8rem,4.5vw,3.2rem);font-weight:700;line-height:1.25;max-width:900px;">Execution-State Capsules</h1>
+    <p style="font-size:clamp(1rem,2vw,1.3rem);font-weight:400;max-width:750px;line-height:1.6;" class="muted">그래프 바인딩 실행 상태 체크포인트 및 복원을 통한<br>초저지연·소형배치·온디바이스 Physical-AI 서빙</p>
+    <div class="hr" style="width:80px;margin:0.5rem 0;"></div>
+    <div style="font-size:clamp(0.9rem,1.5vw,1.1rem);" class="muted">Liang Su</div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1.5rem;">기존 접근의 한계: KV 캐시만으로 충분한가?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin-bottom:1rem;">주류 서빙 시스템</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>vLLM PagedAttention — KV 캐시 페이징</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SGLang RadixAttention — 접두어 radix 트리 매칭</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>관리 객체 = <span class="accent">위치 기반 KV 캐시</span> (단편)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>목표 = 높은 동시성, 높은 처리량</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin-bottom:1rem;">근본적 문제</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>블록 테이블 간접 참조로 그래프가 <span class="accent">자가완비 불가</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>재귀 상태·합성곱 상태는 관리 대상 외</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>단일 스트림·온디바이스에서는 가정이 성립하지 않음</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>세션 복원·분기·인터럽트에 대한 제어 불가</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      위치적 KV 캐시는 실행 상태의 일부일 뿐, 그 상태를 제어하기 위한 <span class="accent">전체 제어면이 아니다.</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">반대 페러다임: 지연 우선 레짐</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);line-height:1.7;margin-bottom:2rem;" class="muted">본 논문은 높은 처리량이 아닌, <span class="accent">단일 스트림 최저 지연</span>을 목표로 하는 전혀 다른 서빙 페러다임을 정의하고 구현한다.</p>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:0.5rem;"><i class="fas fa-bolt accent"></i></div>
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">단일·소수 스트림</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);" class="muted">동시성 1에서의<br>최소 월클럭 지연</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:0.5rem;"><i class="fas fa-microchip accent2"></i></div>
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">온디바이스·엣지</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);" class="muted">소형 VRAM, 단일<br>소비자/엣지 GPU</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:0.5rem;"><i class="fas fa-robot accent3"></i></div>
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.5rem;">Physical-AI 루프</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);" class="muted">코딩 에이전트, 로봇 정책,<br>TTS 바지인 등 실시간 상호작용</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);line-height:1.7;">
+      코딩 에이전트는 매 턴마다 <span class="accent">10k–50k 토큰</span>의 접두어를 재전송하고, 로봇은 제어 틱 내에 반응해야 한다.<br>
+      처리량 우선 스택은 이 레짐을 위해 설계되지 않았다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1.5rem;">핵심 관찰: 하나의 설계 선택, 두 가지 결과</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="font-size:clamp(1.1rem,1.8vw,1.3rem);font-weight:600;margin-bottom:0.8rem;">설계 선택</div>
+      <div style="font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.7;">
+        <span class="accent">정적 연속 버퍼 + 그래프 리플레이</span> (블록 테이블 간접 참조 없음)
+      </div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;"><i class="fas fa-tachometer-alt accent2"></i> 결과 1: 실행 기반(low floor)</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+          간접 참조 오버헤드 제거로 단일 CUDA 그래프 런치로 전체 포워드 패스 완료.<br>
+          vLLM 대비 콜드 TTFT <span class="accent2">2.6–2.8× 더 낮음</span>.
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;"><i class="fas fa-snowflake accent3"></i> 결과 2: 상태 동결 가능</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+          고정된 명명 버퍼 집합 위에서 실행되므로, 토큰 경계에서의 <span class="accent3">완전 실행 상태 = 폐쇄 버퍼 집합</span>.<br>
+          이를 복사하는 것만으로 체크포인트/복원이 완료된다.
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      두 기능은 독립적이지 않다. <span class="accent">동일한 설계 선택</span>이 런타임을 빠르게 만들고 상태를 동결 가능하게 만든다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">FlashRT: 지연 우선 런타임 기판</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);line-height:1.7;margin-bottom:1.5rem;" class="muted">
+      화이트박스, 백엔드 대면 커널 런타임. 핫 패스는 블록 테이블 없는 연속 정적 버퍼 위의 캡처드 그래프.
+    </p>
+    <div class="pipeline" style="margin-bottom:1.5rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">모델 로드</div>
+        <div class="step-desc">하이브리드 모델을<br>정적 버퍼에 배치</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">그래프 캡처</div>
+        <div class="step-desc">셰이프 버킷별<br>CUDA 그래프 기록</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">실행</div>
+        <div class="step-desc">단일 그래프 런치로<br>프리필+디코드</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">캡슐 생성</div>
+        <div class="step-desc">커밋된 토큰 경계에서<br>버퍼 집합 동결</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);font-weight:600;">그래프 런치</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">선택된 셰이프 버킷에 대해<br>단일 CUDA 그래프 (NVIDIA 백엔드)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">0</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);font-weight:600;">블록 테이블 간접 참조</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">물리 블록 수집을 위한<br>가변 인덱싱 없음</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">Execution-State Capsule: 정의</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="font-size:clamp(1.05rem,1.7vw,1.25rem);line-height:1.8;">
+        캡슐이란, 커밋된 토큰 경계에서 <span class="accent">그래프 바인딩 실행 상태</span>의 완전한 스냅샷이다.<br>
+        캡처된 계산 그래프가 아닌, 그래프가 의존하는 <span class="accent2">폐쇄된 명명 디바이스 버퍼 집합</span>이다.
+      </div>
+    </div>
+    <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:1rem;">캡슐의 네 가지 동사</div>
+    <div class="grid-2" style="gap:1rem;">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-save"></i></div>
+        <div>
+          <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;">State (저장)</div>
+          <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">현재 버퍼 집합을 캡슐로 동결</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-undo"></i></div>
+        <div>
+          <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;">Restore (복원)</div>
+          <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">저장된 버퍼를 런타임에 복사하여 재개</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-code-branch"></i></div>
+        <div>
+          <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;">Fork (분기)</div>
+          <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">캡슐을 복사하여 독립 세션 생성</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-rotate-left"></i></div>
+        <div>
+          <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;">Rollback (롤백)</div>
+          <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">이전 경계 상태로 되돌리기</div>
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+      비용 모델: 재계산(compute-bound)이 아닌 <span class="accent">대역폭 바운드 복사-재구축(bandwidth-bound copy-and-rebuild)</span>.<br>
+      GPU 내 스냅샷/복원은 <span class="accent3">서브밀리초</span> 수준.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1.5rem;">재사용 단위의 전환</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div class="card">
+        <div style="font-size:clamp(1.05rem,1.7vw,1.2rem);font-weight:600;margin-bottom:1rem;text-align:center;">기존: 토큰 주소 지정 KV 단편</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.8;">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>블록 테이블이 토큰 위치 → KV 페이지 매핑</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>Radix 트리가 토큰 접두어 → 캐시 서브트리 매칭</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>관리 객체 = <span class="muted">KV 캐시 (위치적 단편)</span></li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>재귀·합성곱 상태는 관리 외</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1.05rem,1.7vw,1.2rem);font-weight:600;margin-bottom:1rem;text-align:center;">캡슐: 그래프 바인딩 실행 상태 경계</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.8;">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>토큰 경계는 <span class="muted">메타데이터</span> (위치 + 접두어 다이제스트) 로만 사용</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>재사용 객체 = 해당 경계의 <span class="accent">전체 실행 상태</span></li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>KV + 재귀 폴드 + 합성곱 상태 포함</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>제3의 관리 객체 도입</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      캡슐은 더 나은 KV 캐시가 아니다. <span class="accent">지연 우선 런타임 기판</span>과 <span class="accent">실행 상태라는 제3의 관리 객체</span>가 함께 정의하는, 처리량 우선 스택이 의도적으로 최적화하지 않는 서빙 설계점이다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">실행 계약: 하나의 계약, 세 가지 시나리오</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);line-height:1.7;margin-bottom:1.5rem;" class="muted">
+      캡슐은 최소 실행 계약 위에 구축된다: <span class="accent">3개 핸들 타입, 1개 불투명 셰이프 키, 엄격한 메커니즘-정책 경계</span>.
+    </p>
+    <div class="grid-3" style="gap:1.2rem;">
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.6rem;"><i class="fas fa-laptop-code accent"></i> LLM 코딩 에이전트</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          대규모 시스템 프롬프트 + 도구 스키마 + 저장소 인덱스의 웜 스타트.<br>
+          캡슐 복원으로 매 턴의 콜드 프리필 회피.
+        </div>
+        <div style="margin-top:0.5rem;"><span class="tag tag-amber">Snapshot/Restore</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.6rem;"><i class="fas fa-robot accent2"></i> 로봇 RL 에피소드 리셋</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          VLA 확산 정책의 에피소드 초기 상태 스냅샷/복원.<br>
+          계산 상태 복구, 물리적 역전이 아님.
+        </div>
+        <div style="margin-top:0.5rem;"><span class="tag tag-green">Snapshot/Restore</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.6rem;"><i class="fas fa-sitemap accent3"></i> 계획자–실행자 인계</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          계층적 플래너에서 액터로의 제로카피 버퍼 전달.<br>
+          복사 없이 실행 상태 소유권 이전.
+        </div>
+        <div style="margin-top:0.5rem;"><span class="tag tag-red">Zero-Copy Pass</span></div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.2rem 0;"></div>
+    <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+      실행 메커니즘 수준에서, 코딩 에이전트의 웜 스타트와 로봇 RL 롤아웃의 에피소드 리셋은 <span class="accent">동일한 스냅샷/복원 동사</span>이다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1.5rem;">정확성: 바이트 상태 복원과 청크 정렬</h2>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">세 가지 정확성 보장</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">바이트 동일 저장 상태</span> — 스냅샷과 복원 후 버퍼가 비트 단위로 일치</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">토큰 동일 탐욕 디코드</span> — LLM에서 캡슐 복원 후 동일 토큰 시퀀스 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">바이트 동일 액션 리플레이</span> — VLA 정책에서 코사인 유사도 1.0</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">청크 정렬 조건</div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+          청크형 선형 어텐션 스캔의 정확한 재사용은 <span class="accent">청크 정렬 조건</span>을 만족해야 한다.<br><br>
+          이 조건은 캡슐이 토큰 경계를 메타데이터로 유지하는 이유이며, 단순한 KV 복사로는 보장되지 않는다.
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="card" style="border-left:3px solid;">
+      <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.5rem;"><i class="fas fa-flask accent"></i> 결정적 증거: KV-전용 제거(ablation)</div>
+      <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;">
+        하이브리드 모델에서 위치적 KV만 복원하고 <span class="accent">재귀 폴드(recurrent fold)를 누락하면 첫 토큰부터 발산</span>한다.<br>
+        전체 캡슐 복원은 토큰-정확하다. → 이득은 런타임만이 아닌 <span class="accent2">상태 메커니즘 자체</span>에서 온다.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">평가: 런타임 기반층 (Layer 1)</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-bottom:1.5rem;" class="muted">범위: TTFT/TTFA, 디코드 처리량이 아님. 동일 하이브리드 모델, 동일 GPU, 단일 스트림.</p>
+    <div class="card" style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">FlashRT vs vLLM — 콜드 Time-to-First-Token</div>
+      <div style="font-size:clamp(3rem,6vw,4.5rem);font-weight:800;line-height:1;" class="accent">2.6–2.8×</div>
+      <div style="font-size:clamp(0.9rem,1.4vw,1rem);margin-top:0.5rem;" class="muted">FlashRT 콜드 TTFT가 vLLM보다 낮음</div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.5rem;">vLLM 경로</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7;" class="muted">
+          블록 테이블 간접 참조 → 가변 물리 블록 수집<br>
+          CUDA 그래프 사용하지만 그래프가 KV를 자가완비 버퍼로 바인딩하지 않음
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.5rem;">FlashRT 경로</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7;" class="muted">
+          연속 정적 버퍼 → 단일 그래프 런치<br>
+          간접 참조 없이 직접 메모리 접근
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">평가: 캡슐 메커니즘 (Layer 2)</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-bottom:1.5rem;" class="muted">캡슐 복원 TTFT vs 콜드 프리필 TTFT (첫 base-logit 토큰 기준, MTP 제외)</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>접두어 길이</th>
+          <th>콜드 프리필 TTFT</th>
+          <th>캡슐 복원 TTFT</th>
+          <th>가속비</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2k 토큰</td>
+          <td>기준</td>
+          <td class="accent3">대역폭 바운드 복사</td>
+          <td><span class="accent">3.9×</span></td>
+        </tr>
+        <tr>
+          <td>8k 토큰</td>
+          <td>기준 (증가)</td>
+          <td class="accent3">복사 비용은 길이에 무관</td>
+          <td><span class="accent">~10×</span></td>
+        </tr>
+        <tr>
+          <td>16k 토큰</td>
+          <td>기준 (크게 증가)</td>
+          <td class="accent3">동일 복사 비용</td>
+          <td><span class="accent">27×</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);font-weight:600;margin-bottom:0.4rem;">핵심 인사이트</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7;" class="muted">
+          캡슐 복원 비용은 접두어 길이에 <span class="accent">의존하지 않는다</span>.<br>
+          길어질수록 가속비가 기하급수적으로 확대된다.
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);font-weight:600;margin-bottom:0.4rem;">GPU 내 복원 비용</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);line-height:1.7;" class="muted">
+          GPU 상주 스냅샷/복원: <span class="accent2">서브밀리초</span>.<br>
+          호스트/디스크 계층은 일회 전송 비용 추가.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">평가: 자동 캐시 vs 캡슐 (Layer 3)</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-bottom:1.5rem;" class="muted">동일 모델, 동일 GPU에서 vLLM 자동 접두어 캐싱과 캡슐 복원을 직접 비교.</p>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">캡슐 vs vLLM 자동 캐시</div>
+        <div style="font-size:clamp(2.5rem,5vw,3.5rem);font-weight:800;line-height:1;" class="accent">1.4–2.8×</div>
+        <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">캡슐 복원이 더 낮은 TTFT</div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">블록/Radix 캐시가 관리하지 않는 것</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>재귀 상태 (선형 어텐션 폴드) — 일급 관리 객체가 아님</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>합성곱 상태</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>명시적 세션 제어 (분기, 롤백, 재진입)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="card" style="border-left:3px solid;">
+      <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);font-weight:600;margin-bottom:0.4rem;">구조적 증거 (속도가 아닌 정확성)</div>
+      <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;">
+        KV만 유지하고 재귀 폴드를 제거한 복원은 <span class="accent">첫 토큰부터 발산</span>.<br>
+        전체 캡슐은 토큰-정확. → 이득의 원천은 런타임 속도가 아닌 <span class="accent2">상태 메커니즘의 완전성</span>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">온디바이스 복제: Jetson AGX Thor & DGX Spark</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-bottom:1.5rem;" class="muted">통합 메모리 온디바이스 시스템에서 동일 정확성과 구조적 특성 확인.</p>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">Jetson AGX Thor <span class="muted">(sm_110)</span></div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+          콜드 프리필 비용이 <span class="accent">초 단위</span>인 환경.<br><br>
+          콜드 → 캡슐 가속비:
+        </div>
+        <div style="font-size:clamp(2rem,4vw,3rem);font-weight:800;text-align:center;margin-top:0.5rem;" class="accent">9–76×</div>
+        <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);text-align:center;margin-top:0.3rem;" class="muted">접두어 길이에 따라 확대</div>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">DGX Spark <span class="muted">(GB10, sm_121)</span></div>
+        <div style="font-size:clamp(0.9rem,1.4vw,1rem);line-height:1.7;" class="muted">
+          동일한 정확성 보장.<br><br>
+          바이트 동일 상태, 토큰 동일 디코드, 바이트 동일 액션 리플레이 모두 유지.<br><br>
+          통합 메모리 아키텍처에서 캡슐의 <span class="accent2">이식성 입증</span>.
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      온디바이스에서 콜드 프리필이 초 단위인 환경일수록, <span class="accent">캡슐의 가속 효과가 극대화</span>된다. 이는 캡슐이 온디바이스 Physical-AI 레짐에 본질적으로 적합함을 시사한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:1rem;">요약 및 핵심 메시지</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="font-size:clamp(1.05rem,1.7vw,1.25rem);line-height:1.8;">
+        캡슐은 재사용 단위를 <span class="accent">토큰 주소 지정 KV 단편</span>에서 <span class="accent2">그래프 바인딩 실행 상태 경계</span>로 이동한다.
+      </div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div>
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">기여</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>지연 우선 화이트박스 런타인 <span class="accent">FlashRT</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그래프 바인딩 실행 상태 캡슐 메커니즘</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>최소 실행 계약으로 3개 도메인 통합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구조적 정확성 증명 (KV-전용 ablation)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>온디바이스 (Thor, Spark) 복제 검증</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:clamp(1rem,1.6vw,1.15rem);font-weight:600;margin-bottom:0.8rem;">범위 (명시적 한계)</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span><span class="muted">고동시성 처리량 최적화 불주장</span></li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span><span class="muted">분산/클러스터 서빙 불주장</span></li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span><span class="muted">동적 임의 셰이프 배칭 불주장</span></li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span><span class="muted">크로스 노드 KV 재사용 불주장</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div style="font-size:clamp(0.95rem,1.5vw,1.1rem);line-height:1.7;">
+      처리량 우선 스택(vLLM, SGLang)의 <span class="accent">보완 설계점</span>이지, 대체재가 아니다.<br>
+      단일 스트림·온디바이스·Physical-AI라는 <span class="accent2">반대 레짐</span>을 위해 존재한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:1.5rem;">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;line-height:1.3;max-width:800px;">Execution-State Capsules</h2>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);max-width:700px;line-height:1.7;" class="muted">Graph-Bound Execution-State Checkpoint and Restore<br>for Low-Latency, Small-Batch, On-Device Physical-AI Serving</p>
+    <div class="hr" style="width:60px;margin:0.5rem 0;"></div>
+    <div style="font-size:clamp(1rem,1.6vw,1.15rem);">Liang Su</div>
+    <div style="font-size:clamp(0.9rem,1.4vw,1rem);margin-top:0.5rem;">
+      <a href="http://arxiv.org/abs/2606.20537v1" style="text-decoration:none;" class="accent2">arxiv.org/abs/2606.20537v1</a>
+    </div>
+    <div style="font-size:clamp(0.85rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">
+      <i class="fab fa-github"></i> github.com/flashrt-project/FlashRT
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
