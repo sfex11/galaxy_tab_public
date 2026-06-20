@@ -119,3 +119,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-06-12-beyond-fully-random-masking-attention-guided-denoi.md]]
 
 - [[sources/2026-06-12-on-subquadratic-architectures-from-applications-to.md]]
+
+- [[sources/2026-06-20-fast-human-attention-prediction-for-fixation-guide.md]]

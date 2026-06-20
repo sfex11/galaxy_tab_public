@@ -187,3 +187,7 @@ _자동 생성됨_
 - [[sources/2026-06-16-learning-coordinated-preference-for-multi-objectiv.md]]
 
 - [[sources/2026-06-19-enhancing-decision-making-with-large-language-mode.md]]
+
+- [[sources/2026-06-20-contagion-networks-evaluator-bias-propagation-in-m.md]]
+
+- [[sources/2026-06-20-optimal-order-of-multi-agent-and-general-many-body.md]]
