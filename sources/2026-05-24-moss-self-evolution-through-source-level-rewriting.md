@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-extension-axis.md|harness extension axis]]
+
+---
+**관련**: [[concepts/harness-spectrum.md|harness spectrum]]

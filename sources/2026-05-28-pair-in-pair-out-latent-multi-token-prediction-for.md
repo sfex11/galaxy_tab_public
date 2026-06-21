@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-05-28-lost-in-sampling-assessing-lexical-reachability-in]]: 모두 LLM의 자기회귀적 디코딩 메커니즘의 한계를 분석하고 개선하는데, 전자는 디코딩이 어휘 다양성을 억제하는 현상을 진단하고, 후자는 입력 압축과 출력 다중 토큰 예측을 통합하여 디코딩 비용을 줄입니다.
+
+---
+**관련**: [[concepts/healthy-pathological-compression.md|healthy pathological compression]]

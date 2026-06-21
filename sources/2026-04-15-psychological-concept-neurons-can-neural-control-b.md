@@ -147,3 +147,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/composite-tool-operation.md|composite tool operation]]
+
+---
+**관련**: [[concepts/representation-orchestration-asymmetry.md|representation orchestration asymmetry]]

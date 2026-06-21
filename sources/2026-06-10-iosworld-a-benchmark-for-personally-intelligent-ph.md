@@ -34,3 +34,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/anti-sandbox.md|anti sandbox]]
+
+---
+**관련**: [[concepts/procedural-identity.md|procedural identity]]
+
+---
+**관련**: [[concepts/knowledge-action-safety-gap.md|knowledge action safety gap]]
+
+---
+**관련**: [[concepts/infrastructure-evaluation-identity.md|infrastructure evaluation identity]]

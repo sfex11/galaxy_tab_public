@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/always-on-assistant.md|always on assistant]]
+
+---
+**관련**: [[concepts/cooperation-competition-spectrum.md|cooperation competition spectrum]]

@@ -235,3 +235,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/execution-visibility-misalignment.md|execution visibility misalignment]]
+
+---
+**관련**: [[concepts/execution-topology-invariance.md|execution topology invariance]]
+
+---
+**관련**: [[concepts/execution-trajectory-encapsulation.md|execution trajectory encapsulation]]
+
+---
+**관련**: [[concepts/sovereign-execution-broker.md|sovereign execution broker]]
+
+---
+**관련**: [[concepts/semantic-coupling.md|semantic coupling]]

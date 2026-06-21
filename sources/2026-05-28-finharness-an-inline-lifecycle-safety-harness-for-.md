@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/incentive-induced-sabotage.md|incentive induced sabotage]]
+
+---
+**관련**: [[concepts/authority-boundary-penetration.md|authority boundary penetration]]

@@ -106,3 +106,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/consolidation-extinction-cycle.md|consolidation extinction cycle]]
+
+---
+**관련**: [[concepts/consistency-bias-conflation.md|consistency bias conflation]]

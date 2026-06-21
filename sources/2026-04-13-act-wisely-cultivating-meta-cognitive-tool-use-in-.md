@@ -67,3 +67,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/cognitive-probability.md|cognitive probability]]
+
+---
+**관련**: [[concepts/meta-cognitive-delegation.md|meta cognitive delegation]]

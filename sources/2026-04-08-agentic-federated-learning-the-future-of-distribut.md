@@ -55,3 +55,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/normative-orchestration-principle.md|normative orchestration principle]]
+
+---
+**관련**: [[concepts/microphysical-orchestration.md|microphysical orchestration]]

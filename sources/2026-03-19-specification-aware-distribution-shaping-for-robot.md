@@ -103,3 +103,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/rollback-specification-boundary.md|rollback specification boundary]]
+
+---
+**관련**: [[concepts/planning-on-degraded-foundation.md|planning on degraded foundation]]

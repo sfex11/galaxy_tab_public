@@ -104,3 +104,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-evolving-framework-taxonomy.md|self evolving framework taxonomy]]
+
+---
+**관련**: [[concepts/procedural-attractor.md|procedural attractor]]
+
+---
+**관련**: [[concepts/evidence-tree-credit-assignment.md|evidence tree credit assignment]]
+
+---
+**관련**: [[concepts/rubric-to-reward-reducibility.md|rubric to reward reducibility]]
+
+---
+**관련**: [[concepts/evaluation-target-substitution.md|evaluation target substitution]]

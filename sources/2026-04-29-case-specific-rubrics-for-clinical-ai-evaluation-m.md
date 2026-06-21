@@ -285,3 +285,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/skill-reward-evaluation-trinity.md|skill reward evaluation trinity]]
+
+---
+**관련**: [[concepts/convergence-dynamics-evaluation.md|convergence dynamics evaluation]]
+
+---
+**관련**: [[concepts/evaluation-contract-as-harness.md|evaluation contract as harness]]
+
+---
+**관련**: [[concepts/root-proximate-cause-conflation.md|root proximate cause conflation]]
+
+---
+**관련**: [[concepts/evaluation-target-erasure.md|evaluation target erasure]]
+
+---
+**관련**: [[concepts/cross-regime-topological-convergence.md|cross regime topological convergence]]

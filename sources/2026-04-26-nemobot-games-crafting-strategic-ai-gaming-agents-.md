@@ -54,3 +54,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/strategic-exploitation.md|strategic exploitation]]
+
+---
+**관련**: [[concepts/strategic-defection.md|strategic defection]]

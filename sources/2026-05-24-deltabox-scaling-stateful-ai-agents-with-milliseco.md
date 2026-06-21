@@ -170,3 +170,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/bottleneck-transference.md|bottleneck transference]]
+
+---
+**관련**: [[concepts/recursive-checkpoint-scope-problem.md|recursive checkpoint scope problem]]
+
+---
+**관련**: [[concepts/algorithm-level-adaptation.md|algorithm level adaptation]]
+
+---
+**관련**: [[concepts/anti-sandbox.md|anti sandbox]]
+
+---
+**관련**: [[concepts/second-order-opacity.md|second order opacity]]

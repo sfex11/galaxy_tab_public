@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컨텍스트에 맡겨둔 규칙은 왜 깨지는가 — 에이전트 정책 준수의 근원적 한계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #8a8279;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 6px 24px rgba(44,40,37,0.06);
+    --radius: 14px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.85;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  article {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px) 80px;
+  }
+
+  /* ── 네비게이션 ── */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 780px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding-top: clamp(40px, 8vw, 80px);
+    padding-bottom: clamp(32px, 6vw, 56px);
+    border-bottom: 1px solid rgba(44,40,37,0.07);
+    margin-bottom: clamp(32px, 6vw, 56px);
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(26px, 5.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2.5vw, 18px);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  .article-meta {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(40px, 8vw, 64px);
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(21px, 4vw, 28px);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.4;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(16px, 3vw, 19px);
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.5;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    color: var(--fg);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .accent-warm { color: var(--accent-warm); font-weight: 600; }
+  .accent-cool { color: var(--accent-cool); font-weight: 600; }
+  .accent-green { color: var(--accent-green); font-weight: 600; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  blockquote p { margin-bottom: 0; color: var(--muted); }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: clamp(20px, 4vw, 28px);
+    margin: 24px 0;
+    transition: box-shadow 0.3s;
+  }
+  .card:hover {
+    box-shadow: 0 2px 6px rgba(44,40,37,0.06), 0 12px 36px rgba(44,40,37,0.09);
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-label.warm { color: var(--accent-warm); }
+  .card-label.cool { color: var(--accent-cool); }
+  .card-label.green { color: var(--accent-green); }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.05) 0%, rgba(107,158,122,0.05) 100%);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: var(--radius);
+    padding: clamp(20px, 4vw, 28px);
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(194,112,62,0.06);
+    border-radius: 50%;
+    filter: blur(20px);
+  }
+  .metaphor-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-cool);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .metaphor-box p { margin-bottom: 10px; font-size: clamp(14px, 2vw, 16px); }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 순서 리스트 ── */
+  ol {
+    padding-left: 20px;
+    margin: 16px 0 20px;
+  }
+  ol li {
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+  ol li::marker {
+    font-weight: 600;
+    color: var(--accent-warm);
+  }
+
+  /* ── 비순서 리스트 ── */
+  ul {
+    padding-left: 20px;
+    margin: 12px 0 18px;
+  }
+  ul li {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  ul li::marker {
+    color: var(--accent-warm);
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(40px, 8vw, 64px) 0;
+  }
+
+  /* ── 하이라이트 텍스트 ── */
+  .highlight {
+    background: linear-gradient(to top, rgba(194,112,62,0.12) 40%, transparent 40%);
+    padding: 0 2px;
+  }
+
+  /* ── 세 축 다이어그램 ── */
+  .axis-diagram {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .axis-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(44,40,37,0.06);
+    background: var(--card-bg);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .axis-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(44,40,37,0.08);
+  }
+  .axis-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .axis-num.warm { background: rgba(194,112,62,0.1); color: var(--accent-warm); }
+  .axis-num.cool { background: rgba(91,124,153,0.1); color: var(--accent-cool); }
+  .axis-num.green { background: rgba(107,158,122,0.1); color: var(--accent-green); }
+  .axis-text { flex: 1; }
+  .axis-label {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+  .axis-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── 결론 카드 ── */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04) 0%, rgba(107,158,122,0.04) 100%);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: var(--radius);
+    padding: clamp(24px, 5vw, 36px);
+    margin: 32px 0;
+  }
+  .conclusion-card h3 { margin-top: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.07);
+    padding-top: 24px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .axis-item { padding: 12px 14px; gap: 10px; }
+    .axis-num { width: 32px; height: 32px; font-size: 14px; border-radius: 8px; }
+    nav { margin: 12px 16px; }
+  }
+
+  /* ── 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section {
+    animation: fadeUp 0.6s ease-out both;
+  }
+  .section:nth-child(2) { animation-delay: 0.08s; }
+  .section:nth-child(3) { animation-delay: 0.16s; }
+  .section:nth-child(4) { animation-delay: 0.24s; }
+  .section:nth-child(5) { animation-delay: 0.32s; }
+  .section:nth-child(6) { animation-delay: 0.40s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <!-- ── 헤더 ── -->
+  <header class="article-header">
+    <span class="article-tag">에이전트 아키텍처 심층 분석</span>
+    <h1>컨텍스트에 맡겨둔 규칙은 왜 깨지는가</h1>
+    <p class="article-subtitle">에이전트가 도메인 정책을 준수하도록 만드는 일은 단순한 프롬프트 엔지니어링의 문제가 아니다. 메모리 아키텍처의 근원적 빈틈이 초래하는 세 가지 한계와, LedgerAgent가 제시하는 구조적 해답을 분석한다.</p>
+    <div class="article-meta">
+      <span>대상 논문: LedgerAgent (2025)</span>
+      <span>읽기 시간: 약 12분</span>
+    </div>
+  </header>
+
+  <!-- ── 섹션 1: 문제 진단 ── -->
+  <section class="section">
+    <h2>구조적 상태 진공: 두 극단 사이의 빈 공간</h2>
+
+    <p>현재 에이전트 메모리 아키텍처를 살펴보면, 하나의 명확한 양극화가 나타난다. 한쪽에는 <span class="accent-warm">ADEMA</span>가 대표하는 <strong>지식 축적 층</strong>이 있다. 이 계층은 에이전트가 "무엇을 알고 있는가"를 오케스트레이션하며, 장기 지식 상태를 관리한다. 다른 한쪽에는 <span class="accent-cool">Crab</span>이 대표하는 <strong>실행 직렬화 층</strong>이 있다. 에이전트의 의미론적 의존 그래프를 OS 수준의 체크포인트 스냅샷으로 번역하여 "어떤 실행 상태였는가"를 보존한다.</p>
+
+    <p>그러나 이 두 극단 사이에 놓인 핵심 질문이 있다.</p>
+
+    <blockquote>
+      <p>"현재 작업의 정책적 상태를 어떻게 구조적으로 유지하는가?"</p>
+    </blockquote>
+
+    <p>이 질문에 답하는 독립 계층이 기존 아키텍처에는 존재하지 않는다. LedgerAgent가 최근 논문에서 제시하는 <span class="highlight"><strong>사실(facts)·식별자(identifiers)·제약조건(constraints)</strong></span>으로 구성된 구조적 작업 상태가 바로 이 진공을 메우려는 시도다. 그런데 기존 아키텍처는 이 빈 공간을 어떻게 처리해왔을까? <strong>암묵적으로 컨텍스트(프롬프트)에 위임</strong>하는 방식이었다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-title">💡 일상적 비유: 건축 현장의 안전 규정</div>
+      <p>건축 현장을 상상해보자. <strong>자재 창고</strong>(지식 축적 층)에는 시멘트, 철근, 목재가 체계적으로 분류되어 있다. <strong>공사 일지</strong>(실행 직렬화 층)에는 매일 어디까지 공사가 진행되었는지 사진과 함께 기록된다. 그런데 <strong>"3층 이상 작업 시 안전모와 안전대를 착용해야 한다"</strong>는 안전 규정은 어디에 있는가?</p>
+      <p>현장 관리자의 머릿속에만 있다면 — 즉, 컨텍스트에만 의존한다면 — 관리자가 교대하거나 피곤한 날에 그 규정은 증발한다. 규정을 게시판에 명문화하여 구조적으로 고정하지 않는 한, 준수는 운에 맡겨진 셈이다.</p>
+    </div>
+
+    <p>이 "컨텍스트 위임" 방식이 도메인 정책 준수에 초래하는 근원적 한계는 정확히 세 가지로 나뉜다. 각각을 순서대로 해부해보자.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 2: 첫 번째 한계 ── -->
+  <section class="section">
+    <h2>첫 번째 한계: 구조가 텍스트로 무너질 때</h2>
+
+    <h3>평탄화와 재해석의 반복 노동</h3>
+
+    <p>정책 제약조건은 본질적으로 <strong>구조적 그래프</strong>다. 어떤 식별자가 어떤 제약에 묶이고, 어떤 사실이 어떤 제약을 활성화하는지, 그 관계망이 존재한다. "고객 계정 #4821은 잠금 상태이므로 비밀번호 재설정 도구를 호출할 수 없다"는 하나의 제약은 사실(계정 잠금), 식별자(#4821), 제약(재설정 불가) 세 요소가 관계를 맺는 구조물이다.</p>
+
+    <p>그런데 이것이 컨텍스트에 위임되면 무슨 일이 벌어지는가? 구조적 그래프가 <span class="accent-warm">평탄한 텍스트 시퀀스</span>로 변환된다. 그리고 매 턴마다 모델이 이 텍스트를 <strong>재해석하고 재구성</strong>해야 한다.</p>
+
+    <div class="card">
+      <div class="card-label warm">⚠️ 동형적 문제 (Isomorphic Problem)</div>
+      <p style="margin-bottom:0;">Crab이 다룬 "의미론적 의존 그래프 → OS 체크포인트 스냅샷" 번역에서 발생하는 비효율은 <strong>실행 층의 간극</strong>이었다. 컨텍스트 위임은 정확히 같은 패턴을 <strong>정책 층에서 재생산</strong>한다. "정책 의존 그래프 → 평탄한 텍스트 시퀀스"로의 번역, 그리고 매 턴의 재해석 — 구조가 정보로 붕괴되는 과정이 동일하다.</p>
+    </div>
+
+    <p>이것이 왜 단순한 추론 오류가 아닌 <strong>아키텍처적 결함</strong>인가? 모델이 특정 턴에서 컨텍스트 내 제약을 재해석하지 못해 도구를 잘못 호출했을 때, 우리는 보통 "모델이 더 똑똑해져야 한다"고 말한다. 하지만 구조적 상태가 존재하지 않아 발생한 문제를 모델의 능력 부족으로 돌리는 것은, <em>게시판에 안전 규정을 붙이지 않은 것을 현장 관리자의 기억력 탓으로 돌리는 것</em>과 같다.</p>
+
+    <blockquote>
+      <p>구조가 없으면 재해석은 필수적이고, 재해석은 필연적으로 오차를 수반하며, 오차는 정책 위반으로 직결된다. 이 연쇄의 기원은 구조의 부재다.</p>
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 3: 두 번째 한계 ── -->
+  <section class="section">
+    <h2>두 번째 한계: 지나간 자국이 없는 감사 공백</h2>
+
+    <h3>관찰 불가능한 상태 전이</h3>
+
+    <p>EU AI Act, NIST RMF, CoE Convention이 요구하는 사전 안전 증명의 핵심은 "절차적 검사에서 <strong>증거 기반 인증</strong>으로의 전환"이다. 말하자면 "이 에이전트는 안전한 절차를 따르도록 설계되었음"이라는 서술에서, "이 에이전트는 이번 실행에서 구체적으로 어떤 정책 제약을 준수했음, 여기 증거가 있음"으로 나아가야 한다는 뜻이다.</p>
+
+    <p>그런데 컨텍스트 위임 방식에서는 <span class="accent-cool">상태 전이 자체가 관찰 불가능</span>하다.</p>
+
+    <ul>
+      <li><strong>ADEMA</strong>는 지식 상태의 변화를 추적하지만, 이는 세계 지식의 갱신이지 작업 제약의 전이가 아니다</li>
+      <li><strong>Crab</strong>은 실행 스냅샷을 보존하지만, 스냅샷 내에서 "어떤 정책 제약이 활성 또는 비활성화되었는가"를 구분하지 않는다</li>
+      <li>컨텍스트에 잠긴 작업 상태는 턴 간에 모델의 <em>attention</em> 메커니즘에 의해 암묵적으로 선택되거나 누락되며, 이 과정에 대한 <strong>감사 가능한 기록(auditable trail)</strong>이 존재하지 않는다</li>
+    </ul>
+
+    <div class="metaphor-box">
+      <div class="metaphor-title">💡 일상적 비유: 감시 카메라 없는 금고실</div>
+      <p>은행 금고실에 출입 기록은 있고, 금고 안의 자재 목록도 있다. 그런데 금고실 <strong>내부에서 누가 어떤 규정을 위반했는지</strong>에 대한 기록은 아예 존재하지 않는다. 보안 감사관이 "3번 직원이 2시에 금고실에서 금연 규정을 위반했는가?"를 조사하려 해도, 그 정보가 수집된 적이 없다.</p>
+      <p>컨텍스트 위임은 정확히 이 상황이다. 제약 준수 여부가 모델의 내부 처리에만 머물고, 외부에서 검증 가능한 형태로 기록되지 않는다.</p>
+    </div>
+
+    <p>LedgerAgent의 구조적 상태가 독립 계층으로 존재할 때만 다음과 같은 전이를 <strong>기계적으로 검증</strong>할 수 있다.</p>
+
+    <div class="card">
+      <div class="card-label cool">🔍 검증 가능한 전이 예시</div>
+      <p>"제약조건 X가 턴 T에서 사실 Y의 도입으로 활성화되었고, 이로 인해 도구 Z의 호출이 차단되었다."</p>
+      <p style="margin-bottom:0;">이 하나의 문장이 가능하려면 제약, 사실, 턴, 도구 호출이라는 요소가 각각 구조적으로 기록되고, 그 사이의 인과관계가 추적 가능해야 한다. 컨텍스트 위임에서는 이것이 원천적으로 불가능하다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 4: 세 번째 한계 ── -->
+  <section class="section">
+    <h2>세 번째 한계: 망각 메커니즘이 정책을 삼킬 때</h2>
+
+    <h3>적응적 망각과 정책 일관성의 충돌</h3>
+
+    <p>적응적 망각(adaptive forgetting)은 대형 언어모델의 컨텍스트 윈도우에서 자연스럽게 발생하는 현상이다. 대화가 길어지면 초기에 주어진 정보가 주의 가중치에서 밀려나 효과적으로 사라진다. 정보의 중요도에 따라 자원을 재배분하는 이 메커니즘은 <em>특정 용도</em>에서는 적응적 기능으로 작동할 수 있다.</p>
+
+    <p>그러나 컨텍스트 위임은 이 망각 메커니즘이 <span class="accent-warm">정책 제약에 직접 작용</span>하도록 허용한다. 이것이 치명적인 이유를 보자.</p>
+
+    <div class="card">
+      <div class="card-label warm">🚨 소프트 제약의 붕괴 시나리오</div>
+      <p>턴 1: "이 고객은 프리미엄 등급이므로 무료 재설정이 가능합니다." — 제약 확립</p>
+      <p>턴 5~15: 다양한 일반 질의와 응답이 오가며 컨텍스트를 채움</p>
+      <p>턴 18: 고객이 재설정을 요청 — 그러나 턴 1의 제약은 이미 주의 가중치에서 밀려났고, 모델이 유료 재설정 절차를 안내함</p>
+      <p style="margin-bottom:0;"><strong>결과:</strong> 정책 위반이 발생했지만, 어느 턴에서 제약이 '사라졌는지'조차 알 수 없다.</p>
+    </div>
+
+    <p>여기서 핵심은 <strong>소프트 제약과 하드 제약의 차이</strong>다. 컨텍스트 윈도우 내에 텍스트로 존재하는 제약은 본질적으로 소프트 제약이다. "지켜야 한다"는 의미는 있지만, 그것을 강제하는 물리적 장치가 없다. 모델의 주의 메커니즘이 언제든 이를 무시할 수 있다.</p>
+
+    <p>반면 믿음 상태(belief state)가 제약으로 기능하려면 그 상태가 <strong>안정적으로 유지</strong>되어야 한다. LedgerAgent의 구조적 상태 계층은 컨텍스트가 아닌 <span class="accent-green">명시적 데이터 구조</span>에 상태를 보존함으로써, 모델의 망각 메커니즘이 정책 일관성을 침해할 경로를 원천적으로 차단한다. 하드 제약의 전환이다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-title">💡 일상적 비유: 포스트잇과 법전</div>
+      <p>컨텍스트 위임은 사무실 모니터 가장자리에 붙인 <strong>포스트잇</strong>에 규정을 적어두는 것과 같다. 업무가 바빠지면 포스트잇은 시야에서 사라지고, 누군가 그 자리에 다른 포스트잇을 붙이면 원래의 규정은 가려진다.</p>
+      <p>구조적 상태 계층은 사무실 벽면에 게시된 <strong>법전</strong>과 같다. 업무가 아무리 바빠도, 다른 문서가 아무리 쌓여도, 법전은 그 자리에 고정되어 있으며 누구나 언제든 확인할 수 있다. 망각의 대상이 될 수 없는 물리적 실체다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 5: 세 축의 재구성 ── -->
+  <section class="section">
+    <h2>패러다임 전환: 지식-실행의 이분법에서 삼축 체계로</h2>
+
+    <h3>기존에 놓쳤던 제3의 축</h3>
+
+    <p>지금까지의 분석이 하나의 <strong>새로운 연결</strong>을 가리키고 있다. 기존의 "에이전트 지식 분리(agent-knowledge-separation)" 논의는 지식의 분리를 다루었지만, LedgerAgent의 등장은 이 개념이 단일 축이 아닌 <span class="highlight"><strong>세 가지 축</strong></span>으로 확장되어야 함을 시사한다.</p>
+
+    <div class="axis-diagram">
+      <div class="axis-item">
+        <div class="axis-num warm">1</div>
+        <div class="axis-text">
+          <div class="axis-label">세계 지식 (World Knowledge)</div>
+          <div class="axis-desc">ADEMA가 관리 — "에이전트가 무엇을 아는가." 장기적이고 안정적인 지식의 축적과 갱신.</div>
+        </div>
+      </div>
+      <div class="axis-item">
+        <div class="axis-num cool">2</div>
+        <div class="axis-text">
+          <div class="axis-label">실행 상태 (Execution State)</div>
+          <div class="axis-desc">Crab이 직렬화 — "어디까지 실행되었는가." 의미론적 의존 그래프의 스냅샷 보존.</div>
+        </div>
+      </div>
+      <div class="axis-item">
+        <div class="axis-num green">3</div>
+        <div class="axis-text">
+          <div class="axis-label accent-green">정책 작업 상태 (Policy Task State)</div>
+          <div class="axis-desc">LedgerAgent가 구조화 — "현재 작업에서 어떤 제약이 활성인가." 사실·식별자·제약조건의 명시적 관리.</div>
+        </div>
+      </div>
+    </div>
+
+    <p>기존 아키텍처는 축 1과 2만 명시적 계층으로 인식했으며, 축 3을 축 1(지식)이나 축 2(실행)에 암묵적으로 흡수시켰다. "정책 제약은 일종의 지식이니까 ADEMA가 처리하면 되지 않겠나?" 혹은 "실행 상태에 제약 정보를 포함시키면 되지 않겠나?" — 이러한 암묵적 흡수가 바로 세 가지 한계의 근원이다.</p>
+
+    <p>축 3이 독립 계층이어야 하는 이유는 명확하다. 세계 지식은 <em>범용적</em>이고, 실행 상태는 <em>순간적</em>이지만, 정책 작업 상태는 <em>특정 작업에 구속되면서도 작업 전체 기간에 지속되는</em> 성격을 갖는다. 이 세 가지 시간적·기능적 특성은 어느 축에도 환원될 수 없다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 결론 ── -->
+  <section class="section">
+    <div class="conclusion-card">
+      <h3>결론: 컨텍스트에서 구조로, 암묵에서 명시로</h3>
+
+      <p>이 분석이 보여주는 것은 컨텍스트 위임이 단순한 "나쁜 설계"가 아니라 <strong>특정 발전 단계에서의 자연스러운 생략</strong>이었다는 점이다. 초기 에이전트 시스템에서는 지식을 쌓고 실행을 이어가는 것 자체가 과제였고, 정책 준수는 "프롬프트에 잘 써두면 된다"는 가정 하에 컨텍스트에 위임될 수밖에 없었다.</p>
+
+      <p>그러나 에이전트가 실제 도메인(금융, 의료, 법률)에 투입되면서 이 생략의 대가가 드러나기 시작했다. 구조적 그래프가 텍스트로 평탄화되어 재해석 비용이 발생하고, 상태 전이가 감사 불가능해 규제 요구를 충족하지 못하며, 적응적 망각이 정책 제약을 삼키는 사태가 벌어진다.</p>
+
+      <p><strong>필요한 패러다임 전환은 다음과 같다.</strong></p>
+
+      <ol>
+        <li><strong>컨텍스트에서 구조로:</strong> 정책 제약을 프롬프트 텍스트가 아닌 사실·식별자·제약조건의 명시적 데이터 구조로 분리하여 보존한다</li>
+        <li><strong>암묵에서 명시로:</strong> 모델의 주의 메커니즘에 맡기던 제약 유지를, 에이전트 런타임이 기계적으로 강제하는 하드 제약으로 전환한다</li>
+        <li><strong>이분법에서 삼축으로:</strong> "지식-실행"의 이분법적 메모리 모델을 "세계 지식-실행 상태-정책 작업 상태"의 삼축 체계로 재구성한다</li>
+      </ol>
+
+      <p style="margin-bottom:0;">LedgerAgent의 구조적 작업 상태는 이 전환의 청사진을 제시한다. 이것이 단일 논문의 기술적 제안을 넘어, 에이전트 메모리 아키텍처 전체가 향해야 할 방향성을 드러내는 이유다. 규칙을 머릿속에만 두지 말고, 법전으로 만들어 벽에 걸어두는 것 — 그것이 에이전트가 도메인 정책을 진정으로 준수하는 길이다.</p>
+    </div>
+
+    <footer class="article-footer">
+      <p><strong>참고 논문:</strong> LedgerAgent: Structured State for Policy-Adherent Tool-Calling Agents (2025)</p>
+      <p>본 분석은 Wiki 쿼리 결과와 연결된 개념망(ADEMA, Crab, Algorithm-System Translation Gap, Agent Execution Semantic Opacity, Auditable Gap, Adaptive Forgetting, Belief State as Constraint, Agent-Knowledge Separation)을 기반으로 작성되었습니다.</p>
+    </footer>
+  </section>
+
+</article>
+
+</body>
+</html>

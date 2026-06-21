@@ -169,3 +169,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/knowledge-action-safety-gap.md|knowledge action safety gap]]
+
+---
+**관련**: [[concepts/environment-capability-co-evolution.md|environment capability co evolution]]
+
+---
+**관련**: [[concepts/silent-failure.md|silent failure]]
+
+---
+**관련**: [[concepts/topology-flattening-failure.md|topology flattening failure]]
+
+---
+**관련**: [[concepts/inference-time-prompt-learning.md|inference time prompt learning]]
+
+---
+**관련**: [[concepts/fine-tuning-knowledge-erosion.md|fine tuning knowledge erosion]]
+
+---
+**관련**: [[concepts/ontological-concealment-of-failure.md|ontological concealment of failure]]
+
+---
+**관련**: [[concepts/knowledge-structure-representation-translation-loss.md|knowledge structure representation translation loss]]

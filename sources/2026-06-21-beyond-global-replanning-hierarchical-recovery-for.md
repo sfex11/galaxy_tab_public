@@ -31,3 +31,15 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/credit-assignment-granularity.md|credit assignment granularity]]
+
+---
+**관련**: [[concepts/failure-reversibility-assumption.md|failure reversibility assumption]]
+
+---
+**관련**: [[concepts/execution-visibility-misalignment.md|execution visibility misalignment]]
+
+---
+**관련**: [[concepts/dynamic-lifecycle-safety.md|dynamic lifecycle safety]]

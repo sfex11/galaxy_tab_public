@@ -331,3 +331,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/inference-time-prompt-learning.md|inference time prompt learning]]
+
+---
+**관련**: [[concepts/evaluation-training-causal-closure.md|evaluation training causal closure]]
+
+---
+**관련**: [[concepts/causal-inversion-of-forgetting-and-benchmark.md|causal inversion of forgetting and benchmark]]

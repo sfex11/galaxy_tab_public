@@ -53,3 +53,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/measurement-target-underspecification.md|measurement target underspecification]]
+
+---
+**관련**: [[concepts/orchestration-attribution-fallacy.md|orchestration attribution fallacy]]
+
+---
+**관련**: [[concepts/skill-definition-governance-blur.md|skill definition governance blur]]
+
+---
+**관련**: [[concepts/measurement-architecture-misattribution.md|measurement architecture misattribution]]

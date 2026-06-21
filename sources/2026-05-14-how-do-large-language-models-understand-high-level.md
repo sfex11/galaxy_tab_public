@@ -125,3 +125,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/specification-gap-internalization.md|specification gap internalization]]
+
+---
+**관련**: [[concepts/rollback-specification-boundary.md|rollback specification boundary]]
+
+---
+**관련**: [[concepts/step-level-boundary-translation.md|step level boundary translation]]

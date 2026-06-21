@@ -31,3 +31,12 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/evolutionary-cross-pollination.md|evolutionary cross pollination]]
+
+---
+**관련**: [[concepts/trajectory-compressibility-criterion.md|trajectory compressibility criterion]]
+
+---
+**관련**: [[concepts/accuracy-expertise-divergence.md|accuracy expertise divergence]]

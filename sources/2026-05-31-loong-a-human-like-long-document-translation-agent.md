@@ -61,3 +61,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/step-level-boundary-translation.md|step level boundary translation]]
+
+---
+**관련**: [[concepts/cache-coherence-constrained-optimization.md|cache coherence constrained optimization]]
+
+---
+**관련**: [[concepts/adaptive-validity.md|adaptive validity]]
+
+---
+**관련**: [[concepts/compression-translation-product.md|compression translation product]]

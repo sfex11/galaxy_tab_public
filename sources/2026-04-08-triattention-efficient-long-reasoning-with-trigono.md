@@ -152,3 +152,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/healthy-pathological-compression.md|healthy pathological compression]]
+
+---
+**관련**: [[concepts/reasoning-structural-failure.md|reasoning structural failure]]
+
+---
+**관련**: [[concepts/compression-inference-coupling.md|compression inference coupling]]

@@ -137,3 +137,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]
+
+---
+**관련**: [[concepts/score-trajectory-complementarity.md|score trajectory complementarity]]
+
+---
+**관련**: [[concepts/skill-reward-evaluation-trinity.md|skill reward evaluation trinity]]
+
+---
+**관련**: [[concepts/trajectory-fingerprinting.md|trajectory fingerprinting]]

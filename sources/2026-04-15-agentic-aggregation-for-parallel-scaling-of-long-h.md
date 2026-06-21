@@ -229,3 +229,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]
+
+---
+**관련**: [[concepts/independent-effect-tracking-problem.md|independent effect tracking problem]]
+
+---
+**관련**: [[concepts/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]
+
+---
+**관련**: [[concepts/information-noise-consumption.md|information noise consumption]]

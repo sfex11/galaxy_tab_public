@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/data-contamination-resistance.md|data contamination resistance]]
+
+---
+**관련**: [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]

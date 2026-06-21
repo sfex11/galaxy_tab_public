@@ -129,3 +129,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/tracking-neutrality-assumption.md|tracking neutrality assumption]]
+
+---
+**관련**: [[concepts/graph-topology-preservation-dimension.md|graph topology preservation dimension]]

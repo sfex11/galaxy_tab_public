@@ -11,3 +11,6 @@ The pursuit of autonomous driving has produced one of the richest sensor data co
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/bias-synchronization.md|bias synchronization]]

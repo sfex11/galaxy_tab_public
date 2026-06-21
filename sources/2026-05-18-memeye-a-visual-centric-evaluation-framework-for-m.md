@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explicit-implicit-evidence-taxonomy.md|explicit implicit evidence taxonomy]]
+
+---
+**관련**: [[concepts/serving-primitive-programmability.md|serving primitive programmability]]

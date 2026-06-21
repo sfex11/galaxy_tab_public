@@ -356,3 +356,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/agent-self-recusal.md|agent self recusal]]
+
+---
+**관련**: [[concepts/alignment-density.md|alignment density]]
+
+---
+**관련**: [[concepts/authority-location-alignment.md|authority location alignment]]
+
+---
+**관련**: [[concepts/environment-constituted-agent.md|environment constituted agent]]
+
+---
+**관련**: [[concepts/alignment-irreversibility.md|alignment irreversibility]]
+
+---
+**관련**: [[concepts/narrative-based-anomaly-detection.md|narrative based anomaly detection]]

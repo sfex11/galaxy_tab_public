@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-17-context-aware-rl-for-agentic-and-multimodal-llms]]: 둘 다 긴 문맥 속에서 결정적인 정보를 동적으로 탐색하고 추론하는 컨텍스트 인식 능력을 다룸.
+
+---
+**관련**: [[concepts/continuous-manifold-checkpointing-difficulty.md|continuous manifold checkpointing difficulty]]

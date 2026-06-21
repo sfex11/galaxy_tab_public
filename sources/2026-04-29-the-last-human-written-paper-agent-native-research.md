@@ -155,3 +155,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evolutionary-branch-isolation.md|evolutionary branch isolation]]
+
+---
+**관련**: [[concepts/specification-gap-internalization.md|specification gap internalization]]
+
+---
+**관련**: [[concepts/narrative-inertia.md|narrative inertia]]
+
+---
+**관련**: [[concepts/self-reinforcing-error-narrative.md|self reinforcing error narrative]]

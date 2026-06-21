@@ -52,3 +52,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-spectrum.md|harness spectrum]]
+
+---
+**관련**: [[concepts/dual-bottleneck-structure.md|dual bottleneck structure]]
+
+---
+**관련**: [[concepts/judgment-bottleneck.md|judgment bottleneck]]

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/embodied-compositional-safety.md|embodied compositional safety]]
+
+---
+**관련**: [[concepts/in-band-safety-signaling.md|in band safety signaling]]

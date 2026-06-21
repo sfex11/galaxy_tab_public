@@ -52,3 +52,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/local-coherence-global-incoherence.md|local coherence global incoherence]]
+
+---
+**관련**: [[concepts/inference-breath-sharing.md|inference breath sharing]]
+
+---
+**관련**: [[concepts/prefix-misalignment.md|prefix misalignment]]
+
+---
+**관련**: [[concepts/adaptation-subject-transfer.md|adaptation subject transfer]]

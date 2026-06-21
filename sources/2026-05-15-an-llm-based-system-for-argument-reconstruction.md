@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/logic-expressiveness-bottleneck.md|logic expressiveness bottleneck]]
+
+---
+**관련**: [[concepts/scaffold-component-tight-coupling.md|scaffold component tight coupling]]
+
+---
+**관련**: [[concepts/component-independence-assumption.md|component independence assumption]]

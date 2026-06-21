@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-control-dual-axis.md|inference control dual axis]]
+
+---
+**관련**: [[concepts/learning-substrate.md|learning substrate]]
+
+---
+**관련**: [[concepts/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]

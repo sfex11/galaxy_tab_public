@@ -262,3 +262,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-integrity-verification-layer.md|semantic integrity verification layer]]
+
+---
+**관련**: [[concepts/harness-protocol-layer.md|harness protocol layer]]
+
+---
+**관련**: [[concepts/self-evolving-framework-taxonomy.md|self evolving framework taxonomy]]

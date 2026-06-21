@@ -99,3 +99,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-state-dependency.md|temporal state dependency]]
+
+---
+**관련**: [[concepts/latent-communication-homogeneity-dependency.md|latent communication homogeneity dependency]]
