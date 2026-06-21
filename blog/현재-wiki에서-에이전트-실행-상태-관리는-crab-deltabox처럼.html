@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이전트의 진짜 상태는 어디에 있는가 — 그래프 위상이라는 불변량</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  ::selection { background: rgba(194,112,62,0.15); }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    border-bottom: 1px solid rgba(44,40,37,0.08);
+    margin-bottom: clamp(32px, 6vw, 56px);
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5.5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2.2vw, 18px);
+    color: rgba(44,40,37,0.6);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .article-meta {
+    margin-top: 20px;
+    font-size: clamp(12px, 1.6vw, 14px);
+    color: rgba(44,40,37,0.45);
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(36px, 7vw, 64px);
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.8vw, 30px);
+    font-weight: 700;
+    color: #2c2825;
+    line-height: 1.35;
+    margin-bottom: 16px;
+    padding-top: 8px;
+  }
+
+  h2 .num {
+    color: #c2703e;
+    margin-right: 6px;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(17px, 2.8vw, 22px);
+    font-weight: 600;
+    color: #2c2825;
+    margin: 28px 0 12px;
+  }
+
+  p { margin-bottom: 18px; }
+
+  strong { color: #c2703e; font-weight: 700; }
+
+  em.accent-blue { color: #5b7c99; font-style: normal; font-weight: 500; }
+  em.accent-green { color: #6b9e7a; font-style: normal; font-weight: 500; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 2vw, 16.5px);
+    line-height: 1.8;
+    color: rgba(44,40,37,0.78);
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+    font-style: normal;
+    color: rgba(44,40,37,0.45);
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 12px;
+    padding: clamp(20px, 3.5vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 1px 4px rgba(44,40,37,0.04), 0 4px 16px rgba(44,40,37,0.03);
+  }
+
+  .card-label {
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 10px;
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 24px 0;
+  }
+
+  .metaphor-box .metaphor-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    font-weight: 600;
+    color: #6b9e7a;
+    margin-bottom: 10px;
+  }
+
+  .metaphor-box p { margin-bottom: 10px; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 표 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 420px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.07);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(44,40,37,0.08);
+    margin: clamp(32px, 6vw, 56px) 0;
+  }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-highlight {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(17px, 2.8vw, 22px);
+    font-weight: 600;
+    line-height: 1.6;
+    color: #2c2825;
+    text-align: center;
+    padding: clamp(24px, 4vw, 40px) clamp(16px, 4vw, 32px);
+    background: rgba(194,112,62,0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(194,112,62,0.1);
+    margin: 32px 0;
+  }
+
+  /* ── 리스트 ── */
+  ul, ol {
+    margin: 12px 0 18px 20px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.08);
+    padding-top: 24px;
+    margin-top: clamp(40px, 8vw, 72px);
+    font-size: clamp(12px, 1.6vw, 14px);
+    color: rgba(44,40,37,0.4);
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .card { padding: 16px; }
+    blockquote { padding: 12px 14px; }
+    thead th, tbody td { padding: 10px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="article-wrap">
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1>에이전트의 "진짜 상태"는 어디에 있는가</h1>
+    <p class="article-subtitle">샌드박스 아티팩트도, KV 캐시도 아닌 계산 그래프의 위상(topology)이 실행 상태의 불변량이라면 — 우리가 알던 체크포인트의 의미는 어떻게 바뀌는가.</p>
+    <p class="article-meta">대상 논문: Execution-State Capsules (Graph-Bound C/R for On-Device Physical-AI Serving)</p>
+  </header>
+
+  <!-- ═══ 섹션 1 ═══ -->
+  <section class="section">
+    <h2><span class="num">01</span>지도를 영토로 착각한 우리</h2>
+
+    <p>요리사가 주방의 상태를 설명해야 한다고 상상해 보자. 한 사람은 "냉장고 안의 모든 재료 사진"을 찍어 보여주고, 다른 사람은 "조리법의 현재 진행 단계"를 가리킨다. 둘 다 틀린 말은 아니다. 하지만 <strong>요리의 진짜 상태</strong>는 어디에 있을까?</p>
+
+    <p>재료 사진은 <em class="accent-blue">Crab·DeltaBox의 샌드박스 체크포인트</em>와 닮아 있다. 샌드박스 안에 존재하는 모든 의미론적 아티팩트 — 파일, 메모리, 컨텍스트 — 를 통째로 직렬화하는 방식이다. 조리법의 진행 단계만 가리키는 사람은 <em class="accent-blue">기존 온디바이스 서빙에서 KV 캐시 하나만 포착</em>하는 방식과 유사하다. "모델이 지금 어디까지 추론했는가"라는 단일 지표만 남기는 것이다.</p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-title">🍳 비유: 레시피의 흐름도</p>
+      <p>진짜 상태는 재료 목록도 아니고, "3단계 완료"라는 체크리스트도 아니다. <strong>"야채를 썬 뒤 기름을 달군 다음 볶는다"는 흐름에서, 지금 어느 노드에 있고 어떤 엣지를 이미 통과했는가</strong> — 그 방향성 그래프의 위상이 요리의 상태다. 재료 사진은 그 위상의 한 매니페스테이션이고, 진행 단계 체크는 위상의 또 다른 축소본일 뿐이다.</p>
+    </div>
+
+    <p>우리는 "상태"라 할 때 눈에 보이는 산출물 — 샌드박스 안의 파일이나, 메모리 위의 KV 캐시 — 을 상태 그 자체로 착각해 왔다. 그러나 Wiki는 이미 Crab 논문 분석 과정에서 이 착각의 실마리를 포착하고 있었다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ 섹션 2 ═══ -->
+  <section class="section">
+    <h2><span class="num">02</span>Wiki가 이미 숨겨둔 통찰</h2>
+
+    <p>Wiki의 <em class="accent-blue">algorithm-system-translation-gap</em> 항목에는 다음과 같은 문장이 있다.</p>
+
+    <blockquote>
+      "에이전트의 의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다."
+      <cite>— Wiki, [[algorithm-system-translation-gap]] 항목 중</cite>
+    </blockquote>
+
+    <p>이 문장은 단순해 보이지만 결정적인 통찰을 담고 있다. <strong>본질은 아티팩트가 아니라 아티팩트 간의 의존 그래프</strong>라는 진단이다. Crab의 한계는 이 그래프를 OS 수준의 전체 스냅샷으로 "뭉개서" 직렬화한다는 점이었고, 이것이 곧 <em class="accent-blue">agent-os-semantic-gap</em>의 현현이었다.</p>
+
+    <p>다시 요리 비유로 돌아가자. "야채 썰기 → 기름 달구기 → 볶기"라는 의존 그래프가 있는데, Crab은 이를 "냉장고 + 프라이팬 + 가스레인지 + 조미료 전체 사진"으로 번역한다. 흐름이 평면화되는 순간, <strong>어떤 경로를 거쳐 현재 상태에 도달했는지 하는 위상 정보가 사라진다.</strong></p>
+
+    <div class="card">
+      <p class="card-label">핵심 포인트</p>
+      <p>Wiki는 "샌드박스 아티팩트 = 실행 상태"로 정의한 것이 아니다. "아티팩트 간 의존 그래프를 전체 스냅샷으로 번역하는 비효율"을 간극의 본질로 진단했다. 이 통찰의 씨앗은 Execution-State Capsules라는 정반대 레짐에서 꽃피운다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ 섹션 3 ═══ -->
+  <section class="section">
+    <h2><span class="num">03</span>대척점에서 만난 동일한 진단</h2>
+
+    <p>Execution-State Capsules 논문은 Crab과 정반대의 환경에서 출발한다. 샌드박스가 아니라 <strong>온디바이스 물리적 AI 서빙</strong> — 로봇 팔의 제어, 자율주행의 실시간 의사결정 같은 초저지연·소규모 배치 환경이다.</p>
+
+    <p>이 환경에서 기존 방식은 KV 캐시 하나만 포착한다. 고처리량·고동시성 클라우드 서빙에서는 이것이 합리적이지만, 온디바이스 물리적 AI에서는 구조적으로 부적합하다. 왜냐하면 물리적 AI의 에이전트 루프는 단일 토큰 생성이 아니라 <strong>센서 입력 → 계획 수립 → 액션 실행 → 환경 피드백</strong>이라는 복합적인 계산 그래프를 구성하기 때문이다.</p>
+
+    <p>이 논문이 제안하는 해법은 놀랍도록 Crab의 진단과 평행한다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>레짐</th>
+            <th>상태 표현의 문제</th>
+            <th>근본 원인</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>샌드박스 C/R</strong><br>(Crab)</td>
+            <td>의존 그래프 → 전체 스냅샷으로 <em class="accent-green">과대직렬화</em></td>
+            <td>그래프 위상을 <strong>평면화</strong>(flatten)</td>
+          </tr>
+          <tr>
+            <td><strong>온디바이스 서빙</strong><br>(Exec-State Capsules)</td>
+            <td>의존 그래프 → KV 캐시 단일 노드로 <em class="accent-green">과소포착</em></td>
+            <td>그래프 위상을 <strong>단일 포인트로 축소</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Crab이 "그래프를 사진으로 뭉개는" 문제를 다뤘다면, Execution-State Capsules는 "그래프를 점 하나로 줄이는" 문제를 다룬다. 두 방향 모두 <strong>실행 상태의 그래프적 위상이 단일 포인트로 환원될 때 발생하는 정보 손실</strong>을 지적한다. 하나는 너무 많이 찍고, 하나는 너무 적게 찍는다. 하지만 둘 다 잃어버리는 것은 같다 — <em class="accent-blue">그래프의 모양</em>이다.</p>
+
+    <div class="metaphor-box">
+      <p class="metaphor-title">🗺️ 비유: 지하철 노선도와 현재 위치</p>
+      <p>Crab은 지하철 노선도 전체를 A3 용지에 인쇄해서 들고 다니는 방식이다. 무거워서 비효율적이지만, 적어도 노선의 연결성은 보존된다(과대직렬화). 반면 기존 온디바이스 서빙은 "지금 2호선 역삼역"이라는 텍스트만 메모하는 방식이다. 가볍지만, 환승 가능 여부나 방향성은 전혀 알 수 없다(과소포착). <strong>둘 다 "노선도의 위상"이라는 핵심을 제대로 표현하지 못한다.</strong></p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ 섹션 4 ═══ -->
+  <section class="section">
+    <h2><span class="num">04</span>계산 그래프의 위상이 불변량인 이유</h2>
+
+    <p>그렇다면 왜 위상(topology)이 불변량인가? 이 질문에 답하려면 <em class="accent-blue">agent-loop-as-computation</em>이라는 관점이 필요하다.</p>
+
+    <p>에이전트 루프를 "계산"으로 보면, 실행 상태란 곧 <strong>방향성 비순환 그래프(DAG)의 부분적 완료 상태</strong>다. 어떤 노드(계산 단계)가 실행되었고, 어떤 엣지(데이터 의존성)가 해소되었으며, 어떤 노드가 아직 대기 중인가. 이 정보가 바로 상태의 본질이다.</p>
+
+    <h3>왜 샌드박스 아티팩트가 아닌가?</h3>
+    <p>아티팩트는 그래프 노드의 <strong>산출물</strong>이지 노드 자체가 아니다. 같은 계산 단계라도 배포 환경에 따라 산출물의 형태가 달라진다. 클라우드에서는 파일로, 온디바이스에서는 메모리 버퍼로, 엣지 디바이스에서는 레지스터 값으로 구체화된다. 형태는 변해도 <strong>"이 계산이 저 계산의 결과에 의존한다"는 위상은 변하지 않는다.</strong></p>
+
+    <h3>왜 KV 캐시가 아닌가?</h3>
+    <p>KV 캐시는 트랜스포머의 어텐션 계산에 필요한 중간 상태다. 하지만 에이전트 루프에는 트랜스포머 추론 외에도 툴 호출, 환경 상호작용, 메모리 읽기/쓰기 등 다양한 계산이 있다. KV 캐시는 이 그래프에서 <strong>하나의 노드에 해당하는 상태</strong>일 뿐, 그래프 전체를 대변할 수 없다.</p>
+
+    <div class="card">
+      <p class="card-label">형식적 정의</p>
+      <p>에이전트 실행 상태 <strong>S</strong> = (V<sub>done</sub>, E<sub>resolved</sub>, V<sub>pending</sub>)<br>
+      여기서 V<sub>done</sub>은 완료된 계산 노드 집합, E<sub>resolved</sub>는 해소된 의존 엣지 집합, V<sub>pending</sub>은 대기 중인 노드 집합이다. 샌드박스 아티팩트와 KV 캐시는 각각 V<sub>done</sub>의 원소들이 특정 레짐에서 구체화된 표현형에 불과하다.</p>
+    </div>
+
+    <h3>adaptive-inference와의 구조적 일치</h3>
+    <p>이 통찰은 <em class="accent-blue">adaptive-inference</em>에서 이미 관찰된 패턴과 구조적으로 동일하다. 적응형 추론이 "추론의 구조를 더 정밀하게 인식"하는 방향으로 진화했다면 — 모델 선택에서 추측 길이 선택으로 확장된 것처럼 — 상태 관리도 "상태의 구조를 더 정밀하게 인식"하는 방향으로 진화하는 것이다. <strong>그 정밀도의 끝에 그래프 위상이 있다.</strong></p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ 섹션 5 ═══ -->
+  <section class="section">
+    <h2><span class="num">05</span>패러다임을 어떻게 전환해야 하는가</h2>
+
+    <p>지금까지의 분석이 옳다면, 기존 패러다임에서 세 가지 전환이 필요하다.</p>
+
+    <h3>전환 1: 1차원 스펙트럼에서 2차원 위상 공간으로</h3>
+    <p>기존의 <em class="accent-blue">checkpoint-restore-efficiency-spectrum</em>은 "전체 스냅샷 ↔ KV 캐시 단일 포인트"라는 1차원 축 위에 있었다. Crab은 한쪽 끝에, 기존 온디바이스 서빙은 다른 끝에 위치한다. 하지만 이 스펙트럼의 진정한 차원은 <strong>"그래프 위상을 얼마나 보존하는가"</strong>여야 한다. Crab은 위상을 보존하되 과대표현하고, KV 캐시는 위상을 완전히 상실한다. 이 둘을 같은 축에 놓는 것 자체가 오류이다.</p>
+
+    <h3>전환 2: 샌드박스 상태 관리와 에이전트 네이티브 서빙의 통합</h3>
+    <p>기존에는 <em class="accent-blue">agent-sandbox-state-management</em>와 <em class="accent-blue">agent-native-serving</em>이 별개의 문제 영역으로 간주되었다. 하지만 Execution-State Capsules의 그래프 구조화는 두 영역이 <em class="accent-blue">algorithm-system-translation-gap</em>을 매개로 <strong>동일한 위상적 본질로 수렴</strong>함을 보여준다. 샌드박스 C/R도, 온디바이스 서빙도, 결국 "계산 그래프의 부분적 재개(resumption)"라는 동일한 문제의 변형일 뿐이다.</p>
+
+    <h3>전환 3: 상태 단위의 재정의</h3>
+    <p>Wiki의 에이전트 상태 관리 엔티티들은 "그래프 위상 보존"이라는 통일적 관점에서 재구조화되어야 한다. 구체적으로는 다음과 같다.</p>
+
+    <ul>
+      <li><strong>상태의 원자 단위</strong>를 "아티팩트" 또는 "KV 캐시"에서 <strong>"의존 그래프의 부분 위상"</strong>으로 재정의</li>
+      <li><strong>C/R의 효율성 지표</strong>를 "직렬화 크기"에서 <strong>"위상 보존률 × 직렬화 비용"</strong>의 2차원 지표로 확장</li>
+      <li><strong>레짉 간 이식성</strong>을 보장하기 위해 상태 표현을 <strong>레짐-독립적인 그래프 형식</strong>으로 표준화</li>
+    </ul>
+
+    <div class="conclusion-highlight">
+      에이전트 실행 상태의 본질적 단위는 샌드박스 아티팩트가 아니라 계산 그래프의 위상이다. 기존 정의는 이 위상이 특정 배포 레짐에서 취하는 특정 형태였을 뿐이다.
+    </div>
+
+    <p>Crab이 한쪽 끝에서 "그래프를 뭉개지 말라"고 말했고, Execution-State Capsules가 반대쪽 끝에서 "그래프를 점으로 줄이지 말라"고 말했다. 두 목소리가 가리키는 방향은 하나다. <strong>계산 그래프의 위상 그 자체를 상태의 원자 단위로 삼으라.</strong> 이 전환은 단순한 표현 방식의 변경이 아니라, 에이전트 시스템 설계의 기본 좌표축을 바꾸는 일이다.</p>
+  </section>
+
+  <footer class="article-footer">
+    <p>본 분석은 Wiki의 기존 엔티티 구조를 재검토하기 위한 심층 분석으로, Execution-State Capsules 논문과 Crab 논문의 비교를 통해 도출된 통찰을 기반으로 작성되었습니다.</p>
+  </footer>
+
+</article>
+
+</body>
+</html>

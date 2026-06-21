@@ -1750,3 +1750,33 @@
 ## [2026-06-20 08:32] ingest | Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
 
 ## [2026-06-20 08:32] ingest | UltraQuant: 4-bit KV Caching for Context-Heavy Agents
+
+## [2026-06-21 08:45] ingest | How Transparent is DiffusionGemma?
+
+## [2026-06-21 08:45] ingest | Execution-State Capsules: Graph-Bound Execution-State Checkpoint and Restore for Low-Latency, Small-Batch, On-Device Physical-AI Serving
+
+## [2026-06-21 08:45] ingest | LedgerAgent: Structured State for Policy-Adherent Tool-Calling Agents
+
+## [2026-06-21 08:45] ingest | Sovereign Execution Brokers: Enforcing Certificate-Bound Authority in Agentic Control Planes
+
+## [2026-06-21 08:45] ingest | Multi-LCB: Extending LiveCodeBench to Multiple Programming Languages
+
+## [2026-06-21 08:45] ingest | Probe-and-Refine Tuning of Repository Guidance for Coding Agents
+
+## [2026-06-21 08:45] ingest | Efficient and Sound Probabilistic Verification for AI Agents
+
+## [2026-06-21 08:45] ingest | What Do Safety-Aligned LLMs Learn From Mixed Compliance Demonstrations?
+
+## [2026-06-21 08:45] ingest | Contagion Networks: Evaluator Bias Propagation in Multi-Agent LLM Systems
+
+## [2026-06-21 08:45] ingest | Fast Human Attention Prediction for Fixation-guided Active Perception in Autonomous Navigation
+
+## [2026-06-21 08:45] ingest | Beyond Global Replanning: Hierarchical Recovery for Cross-Device Agent Systems
+
+## [2026-06-21 08:45] ingest | Optimal Order of Multi-Agent and General Many-Body Systems
+
+## [2026-06-21 08:45] ingest | StylisticBias: A Few Human Visual Cues Drive Most Social Biases in MLLMs
+
+## [2026-06-21 08:45] ingest | Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
+
+## [2026-06-21 08:45] ingest | UltraQuant: 4-bit KV Caching for Context-Heavy Agents
