@@ -1780,3 +1780,7 @@
 ## [2026-06-21 08:45] ingest | Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
 
 ## [2026-06-21 08:45] ingest | UltraQuant: 4-bit KV Caching for Context-Heavy Agents
+
+## [2026-06-21 17:18] lint | Wiki 건전성 체크
+- Issues: 1836개
+- Orphans: 533, Missing: 1303, Contradictions: 0
