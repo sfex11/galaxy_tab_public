@@ -923,3 +923,25 @@
 - [[sources/2026-06-22-stylisticbias-a-few-human-visual-cues-drive-most-s.md]] - StylisticBias: A Few Human Visual Cues Drive Most Social Biases in MLLMs
 - [[sources/2026-06-22-calibration-without-comprehension-diagnosing-the-l.md]] - Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
 - [[sources/2026-06-22-ultraquant-4-bit-kv-caching-for-context-heavy-agen.md]] - UltraQuant: 4-bit KV Caching for Context-Heavy Agents
+- [[sources/2026-06-23-how-transparent-is-diffusiongemma.md]] - How Transparent is DiffusionGemma?
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-23-execution-state-capsules-graph-bound-execution-sta.md]] - Execution-State Capsules: Graph-Bound Execution-State Checkpoint and Restore for Low-Latency, Small-Batch, On-Device Physical-AI Serving
+- [[sources/2026-06-23-ledgeragent-structured-state-for-policy-adherent-t.md]] - LedgerAgent: Structured State for Policy-Adherent Tool-Calling Agents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-23-sovereign-execution-brokers-enforcing-certificate-.md]] - Sovereign Execution Brokers: Enforcing Certificate-Bound Authority in Agentic Control Planes
+- [[sources/2026-06-23-multi-lcb-extending-livecodebench-to-multiple-prog.md]] - Multi-LCB: Extending LiveCodeBench to Multiple Programming Languages
+- [[sources/2026-06-23-probe-and-refine-tuning-of-repository-guidance-for.md]] - Probe-and-Refine Tuning of Repository Guidance for Coding Agents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-23-efficient-and-sound-probabilistic-verification-for.md]] - Efficient and Sound Probabilistic Verification for AI Agents
+- [[sources/2026-06-23-what-do-safety-aligned-llms-learn-from-mixed-compl.md]] - What Do Safety-Aligned LLMs Learn From Mixed Compliance Demonstrations?
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-23-contagion-networks-evaluator-bias-propagation-in-m.md]] - Contagion Networks: Evaluator Bias Propagation in Multi-Agent LLM Systems
+- [[entities/transformer]] - Transformer
+- [[sources/2026-06-23-fast-human-attention-prediction-for-fixation-guide.md]] - Fast Human Attention Prediction for Fixation-guided Active Perception in Autonomous Navigation
+- [[sources/2026-06-23-beyond-global-replanning-hierarchical-recovery-for.md]] - Beyond Global Replanning: Hierarchical Recovery for Cross-Device Agent Systems
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-23-optimal-order-of-multi-agent-and-general-many-body.md]] - Optimal Order of Multi-Agent and General Many-Body Systems
+- [[sources/2026-06-23-stylisticbias-a-few-human-visual-cues-drive-most-s.md]] - StylisticBias: A Few Human Visual Cues Drive Most Social Biases in MLLMs
+- [[sources/2026-06-23-calibration-without-comprehension-diagnosing-the-l.md]] - Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
+- [[sources/2026-06-23-ultraquant-4-bit-kv-caching-for-context-heavy-agen.md]] - UltraQuant: 4-bit KV Caching for Context-Heavy Agents
