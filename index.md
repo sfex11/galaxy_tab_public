@@ -945,3 +945,19 @@
 - [[sources/2026-06-23-stylisticbias-a-few-human-visual-cues-drive-most-s.md]] - StylisticBias: A Few Human Visual Cues Drive Most Social Biases in MLLMs
 - [[sources/2026-06-23-calibration-without-comprehension-diagnosing-the-l.md]] - Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
 - [[sources/2026-06-23-ultraquant-4-bit-kv-caching-for-context-heavy-agen.md]] - UltraQuant: 4-bit KV Caching for Context-Heavy Agents
+- [[sources/2026-06-24-randomized-yarn-improves-length-generalization-for.md]] - Randomized YaRN Improves Length Generalization for Long-Context Reasoning
+- [[sources/2026-06-24-open-problem-is-adamw-effective-under-heavy-tailed.md]] - Open Problem: Is AdamW Effective Under Heavy-Tailed Noise?
+- [[sources/2026-06-24-teaching-llms-string-matching-backtracking-and-err.md]] - Teaching LLMs String Matching, Backtracking, and Error Recovery to Deduce Bases and Truth Tables for the Combinatorially Exploding Bit Manipulation Puzzles
+- [[sources/2026-06-24-can-llms-reliably-self-report-adversarial-prefills.md]] - Can LLMs Reliably Self-Report Adversarial Prefills, and How?
+- [[sources/2026-06-24-on-the-limits-of-prompt-conditioned-language-model.md]] - On the Limits of Prompt-Conditioned Language Models as General-Purpose Learners
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-24-mas-promptbench-when-does-prompt-optimization-impr.md]] - MAS-PromptBench: When Does Prompt Optimization Improve Multi-Agent LLM Systems?
+- [[sources/2026-06-24-enterpriseclawbench-benchmarking-agents-from-real-.md]] - EnterpriseClawBench: Benchmarking Agents from Real Workplace Sessions
+- [[sources/2026-06-24-causal-discovery-in-the-era-of-agents.md]] - Causal Discovery in the Era of Agents
+- [[sources/2026-06-24-autonomous-subsea-cable-search-and-tracking-with-g.md]] - Autonomous Subsea Cable Search and Tracking with Graph-Optimised Priors and Visual Tracking
+- [[sources/2026-06-24-decentralized-autonomous-traffic-management-throug.md]] - Decentralized Autonomous Traffic Management through Corridor Networks
+- [[sources/2026-06-24-kamera-unified-position-invariant-multimodal-kv-ca.md]] - Kamera: Unified Position-Invariant Multimodal KV Cache for Training-Free Reuse
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-24-holoagent-0-a-unified-embodied-agent-framework-wit.md]] - HoloAgent-0: A Unified Embodied Agent Framework with 3D Spatial Memory
+- [[sources/2026-06-24-air-adaptive-interleaved-reasoning-with-code-in-ml.md]] - AIR: Adaptive Interleaved Reasoning with Code in MLLMs
+- [[sources/2026-06-24-grinqh-graded-input-based-quantization-hierarchy-f.md]] - GRINQH: Graded Input-based Quantization Hierarchy for Efficient LLM Generation

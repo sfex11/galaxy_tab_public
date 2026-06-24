@@ -1850,3 +1850,33 @@
 ## [2026-06-23 08:34] ingest | Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software
 
 ## [2026-06-23 08:34] ingest | UltraQuant: 4-bit KV Caching for Context-Heavy Agents
+
+## [2026-06-24 02:11] llm-ingest | 0편 분석, 엔티티 355개, 개념 1167개
+
+## [2026-06-24 08:35] ingest | Randomized YaRN Improves Length Generalization for Long-Context Reasoning
+
+## [2026-06-24 08:35] ingest | Open Problem: Is AdamW Effective Under Heavy-Tailed Noise?
+
+## [2026-06-24 08:35] ingest | Teaching LLMs String Matching, Backtracking, and Error Recovery to Deduce Bases and Truth Tables for the Combinatorially Exploding Bit Manipulation Puzzles
+
+## [2026-06-24 08:35] ingest | Can LLMs Reliably Self-Report Adversarial Prefills, and How?
+
+## [2026-06-24 08:35] ingest | On the Limits of Prompt-Conditioned Language Models as General-Purpose Learners
+
+## [2026-06-24 08:35] ingest | MAS-PromptBench: When Does Prompt Optimization Improve Multi-Agent LLM Systems?
+
+## [2026-06-24 08:35] ingest | EnterpriseClawBench: Benchmarking Agents from Real Workplace Sessions
+
+## [2026-06-24 08:35] ingest | Causal Discovery in the Era of Agents
+
+## [2026-06-24 08:35] ingest | Autonomous Subsea Cable Search and Tracking with Graph-Optimised Priors and Visual Tracking
+
+## [2026-06-24 08:35] ingest | Decentralized Autonomous Traffic Management through Corridor Networks
+
+## [2026-06-24 08:35] ingest | Kamera: Unified Position-Invariant Multimodal KV Cache for Training-Free Reuse
+
+## [2026-06-24 08:35] ingest | HoloAgent-0: A Unified Embodied Agent Framework with 3D Spatial Memory
+
+## [2026-06-24 08:35] ingest | AIR: Adaptive Interleaved Reasoning with Code in MLLMs
+
+## [2026-06-24 08:35] ingest | GRINQH: Graded Input-based Quantization Hierarchy for Efficient LLM Generation

@@ -203,3 +203,5 @@ _자동 생성됨_
 - [[sources/2026-06-23-contagion-networks-evaluator-bias-propagation-in-m.md]]
 
 - [[sources/2026-06-23-optimal-order-of-multi-agent-and-general-many-body.md]]
+
+- [[sources/2026-06-24-mas-promptbench-when-does-prompt-optimization-impr.md]]

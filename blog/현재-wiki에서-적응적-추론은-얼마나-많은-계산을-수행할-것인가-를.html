@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리가 최적화하던 게 아예 다른 병목이었다면?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #8a8279;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+    --radius: 16px;
+  }
+
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    font-weight: 400;
+    min-height: 100vh;
+  }
+
+  /* 배경 질감 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(194,112,62,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(91,124,153,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(107,158,122,0.02) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .article-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* 상단 메타 영역 */
+  .article-header {
+    padding-top: clamp(48px, 8vw, 96px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+    text-align: left;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: clamp(16px, 3vw, 28px);
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(26px, 5vw, 44px);
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: clamp(16px, 3vw, 24px);
+    letter-spacing: -0.01em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: clamp(20px, 3vw, 32px);
+    padding-top: 20px;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    font-size: clamp(12px, 1.5vw, 14px);
+    color: var(--muted);
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* 구분선 */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--accent-warm);
+    border-radius: 2px;
+    margin: clamp(32px, 5vw, 56px) auto;
+    opacity: 0.5;
+  }
+
+  /* 섹션 제목 */
+  .section-heading {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(20px, 3.5vw, 30px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: clamp(16px, 2.5vw, 24px);
+    letter-spacing: -0.01em;
+  }
+
+  .section-heading .num {
+    color: var(--accent-warm);
+    margin-right: 8px;
+    font-weight: 900;
+  }
+
+  /* 본문 단락 */
+  .article-body p {
+    margin-bottom: clamp(14px, 2vw, 20px);
+    color: var(--fg);
+  }
+
+  .article-body strong {
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .article-body em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 4px solid var(--accent-warm);
+    max-width: 800px;
+    margin: clamp(20px, 3vw, 32px) auto;
+    padding: clamp(16px, 2.5vw, 24px) clamp(16px, 3vw, 28px);
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.8;
+    color: #4a4540;
+    font-weight: 400;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: clamp(12px, 1.4vw, 14px);
+    font-style: normal;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* 카드 */
+  .insight-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: clamp(20px, 3vw, 32px);
+    margin: clamp(20px, 3vw, 36px) 0;
+    backdrop-filter: blur(4px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(44,40,37,0.1);
+  }
+
+  .insight-card .card-label {
+    font-size: clamp(11px, 1.3vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    margin-bottom: 10px;
+  }
+
+  .insight-card .card-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(16px, 2.4vw, 20px);
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .insight-card p {
+    margin-bottom: 0;
+    font-size: clamp(13.5px, 1.8vw, 16px);
+    color: #5a554f;
+    line-height: 1.75;
+  }
+
+  /* 표 */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: clamp(20px, 3vw, 32px) 0;
+    font-size: clamp(13px, 1.7vw, 15px);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(44,40,37,0.08);
+  }
+
+  .comparison-table thead th {
+    background: rgba(194,112,62,0.07);
+    color: var(--fg);
+    font-weight: 700;
+    padding: clamp(10px, 1.5vw, 14px) clamp(8px, 1.5vw, 14px);
+    text-align: left;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    font-size: clamp(12px, 1.5vw, 14px);
+  }
+
+  .comparison-table tbody td {
+    padding: clamp(10px, 1.5vw, 14px) clamp(8px, 1.5vw, 14px);
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .comparison-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.4);
+  }
+
+  .comparison-table .label-cell {
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+    width: 20%;
+  }
+
+  .comparison-table .old-cell {
+    color: #8a8279;
+  }
+
+  .comparison-table .new-cell {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .comparison-table .highlight-row td {
+    background: rgba(194,112,62,0.04);
+    font-weight: 600;
+  }
+
+  /* 키워드 태그 */
+  .keyword {
+    display: inline-block;
+    font-size: clamp(11px, 1.3vw, 13px);
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin: 2px 3px;
+  }
+
+  .keyword.warm {
+    background: rgba(194,112,62,0.1);
+    color: var(--accent-warm);
+  }
+
+  .keyword.cool {
+    background: rgba(91,124,153,0.1);
+    color: var(--accent-cool);
+  }
+
+  .keyword.green {
+    background: rgba(107,158,122,0.1);
+    color: var(--accent-green);
+  }
+
+  /* 결론 카드 특수 스타일 */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194,112,62,0.05) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: var(--radius);
+    padding: clamp(24px, 4vw, 40px);
+    margin: clamp(28px, 4vw, 48px) 0;
+  }
+
+  .conclusion-card .card-label {
+    font-size: clamp(11px, 1.3vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    margin-bottom: 12px;
+  }
+
+  .conclusion-list {
+    list-style: none;
+    counter-reset: conclusion;
+  }
+
+  .conclusion-list li {
+    counter-increment: conclusion;
+    padding: clamp(12px, 2vw, 16px) 0;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    font-size: clamp(14px, 1.9vw, 16.5px);
+    line-height: 1.8;
+    color: #4a4540;
+    padding-left: clamp(32px, 4vw, 44px);
+    position: relative;
+  }
+
+  .conclusion-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .conclusion-list li::before {
+    content: counter(conclusion);
+    position: absolute;
+    left: 0;
+    top: clamp(12px, 2vw, 16px);
+    width: clamp(24px, 3vw, 32px);
+    height: clamp(24px, 3vw, 32px);
+    border-radius: 50%;
+    background: rgba(194,112,62,0.1);
+    color: var(--accent-warm);
+    font-weight: 700;
+    font-size: clamp(12px, 1.4vw, 14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .conclusion-list li strong {
+    color: var(--fg);
+  }
+
+  /* 흐름 다이어그램 */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: clamp(24px, 4vw, 40px) 0;
+    align-items: center;
+  }
+
+  .flow-step {
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(14px, 2vw, 20px) clamp(16px, 3vw, 24px);
+    border-radius: 12px;
+    text-align: center;
+    font-size: clamp(13px, 1.7vw, 15px);
+    font-weight: 500;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .flow-step.old {
+    background: rgba(138,130,121,0.08);
+    border: 1px solid rgba(138,130,121,0.15);
+    color: var(--muted);
+  }
+
+  .flow-step.arrow {
+    background: none;
+    border: none;
+    padding: 8px 0;
+    color: var(--accent-warm);
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .flow-step.new {
+    background: rgba(194,112,62,0.08);
+    border: 1px solid rgba(194,112,62,0.18);
+    color: var(--accent-warm);
+    font-weight: 600;
+  }
+
+  /* 하단 푸터 */
+  .article-footer {
+    margin-top: clamp(48px, 8vw, 80px);
+    padding: clamp(24px, 4vw, 40px) 0 clamp(40px, 6vw, 64px);
+    border-top: 1px solid rgba(44,40,37,0.08);
+    text-align: center;
+  }
+
+  .article-footer p {
+    font-size: clamp(12px, 1.4vw, 14px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  /* 스크롤 애니메이션 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .insight-card:hover {
+      transform: none;
+    }
+  }
+
+  /* 모바일 최적화 */
+  @media (max-width: 640px) {
+    .comparison-table .label-cell {
+      width: 28%;
+      font-size: 11px;
+    }
+    .comparison-table thead th,
+    .comparison-table tbody td {
+      padding: 8px 6px;
+      font-size: 12px;
+    }
+    .flow-step {
+      max-width: 100%;
+    }
+    .article-meta {
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="article-wrapper">
+
+  <header class="article-header reveal">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">우리가 최적화하던 게<br>아예 다른 병목이었다면?</h1>
+    <p class="article-subtitle">Kamera 논문이 드러낸 멀티모달 에이전트의 숨은 병목, 그리고 적응적 추론이 답해야 할 새로운 질문</p>
+    <div class="article-meta">
+      <span>논문: Kamera (Training-Free Reuse)</span>
+      <span>키워드: 적응적 추론 · KV 캐시 · 멀티모달</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <div class="article-body">
+
+    <!-- 섹션 1: 비유로 문제 제기 -->
+    <section class="reveal">
+      <h2 class="section-heading"><span class="num">01</span>오피스 빌딩의 엘리베이터를 최적화하던 사람들</h2>
+
+      <p>한 오피스 빌딩에서 엘리베이터 대기 시간을 줄이기 위해 수억 원을 들였다고 상상해 보자. 알고리즘을 고치고, 모터를 교체하고, 호출 버튼의 우선순위 로직을 정교하게 다듬었다. 그런데 조사 결과, <strong>직원들의 실체적 지연의 70%는 엘리베이터가 아니라 각 층에서 동일한 서류 뭉치를 처음부터 다시 정리하는 데서 발생</strong>하고 있었다면?</p>
+
+      <p>엘리베이터를 아무리 빠르게 만들어도 전체 업무 흐름은 거의 개선되지 않는다. 문제는 '이동 속도'가 아니라 <strong>'같은 작업의 반복'</strong>이었기 때문이다. 당연해 보이지만, 이 구조적 오인은 AI 시스템 최적화에서도 정확히 벌어지고 있다.</p>
+
+      <p>적응적 추론(Adaptive Inference) 분야는 줄곧 <strong>"얼마나 많은 계산을 수행할 것인가"</strong>라는 축 위에서 발전해 왔다. 더 큰 모델을 쓸지 작은 모델을 쓸지, 추측 디코딩에서 몇 토큰을 한 번에 추측할지—모든 적응의 결정이 <em>계산량의 조절</em>에 머물러 있었다. SpecKV가 압축 상태에 반응하는 적응을 제시하며 한 걸음 내디뎠지만, 여전히 그 질문의 골격은 "계산 예산을 어떻게 분배할까"였다.</p>
+
+      <div class="insight-card">
+        <div class="card-label">핵심 전제</div>
+        <div class="card-title">기존 패러다임의 암묵적 가정</div>
+        <p>"계산 자체가 비용이다" — 이 가정 아래에서 적응적 추론은 계산량을 줄이거나 늘리는 방향으로만 진화할 수밖에 없었다. 마치 엘리베이터 속도가 건물의 유일한 병목이라고 믿었던 것처럼.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 섹션 2: Kamera의 발견 -->
+    <section class="reveal">
+      <h2 class="section-heading"><span class="num">02</span>계산이 많아서가 아니라,<br>같은 것을 반복해서</h2>
+
+      <p>Kamera 논문이 멀티모달 에이전트의 동작을 추적하면서 발견한 것은 이렇다. 에이전트가 컨텍스트 윈도우를 슬라이드하고 추론을 반복할 때마다, <strong>동일한 비디오 프레임, UI 스크린샷, 렌더링 산출물이 다시 등장</strong>한다. 문제는 이것이 매번 <strong>처음부터 재인코딩</strong>된다는 점이다.</p>
+
+      <blockquote>
+        "멀티모달 에이전트는 컨텍스트 윈도우가 슬라이드하고 추론이 반복됨에 따라 동일한 비디오 프레임, UI 스크린샷, 렌더링 산출물을 반복적으로 재검토하며, 그러나 매번 처음부터 재인코딩한다."
+        <cite>— Kamera 논문 핵심 발견</cite>
+      </blockquote>
+
+      <p>여기서 병목의 본질이 드러난다. <strong>"계산이 너무 많아서"가 아니라 "불필요하게 동일한 것을 반복 계산해서"</strong> 느려지는 것이다. 이것은 γ(추측 길이)를 줄이거나 모델 크기를 조절하는 것으로는 <em>구조적으로 해결될 수 없는</em> 문제다.</p>
+
+      <p>비유로 돌아가자면, 이것은 엘리베이터 속도 문제가 아니라 <strong>매 층에서 같은 서류를 처음부터 다시 정리하는 문제</strong>다. 해결책은 엘리베이터를 더 빠르게 만드는 게 아니라, <strong>이미 정리된 서류 뭉치를 그대로 가져오는 것</strong>이어야 한다.</p>
+
+      <div class="insight-card">
+        <div class="card-label">병목 재정의</div>
+        <div class="card-title">중복이 비용이다, 계산이 비용이 아니다</div>
+        <p>Kamera는 병목의 정의 자체를 바꾼다. 계산량이 아니라 <strong>중복 계산의 존재</strong>가 병목이다. 이 인식의 전환은 단순한 기술적 디테일이 아니라, 최적화의 방향성을 근본적으로 뒤바꾼다.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 섹션 3: 패러다임 시프트의 선례 -->
+    <section class="reveal">
+      <h2 class="section-heading"><span class="num">03</span>이 전환은 처음이 아니다 —<br>병목은 이동한다</h2>
+
+      <p>사실 이런 종류의 '병목 재정의'는 다른 영역에서 이미 관찰된 바 있다. Tool Attention 논문이 다중 서버 MCP 배포 환경에서 보여준 것처럼, <strong>파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정</strong>된다는 사실이었다.</p>
+
+      <blockquote>
+        "다중 서버 MCP 배포에서 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정된다."
+        <cite>— Tool Attention (Aggregate Pipeline Serving)</cite>
+      </blockquote>
+
+      <p>우리가 "적응적으로 최적화해야 할 대상"이라고 믿었던 것—개별 LLM 호출의 계산량—이 실제 병목이 아니었다. 병목은 <strong>스키마 정보가 누적되며 발생하는 간접적 비용</strong>에 있었다. Kamera는 동일한 패턴을 멀티모달 캐시 영역에서 재발견한 셈이다.</p>
+
+      <p>두 사례를 나란히 보면 패턴이 명확해진다.</p>
+
+      <div class="insight-card">
+        <div class="card-label">패턴 발견</div>
+        <div class="card-title">적응적 병목 이동 (Adaptive Bottleneck Migration)</div>
+        <p>파이프라인 서빙에서는 병목이 <strong>LLM 호출 → 스키마 축적</strong>으로 이동했고, 멀티모달 추론에서는 <strong>토큰 생성 계산 → 시각 프레임 재인코딩</strong>으로 이동했다. 병목은 고정되어 있지 않다. 시스템 구조가 복잡해질수록 병목은 우리가 예상하지 못한 곳으로 <em>이동</em>한다.</p>
+      </div>
+
+      <p>이것이 의미하는 바는 명확하다. <strong>고정된 축 위에서의 최적화는 병목이 이동하는 순간 무력해진다.</strong> 진정한 적응적 추론은 "계산량을 조절하는 것"에 머물러서는 안 되고, "현재 시스템 상태에서 어디가 실제 병목인지를 식별하고, 그에 맞춰 적응 축 자체를 전환하는 것"까지 포괄해야 한다.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 섹션 4: 캐시 위상 보존으로의 전환 -->
+    <section class="reveal">
+      <h2 class="section-heading"><span class="num">04</span>캐시 위상 보존 —<br>새로운 적응의 축</h2>
+
+      <p>그렇다면 Kamera가 제시하는 구체적 대안은 무엇인가? 바로 <strong>위치 불변(Position-Invariant) KV 재사용</strong>이다. 컨텍스트가 슬라이드되어 시각 프레임의 위치가 바뀌어도, 동일한 프레임이라면 이전에 인코딩한 KV 캐시를 그대로 재사용한다는 아이디어다.</p>
+
+      <p>이것은 단순한 메모리 절약 기법이 아니다. 여기에는 <strong>캐시 일관성(Cache Coherence)</strong>이라는 까다로운 제약이 따른다. 위치 정보가 바뀌었는데도 캐시를 재사용하면, attention 패턴이 왜곡될 수 있다. Kamera는 이 문제를 위치 불변 설계로 해결하려 한다—즉, <strong>캐시의 위상(위치 정보)을 보존하면서도 일관성을 유지</strong>해야 한다.</p>
+
+      <p>이것을 적응적 추론의 언어로 번역하면 완전히 새로운 결정 차원이 등장한다.</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>차원</th>
+            <th>기존 적응적 추론</th>
+            <th>Kamera가 요구하는 적응</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">적응 대상</td>
+            <td class="old-cell">계산량 (γ, 모델 크기)</td>
+            <td class="new-cell">캐시 항목의 재사용 여부</td>
+          </tr>
+          <tr>
+            <td class="label-cell">상태 감지</td>
+            <td class="old-cell">압축률, 컨텍스트 길이</td>
+            <td class="new-cell">위치 불변성 (position invariance)</td>
+          </tr>
+          <tr>
+            <td class="label-cell">결정</td>
+            <td class="old-cell">"더/덜 계산한다"</td>
+            <td class="new-cell">"재인코딩 없이 재사용한다 / 폐기한다"</td>
+          </tr>
+          <tr class="highlight-row">
+            <td class="label-cell">병목 가정</td>
+            <td class="old-cell">계산 자체가 비용</td>
+            <td class="new-cell">중복이 비용</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>표에서 보듯, 단순히 최적화 대상이 바뀌는 게 아니다. <strong>적응의 의미론 자체가 달라진다.</strong> "얼마나 계산할까"에서 "어떤 캐시 항목의 위상을 보존할까"로 축이 이동한다. 이를 <strong>캐시 일관성 제약 하에서의 최적화(Cache Coherence-Constrained Optimization)</strong>라고 부를 수 있다.</p>
+
+      <div class="flow-diagram">
+        <div class="flow-step old">"이 토큰은 몇 개의 추측으로 생성할까?"<br><span style="font-size:12px;font-weight:400;">— 계산량 축</span></div>
+        <div class="flow-step arrow">▼</div>
+        <div class="flow-step new">"이 프레임은 이미 캐시에 있는가?<br>위치 불변성을 만족하는가?"<br><span style="font-size:12px;font-weight:400;">— 캐시 위상 보존 축</span></div>
+      </div>
+
+      <p>SpecKV가 "압축 상태에 반응하는 적응"을 제시했다면, Kamera는 <strong>"캐시 중복 상태에 반응하는 적응"</strong>이라는 새로운 유형을 추가한다. 그리고 이 두 가지는 상호보완적으로 통합될 수 있다—압축 상태를 감지해 계산량을 조절하면서 동시에, 캐시 중복을 감지해 재인코딩을 건너뛰는 식으로.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 섹션 5: 결론 -->
+    <section class="reveal">
+      <h2 class="section-heading"><span class="num">05</span>전환이 아니라 스펙트럼의 확장</h2>
+
+      <p>처음의 질문으로 돌아가자. "위치 불변 KV 재사용은 적응적 추론의 최적화 축을 '계산량 조절'에서 '캐시 위상 보존'으로 <strong>근본적으로 전환</strong>해야 하는가?"</p>
+
+      <p>대답은 <strong>"전환이라기보다는 확장이다. 하지만 그 확장이 기존 패러다임의 우위를 해체한다는 점에서 근본적이다."</strong></p>
+
+      <p>'전환'이라고 하면 기존 축이 새로운 축으로 완전히 대체되는 느낌을 준다. 하지만 계산량 조절이 여전히 유효한 최적화 수단인 것은 맞다. 다만, <strong>그것이 유일한 축이 아니게 되었고, 더욱이 특정 맥락에서는 보조적 축으로 전락</strong>한다는 점이 핵심이다.</p>
+
+      <div class="conclusion-card">
+        <div class="card-label">Paradigm Shift</div>
+        <p style="font-family:'Source Serif 4','Noto Sans KR',serif;font-size:clamp(17px,2.4vw,21px);font-weight:700;color:var(--fg);margin-bottom:20px;line-height:1.5;">기존 패러다임을 어떻게 전환해야 하는가</p>
+        <ol class="conclusion-list">
+          <li><strong>적응적 병목 이동을 상위 개념으로 삼아라.</strong> 적응적 추론이 고정된 축(계산량) 위에서 최적화하는 것이 아니라, 병목의 위치를 추적하며 적응 축 자체를 이동시키는 능력을 포괄해야 한다.</li>
+          <li><strong>캐시 일관성 제약을 최적화의 일차 조건으로 편입하라.</strong> 멀티모달 에이전트에서 Kamera의 위치 불변 KV 재사용은 선택적 기법이 아니라, 캐시 일관성 제약 하에서의 최적화라는 새로운 문제 공식화를 요구한다.</li>
+          <li><strong>적응의 스펙트럼을 확장하고 계층화하라.</strong> SpecKV의 "압축 상태에 반응하는 적응"과 Kamera의 "캐시 중복 상태에 반응하는 적응"을 상호보완적으로 통합하여, 단일 축이 아닌 <strong>다차원 적응 공간</strong>에서 시스템을 운영해야 한다.</li>
+        </ol>
+      </div>
+
+      <p>결국 Kamera가 우리에게 던지는 진짜 질문은 이런 것이다. <strong>"적응적 추론은 도대체 무엇에 대해 적응하는가?"</strong> 계산량에 적응하는 것만으로 충분했던 시대는 지났다. 이제 적응의 대상은 병목 자체이며, 병목은 이동하며, 우리는 그 이동을 추적하면서 적응 축을 동적으로 전환해야 한다.</p>
+
+      <p>오피스 빌딩의 비유로 끝맺자. 진정으로 똑똑한 빌딩 관리 시스템은 엘리베이터 속도만 조절하는 게 아니다. <strong>아침에는 엘리베이터 병목에 집중하고, 점심에는 식당 혼잡도에 대응하고, 오후에는 회의실 예약 병목을 예측</strong>한다. 병목이 이동하는 만큼, 최적화의 초점도 이동해야 한다.</p>
+
+      <p>Kamera는 멀티모달 AI가 그 단계에 도달했음을 알려주는 신호다.</p>
+    </section>
+
+  </div>
+
+  <footer class="article-footer reveal">
+    <p>대상 논문: Kamera — Unified Position-Invariant Multimodal KV Cache for Training-Free Reuse</p>
+    <p style="margin-top:6px;">연관 개념: Adaptive Inference · Adaptive Bottleneck Migration · Cache Coherence-Constrained Optimization · Aggregate Pipeline Serving · SpecKV</p>
+    <div class="footer-tags">
+      <span class="keyword warm">적응적 추론</span>
+      <span class="keyword cool">KV 캐시</span>
+      <span class="keyword green">멀티모달 에이전트</span>
+      <span class="keyword warm">위치 불변성</span>
+      <span class="keyword cool">병목 이동</span>
+      <span class="keyword green">캐시 일관성</span>
+    </div>
+  </footer>
+
+</article>
+
+<script>
+  // 스크롤 등장 애니메이션
+  document.addEventListener('DOMContentLoaded', function() {
+    var reveals = document.querySelectorAll('.reveal');
+    if (!reveals.length) return;
+
+    // prefers-reduced-motion 체크
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) {
+      reveals.forEach(function(el) {
+        el.classList.add('visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(function(el) {
+      observer.observe(el);
+    });
+  });
+</script>
+
+</body>
+</html>
