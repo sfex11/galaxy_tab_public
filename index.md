@@ -961,3 +961,16 @@
 - [[sources/2026-06-24-holoagent-0-a-unified-embodied-agent-framework-wit.md]] - HoloAgent-0: A Unified Embodied Agent Framework with 3D Spatial Memory
 - [[sources/2026-06-24-air-adaptive-interleaved-reasoning-with-code-in-ml.md]] - AIR: Adaptive Interleaved Reasoning with Code in MLLMs
 - [[sources/2026-06-24-grinqh-graded-input-based-quantization-hierarchy-f.md]] - GRINQH: Graded Input-based Quantization Hierarchy for Efficient LLM Generation
+- [[sources/2026-06-25-zooming-in-on-agentic-web-browsers-as-assistive-te.md]] - "Zooming In" on Agentic Web Browsers as Assistive Technologies: A Case Study with a Low-Vision Technology Expert
+- [[sources/2026-06-25-openthoughts-agent-data-recipes-for-agentic-models.md]] - OpenThoughts-Agent: Data Recipes for Agentic Models
+- [[sources/2026-06-25-world-models-in-pieces-structural-certification-fo.md]] - World Models in Pieces: Structural Certification for General Agents
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-25-grading-the-grader-lessons-from-evaluating-an-agen.md]] - Grading the Grader: Lessons from Evaluating an Agentic Data Analysis System
+- [[sources/2026-06-25-accuracy-and-satisfaction-in-multi-turn-llm-dialog.md]] - Accuracy and Satisfaction in Multi-Turn LLM Dialogues for NFR Assessment
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-25-sherloc-structured-diagnostic-localization-for-cod.md]] - SHERLOC: Structured Diagnostic Localization for Code Repair Agents
+- [[sources/2026-06-25-insight-self-guided-skill-acquisition-via-steerabl.md]] - InSight: Self-Guided Skill Acquisition via Steerable VLAs
+- [[sources/2026-06-25-iv-cot-implicit-visual-chain-of-thought-for-struct.md]] - IV-CoT: Implicit Visual Chain-of-Thought for Structure-Aware Text-to-Image Generation
+- [[sources/2026-06-25-vision-language-model-reasoning-for-contextual-sem.md]] - Vision-Language Model Reasoning for Contextual Semantic Mapping in Intralogistics
+- [[sources/2026-06-25-large-language-model-discovery-of-quantum-ldpc-cod.md]] - Large-Language-Model Discovery of Quantum LDPC Codes through Structured Concept Evolution
+- [[sources/2026-06-25-grad-detect-gradient-based-hallucination-detection.md]] - Grad Detect: Gradient-Based Hallucination Detection in LLMs

@@ -1880,3 +1880,25 @@
 ## [2026-06-24 08:35] ingest | AIR: Adaptive Interleaved Reasoning with Code in MLLMs
 
 ## [2026-06-24 08:35] ingest | GRINQH: Graded Input-based Quantization Hierarchy for Efficient LLM Generation
+
+## [2026-06-25 08:32] ingest | "Zooming In" on Agentic Web Browsers as Assistive Technologies: A Case Study with a Low-Vision Technology Expert
+
+## [2026-06-25 08:32] ingest | OpenThoughts-Agent: Data Recipes for Agentic Models
+
+## [2026-06-25 08:32] ingest | World Models in Pieces: Structural Certification for General Agents
+
+## [2026-06-25 08:32] ingest | Grading the Grader: Lessons from Evaluating an Agentic Data Analysis System
+
+## [2026-06-25 08:32] ingest | Accuracy and Satisfaction in Multi-Turn LLM Dialogues for NFR Assessment
+
+## [2026-06-25 08:32] ingest | SHERLOC: Structured Diagnostic Localization for Code Repair Agents
+
+## [2026-06-25 08:32] ingest | InSight: Self-Guided Skill Acquisition via Steerable VLAs
+
+## [2026-06-25 08:32] ingest | IV-CoT: Implicit Visual Chain-of-Thought for Structure-Aware Text-to-Image Generation
+
+## [2026-06-25 08:32] ingest | Vision-Language Model Reasoning for Contextual Semantic Mapping in Intralogistics
+
+## [2026-06-25 08:32] ingest | Large-Language-Model Discovery of Quantum LDPC Codes through Structured Concept Evolution
+
+## [2026-06-25 08:32] ingest | Grad Detect: Gradient-Based Hallucination Detection in LLMs

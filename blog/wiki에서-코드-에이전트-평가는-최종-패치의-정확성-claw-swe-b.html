@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>병원에 갔는데 수술 성공률만 평가받는다면 — 코드 에이전트 평가의 구조적 맹점</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #8a8580;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 6px 24px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 17.5px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Article Header ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    background: rgba(194,112,62,0.05);
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 16.5px);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 28px;
+    font-weight: 300;
+  }
+
+  .article-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── Hero Visual ── */
+  .hero-visual {
+    width: 100%;
+    aspect-ratio: 16/9;
+    max-height: 360px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: clamp(40px, 6vw, 72px);
+    position: relative;
+    background: linear-gradient(135deg, #f0ebe4 0%, #e8e0d6 40%, #d4c9bb 100%);
+  }
+
+  .hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 40%, rgba(194,112,62,0.15), transparent),
+      radial-gradient(ellipse 40% 60% at 75% 65%, rgba(91,124,153,0.1), transparent);
+  }
+
+  .hero-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .hero-pie {
+    width: clamp(120px, 25vw, 180px);
+    height: clamp(120px, 25vw, 180px);
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--accent) 0deg 180deg,
+      var(--blue) 180deg 330deg,
+      var(--green) 330deg 360deg
+    );
+    position: relative;
+    animation: heroFloat 6s ease-in-out infinite;
+  }
+
+  .hero-pie::after {
+    content: '';
+    position: absolute;
+    inset: 30%;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero-labels {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+  }
+
+  .section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 20px 24px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.95em;
+    color: #4a4540;
+    font-style: italic;
+    line-height: 1.75;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85em;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(6px);
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(16px, 2.5vw, 19px);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .card-icon.orange { background: rgba(194,112,62,0.1); }
+  .card-icon.blue { background: rgba(91,124,153,0.1); }
+  .card-icon.green { background: rgba(107,158,122,0.1); }
+
+  .card p {
+    margin-bottom: 12px;
+    color: #4a4540;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 28px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    text-align: center;
+    padding: 18px 12px;
+    position: relative;
+  }
+
+  .flow-step-inner {
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px 10px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    height: 100%;
+  }
+
+  .flow-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .flow-num.orange { color: var(--accent); }
+  .flow-num.blue { color: var(--blue); }
+  .flow-num.green { color: var(--green); }
+
+  .flow-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--fg);
+    line-height: 1.4;
+  }
+
+  .flow-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    color: var(--muted);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ── Highlight ── */
+  strong.accent { color: var(--accent); font-weight: 600; }
+  strong.blue { color: var(--blue); font-weight: 600; }
+  strong.green { color: var(--green); font-weight: 600; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.08), transparent);
+    margin: clamp(40px, 6vw, 72px) 0;
+  }
+
+  /* ── Comparison Table ── */
+  .compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9em;
+    margin: 24px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+  }
+
+  .compare th {
+    background: rgba(194,112,62,0.06);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--fg);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .compare td {
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: #4a4540;
+    vertical-align: top;
+  }
+
+  .compare tr:last-child td { border-bottom: none; }
+
+  .compare .label-col {
+    font-weight: 500;
+    color: var(--fg);
+    white-space: nowrap;
+    width: 120px;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 28px 0;
+    font-size: 0.93em;
+    line-height: 1.75;
+  }
+
+  .callout.orange {
+    background: rgba(194,112,62,0.06);
+    border: 1px solid rgba(194,112,62,0.15);
+  }
+
+  .callout.blue {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.15);
+  }
+
+  .callout.green {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
+  }
+
+  .callout-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+  }
+
+  .callout.orange .callout-title { color: var(--accent); }
+  .callout.blue .callout-title { color: var(--blue); }
+  .callout.green .callout-title { color: var(--green); }
+
+  /* ── Conclusion ── */
+  .conclusion {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(91,124,153,0.04));
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 40px);
+    margin: clamp(40px, 6vw, 72px) 0;
+  }
+
+  .conclusion-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3.5vw, 26px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+
+  .conclusion p {
+    margin-bottom: 14px;
+    color: #4a4540;
+  }
+
+  .conclusion p:last-child { margin-bottom: 0; }
+
+  /* ── Footer ── */
+  .article-footer {
+    padding: 40px 0 60px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 14px;
+    background: rgba(44,40,37,0.04);
+    color: var(--muted);
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin-bottom: clamp(40px, 6vw, 72px);
+    box-shadow: var(--card-shadow);
+  }
+
+  .toc-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    padding: 0;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 8px;
+  }
+
+  .toc li:last-child { margin-bottom: 0; }
+
+  .toc a {
+    text-decoration: none;
+    color: #4a4540;
+    font-size: 0.93em;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(44,40,37,0.03);
+    transition: color 0.2s;
+  }
+
+  .toc li:last-child a { border-bottom: none; }
+
+  .toc a:hover { color: var(--accent); }
+
+  .toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--accent);
+    flex-shrink: 0;
+    min-width: 22px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .flow { flex-direction: column; align-items: center; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .flow-step { max-width: 100%; min-width: unset; width: 100%; }
+    .compare { font-size: 0.82em; }
+    .compare th, .compare td { padding: 10px 10px; }
+    .compare .label-col { width: auto; white-space: normal; }
+    .hero-labels { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Nav -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">병원에 갔는데 수술 성공률만 평가받는다면</h1>
+    <p class="article-subtitle">코드 에이전트가 예산의 절반을 결함 위치 파악에 쓰는데, 왜 우리는 그 절반을 평가하지 않는가 — SHERLOC이 던지는 구조적 질문</p>
+    <div class="article-meta">
+      <span>📖 SHERLOC 논문 분석</span>
+      <span>⏱ 12분 읽기</span>
+      <span>2025년 7월</span>
+    </div>
+  </header>
+
+  <!-- Hero Visual -->
+  <div class="hero-visual">
+    <div class="hero-inner">
+      <div class="hero-pie"></div>
+      <div class="hero-labels">
+        <span class="hero-label"><span class="hero-dot" style="background:var(--accent)"></span>위치 파악 50%</span>
+        <span class="hero-label"><span class="hero-dot" style="background:var(--blue)"></span>수정 42%</span>
+        <span class="hero-label"><span class="hero-dot" style="background:var(--green)"></span>검증 8%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#s1">응급실에 온 환자, 진단 없이 수술대로</a></li>
+      <li><a href="#s2">병목 오지정: 탐색을 '비용'으로 치부하는 관습</a></li>
+      <li><a href="#s3">명세 간극: 고쳤는가, 고친 것처럼 보이는가</a></li>
+      <li><a href="#s4">은폐의 구조: 분산이 삼키는 저차원 변수</a></li>
+      <li><a href="#s5">패러다임 전환: '수리 가능한 진단'이라는 새로운 축</a></li>
+    </ol>
+  </div>
+
+  <!-- Section 1 -->
+  <section class="section" id="s1">
+    <span class="section-label">Section 01</span>
+    <h2 class="section-title">응급실에 온 환자, 진단 없이 수술대로</h2>
+
+    <p>
+      병원에 복통을 호소하며 온 환자가 있다고 상상해 보자. 의사는 환자의 배를 열어보기 전에, 어디가 아픈지, 왜 아픈지 파악하는 데 상당한 시간을 쓴다. 초음파를 찍고, 혈액 검사를 하고, 문진을 한다. 실제로 메스를 들고 수술하는 시간보다 <strong class="accent">진단에 더 많은 시간이 걸리는 경우</strong>도 흔하다.
+    </p>
+
+    <p>
+      그런데 이 병원의 평가 제도는 이상하다. <strong class="accent">"수술 후 환자가 나았는가?"</strong>만 평가한다. 진단이 정확했는지, 불필요한 검사를 많이 했는지, 엉뚱한 부위를 먼저 봤는지는 아무도 묻지 않는다. 수술이 성공하면 진단도 덩달아 성공한 것으로 간주된다.
+    </p>
+
+    <p>
+      이것이 바로 현재 코드 에이전트 평가 생태계가 놓친 구조적 맹점이다. SHERLOC 논문의 한 줄 요약은 이 사실을 극도로 압축해서 전달한다:
+    </p>
+
+    <blockquote>
+      "LLM agents solve repository-level coding tasks through multi-turn tool use, but utilize half their budget on locating faults before editing."
+      <cite>— SHERLOC: Structured Diagnostic Localization for Code Repair Agents</cite>
+    </blockquote>
+
+    <p>
+      에이전트가 가진 전체 예산(token, API 호출 횟수, 시간 등)의 <strong class="accent">절반을 '어디가 고장 났는지 찾는 데' 쓴다</strong>. 그리고 남은 절반으로 실제 코드를 수정한다. 하지만 Claw-SWE-Bench나 SpecBench 같은 기존 벤치마크는 최종 패치의 정확성이나 명세 준수도만 측정한다. 진단에 쓰인 절반은 평가되지 않는다.
+    </p>
+
+    <p>
+      이것은 단순한 '측정 누락'이 아니다. 누락이라면 "아, 그것도 측정하면 되겠네"로 끝난다. 하지만 SHERLOC가 지적하는 문제는 더 근본적이다 — <strong class="accent">측정하지 않는 것 때문에, 잘못된 곳에 개선 노력이 집중된다</strong>는 것이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 2 -->
+  <section class="section" id="s2">
+    <span class="section-label">Section 02</span>
+    <h2 class="section-title">병목 오지정: 탐색을 '비용'으로 치부하는 관습</h2>
+
+    <p>
+      위키의 지식 그래프에는 <strong class="blue">bottleneck-misattribution</strong>이라는 엔티티가 있다. "실제 병목을 잘못 지정하는 현상"을 의미하는데, 코드 에이전트 평가에서 이 패턴이 그대로 재현된다.
+    </p>
+
+    <p>
+      에이전트가 예산의 절반을 위치 파악에 소모하는 것을 보고, 연구자들은 이를 자연스럽게 <strong class="accent">'탐색 비용'</strong>으로 분류한다. "리포지토리가 크니까 찾는 데 시간이 드는 거지"라는 식의 귀인이다. 마치 응급실에서 검사에 시간이 걸리는 것을 '필수적인 대기 시간'으로 치부해버리는 것과 같다.
+    </p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon orange">🔧</span>
+        유사 패턴: Tool Attention Is All You Need
+      </div>
+      <p>
+        위키에 등록된 <strong>aggregate-pipeline-serving</strong> 관련 논문에서는, 다중 서버 MCP 배포 환경에서 <strong class="blue">파이프라인 전체 레이턴시의 병목이 개별 LLM 호출이 아니라 스키마 축적에 의해 결정된다</strong>고 보여준다. 사람들은 "LLM 응답이 느려서 전체가 느리다"고 생각했지만, 실제로는 중간 단계의 스키마가 누적되는 것이 진짜 병목이었다.
+      </p>
+      <p>
+        코드 에이전트에서도 동일한 오지정이 발생한다. "수정 로직이 부족해서 성공률이 낮다"고 생각하지만, <strong class="accent">실제 병목은 위치 파악의 질적 결함</strong>일 수 있다.
+      </p>
+    </div>
+
+    <p>
+      더 구체적으로, 에이전트는 위치 파악 단계에서 <strong class="accent">진단 없이 도구를 남발</strong>하는 경향이 있다. 위키의 <strong class="blue">blind-tool-invocation</strong> 엔티티가 정확히 이 현상을 가리킨다. 파일을 열고, grep을 돌리고, 다시 닫고, 다른 파일을 연다 — 이 과정이 체계적인 진단이라기보다는 무작위 탐색에 가깝다.
+    </p>
+
+    <p>
+      문제는 이 무작위 탐색이 가끔 우연히 정답을 찾아낸다는 데 있다. 그리고 그 우연이 최종 성공률의 분산 속에 흡수되어, "위치 파악이 문제다"라는 시선을 차단한다.
+    </p>
+
+    <div class="callout blue">
+      <div class="callout-title">병목 오지정의 핵심 구조</div>
+      <p>관찰된 현상(낮은 최종 성공률) → 잘못된 귀인(수정 로직 부족) → 잘못된 개선 방향(수정 프롬프트 튜닝) → 병목 유지(위치 파악 품질 미개선)</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 3 -->
+  <section class="section" id="s3">
+    <span class="section-label">Section 03</span>
+    <h2 class="section-title">명세 간극: 고쳤는가, 고친 것처럼 보이는가</h2>
+
+    <p>
+      위키의 <strong class="green">benchmark-specification-gap</strong> 엔티티는 "벤치마크가 측정하고자 하는 것과 실제로 측정하는 것 사이의 간극"을 의미한다. SHERLOC의 주장은 이 간극의 구체적 사례로 해석할 수 있다.
+    </p>
+
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>차원</th>
+          <th>명세된 측정 대상</th>
+          <th>실제 측정 대상</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-col">Claw-SWE-Bench</td>
+          <td>결함을 고쳤는가</td>
+          <td>최종 패치가 정답과 일치하는가</td>
+        </tr>
+        <tr>
+          <td class="label-col">SpecBench</td>
+          <td>명세를 준수했는가</td>
+          <td>최종 출력이 명세 조건을 만족하는가</td>
+        </tr>
+        <tr>
+          <td class="label-col">SHERLOC의 질문</td>
+          <td colspan="2" style="text-align:center;color:var(--accent);font-weight:500;">위치 파악이 '수리 가능한 진단'이었는가? ← 이 축이 없다</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      "결함을 고쳤는가"와 "최종 패치가 정답과 일치하는가"가 같은 것이라면 간극은 존재하지 않는다. 하지만 다음 두 시나리오를 생각해 보자:
+    </p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon green">✅</span>
+        시나리오 A: 우연한 보정
+      </div>
+      <p>
+        에이전트가 결함 위치를 <strong>잘못 파악</strong>했다. 하지만 수정 단계에서 엉뚱한 곳을 건드리다가 우연히도 원래 결함이 간접적으로 해결되었다. 최종 패치는 정답과 일치한다. 벤치마크는 이를 "성공"으로 기록한다.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon orange">❌</span>
+        시나리오 B: 정확한 진단의 mask-off
+      </div>
+      <p>
+        에이전트가 결함 위치를 <strong>정확히 파악</strong>했다. "auth.py의 127번째 줄, 토큰 만료 검사 로직"이라고 진단했다. 하지만 수정 단계에서 잘못된 패턴을 적용해 오히려 코드를 망가뜨렸다. 벤치마크는 이를 "실패"로 기록한다.
+      </p>
+    </div>
+
+    <p>
+      시나리오 A에서는 <strong class="accent">나쁜 진단이 좋은 결과로 포장</strong>되고, 시나리오 B에서는 <strong class="accent">좋은 진단이 나쁜 결과에 묻힌다</strong>. 이 두 시나리오가 동시에 발생하면, 최종 성공률이라는 숫자 안에서 위치 파악의 품질 정보가 완전히 상쇄되어 버린다.
+    </p>
+
+    <p>
+      이것이 SHERLOC가 "구조적 은폐"라고 부르는 현상의 정체다. 단순히 측정하지 않은 것이 아니라, <strong class="accent">측정하지 않음으로 인해 잘못된 인과 관계가 확립</strong>된다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 4 -->
+  <section class="section" id="s4">
+    <span class="section-label">Section 04</span>
+    <h2 class="section-title">은폐의 구조: 분산이 삼키는 저차원 변수</h2>
+
+    <p>
+      통계적으로 생각해 보자. 최종 수정 성공률은 분산이 높은 지표다. 같은 에이전트라도 리포지토리에 따라, 결함의 유형에 따라, 심지어 같은 문제라도 시드에 따라 결과가 크게 달라진다.
+    </p>
+
+    <p>
+      이 높은 분산 안에 <strong class="accent">위치 파악 품질이라는 저차원 변수</strong>가 흡수된다. 마치 소음이 많은 전파 신호에서 미세한 목소리가 묻혀버리는 것과 같다. 신호가 아예 없는 것이 아니라, 소음의 분산이 너무 커서 신호를 검출할 수 없는 상태다.
+    </p>
+
+    <!-- Flow -->
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-step-inner">
+          <div class="flow-num orange">1</div>
+          <div class="flow-label">진단 없는 도구 남발</div>
+          <div class="flow-desc">blind-tool-invocation</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-inner">
+          <div class="flow-num orange">2</div>
+          <div class="flow-label">이를 '탐색 비용'으로 분류</div>
+          <div class="flow-desc">bottleneck-misattribution</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-inner">
+          <div class="flow-num blue">3</div>
+          <div class="flow-label">최종 패치만 측정하여 은폐</div>
+          <div class="flow-desc">benchmark-specification-gap</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-inner">
+          <div class="flow-num blue">4</div>
+          <div class="flow-label">잘못된 곳에 개선 집중</div>
+          <div class="flow-desc">수정 로직 튜닝</div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      위 플로우가 보여주듯, 문제는 단일 지점에서 발생하지 않는다. <strong class="blue">네 단계가 연쇄적으로 결합</strong>되어 하나의 안정적인 (하지만 잘못된) 피드백 루프를 형성한다. 에이전트 개발자는 최종 성공률을 보고 수정 프롬프트를 고치고, 다시 벤치마크를 돌리고, 성공률이 미미하게 오르면 "개선되었다"고 결론 내린다.
+    </p>
+
+    <p>
+      하지만 이 미미한 상승이 어디서 온 것인지 분해해 보면, 위치 파악의 우연한 성공이 수정 단계의 우연한 성공과 겹쳐서 발생한 확률적 플러스일 수 있다. <strong class="accent">인과적 개선이 아니라 통계적 요동</strong>이다.
+    </p>
+
+    <blockquote>
+      "위치 파악의 질적 부족이 최종 수정 성공의 분산으로 은폐된다" — 이 문장의 핵심은 '은폐'가 의도적이 아니라는 점이다. 아무도 속이려 하지 않았다. 다만 측정 체계가 허용하지 않았을 뿐이다.
+    </blockquote>
+
+    <p>
+      위키의 <strong class="blue">adaptive-inference</strong> 엔티티에서도 유사한 패턴을 찾을 수 있다. SpecKV 관련 연구는 기존 컨텍스트 기반 적응이 "외부 환경에 반응"하는 데 집중했지만, 실제 적응이 필요한 차원이 "내부 시스템 상태"에 있음을 지적한다. <strong class="blue">평가와 최적화의 초점이 진짜 결정 차원을 놓치는 구조</strong>는 코드 에이전트뿐 아니라 적응형 추론 분야에서도 공통으로 나타나는 패턴이다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 5: Conclusion -->
+  <section class="section" id="s5">
+    <span class="section-label">Section 05</span>
+    <h2 class="section-title">패러다임 전환: '수리 가능한 진단'이라는 새로운 축</h2>
+
+    <p>
+      그렇다면 어떻게 바꿔야 하는가? SHERLOC의 제안은 명확하다. 위치 파악을 '파일 검색'이 아닌 <strong class="green">'수리 가능한 진단(repairable diagnosis)'</strong>이라는 독자적인 평가 차원으로 끌어올리자는 것.
+    </p>
+
+    <p>
+      '파일 검색'과 '수리 가능한 진단'의 차이를 다시 병원 비유로 돌아가서 설명하자:
+    </p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon orange">🔍</span>
+        파일 검색 수준의 위치 파악
+      </div>
+      <p>
+        "환자의 통증은 복부 쪽에서 올 것 같습니다." — <strong>어디쯤인지</strong>는 알지만, <strong>무엇이 문제인지</strong>는 모른다. 수술을 시작하려 해도 어디를 잘라야 할지 모른다.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon green">🩺</span>
+        수리 가능한 진단 수준의 위치 파악
+      </div>
+      <p>
+        "환자의 맹장에 염증이 있고, 여기에 절개하면 맹장을 제거할 수 있습니다." — <strong>어디인지</strong>뿐 아니라 <strong>무엇인지</strong>, 그리고 <strong>그것을 고치기 위해 구체적으로 무엇을 해야 하는지</strong>까지 아는 상태.
+      </p>
+    </div>
+
+    <p>
+      이 차이가 벤치마크에 반영되지 않으면, 에이전트는 계속 "복부 쪽"이라고만 말한 채 수술대에 서게 된다. 그리고 가끔 운이 좋아 환자가 나으면 "성공"으로 기록되고, 운이 나쁘면 "실패"로 기록된다. 어느 쪽이든 진단의 질은 평가받지 못한다.
+    </p>
+
+    <div class="conclusion">
+      <div class="conclusion-title">패러다임 전환의 세 가지 축</div>
+
+      <p>
+        <strong class="accent">첫째, 평가의 분해.</strong> 최종 성공률이라는 단일 지표를 "진단 품질"과 "수정 품질" 두 축으로 분해해야 한다. 이렇게 하면 시나리오 A(우연한 보정)와 시나리오 B(정확한 진단의 mask-off)가 구별된다.
+      </p>
+
+      <p>
+        <strong class="blue">둘째, 진단의 구조화.</strong> SHERLOC의 이름에도 들어있는 "Structured Diagnostic"는 위치 파악이 단순한 파일명 반환이 아니라, 결함의 원인, 영향 범위, 수정 가능성에 대한 구조화된 설명이어야 함을 의미한다.
+      </p>
+
+      <p>
+        <strong class="green">셋째, 개선 방향의 재설정.</strong> 위치 파악이 독자 평가 축을 갖게 되면, 개발자는 더 이상 수정 프롬프트만 만지지 않는다. "에이전트가 결함을 진단하는 과정 자체"를 최적화하게 된다. 이것이 병목 오지정을 해소하는 유일한 경로다.
+      </p>
+
+      <p style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(44,40,37,0.06); font-style:italic; color:var(--muted);">
+        결함을 고치는 것은 중요하다. 하지만 결함을 고쳤는지 평가하려면, 먼저 결함을 어디서 어떻게 고쳤는지도 평가할 수 있어야 한다. 이것이 SHERLOC이 묻는, 단순하지만 치명적인 질문이다.
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <div class="tag-list">
+      <span class="tag">SHERLOC</span>
+      <span class="tag">Code Agent</span>
+      <span class="tag">Benchmark</span>
+      <span class="tag">Fault Localization</span>
+      <span class="tag">Bottleneck Misattribution</span>
+      <span class="tag">Specification Gap</span>
+    </div>
+    <p>본 분석은 Wiki 지식 그래프의 구조적 패턴 교차 검증에 기반한 추론입니다.</p>
+    <p style="margin-top:6px;">Claw-SWE-Bench, SpecBench에 대한 구체적 기술은 Wiki에 존재하지 않아 직접 인용은 제한됩니다.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
