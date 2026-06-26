@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-24-randomized-yarn-improves-length-generalization-for]]: 둘 다 LLM이 긴 컨텍스트를 처리할 때의 효율성과 일반화 문제를 해결하며, 하나는 위치 불변 KV 캐시 재사용으로 재계산을 줄이고, 다른 하나는 랜덤화 YaRN으로 길이 일반화를 개선함.

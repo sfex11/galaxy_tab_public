@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-25-vision-language-model-reasoning-for-contextual-sem]]: 둘 다 비전-언어 모델(VLM)을 물리적 환경의 로봇 공학 문제에 적용하며, 각각 조작 기술 자가 습득과 물류 환경의 의미론적 맵핑을 다룸.

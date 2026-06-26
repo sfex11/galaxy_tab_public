@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-26-same-evidence-different-answer-auditing-order-sens]]: 둘 다 LLM/MLLM 출력의 신뢰성 결함을 탐지하는 방법론을 제안하며, 각각 기울기 기반 환각 감지와 입력 순서에 따른 답변 변동성 감사를 다룸.

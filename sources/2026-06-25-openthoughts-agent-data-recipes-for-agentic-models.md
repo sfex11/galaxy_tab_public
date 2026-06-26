@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-26-neglected-free-lunch-from-post-training-progress-a]]: 둘 다 에이전트 모델의 성능을 높이기 위한 사후 학습(post-training) 접근을 다루며, 하나는 학습 데이터 구축 레시피를, 다른 하나는 과정 보상 모델 구축을 제안함.
+- → [[sources/2026-06-24-mas-promptbench-when-does-prompt-optimization-impr]]: 둘 다 에이전트 시스템의 성능을 최적화하기 위한 접근을 다루며, 하나는 학습 데이터 구축 레시피를, 다른 하나는 시스템 프롬프트 최적화의 효과를 분석함.

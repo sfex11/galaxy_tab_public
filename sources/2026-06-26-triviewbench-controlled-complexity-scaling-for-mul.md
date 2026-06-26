@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-06-26-same-evidence-different-answer-auditing-order-sens]]: 둘 다 멀티모달 대형 언어 모델(MLLM)의 신뢰성과 추론 능력을 평가하기 위한 새로운 벤치마크를 제안하며, 각각 입력 순서 민감성과 다중 뷰 구조적 추론을 측정함.
+- → [[sources/2026-06-25-iv-cot-implicit-visual-chain-of-thought-for-struct]]: 둘 다 MLLM의 시각적 추론 능력을 다루며, 하나는 암시적 시각 사고사슬로 구조 인식 생성을 향상시키고, 다른 하나는 다중 뷰 구조적 추론 벤치마크로 평가 체계를 제공함.
