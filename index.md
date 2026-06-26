@@ -974,3 +974,21 @@
 - [[sources/2026-06-25-vision-language-model-reasoning-for-contextual-sem.md]] - Vision-Language Model Reasoning for Contextual Semantic Mapping in Intralogistics
 - [[sources/2026-06-25-large-language-model-discovery-of-quantum-ldpc-cod.md]] - Large-Language-Model Discovery of Quantum LDPC Codes through Structured Concept Evolution
 - [[sources/2026-06-25-grad-detect-gradient-based-hallucination-detection.md]] - Grad Detect: Gradient-Based Hallucination Detection in LLMs
+- [[sources/2026-06-26-revengebench-reverse-engineering-code-space-polici.md]] - RevengeBench: Reverse Engineering Code-Space Policies from Behavioral Experiments
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-26-neglected-free-lunch-from-post-training-progress-a.md]] - Neglected Free Lunch from Post-training: Progress Advantage for LLM Agents
+- [[sources/2026-06-26-when-certainty-is-an-artifact-keyword-lexicon-blin.md]] - When Certainty Is an Artifact: Keyword Lexicon Blindness and the (Mis)Measurement of Rhetorical Stance
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-26-the-unfireable-safety-kernel-execution-time-ai-ali.md]] - The Unfireable Safety Kernel: Execution-Time AI Alignment for AI Agents and Other Escapable AI Systems
+- [[sources/2026-06-26-ai-translation-of-literary-texts-is-fine-but-reade.md]] - AI translation of literary texts is "fine", but readers still prefer human translations
+- [[sources/2026-06-26-detect-unlearn-restore-defending-text-summarizatio.md]] - Detect, Unlearn, Restore: Defending Text Summarization Models Against Data Poisoning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-26-can-trustless-agents-be-trusted-an-empirical-study.md]] - Can Trustless Agents Be Trusted? An Empirical Study of the ERC-8004 Decentralized AI Agent Ecosystem
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-06-26-why-multi-step-tool-use-reinforcement-learning-col.md]] - Why Multi-Step Tool-Use Reinforcement Learning Collapses and How Supervisory Signals Fix It
+- [[sources/2026-06-26-same-evidence-different-answer-auditing-order-sens.md]] - Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models
+- [[sources/2026-06-26-triviewbench-controlled-complexity-scaling-for-mul.md]] - TriViewBench: Controlled Complexity Scaling for Multi-View Structural Reasoning in MLLMs
+- [[sources/2026-06-26-weave-of-formal-thought.md]] - Weave of Formal Thought
+- [[sources/2026-06-26-g2dp-diffusion-planning-with-spatio-temporal-grid-.md]] - G2DP: Diffusion Planning with Spatio-Temporal Grid Guidance
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-06-26-autodata-an-agentic-data-scientist-to-create-high-.md]] - Autodata: An agentic data scientist to create high quality synthetic data

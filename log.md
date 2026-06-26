@@ -1902,3 +1902,29 @@
 ## [2026-06-25 08:32] ingest | Large-Language-Model Discovery of Quantum LDPC Codes through Structured Concept Evolution
 
 ## [2026-06-25 08:32] ingest | Grad Detect: Gradient-Based Hallucination Detection in LLMs
+
+## [2026-06-26 08:34] ingest | RevengeBench: Reverse Engineering Code-Space Policies from Behavioral Experiments
+
+## [2026-06-26 08:34] ingest | Neglected Free Lunch from Post-training: Progress Advantage for LLM Agents
+
+## [2026-06-26 08:34] ingest | When Certainty Is an Artifact: Keyword Lexicon Blindness and the (Mis)Measurement of Rhetorical Stance
+
+## [2026-06-26 08:34] ingest | The Unfireable Safety Kernel: Execution-Time AI Alignment for AI Agents and Other Escapable AI Systems
+
+## [2026-06-26 08:34] ingest | AI translation of literary texts is "fine", but readers still prefer human translations
+
+## [2026-06-26 08:34] ingest | Detect, Unlearn, Restore: Defending Text Summarization Models Against Data Poisoning
+
+## [2026-06-26 08:34] ingest | Can Trustless Agents Be Trusted? An Empirical Study of the ERC-8004 Decentralized AI Agent Ecosystem
+
+## [2026-06-26 08:34] ingest | Why Multi-Step Tool-Use Reinforcement Learning Collapses and How Supervisory Signals Fix It
+
+## [2026-06-26 08:34] ingest | Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models
+
+## [2026-06-26 08:34] ingest | TriViewBench: Controlled Complexity Scaling for Multi-View Structural Reasoning in MLLMs
+
+## [2026-06-26 08:34] ingest | Weave of Formal Thought
+
+## [2026-06-26 08:34] ingest | G2DP: Diffusion Planning with Spatio-Temporal Grid Guidance
+
+## [2026-06-26 08:34] ingest | Autodata: An agentic data scientist to create high quality synthetic data

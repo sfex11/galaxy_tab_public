@@ -273,3 +273,7 @@ _자동 생성됨_
 - [[sources/2026-06-18-learning-red-agent-policy-from-observations-for-ne.md]]
 
 - [[sources/2026-06-19-learning-user-simulators-with-turing-rewards.md]]
+
+- [[sources/2026-06-26-neglected-free-lunch-from-post-training-progress-a.md]]
+
+- [[sources/2026-06-26-why-multi-step-tool-use-reinforcement-learning-col.md]]
