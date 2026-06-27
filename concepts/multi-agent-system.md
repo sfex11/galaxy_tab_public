@@ -207,3 +207,7 @@ _자동 생성됨_
 - [[sources/2026-06-24-mas-promptbench-when-does-prompt-optimization-impr.md]]
 
 - [[sources/2026-06-25-grading-the-grader-lessons-from-evaluating-an-agen.md]]
+
+- [[sources/2026-06-27-resilient-output-containment-under-undisclosed-lea.md]]
+
+- [[sources/2026-06-27-bridging-talk-and-thought-understanding-dialogue-d.md]]

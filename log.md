@@ -1928,3 +1928,33 @@
 ## [2026-06-26 08:34] ingest | G2DP: Diffusion Planning with Spatio-Temporal Grid Guidance
 
 ## [2026-06-26 08:34] ingest | Autodata: An agentic data scientist to create high quality synthetic data
+
+## [2026-06-27 02:08] llm-ingest | 0편 분석, 엔티티 355개, 개념 1184개
+
+## [2026-06-27 08:37] ingest | Reinforcement Learning without Ground-Truth Solutions can Improve LLMs
+
+## [2026-06-27 08:37] ingest | When are likely answers right? On Sequence Probability and Correctness in LLMs
+
+## [2026-06-27 08:37] ingest | Mapping Political-Elite Networks in Europe with a Multilingual Joint Entity-Relation Extraction Pipeline
+
+## [2026-06-27 08:37] ingest | Language-Based Digital Twins for Elderly Cognitive Assistance
+
+## [2026-06-27 08:37] ingest | Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning
+
+## [2026-06-27 08:37] ingest | LLM-Based Examination of Eligibility Criteria from Securities Prospectuses at the German Central Bank
+
+## [2026-06-27 08:37] ingest | Beyond Surface Forms: A Comprehensive, Mechanism-Oriented Taxonomy of Indirect Linguistic Encoding for LLM-Based Coded Language Detection
+
+## [2026-06-27 08:37] ingest | Autoregressive Boltzmann Generators
+
+## [2026-06-27 08:37] ingest | Bridging Performance and Generalization in Reinforcement Learning for Agile Flight
+
+## [2026-06-27 08:37] ingest | Designing Reward Signals for Portable Query Generation: A Case Study in Industrial Semantic Job Search
+
+## [2026-06-27 08:37] ingest | When Does Combining Language Models Help? A Co-Failure Ceiling on Routing, Voting, and Mixture-of-Agents Across 67 Frontier Models
+
+## [2026-06-27 08:37] ingest | Resilient Output Containment under Undisclosed Leader Dynamics and Actuator Attacks
+
+## [2026-06-27 08:37] ingest | Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy
+
+## [2026-06-27 08:37] ingest | Bridging Talk and Thought: Understanding Dialogue Dynamics Across Collaborative Problem-Solving Contexts
