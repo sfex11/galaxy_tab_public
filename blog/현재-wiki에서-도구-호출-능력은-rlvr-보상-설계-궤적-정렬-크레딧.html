@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보상만으로는 도구를 쓸 수 없다 — 다단계 RL의 붕괴와 별도 능력 차원 가설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection { background: rgba(194,112,62,0.18); }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 1.6vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Article Header ── */
+  .article-header {
+    padding: clamp(48px, 8vw, 80px) 0 clamp(32px, 5vw, 48px);
+    text-align: left;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 4.5vw, 40px);
+    line-height: 1.3;
+    color: #2c2825;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 1.8vw, 18px);
+    font-weight: 300;
+    color: rgba(44,40,37,0.6);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .article-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(44,40,37,0.45);
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── Section ── */
+  .section {
+    padding: clamp(32px, 5vw, 56px) 0;
+  }
+
+  .section:not(:last-child) {
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .section-number {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c2703e;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 3vw, 28px);
+    line-height: 1.35;
+    color: #2c2825;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(17px, 2.2vw, 20px);
+    line-height: 1.45;
+    color: #2c2825;
+    margin: 32px 0 12px;
+  }
+
+  p {
+    margin-bottom: 18px;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #2c2825;
+  }
+
+  .accent-orange { color: #c2703e; }
+  .accent-blue { color: #5b7c99; }
+  .accent-green { color: #6b9e7a; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 0 16px 24px;
+    font-size: clamp(14.5px, 1.5vw, 16.5px);
+    font-weight: 400;
+    color: rgba(44,40,37,0.7);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    color: #c2703e;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.6) inset;
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 1.8vw, 17px);
+    color: #c2703e;
+    margin-bottom: 12px;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── Analogy Box ── */
+  .analogy-box {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+  }
+
+  .analogy-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 10px;
+  }
+
+  .analogy-box p { color: rgba(44,40,37,0.8); }
+  .analogy-box p:last-child { margin-bottom: 0; }
+
+  /* ── Formula ── */
+  .formula-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .formula-box .formula {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 400;
+    color: #2c2825;
+    margin: 8px 0;
+    letter-spacing: 0.02em;
+  }
+
+  .formula-box .formula-note {
+    font-size: 13px;
+    color: rgba(44,40,37,0.5);
+    margin-top: 8px;
+  }
+
+  /* ── Table ── */
+  .dual-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  @media (max-width: 560px) {
+    .dual-table { grid-template-columns: 1fr; }
+  }
+
+  .dual-table .col {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(16px, 2.5vw, 24px);
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+
+  .dual-table .col-header {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .col-possible .col-header { color: #6b9e7a; }
+  .col-impossible .col-header { color: #c2703e; }
+
+  .dual-table ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .dual-table li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: rgba(44,40,37,0.75);
+    line-height: 1.65;
+  }
+
+  .dual-table li:last-child { margin-bottom: 0; }
+
+  .dual-table li::before {
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .col-possible li::before { background: #6b9e7a; }
+  .col-impossible li::before { background: #c2703e; }
+
+  /* ── Highlight text ── */
+  .highlight-line {
+    background: linear-gradient(to top, rgba(194,112,62,0.12) 40%, transparent 40%);
+    padding: 0 2px;
+  }
+
+  /* ── List ── */
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 20px;
+  }
+
+  .article-list li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 12px;
+    line-height: 1.75;
+  }
+
+  .article-list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 11px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: #c2703e;
+    opacity: 0.6;
+  }
+
+  /* ── Conclusion ── */
+  .conclusion-box {
+    background: rgba(194,112,62,0.04);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+
+  .conclusion-box h3 {
+    margin-top: 0;
+    color: #c2703e;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    padding: clamp(32px, 5vw, 48px) 0;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    text-align: center;
+  }
+
+  .article-footer p {
+    font-size: 13px;
+    color: rgba(44,40,37,0.35);
+    margin-bottom: 4px;
+  }
+
+  .ref-list {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .ref-list li {
+    font-size: 13px;
+    color: rgba(44,40,37,0.5);
+    margin-bottom: 6px;
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .ref-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: rgba(44,40,37,0.3);
+  }
+
+  /* ── Nav override ── */
+  .nav-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 0 0 8px;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+
+  .toc-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(44,40,37,0.35);
+    margin-bottom: 12px;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    counter-reset: toc;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 6px;
+  }
+
+  .toc a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    text-decoration: none;
+    color: rgba(44,40,37,0.6);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+
+  .toc a:hover { color: #c2703e; }
+
+  .toc a::before {
+    content: counter(toc);
+    font-family: 'Source Serif 4', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #c2703e;
+    opacity: 0.5;
+    min-width: 16px;
+  }
+
+  /* ── Divider ── */
+  .sep {
+    width: 40px;
+    height: 2px;
+    background: rgba(194,112,62,0.25);
+    border-radius: 1px;
+    margin: 0 0 28px;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+</div>
+
+<article class="container">
+
+  <!-- ── Header ── -->
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">보상만으로는 도구를 쓸 수 없다</h1>
+    <p class="article-subtitle">다단계 도구 사용 RL이 감독 신호 없이 붕괴한다면, 도구 사용 능력은 순수 보상 최대화로부터 emergent하게 얻을 수 없는 별도의 능력 차원인가?</p>
+    <div class="article-meta">
+      <span>대상 논문: <em>Why Multi-Step Tool-Use RL Collapses and How Supervisory Signals Fix It</em></span>
+      <span>2025년 7월</span>
+    </div>
+  </header>
+
+  <!-- ── TOC ── -->
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#s1">보상 신호의 근본적 결핍: 끝줄만 보는 심판</a></li>
+      <li><a href="#s2">최적화가 닿지 못하는 구조적 병목</a></li>
+      <li><a href="#s3">보상이 역효과를 낳는 역설</a></li>
+      <li><a href="#s4">기하급수적 상한: 단계가 늘어날수록 무너지는 수학</a></li>
+      <li><a href="#s5">패러다임 전환: 별도 차원으로서의 도구 사용</a></li>
+    </ol>
+  </div>
+
+  <!-- ── Section 1 ── -->
+  <section class="section" id="s1">
+    <div class="section-number">01</div>
+    <h2>보상 신호의 근본적 결핍: 끝줄만 보는 심판</h2>
+    <div class="sep"></div>
+
+    <div class="analogy-box">
+      <div class="analogy-label">비유</div>
+      <p>축구 경기에서 심판이 경기 내내 눈을 감고 있다가, <strong>경기 종료 휘슬과 동시에 승패만 발표</strong>한다고 상상해 보세요. 선수들은 자신의 어느 패스가 실점으로 이어졌는지, 어느 태클이 동점골의 시작이었는지 전혀 알 수 없습니다. 결과적으로 "다음 경기에서 무엇을 고쳐야 할지"를 스스로 알아내야 하는데, 이것이 다단계 도구 사용 RL이 직면한 정확한 상황입니다.</p>
+    </div>
+
+    <p>다단계 도구 사용 환경에서 RLVR(Reinforcement Learning from Verifiable Rewards)의 근본적 한계는 <span class="highlight-line"><strong>크레딧 할당의 입자도 문제</strong></span>로 현현합니다. 최신 연구 "Reinforcement Learning without Ground-Truth Solutions can Improve LLMs"은 RLVR이 기존에는 ground-truth 정답에 의존해 왔음을 명시하며, 이것이 없는 영역으로의 확장을 시도합니다. 그러나 다단계 도구 사용에서는 상황이 근본적으로 다릅니다.</p>
+
+    <div class="card">
+      <div class="card-title">다단계 파이프라인에서 관측 가능한 것과 불가능한 것</div>
+      <p>개별 도구 호출이 정답인지 오답인지 평가할 수 없습니다. 전체 궤적의 성공 혹은 실패만 관측 가능하며, 중간 단계의 기여도를 역추적할 신호가 부재합니다. 이것이 단순한 최적화 난이도 문제가 아니라, <strong>보상 신호 자체가 해당 능력 차원을 인코딩하지 못하는 구조적 결함</strong>이라면, 순수 보상 최대화는 도구 사용 능력을 발현할 수 없습니다.</p>
+    </div>
+
+    <p>cascading-distribution-shift가 암시하듯, 다단계 파이프라인에서는 분포 변이가 누적됩니다. 1단계에서 미세하게 벗어난 출력이 2단계에서 더 큰 오차를 만들고, 이것이 3단계에서는 완전히 다른 영역으로 전이되어 버립니다. 이런 환경에서 단일 단계의 보상이 전체 궤적의 품질을 proxy할 수 없게 되는 것은 최적화 알고리즘의 한계가 아니라, <strong class="accent-orange">신호 구조 자체의 한계</strong>입니다.</p>
+  </section>
+
+  <!-- ── Section 2 ── -->
+  <section class="section" id="s2">
+    <div class="section-number">02</div>
+    <h2>최적화가 닿지 못하는 구조적 병목</h2>
+    <div class="sep"></div>
+
+    <div class="analogy-box">
+      <div class="analogy-label">비유</div>
+      <p>요리사가 "어떤 재료를 언제 넣을지"를 완벽하게 결정하더라도, <strong>주방의 냉장고 안에서 재료가 어떻게 배열되어 있는지</strong>는 요리사의 결정 능력과는 무관한 문제입니다. 아무리 좋은 레시피를 따라도, 냉장고 구조가 비효율적이면 요리 속도는 느려집니다. 도구 사용의 핵심 병목도 이와 같습니다.</p>
+    </div>
+
+    <p>가장 결정적인 증거는 "Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading"이라는 논문에서 나옵니다. 이 연구는 다중 서버 MCP(Model Context Protocol) 배포에서 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 <strong>스키마 축적</strong>에 의해 결정된다는 사실을 보여줍니다.</p>
+
+    <blockquote>
+      다중 서버 MCP 배포에서 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정됨
+      <cite>— Tool Attention Is All You Need, 2025</cite>
+    </blockquote>
+
+    <p>이것을 우리의 질문 프레임으로 번역하면 명확해집니다. 도구 사용의 핵심 병목은 <strong>"언제 호출할지"</strong>에 대한 결정 품질—보상으로 최적화 가능한 영역—이 아니라, <strong class="accent-blue">"어떤 스키마를 어떻게 축적하고 관리할지"</strong>에 대한 구조적 문제입니다.</p>
+
+    <p>보상 최대화는 LLM의 출력 분포를 조정할 수 있습니다. 하지만 스키마 축적은 파이프라인 아키텍처 자체의 속성입니다. "To Call or Not to Call" 같은 연구가 도구 호출을 평가·최적화의 대상으로 삼으면서도, 그 프레임워크가 다루지 못하는 <strong>인프라 계층의 의사결정</strong>이 별도로 존재한다는 것이 이 증거의 핵심입니다.</p>
+
+    <div class="card">
+      <div class="card-title">요약: 최적화 영역과 구조적 영역의 분리</div>
+      <p>보상 최대화가 조정할 수 있는 것은 "모델이 내뱉는 토큰의 확률 분포"입니다. 하지만 스키마가 어떻게 로드되고, 파이프라인이 어떻게 구성되며, 도구 간 의존성이 어떻게 관리되는지는 파이프라인 아키텍처의 속성이지, 토큰 확률의 문제가 아닙니다. 이 두 영역이 혼재되어 있기 때문에 "보상만으로 도구 사용을 배우게 하려는 시도"가 구조적으로 불가능에 가깝습니다.</p>
+    </div>
+  </section>
+
+  <!-- ── Section 3 ── -->
+  <section class="section" id="s3">
+    <div class="section-number">03</div>
+    <h2>보상이 역효과를 낳는 역설</h2>
+    <div class="sep"></div>
+
+    <div class="analogy-box">
+      <div class="analogy-label">비유</div>
+      <p>자전거를 탈 때 "페달을 밟을 때마다 100원을 줍니다"라고 하면, 아이는 페달만 밟고 방향은 전혀 신경 쓰지 않을 것입니다. 반대로 "페달을 밟지 않을 때마다 100원을 줍니다"라고 하면, 아이는 멈춰서서 보상만 받으려 할 것입니다. <strong>페달링이라는 행위 자체가 아니라, 페달링과 방향 전환의 균형</strong>이 자전거 타기의 핵심인데, 이 균형을 단일 스칼라 보상으로 인코딩하는 것은 근본적으로 어렵습니다.</p>
+    </div>
+
+    <p>Wiki에 <strong>blind-tool-invocation</strong>이라는 엔티티가 존재한다는 사실 자체가 시사적입니다. 이것은 도구를 판단 없이 호출하는 현상을 지칭하는데, 문제는 이것이 보상 최대화의 부산물로 발생할 수 있다는 점입니다.</p>
+
+    <ul class="article-list">
+      <li>도구 호출 자체에 긍정적 보상이 부여되면 → <strong class="accent-orange">과도한 호출</strong>이 발생합니다</li>
+      <li>호출 억제에 보상을 부여하면 → <strong class="accent-orange">필요한 호출까지 억제</strong>됩니다</li>
+      <li>즉, <strong>보상 함수의 형태에 무관하게</strong> 다단계 맥락에서 적절한 호출 균형을 보상만으로 인코딩하는 것은 불가능에 가깝습니다</li>
+    </ul>
+
+    <p>capability-cooperation-paradox는 이 현상을 더 넓은 프레임으로 포착합니다. 개별 능력—언어 이해, 추론, 도구 스키마 파싱—이 각각 향상되어도, 이들이 <strong>협력하여 다단계 궤적을 구성하는 능력</strong>은 개별 향상에서 emergent하지 않는다는 역설입니다.</p>
+
+    <p>이것은 마치 오케스트라의 각 악기 연주자가 개인적으로 완벽한 기량을 갖추더라도, <strong>지휘자 없이 악보 없이 합주하려면</strong> 혼란이 불가피한 것과 같습니다. 개별 기량의 합이 합주의 질로 이어지려면, 악기 간의 시간적 조율, 음량 균형, 악장 전환의 타이밍 등 "협력 메커니즘"이 별도로 존재해야 합니다. 도구 사용도 마찬가지입니다.</p>
+  </section>
+
+  <!-- ── Section 4 ── -->
+  <section class="section" id="s4">
+    <div class="section-number">04</div>
+    <h2>기하급수적 상한: 단계가 늘어날수록 무너지는 수학</h2>
+    <div class="sep"></div>
+
+    <div class="analogy-box">
+      <div class="analogy-label">비유</div>
+      <p>10개의 연속적인 문을 통과해야 하는 미로를 생각해 보세요. 각 문을 통과할 확률이 90%라면, 10개를 모두 통과할 확률은 <strong>약 35%</strong>에 불과합니다. 각 문의 통과 확률을 95%로 끌어올려도, 10개를 모두 통과할 확률은 <strong>약 60%</strong>입니다. 문 하나하나의 성능을 크게 높여도, 연속 구조 때문에 전체 성공률은 파이프가 길어질수록 수학적으로 억제됩니다.</p>
+    </div>
+
+    <p>"When Does Combining Language Models Help?"에서 도출된 co-failure-ceiling 개념은 다중 모델 시스템의 이득이 <strong>공동 실패율</strong>에 의해 상한이 정해진다는 것을 보여줍니다. 다단계 도구 사용 RL도 정확히 동일한 수학적 구조를 가집니다.</p>
+
+    <div class="formula-box">
+      <div style="font-size:12px;color:rgba(44,40,37,0.4);margin-bottom:4px;">다단계 궤적의 성공 확률</div>
+      <div class="formula">P<sub>전체</sub> = p<sup>N</sup></div>
+      <div class="formula-note">p: 각 단계의 독립적 성공 확률 &nbsp;|&nbsp; N: 전체 단계 수</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">구체적 수치 시뮬레이션</div>
+      <p>각 단계의 성공 확률 p를 0.9에서 0.95로 5%p 향상시켰다고 가정해 봅시다. 보상 최적화가 개별 단계의 성능을 상당히 끌어올린 것입니다. 하지만:</p>
+      <p><strong>N = 5</strong>일 때: 0.59 → 0.77 (18%p 향상)<br>
+      <strong>N = 10</strong>일 때: 0.35 → 0.60 (25%p 향상)<br>
+      <strong>N = 20</strong>일 때: 0.12 → 0.36 (24%p 향상)<br>
+      <strong>N = 50</strong>일 때: 0.005 → 0.077 (7.2%p 향상)</p>
+      <p>단계 수가 늘어날수록 <strong>동일한 최적화 노력의 효과가 기하급수적으로 감소</strong>합니다. 이것은 최적화 알고리즘의 효율성 문제가 아니라, <strong class="accent-green">다단계 합성의 수학적 구조가 보상 기반 학습의 적용 가능 영역 자체를 제한</strong>한다는 것을 의미합니다.</p>
+    </div>
+
+    <p>다시 말해, 아무리 정교한 보상 함수를 설계하고, 아무리 강력한 최적화 알고리즘을 사용하더라도, <span class="highlight-line"><strong>다단계 구조가 만들어내는 지수적 감쇠</strong></span> 앞에서는 보상 최대화 접근법이 본질적인 성능 상한에 부딪힙니다. 이 상한은 최적화의 질이 아니라 파이프라인의 길이에 의해 결정됩니다.</p>
+  </section>
+
+  <!-- ── Section 5 ── -->
+  <section class="section" id="s5">
+    <div class="section-number">05</div>
+    <h2>패러다임 전환: 별도 차원으로서의 도구 사용</h2>
+    <div class="sep"></div>
+
+    <p>지금까지 살펴본 네 가지 증거—크레딧 할당의 결핍, 구조적 병목, 보상의 역효과, 기하급수적 상한—는 각각 독립적인 문제가 아닙니다. 이것들은 하나의 통일된 결론을 향해 수렴합니다.</p>
+
+    <div class="dual-table">
+      <div class="col col-possible">
+        <div class="col-header">보상 최대화로 획득 가능한 차원</div>
+        <ul>
+          <li>단일 호출의 적절성 판단 — 이 도구를 써야 할지 말지</li>
+          <li>개별 도구의 결과 해석 — 반환값의 의미 파악</li>
+          <li>단일 단계 내에서의 파라미터 구성</li>
+        </ul>
+      </div>
+      <div class="col col-impossible">
+        <div class="col-header">보상 최대화로 획득 불가능한 차원</div>
+        <ul>
+          <li>스키마 축적 구조 — 어떤 도구 목록을 어떻게 관리할지</li>
+          <li>호출/미호출 균형 — blind invocation의 회피</li>
+          <li>다단계 협력 — 능력 간 조율 메커니즘</li>
+          <li>기하급수적 상한 극복 — 파이프라인 길이 대응</li>
+          <li>미세 크레딧 할당 — 중간 단계의 기여도 추적</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>왼쪽 차원은 "단일 시점, 단일 결정"의 영역입니다. 보상 신호가 이 결정의 옳고 그름을 비교적 명확하게 전달할 수 있습니다. 하지만 오른쪽 차원은 <strong>"다단계, 다능력, 다인프라"의 교차 영역</strong>입니다. 이 영역에서의 의사결정은 단일 스칼라 보상으로 인코딩될 수 없는 구조적 복잡성을 가집니다.</p>
+
+    <div class="conclusion-box">
+      <h3>핵심 결론과 패러다임 전환</h3>
+      <p>도구 사용 능력은 단일 차원이 아니라 <strong>두 개의 독립적인 차원</strong>으로 구성됩니다. 하나는 보상 최대화로 획득 가능한 "단일 결정의 질"이고, 다른 하나는 보상 최대화로 획득 불가능한 "다단계 협력의 구조"입니다.</p>
+      <p>기존 패러다임은 이 두 차원을 구분하지 않고, "더 나은 보상 함수 + 더 강력한 최적화 = 더 나은 도구 사용"이라는 암묵적 가정 아래 움직여 왔습니다. 하지만 논문 "Why Multi-Step Tool-Use RL Collapses"가 보여주는 붕괴 현상은 이 가정이 근본적으로 잘못되었음을 증명합니다.</p>
+      <p><strong>필요한 전환은 다음과 같습니다:</strong></p>
+      <ul class="article-list">
+        <li>보상 설계 문제가 아니라 <strong class="accent-orange">학습 파이프라인의 구조적 재설계</strong> 문제로 프레이밍할 것</li>
+        <li>감독 신호(supervisory signal)를 "보상의 대체품"이 아니라 <strong class="accent-blue">별도 차원에 대한 전용 학습 채널</strong>로 conceptualize할 것</li>
+        <li>도구 사용 벤치마크에서 단계 수 N을 독립 변수로 통제하고, <strong class="accent-green">N에 대한 성능 감쇠 곡선</strong>을 핵심 평가 지표로 삼을 것</li>
+        <li>스키마 관리, 호출 균형, 능력 조율을 각각 <strong>독립적인 모듈</strong>로 분리하여 설계할 것</li>
+      </ul>
+      <p>결론적으로, 도구 사용 능력은 순수 보상 최대화로부터 emergent하게 얻을 수 없는 <strong>별도의 능력 차원</strong>입니다. 이를 인정하는 것이 붕괴를 멈추고, 진정한 다단계 도구 사용 에이전트로 나아가는 첫걸음입니다.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="article-footer">
+    <p>본 글은 Wiki Query 결과를 바탕으로 작성된 심층 분석입니다.</p>
+    <p>원문 논문의 주장을 객관적으로 재구성하되, 해석의 부분은 명시적으로 구분했습니다.</p>
+
+    <ol class="ref-list">
+      <li>Why Multi-Step Tool-Use Reinforcement Learning Collapses and How Supervisory Signals Fix It (2025)</li>
+      <li>Reinforcement Learning without Ground-Truth Solutions can Improve LLMs (2025)</li>
+      <li>Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading (2025)</li>
+      <li>To Call or Not to Call: Adaptive Tool Usage for LLMs</li>
+      <li>When Does Combining Language Models Help? — co-failure-ceiling 분석</li>
+    </ol>
+  </footer>
+
+</article>
+
+</body>
+</html>
