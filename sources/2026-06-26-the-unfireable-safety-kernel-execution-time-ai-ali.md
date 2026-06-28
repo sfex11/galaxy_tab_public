@@ -36,3 +36,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-26-can-trustless-agents-be-trusted-an-empirical-study]]: 둘 다 AI 에이전트의 신뢰성과 안전성 보장 문제를 다루며, 하나는 에이전트 외부에서 실행 시 제어하는 안전 커널을, 다른 하나는 분산형 프로토콜 기반 신뢰 층을 제안함.
+
+---
+**관련**: [[entities/reachable-set.md|reachable set]]

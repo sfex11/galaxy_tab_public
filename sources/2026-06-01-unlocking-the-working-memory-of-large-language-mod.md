@@ -148,3 +148,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-as-external-cognition.md|environment as external cognition]]
+
+---
+**관련**: [[concepts/world-model-in-pieces.md|world model in pieces]]
