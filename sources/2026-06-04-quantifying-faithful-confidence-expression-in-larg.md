@@ -41,3 +41,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/shallow-alignment.md|shallow alignment]]
+
+---
+**관련**: [[concepts/alignment-density.md|alignment density]]
+
+---
+**관련**: [[concepts/authority-location-alignment.md|authority location alignment]]
+
+---
+**관련**: [[concepts/latent-communication-homogeneity-dependency.md|latent communication homogeneity dependency]]
+
+---
+**관련**: [[concepts/alignment-irreversibility.md|alignment irreversibility]]

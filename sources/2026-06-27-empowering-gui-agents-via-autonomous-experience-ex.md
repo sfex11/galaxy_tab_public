@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/serving-primitive-programmability.md|serving primitive programmability]]
+
+---
+**관련**: [[concepts/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]

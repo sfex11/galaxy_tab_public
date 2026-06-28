@@ -300,3 +300,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cross-regime-topological-convergence.md|cross regime topological convergence]]
+
+---
+**관련**: [[concepts/rubric-to-reward-reducibility.md|rubric to reward reducibility]]
+
+---
+**관련**: [[concepts/evaluation-target-substitution.md|evaluation target substitution]]

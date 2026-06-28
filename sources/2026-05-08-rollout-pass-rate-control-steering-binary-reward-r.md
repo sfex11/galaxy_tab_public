@@ -275,3 +275,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-control-dual-axis.md|inference control dual axis]]
+
+---
+**관련**: [[concepts/internal-state-certification-path.md|internal state certification path]]
+
+---
+**관련**: [[concepts/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]
+
+---
+**관련**: [[concepts/learning-substrate.md|learning substrate]]
+
+---
+**관련**: [[concepts/silent-failure.md|silent failure]]
+
+---
+**관련**: [[concepts/rollout-budget-convergence-efficiency.md|rollout budget convergence efficiency]]
+
+---
+**관련**: [[concepts/topology-flattening-failure.md|topology flattening failure]]
+
+---
+**관련**: [[concepts/ontological-concealment-of-failure.md|ontological concealment of failure]]
+
+---
+**관련**: [[concepts/hypothesis-state-epistemic-gap.md|hypothesis state epistemic gap]]

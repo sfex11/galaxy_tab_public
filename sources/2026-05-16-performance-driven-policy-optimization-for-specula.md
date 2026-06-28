@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/visibility-inversion-by-optimization.md|visibility inversion by optimization]]
+
+---
+**관련**: [[concepts/prefix-misalignment.md|prefix misalignment]]

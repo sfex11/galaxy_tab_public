@@ -116,3 +116,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-target-substitution.md|evaluation target substitution]]
+
+---
+**관련**: [[concepts/procedural-identity.md|procedural identity]]
+
+---
+**관련**: [[concepts/reward-dimension-encoding-gap.md|reward dimension encoding gap]]
+
+---
+**관련**: [[concepts/evaluation-execution-power-asymmetry.md|evaluation execution power asymmetry]]
+
+---
+**관련**: [[concepts/inference-time-prompt-learning.md|inference time prompt learning]]
+
+---
+**관련**: [[concepts/evaluation-training-causal-closure.md|evaluation training causal closure]]
+
+---
+**관련**: [[concepts/fine-tuning-knowledge-erosion.md|fine tuning knowledge erosion]]
+
+---
+**관련**: [[concepts/infrastructure-evaluation-identity.md|infrastructure evaluation identity]]

@@ -268,3 +268,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-evolving-framework-taxonomy.md|self evolving framework taxonomy]]
+
+---
+**관련**: [[concepts/partial-irrecoverability.md|partial irrecoverability]]
+
+---
+**관련**: [[concepts/foundation-layer-internalization.md|foundation layer internalization]]

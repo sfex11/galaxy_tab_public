@@ -31,3 +31,18 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/cache-coherence-constrained-optimization.md|cache coherence constrained optimization]]
+
+---
+**관련**: [[concepts/workflow-topology-conditional-optimization.md|workflow topology conditional optimization]]
+
+---
+**관련**: [[concepts/execution-topology-invariance.md|execution topology invariance]]
+
+---
+**관련**: [[concepts/sovereign-execution-broker.md|sovereign execution broker]]
+
+---
+**관련**: [[concepts/execution-visibility-misalignment.md|execution visibility misalignment]]

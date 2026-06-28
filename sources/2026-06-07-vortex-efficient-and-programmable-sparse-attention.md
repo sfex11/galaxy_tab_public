@@ -110,3 +110,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inter-agent-translation-gap.md|inter agent translation gap]]
+
+---
+**관련**: [[concepts/self-referential-agent-paradigm.md|self referential agent paradigm]]
+
+---
+**관련**: [[concepts/design-physical-space-non-isomorphism.md|design physical space non isomorphism]]
+
+---
+**관련**: [[concepts/orchestration-design-space-overestimation.md|orchestration design space overestimation]]

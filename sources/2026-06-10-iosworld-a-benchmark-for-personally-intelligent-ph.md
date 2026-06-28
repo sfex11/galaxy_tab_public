@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/infrastructure-evaluation-identity.md|infrastructure evaluation identity]]
+
+---
+**관련**: [[concepts/pre-existing-data-assumption.md|pre existing data assumption]]
+
+---
+**관련**: [[concepts/causal-inversion-of-forgetting-and-benchmark.md|causal inversion of forgetting and benchmark]]

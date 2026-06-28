@@ -141,3 +141,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/dynamic-translation-layer.md|dynamic translation layer]]
+
+---
+**관련**: [[concepts/harness-protocol-layer.md|harness protocol layer]]

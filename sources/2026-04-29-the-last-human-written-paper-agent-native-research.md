@@ -164,3 +164,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-reinforcing-error-narrative.md|self reinforcing error narrative]]
+
+---
+**관련**: [[concepts/structural-certification.md|structural certification]]

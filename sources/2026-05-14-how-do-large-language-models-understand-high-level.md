@@ -131,3 +131,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/step-level-boundary-translation.md|step level boundary translation]]
+
+---
+**관련**: [[concepts/semantic-coupling.md|semantic coupling]]

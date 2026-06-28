@@ -102,3 +102,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/latent-communication-homogeneity-dependency.md|latent communication homogeneity dependency]]
+
+---
+**관련**: [[concepts/cache-phase-preservation.md|cache phase preservation]]
+
+---
+**관련**: [[concepts/cache-redundancy-responsive-adaptation.md|cache redundancy responsive adaptation]]

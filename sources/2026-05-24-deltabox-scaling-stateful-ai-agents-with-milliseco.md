@@ -182,3 +182,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/second-order-opacity.md|second order opacity]]
+
+---
+**관련**: [[concepts/outcome-variance-bottleneck-masking.md|outcome variance bottleneck masking]]
+
+---
+**관련**: [[concepts/redundancy-as-bottleneck.md|redundancy as bottleneck]]

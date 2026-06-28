@@ -371,3 +371,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/narrative-based-anomaly-detection.md|narrative based anomaly detection]]
+
+---
+**관련**: [[concepts/inter-agent-translation-gap.md|inter agent translation gap]]
+
+---
+**관련**: [[concepts/execution-time-alignment.md|execution time alignment]]

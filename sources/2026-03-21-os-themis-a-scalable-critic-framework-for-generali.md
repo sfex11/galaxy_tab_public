@@ -90,3 +90,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/execution-trajectory-encapsulation.md|execution trajectory encapsulation]]
+
+---
+**관련**: [[concepts/score-trajectory-complementarity.md|score trajectory complementarity]]
+
+---
+**관련**: [[concepts/reward-granularity-double-bind.md|reward granularity double bind]]
+
+---
+**관련**: [[concepts/trajectory-fingerprinting.md|trajectory fingerprinting]]

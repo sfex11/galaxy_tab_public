@@ -190,3 +190,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/knowledge-structure-representation-translation-loss.md|knowledge structure representation translation loss]]
+
+---
+**관련**: [[concepts/critical-bottleneck-failure-decoupling.md|critical bottleneck failure decoupling]]
+
+---
+**관련**: [[concepts/co-failure-ceiling.md|co failure ceiling]]
+
+---
+**관련**: [[concepts/hierarchical-recovery.md|hierarchical recovery]]
+
+---
+**관련**: [[concepts/failure-mode-independence-prerequisite.md|failure mode independence prerequisite]]
+
+---
+**관련**: [[concepts/repository-operational-knowledge.md|repository operational knowledge]]
+
+---
+**관련**: [[concepts/uniform-guarantee-failure.md|uniform guarantee failure]]
+
+---
+**관련**: [[concepts/narrative-based-anomaly-detection.md|narrative based anomaly detection]]
+
+---
+**관련**: [[concepts/co-failure-rate.md|co failure rate]]

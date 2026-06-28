@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fast-incorrect-execution.md|fast incorrect execution]]
+
+---
+**관련**: [[concepts/correlated-error-summation.md|correlated error summation]]
+
+---
+**관련**: [[concepts/self-reinforcing-error-narrative.md|self reinforcing error narrative]]

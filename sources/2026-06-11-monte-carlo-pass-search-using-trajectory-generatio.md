@@ -34,3 +34,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/irreversible-mid-trajectory.md|irreversible mid trajectory]]
+
+---
+**관련**: [[concepts/scaffold-component-tight-coupling.md|scaffold component tight coupling]]
+
+---
+**관련**: [[concepts/component-independence-assumption.md|component independence assumption]]
+
+---
+**관련**: [[concepts/policy-constraint-hardening.md|policy constraint hardening]]

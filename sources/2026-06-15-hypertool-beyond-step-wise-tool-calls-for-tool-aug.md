@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ontological-mismatch.md|ontological mismatch]]
+
+---
+**관련**: [[concepts/adaptive-credit-granularity.md|adaptive credit granularity]]

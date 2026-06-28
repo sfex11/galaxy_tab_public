@@ -89,3 +89,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-loop-safety-architecture.md|dual loop safety architecture]]
+
+---
+**관련**: [[concepts/adaptation-subject-transfer.md|adaptation subject transfer]]

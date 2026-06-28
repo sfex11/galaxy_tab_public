@@ -250,3 +250,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-structure-flattening.md|semantic structure flattening]]
+
+---
+**관련**: [[concepts/semantic-integrity-verification-layer.md|semantic integrity verification layer]]
+
+---
+**관련**: [[concepts/snapshot-semantic-epistemic-gap.md|snapshot semantic epistemic gap]]

@@ -1988,3 +1988,7 @@
 ## [2026-06-28 08:38] ingest | Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy
 
 ## [2026-06-28 08:38] ingest | Bridging Talk and Thought: Understanding Dialogue Dynamics Across Collaborative Problem-Solving Contexts
+
+## [2026-06-28 19:25] lint | Wiki 건전성 체크
+- Issues: 2008개
+- Orphans: 550, Missing: 1458, Contradictions: 0

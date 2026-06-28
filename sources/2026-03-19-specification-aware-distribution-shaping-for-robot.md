@@ -106,3 +106,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/planning-on-degraded-foundation.md|planning on degraded foundation]]
+
+---
+**관련**: [[concepts/cascading-distribution-shift.md|cascading distribution shift]]

@@ -21,6 +21,7 @@
 사전학습과 동일한 옵티마이저를 사용한 전체 미세조정(full finetuning)이 다른 옵티마이저를 사용한 미세조정보다 동일하거나 더 나은 하류 성능을 달성하면서도 파라미터적 망각을 더 적게 유발하는 현상. 놀랍게도 이는 LoRA를 포함한 효율적 미세조정 방법들보다 우수한 학습-망각 트레이드오프를 달성한다.
 
 ## 관련 논문
+- [[concepts/consistency-bias-conflation.md|consistency bias conflation]]
 
 - [[sources/2026-05-10-optimizer-model-consistency-full-finetuning-with-the-same.md|Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less]]
 

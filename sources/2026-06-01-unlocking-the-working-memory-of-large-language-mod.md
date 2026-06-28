@@ -151,3 +151,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/world-model-in-pieces.md|world model in pieces]]
+
+---
+**관련**: [[concepts/inline-external-safety-dichotomy.md|inline external safety dichotomy]]
+
+---
+**관련**: [[concepts/informational-environment-generation.md|informational environment generation]]

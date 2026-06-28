@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>같은 증거, 다른 판결 — 순서만 바뀌어도 흔들리는 AI 에이전트의 근본적 맹점</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a746d;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* 배경 장식 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(194,112,62,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -300px; left: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(91,124,153,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  /* 네비게이션 */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* 헤더 */
+  .header {
+    margin-top: 48px;
+    margin-bottom: 48px;
+  }
+  .header .tag {
+    display: inline-block;
+    background: rgba(194,112,62,0.1);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+  .header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .header .subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+  .header .meta {
+    margin-top: 24px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header .meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* 섹션 */
+  .section { margin-bottom: 56px; }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3.5vw, 1.65rem);
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 20px;
+  }
+  .section h2::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 4px; bottom: 4px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    color: var(--fg);
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+  .section p {
+    margin-bottom: 18px;
+    font-size: clamp(0.95rem, 2vw, 1.02rem);
+  }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    background: rgba(194,112,62,0.04);
+    padding: 20px 24px;
+    margin: 28px auto;
+    max-width: 800px;
+    border-radius: 0 10px 10px 0;
+    font-size: 0.97rem;
+    color: #4a433d;
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin: 28px 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(44,40,37,0.09);
+  }
+  .card .card-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+  .card .card-label.orange { background: rgba(194,112,62,0.12); color: var(--accent); }
+  .card .card-label.blue { background: rgba(91,124,153,0.12); color: var(--blue); }
+  .card .card-label.green { background: rgba(107,158,122,0.12); color: var(--green); }
+  .card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.08rem;
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+  .card p {
+    font-size: 0.94rem;
+    color: #4a433d;
+    margin-bottom: 0;
+  }
+
+  /* 비유 박스 */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.04));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+  .analogy-box .analogy-icon {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+  .analogy-box p {
+    font-size: 0.95rem;
+    color: #4a433d;
+    margin-bottom: 10px;
+  }
+  .analogy-box p:last-child { margin-bottom: 0; }
+  .analogy-box strong { color: var(--accent); }
+
+  /* 표 */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 28px 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    min-width: 460px;
+  }
+  thead th {
+    background: rgba(194,112,62,0.07);
+    color: var(--fg);
+    font-weight: 700;
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+  tbody td {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(44,40,37,0.05);
+    color: #4a433d;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td .old { text-decoration: line-through; color: var(--muted); }
+  td .new { color: var(--accent); font-weight: 600; }
+
+  /* 리스트 */
+  .section ul, .section ol {
+    margin: 14px 0 18px 0;
+    padding-left: 22px;
+    font-size: 0.97rem;
+  }
+  .section li {
+    margin-bottom: 10px;
+    line-height: 1.8;
+  }
+  .section li strong { color: var(--fg); }
+
+  /* 하이라이트 */
+  .hl-orange { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(194,112,62,0.18), transparent);
+    margin: 48px 0;
+  }
+
+  /* 결론 박스 */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(107,158,122,0.08), rgba(91,124,153,0.06));
+    border: 1px solid rgba(107,158,122,0.18);
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin: 36px 0;
+  }
+  .conclusion-box h3 {
+    margin-top: 0;
+    color: var(--green);
+  }
+
+  /* 푸터 */
+  .footer {
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(44,40,37,0.07);
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.7;
+  }
+  .footer a { color: var(--blue); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* 스크롤 애니메이션 */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 600px) {
+    .wrapper { padding: 12px 14px 60px; }
+    .header { margin-top: 28px; margin-bottom: 36px; }
+    .card { padding: 20px 18px; }
+    .analogy-box { padding: 20px 18px; }
+    .conclusion-box { padding: 24px 18px; }
+    blockquote { padding: 16px 18px; }
+    .section h2 { padding-left: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+    .card { transition: none; }
+    .card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <nav>
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <header class="header fade-in">
+    <span class="tag">심층 분석 · Agentic VLM</span>
+    <h1>같은 증거, 다른 판결 — 순서만 바뀌어도 흔들리는 AI 에이전트의 근본적 맹점</h1>
+    <p class="subtitle">Wiki가 '기획적 간극'이라 부르는 것과는 전혀 다른 차원의 실패가 숨어 있다. Facet-Probe가 5개 차원에서 증명한 입력 순서 민감성의 실체를 추적한다.</p>
+    <div class="meta">
+      <span>📄 대상 논문: <em>Same Evidence, Different Answer</em></span>
+      <span>⏱ 읽기 소요: 약 12분</span>
+    </div>
+  </header>
+
+  <!-- 섹션 1 -->
+  <section class="section fade-in">
+    <h2>판사에게 증거물을 무작위로 제출한다면</h2>
+    <p>법정을 상상해 보자. A, B, C 세 개의 증거가 있다. A는 알리바이를 부수는 결정적 증거이고, B와 C는 보조적이다. 그런데 검사가 B → C → A 순서로 제출한 날과, A → B → C 순서로 제출한 날, 판사의 <span class="hl-orange">평결이 달라졌다</span>. 내용이 바뀐 게 아니다. 순서만 바뀌었다.</p>
+    <p>우리는 이 판사를 두고 "다단계 판단을 통합하는 기획 능력이 부족하다"고 말하겠는가? 아니다. 더 근본적인 수준에서 문제가 발생하고 있음을 알아챈다. <strong>증거를 '이해'하는 단계 자체가 순서에 흔들리고 있다</strong>는 것을.</p>
+
+    <div class="analogy-box">
+      <p class="analogy-icon">⚖️</p>
+      <p>이 비유는 Facet-Probe 논문이 다중모달 대형 언어 모델(MLLM)에서 발견한 현상과 정확히 대응한다. 동일한 이미지-텍스트 증거를 제공하되 <strong>제시 순서만 순열(permutation)로 바꿨을 뿐인데, 모델의 답변이 5개 독립 차원에서 체계적으로 달라진다</strong>. 이것은 기획의 문제가 아니라 표현의 문제다.</p>
+    </div>
+
+    <p>현재 Wiki의 agentic-VLM 실패 진단 체계는 이 차이를 놓치고 있다. Three-Step Nav 논문이 제로샷 시각-언어 내비게이션(VLN)에서 에이전트가 경로 이탈과 조기 정지를 보일 때, 이를 "개별 스텝의 판단은 옳으나 다단계 기획으로 통합하는 능력이 부족하다"는 <span class="hl-blue">기획적 간극(planning gap)</span>으로 귀인하는 것이 대표적이다. 마찬가지로 agent-scene-instruction-triad에서도 장면·지시·에이전트 삼각 관계의 정보 통합 어려움이 핵심으로 제기된다.</p>
+    <p>그런데 순서 민감성은 이 프레임으로 포착되지 않는 <strong>본질적으로 다른 실패 모드</strong>를 드러낸다. 왜 그런지, 세 가지 이유로 파고들어 보자.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section fade-in">
+    <h2>기존 진단 렌즈에 잡히지 않는 세 가지 이유</h2>
+
+    <div class="card">
+      <span class="card-label orange">실패의 위치</span>
+      <h4>통합이 아니라 표현에서 무너진다</h4>
+      <p>기획적 간극은 <strong>통합 단계(integration stage)</strong>의 실패다. 개별 판단은 정상인데 이들을 시퀀스로 연결하는 능력이 떨어지는 것이다. 반면 순서 민감성은 <strong>표현 단계(representation stage)</strong>에서 일어난다. 정보가 모델 내부에 들어가는 순간, 순서에 따라 내부 표현 자체가 달라진다.</p>
+    </div>
+
+    <p>이 차이를 Crab 논문이 지적한 <span class="hl-blue">algorithm-system-translation-gap</span>과 연결해 볼 수 있다. Crab은 에이전트의 의미론적 의존 그래프를 OS의 체크포인트 메커니즘으로 번역할 때 비효율이 발생한다고 보았는데, 순서 민감성도 구조적으로 동형이다. 다만 번역 대상이 다르다: <strong>비서열적 의미 구조를 순차적 토큰 시퀀스로 강제 변환</strong>할 때 체계적 왜곡이 생긴다는 점이 핵심이다.</p>
+
+    <div class="card">
+      <span class="card-label blue">실패의 조건</span>
+      <h4>복잡도와 무관하게 단일 질의에서도 발생한다</h4>
+      <p>기획적 간극은 작업 복잡도가 증가할 때만 현현한다. 단일 스텝에서는 문제가 없고, 스텝이 쌓이면서 간극이 벌어진다. 그러나 순서 민감성은 <strong>복잡도와 무관하게</strong> 단일 질의 수준에서도 발생한다. 한 번의 질문에 세 개의 증거를 주는 것만으로도 충분하다.</p>
+    </div>
+
+    <p>이는 <span class="hl-blue">attention-stability-boundary</span>의 문제와 직결된다. 모델의 어텐션 패턴이 입력 순서에 의해 불안정해지는 현상이며, 기획 능력의 유무와 완전히 <strong>직교(orthogonal)</strong>하는 차원의 문제다. 기획을 아무리 잘해도 어텐션이 순서에 흔들리면 결론이 바뀐다.</p>
+
+    <div class="card">
+      <span class="card-label green">실패의 진단 가능성</span>
+      <h4>간접 추론이 아니라 직접 통제 실험으로 잡는다</h4>
+      <p>기획적 간극은 결과(경로 이탈, 조기 정지)를 통해 간접적으로 추론할 수밖에 없다. "기획이 부족했겠지"라는 귀인이 필요하다. 반면 순서 민감성은 동일 입력의 순열에 대한 <strong>직접적 통제 실험</strong>으로 증명 가능하다. 원인과 결과 사이의 인과관계가 실험적으로 고립된다.</p>
+    </div>
+
+    <p>흥미롭게도 이는 <span class="hl-green">adaptive-validity</span>의 개념과 충돌한다. 적응적 타당성이 문맥에 따라 판단의 타당성이 변하는 것을 긍정적 특성으로 기술한다면, 순서 민감성은 <strong>의미론적 문맥이 아닌 표면적 순서</strong>에 의해 타당성이 변하는 비적응적 형태다. 문맥에 적응하는 게 아니라 순서에 종속되는 것이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section fade-in">
+    <h2>실제 환경에서 이 맹점이 치명적인 이유</h2>
+
+    <p>랩 환경에서는 입력 순서를 실험자가 통제할 수 있다. 그러나 에이전트가 비정형적으로 증거를 수집하는 실제 환경은 전혀 다르다.</p>
+
+    <h3>수집 순서는 에이전트의 의지와 무관하다</h3>
+    <p>실제 환경에서 증거가 수집되는 순서는 탐색 경로, 네트워크 레이턴시, API 응답 순서, 사용자 상호작용의 우연성 등 <span class="hl-orange">에이전트가 통제할 수 없는 환경적 요인</span>에 의해 결정된다. agent-execution-semantic-opacity가 에이전트 실행의 의미론적 불투명성을 문제로 식별한 바 있는데, 순서 민감성은 이 불투명성이 <strong>입력 단계에서부터 구조적으로 주입된다</strong>는 점을 보여준다. 실행 전에 이미 왜곡이 시작된다.</p>
+
+    <h3>기획을 아무리 강화해도 해결되지 않는다</h3>
+    <p>이것이 가장 중요한 논점이다. 기획 능력을 강화하면 어떻게 될까? 더 긴 사고 연쇄(chain-of-thought), 더 정교한 계획 트리, 더 많은 리ASONING 토큰을 할당한다고 상상해 보자.</p>
+
+    <div class="analogy-box">
+      <p class="analogy-icon">🏗️</p>
+      <p>건축에 비유하자. 기획 능력은 <strong>설계도를 그리는 능력</strong>이고, 표현은 <strong>재료의 품질</strong>이다. 설계도를 아무리 정교하게 그려도, 벽돌 자체가 불균일하면 건물은 기울어진다. 순서 민감성은 설계도의 문제가 아니라 벽돌의 문제다.</p>
+    </div>
+
+    <p>이는 <span class="hl-blue">accuracy-expertise-divergence</span>와 유사한 구조다. 전문성(expertise, 여기서는 기획 능력)이 향상되어도 정확도(accuracy, 여기서는 순서 불변성)가 따라가지 않는 발산 현상이다. 기획 능력의 상한을 높여도 표현 안정성이라는 바닥이 흔들리면 전체 구조가 붕괴한다.</p>
+
+    <h3>벤치마크가 이 실패를 은폐한다</h3>
+    <p><span class="hl-green">benchmark-specification-gap</span>의 새로운 양상이 여기서 드러난다. 기존 벤치마크는 고정된 입력 순서를 사용한다. 평가 세트가 구성될 때 증거의 순서가 결정되어 있고, 모델은 그 순서에 대해 최적화되거나 적어도 편향 없이 동작하는지 검증되지 않는다.</p>
+    <p>즉, 벤치마크가 '무엇을 평가하는가'뿐 아니라 <strong>'어떤 형태로 평가하는가' 자체가 실패 모드를 은폐</strong>할 수 있다. 순서 민감성은 고정 순서 벤치마크에서는 보이지 않는 blind spot이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section fade-in">
+    <h2>재분류: '표현 안정성 실패'라는 독립 축</h2>
+
+    <p>지금까지의 분석을 정리하면, 순서 민감성은 기획적 간극의 하위 증상이 아니라 <strong>기획과 직교하는 독립 차원</strong>에 위치해야 한다. 구체적인 재분류는 다음과 같다.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>기존 분류</th>
+            <th>재분류 제안</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="old">기획적 간극의 하위 증상</span></td>
+            <td><span class="new">표현 안정성 실패</span><br>(Representation Stability Failure)<br>— 기획과 직교하는 독립 차원</td>
+          </tr>
+          <tr>
+            <td><span class="old">에이전트 능력 부족</span></td>
+            <td><span class="new">입력-표현 간 구조적 왜곡</span><br>— 에이전트 능력이 아닌 아키텍처적 제약</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>이 재분류는 <span class="hl-orange">adaptive-inference</span>의 스펙트럼과도 연결된다. SpecKV가 압축이라는 내부 시스템 상태에 반응하는 '적응'을 제시했다면, 순서 민감성은 <strong>입력 순서라는 외부-내부 경계 상태에 대한 비적응적 반응</strong>으로 이해할 수 있다. 적응적 추론이 의도적으로 상태에 반응하는 것이라면, 순서 민감성은 의도치 않게 상태에 종속되는 것이다.</p>
+
+    <blockquote>
+      "기획 능력을 묻기 전에, 먼저 표현이 안정적인지 물어야 한다. 흔들리는 바닥 위에서의 달리기 기록은 의미가 없다."
+    </blockquote>
+
+    <h3>새롭게 드러나는 개념적 연결</h3>
+    <p>이 재분류를 통해 기존에 산발적으로 식별되던 문제들 사이의 구조적 연결이 보인다.</p>
+    <ol>
+      <li><strong class="hl-blue">algorithm-system-translation-gap ↔ 순서 민감성:</strong> Crab이 의미론적 의존 그래프를 OS 스냅샷으로 번역할 때 간극이 발생하듯, 비서열적 증거 집합을 순차적 토큰 시퀀스로 번역할 때 발생하는 간극의 <em>특수 사례</em>로 순서 민감성을 위치 지을 수 있다. 두 현상 모두 "비순차적 구조를 순차적 매체로 강제 변환"할 때 생기는 체계적 왜곡이다.</li>
+      <li><strong class="hl-green">adaptive-validity ↔ 순서 민감성:</strong> 적응적 타당성의 '적응'이 의미론적 문맥에 대한 긍정적 반응이라면, 순서 민감성은 표면적 형태(순서)에 대한 <em>부정적 반응</em>이다. 동전의 양면 — 적응과 비적응의 스펙트럼 위에 두 현상이 놓인다.</li>
+      <li><strong class="hl-orange">attention-stability-boundary ↔ 순서 민감성:</strong> 어텐션 안정성의 경계가 입력 순서에 의해 침투된다는 구체적 사례를 순서 민감성이 제공한다. 추상적 경계 개념에 실험적 실체가 부여된다.</li>
+    </ol>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section fade-in">
+    <h2>패러다임 전환: '잘 기획하는가'에서 '안정적으로 표현하는가'로</h2>
+
+    <div class="conclusion-box">
+      <h3>핵심 전환점</h3>
+      <p>에이전트 평가의 패러다임은 <strong>"잘 기획하는가"</strong>에서 <strong>"안정적으로 표현하는가"</strong>로 확장되어야 한다. 이 두 축은 직교한다. 기획은 잘하지만 표현이 불안정한 에이전트, 표현은 안정하지만 기획이 부족한 에이전트 — 두 유형이 독립적으로 존재하며, 각각 다른 해결 전략을 요구한다.</p>
+    </div>
+
+    <p>구체적으로 다음 네 가지 전환이 필요하다.</p>
+
+    <div class="card">
+      <span class="card-label orange">평가</span>
+      <h4>순열 테스트를 표준 프로토콜로 채택</h4>
+      <p>모든 에이전트 벤치마크에 입력 순열(permutation) 변형을 포함시켜야 한다. 고정 순서에서의 성능만으로는 "진짜" 능력을 측정한 것이 아니다. 순서 불변성을 정식 평가 지표로 도입해야 한다.</p>
+    </div>
+
+    <div class="card">
+      <span class="card-label blue">진단</span>
+      <h4>실패 모드 분류 체계에 '표현 안정성' 축 추가</h4>
+      <p>현재 "기획적 간극 — 표현-행동 불일치"라는 1차원적 스펙트럼에서, "기획 능력 × 표현 안정성"이라는 <strong>2차원 평면</strong>으로 진단 체계를 확장해야 한다. 이平面 위에서 에이전트의 실패를 정밀하게 위치 지울 수 있다.</p>
+    </div>
+
+    <div class="card">
+      <span class="card-label green">해결</span>
+      <h4>아키텍처 수준의 순서 불변성 메커니즘 탐색</h4>
+      <p>프롬프트 엔지니어링이나 사고 연쇄 증강 같은 '기획 층' 해결책으로는 근본 해결이 불가능하다. 집합적 표현(set-based representation), 순서 무관 인코딩(order-invariant encoding), 입력 재정렬 증강(order augmentation training) 등 <strong>표현 층</strong>의 접근이 필요하다.</p>
+    </div>
+
+    <div class="card">
+      <span class="card-label orange">실배포</span>
+      <h4>증거 수집 파이프라인에 순서 통제 계층 도입</h4>
+      <p>실제 환경에서 수집 순서를 완전히 통제할 수는 없지만, 수집 후 정렬(예: 중요도 기준, 시간순 기준)을 거치는 <strong>표현 안정화 계층</strong>을 파이프라인에 삽입하는 것이 단기적 완화책이 될 수 있다.</p>
+    </div>
+
+    <p>Facet-Probe의 발견이 의미하는 것은 단순히 "모델이 순서에 민감하다"가 아니다. 그것은 <span class="hl-orange">우리가 에이전트의 실패를 진단하는 방식 자체에 구조적 맹점이 있었다</span>는 것을 보여준다. '기획'이라는 거대한 우산 아래 '표현 안정성'이라는 독립적 문제가 가려져 있었던 것이다.</p>
+
+    <p>같은 증거, 다른 판결. 이 현상을 에이전트의 '기획 부족'으로 돌리는 것은, 법정에서 판사의 평결이 증거 제출 순서에 따라 바뀌는 것을 '판사의 논리력 부족'으로 진단하는 것과 같다. 문제의 위치를 정확히 파악해야 올바른 해결책을 찾을 수 있다. <strong>표현 안정성 — 이것이 에이전트 신뢰성의 새로운 축이다.</strong></p>
+  </section>
+
+  <footer class="footer">
+    <p>대상 논문: <em>Same Evidence, Different Answer: Auditing Order Sensitivity in Multimodal Large Language Models</em></p>
+    <p>분석 기반: Wiki Query — agentic-vlm, Facet-Probe, algorithm-system-translation-gap 등</p>
+    <p style="margin-top:8px;"><a href="https://github.com/sfex11/galaxy_tab_public">Galaxy Tab Public</a> · 심층 분석 시리즈</p>
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 페이드인 애니메이션
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

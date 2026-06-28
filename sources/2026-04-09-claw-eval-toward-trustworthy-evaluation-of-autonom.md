@@ -146,3 +146,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trajectory-fingerprinting.md|trajectory fingerprinting]]
+
+---
+**관련**: [[concepts/evaluation-contract-as-harness.md|evaluation contract as harness]]
+
+---
+**관련**: [[concepts/evaluation-target-erasure.md|evaluation target erasure]]

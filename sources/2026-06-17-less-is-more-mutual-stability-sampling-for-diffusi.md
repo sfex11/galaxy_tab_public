@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategic-convergence-condition.md|strategic convergence condition]]
+
+---
+**관련**: [[concepts/position-invariant-kv-reuse.md|position invariant kv reuse]]

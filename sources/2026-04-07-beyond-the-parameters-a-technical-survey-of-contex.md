@@ -337,3 +337,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/causal-inversion-of-forgetting-and-benchmark.md|causal inversion of forgetting and benchmark]]
+
+---
+**관련**: [[concepts/model-harness-decomposability.md|model harness decomposability]]

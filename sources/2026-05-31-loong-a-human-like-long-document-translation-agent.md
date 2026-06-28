@@ -70,3 +70,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compression-translation-product.md|compression translation product]]
+
+---
+**관련**: [[concepts/algorithm-level-adaptation.md|algorithm level adaptation]]
+
+---
+**관련**: [[concepts/knowledge-structure-representation-translation-loss.md|knowledge structure representation translation loss]]

@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/component-independence-assumption.md|component independence assumption]]
+
+---
+**관련**: [[concepts/graph-topology-preservation-dimension.md|graph topology preservation dimension]]
