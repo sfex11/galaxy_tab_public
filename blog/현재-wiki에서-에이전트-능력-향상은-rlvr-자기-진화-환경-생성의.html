@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>판을 만드는 자 — Autodata가 무너뜨리는 세 축의 공통 전제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a7470;
+    --accent: #c2703e;
+    --blue: #5b7c99;
+    --green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 4px 12px rgba(44,40,37,0.03);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* subtle background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(194,112,62,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(91,124,153,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  article {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Header ── */
+  .post-header {
+    padding-top: clamp(48px, 8vw, 80px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .post-tag {
+    display: inline-block;
+    font-size: 0.72em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.65em, 4.5vw, 2.4em);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 18px;
+  }
+
+  .post-subtitle {
+    font-size: clamp(0.92em, 1.8vw, 1.05em);
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .post-meta {
+    margin-top: 24px;
+    font-size: 0.82em;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .post-meta span { opacity: 0.8; }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(40px, 7vw, 64px);
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.25em, 3vw, 1.55em);
+    color: var(--fg);
+    margin-bottom: 20px;
+    line-height: 1.35;
+    position: relative;
+    padding-left: 18px;
+  }
+
+  h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  h2.blue-accent::before { background: var(--blue); }
+  h2.green-accent::before { background: var(--green); }
+
+  h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 600;
+    font-size: clamp(1.05em, 2vw, 1.2em);
+    color: var(--fg);
+    margin: 28px 0 12px;
+    line-height: 1.4;
+  }
+
+  p { margin-bottom: 16px; }
+
+  strong { color: var(--accent); font-weight: 700; }
+  strong.blue { color: var(--blue); }
+  strong.green { color: var(--green); }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.95em;
+    line-height: 1.75;
+  }
+
+  blockquote p { margin-bottom: 0; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(4px);
+  }
+
+  .card h3 { margin-top: 0; }
+
+  .card-label {
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card-label.blue { color: var(--blue); }
+  .card-label.green { color: var(--green); }
+
+  /* ── Table ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    min-width: 460px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.06);
+    font-weight: 700;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--card-border);
+    font-size: 0.9em;
+  }
+
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(194,112,62,0.02); }
+
+  /* ── Analogy Box ── */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.04), rgba(107,158,122,0.04));
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+  }
+
+  .analogy-box::before {
+    content: '💡';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    font-size: 1.3em;
+    background: var(--bg);
+    padding: 0 6px;
+    border-radius: 4px;
+  }
+
+  .analogy-box p { margin-bottom: 10px; }
+  .analogy-box p:last-child { margin-bottom: 0; }
+
+  /* ── Diagram ── */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0;
+    padding: 24px 16px;
+  }
+
+  .diagram-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .diagram-box {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.82em;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .diagram-box.axis {
+    background: rgba(194,112,62,0.08);
+    border: 1px solid rgba(194,112,62,0.2);
+    color: var(--accent);
+  }
+
+  .diagram-box.foundation {
+    background: rgba(44,40,37,0.06);
+    border: 1px solid rgba(44,40,37,0.12);
+    color: var(--fg);
+    font-weight: 700;
+    padding: 14px 24px;
+    font-size: 0.9em;
+  }
+
+  .diagram-box.autodata {
+    background: rgba(107,158,122,0.1);
+    border: 2px solid var(--green);
+    color: var(--green);
+    font-weight: 700;
+    padding: 14px 24px;
+    font-size: 0.9em;
+  }
+
+  .diagram-arrow {
+    font-size: 1.4em;
+    color: var(--muted);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .diagram-label {
+    font-size: 0.72em;
+    color: var(--muted);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── Concept Links ── */
+  .concept-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85em;
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(91,124,153,0.3);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .concept-link:hover { border-color: var(--blue); }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.15), transparent);
+    margin: clamp(36px, 6vw, 56px) 0;
+  }
+
+  /* ── Footer ── */
+  .post-footer {
+    padding: clamp(32px, 5vw, 48px) 0 clamp(48px, 8vw, 80px);
+    text-align: center;
+    font-size: 0.82em;
+    color: var(--muted);
+  }
+
+  .post-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(194,112,62,0.2);
+  }
+
+  .post-footer a:hover { border-color: var(--accent); }
+
+  /* ── Numbered list ── */
+  ol {
+    padding-left: 20px;
+    margin: 16px 0;
+  }
+
+  ol li {
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+
+  ol li::marker {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  ul {
+    padding-left: 20px;
+    margin: 12px 0;
+  }
+
+  ul li {
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  ul li::marker { color: var(--muted); }
+
+  /* ── Emphasis inline ── */
+  em { color: var(--muted); font-style: normal; }
+
+  /* ── Scroll fade-in ── */
+  .fade-section {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-section { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ── Callout final ── */
+  .callout-final {
+    background: linear-gradient(135deg, rgba(194,112,62,0.05), rgba(107,158,122,0.05));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3.5vw, 32px);
+    margin: 32px 0;
+  }
+
+  .callout-final p:last-child { margin-bottom: 0; }
+
+  /* ── Nav override ── */
+  nav a { transition: background 0.2s; }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <!-- ── Header ── -->
+  <header class="post-header fade-section">
+    <div class="post-tag">Deep Analysis</div>
+    <h1>판을 만드는 자 — Autodata가 무너뜨리는 세 축의 공통 전제</h1>
+    <p class="post-subtitle">RLVR·자기진화·환경생성, 이 세 축은 정말 병렬적인가? 아니면 모두 같은 바닥 위에 서 있는가? 그리고 Autodata는 네 번째 축이 아니라 그 바닥 자체를 바꾸는 걸까.</p>
+    <div class="post-meta">
+      <span>대상 논문: Autodata — An Agentic Data Scientist to Create High Quality Synthetic Data</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ── Section 1 ── -->
+  <section class="section fade-section">
+    <h2>요리사의 비유 — "거기에 재료가 이미 있다"</h2>
+
+    <p>세 명의 요리사가 있다고 상상해 보자. 첫 번째 요리사는 <strong>레시피를 더 정교하게 다듬는다</strong>(RLVR). 두 번째 요리사는 <strong>주방의 배치를 바꾸고 조리 도구를 최적화한다</strong>(환경 생성). 세 번째 요리사는 <strong>요리하면서 실시간으로 손놀림을 교정한다</strong>(자기 진화).</p>
+
+    <p>세 사람 모두 훌륭하다. 하지만 한 가지를 공통으로 전제하고 있다 — <em>냉장고에 이미 재료가 들어 있다는 것</em>이다. 누가 그 재료를 넣었는지는 묻지 않는다. 그것은 요리사의 영역 밖에 있다고 암묵적으로 합의했다.</p>
+
+    <blockquote>
+      <p>훈련·평가·환경의 '내용물'은 사전 존재하며, 우리가 최적화하는 것은 그 내용물에 대한 '반응 방식'이다.</p>
+    </blockquote>
+
+    <p>이 전제가 얼마나 단단히 자리 잡고 있는지, 세 축을 하나씩 들여다보면 명확해진다.</p>
+
+    <div class="card">
+      <div class="card-label">축 1 — RLVR</div>
+      <h3>보상 신호의 근원은 여전히 "밖"에 있다</h3>
+      <p>RLVR(Reinforcement Learning from Verifiable Rewards)는 에이전트가 스스로 피드백을 생성한다는 점에서 자가 학습처럼 보이지만, 논문 <em>"Reinforcement Learning without Ground-Truth Solutions can Improve LLMs"</em>이 스스로 인정하듯, 기존 RLVR는 "ground-truth answers to assign rewards"를 전제합니다. 이를 벗어나려는 시도조차 "verifiable rewards"라는 <strong>대체 고정점</strong>을 필요로 합니다. 보상 신호의 궁극적 근원이 사전에 존재해야 한다는 구조적 제약은 그대로입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label blue">축 2 — 환경 생성</div>
+      <h3>틀을 만들어도, 안에 들어갈 내용은 정해져 있다</h3>
+      <p>Nemobot Games는 게임 도메인 특화 학습 환경을 생성합니다. 하지만 이는 "환경 구조를 새로 만드는" 것이지 "환경 속 데이터 분포를 처음부터 발명하는" 것과는 다릅니다. 생성된 환경에서 에이전트가 마주하는 태스크 분포는 여전히 <strong class="blue">게임이라는 사전 도메인 지식</strong>에 기대어 있습니다. 빈 방을 지을 수는 있어도, 방 안에 무엇을 채울지는 정해져 있는 셈입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label green">축 3 — 자기 진화</div>
+      <h3>진화의 재료는 외부에서 온다</h3>
+      <p>Agora-opt의 런타임 메모리·토론 구조나 Adaptive Inference의 추론 길이 적응은 모두 "주어진" 지식 베이스, "주어진" 모델 파라미터 위에서의 런타임 최적화입니다. 에이전트가 자신의 반응 방식을 진화시키지만, <strong class="green">진화의 재료가 되는 정보 자체</strong>는 외부에서 공급됩니다. DNA를 재조합할 수는 있어도, 염기서열 자체를 창조하지는 못하는 구조입니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section 2 ── -->
+  <section class="section fade-section">
+    <h2 class="blue-accent">Autodata가 무너뜨리는 두 개의 벽</h2>
+
+    <p>Autodata는 이 암묵적 전제를 <strong>두 수준에서 동시에</strong> 공격합니다.</p>
+
+    <h3>첫째 벽: 데이터 생성 주체의 전환</h3>
+    <p>논문의 핵심 정의부터 보겠습니다 — "AI agents to act as data scientists who build high quality training and evaluation data." 데이터가 더 이상 인간이 큐레이션하거나 환경이 산출하는 부산물이 아닙니다. <strong>에이전트 자신이 데이터의 설계자</strong>가 됩니다. 요리사 비유로 돌아가면, 이제 요리사가 냉장고를 채우는 사람까지 겸하게 되는 것입니다.</p>
+
+    <h3>둘째 벽: 메타최적화 루프</h3>
+    <p>"Train (meta-optimize) such a data scientist" — 데이터를 만드는 에이전트를 다시 훈련시킵니다. 단순히 데이터를 만드는 것으로 끝나지 않고, <strong class="blue">데이터 생성 과정 자체가 최적화 대상</strong>이 됩니다. 폐쇄 루프 훈련(closed-loop training)이 정책 학습 수준에 머물던 것을 데이터 원천까지 확장하는 겁니다.</p>
+
+    <div class="analogy-box">
+      <p>비유하자면, 한 작가가 소설을 쓰고(데이터 생성), 그 소설을 읽으면서 자신의 글쓰기 능력을 향상시키고(에이전트 학습), 다시 더 나은 소설을 쓰는(메타최적화) 과정입니다. 문제는 — <strong>처음 소설을 쓸 수 있었던 능력은 어디서 왔는가?</strong></p>
+    </div>
+
+    <p>이 지점에서 부트스트랩 역설이 구조적으로 필연적이 됩니다. 에이전트 능력이 데이터 품질을 결정하고, 그 데이터가 다시 에이전트 능력을 결정합니다. 인과 화살표가 순환하며, "최초의 좋은 데이터는 어디서 왔는가?"라는 근원적 질문이 시스템 내부에 갇히게 됩니다. 세 축에서는 이 질문을 인간, 벤치마크, 물리 환경으로 <em>외주</em>할 수 있었지만, Autodata에서는 그게 안 됩니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section 3 ── -->
+  <section class="section fade-section">
+    <h2 class="green-accent">왜 "네 번째 축"이라고 부르면 안 되는가</h2>
+
+    <p>네 번째 축이라고 부르려면, RLVR·자기진화·환경생성과 <strong>동일한 추상 수준</strong>에서 병렬적으로 배치될 수 있어야 합니다. 하지만 구조적으로 불가능합니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>기준</th>
+            <th>세 축 (RLVR·자기진화·환경생성)</th>
+            <th>Autodata</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>작동 대상</strong></td>
+            <td>사전 존재하는 데이터/환경에 대한 반응</td>
+            <td><strong class="green">데이터 자체의 생성</strong></td>
+          </tr>
+          <tr>
+            <td><strong>최적화 변수</strong></td>
+            <td>정책, 추론 경로, 환경 파라미터</td>
+            <td><strong class="green">데이터 생성 정책 (메타 수준)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>의존성 방향</strong></td>
+            <td>데이터 → 에이전트 (단방향)</td>
+            <td><strong class="green">데이터 ↔ 에이전트 (순환)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>세 축이 "주어진 판 위에서 어떻게 더 잘 두느냐"의 문제라면, Autodata는 "판 자체를 만들고, 판을 만드는 능력까지 최적화하는" 문제입니다. 이는 차원(dimension)의 추가가 아니라 <strong class="green">기초층(foundation layer)의 내재화</strong>입니다.</p>
+
+    <div class="diagram">
+      <div class="diagram-row">
+        <div class="diagram-box foundation">사전 데이터 (기초층)</div>
+      </div>
+      <div class="diagram-arrow">↑ 의존</div>
+      <div class="diagram-row">
+        <div class="diagram-box axis">RLVR</div>
+        <div class="diagram-box axis">자기 진화</div>
+        <div class="diagram-box axis">환경 생성</div>
+      </div>
+      <div class="diagram-label">세 축은 동일한 기초층 위에서 병렬 작동</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-row">
+        <div class="diagram-box autodata">Autodata — 데이터 생성 정책 (메타 최적화)</div>
+      </div>
+      <div class="diagram-arrow">⇅ 순환</div>
+      <div class="diagram-row">
+        <div class="diagram-box axis">RLVR</div>
+        <div class="diagram-box axis">자기 진화</div>
+        <div class="diagram-box axis">환경 생성</div>
+      </div>
+      <div class="diagram-label">Autodata는 기초층을 내재화하여 세 축 아래가 아닌 '바깥'에서 루프를 형성</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section 4 ── -->
+  <section class="section fade-section">
+    <h2>세 가지 새로운 개념적 연결</h2>
+
+    <p>이 분석에서 기존의 개념 슬러그들 사이에 새로운 연결망이 드러납니다.</p>
+
+    <div class="card">
+      <div class="card-label">연결 1</div>
+      <h3>부트스트랩 역설 ↔ 폐쇄 루프 훈련의 강결합</h3>
+      <p>기존에는 폐쇄 루프 훈련이 주로 정책 학습 루프를 지칭했습니다. 하지만 Autodata는 이 루프를 데이터 원천까지 확장하며 부트스트랩 역설을 <strong>구조적 필연</strong>으로 만듭니다. 더 이상 "역설을 해결해야 한다"가 아니라, "역설 안에서 안정적으로 작동하도록 설계해야 한다"로 과제가 바뀝니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label blue">연결 2</div>
+      <h3>환경 생성 → 정보적 환경 생성으로의 확장</h3>
+      <p>Nemobot Games가 "게임 도메인 특화 전략 학습 환경 생성"이라면, Autodata는 이를 <strong class="blue">"훈련 데이터 분포 자체를 환경으로 간주하고 그 환경을 생성"</strong>하는 방향으로 일반화합니다. 환경 생성의 정의 범위가 물리적·소프트웨어적 환경에서 정보적 환경으로 확장되어야 함을 시사합니다. 게임 맵을 만드는 것과, 게임의 세계관 자체를 창조하는 것의 차이입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label green">연결 3</div>
+      <h3>벤치마크 명세 갭의 양극화 — "닫힘"이 아니라 "순환"으로</h3>
+      <p>Autodata가 훈련 데이터와 평가 데이터를 동시에 생성한다는 점은, 벤치마크 명세 갭(benchmark-specification-gap)을 한쪽으로는 해소(벤치마크와 훈련 분포가 정렬됨)하면서도 다른 쪽으로는 심화(자가 생성 데이터로 자가 평가하는 순환적 타당성 문제)할 수 있습니다. 이 갭이 "닫힘"이 아니라 <strong class="green">"순환"</strong>으로 변형되는 새로운 국면입니다. 자신이 만든 시험으로 자신을 평가하는 구조가 낳는 인식론적 문제가 여기서 본격화됩니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section 5: Conclusion ── -->
+  <section class="section fade-section">
+    <h2>패러다임 전환: "외부 의존형"에서 "자가 참조형"으로</h2>
+
+    <p>지금까지의 에이전트 개발은 근본적으로 <strong>외부 의존형</strong>이었습니다. 데이터는 인간이 만들고, 환경은 세상이 제공하고, 평가는 벤치마크가 담당했습니다. 에이전트는 이 "주어진 세계"에 대해 더 나은 반응을 학습하는 존재였습니다.</p>
+
+    <p>Autodata가 제시하는 것은 <strong>자가 참조형(self-referential)</strong> 패러다임입니다. 에이전트가 자신의 학습 재료를 설계하고, 그 설계 능력을 다시 최적화합니다. 시스템이 자신의 발을 딛고 서는 구조이며, 이것이 가능하려면 부트스트랩 역설을 해결 과제가 아닌 <strong>설계 원리</strong>로 삼아야 합니다.</p>
+
+    <div class="callout-final">
+      <p><strong>기존 패러다임에서 요구되던 전환:</strong> "더 많은 데이터를 모으고, 더 좋은 환경을 만들고, 더 정교한 보상을 설계하라."</p>
+      <p><strong class="green">새로운 패러다임에서 요구되는 전환:</strong> "데이터 생성 정책 자체를 최적화 가능한 변수로 삼고, 순환적 자가 참조 구조가 붕괴하지 않도록 메타 안정성을 설계하라."</p>
+    </div>
+
+    <p>구체적으로 세 가지 방향이 제시됩니다.</p>
+
+    <ol>
+      <li><strong>메타 안정성 보장 장치의 설계.</strong> 자가 참조 루프가 발산하지 않고 수렴하도록, 데이터 생성 정책의 변화 속도를 제어하는 메타 학습률, 생성 데이터의 다양성 하한선, 외부 앵커 포인트(초기 시드 데이터 등)의 역할을 공식화해야 합니다.</li>
+      <li><strong>순환적 타당성(circular validity)의 새로운 평가 기준.</strong> 자가 생성 데이터로 자가 평가할 때 발생하는 인식론적 문제에 대해, 단순한 "외부 벤치마크와의 일치도"를 넘어 루프 내부의 일관성, 다양성, 놀라움(surprise) 등 새로운 지표가 필요합니다.</li>
+      <li><strong>정보적 환경 생성의 독자적인 연구 영역화.</strong> 물리적 환경 생성과 정보적 환경 생성을 명확히 구분하고, 후자에 대한 독자적인 이론적 틀을 구축해야 합니다. "데이터 분포를 환경으로 간주한다"는 관점은 아직 초기 개념 단계에 머물러 있습니다.</li>
+    </ol>
+
+    <p>결론적으로, Autodata는 네 번째 축이 아닙니다. RLVR·자기진화·환경생성이 공유하는 <strong>'사전 데이터 전제'라는 기초층을 내재화</strong>함으로써, 에이전트 개발의 전체 지형도를 바꾸는 기초층 변동입니다. 판 위에서 더 잘 두는 법을 고민하던 시대에서, 판을 만드는 법 — 그리고 판을 만드는 능력 자체를 어떻게 발전시킬 것인지 — 를 고민해야 하는 시대로의 전환입니다.</p>
+  </section>
+
+  <footer class="post-footer">
+    <p>대상 논문: <em>Autodata: An Agentic Data Scientist to Create High Quality Synthetic Data</em></p>
+    <p style="margin-top:8px;"><a href="blog.html">← 분석 글 목록으로</a></p>
+  </footer>
+
+</article>
+
+<script>
+  /* Scroll-triggered fade-in */
+  document.addEventListener('DOMContentLoaded', function() {
+    var sections = document.querySelectorAll('.fade-section');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      sections.forEach(function(s) { s.classList.add('visible'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    sections.forEach(function(s) { observer.observe(s); });
+  });
+</script>
+
+</body>
+</html>
