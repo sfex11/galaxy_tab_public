@@ -215,3 +215,7 @@ _자동 생성됨_
 - [[sources/2026-06-28-resilient-output-containment-under-undisclosed-lea.md]]
 
 - [[sources/2026-06-28-bridging-talk-and-thought-understanding-dialogue-d.md]]
+
+- [[sources/2026-06-29-resilient-output-containment-under-undisclosed-lea.md]]
+
+- [[sources/2026-06-29-bridging-talk-and-thought-understanding-dialogue-d.md]]
