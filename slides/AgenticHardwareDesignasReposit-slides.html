@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Hardware Design as Repository-Level Code Evolution — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;gap:1.5rem;">
+      <span class="tag tag-amber">NVIDIA Research · arXiv 2606.28279</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;line-height:1.25;text-align:center;">하드웨어 설계를 위한<br>에이전트 프레임워크:<br>저장소 수준 코드 진화</h1>
+      <p style="font-size:clamp(1rem,2vw,1.35rem);text-align:center;max-width:680px;line-height:1.7;" class="muted">HORIZON — 자가 진화 에이전트가 하드웨어 설계를<br>저장소 수준의 코드 진화로 처리하는 새로운 패러다임</p>
+      <div class="hr" style="max-width:200px;margin:0.5rem 0;"></div>
+      <p style="font-size:clamp(0.85rem,1.5vw,1.05rem);" class="muted">Cunxi Yu, Chenhui Deng, Nathaniel Pinckney, Brucek Khailany</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">왜 RTL 생성은 단일 턴으로 부족한가</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-microchip accent"></i> RTL의 본질적 난이도</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사이클 수준 동작 정확성 요구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>리셋 및 인터페이스 규약 준수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>비트 폭 추론 필수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>FSM 전이, ready-valid 프로토콜</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자연어 명세에 종종 누락된 코너 케이스</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-ban accent2"></i> 단일 턴 생성의 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구문적으로 유효한 Verilog ≠ 기능적 정확성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컴파일·시뮬레이션 피드백 없이는 수리 불가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>파형/트레이스 검사 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증 아티팩트(테스트벤치, 체커) 동시 생성 요구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>반복적 수정-평가 루프가 필수</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">"유용한 에이전트는 후보 아티팩트를 실행 가능한 워크스페이스에 배치하고, 도메인 도구를 호출하며, 실패를 해석하고, 명시적 수용 조건이 충족될 때까지 수정해야 한다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">선행 연구: 저장소 수준 자가 진화의 계보</h2>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">AlphaEvolve</div>
+        <div class="step-desc">LLM + 자동 평가기로 알고리즘 커널 발견 및 정제</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">SATLUTION</div>
+        <div class="step-desc">전체 SAT 솔버 저장소 진화, 인간 설계 우승자 초과 달성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">ABCEvo</div>
+        <div class="step-desc">백만 줄 ABC 논리 합성 시스템 자율 재작성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label accent3" style="font-weight:700;">HORIZON</div>
+        <div class="step-desc" style="font-weight:600;">하드웨어 설계 자체를 저장소 수준 진화로 확장</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);line-height:1.7;margin-top:1.2rem;">선행 연구들은 <span class="accent">엔지니어가 실행하는 프로그램</span>을 진화시켰다면, HORIZON은 <span class="accent">엔지니어가 생성하는 하드웨어 설계</span> 자체를 진화의 대상으로 삼는다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">HORIZON 프레임워크 개요</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-cogs accent"></i> 핵심 아이디어</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1rem;">하드웨어 설계 문제를 소프트웨어 진화 문제와 동일하게 관리한다. 설계, 컨텍스트, 하니스, 평가기가 모두 <span class="accent">격리된 git worktree</span> 안에 존재하며, 진행 상황은 연결되지 않은 채팅 턴이 아닌 <span class="accent">저장소 상태 변화</span>로 표현된다.</p>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-file-alt"></i></div>
+          <div>사용자가 구조화된 Markdown 하니스 제공</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-box"></i></div>
+          <div>부트스트랩 에이전트가 프로젝트 팩으로 컴파일</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-robot"></i></div>
+          <div>핸즈프리 에이전트 루프가 자율 진화</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-archive accent2"></i> 프로젝트 팩 구성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>도메인 지식</strong> — 태스크 관련 전문 지식</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>실행 가능한 평가기</strong> — 컴파일/시뮬레이션 파이프라인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>수용 조건</strong> — 명시적 정확성 게이트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Git/런타임 정책</strong> — 커밋, 분기, 실행 제약</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">하니스에서 실행 가능한 태스크로</h2>
+    <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);line-height:1.7;margin-bottom:1.5rem;">구조화된 Markdown 하니스가 어떻게 자체 포함된 git worktree로 변환되는지 보여주는 파이프라인이다.</p>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-file-markdown"></i></div>
+        <div class="step-label">Markdown 하니스</div>
+        <div class="step-desc">목표, 지식, 평가기 스펙, 수용 조건을 구조화된 형식으로 기술</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-hat-wizard"></i></div>
+        <div class="step-label">부트스트랩 에이전트</div>
+        <div class="step-desc">하니스를 해석하여 프로젝트 팩으로 컴파일</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-code-branch"></i></div>
+        <div class="step-label">Git Worktree</div>
+        <div class="step-desc">격리된 버전 관리 환경에 설계 + 평가기 + 게이트 배치</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-play-circle"></i></div>
+        <div class="step-label">실행 가능 태스크</div>
+        <div class="step-desc">자율 에이전트 루프가 즉시 시작 가능한 상태</div>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">"같은 기계로 RTL 생성, 완성, 수리를 모두 커버하며, RTL 벤치마크 문제를 소프트웨어 엔지니어링 대리물로 재구성할 필요 없이 있는 그대로 처리할 수 있다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">에이전트 루프와 Git을 기질로 활용</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-sync-alt accent"></i> 핸즈프리 에이전트 루프</h3>
+        <div class="flow-item">
+          <div class="flow-icon">1</div>
+          <div>후보 아티팩트 생성 또는 편집</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">2</div>
+          <div>평가기 실행 (컴파일 → 시뮬레이션 → 스코어링)</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">3</div>
+          <div>수용 조건 검사</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">4</div>
+          <div>통과 → <span class="accent3">커밋</span> / 실패 → <span class="muted">로그 기록 후 재시도</span></div>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;margin-top:0.8rem;" class="muted">인간 개입 없이 수용 조건이 충족될 때까지 반복</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-code-branch accent2"></i> Git이 단순한 부기가 아닌 이유</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>Git 기능</th><th>에이전트 내 역할</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tag tag-amber">diff</span></td><td>제안된 상태 변화 노출</td></tr>
+            <tr><td><span class="tag tag-green">commit</span></td><td>수용된 체크포인트 정의</td></tr>
+            <tr><td><span class="tag tag-red">log</span></td><td>탐색 궤적 복구</td></tr>
+            <tr><td><span class="tag tag-amber">notes</span></td><td>평가기 증거 첨부</td></tr>
+            <tr><td><span class="tag tag-green">worktree</span></td><td>격리된 진화 환경 제공</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">메모리, 세션 재사용, 트레이스 버퍼</h2>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-brain"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">메모리 시스템</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">저장소 히스토리, 커밋 메시지, 평가기 출력이 영구적 메모리로 활용됨</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-redo"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">세션 재사용</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">이전 세션의 체크포인트에서 재개 가능, 중복 탐색 방지</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-stream"></i></div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">트레이스 버퍼</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">에이전트의 전체 탐색 기록이 재생 가능한 트레이스로 저장</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">"저장소 히스토리가 에이전트의 탐색을 재생 가능한 경험 트레이스로 만든다 — 이는 저장소 네이티브 에이전트가 단일 도메인 트릭이 아닌 <span class="accent">등장하는 패러다임</span>이라는 수렴적 증거이다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">실험 설정: 벤치마크 스위트</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-flask accent"></i> 평가 벤치마크</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>벤치마크</th><th>특징</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tag tag-amber">ChipBench</span></td><td>RTL 생성 집계 문제</td></tr>
+            <tr><td><span class="tag tag-green">RTLLM</span></td><td>자연어 명세 → RTL</td></tr>
+            <tr><td><span class="tag tag-red">Verilog-Eval</span></td><td>기본 사양-RTL 능력 측정</td></tr>
+            <tr><td><span class="tag tag-amber">CVDP (9개 카테고리)</span></td><td>783개 문제, 13개 태스크</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-tasks accent2"></i> CVDP 태스크 카테고리 (9개)</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>RTL 코드 완성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자연어 명세 → RTL</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>코드 수정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모듈 재사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>테스트벤치 스튜뮬러스 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체커 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>어서션 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>디버깅</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>린트/품질 개선</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">벤치마크 완료율 결과</h2>
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div class="big-num" style="font-size:clamp(3rem,8vw,5.5rem);">100%</div>
+      <p style="font-size:clamp(1.1rem,2vw,1.4rem);font-weight:600;">전체 벤치마크 스위트 완료율</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);" class="muted">ChipBench, RTLLM, Verilog-Eval, CVDP 9카테고리 — 완전 핸즈프리 에이전트 루프로 달성</p>
+    </div>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:2rem;margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:0.8rem;"><i class="fas fa-check-circle accent3"></i> 핵심 발견</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실행 가능한 피드백이 정확성 수렴을 견인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유일한 잔류 실패는 명세-하니스 불일치로 귀인됨</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>백본 모델에 구애받지 않는 프레임워크</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:0.8rem;"><i class="fas fa-exclamation-triangle accent"></i> 주의</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;">"에이전트 AI로 하드웨어 설계가 해결되었다고 주장하지 않는다. 이 벤치마크들은 칩 설계라는 훨씬 더 광범위한 공학 문제에 대한 <span class="accent">통제된 프록시</span>일 뿐이다."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">토큰 소비 분석</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-coins accent2"></i> 토큰 소비 트렌드</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1rem;">패스률이 진화함에 따라 토큰 소비 패턴이 어떻게 변화하는지 분석했다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>초기 시도: 높은 토큰 소비, 낮은 패스률</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>중기 반복: 피드백 기반 수리로 효율 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>후기 수렴: 감소하는 시도 횟수로 패스 달성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-chart-line accent"></i> 연구 병목 이동</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1rem;">실행 피드백이 정확성을 수렴시킨 후, 주요 연구 병목이 이동한다.</p>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-arrow-right"></i></div>
+          <div><span class="muted">이전:</span> 첫 시도 정확성</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-arrow-right"></i></div>
+          <div><span class="accent">이후:</span> 수렴 효율성</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-arrow-right"></i></div>
+          <div><span class="accent">이후:</span> 검증 품질</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">테스트 생성 태스크 심층 논의</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-vial accent"></i> 검증 지향 태스크의 특수성</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;margin-bottom:1rem;">CVDP 연구에 따르면, 최신 단발성 모델은 특히 다음 태스크에서 어려움을 겪는다:</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>테스트벤치 스튜뮬러스 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>체커 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>어서션 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>버그 수정</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-search-plus accent2"></i> HORIZON의 접근</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);line-height:1.7;">에이전트 루프가 생성된 테스트벤치/체커/어서션을 실제 RTL과 함께 시뮬레이션하여 커버리지와 정확성을 검증한다. 단발성 생성으로는 달성 불가능한 <span class="accent">실행 기반 피드백 루프</span>가 검증 품질을 견인한다.</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;" class="muted">테스트 생성 커버리지 분석 결과는 트레이스 버퍼를 통해 상세히 기록되어 재생 및 분석 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">논의와 한계</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-exclamation-circle accent"></i> 명시적 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>벤치마크는 통제된 프록시일 뿐, 실제 칩 설계를 대변하지 않음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>아키텍처 탐색, 마이크로아키텍처, 물리 설계는 미포함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수렴 효율성이 여전히 연구 병목</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증 품질의 자동 평가 난제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>명세-하니스 불일치로 인한 잔류 실패 가능</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-rocket accent2"></i> 오픈 연구 과제</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트 AI를 위한 아키텍처 탐색 통합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>마이크로아키텍처 설계 자동화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>검증 계획 자동 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>물리 설계와의 상호작용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>EDA 소프트웨어 + 방법론 개발 통합</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:2rem;">핵심 요약</h2>
+    <div class="grid-3" style="gap:1.5rem;margin-bottom:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">프레임워크 제안</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">하드웨어 설계 태스크를 일회성 프롬프트가 아닌 <span class="accent">격리된 버전 관리 저장소</span>로 호스팅</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">100% 완료율 증명</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">Git 네이티브 자가 진화 루프가 <span class="accent2">전체 RTL 벤치마크 스위트</span>를 완주</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:600;margin:0.8rem 0 0.5rem;">병목 이동 분석</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);line-height:1.6;">정확성 수렴 후 <span class="accent3">수렴 효율성과 검증 품질</span>이 핵심 연구 과제로 부상</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);">"저장소 네이티브 에이전트는 단일 도메인 트릭이 아니라 <span class="accent">등장하는 패러다임</span>이다. Git 의미론 — 분기, 계통, 체크포인팅 — 은 에이전트 탐색을 조직화하는 자연스러운 적합체다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:65vh;gap:1.5rem;">
+      <span class="tag tag-amber">논문 정보</span>
+      <h2 style="font-size:clamp(1.5rem,3.5vw,2.5rem);font-weight:800;text-align:center;line-height:1.3;">Agentic Hardware Design as<br>Repository-Level Code Evolution</h2>
+      <div class="hr" style="max-width:300px;"></div>
+      <p style="font-size:clamp(1rem,1.8vw,1.2rem);text-align:center;line-height:1.8;">
+        <span class="accent">Cunxi Yu</span>, Chenhui Deng, Nathaniel Pinckney, Brucek Khailany<br>
+        <span class="muted">NVIDIA Research</span>
+      </p>
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);text-align:center;" class="muted">
+        <i class="fas fa-external-link-alt"></i>
+        <a href="http://arxiv.org/abs/2606.28279v1" style="text-decoration:none;" class="accent2">arxiv.org/abs/2606.28279v1</a>
+      </p>
+      <div class="hr" style="max-width:200px;"></div>
+      <p style="font-size:clamp(0.85rem,1.4vw,1rem);text-align:center;" class="muted">HORIZON — 하드웨어 설계를 저장소 수준 코드 진화로</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
