@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autoregressive Boltzmann Generators — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p style="font-size:clamp(0.8rem,1.2vw,1rem);" class="muted">arXiv:2606.27361v1</p>
+    <h1 style="font-size:clamp(2rem,4vw,3.5rem);margin-top:1rem;line-height:1.2;">자기회귀 볼츠만 생성기</h1>
+    <p style="font-size:clamp(1rem,1.5vw,1.3rem);margin-top:1.5rem;" class="muted">Autoregressive Boltzmann Generators</p>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <p style="font-size:clamp(0.9rem,1.3vw,1.1rem);margin-top:1.5rem;">열역학 평형 상태의 분자 시스템에서<br>자기회귀 모델 기반 효율적 샘플링 방법 제안</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">연구 배경</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-top:1.5rem;line-height:1.8;">분자 시스템의 열역학 평형 상태에서 효율적으로 샘플링하는 것은 통계물리학의 핵심 과제입니다. 전통적인 MCMC 방법은 고차원 에너지 경관에서 느린 수렴 문제에 직면합니다.</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);">MCMC의 한계</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고차원 공간에서 느린 혼합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>샘플 간 상관관계 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에너지 장벽 극복 어려움</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);">필요한 해결책</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상관 없는 독립 샘플 생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>빠른 추론 속도</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정확한 확률 밀도 계산</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">볼츠만 생성기(BG)란?</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);line-height:1.8;">생성 모델과 정확한 가능도(likelihood) 결합을 통해, 열역학 평형 분포에서 상관되지 않은 샘플을 빠르게 생성하는 프레임워크</p>
+    </div>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">단순 분포</div>
+        <div class="step-desc">가우시안 잡음 z</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">생성 모델</div>
+        <div class="step-desc">변환 함수 f(z)</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">표본 공간</div>
+        <div class="step-desc">분자 구조 x</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">가중치 부여</div>
+        <div class="step-desc">Boltzmann 가중치</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">기존 BG의 구조적 제약</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-top:1.5rem;line-height:1.8;">기존 볼츠만 생성기는 주로 <span class="accent">정규화 흐름(Normalizing Flows)</span>을 생성 모델로 사용합니다.</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-check-circle accent3" style="margin-right:0.5rem;"></i>정규화 흐름의 장점</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정확한 역변환 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>야코비안 정확 계산</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-times-circle accent" style="margin-right:0.5rem;"></i>정규화 흐름의 한계</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>엄격한 가역성 요구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>아키텍처 유연성 부족</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고차원에서 계산 비용 증가</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.9rem,1.3vw,1.1rem);margin-top:1.5rem;" class="muted">→ 가역성 제약 없이 정확한 가능도를 계산할 수 있는 대안이 필요합니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">핵심 아이디어: 자기회귀 접근</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-top:1.5rem;line-height:1.8;">자기회귀 모델의 <span class="accent">분해 가능한 가능도(factorized likelihood)</span>를 활용하여, 가역성 요구 없이 정확한 확률 밀도를 계산합니다.</p>
+    <div class="card" style="margin-top:2rem;">
+      <p style="font-size:clamp(1.1rem,1.6vw,1.3rem);text-align:center;line-height:2;">
+        <span class="accent2">p(x)</span> = <span class="accent">∏</span><sub style="font-size:0.7em;">i=1..N</sub> <span class="accent2">p(x<sub>i</sub> | x<sub>&lt;i</sub>)</span>
+      </p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:1rem;text-align:center;" class="muted">조건부 확률의 곱으로 전체 확률 밀도를 정확히 분해</p>
+    </div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">1</div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-top:0.5rem;">가역성 불필요</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">2</div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-top:0.5rem;">정확한 가능도</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">3</div>
+        <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-top:0.5rem;">유연한 아키텍처</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">자기회귀 볼츠만 생성기 구조</h2>
+    <div class="hr"></div>
+    <div class="flow-item" style="margin-top:2rem;">
+      <div class="flow-icon">1</div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">잠복 변수 샘플링</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.3rem;" class="muted">단순 사전 분포(가우시안)에서 z를 샘플링</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1.2rem;">
+      <div class="flow-icon">2</div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">자기회귀 생성</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.3rem;" class="muted">조건부 분포 p(x_i | z, x_{<i})를 순차적으로 평가하여 x 생성</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1.2rem;">
+      <div class="flow-icon">3</div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">가능도 평가</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.3rem;" class="muted">생성된 x에 대해 q(x|z)를 분해 가능한 형태로 정확히 계산</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1.2rem;">
+      <div class="flow-icon">4</div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">볼츠만 가중치 적용</h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.3rem;" class="muted">w(x) ∝ exp(−βE(x)) · q(x|z) / p(x) 로 재가중치 수행</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">손실 함수 설계</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-top:1.5rem;line-height:1.8;">학습 목표는 생성 분포 q(x|z)가 볼츠만 분포 p(x) ∝ exp(−βE(x))에 근사하도록 만드는 것입니다.</p>
+    <div class="card" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);text-align:center;line-height:2;">
+        <span class="accent">L</span> = 𝔼<sub>q(x|z)</sub>[<span class="accent2">E(x)</span>] − <span class="accent3">T</span> · H[q(x|z)]
+      </p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:1rem;text-align:center;" class="muted">에너지 기댓값 최소화 + 엔트로피 최대화 (자유 에너지 최소화와 동치)</p>
+    </div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);"><span class="accent">에너지 항</span></h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;line-height:1.7;" class="muted">생성된 샘플의 물리적 에너지를 낮추어 분자 구조의 타당성 확보</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);"><span class="accent3">엔트로피 항</span></h3>
+        <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;line-height:1.7;" class="muted">생성 분포의 다양성을 유지하여 모드 붕괴 방지</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">정규화 흐름 vs 자기회귀 비교</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>특성</th>
+          <th>정규화 흐름 BG</th>
+          <th><span class="accent">자기회귀 BG</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>가역성 요구</td>
+          <td>필수</td>
+          <td><span class="accent3">불필요</span></td>
+        </tr>
+        <tr>
+          <td>가능도 계산</td>
+          <td>야코비안 행렬식</td>
+          <td><span class="accent3">조건부 확률 곱</span></td>
+        </tr>
+        <tr>
+          <td>아키텍처 유연성</td>
+          <td>제한적</td>
+          <td><span class="accent3">높음</span></td>
+        </tr>
+        <tr>
+          <td>병렬 생성</td>
+          <td><span class="accent3">가능</span></td>
+          <td>순차적 (단, 마스크 활용 가능)</td>
+        </tr>
+        <tr>
+          <td>고차원 확장성</td>
+          <td>야코비안 비용 증가</td>
+          <td><span class="accent3">선형 스케일</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">실험 설정</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-flask accent2" style="margin-right:0.5rem;"></i>벤치마크 시스템</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이중 우물 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>알라닌 디펩티드</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>고분자 시스템</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-cog accent" style="margin-right:0.5rem;"></i>비교 방법</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>HMC (기준선)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>NF-BG (정규화 흐름)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ARG-BG (제안 방법)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:2rem;">
+      <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-chart-line accent3" style="margin-right:0.5rem;"></i>평가 지표</h3>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);margin-top:0.5rem;line-height:1.8;" class="muted">유효 샘플 크기(ESS), 추론 속도, 에너지 분포 일치도, 열역학량 추정 정확도</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">주요 실험 결과</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">↑</div>
+        <p style="font-size:clamp(1rem,1.5vw,1.2rem);margin-top:0.5rem;">유효 샘플 크기</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-top:0.3rem;" class="muted">HMC 대비 ESS 대폭 향상</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">↓</div>
+        <p style="font-size:clamp(1rem,1.5vw,1.2rem);margin-top:0.5rem;">추론 시간</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-top:0.3rem;" class="muted">NF-BG 대비 경쟁적 속도</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">≈</div>
+        <p style="font-size:clamp(1rem,1.5vw,1.2rem);margin-top:0.5rem;">에너지 분포</p>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-top:0.3rem;" class="muted">참 분포와 높은 일치도</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);line-height:1.8;">자기회귀 BG는 <span class="accent">가역성 제약을 제거</span>함에도 불구하고, 정규화 흐름 기반 BG와 <span class="accent2">동등하거나 우수한 성능</span>을 달성하며, 특히 고차원 시스템에서 아키텍처 유연성의 이점이 두드러집니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">분석: 가중치 효율성</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);margin-top:1.5rem;line-height:1.8;">볼츠만 생성기의 핵심 성능 지표 중 하나는 <span class="accent">가중치 분산의 낮음</span>입니다. 분산이 낮을수록 재가중치 샘플링 효율이 높아집니다.</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">낮은 가중치 분산이 의미하는 것</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>생성 분포가 볼츠만 분포에 가까움</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>적은 샘플로 정확한 열역학량 추정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>중요도 가중치의 유효성 확보</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.5vw,1.2rem);">자기회귀 모델의 이점</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>조건부 분포의 정밀한 모델링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 모드 분포 표현력 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복잡한 에너지 경관 적합 용이</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">논의 및 한계점</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-exclamation-triangle accent" style="margin-right:0.5rem;"></i>한계점</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>순차적 생성으로 인한 추론 지연</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>매우 큰 분자 시스템에서의 검증 부족</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>조건부 순서 선택의 민감도</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,1.6vw,1.3rem);"><i class="fas fa-lightbulb accent2" style="margin-right:0.5rem;"></i>향후 방향</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>병렬 자기회귀 기법 도입</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>순서 불변 아키텍처 탐색</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단백질 등 대형 바이오분자 적용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">결론</h2>
+    <div class="hr"></div>
+    <div class="card" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.95rem,1.4vw,1.15rem);line-height:1.9;">자기회귀 볼츠만 생성기(ARG-BG)는 <span class="accent">정규화 흐름의 가역성 제약을 제거</span>하면서도, 분해 가능한 가능도를 통해 정확한 확률 밀도 계산을 유지합니다.</p>
+    </div>
+    <ul class="check-list" style="margin-top:2rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>가역성 없이도 정확한 볼츠만 가중치 계산 가능</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>더 유연한 네트워크 아키텍처 설계 자유도 확보</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 NF-BG와 동등 이상의 샘플링 품질 달성</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>볼츠만 생성기 프레임워크의 적용 범위 확장</li>
+    </ul>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.3vw,1.1rem);line-height:1.8;">"생성 모델 선택의 유연성은 볼츠만 생성기가 다양한 분자 시스템에 적응할 수 있는 핵심 열쇠입니다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,2.5vw,2.2rem);">참고 문헌</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;line-height:2.2;">
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);"><span class="accent">[1]</span> Noé, F. et al. "Boltzmann Generators: Sampling Equilibrium States of Many-Body Systems with Deep Learning." <span class="muted">Science, 2019.</span></p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);"><span class="accent">[2]</span> Rezende, D. & Mohamed, S. "Variational Inference with Normalizing Flows." <span class="muted">ICML, 2015.</span></p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);"><span class="accent">[3]</span> Larochelle, H. & Murray, I. "The Neural Autoregressive Distribution Estimator." <span class="muted">AISTATS, 2011.</span></p>
+      <p style="font-size:clamp(0.85rem,1.2vw,1rem);"><span class="accent">[4]</span> Dinh, L. et al. "Density Estimation Using Real-Valued Non-Volume Preserving (Real NVP) Transformations." <span class="muted">ICLR, 2017.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <p style="font-size:clamp(0.85rem,1.2vw,1rem);" class="muted">감사합니다</p>
+    <h2 style="font-size:clamp(1.8rem,3.5vw,3rem);margin-top:1.5rem;line-height:1.3;">자기회귀 볼츠만 생성기</h2>
+    <p style="font-size:clamp(1rem,1.5vw,1.2rem);margin-top:0.5rem;" class="muted">Autoregressive Boltzmann Generators</p>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <div style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);line-height:2;">
+        <i class="fas fa-file-alt accent2" style="margin-right:0.5rem;"></i>arXiv: <a href="http://arxiv.org/abs/2606.27361v1" style="font-size:inherit;" class="accent">2606.27361v1</a>
+      </p>
+      <p style="font-size:clamp(0.9rem,1.3vw,1.05rem);margin-top:0.5rem;line-height:2;">
+        <i class="fas fa-users accent3" style="margin-right:0.5rem;"></i>저자: 논문 원문 참조
+      </p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
