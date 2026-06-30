@@ -1049,3 +1049,13 @@
 - [[sources/2026-06-29-advancing-omnimodal-embodied-agents-from-isolated-.md]] - Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-06-29-bridging-talk-and-thought-understanding-dialogue-d.md]] - Bridging Talk and Thought: Understanding Dialogue Dynamics Across Collaborative Problem-Solving Contexts
+- [[sources/2026-06-30-agentic-hardware-design-as-repository-level-code-e.md]] - Agentic Hardware Design as Repository-Level Code Evolution
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-30-agent-native-immune-system-architecture-taxonomy-a.md]] - Agent-Native Immune System: Architecture, Taxonomy, and Engineering
+- [[sources/2026-06-30-hpro-hierarchical-progressive-reward-optimization-.md]] - HPRO: Hierarchical Progressive Reward Optimization via Preference Extraction for Emotional Text-to-Speech
+- [[sources/2026-06-30-govern-the-repository-not-the-agent-measuring-ecos.md]] - Govern the Repository, Not the Agent: Measuring Ecosystem-Level Risk in AI-Native Software
+- [[sources/2026-06-30-towards-value-constrained-credit-assignment-in-ful.md]] - Towards Value-Constrained Credit Assignment in Fully Delegated AI Cooperatives
+- [[sources/2026-06-30-hat-4d-lifting-monocular-video-for-4d-multi-object.md]] - HAT-4D: Lifting Monocular Video for 4D Multi-Object Interactions via Human-Agent Collaboration
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-06-30-gbc-gradient-based-connections-for-optimizing-mult.md]] - GBC: Gradient-Based Connections for Optimizing Multi-Agent Systems

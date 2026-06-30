@@ -219,3 +219,7 @@ _자동 생성됨_
 - [[sources/2026-06-29-resilient-output-containment-under-undisclosed-lea.md]]
 
 - [[sources/2026-06-29-bridging-talk-and-thought-understanding-dialogue-d.md]]
+
+- [[sources/2026-06-30-agent-native-immune-system-architecture-taxonomy-a.md]]
+
+- [[sources/2026-06-30-gbc-gradient-based-connections-for-optimizing-mult.md]]

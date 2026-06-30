@@ -2022,3 +2022,17 @@
 ## [2026-06-29 08:44] ingest | Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy
 
 ## [2026-06-29 08:44] ingest | Bridging Talk and Thought: Understanding Dialogue Dynamics Across Collaborative Problem-Solving Contexts
+
+## [2026-06-30 08:38] ingest | Agentic Hardware Design as Repository-Level Code Evolution
+
+## [2026-06-30 08:38] ingest | Agent-Native Immune System: Architecture, Taxonomy, and Engineering
+
+## [2026-06-30 08:38] ingest | HPRO: Hierarchical Progressive Reward Optimization via Preference Extraction for Emotional Text-to-Speech
+
+## [2026-06-30 08:38] ingest | Govern the Repository, Not the Agent: Measuring Ecosystem-Level Risk in AI-Native Software
+
+## [2026-06-30 08:38] ingest | Towards Value-Constrained Credit Assignment in Fully Delegated AI Cooperatives
+
+## [2026-06-30 08:38] ingest | HAT-4D: Lifting Monocular Video for 4D Multi-Object Interactions via Human-Agent Collaboration
+
+## [2026-06-30 08:38] ingest | GBC: Gradient-Based Connections for Optimizing Multi-Agent Systems
