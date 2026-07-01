@@ -1059,3 +1059,20 @@
 - [[sources/2026-06-30-hat-4d-lifting-monocular-video-for-4d-multi-object.md]] - HAT-4D: Lifting Monocular Video for 4D Multi-Object Interactions via Human-Agent Collaboration
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-06-30-gbc-gradient-based-connections-for-optimizing-mult.md]] - GBC: Gradient-Based Connections for Optimizing Multi-Agent Systems
+- [[sources/2026-07-01-levo-2-stable-and-melodious-song-generation-via-hi.md]] - LeVo 2: Stable and Melodious Song Generation via Hierarchical Representation Modeling and Progressive Post-Training
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-01-self-evolving-world-models-for-llm-agent-planning.md]] - Self-Evolving World Models for LLM Agent Planning
+- [[sources/2026-07-01-one-step-gradient-delay-is-not-a-barrier-for-large.md]] - One-Step Gradient Delay is Not a Barrier for Large-Scale Asynchronous Pipeline Parallel LLM Pretraining
+- [[sources/2026-07-01-scaling-the-horizon-not-the-parameters-reaching-tr.md]] - Scaling the Horizon, Not the Parameters: Reaching Trillion-Parameter Performance with a 35B Agent
+- [[sources/2026-07-01-sequential-planning-via-anchored-robotic-keypoints.md]] - Sequential Planning via Anchored Robotic Keypoints
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-01-mesa-prioritizing-vulnerable-communication-channel.md]] - MESA: Prioritizing Vulnerable Communication Channels for Securing Multi-Agent Systems
+- [[sources/2026-07-01-words-speak-louder-than-code-investigating-cogniti.md]] - Words Speak Louder Than Code: Investigating Cognitive Heuristics in LLM-Based Code Vulnerability Detection
+- [[sources/2026-07-01-moar-planner-multi-objective-and-adaptive-risk-awa.md]] - MOAR Planner: Multi-Objective and Adaptive Risk-Aware Path Planning for Infrastructure Inspection with a UAV
+- [[sources/2026-07-01-swe-interact-reimagining-swe-benchmarks-as-user-dr.md]] - SWE-INTERACT: Reimagining SWE Benchmarks as User-Driven Long-Horizon Coding Sessions
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-01-attractor-states-emerge-in-multi-turn-llm-conversa.md]] - Attractor States Emerge in Multi-Turn LLM Conversations
+- [[sources/2026-07-01-c2r-cross-sample-consistency-regularization-mitiga.md]] - C$^{2}$R: Cross-sample Consistency Regularization Mitigates Feature Splitting and Absorption in Sparse Autoencoders
+- [[sources/2026-07-01-latent-actions-from-factorized-transition-effects-.md]] - Latent Actions from Factorized Transition Effects under Agent Ambiguity
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-01-linguistic-firewall-geometry-as-defense-in-multi-a.md]] - Linguistic Firewall: Geometry as Defense in Multi-Agent Systems Routing

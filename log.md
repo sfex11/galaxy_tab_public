@@ -2036,3 +2036,29 @@
 ## [2026-06-30 08:38] ingest | HAT-4D: Lifting Monocular Video for 4D Multi-Object Interactions via Human-Agent Collaboration
 
 ## [2026-06-30 08:38] ingest | GBC: Gradient-Based Connections for Optimizing Multi-Agent Systems
+
+## [2026-07-01 08:39] ingest | LeVo 2: Stable and Melodious Song Generation via Hierarchical Representation Modeling and Progressive Post-Training
+
+## [2026-07-01 08:39] ingest | Self-Evolving World Models for LLM Agent Planning
+
+## [2026-07-01 08:39] ingest | One-Step Gradient Delay is Not a Barrier for Large-Scale Asynchronous Pipeline Parallel LLM Pretraining
+
+## [2026-07-01 08:39] ingest | Scaling the Horizon, Not the Parameters: Reaching Trillion-Parameter Performance with a 35B Agent
+
+## [2026-07-01 08:39] ingest | Sequential Planning via Anchored Robotic Keypoints
+
+## [2026-07-01 08:39] ingest | MESA: Prioritizing Vulnerable Communication Channels for Securing Multi-Agent Systems
+
+## [2026-07-01 08:39] ingest | Words Speak Louder Than Code: Investigating Cognitive Heuristics in LLM-Based Code Vulnerability Detection
+
+## [2026-07-01 08:39] ingest | MOAR Planner: Multi-Objective and Adaptive Risk-Aware Path Planning for Infrastructure Inspection with a UAV
+
+## [2026-07-01 08:39] ingest | SWE-INTERACT: Reimagining SWE Benchmarks as User-Driven Long-Horizon Coding Sessions
+
+## [2026-07-01 08:39] ingest | Attractor States Emerge in Multi-Turn LLM Conversations
+
+## [2026-07-01 08:39] ingest | C$^{2}$R: Cross-sample Consistency Regularization Mitigates Feature Splitting and Absorption in Sparse Autoencoders
+
+## [2026-07-01 08:39] ingest | Latent Actions from Factorized Transition Effects under Agent Ambiguity
+
+## [2026-07-01 08:39] ingest | Linguistic Firewall: Geometry as Defense in Multi-Agent Systems Routing
