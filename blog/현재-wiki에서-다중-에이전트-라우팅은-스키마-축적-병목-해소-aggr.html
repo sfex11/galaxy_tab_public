@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가장 효율적인 라우터가 가장 위험한 이유 — 다중 에이전트 라우팅의 구조적 보안 취약성</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf9f7;
+  --fg: #2c2825;
+  --accent-warm: #c2703e;
+  --accent-cool: #5b7c99;
+  --accent-green: #6b9e7a;
+  --card-bg: rgba(255,255,255,0.7);
+  --card-border: rgba(194,112,62,0.12);
+  --muted: #7a7470;
+  --subtle-border: rgba(44,40,37,0.06);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(15px, 2.2vw, 18px);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(194,112,62,0.18);
+}
+
+/* ── Layout ── */
+.article-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+/* ── Nav ── */
+.nav-bar {
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(8px);
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--subtle-border);
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.nav-bar a {
+  color: var(--accent-warm);
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.85em;
+  transition: background 0.2s;
+}
+.nav-bar a:hover {
+  background: rgba(194,112,62,0.08);
+}
+
+/* ── Hero ── */
+.hero {
+  padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px) 0;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  background: rgba(194,112,62,0.08);
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: clamp(1.7em, 4.5vw, 2.6em);
+  line-height: 1.3;
+  color: var(--fg);
+  margin-bottom: 18px;
+}
+.hero-sub {
+  color: var(--muted);
+  font-size: clamp(0.9em, 1.8vw, 1.05em);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  font-size: 0.82em;
+  color: var(--muted);
+}
+.hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Divider ── */
+.section-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(194,112,62,0.2), transparent);
+  margin: clamp(32px, 5vw, 56px) 0;
+}
+
+/* ── Section ── */
+.content-section {
+  margin-bottom: clamp(36px, 6vw, 64px);
+}
+.section-label {
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-cool);
+  margin-bottom: 10px;
+}
+.content-section h2 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: clamp(1.3em, 3vw, 1.7em);
+  line-height: 1.35;
+  color: var(--fg);
+  margin-bottom: 20px;
+}
+.content-section h3 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: clamp(1.05em, 2.2vw, 1.25em);
+  line-height: 1.4;
+  color: var(--fg);
+  margin: 28px 0 12px 0;
+}
+.content-section p {
+  margin-bottom: 16px;
+  color: var(--fg);
+}
+
+/* ── Blockquote ── */
+.content-section blockquote {
+  border-left: 3px solid var(--accent-warm);
+  padding: 16px 20px;
+  margin: 24px auto;
+  max-width: 800px;
+  background: rgba(194,112,62,0.03);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95em;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.content-section blockquote em {
+  color: var(--accent-warm);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* ── Card ── */
+.insight-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: clamp(20px, 3vw, 28px);
+  margin: 24px 0;
+  box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0.5px 2px rgba(44,40,37,0.03);
+  transition: box-shadow 0.3s;
+}
+.insight-card:hover {
+  box-shadow: 0 4px 24px rgba(44,40,37,0.07), 0 1px 3px rgba(44,40,37,0.04);
+}
+.insight-card h4 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 1.05em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.insight-card p {
+  margin-bottom: 10px;
+  font-size: 0.95em;
+}
+.insight-card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Concept Tag ── */
+.concept-tag {
+  display: inline-block;
+  font-size: 0.78em;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+.tag-warm {
+  background: rgba(194,112,62,0.1);
+  color: var(--accent-warm);
+}
+.tag-cool {
+  background: rgba(91,124,153,0.1);
+  color: var(--accent-cool);
+}
+.tag-green {
+  background: rgba(107,158,122,0.1);
+  color: var(--accent-green);
+}
+
+/* ── Analogy Box ── */
+.analogy-box {
+  background: linear-gradient(135deg, rgba(91,124,153,0.04), rgba(107,158,122,0.04));
+  border: 1px solid rgba(91,124,153,0.1);
+  border-radius: 14px;
+  padding: clamp(20px, 3vw, 28px);
+  margin: 28px 0;
+  position: relative;
+}
+.analogy-box::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 24px;
+  width: 40px;
+  height: 4px;
+  background: var(--accent-cool);
+  border-radius: 4px;
+}
+.analogy-box h4 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 1em;
+  color: var(--accent-cool);
+  margin-bottom: 12px;
+}
+.analogy-box p {
+  font-size: 0.95em;
+  margin-bottom: 12px;
+}
+.analogy-box p:last-child { margin-bottom: 0; }
+
+/* ── Numbered List ── */
+.numbered-list {
+  counter-reset: item;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+.numbered-list li {
+  counter-increment: item;
+  position: relative;
+  padding: 12px 0 12px 48px;
+  border-bottom: 1px solid var(--subtle-border);
+  font-size: 0.95em;
+}
+.numbered-list li:last-child {
+  border-bottom: none;
+}
+.numbered-list li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(194,112,62,0.08);
+  color: var(--accent-warm);
+  font-weight: 700;
+  font-size: 0.85em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Connection Diagram ── */
+.connection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 24px 0;
+}
+@media (min-width: 560px) {
+  .connection-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.conn-item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 18px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.conn-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44,40,37,0.06);
+}
+.conn-item .conn-slug {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 0.92em;
+  margin-bottom: 6px;
+  color: var(--fg);
+}
+.conn-item p {
+  font-size: 0.85em;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+/* ── Conclusion ── */
+.conclusion-box {
+  background: linear-gradient(135deg, rgba(194,112,62,0.05), rgba(107,158,122,0.05));
+  border: 1px solid rgba(194,112,62,0.15);
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 36px);
+  margin: 32px 0;
+}
+.conclusion-box h3 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 700;
+  font-size: 1.2em;
+  margin: 0 0 16px 0;
+  color: var(--accent-warm);
+}
+.conclusion-box p {
+  font-size: 0.95em;
+  margin-bottom: 14px;
+}
+.conclusion-box p:last-child { margin-bottom: 0; }
+
+/* ── Footer ── */
+.article-footer {
+  text-align: center;
+  padding: clamp(32px, 5vw, 56px) 0;
+  border-top: 1px solid var(--subtle-border);
+  margin-top: clamp(36px, 6vw, 64px);
+}
+.article-footer p {
+  font-size: 0.82em;
+  color: var(--muted);
+}
+.ref-list {
+  text-align: left;
+  margin: 16px auto 0 auto;
+  max-width: 600px;
+}
+.ref-list li {
+  font-size: 0.8em;
+  color: var(--muted);
+  padding: 4px 0;
+  list-style: none;
+}
+.ref-list li::before {
+  content: '→ ';
+  color: var(--accent-warm);
+}
+
+/* ── Highlight ── */
+.hl-warm { color: var(--accent-warm); font-weight: 600; }
+.hl-cool { color: var(--accent-cool); font-weight: 600; }
+.hl-green { color: var(--accent-green); font-weight: 600; }
+
+/* ── TOC ── */
+.toc {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: clamp(16px, 3vw, 24px);
+  margin: 0 0 clamp(32px, 5vw, 48px) 0;
+}
+.toc h4 {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: 0.95em;
+  margin-bottom: 12px;
+  color: var(--fg);
+}
+.toc ol {
+  padding-left: 20px;
+  margin: 0;
+}
+.toc li {
+  font-size: 0.88em;
+  padding: 5px 0;
+}
+.toc a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.toc a:hover {
+  color: var(--accent-warm);
+}
+
+/* ── Fade-in Animation ── */
+.fade-section {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar" role="navigation" aria-label="메인 네비게이션">
+  <a href="../index.html">📚 홈</a>
+  <a href="../sources.html">논문</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../daily.html">📝 요약</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="blog.html">🧠 분석</a>
+  <a href="../patent/README.html">patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+</nav>
+
+<div class="article-wrapper">
+
+  <!-- Hero -->
+  <header class="hero fade-section">
+    <div class="hero-badge">Deep Analysis</div>
+    <h1>가장 효율적인 라우터가<br>가장 위험한 이유</h1>
+    <p class="hero-sub">다중 에이전트 시스템에서 라우팅 효율성을 극대화하는 설계가 왜 구조적 보안 취약성을 내재하게 되는가 — 그리고 우리가 어떤 패러다임 전환을 해야 하는가.</p>
+    <div class="hero-meta">
+      <span>📖 대상 논문: <em>Linguistic Firewall</em></span>
+      <span>🗓 2025.07</span>
+      <span>⏱ 12분 읽기</span>
+    </div>
+  </header>
+
+  <hr class="section-divider">
+
+  <!-- TOC -->
+  <div class="toc fade-section" role="navigation" aria-label="목차">
+    <h4>목차</h4>
+    <ol>
+      <li><a href="#sec1">효율성이 공격 표면이 되는 역설</a></li>
+      <li><a href="#sec2">평가 방법론의 구조적 맹점</a></li>
+      <li><a href="#sec3">알고리즘과 시스템 사이의 균열</a></li>
+      <li><a href="#sec4">누락된 개념 연결망</a></li>
+      <li><a href="#sec5">패러다임 전환: 능력과 안전의 수렴</a></li>
+    </ol>
+  </div>
+
+  <!-- Section 1 -->
+  <section class="content-section fade-section" id="sec1">
+    <div class="section-label">Section 01</div>
+    <h2>효율성이 공격 표면이 되는 역설</h2>
+
+    <p>다중 에이전트 라우팅 연구는 지금까지 하나의 전제 위에 서 있었다. <span class="hl-warm">"라우팅은 최적화 문제다."</span> 어떤 요청을 어떤 에이전트에, 어떤 순서로, 어떤 파이프라인을 통해 할당할 것인가 — 이것이 전부였다.</p>
+
+    <p>aggregate-pipeline-serving는 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 <span class="hl-cool">스키마 축적</span>에 의해 결정된다는 사실을 밝혀냈다. adaptive-inference의 SpecKV는 추측 길이(γ)를 도입해 모델 선택의 결정 차원을 확장했다. 두 연구 모두 "더 똑똑하게 할당하자"는 방향성을 공유한다.</p>
+
+    <p>그런데 잠깐. 이 '최적화 대상' 자체가 조작 가능하다면?</p>
+
+    <div class="analogy-box">
+      <h4>🖱 비유: 자동차 내비게이션과 교통 조작</h4>
+      <p>도시의 교통 내비게이션이 "가장 빠른 경로"를 찾는 데만 집중한다고 상상해 보자. 만약 누군가 의도적으로 특정 도로에 가짜 차량 GPS 신호를 쏟아붓는다면, 내비게이션은 그 도로를 피하는 "최적 경로"를 계산한다. 결과적으로 <span class="hl-warm">공격자가 원하는 대로 전체 교통 흐름을 조종</span>하게 된다. 내비게이션이 더 정교할수록, 공격자의 의도는 더 정확하게 실행된다.</p>
+    </div>
+
+    <p>다중 에이전트 라우팅에서도 정확히 같은 일이 일어난다. 적대적 입력이 의도적으로 스키마 로드를 팽창시키거나 특정 라우트로의 편향을 유도하도록 설계될 수 있다. 이때 효율성을 극대화하도록 튜닝된 라우팅 로직은 공격자의 의도를 <span class="hl-warm">가장 효율적으로 실행</span>하는 메커니즘이 된다.</p>
+
+    <blockquote>
+      적응의 기반이 되는 <em>내부 시스템 상태</em> 자체가 적대적 입력에 의해 가늠될 수 있다면, 적응 메커니즘은 공격자에게 결정 권한을 위임하는 셈이 된다.
+    </blockquote>
+
+    <p>SpecKV의 추측 길이 γ 선택은 분명 지능적인 메커니즘이다. 하지만 γ를 결정하는 근거 — 압축률, 토큰 분포, 문맥 길이 추정 — 이 적대적 입력에 의해 의도대로 왜곡될 수 있다면, "적응"이라는 이름의 문은 사실 <span class="hl-cool">공격자를 위한 제어 밸브</span>가 된다.</p>
+
+    <div class="insight-card">
+      <h4><span class="concept-tag tag-warm">핵심 역설</span></h4>
+      <p>라우팅이 더 효율적일수록, 공격자가 라우팅 결정을 조작했을 때의 <span class="hl-warm">피해 규모가 커진다</span>. 효율성과 보안 취약성이 비례하는 구조다. 이것을 "효율성-취약성 비례 법칙"이라 부를 수 있을 것이다.</p>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Section 2 -->
+  <section class="content-section fade-section" id="sec2">
+    <div class="section-label">Section 02</div>
+    <h2>평가 방법론의 구조적 맹점</h2>
+
+    <p>이 문제가 단순한 "검증 누락"이 아니라 <span class="hl-warm">구조적 맹점</span>인 이유는, ai-safety 분야에서 이미 정확히 같은 패턴이 실증되었기 때문이다.</p>
+
+    <div class="insight-card">
+      <h4><span class="concept-tag tag-cool">SafetyALFRED의 발견</span></h4>
+      <p>11개 SOTA 모델을 대상으로 한 SafetyALFRED 연구는, disembodied QA 기반 안전 평가가 <span class="hl-cool">체화 배포 환경</span>에서의 안전성을 전혀 보장하지 못함을 실증했다. 즉, 평가 환경과 배포 환경 사이에 구조적 단절이 존재한다.</p>
+    </div>
+
+    <p>라우팅에도 동일한 구조가 존재한다. 정적 벤치마크에서 측정된 라우팅 효율성이 <span class="hl-warm">적대적 입력이 존재하는 배포 환경</span>에서의 라우팅 안전성을 보장하지 못한다. 그런데 현재 Wiki의 라우팅 분석에는 이 지점이 전혀 현현되지 않았다.</p>
+
+    <div class="analogy-box">
+      <h4>🖱 비유: 실험실 자동차와 실제 도로</h4>
+      <p>자동차를 공기저항이 없는 풍동에서만 테스트한다고 상상해 보자. 연비 수치는 완벽할 것이다. 하지만 실제 도로 —突風, 비, 타이어 마모, 다른 차량의 난폭 운전 — 에서는 그 수치가 아무런 의미가 없다. 더 나아가, 풍동에서 최적화된 공기역학 설계가 실제 도로의 측풍에서는 오히려 차를 전복시킬 수 있다.</p>
+      <p>정적 벤치마크의 라우팅 효율성 점수가 바로 이 "풍동 연비"다. 적대적 입력이 없는 환경에서의 성능이, 적대적 입력이 존재하는 환경에서의 안전성을 보장하지 못할 뿐 아니라, <span class="hl-warm">오히려 위험을 증폭</span>시킬 수 있다.</p>
+    </div>
+
+    <p>이 맹점이 "구조적"인 이유는, 단순히 테스트 케이스를 추가한다고 해결되지 않기 때문이다. 평가의 <span class="hl-cool">프레임 자체</span>가 "라우팅 = 최적화 문제"로 고정되어 있으므로, 보안 관점의 평가 차원이 프레임 밖에 존재하게 된다. 마치 체온계만으로 환자를 검사하면서 혈압은 측정할 생각을 못 하는 것과 같다.</p>
+
+    <ol class="numbered-list">
+      <li><strong>측정 대상의 축소</strong> — 라우팅을 레이턴시·처리량으로만 측정하고, 결정의 건전성은 측정하지 않음</li>
+      <li><strong>환경의 동결</strong> — 벤치마크 입력이 정적이므로, 입력 자체가 공격 매개체가 될 수 있다는 가설 자체가 배제됨</li>
+      <li><strong>피드백 루프의 누락</strong> — 라우팅 결정이 시스템 상태를 변경하고, 그 변경된 상태가 다음 라우팅에 영향을 미치는 동적 루프를 평가하지 않음</li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Section 3 -->
+  <section class="content-section fade-section" id="sec3">
+    <div class="section-label">Section 03</div>
+    <h2>알고리즘과 시스템 사이의 균열</h2>
+
+    <p>여기서 세 번째 층위의 문제가 등장한다. 알고리즘 레벨에서 설계된 라우팅 로직이 실제 시스템에 구현될 때, <span class="hl-warm">번역 간극(translation gap)</span>이 발생한다는 것이다.</p>
+
+    <div class="insight-card">
+      <h4><span class="concept-tag tag-warm">Crab의 발견</span></h4>
+      <p>algorithm-system-translation-gap 연구에서 Crab은 에이전트의 <span class="hl-cool">의미론적 의존 그래프</span>를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율을 구체화했다. 알고리즘이 "A 다음 B"라는 의미론적 순서를 지정해도, 시스템은 이를 "A의 전체 상태 스냅샷 → B의 전체 상태 스냅샷"이라는 비Semantic한 방식으로 구현한다.</p>
+    </div>
+
+    <p>라우팅 결정은 알고리즘 레벨에서는 "의미론적 의존"에 기반한 최적 할당이다. "이 요청은 수학적 추론이 필요하니 수학 에이전트로, 이어서 코드 생성이 필요하니 코드 에이전트로" — 이런 식의 <span class="hl-green">의미론적 라우팅</span>이 이루어져야 한다.</p>
+
+    <p>그러나 시스템 레벨에서 이것이 구현될 때, 의미론적 정보가 손실되거나 왜곡되는 간극이 생긴다. 적대적 입력은 바로 이 간극을 타고 파고든다.</p>
+
+    <div class="analogy-box">
+      <h4>🖱 비유: 건축 도면과 현장 시공</h4>
+      <p>건축가가 도면에 "이 벽은 구조벽이므로 철골로 보강하라"고 명시했다고 하자. 그러나 현장 시공자가 이를 "철골 = 철제 자재 = 가벼운 철제 패널"로 오역해서 시공한다면, 건물은 외관상 완벽해 보이지만 지진에 무너진다.</p>
+      <p>적대적 입력은 이 "오역 가능성"을 정밀하게 타겟팅한다. 알고리즘이 의도한 라우팅 결정과 시스템이 실제로 수행하는 라우팅 결정 사이에 <span class="hl-warm">보이지 않는 괴리</span>를 만들어내고, 이 괴리 속에서 공격이 성립한다.</p>
+    </div>
+
+    <p>agent-os-semantic-gap 역시 이 맥락에서 재해석될 수 있다. 에이전트 OS가 에이전트의 의미론적 행위를 시스템 콜 수준으로 번역하는 과정에서 발생하는 의미 소실이, 라우팅 보안의 치명적 약점이 된다.</p>
+
+    <p>특히 주목해야 할 점은, agentic-harness-engineering에서 Crab이 보여주듯 C/R(Checkpoint/Restart) 런타임이 결함 내성·롤백·분기를 <span class="hl-cool">인프라 계층</span>에서 직접 구현한다면, 라우팅 보안 역시 애플리케이션 로직이 아닌 인프라 계층에서 다뤄져야 한다는 것이다. 그러나 현재의 라우팅 설계는 이 요구를 완전히 외면하고 있다.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Section 4 -->
+  <section class="content-section fade-section" id="sec4">
+    <div class="section-label">Section 04</div>
+    <h2>누락된 개념 연결망</h2>
+
+    <p>이 분석을 통해 기존 Wiki에 존재하면서도 정의되지 않았던 슬러그들이 비로소 구체적 의미를 얻는다. 네 개의 개념이 하나의 연결망을 형성한다.</p>
+
+    <div class="connection-grid">
+      <div class="conn-item">
+        <div class="conn-slug"><span class="concept-tag tag-warm">capability-safety-inseparability</span></div>
+        <p>라우팅 <span class="hl-warm">능력</span>(효율적 할당)을 극대화하는 것이 라우팅 <span class="hl-cool">안전성</span>(적대적 조작 방어)을 훼손하는 구조. 능력과 안전이 분리 가능하다는 가정 자체가 오류였음을 보여줌.</p>
+      </div>
+      <div class="conn-item">
+        <div class="conn-slug"><span class="concept-tag tag-cool">agent-native-immune-system</span></div>
+        <p>라우팅 결정을 적대적 조작으로부터 보호하는 메커니즘. 효율성 중심 라우팅에 이 면역 체계가 결합되지 않으면 구조적 취약성이 해소되지 않음. 생물학적 면역계처럼 <span class="hl-cool">항상 켜져 있어야</span> 함.</p>
+      </div>
+      <div class="conn-item">
+        <div class="conn-slug"><span class="concept-tag tag-green">agent-execution-semantic-opacity</span></div>
+        <p>라우팅 결정이 불투명하게 이루어지는 상황에서 적대적 조작은 더욱 탐지하기 어려워짐. 문제는 <span class="hl-green">효율성 최적화가 종종 이 불투명성을 증가</span>시키는 방향으로 작동한다는 점.</p>
+      </div>
+      <div class="conn-item">
+        <div class="conn-slug"><span class="concept-tag tag-warm">architectural-safety-convergence</span></div>
+        <p>효율성과 안전성이 분리된 설계(보안을 추가 기능으로 취급)가 아니라, <span class="hl-warm">아키텍처 수준에서 수렴</span>되어야 한다는 방향성. 보안이 사후 패치가 아니라 설계의 첫 번째 제약이 되어야 함.</p>
+      </div>
+    </div>
+
+    <p>이 네 개념은 개별적으로 존재할 때는 추상적인 슬러그에 불과했다. 하지만 "라우팅 결정의 적대적 조작 가능성"이라는 구체적 문제 의식을 만나는 순간, 하나의 <span class="hl-cool">논증 사슬</span>을 형성한다.</p>
+
+    <blockquote>
+      <em>capability-safety-inseparability</em>가 문제의 존재를 진단하고, <em>agent-execution-semantic-opacity</em>가 왜 탐지가 어려운지 설명하며, <em>agent-native-immune-system</em>이 방어 메커니즘을 제안하고, <em>architectural-safety-convergence</em>가 최종적으로 설계 원칙을 제시한다.
+    </blockquote>
+
+    <p>현재 Wiki에서 이 연결망이 형성되지 않은 이유는 명확하다. 효율성 분석과 안전성 분석이 <span class="hl-warm">별도의 파이프라인</span>에서 진행되었기 때문이다. aggregate-pipeline-serving는 레이턴시 최적화에, ai-safety는 체화 환경 안전에 각각 집중하면서, 두 축이 만나는 교점을 아무도 보지 못한 것이다.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Section 5: Conclusion -->
+  <section class="content-section fade-section" id="sec5">
+    <div class="section-label">Section 05</div>
+    <h2>패러다임 전환: 능력과 안전의 수렴</h2>
+
+    <p>지금까지의 분석이 하나의 명확한 진단에 도달한다: 효율성 중심 라우팅 설계는 보안 취약성을 '추가 비용'이 아니라 <span class="hl-warm">구조적 속성</span>으로 내재한다.</p>
+
+    <p>이것은 "보안을 추가하면 된다"는 식의 대응으로는 해결되지 않는다. 구조적 문제에는 구조적 해답이 필요하다. 세 가지 패러다임 전환이 요구된다.</p>
+
+    <div class="conclusion-box">
+      <h3>전환 1: 라우팅의 정의 변경</h3>
+      <p><span class="hl-cool">기존:</span> 라우팅 = 최적화 문제 (어떻게 가장 빠르게/저렴하게 할당할 것인가)</p>
+      <p><span class="hl-warm">전환:</span> 라우팅 = <strong>제약 최적화 문제</strong> (안전 제약 하에서 효율성을 극대화할 것인가)</p>
+      <p>보안이 목적함수의 일부가 아니라 <span class="hl-green">제약 조건</span>이 되어야 한다. 제약을 위반한 효율성은 의미가 없다.</p>
+    </div>
+
+    <div class="conclusion-box">
+      <h3>전환 2: 평가 프레임의 확장</h3>
+      <p><span class="hl-cool">기존:</span> 정적 벤치마크에서 레이턴시·처리량 측정</p>
+      <p><span class="hl-warm">전환:</span> <strong>적대적 라우팅 스트레스 테스트</strong>를 정식 평가 차원으로 도입</p>
+      <p>SafetyALFRED가 체화 환경 안전 평가를 도입한 것처럼, 라우팅 분야에도 "적대적 입력 하에서의 라우팅 결정 건전성"이라는 새로운 평가 축이 필요하다. 이것은 선택적 추가가 아니라 필수 차원이다.</p>
+    </div>
+
+    <div class="conclusion-box">
+      <h3>전환 3: 보안의 계층 격상</h3>
+      <p><span class="hl-cool">기존:</span> 보안 = 애플리케이션 로직 (라우팅 함수 내부의 검증)</p>
+      <p><span class="hl-warm">전환:</span> 보안 = <strong>인프라 계층</strong> (C/R 런타임과 동일한 계층에서의 면역 메커니즘)</p>
+      <p>agentic-harness-engineering이 보여주듯, 결함 내성과 롤백이 인프라에서 구현되듯, 라우팅 결정의 건전성 검증도 인프라 계층에서 이루어져야 한다. agent-native-immune-system이 구체화되어야 할 지점이 바로 여기다.</p>
+    </div>
+
+    <p>결론적으로, 현재 Wiki의 라우팅 분석은 하나의 축 — 효율성 — 만을 보면서 2차원 평면 위에 있다. 안전성이라는 두 번째 축이 추가되어야 비로소 문제의 실체가 드러난다. 그리고 이 두 축은 capability-safety-inseparability가 말하듯 <span class="hl-warm">분리 가능하지 않다</span>.</p>
+
+    <blockquote>
+      "가장 효율적인 라우터가 가장 위험하다"는 명제는 역설이 아니다. <em>효율성만을 최적화하도록 설계된</em> 라우터가 가장 위험하다는 것이며, 이것은 논리적 귀결이다. 해결책은 효율성을 포기하는 것이 아니라, <em>안전과 수렴된</em> 효율성을 설계하는 것이다.
+    </blockquote>
+
+    <p>Linguistic Firewall 논문이 "기하학을 방어로 삼는다"는 접근을 제안한 이유가 여기에 있다. 기하학적 관점에서 라우팅 결정 공간의 적대적 영역을 식별하고, 그 영역을 구조적으로 제외하는 것 — 이것이 애플리케이션 수준의 패치가 아닌, <span class="hl-green">아키텍처 수준의 수렴</span>을 실현하는 방향이다.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Footer -->
+  <footer class="article-footer fade-section">
+    <p>참고 문헌 및 관련 슬러그</p>
+    <ul class="ref-list">
+      <li>Linguistic Firewall: Geometry as Defense in Multi-Agent Systems Routing</li>
+      <li>aggregate-pipeline-serving — 스키마 축적 병목 해소</li>
+      <li>adaptive-inference — SpecKV 적응 차원 확장</li>
+      <li>ai-safety — SafetyALFRED 체화 환경 안전 평가</li>
+      <li>algorithm-system-translation-gap — Crab 의미론적 번역 간극</li>
+      <li>agent-os-semantic-gap — 에이전트 OS 의미론적 간극</li>
+      <li>agentic-harness-engineering — C/R 런타임 인프라 계층</li>
+      <li>capability-safety-inseparability</li>
+      <li>agent-native-immune-system</li>
+      <li>agent-execution-semantic-opacity</li>
+      <li>architectural-safety-convergence</li>
+    </ul>
+    <p style="margin-top: 24px;">© 2025 Galaxy Tab Public — Wiki Deep Analysis Series</p>
+  </footer>
+
+</div>
+
+<script>
+// Fade-in on scroll (IntersectionObserver)
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('.fade-section');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReduced) {
+    sections.forEach(s => s.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  sections.forEach(s => observer.observe(s));
+});
+</script>
+
+</body>
+</html>

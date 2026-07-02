@@ -295,3 +295,5 @@ _자동 생성됨_
 - [[sources/2026-06-29-bridging-performance-and-generalization-in-reinfor.md]]
 
 - [[sources/2026-06-29-designing-reward-signals-for-portable-query-genera.md]]
+
+- [[sources/2026-07-02-triage-role-typed-credit-assignment-for-agentic-re.md]]

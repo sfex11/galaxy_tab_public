@@ -1076,3 +1076,22 @@
 - [[sources/2026-07-01-latent-actions-from-factorized-transition-effects-.md]] - Latent Actions from Factorized Transition Effects under Agent Ambiguity
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-07-01-linguistic-firewall-geometry-as-defense-in-multi-a.md]] - Linguistic Firewall: Geometry as Defense in Multi-Agent Systems Routing
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-02-qval-cheaply-evaluating-dense-supervision-signals-.md]] - QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents
+- [[sources/2026-07-02-reinforcement-learning-with-metacognitive-feedback.md]] - Reinforcement Learning with Metacognitive Feedback Elicits Faithful Uncertainty Expression in LLMs
+- [[sources/2026-07-02-when-llms-read-tables-carelessly-measuring-and-red.md]] - When LLMs Read Tables Carelessly: Measuring and Reducing Data Referencing Errors
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-02-generative-skill-composition-for-llm-agents.md]] - Generative Skill Composition for LLM Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-02-triage-role-typed-credit-assignment-for-agentic-re.md]] - TRIAGE: Role-Typed Credit Assignment for Agentic Reinforcement Learning
+- [[sources/2026-07-02-scalable-behaviour-cloning-on-browser-using-via-sk.md]] - Scalable Behaviour Cloning on Browser Using via Skill Distillation
+- [[sources/2026-07-02-surrogate-fidelity-when-can-open-llms-explain-clos.md]] - Surrogate Fidelity: When Can Open LLMs Explain Closed Ones?
+- [[sources/2026-07-02-axdafny-agentic-verified-code-generation-in-dafny.md]] - AxDafny: Agentic Verified Code Generation in Dafny
+- [[sources/2026-07-02-policyguard-from-organizational-policies-to-neuro-.md]] - PolicyGuard: From Organizational Policies to Neuro-SymbolicCompliance Review Engines
+- [[sources/2026-07-02-gr2-technical-report.md]] - GR2 Technical Report
+- [[sources/2026-07-02-comet-context-and-multiplicity-decomposition-for-m.md]] - CoMet: Context and Multiplicity Decomposition for Multimodal Uncertainty Estimation
+- [[sources/2026-07-02-freeform-preference-learning-for-robotic-manipulat.md]] - Freeform Preference Learning for Robotic Manipulation
+- [[sources/2026-07-02-digitalcoach-communication-and-grounding-gaps-in-h.md]] - DigitalCoach: Communication and Grounding Gaps in Human and Agentic Computer Use Coaching
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-02-treeagent-a-generalizable-multi-agent-framework-fo.md]] - TreeAgent: A Generalizable Multi-Agent Framework for Automated Bias Labeling in Forestry via Compiled Expert Rules and Vision-Language Models
+- [[sources/2026-07-02-mecobench-a-systematic-study-of-multimodal-agent-c.md]] - MECoBench: A Systematic Study of Multimodal Agent Collaboration in Embodied Environments

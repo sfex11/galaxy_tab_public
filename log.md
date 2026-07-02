@@ -2062,3 +2062,33 @@
 ## [2026-07-01 08:39] ingest | Latent Actions from Factorized Transition Effects under Agent Ambiguity
 
 ## [2026-07-01 08:39] ingest | Linguistic Firewall: Geometry as Defense in Multi-Agent Systems Routing
+
+## [2026-07-02 08:33] ingest | QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents
+
+## [2026-07-02 08:33] ingest | Reinforcement Learning with Metacognitive Feedback Elicits Faithful Uncertainty Expression in LLMs
+
+## [2026-07-02 08:33] ingest | When LLMs Read Tables Carelessly: Measuring and Reducing Data Referencing Errors
+
+## [2026-07-02 08:33] ingest | Generative Skill Composition for LLM Agents
+
+## [2026-07-02 08:33] ingest | TRIAGE: Role-Typed Credit Assignment for Agentic Reinforcement Learning
+
+## [2026-07-02 08:33] ingest | Scalable Behaviour Cloning on Browser Using via Skill Distillation
+
+## [2026-07-02 08:33] ingest | Surrogate Fidelity: When Can Open LLMs Explain Closed Ones?
+
+## [2026-07-02 08:33] ingest | AxDafny: Agentic Verified Code Generation in Dafny
+
+## [2026-07-02 08:33] ingest | PolicyGuard: From Organizational Policies to Neuro-SymbolicCompliance Review Engines
+
+## [2026-07-02 08:33] ingest | GR2 Technical Report
+
+## [2026-07-02 08:33] ingest | CoMet: Context and Multiplicity Decomposition for Multimodal Uncertainty Estimation
+
+## [2026-07-02 08:33] ingest | Freeform Preference Learning for Robotic Manipulation
+
+## [2026-07-02 08:33] ingest | DigitalCoach: Communication and Grounding Gaps in Human and Agentic Computer Use Coaching
+
+## [2026-07-02 08:33] ingest | TreeAgent: A Generalizable Multi-Agent Framework for Automated Bias Labeling in Forestry via Compiled Expert Rules and Vision-Language Models
+
+## [2026-07-02 08:33] ingest | MECoBench: A Systematic Study of Multimodal Agent Collaboration in Embodied Environments
