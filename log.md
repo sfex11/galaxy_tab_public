@@ -2092,3 +2092,21 @@
 ## [2026-07-02 08:33] ingest | TreeAgent: A Generalizable Multi-Agent Framework for Automated Bias Labeling in Forestry via Compiled Expert Rules and Vision-Language Models
 
 ## [2026-07-02 08:33] ingest | MECoBench: A Systematic Study of Multimodal Agent Collaboration in Embodied Environments
+
+## [2026-07-03 08:32] ingest | Measuring the Gap Between Human and LLM Research Ideas
+
+## [2026-07-03 08:32] ingest | Is One Layer Enough? Training A Single Transformer Layer Can Match Full-Parameter RL Training
+
+## [2026-07-03 08:32] ingest | AutoMem: Automated Learning of Memory as a Cognitive Skill
+
+## [2026-07-03 08:32] ingest | Theoria: Rewrite-Acceptability Verification over Informal Reasoning States
+
+## [2026-07-03 08:32] ingest | Are Performance-Optimization Benchmarks Reliably Measuring Coding Agents?
+
+## [2026-07-03 08:32] ingest | Distill to Detect: Exposing Stealth Biases in LLMs through Cartridge Distillation
+
+## [2026-07-03 08:32] ingest | Optimal Resource Utilization for Autonomous Laboratory Orchestrators
+
+## [2026-07-03 08:32] ingest | Adversarial Pragmatics for AI Safety Evaluation: A Benchmark for Instruction Conflict, Embedded Commands, and Policy Ambiguity
+
+## [2026-07-03 08:32] ingest | AGC-Bench: Measuring Artificial General Creativity

@@ -127,3 +127,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-06-22-fast-human-attention-prediction-for-fixation-guide.md]]
 
 - [[sources/2026-06-23-fast-human-attention-prediction-for-fixation-guide.md]]
+
+- [[sources/2026-07-03-is-one-layer-enough-training-a-single-transformer-.md]]

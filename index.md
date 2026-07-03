@@ -1095,3 +1095,15 @@
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-07-02-treeagent-a-generalizable-multi-agent-framework-fo.md]] - TreeAgent: A Generalizable Multi-Agent Framework for Automated Bias Labeling in Forestry via Compiled Expert Rules and Vision-Language Models
 - [[sources/2026-07-02-mecobench-a-systematic-study-of-multimodal-agent-c.md]] - MECoBench: A Systematic Study of Multimodal Agent Collaboration in Embodied Environments
+- [[sources/2026-07-03-measuring-the-gap-between-human-and-llm-research-i.md]] - Measuring the Gap Between Human and LLM Research Ideas
+- [[entities/transformer]] - Transformer
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-03-is-one-layer-enough-training-a-single-transformer-.md]] - Is One Layer Enough? Training A Single Transformer Layer Can Match Full-Parameter RL Training
+- [[sources/2026-07-03-automem-automated-learning-of-memory-as-a-cognitiv.md]] - AutoMem: Automated Learning of Memory as a Cognitive Skill
+- [[sources/2026-07-03-theoria-rewrite-acceptability-verification-over-in.md]] - Theoria: Rewrite-Acceptability Verification over Informal Reasoning States
+- [[sources/2026-07-03-are-performance-optimization-benchmarks-reliably-m.md]] - Are Performance-Optimization Benchmarks Reliably Measuring Coding Agents?
+- [[sources/2026-07-03-distill-to-detect-exposing-stealth-biases-in-llms-.md]] - Distill to Detect: Exposing Stealth Biases in LLMs through Cartridge Distillation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-03-optimal-resource-utilization-for-autonomous-labora.md]] - Optimal Resource Utilization for Autonomous Laboratory Orchestrators
+- [[sources/2026-07-03-adversarial-pragmatics-for-ai-safety-evaluation-a-.md]] - Adversarial Pragmatics for AI Safety Evaluation: A Benchmark for Instruction Conflict, Embedded Commands, and Policy Ambiguity
+- [[sources/2026-07-03-agc-bench-measuring-artificial-general-creativity.md]] - AGC-Bench: Measuring Artificial General Creativity
