@@ -31,3 +31,7 @@ Reinforcement learning (RL) has become a central component of post-training larg
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-02-triage-role-typed-credit-assignment-for-agentic-re]]: 두 논문 모두 LLM의 강화학습(RL) 훈련 메커니즘을 분석하며, 하나는 에이전트 행동에 대한 신용 할당을, 다른 하나는 RL 적응이 트랜스포머 레이어별로 어떻게 분포하는지 다룹니다.

@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-02-comet-context-and-multiplicity-decomposition-for-m]]: 두 논문 모두 인공지능 모델의 메타인지(metacognition)와 불확실성 인식의 어려움을 다루며, 각각 다중모달 환경과 강화학습 맥락에서 해결책을 제시합니다.
+- → [[sources/2026-07-03-automem-automated-learning-of-memory-as-a-cognitiv]]: 두 논문 모두 인지 과학의 메타인지 관점을 LLM에 도입하며, 하나는 강화학습을 통한 불확실성 표현에, 다른 하나는 메타기억 기반의 메모리 관리 기술로 적용합니다.

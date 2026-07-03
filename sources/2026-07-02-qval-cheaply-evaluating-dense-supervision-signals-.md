@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-02-triage-role-typed-credit-assignment-for-agentic-re]]: 둘 다 장기적인(long-horizon) 에이전트 강화학습에서 행동에 대한 정교한 피드백, 즉 밀집 감독 신호 평가와 역할 기반 신용 할당 문제를 다룹니다.
+- → [[sources/2026-07-01-scaling-the-horizon-not-the-parameters-reaching-tr]]: 두 논문은 장기 수평(long-horizon) LLM 에이전트를 다루며, 하나는 수평 확장을 통한 성능 달성을, 다른 하나는 이러한 긴 궤적에서의 밀집 감독 신호 평가 방법을 다룹니다.

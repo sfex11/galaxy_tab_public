@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-01-scaling-the-horizon-not-the-parameters-reaching-tr]]: 두 논문 모두 장기적인(long-horizon) LLM 에이전트의 성능 향상을 다루며, 하나는 에이전트 수평 확장을, 다른 하나는 세계 모델을 통한 예측 기반 계획을 제안합니다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-02-freeform-preference-learning-for-robotic-manipulat]]: 두 논문 모두 임베디드(embodied) 로봇 환경에서의 에이전트 성능을 다루며, 하나는 조작 작업을 위한 보상 학습을, 다른 하나는 다중모달 에이전트 협업 벤치마크를 제안합니다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-03-theoria-rewrite-acceptability-verification-over-in]]: 두 논문 모두 AI 시스템의 출력을 검증(verification)하는 문제를 다루며, 하나는 형식적 증명 기반의 코드 검증을, 다른 하나는 비형식적 추론 상태의 수용 가능성 검증을 제안합니다.

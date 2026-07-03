@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-02-freeform-preference-learning-for-robotic-manipulat]]: 두 논문 모두 로봇 조작(robotic manipulation) 작업을 다루며, 하나는 순차적 계획 시스템을, 다른 하나는 장기적인 조작 작업을 위한 자유 형식 선호 학습 방법을 제안합니다.
