@@ -1107,3 +1107,24 @@
 - [[sources/2026-07-03-optimal-resource-utilization-for-autonomous-labora.md]] - Optimal Resource Utilization for Autonomous Laboratory Orchestrators
 - [[sources/2026-07-03-adversarial-pragmatics-for-ai-safety-evaluation-a-.md]] - Adversarial Pragmatics for AI Safety Evaluation: A Benchmark for Instruction Conflict, Embedded Commands, and Policy Ambiguity
 - [[sources/2026-07-03-agc-bench-measuring-artificial-general-creativity.md]] - AGC-Bench: Measuring Artificial General Creativity
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-04-what-llm-agents-say-when-no-one-is-watching-social.md]] - What LLM Agents Say When No One Is Watching: Social Structure and Latent Objective Emergence in Multi-Agent Debates
+- [[sources/2026-07-04-controllable-sim-agents-with-behavior-latents.md]] - Controllable Sim Agents with Behavior Latents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-04-adoption-and-ecosystem-health-a-longitudinal-analy.md]] - Adoption and Ecosystem Health: A Longitudinal Analysis of Open-Source Multi-Agent Frameworks
+- [[sources/2026-07-04-distributed-attacks-in-persistent-state-ai-control.md]] - Distributed Attacks in Persistent-State AI Control
+- [[sources/2026-07-04-reasoning-llm-improves-speaker-recognition-in-long.md]] - Reasoning LLM Improves Speaker Recognition in Long-form TV Dramas
+- [[sources/2026-07-04-testevo-bench-an-executable-and-live-benchmark-for.md]] - TestEvo-Bench: An Executable and Live Benchmark for Test and Code Co-Evolution
+- [[sources/2026-07-04-language-models-as-measurement-apparatus-for-cultu.md]] - Language Models as Measurement Apparatus for Culture
+- [[sources/2026-07-04-lacuna-a-testbed-for-evaluating-localization-preci.md]] - LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning
+- [[sources/2026-07-04-demopsd-disagreement-modulated-policy-self-distill.md]] - DemoPSD: Disagreement-Modulated Policy Self-Distillation
+- [[sources/2026-07-04-program-as-weights-a-programming-paradigm-for-fuzz.md]] - Program-as-Weights: A Programming Paradigm for Fuzzy Functions
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-04-agentscad-automated-design-for-manufacturing-of-fd.md]] - AgentsCAD: Automated Design for Manufacturing of FDM Parts via Multi-Agent LLM Reasoning and Geometric Feature Recognition
+- [[sources/2026-07-04-recontext-recursive-evidence-replay-as-llm-harness.md]] - ReContext: Recursive Evidence Replay as LLM Harness for Long-Context Reasoning
+- [[sources/2026-07-04-online-safety-monitoring-for-llms.md]] - Online Safety Monitoring for LLMs
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-04-evopolicygym-evaluating-autonomous-policy-evolutio.md]] - EvoPolicyGym: Evaluating Autonomous Policy Evolution in Interactive Environments
+- [[sources/2026-07-04-reasoning-effort-not-tool-access-buys-first-try-re.md]] - Reasoning effort, not tool access, buys first-try reliability in agentic code generation: an observational study
+- [[sources/2026-07-04-an-efficient-vllm-based-inference-pipeline-for-uni.md]] - An Efficient vLLM-Based Inference Pipeline for Unified Audio Understanding and Generation
+- [[sources/2026-07-04-towards-load-aware-prefill-deflection-for-disaggre.md]] - Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving

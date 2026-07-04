@@ -2110,3 +2110,37 @@
 ## [2026-07-03 08:32] ingest | Adversarial Pragmatics for AI Safety Evaluation: A Benchmark for Instruction Conflict, Embedded Commands, and Policy Ambiguity
 
 ## [2026-07-03 08:32] ingest | AGC-Bench: Measuring Artificial General Creativity
+
+## [2026-07-04 08:32] ingest | What LLM Agents Say When No One Is Watching: Social Structure and Latent Objective Emergence in Multi-Agent Debates
+
+## [2026-07-04 08:32] ingest | Controllable Sim Agents with Behavior Latents
+
+## [2026-07-04 08:32] ingest | Adoption and Ecosystem Health: A Longitudinal Analysis of Open-Source Multi-Agent Frameworks
+
+## [2026-07-04 08:32] ingest | Distributed Attacks in Persistent-State AI Control
+
+## [2026-07-04 08:32] ingest | Reasoning LLM Improves Speaker Recognition in Long-form TV Dramas
+
+## [2026-07-04 08:32] ingest | TestEvo-Bench: An Executable and Live Benchmark for Test and Code Co-Evolution
+
+## [2026-07-04 08:32] ingest | Language Models as Measurement Apparatus for Culture
+
+## [2026-07-04 08:32] ingest | LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning
+
+## [2026-07-04 08:32] ingest | DemoPSD: Disagreement-Modulated Policy Self-Distillation
+
+## [2026-07-04 08:32] ingest | Program-as-Weights: A Programming Paradigm for Fuzzy Functions
+
+## [2026-07-04 08:32] ingest | AgentsCAD: Automated Design for Manufacturing of FDM Parts via Multi-Agent LLM Reasoning and Geometric Feature Recognition
+
+## [2026-07-04 08:32] ingest | ReContext: Recursive Evidence Replay as LLM Harness for Long-Context Reasoning
+
+## [2026-07-04 08:32] ingest | Online Safety Monitoring for LLMs
+
+## [2026-07-04 08:32] ingest | EvoPolicyGym: Evaluating Autonomous Policy Evolution in Interactive Environments
+
+## [2026-07-04 08:32] ingest | Reasoning effort, not tool access, buys first-try reliability in agentic code generation: an observational study
+
+## [2026-07-04 08:32] ingest | An Efficient vLLM-Based Inference Pipeline for Unified Audio Understanding and Generation
+
+## [2026-07-04 08:32] ingest | Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving
