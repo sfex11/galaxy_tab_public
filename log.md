@@ -2178,3 +2178,7 @@
 ## [2026-07-05 08:38] ingest | An Efficient vLLM-Based Inference Pipeline for Unified Audio Understanding and Generation
 
 ## [2026-07-05 08:38] ingest | Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving
+
+## [2026-07-05 17:12] lint | Wiki 건전성 체크
+- Issues: 2242개
+- Orphans: 654, Missing: 1588, Contradictions: 0

@@ -22,7 +22,7 @@ Reinforcement learning (RL) has become a central component of post-training larg
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 
