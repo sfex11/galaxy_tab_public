@@ -233,3 +233,5 @@ _자동 생성됨_
 - [[sources/2026-07-02-treeagent-a-generalizable-multi-agent-framework-fo.md]]
 
 - [[sources/2026-07-04-agentscad-automated-design-for-manufacturing-of-fd.md]]
+
+- [[sources/2026-07-05-agentscad-automated-design-for-manufacturing-of-fd.md]]
