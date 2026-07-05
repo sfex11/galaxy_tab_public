@@ -274,3 +274,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/foundation-layer-internalization.md|foundation layer internalization]]
+
+---
+**관련**: [[concepts/infrastructure-layer-routing-defense.md|infrastructure layer routing defense]]

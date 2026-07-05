@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-19-trade-offs-in-medical-llm-adaptation-an-empirical-]]: 둘 다 의료 진료 및 질의응답 분야에서 LLM의 한계를 극복하기 위해 도메인 특화 적응 및 하이브리드 접근법을 제안함.
+
+---
+**관련**: [[concepts/narrative-inertia.md|narrative inertia]]

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/scaffold-component-tight-coupling.md|scaffold component tight coupling]]
+
+---
+**관련**: [[concepts/prefix-misalignment.md|prefix misalignment]]

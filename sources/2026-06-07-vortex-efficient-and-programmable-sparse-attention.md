@@ -119,3 +119,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/orchestration-design-space-overestimation.md|orchestration design space overestimation]]
+
+---
+**관련**: [[concepts/world-model-in-pieces.md|world model in pieces]]
+
+---
+**관련**: [[concepts/informational-environment-generation.md|informational environment generation]]
+
+---
+**관련**: [[concepts/agent-native-immune-system.md|agent native immune system]]
+
+---
+**관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]

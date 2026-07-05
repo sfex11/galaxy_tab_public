@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]
+
+---
+**관련**: [[concepts/planning-on-degraded-foundation.md|planning on degraded foundation]]

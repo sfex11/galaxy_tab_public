@@ -86,3 +86,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/geometric-regulation.md|geometric regulation]]
+
+---
+**관련**: [[concepts/structural-certification.md|structural certification]]

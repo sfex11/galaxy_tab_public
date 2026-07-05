@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/data-contamination-resistance.md|data contamination resistance]]
+
+---
+**관련**: [[concepts/codebase-dependency-contamination.md|codebase dependency contamination]]

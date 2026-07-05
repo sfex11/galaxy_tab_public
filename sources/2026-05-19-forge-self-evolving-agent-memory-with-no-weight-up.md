@@ -214,3 +214,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/co-failure-rate.md|co failure rate]]
+
+---
+**관련**: [[concepts/goal-fixation-meta-decision.md|goal fixation meta decision]]
+
+---
+**관련**: [[concepts/failure-relabeling.md|failure relabeling]]
+
+---
+**관련**: [[concepts/hierarchical-optimization-reconfiguration.md|hierarchical optimization reconfiguration]]
+
+---
+**관련**: [[concepts/artifact-experience-paradigm-divergence.md|artifact experience paradigm divergence]]
+
+---
+**관련**: [[concepts/representation-stability-failure.md|representation stability failure]]

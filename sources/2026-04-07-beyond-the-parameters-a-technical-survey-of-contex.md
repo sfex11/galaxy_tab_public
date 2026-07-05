@@ -340,3 +340,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/model-harness-decomposability.md|model harness decomposability]]
+
+---
+**관련**: [[concepts/context-delegation.md|context delegation]]

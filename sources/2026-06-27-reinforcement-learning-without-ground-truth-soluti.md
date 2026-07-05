@@ -46,3 +46,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/execution-visibility-misalignment.md|execution visibility misalignment]]
+
+---
+**관련**: [[concepts/score-trajectory-complementarity.md|score trajectory complementarity]]
+
+---
+**관련**: [[concepts/score-narrative-conflation.md|score narrative conflation]]
+
+---
+**관련**: [[concepts/relative-credit-assignment.md|relative credit assignment]]
+
+---
+**관련**: [[concepts/execution-time-alignment.md|execution time alignment]]
+
+---
+**관련**: [[concepts/relative-verifiability.md|relative verifiability]]

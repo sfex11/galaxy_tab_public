@@ -31,3 +31,36 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/policy-task-state.md|policy task state]]
+
+---
+**관련**: [[concepts/execution-state-capsule.md|execution state capsule]]
+
+---
+**관련**: [[concepts/evaluation-target-substitution.md|evaluation target substitution]]
+
+---
+**관련**: [[concepts/repository-operational-knowledge.md|repository operational knowledge]]
+
+---
+**관련**: [[concepts/structural-state-vacuum.md|structural state vacuum]]
+
+---
+**관련**: [[concepts/repository-level-emergent-hazard.md|repository level emergent hazard]]
+
+---
+**관련**: [[concepts/fine-tuning-knowledge-erosion.md|fine tuning knowledge erosion]]
+
+---
+**관련**: [[concepts/causal-inversion-of-forgetting-and-benchmark.md|causal inversion of forgetting and benchmark]]
+
+---
+**관련**: [[concepts/knowledge-structure-representation-translation-loss.md|knowledge structure representation translation loss]]
+
+---
+**관련**: [[concepts/hypothesis-state-epistemic-gap.md|hypothesis state epistemic gap]]
+
+---
+**관련**: [[concepts/second-order-opacity.md|second order opacity]]

@@ -40,3 +40,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-epistemic-error.md|environment epistemic error]]
+
+---
+**관련**: [[concepts/environment-as-external-cognition.md|environment as external cognition]]
+
+---
+**관련**: [[concepts/hierarchical-recovery.md|hierarchical recovery]]
+
+---
+**관련**: [[concepts/graph-bound-recovery.md|graph bound recovery]]
+
+---
+**관련**: [[concepts/evidence-tree-credit-assignment.md|evidence tree credit assignment]]
+
+---
+**관련**: [[concepts/environment-capability-co-evolution.md|environment capability co evolution]]
+
+---
+**관련**: [[concepts/execution-topology-invariance.md|execution topology invariance]]
+
+---
+**관련**: [[concepts/silent-failure.md|silent failure]]
+
+---
+**관련**: [[concepts/sovereign-execution-broker.md|sovereign execution broker]]
+
+---
+**관련**: [[concepts/topology-flattening-failure.md|topology flattening failure]]
+
+---
+**관련**: [[concepts/ontological-concealment-of-failure.md|ontological concealment of failure]]
+
+---
+**관련**: [[concepts/position-invariant-kv-reuse.md|position invariant kv reuse]]

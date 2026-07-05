@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fast-weight-consolidation.md|fast weight consolidation]]
+
+---
+**관련**: [[concepts/routing-adversarial-hijacking.md|routing adversarial hijacking]]

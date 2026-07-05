@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/procedural-attractor.md|procedural attractor]]
+
+---
+**관련**: [[concepts/procedural-identity.md|procedural identity]]
+
+---
+**관련**: [[concepts/trajectory-fingerprinting.md|trajectory fingerprinting]]

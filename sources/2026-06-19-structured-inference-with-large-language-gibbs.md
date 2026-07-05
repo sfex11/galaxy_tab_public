@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-19-enhancing-decision-making-with-large-language-mode]]: 둘 다 LLM의 지식을 바탕으로 복잡한 세계의 변수들에 대해 구조화된 확률적 추론 및 의사결정을 수행하는 방법을 제안함.
+
+---
+**관련**: [[concepts/complementarity-cancellation-transition.md|complementarity cancellation transition]]

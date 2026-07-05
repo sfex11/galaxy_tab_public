@@ -70,3 +70,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-breath-sharing.md|inference breath sharing]]
+
+---
+**관련**: [[concepts/compression-inference-coupling.md|compression inference coupling]]
+
+---
+**관련**: [[concepts/correlated-error-summation.md|correlated error summation]]
+
+---
+**관련**: [[concepts/self-reinforcing-error-narrative.md|self reinforcing error narrative]]

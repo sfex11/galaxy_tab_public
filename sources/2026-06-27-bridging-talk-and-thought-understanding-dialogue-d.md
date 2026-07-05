@@ -67,3 +67,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cooperation-competition-spectrum.md|cooperation competition spectrum]]
+
+---
+**관련**: [[concepts/cooperation-as-control-mechanism.md|cooperation as control mechanism]]

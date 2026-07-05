@@ -46,3 +46,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/latent-geometric-adaptation.md|latent geometric adaptation]]
+
+---
+**관련**: [[concepts/cache-redundancy-responsive-adaptation.md|cache redundancy responsive adaptation]]
+
+---
+**관련**: [[concepts/optimal-order-ceiling.md|optimal order ceiling]]
+
+---
+**관련**: [[concepts/policy-constraint-hardening.md|policy constraint hardening]]

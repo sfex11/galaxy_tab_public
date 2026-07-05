@@ -111,3 +111,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compression-inference-coupling.md|compression inference coupling]]
+
+---
+**관련**: [[concepts/analysis-unit-mis-specification.md|analysis unit mis specification]]
+
+---
+**관련**: [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]

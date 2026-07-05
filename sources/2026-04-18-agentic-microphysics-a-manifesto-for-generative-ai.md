@@ -136,3 +136,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/collective-vulnerability-propagation.md|collective vulnerability propagation]]
+
+---
+**관련**: [[concepts/tool-use-optimizability-stratification.md|tool use optimizability stratification]]

@@ -81,3 +81,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/streaming-adaptive-inference.md|streaming adaptive inference]]
+
+---
+**관련**: [[concepts/graph-topology-preservation-dimension.md|graph topology preservation dimension]]

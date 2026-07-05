@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/root-proximate-cause-conflation.md|root proximate cause conflation]]
+
+---
+**관련**: [[concepts/independent-effect-tracking-problem.md|independent effect tracking problem]]

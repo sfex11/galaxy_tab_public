@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-02-scalable-behaviour-cloning-on-browser-using-via-sk]]: 두 논문 모두 LLM 에이전트를 위한 '스킬(skill)'의 활용에 초점을 맞추며, 하나는 스킬의 생성적 구성을, 다른 하나는 브라우저 환경에서의 스킬 증류를 다룹니다.
+
+---
+**관련**: [[concepts/procedural-attractor.md|procedural attractor]]

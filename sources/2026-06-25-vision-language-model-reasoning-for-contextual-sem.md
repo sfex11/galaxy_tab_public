@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-orchestration-asymmetry.md|representation orchestration asymmetry]]
+
+---
+**관련**: [[concepts/semantic-coupling.md|semantic coupling]]

@@ -109,3 +109,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/cascading-distribution-shift.md|cascading distribution shift]]
+
+---
+**관련**: [[concepts/foundation-layer-internalization.md|foundation layer internalization]]

@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/substrate-design.md|substrate design]]
+
+---
+**관련**: [[concepts/probabilistic-verification.md|probabilistic verification]]
+
+---
+**관련**: [[concepts/probabilistic-guarantee-redefinition.md|probabilistic guarantee redefinition]]

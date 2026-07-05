@@ -49,3 +49,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/causal-inversion-of-forgetting-and-benchmark.md|causal inversion of forgetting and benchmark]]
+
+---
+**관련**: [[concepts/threat-defense-surface-identity.md|threat defense surface identity]]
+
+---
+**관련**: [[concepts/efficiency-attack-surface-identity.md|efficiency attack surface identity]]

@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptation-subject-transfer.md|adaptation subject transfer]]
+
+---
+**관련**: [[concepts/cache-phase-preservation.md|cache phase preservation]]

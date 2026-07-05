@@ -157,3 +157,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/informational-environment-generation.md|informational environment generation]]
+
+---
+**관련**: [[concepts/explicit-latent-objective-gap.md|explicit latent objective gap]]
+
+---
+**관련**: [[concepts/memory-semantic-flattening.md|memory semantic flattening]]
+
+---
+**관련**: [[concepts/latent-objective-emergence.md|latent objective emergence]]
+
+---
+**관련**: [[concepts/benchmark-format-blindspot.md|benchmark format blindspot]]
+
+---
+**관련**: [[concepts/external-internal-adaptation-transition.md|external internal adaptation transition]]
+
+---
+**관련**: [[concepts/metamemory-as-model-action.md|metamemory as model action]]
+
+---
+**관련**: [[concepts/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]

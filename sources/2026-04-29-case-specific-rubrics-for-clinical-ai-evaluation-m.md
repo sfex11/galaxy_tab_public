@@ -306,3 +306,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-target-substitution.md|evaluation target substitution]]
+
+---
+**관련**: [[concepts/evaluation-execution-power-asymmetry.md|evaluation execution power asymmetry]]
+
+---
+**관련**: [[concepts/evaluation-training-causal-closure.md|evaluation training causal closure]]
+
+---
+**관련**: [[concepts/infrastructure-evaluation-identity.md|infrastructure evaluation identity]]
+
+---
+**관련**: [[concepts/admissibility-as-objective-component.md|admissibility as objective component]]

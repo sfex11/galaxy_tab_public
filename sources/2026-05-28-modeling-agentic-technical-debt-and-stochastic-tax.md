@@ -62,3 +62,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/measurement-architecture-misattribution.md|measurement architecture misattribution]]
+
+---
+**관련**: [[concepts/inline-external-safety-dichotomy.md|inline external safety dichotomy]]
+
+---
+**관련**: [[concepts/orchestration-transparency-illusion.md|orchestration transparency illusion]]
+
+---
+**관련**: [[concepts/representation-orchestration-asymmetry.md|representation orchestration asymmetry]]

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파이프가 생각하기 시작했다 — ReContext와 하네스-모델 경계의 붕괴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: clamp(60px, 10vw, 120px) 0 clamp(40px, 6vw, 80px);
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c2703e;
+    border: 1px solid rgba(194,112,62,0.25);
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5.5vw, 48px);
+    line-height: 1.25;
+    color: #2c2825;
+    margin-bottom: 24px;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 17px);
+    color: #6b6560;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: #c2703e;
+    border-radius: 3px;
+    margin: 0 auto 48px;
+    opacity: 0.7;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(48px, 8vw, 80px);
+  }
+
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 3.8vw, 32px);
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(18px, 2.8vw, 23px);
+    line-height: 1.4;
+    color: #2c2825;
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+  }
+
+  .section strong {
+    font-weight: 700;
+    color: #2c2825;
+  }
+
+  .accent-orange { color: #c2703e; font-weight: 600; }
+  .accent-blue { color: #5b7c99; font-weight: 600; }
+  .accent-green { color: #6b9e7a; font-weight: 600; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 4px solid #c2703e;
+    padding: 20px 24px;
+    margin: 28px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    color: #5a5450;
+    line-height: 1.8;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: 0.88em;
+    font-weight: 500;
+    color: #c2703e;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 520px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.08);
+    color: #2c2825;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid rgba(194,112,62,0.18);
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    vertical-align: top;
+    line-height: 1.7;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* ── Numbered list ── */
+  .numbered-list {
+    list-style: none;
+    counter-reset: nl;
+    padding: 0;
+  }
+
+  .numbered-list li {
+    counter-increment: nl;
+    position: relative;
+    padding-left: 44px;
+    margin-bottom: 20px;
+  }
+
+  .numbered-list li::before {
+    content: counter(nl);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 30px;
+    height: 30px;
+    background: rgba(194,112,62,0.1);
+    color: #c2703e;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Highlight box ── */
+  .highlight-box {
+    border: 1px solid rgba(107,158,122,0.25);
+    background: rgba(107,158,122,0.05);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 28px 0;
+  }
+
+  .highlight-box.blue {
+    border-color: rgba(91,124,153,0.25);
+    background: rgba(91,124,153,0.05);
+  }
+
+  .highlight-box.orange {
+    border-color: rgba(194,112,62,0.2);
+    background: rgba(194,112,62,0.04);
+  }
+
+  /* ── Diagram (CSS-only) ── */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 36px 0;
+  }
+
+  .diagram-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .diagram-box {
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: clamp(13px, 1.8vw, 15px);
+    font-weight: 500;
+    text-align: center;
+    min-width: 130px;
+  }
+
+  .diagram-box.infra {
+    background: rgba(91,124,153,0.1);
+    border: 1px solid rgba(91,124,153,0.2);
+    color: #5b7c99;
+  }
+
+  .diagram-box.cognitive {
+    background: rgba(194,112,62,0.1);
+    border: 1px solid rgba(194,112,62,0.2);
+    color: #c2703e;
+  }
+
+  .diagram-box.gray {
+    background: rgba(107,158,122,0.1);
+    border: 1px solid rgba(107,158,122,0.25);
+    color: #6b9e7a;
+  }
+
+  .diagram-arrow {
+    font-size: 20px;
+    color: #b0a89f;
+  }
+
+  .diagram-label {
+    font-size: clamp(11px, 1.4vw, 13px);
+    color: #9a918a;
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  /* ── Tag ── */
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+  .tag.orange { background: rgba(194,112,62,0.1); color: #c2703e; }
+  .tag.blue { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .tag.green { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 48px 0 clamp(40px, 8vw, 80px);
+    color: #b0a89f;
+    font-size: 13px;
+    border-top: 1px solid rgba(44,40,37,0.06);
+    margin-top: clamp(48px, 8vw, 80px);
+  }
+
+  .footer a {
+    color: #c2703e;
+    text-decoration: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .numbered-list li { padding-left: 38px; }
+    .numbered-list li::before { width: 26px; height: 26px; font-size: 12px; }
+    .card { padding: 18px; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 10px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- Nav -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <span class="hero-eyebrow">Deep Analysis</span>
+    <h1>파이프가 생각하기 시작했다</h1>
+    <p class="hero-sub">
+      ReContext가 드러낸 하네스-모델 경계의 붕괴, 그리고 "어떤 정보가 중요한지"를 결정하는 권한이 파이프라인으로 넘어가는 순간에 대해
+    </p>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Section 1 -->
+  <section class="section">
+    <h2>도서관 사서와 독자: 지금까지 우리가 믿었던 분업</h2>
+
+    <p>
+      한 번 비유를 상상해 보겠습니다. 거대한 도서관에 <strong>사서</strong>와 <strong>독자</strong>가 있습니다. 사서의 역할은 "어떤 책을 어느 책장에 넣을지, 언제 가져다줄지"를 결정하는 것입니다. 독자의 역할은 "그 책들 속에서 무엇이 중요한지"를 판단하며 읽어나가는 것입니다. 사서는 <span class="accent-blue">인프라</span>고, 독자는 <span class="accent-orange">인지</span>입니다. 이 분업은 명확해 보입니다.
+    </p>
+
+    <p>
+      LLM 에이전트 시스템에서도 우리는 똑같은 분업을 가정해 왔습니다. <strong>에이전트 하네스</strong>—체크포인트/복원 런타임(Crab), 파이프라인 서빙(Tool Attention), 프롬프트 구성기—는 "정보를 언제, 어떤 형식으로 전달할지"를 결정하는 <span class="accent-blue">중립적 인프라</span>입니다. 반면 <strong>모델</strong>은 희소 주의(sparse attention), 계층적 메모리 같은 내부 메커니즘으로 "어떤 정보가 추론에 관련 있는지"를 판단하는 <span class="accent-orange">인지적 주체</span>입니다.
+    </p>
+
+    <p>
+      장문맥(long-context) 추론이 실패하면, 우리는 자연스럽게 독자를 탓했습니다. "모델의 주의 범위가 짧아서 증거를 놓쳤다"고. 사서는 그저 책을 가져다줬을 뿐, 독자가 못 읽은 것 아닌가?
+    </p>
+
+    <blockquote>
+      "현재 Wiki는 에이전트 하네스를 중립적 실행 인프라로, 장문맥 실패를 모델 내부 능력의 한계로 분리해서 기록해왔다."
+      <cite>— 기존 분석 프레임의 전제</cite>
+    </blockquote>
+
+    <p>
+      그런데 ReContext가 이 분업에 균열을 냅니다. 입력에 <strong>이미 존재하는 증거를 하네스가 재생</strong>하여 모델의 주의 실패를 보상하는데, 이때 하네스는 단순히 "책을 다시 가져다주는" 것이 아니라 <strong>"어떤 책이 이 독자에게 지금 필요한지"</strong>를 선택합니다. 사서가 독자를 대신해 "이 부분이 중요해"라고 밑줄을 치기 시작한 것입니다.
+    </p>
+  </section>
+
+  <!-- Section 2 -->
+  <section class="section">
+    <h2>균열은 어제 시작된 것이 아니다: 세 가지 조짐</h2>
+
+    <p>
+      ReContext가 처음으로 경계를 건넨 것은 아닙니다. Wiki는 이미 하네스가 '중립적'이지 않다는 세 가지 증거를 기록하고 있었습니다.
+    </p>
+
+    <h3>① 사서가 의미를 이해하기 시작했다</h3>
+
+    <p>
+      Crab의 C/R 런타임은 단순한 스냅샷 저장이 아닙니다. 에이전트가 "어떤 상태에 의존하는가"라는 <span class="accent-orange">의미론적 의존 그래프</span>를 이해해야만 효율적인 체크포인트와 복원이 가능합니다. 이는 알고리즘-시스템 번역 간극(algorithm-system translation gap)으로 구체화되었는데—에이전트의 "의미론적 질문"을 OS의 "전체 스냅샷"이라는 물리적 메커니즘으로 번역할 때 발생하는 비효율이 바로 간극의 본질입니다.
+    </p>
+
+    <p>
+      요컨대, 하네스는 이미 에이전트가 <em>무엇에 의존하는지</em>를 이해하지 않으면 제 역할을 할 수 없었습니다. '중립적 파이프'라는 이름이 무색하게, 파이프 자체가 흐르는 내용의 구조를 알아야 했던 것입니다.
+    </p>
+
+    <h3>② 사서가 독자의 시야를 제한하고 있었다</h3>
+
+    <p>
+      Tool Attention이 다중 서버 MCP 배포에서 보여준 것은, <strong>스키마 축적이 개별 LLM 호출보다 더 큰 레이턴시 병목</strong>이 된다는 사실이었습니다. 이것의 의미를 깊이 읽어보면 놀라운 결론에 도달합니다.
+    </p>
+
+    <div class="highlight-box blue">
+      <strong>하네스 측의 정보 축적 방식이 모델이 "무엇을 주의할 수 있는지"를 구조적으로 제한한다.</strong> 즉, 모델의 주의 실패가 모델 내부뿐 아니라 하네스의 스키마 관리 방식에서 기인할 수 있다.
+    </div>
+
+    <p>
+      독자가 책을 못 읽은 게 아니라, 사서가 책상 위에 너무 많은 책을 쌓아놓아 아예 펼칠 수 없었던 것입니다. 주의 실패의 원인이 모델 내부에만 있는 것이 아니라 하네스의 정보 관리 방식에도 있었다는 점에서, 경계는 이미 흐려져 있었습니다.
+    </p>
+
+    <h3>③ 적응의 주체가 이동하고 있었다</h3>
+
+    <p>
+      SpecKV는 적응적 추론의 결정 차원을 "추측 길이(γ) 선택"으로 확장했습니다. 외부 환경에 반응하던 적응을 <span class="accent-green">압축이라는 내부 시스템 상태에 반응하는 적응</span>으로 변환한 것이죠. ReContext는 이 방향을 한 단계 더 나아가, 적응의 주체 자체를 모델에서 하네스로 넘깁니다.
+    </p>
+
+    <div class="card">
+      <p style="margin-bottom:0;"><span class="tag orange">Crab C/R</span><span class="tag blue">Tool Attention</span><span class="tag green">SpecKV</span><span class="tag orange">ReContext</span></p>
+      <p style="margin-top:14px;margin-bottom:0;font-size:0.92em;color:#6b6560;">공통 패턴: 하네스가 점점 더 '의미론적'인 결정에 관여하며, 그 관여 범위가 정보 전달의 형식에서 내용으로 확장되고 있다.</p>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section class="section">
+    <h2>ReContext가 경계를 넘는 방식: 세 개의 축</h2>
+
+    <p>
+      ReContext가 기존 프레임과 어떻게 다른지, 세 개의 축으로 정리해 보겠습니다.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%;">차원</th>
+            <th style="width:39%;">기존 프레임</th>
+            <th style="width:39%;">ReContext의 위치</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>실패의 귀인</strong></td>
+            <td>모델의 희소 주의가 증거를 놓침<br><span style="color:#9a918a;font-size:0.9em;">(모델 책임)</span></td>
+            <td>증거는 존재하지만 전달 방식이 불충분함<br><span style="color:#9a918a;font-size:0.9em;">(하네스-모델 공동 책임)</span></td>
+          </tr>
+          <tr>
+            <td><strong>보상의 주체</strong></td>
+            <td>모델 내부 적응<br><span style="color:#9a918a;font-size:0.9em;">(attention mechanism 개선)</span></td>
+            <td>하네스가 외부에서 재생<br><span style="color:#9a918a;font-size:0.9em;">(harness-side compensation)</span></td>
+          </tr>
+          <tr>
+            <td><strong>선택의 기준</strong></td>
+            <td>모델의 어텐션 가중치<br><span style="color:#9a918a;font-size:0.9em;">(internal)</span></td>
+            <td>어떤 증거를 재생할지에 대한 하네스의 판단<br><span style="color:#9a918a;font-size:0.9em;">(external but semantic)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      세 번째 행이 핵심입니다. <strong>"어떤 증거를 재생할지"를 결정하는 것은 단순한 인프라 최적화가 아닙니다.</strong> 이는 추론 과정에서 어떤 정보가 관련성을 가지는지에 대한 의미론적 판단입니다. 하네스가 이를 수행하는 순간, 하네스는 '중립적 파이프'에서 <span class="accent-orange">'준인지적 에이전트'</span>로 승격됩니다.
+    </p>
+
+    <blockquote>
+      "형식적으로는 인프라 동작(이미 존재하는 정보를 재전달)이지만, 실질적으로는 인지적 동작(추론에 필요한 정보를 의미론적으로 선택)이다."
+    </blockquote>
+
+    <div class="diagram">
+      <div class="diagram-row">
+        <div class="diagram-box infra">인프라 영역<br><span style="font-weight:300;font-size:0.85em;">형식 · 시점 · 압축률</span></div>
+        <div class="diagram-arrow">← 붕괴 →</div>
+        <div class="diagram-box gray">회색지대<br><span style="font-weight:300;font-size:0.85em;">ReContext가 위치한 곳</span></div>
+        <div class="diagram-arrow">← 붕괴 →</div>
+        <div class="diagram-box cognitive">인지적 영역<br><span style="font-weight:300;font-size:0.85em;">내용적 관련성 판단</span></div>
+      </div>
+      <p class="diagram-label">"의미론적 선택 권한"이 인지적 영역에서 회색지대로, 그리고 인프라 영역으로 침투하는 구조</p>
+    </div>
+  </section>
+
+  <!-- Section 4 -->
+  <section class="section">
+    <h2>병목은 사라지지 않고 이동한다</h2>
+
+    <p>
+      여기서 한 가지 중요한 통찰이 생깁니다. ReContext가 모델의 주의 실패를 '해결'한 것일까요? 아닙니다. ReContext는 장문맥 추론의 <strong>병목을 모델 내부에서 하네스로 이전</strong>시켰을 뿐입니다.
+    </p>
+
+    <p>
+      비유하자면, 좁은 문(모델의 주의 범위) 앞에 줄을 서던 사람들을 사서가 미리 골라내어 문 앞에만 세워놓은 것과 같습니다. 문은 여전히 좁습니다. 다만 사서의 <span class="accent-orange">선택 능력</span>이 문의 좁음을 보상하는 구조가 된 것입니다.
+    </p>
+
+    <div class="highlight-box orange">
+      <strong>핵심 질문이 바뀝니다:</strong> "모델의 주의 범위를 어떻게 넓힐까?"에서 "하네스가 증거를 선택하는 기준이 얼마나 정확한가?"로. 병목의 위치가 이동한 것입니다.
+    </div>
+
+    <p>
+      이는 적응적 병목 이동(adaptive bottleneck migration)이라는 Wiki 엔티티가 기술하는 현상과 정확히 일치합니다. SpecKV에서 병목은 압축 계층 간에 이동했고, ReContext에서는 <strong>모델-하네스 간에 이동</strong>합니다. 병목 자체를 제거하는 것이 아니라, 더 효율적으로 처리할 수 있는 계층으로 병목을 보내는 전략입니다.
+    </p>
+
+    <p>
+      그렇다면 이 이동의 끝은 어디일까요? 하네스가 증거 선택에 더 능숙해질수록, 모델은 "주의 범위가 좁아도 괜찮은" 존재가 됩니다. 반대로, 하네스의 선택이 틀리면 모델은 아예 잘못된 증거 위에서 추론하게 됩니다. <strong>모델의 능력이 하네스의 판단에 종속</strong>되는 구조가 점진적으로 강화되는 셈입니다.
+    </p>
+  </section>
+
+  <!-- Section 5 -->
+  <section class="section">
+    <h2>경계를 어디에 그어야 하는가: 새로운 기준</h2>
+
+    <p>
+      기존 프레임—하네스는 인프라, 모델은 인지—는 더 이상 유효하지 않습니다. 하지만 "아무 곳에도 경계를 긋지 말자"는 것은 분석적 포기입니다. Wiki의 기존 엔티티들을 조합하여, 다음과 같은 <strong>경계의 새로운 기준</strong>을 제안합니다.
+    </p>
+
+    <ol class="numbered-list">
+      <li>
+        <strong>인프라 영역 (하네스)</strong> — 정보의 <span class="accent-blue">형식, 시점, 압축률</span>을 결정하는 영역. "언제/어떻게"만 관여합니다. 스키마 로딩 최적화, 체크포인트 효율화가 여기에 해당합니다. 여기서의 결정은 내용과 무관하게 평가될 수 있습니다.
+      </li>
+      <li>
+        <strong>인지적 영역 (모델)</strong> — 정보의 <span class="accent-orange">내용적 관련성</span>을 판단하는 영역. "무엇이 중요한지"를 결정합니다. 희소 주의의 가중치 할당이 여기에 해당합니다.
+      </li>
+      <li>
+        <strong>회색지대 (경계 붕괴 구역)</strong> — ReContext가 위치하는 곳. 하네스가 "무엇을 재생할지"를 선택하면, 이 결정은 형식적 결정(인프라)인지 내용적 결정(인지)인지 <strong>모호해집니다</strong>.
+      </li>
+    </ol>
+
+    <div class="highlight-box">
+      <strong>제안하는 경계의 기준:</strong> "의미론적 선택 권한(semantic selection authority)"의 소재. 하네스가 "어떤 정보를 선택할지"에 관여하면 회색지대에 진입하며, 이 경계는 고정선이 아닌 <span class="accent-green">이동하는 프런티어</span>로 이해되어야 한다.
+    </div>
+
+    <p>
+      이 관점에서 가장 중요한 인사이트는 이것입니다. 경계를 "그어야 한다"는 질문 자체가 잘못되었습니다. ReContext가 보여주는 것은 <strong>경계가 그어질 수 없다는 사실</strong>입니다. 형식적으로는 인프라 동작이지만 실질적으로는 인지적 동작인 것이죠. 이것이 알고리즘-시스템 경계 붕괴(algorithm-system boundary collapse)가 정확히 기술하는 현상입니다.
+    </p>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="section">
+    <h2>패러다임 전환: "누가 생각하는가"에서 "생각이 어디서 일어나는가"로</h2>
+
+    <p>
+      지금까지의 패러다임은 이원론이었습니다. 시스템이 정보를 전달하고, 모델이 정보를 처리한다. 하나는 도관이고 하나는 두뇌다. 이 분업이 무너지면 우리는 당황합니다—"경계를 어디에 그어야 하는가?"라는 질문이 바로 그 당황의 표현입니다.
+    </p>
+
+    <p>
+      하지만 이 질문은 잘못된 질문입니다. 물리학에서 입자와 파동의 경계가 모호해졌을 때, 물리학자들은 "어떻게 경계를 그을까"가 아니라 <strong>"경계가 모호하다는 것 자체가 자연의 본질이다"</strong>라고 받아들였습니다. 우리도 마찬가지여야 합니다.
+    </p>
+
+    <p>
+      필요한 패러다임 전환은 세 가지입니다.
+    </p>
+
+    <ol class="numbered-list">
+      <li>
+        <strong>이원론에서 스펙트럼으로.</strong> 하네스와 모델 사이에 "의미론적 선택 권한"의 스펙트럼을 설정하고, 각 시스템이 이 스펙트럼의 어느 지점에 있는지를 분석해야 합니다. ReContext는 스펙트럼의 중간에 위치합니다.
+      </li>
+      <li>
+        <strong>고정 경계에서 이동 프런티어로.</strong> 경계를 선으로 그으려 하지 말고, "의미론적 선택이 어디까지 하네스로 이동했는지"를 추적하는 <span class="accent-green">이동 프런티어</span>로 개념화해야 합니다. 이 프런티어는 새로운 하네스 기법이 등장할 때마다 이동합니다.
+      </li>
+      <li>
+        <strong>"누가 생각하는가"에서 "생각이 어디서 일어나는가"로.</strong> 생각은 모델 내부에서만 일어나지 않습니다. 하네스의 증거 선택, 스키마 관리, 체크포인트 전략 모두가 추론의 일부를 구성합니다. <strong>추론은 모델의 독점적 영역이 아니라 시스템 전체의 분산적 현상</strong>입니다.
+      </li>
+    </ol>
+
+    <blockquote>
+      "ReContext는 하네스와 모델 능력의 경계를 어디에 그어야 하는가라는 질문에 답하는 것이 아니다. 그 질문이 더 이상 유효하지 않다는 것을 보여주는 것이다."
+    </blockquote>
+
+    <p>
+      파이프가 생각하기 시작했다는 것은, 파이프가 이상해진 것이 아닙니다. 우리가 파이프라고 부르던 것이从一开始 생각의 일부였다는 것을 드러낸 것입니다. 도서관 사서는 독자의 읽기 과정에 처음부터 관여하고 있었고, ReContext는 그 관여가 단순한 물류가 아닌 <span class="accent-orange">해석적 행위</span>임을 명시적으로 만들었을 뿐입니다.
+    </p>
+
+    <p>
+      경계를 그으려 애쓰지 마십시오. 대신, 그 경계가 붕괴되는 지점을 관찰하십시오. 거기에 <strong>다음 세대 에이전트 아키텍처의 설계 원리</strong>가 있습니다.
+    </p>
+  </section>
+
+  <footer class="footer">
+    <p>대상 논문: <em>ReContext: Recursive Evidence Replay as LLM Harness for Long-Context Reasoning</em></p>
+    <p style="margin-top:8px;"><a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a> · Wiki Analysis Series</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

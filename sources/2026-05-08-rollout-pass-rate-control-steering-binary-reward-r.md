@@ -299,3 +299,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hypothesis-state-epistemic-gap.md|hypothesis state epistemic gap]]
+
+---
+**관련**: [[concepts/co-failure-ceiling.md|co failure ceiling]]
+
+---
+**관련**: [[concepts/control-reachability.md|control reachability]]
+
+---
+**관련**: [[concepts/failure-mode-independence-prerequisite.md|failure mode independence prerequisite]]
+
+---
+**관련**: [[concepts/reward-dimension-encoding-gap.md|reward dimension encoding gap]]
+
+---
+**관련**: [[concepts/rubric-to-reward-reducibility.md|rubric to reward reducibility]]
+
+---
+**관련**: [[concepts/circular-validity-problem.md|circular validity problem]]
+
+---
+**관련**: [[concepts/uniform-guarantee-failure.md|uniform guarantee failure]]
+
+---
+**관련**: [[concepts/co-failure-rate.md|co failure rate]]
