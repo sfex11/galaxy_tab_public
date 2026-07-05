@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Safety Monitoring for LLMs — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:1.5rem;">
+    <span class="tag tag-amber">ICML 2025</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,3rem);line-height:1.25;font-weight:700;">LLM을 위한 온라인 안전 모니터링</h1>
+    <p style="font-size:clamp(1rem,2vw,1.25rem);max-width:680px;line-height:1.7;" class="muted">배포 시점에서도 LLM은 불안전한 출력을 생성할 수 있으며,<br>실시간으로 안전성을 감시하고 경보를Raise하는 것이 필수적이다.</p>
+    <div class="hr" style="width:120px;margin:0.5rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1rem);">Mona Schirmer, Metod Jazbec, Alexander Timans, Christian Naesseth, Maja Waldron, Eric Nalisnick</p>
+    <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);" class="muted">arXiv:2607.02510v1</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">왜 온라인 모니터링이 필요한가?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:1rem;"><i class="fas fa-shield-halved accent"></i> 기존 안전 조치의 한계</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정렬 훈련(RLHF 등)으로도 완전히 제어 불가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사전 평가는 모든 프롬프트 시나리오를 커버하지 못함</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사후 검출은 이미 유해 출력이 완료된 후에야 작동</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.25rem);margin-bottom:1rem;"><i class="fas fa-bolt accent2"></i> 온라인 모니터링의 필요성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>토큰이 생성되는 동안 실시간 감시</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유해 출력이 완료되기 전에 중단 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안전 라벨이 없는 환경에서도 작동해야 함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">모니터의 핵심 과제: 불완전한 안전 신호를 이진 결정(경보 vs 침묵)으로 변환하는 것</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">문제 설정</h2>
+    <div class="pipeline" style="margin-bottom:1.5rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">프롬프트 입력</div>
+        <div class="step-desc">x ~ P<sub>x</sub></div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">순차적 출력 생성</div>
+        <div class="step-desc">o<sub>1:T</sub> 자가회귀</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">안전 변수</div>
+        <div class="step-desc">y ∈ {0, 1}</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">실시간 모니터링</div>
+        <div class="step-desc">o<sub>1:t</sub> 검사</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.1rem);margin-bottom:0.75rem;"><span class="tag tag-green">y = 1</span> 안전 상태</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);" class="muted">사실적으로 정확하거나 무해한 출력</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.8vw,1.1rem);margin-bottom:0.75rem;"><span class="tag tag-red">y = 0</span> 불안전 상태</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);" class="muted">환각, 사실 오류, 유해한 출력</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-top:1rem;" class="muted">목표: 불안전한 시퀀스를 가능한 한 <span class="accent">조기에</span> 식별하는 것</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">안전 신호 (Safety Signal)</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);margin-bottom:1.5rem;">안전 변수 y에 대한 정보를 담는 불완전한 신호 s<sub>t</sub>를 활용</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-robot accent"></i> 외부 검증자 신호</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-bottom:0.75rem;" class="muted">p<sub>ψ</sub>(y | x, o<sub>1:t</sub>) — 외부 모델의 예측 확률</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학 추론: <span class="accent2">프로세스 보상 모델(PRM)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>콘텐츠 검열: LLM <span class="accent2">세이프가드 분류기</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>효과적이지만 배포 비용이 높음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-microchip accent3"></i> 내부 신호</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-bottom:0.75rem;" class="muted">p<sub>θ</sub>(o<sub>t</sub> | x, o<sub>1:t-1</sub>) — 생성 모델 자체의 토큰 로그확률</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 모델 배포 불필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>비용 효율적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>신호 품질은 외부 신호보다 낮음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1rem;">안전 모니터: 단일 임계값 규칙</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);margin-bottom:1.5rem;" class="muted">복잡한 순차 검정 대신, <span class="accent">단일 시불변 임계값 λ</span>를 적용하는 매우 단순한 규칙</p>
+    <div class="card" style="text-align:center;margin-bottom:1.5rem;">
+      <p style="font-size:clamp(1.1rem,2.2vw,1.4rem);font-weight:600;line-height:1.8;">Φ<sub>t</sub> := 𝟏{ ∃k, 1 ≤ k ≤ t : s<sub>k</sub> < λ }</p>
+      <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);margin-top:0.5rem;" class="muted">시간 t까지 신호 s<sub>k</sub>가 임계값 λ보다 처음 낮아지는 순간 경보 발생</p>
+    </div>
+    <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;">경보 발생 시 후속 조치</h3>
+    <div class="grid-3" style="gap:1rem;">
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-stop-circle accent" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);">생성 중단</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-arrow-up-right-dots accent2" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);">강한 검증자 에스컬레이션</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <i class="fas fa-user-check accent3" style="font-size:clamp(1.2rem,2vw,1.6rem);margin-bottom:0.5rem;display:block;"></i>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);">인간 검토 요청</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">모니터의 두 가지 위험</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div class="big-num" style="font-size:clamp(1.5rem,3vw,2.2rem);">I</div>
+          <h3 style="font-size:clamp(1rem,2vw,1.2rem);">위양성 위험 (False Alarm)</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-bottom:0.75rem;">실제로는 안전한 출력에 불필요하게 경보를Raise</p>
+        <div class="card" style="background:transparent;border:1px dashed #ccc;">
+          <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);text-align:center;font-weight:500;">ℛ<sup>I</sup>(λ) = ℙ(∃t ≥ 1 : s<sub>t</sub> < λ | y = 1)</p>
+          <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);text-align:center;margin-top:0.5rem;" class="muted">λ가 클수록 위양성 위험 증가 (단조 증가)</p>
+        </div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);margin-top:0.75rem;" class="muted"><i class="fas fa-triangle-exclamation accent"></i> 사용자 경험 저해, LLM 기능성 방해</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div class="big-num" style="font-size:clamp(1.5rem,3vw,2.2rem);">II</div>
+          <h3 style="font-size:clamp(1rem,2vw,1.2rem);">위음성 위험 (Missed Detection)</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-bottom:0.75rem;">불안전한 출력을 놓쳐서 경보를Raise하지 않음</p>
+        <div class="card" style="background:transparent;border:1px dashed #ccc;">
+          <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);text-align:center;font-weight:500;">ℛ<sup>II</sup>(λ) = ℙ(∀t ≥ 1 : s<sub>t</sub> ≥ λ | y = 0)</p>
+          <p style="font-size:clamp(0.75rem,1.2vw,0.85rem);text-align:center;margin-top:0.5rem;" class="muted">λ가 작을수록 위음성 위험 증가</p>
+        </div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);margin-top:0.75rem;" class="muted"><i class="fas fa-triangle-exclamation accent"></i> 거짓 안도감 부여, 모니터 무용화</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-top:1rem;text-align:center;" class="muted">본 논문은 주로 <span class="accent">위양성 위험(ℛ<sup>I</sup>)</span>의 통제에 집중</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1rem;">위험 통제: 기댓값 제어</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);margin-bottom:1.5rem;" class="muted">순익 위험 통제 (Conformal Risk Control, Angelopoulos et al. 2022)</p>
+    <div class="card" style="text-align:center;margin-bottom:1.5rem;">
+      <p style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:500;">𝔼<sub>𝒟<sub>cal</sub></sub>[ℛ(λ̂)] ≤ ε</p>
+      <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);margin-top:0.5rem;" class="muted">캘리브레이션 셋 추출에 대해 <span class="accent">평균적으로</span> 위험이 ε 이하 보장</p>
+    </div>
+    <div class="flow-item" style="margin-bottom:1rem;">
+      <div class="flow-icon"><i class="fas fa-database"></i></div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);font-weight:500;">캘리브레이션 데이터셋</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">𝒟<sub>cal</sub> = {(x<sup>(i)</sup>, o<sub>1:T</sub><sup>(i)</sup>, y<sup>(i)</sup>)}<sub>i=1</sub><sup>n</sup> — 배포와 동일 분포에서 추출</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon"><i class="fas fa-sliders"></i></div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);font-weight:500;">임계값 선택 규칙</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">보정된 경험적 위험이 ε 이하인 <span class="accent">가장 큰 λ</span>를 선택 — 모니터를 최대한 관대하게 만듦</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1rem;">위험 통제: 고확률 제어</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);margin-bottom:1.5rem;" class="muted">Bates et al. (2021) 기반 — 더 강한 통계적 보장</p>
+    <div class="card" style="text-align:center;margin-bottom:1.5rem;">
+      <p style="font-size:clamp(1rem,1.8vw,1.2rem);font-weight:500;">ℙ<sub>𝒟<sub>cal</sub></sub>(ℛ(λ̂) ≤ ε) ≥ 1 − δ</p>
+      <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);margin-top:0.5rem;" class="muted">캘리브레이션 셋 추출의 <span class="accent2">최대 δ 비율을 제외하고</span> 위험이 ε 이하 보장</p>
+    </div>
+    <div class="pipeline" style="margin-bottom:1rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">UCB 계산</div>
+        <div class="step-desc">경험적 위험의 (1−δ) 상한 신뢰계산 U(λ, n, δ)</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">임계값 선택</div>
+        <div class="step-desc">UCB가 ε 이하인 가장 큰 λ 선택</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">보장 달성</div>
+        <div class="step-desc">고확률 위험 통제 완료</div>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);">기댓값 제어보다 <span class="accent2">더 보수적인 임계값</span>을 산출하지만, 실제 배포에서 더 강력한 안전 보장 제공</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">실험 1: 사실성(Factuality) 모니터링</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-flask accent"></i> 설정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학 문제 해결 데이터셋 (GSM8K, MATH)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안전 신호: 프로세스 보상 모델(PRM) 점수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>비교 대상: 순차 가설 검정 기반 모니터 (E-valuator)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>목표 위험 수준: ε = 0.1</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-chart-line accent2"></i> 주요 결과</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>위양성 위험이 <span class="accent">목표 수준 이하로 통제됨</span>을 경험적으로 확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단순 임계값 모니터가 순차 검정 방법과 <span class="accent2">경쟁력 있는 성능</span> 달성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>생성 과정에서 <span class="accent3">더 조기에</span> 경보를Raise</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1rem 0;"></div>
+    <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);text-align:center;" class="muted">복잡한 순차 가설 검정 없이도 단순한 임계값 설계로 충분한 성능을 얻을 수 있음</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">실험 2: 무해성(Harmlessness) 모니터링</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-user-shield accent"></i> 설정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>레드팀 대화 데이터셋 활용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>안전 신호: LLM 세이프가드 분류기</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>독성, 악의적 사용 탐지</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-signal accent3"></i> 핵심 발견</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">더 나은 신호 → 더 나은 모니터</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>신호 품질이 모니터 성능의 결정적 요인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프레임워크는 신호에 구애받지 않고 범용 적용 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);">"모니터 설계의 복잡도를 줄이고, <span class="accent">신호 품질 향상</span>에 자원을 집중하는 것이 더 효과적"</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">신호 비교: PRM vs 토큰 로그확률</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);margin-bottom:1.5rem;" class="muted">모니터 효율성과 성능 간의 트레이드오프 분석</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>특성</th>
+          <th><span class="accent">외부 PRM 신호</span></th>
+          <th><span class="accent3">내부 토큰 로그확률</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:500;">추가 비용</td>
+          <td>높음 (별도 모델 필요)</td>
+          <td>없음</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;">신호 품질</td>
+          <td>높음</td>
+          <td>상대적으로 낮음</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;">위험 통제 품질</td>
+          <td><span class="tag tag-green">우수</span></td>
+          <td><span class="tag tag-amber">보통</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;">조기 탐지 능력</td>
+          <td><span class="tag tag-green">빠름</span></td>
+          <td><span class="tag tag-red">상대적으로 느림</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;">배포 복잡도</td>
+          <td>복잡</td>
+          <td><span class="tag tag-green">단순</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.85rem,1.4vw,0.95rem);margin-top:1rem;text-align:center;" class="muted">토큰 로그확률은 비용 효율적이지만, <span class="accent">안전 모니터링 목적으로는 PRM 신호가 확실히 우위</span></p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">핵심 요약</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-minimize"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">단순함의 힘</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">단일 임계값 규칙이 복잡한 순차 검정과 경쟁력 있음</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-chart-bar"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">통계적 보장</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">기댓값 또는 고확률로 위양성 위험을 엄격히 통제</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-puzzle-piece"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">범용성</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">사실성, 독성, 악의적 사용 등 다양한 안전 위험에 적용 가능</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-bolt"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">조기 탐지</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">생성 중간에 불안전 출력을 식별하여 피해 최소화</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-signal"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">신호가 핵심</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">모니터 설계보다 신호 품질 향상에 투자하는 것이 효과적</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-scale-balanced"></i></div>
+          <div>
+            <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);font-weight:600;">트레이드오프 명시</p>
+            <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">비용 vs 신호 품질 간 명확한 비교 프레임워크 제공</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);margin-bottom:1.5rem;">한계점 및 향후 방향</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-triangle-exclamation accent"></i> 한계점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>캘리브레이션 셋이 배포 분포와 동일하다고 가정 — 분포 시프트 시 성능 저하 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>주로 위양성 위험에 집중, 위음성 위험의 상세 분석은 부록에서만 다룸</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 임계값의 단순성이 복잡한 패턴 탐지에는 한계가 될 수 있음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.2rem);margin-bottom:1rem;"><i class="fas fa-rocket accent2"></i> 향후 방향</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분포 시프트에 강건한 적응적 캘리브레이션 방법</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>위양성·위음성 위험의 동시 통제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>더 다양한 안전 위험 유형으로 확장 (편향, 프라이버시 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 모달 LLM (비전·오디오)로의 일반화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:1.5rem;">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:700;">Online Safety Monitoring for LLMs</h2>
+    <div class="hr" style="width:100px;"></div>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.15rem);">Mona Schirmer, Metod Jazbec, Alexander Timans,<br>Christian Naesseth, Maja Waldron, Eric Nalisnick</p>
+    <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">ICML 2025</p>
+    <a href="http://arxiv.org/abs/2607.02510v1" style="font-size:clamp(0.9rem,1.5vw,1.05rem);text-decoration:underline;" class="accent2">arxiv.org/abs/2607.02510v1</a>
+    <div class="hr" style="width:100px;"></div>
+    <p style="font-size:clamp(0.8rem,1.3vw,0.9rem);" class="muted">단순한 임계값 규칙 + 통계적 위험 통제 = 실용적 온라인 안전 모니터</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
