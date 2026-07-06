@@ -235,3 +235,5 @@ _자동 생성됨_
 - [[sources/2026-07-04-agentscad-automated-design-for-manufacturing-of-fd.md]]
 
 - [[sources/2026-07-05-agentscad-automated-design-for-manufacturing-of-fd.md]]
+
+- [[sources/2026-07-06-agentscad-automated-design-for-manufacturing-of-fd.md]]
