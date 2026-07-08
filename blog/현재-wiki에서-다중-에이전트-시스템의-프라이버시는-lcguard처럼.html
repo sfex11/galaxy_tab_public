@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정상 작동이 곧 누출이다 — 다중 에이전트 시스템의 구조적 프라이버시 위협</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #8a8279;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06), 0 0.5px 2px rgba(44,40,37,0.04);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  article {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* ── 네비게이션 ── */
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 영역 ── */
+  .article-header {
+    margin-top: clamp(32px, 6vw, 64px);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(1.65rem, 4.5vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .article-meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: clamp(12px, 1.5vw, 14px);
+    color: var(--muted);
+  }
+
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(28px, 4vw, 48px) 0;
+  }
+
+  /* ── 히어로 카드 ── */
+  .hero-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: clamp(20px, 3vw, 32px);
+    box-shadow: var(--card-shadow);
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+
+  .hero-card p {
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    line-height: 1.8;
+    color: var(--fg);
+  }
+
+  .hero-card .verdict {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  /* ── 섹션 제목 ── */
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--fg);
+    margin-top: clamp(36px, 5vw, 56px);
+    margin-bottom: 16px;
+    letter-spacing: -0.005em;
+  }
+
+  h2 .section-num {
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 600;
+    color: var(--fg);
+    margin-top: 28px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  /* ── 본문 ── */
+  p {
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  em {
+    font-style: italic;
+    color: var(--accent2);
+  }
+
+  .text-accent { color: var(--accent); font-weight: 600; }
+  .text-accent2 { color: var(--accent2); font-weight: 600; }
+  .text-accent3 { color: var(--accent3); font-weight: 600; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 16px 20px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+    line-height: 1.8;
+    color: #4a4540;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.88em;
+    color: var(--muted);
+    font-style: normal;
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.15);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 1px 8px rgba(44,40,37,0.04);
+  }
+
+  .metaphor-box .metaphor-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  .metaphor-box p {
+    margin-bottom: 10px;
+    color: #3d3a36;
+  }
+
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 분석 카드 ── */
+  .analysis-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    box-shadow: var(--card-shadow);
+    margin: 24px 0;
+  }
+
+  .analysis-card h3 {
+    margin-top: 0;
+  }
+
+  /* ── 표 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+    min-width: 480px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.08);
+    color: var(--accent);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid rgba(194,112,62,0.18);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover {
+    background: rgba(194,112,62,0.03);
+  }
+
+  .label-old {
+    display: inline-block;
+    font-size: 0.85em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(194,112,62,0.1);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .label-new {
+    display: inline-block;
+    font-size: 0.85em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(107,158,122,0.12);
+    color: #4a7a56;
+    font-weight: 500;
+  }
+
+  /* ── 키워드 태그 ── */
+  .wiki-tag {
+    display: inline-block;
+    font-size: 0.82em;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(91,124,153,0.08);
+    color: var(--accent2);
+    font-weight: 500;
+    font-family: 'Source Serif 4', monospace;
+    margin: 1px 2px;
+  }
+
+  /* ── 리스트 ── */
+  ul, ol {
+    margin: 12px 0 20px 20px;
+    color: var(--fg);
+  }
+
+  li {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  li::marker {
+    color: var(--accent);
+  }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-highlight {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(107,158,122,0.06));
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 32px);
+    margin: 28px 0;
+  }
+
+  .conclusion-highlight p:last-child { margin-bottom: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    margin-top: clamp(48px, 8vw, 80px);
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    font-size: clamp(12px, 1.5vw, 14px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    article { padding: 12px 14px 60px; }
+    .hero-card { padding: 16px; }
+    .analysis-card { padding: 16px; }
+    .metaphor-box { padding: 14px; }
+    blockquote { padding: 12px 14px; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px auto;max-width:760px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis · Multi-Agent Privacy</span>
+    <h1>정상 작동이 곧 누출이다<br>다중 에이전트 시스템의 구조적 프라이버시 위협</h1>
+    <p class="article-subtitle">PiSAs 벤치마크가 폭로한 놀라운 사실: 해커가 없어도 사용자 정보가 새어 나간다. 기존 방어 체계는 왜 이를 막지 못하는가?</p>
+    <div class="article-meta">
+      <span>基于 PiSAs 논문 분석</span>
+      <span>다중 에이전트 · 문맥적 무결성 · 프라이버시</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 히어로 카드 -->
+  <div class="hero-card">
+    <p class="verdict">결론부터 말하면: 불가능하다.</p>
+    <p>개별 에이전트의 입출력을 검사하는 인라인 하네스, 런타임 거버넌스, OS 수준 샌드박스 격리—이 모든 방어 수단은 <strong>PiSAs</strong>가 지적하는 문맥적 무결성(Contextual Integrity) 위반을 탐지하거나 방어할 수 없습니다. 왜냐하면 이 누출은 <strong>외부 공격의 결과가 아니라 시스템의 정상 작동 모드 그 자체</strong>이기 때문입니다.</p>
+  </div>
+
+  <!-- 섹션 1 -->
+  <h2><span class="section-num">01</span>문제의 본질: "고장"이 아니라 "설계"다</h2>
+
+  <p>다중 에이전트 시스템(MAS)의 프라이버시 논의는 지금까지 주로 <em>LCGuard</em> 같은 접근으로 요약되어 왔습니다. KV 캐시 공유 계층에서 외부 공격자가 정보를 가로채는 것을 막는 방식이죠. 이는 화살이 날아오는 것을 방패로 막는 것과 같은 논리입니다.</p>
+
+  <p>그런데 PiSAs가 묻는 질문은 전혀 다릅니다. <strong>방패로 막을 수 없는 누출이 있다면?</strong></p>
+
+  <div class="metaphor-box">
+    <div class="metaphor-label">직관적 비유</div>
+    <p>한 건물에 여러 회사가 입주한 오피스를 상상해 보세요. A회사 직원이 복도 게시판에 "오늘 3시에 B회사와 계약서 작성"이라고 적어 놓았습니다. 이 게시판은 건물의 <strong>정상적인 공유 인프라</strong>입니다. 해킹도, 몰래 카메라도 없습니다. 그런데 C회사 직원이 지나가며 그 내용을 읽습니다.</p>
+    <p>문제는 게시판이 "고장 난" 것이 아닙니다. <strong>공유 인프라가 정보의 소유권 경계를 모른다는 것</strong>이 문제입니다. PiSAs가 다중 에이전트 시스템에서 발견한 현상이 정확히 이것입니다.</p>
+  </div>
+
+  <p>PiSAs가 정의하는 문맥적 무결성 위반은 공유 메모리와 에이전트 간 메시지를 통해 <strong>다른 사용자의 정보가 아키텍처의 정상적인 작동 속에서 구조적으로 누출</strong>되는 현상입니다. 외부 공격 경로가 아닙니다. 시스템이 설계된 대로 동작하는 과정 자체에서 정보가 새어 나갑니다.</p>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <h2><span class="section-num">02</span>첫 번째 한계: 감시 카메라가 복도를 못 본다</h2>
+
+  <h3>스키마 축적이 만드는 보이지 않는 누출 경로</h3>
+
+  <p><span class="wiki-tag">aggregate-pipeline-serving</span> 연구의 핵심 발견은 이 문제의 본질을 직격합니다: <strong>다중 서버 MCP 배포에서 파이프라인 전체의 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정된다</strong>는 것입니다.</p>
+
+  <blockquote>
+    스키마가 파이프라인을 따라 축적된다는 것은, 에이전트 A가 호출한 도구의 스키마(구조, 파라미터, 반환값 형식)가 에이전트 B의 컨텍스트에 정상적으로 유입된다는 뜻이다.
+    <cite>— aggregate-pipeline-serving 분석에서</cite>
+  </blockquote>
+
+  <p>여기서 "정상적으로"라는 단어가 핵심입니다. 에이전트 A가 어떤 도구를 사용했는지, 그 도구가 어떤 파라미터를 받고 어떤 값을 반환하는지—이 메타정보가 파이프라인을 타고 에이전트 B에게로 흘러갑니다. 인라인 하네스는 이 흐름을 <strong>정상 동작으로 분류</strong>합니다. 방어해야 할 대상이 방어 체계의 정의상 "정상"에 포함되어 있는 것입니다.</p>
+
+  <div class="metaphor-box">
+    <div class="metaphor-label">직관적 비유</div>
+    <p>감시 카메라가 각 방의 출입구만 감시하고 있다고 상상해 보세요. 방 안에서 일어나는 일은 다 찍습니다. 하지만 <strong>복도를 통해 방과 방 사이로 물건이 자연스럽게 전달되는 과정</strong>은 감시 대상이 아닙니다. 왜냐하면 복도는 "공용 공간"이니까요. 개별 에이전트의 입출력을 검사하는 하네스가 정확히 이 위치에 서 있습니다.</p>
+  </div>
+
+  <div class="analysis-card">
+    <h3>병목 오지정(Bottleneck Misattribution)의 함정</h3>
+    <p><span class="wiki-tag">bottleneck-misattribution</span> 개념이 이를 뒷받침합니다. 우리가 문제의 원인을 잘못 지정하면, 그에 기반한 방어 체계는 근본적으로 엉뚱한 곳을 감시하게 됩니다. 개별 에이전트의 행동을 모니터링하는 것은 "병목이 개별 LLM 호출에 있다"는 오지정에서 비롯된 접근입니다. 실제 병목—그리고 실제 누출 경로—는 <strong>파이프라인 구조 자체</strong>에 있습니다.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <h2><span class="section-num">03</span>두 번째 한계: 스냅샷은 "소유권"을 모른다</h2>
+
+  <h3>의미론적 간극이 만드는 사각지대</h3>
+
+  <p><span class="wiki-tag">agent-os-semantic-gap</span>과 <span class="wiki-tag">algorithm-system-translation-gap</span>이 제시하는 간극은 하네스 기반 방어의 두 번째 한계를 보여줍니다.</p>
+
+  <blockquote>
+    Crab이 이 간극을 구체적 런타임 문제로 현현한다: 에이전트의 의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다.
+    <cite>— agent-os-semantic-gap 분석에서</cite>
+  </blockquote>
+
+  <p>PiSAs 문맥으로 번역하면 이렇습니다: OS 수준의 <span class="wiki-tag">agent-sandbox-state-management</span>는 <strong>상태의 존재 여부</strong>는 알지만 <strong>그 상태가 어떤 사용자의 문맥적 무결성 영역에 속하는지</strong>를 모릅니다.</p>
+
+  <div class="metaphor-box">
+    <div class="metaphor-label">직관적 비유</div>
+    <p>창고 관리 시스템을 생각해 보세요. 시스템은 "3번 선반에 상자가 있다"는 것을 정확히 알고 있습니다. 체크포인트도 찍을 수 있습니다. 하지만 <strong>그 상자 안의 물건이 누구의 것인지</strong>는 시스템이 모릅니다. A 고객의 물건이 B 고객의 선반에 정상적으로 "보관"되어 있어도, 시스템 입장에서는 그저 "상자가 선반에 있다"는 사실만 존재할 뿐입니다.</p>
+  </div>
+
+  <p>Crab의 C/R(Checkpoint/Restore) 런타임이 아무리 정교하게 스냅샷과 복원을 수행해도, 스냅샷 내에 "사용자 A의 정보가 사용자 B의 에이전트 메모리에 정상적으로 복사되어 있다"는 것을 <strong>의미론적 위반</strong>으로 인식할 수 없습니다. <span class="wiki-tag">agent-execution-semantic-opacity</span>이 정확히 이 상태를 지칭합니다—에이전트 실행의 의미론적 내용(어떤 정보가 누구의 문맥에서 와서 누구에게로 흐르는가)이 실행 인프라 수준에서 불투명한 것입니다.</p>
+
+  <p>정리하면: OS 수준의 격리는 <strong>물리적 경계</strong>는 보존하지만, <strong>의미론적 경계</strong>—"이 정보는 원래 어떤 사용자의 문맥에 속했는가"—는 보존하지 못합니다.</p>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <h2><span class="section-num">04</span>세 번째 한계: 확장의 한계, 에이전트 "간" 경계까지 닿지 못한 하네스</h2>
+
+  <h3>하네스 엔지니어링의 진화와 그 끝에서 마주한 벽</h3>
+
+  <p><span class="wiki-tag">agentic-harness-engineering</span>의 진화 경로를 추적하면 문제가 선명해집니다.</p>
+
+  <blockquote>
+    C/R 런타임이 하네스의 핵심 구성요소(결함 내성·롤백·분기)를 직접 구현하는 인프라 계층으로, 하네스 엔지니어링의 범위를 애플리케이션 로직에서 실행 환경까지 확장함을 시사한다.
+    <cite>— agentic-harness-engineering 분석에서</cite>
+  </blockquote>
+
+  <p>Crab은 하네스의 범위를 에이전트 <strong>내부</strong>의 실행 환경까지 확장하는 데 성공했습니다. 결함 내성, 롤백, 분기 실행—이 모든 것이 에이전트 단위로 제어됩니다. 놀라운 성과입니다.</p>
+
+  <p>그러나 PiSAs의 문제는 에이전트 <strong>간</strong> 경계에서 발생합니다.</p>
+
+  <div class="metaphor-box">
+    <div class="metaphor-label">직관적 비유</div>
+    <p>각 방의 보안 시스템이 완벽하게 동작하는 건물입니다. 방 안의 모든 출입, 모든 활동이 감시되고 제어됩니다. 하지만 <strong>방과 방 사이의 벽에 구멍이 뚫려 있어서 공기(정보)가 자연스럽게 순환</strong>하고 있습니다. 방 내부의 보안은 이 구멍을 "건물의 환기 시스템"으로 인식할 뿐, 보안 결함으로 보지 않습니다.</p>
+  </div>
+
+  <p>이것이 <span class="wiki-tag">agent-boundary-semantic-collapse</span>로 포착되어야 할 영역입니다. 기존 하네스 패러다임은 에이전트를 <strong>경계가 명확한 단위</strong>로 전제하고 그 내부를 제어합니다. 에이전트 간 경계가 의미론적으로 붕괴되는 현상—A 사용자의 정보가 파이프라인을 타고 B 사용자의 에이전트에 도달하는 것—자체를 감지하려면, 제어 대상이 "개별 에이전트의 행동"이 아니라 <strong>"에이전트 간 정보 흐름의 문맥적 적합성"</strong>이어야 합니다.</p>
+
+  <p>그런데 기존 하네스는 이 적합성을 평가할 도구를, 아니 개념조차 갖고 있지 않습니다.</p>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 대안 -->
+  <h2><span class="section-num">05</span>패러다임 전환: "행동 통제"에서 "구조 분리"로</h2>
+
+  <h3>런타임에 막을 수 없다면, 설계 시점에 나눠라</h3>
+
+  <p>세 가지 한계가 가리키는 방향은 명확합니다. 기존 패러다임을 전환해야 합니다.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>기존 패러다임</th>
+          <th>필요한 전환</th>
+          <th>핵심 개념</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="label-old">개별 입출력 검사</span></td>
+          <td><span class="label-new">에이전트 간 정보 흐름의 문맥적 무결성 검증</span></td>
+          <td><span class="wiki-tag">agent-boundary-semantic-collapse</span> <span class="wiki-tag">agent-knowledge-separation</span></td>
+        </tr>
+        <tr>
+          <td><span class="label-old">인라인 하네스 (per-agent)</span></td>
+          <td><span class="label-new">파이프라인 수준의 구조적 누출 탐지</span></td>
+          <td><span class="wiki-tag">aggregate-pipeline-serving</span> <span class="wiki-tag">adaptive-bottleneck-migration</span></td>
+        </tr>
+        <tr>
+          <td><span class="label-old">OS 수준 샌드박스 격리</span></td>
+          <td><span class="label-new">의미론적 경계 보존</span></td>
+          <td><span class="wiki-tag">agent-os-semantic-preservation-failure</span> <span class="wiki-tag">agent-native-immune-system</span></td>
+        </tr>
+        <tr>
+          <td><span class="label-old">런타임 거버넌스 (행동 제어)</span></td>
+          <td><span class="label-new">설계 시점의 아키텍처 수준 분리</span></td>
+          <td><span class="wiki-tag">agora-opt</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>MASPO의 통찰: 런타임의 부담을 설계 시점으로</h3>
+
+  <p><span class="wiki-tag">agora-opt</span> 관련 논문에서 MASPO가 제시한 통찰은 이 문제에 직접 적용됩니다.</p>
+
+  <blockquote>
+    Agora-Opt가 런타임 메모리·토론 구조를 통해 다중 에이전트 정렬을 달성했다면, MASPO는 프롬프트 설계 시점에서 사전 정렬을 보장하는 상보적 경로를 제공하여, 런타임 정렬 메커니즘의 부담을 설계 시점으로 분산시킨다.
+    <cite>— agora-opt / MASPO 분석에서</cite>
+  </blockquote>
+
+  <p>정렬(alignment) 문제에서 런타임에만 의존하는 것의 한계를 MASPO가 설계 시점의 사전 정렬로 해결한 것처럼, PiSAs의 구조적 누출도 <strong>런타임 탐지에서 설계 시점 분리로</strong> 이동해야 합니다.</p>
+
+  <p>런타임에 탐지하려는 시도 자체가 <span class="wiki-tag">agent-execution-semantic-opacity</span>에 부딪힙니다. 실행 인프라 수준에서는 정보의 의미론적 소속(이것이 누구의 문맥에서 온 것인가)을 판별할 수 없기 때문입니다. 이것은 기술적 한계가 아니라 <strong>원리적 한계</strong>입니다.</p>
+
+  <div class="conclusion-highlight">
+    <h3 style="margin-top:0;color:var(--accent3);">필요한 것: 세 가지 구조적 변화</h3>
+    <p><strong>첫째,</strong> 아키텍처 설계 시점에서 에이전트 간 <span class="wiki-tag">agent-knowledge-separation</span>을 강제해야 합니다. 스키마 축적이 파이프라인을 따라 무제한으로 전파되는 것을 구조적으로 차단하는 메커니즘이 필요합니다.</p>
+    <p><strong>둘째,</strong> <span class="wiki-tag">agent-native-serving</span> 계층에서 문맥적 무결성을 <strong>일급(first-class) 제약</strong>으로 처리해야 합니다. 성능 최적화나 장애 복구와 동등한 위계의 설계 제약으로, "이 정보는 어떤 사용자 문맥에 속하는가"를 서빙 인프라가 추적해야 합니다.</p>
+    <p><strong>셋째,</strong> <span class="wiki-tag">agent-native-immune-system</span>의 개념처럼, 에이전트 간 경계에서 의미론적 붕괴가 발생하는 것을 아키텍처 수준에서 감지하고 격리하는 메커니즘을 내장해야 합니다. 이것은 "행동 통제"가 아니라 "구조적 면역"입니다.</p>
+  </div>
+
+  <p>PiSAs가 우리에게 던지는 진정한 도전은 기술적 문제가 아닙니다. <strong>관점의 문제</strong>입니다. "개별 에이전트가 안전한가?"에서 "에이전트 간 파이프라인이 문맥적으로 건강한가?"로 질문을 바꿔야 합니다. 그 전환 없이는 아무리 정교한 하네스를 만들어도, 정상 작동하는 시스템의 틈새로 사용자의 정보가 조용히 흘러나갈 것입니다.</p>
+
+  <hr class="divider">
+
+  <footer class="article-footer">
+    <p><strong>분석 대상 논문:</strong> PiSAs: Benchmarking Contextual Integrity in Multi-User Agentic Systems</p>
+    <p style="margin-top:6px;">본 분석은 Wiki의 연관 슬러그 크로스 참조(agent-boundary-semantic-collapse, agent-knowledge-separation, aggregate-pipeline-serving, agent-os-semantic-gap, agent-execution-semantic-opacity, agentic-harness-engineering, agora-opt 등)를 기반으로 작성되었습니다.</p>
+  </footer>
+
+</article>
+
+</body>
+</html>

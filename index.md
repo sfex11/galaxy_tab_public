@@ -1191,3 +1191,21 @@
 - [[sources/2026-07-07-reasoning-effort-not-tool-access-buys-first-try-re.md]] - Reasoning effort, not tool access, buys first-try reliability in agentic code generation: an observational study
 - [[sources/2026-07-07-an-efficient-vllm-based-inference-pipeline-for-uni.md]] - An Efficient vLLM-Based Inference Pipeline for Unified Audio Understanding and Generation
 - [[sources/2026-07-07-towards-load-aware-prefill-deflection-for-disaggre.md]] - Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving
+- [[sources/2026-07-08-llm-as-a-verifier-a-general-purpose-verification-f.md]] - LLM-as-a-Verifier: A General-Purpose Verification Framework
+- [[sources/2026-07-08-search-beyond-what-can-be-taught-evolving-the-know.md]] - Search Beyond What Can Be Taught: Evolving the Knowledge Boundary in Agentic Visual Generation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-08-compactionrl-reinforcement-learning-with-context-c.md]] - CompactionRL: Reinforcement Learning with Context Compaction for Long-Horizon Agents
+- [[sources/2026-07-08-cortex-a-bidirectionally-aligned-embodied-agent-fr.md]] - Cortex: A Bidirectionally Aligned Embodied Agent Framework for Long-horizon Manipulation
+- [[sources/2026-07-08-gap-a-graph-as-policy-multi-agent-self-learning-ha.md]] - GaP: A Graph-as-Policy Multi-Agent Self-Learning Harness For Variational Automation Tasks
+- [[sources/2026-07-08-sovereignpa-bench-evaluating-user-owned-personal-a.md]] - SovereignPA-Bench: Evaluating User-Owned Personal Agents under Evolving Intent, Platform Mediation, and Consent Constraints
+- [[sources/2026-07-08-selective-disclosure-watermarking-for-large-langua.md]] - Selective Disclosure Watermarking for Large Language Models
+- [[sources/2026-07-08-multiplayer-interactive-world-models-with-represen.md]] - Multiplayer Interactive World Models with Representation Autoencoders
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-08-optiagent-end-to-end-optimization-modeling-via-mul.md]] - OptiAgent: End-to-End Optimization Modeling via Multi-Agent Iterative Refinement
+- [[sources/2026-07-08-graph-sparse-sampling-breaking-the-curse-of-the-ho.md]] - Graph Sparse Sampling: Breaking the Curse of the Horizon in Continuous MDP Planning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-08-pisas-benchmarking-contextual-integrity-in-multi-u.md]] - PiSAs: Benchmarking Contextual Integrity in Multi-User Agentic Systems
+- [[sources/2026-07-08-how-much-is-left-llms-linearly-encode-their-remain.md]] - How Much is Left? LLMs Linearly Encode Their Remaining Output Length
+- [[entities/transformer]] - Transformer
+- [[sources/2026-07-08-unified-audio-intelligence-without-regressing-on-t.md]] - Unified Audio Intelligence Without Regressing on Text Intelligence
+- [[sources/2026-07-08-latent-programming-horizons-in-coding-agents.md]] - Latent Programming Horizons in Coding Agents

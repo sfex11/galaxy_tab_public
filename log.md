@@ -2256,3 +2256,31 @@
 ## [2026-07-07 08:52] ingest | Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving
 
 ## [2026-07-08 02:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1253개
+
+## [2026-07-08 08:38] ingest | LLM-as-a-Verifier: A General-Purpose Verification Framework
+
+## [2026-07-08 08:38] ingest | Search Beyond What Can Be Taught: Evolving the Knowledge Boundary in Agentic Visual Generation
+
+## [2026-07-08 08:38] ingest | CompactionRL: Reinforcement Learning with Context Compaction for Long-Horizon Agents
+
+## [2026-07-08 08:38] ingest | Cortex: A Bidirectionally Aligned Embodied Agent Framework for Long-horizon Manipulation
+
+## [2026-07-08 08:38] ingest | GaP: A Graph-as-Policy Multi-Agent Self-Learning Harness For Variational Automation Tasks
+
+## [2026-07-08 08:38] ingest | SovereignPA-Bench: Evaluating User-Owned Personal Agents under Evolving Intent, Platform Mediation, and Consent Constraints
+
+## [2026-07-08 08:38] ingest | Selective Disclosure Watermarking for Large Language Models
+
+## [2026-07-08 08:38] ingest | Multiplayer Interactive World Models with Representation Autoencoders
+
+## [2026-07-08 08:38] ingest | OptiAgent: End-to-End Optimization Modeling via Multi-Agent Iterative Refinement
+
+## [2026-07-08 08:38] ingest | Graph Sparse Sampling: Breaking the Curse of the Horizon in Continuous MDP Planning
+
+## [2026-07-08 08:38] ingest | PiSAs: Benchmarking Contextual Integrity in Multi-User Agentic Systems
+
+## [2026-07-08 08:38] ingest | How Much is Left? LLMs Linearly Encode Their Remaining Output Length
+
+## [2026-07-08 08:38] ingest | Unified Audio Intelligence Without Regressing on Text Intelligence
+
+## [2026-07-08 08:38] ingest | Latent Programming Horizons in Coding Agents
