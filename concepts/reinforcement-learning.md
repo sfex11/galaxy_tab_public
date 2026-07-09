@@ -301,3 +301,5 @@ _자동 생성됨_
 - [[sources/2026-07-03-is-one-layer-enough-training-a-single-transformer-.md]]
 
 - [[sources/2026-07-08-compactionrl-reinforcement-learning-with-context-c.md]]
+
+- [[sources/2026-07-09-multi-agent-deep-reinforcement-learning-for-multi-.md]]

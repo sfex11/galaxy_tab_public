@@ -1209,3 +1209,13 @@
 - [[entities/transformer]] - Transformer
 - [[sources/2026-07-08-unified-audio-intelligence-without-regressing-on-t.md]] - Unified Audio Intelligence Without Regressing on Text Intelligence
 - [[sources/2026-07-08-latent-programming-horizons-in-coding-agents.md]] - Latent Programming Horizons in Coding Agents
+- [[sources/2026-07-09-rsf-gllm-bridging-the-semantic-gap-in-multi-hop-kn.md]] - RSF-GLLM: Bridging the Semantic Gap in Multi-Hop Knowledge Graph QA via Recurrent Soft-Flow and Decoupled LLM Generation
+- [[entities/transformer]] - Transformer
+- [[sources/2026-07-09-freqdepthkv-frequency-guided-depth-sharing-for-rob.md]] - FreqDepthKV: Frequency-Guided Depth Sharing for Robust KV Cache Compression in Long-Context LLM Inference
+- [[sources/2026-07-09-doomed-from-the-start-early-abort-of-llm-agent-epi.md]] - Doomed from the Start: Early Abort of LLM Agent Episodes via a Recall-Controlled Probe Cascade
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-09-multi-agent-deep-reinforcement-learning-for-multi-.md]] - Multi-Agent Deep Reinforcement Learning for Multi Objective Battery Management in Dairy Farms
+- [[sources/2026-07-09-hypothesis-driven-model-expansion-under-uncertaint.md]] - Hypothesis-driven Model Expansion under Uncertainty for Open-World Robot Planning
+- [[sources/2026-07-09-assessing-the-operational-impact-of-poisoning-atta.md]] - Assessing the Operational Impact of Poisoning Attacks over Augmented 3D Point Cloud Public Datasets for Connected and Autonomous Vehicles
+- [[sources/2026-07-09-data-analysis-in-the-wild-benchmarking-large-langu.md]] - Data Analysis in the Wild: Benchmarking Large Language Models Against Real-World Data Complexities
+- [[sources/2026-07-09-from-voting-to-agent-collaboration-answer-type-awa.md]] - From Voting to Agent Collaboration: Answer-Type-Aware LLM Pipelines for BioASQ 14b

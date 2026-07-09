@@ -2284,3 +2284,19 @@
 ## [2026-07-08 08:38] ingest | Unified Audio Intelligence Without Regressing on Text Intelligence
 
 ## [2026-07-08 08:38] ingest | Latent Programming Horizons in Coding Agents
+
+## [2026-07-09 08:33] ingest | RSF-GLLM: Bridging the Semantic Gap in Multi-Hop Knowledge Graph QA via Recurrent Soft-Flow and Decoupled LLM Generation
+
+## [2026-07-09 08:33] ingest | FreqDepthKV: Frequency-Guided Depth Sharing for Robust KV Cache Compression in Long-Context LLM Inference
+
+## [2026-07-09 08:33] ingest | Doomed from the Start: Early Abort of LLM Agent Episodes via a Recall-Controlled Probe Cascade
+
+## [2026-07-09 08:33] ingest | Multi-Agent Deep Reinforcement Learning for Multi Objective Battery Management in Dairy Farms
+
+## [2026-07-09 08:33] ingest | Hypothesis-driven Model Expansion under Uncertainty for Open-World Robot Planning
+
+## [2026-07-09 08:33] ingest | Assessing the Operational Impact of Poisoning Attacks over Augmented 3D Point Cloud Public Datasets for Connected and Autonomous Vehicles
+
+## [2026-07-09 08:33] ingest | Data Analysis in the Wild: Benchmarking Large Language Models Against Real-World Data Complexities
+
+## [2026-07-09 08:33] ingest | From Voting to Agent Collaboration: Answer-Type-Aware LLM Pipelines for BioASQ 14b
