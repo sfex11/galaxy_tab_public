@@ -2302,3 +2302,5 @@
 ## [2026-07-09 08:33] ingest | From Voting to Agent Collaboration: Answer-Type-Aware LLM Pipelines for BioASQ 14b
 
 ## [2026-07-10 02:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1270개
+
+## [2026-07-10 04:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1270개
