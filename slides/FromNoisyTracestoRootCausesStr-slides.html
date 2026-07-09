@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Noisy Traces to Root Causes: Structural Trajectory Anal — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom: clamp(16px, 3vw, 40px);">
+      <span class="tag tag-amber">Agent Optimization</span>
+      <span class="tag tag-green">Causal Analysis</span>
+      <span class="tag tag-red">Trajectory Mining</span>
+    </div>
+    <h1 style="font-size: clamp(1.6rem, 3.5vw, 3rem); line-height: 1.25; margin-bottom: clamp(12px, 2vw, 24px);">노이즈가 많은 트레이스에서 근본 원인까지:<br>에이전트 최적화를 위한 구조적 궤적 분석과 인과 추출</h1>
+    <p class="muted" style="font-size: clamp(0.85rem, 1.3vw, 1.1rem); margin-bottom: clamp(20px, 3vw, 36px);">From Noisy Traces to Root Causes: Structural Trajectory Analysis and Causal Extraction for Agent Optimization</p>
+    <div class="hr"></div>
+    <p style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-top: clamp(12px, 2vw, 20px);">Ying Chang, Jiahang Xu, Xuan Feng, Chenyuan Yang, Peng Cheng, Yuqing Yang</p>
+    <p class="muted" style="font-size: clamp(0.75rem, 1vw, 0.9rem);">University of Chinese Academy of Sciences · Microsoft Research</p>
+    <p class="muted" style="font-size: clamp(0.7rem, 0.9vw, 0.85rem); margin-top: clamp(8px, 1.5vw, 16px);">arXiv: 2607.07702v1 · July 2026</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">배경: 복합 에이전트 시스템의 부상</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);"><i class="fas fa-robot" style="margin-right: 6px;"></i>단일 턴 → 복합 시스템</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">단순 챗봇에서 도구 사용, 동적 메모리, 다단계 제어 흐름을 오케스트레이션하는 정교한 운영 단위로 진화</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);"><i class="fas fa-route" style="margin-right: 6px;"></i>복잡한 실행 궤적</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">추론 체인, 코드 실행 환경, 상태 전이를 포함하는 복잡한 실행 트레이스가 생성됨</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);">이러한 궤적 정보를 효과적으로 활용하여 에이전트 시스템을 더욱 향상시키는 것이 핵심 과제가 되었다.</p>
+    </div>
+    <p style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-top: clamp(12px, 2vw, 20px);">지배적인 최적화 패러다임: <span class="accent">반사적 최적화(Reflexive Optimization)</span> — LLM이 실패를 진단하고 에이전트 정책을 개선</p>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">문제 정의: <span class="accent">Context-Noise Trade-off</span></h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1.2vw, 12px);"><span class="tag tag-red">문제 A</span> 전체 궤적</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">무관한 성공 단계와 저신호잡음비(SNR) 컨텍스트가 과부하를 유발 → 허구적 상관관계, 환각적 프롬프트 패치</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1.2vw, 12px);"><span class="tag tag-red">문제 B</span> 짧은 절단</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">국소 근접성을 인과적 관련성의 신호로 처리 → 멀리 있으나 인과적으로 필수적인 기록을 삭제할 위험</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1.2vw, 12px);"><span class="tag tag-green">해결</span> STRACE</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">인과적 컨텍스트 증류를 통해 <span class="accent3">컴팩트한 인과 슬라이스</span>를 추출하여 고SNR 최적화 컨텍스트 제공</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);"><span class="accent">핵심 현실:</span> 에러가 나타나는 노드(하류 증상)는 종종 에러가 기원하는 노드(상류 근본 원인)가 아니다. 예: Step 50의 Code Interpreter 충돌은 Step 5의 Planner 오류의 지연된 결과일 수 있다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">STRACE 프레임워크 개요</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <p class="muted" style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-bottom: clamp(16px, 2.5vw, 28px);">실행 로그를 단일 선형 텍스트가 아닌 <span class="accent">인과 그래프</span>로 취급하는 최적화 프레임워크</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">구조적 모델링</div>
+        <div class="step-desc">텍스트 의존성 그래프 구성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">실패 패턴 마이닝</div>
+        <div class="step-desc">트레이스 필터링</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">인과적 지역화</div>
+        <div class="step-desc">근본 원인 탐지</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">귀납적 정책 최적화</div>
+        <div class="step-desc">자연어 휴리스틱 합성</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-layer-group" style="margin-right: 6px;"></i>배치 수준</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">실패 패턴 마이닝으로 중복 트레이스 필터링, 대표적 실패만 보존</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-crosshairs" style="margin-right: 6px;"></i>개별 트레이스 수준</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">텍스트 의존성 그래프 상에서 인과 지역화로 비인과 단계 제거, 진정한 근본 원인 모듈 식별</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">Phase 1: 구조적 모델링</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);">텍스트 의존성 그래프 구성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트 컴포넌트 간 <span class="accent">데이터 및 제어 관계</span>를 의존성 사전으로 기록</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컴팩트한 텍스트 의존성 그래프(Textual Dependency Graph) 추론</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>노드: 에이전트 모듈 (Planner, Code Interpreter, Retriever 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>엣지: 모듈 간의 정보 흐름 및 제어 의존성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-project-diagram" style="margin-right: 6px;"></i>역할</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-bottom: clamp(8px, 1.5vw, 14px);">이 토폴로지는 후속 단계들의 <span class="accent2">구조적 가이드</span>로 활용됨</p>
+        <div class="hr"></div>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">단순한 선형 텍스트가 아닌, 구조적 관계를 명시적으로 모델링하여 인과 추적의 기반 제공</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">Phase 2: 실패 패턴 마이닝 & 트레이스 필터링</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="flow-item" style="margin-bottom: clamp(12px, 2vw, 20px);">
+      <div class="flow-icon">1</div>
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: 4px;">배치 진단 요약</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">각 배치의 실패 트레이스를 <span class="accent">통계적 및 구조적 진단</span>으로 요약</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom: clamp(12px, 2vw, 20px);">
+      <div class="flow-icon">2</div>
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: 4px;">재발 및 심각도 신호 분석</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">실패 패턴의 <span class="accent2">빈도</span>와 <span class="accent2">심각도</span>를 기준으로 중복/저가치 실패 식별</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom: clamp(16px, 2vw, 24px);">
+      <div class="flow-icon">3</div>
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: 4px;">대표적 실패 트레이스 보존</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">컴팩트한 트레이스 집합만 남겨 <span class="accent3">최적화 효율성</span> 극대화</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);">모든 실패 트레이스에서 최적화를 시도하는 것은 계산적으로 비실용적이며, 취약하고 과적합된 업데이트를 초래함</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">Phase 3: 인과적 지역화 <span class="muted">(Causal Localization)</span></h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);">의존성 역추적</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>의존성 그래프를 따라 <span class="accent">역방향 추적</span> 수행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무관한 단계를 제거하여 <span class="accent2">컴팩트한 인과 슬라이스</span> 추출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에러의 <span class="accent3">논리적 기원</span>을 발현 노드가 아닌 위치에서 식별</li>
+        </ul>
+        <div class="hr" style="margin-top: clamp(12px, 2vw, 20px);"></div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);">근본 원인 모듈 식별</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">최적화 대상으로서 진정한 <span class="accent">루트-카우스 모듈</span>을 정확히 지정</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-scissors" style="margin-right: 6px;"></i>인과 슬라이스 vs 기존 방법</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem); margin-bottom: clamp(6px, 1vw, 10px);"><span class="accent">절단(Truncation)</span>: 시간적 근접성 기준 → 인과적 연결 단절 위험</p>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem); margin-bottom: clamp(6px, 1vw, 10px);"><span class="accent">슬라이딩 윈도우</span>: 고정 범위 → 장거리 인과 의존성 누락</p>
+        <div class="hr"></div>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);"><span class="accent3">인과 슬라이스</span>: 의존성 그래프 기반 → 증상과 기원 간 시간적 간극을_bridge하면서 노이즈 동시 필터링</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">Phase 4: 귀납적 정책 최적화</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);">최적화 과정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>지역화된 실패 에피소드를 활용하여 <span class="accent">일반화된 자연어 휴리스틱</span> 합성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>예방적 가이드라인을 <span class="accent2">식별된 근본 원인 모듈의 명령어에만</span> 주입</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기본 실행 코드 변경 없이 <span class="accent3">지속적, 안전, 비용 효율적</span> 개선</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-shield-alt" style="margin-right: 6px;"></i>안전성 보장</h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-bottom: clamp(8px, 1.5vw, 14px);">코드 수정이 아닌 <span class="accent">프롬프트 수준의 개입</span>만으로 정책 업데이트</p>
+        <div class="hr"></div>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">기존 시스템의 동작을 파괴하지 않고 점진적 향상 가능 — 롤백도 용이</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);">핵심 차별점: 증상 수리가 아닌 <span class="accent">근본 원인 모듈에만</span> 타겟팅된 최적화를 수행함으로써, 잘못된 컴포넌트 업데이트를 방지</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">실험 설정</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-fire" style="margin-right: 6px;"></i>HotpotQA</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem); margin-bottom: clamp(4px, 0.8vw, 8px);">멀티홉 질의응답</p>
+        <p class="muted" style="font-size: clamp(0.7rem, 1vw, 0.85rem);">다중 문서 추론 능력 평가</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-globe" style="margin-right: 6px;"></i>WebArena</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem); margin-bottom: clamp(4px, 0.8vw, 8px);">실제 웹 환경 에이전트</p>
+        <p class="muted" style="font-size: clamp(0.7rem, 1vw, 0.85rem);">복잡한 웹 작업 자동화 평가</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.95rem, 1.4vw, 1.15rem); margin-bottom: clamp(6px, 1vw, 10px);"><i class="fas fa-shield-virus" style="margin-right: 6px;"></i>VeruSAGE-Bench</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem); margin-bottom: clamp(4px, 0.8vw, 8px);">형식적 검증 작업</p>
+        <p class="muted" style="font-size: clamp(0.7rem, 1vw, 0.85rem);">전문가 설계 에이전트 최적화</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top: clamp(16px, 2.5vw, 28px); margin-bottom: clamp(12px, 2vw, 20px);"></div>
+    <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);">비교 대상 (Baselines)</h3>
+    <div class="grid-2">
+      <div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Full Trajectory (전체 궤적)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Short Truncation (짧은 절단)</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GEPA (진화적 프롬프트 최적화)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Hands-off Agents (무개입 에이전트)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">주요 결과</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>HotpotQA</th>
+          <th>WebArena</th>
+          <th>VeruSAGE-Bench</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Base Agent</td>
+          <td>—</td>
+          <td>—</td>
+          <td>42.5%</td>
+        </tr>
+        <tr>
+          <td>Full Trajectory</td>
+          <td>하위 성능</td>
+          <td>하위 성능</td>
+          <td>개선 미미</td>
+        </tr>
+        <tr>
+          <td>Short Truncation</td>
+          <td>부분 개선</td>
+          <td>부분 개선</td>
+          <td>개선 미미</td>
+        </tr>
+        <tr>
+          <td>GEPA</td>
+          <td>중간 성능</td>
+          <td>중간 성능</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><span class="accent">STRACE</span></td>
+          <td><span class="accent">최고 성능</span></td>
+          <td><span class="accent">최고 성능</span></td>
+          <td><span class="accent">58.5%</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid-2" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <div class="card">
+        <div class="big-num">+16.0%</div>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">VeruSAGE-Bench 절대 성능 향상<br><span class="muted">(42.5% → 58.5%)</span></p>
+      </div>
+      <div class="card">
+        <div class="big-num">1.4×</div>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">성공률 개선 배수<br><span class="muted">전문가 설계 에이전트 대상</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">최적화 확장성 및 비용 분석</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);"><i class="fas fa-chart-line" style="margin-right: 6px;"></i>확장성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>트레이스 필터링으로 <span class="accent">불필요한 최적화 비용</span> 대폭 절감</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인과 슬라이스로 <span class="accent2">컨텍스트 길이 효율적 관리</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>배치 크기 증가에도 안정적 성능 유지</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size: clamp(0.95rem, 1.5vw, 1.2rem); margin-bottom: clamp(8px, 1.5vw, 14px);"><i class="fas fa-coins" style="margin-right: 6px;"></i>비용 효율성</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Full Trajectory 대비 <span class="accent3">토큰 사용량大幅 감소</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단계별 비용 분석에서 Phase 2의 필터링이 <span class="accent">가장 큰 비용 절감</span> 기여</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>코드 수정 없이 프롬프트만 업데이트하므로 <span class="accent2">배포 비용 최소화</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);">STRACE는 <span class="accent">더 적은 컨텍스트</span>로 <span class="accent">더 정확한 최적화</span>를 달성하여, 비용-성능 트레이드오프에서 기존 방법들을 일관되게 상회</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">사례 연구: 증상에서 근본 원인까지 추적</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="pipeline" style="margin-bottom: clamp(16px, 2.5vw, 28px);">
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="step-label">증상</div>
+        <div class="step-desc">Step 50: Code Interpreter 충돌</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-search"></i></div>
+        <div class="step-label">의존성 역추적</div>
+        <div class="step-desc">그래프 상에서 역방향 탐색</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-bullseye"></i></div>
+        <div class="step-label">근본 원인</div>
+        <div class="step-desc">Step 5: Planner 오류</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-wrench"></i></div>
+        <div class="step-label">타겟팅 수정</div>
+        <div class="step-desc">Planner 명령어에만 가이드라인 주입</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><span class="tag tag-red">기존 방법</span></h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">Code Interpreter(Step 50)의 명령어를 수정 시도 → 증상만 수리, 근본 원인 미해결 → 동일 패턴 재발</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-bottom: clamp(6px, 1vw, 10px);"><span class="tag tag-green">STRACE</span></h3>
+        <p style="font-size: clamp(0.8rem, 1.2vw, 1rem);">Planner(Step 5)를 근본 원인으로 식별 → Planner 명령어에 예방적 가이드라인 주입 → <span class="accent3">패턴 근절</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">절제 연구 <span class="muted">(Ablation Study)</span></h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>구성</th>
+          <th>제거된 단계</th>
+          <th>영향</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="accent">STRACE (Full)</span></td>
+          <td>—</td>
+          <td><span class="tag tag-green">최고 성능</span></td>
+        </tr>
+        <tr>
+          <td>w/o Structural Modeling</td>
+          <td>Phase 1 제거</td>
+          <td><span class="tag tag-red">성능 하락</span> 의존성 정보 부재</td>
+        </tr>
+        <tr>
+          <td>w/o Trace Filtering</td>
+          <td>Phase 2 제거</td>
+          <td><span class="tag tag-red">성능 하락</span> 중복 트레이스 과부하</td>
+        </tr>
+        <tr>
+          <td>w/o Slicing (Current Node)</td>
+          <td>Phase 3 — 현재 노드만</td>
+          <td><span class="tag tag-amber">부분 하락</span> 근본 원인 탐지 실패</td>
+        </tr>
+        <tr>
+          <td>w/o Slicing (Full Trace)</td>
+          <td>Phase 3 — 전체 트레이스</td>
+          <td><span class="tag tag-red">성능 하락</span> 노이즈 재유입</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top: clamp(16px, 2.5vw, 28px);">
+      <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem);">네 단계 모두가 <span class="accent">상호 보완적</span>으로 작동하며, 특히 <span class="accent2">구조적 모델링(Phase 1)</span>과 <span class="accent2">인과 슬라이싱(Phase 3)</span>의 결합이 핵심 성능 driverr</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(12px, 2vw, 24px);">결론</h2>
+    <div class="hr" style="margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num">1</div>
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-top: clamp(6px, 1vw, 10px); margin-bottom: clamp(4px, 0.8vw, 8px);">구조적 인과 프레임워크</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">실행 로그를 단일 선형 텍스트가 아닌 구조적 인과 증거로 취급하는 end-to-end 최적화 프레임워크 제안</p>
+      </div>
+      <div class="card">
+        <div class="big-num">2</div>
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-top: clamp(6px, 1vw, 10px); margin-bottom: clamp(4px, 0.8vw, 8px);">이중 수준 필터링</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">배치 수준 트레이스 필터링 + 개별 트레이스 수준 인과 지역화로 고SNR 최적화 컨텍스트 구축</p>
+      </div>
+      <div class="card">
+        <div class="big-num">3</div>
+        <h3 style="font-size: clamp(0.9rem, 1.3vw, 1.1rem); margin-top: clamp(6px, 1vw, 10px); margin-bottom: clamp(4px, 0.8vw, 8px);">일관된 성능 향상</h3>
+        <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">다양한 벤치마크에서 기존 방법들을 일관되게 상회, 특히 VeruSAGE에서 1.4× 성공률 개선</p>
+      </div>
+    </div>
+    <div class="hr" style="margin-top: clamp(20px, 3vw, 36px); margin-bottom: clamp(16px, 2.5vw, 28px);"></div>
+    <h2 style="font-size: clamp(1rem, 2vw, 1.6rem); margin-bottom: clamp(8px, 1.5vw, 14px);">From Noisy Traces to Root Causes</h2>
+    <p style="font-size: clamp(0.85rem, 1.3vw, 1.05rem); margin-bottom: clamp(4px, 0.8vw, 8px);">Structural Trajectory Analysis and Causal Extraction for Agent Optimization</p>
+    <p style="font-size: clamp(0.8rem, 1.2vw, 1rem); margin-bottom: clamp(4px, 0.8vw, 8px);">Ying Chang, Jiahang Xu, Xuan Feng, Chenyuan Yang, Peng Cheng, Yuqing Yang</p>
+    <p style="font-size: clamp(0.75rem, 1.1vw, 0.9rem);">University of Chinese Academy of Sciences · Microsoft Research</p>
+    <p class="muted" style="font-size: clamp(0.7rem, 0.9vw, 0.85rem); margin-top: clamp(8px, 1.5vw, 16px);"><i class="fas fa-link" style="margin-right: 4px;"></i>arXiv: http://arxiv.org/abs/2607.07702v1</p>
+    <p class="muted" style="font-size: clamp(0.7rem, 0.9vw, 0.85rem);"><i class="fab fa-github" style="margin-right: 4px;"></i>https://github.com/moomight/STRACE</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
