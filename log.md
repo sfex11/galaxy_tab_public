@@ -2304,3 +2304,33 @@
 ## [2026-07-10 02:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1270개
 
 ## [2026-07-10 04:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1270개
+
+## [2026-07-10 08:08] llm-ingest | 0편 분석, 엔티티 355개, 개념 1270개
+
+## [2026-07-10 08:41] ingest | Co-LMLM: Continuous-Query Limited Memory Language Models
+
+## [2026-07-10 08:41] ingest | From Noisy Traces to Root Causes: Structural Trajectory Analysis and Causal Extraction for Agent Optimization
+
+## [2026-07-10 08:41] ingest | Breaking Database Lock-in: Agentic Regeneration of High Performance Storage Readers for Database Bypass
+
+## [2026-07-10 08:41] ingest | Institutional Red-Teaming: Deployment Rules, Not Just Models, Causally Shape Multi-Agent AI Safety
+
+## [2026-07-10 08:41] ingest | Agent Delivery Engineering Predictive Reliability Framework
+
+## [2026-07-10 08:41] ingest | SkillCenter: A Large-Scale Source-Grounded Skill Library for Autonomous AI Agents
+
+## [2026-07-10 08:41] ingest | A hierarchical memory architecture overcomes context limits in long-horizon multi-agent computational modeling
+
+## [2026-07-10 08:41] ingest | Future Confidence Distillation in Large Language Models
+
+## [2026-07-10 08:41] ingest | Recursive Self-Improvement in AI: From Bounded Self-Refinement to Autonomous Research Loops
+
+## [2026-07-10 08:41] ingest | Towards Agentic AI Governance: A Preliminary Assessment
+
+## [2026-07-10 08:41] ingest | DiaLLM: An Investigation into the Robustness-Generation Gap in English Dialect Adaptation
+
+## [2026-07-10 08:41] ingest | DeLS-Spec: Decoupled Long-Short Contexts for Parallel Speculative Drafting
+
+## [2026-07-10 08:41] ingest | TF-Engram: A Train-Free Engram with SSD-Backed Memory for Large Language Models
+
+## [2026-07-10 08:41] ingest | Does Bielik Know What It Doesn't Know? Activation Dispersion Separates Entity Familiarity from Factual Reliability Across Model Scale
