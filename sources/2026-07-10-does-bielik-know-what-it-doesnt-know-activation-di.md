@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-10-future-confidence-distillation-in-large-language-m]]: 두 논문은 LLM이 답변의 신뢰성을 내부적으로 판단하는 신호를 탐구하며, 하나는 미래 신뢰도를 증류하는 방법을 제안하고 다른 하나는 활성화 분산도가 사실적 신뢰도를 예측함을 보여준다.
+- → [[sources/2026-07-08-llm-as-a-verifier-a-general-purpose-verification-f]]: 두 논문은 LLM 출력의 정확성을 사전에 예측하는 방법을 제안하며, 하나는 LLM 자체를 범용 검증자로 활용하고 다른 하나는 생성 전 활성화 분산도로 개체 친숙도와 사실적 신뢰도를 분리하여 판별한다.
