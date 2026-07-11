@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Weights in LLMs and the Failure of Selective Training — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;gap:1.5rem;">
+      <span class="tag tag-amber">arXiv: 2607.08733v1</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);text-align:center;line-height:1.3;">LLM의 슈퍼 웨이트와<br>선택적 학습의 실패</h1>
+      <p class="muted" style="font-size:clamp(0.9rem,1.5vw,1.1rem);text-align:center;">Super Weights in LLMs and the Failure of Selective Training</p>
+      <div class="hr" style="width:120px;"></div>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);text-align:center;">Shreyas Subramanian, Adewale Akinfaderin, Akarsha Sehwag<br><span class="muted">Amazon Web Services</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">연구 배경과 동기</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">파라미터 효율적 미세조정(PEFT)</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LoRA는 전체 파라미터의 0.1~1%만 업데이트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미세조정은 매우 낮은 본질 차원에서 동작</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>랜덤한 저차원 부분공간으로도 충분</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">자연스러운 가설</h3>
+        <div class="quote-block">
+          랜덤한 부분공간도 작동한다면, <span class="accent">가장 중요한 파라미터를 명시적으로 타겟팅</span>하면 적어도 그 이상으로 작동해야 하지 않을까?
+        </div>
+        <p class="muted" style="margin-top:1rem;font-size:clamp(0.85rem,1.2vw,0.95rem);">이 가설이 <span class="accent">틀렸음</span>을 증명합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">슈퍼 웨이트란 무엇인가?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">정의</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">개별 스칼라 파라미터로, 제거 시 모델 성능이 <span class="accent">몇 자릿수만큼 급격히 저하</span>되는 특수한 가중치</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.6;" class="muted">Yu et al. (2025)이 최초로 식별<br>활성화 이상치(outlier)의 근원을 down_proj 가중치에서 추적</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">분포 특성</h3>
+        <div class="big-num" style="margin-bottom:0.8rem;">80%</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-bottom:1rem;">전체 모델에서 top-10 최대 크기 파라미터가 <span class="accent2">down_proj</span>에 집중</p>
+        <div class="big-num" style="margin-bottom:0.8rem;">52%</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);">top-100 파라미터 중 down_proj 비율</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:1.2rem;font-size:clamp(0.8rem,1.2vw,0.9rem);text-align:center;">이는 설계 선택이 아닌 <span class="accent">경험적 발견</span>이며, 사전 학습 과정에서 자연스럽게 발생</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">슈퍼 웨이트 일관성 검증</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;line-height:1.7;">기존 연구의 한계: Yu et al.은 <span class="muted">단일 포워드 패스</span>로 슈퍼 웨이트를 식별. 이를 20개의 다양한 샘플로 교차 검증.</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">검증 결과</h3>
+        <div class="big-num">9개</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;">가중치 위치가 <span class="accent">100%의 입력</span>에서 활성화 스파이크 생성</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.6;" class="muted">슈퍼 웨이트는 입력 의존적 인공물이 아닌, 사전 학습 모델의 <span class="accent2">구조적 속성</span>임을 확인</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">프루닝 범용성 검증</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">10개 모델 테스트 결과:</p>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>OLMo-1B, OLMo-7B</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Phi-3-mini, Meta-Llama-3-8B</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Llama-3.1/3.2 계열, Qwen2.5, Gemma-2</li>
+        </ul>
+        <p class="muted" style="margin-top:0.8rem;font-size:clamp(0.8rem,1.2vw,0.9rem);">프루닝 효과가 <span class="accent">모든 LLM에 보편적이지 않음</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">핵심 실험: 슈퍼 웨이트 직접 학습</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;">슈퍼 웨이트만 격리하여 학습하면 어떻게 될까?</p>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>학습 방식</th>
+            <th>파라미터 수</th>
+            <th>OLMo-1B 정확도</th>
+            <th>OLMo-7B 정확도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>사전학습 베이스라인</td>
+            <td class="muted">전체</td>
+            <td>61%</td>
+            <td>52%</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">SW 직접 학습</span></td>
+            <td class="muted">100개</td>
+            <td class="accent">~랜덤 추측</td>
+            <td class="accent">~랜덤 추측</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">SW 직접 학습</span></td>
+            <td class="muted">8,192개</td>
+            <td class="accent">~랜덤 추측</td>
+            <td class="accent">~랜덤 추측</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quote-block">
+      100개에서 8,192개로 파라미터를 82배 늘려도 정확도는 <span class="accent">랜덤 추측 수준</span>에 머물렀다. 단순한 파라미터 수 문제가 아니다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">이웃 확장 학습 — 여전히 실패</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;">슈퍼 웨이트 주변의 국소 이웃까지 확장하면 개선될까?</p>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">SW만</div>
+        <div class="step-desc">100~8,192개<br><span class="accent">실패</span></div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">국소 이웃 포함</div>
+        <div class="step-desc">최대 36K개<br><span class="accent">실패</span></div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">결론</div>
+        <div class="step-desc">이웃 확장은<br><span class="accent3">무효</span></div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">왜 실패할까?</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">슈퍼 웨이트는 <span class="accent">레이어 전체의 관계적 구조</span>에 의존하는데, 격리 학습은 이 구조를 파괴함</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">핵심 질문</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">실패 원인이 <span class="muted">희소성</span>인가, <span class="muted">모듈</span>인가, 아니면 <span class="accent">슈퍼 웨이트 좌표 자체</span>인가?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">통제 실험: 실패 원인 격리</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;">동일한 down_proj 레이어에서 두 가지 통제 실험 수행</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+          <span class="tag tag-green">통제 1</span>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">랜덤 위치 학습</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;margin-bottom:1rem;">SW 좌표를 <span class="accent3">제외한</span> 동일 수의 랜덤 down_proj 위치 학습</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);">결과: 베이스라인 대비 <span class="accent3">개선</span></p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.9rem);margin-top:0.5rem;">희소성 자체가 문제가 아님</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+          <span class="tag tag-green">통제 2</span>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">down_proj 저랭크 업데이트</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;margin-bottom:1rem;">down_proj 전체에 LoRA와 동일한 저랭크 구조 적용</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);">결과: <span class="accent3">성공</span></p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.9rem);margin-top:0.5rem;">down_proj 모듈 자체가 문제가 아님</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      붕괴의 원인은 희소성도, 모듈 선택도 아닌 <span class="accent">슈퍼 웨이트 좌표와 그 얽힌 이웃을 타겟팅하는 것 자체</span>에 있다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">LoRA는 왜 성공하는가?</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>방법</th>
+              <th>파라미터 비율</th>
+              <th>OLMo-1B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>베이스라인</td>
+              <td class="muted">100%</td>
+              <td>61%</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-red">SW 직접 학습</span></td>
+              <td class="muted">~0.001%</td>
+              <td class="accent">랜덤 추측</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-green">Vanilla LoRA</span></td>
+              <td class="muted">0.16%</td>
+              <td class="accent3">67%</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-green">LoRA on down_proj</span></td>
+              <td class="muted">0.16%</td>
+              <td class="accent3">성공</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">LoRA의 핵심 차이점</h3>
+        <div class="flow-item" style="margin-bottom:1rem;">
+          <div class="flow-icon"><i class="fas fa-layer-group"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent2">레이어 전체 조율</span></p>
+            <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">rank-8 분해로 가중치 행렬의 모든 위치를 연결하여 업데이트</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1rem;">
+          <div class="flow-icon"><i class="fas fa-project-diagram"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent2">관계적 구조 유지</span></p>
+            <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">슈퍼 웨이트가 의존하는 레이어 간 상호작용 보존</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-compress-arrows-alt"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent2">저랭크 부분공간</span></p>
+            <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">미세조정 차원을 효과적으로 포착</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">LoRA + 슈퍼 웨이트 동결 실험</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;">LoRA 업데이트에서 SW 좌표를 명시적으로 동결하면 성능이 떨어지는가?</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">LoRA-dproj-SW-freeze</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;margin-bottom:1rem;">attention 가중치 행렬에서 down_proj SW 인덱스와 일치하는 좌표의 LoRA 업데이트 동결</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);">결과: <span class="accent3">측정 가능한 효과 없음</span></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">LoRA-ΔW-SW-freeze</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;margin-bottom:1rem;">사전 학습된 ΔW에서 최대 크기 가중치(top magnitude) 위치의 업데이트 동결</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);">결과: <span class="accent3">측정 가능한 효과 없음</span></p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      기저 모델의 슈퍼 웨이트와 달리, <span class="accent">LoRA 자체의 최대 크기 업데이트 위치는 개별적으로 중요하지 않다.</span> SW 레이어로 들어오는 attention 표현은 위치 수준 제한에 강건하다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">10-시드 추출 결과</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-bottom:1.5rem;">LoRA-dproj-SW-freeze vs 일반 LoRA를 10개 서로 다른 시드로 비교</p>
+    <div class="grid-3" style="gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">p > 0.05</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;">통계적으로 유의한 차이 <span class="accent3">없음</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">80%</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;">시드에서 <span class="accent3">동일한 예측</span> 산출</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">10/10</div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;">모든 시드에서 <span class="accent3">성능 유지</span></p>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">해석</h3>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">SW 좌표 동결이 LoRA 성능에 영향을 주지 않는다는 것은, LoRA의 저랭크 구조가 <span class="accent2">SW 위치를 암묵적으로 보호</span>하면서도 레이어 전체에 걸쳐 조율된 업데이트를 생성함을 의미한다. 개별 좌표 제한은 저랭크 분해의 전역적 특성에 의해 자연스럽게 상쇄된다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">이론적 분석</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;"><i class="fas fa-cube" class="accent2"></i> 본질 차원성 관점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미세조정 부분공간은 저랭크 구조를 가짐</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>희소 업데이트는 이 부분공간의 <span class="accent">무시할 수 있는 비율</span>만 포착</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>좌표 정렬 문제: SW 위치가 미세조정 방향과 정렬되지 않음</li>
+        </ul>
+        <div class="hr"></div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.9rem);">결과: 희소 학습이 "수학적으로" 실패하는 이유를 차원 정렬 관점에서 설명</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;"><i class="fas fa-chart-line" class="accent"></i> 최적화 동역학 관점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SW 위치에서 헤시안 곡률이 <span class="accent">높음</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>높은 곡률 → 작은 스텝 크기 → 업데이트 억제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>가중치 감쇠가 SW 위치에서 암묵적 정규화 역할</li>
+        </ul>
+        <div class="hr"></div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.9rem);">검증: 활성화 증폭, 곡률 스케일링, 섭동 강건성 3가지 실험으로 지지</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">핵심 관찰</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+          <span class="tag tag-amber">관찰 1</span>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">실패는 SW 좌표에 특정</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">실패는 희소성이나 모듈 선택 때문이 아니다.</p>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-times" class="accent"></i></span>동일 수의 랜덤 위치 학습 → <span class="accent3">성공</span></li>
+          <li><span class="check-icon"><i class="fas fa-times" class="accent"></i></span>동일 모듈 저랭크 업데이트 → <span class="accent3">성공</span></li>
+          <li><span class="check-icon"><i class="fas fa-times" class="accent"></i></span>SW 좌표 타겟팅 → <span class="accent">실패</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+          <span class="tag tag-amber">관찰 2</span>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);">LoRA는 레이어 전체 조율</h3>
+        </div>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">LoRA의 저랭크 구조가 생성하는 업데이트는 전체 레이어에 걸쳐 조율된다.</p>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>0.16% 파라미터로 베이스라인 <span class="accent3">초과 달성</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SW 좌표 동결해도 <span class="accent3">성능 변화 없음</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>개별 최대 업데이트 위치는 <span class="accent3">중요하지 않음</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">결론 및 시사점</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">핵심 발견</h3>
+      <div class="grid-2" style="gap:1.5rem;">
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-unlink"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent">파라미터 중요성 ≠ 파라미터 독립 학습 가능성</span></p>
+            <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">제거 시 치명적이라도, 격리하여 학습할 수 있는 것은 아님</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-sitemap"></i></div>
+          <div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent2">구조적 분해가 핵심</span></p>
+            <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">개별 중요 가중치 타겟팅이 아닌 레이어 전체 구조 활용</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:1rem;">실무적 시사점</h3>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>중요 파라미터를 식별한 뒤 선택적 미세조정하는 접근법은 <span class="accent">효과적이지 않음</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>LoRA의 성공은 저랭크성 + 레이어 전체 조율의 <span class="accent3">결합 효과</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>프루닝 민감도와 미세조정 가능성은 <span class="accent2">독립적인 속성</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>향후 PEFT 설계는 개별 좌표 중요도가 아닌 <span class="accent2">구조적 커버리지</span>를 고려해야 함</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);margin-bottom:1.5rem;">한계점</h2>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">모델 범위</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">학습 실험은 OLMo-1B/7B에만 수행. 프루닝은 10개 모델에서 검증했으나, 학습 실험의 범용성은 추가 확인 필요</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">태스크 범위</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">ARC-Easy와 Winogrande 두 벤치마크에서만 평가. 다양한 태스크 유형에서의 검증이 필요</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.8rem;">학습 설정</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">AdamW, lr=10⁻⁴, 3에포크 고정. 학습 하이퍼파라미터 탐색에 따른 결과 변화 가능성 존재</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;gap:1.5rem;">
+      <h2 style="font-size:clamp(1.4rem,2.8vw,2rem);text-align:center;">LLM의 슈퍼 웨이트와<br>선택적 학습의 실패</h2>
+      <div class="hr" style="width:100px;"></div>
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);text-align:center;">Super Weights in LLMs and the Failure of Selective Training</p>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);text-align:center;">Shreyas Subramanian, Adewale Akinfaderin, Akarsha Sehwag</p>
+      <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.9rem);text-align:center;">Amazon Web Services</p>
+      <div class="hr" style="width:60px;"></div>
+      <a href="http://arxiv.org/abs/2607.08733v1" style="font-size:clamp(0.85rem,1.3vw,1rem);" class="accent2"><i class="fas fa-external-link-alt"></i> arxiv.org/abs/2607.08733v1</a>
+      <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);text-align:center;margin-top:0.5rem;">License: CC BY 4.0 · July 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
