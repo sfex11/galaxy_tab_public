@@ -247,3 +247,7 @@ _자동 생성됨_
 - [[sources/2026-07-10-agent-delivery-engineering-predictive-reliability-.md]]
 
 - [[sources/2026-07-10-a-hierarchical-memory-architecture-overcomes-conte.md]]
+
+- [[sources/2026-07-11-webswarm-recursive-multi-agent-orchestration-for-d.md]]
+
+- [[sources/2026-07-11-formal-mechanisms-for-market-stability-in-self-int.md]]
