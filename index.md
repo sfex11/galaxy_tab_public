@@ -1262,3 +1262,27 @@
 - [[sources/2026-07-11-bisco-llm-lookup-free-binary-spherical-coding-for-.md]] - BiSCo-LLM: Lookup-Free Binary Spherical Coding for Extreme Low-Bit Large Language Model Compression
 - [[sources/2026-07-11-dominotree-conditional-tree-structured-drafting-wi.md]] - DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
 - [[sources/2026-07-11-smetric-rethink-llm-scheduling-for-serving-agents-.md]] - SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling
+- [[sources/2026-07-12-uniclawbench-a-universal-benchmark-for-proactive-a.md]] - UniClawBench: A Universal Benchmark for Proactive Agents on Real-World Tasks
+- [[sources/2026-07-12-workflow-as-knowledge-semantic-persistence-for-llm.md]] - Workflow as Knowledge: Semantic Persistence for LLM-Mediated Workflows
+- [[sources/2026-07-12-the-illusion-of-equivalency-statistical-characteri.md]] - The Illusion of Equivalency: Statistical Characterization of Quantization Effects in LLMs
+- [[sources/2026-07-12-super-weights-in-llms-and-the-failure-of-selective.md]] - Super Weights in LLMs and the Failure of Selective Training
+- [[sources/2026-07-12-validity-of-llms-as-data-annotators-amalia-on-auth.md]] - Validity of LLMs as data annotators: AMALIA on authority
+- [[sources/2026-07-12-remember-when-it-matters-proactive-memory-agent-fo.md]] - Remember When It Matters: Proactive Memory Agent for Long-Horizon Agents
+- [[sources/2026-07-12-autopilot-vqa-benchmarking-vision-language-models-.md]] - AUTOPILOT VQA: Benchmarking Vision-Language Models for Incident-Centric Dashcam Understanding
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-12-mpflow-learning-budgeted-max-flow-optimization-on-.md]] - MPFlow: Learning Budgeted Max-Flow Optimization on the Lightning Network with Deep Graph Reinforcement Learning
+- [[sources/2026-07-12-projagent-procedural-similarity-retrieval-for-repo.md]] - ProjAgent: Procedural Similarity Retrieval for Repository-Level Code Generation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-12-solarchain-eval-a-physics-constrained-benchmark-fo.md]] - SolarChain-Eval: A Physics-Constrained Benchmark for Trustworthy Economic Agents in Decentralized Energy Markets
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-12-webswarm-recursive-multi-agent-orchestration-for-d.md]] - WebSwarm: Recursive Multi-Agent Orchestration for Deep-and-Wide Web Search
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-12-formal-mechanisms-for-market-stability-in-self-int.md]] - Formal Mechanisms for Market Stability in Self-Interested Agent Societies: A Marketplace Simulation Study
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-12-multi-modal-multi-environment-machine-teaching-for.md]] - Multi-Modal, Multi-Environment Machine Teaching for Robust Reward Learning
+- [[sources/2026-07-12-a-practical-investigation-of-training-free-relaxed.md]] - A Practical Investigation of Training-free Relaxed Speculative Decoding
+- [[sources/2026-07-12-bisco-llm-lookup-free-binary-spherical-coding-for-.md]] - BiSCo-LLM: Lookup-Free Binary Spherical Coding for Extreme Low-Bit Large Language Model Compression
+- [[sources/2026-07-12-dominotree-conditional-tree-structured-drafting-wi.md]] - DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
+- [[sources/2026-07-12-smetric-rethink-llm-scheduling-for-serving-agents-.md]] - SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling

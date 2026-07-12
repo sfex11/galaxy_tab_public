@@ -251,3 +251,7 @@ _자동 생성됨_
 - [[sources/2026-07-11-webswarm-recursive-multi-agent-orchestration-for-d.md]]
 
 - [[sources/2026-07-11-formal-mechanisms-for-market-stability-in-self-int.md]]
+
+- [[sources/2026-07-12-webswarm-recursive-multi-agent-orchestration-for-d.md]]
+
+- [[sources/2026-07-12-formal-mechanisms-for-market-stability-in-self-int.md]]
