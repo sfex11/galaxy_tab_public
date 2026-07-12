@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요청 단위 최적화는 에이전트 서빙에서 잘못된 추상화 계층인가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736d;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.5vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 5vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 2vw, 14px);
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(40px, 8vw, 80px) 0 clamp(24px, 5vw, 48px);
+    text-align: left;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.8vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.65rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2.2vw, 16.5px);
+    color: var(--muted);
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 640px;
+  }
+
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: clamp(12px, 1.8vw, 13px);
+    color: var(--muted);
+  }
+  .article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+    border: none;
+    margin: clamp(32px, 6vw, 56px) auto;
+    opacity: 0.5;
+  }
+
+  /* ── 본문 ── */
+  .article-body { padding-bottom: clamp(60px, 10vw, 120px); }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    font-weight: 600;
+    color: var(--fg);
+    margin: clamp(40px, 7vw, 64px) 0 clamp(16px, 3vw, 24px);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  h2 .section-num {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    color: var(--fg);
+    margin: clamp(28px, 5vw, 40px) 0 12px;
+    line-height: 1.45;
+  }
+
+  p {
+    margin-bottom: clamp(14px, 2.5vw, 20px);
+    color: var(--fg);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  .accent-text { color: var(--accent); font-weight: 600; }
+  .accent2-text { color: var(--accent2); font-weight: 600; }
+  .accent3-text { color: var(--accent3); font-weight: 600; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    max-width: 800px;
+    margin: clamp(20px, 4vw, 32px) auto;
+    padding: clamp(16px, 3vw, 24px) clamp(16px, 4vw, 28px);
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2.2vw, 16px);
+    line-height: 1.8;
+    color: var(--fg);
+    font-style: italic;
+  }
+  blockquote p { margin-bottom: 0; }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85em;
+    font-style: normal;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: clamp(20px, 4vw, 32px) 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-label {
+    display: inline-block;
+    font-size: clamp(10px, 1.6vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+  .card-label.orange { color: var(--accent); background: rgba(194,112,62,0.1); }
+  .card-label.blue { color: var(--accent2); background: rgba(91,124,153,0.1); }
+  .card-label.green { color: var(--accent3); background: rgba(107,158,122,0.1); }
+
+  .card h3 { margin-top: 0; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.05) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: clamp(24px, 5vw, 40px) 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -8px;
+    right: 16px;
+    font-size: clamp(28px, 5vw, 40px);
+    opacity: 0.15;
+  }
+  .metaphor-box .metaphor-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1rem, 2.3vw, 1.15rem);
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .metaphor-box p { margin-bottom: 10px; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 테이블 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: clamp(20px, 4vw, 32px) 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(12.5px, 2vw, 14.5px);
+    background: var(--card-bg);
+  }
+  thead { background: rgba(194,112,62,0.06); }
+  th {
+    padding: clamp(10px, 2vw, 14px) clamp(10px, 2.5vw, 18px);
+    text-align: left;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+  td {
+    padding: clamp(10px, 2vw, 14px) clamp(10px, 2.5vw, 18px);
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(194,112,62,0.03); }
+
+  /* ── 하이라이트 라인 ── */
+  .highlight-line {
+    border-left: 3px solid var(--accent2);
+    padding-left: clamp(14px, 3vw, 20px);
+    margin: clamp(20px, 4vw, 32px) 0;
+    color: var(--fg);
+    font-size: clamp(14.5px, 2.3vw, 16.5px);
+    line-height: 1.8;
+  }
+
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(107,158,122,0.06) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px solid rgba(107,158,122,0.2);
+    border-radius: 14px;
+    padding: clamp(24px, 5vw, 40px);
+    margin: clamp(32px, 6vw, 56px) 0;
+  }
+  .conclusion-box h2 { margin-top: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.08);
+    padding-top: clamp(24px, 4vw, 40px);
+    text-align: center;
+    font-size: clamp(12px, 1.8vw, 13px);
+    color: var(--muted);
+    padding-bottom: clamp(40px, 8vw, 80px);
+  }
+  .article-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .article-footer a:hover { text-decoration: underline; }
+
+  /* ── 태그 목록 ── */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .tag-list span {
+    font-size: clamp(11px, 1.6vw, 12px);
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: rgba(44,40,37,0.05);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── 리스트 ── */
+  ul, ol {
+    margin: clamp(10px, 2vw, 16px) 0 clamp(14px, 2.5vw, 20px);
+    padding-left: clamp(20px, 4vw, 32px);
+  }
+  li {
+    margin-bottom: clamp(6px, 1.5vw, 10px);
+    line-height: 1.75;
+  }
+
+  /* ── 스크롤 애니메이션 ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ── 연결 발견 박스 ── */
+  .discovery-box {
+    background: rgba(91,124,153,0.05);
+    border: 1px solid rgba(91,124,153,0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: clamp(24px, 5vw, 40px) 0;
+  }
+  .discovery-box .discovery-label {
+    display: inline-block;
+    font-size: clamp(10px, 1.6vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent2);
+    background: rgba(91,124,153,0.1);
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+
+  /* ── 화살표 리스트 ── */
+  .arrow-list { list-style: none; padding-left: 0; }
+  .arrow-list li {
+    padding-left: clamp(20px, 3vw, 28px);
+    position: relative;
+  }
+  .arrow-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header reveal">
+    <span class="article-tag">Deep Analysis</span>
+    <h1>병원 응급실에 줄 세우는 방식으로<br>외과 수술을 스케줄링하는 것</h1>
+    <p class="article-subtitle">요청 중심 최적화는 에이전트 서빙에서 근본적으로 잘못된 추상화 계층인가? — SMetric 논문을 축으로 세 가지 수준의 추상화 붕괴를 분석한다.</p>
+    <div class="article-meta">
+      <span>2026-05-06</span>
+      <span>·</span>
+      <span>읽기 약 12분</span>
+      <span>·</span>
+      <span>SMetric · Tool Attention · Crab · SpecKV</span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 본문 -->
+  <article class="article-body">
+
+    <!-- 서론 -->
+    <section class="reveal">
+      <p>대형 언어 모델(LLM) 서빙의 역사는 본질적으로 <strong class="accent-text">"하나의 요청을 얼마나 빨리 처리할 것인가"</strong>의 역사였다. vLLM의 PagedAttention도, Orca의 연속 배칭도, Splitwise의 분할 처리도 모두 이 질문에 대한 답이었다. 그런데 에이전트가 등장하면서 상황이 묘하게 어긋나기 시작했다.</p>
+
+      <p>SMetric 논문("Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling")은 이 어긋남의 본질을 날카롭게 짚는다: <strong>에이전트는 개별 LLM 응답 토큰이 아니라 완전한 응답, 즉 행동 완수에 대해서만 다음 결정을 내린다.</strong> 그런데 기존 스케줄러는 각 LLM 호출을 독립적인 요청으로 취급하여 개별 레이턴시를 최소화하려 한다.</p>
+
+      <div class="metaphor-box">
+        <div class="metaphor-title">비유: 응급실과 외과 수술</div>
+        <p>환자가 병원에 온다. 기존 서빙은 "각 환자를 진료실에 얼마나 빨리 들여보낼 것인가"를 최적화한다. 하지만 에이전트 환자는 <strong>수술 전 검사 → 마취 → 수술 → 회복</strong>이라는 일련의 과정이 하나의 단위로 묶여 있다. 검사 결과가 나와야 마취를 결정하고, 마취가 끝나야 수술이 시작된다.</p>
+        <p>이때 "각 진료 단계를 독립적인 환자로 취급해서 줄 세우면 전체 수술 시간이 최적화될 것"이라는 가정이 바로 <strong class="accent-text">요청 중심 최적화</strong>이다. 검사실 대기 시간은 줄었지만, 환자는 검사 → 마취 → 수실을 옮기는 동안 대부분의 시간을 방치된다.</p>
+      </div>
+
+      <p>결론부터 말하면, Wiki에 축적된 증거들은 이 질문에 <strong>"그렇다"에 가까운 답</strong>을 향해 모이고 있다. 하지만 단순한 "틀렸다"가 아니라, <strong class="accent-text">추상화 계층의 부정합이 세 가지 수준에서 계층적으로 드러난다</strong>는 것이 더 정확한 분석이다.</p>
+    </section>
+
+    <!-- 1단계 -->
+    <section class="reveal">
+      <h2><span class="section-num">01</span>요청 내부에서의 추상화 붕괴</h2>
+
+      <p>문제의 가장 얕은 층은 요청 <strong>내부</strong>에서 시작된다. "Tool Attention Is All You Need"(2026-04-26)라는 논문은 다중 서버 MCP(Model Context Protocol) 배포 환경에서 파이프라인 전체의 레이턴시 병목을 조사했는데, 그 결과가 당혹스러웠다.</p>
+
+      <div class="card">
+        <span class="card-label orange">핵심 발견</span>
+        <h3>진짜 병목은 LLM 추론이 아니라 스키마 축적이었다</h3>
+        <p>다중 툴 환경에서 에이전트가 하나의 요청을 처리할 때, LLM이 토큰을 생성하는 시간보다 <strong>툴 스키마를 로딩하고 축적하는 시간</strong>이 전체 레이턴시를 지배했다. 기존 서빙 최적화는 "하나의 요청 = 하나의 LLM 추론"이라는 암묵적 추상화에 기반하는데, 이 추상화가 이미 요청 내부의 실제 병목 지점을 가려버린 것이다.</p>
+      </div>
+
+      <p>이 발견이 중요한 이유는 단순히 "스키마 로딩이 느리다"가 아니다. <strong class="accent-text">요청이라는 추상화 단위 자체가 무엇이 병목인지를 숨겨버린다</strong>는 점이 핵심이다. 마치 환자의 진찰 시간을 재면서 "수술 대기 시간"을 측정에서 제외하는 것과 같다.</p>
+
+      <blockquote>
+        <p>기존 서빙 최적화는 "하나의 요청 = 하나의 LLM 추론"이라는 암묵적 추상화에 기반한다. 그러나 에이전트 파이프라인에서는 하나의 요청 내부에 툴 스키마 로딩, 여러 LLM 호출, 툴 실행 등이 연쇄적으로 존재하며, 진짜 병목은 LLM 추론이 아니라 스키마 축적이었다.</p>
+        <cite>— Wiki: aggregate-pipeline-serving</cite>
+      </blockquote>
+
+      <p>SMetric의 주장은 이것의 논리적 연장선이다. 요청 내부에서조차 추상화가 붕괴하는데, 여러 요청이 연쇄적으로 연결된 세션 전체를 요청 단위로 쪼개어 스케줄링하는 것은 더욱 근본적인 오류다.</p>
+    </section>
+
+    <!-- 2단계 -->
+    <section class="reveal">
+      <h2><span class="section-num">02</span>세션 수준에서의 추상화 부정합</h2>
+
+      <p>두 번째 층은 요청 <strong>사이</strong>의 관계로 확장된다. 에이전트가 사용자의 질문에 답하기 위해 툴을 호출하고, 결과를 보고 다시 추론하고, 추가 툴을 호출하는 과정을 상상해 보라. 이것은 여러 개의 "요청"으로 구성되지만, <strong class="accent-text">에이전트의 의사결정 단위는 각 요청이 아니라 세션 전체의 행동 완수</strong>다.</p>
+
+      <div class="metaphor-box">
+        <div class="metaphor-title">비유: 레시피와 조리 단계</div>
+        <p>파스타를 만든다고 할 때, "물 끓이기", "소스 만들기", "면 삶기", "버무리기"는 각각 독립적인 작업이다. 하지만 요리사의 결정 단위는 "파스타 완성"이다. 소스가 덜 익었는데 면을 먼저 삶아놓는 것이 최적이 아닌 것처럼, 각 LLM 호출의 레이턴시를 개별적으로 최소화하는 것이 세션 전체의 완수 시간을 최소화하지 못한다.</p>
+      </div>
+
+      <p>SMetric가 제기하는 핵심은 정확히 여기에 있다. 기존 스케줄러의 원자 단위는 "요청"이지만, 에이전트의 원자 단위는 "세션"이다. 스케줄링의 원자 단위를 요청에서 세션으로 전환해야 한다는 주장은 단순한 휴리스틱이 아니라, <strong class="accent-text">문제 영역의 실제 의미론적 단위에 스케줄링을 정렬하자는 구조적 제안</strong>이다.</p>
+
+      <div class="highlight-line">
+        요청 중심 스케줄링이 "잘못된" 것이 아니라, 에이전트 서빙이라는 문제 영역에 대해 <strong>충분히 낮은 추상화 계층으로 내려가지 못한 것</strong>이다.
+      </div>
+    </section>
+
+    <!-- 3단계 -->
+    <section class="reveal">
+      <h2><span class="section-num">03</span>의미론적 단위와 시스템 단위의 간극</h2>
+
+      <p>세 번째 층에서 문제는 더 깊은 구조적 패턴으로 드러난다. "Crab"(2026-05-03)이라는 논문은 에이전트의 의미론적 상태 의존성을 OS의 체크포인트 메커니즘으로 번역할 때 발생하는 비효율을 다루는데, 이것은 SMetric의 문제와 <strong class="accent2-text">정확히 동일한 구조</strong>를 갖는다.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>에이전트의 실제 단위</th>
+              <th>시스템의 임의적 단위</th>
+              <th>발생 영역</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong class="accent2-text">Crab의 경우</strong></td>
+              <td>의미론적 상태 의존 그래프<br><span style="color:var(--muted);font-size:0.9em;">(어떤 상태에 의존하는가)</span></td>
+              <td>비의미론적 스냅샷 단위<br><span style="color:var(--muted);font-size:0.9em;">(전체 스냅샷)</span></td>
+              <td>런타임 / OS</td>
+            </tr>
+            <tr>
+              <td><strong class="accent-text">SMetric의 경우</strong></td>
+              <td>세션 수준 행동 완수 단위<br><span style="color:var(--muted);font-size:0.9em;">(완전한 응답)</span></td>
+              <td>개별 요청 단위<br><span style="color:var(--muted);font-size:0.9em;">(독립적 LLM 호출)</span></td>
+              <td>서빙 / 스케줄링</td>
+            </tr>
+            <tr>
+              <td><strong class="accent3-text">Tool Attention의 경우</strong></td>
+              <td>파이프라인 내 스키마 축적<br><span style="color:var(--muted);font-size:0.9em;">(실제 병목)</span></td>
+              <td>개별 LLM 호출 레이턴시<br><span style="color:var(--muted);font-size:0.9em;">(가정된 병목)</span></td>
+              <td>서빙 / 파이프라인</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>세 경우 모두 <strong>에이전트가 의미론적으로 묶여 있는 단위</strong>와 <strong>시스템이 임의로 정한 단위</strong> 사이에 불일치가 존재한다. 이것이 서로 다른 논문에서 독립적으로 발견된다는 사실 자체가, 이것이 우연이 아니라 에이전트 컴퓨팅의 <strong class="accent-text">구조적 특성</strong>임을 시사한다.</p>
+
+      <div class="discovery-box reveal">
+        <span class="discovery-label">새로운 연결 발견</span>
+        <p><strong class="accent2-text">algorithm-system-translation-gap</strong>과 <strong class="accent2-text">aggregate-pipeline-serving</strong>은 서로 다른 논문에서 독립적으로 기술되어 있으나, 본질적으로 동일한 구조 — 에이전트의 의미론적 처리 단위와 시스템의 임의적 분할 단위 사이의 불일치 — 를 각각 런타임(Crab)과 서빙(Tool Attention, SMetric) 영역에서 현현한 것이다.</p>
+        <p>이를 아우르는 상위 개념으로 <strong class="accent2-text">추상화 계층 부정합(abstraction-layer mismatch)</strong>을 제안할 수 있다.</p>
+      </div>
+    </section>
+
+    <!-- 4단계 -->
+    <section class="reveal">
+      <h2><span class="section-num">04</span>미시적 적응도 요청 단위를 벗어난다</h2>
+
+      <p>마지막 층은 훨씬 미시적인 수준에서 같은 패턴을 보여준다. SpecKV(2026-05-05)는 적응형 추론(adaptive inference)에서 모델이나 라우트 선택을 넘어 <strong class="accent3-text">추측 길이(γ) 선택</strong>이라는 결정 차원을 확장했는데, 이 적응은 "압축이라는 내부 시스템 상태"에 반응한다.</p>
+
+      <p>즉, 적응의 단위 역시 요청이 아니라 <strong class="accent3-text">토큰 생성 과정 내부의 동적 상태</strong>다. 요청 단위 최적화는 이 미시적 적응의 공간까지 포착하지 못한다. 토큰마다 KV 캐시의 압축 상태가 다른데, 요청 전체를 일괄 처리하는 것은 마치 도로의 각 구간별 교통 상황을 무시하고 "이 도로의 평균 속도는 60km/h"로 관리하는 것과 같다.</p>
+
+      <div class="card">
+        <span class="card-label green">미시 수준의 비대칭</span>
+        <p>SpecKV가 보여주는 적응은 토큰 생성 과정 <strong>내부</strong>의 동적 상태에 반응한다. 이 상태는 요청 단위로는 관측 불가능하다. 요청 단위 최적화는 실제로 존재하는 미시적 적응 공간을 추상화 계층 아래에 가둬버린다.</p>
+      </div>
+    </section>
+
+    <!-- 종합 -->
+    <section class="reveal">
+      <h2><span class="section-num">05</span>세 수준의 동시 붕괴: 왜 "근본적으로" 잘못된 것인가</h2>
+
+      <p>지금까지의 분석을 하나의 그림으로 정리하면 다음과 같다.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>수준</th>
+              <th>실제 단위</th>
+              <th>기존 스케줄링의 단위</th>
+              <th>관련 증거</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>미시</strong></td>
+              <td>토큰 내부 압축 상태 (γ)</td>
+              <td>요청 전체 일괄 처리</td>
+              <td>SpecKV</td>
+            </tr>
+            <tr>
+              <td><strong>중간</strong></td>
+              <td>파이프라인 내 스키마 축적</td>
+              <td>개별 LLM 호출 레이턴시</td>
+              <td>Tool Attention</td>
+            </tr>
+            <tr>
+              <td><strong>거시</strong></td>
+              <td>세션 수준 행동 완수</td>
+              <td>독립적 요청</td>
+              <td>SMetric</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>요청 중심 최적화가 "근본적으로" 잘못된 추상화 계층인 이유는 <strong>단일 지점에서의 오류가 아니라 세 수준에서 동시에 추상화 오류가 발생</strong>하기 때문이다. 하나의 수준에서만 어긋났다면 "개선이 필요하다"고 했을 것이다. 하지만 미시·중간·거시 모든 수준에서 요청이라는 단위가 실제 병목과 결정 단위를 보이지 않게 만든다면, 이것은 개선의 여지가 아니라 <strong class="accent-text">패러다임 전환의 필요성</strong>을指向한다.</p>
+
+      <blockquote>
+        <p>요청 중심 최적화는 세 수준 모두에서 실제 병목과 결정 단위를 보이지 않게 만드는 추상화로 작동한다.</p>
+      </blockquote>
+    </section>
+
+    <!-- 결론 -->
+    <section class="conclusion-box reveal">
+      <h2><span class="section-num">∥</span>패러다임 전환: 어디로 가야 하는가</h2>
+
+      <p>이 분석이 시사하는 방향은 명확하다. 에이전트 서빙의 최적화는 <strong>추상화 계층을 문제 영역의 실제 의미론적 단위로 내려야</strong> 한다.</p>
+
+      <ul class="arrow-list">
+        <li><strong class="accent-text">스케줄링의 원자 단위를 세션으로 전환</strong>할 것 — SMetric이 제안하는 세션 중심 스케줄링은 가장 거시적인 전환이다.</li>
+        <li><strong class="accent2-text">파이프라인 내부의 실제 병목을 추상화하지 않을 것</strong> — Tool Attention의 발견처럼, 요청 내부의 스키마 축적, 툴 실행 대기 등을 관측 가능한 단위로 스케줄링에 반영해야 한다.</li>
+        <li><strong class="accent3-text">미시적 적응 상태를 스케줄링 결정에 노출할 것</strong> — SpecKV가 보여주는 토큰 수준의 동적 상태가 스케줄러의 결정에 반영될 수 있는 인터페이스가 필요하다.</li>
+        <li><strong>의미론적 단위와 시스템 단위의 정렬을 설계 원칙으로 삼을 것</strong> — Crab의 발견까지 포괄하는 "추상화 계층 부정합"을 에이전트 시스템 설계의 핵심 진단 프레임워크로 채택해야 한다.</li>
+      </ul>
+
+      <p style="margin-top:24px;">에이전트 시대의 서빙은 더 이상 "요청을 빨리 처리하는 기술"이 아니다. <strong class="accent-text">에이전트가 의미론적으로 묶여 있는 단위를 식별하고, 시스템의 추상화 계층을 그 단위에 정렬시키는 기술</strong>이 되어야 한다. 이것이 Wiki의 논문들이 조용히, 그러나 일치하게 가리키는 방향이다.</p>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="article-footer">
+      <div class="tag-list" style="justify-content:center;">
+        <span>에이전트 서빙</span>
+        <span>SMetric</span>
+        <span>추상화 계층</span>
+        <span>세션 중심 스케줄링</span>
+        <span>Tool Attention</span>
+        <span>Crab</span>
+        <span>SpecKV</span>
+        <span>adaptive-inference</span>
+      </div>
+      <p style="margin-top:20px;">
+        Wiki 기반 심층 분석 · <a href="blog.html">분석 글 목록으로</a>
+      </p>
+    </footer>
+
+  </article>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(function(el) { observer.observe(el); });
+    } else {
+      reveals.forEach(function(el) { el.classList.add('visible'); });
+    }
+  });
+</script>
+</body>
+</html>
