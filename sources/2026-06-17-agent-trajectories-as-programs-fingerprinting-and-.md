@@ -49,3 +49,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/trajectory-fingerprinting.md|trajectory fingerprinting]]
+
+---
+**관련**: [[concepts/score-narrative-conflation.md|score narrative conflation]]
+
+---
+**관련**: [[concepts/probe-cascade.md|probe cascade]]

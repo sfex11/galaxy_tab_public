@@ -85,3 +85,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/critical-bottleneck-failure-decoupling.md|critical bottleneck failure decoupling]]
+
+---
+**관련**: [[concepts/safety-as-conditional-state.md|safety as conditional state]]
+
+---
+**관련**: [[concepts/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]
+
+---
+**관련**: [[concepts/harness-monitoring-separation.md|harness monitoring separation]]
+
+---
+**관련**: [[concepts/external-internal-adaptation-transition.md|external internal adaptation transition]]

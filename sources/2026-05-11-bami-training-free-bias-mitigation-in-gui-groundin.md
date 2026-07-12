@@ -47,3 +47,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/orchestration-attribution-fallacy.md|orchestration attribution fallacy]]
+
+---
+**관련**: [[concepts/correlated-error-summation.md|correlated error summation]]

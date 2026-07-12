@@ -88,3 +88,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/discrete-continuous-adaptation-transition.md|discrete continuous adaptation transition]]
+
+---
+**관련**: [[concepts/optimal-order-ceiling.md|optimal order ceiling]]

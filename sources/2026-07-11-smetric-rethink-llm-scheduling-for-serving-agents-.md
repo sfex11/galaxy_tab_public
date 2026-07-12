@@ -31,3 +31,18 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/cascading-distribution-shift.md|cascading distribution shift]]
+
+---
+**관련**: [[concepts/pre-existing-data-assumption.md|pre existing data assumption]]
+
+---
+**관련**: [[concepts/design-physical-space-non-isomorphism.md|design physical space non isomorphism]]
+
+---
+**관련**: [[concepts/position-invariant-kv-reuse.md|position invariant kv reuse]]
+
+---
+**관련**: [[concepts/orchestration-design-space-overestimation.md|orchestration design space overestimation]]

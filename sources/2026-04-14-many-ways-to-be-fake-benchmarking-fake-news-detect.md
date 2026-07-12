@@ -97,3 +97,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategic-convergence-condition.md|strategic convergence condition]]
+
+---
+**관련**: [[concepts/turn-driven-drift.md|turn driven drift]]

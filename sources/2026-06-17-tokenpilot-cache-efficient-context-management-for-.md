@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/mutation-authority-separation.md|mutation authority separation]]
+
+---
+**관련**: [[concepts/cache-phase-preservation.md|cache phase preservation]]

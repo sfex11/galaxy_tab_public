@@ -75,3 +75,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/distributed-cognitive-constitution.md|distributed cognitive constitution]]
+
+---
+**관련**: [[concepts/control-reachability.md|control reachability]]

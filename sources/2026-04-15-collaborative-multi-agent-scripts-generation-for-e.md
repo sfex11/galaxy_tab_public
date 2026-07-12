@@ -277,3 +277,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/infrastructure-layer-routing-defense.md|infrastructure layer routing defense]]
+
+---
+**관련**: [[concepts/dual-layer-governance-control.md|dual layer governance control]]

@@ -327,3 +327,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/routing-safety-evaluation-deployment-gap.md|routing safety evaluation deployment gap]]
+
+---
+**관련**: [[concepts/evaluation-attractor-spiral.md|evaluation attractor spiral]]
+
+---
+**관련**: [[concepts/attractor-state-evaluation-confound.md|attractor state evaluation confound]]

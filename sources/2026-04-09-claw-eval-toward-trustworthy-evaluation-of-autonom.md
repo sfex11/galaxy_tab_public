@@ -152,3 +152,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evaluation-target-erasure.md|evaluation target erasure]]
+
+---
+**관련**: [[concepts/evaluation-execution-power-asymmetry.md|evaluation execution power asymmetry]]

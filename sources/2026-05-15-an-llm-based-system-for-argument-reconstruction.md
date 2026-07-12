@@ -52,3 +52,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/graph-topology-preservation-dimension.md|graph topology preservation dimension]]
+
+---
+**관련**: [[concepts/graph-bound-recovery.md|graph bound recovery]]
+
+---
+**관련**: [[concepts/admissibility-as-objective-component.md|admissibility as objective component]]
+
+---
+**관련**: [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]

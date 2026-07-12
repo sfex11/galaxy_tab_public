@@ -235,3 +235,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/memory-semantic-flattening.md|memory semantic flattening]]
+
+---
+**관련**: [[concepts/knowledge-loss-translation.md|knowledge loss translation]]
+
+---
+**관련**: [[concepts/two-stage-translation-failure.md|two stage translation failure]]
+
+---
+**관련**: [[concepts/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]

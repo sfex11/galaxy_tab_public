@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interpretive-harness.md|interpretive harness]]
+
+---
+**관련**: [[concepts/harness-side-compensation.md|harness side compensation]]

@@ -326,3 +326,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/policy-task-state.md|policy task state]]
+
+---
+**관련**: [[concepts/execution-state-capsule.md|execution state capsule]]
+
+---
+**관련**: [[concepts/failure-relabeling.md|failure relabeling]]
+
+---
+**관련**: [[concepts/structural-state-vacuum.md|structural state vacuum]]

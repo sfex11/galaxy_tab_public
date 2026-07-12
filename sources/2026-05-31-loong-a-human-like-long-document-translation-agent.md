@@ -79,3 +79,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-adaptive-validity-by-surface-order.md|non adaptive validity by surface order]]
+
+---
+**관련**: [[concepts/tool-selection-cognitive-tax.md|tool selection cognitive tax]]

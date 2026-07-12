@@ -158,3 +158,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/compression-inference-coupling.md|compression inference coupling]]
+
+---
+**관련**: [[concepts/designer-metric-deployment-gap.md|designer metric deployment gap]]
+
+---
+**관련**: [[concepts/compression-relevance-proxy.md|compression relevance proxy]]

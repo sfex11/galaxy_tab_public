@@ -64,3 +64,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ceiling-incentive-feedback-loop.md|ceiling incentive feedback loop]]
+
+---
+**관련**: [[concepts/hierarchical-optimization-reconfiguration.md|hierarchical optimization reconfiguration]]

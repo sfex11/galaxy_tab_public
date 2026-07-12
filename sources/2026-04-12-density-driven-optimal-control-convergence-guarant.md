@@ -70,3 +70,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/convergence-depth.md|convergence depth]]
+
+---
+**관련**: [[concepts/content-insensitive-convergence.md|content insensitive convergence]]

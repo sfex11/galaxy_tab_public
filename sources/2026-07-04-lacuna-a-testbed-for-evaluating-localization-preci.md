@@ -64,3 +64,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/second-order-opacity.md|second order opacity]]
+
+---
+**관련**: [[concepts/ecosystem-level-adaptation-subject.md|ecosystem level adaptation subject]]
+
+---
+**관련**: [[concepts/defense-target-normalization-paradox.md|defense target normalization paradox]]
+
+---
+**관련**: [[concepts/artifact-experience-paradigm-divergence.md|artifact experience paradigm divergence]]

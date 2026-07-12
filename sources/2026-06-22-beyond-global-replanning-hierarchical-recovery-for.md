@@ -76,3 +76,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/co-failure-ceiling.md|co failure ceiling]]
+
+---
+**관련**: [[concepts/failure-mode-independence-prerequisite.md|failure mode independence prerequisite]]
+
+---
+**관련**: [[concepts/relative-credit-assignment.md|relative credit assignment]]
+
+---
+**관련**: [[concepts/execution-time-alignment.md|execution time alignment]]
+
+---
+**관련**: [[concepts/co-failure-rate.md|co failure rate]]

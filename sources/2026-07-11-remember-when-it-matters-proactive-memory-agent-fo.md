@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/goal-fixation-meta-decision.md|goal fixation meta decision]]
+
+---
+**관련**: [[concepts/threat-defense-surface-identity.md|threat defense surface identity]]

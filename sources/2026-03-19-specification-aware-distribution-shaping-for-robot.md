@@ -112,3 +112,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/foundation-layer-internalization.md|foundation layer internalization]]
+
+---
+**관련**: [[concepts/analysis-unit-mis-specification.md|analysis unit mis specification]]

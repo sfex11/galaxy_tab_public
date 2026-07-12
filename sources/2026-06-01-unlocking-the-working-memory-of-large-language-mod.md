@@ -178,3 +178,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]
+
+---
+**관련**: [[concepts/internal-prediction-readout.md|internal prediction readout]]
+
+---
+**관련**: [[concepts/internal-failure-signal-translation-gap.md|internal failure signal translation gap]]
+
+---
+**관련**: [[concepts/failure-detection-computation-gap.md|failure detection computation gap]]

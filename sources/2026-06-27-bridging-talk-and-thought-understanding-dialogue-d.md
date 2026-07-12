@@ -70,3 +70,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cooperation-as-control-mechanism.md|cooperation as control mechanism]]
+
+---
+**관련**: [[concepts/temporal-knowledge-exploration-operation.md|temporal knowledge exploration operation]]
+
+---
+**관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]

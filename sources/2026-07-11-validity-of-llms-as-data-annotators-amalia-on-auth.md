@@ -34,3 +34,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-adaptive-validity-by-surface-order.md|non adaptive validity by surface order]]
+
+---
+**관련**: [[concepts/circular-validity-problem.md|circular validity problem]]
+
+---
+**관련**: [[concepts/semantic-selection-authority.md|semantic selection authority]]
+
+---
+**관련**: [[concepts/foundation-layer-internalization.md|foundation layer internalization]]

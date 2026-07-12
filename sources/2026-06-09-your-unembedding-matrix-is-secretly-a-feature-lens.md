@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/orchestration-design-space-overestimation.md|orchestration design space overestimation]]
+
+---
+**관련**: [[concepts/inertial-vs-optimal-convergence.md|inertial vs optimal convergence]]

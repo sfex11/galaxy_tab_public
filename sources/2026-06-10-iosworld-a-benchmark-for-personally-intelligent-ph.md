@@ -58,3 +58,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/resolution-spectrum-identity.md|resolution spectrum identity]]
+
+---
+**관련**: [[concepts/benchmark-format-blindspot.md|benchmark format blindspot]]
+
+---
+**관련**: [[concepts/ecosystem-native.md|ecosystem native]]
+
+---
+**관련**: [[concepts/episodic-persistent-state-gap.md|episodic persistent state gap]]

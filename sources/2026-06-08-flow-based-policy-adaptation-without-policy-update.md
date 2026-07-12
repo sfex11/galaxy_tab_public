@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/policy-constraint-hardening.md|policy constraint hardening]]
+
+---
+**관련**: [[concepts/learnable-forgetting-policy.md|learnable forgetting policy]]

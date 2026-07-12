@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/capability-safety-inseparability.md|capability safety inseparability]]
+
+---
+**관련**: [[concepts/probabilistic-guarantee-redefinition.md|probabilistic guarantee redefinition]]

@@ -188,3 +188,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/redundancy-as-bottleneck.md|redundancy as bottleneck]]
+
+---
+**관련**: [[concepts/preservation-structure-bottleneck.md|preservation structure bottleneck]]
+
+---
+**관련**: [[concepts/repository-level-emergent-hazard.md|repository level emergent hazard]]

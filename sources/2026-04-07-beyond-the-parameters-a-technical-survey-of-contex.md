@@ -355,3 +355,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/execution-level-causal-extraction.md|execution level causal extraction]]
+
+---
+**관련**: [[concepts/survivorship-biased-technical-documentation.md|survivorship biased technical documentation]]
+
+---
+**관련**: [[concepts/contextual-integrity-first-class-constraint.md|contextual integrity first class constraint]]
+
+---
+**관련**: [[concepts/rule-variation-causal-attribution.md|rule variation causal attribution]]
+
+---
+**관련**: [[concepts/technical-ecosystem-translation-gap.md|technical ecosystem translation gap]]

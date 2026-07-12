@@ -103,3 +103,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/measurement-architecture-misattribution.md|measurement architecture misattribution]]
+
+---
+**관련**: [[concepts/hybrid-verification-architecture.md|hybrid verification architecture]]

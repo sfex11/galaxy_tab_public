@@ -49,3 +49,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/position-invariant-kv-reuse.md|position invariant kv reuse]]
+
+---
+**관련**: [[concepts/efficiency-attack-surface-identity.md|efficiency attack surface identity]]
+
+---
+**관련**: [[concepts/representation-stability-failure.md|representation stability failure]]
+
+---
+**관련**: [[concepts/early-episode-abort.md|early episode abort]]
