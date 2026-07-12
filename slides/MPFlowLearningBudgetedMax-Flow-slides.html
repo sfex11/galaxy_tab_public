@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPFlow: Learning Budgeted Max-Flow Optimization on the Light — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;gap:1.5rem;">
+    <div style="font-size:clamp(0.8rem,1.2vw,1rem);letter-spacing:0.15em;" class="muted">arXiv: 2607.08703v1 · cs.LG · 2026</div>
+    <h1 style="font-size:clamp(1.6rem,3.5vw,3rem);line-height:1.25;max-width:900px;">MPFlow: 예산 제약 하에서의<br>Max-Flow 최적화 학습</h1>
+    <p style="font-size:clamp(0.95rem,1.5vw,1.2rem);max-width:700px;" class="muted">라이트닝 네트워크의 유동성 배치 문제를<br>심층 그래프 강화학습으로 해결하다</p>
+    <div class="hr" style="max-width:200px;margin:0.5rem auto;"></div>
+    <div style="font-size:clamp(0.85rem,1.2vw,1rem);" class="muted">
+      Harrison Rush · Vincent Davis · Simone Antonelli · Vikash Singh · Jesse Shrader · Emanuele Rossi
+    </div>
+    <div style="font-size:clamp(0.75rem,1vw,0.85rem);" class="muted">
+      Amboss Technologies · CISPA Helmholtz · Stillmark · Sapienza University of Rome
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">라이트닝 네트워크의 유동성 문제</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);line-height:1.8;margin-bottom:1rem;">
+          비트코인 라이트닝 네트워크(LN)는 오프체인 결제 채널을 통해 <span class="accent">빠르고 저렴한 결제</span>를 가능하게 합니다. 하지만 채널의 <span class="accent">고정 용량</span>이라는 근본적 한계가 존재합니다.
+        </p>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>유동성 배치가 잘못되면 라우팅 병목 발생</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>목표된 배치는 처리량을 극대화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>토폴로지가 지속적으로 변화하여 능동적 관리 필요</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div style="font-size:clamp(0.8rem,1.1vw,0.9rem);margin-bottom:0.75rem;" class="muted">핵심 질문</div>
+        <p style="font-size:clamp(1.1rem,1.8vw,1.4rem);line-height:1.6;">
+          "<span class="accent2">어떤 피어에게 채널을 열고,<br>제한된 유동성을 어떻게 배분해야<br>효과적으로 네트워크에 참여할 수 있는가?</span>"
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">기존 접근법의 한계</h2>
+    <div class="grid-3" style="gap:1.5rem;margin-bottom:2rem;">
+      <div class="card" style="padding:1.5rem;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-project-diagram accent"></i></div>
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.5rem;">정적 그래프 휴리스틱</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;" class="muted">차수(Degree), 매개중심성(Betweenness) 등은 방향성 잔액, 예산 제약, 다중 배치 간 상호작용을 무시</p>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-eye-slash accent"></i></div>
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.5rem;">관측 불가능성</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;" class="muted">LN은 외부 관측성이 거의 없고, 지도 학습을 위한 트레이스도 존재하지 않음</p>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-flask accent"></i></div>
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.5rem;">시뮬레이션의 한계</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;" class="muted">수요 행렬, 재시도 로직, 숨겨진 잔액에 대한 강한 가정이 결론을 지배할 수 있음</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);line-height:1.7;">
+        <span class="accent2">→ 새로운 접근이 필요합니다:</span> 강한 가정 없이, 이론적으로 정당화된 목표 함수를 바탕으로, 학습 기반으로 유동성 배치를 최적화
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">배경: Max-Flow와 Min-Cut 정리</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);line-height:1.8;margin-bottom:1rem;">
+          유향 그래프 <span class="accent">G = (V, E)</span> 에 용량 <span class="accent">c: E → ℝ<sub>≥0</sub></span>, 소스 <span class="accent">s</span>, 싱크 <span class="accent">t</span>가 주어집니다.
+        </p>
+        <div class="flow-item" style="margin-bottom:1rem;">
+          <div class="flow-icon"><i class="fas fa-water"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">용량 제약</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">0 ≤ f(u,v) ≤ c(u,v)</div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1rem;">
+          <div class="flow-icon"><i class="fas fa-balance-scale"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">유량 보존</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">∑f(u,v) = ∑f(v,w) for v ∉ {s,t}</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-bullseye"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">최대 유량</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">|f| = ∑f(s,w)를 최대화</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:2rem;display:flex;flex-direction:column;justify-content:center;">
+        <h3 style="font-size:clamp(1.1rem,1.8vw,1.4rem);margin-bottom:1rem;" class="accent2">Max-Flow Min-Cut 정리</h3>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);line-height:1.8;margin-bottom:1rem;">
+          <span class="accent">최대 유량 = 최소 s-t 컷 용량</span>
+        </p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.8;" class="muted">
+          이 정리가 바로 max-flow를 라우팅 용량의 <span class="accent3">이론적으로 정당화된 측정치</span>로 만드는 이유입니다. 최대 유량은 전달 가능한 결제 볼륨의 상한을 직접 측정합니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1rem;">문제 정식화: MDP로의 변환</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);line-height:1.7;margin-bottom:1.5rem;" class="muted">
+      예산 제약 조합 최적화 → 순차적 그래프 구성 → 유한 수평 MDP
+    </p>
+    <div class="grid-3" style="gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="card" style="padding:1.5rem;border-top:3px solid;">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.75rem;"><i class="fas fa-map accent2"></i> 상태 S<sub>t</sub></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">
+          현재 그래프 토폴로지 G<sub>t</sub>: 노드 특성(중심성 지표), 에지 특성(수수료, 용량)
+        </p>
+      </div>
+      <div class="card" style="padding:1.5rem;border-top:3px solid;">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.75rem;"><i class="fas fa-hand-pointer accent"></i> 행동 A<sub>t</sub></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">
+          채널을 열 노드 선택 (기존 채널 충전 포함). 에피소드당 <span class="accent">k=5회</span> 행동 제한
+        </p>
+      </div>
+      <div class="card" style="padding:1.5rem;border-top:3px solid;">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:0.75rem;"><i class="fas fa-gift accent3"></i> 보상 R<sub>t</sub></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">
+          <span class="accent">한계 max-flow 증가분:</span> r<sub>t</sub> = F<sub>t</sub> − F<sub>t−1</sub>
+        </p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">
+        <span class="accent2">왜 max-flow인가?</span> 이론적 근거(Max-Flow Min-Cut), 방향성 잔액 고려, 강한 가정 불필요, 전달 가능한 결제 볼륨의 직접적 상한 측정
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">MPFlow 에이전트 아키텍처</h2>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">입력 그래프</div>
+        <div class="step-desc">노드/에지 특성<br>인코딩</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">MPNN 백본</div>
+        <div class="step-desc">2층 Max-Aggregation<br>메시지 패싱</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">Actor-Critic</div>
+        <div class="step-desc">Masked-Softmax<br>Actor + Max-Pool Critic</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">PPO 업데이트</div>
+        <div class="step-desc">On-policy<br>클리핑 보조 목적</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card" style="padding:1.25rem;">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:0.5rem;"><i class="fas fa-layer-group accent"></i> Max-Aggregation MPNN</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          순열 불변성 max 집계기가 이질적 용량 이웃의 <span class="accent">좁은 컷 구조</span>를 강조하여 min-cut 목표와 정렬
+        </p>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);margin-bottom:0.5rem;"><i class="fas fa-mask accent2"></i> Action Masking</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          이미 채널이 열린 노드, 자기 자신, 불가능한 노드를 마스킹하여 <span class="accent2">타당성 보장</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1rem;">핵심 기법: Hub-Exclusion 커리큘럼</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);line-height:1.7;margin-bottom:1.5rem;" class="muted">
+      라이트닝 네트워크는 헤비테일 분포를 가지며, 상위 허브에 의존하는 정책은 일반화가 어렵습니다.
+    </p>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon">1</div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">훈련 시 허브 제거</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">훈련 서브그래프에서 <span class="accent">상위 50개 허브를 제거</span></div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon">2</div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">용량 인식 학습 강제</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">허브 부착이 아닌 <span class="accent">네트워크 구조적 병목 해소</span> 학습</div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon">3</div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">전체 그래프 평가</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">평가는 <span class="accent">전체 그래프(허브 포함)</span>에서 수행</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-trophy"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;" class="accent3">결과: 허브 독립적 정책</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">허브 제거 시 휴리스틱 대비 우위가 더욱 확대</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;" class="accent">왜 커리큘럼이 필요한가?</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.8;" class="muted">
+          허브가 보이면 에이전트는 "가장 큰 노드에 연결하라"는 <span class="accent">단순한 단축키(shortcut)</span>를 학습합니다. 허브를 숨기면 에이전트는 <span class="accent2">그래프의 병목 구조를 실제로 이해</span>해야만 보상을 얻을 수 있습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">실험 설정</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;">데이터 처리</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);margin-bottom:1.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 LN 스냅샷 사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>5,000 노드 서브그래프 추출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>채널 잔액 추정 (CBI 기반)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>예산: k=5 × 0.20 BTC</li>
+        </ul>
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;">평가 프로토콜</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Paired 평가 (동일 출발 상태)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 시드 · 다중 스냅샷</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>보이지 않는 그래프 일반화 테스트</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;">비교 대상</h3>
+        <table class="compare-table" style="font-size:clamp(0.75rem,1.1vw,0.85rem);">
+          <thead>
+            <tr>
+              <th>베이스라인</th>
+              <th>유형</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Random</td>
+              <td class="muted">무작위 선택</td>
+            </tr>
+            <tr>
+              <td>Degree</td>
+              <td class="muted">차수 기준</td>
+            </tr>
+            <tr>
+              <td>Betweenness</td>
+              <td class="muted">매개중심성 기준</td>
+            </tr>
+            <tr>
+              <td>Max-Flow Greedy</td>
+              <td class="muted">탐욕적 max-flow</td>
+            </tr>
+            <tr>
+              <td>GNN (허브 포함)</td>
+              <td class="muted">학습 (커리큘럼 없음)</td>
+            </tr>
+            <tr>
+              <td><span class="accent">MPFlow (Ours)</span></td>
+              <td><span class="accent">학습 + 허브 제외 커리큘럼</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">주요 결과: 5k 서브그래프</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;">
+          MPFlow는 <span class="accent">모든 시드에서 모든 베이스라인을 일관되게 상회</span>하며, 특히 허브 제거 후 그 우위가 더욱 명확해집니다.
+        </p>
+        <div class="grid-2" style="gap:1rem;">
+          <div class="card" style="padding:1.25rem;text-align:center;">
+            <div class="big-num accent">1위</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">전 시드 평균 순위</div>
+          </div>
+          <div class="card" style="padding:1.25rem;text-align:center;">
+            <div class="big-num accent2">100%</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">베이스라인 대비 승률</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.5vw,1.2rem);margin-bottom:1rem;">성능 순서 (요약)</h3>
+        <div style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:2.2;">
+          <div><span class="tag tag-green">최고</span> <span class="accent">MPFlow (허브 제외)</span></div>
+          <div style="padding-left:2rem;" class="muted">Max-Flow Greedy</div>
+          <div style="padding-left:2rem;" class="muted">Betweenness Centrality</div>
+          <div style="padding-left:2rem;" class="muted">GNN (허브 포함 훈련)</div>
+          <div style="padding-left:2rem;" class="muted">Degree Centrality</div>
+          <div><span class="tag tag-red">최저</span> Random</div>
+        </div>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          <span class="accent2">핵심 발견:</span> MPFlow는 단순히 허브에 연결하는 것이 아니라, <span class="accent">실제로 네트워크 병목을 완화하는 배치</span>를 학습함
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">ABLATION: 그래프 규모 및 허브 제거 효과</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card" style="padding:1.5rem;">
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;"><i class="fas fa-expand-arrows-alt accent"></i> 그래프 규모에 따른 성능</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>작은 서브그래프에서도 안정적 성능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>규모 확장 시 상대적 우위 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MPNN의 메시지 패싱이 규모에 대한 일반화에 기여</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;"><i class="fas fa-user-slash accent2"></i> 허브 제거 수준별 비교</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>허브 제거 개수 증가 시 MPFlow 우위 <span class="accent">확대</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>허브 포함 훈련 변형은 허브 제거 시 급격히 성능 저하</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>커리큘럼이 <span class="accent2">견고성의 핵심 원인</span>임이 확인됨</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;">
+        허브 제외 커리큘럼 없이 학습한 동일 아키텍처 변형(Appendix B)은 허브가 없는 환경에서 <span class="accent">휴리스틱보다도 못한 성능</span>을 보여, 커리큘럼의 필수성을 입증합니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">크로스-스냅샷 일반화</h2>
+    <p style="font-size:clamp(0.9rem,1.4vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;" class="muted">
+      실제 배포를 위해서는 <span class="accent">훈련에 사용되지 않은 미래 스냅샷</span>에서도 성능이 유지되어야 합니다.
+    </p>
+    <div class="grid-3" style="gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="card" style="padding:1.5rem;text-align:center;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-calendar-alt accent3"></i></div>
+        <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.5rem;">시간적 격리</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">훈련 스냅샷과 다른 시기의 스냅샷에서 평가</p>
+      </div>
+      <div class="card" style="padding:1.5rem;text-align:center;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-chart-line accent"></i></div>
+        <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.5rem;">일관된 우위</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">보이지 않는 그래프에서도 베이스라인 상회 성능 유지</p>
+      </div>
+      <div class="card" style="padding:1.5rem;text-align:center;">
+        <div style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.5rem;"><i class="fas fa-network-wired accent2"></i></div>
+        <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.5rem;">토폴로지 변화</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">LN 토폴로지 가변성(Seres et al., 2020)에도 강건</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.7;" class="muted">
+      <span class="accent2">시사점:</span> MPFlow는 특정 스냅샷에 과적합되지 않고, <span class="accent">그래프 구조적 패턴을 일반화</span>하여 라우팅 병목 해소 능력을 보여줍니다.
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">실제 프로덕션 배포</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);line-height:1.8;margin-bottom:1.5rem;">
+          MPFlow는 연구 단계를 넘어 <span class="accent">실제 프로덕션 환경에 배포</span>되어 피어 추천에 사용되고 있습니다.
+        </p>
+        <div class="grid-2" style="gap:1rem;margin-bottom:1.5rem;">
+          <div class="card" style="padding:1.25rem;text-align:center;">
+            <div class="big-num accent">4,640</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">채널 오픈 결정 수</div>
+          </div>
+          <div class="card" style="padding:1.25rem;text-align:center;">
+            <div class="big-num accent2">267.3</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">BTC 총 할당액</div>
+          </div>
+        </div>
+        <div class="grid-2" style="gap:1rem;">
+          <div class="card" style="padding:1rem;text-align:center;">
+            <div class="big-num accent3">30</div>
+            <div style="font-size:clamp(0.75rem,1.1vw,0.85rem);" class="muted">관리 노드 수</div>
+          </div>
+          <div class="card" style="padding:1rem;text-align:center;">
+            <div class="big-num muted">$16M+</div>
+            <div style="font-size:clamp(0.75rem,1.1vw,0.85rem);" class="muted">할당 가치 (USD)</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;display:flex;flex-direction:column;justify-content:center;">
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;"><i class="fas fa-rocket accent"></i> 배포 의의</h3>
+        <ul class="check-list" style="font-size:clamp(0.85rem,1.3vw,1rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그래프 강화학습이 실제 금융 네트워크에서 작동함을 입증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시뮬레이션을 넘어 <span class="accent">실자본 운용</span>에 적용된 최초의 사례 중 하나</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>가벼운 MPNN-PPO 아키텍처가 <span class="accent2">실시간 추론</span>에 충분히 가벼움</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>피어 추천 시스템으로의 자연스러운 통합</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);margin-bottom:1.5rem;">결론 및 기여 요약</h2>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-bullseye"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">최적화 정렬 RL 정식화</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">유동성 배치를 한계 max-flow 보상을 갖는 그래프 MDP로 공식화</div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-cube"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">간결하고 배포 가능한 정책</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">MPNN + PPO + Action Masking으로 구성된 가벼운 에이전트</div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-graduation-cap"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">Hub-Exclusion 커리큘럼</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">허브 의존성을 제거하고 구조적 이해를 강제하는 새로운 훈련 전략</div>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:1.25rem;">
+          <div class="flow-icon"><i class="fas fa-chart-bar"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;">실제 LN 토폴로지에서의 실증</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">다중 시드, 다중 스냅샷, 크로스-스냅샷 일반화까지 포괄적 평가</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-industry"></i></div>
+          <div>
+            <div style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;" class="accent3">실제 프로덕션 배포</div>
+            <div style="font-size:clamp(0.8rem,1.2vw,0.9rem);" class="muted">4,640개 결정, 267.3 BTC 할당으로 실질적 가치 창출</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;display:flex;flex-direction:column;justify-content:center;">
+        <h3 style="font-size:clamp(1.05rem,1.6vw,1.25rem);margin-bottom:1rem;" class="accent2">핵심 메시지</h3>
+        <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);line-height:1.8;margin-bottom:1rem;">
+          복잡한 시뮬레이션 대신, <span class="accent">이론적으로 정당화된 목표(max-flow)</span>와 <span class="accent2">단순한 아키텍처(MPNN-PPO)</span>, 그리고 <span class="accent3">적절한 훈련 전략(허브 제외 커리큘럼)</span>의 결합으로 실제 금융 네트워크의 유동성 배치를 효과적으로 해결할 수 있습니다.
+        </p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.9rem);line-height:1.7;" class="muted">
+          이 패러다임은 라이트닝 네트워크를 넘어 다른 결제 채널 네트워크 및 유동성 관리 문제로 확장 가능합니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
