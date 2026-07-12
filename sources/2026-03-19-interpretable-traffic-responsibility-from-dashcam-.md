@@ -291,3 +291,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/environment-constituted-agent.md|environment constituted agent]]
+
+---
+**관련**: [[concepts/self-referential-agent-paradigm.md|self referential agent paradigm]]

@@ -323,3 +323,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/co-failure-rate.md|co failure rate]]
+
+---
+**관련**: [[concepts/policy-task-state.md|policy task state]]

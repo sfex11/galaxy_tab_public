@@ -60,3 +60,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/observation-fidelity-paradox.md|observation fidelity paradox]]
+
+---
+**관련**: [[concepts/complementarity-cancellation-transition.md|complementarity cancellation transition]]

@@ -144,3 +144,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/harness-protocol-layer.md|harness protocol layer]]
+
+---
+**관련**: [[concepts/infrastructure-layer-routing-defense.md|infrastructure layer routing defense]]

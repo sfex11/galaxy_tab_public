@@ -343,3 +343,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/context-delegation.md|context delegation]]
+
+---
+**관련**: [[concepts/world-model-in-pieces.md|world model in pieces]]
+
+---
+**관련**: [[concepts/failure-as-causal-data.md|failure as causal data]]
+
+---
+**관련**: [[concepts/informational-environment-generation.md|informational environment generation]]
+
+---
+**관련**: [[concepts/execution-level-causal-extraction.md|execution level causal extraction]]

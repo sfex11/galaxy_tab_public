@@ -2402,3 +2402,7 @@
 ## [2026-07-12 08:30] ingest | DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
 
 ## [2026-07-12 08:30] ingest | SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling
+
+## [2026-07-12 17:11] lint | Wiki 건전성 체크
+- Issues: 2473개
+- Orphans: 730, Missing: 1743, Contradictions: 0

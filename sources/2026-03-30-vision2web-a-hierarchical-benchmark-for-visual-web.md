@@ -108,3 +108,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-problem-space-misattribution.md|hierarchical problem space misattribution]]
+
+---
+**관련**: [[concepts/probabilistic-verification.md|probabilistic verification]]
+
+---
+**관련**: [[concepts/hierarchical-recovery.md|hierarchical recovery]]

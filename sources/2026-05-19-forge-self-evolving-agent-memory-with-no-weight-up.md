@@ -229,3 +229,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-stability-failure.md|representation stability failure]]
+
+---
+**관련**: [[concepts/dual-failure-handling-architecture.md|dual failure handling architecture]]
+
+---
+**관련**: [[concepts/memory-semantic-flattening.md|memory semantic flattening]]

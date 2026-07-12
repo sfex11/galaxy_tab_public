@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-loop-safety-architecture.md|dual loop safety architecture]]
+
+---
+**관련**: [[concepts/inline-external-safety-dichotomy.md|inline external safety dichotomy]]

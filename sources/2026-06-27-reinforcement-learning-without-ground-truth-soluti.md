@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/relative-verifiability.md|relative verifiability]]
+
+---
+**관련**: [[concepts/ceiling-incentive-feedback-loop.md|ceiling incentive feedback loop]]

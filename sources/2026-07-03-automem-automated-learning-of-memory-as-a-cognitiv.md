@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-02-reinforcement-learning-with-metacognitive-feedback]]: 두 논문 모두 인지 과학의 메타인지 관점을 LLM에 도입하며, 하나는 강화학습을 통한 불확실성 표현에, 다른 하나는 메타기억 기반의 메모리 관리 기술로 적용합니다.
+
+---
+**관련**: [[concepts/infrastructure-cognitive-attribution-bias.md|infrastructure cognitive attribution bias]]

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/schema-accumulation-attack-surface.md|schema accumulation attack surface]]
+
+---
+**관련**: [[concepts/goal-fixation-meta-decision.md|goal fixation meta decision]]

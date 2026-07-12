@@ -158,3 +158,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/narrative-based-anomaly-detection.md|narrative based anomaly detection]]
+
+---
+**관련**: [[concepts/pipeline-inherent-structural-leakage.md|pipeline inherent structural leakage]]

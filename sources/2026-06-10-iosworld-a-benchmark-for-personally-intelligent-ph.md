@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/efficiency-attack-surface-identity.md|efficiency attack surface identity]]
+
+---
+**관련**: [[concepts/resolution-spectrum-identity.md|resolution spectrum identity]]

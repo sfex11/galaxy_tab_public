@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-spectrum.md|harness spectrum]]
+
+---
+**관련**: [[concepts/tool-use-optimizability-stratification.md|tool use optimizability stratification]]

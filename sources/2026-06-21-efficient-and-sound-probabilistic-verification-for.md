@@ -82,3 +82,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pre-existing-data-assumption.md|pre existing data assumption]]
+
+---
+**관련**: [[concepts/critical-bottleneck-failure-decoupling.md|critical bottleneck failure decoupling]]

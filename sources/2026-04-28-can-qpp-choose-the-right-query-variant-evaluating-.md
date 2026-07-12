@@ -259,3 +259,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-selection-cognitive-tax.md|tool selection cognitive tax]]
+
+---
+**관련**: [[concepts/non-sequential-semantic-forced-serialization.md|non sequential semantic forced serialization]]

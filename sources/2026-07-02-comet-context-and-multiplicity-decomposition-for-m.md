@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-02-reinforcement-learning-with-metacognitive-feedback]]: 두 논문 모두 인공지능 모델의 메타인지(metacognition)와 불확실성 인식의 어려움을 다루며, 각각 다중모달 환경과 강화학습 맥락에서 해결책을 제시합니다.
+
+---
+**관련**: [[entities/metacognition.md|metacognition]]

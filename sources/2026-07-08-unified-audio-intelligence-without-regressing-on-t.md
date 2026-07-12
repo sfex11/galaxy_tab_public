@@ -22,7 +22,7 @@ Audio intelligence involves understanding, reasoning about, and generating both 
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

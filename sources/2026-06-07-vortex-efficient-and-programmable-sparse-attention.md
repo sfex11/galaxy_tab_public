@@ -131,3 +131,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]
+
+---
+**관련**: [[concepts/episode-length-adaptation.md|episode length adaptation]]
