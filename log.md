@@ -2410,3 +2410,37 @@
 ## [2026-07-12 18:38] lint | Wiki 건전성 체크
 - Issues: 2432개
 - Orphans: 689, Missing: 1743, Contradictions: 0
+
+## [2026-07-13 08:32] ingest | UniClawBench: A Universal Benchmark for Proactive Agents on Real-World Tasks
+
+## [2026-07-13 08:32] ingest | Workflow as Knowledge: Semantic Persistence for LLM-Mediated Workflows
+
+## [2026-07-13 08:32] ingest | The Illusion of Equivalency: Statistical Characterization of Quantization Effects in LLMs
+
+## [2026-07-13 08:32] ingest | Super Weights in LLMs and the Failure of Selective Training
+
+## [2026-07-13 08:32] ingest | Validity of LLMs as data annotators: AMALIA on authority
+
+## [2026-07-13 08:32] ingest | Remember When It Matters: Proactive Memory Agent for Long-Horizon Agents
+
+## [2026-07-13 08:32] ingest | AUTOPILOT VQA: Benchmarking Vision-Language Models for Incident-Centric Dashcam Understanding
+
+## [2026-07-13 08:32] ingest | MPFlow: Learning Budgeted Max-Flow Optimization on the Lightning Network with Deep Graph Reinforcement Learning
+
+## [2026-07-13 08:32] ingest | ProjAgent: Procedural Similarity Retrieval for Repository-Level Code Generation
+
+## [2026-07-13 08:32] ingest | SolarChain-Eval: A Physics-Constrained Benchmark for Trustworthy Economic Agents in Decentralized Energy Markets
+
+## [2026-07-13 08:32] ingest | WebSwarm: Recursive Multi-Agent Orchestration for Deep-and-Wide Web Search
+
+## [2026-07-13 08:32] ingest | Formal Mechanisms for Market Stability in Self-Interested Agent Societies: A Marketplace Simulation Study
+
+## [2026-07-13 08:32] ingest | Multi-Modal, Multi-Environment Machine Teaching for Robust Reward Learning
+
+## [2026-07-13 08:32] ingest | A Practical Investigation of Training-free Relaxed Speculative Decoding
+
+## [2026-07-13 08:32] ingest | BiSCo-LLM: Lookup-Free Binary Spherical Coding for Extreme Low-Bit Large Language Model Compression
+
+## [2026-07-13 08:32] ingest | DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
+
+## [2026-07-13 08:32] ingest | SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling
