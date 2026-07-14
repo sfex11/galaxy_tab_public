@@ -259,3 +259,9 @@ _자동 생성됨_
 - [[sources/2026-07-13-webswarm-recursive-multi-agent-orchestration-for-d.md]]
 
 - [[sources/2026-07-13-formal-mechanisms-for-market-stability-in-self-int.md]]
+
+- [[sources/2026-07-14-vexaiot-autonomous-iot-vulnerability-exploitation-.md]]
+
+- [[sources/2026-07-14-mosaic-runtime-efficient-multi-agent-embodied-plan.md]]
+
+- [[sources/2026-07-14-codimad-diffusion-based-privileged-distillation-fo.md]]

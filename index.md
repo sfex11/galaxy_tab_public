@@ -1310,3 +1310,18 @@
 - [[sources/2026-07-13-bisco-llm-lookup-free-binary-spherical-coding-for-.md]] - BiSCo-LLM: Lookup-Free Binary Spherical Coding for Extreme Low-Bit Large Language Model Compression
 - [[sources/2026-07-13-dominotree-conditional-tree-structured-drafting-wi.md]] - DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
 - [[sources/2026-07-13-smetric-rethink-llm-scheduling-for-serving-agents-.md]] - SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-14-vexaiot-autonomous-iot-vulnerability-exploitation-.md]] - VEXAIoT: Autonomous IoT Vulnerability EXploitation using AI Agents
+- [[sources/2026-07-14-indirect-and-direct-ai-scaffolding-for-computation.md]] - Indirect and Direct AI Scaffolding for Computational Problem Posing: A Pilot Experience Report
+- [[sources/2026-07-14-task-specific-multimodal-question-answering-agents.md]] - Task-Specific Multimodal Question Answering Agents via Confidence Calibration and Incremental Reasoning for QANTA 2026
+- [[sources/2026-07-14-llm-for-eda-in-front-end-design-challenges-and-opp.md]] - LLM for EDA in Front-End Design: Challenges and Opportunities
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-14-mosaic-runtime-efficient-multi-agent-embodied-plan.md]] - Mosaic: Runtime-Efficient Multi-Agent Embodied Planning
+- [[sources/2026-07-14-agora-enhancing-llm-agent-reasoning-via-auction-ba.md]] - Agora: Enhancing LLM Agent Reasoning Via Auction-Based Task Allocation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-14-codimad-diffusion-based-privileged-distillation-fo.md]] - CoDiMAD: Diffusion-Based Privileged Distillation for Communication-Free Multi-Robot Coordination
+- [[sources/2026-07-14-4dr360-state-reasoning-for-joint-3d-detection-and-.md]] - 4DR360: State Reasoning for Joint 3D Detection and Occupancy Prediction in 4D Radar-Camera Full-Scene Perception
+- [[sources/2026-07-14-trustx-agent-risk-classification-framework-arc-ris.md]] - TrustX Agent Risk Classification Framework (ARC): Risk-Tiering Internally Created Agentic AI Systems
+- [[sources/2026-07-14-test-time-scaling-for-small-vlms-on-multilingual-v.md]] - Test-Time Scaling for Small VLMs on Multilingual Visual MCQ
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-14-coral-auv-cfd-oriented-reinforcement-learning-for-.md]] - CORAL-AUV: CFD Oriented Reinforcement Learning for Autonomous Underwater Vehicles

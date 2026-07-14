@@ -2444,3 +2444,25 @@
 ## [2026-07-13 08:32] ingest | DominoTree: Conditional Tree-Structured Drafting with Domino for Speculative Decoding
 
 ## [2026-07-13 08:32] ingest | SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling
+
+## [2026-07-14 08:33] ingest | VEXAIoT: Autonomous IoT Vulnerability EXploitation using AI Agents
+
+## [2026-07-14 08:33] ingest | Indirect and Direct AI Scaffolding for Computational Problem Posing: A Pilot Experience Report
+
+## [2026-07-14 08:33] ingest | Task-Specific Multimodal Question Answering Agents via Confidence Calibration and Incremental Reasoning for QANTA 2026
+
+## [2026-07-14 08:33] ingest | LLM for EDA in Front-End Design: Challenges and Opportunities
+
+## [2026-07-14 08:33] ingest | Mosaic: Runtime-Efficient Multi-Agent Embodied Planning
+
+## [2026-07-14 08:33] ingest | Agora: Enhancing LLM Agent Reasoning Via Auction-Based Task Allocation
+
+## [2026-07-14 08:33] ingest | CoDiMAD: Diffusion-Based Privileged Distillation for Communication-Free Multi-Robot Coordination
+
+## [2026-07-14 08:33] ingest | 4DR360: State Reasoning for Joint 3D Detection and Occupancy Prediction in 4D Radar-Camera Full-Scene Perception
+
+## [2026-07-14 08:33] ingest | TrustX Agent Risk Classification Framework (ARC): Risk-Tiering Internally Created Agentic AI Systems
+
+## [2026-07-14 08:33] ingest | Test-Time Scaling for Small VLMs on Multilingual Visual MCQ
+
+## [2026-07-14 08:33] ingest | CORAL-AUV: CFD Oriented Reinforcement Learning for Autonomous Underwater Vehicles
