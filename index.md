@@ -1325,3 +1325,19 @@
 - [[sources/2026-07-14-test-time-scaling-for-small-vlms-on-multilingual-v.md]] - Test-Time Scaling for Small VLMs on Multilingual Visual MCQ
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-07-14-coral-auv-cfd-oriented-reinforcement-learning-for-.md]] - CORAL-AUV: CFD Oriented Reinforcement Learning for Autonomous Underwater Vehicles
+- [[sources/2026-07-15-metacognition-in-llms-foundations-progress-and-opp.md]] - Metacognition in LLMs: Foundations, Progress, and Opportunities
+- [[sources/2026-07-15-inside-the-unfair-judge-a-mechanistic-interpretabi.md]] - Inside the Unfair Judge: A Mechanistic Interpretability Account of LLM-as-Judge Bias
+- [[sources/2026-07-15-evidence-backed-video-question-answering.md]] - Evidence-Backed Video Question Answering
+- [[sources/2026-07-15-can-llms-perform-deep-technical-comprehension-of-c.md]] - Can LLMs Perform Deep Technical Comprehension of Computer Architecture Papers?
+- [[sources/2026-07-15-advancedmathbench-a-benchmark-suite-for-advanced-m.md]] - AdvancedMathBench: A Benchmark Suite for Advanced Mathematical Proof Generation and Verification
+- [[sources/2026-07-15-mm-toolsandbox-a-unified-framework-for-evaluating-.md]] - MM-ToolSandBox: A Unified Framework for Evaluating Visual Tool-Calling Agents
+- [[sources/2026-07-15-supporting-reflection-in-llm-based-exploratory-sea.md]] - Supporting Reflection in LLM-based Exploratory Search
+- [[sources/2026-07-15-forgetting-our-way-to-shared-meaning-effects-of-fo.md]] - Forgetting Our Way to Shared Meaning: Effects of Forgetting on Conceptual Alignment in a Non-Partnership Coordination Game
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-15-paradoxes-of-game-theoretic-equilibria-and-price-o.md]] - Paradoxes of Game Theoretic Equilibria and Price of Anarchy
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-15-when-local-monitors-miss-compositional-harm-diagno.md]] - When Local Monitors Miss Compositional Harm: Diagnosing Distributed Backdoors in Multi-Agent Systems
+- [[sources/2026-07-15-multi-agent-reinforcement-learning-for-c-v2x-rat-s.md]] - Multi-Agent Reinforcement Learning for C-V2X RAT Selection
+- [[sources/2026-07-15-production-and-perception-in-llms-a-token-probabil.md]] - Production and Perception in LLMs: A Token Probability Approach
+- [[sources/2026-07-15-think-through-a-bottleneck-hourglass-reasoning-for.md]] - Think Through a Bottleneck: Hourglass Reasoning for Rigorous Induction
+- [[sources/2026-07-15-hcrmap-pressure-aware-hot-expert-residency-mapping.md]] - HCRMap: Pressure-Aware Hot-Expert Residency Mapping for 3.5D MoE Chiplet Inference

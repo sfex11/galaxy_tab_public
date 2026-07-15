@@ -2466,3 +2466,31 @@
 ## [2026-07-14 08:33] ingest | Test-Time Scaling for Small VLMs on Multilingual Visual MCQ
 
 ## [2026-07-14 08:33] ingest | CORAL-AUV: CFD Oriented Reinforcement Learning for Autonomous Underwater Vehicles
+
+## [2026-07-15 08:31] ingest | Metacognition in LLMs: Foundations, Progress, and Opportunities
+
+## [2026-07-15 08:31] ingest | Inside the Unfair Judge: A Mechanistic Interpretability Account of LLM-as-Judge Bias
+
+## [2026-07-15 08:31] ingest | Evidence-Backed Video Question Answering
+
+## [2026-07-15 08:31] ingest | Can LLMs Perform Deep Technical Comprehension of Computer Architecture Papers?
+
+## [2026-07-15 08:31] ingest | AdvancedMathBench: A Benchmark Suite for Advanced Mathematical Proof Generation and Verification
+
+## [2026-07-15 08:31] ingest | MM-ToolSandBox: A Unified Framework for Evaluating Visual Tool-Calling Agents
+
+## [2026-07-15 08:31] ingest | Supporting Reflection in LLM-based Exploratory Search
+
+## [2026-07-15 08:31] ingest | Forgetting Our Way to Shared Meaning: Effects of Forgetting on Conceptual Alignment in a Non-Partnership Coordination Game
+
+## [2026-07-15 08:31] ingest | Paradoxes of Game Theoretic Equilibria and Price of Anarchy
+
+## [2026-07-15 08:31] ingest | When Local Monitors Miss Compositional Harm: Diagnosing Distributed Backdoors in Multi-Agent Systems
+
+## [2026-07-15 08:31] ingest | Multi-Agent Reinforcement Learning for C-V2X RAT Selection
+
+## [2026-07-15 08:31] ingest | Production and Perception in LLMs: A Token Probability Approach
+
+## [2026-07-15 08:31] ingest | Think Through a Bottleneck: Hourglass Reasoning for Rigorous Induction
+
+## [2026-07-15 08:31] ingest | HCRMap: Pressure-Aware Hot-Expert Residency Mapping for 3.5D MoE Chiplet Inference

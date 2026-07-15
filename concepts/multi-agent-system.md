@@ -265,3 +265,7 @@ _자동 생성됨_
 - [[sources/2026-07-14-mosaic-runtime-efficient-multi-agent-embodied-plan.md]]
 
 - [[sources/2026-07-14-codimad-diffusion-based-privileged-distillation-fo.md]]
+
+- [[sources/2026-07-15-paradoxes-of-game-theoretic-equilibria-and-price-o.md]]
+
+- [[sources/2026-07-15-when-local-monitors-miss-compositional-harm-diagno.md]]
