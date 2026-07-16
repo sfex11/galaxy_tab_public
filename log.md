@@ -2494,3 +2494,23 @@
 ## [2026-07-15 08:31] ingest | Think Through a Bottleneck: Hourglass Reasoning for Rigorous Induction
 
 ## [2026-07-15 08:31] ingest | HCRMap: Pressure-Aware Hot-Expert Residency Mapping for 3.5D MoE Chiplet Inference
+
+## [2026-07-16 08:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1303개
+
+## [2026-07-16 08:34] ingest | Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution
+
+## [2026-07-16 08:34] ingest | TerraZero: Procedural Driving Simulation for Zero-Demonstration Self-Play at Scale
+
+## [2026-07-16 08:34] ingest | PalmClaw: A Native On-Device Agent Framework for Mobile Phones
+
+## [2026-07-16 08:34] ingest | Win by Silence: Deletion Non-Monotonicity, Autonomous Exploitation, and Typed-State Gating in LLM Plan Evaluation
+
+## [2026-07-16 08:34] ingest | Resist and Update: Counterfactual Report Coordinates for Incentive-Compatible LLMs
+
+## [2026-07-16 08:34] ingest | FormalAnalyticGeo: A Neural-Symbolic Based Framework for Multimodal Analytic Geometry Problem Generation
+
+## [2026-07-16 08:34] ingest | The Illusion of Robustness: Aggregate Accuracy Hides Prediction Flips under Task-Irrelevant Context
+
+## [2026-07-16 08:34] ingest | MAMMOTH: A Multi-Modal End-to-End Policy for Off-Road Mobility Robust to Missing Modality
+
+## [2026-07-16 08:34] ingest | Form, Not Content? A Preregistered, Placebo-Controlled Evaluation of Learned Error-Conditioned Self-Repair Through Prompts and Weights in Frozen Small Code Models

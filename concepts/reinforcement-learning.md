@@ -317,3 +317,5 @@ _자동 생성됨_
 - [[sources/2026-07-13-multi-modal-multi-environment-machine-teaching-for.md]]
 
 - [[sources/2026-07-14-coral-auv-cfd-oriented-reinforcement-learning-for-.md]]
+
+- [[sources/2026-07-16-terrazero-procedural-driving-simulation-for-zero-d.md]]

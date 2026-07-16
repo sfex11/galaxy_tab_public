@@ -1,3 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정교하게 설계된 무용성 — 복잡도 메타인지가 두 최적화 축을 무너뜨리는 구조</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 17.5px);
+    line-height: 1.85;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 32px);
+  }
+
+  /* ── 타이포그래피 ── */
+  h1, h2, h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: clamp(1.65rem, 5vw, 2.35rem);
+    font-weight: 700;
+    margin: 48px 0 12px;
+  }
+
+  .subtitle {
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    color: #6b6560;
+    font-weight: 300;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 3.8vw, 1.65rem);
+    font-weight: 600;
+    margin: 56px 0 20px;
+    padding-top: 8px;
+  }
+
+  h3 {
+    font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+    font-weight: 600;
+    margin: 32px 0 12px;
+  }
+
+  p { margin-bottom: 1.4em; }
+
+  strong { color: #c2703e; font-weight: 500; }
+
+  em.accent-blue { color: #5b7c99; font-style: normal; font-weight: 500; }
+  em.accent-green { color: #6b9e7a; font-style: normal; font-weight: 500; }
+
+  a { color: #c2703e; text-decoration: none; border-bottom: 1px solid rgba(194,112,62,0.25); transition: border-color 0.2s; }
+  a:hover { border-bottom-color: #c2703e; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 16px 0 16px 22px;
+    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+    color: #5a5550;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.88em;
+    color: #9a9590;
+    font-style: normal;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05), 0 0.5px 2px rgba(44,40,37,0.04);
+  }
+
+  .card-label {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .card-label.orange { background: rgba(194,112,62,0.1); color: #c2703e; }
+  .card-label.blue { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .card-label.green { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+
+  /* ── 도식 ── */
+  .diagram {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 36px);
+    margin: 32px 0;
+    font-family: 'Noto Sans KR', monospace;
+    overflow-x: auto;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05);
+  }
+
+  .diagram-node {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: clamp(0.78rem, 2vw, 0.88rem);
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .diagram-node.top { background: rgba(194,112,62,0.13); color: #c2703e; }
+  .diagram-node.mid { background: rgba(91,124,153,0.1); color: #5b7c99; }
+  .diagram-node.mid2 { background: rgba(107,158,122,0.1); color: #6b9e7a; }
+  .diagram-node.bottom { background: rgba(44,40,37,0.05); color: #5a5550; }
+
+  .diagram-arrow {
+    display: block;
+    text-align: center;
+    color: #b5b0aa;
+    font-size: 1.2em;
+    line-height: 1.6;
+  }
+
+  .diagram-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 6px 0;
+  }
+
+  .diagram-desc {
+    text-align: center;
+    font-size: clamp(0.72rem, 1.8vw, 0.82rem);
+    color: #9a9590;
+    margin-top: 2px;
+  }
+
+  /* ── 메타 정보 ── */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.82em;
+    color: #9a9590;
+    margin-bottom: 8px;
+  }
+  .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 구분선 ── */
+  hr {
+    border: none;
+    height: 1px;
+    background: rgba(44,40,37,0.08);
+    margin: 48px 0;
+  }
+
+  /* ── 목차 ── */
+  .toc {
+    margin: 0 0 40px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(44,40,37,0.06);
+    border-radius: 12px;
+  }
+  .toc-title {
+    font-size: 0.78em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9590;
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .toc li {
+    margin-bottom: 6px;
+    font-size: 0.92em;
+  }
+  .toc a {
+    color: #5a5550;
+    border-bottom: none;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: #c2703e; }
+
+  /* ── 하이라이트 줄 ── */
+  .highlight-line {
+    border-left: 3px solid #c2703e;
+    padding-left: 16px;
+    margin: 28px 0;
+    color: #5a5550;
+  }
+
+  /* ── 푸터 ── */
+  footer {
+    text-align: center;
+    padding: 48px 16px 40px;
+    font-size: 0.8em;
+    color: #b5b0aa;
+  }
+
+  /* ── 반응형 미세 조정 ── */
+  @media (max-width: 480px) {
+    h1 { margin-top: 32px; }
+    h2 { margin-top: 40px; }
+    .diagram-row { flex-direction: column; align-items: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+
+  <div class="meta">
+    <span>📅 2025년 7월</span>
+    <span>📂 AI 에이전트 · 메타인지 · 최적화 이론</span>
+  </div>
+
+  <h1>정교하게 설계된 무용성</h1>
+  <p class="subtitle">에이전트가 "이 과제는 단순하다"는 사실을 모를 때,<br>두 최적화 축은 왜 동시에 무너지는가</p>
+
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#sec1">네비게이션의 역설 — 2분 거리에 고속도로를 까는 AI</a></li>
+      <li><a href="#sec2">적응적 추론의 함정 — "얼마나 계산할까"만 묻는 습관</a></li>
+      <li><a href="#sec3">하네스 최적화의 무용 — "병목을 어디서 잡을까"만 묻는 습관</a></li>
+      <li><a href="#sec4">상위 병목의 구조 — 사라진 첫 번째 질문</a></li>
+      <li><a href="#sec5">패러다임 전환 — "정말 그만큼 필요한가"를 먼저 물어야 한다</a></li>
+    </ol>
+  </div>
+
+  <!-- ── 섹션 1 ── -->
+  <h2 id="sec1">네비게이션의 역설 — 2분 거리에 고속도로를 까는 AI</h2>
+
+  <p>집 앞 편의점까지 걸어가는 데 걸리는 시간은 2분이다. 그런데 당신의 네비게이션 앱이 이 구간을 위해 <strong>고속도로 진입로를 계획</strong>하고, <strong>톨게이트 비용을 산출</strong>하고, <strong>차선 변경 시뮬레이션</strong>까지 돌린다면 어떨까? 도로 자체는 아주 정교하게 최적화되어 있을지 몰라도, 그 정교함이 문제를 해결하는 것이 아니라 <strong>없는 문제를 증식</strong>시키고 있다는 사실을 깨닫는 데는 그리 오래 걸리지 않을 것이다.</p>
+
+  <p>이 비유는 현재 AI 에이전트 생태계가 직면한 구조적 문제를 정확히 묘사한다. 최근 논문 <em>"Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution"</em>이 확인한 바와 같이, LLM 에이전트는 과제가 단순한지 복잡한지 스스로 판단하지 않고 <strong>항상 최대 노력(maximum-effort) 전략</strong>을 따른다. 단순한 텍스트 편집을 20단계 탐색으로 확장하는 식이다.</p>
+
+  <p>그런데 흥미롭게도, 학계와 산업계는 이 근본적인 문제를 해결하는 대신 <strong>두 가지 하위 최적화 축</strong>에 집중해 왔다. 하나는 모델 내부에서 계산 예산을 어떻게 분배할 것인가의 문제(<em class="accent-blue">적응적 추론</em>)이고, 다른 하나는 실행 인프라에서 병목을 어디서 해결할 것인가의 문제(<em class="accent-green">에이전트 하네스 최적화</em>)이다.</p>
+
+  <p>이 두 축은 각각 의미 있는 최적화다. 하지만 둘 다 <strong>"에이전트가 과제의 복잡도를 정확히 인지하고 있다"</strong>는 전제 위에 서 있다. 편의점까지 2분 거리라는 사실을 모르는 네비게이션에게 고속도로 노선을 최적화해주는 것과 같다. 이 글에서는 왜 이 전제의 부재가 단순한 누락이 아니라 <strong>두 최적화 축을 동시에 무력화하는 상위 차원의 병목</strong>인지를 파헤친다.</p>
+
+  <hr>
+
+  <!-- ── 섹션 2 ── -->
+  <h2 id="sec2">적응적 추론의 함정 — "얼마나 계산할까"만 묻는 습관</h2>
+
+  <div class="card">
+    <span class="card-label blue">적응적 추론(Adaptive Inference)</span>
+    <p>모델 내부에서 계산 예산을 동적으로 할당하는 기법. SpecKV 논문은 추측 길이(γ) 선택을 적응의 차원으로 확장하고, 압축이라는 내부 시스템 상태에 반응하는 메커니즘을 제시한다.</p>
+  </div>
+
+  <p>적응적 추론의 핵심 질문은 <strong>"얼마나 계산할까"</strong>다. 주어진 복잡도 수준에 대해 최적의 γ를 선택하고, 계산 자원을 효율적으로 분배하는 것이 이 축의 목표다. 마치 요리사가 메뉴의 난이도를 이미 알고 있으니, 그에 맞춰 불 강도와 조리 시간을 미세조정하는 것과 같다.</p>
+
+  <p>문제는 이 질문이 <strong>하나의 단계를 건너뛰고 있다</strong>는 데 있다. 적응적 추론은 "어떤 복잡도 수준에 대응할 것인가"를 이미 알고 있다는 전제 하에 "그에 맞는 γ를 어떻게 선택할 것인가"를 최적화한다. 정작 가장 중요한 결정—<strong>"적응할 것인가 말 것인가"</strong>—은 이 체계의 밖에 있다.</p>
+
+  <div class="highlight-line">
+    SpecKV의 적응 메커니즘은 분배의 효율성은 높여도, <strong>분배 자체가 불필요한 경우</strong>를 감지하지 못한다. 불필요한 계산에 대한 예산을 더 효율적으로 할당하는 것에 불과하다.
+  </div>
+
+  <p>요리사 비유로 돌아가 보자. 물을 끓이는 데 고급 프렌치 오븐의 온도를 0.1도 단위로 최적화하는 요리사를 상상해보라. 오븐 제어 기술은 대단히 정교하지만, <strong>물을 끓이는 데 오븐이 필요한지 자체를 묻지 않</strong>는다. 주전자와 가스레인지면 충분한 일이다. 적응의 타당성은 '적응 대상에 대한 정확한 모델'에 달려있는데, 복잡도에 대한 메타인지가 없으면 적응 자체가 무효화된다.</p>
+
+  <p>더 근본적으로, 에이전트가 항상 maximum-effort를 가정하면 최적화 축들은 <strong>'천장에 도달하기 위한 효율적 경로'만 제공</strong>하게 된다. 천장 자체가 낮은 과제에서는 이 경로가 역설적으로 비효율을 극대화하는 피드백 루프를 형성한다. 2층 건물에 엘리베이터 최적화 알고리즘을 적용하는 꼴이다.</p>
+
+  <hr>
+
+  <!-- ── 섹션 3 ── -->
+  <h2 id="sec3">하네스 최적화의 무용 — "병목을 어디서 잡을까"만 묻는 습관</h2>
+
+  <div class="card">
+    <span class="card-label green">에이전트 하네스 엔지니어링(Agentic Harness Engineering)</span>
+    <p>에이전트의 실행 인프라에서 병목을 식별하고 해결하는 기법. Crab 논문은 C/R 런타임이 결함 내성·롤백·분기를 인프라 계층에서 직접 구현함을 보여주며, 다중 서버 MCP 배포에서 실제 병목이 개별 LLM 호출이 아닌 스키마 축적에 있음을 재정의한다.</p>
+  </div>
+
+  <p>하네스 최적화의 핵심 질문은 <strong>"병목을 어디서 잡을까"</strong>다. 파이프라인 서빙의 병목이 어디에 있는지 정밀하게 진단하고, 스키마 축적에서 다른 곳으로 병목을 이동시키며, 의미론적 체크포인트로 상태 관리를 정교하게 만드는 것이 이 축의 과제다.</p>
+
+  <p>하지만 여기에도 같은 구조적 맹점이 있다. 두 최적화 모두 <strong>에이전트가 생성하는 작업 그래프의 구조가 합리적이라는 전제</strong>를 공유하기 때문이다.</p>
+
+  <blockquote>
+    단순 편집 과제를 20단계 탐색으로 확장하는 에이전트에게 최적화된 파이프라인 서빙을 제공하면 무슨 의미가 있겠는가? 인프라 병목을 스키마 축적에서 다른 곳으로 옮겨도, 에이전트가 과생산하는 불필요한 툴 호출과 체크포인트 자체가 사라지지 않으면 하네스 최적화는 <strong>비효율을 더 빠르게 처리하는 것</strong>에 불과하다.
+  </blockquote>
+
+  <p>비유하자면, 물이 새고 있는 수도관에서 누수 위치를 진단하는 기술을 발명한 것과 같다. 진단 기술이 아무리 정밀해도, <strong>처음부터 수도관을 사용할 필요가 없는 상황</strong>이라면 그 정밀함은 의미가 없다. 컵에 물을 따르면 되는 일이다.</p>
+
+  <p>특히 Crab의 의미론적 체크포인트는 알고리즘과 시스템 사이의 번역 간극을 해결하려 하지만, 에이전트가 의미론적 의존 그래프 자체를 과도하게 복잡하게 구성한다면 정교한 체크포인트는 <strong>과도한 상태 보존의 대상만 늘릴 뿐</strong>이다. 2분 걷기에 카메라, GPS, 생체센서를 모두 장착하고 각 센서의 체크포인트를 최적화하는 것과 같다.</p>
+
+  <hr>
+
+  <!-- ── 섹션 4 ── -->
+  <h2 id="sec4">상위 병목의 구조 — 사라진 첫 번째 질문</h2>
+
+  <p>두 축의 관계를 도식화하면 문제의 구조가 선명해진다.</p>
+
+  <div class="diagram">
+    <div style="text-align:center;">
+      <span class="diagram-node top">복잡도 메타인지</span>
+      <div class="diagram-desc">"이 과제에 그만큼의 할당과 해결이 필요한가?"</div>
+    </div>
+    <div class="diagram-arrow">│</div>
+    <div class="diagram-arrow">▼ 결정</div>
+    <div style="text-align:center; margin: 8px 0;">
+      <span class="diagram-node bottom">과제 분해의 적정성</span>
+    </div>
+    <div class="diagram-arrow">│</div>
+    <div class="diagram-row">
+      <div style="text-align:center;">
+        <span class="diagram-node mid">적응적 추론</span>
+        <div class="diagram-desc">"얼마나 계산할까?"<br>(내부 예산 할당)</div>
+      </div>
+      <div style="text-align:center;">
+        <span class="diagram-node mid2">하네스 엔지니어링</span>
+        <div class="diagram-desc">"어디서 병목을 잡을까?"<br>(실행 인프라 최적화)</div>
+      </div>
+    </div>
+  </div>
+
+  <p>복잡도 메타인지는 두 축이 <strong>동시에 의존하는 상위 결정 노드</strong>다. 이 노드가 고장 나면 내부 축은 불필요한 계산에 예산을 할당하고, 외부 축은 불필요한 파이프라인 단계를 최적화한다. 두 축은 각각 자신의 영역에서 합리적으로 보이지만, 전체 시스템의 관점에서는 <strong>정답을 향하지 않는 최적화</strong>가 된다.</p>
+
+  <p>이것은 단순한 누락이 아니라 <strong>병목 오인의 근원적 형태</strong>다. 에이전트가 병목의 원인을 '계산 부족'이나 '인프라 한계'로 잘못 짚는 것이 아니다. 더 근본적으로 <strong>'과제 자체가 단순했다는 사실'을 인지하지 못하는 것</strong>이므로, 하위 축의 어떤 최적화도 정답을 향하지 못한다.</p>
+
+  <div class="card">
+    <span class="card-label orange">핵심 통찰</span>
+    <p>기존 적응적 추론이 "주어진 신호에 어떻게 반응할까"라면, 복잡도 메타인지는 <strong>"반응할 신호 자체를 생성할까 말까"</strong>의 문제다. 이는 질적 차이를 갖는 상위 개념으로, 신호 생성의 적정성 여부가 하위 모든 적응의 타당성을 결정한다.</p>
+  </div>
+
+  <p>건축에 비유하자면, 적응적 추론은 "재료를 어떻게 배분할까"이고 하네스 엔지니어링은 "공사 현장의 병목을 어디서 잡을까"다. 둘 다 중요한 질문이다. 하지만 <strong>"이 부지에 건물을 지을 필요가 있는가"</strong>를 먼저 묻지 않으면, 아무리 정교한 재료 배분과 현장 관리도 허공을 향한 노력이 된다.</p>
+
+  <hr>
+
+  <!-- ── 섹션 5 ── -->
+  <h2 id="sec5">패러다임 전환 — "정말 그만큼 필요한가"를 먼저 물어야 한다</h2>
+
+  <p>지금까지의 분석이 가리키는 전환은 명확하다. 현재의 최적화 패러다임은 <strong>세 번째 질문에서 시작</strong>한다.</p>
+
+  <div class="card">
+    <p style="margin-bottom:0.8em;"><strong>기존 패러다임의 질문 순서:</strong></p>
+    <ol style="padding-left:20px; margin-bottom:1.2em;">
+      <li style="margin-bottom:4px; color:#9a9590; text-decoration:line-through;">이 과제는 복잡한가? <em style="color:#b5b0aa; font-size:0.9em;">← 건너뜀</em></li>
+      <li>얼마나 계산할까? <em class="accent-blue">(적응적 추론)</em></li>
+      <li>어디서 병목을 잡을까? <em class="accent-green">(하네스 엔지니어링)</em></li>
+    </ol>
+    <p style="margin-bottom:0;"><strong>전환되어야 할 질문 순서:</strong></p>
+    <ol style="padding-left:20px; margin-bottom:0;">
+      <li style="margin-bottom:4px;"><strong>이 과제에 그만큼의 할당과 해결이 필요한가?</strong> <em style="color:#c2703e; font-size:0.9em;">← 복잡도 메타인지</em></li>
+      <li style="margin-bottom:4px;">필요하다면, 얼마나 계산할까?</li>
+      <li>필요하다면, 어디서 병목을 잡을까?</li>
+    </ol>
+  </div>
+
+  <p>이 전환은 단순히 '한 단계를 추가'하는 것이 아니다. <strong>전체 최적화의 방향성을 뒤집는 것</strong>이다. 기존 패러다임에서 최적화는 "더 적은 자원으로 같은 결과를 내는 것"을 목표로 한다. 하지만 복잡도 메타인지가 선행되면 최적화는 "이 과제에 맞는 <strong>적정 수준의 결과</strong>를 내는 것"으로 목표가 바뀐다. '적정'의 기준이 과제의 실제 복잡도에서 오는 것이다.</p>
+
+  <p>실제로 구현한다면 어떤 모습일까? 에이전트의 추론 파이프라인 최상단에 <strong>복잡도 추정 게이트(complexity estimation gate)</strong>를 두는 것을 상상할 수 있다. 이 게이트는 과제를 수행하기 전에 "이것은 단순 편집인가, 다단계 추론인가, 아니면 열린 탐색인가?"를 추정하고, 추정 결과에 따라 하위 파이프라인의 구성 자체를 달리한다.</p>
+
+  <blockquote>
+    복잡도 메타인지가 선행되지 않은 상태에서 두 축의 최적화는 <strong>정교하게 설계된 무용성(精巧無用)</strong>에 가깝다. 아름다운 설계도, 훌륭한 재료, 능숙한 인부가 모여 있지만, 지어야 할 건물의 규모를 모르는 공사 현장과 다르지 않다.
+    <cite>— 본 분석의 핵심 결론</cite>
+  </blockquote>
+
+  <p>물론 이 게이트 자체가 완벽할 필요는 없다. 대략적인 삼분류—단순/보통/복잡—만으로도 하위 최적화 축의 효율은 극적으로 달라진다. 단순 분류로 30%의 과제를 최소 경로로 보내면, 그 자원을 복잡한 과제에 재할당할 수 있기 때문이다. <strong>불필요한 정밀함을 피하는 것만으로도 전체 시스템의 효율은 비선형적으로 개선</strong>된다.</p>
+
+  <p>결국, AI 에이전트 연구가 다음 단계로 나아가기 위해서는 '더 빠르게, 더 효율적으로'라는 질문에 머물지 않고 <strong>'정말 그만큼 필요한가'라는 질문을 체계화</strong>해야 한다. 그것이 편의점까지 고속도로를 까는 역설을 끊어내는 유일한 경로다.</p>
+
+</article>
+
+<footer>
+  Galaxy Tab Public · Wiki Analysis Series
+</footer>
 
 </body>
 </html>

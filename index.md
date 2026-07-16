@@ -1341,3 +1341,13 @@
 - [[sources/2026-07-15-production-and-perception-in-llms-a-token-probabil.md]] - Production and Perception in LLMs: A Token Probability Approach
 - [[sources/2026-07-15-think-through-a-bottleneck-hourglass-reasoning-for.md]] - Think Through a Bottleneck: Hourglass Reasoning for Rigorous Induction
 - [[sources/2026-07-15-hcrmap-pressure-aware-hot-expert-residency-mapping.md]] - HCRMap: Pressure-Aware Hot-Expert Residency Mapping for 3.5D MoE Chiplet Inference
+- [[sources/2026-07-16-do-ai-agents-know-when-a-task-is-simple-toward-com.md]] - Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-16-terrazero-procedural-driving-simulation-for-zero-d.md]] - TerraZero: Procedural Driving Simulation for Zero-Demonstration Self-Play at Scale
+- [[sources/2026-07-16-palmclaw-a-native-on-device-agent-framework-for-mo.md]] - PalmClaw: A Native On-Device Agent Framework for Mobile Phones
+- [[sources/2026-07-16-win-by-silence-deletion-non-monotonicity-autonomou.md]] - Win by Silence: Deletion Non-Monotonicity, Autonomous Exploitation, and Typed-State Gating in LLM Plan Evaluation
+- [[sources/2026-07-16-resist-and-update-counterfactual-report-coordinate.md]] - Resist and Update: Counterfactual Report Coordinates for Incentive-Compatible LLMs
+- [[sources/2026-07-16-formalanalyticgeo-a-neural-symbolic-based-framewor.md]] - FormalAnalyticGeo: A Neural-Symbolic Based Framework for Multimodal Analytic Geometry Problem Generation
+- [[sources/2026-07-16-the-illusion-of-robustness-aggregate-accuracy-hide.md]] - The Illusion of Robustness: Aggregate Accuracy Hides Prediction Flips under Task-Irrelevant Context
+- [[sources/2026-07-16-mammoth-a-multi-modal-end-to-end-policy-for-off-ro.md]] - MAMMOTH: A Multi-Modal End-to-End Policy for Off-Road Mobility Robust to Missing Modality
+- [[sources/2026-07-16-form-not-content-a-preregistered-placebo-controlle.md]] - Form, Not Content? A Preregistered, Placebo-Controlled Evaluation of Learned Error-Conditioned Self-Repair Through Prompts and Weights in Frozen Small Code Models
