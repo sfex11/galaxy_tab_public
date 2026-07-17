@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partition, Prompt, Aggregate: Statistical Self-Consistency i — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber">arXiv: 2607.15277v1</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);margin-top:1.5rem;line-height:1.3;">Partition, Prompt, Aggregate:<br>언어 모델에서의 통계적 자기일관성</h1>
+      <p class="muted" style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:1.5rem;max-width:600px;">In-Context Learning이 조건부 추론이라면,<br>LLM의 추정치는 기본적인 확률론적 성질을 만족해야 한다</p>
+      <div class="hr" style="margin-top:2rem;width:200px;"></div>
+      <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1rem;">Statistical Self-Consistency in Language Models</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">동기: In-Context Learning의 해석</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      In-Context Learning(ICL)은 프롬프트가 문맥을 지정하고, 모델의 출력이 해당 조건부 분포의 추정치로 처리되는 <span class="accent">조건부 추론</span>의 한 형태로 해석된다.
+    </div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">전통적 해석</h3>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:0.8rem;">프롬프트 → 모델 출력 ≈ P(y|x, context)</p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">출력을 조건부 확률 분포의 근사로 간주</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">핵심 질문</h3>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:0.8rem;">이 해석이 <span class="accent2">정말로 유효한가</span>?</p>
+        <p class="muted" style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">기본 확률론적 성질을 LLM이 만족하는가?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">통계적 자기일관성이란?</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1.5rem;">확률 분포로서 만족해야 할 <span class="accent">기본적 성질</span>들:</p>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">Σ</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem);margin-top:0.5rem;">정규화</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">모든 결과의 확률 합 = 1</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">⊆</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem);margin-top:0.5rem;">여백화 일관성</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">부분집합의 합은 전체 확률과 일치</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">⊥</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem);margin-top:0.5rem;">독립성 보존</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">독립 사건의 결합 확률 = 곱</p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1.5rem;text-align:center;"><i class="fas fa-exclamation-triangle" style="margin-right:0.4rem;"></i>이러한 성질을 위배하면 "조건부 분포 추정"이라는 해석이 근본적으로 의심된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">문제 제기: LLM은 자기일관성을 만족하는가?</h2>
+    <div class="hr"></div>
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">단일 프롬프트로는 <span class="accent">하나의 샘플</span>만 얻을 수 있다.</p>
+      <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:0.5rem;">하지만 분포의 성질을 검증하려면 <span class="accent2">여러 샘플</span>이 필요하다.</p>
+    </div>
+    <div class="card" style="margin-top:1.5rem;border-left:4px solid #c0562f;">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.3rem);">근본적 딜레마</h3>
+      <ul class="check-list" style="margin-top:0.8rem;">
+        <li><span class="check-icon"><i class="fas fa-times"></i></span>프롬프트를 바꾸면 → 조건부 분포 자체가 바뀔 수 있음</li>
+        <li><span class="check-icon"><i class="fas fa-times"></i></span>temperature 조절로 샘플링 → 분포 왜곡 가능</li>
+        <li><span class="check-icon"><i class="fas fa-times"></i></span>같은 프롬프트 반복 → 상관된 샘플, 독립성 불만족</li>
+      </ul>
+    </div>
+    <p style="font-size:clamp(1rem,1.8vw,1.2rem);margin-top:1.5rem;text-align:center;">⟹ <span class="accent">동일한 조건부 분포에서 독립적인 샘플을 어떻게 얻을 것인가?</span></p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">제안 방법: Partition, Prompt, Aggregate</h2>
+    <div class="hr"></div>
+    <p class="muted" style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;">동일한 조건부 분포에서 독립 샘플을 추출하기 위한 세 단계 프레임워크</p>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Partition</div>
+        <div class="step-desc">데모 데이터를<br>여러 부분집합으로 분할</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Prompt</div>
+        <div class="step-desc">각 부분집합으로<br>개별 프롬프트 구성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">Aggregate</div>
+        <div class="step-desc">출력들을 집계하여<br>분포 추정치 도출</div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      핵심 아이디어: <span class="accent">동일한 전체 데이터의 다른 부분집합</span>은 <span class="accent2">동일한 조건부 분포</span>를 정의해야 한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">Step 1: Partition — 분할 전략</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1rem;">전체 데모셋 D를 K개의 부분집합 {D₁, D₂, ..., Dₖ}으로 나눈다.</p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-random" style="margin-right:0.4rem;"></i>무작위 분할</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.6rem;">D를 무작위로 K개로 나눔</p>
+        <p class="muted" style="font-size:clamp(0.78rem,1.2vw,0.9rem);margin-top:0.4rem;">각 Dᵢ는 전체 분포의 대표성 보존</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-layer-group" style="margin-right:0.4rem;"></i>교차 검증형 분할</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.6rem;">K-fold 방식으로 순차적 분할</p>
+        <p class="muted" style="font-size:clamp(0.78rem,1.2vw,0.9rem);margin-top:0.4rem;">중복 없이 전체 데이터 활용</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;background:rgba(0,0,0,0.03);">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><span class="accent">핵심 가정:</span> Dᵢ ⊂ D이고 D가 동일한 데이터 생성 과정에서 왔다면, P(y|x, Dᵢ) ≈ P(y|x, D)</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">Step 2: Prompt — 개별 프롬프트 구성</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1rem;">각 분할 Dᵢ에 대해 독립적인 프롬프트를 생성하고 모델에 입력</p>
+    <div class="flow-item" style="margin-top:1.5rem;">
+      <div class="flow-icon">1</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">D₁으로 프롬프트 구성 → 모델에 입력 → 출력 y₁ 획득</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">2</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">D₂으로 프롬프트 구성 → 모델에 입력 → 출력 y₂ 획득</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">...</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">반복...</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">K</div>
+      <div>
+        <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);">Dₖ으로 프롬프트 구성 → 모델에 입력 → 출력 yₖ 획득</p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1.2rem;text-align:center;">각 yᵢ는 동일한 조건부 분포 P(y|x, D)에서의 <span class="accent2">근사 독립 샘플</span>로 간주</p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">Step 3: Aggregate — 집계와 검증</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1rem;">K개의 독립 샘플 {y₁, ..., yₖ}을 바탕으로 분포 추정 및 자기일관성 검증</p>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);">경험적 분포 추정</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>빈도 기반 확률 추정 P̂(y|x, D)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기댓값, 분산 등 통계량 계산</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);">자기일관성 검증</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정규화: ΣP̂(y) ≈ 1 인가?</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>여백화: 부분집합 합이 일관된가?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;">
+      <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-chart-bar" style="margin-right:0.4rem;"></i>보정(Calibration) 분석</h3>
+      <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;">추정된 분포가 실제 빈도와 얼마나 일치하는지 정량적 평가</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">자기일관성 위배 사례</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:1rem;">PPA 프레임워크로 발견한 주요 위배 패턴</p>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <span class="tag tag-red">위배 1</span>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);margin-top:0.8rem;">과대 확신</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">특정 출력에 확률이 과도하게 집중됨</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="tag tag-red">위배 2</span>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);margin-top:0.8rem;">비정규화</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">추정 확률의 합이 1에서 벗어남</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="tag tag-red">위배 3</span>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);margin-top:0.8rem;">문맥 민감성</h3>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:0.5rem;">분할 방식에 따라 분포가 크게 변동</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      LLM의 ICL 출력은 <span class="accent">엄밀한 조건부 분포 추정이 아닐 가능성</span>이 높다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">실험 설계</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-flask" style="margin-right:0.4rem;"></i>벤치마크</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분류 작업 (Sentiment, Topic 등)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>객관식 QA 작업</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 선택 추론 과제</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-cog" style="margin-right:0.4rem;"></i>설정</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분할 수 K = 10~100 가변</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 모델 규모 비교</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>데모 수에 따른 민감도 분석</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;">
+      <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);">평가 지표</h3>
+      <table class="compare-table" style="margin-top:0.6rem;">
+        <thead>
+          <tr><th>지표</th><th>의미</th><th>이상값</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>정규화 오차</td><td>|ΣP̂(y) − 1|</td><td>0</td></tr>
+          <tr><td>여백화 오차</td><td>부분집합 합 vs 전체</td><td>0</td></tr>
+          <tr><td>보정 오차</td><td>신뢰도 vs 정확도</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">주요 실험 결과</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <span class="tag tag-amber">발견 1</span>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-top:0.8rem;">정규화 위배</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;">대부분의 모델에서 추정 확률 합이 1에서 유의미하게 벗어남</p>
+        <p class="accent" style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.3rem;">→ 단일 샘플 해석의 근거 약화</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">발견 2</span>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-top:0.8rem;">보정 부족</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;">높은 확률을 부여한 출력의 실제 빈도와 불일치</p>
+        <p class="accent" style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.3rem;">→ 과대 확신 현상 확인</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">발견 3</span>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-top:0.8rem;">규모 효과</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;">더 큰 모델이 자기일관성을 더 잘 만족하는 경향</p>
+        <p class="accent3" style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.3rem;">→ 스케일링이 부분적 해결책</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">발견 4</span>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-top:0.8rem;">PPA의 개선 효과</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.5rem;">PPA 집계가 단일 프롬프트보다 더 나은 보정 제공</p>
+        <p class="accent3" style="font-size:clamp(0.85rem,1.4vw,1rem);margin-top:0.3rem;">→ 실용적 가치 입증</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">시사점과 함의</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-lightbulb" style="margin-right:0.4rem;"></i>이론적 시사점</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ICL = 조건부 추론이라는 해석에 <span class="accent">경고</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM 출력을 확률로 취급할 때 주의 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자기일관성은 새로운 평가 축 제안</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);"><i class="fas fa-tools" style="margin-right:0.4rem;"></i>실용적 시사점</h3>
+        <ul class="check-list" style="margin-top:0.6rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>PPA를 활용한 <span class="accent2">신뢰도 향상</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>불확실성 정량화에 PPA 활용 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Self-consistency 기법의 통계적 근거 제공</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      "LLM이 무엇을 하는지 이해하려면, 출력이 <span class="accent">어떤 수학적 객체</span>인지 명확히 해야 한다."
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">한계 및 향후 방향</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <span class="tag tag-red">한계</span>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span>분할이 "진정으로 동일한 분포"를 보장한다는 가정</li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span>주로 분류/객관식에 집중된 실험</li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span>생성 작업(자유 형식)으로의 확장 미해결</li>
+          <li><span class="check-icon"><i class="fas fa-minus"></i></span>추론 비용 증가 (K배 프롬프트)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">향후 방향</span>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>개방형 생성에서의 자기일관성 정의</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분할 독립성에 대한 이론적 보장 연구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>PPA 기반 보정 기법 개발</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다른 모달리티(비전 등)로 확장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;">
+      <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">요약</h2>
+      <div class="hr" style="margin-top:1rem;width:150px;"></div>
+      <div class="grid-3" style="margin-top:2rem;text-align:center;">
+        <div class="card">
+          <div class="big-num">P</div>
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:0.5rem;">Partition<br><span class="muted" style="font-size:clamp(0.78rem,1.2vw,0.9rem);">데모를 분할하여</span></p>
+        </div>
+        <div class="card">
+          <div class="big-num">P</div>
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:0.5rem;">Prompt<br><span class="muted" style="font-size:clamp(0.78rem,1.2vw,0.9rem);">각각에 프롬프트하고</span></p>
+        </div>
+        <div class="card">
+          <div class="big-num">A</div>
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:0.5rem;">Aggregate<br><span class="muted" style="font-size:clamp(0.78rem,1.2vw,0.9rem);">집계하여 분포 추정</span></p>
+        </div>
+      </div>
+      <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);margin-top:2rem;max-width:650px;">LLM의 In-Context Learning 출력은 <span class="accent">엄밀한 조건부 분포</span>가 아닐 가능성이 높으며, PPA 프레임워크는 이를 <span class="accent2">체계적으로 검증하고 개선</span>하는 방법을 제공한다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;">
+      <h2 style="font-size:clamp(1.5rem,3vw,2.4rem);">논문 정보</h2>
+      <div class="hr" style="margin-top:1rem;width:150px;"></div>
+      <div class="card" style="margin-top:2rem;max-width:600px;text-align:left;">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);">Partition, Prompt, Aggregate: Statistical Self-Consistency in Language Models</h3>
+        <div class="hr" style="margin-top:1rem;"></div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;"><i class="fas fa-link" style="margin-right:0.4rem;"></i>arXiv: <a href="http://arxiv.org/abs/2607.15277v1" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">2607.15277v1</a></p>
+        <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:1rem;"><i class="fas fa-file-alt" style="margin-right:0.4rem;"></i>http://arxiv.org/abs/2607.15277v1</p>
+      </div>
+      <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-top:2rem;"><i class="fas fa-quote-left" style="margin-right:0.3rem;"></i> 감사합니다 <i class="fas fa-quote-right" style="margin-left:0.3rem;"></i></p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
