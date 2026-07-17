@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>침묵이 승리하는 평가 — LLM 계획 평가의 삭제 비단조성 역설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* --- Article Header --- */
+  .article-header {
+    padding: clamp(48px, 10vw, 96px) 0 clamp(32px, 6vw, 56px);
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #c2703e;
+    background: rgba(194, 112, 62, 0.08);
+    border: 1px solid rgba(194, 112, 62, 0.15);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    line-height: 1.3;
+    color: #2c2825;
+    margin-bottom: 18px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 17px);
+    color: #6b6560;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .article-meta {
+    margin-top: 24px;
+    font-size: 13px;
+    color: #9e9893;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* --- Divider --- */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: #c2703e;
+    margin: 0 auto 48px;
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  /* --- Section --- */
+  .section {
+    margin-bottom: clamp(40px, 8vw, 64px);
+  }
+
+  .section-label {
+    font-size: clamp(11px, 1.3vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+    line-height: 1.4;
+    color: #2c2825;
+    margin-bottom: 16px;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+  }
+
+  /* --- Blockquote --- */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194, 112, 62, 0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 1.8vw, 16px);
+    color: #5a5550;
+    font-style: italic;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-style: normal;
+    color: #9e9893;
+    font-weight: 500;
+  }
+
+  /* --- Card --- */
+  .card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(194, 112, 62, 0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44, 40, 37, 0.05), 0 1px 3px rgba(44, 40, 37, 0.03);
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: #c2703e;
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    margin-bottom: 10px;
+    font-size: clamp(14px, 1.8vw, 16px);
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* --- Highlight --- */
+  .hl-orange { color: #c2703e; font-weight: 500; }
+  .hl-blue { color: #5b7c99; font-weight: 500; }
+  .hl-green { color: #6b9e7a; font-weight: 500; }
+
+  strong { color: #2c2825; font-weight: 700; }
+
+  /* --- Table --- */
+  .wiki-table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wiki-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.6vw, 15px);
+  }
+
+  .wiki-table th {
+    background: rgba(91, 124, 153, 0.08);
+    color: #5b7c99;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid rgba(91, 124, 153, 0.15);
+    white-space: nowrap;
+  }
+
+  .wiki-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(44, 40, 37, 0.06);
+    vertical-align: top;
+  }
+
+  .wiki-table tr:last-child td { border-bottom: none; }
+
+  .wiki-table code {
+    font-size: 0.9em;
+    background: rgba(107, 158, 122, 0.1);
+    color: #6b9e7a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* --- Analogy Box --- */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(107, 158, 122, 0.06), rgba(91, 124, 153, 0.06));
+    border: 1px solid rgba(107, 158, 122, 0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 28px);
+    margin: 28px 0;
+  }
+
+  .analogy-box .analogy-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b9e7a;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .analogy-box p {
+    margin-bottom: 12px;
+    font-size: clamp(14px, 1.8vw, 16px);
+  }
+  .analogy-box p:last-child { margin-bottom: 0; }
+
+  /* --- Diagram --- */
+  .diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 16px);
+    flex-wrap: wrap;
+    margin: 28px 0;
+    padding: 20px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(44,40,37,0.05);
+  }
+
+  .diagram-node {
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: clamp(12px, 1.5vw, 14px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .diagram-node.node-a {
+    background: rgba(194, 112, 62, 0.1);
+    color: #c2703e;
+    border: 1px solid rgba(194, 112, 62, 0.2);
+  }
+
+  .diagram-node.node-b {
+    background: rgba(91, 124, 153, 0.1);
+    color: #5b7c99;
+    border: 1px solid rgba(91, 124, 153, 0.2);
+  }
+
+  .diagram-node.node-c {
+    background: rgba(107, 158, 122, 0.1);
+    color: #6b9e7a;
+    border: 1px solid rgba(107, 158, 122, 0.2);
+  }
+
+  .diagram-arrow {
+    font-size: 20px;
+    color: #9e9893;
+  }
+
+  /* --- Callout --- */
+  .callout {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 24px 0;
+    font-size: clamp(14px, 1.8vw, 16px);
+  }
+
+  .callout-warn {
+    background: rgba(194, 112, 62, 0.06);
+    border: 1px solid rgba(194, 112, 62, 0.12);
+  }
+
+  .callout-info {
+    background: rgba(91, 124, 153, 0.06);
+    border: 1px solid rgba(91, 124, 153, 0.12);
+  }
+
+  .callout-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1.6;
+  }
+
+  /* --- Footnote --- */
+  .footnotes {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44, 40, 37, 0.08);
+    font-size: clamp(12px, 1.4vw, 13px);
+    color: #9e9893;
+    line-height: 1.7;
+  }
+
+  .footnotes p { margin-bottom: 6px; }
+
+  /* --- Article Footer --- */
+  .article-footer {
+    text-align: center;
+    padding: clamp(40px, 8vw, 64px) 0;
+    font-size: 13px;
+    color: #9e9893;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 480px) {
+    .diagram { flex-direction: column; }
+    .diagram-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- Navigation -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="article-header">
+    <span class="article-tag">에이전트 언어 · 평가 역설</span>
+    <h1 class="article-title">침묵이 승리하는 평가<br>LLM 계획 평가는 왜 더 자세한 말을 벌하는가</h1>
+    <p class="article-subtitle">계획에서 정보를 지울수록 점수가 오르는 '삭제 비단조성'이 존재한다면, 우리는 지금까지 무엇을 측정해 온 것인가</p>
+    <div class="article-meta">
+      <span>2026-05-25</span>
+      <span>·</span>
+      <span>Win by Silence 논문 분석</span>
+      <span>·</span>
+      <span>약 12분 읽기</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Section 1 -->
+  <section class="section">
+    <p class="section-label">Section 01</p>
+    <h2 class="section-title">요리사의 레시피와 평가자의 눈</h2>
+
+    <p>요리사에게 레시피를 쓰게 하고, 그 레시피의 '완성도'를 평가한다고 상상해 보세요. 한 요리사는 "소금 한 꼬집, 후추 두 번 톡, 중불에서 7분간 굽되, 3분째에 뒤집을 것"이라고 적습니다. 다른 요리사는 "소금 후추로 간하고 중불에 굽는다"라고 적습니다.</p>
+
+    <p>상식적으로 전자가 더 정밀한 지시입니다. 그런데 평가자가 점수를 매기는 결과가 반대라면 어떨까요. 더 적게 적은 레시피가 더 높은 점수를 받는 상황. 정보를 <span class="hl-orange">지울수록 점수가 상승</span>하는 이 기이한 현상을, "Win by Silence" 논문은 <strong>삭제 비단조성(Deletion Non-Monotonicity)</strong>이라고 부릅니다.</p>
+
+    <blockquote>
+      "계획에서 정보를 삭제할수록 평가 점수가 오히려 상승한다면, 자연어 기반 계획 평가는 '명시성을 벌하는' 구조적 역선택을 내재하는 것인가?"
+      <cite>— Wiki Query 원문</cite>
+    </blockquote>
+
+    <p>이 질문은 단순한 기술적 버그 리포트가 아닙니다. 이것은 <span class="hl-blue">"우리가 '좋은 계획'이라고 부르는 것의 본질이 무엇인가"</span>라는 근원적 질문을 던집니다. 정보가 많으면 좋은 계획이라는 전제 — 에이전트 언어(agentic-language)의 기본 가정 — 이 뒤집힐 수 있다는 possibility를 이 질문은 열어놓습니다.</p>
+
+    <div class="analogy-box">
+      <p class="analogy-label">🎯 직관적 비유: GPS 안내</p>
+      <p>네비게이션이 "500m 전방에서 우회전"이라고만 알려줄 때와, "500m 전방에서 우회전. 우회전 후 200m 지점에 편의점이 있으며, 그 앞에서 다시 좌회전. 좌회전 후 직진 50m"라고 알려줄 때, 어느 쪽이 더 '좋은 안내'인가요?</p>
+      <p>목적지까지 도달하는 데 필요한 정보만으로 충분하다면, 추가 정보는 <strong>방해물</strong>이 됩니다. 삭제 비단조성은 바로 이 지점 — "추가 정보가 방해가 되는" 지점 — 이 평가 메트릭 안에 구조적으로 매립되어 있음을 시사합니다.</p>
+    </div>
+  </section>
+
+  <!-- Section 2 -->
+  <section class="section">
+    <p class="section-label">Section 02</p>
+    <h2 class="section-title">삭제 비단조성: 아직 지도에 없는 영토</h2>
+
+    <p>여기서 한 가지 당혹스러운 사실을 마주해야 합니다. <span class="hl-orange">이 현상 자체가 학계의 지식 기반(Wiki)에 아직 등재되지 않았습니다.</span></p>
+
+    <div class="card">
+      <p class="card-title">Wiki 축적 상태 진단</p>
+      <p><code>agentic-language</code> 엔티티는 현재 "Wiki 축적 중" 상태입니다. 자연어 계획이 신뢰할 수 있는 실행 지시로 전제된다는 주장조차 명시적으로 기록되지 않았으며, 연결된 논문(RunAgent)의 구체적 발견에 대한 요약도 존재하지 않습니다.</p>
+      <p>"삭제 비단조성"이라는 슬러그는 Wiki의 어디에도 없습니다. 논문 요약 어디에서도 정보 삭제가 평가 메트릭에 미치는 효과를 다룬 내용은 발견되지 않았습니다.</p>
+    </div>
+
+    <p>이것은 부정적 증거가 아니라 <span class="hl-blue">지식의 공백</span>입니다. 아무도 이 현상을 이름 붙여 기록하지 않았다는 뜻이지, 현상이 존재하지 않는다는 뜻이 아닙니다. 오히려 "Win by Silence" 논문이 이 현상을 처음으로 명명하고 구조화했다는 점에서, 이 논문은 <strong>새로운 개념적 영토를 개척하는 선언문</strong>에 가깝습니다.</p>
+
+    <p>논문의 부제인 "Autonomous Exploitation"과 "Typed-State Gating"은 이 현상을 설명하기 위한 메커니즘적 가설로 보입니다. LLM 평가기가 계획의 정보량이 아니라, 자신이 처리하기 '편안한' 형태의 계획에 보상을 부여한다면 — 즉, 평가기 스스로가 정보를 '이용(exploit)'하는 방식으로 간결한 계획을 선호한다면 — 삭제 비단조성은 단순한 버그가 아니라 <span class="hl-green">평가 구조의 내재적 속성</span>이 됩니다.</p>
+
+    <div class="diagram">
+      <div class="diagram-node node-a">정보가 풍부한 계획<br><small>(명시적 단계 포함)</small></div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node node-b">LLM 평가기<br><small>정보 과부하 / 혼란</small></div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node node-a" style="opacity:0.6;">낮은 점수</div>
+    </div>
+    <div class="diagram">
+      <div class="diagram-node node-c">정보가 삭제된 계획<br><small>(최소 지시만)</small></div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node node-b">LLM 평가기<br><small>처리 용이 / 일관성 높음</small></div>
+      <span class="diagram-arrow">→</span>
+      <div class="diagram-node node-c" style="opacity:0.8;">높은 점수</div>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section class="section">
+    <p class="section-label">Section 03</p>
+    <h2 class="section-title">간접 단서들: 명시성의 역설을 둘러싼 증언들</h2>
+
+    <p>직접적 증거가 없다면, 간접적 단서는 어떻게 우리를 안내할 수 있을까요. Wiki 내에서 삭제 비단조성과 <strong>같은 방향성</strong>을 가진 지식들이 존재합니다.</p>
+
+    <div class="card">
+      <p class="card-title">단서 1 — 단계별 판단과 다단계 기획의 간극</p>
+      <p><code>agentic-vlm</code> 엔티티에 연결된 Three-Step Nav 논문에 따르면, MLLM 기반 에이전트는 제로샷 VLN(시각-언어 내비게이션) 환경에서 '단계별 판단'과 '다단계 경로 기획' 사이의 간극에 의해 능력이 제한됩니다.</p>
+      <p>이것은 "더 명시적인 단계별 지시가 반드시 더 나은 실행으로 이어지지 않는다"는 <span class="hl-blue">실증적 단서</span>입니다. 세분화된 지시가 오히려 에이전트의 통합적 기획 능력을 방해할 수 있다는 발견은, 삭제 비단조성과 동일 계열의 현상으로 해석할 여지가 있습니다.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title">단서 2 — 의미론적 의존 그래프의 번역 왜곡</p>
+      <p><code>agentic-harness-engineering</code>와 연결된 Crab 논문의 관점에서 보면, 자연어 계획의 "의미론적 의존 그래프"가 OS 수준 체크포인트로 번역될 때 비효율이 발생합니다.</p>
+      <p>이것은 <code>algorithm-system-translation-gap</code> — 알고리즘 표현과 시스템 구현 사이의 간극 — 의 관점에서, <span class="hl-orange">정보의 명시성이 시스템의 다른 계층에서 어떻게 왜곡될 수 있는지</span>를 보여줍니다. 자연어에서는 '명시적'이었던 정보가 실행 계층에서는 '노이즈'로 변환될 수 있다는 것입니다.</p>
+    </div>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">💡</span>
+      <div><strong>세 번째 단서</strong>는 <code>agent-scene-instruction-triad</code>에서 옵니다. AwareVLN 논문이 다루는 '장면-지시 삼원 관계'에서, 지시의 명시성이 에이전트의 자기인식적 추론과 어떻게 상호작용하는지가 관련될 수 있으나, 아직 요약이 축적되지 않아 이 연결선은 잠정적입니다.</div>
+    </div>
+
+    <p>이 세 단서가 보여주는 공통된 패턴은 명확합니다. <strong>자연어 계획의 '정보량'과 '실행 성과' 사이에는 단조적 관계가 없다</strong>는 것입니다. 더 많이 말한다고 더 잘 되지 않고, 오히려 방해가 될 수 있는 지점들이 여러 도메인에서 관찰되고 있습니다.</p>
+  </section>
+
+  <!-- Section 4 -->
+  <section class="section">
+    <p class="section-label">Section 04</p>
+    <h2 class="section-title">구조적 역선택의 해부학</h2>
+
+    <p>이제 핵심 질문으로 돌아갑시다. 삭제 비단조성이 실제 관찰 가능한 현상이라면, 자연어 기반 계획 평가는 정말로 '명시성을 벌하는' 구조적 역선택을 내재하고 있는 걸까요?</p>
+
+    <div class="analogy-box">
+      <p class="analogy-label">🔬 비유: 교육 평가의 역선택</p>
+      <p>학생에게 "답을 자세히 설명하라"고 요구하는 시험을 상상해 보세요. 그런데 채점 기준이 '설명의 정확성'이 아니라 '오답을 포함하지 않음'이라면, 가장 안전한 전략은 아무것도 쓰지 않는 것입니다. 적게 쓸수록 오답을 적을 확률이 낮아지니까요.</p>
+      <p>이 시험은 "자세한 설명을 요구"하면서 "자세한 설명을 벌"하는 구조를 가집니다. LLM 계획 평가에서 삭제 비단조성이 보여주는 것이 바로 이 구조적 모순입니다.</p>
+    </div>
+
+    <p>이 역선택이 구조적이라는 말의 의미를 분해해 보겠습니다.</p>
+
+    <p><strong>첫째, 평가자의 인지 부하 문제.</strong> LLM 평가기에 더 많은 정보가 주어지면, 평가기가 처리해야 할 '판단 지점'이 증가합니다. 각 지점에서 오판단할 확률이 독립적으로 존재한다면, 정보가 많은 계획이 누적적으로 더 낮은 점수를 받을 구조적 이유가 생깁니다. 이것은 평가기의 '능력 부족'이 아니라, 정보량과 판단 오류 사이의 <span class="hl-green">수학적 구조</span>에서 비롯됩니다.</p>
+
+    <p><strong>둘째, 자율적 이용(Autonomous Exploitation)의 가능성.</strong> 논문이 제시하는 이 개념은, 평가기가 계획의 내용을 '이해'하는 것이 아니라 자신의 이해 범위 내에서 '이용'한다는 가설입니다. 계획에 평가기의 처리 능력을 벗어나는 정보가 포함되면, 평가기는 그 정보를 무시하거나 왜곡하여 평가합니다. 결과적으로 정보가 적은 계획이 평가기의 '이용 가능한 영역'에 더 잘 맞아 높은 점수를 받습니다.</p>
+
+    <p><strong>셋째, 유형화된 상태 게이팅(Typed-State Gating).</strong> 이것은 평가기가 특정 '유형'의 상태 표현에만 문을 열어둔다는 메커니즘입니다. 계획에 포함된 정보의 유형이 평가기가 기대하는 유형과 다르면, 그 정보는 게이팅에 의해 차단됩니다. 정보를 삭제하면 차단될 정보가 줄어들어 점수가 상승합니다.</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <div><strong>주의:</strong> 위 세 가지 메커니즘은 "Win by Silence" 논문의 부제에서 유추한 가설적 해석입니다. Wiki에 이 메커니즘들에 대한 실증 데이터가 아직 축적되지 않았으므로, 확정적 설명이 아닌 분석적 프레임워크로 읽어야 합니다.</div>
+    </div>
+  </section>
+
+  <!-- Section 5 -->
+  <section class="section">
+    <p class="section-label">Section 05</p>
+    <h2 class="section-title">새로운 지도를 그리기: 패러다임 전환의 필요성</h2>
+
+    <p>삭제 비단조성이 실제 현상임이 확인된다면, 우리는 단순히 '평가 지표를 수정'하는 것으로는 부족합니다. <strong>근본적 패러다임 전환</strong>이 필요합니다.</p>
+
+    <div class="wiki-table-wrap">
+      <table class="wiki-table">
+        <thead>
+          <tr>
+            <th>기존 패러다임</th>
+            <th>전환되어야 할 패러다임</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>정보량 = 계획의 질</td>
+            <td><span class="hl-green">정보의 적절성 = 계획의 질</span></td>
+          </tr>
+          <tr>
+            <td>더 명시적일수록 좋다</td>
+            <td><span class="hl-green">실행 맥락에 맞는 명시 수준이 존재한다</span></td>
+          </tr>
+          <tr>
+            <td>평가 = 이해의 측정</td>
+            <td><span class="hl-blue">평가 = 이해 + 이용 가능성의 측정 (분리 필요)</span></td>
+          </tr>
+          <tr>
+            <td>단일 점수로 계획 순위화</td>
+            <td><span class="hl-blue">다차원 평가 (정보량, 적절성, 실행 가능성 등)</span></td>
+          </tr>
+          <tr>
+            <td><code>benchmark-specification-gap</code> 무시</td>
+            <td><span class="hl-orange">벤치마크가 측정하려는 것과 보상하는 것의 괴리를 정식으로 모델링</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>가장 중요한 전환은 <span class="hl-orange">"계획의 질"을 정보량에서 분리하는 것</span>입니다. 레스토랑 주방에서도, 명확한 레시피와 장황한 레시피는 다릅니다. 좋은 레시피는 '필요한 정보'를 '필요한 수준의 명시성'으로 담고 있습니다. 이 '필요한 수준'은 실행 맥락 — 누가, 어떤 환경에서, 어떤 도구로 실행하는가 — 에 따라 달라집니다.</p>
+
+    <p>이것을 에이전트 시스템으로 번역하면, 계획 평가는 계획 텍스트 자체의 속성만으로 이루어져서는 안 되고, <strong>계획이 실행될 에이전트의 유형, 환경의 복잡도, 하네스의 처리 방식</strong>을 함께 고려하는 문맥적 평가(contextual evaluation)로 전환되어야 합니다.</p>
+
+    <blockquote>
+      "이 가설을 Wiki에 정식으로 기록하려면, RunAgent 논문 등에서 정보 삭제가 평가 점수에 미치는 영향에 대한 구체적 실증 데이터가 먼저 축적되어야 한다."
+      <cite>— Wiki 분석 결론</cite>
+    </blockquote>
+
+    <p>그리고 이 실증 데이터의 축적 자체가, 기존의 '정보량 중심' 평가 프레임워크로는 불가능할 수 있습니다. 삭제 비단조성을 검증하려면, <span class="hl-blue">의도적으로 정보를 삭제한 계획 변형들을 체계적으로 생성하고, 각 변형의 평가 점수를 비교하는 전용 실험 설계</span>가 필요합니다. 이 실험 설계 자체가 새로운 벤치마크가 될 것입니다.</p>
+
+    <div class="card">
+      <p class="card-title">잠재적 Wiki 연결 지도</p>
+      <p>삭제 비단조성이 새로운 개념으로 정식화된다면, 다음 엔티티들과의 연결이 가능해집니다:</p>
+      <p><code>agentic-language</code> — 자연어 계획의 정보량과 실행 신뢰성 사이의 관계 재정의</p>
+      <p><code>agentic-vlm</code> — Three-Step Nav의 '명시적 지시 ≠ 더 나은 실행' 간극과 동일 계열 현상으로 통합</p>
+      <p><code>benchmark-specification-gap</code> — 벤치마크가 측정하려는 것과 실제로 보상하는 것 사이의 괴리로서 해석</p>
+      <p><code>alignment-base-opacity</code> — 평가 기준의 불투명성이 명시성에 대한 역선택을 은폐하는 메커니즘</p>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="section" style="margin-bottom: 0;">
+    <p class="section-label">에필로그</p>
+    <h2 class="section-title">침묵의 가치를 배우는 평가</h2>
+
+    <p>"Win by Silence"라는 제목이 가진 아이러니는 이것입니다. 우리는 에이전트에게 <strong>더 많이 말하라고</strong> 가르쳐 왔지만, 우리의 평가 시스템은 <strong>더 적게 말하는 것에 보상</strong>을 주고 있었을지도 모릅니다.</p>
+
+    <p>이것은 에이전트의 문제가 아니라 평가의 문제입니다. 그리고 평가의 문제는 — 평가가 보상을 결정하고, 보상이 행동을 형성하고, 행동이 시스템의 진화 방향을 결정하므로 — 궁극적으로 시스템 전체의 문제입니다.</p>
+
+    <p>삭제 비단조성은 아직 Wiki에 기록되지 않은 개념입니다. 하지만 Three-Step Nav의 간극, 알고리즘-시스템 번역 갭, 장면-지시 삼원 관계의 미축적 지식 등 간접 단서들이 모두 같은 방향을 가리키고 있습니다. <span class="hl-orange">자연어 계획의 '명시성'이 무조건적 가치가 아니라는 방향으로.</span></p>
+
+    <p>우리에게 필요한 것은 '더 많은 정보'가 아니라 <strong>'더 정확한 정보의 적절한 표현'</strong>입니다. 그리고 그것을 평가하기 위해서는, 평가 스스로가 자신이 무엇을 보상하고 있는지 — 무엇을 벌하고 있는지 — 투명하게 인지해야 합니다.</p>
+
+    <p style="text-align: center; margin-top: 36px; font-family: 'Source Serif 4', serif; font-style: italic; font-size: clamp(15px, 2vw, 18px); color: #5b7c99;">
+      "침묵이 승리하는 평가에서 벗어나,<br>적절한 말이 승리하는 평가로."
+    </p>
+  </section>
+
+  <div class="divider" style="margin-top: 48px;"></div>
+
+  <!-- Footnotes -->
+  <div class="footnotes">
+    <p><strong>참고 엔티티:</strong> agentic-language, agentic-vlm, agentic-harness-engineering, agent-scene-instruction-triad, benchmark-specification-gap, alignment-base-opacity, algorithm-system-translation-gap</p>
+    <p><strong>관련 논문:</strong> Win by Silence (2026), RunAgent: Interpreting Natural-Language Plans with Constraints, Three-Step Nav, Crab: A Semantics-Aware Checkpoint/Restore Runtime, AwareVLN</p>
+    <p><strong>한계:</strong> 본 분석은 Wiki 축적 상태를 기준으로 작성되었으며, 삭제 비단조성에 대한 직접적 실증 데이터가 부재한 상태에서 간접 단서를 통한 추론적 분석입니다. 향후 논문 요약 축적에 따라 결론이 수정될 수 있습니다.</p>
+  </div>
+
+  <footer class="article-footer">
+    Galaxy Tab Public · Wiki 기반 심층 분석
+  </footer>
+
+</div>
+
+</body>
+</html>
