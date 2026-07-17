@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-16-form-not-content-a-preregistered-placebo-controlle]]: 둘 다 LLM 기반 코드 생성 및 수리 도구를 다루며, 하나는 실제 GitHub 프로젝트에서의 에이전트 코딩 도구 도입 현황을, 다른 하나는 코드 자가 수리 메커니즘의 실제 효과를 엄밀히 검증함.
