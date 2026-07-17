@@ -2514,3 +2514,27 @@
 ## [2026-07-16 08:34] ingest | MAMMOTH: A Multi-Modal End-to-End Policy for Off-Road Mobility Robust to Missing Modality
 
 ## [2026-07-16 08:34] ingest | Form, Not Content? A Preregistered, Placebo-Controlled Evaluation of Learned Error-Conditioned Self-Repair Through Prompts and Weights in Frozen Small Code Models
+
+## [2026-07-17 08:33] ingest | Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters
+
+## [2026-07-17 08:33] ingest | Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models
+
+## [2026-07-17 08:33] ingest | PhysClaw-0: A Symbiotic Agentic System for Robot Autonomy via Language Corrections
+
+## [2026-07-17 08:33] ingest | Can an Old Dog Be Taught New Tricks? Taking LLMs Beyond Sentence Level Translation
+
+## [2026-07-17 08:33] ingest | Early Adoption of Agentic Coding Tools by GitHub Projects
+
+## [2026-07-17 08:33] ingest | M$^\text{4}$World: A Multi-view Multimodal Driving World Model for Interactive Object Manipulation and Minute-long Streaming
+
+## [2026-07-17 08:33] ingest | Do Agent Optimizers Compound? A Continual-Learning Evaluation on Terminal-Bench 2.0
+
+## [2026-07-17 08:33] ingest | Lyapunov Exponent as Physics-Informed Dense Reward: RL Discovery of Stabilization Beyond the Kapitza Pendulum
+
+## [2026-07-17 08:33] ingest | The Dynamic Verifiable Multi-Agent Human Agentic Loyalty Loop (DVM-HALL) Model and the Net Human-Agent Score (NHAS) in Autonomous Commerce
+
+## [2026-07-17 08:33] ingest | TRACE: Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents
+
+## [2026-07-17 08:33] ingest | Generative Compilation: On-the-Fly Compiler Feedback as AI Generates Code
+
+## [2026-07-17 08:33] ingest | The 2nd International StepUP Competition for Biometric Footstep Recognition: From Steps to Strides

@@ -1351,3 +1351,16 @@
 - [[sources/2026-07-16-the-illusion-of-robustness-aggregate-accuracy-hide.md]] - The Illusion of Robustness: Aggregate Accuracy Hides Prediction Flips under Task-Irrelevant Context
 - [[sources/2026-07-16-mammoth-a-multi-modal-end-to-end-policy-for-off-ro.md]] - MAMMOTH: A Multi-Modal End-to-End Policy for Off-Road Mobility Robust to Missing Modality
 - [[sources/2026-07-16-form-not-content-a-preregistered-placebo-controlle.md]] - Form, Not Content? A Preregistered, Placebo-Controlled Evaluation of Learned Error-Conditioned Self-Repair Through Prompts and Weights in Frozen Small Code Models
+- [[sources/2026-07-17-hindcast-replaying-prediction-markets-to-evaluate-.md]] - Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters
+- [[sources/2026-07-17-deep-interaction-an-efficient-human-ai-interaction.md]] - Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models
+- [[sources/2026-07-17-physclaw-0-a-symbiotic-agentic-system-for-robot-au.md]] - PhysClaw-0: A Symbiotic Agentic System for Robot Autonomy via Language Corrections
+- [[sources/2026-07-17-can-an-old-dog-be-taught-new-tricks-taking-llms-be.md]] - Can an Old Dog Be Taught New Tricks? Taking LLMs Beyond Sentence Level Translation
+- [[sources/2026-07-17-early-adoption-of-agentic-coding-tools-by-github-p.md]] - Early Adoption of Agentic Coding Tools by GitHub Projects
+- [[sources/2026-07-17-mtext4world-a-multi-view-multimodal-driving-world-.md]] - M$^\text{4}$World: A Multi-view Multimodal Driving World Model for Interactive Object Manipulation and Minute-long Streaming
+- [[sources/2026-07-17-do-agent-optimizers-compound-a-continual-learning-.md]] - Do Agent Optimizers Compound? A Continual-Learning Evaluation on Terminal-Bench 2.0
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-17-lyapunov-exponent-as-physics-informed-dense-reward.md]] - Lyapunov Exponent as Physics-Informed Dense Reward: RL Discovery of Stabilization Beyond the Kapitza Pendulum
+- [[sources/2026-07-17-the-dynamic-verifiable-multi-agent-human-agentic-l.md]] - The Dynamic Verifiable Multi-Agent Human Agentic Loyalty Loop (DVM-HALL) Model and the Net Human-Agent Score (NHAS) in Autonomous Commerce
+- [[sources/2026-07-17-trace-turn-level-reward-assignment-via-credit-esti.md]] - TRACE: Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents
+- [[sources/2026-07-17-generative-compilation-on-the-fly-compiler-feedbac.md]] - Generative Compilation: On-the-Fly Compiler Feedback as AI Generates Code
+- [[sources/2026-07-17-the-2nd-international-stepup-competition-for-biome.md]] - The 2nd International StepUP Competition for Biometric Footstep Recognition: From Steps to Strides

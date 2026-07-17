@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이전트 RL 최적화, 정말 능력이 쌓이고 있는가?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736b;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 1.6vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 헤더 영역 ── */
+  .article-header {
+    padding-top: clamp(48px, 8vw, 96px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 500;
+    color: var(--accent);
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    letter-spacing: 0.03em;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(14px, 1.5vw, 16px);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .article-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 구분선 ── */
+  .divider {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  .section p {
+    margin-bottom: 18px;
+    color: #3d3835;
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 20px 24px;
+    border-left: 3px solid var(--accent);
+    background: var(--card-bg);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 1.4vw, 15.5px);
+    color: var(--muted);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .icon-orange { background: rgba(194,112,62,0.1); }
+  .icon-blue { background: rgba(91,124,153,0.1); }
+  .icon-green { background: rgba(107,158,122,0.1); }
+
+  .card p {
+    font-size: clamp(14px, 1.4vw, 15.5px);
+    color: #4a4540;
+    margin-bottom: 10px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 강조 텍스트 ── */
+  .hl-orange { color: var(--accent); font-weight: 500; }
+  .hl-blue { color: var(--accent2); font-weight: 500; }
+  .hl-green { color: var(--accent3); font-weight: 500; }
+
+  strong { color: var(--fg); }
+
+  /* ── 비유 박스 ── */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(91,124,153,0.04));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+  }
+
+  .analogy-box::before {
+    content: '💡';
+    position: absolute;
+    top: -14px;
+    left: 24px;
+    font-size: 22px;
+    background: var(--bg);
+    padding: 0 6px;
+  }
+
+  .analogy-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .analogy-box p {
+    font-size: clamp(14px, 1.4vw, 15.5px);
+    color: #4a4540;
+    margin-bottom: 10px;
+  }
+  .analogy-box p:last-child { margin-bottom: 0; }
+
+  /* ── 표 ── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 28px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    font-size: clamp(13px, 1.3vw, 14.5px);
+  }
+
+  .comparison-table thead th {
+    background: rgba(194,112,62,0.08);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .comparison-table tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: #4a4540;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+
+  .comparison-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table .old { text-decoration: line-through; opacity: 0.55; }
+  .comparison-table .new { color: var(--accent); font-weight: 500; }
+
+  /* ── 번호형 리스트 ── */
+  .numbered-list {
+    list-style: none;
+    counter-reset: nl;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  .numbered-list li {
+    counter-increment: nl;
+    padding: 16px 0 16px 52px;
+    position: relative;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+  }
+
+  .numbered-list li:last-child { border-bottom: none; }
+
+  .numbered-list li::before {
+    content: counter(nl);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(194,112,62,0.08);
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .numbered-list li strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: clamp(14.5px, 1.5vw, 16px);
+  }
+
+  .numbered-list li span {
+    font-size: clamp(13.5px, 1.35vw, 15px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    padding: clamp(40px, 6vw, 72px) 0;
+    text-align: center;
+  }
+
+  .footer-line {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin: 0 auto 20px auto;
+    border-radius: 2px;
+  }
+
+  .article-footer p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .article-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── 스크롤 애니메이션 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 모바일 최적화 ── */
+  @media (max-width: 600px) {
+    .comparison-table { font-size: 12.5px; }
+    .comparison-table thead th,
+    .comparison-table tbody td { padding: 10px 10px; }
+    .numbered-list li { padding-left: 44px; }
+    .numbered-list li::before { width: 28px; height: 28px; font-size: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<div class="article-wrapper">
+
+  <!-- 헤더 -->
+  <header class="article-header fade-in">
+    <div class="article-tag">에이전트 RL 최적화 · 컨티뉴얼 러닝</div>
+    <h1 class="article-title">에이전트 RL 최적화, 정말 능력이 쌓이고 있는가?</h1>
+    <p class="article-subtitle">RLVR, StraTA, APPO, 자기증류 — 고정 벤치마크에서 보고된 '이득'은 누적 가능한 능력인가, 아니면 시험이 바뀌면 증발하는 일시적 적응 상태인가?</p>
+    <div class="article-meta">
+      <span>2025년 7월</span>
+      <span>·</span>
+      <span>Terminal-Bench 2.0 실증 분석</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- 섹션 1: 발단 -->
+  <section class="section fade-in">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">시험지를 외운 학생과 진짜 실력의 차이</h2>
+    <p>어떤 학생이 특정 모의고사를 20번 반복해서 풀고, 드디어 95점을 받았다고 가정해 봅시다. 그런데 실전 수능에서 문제가 조금만 바뀌어도 점수가 60점대로 곤두박질친다면, 우리는 그 학생의 95점을 <strong>'실력 향상'</strong>이라 부르지 않습니다. <span class="hl-orange">시험지를 외웈다</span>고 말하죠.</p>
+    <p>에이전트 RL 최적화 연구의 현주소가 바로 이 상황과 닮아 있습니다. RLVR, StraTA, APPO, 자기증류(self-distillation) 등의 방법이 고정 벤치마크에서 인상적인 성능 향상을 보고하지만, 최근 <strong>Terminal-Bench 2.0</strong>을 활용한 컨티뉴얼 러닝 평가에서 그 이득이 복리되지 않고 소멸한다는 실증이 나왔습니다.</p>
+
+    <blockquote>
+      "Most reported gains from agent-optimization methods are one-shot: an agent is optimized against a fixed benchmark and the resulting improvement is reported as if it were a stable property of the method..."
+      <cite>— Do Agent Optimizers Compound? A Continual-Learning Evaluation on Terminal-Bench 2.0</cite>
+    </blockquote>
+
+    <p>핵심은 단 하나입니다. <span class="hl-orange">고정 벤치마크에서의 일회성 이득을 에이전트의 안정적 능력 속성으로 전제해도 되는가?</span> 이 질문에 대한 답이, 향후 에이전트 최적화 연구의 방향성 전체를 뒤바꿀 수 있습니다.</p>
+  </section>
+
+  <!-- 섹션 2: 세 가지 구조적 원인 -->
+  <section class="section fade-in">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">왜 이득이 '복리'되지 않는가 — 세 가지 구조적 원인</h2>
+    <p>최적화 이득이 컨티뉴얼 설정에서 증발하는 현상을 단순히 '망각(forgetting)'으로 설명하려는 경향이 있습니다. 하지만 이는 인과관계를 뒤바꾼 해석입니다. 논문이 제시하는 구조적 원인 세 가지를 하나씩 파헤쳐 보겠습니다.</p>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon icon-orange">01</span>
+        인과적 전도: '망각'이 아니라 '원래 없었다'
+      </div>
+      <p>통상적으로 우리는 "최적화로 얻은 능력이 망각되었다"고 말합니다. 하지만 실제 인과는 반대입니다. <span class="hl-orange">원래부터 안정적 능력이 아니라, 벤치마크 특화 적응 상태였을 뿐</span>입니다.</p>
+      <p>비유하자면, 시험지 외우기를 '기억 상실'로 진단하는 것과 같습니다. 기억을 잃은 게 아니라, 애초에 이해가 있었던 적이 없었던 것입니다. 고정 벤치마크가 이 사실을 가려주었을 뿐입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon icon-blue">02</span>
+        행동 다양체 국한: 좁아진 가능성의 터널
+      </div>
+      <p>RL 최적화가 에이전트를 <span class="hl-blue">현재 벤치마크 분포에 최적화된 행동 다양체(manifold)의 좁은 영역</span>으로 압축합니다. 마치 특정 코스만 1000번 연습한 운전자가, 갑자기 낯선 경로로 우회해야 할 때 당황하는 것과 같습니다.</p>
+      <p>복리가 일어나려면 최적화가 행동 다양체 상에서 '이동 가능한 기저 능력'을 형성해야 합니다. 그러나 실증은 그렇지 않음을 보여줍니다. 국한된 적응 상태는 새로운 태스크 앞에서 전이 불가능합니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon icon-green">03</span>
+        순환 타당성과 천장 피드백 루프의 함정
+      </div>
+      <p>고정 벤치마크에서 <span class="hl-green">최적화 → 평가를 반복</span>하면 두 가지 문제가 결합됩니다. 첫째, 최적화 대상과 평가 대상이 동일하므로 얻는 이득이 과적합인지 실제 향상인지 구분할 수 없는 <strong>순환 타당성 문제(circular validity problem)</strong>입니다.</p>
+      <p>둘째, 벤치마크 천장에 도달할 때까지의 피드백 루프가 '능력 축적'의 환상을 생성합니다. 컨티뉴얼 설정이 이 순환성을 깨뜨리는 역할을 하는 것 — 벤치마크가 바뀌기 때문에 적응 상태의 본질이 드러나는 것입니다.</p>
+    </div>
+  </section>
+
+  <!-- 섹션 3: 보완적 시사점 -->
+  <section class="section fade-in">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">망각을 버그가 아니라 기능으로 읽기</h2>
+    <p>여기서 생각의 방향을 완전히 전환해야 합니다. 만약 최적화 이득이 '일시적 적응 상태'라면, 컨티뉴얼 설정에서 일어나는 '망각'은 버그가 아닙니다. <span class="hl-green">기능(function)</span>입니다.</p>
+
+    <div class="analogy-box">
+      <div class="analogy-label">일상적 비유</div>
+      <p>여름에 반팔을 입고 적응하다가 겨울이 오면 코트로 갈아입습니다. 우리는 이것을 '반팔 입는 능력을 망각했다'고 말하지 않습니다. <strong>계절에 맞게 적응 상태를 해제하고 재적응하는 과정</strong>으로 이해합니다.</p>
+      <p>에이전트에게도 동일한 논리가 적용됩니다. 이전 태스크에 대한 적응 상태를 해제하는 것이 비효율이 아니라, 새로운 태스크에 재적응하기 위한 정상적인 메커니즘일 수 있습니다. 그렇다면 <span class="hl-orange">망각을 방지하려는 접근 자체가 잘못된 목표 설정</span>일 수 있습니다.</p>
+    </div>
+
+    <p>더 근본적인 문제는 <strong>적응 축의 부정합(adaptation axis misalignment)</strong>입니다. RL 최적화가 작동하는 축은 "현재 태스크에서의 보상 극대화"입니다. 반면 컨티뉴얼 학습이 요구하는 축은 "태스크 간 전이 가능한 기저 능력의 축적"입니다. 이 두 축이 근본적으로 정렬되지 않기 때문에, 아무리 현재 태스크에서 최적화를 해도 다음 태스크로 이어지지 않는 것입니다.</p>
+
+    <p>이를 폐쇄 루프 훈련(closed-loop training)의 구조적 한계로도 읽을 수 있습니다. 에이전트 RL 최적화는 본질적으로 루프가 닫힌 패러다임에 있으며, 루프가 닫힌 상태에서 이득은 루프 내에 갇힙니다. 컨티뉴얼 설정이 루프를 강제로 열어놓는 것이므로, 갇힌 이득이 증발하는 것은 <span class="hl-blue">구조적으로 예측 가능한 결과</span>입니다.</p>
+  </section>
+
+  <!-- 섹션 4: 재개념화 표 -->
+  <section class="section fade-in">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">기존 전제에서 재개념화로 — 패러다임 전환의 지도</h2>
+    <p>지금까지의 분석을 종합하면, 에이전트 RL 최적화에 대한 재개념화는 선택이 아니라 필수입니다. 아래 표는 이 전환을 네 가지 차원에서 정리한 것입니다.</p>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th style="width:28%">차원</th>
+          <th style="width:36%">기존 전제</th>
+          <th style="width:36%">재개념화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>이득의 본질</strong></td>
+          <td><span class="old">안정적 능력 속성</span></td>
+          <td><span class="new">벤치마크 사양 갭 내에서 관측된 일시적 적응 상태</span></td>
+        </tr>
+        <tr>
+          <td><strong>이득 소멸의 해석</strong></td>
+          <td><span class="old">망각(forgetting) 현상</span></td>
+          <td><span class="new">인과적 전도의 현현 — 원래 안정적이지 않았음이 드러남</span></td>
+        </tr>
+        <tr>
+          <td><strong>최적화 목표</strong></td>
+          <td><span class="old">현재 태스크 성능 극대화</span></td>
+          <td><span class="new">적응 축 부정합 해소 후 전이 가능한 기저 능력 축적</span></td>
+        </tr>
+        <tr>
+          <td><strong>평가 방법</strong></td>
+          <td><span class="old">고정 벤치마크에서의 일회성 측정</span></td>
+          <td><span class="new">컨티뉴얼 설정에서의 복리성(compoundability) 측정</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>표에서 <span style="text-decoration:line-through;opacity:0.55;">취소선</span>으로 표시된 기존 전제는 단순히 '틀렸다'는 의미를 넘어서, <span class="hl-orange">특정 평가 조건 하에서만 진위를 판별할 수 없었던 전제</span>입니다. 고정 벤치마크라는 조건이 이 전제들의 허구성을 은폐하고 있었던 것입니다. 컨티뉴얼 설정은 이 은폐를 해제하는 '진실의 조명' 역할을 합니다.</p>
+  </section>
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section fade-in">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-title">복리되는 능력을 만들려면 무엇을 바꿔야 하는가</h2>
+    <p>결론부터 말하면, 에이전트 RL 최적화를 '누적 가능한 능력 축적'으로 만들려면 <strong>최적화의 목적함수 자체</strong>를 바꿔야 합니다. 이것은 하이퍼파라미터 튜닝이나 아키텍처 수정 수준의 변화가 아닙니다. 패러다임 수준의 전환입니다.</p>
+
+    <ol class="numbered-list">
+      <li>
+        <strong>목적함수를 '전이 가능성'으로 재설계하라</strong>
+        <span>현재 태스크에서의 보상 극대화가 아닌, 다음 태스크로의 전이 가능성(transferability)을 직접 최적화 대상으로 삼아야 합니다. 메타러닝의 통찰을 RL 최적화에 통합하는 방향입니다.</span>
+      </li>
+      <li>
+        <strong>평가 메트릭을 '컨티뉴얼 복리율'로 교체하라</strong>
+        <span>일회성 정확도는 더 이상 의미 있는 신호가 아닙니다. 태스크가 순차적으로 도입될 때 이전 최적화 이득이 얼마나 보존·증폭되는지를 측정하는 '복리율(compound rate)' 메트릭이 필요합니다.</span>
+      </li>
+      <li>
+        <strong>행동 다양체의 '이동성'을 최적화하라</strong>
+        <span>현재 벤치마크에 국한되지 않고, 행동 공간 상에서 유연하게 이동할 수 있는 기저 능력을 형성하도록 정규화 및 훈련 전략을 재구성해야 합니다.</span>
+      </li>
+      <li>
+        <strong>폐쇄 루프를 구조적으로 열어라</strong>
+        <span>훈련 과정 자체에 태스크 전환 시뮬레이션을 내재화하여, 최적화가 단일 루프 내에 갇히지 않도록 구조적 장치를 마련해야 합니다.</span>
+      </li>
+    </ol>
+
+    <div class="analogy-box">
+      <div class="analogy-label">최종 비유</div>
+      <p>헬스장에서 특정 기구만 1000번 반복하는 사람이 '근력이 늘었다'고 착각하는 것과 같습니다. 진짜 체력은 기구가 바뀌어도 유지되고, 오히려 이전 훈련이 새로운 운동에 도움이 될 때 '축적되었다'고 말할 수 있습니다.</p>
+      <p>에이전트 RL 최적화 연구가 지금껏 측정해 온 것은 <strong>특정 기구에서의 최대 반복 횟수</strong>였을 뿐입니다. 이제 <span class="hl-orange">기구가 바뀌어도 유지되는 진짜 체력</span>을 측정하고, 그 체력을 길러내는 훈련법을 설계할 때입니다.</p>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="article-footer fade-in">
+    <div class="footer-line"></div>
+    <p>분석 기반: <a href="#">Do Agent Optimizers Compound? A Continual-Learning Evaluation on Terminal-Bench 2.0</a></p>
+    <p style="margin-top:6px;">Wiki 엔티티: causal-inversion-of-forgetting-and-benchmark · behavioral-manifold-confinement · circular-validity-problem · ceiling-incentive-feedback-loop · adaptive-forgetting-as-function · adaptation-axis-misalignment · closed-loop-training · benchmark-specification-gap</p>
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 페이드인 애니메이션
+  document.addEventListener('DOMContentLoaded', function() {
+    var els = document.querySelectorAll('.fade-in');
+    if (!els.length) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    els.forEach(function(el) {
+      observer.observe(el);
+    });
+  });
+</script>
+
+</body>
+</html>
