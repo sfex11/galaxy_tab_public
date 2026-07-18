@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoSynthesis: An agentic system for automated meta-analysis — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;gap:1.5rem;">
+      <span class="tag tag-amber">arXiv:2607.15247v1 · cs.AI · 2026년 7월</span>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.8rem);text-align:center;line-height:1.2;">AutoSynthesis</h1>
+      <p style="font-size:clamp(1.1rem,2.5vw,1.6rem);text-align:center;" class="muted">메타분석 자동화를 위한 에이전트 시스템</p>
+      <div class="hr" style="max-width:400px;margin:0.5rem auto;"></div>
+      <p style="font-size:clamp(0.85rem,1.5vw,1rem);text-align:center;" class="muted">Moein Taherinezhad, Sebastian Maier, Gerardo Vitagliano, Francesco Pierri, Stefan Feuerriegel</p>
+      <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);text-align:center;" class="muted">Politecnico di Milano · LMU Munich · MIT CSAIL</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 제기</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">메타분석은 왜 어려운가?</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-clock"></i> 막대한 시간 비용</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">단일 메타분석에 <span class="accent">1,000시간 이상</span> 소요되며, 완료까지 1년 이상 걸리는 경우가 일반적입니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-hand-paper"></i> 수동 프로세스 의존</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">검색 전략 수립, 문헌 선별, 자료 추출, 효과크기 계산, 통계 합성 등 <span class="accent">모든 단계가 수동</span>으로 이루어집니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-exclamation-triangle"></i> 증거 지연 문제</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">1차 연구 발표와 종합 증거 제공 사이에 <span class="accent">심각한 시차</span>가 발생하여 정책 결정이 지연됩니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-expand-arrows-alt"></i> 확장성 부족</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">임상의학, 심리학, 교육, 공공보건 등 <span class="accent">다양한 분야</span>에서 수요가 폭증하나 공급이 따라가지 못합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-amber">기존 연구</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">LLM 기반 증거 종합의 한계</h2>
+    <div style="margin-top:2rem;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="font-size:clamp(0.85rem,1.5vw,1rem);">접근 방식</th>
+            <th style="font-size:clamp(0.85rem,1.5vw,1rem);">수행 가능 단계</th>
+            <th style="font-size:clamp(0.85rem,1.5vw,1rem);">한계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">문헌 검색 · 선별</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">검색, 스크리닝, 적격성 평가</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="muted">통계 합성 불가</td>
+          </tr>
+          <tr>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">정보 추출</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">결과값, 측정치 구조화 추출</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="muted">효과크기 계산 불가</td>
+          </tr>
+          <tr>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">체계적 문헌고찰</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);">선별 + 추출까지</td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="muted">메타분석 미수행</td>
+          </tr>
+          <tr>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="accent"><strong>AutoSynthesis</strong></td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="accent"><strong>전 단계 종단 수행</strong></td>
+            <td style="font-size:clamp(0.8rem,1.4vw,0.95rem);" class="accent3">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.85rem,1.5vw,1rem);">"효과크기를 표준화하고 완전한 통계적 메타분석을 수행하는 <span class="accent">종단 시스템은 아직 존재하지 않는다.</span>"</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">제안</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">AutoSynthesis란?</h2>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem);margin-top:1.5rem;">자연어 연구 질문을 입력으로 받아, <span class="accent">PRISMA 가이드라인에 부합하는 완전한 메타분석 보고서</span>를 자동으로 생성하는 다중 에이전트 시스템입니다.</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">End-to-End</div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">검색 전략 수립부터 통계 합성까지 전 파이프라인 자동화</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">Multi-Agent</div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">전문화된 LLM 에이전트들이 협력하여 복잡한 추론 수행</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">Transparent</div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">모든 에이전트 추적과 중간 결정 기록으로 감사 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">시스템 아키텍처</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">AutoSynthesis 워크플로우</h2>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">프로토콜 수립</div>
+        <div class="step-desc">연구 질문 → 구조화된 리뷰 프로토콜 및 검색 쿼리 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">문헌 검색 · 선별</div>
+        <div class="step-desc">다중 데이터베이스 검색, 제목/초록 스크리닝, 전문 적격성 평가</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">증거 추출</div>
+        <div class="step-desc">정량 통계 추출, 원문 검증, 표준화 효과크기 계산</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">통계 합성 · 보고</div>
+        <div class="step-desc">랜덤효과 메타분석, 편향 평가, PRISMA 보고서 생성</div>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);margin-top:1.5rem;" class="muted"><i class="fas fa-info-circle"></i> 각 단계는 독립적으로 검사 · 검증 · 비교 가능한 모듈식 아키텍처로 설계되었습니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-green">핵심 기능</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">통계적 합성 및 품질 평가</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-calculator"></i> 효과크기 표준화</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cohen's <em>d</em> 및 Hedges' <em>g</em> 자동 계산</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 통계 형식을 공통 표현으로 변환</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추출 결과의 원문 기반 검증</li>
+        </ul>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-top:1.5rem;"><i class="fas fa-random"></i> 랜덤효과 메타분석</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>풀링된 효과크기 추정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이질성 지표: <em>I</em>², τ², Cochran's <em>Q</em></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자 지정 중재변수에 대한 이질성 분석</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-balance-scale"></i> 편향 평가</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Trim-and-fill 절차로 출판 편향 진단</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>깔때기 그림 분석 (소연구 효과 검정)</li>
+        </ul>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin-top:1.5rem;"><i class="fas fa-shield-alt"></i> 편향 위험 평가</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>RoB 2 (무작위 대조시험)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ROBINS-I (비무작위 연구)</li>
+        </ul>
+        <div class="hr" style="margin-top:1.5rem;"></div>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted"><i class="fas fa-file-alt"></i> 최종 출력: PRISMA 2020 준수 보고서, 숲 그림, 깔때기 그림, 연구 수준 요약표</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-red">실증 연구</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">종단 시연: LLM의 설득력 메타분석</h2>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);"><i class="fas fa-quote-left"></i> "LLM이 생성한 설득적 메시지가 비LLM 또는 인간이 작성한 대조 메시지와 비교하여 설득 결과에 미치는 효과는 무엇인가?"</p>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1rem);margin-top:1rem;" class="muted">참고 기준: Hölbling et al. (2025)의 전문가 메타분석 (<em>k</em>=11, 참여자 17,422명)</p>
+    <div style="margin-top:2rem;">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-search"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">문헌 검색</strong>
+          <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">28개 후보 논문 검색</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-filter"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">제목/초록 스크리닝</strong>
+          <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">25개 논문 통과</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-file-check"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">전문 적격성 평가</strong>
+          <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">19개 연구 적격 판정</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-database"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">최종 포함 · 증거 추출</strong>
+          <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">8개 연구에서 20개 이상의 정량적 주장 추출</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-green">결과</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">전문가 메타분석과의 일치도</h2>
+    <div style="display:flex;justify-content:center;align-items:center;margin-top:2.5rem;">
+      <div style="text-align:center;">
+        <div class="big-num" style="font-size:clamp(3rem,8vw,5rem);">±0.12</div>
+        <p style="font-size:clamp(0.95rem,1.8vw,1.2rem);margin-top:0.5rem;">Hedges' <em>g</em> 오차 범위</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">전문가 수행 메타분석 대비</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:2.5rem;">
+      <div class="card" style="text-align:center;">
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="accent"><strong>인간-AI 상호작용</strong></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">LLM 설득력 연구</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="accent2"><strong>교육학</strong></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">학습 개입 효과 연구</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="accent3"><strong>심리학</strong></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);" class="muted">행동 · 정신건강 개입</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1rem);margin-top:1.5rem;text-align:center;">복수 분야의 참고 사례에서 AutoSynthesis의 풀링된 효과 추정치가 <span class="accent">전문가 결과와 강하게 일치</span>함을 확인</p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-amber">성능 상세</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">다단계 평가 결과</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-search-plus"></i> 문헌 검색</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전문가 리뷰와 의미 있는 검색 결과 중첩</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자연어 연구 질문에서 적절한 검색 쿼리 자동 생성</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-crosshairs"></i> 연구 질문 식별</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 논문 내 독립적 연구 및 연구 질문 매핑</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>타겟 메타분석과 관련된 결과만 필터링</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-extract"></i> 정량 데이터 추출</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>20개 이상의 정량적 주장 성공적 추출</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>원문 대비 추출 정확도 검증</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-chart-bar"></i> 최종 효과크기</h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모든 참고 사례에서 ±0.12 Hedges' <em>g</em> 이내</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이질성 지표 및 편향 평가 정상 산출</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-green">확장 가능성</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">AutoSynthesis의 의의와 잠재력</h2>
+    <div style="margin-top:2rem;">
+      <div class="flow-item">
+        <div class="flow-icon">1</div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.6vw,1.15rem);">비용 절감과 확장성</strong>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">메타분석이 비용이나 시간 제약으로 불가능했던 환경에서도 <span class="accent">정량적 증거 종합</span>을 가능하게 합니다. 임시 판단에 의존하던 분야에 증거기반 의사결정을 도입할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">2</div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.6vw,1.15rem);">준실시간 "살아있는" 메타분석</strong>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">"살아있는" 체계적 문헌고찰의 개념을 메타분석으로 확장하여, <span class="accent2">새로운 연구가 출간될 때마다 지속적으로 증거를 통합</span>할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">3</div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.6vw,1.15rem);">방법론적 엄격성 향상</strong>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">편향 위험 평가, PRISMA 보고 등 <span class="accent3">확립된 최선의 실무를 일관되게 적용</span>하여, 메타분석 전문 지식이 없는 연구자도 높은 품질의 결과를 얻을 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <p style="font-size:clamp(0.85rem,1.5vw,1rem);text-align:center;" class="muted"><i class="fas fa-hospital"></i> <i class="fas fa-graduation-cap"></i> <i class="fas fa-landmark"></i> 임상 실무, 교육, 공공 정책 등 신뢰할 수 있는 문헌 요약이 시급히 필요한 분야에 기여</p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-red">논의</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">투명성과 검증 가능성</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-eye"></i> 완전 추적 기록</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">모든 에이전트의 추적(trace)과 중간 결정이 기록됩니다. 특정 연구의 포함/제외 사유를 <span class="accent">단계별로 검사</span>할 수 있습니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-puzzle-piece"></i> 모듈식 아키텍처</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">증거 종합 과정의 <span class="accent">각 단계를 독립적으로 검사, 검증, 비교</span>할 수 있는 구조로 설계되었습니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-redo"></i> 재현 가능성</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">동일한 연구 질문에 대해 <span class="accent2">일관된 결과를 재현</span>할 수 있어, 수동 메타분석의 재현성 위기를 완화할 잠재력이 있습니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);"><i class="fas fa-user-check"></i> 인간 감독 모델</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1rem);" class="muted">완전 자동화가 아닌, <span class="accent3">연구자가 중간 결과를 검토하고 개입할 수 있는</span> human-in-the-loop 운영을 전제로 합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-amber">결론</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-top:1rem;">핵심 요약</h2>
+    <div style="margin-top:2rem;">
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">최초의 종단 자동 메타분석 시스템</strong> — 검색 전략 수립부터 PRISMA 보고서 생성까지 전 파이프라인을 다중 에이전트가 자동 수행</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">전문가 수준의 정확도</strong> — 복수 분야에서 풀링된 효과크기가 전문가 메타분석과 ±0.12 Hedges' <em>g</em> 이내로 일치</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">통계적 엄격성</strong> — 랜덤효과 모델, 이질성 분석, 출판 편향 진단, RoB 2/ROBINS-I 편향 위험 평가를 모두 지원</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">투명하고 감사 가능</strong> — 모든 에이전트 추적과 중간 결정 기록으로 전 과정 검증 가능</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong style="font-size:clamp(0.9rem,1.5vw,1.05rem);">확장 가능한 증거 종합</strong> — 임상, 교육, 정책 등 증거기반 의사결정이 필요한 모든 분야에 적용 가능</li>
+      </ul>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">AutoSynthesis는 정량적 증거 종합을 <span class="accent">더 확장 가능하게 만들어</span>, 여러 분야의 증거기반 의사결정을 지원할 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:65vh;gap:1.5rem;">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);text-align:center;">AutoSynthesis</h2>
+      <p style="font-size:clamp(1rem,2vw,1.3rem);text-align:center;" class="muted">An agentic system for automated meta-analysis</p>
+      <div class="hr" style="max-width:350px;margin:0.5rem auto;"></div>
+      <p style="font-size:clamp(0.85rem,1.5vw,1rem);text-align:center;" class="muted">Moein Taherinezhad, Sebastian Maier, Gerardo Vitagliano, Francesco Pierri, Stefan Feuerriegel</p>
+      <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);text-align:center;" class="muted">Politecnico di Milano · LMU Munich · MIT CSAIL</p>
+      <div style="margin-top:1rem;">
+        <span class="tag tag-amber"><i class="fas fa-external-link-alt"></i> arXiv:2607.15247v1</span>
+      </div>
+      <p style="font-size:clamp(0.75rem,1.2vw,0.9rem);text-align:center;" class="muted">http://arxiv.org/abs/2607.15247v1</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
