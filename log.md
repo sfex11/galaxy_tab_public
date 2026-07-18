@@ -2538,3 +2538,25 @@
 ## [2026-07-17 08:33] ingest | Generative Compilation: On-the-Fly Compiler Feedback as AI Generates Code
 
 ## [2026-07-17 08:33] ingest | The 2nd International StepUP Competition for Biometric Footstep Recognition: From Steps to Strides
+
+## [2026-07-18 04:09] llm-ingest | 0편 분석, 엔티티 355개, 개념 1315개
+
+## [2026-07-18 08:32] ingest | Partition, Prompt, Aggregate: Statistical Self-Consistency in Language Models
+
+## [2026-07-18 08:32] ingest | Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents
+
+## [2026-07-18 08:32] ingest | SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration
+
+## [2026-07-18 08:32] ingest | teLLMe Why (Ain't Nothing but a Jam): Exploratory Causal Analysis of Urban Driving Data
+
+## [2026-07-18 08:32] ingest | Bridge Evidence: Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search
+
+## [2026-07-18 08:32] ingest | AutoSynthesis: An agentic system for automated meta-analysis
+
+## [2026-07-18 08:32] ingest | In-Place Tokenizer Expansion for Pre-trained LLMs
+
+## [2026-07-18 08:32] ingest | When Words Are Safe But Actions Kill: Probing Physical Danger Beyond Text Safety in Hidden-State Risk Space
+
+## [2026-07-18 08:32] ingest | Plover: Steering GUI Agents through Plan-Centric Interaction
+
+## [2026-07-18 08:32] ingest | Symbal: Detecting Systematic Misalignments in Model-Generated Captions

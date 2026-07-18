@@ -269,3 +269,7 @@ _자동 생성됨_
 - [[sources/2026-07-15-paradoxes-of-game-theoretic-equilibria-and-price-o.md]]
 
 - [[sources/2026-07-15-when-local-monitors-miss-compositional-harm-diagno.md]]
+
+- [[sources/2026-07-18-searchos-v1-towards-robust-open-domain-information.md]]
+
+- [[sources/2026-07-18-autosynthesis-an-agentic-system-for-automated-meta.md]]

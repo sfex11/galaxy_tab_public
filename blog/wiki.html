@@ -3,416 +3,652 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>정교하게 설계된 무용성 — 복잡도 메타인지가 두 최적화 축을 무너뜨리는 구조</title>
+<title>좋은 악보가 훌륭한 연주를 보장하지 않는다 — 검색 최적화가 놓친 인과적 진실</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --border-light: rgba(44,40,37,0.08);
+  }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: #faf9f7;
-    color: #2c2825;
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: clamp(15px, 2.2vw, 17.5px);
+    background: var(--bg);
+    color: var(--fg);
     line-height: 1.85;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
     -webkit-font-smoothing: antialiased;
   }
 
-  article {
-    max-width: 720px;
+  ::selection {
+    background: rgba(194,112,62,0.18);
+    color: var(--fg);
+  }
+
+  .article-wrapper {
+    max-width: 760px;
     margin: 0 auto;
-    padding: 0 clamp(16px, 4vw, 32px);
+    padding: 0 clamp(16px, 4vw, 40px);
   }
 
-  /* ── 타이포그래피 ── */
-  h1, h2, h3 {
-    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
-    line-height: 1.35;
-    letter-spacing: -0.02em;
+  /* ── Header ── */
+  .article-header {
+    padding-top: clamp(40px, 6vw, 80px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: clamp(32px, 5vw, 56px);
   }
 
-  h1 {
-    font-size: clamp(1.65rem, 5vw, 2.35rem);
+  .article-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
     font-weight: 700;
-    margin: 48px 0 12px;
+    font-size: clamp(26px, 5vw, 40px);
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
   }
 
-  .subtitle {
-    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-    color: #6b6560;
+  .article-subtitle {
+    font-size: clamp(15px, 2.4vw, 18px);
+    color: var(--muted);
+    line-height: 1.7;
     font-weight: 300;
-    margin-bottom: 36px;
-    line-height: 1.6;
+    max-width: 640px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--accent2);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--accent2);
+    border-radius: 1px;
   }
 
   h2 {
-    font-size: clamp(1.3rem, 3.8vw, 1.65rem);
-    font-weight: 600;
-    margin: 56px 0 20px;
-    padding-top: 8px;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 3.5vw, 28px);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
   }
 
   h3 {
-    font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+    font-family: 'Source Serif 4', serif;
     font-weight: 600;
-    margin: 32px 0 12px;
+    font-size: clamp(17px, 2.8vw, 21px);
+    line-height: 1.4;
+    color: var(--fg);
+    margin-top: 32px;
+    margin-bottom: 12px;
   }
 
-  p { margin-bottom: 1.4em; }
+  p {
+    margin-bottom: 18px;
+  }
 
-  strong { color: #c2703e; font-weight: 500; }
+  strong {
+    font-weight: 600;
+    color: var(--fg);
+  }
 
-  em.accent-blue { color: #5b7c99; font-style: normal; font-weight: 500; }
-  em.accent-green { color: #6b9e7a; font-style: normal; font-weight: 500; }
+  .text-accent { color: var(--accent); font-weight: 600; }
+  .text-accent2 { color: var(--accent2); font-weight: 600; }
+  .text-accent3 { color: var(--accent3); font-weight: 600; }
 
-  a { color: #c2703e; text-decoration: none; border-bottom: 1px solid rgba(194,112,62,0.25); transition: border-color 0.2s; }
-  a:hover { border-bottom-color: #c2703e; }
-
-  /* ── 인용구 ── */
+  /* ── Blockquote ── */
   blockquote {
-    border-left: 3px solid #c2703e;
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 24px auto;
     max-width: 800px;
-    margin: 28px auto;
-    padding: 16px 0 16px 22px;
-    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
-    color: #5a5550;
     background: rgba(194,112,62,0.03);
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 10px 10px 0;
+    font-size: 0.95em;
+    color: var(--muted);
+    line-height: 1.8;
   }
 
-  blockquote cite {
-    display: block;
-    margin-top: 8px;
-    font-size: 0.88em;
-    color: #9a9590;
+  blockquote em {
+    color: var(--fg);
     font-style: normal;
+    font-weight: 500;
   }
 
-  /* ── 카드 ── */
+  /* ── Card ── */
   .card {
-    background: rgba(255,255,255,0.7);
-    border: 1px solid rgba(194,112,62,0.12);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: clamp(18px, 3vw, 28px);
-    margin: 28px 0;
-    box-shadow: 0 2px 12px rgba(44,40,37,0.05), 0 0.5px 2px rgba(44,40,37,0.04);
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
   }
 
   .card-label {
-    display: inline-block;
-    font-size: 0.75em;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    padding: 3px 10px;
-    border-radius: 6px;
-    margin-bottom: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 10px;
   }
-  .card-label.orange { background: rgba(194,112,62,0.1); color: #c2703e; }
-  .card-label.blue { background: rgba(91,124,153,0.1); color: #5b7c99; }
-  .card-label.green { background: rgba(107,158,122,0.1); color: #6b9e7a; }
 
-  /* ── 도식 ── */
-  .diagram {
-    background: rgba(255,255,255,0.75);
-    border: 1px solid rgba(194,112,62,0.12);
-    border-radius: 14px;
-    padding: clamp(20px, 4vw, 36px);
-    margin: 32px 0;
-    font-family: 'Noto Sans KR', monospace;
+  /* ── Table ── */
+  .table-wrapper {
     overflow-x: auto;
-    box-shadow: 0 2px 12px rgba(44,40,37,0.05);
+    margin: 24px 0;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .diagram-node {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92em;
+    min-width: 480px;
+  }
+
+  thead th {
+    background: rgba(44,40,37,0.03);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--border-light);
+    font-size: 0.9em;
+    letter-spacing: 0.02em;
+  }
+
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover {
+    background: rgba(194,112,62,0.025);
+  }
+
+  .tag-inline {
     display: inline-block;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: clamp(0.78rem, 2vw, 0.88rem);
+    font-size: 11px;
     font-weight: 500;
-    text-align: center;
+    padding: 2px 8px;
+    border-radius: 5px;
     white-space: nowrap;
   }
 
-  .diagram-node.top { background: rgba(194,112,62,0.13); color: #c2703e; }
-  .diagram-node.mid { background: rgba(91,124,153,0.1); color: #5b7c99; }
-  .diagram-node.mid2 { background: rgba(107,158,122,0.1); color: #6b9e7a; }
-  .diagram-node.bottom { background: rgba(44,40,37,0.05); color: #5a5550; }
+  .tag-infra { background: rgba(91,124,153,0.1); color: var(--accent2); }
+  .tag-sem { background: rgba(194,112,62,0.1); color: var(--accent); }
+  .tag-common { background: rgba(107,158,122,0.1); color: var(--accent3); }
 
-  .diagram-arrow {
-    display: block;
-    text-align: center;
-    color: #b5b0aa;
-    font-size: 1.2em;
-    line-height: 1.6;
+  /* ── Metaphor Box ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04), rgba(91,124,153,0.04));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: 14px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
   }
 
-  .diagram-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 6px 0;
+  .metaphor-box::before {
+    content: '🎭';
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    font-size: 24px;
+    background: var(--bg);
+    padding: 2px 6px;
+    border-radius: 8px;
   }
 
-  .diagram-desc {
-    text-align: center;
-    font-size: clamp(0.72rem, 1.8vw, 0.82rem);
-    color: #9a9590;
-    margin-top: 2px;
+  .metaphor-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+    margin-top: 4px;
+    color: var(--accent);
   }
 
-  /* ── 메타 정보 ── */
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 0.82em;
-    color: #9a9590;
-    margin-bottom: 8px;
+  /* ── List ── */
+  .analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
   }
-  .meta span { display: flex; align-items: center; gap: 4px; }
 
-  /* ── 구분선 ── */
-  hr {
+  .analysis-list li {
+    position: relative;
+    padding: 10px 0 10px 24px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .analysis-list li:last-child { border-bottom: none; }
+
+  .analysis-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 18px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* ── Wiki Link Style ── */
+  .wiki-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.88em;
+    font-weight: 500;
+    color: var(--accent2);
+    background: rgba(91,124,153,0.06);
+    padding: 2px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid rgba(91,124,153,0.1);
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .wiki-link:hover {
+    background: rgba(91,124,153,0.12);
+    border-color: rgba(91,124,153,0.2);
+  }
+
+  /* ── Divider ── */
+  .divider {
     border: none;
     height: 1px;
-    background: rgba(44,40,37,0.08);
-    margin: 48px 0;
+    background: var(--border-light);
+    margin: clamp(36px, 5vw, 56px) 0;
   }
 
-  /* ── 목차 ── */
-  .toc {
-    margin: 0 0 40px;
-    padding: 20px 24px;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(44,40,37,0.06);
+  /* ── Highlight Box ── */
+  .highlight-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
     border-radius: 12px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 24px 0;
   }
+
+  .highlight-box .hl-title {
+    font-weight: 600;
+    color: var(--accent3);
+    margin-bottom: 8px;
+    font-size: 0.95em;
+  }
+
+  /* ── Conclusion ── */
+  .conclusion-block {
+    background: linear-gradient(135deg, rgba(44,40,37,0.02), rgba(194,112,62,0.04));
+    border: 1px solid rgba(194,112,62,0.1);
+    border-radius: 16px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+
+  .conclusion-block p:last-child { margin-bottom: 0; }
+
+  /* ── Footer ── */
+  .article-footer {
+    border-top: 1px solid var(--border-light);
+    padding-top: 24px;
+    padding-bottom: clamp(40px, 6vw, 80px);
+    font-size: 0.88em;
+    color: var(--muted);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .footer-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 24px);
+    margin: 0 0 clamp(36px, 5vw, 56px) 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04);
+  }
+
   .toc-title {
-    font-size: 0.78em;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #9a9590;
+    color: var(--muted);
     margin-bottom: 12px;
   }
+
   .toc ol {
-    padding-left: 20px;
+    list-style: none;
+    counter-reset: toc-counter;
+    padding: 0;
     margin: 0;
   }
-  .toc li {
+
+  .toc ol li {
+    counter-increment: toc-counter;
     margin-bottom: 6px;
-    font-size: 0.92em;
-  }
-  .toc a {
-    color: #5a5550;
-    border-bottom: none;
-    transition: color 0.2s;
-  }
-  .toc a:hover { color: #c2703e; }
-
-  /* ── 하이라이트 줄 ── */
-  .highlight-line {
-    border-left: 3px solid #c2703e;
-    padding-left: 16px;
-    margin: 28px 0;
-    color: #5a5550;
   }
 
-  /* ── 푸터 ── */
-  footer {
-    text-align: center;
-    padding: 48px 16px 40px;
-    font-size: 0.8em;
-    color: #b5b0aa;
+  .toc ol li a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--fg);
+    font-size: 0.93em;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    line-height: 1.5;
   }
 
-  /* ── 반응형 미세 조정 ── */
-  @media (max-width: 480px) {
-    h1 { margin-top: 32px; }
-    h2 { margin-top: 40px; }
-    .diagram-row { flex-direction: column; align-items: center; }
+  .toc ol li a::before {
+    content: counter(toc-counter);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.85em;
+    min-width: 18px;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
+  .toc ol li a:hover {
+    background: rgba(194,112,62,0.05);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .table-wrapper { margin-left: -8px; margin-right: -8px; }
+    table { font-size: 0.86em; }
+    thead th, tbody td { padding: 9px 10px; }
+    .footer-meta { flex-direction: column; gap: 8px; }
   }
 </style>
 </head>
 <body>
 
-<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
-<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
-<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
-<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
-<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
-<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
-<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
-<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
-<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
-</nav>
+<div class="article-wrapper">
 
-<article>
+  <!-- Nav -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
 
-  <div class="meta">
-    <span>📅 2025년 7월</span>
-    <span>📂 AI 에이전트 · 메타인지 · 최적화 이론</span>
-  </div>
+  <!-- Header -->
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">좋은 악보가 훌륭한 연주를 보장하지 않는다</h1>
+    <p class="article-subtitle">검색 모듈이 "정적으로 유용해 보이는" 문서를 골라냈는데도 다단계 에이전트 추론에서는 아무 도움이 되지 않는다면, 파이프라인식 최적화는 근본적으로 잘못된 것인가?</p>
+  </header>
 
-  <h1>정교하게 설계된 무용성</h1>
-  <p class="subtitle">에이전트가 "이 과제는 단순하다"는 사실을 모를 때,<br>두 최적화 축은 왜 동시에 무너지는가</p>
-
+  <!-- TOC -->
   <div class="toc">
     <div class="toc-title">목차</div>
     <ol>
-      <li><a href="#sec1">네비게이션의 역설 — 2분 거리에 고속도로를 까는 AI</a></li>
-      <li><a href="#sec2">적응적 추론의 함정 — "얼마나 계산할까"만 묻는 습관</a></li>
-      <li><a href="#sec3">하네스 최적화의 무용 — "병목을 어디서 잡을까"만 묻는 습관</a></li>
-      <li><a href="#sec4">상위 병목의 구조 — 사라진 첫 번째 질문</a></li>
-      <li><a href="#sec5">패러다임 전환 — "정말 그만큼 필요한가"를 먼저 물어야 한다</a></li>
+      <li><a href="#sec1">오케스트라 비유: 개별 악기와 전체 연주</a></li>
+      <li><a href="#sec2">인프라 계층에서 이미 예고된 붕괴</a></li>
+      <li><a href="#sec3">의미론 계층에서의 동일 패턴 — Bridge Evidence</a></li>
+      <li><a href="#sec4">공통 진단: 병목 오지정(Bottleneck Misattribution)</a></li>
+      <li><a href="#sec5">패러다임 전환 — 모듈 내부에서 과정 전체로</a></li>
     </ol>
   </div>
 
-  <!-- ── 섹션 1 ── -->
-  <h2 id="sec1">네비게이션의 역설 — 2분 거리에 고속도로를 까는 AI</h2>
+  <!-- Section 1 -->
+  <section class="section" id="sec1">
+    <div class="section-label">서론</div>
+    <h2>오케스트라 비유: 개별 악기와 전체 연주</h2>
 
-  <p>집 앞 편의점까지 걸어가는 데 걸리는 시간은 2분이다. 그런데 당신의 네비게이션 앱이 이 구간을 위해 <strong>고속도로 진입로를 계획</strong>하고, <strong>톨게이트 비용을 산출</strong>하고, <strong>차선 변경 시뮬레이션</strong>까지 돌린다면 어떨까? 도로 자체는 아주 정교하게 최적화되어 있을지 몰라도, 그 정교함이 문제를 해결하는 것이 아니라 <strong>없는 문제를 증식</strong>시키고 있다는 사실을 깨닫는 데는 그리 오래 걸리지 않을 것이다.</p>
+    <p>교향곡을 연주하는 오케스트라를 상상해 보십시오. 각 악기 파트의 악보를 따로 떼어내어 "이 바이올린 파트, 혼자 연주해 보니 아주 훌륭하네"라고 평가한다고 해서, 그 파트가 전체 교향곡에서도 반드시 핵심적인 역할을 하는 것은 아닙니다. 아마도 그 바이올린 파트는 화려하지만 전체 구조에서는 장식적 역할에 불과할 수 있고, 반대로 조용한 비올라 파트가 모티프의 인과적 연결 고리를 담당하고 있을 수 있습니다.</p>
 
-  <p>이 비유는 현재 AI 에이전트 생태계가 직면한 구조적 문제를 정확히 묘사한다. 최근 논문 <em>"Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution"</em>이 확인한 바와 같이, LLM 에이전트는 과제가 단순한지 복잡한지 스스로 판단하지 않고 <strong>항상 최대 노력(maximum-effort) 전략</strong>을 따른다. 단순한 텍스트 편집을 20단계 탐색으로 확장하는 식이다.</p>
-
-  <p>그런데 흥미롭게도, 학계와 산업계는 이 근본적인 문제를 해결하는 대신 <strong>두 가지 하위 최적화 축</strong>에 집중해 왔다. 하나는 모델 내부에서 계산 예산을 어떻게 분배할 것인가의 문제(<em class="accent-blue">적응적 추론</em>)이고, 다른 하나는 실행 인프라에서 병목을 어디서 해결할 것인가의 문제(<em class="accent-green">에이전트 하네스 최적화</em>)이다.</p>
-
-  <p>이 두 축은 각각 의미 있는 최적화다. 하지만 둘 다 <strong>"에이전트가 과제의 복잡도를 정확히 인지하고 있다"</strong>는 전제 위에 서 있다. 편의점까지 2분 거리라는 사실을 모르는 네비게이션에게 고속도로 노선을 최적화해주는 것과 같다. 이 글에서는 왜 이 전제의 부재가 단순한 누락이 아니라 <strong>두 최적화 축을 동시에 무력화하는 상위 차원의 병목</strong>인지를 파헤친다.</p>
-
-  <hr>
-
-  <!-- ── 섹션 2 ── -->
-  <h2 id="sec2">적응적 추론의 함정 — "얼마나 계산할까"만 묻는 습관</h2>
-
-  <div class="card">
-    <span class="card-label blue">적응적 추론(Adaptive Inference)</span>
-    <p>모델 내부에서 계산 예산을 동적으로 할당하는 기법. SpecKV 논문은 추측 길이(γ) 선택을 적응의 차원으로 확장하고, 압축이라는 내부 시스템 상태에 반응하는 메커니즘을 제시한다.</p>
-  </div>
-
-  <p>적응적 추론의 핵심 질문은 <strong>"얼마나 계산할까"</strong>다. 주어진 복잡도 수준에 대해 최적의 γ를 선택하고, 계산 자원을 효율적으로 분배하는 것이 이 축의 목표다. 마치 요리사가 메뉴의 난이도를 이미 알고 있으니, 그에 맞춰 불 강도와 조리 시간을 미세조정하는 것과 같다.</p>
-
-  <p>문제는 이 질문이 <strong>하나의 단계를 건너뛰고 있다</strong>는 데 있다. 적응적 추론은 "어떤 복잡도 수준에 대응할 것인가"를 이미 알고 있다는 전제 하에 "그에 맞는 γ를 어떻게 선택할 것인가"를 최적화한다. 정작 가장 중요한 결정—<strong>"적응할 것인가 말 것인가"</strong>—은 이 체계의 밖에 있다.</p>
-
-  <div class="highlight-line">
-    SpecKV의 적응 메커니즘은 분배의 효율성은 높여도, <strong>분배 자체가 불필요한 경우</strong>를 감지하지 못한다. 불필요한 계산에 대한 예산을 더 효율적으로 할당하는 것에 불과하다.
-  </div>
-
-  <p>요리사 비유로 돌아가 보자. 물을 끓이는 데 고급 프렌치 오븐의 온도를 0.1도 단위로 최적화하는 요리사를 상상해보라. 오븐 제어 기술은 대단히 정교하지만, <strong>물을 끓이는 데 오븐이 필요한지 자체를 묻지 않</strong>는다. 주전자와 가스레인지면 충분한 일이다. 적응의 타당성은 '적응 대상에 대한 정확한 모델'에 달려있는데, 복잡도에 대한 메타인지가 없으면 적응 자체가 무효화된다.</p>
-
-  <p>더 근본적으로, 에이전트가 항상 maximum-effort를 가정하면 최적화 축들은 <strong>'천장에 도달하기 위한 효율적 경로'만 제공</strong>하게 된다. 천장 자체가 낮은 과제에서는 이 경로가 역설적으로 비효율을 극대화하는 피드백 루프를 형성한다. 2층 건물에 엘리베이터 최적화 알고리즘을 적용하는 꼴이다.</p>
-
-  <hr>
-
-  <!-- ── 섹션 3 ── -->
-  <h2 id="sec3">하네스 최적화의 무용 — "병목을 어디서 잡을까"만 묻는 습관</h2>
-
-  <div class="card">
-    <span class="card-label green">에이전트 하네스 엔지니어링(Agentic Harness Engineering)</span>
-    <p>에이전트의 실행 인프라에서 병목을 식별하고 해결하는 기법. Crab 논문은 C/R 런타임이 결함 내성·롤백·분기를 인프라 계층에서 직접 구현함을 보여주며, 다중 서버 MCP 배포에서 실제 병목이 개별 LLM 호출이 아닌 스키마 축적에 있음을 재정의한다.</p>
-  </div>
-
-  <p>하네스 최적화의 핵심 질문은 <strong>"병목을 어디서 잡을까"</strong>다. 파이프라인 서빙의 병목이 어디에 있는지 정밀하게 진단하고, 스키마 축적에서 다른 곳으로 병목을 이동시키며, 의미론적 체크포인트로 상태 관리를 정교하게 만드는 것이 이 축의 과제다.</p>
-
-  <p>하지만 여기에도 같은 구조적 맹점이 있다. 두 최적화 모두 <strong>에이전트가 생성하는 작업 그래프의 구조가 합리적이라는 전제</strong>를 공유하기 때문이다.</p>
-
-  <blockquote>
-    단순 편집 과제를 20단계 탐색으로 확장하는 에이전트에게 최적화된 파이프라인 서빙을 제공하면 무슨 의미가 있겠는가? 인프라 병목을 스키마 축적에서 다른 곳으로 옮겨도, 에이전트가 과생산하는 불필요한 툴 호출과 체크포인트 자체가 사라지지 않으면 하네스 최적화는 <strong>비효율을 더 빠르게 처리하는 것</strong>에 불과하다.
-  </blockquote>
-
-  <p>비유하자면, 물이 새고 있는 수도관에서 누수 위치를 진단하는 기술을 발명한 것과 같다. 진단 기술이 아무리 정밀해도, <strong>처음부터 수도관을 사용할 필요가 없는 상황</strong>이라면 그 정밀함은 의미가 없다. 컵에 물을 따르면 되는 일이다.</p>
-
-  <p>특히 Crab의 의미론적 체크포인트는 알고리즘과 시스템 사이의 번역 간극을 해결하려 하지만, 에이전트가 의미론적 의존 그래프 자체를 과도하게 복잡하게 구성한다면 정교한 체크포인트는 <strong>과도한 상태 보존의 대상만 늘릴 뿐</strong>이다. 2분 걷기에 카메라, GPS, 생체센서를 모두 장착하고 각 센서의 체크포인트를 최적화하는 것과 같다.</p>
-
-  <hr>
-
-  <!-- ── 섹션 4 ── -->
-  <h2 id="sec4">상위 병목의 구조 — 사라진 첫 번째 질문</h2>
-
-  <p>두 축의 관계를 도식화하면 문제의 구조가 선명해진다.</p>
-
-  <div class="diagram">
-    <div style="text-align:center;">
-      <span class="diagram-node top">복잡도 메타인지</span>
-      <div class="diagram-desc">"이 과제에 그만큼의 할당과 해결이 필요한가?"</div>
+    <div class="metaphor-box">
+      <div class="metaphor-title">비유의 핵심</div>
+      <p>문서의 <span class="text-accent">정적 유용성(Static Utility)</span>은 "악보를 따로 떼어내어 평가한 것"이고, <span class="text-accent2">인과적 기여(Causal Utility)</span>는 "전체 연주 속에서 그 악보가 실제로 수행하는 역할"입니다. Bridge Evidence 논문은 이 둘이 전혀 다르다는 것을 실증적으로 보여줍니다.</p>
     </div>
-    <div class="diagram-arrow">│</div>
-    <div class="diagram-arrow">▼ 결정</div>
-    <div style="text-align:center; margin: 8px 0;">
-      <span class="diagram-node bottom">과제 분해의 적정성</span>
+
+    <p>이 발견은 단순히 "검색 알고리즘이 조금 부정확하다"는 수준의 이야기가 아닙니다. 현재 에이전트 파이프라인 설계의 근간을 이루는 <strong>모듈성(Modularity) 전제</strong>에 대한 근본적인 질문을 던집니다. 검색을 독립적인 구성요소로 분리하고, 그 자체로 최적화할 수 있다는 믿음 — 이것이 과연 유효한가요?</p>
+
+    <p>결론부터 말하면, <span class="text-accent">모듈성 자체가 잘못된 것이 아닙니다. "모듈 간 독립성 가정"이 잘못된 것</span>입니다. 그리고 이 가정의 붕괴는 인프라 계층에서 이미 예고되어 있었습니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 2 -->
+  <section class="section" id="sec2">
+    <div class="section-label">계층 분석 1</div>
+    <h2>인프라 계층에서 이미 예고된 붕괴</h2>
+
+    <p>
+      <span class="wiki-link">aggregate-pipeline-serving</span>
+      연구가 다중 서버 MCP 배포에서 발견한 핵심 사실은 이렇습니다:
+    </p>
+
+    <blockquote>
+      "파이프라인 전체의 레이턴시 병목이 <em>개별 LLM 호출이 아닌 스키마 축적(Schema Accumulation)</em>에 의해 결정된다"
+    </blockquote>
+
+    <p>이 발견의 파급력을 이해하려면, 모듈식 최적화가 무엇을 가정하는지를 볼 필요가 있습니다. 전통적인 파이프라인 최적화는 각 모듈의 성능을 개별적으로 측정한 뒤, 가장 비용이 큰 모듈을 최적화하면 전체가 빨라질 것이라고 가정합니다. 마치 공장의 각 공정별로 시간을 재서 가장 느린 공정을 고치면 전체 생산량이 늘어난다고 생각하는 것과 같습니다.</p>
+
+    <p>하지만 실제 병목은 <span class="text-accent2">모듈 내부가 아니라 모듈 간 경계</span>에 있었습니다. 개별 LLM 호출 자체의 비용이 문제가 아니라, 모듈들이 서로 데이터를 전달하면서 발생하는 스키마의 누적이 병목이었다는 것입니다. 모듈을 따로따로 아무리 최적화해도, 모듈 사이의 "마찰"을 줄이지 않으면 전체는 빨라지지 않았습니다.</p>
+
+    <div class="card">
+      <div class="card-label">핵심 관찰</div>
+      <p>최적화 대상의 <strong>위치</strong>를 잘못 지정한 것입니다. 모듈 <strong>내부</strong>를 최적화하려 했지만, 실제 병목은 모듈 <strong>간 경계</strong>에 있었습니다. 이 오류 패턴이 이후 의미론 계층에서도 정확히 재현됩니다.</p>
     </div>
-    <div class="diagram-arrow">│</div>
-    <div class="diagram-row">
-      <div style="text-align:center;">
-        <span class="diagram-node mid">적응적 추론</span>
-        <div class="diagram-desc">"얼마나 계산할까?"<br>(내부 예산 할당)</div>
-      </div>
-      <div style="text-align:center;">
-        <span class="diagram-node mid2">하네스 엔지니어링</span>
-        <div class="diagram-desc">"어디서 병목을 잡을까?"<br>(실행 인프라 최적화)</div>
-      </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Section 3 -->
+  <section class="section" id="sec3">
+    <div class="section-label">계층 분석 2</div>
+    <h2>의미론 계층에서의 동일 패턴 — Bridge Evidence</h2>
+
+    <p>
+      Bridge Evidence 논문(<span class="wiki-link">Bridge Evidence: Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search</span>)은 이 동일한 오류 패턴을 검색의 의미론적 차원으로 확장합니다.
+    </p>
+
+    <h3>기존 가정: 문서 유용성은 문서-질문 쌍의 고유 속성이다</h3>
+    <p>기존 검색 최적화는 문서의 유용성을 "이 문서가 이 질문과 얼마나 관련이 있는가"라는 <span class="text-accent">정적이고 독립적인</span> 속성으로 측정합니다. RAG 파이프라인에서 검색 모듈을 평가할 때, 우리는 보통 "검색된 문서가 질문에 관련이 있는가?"를 점수화합니다. 이것이 바로 모듈 내부에서 구할 수 있는 평가 지표입니다.</p>
+
+    <h3>Bridge Evidence의 발견: 실제 기여는 추론 체인 전체의 맥락에서만 결정된다</h3>
+    <p>하지만 실제로 다단계 에이전트가 추론을 수행할 때, 문서의 기여도는 완전히 다른 방식으로 결정됩니다. 어떤 문서는 1단계에서는 쓸모없어 보이지만, 3단계의 추론을 거친 뒤에야 그 진가가 발휘됩니다. 반대로 정적 점수가 높았던 문서가 실제 추론 체인에서는 아무런 인과적 역할을 수행하지 못할 수도 있습니다.</p>
+
+    <blockquote>
+      aggregate-pipeline-serving가 "<em>병목의 위치</em>를 잘못 지정했다"면, Bridge Evidence는 "<em>유용성의 존재론적 위치</em>를 잘못 지정했다"고 말하는 것입니다.
+    </blockquote>
+
+    <p>유용성은 검색 모듈의 출력물에 내재된 속성이 아닙니다. 그것은 다단계 추론이라는 <span class="text-accent">과정 전체에 분산된 관계적 속성</span>입니다. 문서를 떼어내어 평가하는 순간, 그 관계적 속성은 이미 소실됩니다.</p>
+
+    <div class="highlight-box">
+      <div class="hl-title">🔄 번역 실패의 구조</div>
+      <p>이것은
+        <span class="wiki-link">algorithm-system-translation-gap</span>
+        과 직접 연결됩니다. "에이전트의 의미론적 의존 그래프를 OS의 체크포인트 메커니즘으로 번역할 때 발생하는 비효율" — Bridge Evidence는 이 번역 실패의 검색 버전입니다. <strong>문서의 인과적 의존 그래프를 정적 유용성 점수로 번역할 때 발생하는 정보 소실</strong>이 문제의 본질입니다.</p>
     </div>
-  </div>
+  </section>
 
-  <p>복잡도 메타인지는 두 축이 <strong>동시에 의존하는 상위 결정 노드</strong>다. 이 노드가 고장 나면 내부 축은 불필요한 계산에 예산을 할당하고, 외부 축은 불필요한 파이프라인 단계를 최적화한다. 두 축은 각각 자신의 영역에서 합리적으로 보이지만, 전체 시스템의 관점에서는 <strong>정답을 향하지 않는 최적화</strong>가 된다.</p>
+  <hr class="divider">
 
-  <p>이것은 단순한 누락이 아니라 <strong>병목 오인의 근원적 형태</strong>다. 에이전트가 병목의 원인을 '계산 부족'이나 '인프라 한계'로 잘못 짚는 것이 아니다. 더 근본적으로 <strong>'과제 자체가 단순했다는 사실'을 인지하지 못하는 것</strong>이므로, 하위 축의 어떤 최적화도 정답을 향하지 못한다.</p>
+  <!-- Section 4 -->
+  <section class="section" id="sec4">
+    <div class="section-label">통합 분석</div>
+    <h2>공통 진단: 병목 오지정(Bottleneck Misattribution)</h2>
 
-  <div class="card">
-    <span class="card-label orange">핵심 통찰</span>
-    <p>기존 적응적 추론이 "주어진 신호에 어떻게 반응할까"라면, 복잡도 메타인지는 <strong>"반응할 신호 자체를 생성할까 말까"</strong>의 문제다. 이는 질적 차이를 갖는 상위 개념으로, 신호 생성의 적정성 여부가 하위 모든 적응의 타당성을 결정한다.</p>
-  </div>
+    <p>여기서 새로운 연결이 명확해집니다. 인프라 계층의 발견과 의미론 계층의 발견은 동일한 근본적 오류의 서로 다른 현현입니다.</p>
 
-  <p>건축에 비유하자면, 적응적 추론은 "재료를 어떻게 배분할까"이고 하네스 엔지니어링은 "공사 현장의 병목을 어디서 잡을까"다. 둘 다 중요한 질문이다. 하지만 <strong>"이 부지에 건물을 지을 필요가 있는가"</strong>를 먼저 묻지 않으면, 아무리 정교한 재료 배분과 현장 관리도 허공을 향한 노력이 된다.</p>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>계층</th>
+            <th>모듈식 가정</th>
+            <th>실제 병목</th>
+            <th>오류 유형</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag-inline tag-infra">인프라</span><br>
+              <span class="wiki-link" style="font-size:0.82em;">aggregate-pipeline-serving</span></td>
+            <td>개별 LLM 호출 비용이 병목</td>
+            <td>스키마 축적<br><span class="text-accent2">(모듈 간)</span></td>
+            <td rowspan="2" style="text-align:center; vertical-align:middle;">
+              <span class="tag-inline tag-common">bottleneck-misattribution</span><br><br>
+              <span style="font-size:0.9em; color:var(--muted);">최적화 대상을<br>모듈 내부로<br>잘못 지정</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="tag-inline tag-sem">의미론</span><br>
+              <span style="font-size:0.85em; font-style:italic;">Bridge Evidence</span></td>
+            <td>개별 문서 유용성이 최적화 대상</td>
+            <td>추론 체인 내 인과적 기여<br><span class="text-accent">(과정적)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <hr>
+    <p>양 계층에서 완벽히 대칭되는 패턴입니다. 최적화할 대상을 <strong>모듈 내부</strong>로 지정했다가 <strong>모듈 간·과정적</strong> 특성으로 밝혀진 것 — 인프라에서는 레이턴시의 위치가, 의미론에서는 유용성의 위치가 동일한 방식으로 오지정되었습니다.</p>
 
-  <!-- ── 섹션 5 ── -->
-  <h2 id="sec5">패러다임 전환 — "정말 그만큼 필요한가"를 먼저 물어야 한다</h2>
+    <p>그렇다면 이것이 파이프라인 모듈성 자체의 폐기를 의미할까요? 그렇지 않습니다.</p>
 
-  <p>지금까지의 분석이 가리키는 전환은 명확하다. 현재의 최적화 패러다임은 <strong>세 번째 질문에서 시작</strong>한다.</p>
+    <div class="card">
+      <div class="card-label">정밀한 구분</div>
+      <p><strong>모듈성은 유효합니다.</strong> 시스템을 기능적 단위로 나누는 것 자체는 여전히 합리적인 설계 원칙입니다. 하지만 <span class="text-accent">모듈의 평가 기준을 모듈 내부에서 구할 수 있다는 가정</span> — 이것이 붕괴했습니다. 모듈의 진정한 성과는 그 모듈이 속한 전체 과정의 맥락에서만 측정 가능합니다.</p>
+    </div>
+  </section>
 
-  <div class="card">
-    <p style="margin-bottom:0.8em;"><strong>기존 패러다임의 질문 순서:</strong></p>
-    <ol style="padding-left:20px; margin-bottom:1.2em;">
-      <li style="margin-bottom:4px; color:#9a9590; text-decoration:line-through;">이 과제는 복잡한가? <em style="color:#b5b0aa; font-size:0.9em;">← 건너뜀</em></li>
-      <li>얼마나 계산할까? <em class="accent-blue">(적응적 추론)</em></li>
-      <li>어디서 병목을 잡을까? <em class="accent-green">(하네스 엔지니어링)</em></li>
-    </ol>
-    <p style="margin-bottom:0;"><strong>전환되어야 할 질문 순서:</strong></p>
-    <ol style="padding-left:20px; margin-bottom:0;">
-      <li style="margin-bottom:4px;"><strong>이 과제에 그만큼의 할당과 해결이 필요한가?</strong> <em style="color:#c2703e; font-size:0.9em;">← 복잡도 메타인지</em></li>
-      <li style="margin-bottom:4px;">필요하다면, 얼마나 계산할까?</li>
-      <li>필요하다면, 어디서 병목을 잡을까?</li>
-    </ol>
-  </div>
+  <hr class="divider">
 
-  <p>이 전환은 단순히 '한 단계를 추가'하는 것이 아니다. <strong>전체 최적화의 방향성을 뒤집는 것</strong>이다. 기존 패러다임에서 최적화는 "더 적은 자원으로 같은 결과를 내는 것"을 목표로 한다. 하지만 복잡도 메타인지가 선행되면 최적화는 "이 과제에 맞는 <strong>적정 수준의 결과</strong>를 내는 것"으로 목표가 바뀐다. '적정'의 기준이 과제의 실제 복잡도에서 오는 것이다.</p>
+  <!-- Section 5 -->
+  <section class="section" id="sec5">
+    <div class="section-label">대안 경로</div>
+    <h2>패러다임 전환 — 모듈 내부에서 과정 전체로</h2>
 
-  <p>실제로 구현한다면 어떤 모습일까? 에이전트의 추론 파이프라인 최상단에 <strong>복잡도 추정 게이트(complexity estimation gate)</strong>를 두는 것을 상상할 수 있다. 이 게이트는 과제를 수행하기 전에 "이것은 단순 편집인가, 다단계 추론인가, 아니면 열린 탐색인가?"를 추정하고, 추정 결과에 따라 하위 파이프라인의 구성 자체를 달리한다.</p>
+    <p>그렇다면 올바른 방향은 무엇일까요? Wiki의 지식 구조가 암시하는 대안적 경로들을 살펴보겠습니다.</p>
 
-  <blockquote>
-    복잡도 메타인지가 선행되지 않은 상태에서 두 축의 최적화는 <strong>정교하게 설계된 무용성(精巧無用)</strong>에 가깝다. 아름다운 설계도, 훌륭한 재료, 능숙한 인부가 모여 있지만, 지어야 할 건물의 규모를 모르는 공사 현장과 다르지 않다.
-    <cite>— 본 분석의 핵심 결론</cite>
-  </blockquote>
+    <h3>인과적 필요성에 기반한 검색</h3>
+    <p>
+      <span class="wiki-link">causal-rag</span>는 정적 관련성이 아닌 인과적 필요성에 기반한 검색 접근입니다. 문서의 "필요성"을 현재 추론 상태의 인과 그래프 내에서 평가합니다. "이 문서가 질문과 관련이 있는가?"가 아니라 <span class="text-accent">"현재 추론 체인에서 이 문서가 없으면 어떤 인과 연결이 끊어지는가?"</span>를 묻는 것입니다.
+    </p>
 
-  <p>물론 이 게이트 자체가 완벽할 필요는 없다. 대략적인 삼분류—단순/보통/복잡—만으로도 하위 최적화 축의 효율은 극적으로 달라진다. 단순 분류로 30%의 과제를 최소 경로로 보내면, 그 자원을 복잡한 과제에 재할당할 수 있기 때문이다. <strong>불필요한 정밀함을 피하는 것만으로도 전체 시스템의 효율은 비선형적으로 개선</strong>된다.</p>
+    <h3>닫힌 루프 평가</h3>
+    <p>
+      <span class="wiki-link">closed-loop-evaluation</span>는 개별 컴포넌트를 파이프라인 밖에서 평가하는 것의 한계를 구조적으로 회피합니다. 컴포넌트가 파이프라인 내에 있을 때만 측정 가능한 속성 — 즉 인과적 기여 — 를 포착할 수 있습니다. 악보를 따로 떼어내어 평가하지 않고, 실제 연주 속에서 평가하는 것입니다.
+    </p>
 
-  <p>결국, AI 에이전트 연구가 다음 단계로 나아가기 위해서는 '더 빠르게, 더 효율적으로'라는 질문에 머물지 않고 <strong>'정말 그만큼 필요한가'라는 질문을 체계화</strong>해야 한다. 그것이 편의점까지 고속도로를 까는 역설을 끊어내는 유일한 경로다.</p>
+    <h3>벤치마크 간극의 인식</h3>
+    <p>
+      <span class="wiki-link">benchmark-specification-gap</span>이 지적하듯, 현재 검색 벤치마크가 측정하는 것(정적 유용성)과 실제로 중요한 것(인과적 기여) 사이에는 구조적 간극이 있습니다. Bridge Evidence는 이 간극의 구체적 실증 사례입니다. 벤치마크를 고치지 않으면 최적화 방향도 바뀌지 않습니다.
+    </p>
 
-</article>
+    <h3>상관관계와 인과적 필요성의 분리</h3>
+    <p>
+      <span class="wiki-link">causal-necessity-vs-correlation</span>이 명확히 하는 것처럼, 정적 유용성 점수가 포착하는 것은 "질문과 문서 간의 상관관계"이고, Bridge Evidence가 요구하는 것은 "추론 체인 내에서의 인과적 필요성"입니다. 이 둘의 차이가 곧 최적화 방향의 차이입니다.
+    </p>
 
-<footer>
-  Galaxy Tab Public · Wiki Analysis Series
-</footer>
+    <div class="card">
+      <div class="card-label">아키텍처적 방향</div>
+      <p>
+        <span class="wiki-link">adema</span>가 "지식 상태 오케스트레이션 아키텍처"라는 점에서 주목할 만합니다. 지식 상태를 오케스트레이션한다는 것은, 검색을 독립 모듈이 아니라 <span class="text-accent3">에이전트의 인지 상태에 의존적인 과정</span>으로 취급한다는 뜻입니다. 이것은 Bridge Evidence의 발견과 정확히 정렬되는 아키텍처적 방향입니다.
+      </p>
+    </div>
+
+    <div class="conclusion-block">
+      <h3 style="margin-top:0;">결론: 평가의 위치를 옮겨야 한다</h3>
+      <p>파이프라인 모듈성을 전제한 검색 최적화가 "근본적으로 잘못된" 것은 아닙니다. 모듈식 구조는 여전히 유효한 엔지니어링 원칙입니다.</p>
+      <p>하지만 <span class="text-accent">모듈의 평가 지표를 모듈 경계 내에서 구할 수 있다는 가정</span>은 인프라 계층과 의미론 계층에서 각각 독립적으로 파괴되었습니다. 두 발견은 병목 오지정(bottleneck-misattribution)이라는 공통 진단 아래 통합됩니다.</p>
+      <p>필요한 것은 패러다임 전환입니다. <strong>"이 모듈이 얼마나 좋은가?"에서 "이 모듈이 전체 과정에서 어떤 인과적 역할을 수행하는가?"로</strong> 평가의 축을 이동해야 합니다. 정적 유용성에서 인과적 필요성으로, 모듈 내부에서 과정 전체로, 상관관계에서 인과성으로 — 이 세 가지 이동이 검색 최적화의 다음 패러다임을 구성할 것입니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <div class="footer-meta">
+      <span>📄 대상 논문: Bridge Evidence (Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search)</span>
+    </div>
+    <div class="footer-meta">
+      <span>🔗 연결 지식: aggregate-pipeline-serving · ADEMA · causal-rag · closed-loop-evaluation · bottleneck-misattribution · algorithm-system-translation-gap · benchmark-specification-gap · causal-necessity-vs-correlation</span>
+    </div>
+    <p style="margin-top:16px; margin-bottom:0;">Wiki Query 기반 심층 분석 · 자동 생성됨</p>
+  </footer>
+
+</div>
 
 </body>
 </html>
