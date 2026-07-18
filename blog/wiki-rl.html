@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신호를 찾는가, 신호를 쪼개는가 — 크레딧 할당의 진짜 문제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  /* 제목 */
+  .article-header {
+    padding: 48px 0 36px;
+    text-align: left;
+  }
+
+  .article-header h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(26px, 5.5vw, 44px);
+    font-weight: 800;
+    line-height: 1.3;
+    color: #2c2825;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .article-meta {
+    font-size: clamp(12px, 1.8vw, 14px);
+    color: #8a8279;
+    font-weight: 400;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .article-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(194,112,62,0.08);
+    color: #c2703e;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  /* 섹션 제목 */
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(20px, 4vw, 30px);
+    font-weight: 700;
+    color: #2c2825;
+    margin: 56px 0 20px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    position: relative;
+  }
+
+  h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #c2703e;
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+
+  h3 {
+    font-size: clamp(16px, 2.8vw, 20px);
+    font-weight: 600;
+    color: #2c2825;
+    margin: 36px 0 12px;
+    line-height: 1.4;
+  }
+
+  /* 본문 */
+  p {
+    margin-bottom: 20px;
+    color: #3d3833;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #2c2825;
+  }
+
+  .accent-orange { color: #c2703e; font-weight: 600; }
+  .accent-blue { color: #5b7c99; font-weight: 600; }
+  .accent-green { color: #6b9e7a; font-weight: 600; }
+
+  /* 인용구 */
+  blockquote {
+    border-left: 4px solid #c2703e;
+    max-width: 800px;
+    margin: 28px auto;
+    padding: 20px 24px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(14px, 2.2vw, 17px);
+    line-height: 1.8;
+    color: #4a443e;
+  }
+
+  blockquote p {
+    margin-bottom: 0;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #8a8279;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* 카드 */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+
+  .card h3 {
+    margin-top: 0;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* 비유 박스 */
+  .analogy-box {
+    background: rgba(91,124,153,0.06);
+    border: 1px solid rgba(91,124,153,0.15);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 28px 0;
+  }
+
+  .analogy-box .analogy-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #5b7c99;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .analogy-box p {
+    color: #3d3833;
+    margin-bottom: 10px;
+  }
+
+  .analogy-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* 표 */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 28px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 2vw, 15px);
+    min-width: 480px;
+  }
+
+  thead th {
+    background: rgba(194,112,62,0.08);
+    color: #2c2825;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+    color: #3d3833;
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: rgba(194,112,62,0.03);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background: rgba(44,40,37,0.06);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 0.88em;
+    color: #c2703e;
+  }
+
+  /* 3축 다이어그램 */
+  .axis-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .axis-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 12px;
+    box-shadow: 0 1px 6px rgba(44,40,37,0.04);
+  }
+
+  .axis-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    color: #faf9f7;
+  }
+
+  .axis-number.n1 { background: #c2703e; }
+  .axis-number.n2 { background: #5b7c99; }
+  .axis-number.n3 { background: #6b9e7a; }
+
+  .axis-content h4 {
+    font-size: clamp(14px, 2.4vw, 17px);
+    font-weight: 600;
+    color: #2c2825;
+    margin-bottom: 4px;
+  }
+
+  .axis-content p {
+    font-size: clamp(13px, 2vw, 15px);
+    color: #5a544d;
+    margin-bottom: 0;
+    line-height: 1.7;
+  }
+
+  /* 구분선 */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
+    margin: 48px 0;
+  }
+
+  /* 결론 하이라이트 */
+  .conclusion-highlight {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(91,124,153,0.06));
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin: 32px 0;
+    text-align: center;
+  }
+
+  .conclusion-highlight p {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(16px, 3vw, 21px);
+    font-weight: 600;
+    color: #2c2825;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* 위키 링크 스타일 */
+  .wiki-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.88em;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(91,124,153,0.08);
+    color: #5b7c99;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .wiki-link:hover {
+    background: rgba(91,124,153,0.14);
+  }
+
+  .wiki-link::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5b7c99;
+    flex-shrink: 0;
+  }
+
+  /* 목차 */
+  .toc {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 32px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05);
+  }
+
+  .toc-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8a8279;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    padding: 0;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 8px;
+  }
+
+  .toc li:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc a {
+    color: #3d3833;
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    transition: color 0.2s;
+    font-weight: 400;
+  }
+
+  .toc li:last-child a {
+    border-bottom: none;
+  }
+
+  .toc a:hover {
+    color: #c2703e;
+  }
+
+  .toc a::before {
+    content: counter(toc);
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(194,112,62,0.08);
+    color: #c2703e;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 푸터 */
+  .article-footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    font-size: 13px;
+    color: #8a8279;
+    line-height: 1.7;
+  }
+
+  /* 스크롤바 */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(44,40,37,0.12); border-radius: 3px; }
+
+  /* 반응형 */
+  @media (max-width: 640px) {
+    article { padding: 12px 16px 60px; }
+    .article-header { padding: 32px 0 24px; }
+    .card, .analogy-box, .toc, .conclusion-highlight { padding: 18px 18px; }
+    .axis-item { padding: 14px 16px; }
+    blockquote { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article>
+  <header class="article-header">
+    <h1>신호를 찾는가, 신호를 쪼개는가<br>— 크레딧 할당의 진짜 문제는 어디에 있는가</h1>
+    <div class="article-meta">
+      <span class="tag">Agent RL</span>
+      <span class="tag">Credit Assignment</span>
+      <span class="tag">TRACE</span>
+      <span>2025.07.11</span>
+    </div>
+  </header>
+
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#sec1">요리사와 평론가: 왜 우리는 '정밀한 신호'에 집착했는가</a></li>
+      <li><a href="#sec2">TRACE가 던지는 질문: 분해가 정답인가</a></li>
+      <li><a href="#sec3">분해만으로는 부족하다 — 세 가지 한계가 말하는 것</a></li>
+      <li><a href="#sec4">Wiki 지식 구조에서 드러난 새로운 연결들</a></li>
+      <li><a href="#sec5">패러다임 전환: '신호 정밀도'에서 '신호 분해 역학'으로</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <h2 id="sec1">요리사와 평론가: 왜 우리는 '정밀한 신호'에 집착했는가</h2>
+
+  <div class="analogy-box">
+    <div class="analogy-label">비유</div>
+    <p>긴 코스 요리를 한 팀의 요리사가 협력해서 완성했다고 상상해 보십시오. 손님은 최종 요리에 대해 "맛있다" 또는 "맛없다"라고만 말합니다. 이때 주방장은 누가 공을 셋 넣었는지 알 수 없습니다. 재료 손질은 훌륭했는데 소스를 망쳤을 수도 있고, 반대일 수도 있습니다.</p>
+    <p>전통적 접근은 <strong>더 정밀한 평론가를 고용</strong>하는 것이었습니다. 매 단계마다 미식 평론가가 와서 "이 재료 손질은 8점, 이 볶기는 3점"이라고 평가해 주면, 주방장은 누구에게 칭찬과 질책을 줄지 압니다. 하지만 현실에서 이런 평론가를 매번 데려오는 건 비용도, 현실성도 없습니다.</p>
+  </div>
+
+  <p>에이전트 강화학습(Agent RL)에서 크레딧 할당(Credit Assignment) 문제는 이 요리 주방과 정확히 같은 구조를 가집니다. 멀티턴 에이전트가 수십 번의 도구 호출과 추론 단계를 거쳐 최종 결과물을 만들어내는데, 우리가 얻는 피드백은 대개 "성공" 또는 "실패"라는 극도로 거친 신호뿐입니다.</p>
+
+  <p>Wiki의 기존 분석 프레임은 이 문제를 <strong class="accent-orange">"신호 정밀도(signal precision)"</strong> 문제로 규정했습니다. 즉, 더 정밀한 보상 신호를 <em>어떻게 설계하고 확보할 것인가</em>가 핵심 난제라는 관점입니다. 인간 피드백(RLHF), 환경 내 보상 함수, 과정별 평가 모델 등은 모두 이 "더 좋은 신호를 얻자"는 전략의 산물입니다.</p>
+
+  <p>그런데 TRACE 논문이 이 프레임에 균열을 냅니다.</p>
+
+  <!-- 섹션 2 -->
+  <h2 id="sec2">TRACE가 던지는 질문: 분해가 정답인가</h2>
+
+  <p>TRACE(<em>Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents</em>)는 외부에서 정밀한 신호를 주입하지 않고도, <strong>기존의 거친 결과 보상(outcome reward)을 내부적으로 분해</strong>하여 턴 수준의 크레딧을 추정하는 방법론을 제시합니다.</p>
+
+  <blockquote>
+    <p>"더 좋은 신호를 얻는 것이 아니라, 거친 신호를 어떻게 정밀하게 분해할 것인가"로 문제를 재정의할 수 있는가?</p>
+  </blockquote>
+
+  <p>이 질문은 강력한 통찰을 담고 있습니다. 요리 비유로 돌아가면, 평론가를 더 많이 고용하는 대신 <strong>"손님의 최종 평가(거친 신호)를 분석해서, 각 요리사의 기여도를 역추적하는 통계적 방법"</strong>을 개발하겠다는 것입니다. TRACE는 바로 이 접근 — 결과 보상만으로 턴 수준 크레딧을 추정하는 분해 방법론 — 을 실제로 구현했습니다.</p>
+
+  <div class="card">
+    <h3>TRACE의 핵심 아이디어</h3>
+    <p>멀티턴 에이전트가 최종 결과물을 내기까지의 긴 도구 상호작용 시퀀스에서, 최종 결과에 대한 보상만을 입력으로 받아 각 턴의 기여도를 추정합니다. 별도의 인간 피드백이나 환경 내 보상 함수를 외부에서 주입하지 않고도, 기존에 존재하는 거친 신호를 내부적으로 분해하여 정밀도를 확보합니다.</p>
+  </div>
+
+  <p>이 접근이 시사하는 바는 명확합니다. 크레딧 할당의 핵심 난제를 "신호 획득"에서 "신호 분해"로 이동시키면, 외부 평가 인프라에 의존하지 않는 더 범용적인 해법의 가능성이 열립니다. 하지만 이 재정의가 <strong>완전한</strong> 것일까요?</p>
+
+  <!-- 섹션 3 -->
+  <h2 id="sec3">분해만으로는 부족하다 — 세 가지 한계가 말하는 것</h2>
+
+  <p>결론부터 말하면, "거친 신호를 정밀하게 분해할 것"이라는 재정의는 <strong class="accent-orange">필요 조건</strong>을 올바르게 식별했지만 <strong class="accent-blue">충분 조건</strong>은 아닙니다. Wiki의 지식 구조를 TRACE에 매핑해 보면, 분해만으로 덮을 수 없는 세 가지 차원이 드러납니다.</p>
+
+  <h3>첫째, 분해의 입자도(granularity)를 누가 결정하는가</h3>
+
+  <p>TRACE는 턴 수준 분해를 제시합니다. 하지만 <span class="wiki-link">adaptive-credit-granularity</span> 엔티티가 시사하듯, 모든 태스크에서 턴 단위가 최적의 입자도인지는 보장되지 않습니다.</p>
+
+  <div class="analogy-box">
+    <div class="analogy-label">비유</div>
+    <p>10명의 요리사가 5개의 요리 스테이션에서 일할 때, "스테이션별"로 평가하는 것과 "개인별"로 평가하는 것은 다른 문제입니다. 스테이션별 평가가 항상 최선인지는 요리의 복잡도에 따라 달라집니다. 단순한 샐러드 담당은 개인별 평가가 필요 없고, 복잡한 소스 담당은 두 사람의 기여를 따로 봐야 할 수 있습니다.</p>
+  </div>
+
+  <p>즉, 크레딧 할당의 난제는 단순히 "분해하느냐 마느냐"가 아니라 <strong>"어느 입자도로 분해할 것인가를 상황에 맞게 적응시키느냐"</strong>라는 추가 차원이 존재합니다. 턴 수준 분해는 고정된 입자도이며, 이를 동적으로 조절하는 메커니즘이 필요합니다.</p>
+
+  <h3>둘째, 분해는 정보를 '재분배'할 뿐 '창조'하지 못한다</h3>
+
+  <p><span class="wiki-link">ceiling-performance-problem</span>과 <span class="wiki-link">co-failure-ceiling</span>이 암시하는 것은, 결과 보상이 너무 거칠 경우 분해 방법론이 아무리 정교해도 도달할 수 있는 성능 상한이 구조적으로 존재한다는 점입니다.</p>
+
+  <div class="card">
+    <h3>정보론적 천장</h3>
+    <p>결과 보상이 "성공/실패"의 바이너리 신호라면, 이 신호가 담고 있는 정보량은 최대 1비트입니다. 20턴의 시퀀스에서 각 턴에 정밀한 크레딧을 할당하려면 20개의 실수값이 필요한데, 1비트를 아무리 정교하게 분해해도 20개의 실수값을 무오차로 복원할 수는 없습니다. 분해는 정보를 창조하는 것이 아니라 <strong>기존 정보의 재분배</strong>일 뿐입니다.</p>
+  </div>
+
+  <p>특히 멀티턴 파이프라인에서 <span class="wiki-link">co-failure-rate</span>이 높을수록 — 즉 여러 턴이 동시에 실패할 확률이 높을수록 — 결과 보상의 분해 난이도는 구조적으로 상승합니다. "모두가 망했을 때, 누구의 책임이 더 큰가?"를 바이너리 신호만으로 판별하는 것은 근본적으로 정보가 부족합니다.</p>
+
+  <h3>셋째, 신호 획득과 분해는 배타적이지 않다</h3>
+
+  <p><span class="wiki-link">belief-drift-as-reward-signal</span> 엔티티는 결과 보상 외에 에이전트의 내적 신념 상태 변화 자체를 보상 신호로 활용하는 접근을 제시합니다. 이는 "더 좋은 신호를 얻는 것"과 "거친 신호를 분해하는 것"이 <strong>계층적으로 결합</strong>되어야 함을 시사합니다.</p>
+
+  <p>요리 비유로 말하면, 손님의 최종 평가(결과 보상)를 분해하는 동시에, 각 요리사가 자신의 작업 중 <strong>"아, 이건 잘못된 방향이다"라고 느끼는 순간(내적 신념 변화)</strong>도 보상 신호로 포착하겠다는 것입니다. 두 신호가 서로를 보완할 때 비로소 천장을 뛰어넘을 수 있습니다.</p>
+
+  <!-- 섹션 4 -->
+  <h2 id="sec4">Wiki 지식 구조에서 드러난 새로운 연결들</h2>
+
+  <p>TRACE의 접근법을 Wiki의 기존 엔티티들에 매핑하면서, 이전에는 보이지 않았던 연결들이 새롭게 드러납니다.</p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>연결</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong class="accent-orange">TRACE</strong> ↔ <span class="wiki-link">adaptive-credit-granularity</span></td>
+          <td>턴 수준 분해는 고정된 입자도이며, 이를 적응적 입자도로 확장하는 것이 자연스러운 다음 단계입니다. 태스크 복잡도에 따라 턴보다 굵게, 혹은 더 잘게 분해하는 동적 조절이 필요합니다.</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-orange">TRACE</strong> ↔ <span class="wiki-link">ceiling-performance-problem</span></td>
+          <td>결과 보상 분해의 정보론적 한계를 천장 문제로 형식화(formalize)할 수 있습니다. 원 신호의 정보량이 분해 가능한 정밀도의 상한을 구조적으로 결정합니다.</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-orange">TRACE</strong> ↔ <span class="wiki-link">co-failure-rate</span></td>
+          <td>멀티턴 파이프라인에서 공동 실패율이 높을수록 결과 보상의 분해 난이도가 구조적으로 상승합니다. 실패가 연쇄적일수록 개별 턴의 책임을 분리하기 더 어려워집니다.</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-orange">TRACE</strong> ↔ <span class="wiki-link">agent-loop-as-computation</span></td>
+          <td>에이전트 루프를 연산 그래프로 보면, 크레딧 할당은 그래프 상의 역전파와 동치입니다. TRACE는 스파스한 최종 노드 보상을 조밀한 중간 노드 보상으로 확장하는 기법으로 재해석 가능합니다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>특히 네 번째 연결이 흥미롭습니다. 에이전트 루프를 연산 그래프로 모델링하면, TRACE의 분해는 <strong>딥러닝에서의 역전파(backpropagation)와 구조적으로 동일</strong>합니다. 최종 손실(결과 보상)을 중간 층(턴)의 기여도로 분해하는 과정이니까요. 이 관점에서 보면, 크레딧 할당 연구는 "비미분가능한离散 연산 그래프에서 어떻게 역전파를 수행할 것인가"라는 더 근본적인 문제의 일환이라고 볼 수 있습니다.</p>
+
+  <hr class="divider">
+
+  <!-- 섹션 5 -->
+  <h2 id="sec5">패러다임 전환: '신호 정밀도'에서 '신호 분해 역학'으로</h2>
+
+  <p>지금까지의 분석을 종합하면, 크레딧 할당의 핵심 난제를 단일 축으로 재정의하는 것은 불가능합니다. 정확한 재정의는 <strong>세 개의 축</strong>으로 구성되어야 합니다.</p>
+
+  <div class="axis-diagram">
+    <div class="axis-item">
+      <div class="axis-number n1">1</div>
+      <div class="axis-content">
+        <h4>거친 신호를 정밀하게 분해할 것</h4>
+        <p>TRACE가 기여한 축입니다. 외부 정밀 신호에 의존하지 않고, 결과 보상을 내부적으로 분해하여 턴 수준 크레딧을 추정합니다. 이는 필요 조건이지만 충분 조건은 아닙니다.</p>
+      </div>
+    </div>
+    <div class="axis-item">
+      <div class="axis-number n2">2</div>
+      <div class="axis-content">
+        <h4>분해의 입자도를 적응적으로 조절할 것</h4>
+        <p><span class="wiki-link">adaptive-credit-granularity</span>가 제시하는 축입니다. 턴 단위가 항상 최적은 아닙니다. 태스크의 복잡도, 파이프라인의 길이, 공동 실패율에 따라 분해의 입자도를 동적으로 결정하는 메커니즘이 필요합니다.</p>
+      </div>
+    </div>
+    <div class="axis-item">
+      <div class="axis-number n3">3</div>
+      <div class="axis-content">
+        <h4>분해 한계를 보완하기 위해 내적 상태 기반 보상을 보조적으로 획득할 것</h4>
+        <p><span class="wiki-link">belief-drift-as-reward-signal</span>이 제시하는 축입니다. 분해만으로 도달할 수 없는 정보론적 천장을 극복하기 위해, 에이전트의 내적 신념 변화 등 보조적 신호를 획득하여 분해의 정보 기반을 보강합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion-highlight">
+    <p>크레딧 할당의 핵심 난제는<br>"더 정밀한 신호를 얻는 것"도 아니고,<br>"거친 신호를 정밀하게 분해하는 것"도 아닙니다.<br><br>"신호를 분해하고, 그 분해의 입자도를 적응시키며,<br>분해의 한계를 보완할 보조 신호를 계층적으로 결합하는 것"입니다.</p>
+  </div>
+
+  <p>TRACE는 첫 번째 축에서 중요한 기여를 했습니다. 하지만 Wiki 지식 구조가 보여주듯, 두 번째 축(<span class="wiki-link">adaptive-credit-granularity</span>)과 세 번째 축(<span class="wiki-link">belief-drift-as-reward-signal</span>)까지 아우러야 크레딧 할당 문제가 완전히 재정의됩니다.</p>
+
+  <p>이 세 축의 관계를 다시 요리 비유로 정리하면 이렇습니다. 손님의 최종 평가를 분석해서 각 요리사의 기여도를 추정하고(분해), 요리의 복잡도에 따라 평가 단위를 스테이션별에서 개인별로 조절하며(적응적 입자도), 동시에 각 요리사가 작업 중 느끼는 "이건 잘못되었다"는 직관도 수집하여(내적 상태 보상), 이 세 가지를 종합해야 비로소 공정하고 정밀한 평가가 가능해집니다.</p>
+
+  <blockquote>
+    <p>기존 패러다임은 크레딧 할당을 <strong>"신호 정밀도(signal precision)"</strong>라는 단일 차원의 문제로 보았습니다. 새로운 패러다임은 이를 <strong>"신호 분해 역학(signal decomposition dynamics)"</strong>이라는 다차원 문제로 전환해야 합니다. 분해, 적응, 보완 — 이 세 역학이 상호작용하는 시스템으로 크레딧 할당을 재설계할 때, 비로소 긴 호라이즌 에이전트의 학습 문제가 본질적으로 해결될 것입니다.</p>
+    <cite>— Wiki 지식 구조 분석을 기반으로 도출된 패러다임 전환 제안</cite>
+  </blockquote>
+
+  <p>TRACE가 Wiki 엔티티로 아직 등록되지 않은 점도 주목할 만합니다. 이 논문이 제시하는 턴 수준 크레딧 추정은 <code>turn-level-credit-estimation</code>이라는 신규 엔티티로 등록되어, <span class="wiki-link">adaptive-credit-granularity</span> 및 기존 크레딧 할당 관련 엔티티들과 명시적으로 연결될 필요가 있습니다. 지식 그래프의 완성도가 곧 분석의 깊이를 결정합니다.</p>
+
+  <footer class="article-footer">
+    <p>본 분석은 Wiki 지식 구조 내의 엔티티 관계를 기반으로 작성되었습니다. 주요 참조 엔티티: <span class="wiki-link">adaptive-credit-granularity</span> <span class="wiki-link">ceiling-performance-problem</span> <span class="wiki-link">co-failure-ceiling</span> <span class="wiki-link">co-failure-rate</span> <span class="wiki-link">belief-drift-as-reward-signal</span> <span class="wiki-link">agent-loop-as-computation</span></p>
+    <p style="margin-top: 8px;">대상 논문: TRACE — Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents</p>
+  </footer>
+</article>
+
+</body>
+</html>
