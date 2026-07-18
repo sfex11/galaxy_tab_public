@@ -2560,3 +2560,5 @@
 ## [2026-07-18 08:32] ingest | Plover: Steering GUI Agents through Plan-Centric Interaction
 
 ## [2026-07-18 08:32] ingest | Symbal: Detecting Systematic Misalignments in Model-Generated Captions
+
+## [2026-07-19 02:04] llm-ingest | 0편 분석, 엔티티 355개, 개념 1320개
