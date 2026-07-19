@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/uniform-guarantee-failure.md|uniform guarantee failure]]
+
+---
+**관련**: [[concepts/schema-speed-perception-paradox.md|schema speed perception paradox]]

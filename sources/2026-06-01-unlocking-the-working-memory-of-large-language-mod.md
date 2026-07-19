@@ -187,3 +187,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-detection-computation-gap.md|failure detection computation gap]]
+
+---
+**관련**: [[concepts/memory-as-alignment-participant.md|memory as alignment participant]]

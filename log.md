@@ -2584,3 +2584,7 @@
 ## [2026-07-19 08:36] ingest | Plover: Steering GUI Agents through Plan-Centric Interaction
 
 ## [2026-07-19 08:36] ingest | Symbal: Detecting Systematic Misalignments in Model-Generated Captions
+
+## [2026-07-19 17:00] lint | Wiki 건전성 체크
+- Issues: 2642개
+- Orphans: 788, Missing: 1854, Contradictions: 0

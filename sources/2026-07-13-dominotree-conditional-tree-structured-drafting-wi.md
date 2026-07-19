@@ -34,3 +34,6 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/failure-as-causal-data.md|failure as causal data]]

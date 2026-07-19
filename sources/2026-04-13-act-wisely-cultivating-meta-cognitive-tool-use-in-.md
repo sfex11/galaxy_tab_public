@@ -76,3 +76,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/distributed-cognitive-constitution.md|distributed cognitive constitution]]
+
+---
+**관련**: [[concepts/infrastructure-cognitive-attribution-bias.md|infrastructure cognitive attribution bias]]

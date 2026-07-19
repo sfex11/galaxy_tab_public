@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/repository-operational-knowledge.md|repository operational knowledge]]
+
+---
+**관련**: [[concepts/goal-fixation-meta-decision.md|goal fixation meta decision]]

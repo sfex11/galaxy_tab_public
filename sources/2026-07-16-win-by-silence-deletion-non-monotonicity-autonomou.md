@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-16-do-ai-agents-know-when-a-task-is-simple-toward-com]]: 둘 다 LLM 에이전트의 계획 및 실행 과정에서 나타나는 인지적 편향을 다루며, 하나는 과도한 복잡도 추정 문제를, 다른 하나는 계획 평가의 비단조성 문제를 분석함.
+
+---
+**관련**: [[concepts/deletion-non-monotonicity.md|deletion non monotonicity]]

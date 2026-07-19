@@ -100,3 +100,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/turn-driven-drift.md|turn driven drift]]
+
+---
+**관련**: [[concepts/real-time-threshold-detection.md|real time threshold detection]]

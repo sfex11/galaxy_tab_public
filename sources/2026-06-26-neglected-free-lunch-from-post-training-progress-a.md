@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-06-25-openthoughts-agent-data-recipes-for-agentic-models]]: 둘 다 에이전트 모델의 성능을 높이기 위한 사후 학습(post-training) 접근을 다루며, 하나는 학습 데이터 구축 레시피를, 다른 하나는 과정 보상 모델 구축을 제안함.
 - → [[sources/2026-06-26-why-multi-step-tool-use-reinforcement-learning-col]]: 둘 다 에이전트 모델의 학습 과정에서 발생하는 근본적 문제를 진단하고 해결책을 제시하며, 각각 과정 보상 모델의 구축 어려움과 다단계 도구 사용 RL의 붕괴를 다룸.
+
+---
+**관련**: [[concepts/ceiling-incentive-feedback-loop.md|ceiling incentive feedback loop]]
