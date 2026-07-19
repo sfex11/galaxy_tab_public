@@ -273,3 +273,7 @@ _자동 생성됨_
 - [[sources/2026-07-18-searchos-v1-towards-robust-open-domain-information.md]]
 
 - [[sources/2026-07-18-autosynthesis-an-agentic-system-for-automated-meta.md]]
+
+- [[sources/2026-07-19-searchos-v1-towards-robust-open-domain-information.md]]
+
+- [[sources/2026-07-19-autosynthesis-an-agentic-system-for-automated-meta.md]]

@@ -1377,3 +1377,16 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-07-18-plover-steering-gui-agents-through-plan-centric-in.md]] - Plover: Steering GUI Agents through Plan-Centric Interaction
 - [[sources/2026-07-18-symbal-detecting-systematic-misalignments-in-model.md]] - Symbal: Detecting Systematic Misalignments in Model-Generated Captions
+- [[sources/2026-07-19-partition-prompt-aggregate-statistical-self-consis.md]] - Partition, Prompt, Aggregate: Statistical Self-Consistency in Language Models
+- [[sources/2026-07-19-beyond-success-rate-cost-aware-evaluation-of-offen.md]] - Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-19-searchos-v1-towards-robust-open-domain-information.md]] - SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration
+- [[sources/2026-07-19-tellme-why-aint-nothing-but-a-jam-exploratory-caus.md]] - teLLMe Why (Ain't Nothing but a Jam): Exploratory Causal Analysis of Urban Driving Data
+- [[sources/2026-07-19-bridge-evidence-static-retrieval-utility-does-not-.md]] - Bridge Evidence: Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-19-autosynthesis-an-agentic-system-for-automated-meta.md]] - AutoSynthesis: An agentic system for automated meta-analysis
+- [[sources/2026-07-19-in-place-tokenizer-expansion-for-pre-trained-llms.md]] - In-Place Tokenizer Expansion for Pre-trained LLMs
+- [[sources/2026-07-19-when-words-are-safe-but-actions-kill-probing-physi.md]] - When Words Are Safe But Actions Kill: Probing Physical Danger Beyond Text Safety in Hidden-State Risk Space
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-19-plover-steering-gui-agents-through-plan-centric-in.md]] - Plover: Steering GUI Agents through Plan-Centric Interaction
+- [[sources/2026-07-19-symbal-detecting-systematic-misalignments-in-model.md]] - Symbal: Detecting Systematic Misalignments in Model-Generated Captions
