@@ -155,3 +155,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evaluation-execution-power-asymmetry.md|evaluation execution power asymmetry]]
+
+---
+**관련**: [[concepts/routing-safety-evaluation-deployment-gap.md|routing safety evaluation deployment gap]]
+
+---
+**관련**: [[concepts/structural-trajectory-analysis.md|structural trajectory analysis]]
+
+---
+**관련**: [[concepts/evaluation-attractor-spiral.md|evaluation attractor spiral]]

@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rule-structure-certification.md|rule structure certification]]
+
+---
+**관련**: [[concepts/input-representation-structural-distortion.md|input representation structural distortion]]

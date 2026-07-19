@@ -194,3 +194,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/repository-level-emergent-hazard.md|repository level emergent hazard]]
+
+---
+**관련**: [[concepts/memory-semantic-flattening.md|memory semantic flattening]]
+
+---
+**관련**: [[concepts/ecosystem-level-adaptation-subject.md|ecosystem level adaptation subject]]

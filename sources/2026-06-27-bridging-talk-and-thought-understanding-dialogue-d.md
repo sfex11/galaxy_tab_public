@@ -76,3 +76,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]
+
+---
+**관련**: [[concepts/cross-layer-bottleneck-isomorphism.md|cross layer bottleneck isomorphism]]
+
+---
+**관련**: [[concepts/heterogeneous-resource-price-mapping-problem.md|heterogeneous resource price mapping problem]]
+
+---
+**관련**: [[concepts/triaxial-credit-assignment-framework.md|triaxial credit assignment framework]]
+
+---
+**관련**: [[concepts/termination-guarantee-problem.md|termination guarantee problem]]

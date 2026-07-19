@@ -47,3 +47,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/schema-speed-perception-paradox.md|schema speed perception paradox]]
+
+---
+**관련**: [[concepts/episode-length-adaptation.md|episode length adaptation]]
+
+---
+**관련**: [[concepts/visual-perception-tool-selection-gap.md|visual perception tool selection gap]]

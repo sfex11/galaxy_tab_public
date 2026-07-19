@@ -58,3 +58,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/independent-effect-tracking-problem.md|independent effect tracking problem]]
+
+---
+**관련**: [[concepts/recursive-evidence-replay.md|recursive evidence replay]]
+
+---
+**관련**: [[concepts/cooperation-as-control-mechanism.md|cooperation as control mechanism]]
+
+---
+**관련**: [[concepts/artifact-experience-paradigm-divergence.md|artifact experience paradigm divergence]]
+
+---
+**관련**: [[concepts/dual-layer-governance-control.md|dual layer governance control]]

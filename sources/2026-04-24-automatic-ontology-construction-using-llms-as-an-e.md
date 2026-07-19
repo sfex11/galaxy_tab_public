@@ -147,3 +147,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/infrastructure-layer-routing-defense.md|infrastructure layer routing defense]]
+
+---
+**관련**: [[concepts/cyber-physical-ontology-gap.md|cyber physical ontology gap]]

@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inline-external-safety-dichotomy.md|inline external safety dichotomy]]
+
+---
+**관련**: [[concepts/capability-safety-inseparability.md|capability safety inseparability]]
+
+---
+**관련**: [[concepts/safety-monotonicity-assumption.md|safety monotonicity assumption]]

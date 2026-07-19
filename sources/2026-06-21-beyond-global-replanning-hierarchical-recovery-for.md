@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dynamic-lifecycle-safety.md|dynamic lifecycle safety]]
+
+---
+**관련**: [[concepts/relative-credit-assignment.md|relative credit assignment]]

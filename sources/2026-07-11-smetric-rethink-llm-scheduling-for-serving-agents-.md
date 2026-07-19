@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/orchestration-design-space-overestimation.md|orchestration design space overestimation]]
+
+---
+**관련**: [[concepts/request-centric-optimization.md|request centric optimization]]

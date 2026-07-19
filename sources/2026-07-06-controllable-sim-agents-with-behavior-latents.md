@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explicit-latent-objective-gap.md|explicit latent objective gap]]
+
+---
+**관련**: [[concepts/latent-objective-emergence.md|latent objective emergence]]

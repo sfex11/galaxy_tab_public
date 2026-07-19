@@ -146,3 +146,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/request-centric-optimization.md|request centric optimization]]
+
+---
+**관련**: [[concepts/forgetting-as-agent-decision.md|forgetting as agent decision]]
+
+---
+**관련**: [[concepts/perception-action-timing-combinatorics.md|perception action timing combinatorics]]

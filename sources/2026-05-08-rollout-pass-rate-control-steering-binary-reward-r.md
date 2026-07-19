@@ -335,3 +335,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-state-vacuum.md|structural state vacuum]]
+
+---
+**관련**: [[concepts/dual-failure-handling-architecture.md|dual failure handling architecture]]
+
+---
+**관련**: [[concepts/efficiency-attack-surface-identity.md|efficiency attack surface identity]]
+
+---
+**관련**: [[concepts/two-stage-translation-failure.md|two stage translation failure]]
+
+---
+**관련**: [[concepts/representation-stability-failure.md|representation stability failure]]

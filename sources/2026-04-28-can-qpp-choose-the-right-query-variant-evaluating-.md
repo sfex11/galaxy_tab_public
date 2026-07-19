@@ -268,3 +268,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pipeline-inherent-structural-leakage.md|pipeline inherent structural leakage]]
+
+---
+**관련**: [[concepts/internal-prediction-readout.md|internal prediction readout]]
+
+---
+**관련**: [[concepts/semantic-selection-authority.md|semantic selection authority]]

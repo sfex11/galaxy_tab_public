@@ -82,3 +82,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-selection-cognitive-tax.md|tool selection cognitive tax]]
+
+---
+**관련**: [[concepts/repository-level-emergent-hazard.md|repository level emergent hazard]]
+
+---
+**관련**: [[concepts/risk-translation-loss-as-safety.md|risk translation loss as safety]]
+
+---
+**관련**: [[concepts/technical-ecosystem-translation-gap.md|technical ecosystem translation gap]]

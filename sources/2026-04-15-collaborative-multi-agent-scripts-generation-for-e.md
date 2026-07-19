@@ -280,3 +280,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-layer-governance-control.md|dual layer governance control]]
+
+---
+**관련**: [[concepts/benchmark-format-blindspot.md|benchmark format blindspot]]
+
+---
+**관련**: [[concepts/abstraction-layer-mismatch.md|abstraction layer mismatch]]

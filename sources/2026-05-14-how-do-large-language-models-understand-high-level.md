@@ -143,3 +143,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-sequential-semantic-forced-serialization.md|non sequential semantic forced serialization]]
+
+---
+**관련**: [[concepts/cumulative-semantic-audit.md|cumulative semantic audit]]
+
+---
+**관련**: [[concepts/analysis-unit-mis-specification.md|analysis unit mis specification]]

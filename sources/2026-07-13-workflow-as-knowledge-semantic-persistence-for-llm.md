@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/resolution-spectrum-identity.md|resolution spectrum identity]]
+
+---
+**관련**: [[concepts/threat-defense-surface-identity.md|threat defense surface identity]]

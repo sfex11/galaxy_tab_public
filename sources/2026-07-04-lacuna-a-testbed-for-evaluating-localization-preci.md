@@ -73,3 +73,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/artifact-experience-paradigm-divergence.md|artifact experience paradigm divergence]]
+
+---
+**관련**: [[concepts/turn-level-credit-estimation.md|turn level credit estimation]]
+
+---
+**관련**: [[concepts/knowledge-loss-translation.md|knowledge loss translation]]

@@ -383,3 +383,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/agent-native-immune-system.md|agent native immune system]]
+
+---
+**관련**: [[concepts/alignment-scope-erosion.md|alignment scope erosion]]

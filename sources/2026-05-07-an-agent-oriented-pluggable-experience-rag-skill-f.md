@@ -48,3 +48,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/microphysical-orchestration.md|microphysical orchestration]]
+
+---
+**관련**: [[concepts/orchestration-transparency-illusion.md|orchestration transparency illusion]]

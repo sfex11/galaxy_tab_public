@@ -97,3 +97,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/external-internal-adaptation-transition.md|external internal adaptation transition]]
+
+---
+**관련**: [[concepts/digital-optimization-physical-impossibility.md|digital optimization physical impossibility]]
+
+---
+**관련**: [[concepts/hidden-state-risk-space.md|hidden state risk space]]
+
+---
+**관련**: [[concepts/structural-state-adaptation.md|structural state adaptation]]
+
+---
+**관련**: [[concepts/attractor-state-evaluation-confound.md|attractor state evaluation confound]]
+
+---
+**관련**: [[concepts/episodic-persistent-state-gap.md|episodic persistent state gap]]
+
+---
+**관련**: [[concepts/transient-adaptation-state.md|transient adaptation state]]
+
+---
+**관련**: [[concepts/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]

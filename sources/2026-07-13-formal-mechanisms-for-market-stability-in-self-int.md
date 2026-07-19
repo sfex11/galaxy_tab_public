@@ -31,3 +31,9 @@ Self-interested agents, left unconstrained, tend toward defection in repeated so
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/infrastructure-layer-routing-defense.md|infrastructure layer routing defense]]
+
+---
+**관련**: [[concepts/routing-adversarial-hijacking.md|routing adversarial hijacking]]

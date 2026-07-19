@@ -170,3 +170,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/input-representation-structural-distortion.md|input representation structural distortion]]
+
+---
+**관련**: [[concepts/score-narrative-conflation.md|score narrative conflation]]

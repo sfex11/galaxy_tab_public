@@ -67,3 +67,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-optimization-reconfiguration.md|hierarchical optimization reconfiguration]]
+
+---
+**관련**: [[concepts/optimization-premise-collapse.md|optimization premise collapse]]
+
+---
+**관련**: [[concepts/transferability-targeted-optimization.md|transferability targeted optimization]]
+
+---
+**관련**: [[concepts/price-representation-applicability.md|price representation applicability]]

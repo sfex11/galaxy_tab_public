@@ -67,3 +67,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/episodic-persistent-state-gap.md|episodic persistent state gap]]
+
+---
+**관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]

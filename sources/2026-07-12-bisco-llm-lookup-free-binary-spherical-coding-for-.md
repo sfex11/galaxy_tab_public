@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/defense-target-normalization-paradox.md|defense target normalization paradox]]
+
+---
+**관련**: [[concepts/compression-relevance-proxy.md|compression relevance proxy]]

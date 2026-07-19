@@ -333,3 +333,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/attractor-state-evaluation-confound.md|attractor state evaluation confound]]
+
+---
+**관련**: [[concepts/designer-metric-deployment-gap.md|designer metric deployment gap]]
+
+---
+**관련**: [[concepts/survivorship-biased-technical-documentation.md|survivorship biased technical documentation]]

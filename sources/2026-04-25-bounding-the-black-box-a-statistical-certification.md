@@ -89,3 +89,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/structural-certification.md|structural certification]]
+
+---
+**관련**: [[concepts/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]
+
+---
+**관련**: [[concepts/substantively-empty-certification.md|substantively empty certification]]

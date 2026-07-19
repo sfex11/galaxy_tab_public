@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/contrastive-interleaving.md|contrastive interleaving]]
+
+---
+**관련**: [[concepts/content-insensitive-convergence.md|content insensitive convergence]]

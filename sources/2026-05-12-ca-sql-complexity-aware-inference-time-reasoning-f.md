@@ -11,3 +11,6 @@ While recent advancements in inference-time learning have improved LLM reasoning
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/refined-futility.md|refined futility]]

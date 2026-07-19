@@ -78,3 +78,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/control-reachability.md|control reachability]]
+
+---
+**관련**: [[concepts/distributed-backdoor.md|distributed backdoor]]

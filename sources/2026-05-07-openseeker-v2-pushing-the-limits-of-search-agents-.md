@@ -57,3 +57,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/measurability-induced-competency-bias.md|measurability induced competency bias]]
+
+---
+**관련**: [[concepts/continual-compoundability.md|continual compoundability]]

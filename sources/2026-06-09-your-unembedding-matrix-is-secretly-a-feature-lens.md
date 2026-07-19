@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inertial-vs-optimal-convergence.md|inertial vs optimal convergence]]
+
+---
+**관련**: [[concepts/residual-stream-length-encoding.md|residual stream length encoding]]

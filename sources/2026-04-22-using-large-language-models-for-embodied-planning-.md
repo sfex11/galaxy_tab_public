@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/annotator-normative-role.md|annotator normative role]]
+
+---
+**관련**: [[concepts/representational-inevitability-of-danger.md|representational inevitability of danger]]

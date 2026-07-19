@@ -190,3 +190,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/memory-as-alignment-participant.md|memory as alignment participant]]
+
+---
+**관련**: [[concepts/pre-constraint-by-memory.md|pre constraint by memory]]
+
+---
+**관련**: [[concepts/complexity-meta-cognition.md|complexity meta cognition]]
+
+---
+**관련**: [[concepts/peer-agent-memory-architecture.md|peer agent memory architecture]]
+
+---
+**관련**: [[concepts/proactive-memory-agent.md|proactive memory agent]]
+
+---
+**관련**: [[concepts/signal-decomposition-information-ceiling.md|signal decomposition information ceiling]]
+
+---
+**관련**: [[concepts/multi-agent-communication-fallacy.md|multi agent communication fallacy]]

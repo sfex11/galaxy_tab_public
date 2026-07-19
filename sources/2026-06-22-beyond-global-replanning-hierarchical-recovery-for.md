@@ -88,3 +88,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/co-failure-rate.md|co failure rate]]
+
+---
+**관련**: [[concepts/failure-relabeling.md|failure relabeling]]
+
+---
+**관련**: [[concepts/depth-weighted-credit-assignment.md|depth weighted credit assignment]]
+
+---
+**관련**: [[concepts/hierarchical-optimization-reconfiguration.md|hierarchical optimization reconfiguration]]

@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/early-episode-abort.md|early episode abort]]
+
+---
+**관련**: [[concepts/ecosystem-native.md|ecosystem native]]

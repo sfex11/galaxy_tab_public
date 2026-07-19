@@ -37,3 +37,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-as-causal-data.md|failure as causal data]]
+
+---
+**관련**: [[concepts/execution-level-causal-extraction.md|execution level causal extraction]]
+
+---
+**관련**: [[concepts/bidding-meta-inference-circularity.md|bidding meta inference circularity]]
+
+---
+**관련**: [[concepts/preservation-structure-bottleneck.md|preservation structure bottleneck]]
+
+---
+**관련**: [[concepts/safety-as-conditional-state.md|safety as conditional state]]
+
+---
+**관련**: [[concepts/rule-structure-certification.md|rule structure certification]]
+
+---
+**관련**: [[concepts/contextual-integrity-first-class-constraint.md|contextual integrity first class constraint]]
+
+---
+**관련**: [[concepts/rule-variation-causal-attribution.md|rule variation causal attribution]]
+
+---
+**관련**: [[concepts/depth-dependent-divergent-bottleneck.md|depth dependent divergent bottleneck]]
+
+---
+**관련**: [[concepts/metamemory-as-model-action.md|metamemory as model action]]
+
+---
+**관련**: [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]

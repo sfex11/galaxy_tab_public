@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/change-type-taxonomy.md|change type taxonomy]]
+
+---
+**관련**: [[concepts/relative-verifiability.md|relative verifiability]]
