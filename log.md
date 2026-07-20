@@ -2618,3 +2618,5 @@
 ## [2026-07-20 08:33] ingest | Symbal: Detecting Systematic Misalignments in Model-Generated Captions
 
 ## [2026-07-21 02:05] llm-ingest | 0편 분석, 엔티티 355개, 개념 1338개
+
+## [2026-07-21 06:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1338개
