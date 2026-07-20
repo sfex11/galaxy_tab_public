@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>삼원관계의 함정 — 왜 에이전트는 "반응"만 할 때 막히는가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --card-shadow: 0 1px 3px rgba(44,40,37,0.04), 0 4px 12px rgba(44,40,37,0.03);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.85;
+    font-size: clamp(15px, 2.2vw, 18px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px) 80px;
+  }
+
+  /* ── 네비게이션 ── */
+  .site-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  .site-nav a {
+    color: var(--accent-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.88em;
+    transition: background 0.2s;
+  }
+  .site-nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding-top: clamp(40px, 8vw, 80px);
+    padding-bottom: clamp(24px, 5vw, 48px);
+    border-bottom: 1px solid rgba(44,40,37,0.07);
+    margin-bottom: clamp(28px, 5vw, 48px);
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  .article-header .subtitle {
+    font-size: clamp(0.92em, 1.8vw, 1.05em);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(36px, 6vw, 56px);
+  }
+  .section h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 18px;
+  }
+  .section h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--accent-warm);
+  }
+  .section h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    color: var(--fg);
+    margin: 28px 0 12px;
+  }
+  .section p {
+    margin-bottom: 16px;
+    color: var(--fg);
+    opacity: 0.92;
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 16px 20px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    color: var(--fg);
+    opacity: 0.88;
+    font-style: italic;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: var(--card-shadow);
+  }
+  .card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+  .card p, .card ul { font-size: 0.95em; opacity: 0.9; }
+  .card ul { padding-left: 20px; margin-bottom: 8px; }
+  .card ul li { margin-bottom: 6px; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(107,158,122,0.06);
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    font-size: 1.2em;
+    background: var(--bg);
+    padding: 0 6px;
+  }
+  .metaphor-box p { font-size: 0.95em; margin-bottom: 10px; opacity: 0.9; }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+  .metaphor-box strong { color: var(--accent-green); }
+
+  /* ── 표 ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 24px 0;
+    font-size: 0.9em;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(44,40,37,0.07);
+  }
+  .compare-table th {
+    background: rgba(194,112,62,0.07);
+    font-weight: 600;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.92em;
+  }
+  .compare-table td {
+    padding: 11px 14px;
+    border-top: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  .compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.35); }
+  .compare-table .label-cell {
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    width: 38%;
+  }
+
+  /* ── 다이어그램 ── */
+  .diagram-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0;
+  }
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .diagram .plan-layer {
+    background: rgba(194,112,62,0.1);
+    border: 2px solid var(--accent-warm);
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 0.92em;
+    color: var(--accent-warm);
+    text-align: center;
+  }
+  .diagram .arrow-down {
+    font-size: 1.6em;
+    color: var(--muted);
+    line-height: 1;
+    padding: 6px 0;
+    opacity: 0.6;
+  }
+  .diagram .triad-layer {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .diagram .triad-node {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--fg);
+    text-align: center;
+  }
+  .diagram .triad-sep {
+    display: flex;
+    align-items: center;
+    color: var(--muted);
+    opacity: 0.4;
+    font-size: 0.9em;
+  }
+  .diagram .steer-label {
+    font-size: 0.72em;
+    color: var(--accent-warm);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-top: -2px;
+  }
+
+  /* ── 키워드 태그 ── */
+  .kw {
+    display: inline;
+    font-size: 0.88em;
+    color: var(--accent-cool);
+    font-weight: 500;
+  }
+  .kw-warm {
+    color: var(--accent-warm);
+  }
+  .kw-green {
+    color: var(--accent-green);
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(44,40,37,0.07);
+    margin: clamp(32px, 6vw, 56px) 0;
+  }
+
+  /* ── 결론 하이라이트 ── */
+  .conclusion-highlight {
+    background: rgba(91,124,153,0.06);
+    border-left: 3px solid var(--accent-cool);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 1em;
+    line-height: 1.8;
+    opacity: 0.92;
+  }
+  .conclusion-highlight strong { color: var(--accent-cool); }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.07);
+    padding-top: 24px;
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  /* ── 반응형 표 스크롤 ── */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 24px 0;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .compare-table { font-size: 0.82em; }
+    .compare-table th, .compare-table td { padding: 9px 10px; }
+    .diagram .triad-layer { gap: 4px; }
+    .diagram .triad-node { padding: 8px 12px; font-size: 0.8em; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html">📚 홈</a>
+  <a href="../sources.html">논문</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../daily.html">📝 요약</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="blog.html">🧠 분석</a>
+  <a href="../patent/README.html">patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+</nav>
+
+<article class="article-wrap">
+
+  <header class="article-header">
+    <span class="tag">Agentic VLM · 패러다임 분석</span>
+    <h1>삼원관계의 함정 — 왜 에이전트는 "반응"만 할 때 막히는가</h1>
+    <p class="subtitle">
+      장면-지시-에이전트 삼원관계가 agentic VLM의 근본적 한계인 이유,
+      그리고 Plover가 제시하는 "계획 중심 조향"이 의미하는 패러다임 전환
+    </p>
+    <div class="article-meta">
+      <span>대상 논문: Plover (Plan-Centric Interaction)</span>
+      <span>참조: Three-Step Nav, AwareVLN, Crab</span>
+    </div>
+  </header>
+
+  <!-- ─── 섹션 1 ─── -->
+  <section class="section">
+    <h2>반응적 사고의 구조적 함정에 빠진 삼원관계</h2>
+
+    <p>
+      현재 agentic VLM 연구는 에이전트의 상호작용을 <span class="kw kw-warm">장면(scene)–지시(instruction)–에이전트(agent)</span> 세 축으로 구조화합니다. 직관적으로 보면 합리적입니다. 에이전트가 장면을 보고, 지시를 참조해, 행동을 결정한다 — 무엇이 문제일까요?
+    </p>
+
+    <div class="metaphor-box">
+      <p>
+        <strong>요리 비유</strong>를 생각해 봅시다. "파스타를 만들어라"는 지시가 주어졌을 때, 삼원관계 모델의 요리사는 매 순간 눈앞의 재료(장면)와 레시피 첫 줄(지시)만 보고 다음 손동작을 결정합니다. 물을 끓일까? 아니면 먼저 올리브 오일을 열까? — 매번 지시를 재해석해야 합니다.
+      </p>
+      <p>
+        반면 <strong>경험 있는 요리사</strong>는 머릿속에 전체 수순(계획)을 유지합니다. "지금은 물을 끓이는 단계다"라는 <strong>내부 상태</strong>가 손동작을 조향(steering)합니다. 장면이 변해도 계획의 맥락이 유지되기 때문에, 갑작스러운 변화에도 흔들리지 않습니다.
+      </p>
+    </div>
+
+    <p>
+      삼원관계의 문제는 이것입니다. 에이전트를 <span class="kw kw-warm">장면과 지시에 대한 반응자</span>로 위치지우는 암묵적 전제가 내장되어 있다는 점입니다. Plover 논문이 "에이전트는 유지된 계획에 의해 능동적으로 조향되어야 한다"고 주장하는 것은, 이 삼원관계가 단순히 불완전한 것이 아니라 <strong>상호작용 패러다임 자체의 근본적 한계</strong>임을 드러냅니다.
+    </p>
+
+    <blockquote>
+      삼원관계는 "에이전트가 무엇을 보고, 무엇을 해야 하는지 알 때, 어떻게 행동하는가"를 묻지만,
+      "에이전트가 지금 어디까지 와 있으며, 앞으로 어디로 가야 하는가"를 묻지 않는다.
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 섹션 2 ─── -->
+  <section class="section">
+    <h2>단계별 판단과 다단계 기획 사이의 구조적 단절</h2>
+
+    <p>
+      이 한계는 이미 여러 논문에서 실증되었습니다. Three-Step Nav 논문은 agentic VLM이 제로샷 VLN(Vision-Language Navigation) 환경에서 <span class="kw">경로 이탈</span>과 <span class="kw">조기 정지</span>라는 구조적 실패를 반복적으로 보인다고 보고합니다.
+    </p>
+
+    <p>
+      핵심은 에이전트의 능력이 <strong>"단계별 판단"과 "다단계 경로 기획" 사이의 간극</strong>에 의해 제한된다는 것입니다. 삼원관계의 렌즈로 이 간극을 다시 읽으면 원인이 명확해집니다.
+    </p>
+
+    <div class="card">
+      <h4>삼원관계에 기획을 끼워 넣을 "슬롯"이 없다</h4>
+      <p>
+        삼원관계에서 "지시(instruction)"는 통상적으로 <strong>정적 목표</strong>로 처리됩니다. "복도 끝 방으로 가라" — 이 지시는 t=0에서 주어지고 이후 변하지 않습니다. 에이전트는 각 시점에서 장면을 읽고 이 정적 지시를 참조해 다음 행동을 결정합니다.
+      </p>
+      <p>
+        문제는, <span class="kw kw-warm">"다단계 기획"이 삽입될 구조적 슬롯이 존재하지 않는다</span>는 점입니다. Three-Step Nav가 계층적 글로벌-로컬 플래너를 외부에서 도입해야 했던 이유가 정확히 여기에 있습니다. 삼원관계 내부에는 기획을 유지하고 갱신할 매커니즘 자체가 없었기 때문입니다.
+      </p>
+    </div>
+
+    <p>
+      이것은 단순히 "기획 모듈이 없어서"라는 기술적 부족이 아닙니다. 삼원관계라는 <strong>구조 자체가 기획을 허용하지 않는</strong> 것입니다. 장면과 지시가 매 순간의 판단을 위한 입력으로만 기능하기 때문에, 시간을 걸쳐 유지되는 상태를 담을 자리가 구조적으로 없습니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 섹션 3 ─── -->
+  <section class="section">
+    <h2>자기인식으로도 삼원관계는 극복할 수 없다</h2>
+
+    <p>
+      그렇다면 삼원관계 내부에서 성찰 기능을 추가하면 해결될까요? AwareVLN 논문은 <span class="kw kw-green">자기인식(self-awareness)</span>을 통해 VLN의 추론을 개선하려 시도합니다. 에이전트가 "내가 현재 지시를 얼마나 잘 수행하고 있는지"를 스스로 평가하게 하는 접근입니다.
+    </p>
+
+    <p>
+      그러나 자기인식이 삼원관계 내부에서 작동한다면, 이는 결국 <strong>"내가 현재 장면에서 지시를 얼마나 잘 수행하고 있는지"에 대한 메타인지</strong>에 머뭅니다. 세 축 안에서의 성찰은 삼원관계를 벗어나지 못합니다.
+    </p>
+
+    <div class="table-scroll">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>차원</th>
+            <th>AwareVLN의 자기인식</th>
+            <th>Plover의 계획 조향</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">성찰의 범위</td>
+            <td>삼원관계 <strong>내부</strong></td>
+            <td>삼원관계 <strong>외부</strong>에 지속적 상태를 둠</td>
+          </tr>
+          <tr>
+            <td class="label-cell">시간적 성격</td>
+            <td>현재 시점의 평가</td>
+            <td>과거→현재→미래를 잇는 연속적 상태</td>
+          </tr>
+          <tr>
+            <td class="label-cell">기능</td>
+            <td>"잘하고 있는가?" 점검</td>
+            <td>"다음에 어디로 가야 하는가?" 조향</td>
+          </tr>
+          <tr>
+            <td class="label-cell">삼원관계와의 관계</td>
+            <td>삼원관계를 보완</td>
+            <td>삼원관계 <strong>자체를 재구성</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Plover의 계획 조향은 삼원관계 외부에 지속적 상태를 두고, <strong>그 상태가 삼원관계 자체의 해석 방식을 바꿔버리는</strong> 메커니즘입니다. 자기인식이 "거울"이라면, 계획 조향은 "핸들"입니다. 거울은 현재 상태를 보여줄 뿐 방향을 바꾸지 못하지만, 핸들은 에이전트의 궤적 자체를 틀어버립니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 섹션 4 ─── -->
+  <section class="section">
+    <h2>"지시"의 시간적 얕음 — 패러다임의 본질적 결함</h2>
+
+    <p>
+      여기까지의 분석을 하나의 핵심 개념으로 압축할 수 있습니다. 삼원관계의 "지시(instruction)"는 <span class="kw kw-warm">시간적 깊이(temporal depth)</span>를 갖지 않는다는 것입니다.
+    </p>
+
+    <p>
+      지시는 t=0에서 주어지고, 이후 에이전트는 장면의 변화에 따라 매 순간 재반응합니다. 반면 Plover의 "유지된 계획(maintained plan)"은 t=0, t=1, t=2…에서 지속적으로 존재하며, <strong>장면 관찰보다 우선적으로</strong> 에이전트의 행동을 구속합니다.
+    </p>
+
+    <div class="table-scroll">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>삼원관계의 가정</th>
+            <th>Plover의 관점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">지시는 정적 입력</td>
+            <td>계획은 <strong>동적 아티팩트</strong></td>
+          </tr>
+          <tr>
+            <td class="label-cell">에이전트는 장면+지시에 <em>반응</em></td>
+            <td>에이전트는 계획에 의해 <strong>조향</strong>됨</td>
+          </tr>
+          <tr>
+            <td class="label-cell">상호작용이 매 순간 독립적으로 재평가됨</td>
+            <td>계획이 순간 간의 <strong>연속성을 강제</strong>함</td>
+          </tr>
+          <tr>
+            <td class="label-cell">장면이 주도권을 가짐 (반응의 대상)</td>
+            <td>계획이 주도권을 가짐 (조향의 원천)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>숨겨진 연결들: 신념 상태와 번역 간극</h3>
+
+    <p>
+      이 분석에서 흥미로운 연결들이 드러납니다. 첫째, Plover의 "유지된 계획"은 사실상 <span class="kw kw-green">신념 상태(belief state)</span>의 특수한 형태입니다. 계획이 에이전트를 조향한다는 것은, 계획이 신념 상태로서 <strong>구속 조건(constraint)</strong>으로 기능한다는 뜻입니다. 삼원관계에 신념 상태가 명시적으로 없다는 것은, 에이전트가 장면을 볼 때마다 상태를 재구성해야 한다는 것을 의미하며 — 이것이 Three-Step Nav가 관찰한 "다단계 기획의 실패"의 <strong>근원적 원인</strong>입니다.
+    </p>
+
+    <p>
+      둘째, <span class="kw">algorithm-system-translation-gap</span>이라는 개념이 새로운 조명을 받습니다. 이 간극은 알고리즘(계획 알고리즘)을 시스템(OS 레벨 실행)으로 번역할 때 발생한다고 정의되어 있는데, Plover의 계획 조향이 실제로 작동하려면 유지된 계획 상태를 에이전트 실행 환경이 <strong>어떻게 보존하고 복원하는가</strong>가 핵심입니다. Crab 논문이 지적한 대로, 에이전트의 의미론적 의존 그래프(계획에 의존하는 상태)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때의 비효율이 바로 이 간극의 본질입니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 섹션 5 ─── -->
+  <section class="section">
+    <h2>결론: 사원관계가 아니라 위계의 재구성이 필요하다</h2>
+
+    <p>
+      삼원관계의 한계는 요소 부족이 아닙니다. "네 번째 요소를 추가하면 된다"는 식의 사원관계(quaternary) 확장은 근본적 해결책이 아닙니다. 진짜 문제는 <span class="kw kw-warm">위계(hierarchy)의 부재</span>입니다.
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram">
+        <div class="plan-layer">유지된 계획 (maintained plan)</div>
+        <div class="steer-label">↓ 조향 (steering)</div>
+        <div class="arrow-down">⬇</div>
+        <div class="triad-layer">
+          <div class="triad-node">장면</div>
+          <div class="triad-sep">—</div>
+          <div class="triad-node">지시</div>
+          <div class="triad-sep">—</div>
+          <div class="triad-node">에이전트</div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      Plover가 제시하는 패러다임에서 계획은 삼원관계 <strong>위에</strong> 위치하며, 삼원관계 자체의 해석을 제약합니다. 장면이 "무엇을 보이는가"에서 <strong>"계획 실행에 어떤 의미가 있는가"</strong>로 재해석되고, 지시가 "무엇을 해야 하는가"에서 <strong>"계획이 현재 어떤 단계에 있는가"</strong>로 재해석됩니다.
+    </p>
+
+    <div class="conclusion-highlight">
+      <p>
+        따라서 agent-scene-instruction-triad는 <strong>반응적 상호작용의 기술적 묘사</strong>로서는 유효하지만, 능동적 조향이 필요한 에이전트 패러다임에서는 <strong>부분적 하위 구조</strong>로 격하되어야 합니다. 패러다임 전환의 핵심은 "요소 추가"가 아니라 <strong>"위계 재구성"</strong>에 있습니다. 계획을 최상위 구속 조건으로 두고, 삼원관계를 그 계획의 실행 엔진으로 재배치하는 것 — 이것이 Plover가 암시하고, agentic VLM이 나아가야 할 방향입니다.
+      </p>
+    </div>
+
+    <div class="card">
+      <h4>패러다임 전환의 세 가지 함의</h4>
+      <ul>
+        <li><span class="kw kw-warm">상호작용의 주도권 이전:</span> 장면이 에이전트를 자극하는 구조에서, 계획이 에이전트를 조향하는 구조로</li>
+        <li><span class="kw kw-green">시간적 깊이의 획득:</span> 매 순간 독립적 판단에서, 시간을 걸쳐 유지되는 상태 기반 추론으로</li>
+        <li><span class="kw">시스템 엔지니어링의 과제 명확화:</span> 유지된 계획 상태를 어떻게 보존·복원할 것인가가 핵심 엔지니어링 문제로 부상</li>
+      </ul>
+    </div>
+
+    <p>
+      결국 삼원관계는 "에이전트가 보고 반응하는" 세계의 지도입니다. 그 지도가 틀린 것은 아니지만, <strong>"에이전트가 계획하고 조향하는" 세계를 그리기에는 축척 자체가 다릅니다.</strong> Plover의 기여는 새로운 알고리즘을 제안한 것을 넘어, 우리가 쓰던 지도의 한계를 정확히 가리켰다는 데 있습니다.
+    </p>
+  </section>
+
+  <footer class="article-footer">
+    <p>분석 대상: Plover — Steering GUI Agents through Plan-Centric Interaction</p>
+    <p>참조 문헌: Three-Step Nav · AwareVLN · Crab</p>
+    <p style="margin-top:8px;opacity:0.6;">agent-scene-instruction-triad · belief-state-as-constraint · algorithm-system-translation-gap</p>
+  </footer>
+
+</article>
+
+</body>
+</html>
