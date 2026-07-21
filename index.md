@@ -1403,3 +1403,15 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-07-20-plover-steering-gui-agents-through-plan-centric-in.md]] - Plover: Steering GUI Agents through Plan-Centric Interaction
 - [[sources/2026-07-20-symbal-detecting-systematic-misalignments-in-model.md]] - Symbal: Detecting Systematic Misalignments in Model-Generated Captions
+- [[sources/2026-07-21-pagedweight-efficient-moe-llm-serving-with-dynamic.md]] - PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization
+- [[sources/2026-07-21-evaluating-open-weight-llms-for-generating-structu.md]] - Evaluating Open-Weight LLMs for Generating Structured Threat Information for Autonomous Vehicle Vulnerabilities
+- [[sources/2026-07-21-vision-language-motion-maps-an-open-vocabulary-unc.md]] - Vision-Language-Motion Maps: An Open-Vocabulary, Uncertainty-Aware, Queryable Motion Attribute for 3D Scene Maps
+- [[sources/2026-07-21-when-does-muon-help-agentic-reinforcement-learning.md]] - When Does Muon Help Agentic Reinforcement Learning?
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-21-prisa-proactive-infrastructure-lidar-framework-for.md]] - PRISA: Proactive Infrastructure LiDAR Framework for Intersection Safety Assessment
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-21-when-do-multi-agent-systems-help-an-information-bo.md]] - When Do Multi-Agent Systems Help? An Information Bottleneck Perspective
+- [[sources/2026-07-21-craft-clustering-rubrics-to-diagnose-weak-llm-capa.md]] - CRAFT: Clustering Rubrics to Diagnose Weak LLM Capabilities and Generate Targeted Fine-Tuning Data
+- [[sources/2026-07-21-toward-semantic-communication-for-real-time-mobile.md]] - Toward Semantic Communication for Real-time Mobile 3D Reconstruction
+- [[sources/2026-07-21-an-exam-for-active-observers.md]] - An Exam for Active Observers
+- [[sources/2026-07-21-an-mlir-based-compilation-method-for-large-languag.md]] - An MLIR-Based Compilation Method for Large Language Models

@@ -2620,3 +2620,25 @@
 ## [2026-07-21 02:05] llm-ingest | 0편 분석, 엔티티 355개, 개념 1338개
 
 ## [2026-07-21 06:07] llm-ingest | 0편 분석, 엔티티 355개, 개념 1338개
+
+## [2026-07-21 08:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1338개
+
+## [2026-07-21 08:35] ingest | PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization
+
+## [2026-07-21 08:35] ingest | Evaluating Open-Weight LLMs for Generating Structured Threat Information for Autonomous Vehicle Vulnerabilities
+
+## [2026-07-21 08:35] ingest | Vision-Language-Motion Maps: An Open-Vocabulary, Uncertainty-Aware, Queryable Motion Attribute for 3D Scene Maps
+
+## [2026-07-21 08:35] ingest | When Does Muon Help Agentic Reinforcement Learning?
+
+## [2026-07-21 08:35] ingest | PRISA: Proactive Infrastructure LiDAR Framework for Intersection Safety Assessment
+
+## [2026-07-21 08:35] ingest | When Do Multi-Agent Systems Help? An Information Bottleneck Perspective
+
+## [2026-07-21 08:35] ingest | CRAFT: Clustering Rubrics to Diagnose Weak LLM Capabilities and Generate Targeted Fine-Tuning Data
+
+## [2026-07-21 08:35] ingest | Toward Semantic Communication for Real-time Mobile 3D Reconstruction
+
+## [2026-07-21 08:35] ingest | An Exam for Active Observers
+
+## [2026-07-21 08:35] ingest | An MLIR-Based Compilation Method for Large Language Models
