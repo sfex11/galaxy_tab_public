@@ -2642,3 +2642,23 @@
 ## [2026-07-21 08:35] ingest | An Exam for Active Observers
 
 ## [2026-07-21 08:35] ingest | An MLIR-Based Compilation Method for Large Language Models
+
+## [2026-07-22 08:35] ingest | Automated Discovery Has No Universally Superior Harness
+
+## [2026-07-22 08:35] ingest | It's Not What You Say, It's How You Say It: Evaluating LLM Responses to Expressions of Belief
+
+## [2026-07-22 08:35] ingest | SWE-Pruner Pro: The Coder LLM Already Knows What to Prune
+
+## [2026-07-22 08:35] ingest | VEHBench: A Stage-Local Diagnostic Benchmark for LLM-Assisted Vibration Energy Harvester Design
+
+## [2026-07-22 08:35] ingest | FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications
+
+## [2026-07-22 08:35] ingest | TRIM: Reducing AI-Generated CodeSlop via Agent Trajectory Minimization
+
+## [2026-07-22 08:35] ingest | LLMs and Agentic AI Systems for Smart Grids: A Tutorial on Architectures and Applications
+
+## [2026-07-22 08:35] ingest | PPL-Factory: Task-Aware and Budget-Aware Data Selection from Language Modeling to Reasoning
+
+## [2026-07-22 08:35] ingest | How Does Alignment Tuning Shape Representations of Sycophancy and Related Cue-Induced Biases in LLMs?
+
+## [2026-07-22 08:35] ingest | Enhancing Rubric-based RL via Self-Distillation

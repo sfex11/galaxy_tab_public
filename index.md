@@ -1415,3 +1415,13 @@
 - [[sources/2026-07-21-toward-semantic-communication-for-real-time-mobile.md]] - Toward Semantic Communication for Real-time Mobile 3D Reconstruction
 - [[sources/2026-07-21-an-exam-for-active-observers.md]] - An Exam for Active Observers
 - [[sources/2026-07-21-an-mlir-based-compilation-method-for-large-languag.md]] - An MLIR-Based Compilation Method for Large Language Models
+- [[sources/2026-07-22-automated-discovery-has-no-universally-superior-ha.md]] - Automated Discovery Has No Universally Superior Harness
+- [[sources/2026-07-22-its-not-what-you-say-its-how-you-say-it-evaluating.md]] - It's Not What You Say, It's How You Say It: Evaluating LLM Responses to Expressions of Belief
+- [[sources/2026-07-22-swe-pruner-pro-the-coder-llm-already-knows-what-to.md]] - SWE-Pruner Pro: The Coder LLM Already Knows What to Prune
+- [[sources/2026-07-22-vehbench-a-stage-local-diagnostic-benchmark-for-ll.md]] - VEHBench: A Stage-Local Diagnostic Benchmark for LLM-Assisted Vibration Energy Harvester Design
+- [[sources/2026-07-22-flashrt-agent-harness-for-guiding-agents-to-deploy.md]] - FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications
+- [[sources/2026-07-22-trim-reducing-ai-generated-codeslop-via-agent-traj.md]] - TRIM: Reducing AI-Generated CodeSlop via Agent Trajectory Minimization
+- [[sources/2026-07-22-llms-and-agentic-ai-systems-for-smart-grids-a-tuto.md]] - LLMs and Agentic AI Systems for Smart Grids: A Tutorial on Architectures and Applications
+- [[sources/2026-07-22-ppl-factory-task-aware-and-budget-aware-data-selec.md]] - PPL-Factory: Task-Aware and Budget-Aware Data Selection from Language Modeling to Reasoning
+- [[sources/2026-07-22-how-does-alignment-tuning-shape-representations-of.md]] - How Does Alignment Tuning Shape Representations of Sycophancy and Related Cue-Induced Biases in LLMs?
+- [[sources/2026-07-22-enhancing-rubric-based-rl-via-self-distillation.md]] - Enhancing Rubric-based RL via Self-Distillation
