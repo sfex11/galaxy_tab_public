@@ -2662,3 +2662,37 @@
 ## [2026-07-22 08:35] ingest | How Does Alignment Tuning Shape Representations of Sycophancy and Related Cue-Induced Biases in LLMs?
 
 ## [2026-07-22 08:35] ingest | Enhancing Rubric-based RL via Self-Distillation
+
+## [2026-07-23 08:10] llm-ingest | 0편 분석, 엔티티 355개, 개념 1349개
+
+## [2026-07-23 08:40] ingest | Copy Less, Ground More: Overcoming Repetitive Copying in Long-Context Reasoning via Evidence-Aware Reinforcement Learning
+
+## [2026-07-23 08:40] ingest | CodeRescue: Budget-Calibrated Recovery Routing for Coding Agents
+
+## [2026-07-23 08:40] ingest | Agents in the Wild: Where Research Meets Deployment
+
+## [2026-07-23 08:40] ingest | Fundamental limits of distributed multiclass classification from simple binary decisions
+
+## [2026-07-23 08:40] ingest | ResearchArena: Evaluating Sabotage and Monitoring in Automated AI R&D
+
+## [2026-07-23 08:40] ingest | LLM Detection as an Intervention: Downstream Impact under Strategic User Behavior
+
+## [2026-07-23 08:40] ingest | Graph-Based Agentic AI with LangGraph: Workflow Pathways for Long-Running Stateful Business Processes
+
+## [2026-07-23 08:40] ingest | From Distances to Trajectories: Real-Time Signed Distance Function Mapping and Distance-Accelerated Motion Planning for UAVs
+
+## [2026-07-23 08:40] ingest | Stochastic Multi-Objective Kinodynamic Planning Against Adversaries
+
+## [2026-07-23 08:40] ingest | They'll Verify. They Just Won't Act. How Authority Framing and Laundered Code Turn a Trusted Agentic CI/CD Pipeline Into an Attack Surface
+
+## [2026-07-23 08:40] ingest | Off-Context GRPO: Learning to Reason on Hard Problems using Privileged Information
+
+## [2026-07-23 08:40] ingest | AdaFlash: Adaptive Speculative Decoding via On-Policy Distilled Diffusion Drafters
+
+## [2026-07-23 08:40] ingest | Cognitive Dual-Process Planning for Autonomous Driving with Structured Scene Knowledge and Verifiable Reasoning-Action Consistency
+
+## [2026-07-23 08:40] ingest | ABot-World-0: Infinite Interactive World Rollout on a Single Desktop GPU
+
+## [2026-07-23 08:40] ingest | BioSecBench-Surveillance: A Verifiable Benchmark for AI Agents in Pathogen Genomic Surveillance
+
+## [2026-07-23 08:40] ingest | Inference-Time Steering for Cross-Lingual Factual Consistency in LLMs

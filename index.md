@@ -1425,3 +1425,23 @@
 - [[sources/2026-07-22-ppl-factory-task-aware-and-budget-aware-data-selec.md]] - PPL-Factory: Task-Aware and Budget-Aware Data Selection from Language Modeling to Reasoning
 - [[sources/2026-07-22-how-does-alignment-tuning-shape-representations-of.md]] - How Does Alignment Tuning Shape Representations of Sycophancy and Related Cue-Induced Biases in LLMs?
 - [[sources/2026-07-22-enhancing-rubric-based-rl-via-self-distillation.md]] - Enhancing Rubric-based RL via Self-Distillation
+- [[sources/2026-07-23-copy-less-ground-more-overcoming-repetitive-copyin.md]] - Copy Less, Ground More: Overcoming Repetitive Copying in Long-Context Reasoning via Evidence-Aware Reinforcement Learning
+- [[sources/2026-07-23-coderescue-budget-calibrated-recovery-routing-for-.md]] - CodeRescue: Budget-Calibrated Recovery Routing for Coding Agents
+- [[sources/2026-07-23-agents-in-the-wild-where-research-meets-deployment.md]] - Agents in the Wild: Where Research Meets Deployment
+- [[sources/2026-07-23-fundamental-limits-of-distributed-multiclass-class.md]] - Fundamental limits of distributed multiclass classification from simple binary decisions
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-23-researcharena-evaluating-sabotage-and-monitoring-i.md]] - ResearchArena: Evaluating Sabotage and Monitoring in Automated AI R&D
+- [[sources/2026-07-23-llm-detection-as-an-intervention-downstream-impact.md]] - LLM Detection as an Intervention: Downstream Impact under Strategic User Behavior
+- [[sources/2026-07-23-graph-based-agentic-ai-with-langgraph-workflow-pat.md]] - Graph-Based Agentic AI with LangGraph: Workflow Pathways for Long-Running Stateful Business Processes
+- [[sources/2026-07-23-from-distances-to-trajectories-real-time-signed-di.md]] - From Distances to Trajectories: Real-Time Signed Distance Function Mapping and Distance-Accelerated Motion Planning for UAVs
+- [[sources/2026-07-23-stochastic-multi-objective-kinodynamic-planning-ag.md]] - Stochastic Multi-Objective Kinodynamic Planning Against Adversaries
+- [[sources/2026-07-23-theyll-verify-they-just-wont-act-how-authority-fra.md]] - They'll Verify. They Just Won't Act. How Authority Framing and Laundered Code Turn a Trusted Agentic CI/CD Pipeline Into an Attack Surface
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-23-off-context-grpo-learning-to-reason-on-hard-proble.md]] - Off-Context GRPO: Learning to Reason on Hard Problems using Privileged Information
+- [[entities/transformer]] - Transformer
+- [[sources/2026-07-23-adaflash-adaptive-speculative-decoding-via-on-poli.md]] - AdaFlash: Adaptive Speculative Decoding via On-Policy Distilled Diffusion Drafters
+- [[sources/2026-07-23-cognitive-dual-process-planning-for-autonomous-dri.md]] - Cognitive Dual-Process Planning for Autonomous Driving with Structured Scene Knowledge and Verifiable Reasoning-Action Consistency
+- [[sources/2026-07-23-abot-world-0-infinite-interactive-world-rollout-on.md]] - ABot-World-0: Infinite Interactive World Rollout on a Single Desktop GPU
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-23-biosecbench-surveillance-a-verifiable-benchmark-fo.md]] - BioSecBench-Surveillance: A Verifiable Benchmark for AI Agents in Pathogen Genomic Surveillance
+- [[sources/2026-07-23-inference-time-steering-for-cross-lingual-factual-.md]] - Inference-Time Steering for Cross-Lingual Factual Consistency in LLMs

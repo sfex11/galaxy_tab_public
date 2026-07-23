@@ -135,3 +135,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-07-09-freqdepthkv-frequency-guided-depth-sharing-for-rob.md]]
 
 - [[sources/2026-07-10-tf-engram-a-train-free-engram-with-ssd-backed-memo.md]]
+
+- [[sources/2026-07-23-adaflash-adaptive-speculative-decoding-via-on-poli.md]]
