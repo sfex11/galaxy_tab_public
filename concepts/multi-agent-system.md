@@ -285,3 +285,5 @@ _자동 생성됨_
 - [[sources/2026-07-21-prisa-proactive-infrastructure-lidar-framework-for.md]]
 
 - [[sources/2026-07-21-when-do-multi-agent-systems-help-an-information-bo.md]]
+
+- [[sources/2026-07-24-distributed-motion-planning-with-safety-guarantees.md]]

@@ -1445,3 +1445,15 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-07-23-biosecbench-surveillance-a-verifiable-benchmark-fo.md]] - BioSecBench-Surveillance: A Verifiable Benchmark for AI Agents in Pathogen Genomic Surveillance
 - [[sources/2026-07-23-inference-time-steering-for-cross-lingual-factual-.md]] - Inference-Time Steering for Cross-Lingual Factual Consistency in LLMs
+- [[sources/2026-07-24-lkvalues-aligning-large-language-models-with-sri-l.md]] - LKValues: Aligning Large Language Models with Sri Lankan Societal Values
+- [[sources/2026-07-24-notes-to-self-can-llms-benefit-from-experiential-a.md]] - Notes to Self: Can LLMs Benefit from Experiential Abstractions?
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-24-distributed-motion-planning-with-safety-guarantees.md]] - Distributed Motion Planning with Safety Guarantees for Self-Reconfiguring Robotic Boats
+- [[sources/2026-07-24-pyrodash-cost-efficient-token-level-small-large-la.md]] - PyroDash: Cost-Efficient Token-Level Small-Large Language Model Collaborative Inference
+- [[sources/2026-07-24-the-blessing-of-dimensionality-how-near-orthogonal.md]] - The Blessing of Dimensionality: How Near-Orthogonality in High-Dimensional Spaces Explains Temporal Portability
+- [[sources/2026-07-24-potre-test-time-reasoning-inspired-by-cognitive-he.md]] - PoTRE: Test-Time Reasoning inspired by Cognitive Heterogeneity
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-24-the-ethics-of-autonomous-ai-agents-for-offensive-s.md]] - The Ethics of Autonomous AI Agents for Offensive Security
+- [[sources/2026-07-24-small-free-and-effective-orchestrating-open-weight.md]] - Small, Free, and Effective: Orchestrating Open-Weight Small Language Models to Outperform Single LLM for Malware Analysis
+- [[sources/2026-07-24-understanding-the-impact-of-linguistic-realization.md]] - Understanding the Impact of Linguistic Realization Choices on LLM Stance with Causal Tracing
+- [[sources/2026-07-24-refertrack-referring-then-tracking-for-embodied-vi.md]] - ReferTrack: Referring Then Tracking for Embodied Visual Tracking

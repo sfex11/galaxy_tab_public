@@ -2696,3 +2696,23 @@
 ## [2026-07-23 08:40] ingest | BioSecBench-Surveillance: A Verifiable Benchmark for AI Agents in Pathogen Genomic Surveillance
 
 ## [2026-07-23 08:40] ingest | Inference-Time Steering for Cross-Lingual Factual Consistency in LLMs
+
+## [2026-07-24 08:32] ingest | LKValues: Aligning Large Language Models with Sri Lankan Societal Values
+
+## [2026-07-24 08:32] ingest | Notes to Self: Can LLMs Benefit from Experiential Abstractions?
+
+## [2026-07-24 08:32] ingest | Distributed Motion Planning with Safety Guarantees for Self-Reconfiguring Robotic Boats
+
+## [2026-07-24 08:32] ingest | PyroDash: Cost-Efficient Token-Level Small-Large Language Model Collaborative Inference
+
+## [2026-07-24 08:32] ingest | The Blessing of Dimensionality: How Near-Orthogonality in High-Dimensional Spaces Explains Temporal Portability
+
+## [2026-07-24 08:32] ingest | PoTRE: Test-Time Reasoning inspired by Cognitive Heterogeneity
+
+## [2026-07-24 08:32] ingest | The Ethics of Autonomous AI Agents for Offensive Security
+
+## [2026-07-24 08:32] ingest | Small, Free, and Effective: Orchestrating Open-Weight Small Language Models to Outperform Single LLM for Malware Analysis
+
+## [2026-07-24 08:32] ingest | Understanding the Impact of Linguistic Realization Choices on LLM Stance with Causal Tracing
+
+## [2026-07-24 08:32] ingest | ReferTrack: Referring Then Tracking for Embodied Visual Tracking
