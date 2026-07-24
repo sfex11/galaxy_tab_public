@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-24-lkvalues-aligning-large-language-models-with-sri-l]]: 두 논문은 LLM이 특정 언어나 문화적 맥락에 편향되어 나타내는 사실적 불일치 및 가치 정렬 문제를 해결하는 것을 목표로 함.

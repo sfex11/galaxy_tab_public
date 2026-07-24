@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-researcharena-evaluating-sabotage-and-monitoring-i]]: 두 논문은 자율 AI 에이전트의 통제 불가능성과 비결정적 특성으로 인해 발생하는 보안 위협과 윤리적 문제를 다룸.
+- → [[sources/2026-07-24-small-free-and-effective-orchestrating-open-weight]]: 두 논문은 사이버 보안(악성코드 분석 및 공격적 보안)이라는 동일한 도메인에서 LLM 에이전트를 활용하는 방법과 그에 따른 문제점을 다룸.

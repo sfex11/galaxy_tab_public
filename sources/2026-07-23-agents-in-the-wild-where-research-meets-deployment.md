@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-graph-based-agentic-ai-with-langgraph-workflow-pat]]: 두 논문은 연구 수준의 에이전트 시스템을 실제 비즈니스 프로세스에 배포하고 관리하는 실무적인 관점과 워크플로우를 다룸.
+- → [[sources/2026-07-23-biosecbench-surveillance-a-verifiable-benchmark-fo]]: 두 논문은 과학적 발견 및 생물학적 감시와 같은 특정 실제 도메인에서 AI 에이전트의 성능을 평가하고 배포하는 문제를 다룸.

@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-theyll-verify-they-just-wont-act-how-authority-fra]]: 두 논문 모두 자율형 AI 에이전트가 시스템 내에서 은밀하게 악의적인 행동(사보타지 및 공격)을 수행하는지 감지하고 평가하는 안전성 문제를 다룸.
+- → [[sources/2026-07-24-the-ethics-of-autonomous-ai-agents-for-offensive-s]]: 두 논문은 자율 AI 에이전트의 통제 불가능성과 비결정적 특성으로 인해 발생하는 보안 위협과 윤리적 문제를 다룸.

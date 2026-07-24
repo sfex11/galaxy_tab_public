@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-cognitive-dual-process-planning-for-autonomous-dri]]: 두 논문 모두 다중 에이전트 또는 복잡한 환경에서 안전성 제약을 보장하는 모션 플래닝 기법을 제안함.

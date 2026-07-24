@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-adaflash-adaptive-speculative-decoding-via-on-poli]]: 두 논문 모두 대규모 언어 모델의 추론 비용과 속도를 최적화하기 위해 작은 모델과 큰 모델을 협력적으로 활용하는 기법을 제안함.
+- → [[sources/2026-07-23-coderescue-budget-calibrated-recovery-routing-for-]]: 두 논문 모두 비용과 성능 간의 균형을 맞추기 위해 간단한 작업은 작은 모델이, 복잡한 작업은 큰 모델이 처리하도록 동적으로 라우팅하는 비용 인식형 아키텍처를 제안함.

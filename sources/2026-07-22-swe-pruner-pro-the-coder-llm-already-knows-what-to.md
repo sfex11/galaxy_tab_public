@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-22-trim-reducing-ai-generated-codeslop-via-agent-traj]]: 두 논문은 코딩 에이전트가 생성하는 결과물의 비효율성(불필요한 컨텍스트와 과도한 코드)을 줄여 품질을 개선하는 것을 목표로 함.
+- → [[sources/2026-07-23-coderescue-budget-calibrated-recovery-routing-for-]]: 두 논문 모두 코딩 에이전트의 효율성과 비용을 최적화하는 방법을 다루며, 컨텍스트 관리와 실패 복구라는 상호 보완적인 문제를 해결함.

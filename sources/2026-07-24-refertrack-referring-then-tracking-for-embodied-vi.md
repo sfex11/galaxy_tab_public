@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-abot-world-0-infinite-interactive-world-rollout-on]]: 두 논문 모두 에이전트가 시각적 환경을 인식하고 상호작용하는 임베디드 AI 및 월드 모델 분야의 연구를 다룸.

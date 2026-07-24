@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-24-the-blessing-of-dimensionality-how-near-orthogonal]]: 두 논문 모두 파라미터 효율적 미세조정(PEFT) 환경에서 LLM의 도메인 적응 성능을 극대화하기 위한 효율적인 학습 및 적용 전략을 다룸.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-cognitive-dual-process-planning-for-autonomous-dri]]: 두 논문은 자율주행 및 로봇 분야에서 실시간으로 환경을 이해하고 안전한 궤적을 계획하는 인지적 및 기하학적 접근법을 다룸.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-off-context-grpo-learning-to-reason-on-hard-proble]]: 두 논문 모두 강화 학습을 활용하여 대형 언어 모델의 복잡한 추론 능력을 향상시키는 훈련 기법을 제안함.

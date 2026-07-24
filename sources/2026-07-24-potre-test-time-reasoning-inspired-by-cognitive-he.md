@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-23-off-context-grpo-learning-to-reason-on-hard-proble]]: 두 논문은 기존 단일 스트림 추론의 한계를 극복하고 어려운 문제에서 LLM의 추론 성능을 끌어올리기 위한 새로운 테스트 타임(또는 훈련) 전략을 제안함.
+- → [[sources/2026-07-24-notes-to-self-can-llms-benefit-from-experiential-a]]: 두 논문은 인지과학적 메타포(경험적 추상화 및 인지 이질성)에서 영감을 받아 LLM의 문제 해결 및 추론 능력을 향상시키는 방법을 제안함.

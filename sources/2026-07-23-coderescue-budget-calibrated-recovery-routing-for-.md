@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-22-swe-pruner-pro-the-coder-llm-already-knows-what-to]]: 두 논문 모두 코딩 에이전트의 효율성과 비용을 최적화하는 방법을 다루며, 컨텍스트 관리와 실패 복구라는 상호 보완적인 문제를 해결함.
+- → [[sources/2026-07-24-pyrodash-cost-efficient-token-level-small-large-la]]: 두 논문 모두 비용과 성능 간의 균형을 맞추기 위해 간단한 작업은 작은 모델이, 복잡한 작업은 큰 모델이 처리하도록 동적으로 라우팅하는 비용 인식형 아키텍처를 제안함.
