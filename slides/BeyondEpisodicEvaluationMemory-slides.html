@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Episodic Evaluation: Memory Architectural Bottlenecks — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <p class="muted" style="font-size:clamp(0.7rem,1.2vw,0.9rem);margin-bottom:1.5rem;">arXiv:2607.21571v1 · cs.RO · 2026년 7월</p>
+    <h1 style="font-size:clamp(1.6rem,3.5vw,2.8rem);line-height:1.25;margin-bottom:1.5rem;">에피소딕 평가를 넘어서:<br>순차적 구현 질의응답에서의<br>메모리 아키텍처 병목</h1>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.15rem);margin-bottom:2.5rem;" class="muted">Beyond Episodic Evaluation: Memory Architectural Bottlenecks<br>in Sequential Embodied Question Answering</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.75rem,1.2vw,0.95rem);">Zikui Cai, Kaushal Janga, Tan Dat Dao, Seungjae Lee 외 · University of Maryland, UT Austin, UIUC</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">동기: 에피소딕 평가의 한계</h2>
+    <div class="quote-block" style="margin-bottom:2rem;">
+      <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);">"기존 EQA 평가는 각 질문을 독립적인 작업으로 처리하고, 에피소드 간에 에이전트의 내부 상태를 초기화한다."</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:0.8rem;"><i class="fas fa-robot"></i>&nbsp; 실제 로봇의 동작 방식</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>연속적으로 환경에서 작동</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전 상호작용에서 얻은 정보를 누적·보존·재사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>중복 탐색을 피해 효율적으로 후속 작업 수행</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:0.8rem;"><i class="fas fa-exclamation-triangle accent"></i>&nbsp; 암묵적 가정의 문제</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>메모리를 "켜두기만" 하면 성능이 일률적으로 향상될 것이라는 가정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>메모리 구조에 따른 지식 축적 능력 차이 무시</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>순차적 설정에서의 아키텍처 병목 미탐색</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">에피소딕 vs 순차적 평가</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;"><span class="tag tag-amber">에피소딕 평가</span></h3>
+        <div class="flow-item">
+          <div class="flow-icon">Q1</div>
+          <div>전체 탐색 → 답변 → <span class="accent">메모리 초기화</span></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">Q2</div>
+          <div>전체 탐색 → 답변 → <span class="accent">메모리 초기화</span></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">Q3</div>
+          <div>전체 탐색 → 답변 → <span class="accent">메모리 초기화</span></div>
+        </div>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.9rem);margin-top:1rem;">모든 질문을 마치 새로운 환경처럼 처음부터 탐색</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;"><span class="tag tag-green">순차적 평가</span></h3>
+        <div class="flow-item">
+          <div class="flow-icon">Q1</div>
+          <div>전체 탐색 → 답변 → <span class="accent3">메모리 유지</span></div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">Q2</div>
+          <div><span class="accent3">이전 지식 활용</span> → 직접 이동 → 답변</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">Q3</div>
+          <div><span class="accent3">이전 지식 활용</span> → 직접 이동 → 답변</div>
+        </div>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.9rem);margin-top:1rem;">중복 탐색 제거, 효율성 극대화</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">Sequential-EQA 평가 프로토콜</h2>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-bottom:2rem;">기존 에피소딕 EQA 벤치마크를 최소 개입으로 순차적 설정으로 변환</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">동일 환경</div>
+        <div class="step-desc">같은 3D 환경 내에서 여러 질문을 연속적으로 제시</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">상태 전달</div>
+        <div class="step-desc">에이전트의 내부 메모리를 질문 간에 유지</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">최소 개입</div>
+        <div class="step-desc">환경과 모델 파라미터는 변경하지 않음</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">진단 평가</div>
+        <div class="step-desc">실패 모드 분석에 집중, 최적화된 성능 측정 아님</div>
+      </div>
+    </div>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.9rem);">대상 벤치마크: OpenEQA — 에이전트를 의도적으로 추가 최적화 없이 적용하여 메모리 아키텍처 자체의 한계를 격리</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">평가 대상 메모리 아키텍처</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);margin-bottom:0.8rem;"><span class="tag tag-amber">경량 기하 메모리</span></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.6rem;" class="muted">ExploreEQA</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>2D 점유 맵(Occupancy Map) 기반</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>탐색 가능 여부만 저장</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시각-의미 정보 <span class="accent">미포함</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);margin-bottom:0.8rem;"><span class="tag tag-red">암시적 메모리 (VLA)</span></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.6rem;" class="muted">UniNavid</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>엔드-투-엔드 비전-언어-행동 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단기 에피소딕 버퍼 사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단기 호라이즌 데이터로 학습 → <span class="accent">분포 외향 붕괴</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);margin-bottom:0.8rem;"><span class="tag tag-green">구조화 3D 공간 메모리</span></h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.6rem;" class="muted">3D-Mem</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시각 관측을 3D 기하에 매핑</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>VLM으로 의미적 정보 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>공간 좌표에 앵커링 → <span class="accent3">재사용 가능한 장면 표현</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">핵심 발견 1: 경량 메모리의 한계</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">2D 점유 맵이 기억하는 것</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>로봇이 어디를 탐색했는지<span class="muted"> (통행 가능성)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>장애물의 위치<span class="muted"> (기하 정보)</span></li>
+        </ul>
+        <div class="hr"></div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">2D 점유 맵이 잊어버리는 것</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>객체의 <span class="accent">시각-의미 증거</span><span class="muted"> (색상, 형태, 카테고리)</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>질문에 답하기 위한 <span class="accent">핵심 정보</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">결과</h3>
+        <div class="quote-block">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);">"탐색 위치는 기억하지만, 이후 질문에 필요한 시각-의미 증거가 없어 정답률이 정체되거나 하락한다."</p>
+        </div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem;" class="muted">메모리 지속성 ≠ 지식 축적<br>단순히 메모리를 유지하는 것만으로는 충분하지 않다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">핵심 발견 2: VLA 에이전트의 시간적 불일치</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">UniNavid의 순차적 설정에서의 문제</h3>
+      <div class="grid-2">
+        <div>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-bottom:0.8rem;"><span class="accent">학습 시:</span> 단기 호라이즌의 에피소딕 데이터</p>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent2">배포 시:</span> 연속적인 다중 질의 히스토리</p>
+        </div>
+        <div>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);">상속된 컨텍스트가 <span class="accent">재사용 가능한 장면 표현</span>이 아닌 <span class="accent">심각한 시간적 불일치(Temporal Mismatch)</span>를 유발</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;" class="muted">의미적 간섭 (Semantic Interference)</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);">이전 질문의 컨텍스트가 현재 질문의 추론을 방해</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;" class="muted">재해석 문제 (Overwriting)</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);">새 관측이 이전 지식을 덮어써서 치명적 망각 발생</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1.5rem;" class="muted">→ 내비게이션 비용은 감소하지만, 정답률이 정체되거나 체계적으로 하락</p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">해결책: 공간적으로 기반된 3D 메모리</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">3D-Mem 아키텍처의 핵심 원리</h3>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1</div>
+          <div class="step-label">시각 관측 수집</div>
+          <div class="step-desc">로봇 이동 중 지속적 이미지 획득</div>
+        </div>
+        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipeline-step">
+          <div class="step-num">2</div>
+          <div class="step-label">3D 기하 매핑</div>
+          <div class="step-desc">관측을 메트릭 3D 좌표에 영속적으로 부착</div>
+        </div>
+        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipeline-step">
+          <div class="step-num">3</div>
+          <div class="step-label">VLM 의미 부착</div>
+          <div class="step-desc">VLM으로 시각-의미 정보를 3D 위치에 저장</div>
+        </div>
+        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipeline-step">
+          <div class="step-num">4</div>
+          <div class="step-label">선택적 재사용</div>
+          <div class="step-desc">질문에 관련된 공간 영역만 조회하여 답변</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><i class="fas fa-shield-alt accent3"></i>&nbsp; <span class="accent3">치명적 망각 방지:</span> 공간 좌표에 앵커링되어 이전 정보가 덮어쓰기되지 않음</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><i class="fas fa-filter accent3"></i>&nbsp; <span class="accent3">의미적 노이즈 제거:</span> 질문과 무관한 과거 정보가 현재 추론을 간섭하지 않음</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">시뮬레이션 실험 결과</h2>
+    <p style="font-size:clamp(0.85rem,1.4vw,1.05rem);margin-bottom:1.5rem;">OpenEQA 벤치마크 기반 순차적 평가</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>메모리 아키텍처</th>
+          <th>정답률 변화</th>
+          <th>내비게이션 비용</th>
+          <th>정확도-효율성 트레이드오프</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2D 점유 맵<br><span class="muted" style="font-size:clamp(0.7rem,1vw,0.8rem);">ExploreEQA</span></td>
+          <td><span class="accent">정체 또는 하락</span></td>
+          <td>감소</td>
+          <td><span class="accent">깨짐</span> — 의미 정보 부재</td>
+        </tr>
+        <tr>
+          <td>암시적 메모리<br><span class="muted" style="font-size:clamp(0.7rem,1vw,0.8rem);">UniNavid (VLA)</span></td>
+          <td><span class="accent">체계적 하락</span></td>
+          <td>감소</td>
+          <td><span class="accent">깨짐</span> — 시간적 불일치</td>
+        </tr>
+        <tr>
+          <td>3D 공간 메모리<br><span class="muted" style="font-size:clamp(0.7rem,1vw,0.8rem);">3D-Mem</span></td>
+          <td><span class="accent3">+33.3% 향상</span></td>
+          <td><span class="accent3">-53.3% 감소</span></td>
+          <td><span class="accent3">돌파</span> — 동시 달성</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin-top:1.5rem;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">"공간적으로 기반된 3D 메모리만이 순차적 설정에서 정확도-효율성 트레이드오프를 돌파한다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">실제 로봇 검증</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">실험 설정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 사족보행 이동 로봇 활용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실내 및 실외 환경에서 테스트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>현실적인 센싱 및 구동 노이즈 존재</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시뮬레이션과 동일한 평가 프로토콜 적용</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;">결과</h3>
+        <div class="quote-block" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);">"시뮬레이션에서 발견된 병목 현상이 실제 환경에서도 일반화됨을 확인."</p>
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>공간적으로 기반된 시각 메모리의 필요성 재확인</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시뮬레이션 결과가 단순한 아티팩트가 아님을 입증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>물리적 환경에서의 연속적 지능적 동작 가능성 확인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">정성적 분석 인사이트</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;"><i class="fas fa-search accent"></i>&nbsp; 실패 모드 분석</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">의미적 희석:</span> 질문과 무관한 영역의 정보가 메모리에 축적되어 관련 정보의 검색 정밀도 저하</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">과신(Overconfidence):</span> 과거 관측에 의존하여 추가 탐색을 수행하지 않다가 정보가 불충분한 경우 발생</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent">컨텍스트 오염:</span> VLA에서 이전 질문의 언어 컨텍스트가 현재 질문 해석을 왜곡</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);margin-bottom:1rem;"><i class="fas fa-lightbulb accent3"></i>&nbsp; 3D-Mem의 성공 요인</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">공간 분리성:</span> 서로 다른 객체와 장소의 정보가 3D 공간에서 자연스럽게 분리되어 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">선택적 접근:</span> 질문과 관련된 공간 영역만 효율적으로 조회 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">점진적 축적:</span> 새 관측이 이전 정보를 덮어쓰지 않고 추가됨</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:1.5rem;">주요 기여 요약</h2>
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:1rem;">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+            <div class="big-num">1</div>
+            <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);">Sequential-EQA 프로토콜 도입</h3>
+          </div>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);" class="muted">EQA를 고립된 에피소드에서 연속적 다중 질의 작동으로 전환. 기존 모델과 환경 수정 없이 메모리 재사용 효율을 측정.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+            <div class="big-num">2</div>
+            <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);">아키텍처 병목 식별</h3>
+          </div>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);" class="muted">메모리 지속성이 지식 축적을 보장하지 않음을 4가지 아키텍처(VLM-agent, VLA 포함)에서 입증.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:1rem;">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+            <div class="big-num">3</div>
+            <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);">트레이드오프 돌파 증명</h3>
+          </div>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);" class="muted">공간 기반 3D 메모리가 순차적 설정에서 정확도 <span class="accent3">+33.3%</span>, 내비게이션 비용 <span class="accent3">-53.3%</span>를 동시 달성.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+            <div class="big-num">4</div>
+            <h3 style="font-size:clamp(0.9rem,1.4vw,1.1rem);">실제 로봇 검증</h3>
+          </div>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);" class="muted">사족보행 로봇에서 실내·실외 환경 테스트로 식별된 병목이 시뮬레이션을 넘어 일반화됨을 확인.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.2rem,2.2vw,1.8rem);margin-bottom:2rem;">논문 정보</h2>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:clamp(1rem,1.6vw,1.25rem);margin-bottom:0.8rem;">Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering</h3>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-bottom:1rem;" class="muted">Zikui Cai, Kaushal Janga, Tan Dat Dao, Seungjae Lee, Shivin Dass, Mingyo Seo, Kaiyu Yue, Mintong Kang, Nandhu Pillai, Monte Hoover, Aadi Palnitkar, Ruchit Rawal, Ruijie Zheng, Bo Li, Yuke Zhu, Roberto Martín-Martín, Tom Goldstein, Furong Huang</p>
+      <div class="hr"></div>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;"><i class="fas fa-university"></i>&nbsp; University of Maryland · UT Austin · UIUC</p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;"><i class="fas fa-calendar"></i>&nbsp; 2026년 7월 23일</p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;"><i class="fas fa-file-alt"></i>&nbsp; arXiv: <a href="http://arxiv.org/abs/2607.21571v1" class="accent2">2607.21571v1</a> [cs.RO]</p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;"><i class="fas fa-globe"></i>&nbsp; <a href="https://sequential-eqa.github.io/" class="accent2">프로젝트 페이지</a></p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);"><i class="fab fa-github"></i>&nbsp; <a href="https://github.com/jangablox/sequential-eqa" class="accent2">GitHub 저장소</a></p>
+    </div>
+    <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.9rem);text-align:center;">감사합니다</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
