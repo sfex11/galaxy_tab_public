@@ -2716,3 +2716,31 @@
 ## [2026-07-24 08:32] ingest | Understanding the Impact of Linguistic Realization Choices on LLM Stance with Causal Tracing
 
 ## [2026-07-24 08:32] ingest | ReferTrack: Referring Then Tracking for Embodied Visual Tracking
+
+## [2026-07-25 04:13] llm-ingest | 0편 분석, 엔티티 355개, 개념 1361개
+
+## [2026-07-25 08:32] ingest | Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering
+
+## [2026-07-25 08:32] ingest | MedGame: Storytelling Gamification Empowered by Large Language Models for Medical Education
+
+## [2026-07-25 08:32] ingest | Beyond Sycophancy: Structured Resistance and Compliance in LLM Moral Reasoning
+
+## [2026-07-25 08:32] ingest | OpenForgeRL: Train Harness-native Agents in Any Environment
+
+## [2026-07-25 08:32] ingest | MIRROR: Learning from the Other View for Multi-Modal Reasoning
+
+## [2026-07-25 08:32] ingest | GS-Agent: Creating 4D Physical Worlds With Generative Simulation
+
+## [2026-07-25 08:32] ingest | Same Dangerous Objective, Opposite Advice: Direct Exposure versus Multi-Agent Mediation
+
+## [2026-07-25 08:32] ingest | Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
+
+## [2026-07-25 08:32] ingest | Toward Continuous Assurance for the Democratization of AI Agent Creation in Industry
+
+## [2026-07-25 08:32] ingest | Compact Latent Coordination for Autonomous Vehicles at Unsignalized Intersections
+
+## [2026-07-25 08:32] ingest | From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
+
+## [2026-07-25 08:32] ingest | X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
+
+## [2026-07-25 08:32] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors

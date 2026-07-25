@@ -323,3 +323,5 @@ _자동 생성됨_
 - [[sources/2026-07-17-lyapunov-exponent-as-physics-informed-dense-reward.md]]
 
 - [[sources/2026-07-23-off-context-grpo-learning-to-reason-on-hard-proble.md]]
+
+- [[sources/2026-07-25-compact-latent-coordination-for-autonomous-vehicle.md]]
