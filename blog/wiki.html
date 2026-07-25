@@ -3,514 +3,546 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>성공률의 함정 — 에이전트 평가가 놓치고 있는 것</title>
+<title>하네스 없이 훈련된 에이전트는 왜 '실전'에서 무너지는가</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --bg: #faf9f7;
-    --fg: #2c2825;
-    --muted: #7a7570;
-    --accent: #c2703e;
-    --accent2: #5b7c99;
-    --accent3: #6b9e7a;
-    --card-bg: rgba(255,255,255,0.7);
-    --card-border: rgba(194,112,62,0.12);
-    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
-    --radius: 14px;
-  }
-
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg);
-    color: var(--fg);
+    background: #faf9f7;
+    color: #2c2825;
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
     line-height: 1.85;
-    font-size: clamp(15px, 2.2vw, 18px);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  article {
-    max-width: 780px;
+  .article-wrapper {
+    max-width: 720px;
     margin: 0 auto;
-    padding: 0 clamp(16px, 4vw, 40px) 80px;
+    padding: 20px 20px 80px;
   }
 
   /* ── 네비게이션 ── */
-  .nav-wrap {
-    max-width: 860px;
-    margin: 24px auto 0;
-    padding: 0 clamp(12px, 4vw, 40px);
+  nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
   }
+  nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  nav a:hover { background: rgba(194,112,62,0.08); }
 
   /* ── 헤더 ── */
   .article-header {
-    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
+    margin: 48px 0 40px;
     text-align: left;
   }
-
-  .article-header .tag {
+  .article-tag {
     display: inline-block;
-    font-size: clamp(11px, 1.4vw, 13px);
+    font-size: clamp(11px, 1.6vw, 12px);
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--card-border);
-    padding: 4px 14px;
-    border-radius: 100px;
-    margin-bottom: 20px;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
   }
-
   .article-header h1 {
-    font-family: 'Source Serif 4', serif;
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
     font-weight: 700;
-    font-size: clamp(28px, 5.5vw, 48px);
-    line-height: 1.25;
-    color: var(--fg);
-    margin-bottom: 20px;
+    font-size: clamp(1.65rem, 4.5vw, 2.2rem);
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 16px;
   }
-
-  .article-header .subtitle {
-    font-size: clamp(15px, 2vw, 18px);
-    color: var(--muted);
-    font-weight: 300;
+  .article-subtitle {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #7a7470;
     line-height: 1.7;
-    max-width: 600px;
+    font-weight: 300;
   }
-
-  .article-header .meta {
-    margin-top: 24px;
-    font-size: 13px;
-    color: var(--muted);
+  .article-meta {
+    margin-top: 20px;
+    font-size: clamp(11px, 1.5vw, 12px);
+    color: #a09a95;
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
   }
 
-  .article-header .meta span {
+  /* ── 섹션 ── */
+  .section { margin: 48px 0; }
+  .section-number {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(12px, 1.6vw, 13px);
+    color: #c2703e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+    line-height: 1.4;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+  .section h3 {
+    font-weight: 700;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    color: #2c2825;
+    margin: 28px 0 10px;
+  }
+
+  p { margin-bottom: 18px; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 2vw, 15.5px);
+    color: #5a5550;
+    font-style: italic;
+    line-height: 1.8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: clamp(11px, 1.5vw, 12px);
+    color: #a09a95;
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: clamp(14px, 2vw, 15px);
+    color: #c2703e;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 강조 ── */
+  strong { color: #2c2825; font-weight: 700; }
+  .hl-orange { color: #c2703e; font-weight: 600; }
+  .hl-blue { color: #5b7c99; font-weight: 600; }
+  .hl-green { color: #6b9e7a; font-weight: 600; }
+
+  /* ── 리스트 ── */
+  ul, ol {
+    margin: 12px 0 18px 20px;
+    padding-left: 4px;
+  }
+  li { margin-bottom: 8px; }
+  li::marker { color: #c2703e; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.04) 0%, rgba(91,124,153,0.04) 100%);
+    border: 1px solid rgba(194,112,62,0.10);
+    border-radius: 14px;
+    padding: 24px 24px 20px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .metaphor-box::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, #c2703e, #5b7c99);
+    border-radius: 0 0 2px 2px;
+  }
+  .metaphor-label {
+    font-size: clamp(10px, 1.4vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5b7c99;
+    margin-bottom: 10px;
+  }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 연결 다이어그램 ── */
+  .connection-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 24px 0;
+  }
+  @media (min-width: 500px) {
+    .connection-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .conn-item {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 1px 8px rgba(44,40,37,0.03);
+  }
+  .conn-item .conn-arrow {
+    font-family: 'Source Serif 4', serif;
+    font-size: 18px;
+    color: #c2703e;
+    margin-bottom: 6px;
+  }
+  .conn-item strong {
+    font-size: clamp(13px, 1.8vw, 14px);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .conn-item p {
+    font-size: clamp(12px, 1.7vw, 13px);
+    color: #7a7470;
+    margin-bottom: 0;
+    line-height: 1.7;
   }
 
   /* ── 구분선 ── */
   .divider {
     border: none;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.2), transparent);
-    margin: 0 0 clamp(40px, 6vw, 64px);
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.18), transparent);
+    margin: 48px 0;
   }
 
-  /* ── 섹션 ── */
-  .section { margin-bottom: clamp(40px, 7vw, 72px); }
-
-  .section h2 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 700;
-    font-size: clamp(21px, 3.5vw, 30px);
-    line-height: 1.35;
-    color: var(--fg);
-    margin-bottom: 16px;
-    position: relative;
-  }
-
-  .section h2 .num {
-    color: var(--accent);
-    font-weight: 600;
-    margin-right: 8px;
-  }
-
-  .section h3 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 600;
-    font-size: clamp(17px, 2.6vw, 22px);
-    color: var(--fg);
-    margin: 32px 0 12px;
-  }
-
-  .section p {
-    margin-bottom: 18px;
-    color: var(--fg);
-  }
-
-  .section ul, .section ol {
-    margin: 0 0 20px 20px;
-  }
-
-  .section li {
-    margin-bottom: 10px;
-  }
-
-  /* ── 인용구 ── */
-  blockquote {
-    border-left: 3px solid var(--accent);
-    padding: 16px 24px;
-    margin: 24px auto;
-    max-width: 800px;
-    background: rgba(194,112,62,0.04);
+  /* ── 결론 하이라이트 ── */
+  .conclusion-highlight {
+    background: rgba(194,112,62,0.05);
+    border-left: 3px solid #c2703e;
     border-radius: 0 10px 10px 0;
-    font-style: italic;
-    color: var(--muted);
-    font-size: 0.97em;
-    line-height: 1.75;
-  }
-
-  blockquote cite {
-    display: block;
-    margin-top: 10px;
-    font-style: normal;
-    font-size: 0.88em;
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  /* ── 카드 ── */
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    box-shadow: var(--card-shadow);
-    padding: clamp(20px, 3vw, 32px);
-    margin: 24px 0;
-    backdrop-filter: blur(6px);
-  }
-
-  .card h4 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 600;
-    font-size: clamp(16px, 2.4vw, 19px);
-    margin-bottom: 10px;
-    color: var(--fg);
-  }
-
-  .card p {
-    margin-bottom: 10px;
-    color: var(--fg);
-    font-size: 0.96em;
-  }
-
-  .card .label {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-  }
-
-  .label-orange { background: rgba(194,112,62,0.12); color: var(--accent); }
-  .label-blue { background: rgba(91,124,153,0.12); color: var(--accent2); }
-  .label-green { background: rgba(107,158,122,0.12); color: var(--accent3); }
-
-  /* ── 강조 ── */
-  strong { color: var(--fg); font-weight: 700; }
-  .em-orange { color: var(--accent); font-weight: 500; }
-  .em-blue { color: var(--accent2); font-weight: 500; }
-  .em-green { color: var(--accent3); font-weight: 500; }
-
-  /* ── 비유 박스 ── */
-  .analogy-box {
-    background: linear-gradient(135deg, rgba(91,124,153,0.06), rgba(107,158,122,0.06));
-    border: 1px solid rgba(91,124,153,0.12);
-    border-radius: var(--radius);
-    padding: clamp(20px, 3vw, 28px);
+    padding: 20px 24px;
     margin: 28px 0;
-    position: relative;
   }
-
-  .analogy-box::before {
-    content: '💡';
-    position: absolute;
-    top: -14px;
-    left: 24px;
-    font-size: 22px;
-    background: var(--bg);
-    padding: 0 8px;
-    border-radius: 8px;
-  }
-
-  .analogy-box p {
-    margin-bottom: 8px;
-    font-size: 0.97em;
-  }
-
-  /* ── 연결 다이어그램 ── */
-  .connection-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 24px 0;
-  }
-
-  .connection-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 18px;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    box-shadow: var(--card-shadow);
-  }
-
-  .connection-icon {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 700;
-    font-family: 'Source Serif 4', serif;
-  }
-
-  .ci-orange { background: rgba(194,112,62,0.1); color: var(--accent); }
-  .ci-blue { background: rgba(91,124,153,0.1); color: var(--accent2); }
-  .ci-green { background: rgba(107,158,122,0.1); color: var(--accent3); }
-
-  .connection-text h4 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 600;
-    font-size: clamp(15px, 2.2vw, 17px);
-    margin-bottom: 4px;
-    color: var(--fg);
-  }
-
-  .connection-text p {
-    font-size: 0.93em;
-    color: var(--muted);
-    margin-bottom: 0;
-  }
-
-  /* ── 결론 박스 ── */
-  .conclusion-box {
-    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(194,112,62,0.02));
-    border: 1px solid rgba(194,112,62,0.15);
-    border-radius: var(--radius);
-    padding: clamp(24px, 4vw, 40px);
-    margin: 32px 0;
-  }
-
-  .conclusion-box h2 {
-    margin-bottom: 16px;
-  }
-
-  .conclusion-box ol {
-    margin-left: 20px;
-    margin-bottom: 0;
-  }
-
-  .conclusion-box li {
-    margin-bottom: 14px;
-    padding-left: 4px;
-  }
-
-  .conclusion-box li strong {
-    color: var(--accent);
-  }
+  .conclusion-highlight p:last-child { margin-bottom: 0; }
 
   /* ── 푸터 ── */
   .article-footer {
-    margin-top: clamp(48px, 8vw, 80px);
+    margin-top: 56px;
     padding-top: 24px;
-    border-top: 1px solid rgba(44,40,37,0.08);
-    font-size: 13px;
-    color: var(--muted);
+    border-top: 1px solid rgba(44,40,37,0.06);
+    font-size: clamp(11px, 1.5vw, 12px);
+    color: #a09a95;
     text-align: center;
+    line-height: 1.8;
   }
 
-  .article-footer a {
-    color: var(--accent);
-    text-decoration: none;
+  /* ── 스크롤 진행 바 ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #c2703e, #5b7c99);
+    width: 0%;
+    z-index: 100;
+    transition: width 0.1s linear;
   }
 
-  /* ── 반응형 ── */
-  @media (max-width: 600px) {
-    .connection-item {
-      flex-direction: column;
-      gap: 10px;
-    }
-    .connection-icon {
-      width: 32px;
-      height: 32px;
-      font-size: 14px;
-    }
-    .article-header .meta {
-      flex-direction: column;
-      gap: 6px;
-    }
+  /* ── 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
   }
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+  .fade-up-d1 { animation-delay: 0.1s; }
+  .fade-up-d2 { animation-delay: 0.2s; }
+  .fade-up-d3 { animation-delay: 0.3s; }
 
-  /* ── 스크롤 부드러움 ── */
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
+    .fade-up { animation: none; opacity: 1; }
+    .progress-bar { transition: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="nav-wrap">
-<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
-<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
-<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
-<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
-<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
-<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
-<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
-<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
-<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
-</nav>
-</div>
+<div class="progress-bar" id="progressBar"></div>
 
-<article>
+<div class="article-wrapper">
 
-  <header class="article-header">
-    <span class="tag">Agent Evaluation</span>
-    <h1>성공률의 함정:<br>에이전트 평가가 놓치고 있는<br>진짜 질문</h1>
-    <p class="subtitle">보안 에이전트가 취약점 하나 찾는 데 1만 달러를 썼다면, 그것을 '성공'이라 부를 수 있을까? 결과의 질에서 비용 대비 효율로 향해야 하는 평가 패러다임 전환을 짚어본다.</p>
-    <div class="meta">
-      <span>2025년 7월</span>
-      <span>·</span>
-      <span>Based on: Beyond Success Rate (Cost-Aware Evaluation of Security Agents)</span>
+  <!-- 네비게이션 -->
+  <nav>
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header fade-up">
+    <span class="article-tag">OpenForgeRL 심층 분석</span>
+    <h1>하네스 없이 훈련된 에이전트는 왜 '실전'에서 무너지는가</h1>
+    <p class="article-subtitle">훈련과 배포를 분리하는 기존 패러다임이 에이전트 능력을 구조적으로 제한하는 세 가지 메커니즘과, 그 경계를 붕괴해야 하는 이유</p>
+    <div class="article-meta">
+      <span>대상 논문: OpenForgeRL — Train Harness-native Agents in Any Environment</span>
+      <span>에이전트 하네스 엔지니어링 · 훈련-배포 간극</span>
     </div>
   </header>
+
+  <!-- 서론 -->
+  <section class="section fade-up fade-up-d1">
+    <p>현대 AI 에이전트는 Claude Code, Codex, OpenClaw 같은 정교한 <span class="hl-orange">인퍼런스 하네스(inference harness)</span> 위에서 동작합니다. 체크포인트·복원, 도구 스키마 관리, 롤백·분기 실행 — 이런 기능들이 에이전트의 실제 실행 환경을 구성합니다. 그런데 우리는 에이전트를 <strong>이 하네스 없는 환경</strong>에서 훈련하고 있습니다.</p>
+
+    <p>OpenForgeRL은 이 모순을 정면으로 지적합니다. 현재 Wiki의 에이전트 하네스 엔지니어링이 하네스를 "배포 시점의 실행 인프라"로만 규정하고 훈련과 구조적으로 분리한다면, 그 분리 자체가 에이전트 능력을 근본적으로 제한한다는 것입니다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>비행기 조종사를 <strong>시뮬레이터에서는 조이스틱만</strong> 잡고 훈련시킨 뒤, 실제 전투기에 태워 <strong>autopilot·HUD·ECM 시스템이 잔뜩 달린 cockpit</strong>에 앉히는 것과 같습니다. 조종사는 기본적인 비행 기량은 갖추었지만, 실제 cockpit의 시스템들이 어떻게 자신의 의사결정과 충돌하거나 보완하는지 경험한 적이 없습니다. 결국 <span class="hl-orange">실제 기체의 능력을 제대로 끌어쓰지 못하는 상태</span>가 됩니다.</p>
+    </div>
+
+    <p>이 글에서는 하네스 없이 학습한 에이전트가 하네스 내에서 실행될 때 발생하는 <span class="hl-orange">훈련-배포 간 인터페이스 불일치</span>가 세 가지 차원에서 에이전트 능력을 어떻게 제한하는지, 그리고 이것이 단순한 성능 저하가 아닌 <strong>구조적 발현 불가</strong>라는 점을 분석합니다.</p>
+  </section>
 
   <hr class="divider">
 
   <!-- 섹션 1 -->
-  <section class="section">
-    <h2><span class="num">01</span>연비 없이 속도만 재는 속도계</h2>
+  <section class="section fade-up fade-up-d2" id="sec1">
+    <div class="section-number">Section 01</div>
+    <h2>의미론적 상태 관리의 단절: 암묵적 추론이 OS 스냅샷으로 부서질 때</h2>
 
-    <p>자동차의 성능을 평가한다고 상상해 보자. 측정 항목이 <span class="em-orange">최고 속도</span> 하나뿐이라면 어떤 일이 벌어질까? 연료 소비는 무시한 채, "이 차는 시속 300km까지 납니다"라는 결과만 남는다. 그런데 실제 도로에서 그 차는 1km 가는 데 기름 10리터를 먹는다면 — 그 차를 '우수한 자동차'라고 평가할 운전자가 있을까?</p>
+    <p>에이전트가 훈련 과정에서 학습하는 것은 단순히 "정답을 맞히는 방법"이 아닙니다. 자신의 추론이 <strong>어떤 상태에 의존하는지</strong>를 암묵적으로 학습합니다. "이전 세 단계의 맥락이 유지되어야 이 결론에 도달할 수 있다"는 식의 <span class="hl-blue">의미론적 의존 그래프</span>가 추론에 내재되어 있는 것입니다.</p>
 
-    <p>에이전트 평가의 현주소가 바로 이 속도계와 다르지 않다. 현재 Wiki가 구축한 평가 인프라는 크게 세 가지 경로로 나뉜다:</p>
-
-    <div class="card">
-      <span class="label label-orange">경로 1</span>
-      <h4>벤치마크 기반 정량 평가</h4>
-      <p>성공률, 점수 등 숫자로 결과를 환산하는 전통적 방식. "에이전트가 주어진 과제를 풀었는가?"만 묻는다.</p>
-    </div>
-
-    <div class="card">
-      <span class="label label-blue">경로 2</span>
-      <h4>벤치마크 없는 비교 안전 평가</h4>
-      <p><em>acceptable-risk-quantification</em>과 <em>benchmarkless-comparative-safety-scoring</em>이 시도하는 접근. 고정된 테스트셋 없이 에이전트 간 상대적 안전성을 비교하려 하지만, 여전히 <strong>결과의 안전성</strong>이 평가의 중심축이다.</p>
-    </div>
-
-    <div class="card">
-      <span class="label label-green">경로 3</span>
-      <h4>통계적 인증 프레임워크</h4>
-      <p><em>ai-risk-regulation</em>이 EU AI Act·NIST RMF·CoE Convention의 규제 요구를 "Bounding the Black Box"라는 프레임워크로 번역한다. 절차적 검사에서 증거 기반 인증으로의 전환은 인상적이나, <strong>그 결과를 도출하는 데 소요된 비용까지 포괄하지 않는다</strong>.</p>
-    </div>
-
-    <p>세 경로 모두 <span class="em-orange">결과의 질</span>—안전성, 정확성, 규제 준수—을 측정한다는 점에서 일치한다. 그러나 그 결과를 도출하는 데 소요된 <strong>추론 비용, 도구 호출 비용, 경과 시간</strong>은 어느 경로에도 편입되어 있지 않다. 마치 연비 계산기 없이 속도만 재는 속도계인 셈이다.</p>
-  </section>
-
-  <!-- 섹션 2 -->
-  <section class="section">
-    <h2><span class="num">02</span>보안 에이전트, 무제한 지출의 역설</h2>
-
-    <p>이 문제가 단순한 이론적 공백이 아님을 보여주는 가장 결정적인 증거는 최근 등장한 논문 <span class="em-blue">"Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents"</span>다.</p>
+    <p>그런데 배포 시 하네스가 제공하는 체크포인트/복원(Checkpoint/Restore, C/R) 메커니즘은 이 의미론적 의존을 <strong>OS 수준의 전체 스냅샷</strong>으로 번역합니다.</p>
 
     <blockquote>
-      "Security-agent evaluations commonly measure peak offensive capability under generous inference budgets, emphasizing vulnerability discovery, exploit development, penetration testing, and CTF completion…"
-      <cite>— Beyond Success Rate, 2025</cite>
+      "에이전트의 의미론적 의존 그래프(어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 발생하는 비효율이 간극의 본질이다."
+      <cite>— Crab 논문, algorithm-system-translation-gap</cite>
     </blockquote>
 
-    <p>이 논문이 지적하는 핵심은 명확하다. 보안 에이전트 평가는 <span class="em-orange">관대한 추론 예산</span> 하에서 첨단 공격 능력만 측정한다는 것이다. 실제 운영 환경에서는 <strong>각 툴 호출마다, 각 추론 단계마다 실제 비용이 발생</strong>하는데, 성공률만 높이면 되는 평가 체제에서는 에이전트가 무제한 예산을 소모해 단 하나의 취약점을 찾는 전략이 최적으로 평가되는 <strong>역설</strong>이 생긴다.</p>
-
-    <div class="analogy-box">
-      <p><strong>택시 기사 비유:</strong> 손님이 "공항까지 데려다 주세요"라고 했을 때, 택시 기사가 시내를 50바퀴 돌아서 공항에 도착했다면 — 목적지에 도착한 것은 맞지만 — 그 서비스를 '성공'이라 평가할 승객은 없다. 그런데 현재의 에이전트 평가는 바로 이 기사에게 "도착 성공!"이라는 점수를 주고 있는 것이다.</p>
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>책을 읽다가 중간에 책갈피를 꽂는다고 상상해 보십시오. 당신이 기억하는 것은 <strong>"주인공이 배신당했을 때의 감정적 맥락"</strong>입니다. 그런데 책갈피는 물리적으로 <strong>"98페이지"</strong>라는 정보만 저장합니다. 다음 날 책을 펼쳤을 때, 98페이지의 글자들은 그대로지만 당신이 그 문맥에 도달하기까지의 감정적 연속성은 사라져 있습니다. 에이전트도 마찬가지입니다. OS 스냅샷은 <strong>문자열 상태</strong>는 보존하지만, <span class="hl-orange">추론의 의미론적 연속성</span>은 보존하지 못합니다.</p>
     </div>
 
-    <p>이 문제는 <em>agentic-security-investigation</em> 엔티티가 다루는 "Towards Agentic Investigation of Security Alerts"와도 직결된다. 보안 알림 조사(Security Alert Investigation)는 실제 SOC(Security Operations Center) 운영에서 <span class="em-orange">비용-효율성이 생존의 기준</span>인 도메인이다. 분당 수십 건의 알림이 쏟아지는 환경에서, 하나의 알림을 조사하는 데 수백 달러의 추론 비용을 쓴다면 그 시스템은 운영 불가능하다. 그런데 평가는 여전히 '조사 성공 여부'에 머물러 있다.</p>
+    <div class="card">
+      <div class="card-title">◈ 제한 양상</div>
+      <p>하네스 없이 학습한 에이전트는 롤백·분기 같은 하네스 고유 기능을 활용하는 법을 학습한 적이 없습니다. 롤백 후 재시도 시 이전 추론 경로와의 <span class="hl-orange">의미론적 연속성</span>을 유지하지 못하고, 마치 처음부터 시작하는 것처럼 비효율적인 재추론을 수행합니다. C/R 런타임이 "결함 내성·롤백·분기를 직접 구현하는 인프라 계층"이라면, 이 기능들을 <strong>훈련 불가능한 블랙박스</strong>로 두는 것은 에이전트가 자신의 실패 복구 전략을 하네스의 의미론과 정렬할 수 없음을 의미합니다.</p>
+    </div>
   </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section" id="sec2">
+    <div class="section-number">Section 02</div>
+    <h2>파이프라인 서빙 병목과 도구 사용 패턴의 왜곡</h2>
+
+    <p>하네스는 단순한 LLM 호출 래퍼가 아닙니다. 실제 배포 환경에서는 다중 서버 MCP(Model Context Protocol) 배포, 도구 스키마의 동적 로딩, 파이프라인 단계별 레이턴시 누적 등 복잡한 인프라가 작동합니다.</p>
+
+    <blockquote>
+      "다중 서버 MCP 배포에서 파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정됨."
+      <cite>— Tool Attention 논문, aggregate-pipeline-serving</cite>
+    </blockquote>
+
+    <p>훈련 시 에이전트는 도구 스키마가 <strong>즉시 제공되는</strong> 환경에서 학습합니다. 모든 도구의 인터페이스가 컨텍스트에 이미 존재한다고 가정하고 도구 선택 전략을 내재화합니다. 그러나 하네스 배포 시에는 스키마가 <span class="hl-blue">지연적으로 축적</span>되는 파이프라인을 거칩니다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>요리사가 <strong>모든 조미료가 이미 조리대에 펼쳐져 있는</strong> 주방에서 연습했습니다. 그런데 실제 레스토랑 주방에서는 조미료가 <strong>주문이 들어올 때마다 하나씩 서빙됩니다.</strong> 소금은 있는데 간장이 아직 안 왔다 — 이 상황에서 요리사는 익숙했던 타이밍으로 요리를 진행할 수 없습니다. 마찬가지로 에이전트는 <span class="hl-orange">스키마가 아직 로드되지 않은 도구를 호출하려 하는</span> 오류(blind-tool-invocation)를 범할 가능성이 크게 높아집니다.</p>
+    </div>
+
+    <p>이로 인해 세 가지 왜곡이 발생합니다:</p>
+    <ul>
+      <li>에이전트가 훈련 시 학습한 <span class="hl-orange">도구 선택 타이밍</span>이 하네스 내에서는 suboptimal이 됩니다</li>
+      <li>스키마가 아직 로드되지 않은 도구를 호출하려 할 때 <span class="hl-orange">blind-tool-invocation</span>이 발생할 가능성이 증가합니다</li>
+      <li>하네스의 스키마 축적 상태라는 <span class="hl-blue">외부 인프라 상태에 적응</span>해야 하는데, 훈련에서 이를 경험하지 못했습니다</li>
+    </ul>
+
+    <div class="card">
+      <div class="card-title">◈ 핵심 포인트</div>
+      <p>SpecKV가 압축이라는 <strong>내부 시스템 상태</strong>에 반응하는 적응을 보여주었다면, 하네스 네이티브 훈련은 <span class="hl-green">체크포인트 가용성, 스키마 축적도, 롤백 히스토리 깊이</span>라는 <strong>하네스 상태에 반응하는 적응</strong>이라는 완전히 새로운 차원을 열어야 합니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
 
   <!-- 섹션 3 -->
-  <section class="section">
-    <h2><span class="num">03</span>Wiki 안에 흩어진 비용의 단편들</h2>
+  <section class="section" id="sec3">
+    <div class="section-number">Section 03</div>
+    <h2>에이전트-OS 의미론 간극: 실행 불투명성과 메타인지의 부재</h2>
 
-    <p>흥미롭게도, Wiki는 이미 비용 문제를 부분적으로 인식하고 있다. 그러나 이 단편들을 <span class="em-green">평가 패러다임으로까지 통합하지 못한</span> 상태다. 세 가지 조각을 살펴보자.</p>
+    <p>앞선 두 섹션이 "하네스 기능을 못 쓴다"는 문제라면, 세 번째 문제는 더 근본적입니다. <span class="hl-orange">자신이 어떤 환경에서 실행되고 있는지조차 모른다</span>는 것입니다.</p>
 
-    <h3>3-1. 파이프라인 병목의 재정의</h3>
-    <p><em>aggregate-pipeline-serving</em>에서 다루는 "Tool Attention Is All You Need" 논문은, 다중 서버 MCP 배포 환경에서 <span class="em-blue">파이프라인 전체의 레이턴시 병목이 개별 LLM 호출이 아닌 스키마 축적에 의해 결정된다</span>는 사실을 보여준다. 이것이 시사하는 바는 명확하다: 비용은 단일 호출 단위가 아니라 <strong>파이프라인 구조 전체에서 발생</strong>한다는 것. 그렇다면 평가 역시 단일 턴의 성공률이 아닌 <span class="em-blue">파이프라인 단위의 비용 효율</span>로 확장되어야 마땅하다.</p>
+    <p>하네스 없이 학습한 에이전트가 하네스 내에서 실행될 때, 에이전트의 내부 상태 전이가 OS 수준에서 어떻게 표현되는지 에이전트 자신이 모델링하지 못합니다. 이것이 무엇을 의미하는지 하나씩 풀어보겠습니다.</p>
 
-    <h3>3-2. "호출할지 말지"라는 결정 자체가 비용이다</h3>
-    <p><em>adaptive-inference</em>에서 다루는 "To Call or Not to Call"은 에이전트가 도구를 <span class="em-green">호출할지 말지</span> 자체를 평가·최적화의 대상으로 삼는다. 이는 이미 "비용 없이 해결 가능한 경우에는 호출하지 않는다"는 비용 인식을 내포하고 있다. 문제는 이 통찰을 <strong>에이전트 평가 메트릭으로 정식화하지 않았다는 것</strong>이다. 도구를 호출하지 않고 정답을 낸 에이전트를, 열 번 호출하고 정답을 낸 에이전트와 동등하게 취급하는 현재 체제에서는 이 최적화가 평가에 반영되지 않는다.</p>
+    <h3>실행 불투명성(Execution Semantic Opacity)</h3>
+    <p>에이전트는 자신의 추론이 하네스 내에서 어떻게 <strong>체크포인트되고, 롤백되고, 분기되는지</strong> 관찰할 수 없습니다. 마치 자동차 운전자가 자신의 차에 블랙박스가 있는지 없는지, 언제 영상이 저장되는지 모르는 것과 비슷합니다. 운전 자체에는 지장이 없어 보이지만, <strong>사고 발생 시 복구 전략</strong>을 세울 수 없습니다.</p>
 
-    <h3>3-3. 이중 비용 모델의 잠재적 청사진</h3>
-    <p><em>behavior-infrastructure-dual-cost-model</em>이라는 슬러그가 Wiki에 존재한다. 정의는 아직 축적 중이지만, 이름만으로도 <span class="em-orange">행동 비용(behavior cost)과 인프라 비용(infrastructure cost)의 이중 축</span>으로 운영 비용을 포착하려는 시도로 읽힌다. 에이전트가 어떤 행동을 선택했는가(행동 비용)와 그 행동을 실행하는 데 필요한 인프라 자원이 얼마였는가(인프라 비용)를 분리해서 측정하겠다는 구상이다. 이것이 완성된다면, 평가 패러다임 전환의 핵심 도구가 될 수 있다.</p>
-  </section>
+    <h3>메타인지의 부재</h3>
+    <p>에이전트가 자신의 실행 환경에 대한 메타인지 없이 하네스의 의사결정 — 체크포인트 타이밍, 롤백 여부, 분기 지점 선택 — 에 <span class="hl-orange">수동적으로 종속</span>됩니다. 하네스가 "여기서 체크포인트 찍는 게 좋겠다"고 판단하면 에이전트는 그 결정에 맞춰야 하는데, 훈련에서 이런 상황을 경험한 적이 없으므로 <strong>협력적 실행</strong>이 불가능합니다.</p>
 
-  <!-- 섹션 4 -->
-  <section class="section">
-    <h2><span class="num">04</span>세 가지 새로운 연결</h2>
-
-    <p>위 단편들을 하나로 이어보면, 기존에 보이지 않았던 연결들이 드러난다.</p>
-
-    <div class="connection-list">
-      <div class="connection-item">
-        <div class="connection-icon ci-orange">C</div>
-        <div class="connection-text">
-          <h4>천장 성능 문제 ↔ 비용 누적의 역설</h4>
-          <p><em>ceiling-performance-problem</em>이 포착할 수 있는 현상: 성능 천장에 도달한 에이전트가 오히려 <span class="em-orange">더 많은 추론 단계를 소모하여 비용만 증가</span>하는 상황이다. 성공률이 이미 95%인 상태에서 나머지 5%를 채우기 위해 10배의 비용을 소모하는 상황은 보안 도메인에서 치명적이다. "성능이 좋을수록 비효율적이다"라는 역설이 성립하는 지점이다.</p>
-        </div>
-      </div>
-
-      <div class="connection-item">
-        <div class="connection-icon ci-blue">A</div>
-        <div class="connection-text">
-          <h4>적응적 추론 → 평가 메트릭으로의 확장</h4>
-          <p><em>adaptive-inference</em>가 현재 <strong>추론 최적화 기법</strong>으로만 위치한다면, 이를 <span class="em-blue">"에이전트가 비용을 인식하고 적응적으로 자원을 배분하는 능력 자체를 평가하는 지표"</span>로 재해석할 수 있다. '정답을 맞혔는가'가 아니라 '주어진 예산 내에서 최적으로 자원을 배분했는가'가 평가 축이 되어야 한다.</p>
-        </div>
-      </div>
-
-      <div class="connection-item">
-        <div class="connection-icon ci-green">R</div>
-        <div class="connection-text">
-          <h4>규제 인증에 비용 차원의 편입</h4>
-          <p><em>ai-risk-regulation</em>의 통계적 인증이 "이 에이전트는 안전하다"만 증명한다면, 운영자에게 진정 필요한 인증은 <span class="em-green">"이 에이전트는 주어진 비용 예산 내에서 안전하다"</span>다. 비용-안전 효율성(cost-safety efficiency)이라는 새로운 인증 축이 필요하다.</p>
-        </div>
-      </div>
+    <div class="card">
+      <div class="card-title">◈ 의미론 보존 실패</div>
+      <p>체크포인트 복원 시 에이전트가 의미론적으로 보존해야 할 추론 맥락이 OS 스냅샷 경계에서 <span class="hl-orange">손실</span>됩니다. 이를 <strong>agent-os-semantic-preservation-failure</strong>라고 부릅니다. 문자열 수준의 컨텍스트는 복원되더라도, "왜 이 결론에 도달했는지"에 대한 추론 맥락이 단절되어, 에이전트는 복원된 상태에서 이전과 다른 결론을 내리거나 불필요한 재추론에 빠집니다.</p>
     </div>
   </section>
 
-  <!-- 섹션 5: 결론 -->
-  <section class="section">
-    <div class="conclusion-box">
-      <h2><span class="num">05</span>결론: 평가 패러다임을 어떻게 전환할 것인가</h2>
+  <hr class="divider">
 
-      <p>지금까지의 분석이 보여주는 것은 단순하다. <strong>성공률은 필요조건이지 충분조건이 아니다.</strong> 특히 추론 단계와 도구 호출마다 실제 비용이 발생하는 도메인—보안, SOC 운영, 자동화 조사—에서는 '비용 대비 효율'이 평가의 본질적 기준이 되어야 한다.</p>
+  <!-- 섹션 4 -->
+  <section class="section" id="sec4">
+    <div class="section-number">Section 04</div>
+    <h2>숨겨진 연결: 경계가 붕괴되어야 비로소 보이는 것들</h2>
 
-      <p>구체적으로, 기존 패러다임에서 다음 네 가지 방향으로 전환해야 한다:</p>
+    <p>이 분석을 통해 기존에 분리되어 있던 개념들 사이의 <span class="hl-green">새로운 연결</span>이 드러납니다. 훈련-배포 분리라는 렌즈를 거두면, 서로 다른 영역으로 보였던 문제들이 사실 하나의 근본 원인에서 파생되었음이 보입니다.</p>
 
-      <ol>
-        <li><strong>단일 턴 → 파이프라인 단위 측정</strong> — 개별 호출의 성공이 아닌, 전체 파이프라인의 비용-결과 비율을 측정하는 메트릭 도입. 스키마 축적과 서버 간 통신 등 구조적 비용을 포함해야 한다.</li>
-        <li><strong>이진 성공 → 예산 내 최적화</strong> — "성공/실패"가 아니라 "주어진 예산 내에서 어디까지 도달했는가"를 측정. 적응적 추론 능력—호출하지 않아도 되면 하지 않는 판단력—을 정식 평가 지표로 편입.</li>
-        <li><strong>안전성 → 비용-안전 효율성</strong> — 규제 인증이 "안전하다"를 넘어 "주어진 비용 내에서 안전하다"로 확장. 운영 가능성과 규제 준수 가능성 사이의 간극을 메워야 한다.</li>
-        <li><strong>행동-인프라 이중 비용 모델 정식화</strong> — 에이전트의 행동 선택 비용과 그 행동을 실행하는 인프라 비용을 분리 측정하는 프레임워크를 완성하여, 비용 발생의 실제 구조를 가시화.</li>
-      </ol>
+    <div class="connection-grid">
+      <div class="conn-item">
+        <div class="conn-arrow">↔</div>
+        <strong>하네스 엔지니어링 × 알고리즘-시스템 경계 붕괴</strong>
+        <p>하네스는 단순한 '시스템 계층'이 아니라 에이전트 능력의 일부를 구성합니다. 훈련-배포 분리를 고수하면 알고리즘과 시스템의 경계가 인위적으로 유지되지만, 실제로는 이 경계가 <span class="hl-orange">붕괴</span>되어야 합니다.</p>
+      </div>
+      <div class="conn-item">
+        <div class="conn-arrow">↔</div>
+        <strong>하네스 엔지니어링 × 자율성-품질 분리</strong>
+        <p>하네스를 배포 전용 인프라로 분리하면 에이전트의 자율성(훈련 시 학습)과 품질(하네스 매개 실행 시 실현)이 구조적으로 분리됩니다. OpenForgeRL은 이 분리를 <span class="hl-blue">훈련 시점에서 해소</span>하겠다는 것입니다.</p>
+      </div>
+      <div class="conn-item" style="grid-column: 1 / -1;">
+        <div class="conn-arrow">↗</div>
+        <strong>적응적 추론(Adaptive Inference)의 확장</strong>
+        <p>SpecKV가 압축이라는 내부 상태에 반응하는 적응을 제시했다면, 하네스 네이티브 훈련은 <span class="hl-green">하네스 상태에 반응하는 적응</span>이라는 새로운 차원을 엽니다. 에이전트가 "지금 스키마가 60% 로드된 상태", "롤백 히스토리가 3단계 깊이" 같은 하네스 상태를 인지하고 추론 전략을 조정하는 것입니다.</p>
+      </div>
+    </div>
 
-      <p style="margin-top:20px;">다시 속도계 비유로 돌아가자. 우리는 지금까지 "이 에이전트는 시속 300km입니다"라는 결과에 만족해 왔다. 하지만 실제 도로에 내보내려면 <span class="em-orange">연비계</span>가 필요하다. "이 에이전트는 1달러당 어디까지 갈 수 있습니까?" — 그것이 보안 에이전트 평가가 던져야 할 다음 질문이다.</p>
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>이것은 <strong>수영선수와 수영장</strong>의 관계를 재정의하는 것과 같습니다. 기존 패러다임은 "수영선수는 수영장 밖에서 훈련하고, 시합 때만 수영장에 넣는다"는 것이었습니다. 하지만 수영장의 <strong>수심, 수온, 레인 너비, 출발대 높이</strong>가 선수의 기량 발현에 영향을 미친다면 — 수영장 자체가 훈련 환경의 일부가 되어야 합니다. 수영장을 '배포 인프라'로만 보는 순간, 선수는 수영장의 특성에 적응하는 법을 영원히 학습할 수 없습니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 결론 -->
+  <section class="section" id="sec5">
+    <div class="section-number">Conclusion</div>
+    <h2>패러다임 전환: 하네스를 '인프라'에서 '훈련-배포 통합 아키텍처'로</h2>
+
+    <p>지금까지 살펴본 세 가지 제한 메커니즘 — 의미론적 상태 관리의 단절, 파이프라인 서빙 병목에 의한 도구 사용 왜곡, 실행 불투명성으로 인한 메타인지 부재 — 는 각각 독립적인 버그가 아닙니다. <strong>하나의 근본적 설계 결정</strong>에서 파생된 증상들입니다.</p>
+
+    <div class="conclusion-highlight">
+      <p>하네스 없이 학습한 에이전트가 하네스 내에서 실행될 때의 근본적 제한은 <span class="hl-orange">단순한 성능 저하가 아닙니다.</span> 에이전트가 학습한 능력의 <strong>실행 경로 자체가 하네스의 의미론과 불일치</strong>하여 일부 능력이 발현 불가능해지는 구조적 문제입니다.</p>
+    </div>
+
+    <p>그렇다면 어떻게 전환해야 합니까?</p>
+
+    <h3>첫째, 하네스를 훈련 환경의 일부로 편입시켜야 합니다</h3>
+    <p>OpenForgeRL이 "Train Harness-native Agents"를 주장하는 핵심입니다. 하네스의 C/R 메커니즘, 스키마 축적 파이프라인, 롤백·분기 의사결정을 <span class="hl-green">훈련 시점에 에이전트가 경험</span>할 수 있어야 합니다. 이것은 하네스를 "훈련 가능한" 객체로 만드는 것을 의미합니다.</p>
+
+    <h3>둘째, 알고리즘-시스템 경계를 인위적으로 유지해서는 안 됩니다</h3>
+    <p>에이전트(알고리즘)와 하네스(시스템) 사이에 명확한 인터페이스 경계를 두는 것이 엔지니어링적으로 깔끔해 보일 수 있습니다. 하지만 이 경계가 <span class="hl-blue">에이전트 능력의 발현을 차단</span>한다면, 깔끔함은 쓸모없는 깔끔함입니다. 경계를 붕괴시키고 하네스의 의미론을 에이전트의 추론에 통합해야 합니다.</p>
+
+    <h3>셋째, 새로운 적응 차원을 정의해야 합니다</h3>
+    <p>기존의 적응적 추론이 모델 내부 상태(압축률, KV 캐시 사용량 등)에 반응하는 것이었다면, 하네스 네이티브 훈련은 <span class="hl-orange">외부 인프라 상태</span> — 체크포인트 가용성, 스키마 축적도, 롤백 히스토리 깊이 — 에 반응하는 적응이라는 새로운 차원을 열어야 합니다.</p>
+
+    <blockquote>
+      "Modern AI agents rely on elaborate inference harnesses such as Claude Code, Codex, and OpenClaw."
+      <cite>— OpenForgeRL</cite>
+    </blockquote>
+
+    <p>이 한 문장이 함의하는 바는 명확합니다. 하네스는 더 이상 에이전트 뒤에 숨은 <strong>투명한 인프라</strong>가 아니라, 에이전트 능력을 <strong>구성하는 불투명한 요소</strong>입니다. 이 요소를 훈련에서 배제하는 순간, 우리는 에이전트가 실제로 가진 능력의 일부를 의도적으로 비활성화하는 셈이 됩니다.</p>
+
+    <div class="card" style="margin-top: 32px;">
+      <div class="card-title">◈ 요약: 패러다임 전환의 방향</div>
+      <p><strong>기존:</strong> 하네스 = 배포 시점의 실행 인프라 (훈련과 분리)<br>
+      <strong>전환:</strong> 하네스 = 훈련-배포 통합 아키텍처 (에이전트 능력의 구성 요소)</p>
+      <p style="margin-top: 12px;">이 전환은 에이전트 하네스 엔지니어링의 정의를 근본적으로 다시 쓰는 것이며, 동시에 자율성-품질 분리 문제를 훈련 시점에서 해소하는 유일한 경로입니다.</p>
     </div>
   </section>
 
   <footer class="article-footer">
-    <p>Based on Wiki entities: benchmark, acceptable-risk-quantification, benchmarkless-comparative-safety-scoring, ai-risk-regulation, aggregate-pipeline-serving, adaptive-inference, behavior-infrastructure-dual-cost-model, ceiling-performance-problem, agentic-security-investigation</p>
-    <p style="margin-top:8px;">원문 논문: <a href="#">Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents</a></p>
+    <p>분석 기반: OpenForgeRL — Train Harness-native Agents in Any Environment<br>
+    관련 Wiki: agentic-harness-engineering · algorithm-system-translation-gap · aggregate-pipeline-serving<br>
+    agent-os-semantic-gap · adaptive-inference · blind-tool-invocation · autonomy-quality-decoupling</p>
   </footer>
 
-</article>
+</div>
+
+<script>
+  // 스크롤 진행 바
+  const progressBar = document.getElementById('progressBar');
+  let ticking = false;
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // 스크롤 기반 fade-up 애니메이션
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.section').forEach(function(sec) {
+    sec.style.opacity = '0';
+    sec.style.transform = 'translateY(20px)';
+    sec.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    observer.observe(sec);
+  });
+</script>
 
 </body>
 </html>
