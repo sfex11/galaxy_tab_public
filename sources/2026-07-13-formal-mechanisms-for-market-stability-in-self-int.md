@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/routing-adversarial-hijacking.md|routing adversarial hijacking]]
+
+---
+**관련**: [[concepts/schema-accumulation-attack-surface.md|schema accumulation attack surface]]
+
+---
+**관련**: [[concepts/abstraction-layer-mismatch.md|abstraction layer mismatch]]

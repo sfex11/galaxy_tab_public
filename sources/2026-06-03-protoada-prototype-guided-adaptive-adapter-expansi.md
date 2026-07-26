@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/sleep-wake-consolidation.md|sleep wake consolidation]]
+
+---
+**관련**: [[concepts/continual-compoundability.md|continual compoundability]]

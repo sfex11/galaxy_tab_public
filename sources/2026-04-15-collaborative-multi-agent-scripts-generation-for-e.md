@@ -286,3 +286,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/abstraction-layer-mismatch.md|abstraction layer mismatch]]
+
+---
+**관련**: [[concepts/hidden-state-risk-space.md|hidden state risk space]]
+
+---
+**관련**: [[concepts/intent-laundering.md|intent laundering]]

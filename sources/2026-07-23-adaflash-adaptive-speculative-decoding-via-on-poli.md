@@ -22,7 +22,7 @@ Speculative decoding, in which a lightweight draft model first generates a draft
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

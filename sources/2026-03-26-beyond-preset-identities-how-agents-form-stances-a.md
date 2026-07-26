@@ -58,3 +58,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/probabilistic-risk-bound.md|probabilistic risk bound]]
+
+---
+**관련**: [[concepts/resolution-spectrum-identity.md|resolution spectrum identity]]

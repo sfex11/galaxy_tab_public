@@ -146,3 +146,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/workflow-topology-conditional-optimization.md|workflow topology conditional optimization]]
+
+---
+**관련**: [[concepts/transferability-targeted-optimization.md|transferability targeted optimization]]

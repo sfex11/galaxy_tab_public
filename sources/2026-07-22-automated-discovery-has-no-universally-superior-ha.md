@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/meta-harness-policy.md|meta harness policy]]
+
+---
+**관련**: [[concepts/harness-side-compensation.md|harness side compensation]]

@@ -88,3 +88,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/termination-guarantee-problem.md|termination guarantee problem]]
+
+---
+**관련**: [[concepts/autonomous-commerce.md|autonomous commerce]]
+
+---
+**관련**: [[concepts/perception-action-timing-combinatorics.md|perception action timing combinatorics]]
+
+---
+**관련**: [[concepts/legitimate-division-of-labor-as-attack-surface.md|legitimate division of labor as attack surface]]

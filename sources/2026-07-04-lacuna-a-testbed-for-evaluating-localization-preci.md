@@ -79,3 +79,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/knowledge-loss-translation.md|knowledge loss translation]]
+
+---
+**관련**: [[concepts/temporal-knowledge-exploration-operation.md|temporal knowledge exploration operation]]
+
+---
+**관련**: [[concepts/structural-state-adaptation.md|structural state adaptation]]
+
+---
+**관련**: [[concepts/reactive-paradigm-trap.md|reactive paradigm trap]]
+
+---
+**관련**: [[concepts/episodic-persistent-state-gap.md|episodic persistent state gap]]
+
+---
+**관련**: [[concepts/transient-adaptation-state.md|transient adaptation state]]

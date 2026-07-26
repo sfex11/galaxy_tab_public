@@ -66,3 +66,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/multidimensional-generalization-metric.md|multidimensional generalization metric]]
+
+---
+**관련**: [[concepts/optimization-premise-collapse.md|optimization premise collapse]]

@@ -386,3 +386,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/alignment-scope-erosion.md|alignment scope erosion]]
+
+---
+**관련**: [[concepts/memory-as-alignment-participant.md|memory as alignment participant]]
+
+---
+**관련**: [[concepts/preference-discovery-construction-boundary.md|preference discovery construction boundary]]
+
+---
+**관련**: [[concepts/forgetting-as-agent-decision.md|forgetting as agent decision]]

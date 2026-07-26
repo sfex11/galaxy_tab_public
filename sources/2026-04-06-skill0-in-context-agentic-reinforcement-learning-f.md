@@ -122,3 +122,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/external-internal-adaptation-transition.md|external internal adaptation transition]]
+
+---
+**관련**: [[concepts/internal-prediction-readout.md|internal prediction readout]]

@@ -35,3 +35,24 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-23-agents-in-the-wild-where-research-meets-deployment]]: 두 논문은 과학적 발견 및 생물학적 감시와 같은 특정 실제 도메인에서 AI 에이전트의 성능을 평가하고 배포하는 문제를 다룸.
+
+---
+**관련**: [[concepts/pipeline-inherent-structural-leakage.md|pipeline inherent structural leakage]]
+
+---
+**관련**: [[concepts/structural-trajectory-analysis.md|structural trajectory analysis]]
+
+---
+**관련**: [[concepts/preservation-structure-bottleneck.md|preservation structure bottleneck]]
+
+---
+**관련**: [[concepts/rule-structure-certification.md|rule structure certification]]
+
+---
+**관련**: [[concepts/spectrum-classification-fallacy.md|spectrum classification fallacy]]
+
+---
+**관련**: [[concepts/depth-dependent-divergent-bottleneck.md|depth dependent divergent bottleneck]]
+
+---
+**관련**: [[concepts/harness-task-matching-bottleneck.md|harness task matching bottleneck]]

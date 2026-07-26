@@ -120,3 +120,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-trajectory-analysis.md|structural trajectory analysis]]
+
+---
+**관련**: [[concepts/bidding-meta-inference-circularity.md|bidding meta inference circularity]]

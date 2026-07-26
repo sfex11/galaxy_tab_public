@@ -66,3 +66,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/statistical-certification.md|statistical certification]]
+
+---
+**관련**: [[concepts/substantively-empty-certification.md|substantively empty certification]]

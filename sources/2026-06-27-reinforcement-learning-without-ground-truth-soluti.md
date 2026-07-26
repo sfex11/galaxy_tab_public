@@ -76,3 +76,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/price-representation-applicability.md|price representation applicability]]
+
+---
+**관련**: [[concepts/digital-optimization-physical-impossibility.md|digital optimization physical impossibility]]
+
+---
+**관련**: [[concepts/dual-axis-optimization-inversion.md|dual axis optimization inversion]]
+
+---
+**관련**: [[concepts/request-centric-optimization.md|request centric optimization]]

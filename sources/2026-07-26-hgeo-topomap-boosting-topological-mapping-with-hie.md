@@ -31,3 +31,30 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/schema-speed-perception-paradox.md|schema speed perception paradox]]
+
+---
+**관련**: [[concepts/real-time-threshold-detection.md|real time threshold detection]]
+
+---
+**관련**: [[concepts/designer-metric-deployment-gap.md|designer metric deployment gap]]
+
+---
+**관련**: [[concepts/hierarchical-cumulative-failure.md|hierarchical cumulative failure]]
+
+---
+**관련**: [[concepts/heterogeneous-resource-price-mapping-problem.md|heterogeneous resource price mapping problem]]
+
+---
+**관련**: [[concepts/termination-guarantee-problem.md|termination guarantee problem]]
+
+---
+**관련**: [[concepts/signal-decomposition-information-ceiling.md|signal decomposition information ceiling]]
+
+---
+**관련**: [[concepts/visual-perception-tool-selection-gap.md|visual perception tool selection gap]]
+
+---
+**관련**: [[concepts/failure-detection-computation-gap.md|failure detection computation gap]]

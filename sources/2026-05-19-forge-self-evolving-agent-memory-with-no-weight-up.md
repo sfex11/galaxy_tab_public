@@ -256,3 +256,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-detection-computation-gap.md|failure detection computation gap]]
+
+---
+**관련**: [[concepts/failure-as-causal-data.md|failure as causal data]]
+
+---
+**관련**: [[concepts/pre-constraint-by-memory.md|pre constraint by memory]]
+
+---
+**관련**: [[concepts/failure-feedback-routing.md|failure feedback routing]]

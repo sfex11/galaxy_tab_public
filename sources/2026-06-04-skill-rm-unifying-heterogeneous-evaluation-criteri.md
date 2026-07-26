@@ -167,3 +167,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cooperation-as-control-mechanism.md|cooperation as control mechanism]]
+
+---
+**관련**: [[concepts/infinite-budget-evaluation-paradox.md|infinite budget evaluation paradox]]
+
+---
+**관련**: [[concepts/evaluation-self-referential-collapse.md|evaluation self referential collapse]]
+
+---
+**관련**: [[concepts/evaluation-execution-safety-disconnect.md|evaluation execution safety disconnect]]
+
+---
+**관련**: [[concepts/pipeline-level-cost-attribution.md|pipeline level cost attribution]]
+
+---
+**관련**: [[concepts/triaxial-credit-assignment-framework.md|triaxial credit assignment framework]]
+
+---
+**관련**: [[concepts/internal-failure-signal-translation-gap.md|internal failure signal translation gap]]
+
+---
+**관련**: [[concepts/evaluation-training-boundary-dissolution.md|evaluation training boundary dissolution]]
+
+---
+**관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]

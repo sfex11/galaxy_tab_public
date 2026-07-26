@@ -53,3 +53,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/alignment-irreversibility.md|alignment irreversibility]]
+
+---
+**관련**: [[concepts/recursive-evidence-replay.md|recursive evidence replay]]
+
+---
+**관련**: [[concepts/alignment-scope-erosion.md|alignment scope erosion]]

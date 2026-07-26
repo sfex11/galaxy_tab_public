@@ -53,3 +53,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/visual-perception-tool-selection-gap.md|visual perception tool selection gap]]
+
+---
+**관련**: [[concepts/ecosystem-native.md|ecosystem native]]
+
+---
+**관련**: [[concepts/residual-stream-length-encoding.md|residual stream length encoding]]

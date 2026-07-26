@@ -74,3 +74,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/workflow-topology-conditional-optimization.md|workflow topology conditional optimization]]
+
+---
+**관련**: [[concepts/survivorship-biased-technical-documentation.md|survivorship biased technical documentation]]
+
+---
+**관련**: [[concepts/relational-governance.md|relational governance]]
+
+---
+**관련**: [[concepts/technical-ecosystem-translation-gap.md|technical ecosystem translation gap]]

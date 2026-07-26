@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/composite-tool-operation.md|composite tool operation]]
+
+---
+**관련**: [[concepts/inertial-vs-optimal-convergence.md|inertial vs optimal convergence]]

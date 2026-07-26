@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inertial-vs-optimal-convergence.md|inertial vs optimal convergence]]
+
+---
+**관련**: [[concepts/episode-length-adaptation.md|episode length adaptation]]

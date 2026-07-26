@@ -91,3 +91,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/technical-ecosystem-translation-gap.md|technical ecosystem translation gap]]
+
+---
+**관련**: [[concepts/autonomy-quality-decoupling.md|autonomy quality decoupling]]
+
+---
+**관련**: [[concepts/ecosystem-level-adaptation-subject.md|ecosystem level adaptation subject]]
+
+---
+**관련**: [[concepts/semantic-selection-authority.md|semantic selection authority]]
+
+---
+**관련**: [[concepts/knowledge-loss-translation.md|knowledge loss translation]]

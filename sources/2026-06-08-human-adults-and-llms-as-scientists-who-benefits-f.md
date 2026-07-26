@@ -70,3 +70,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-layer-governance-control.md|dual layer governance control]]
+
+---
+**관련**: [[concepts/rule-variation-causal-attribution.md|rule variation causal attribution]]

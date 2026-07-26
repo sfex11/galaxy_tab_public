@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/statistical-ranking-indistinguishability.md|statistical ranking indistinguishability]]
+
+---
+**관련**: [[concepts/early-episode-abort.md|early episode abort]]

@@ -2758,3 +2758,11 @@
 ## [2026-07-26 08:31] ingest | From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
 
 ## [2026-07-26 08:31] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+
+## [2026-07-26 17:02] lint | Wiki 건전성 체크
+- Issues: 2793개
+- Orphans: 844, Missing: 1949, Contradictions: 0
+
+## [2026-07-26 17:47] lint | Wiki 건전성 체크
+- Issues: 2747개
+- Orphans: 798, Missing: 1949, Contradictions: 0

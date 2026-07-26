@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-24-the-ethics-of-autonomous-ai-agents-for-offensive-s]]: 두 논문은 사이버 보안(악성코드 분석 및 공격적 보안)이라는 동일한 도메인에서 LLM 에이전트를 활용하는 방법과 그에 따른 문제점을 다룸.
+
+---
+**관련**: [[concepts/locational-opacity-of-risk.md|locational opacity of risk]]
+
+---
+**관련**: [[concepts/bias-opacity.md|bias opacity]]

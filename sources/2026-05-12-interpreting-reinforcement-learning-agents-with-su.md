@@ -26,3 +26,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/interpretability-verifiability-substitution.md|interpretability verifiability substitution]]
+
+---
+**관련**: [[concepts/utility-ontological-mislocation.md|utility ontological mislocation]]

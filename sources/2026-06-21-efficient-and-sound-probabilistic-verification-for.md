@@ -118,3 +118,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]
+
+---
+**관련**: [[concepts/loyalty-loop-subject-transition.md|loyalty loop subject transition]]
+
+---
+**관련**: [[concepts/verification-execution-gap.md|verification execution gap]]
+
+---
+**관련**: [[concepts/harness-state-responsive-adaptation.md|harness state responsive adaptation]]

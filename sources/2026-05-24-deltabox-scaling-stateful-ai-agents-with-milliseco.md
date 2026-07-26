@@ -200,3 +200,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ecosystem-level-adaptation-subject.md|ecosystem level adaptation subject]]
+
+---
+**관련**: [[concepts/turn-level-credit-estimation.md|turn level credit estimation]]
+
+---
+**관련**: [[concepts/rollback-semantic-discontinuity.md|rollback semantic discontinuity]]

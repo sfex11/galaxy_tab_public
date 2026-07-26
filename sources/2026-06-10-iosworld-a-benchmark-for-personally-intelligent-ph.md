@@ -70,3 +70,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/functional-action-heterogeneity.md|functional action heterogeneity]]
+
+---
+**관련**: [[concepts/temporal-shallowness-of-instruction.md|temporal shallowness of instruction]]
+
+---
+**관련**: [[concepts/harness-native-training.md|harness native training]]
+
+---
+**관련**: [[concepts/contextual-integrity-first-class-constraint.md|contextual integrity first class constraint]]

@@ -208,3 +208,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/multi-agent-communication-fallacy.md|multi agent communication fallacy]]
+
+---
+**관련**: [[concepts/external-abstraction-injection.md|external abstraction injection]]
+
+---
+**관련**: [[concepts/information-preservation-boundary.md|information preservation boundary]]
+
+---
+**관련**: [[concepts/alignment-information-dilution.md|alignment information dilution]]
+
+---
+**관련**: [[concepts/net-human-agent-score.md|net human agent score]]
+
+---
+**관련**: [[concepts/agent-human-economic-power-asymmetry.md|agent human economic power asymmetry]]
+
+---
+**관련**: [[concepts/communication-increase-paradox.md|communication increase paradox]]
+
+---
+**관련**: [[concepts/dvm-hall-model.md|dvm hall model]]

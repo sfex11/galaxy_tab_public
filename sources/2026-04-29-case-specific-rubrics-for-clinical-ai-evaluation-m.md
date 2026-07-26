@@ -339,3 +339,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/survivorship-biased-technical-documentation.md|survivorship biased technical documentation]]
+
+---
+**관련**: [[concepts/cross-layer-bottleneck-isomorphism.md|cross layer bottleneck isomorphism]]
