@@ -1477,3 +1477,14 @@
 - [[sources/2026-07-25-from-resource-flow-to-executable-tests-petri-net-g.md]] - From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
 - [[sources/2026-07-25-x3-opd-distilling-reasoning-into-large-audio-langu.md]] - X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
 - [[sources/2026-07-25-hgeo-topomap-boosting-topological-mapping-with-hie.md]] - HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+- [[sources/2026-07-26-beyond-episodic-evaluation-memory-architectural-bo.md]] - Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/claude-35]] - Claude 3.5
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-07-26-openforgerl-train-harness-native-agents-in-any-env.md]] - OpenForgeRL: Train Harness-native Agents in Any Environment
+- [[sources/2026-07-26-gs-agent-creating-4d-physical-worlds-with-generati.md]] - GS-Agent: Creating 4D Physical Worlds With Generative Simulation
+- [[sources/2026-07-26-same-dangerous-objective-opposite-advice-direct-ex.md]] - Same Dangerous Objective, Opposite Advice: Direct Exposure versus Multi-Agent Mediation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-26-agentic-context-management-solving-agent-memory-an.md]] - Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
+- [[sources/2026-07-26-from-resource-flow-to-executable-tests-petri-net-g.md]] - From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
+- [[sources/2026-07-26-hgeo-topomap-boosting-topological-mapping-with-hie.md]] - HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors

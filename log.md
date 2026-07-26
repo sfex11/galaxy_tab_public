@@ -2744,3 +2744,17 @@
 ## [2026-07-25 08:32] ingest | X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
 
 ## [2026-07-25 08:32] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+
+## [2026-07-26 08:31] ingest | Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering
+
+## [2026-07-26 08:31] ingest | OpenForgeRL: Train Harness-native Agents in Any Environment
+
+## [2026-07-26 08:31] ingest | GS-Agent: Creating 4D Physical Worlds With Generative Simulation
+
+## [2026-07-26 08:31] ingest | Same Dangerous Objective, Opposite Advice: Direct Exposure versus Multi-Agent Mediation
+
+## [2026-07-26 08:31] ingest | Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
+
+## [2026-07-26 08:31] ingest | From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
+
+## [2026-07-26 08:31] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors

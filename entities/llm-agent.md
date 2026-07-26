@@ -506,3 +506,7 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-07-25-agentic-context-management-solving-agent-memory-an.md]]
 
 - [[sources/2026-07-25-toward-continuous-assurance-for-the-democratizatio.md]]
+
+- [[sources/2026-07-26-openforgerl-train-harness-native-agents-in-any-env.md]]
+
+- [[sources/2026-07-26-agentic-context-management-solving-agent-memory-an.md]]

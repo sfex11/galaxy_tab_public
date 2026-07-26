@@ -37,3 +37,5 @@ _자동 생성됨_
 - [[sources/2026-06-01-physics-is-all-you-need-a-case-study-in-physicist-.md]]
 
 - [[sources/2026-07-25-openforgerl-train-harness-native-agents-in-any-env.md]]
+
+- [[sources/2026-07-26-openforgerl-train-harness-native-agents-in-any-env.md]]
