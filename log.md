@@ -2792,3 +2792,5 @@
 ## [2026-07-27 08:30] ingest | X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
 
 ## [2026-07-27 08:30] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+
+## [2026-07-28 04:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1381개
