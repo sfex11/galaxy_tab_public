@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Resource Flow to Executable Tests: Petri-Net-Guided LLM — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;text-align:center;gap:1.5rem;">
+      <span class="tag tag-amber">arXiv:2607.21530v1</span>
+      <h1 style="font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.3;font-weight:800;color:inherit;">자원 흐름에서 실행 가능한 테스트까지:<br>Petri-Net 유도 LLM 테스트 생성</h1>
+      <p style="font-size:clamp(1rem,2vw,1.3rem);color:inherit;" class="muted">동시성 상태유지 Rust API를 위한 접근법</p>
+      <div class="hr" style="width:60px;margin:0.5rem auto;"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);color:inherit;">Kaiwen Zhang, Guanjun Liu</p>
+      <p style="font-size:clamp(0.8rem,1.3vw,1rem);color:inherit;" class="muted">Tongji University, Shanghai, China</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">동시성 상태유지 API: 왜 테스트가 어려운가</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;">강한 상태 의존성</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">많은 결함은 유효한 접두사가 비자명한 자원 구성을 확립한 후에만 나타남</p>
+      </div>
+      <div class="card">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;">의미적 규율 필요</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">접두사가语义적으로 유효하지 않으면 이후 관찰은 무의미해짐</p>
+      </div>
+      <div class="card">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;">부분 순서 수준의 동시성</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">긴 순차열은 노출해야 할 경쟁을 우연히 직렬화하면 무용함</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);color:inherit;">Rust의 타입 시스템은 광범위한 메모리 오류를 제거하지만, 라이브러리가 상위 수준 프로토콜을 준수함을 증명하지는 않는다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">기존 접근법의 한계</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent">모델 기반 테스팅</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>합법적 상태·자원 흐름·경계 조건 기술 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>의미적 제어 우수</li>
+        </ul>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted"><i class="fas fa-times" style="margin-right:0.3rem;"></i>추상 시나리오 → 실행 코드 변환에 대량의 수작성 코드 필요</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent2">직접 LLM 프롬프팅</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>코딩 부담 감소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>빠른 프로토타입 가능</li>
+        </ul>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted"><i class="fas fa-times" style="margin-right:0.3rem;"></i>사전조건 위반, 얕은 테스트, 동시성을 우연한 순차열로 축소</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.95rem,1.6vw,1.15rem);font-weight:700;color:inherit;"><span class="accent">핵심 간극:</span> 형식적 시나리오 설계와 저비용 테스트 구체화 사이의 빈틈</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">SyncPetri: 핵심 설계 원칙</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;text-align:center;">
+      <p style="font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:800;color:inherit;"><span class="accent">모델은 의미를 작성하고,</span> <span class="accent2">LLM은 코드를 작성한다</span></p>
+    </div>
+    <div class="grid-2" style="margin-top:2.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><i class="fas fa-project-diagram" style="margin-right:0.4rem;"></i>Petri Net의 역할</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>의미적 의도 지정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자원 흐름 표현</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>도달 가능성·충돌·버그 관련 돌연변이 명시</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><i class="fas fa-robot" style="margin-right:0.4rem;"></i>LLM의 역할</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>라이브러리 특정 문법 실현</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>태스크 스캐폴딩 작성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단언(assertion) 작성</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;margin-top:2rem;text-align:center;" class="muted">의미적 책임은 LLM 외부에 유지하면서, 코드 실현은 저비용으로 유지</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">Petri Net 자원 모델: mpsc 예시</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);color:inherit;margin-top:1.5rem;" class="muted">유계(bounded) mpsc 채널의 추상 장소(Place) 정의</p>
+    <table class="compare-table" style="margin-top:1.5rem;">
+      <thead>
+        <tr>
+          <th>장소 (Place)</th>
+          <th>의미</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="accent" style="font-weight:700;">LiveSender(s)</span></td><td>송신자 핸들 s가 존재하며 송신측 연산 가능</td></tr>
+        <tr><td><span class="accent" style="font-weight:700;">LiveReceiver(r)</span></td><td>수신자 핸들 r이 존재하며 수신 또는 종료 가능</td></tr>
+        <tr><td><span class="accent2" style="font-weight:700;">Open(c) / Closed(c)</span></td><td>채널 c가 열림 / 수신 측에서 닫힘</td></tr>
+        <tr><td><span class="accent3" style="font-weight:700;">Permit(s,c)</span></td><td>송신자 s가 채널 c에 예약된 퍼밋 보유</td></tr>
+        <tr><td><span class="muted" style="font-weight:700;">Cap(c,n)</span></td><td>채널 c에 n개의 예약되지 않은 버퍼 슬롯</td></tr>
+        <tr><td><span class="muted" style="font-weight:700;">Buf(c,n)</span></td><td>채널 c의 추상 버퍼 항목 수</td></tr>
+        <tr><td><span class="muted" style="font-weight:700;">Obs(x)</span></td><td>계측이 방출하는 런타임 관찰 토큰</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;margin-top:1.5rem;" class="muted">송신자, 수신자, 퍼밋, 버퍼, 관찰 의무를 색인 있는 토큰과 전이로 표현</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">버그 모델: 4가지 결함 패밀리</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent">B<sub>pre</sub> 사전조건 위반</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">추상 선행조건이 위반되었음에도 연산이 부정하게 성공</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;" class="muted" style="margin-top:0.5rem;">예: 닫힌 채널로 송신 성공</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent2">B<sub>state</sub> 사후 상태 불일치</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">연산 실행 후 자원 회계, 소유권 이전, 정리 로직이 명세와 다름</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;" class="muted">예: 퍼밋 회계 불일치</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent3">B<sub>race</sub> 경쟁 민감도</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">스케줄 의존적 인터리빙이 상위 프로토콜이 금지하는 관찰 순서를 노출</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;" class="muted">예: 값 업데이트 후 알림 누락</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="muted">B<sub>live</sub> 활성성·블로킹</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">영구 블로킹, 깨우기 누락, 종단 프로토콜 상태 도달 후 비종료</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;" class="muted">예: close 경쟁 후 비종료</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">SyncPetri 5단계 파이프라인</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">자원 모델</div>
+        <div class="step-desc">API 자원·수명주기·인과 의존성을 색인 Petri Net으로 정식화</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">시나리오 합성</div>
+        <div class="step-desc">합법적 깊은 상태, 준법적 경계, 부분 순서 동시 시나리오 도출</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">LLM 구체화</div>
+        <div class="step-desc">제약 프롬프트 + 구조적 수리 루프로 실행 가능한 Rust 코드 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">스케줄 탐색</div>
+        <div class="step-desc">Petri 유도 스케줄 형성으로 고충돌 동시성 골격 우선 탐색</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">오라클 판정</div>
+        <div class="step-desc">다층 의미 오라클로 합성 실패와 의미적 위반 구분</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">시나리오 합성: 3가지 패밀리</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent">합법적 깊은 상태</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">Petri Net의 도달 가능한 마킹에서 비자명한 자원 구성을 확립한 후 테스트 관찰 수행</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;margin-top:1rem;" class="muted">예: 퍼밋 획득 → 수신자 종료 → 퍼밋 기반 송신 검증</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.0rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent2">준법적 경계 탐색</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">의도적으로 하나의 전이 조건을 위반하여 사전조건 집행 결함(B<sub>pre</sub>)을 프로브</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;margin-top:1rem;" class="muted">예: 닫힌 채널에 일반 송신 시도</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.0rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent3">부분 순서 동시성</span></h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">인과 독립 전이들을 병렬 태스크로 배치하여 스케줄 의존적 경쟁(B<sub>race</sub>) 노출</p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;margin-top:1rem;" class="muted">예: 송신과 close를 동시에 실행</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">LLM 구체화: 프롬프트 계약과 수리 루프</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent">프롬프트 계약 (Prompt Contract)</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추상 시나리오 단계를 구조화된 템플릿으로 제공</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>어댑터 스키마로 API 호출 패턴 규정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LLM은 문법·스캐폴딩만 담당, 의미적 선택 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><span class="accent2">구조적 수리 루프</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>생성 코드를 정적 분석으로 검증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구조적 불일치 발견 시 피드백과 함께 재생성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>시나리오 자체는 변경하지 않고 코드만 수정</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);color:inherit;"><strong>국소 충실성 (Local Faithfulness):</strong> 각 추상 단계가 구체적 Rust 연산에 일대일로 대응되어야 함 — LLM이 단계를 생략·재배열·추가 불가</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">Petri 유도 스케줄 탐색</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);color:inherit;margin-top:1.5rem;">Loom과 호환되는 하니스(harness)를 위해 Petri Net의 충돌 구조를 활용한 스케줄 형성</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><i class="fas fa-crosshairs" style="margin-right:0.4rem;"></i>고충돌 골격 우선</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">Petri Net에서 전이 간 충돌(conflict)이 많은 스케줄 순서를 우선적으로 선택하여 경쟁 민감 버그 노출 확률 극대화</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);font-weight:700;color:inherit;"><i class="fas fa-layer-group" style="margin-right:0.4rem;"></i>Loom과의 통합</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;" class="muted">스케줄 형성이 Loom의 내부 검색을 대체하지 않고, 하니스 선택을 개선하여 더 진단적 유용한 인터리빙을 탐색하도록 유도</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;margin-top:2rem;text-align:center;" class="muted">목표: 길이가 아닌 <span class="accent" style="font-weight:700;">부분 순서 구조</span>에서 진단 가치가 발생</p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">다층 의미 오라클</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.1rem);color:inherit;margin-top:1.5rem;" class="muted">합성 실패(우리의 파이프라인 문제)와 의미적 위반(라이브러리 버그)을 명확히 구분</p>
+    <div style="margin-top:1.5rem;">
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-sitemap"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">구조 오라클</strong>
+          <p style="font-size:clamp(0.85rem,1.3vw,0.95rem);color:inherit;" class="muted">생성 코드가 어댑터 스키마와 일치하는지 검증 — 불일치 시 합성 실패로 분류</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-eye"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">결과 오라클</strong>
+          <p style="font-size:clamp(0.85rem,1.3vw,0.95rem);color:inherit;" class="muted">런타임 반환값이 Petri Net 마킹에서 예상한 결과와 일치하는지 확인</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-shield-alt"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">불변량 오라클</strong>
+          <p style="font-size:clamp(0.85rem,1.3vw,0.95rem);color:inherit;" class="muted">API 수준 불변량(자원 회계 일관성 등) 위반을 탐지</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><i class="fas fa-heartbeat"></i></div>
+        <div>
+          <strong style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">활성성 오라클</strong>
+          <p style="font-size:clamp(0.85rem,1.3vw,0.95rem);color:inherit;" class="muted">종단 프로토콜 상태에서 비종료·영구 블로킹 탐지</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">평가: 연구 질문과 프로토콜</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;">
+      <div class="flow-item">
+        <div class="flow-icon"><span class="accent" style="font-weight:800;">RQ1</span></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">아티팩트 제약 프롬프트가 실행 가능한 Tokio 코드를 생성할 수 있는가?</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><span class="accent2" style="font-weight:800;">RQ2</span></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">생성된 러너가 스케줄 민감적 구조를 보존하는가?</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><span class="accent3" style="font-weight:800;">RQ3</span></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">피드백 수리가 시나리오 변경 없이 구체적 불일치를 복구할 수 있는가?</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon"><span class="muted" style="font-weight:800;">RQ4</span></div>
+        <div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.1rem);color:inherit;">아티팩트 경계가 일반 파이프라인을 대상 특정 모델로부터 격리하는 데 충분한가?</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.85rem,1.4vw,1rem);color:inherit;margin-top:2rem;" class="muted">평가 차원: 실행 가능성 · 구조적 충실성 · 깊은 상태 도달 가능성 · 경계 실패 수율 · 충돌 커버리지</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;color:inherit;">기여 요약과 한계</h2>
+    <div class="hr"></div>
+    <div style="margin-top:2rem;">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);font-weight:700;color:inherit;"><span class="accent">5가지 기여</span></h3>
+      <ul class="check-list" style="margin-top:0.8rem;">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>자원 운반 전이에 대한 Petri-Net 유도 시나리오 합성의 형식화</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>추상 Petri-Net 단계를 구체적 Rust 실행에 연결하는 어댑터 스키마와 국소 충실성 계약</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>합법 도달, 준법적 경계 돌연변이, 부분 순서 동시성을 통합하는 시나리오 표현</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>생성 실패와 의미적 실패를 구분하는 제약 구체화 루프와 다층 오라클</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>Loom 호환 하니스를 위한 Petri 유도 스케줄 형성 방법</li>
+      </ul>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div>
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);font-weight:700;color:inherit;"><span class="muted">명시적 한계</span></h3>
+      <ul class="check-list" style="margin-top:0.8rem;">
+        <li><span class="check-icon"><i class="fas fa-minus"></i></span>자원 모델, 어댑터, 시나리오 불변량은 수동 작성 필요</li>
+        <li><span class="check-icon"><i class="fas fa-minus"></i></span>스케줄 형성은 Loom의 내부 검색을 개선할 뿐 대체하지 않음</li>
+        <li><span class="check-icon"><i class="fas fa-minus"></i></span>완전 자동 동시성 검증이 아닌, 모델링 노력과 의미적 제어 간 트레이드오프</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:65vh;text-align:center;gap:1.2rem;">
+      <span class="tag tag-green">논문 정보</span>
+      <h2 style="font-size:clamp(1.3rem,3vw,2rem);font-weight:800;color:inherit;line-height:1.4;">From Resource Flow to Executable Tests:<br>Petri-Net-Guided LLM Test Generation<br>for Concurrent Stateful Rust APIs</h2>
+      <div class="hr" style="width:60px;margin:0.5rem auto;"></div>
+      <p style="font-size:clamp(1rem,1.8vw,1.2rem);color:inherit;">Kaiwen Zhang, Guanjun Liu</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);color:inherit;" class="muted">Tongji University, Shanghai, China</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);color:inherit;margin-top:1rem;">
+        <i class="fas fa-external-link-alt" style="margin-right:0.4rem;"></i>
+        <a href="http://arxiv.org/abs/2607.21530v1" style="color:inherit;text-decoration:underline;">arxiv.org/abs/2607.21530v1</a>
+      </p>
+      <p style="font-size:clamp(0.8rem,1.3vw,0.95rem);color:inherit;margin-top:1.5rem;" class="muted">CC BY 4.0 · cs.SE · July 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
