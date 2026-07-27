@@ -1,15 +1,15 @@
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-07-20  
+**생성일**: 2026-07-27  
 **관련 논문**: 8편  
-**최종 업데이트**: 2026-07-20
+**최종 업데이트**: 2026-07-27
 
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-07-13
+**생성일**: 2026-07-20
 **관련 논문**: 4편 (고유, 입력 중 중복 제외)
-**최종 업데이트**: 2026-07-13
-**변경 사항**: 신규 논문 없음, 기존 분석 유지
+**최종 업데이트**: 2026-07-20
+**변경 사항**: 기존 분석의 절단된 섹션 보완 및 구조 재정비
 
 ## 공통 주제: 현실 배포를 가로막는 RL의 세 가지 근원적 난제
 
@@ -45,9 +45,11 @@ GP-MBRL과 진화적 RL의 대비가 가장 뚜렷하다. 전자는 가우시안
 
 - [[concepts/reinforcement-learning.md|reinforcement-learning]]
 - [[concepts/distribution-shift.md|distribution-shift]]
-- [[concepts/formal-verification.md|formal-verification]]
 - [[concepts/world-model.md|world-model]]
 - [[concepts/meta-learning.md|meta-learning]]
-- [[concepts/embodied-ai.md|embodied-ai]]
+- [[concepts/formal-verification.md|formal-verification]]
 - [[concepts/ai-safety.md|ai-safety]]
 - [[concepts/model-predictive-control.md|model-predictive-control]]
+- [[concepts/embodied-ai.md|embodied-ai]]
+- [[concepts/token-efficiency.md|token-efficiency]]
+- [[concepts/computer-use-agent.md|computer-use-agent]]
