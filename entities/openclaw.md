@@ -62,3 +62,5 @@ Claw-Eval(2026-04-09)은 기존 벤치마크의 "최종 출력만 확인" 문제
 - [[sources/2026-07-25-openforgerl-train-harness-native-agents-in-any-env.md]]
 
 - [[sources/2026-07-26-openforgerl-train-harness-native-agents-in-any-env.md]]
+
+- [[sources/2026-07-27-openforgerl-train-harness-native-agents-in-any-env.md]]

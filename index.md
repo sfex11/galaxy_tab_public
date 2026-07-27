@@ -1488,3 +1488,23 @@
 - [[sources/2026-07-26-agentic-context-management-solving-agent-memory-an.md]] - Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
 - [[sources/2026-07-26-from-resource-flow-to-executable-tests-petri-net-g.md]] - From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
 - [[sources/2026-07-26-hgeo-topomap-boosting-topological-mapping-with-hie.md]] - HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+- [[sources/2026-07-27-beyond-episodic-evaluation-memory-architectural-bo.md]] - Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering
+- [[sources/2026-07-27-medgame-storytelling-gamification-empowered-by-lar.md]] - MedGame: Storytelling Gamification Empowered by Large Language Models for Medical Education
+- [[sources/2026-07-27-beyond-sycophancy-structured-resistance-and-compli.md]] - Beyond Sycophancy: Structured Resistance and Compliance in LLM Moral Reasoning
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/claude-35]] - Claude 3.5
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-07-27-openforgerl-train-harness-native-agents-in-any-env.md]] - OpenForgeRL: Train Harness-native Agents in Any Environment
+- [[sources/2026-07-27-mirror-learning-from-the-other-view-for-multi-moda.md]] - MIRROR: Learning from the Other View for Multi-Modal Reasoning
+- [[sources/2026-07-27-gs-agent-creating-4d-physical-worlds-with-generati.md]] - GS-Agent: Creating 4D Physical Worlds With Generative Simulation
+- [[sources/2026-07-27-same-dangerous-objective-opposite-advice-direct-ex.md]] - Same Dangerous Objective, Opposite Advice: Direct Exposure versus Multi-Agent Mediation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-27-agentic-context-management-solving-agent-memory-an.md]] - Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-27-toward-continuous-assurance-for-the-democratizatio.md]] - Toward Continuous Assurance for the Democratization of AI Agent Creation in Industry
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-27-compact-latent-coordination-for-autonomous-vehicle.md]] - Compact Latent Coordination for Autonomous Vehicles at Unsignalized Intersections
+- [[sources/2026-07-27-from-resource-flow-to-executable-tests-petri-net-g.md]] - From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
+- [[sources/2026-07-27-x3-opd-distilling-reasoning-into-large-audio-langu.md]] - X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
+- [[sources/2026-07-27-hgeo-topomap-boosting-topological-mapping-with-hie.md]] - HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors

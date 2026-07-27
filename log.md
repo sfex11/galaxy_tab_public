@@ -2766,3 +2766,29 @@
 ## [2026-07-26 17:47] lint | Wiki 건전성 체크
 - Issues: 2747개
 - Orphans: 798, Missing: 1949, Contradictions: 0
+
+## [2026-07-27 08:30] ingest | Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering
+
+## [2026-07-27 08:30] ingest | MedGame: Storytelling Gamification Empowered by Large Language Models for Medical Education
+
+## [2026-07-27 08:30] ingest | Beyond Sycophancy: Structured Resistance and Compliance in LLM Moral Reasoning
+
+## [2026-07-27 08:30] ingest | OpenForgeRL: Train Harness-native Agents in Any Environment
+
+## [2026-07-27 08:30] ingest | MIRROR: Learning from the Other View for Multi-Modal Reasoning
+
+## [2026-07-27 08:30] ingest | GS-Agent: Creating 4D Physical Worlds With Generative Simulation
+
+## [2026-07-27 08:30] ingest | Same Dangerous Objective, Opposite Advice: Direct Exposure versus Multi-Agent Mediation
+
+## [2026-07-27 08:30] ingest | Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems
+
+## [2026-07-27 08:30] ingest | Toward Continuous Assurance for the Democratization of AI Agent Creation in Industry
+
+## [2026-07-27 08:30] ingest | Compact Latent Coordination for Autonomous Vehicles at Unsignalized Intersections
+
+## [2026-07-27 08:30] ingest | From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
+
+## [2026-07-27 08:30] ingest | X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
+
+## [2026-07-27 08:30] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
