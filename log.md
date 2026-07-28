@@ -2820,3 +2820,5 @@
 ## [2026-07-28 08:33] ingest | HiKV: Hierarchical Importance-Aware KV Cache with Hardware Acceleration for LLM Decoding
 
 ## [2026-07-29 02:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1386개
+
+## [2026-07-29 04:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1386개
