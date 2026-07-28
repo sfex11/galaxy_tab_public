@@ -1508,3 +1508,17 @@
 - [[sources/2026-07-27-from-resource-flow-to-executable-tests-petri-net-g.md]] - From Resource Flow to Executable Tests: Petri-Net-Guided LLM Test Generation for Concurrent Stateful Rust APIs
 - [[sources/2026-07-27-x3-opd-distilling-reasoning-into-large-audio-langu.md]] - X$^3$-OPD: Distilling Reasoning into Large Audio-Language Models via On-Policy Alignment
 - [[sources/2026-07-27-hgeo-topomap-boosting-topological-mapping-with-hie.md]] - HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
+- [[sources/2026-07-28-skill-self-play-pushing-the-frontier-of-llm-capabi.md]] - Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills
+- [[sources/2026-07-28-explainable-reinforcement-learning-for-assisting-a.md]] - Explainable Reinforcement Learning for assisting Air Traffic Controllers
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-28-the-regression-tax-decomposing-why-skills-help-and.md]] - The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-07-28-opaque-epistemic-mediation-how-llm-deployment-conf.md]] - Opaque Epistemic Mediation: How LLM Deployment Configurations Shape the Validation of Pseudo-Science
+- [[sources/2026-07-28-causalforge-a-formally-grounded-self-improving-age.md]] - CausalForge: A Formally Grounded, Self-Improving Agentic Framework for Automated Research in Causal Inference
+- [[sources/2026-07-28-minevalicoder-reliable-code-generation-with-test-c.md]] - MineValiCoder: Reliable Code Generation with Test Case Quality Mining and Bipartite Graph-Based Mutual Validation
+- [[sources/2026-07-28-trace-router-task-consistent-and-adaptive-online-r.md]] - TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI
+- [[sources/2026-07-28-beyond-perspectives-a-trio-ethnography-of-interpre.md]] - Beyond Perspectives: A Trio-Ethnography of Interpretation Evolution in LLM-Supported Programming Education
+- [[sources/2026-07-28-where-factsgo-missing-a-layerwisetaxonomy-and-per-.md]] - Where FactsGo Missing: A LayerwiseTaxonomy and Per-Layer Attribution of Information Omissionin Air-Gapped LLM Agent Pipelines
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-28-dynamic-capability-scoping-for-enterprise-ai-agent.md]] - Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture
+- [[sources/2026-07-28-hikv-hierarchical-importance-aware-kv-cache-with-h.md]] - HiKV: Hierarchical Importance-Aware KV Cache with Hardware Acceleration for LLM Decoding

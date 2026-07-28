@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>각각은 최적인데 전체는 최악인 이유 — TRACE-ROUTER가 폭로한 분석의 근본적 맹점</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(194, 112, 62, 0.12);
+    --muted: #7a7470;
+    --light-muted: #b5afa9;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── 네비게이션 ── */
+  .site-nav {
+    background: rgba(250, 249, 247, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 720px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44, 40, 37, 0.06);
+  }
+  .site-nav a {
+    color: var(--accent-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 1.8vw, 14px);
+    transition: background 0.2s;
+  }
+  .site-nav a:hover { background: rgba(194, 112, 62, 0.08); }
+
+  /* ── 아티클 컨테이너 ── */
+  .article-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px clamp(16px, 5vw, 40px) 80px;
+  }
+
+  /* ── 헤더 영역 ── */
+  .article-header {
+    margin-bottom: clamp(36px, 6vw, 56px);
+    padding-bottom: clamp(24px, 4vw, 40px);
+    border-bottom: 1px solid rgba(44, 40, 37, 0.08);
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194, 112, 62, 0.08);
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  .article-subtitle {
+    font-size: clamp(14px, 2.2vw, 17px);
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: clamp(12px, 1.6vw, 13px);
+    color: var(--light-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: clamp(40px, 7vw, 64px); }
+
+  .section-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-cool);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+  .section p { margin-bottom: 18px; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 16px 20px;
+    background: rgba(194, 112, 62, 0.04);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--muted);
+    font-size: clamp(14px, 2.1vw, 16.5px);
+    line-height: 1.75;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-size: clamp(11px, 1.5vw, 13px);
+    color: var(--light-muted);
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(16px, 3vw, 24px);
+    margin: 24px 0;
+    box-shadow: 0 1px 4px rgba(44, 40, 37, 0.04), 0 4px 16px rgba(44, 40, 37, 0.03);
+  }
+
+  /* ── 강조 ── */
+  .hl-warm { color: var(--accent-warm); font-weight: 600; }
+  .hl-cool { color: var(--accent-cool); font-weight: 600; }
+  .hl-green { color: var(--accent-green); font-weight: 600; }
+
+  strong { font-weight: 600; }
+
+  /* ── 테이블 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.9vw, 15px);
+  }
+  thead th {
+    background: rgba(194, 112, 62, 0.06);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--card-border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44, 40, 37, 0.04);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  .entity-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 12px);
+    background: rgba(91, 124, 153, 0.1);
+    color: var(--accent-cool);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(107, 158, 122, 0.06) 0%, rgba(91, 124, 153, 0.04) 100%);
+    border: 1px solid rgba(107, 158, 122, 0.15);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 28px 0;
+  }
+  .metaphor-box .metaphor-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .metaphor-box p {
+    margin-bottom: 10px;
+    color: var(--fg);
+    font-size: clamp(14px, 2.1vw, 16px);
+    line-height: 1.8;
+  }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 구조 다이어그램 ── */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 28px 0;
+    font-size: clamp(12px, 1.7vw, 14px);
+  }
+  .diagram-row {
+    display: flex;
+    align-items: stretch;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .diagram-label {
+    min-width: clamp(100px, 22vw, 150px);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: clamp(11px, 1.5vw, 13px);
+  }
+  .diagram-content {
+    flex: 1;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    line-height: 1.5;
+  }
+  .diag-warm { background: rgba(194, 112, 62, 0.08); color: var(--accent-warm); }
+  .diag-cool { background: rgba(91, 124, 153, 0.07); color: var(--accent-cool); }
+  .diag-green { background: rgba(107, 158, 122, 0.08); color: var(--accent-green); }
+  .diag-warm-light { background: rgba(194, 112, 62, 0.04); }
+  .diag-cool-light { background: rgba(91, 124, 153, 0.03); }
+  .diag-green-light { background: rgba(107, 158, 122, 0.04); }
+  .diag-red-light { background: rgba(180, 60, 50, 0.05); }
+
+  /* ── 결론 카드 ── */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194, 112, 62, 0.06) 0%, rgba(91, 124, 153, 0.04) 100%);
+    border: 1px solid rgba(194, 112, 62, 0.15);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: 32px 0;
+  }
+  .conclusion-card h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 3vw, 1.35rem);
+    margin-bottom: 16px;
+    color: var(--accent-warm);
+  }
+  .conclusion-card p { margin-bottom: 14px; }
+  .conclusion-card p:last-child { margin-bottom: 0; }
+
+  /* ── 리스트 ── */
+  .custom-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+  .custom-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    line-height: 1.75;
+  }
+  .custom-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-warm);
+    opacity: 0.5;
+  }
+  .custom-list.green li::before { background: var(--accent-green); }
+  .custom-list.cool li::before { background: var(--accent-cool); }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(44, 40, 37, 0.08);
+    margin: clamp(32px, 5vw, 48px) 0;
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    margin-top: clamp(40px, 6vw, 60px);
+    padding-top: 24px;
+    border-top: 1px solid rgba(44, 40, 37, 0.08);
+    text-align: center;
+    color: var(--light-muted);
+    font-size: clamp(11px, 1.5vw, 13px);
+  }
+
+  /* ── 스크롤 애니메이션 ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 하이라이트 마커 ── */
+  mark {
+    background: rgba(194, 112, 62, 0.15);
+    color: inherit;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* ── 인라인 코드 ── */
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.88em;
+    background: rgba(44, 40, 37, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html">📚 홈</a>
+  <a href="../sources.html">논문</a>
+  <a href="../slides.html">🎨 슬라이드</a>
+  <a href="../daily.html">📝 요약</a>
+  <a href="../reports.html">📊 보고서</a>
+  <a href="blog.html">🧠 분석</a>
+  <a href="../patent/README.html">patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+</nav>
+
+<article class="article-wrap">
+
+  <!-- ── 헤더 ── -->
+  <header class="article-header reveal">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">각각은 최적인데 전체는 최악인 이유<br>TRACE-ROUTER가 폭로한 분석의 근본적 맹점</h1>
+    <p class="article-subtitle">적응적 추론과 파이프라인 서빙을 따로 최적화하는 것이 왜 에이전트 워크플로우 전체를 망칠 수 있는가</p>
+    <div class="article-meta">
+      <span>대상 논문: TRACE-ROUTER</span>
+      <span>읽기 소요: ~12분</span>
+    </div>
+  </header>
+
+  <!-- ── 섹션 1 ── -->
+  <section class="section reveal">
+    <p class="section-label">Section 01</p>
+    <h2 class="section-title">직교성 가정의 붕괴: 두 축은 분리될 수 없다</h2>
+
+    <p>현재 LLM 서빙 연구는 크게 두 축으로 나뉘어 분석되어 왔다. 하나는 <strong class="hl-warm">적응적 추론(adaptive-inference)</strong>——각 LLM 호출마다 가장 적합한 모델이나 전략을 선택하는 문제. 다른 하나는 <strong class="hl-cool">파이프라인 서빙(aggregate-pipeline-serving)</strong>——다중 서버 환경에서 파이프라인 전체의 레이턴시 병목을 해결하는 문제.</p>
+
+    <p>이 두 축은 마치 서로 다른 방의 문제를 다루는 것처럼 취급되어 왔다. 적응적 추론은 "이 호출에는 작은 모델이 enough하다"라고 결정하고, 파이프라인 서빙은 "툴 스키마 축적이 병목이다"라고 진단한다. 둘 다 맞는 말이다. 하지만 <mark>동시에 둘 다만 보면 정작 중요한 것이 보이지 않는다</mark>.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">直观的な比喩</div>
+      <p>고속도로 인터체인지를 생각해 보자. <strong class="hl-warm">적응적 추론</strong>은 "이 차는 소형차이니 2차선으로 보내면 되겠다"라고 각 진입 차량마다 독립적으로 판단하는 교통경찰이다. <strong class="hl-cool">파이프라인 서빙</strong>은 "2차선 합류 지점에 병목이 있다"라고 도로 구조를 진단하는 도로 설계자다.</p>
+      <p>그런데 만약 그 교통경찰의 판단 때문에 2차선으로 보내진 소형차들이 연이어 합류 지점에서 대형 트럭과 엉키게 된다면? 개별 차량 단위의 "최적" 진입이 도로 전체의 "최악" 정체를 만들어낸다. <strong>병목의 원인이 도로 구조가 아니라 교통경찰의 라우팅 결정에 있음에도</strong>, 두 사람은 각자의 프레임 안에서만 답을 찾고 있다.</p>
+    </div>
+
+    <p>TRACE-ROUTER의 핵심 지적은 정확히 이 지점을 찌른다. <mark>"Existing routers primarily make independent routing"</mark>——기존 라우터들은 본질적으로 각 호출을 독립적으로 라우팅한다. 그리고 이 독립성 가정이 두 축 사이의 인과 사슬을 은폐한다.</p>
+
+    <blockquote>
+      스키마 축적량(파이프라인 병목의 핵심) 자체가 이전 라우팅 결정의 결과물이다. 작은 모델을 라우팅한 호출이 불필요한 툴 스키마를 로드하게 만들었다면, 개별 호출 수준의 "최적"이 파이프라인 수준의 "최악"을 낳는다.
+      <cite>— TRACE-ROUTER 논문의 핵심 논증을 재구성</cite>
+    </blockquote>
+
+    <p>두 축은 직교하는 독립 변수가 아니다. 하나의 <strong class="hl-warm">인과 사슬</strong>이다. 적응적 추론의 결정 → 툴 호출 시퀀스 변화 → 스키마 축적량 변화 → 파이프라인 병목 위치와 크기 변화. 이 사슬을 끊어놓고 각 고리만 최적화하는 것이 바로 "두 축 분리 분석"의 근본적 한계다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 2 ── -->
+  <section class="section reveal">
+    <p class="section-label">Section 02</p>
+    <h2 class="section-title">병목 오귀인: 증상을 원인으로 착각하는 구조적 왜곡</h2>
+
+    <p>"Tool Attention Is All You Need" 논문은 훌륭한 발견을 했다. 에이전트 워크플로우의 레이턴시 병목이 개별 LLM 호출 자체가 아니라 <strong class="hl-cool">스키마 축적</strong>에 의해 결정된다는 것. MCP(Model Context Protocol) 환경에서 툴이 많아질수록 매 호출마다 로드되는 스키마의 양이 기하급수적으로 늘어나고, 이것이 진짜 병목이라는 진단이다.</p>
+
+    <p>그런데 TRACE-ROUTER의 관점에서 이 진단은 <mark>불완전하다</mark>. 더 정확히 말하면, <strong class="hl-warm">추상화 계층을 잘못 매핑한 것</strong>이다.</p>
+
+    <div class="card">
+      <p style="margin-bottom:12px;"><strong>스키마 축적량의 실제 결정 방정식:</strong></p>
+      <p style="font-family:'SF Mono','Fira Code',monospace;font-size:clamp(13px,1.8vw,15px);color:var(--muted);margin-bottom:8px;">
+        스키마 축적량 = f(라우팅 경로 선택, 툴 호출 시퀀스, 이전 호출의 출력 품질)
+      </p>
+      <p style="font-family:'SF Mono','Fira Code',monospace;font-size:clamp(13px,1.8vw,15px);color:var(--muted);">
+        라우팅 경로 선택 = g(개별 호출 단위의 독립적 최적화)
+      </p>
+    </div>
+
+    <p>이 방정식이 말하는 것은 단순하다. "스키마 축적이 병목이다"라는 진단은 <strong>증상</strong>을 원인으로 간주한 것이다. 마치 "기침이 병이다"라고 말하는 것과 같다. 기침(스키마 축적)은 감기(독립적 라우팅의 경로 의존성 무시)의 증상이다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유: 진단의 오류</div>
+      <p>환자가 계속 기침을 한다. 의사 A(파이프라인 서빙 연구자)는 "기도에 점액이 쌓여 있다"라고 정확히 관찰한다. 의사 B(적응적 추론 연구자)는 "이 환자의 각 호흡 패턴은 효율적이다"라고 말한다. 둘 다 틀린 말은 아니다.</p>
+      <p>하지만 정작 기도에 점액이 쌓인 <strong>이유</strong>——처방된 기침 억제제가 점액 배출을 방해하고 있다는 것——을 아무도 보지 못한다. 원인이 "호흡 패턴 최적화(독립적 라우팅)"와 "점액 축적(스키마 축적)" 사이의 상호작용에 있기 때문이다.</p>
+    </div>
+
+    <p>TRACE-ROUTER는 이것을 <strong class="hl-warm">"라우팅 경로의 함수로서의 동적 병목"</strong>으로 재귀인한다. 병목은 정적 구조적 요인이 아니라, 이전 라우팅 결정들이 누적되어 <mark>경로마다 다르게 나타나는 동적 현상</mark>이라는 것이다. 이 재귀인이 없으면 우리는 계속해서 "스키마를 줄이자"라는 대증요법에 머물게 된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 3 ── -->
+  <section class="section reveal">
+    <p class="section-label">Section 03</p>
+    <h2 class="section-title">추상화 계층의 오정렬: 최적화 단위가 틀렸다</h2>
+
+    <p>SpecKV 논문은 적응적 추론의 결정 차원을 "어떤 모델을 선택할 것인가"에서 "추측 길이 γ를 어떻게 선택할 것인가"로 확장했다. CADENCE는 외부 환경 변화에 반응하게 했다. 이들은 모두 의미 있는 확장이었다. 하지만 <mark>동일한 추상화 계층 내에서의 차원 확장</mark>이었을 뿐이다.</p>
+
+    <p>반응의 단위는 여전히 <strong>단일 호출</strong>이었다. 한 번의 LLM 호출이라는 프레임 안에서 모델을 바꾸거나, KV 캐시를 압축하거나, 추측 길이를 조절하는 것. 이것은 방 안의 가구를 재배치하는 것과 같다——방 자체의 설계를 바꾸지는 않는다.</p>
+
+    <div class="card">
+      <p style="margin-bottom:14px;"><strong>추상화 계층 비교:</strong></p>
+      <div class="diagram">
+        <div class="diagram-row">
+          <div class="diagram-label diag-warm">적응적 추론</div>
+          <div class="diagram-content diag-warm-light">최적화 단위: <strong>단일 호출</strong> (모델 선택, γ 선택, KV 압축)</div>
+        </div>
+        <div class="diagram-row">
+          <div class="diagram-label diag-cool">파이프라인 서빙</div>
+          <div class="diagram-content diag-cool-light">최적화 단위: <strong>파이프라인 구조</strong> (스키마 분배, 서버 배치)</div>
+        </div>
+        <div class="diagram-row">
+          <div class="diagram-label diag-green">TRACE-ROUTER</div>
+          <div class="diagram-content diag-green-light">최적화 단위: <strong>워크플로우 경로</strong> (경로 일관적 라우팅)</div>
+        </div>
+        <div class="diagram-row">
+          <div class="diagram-label" style="background:rgba(180,60,50,0.06);color:#b43c32;">빈 축 (갭)</div>
+          <div class="diagram-content diag-red-light">경로 수준 동적 적응 — 기존 어느 엔티티도 포착하지 못함</div>
+        </div>
+      </div>
+    </div>
+
+    <p>이 오정렬은 알고리즘-시스템 번역 간극(algorithm-system-translation-gap)과 <strong>동형적 구조</strong>를 공유한다. 에이전트의 의미론적 의존 그래프——"이 호출은 저 호출의 출력에 의존한다"——를 OS 수준의 체크포인트 메커니즘(전체 스냅샷 저장)으로 번역할 때 발생하는 비효율과 같은 패턴이다.</p>
+
+    <p>상위 계층의 의미론(의존 관계, 경로 일관성)이 하위 계층의 메커니즘(개별 호출 최적화)으로 번역되는 과정에서 <mark>의미론적 정보가 손실</mark>된다. "A 호출의 결과에 따라 B 호출의 모델을 달리해야 한다"는 경로 수준의 의미가 "B 호출은 B 호출이다"라는 독립성 가정에 의해 지워진다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유: 악보와 음표</div>
+      <p>교향곡을 연주할 때, 각 음표를 개별적으로 "가장 아름다운 소리가 나는 강약과 타이밍"으로 연주하는 연주자들이 있다. 개별 음표 단위로는 완벽할 수 있다. 하지만 <strong>악보의 전체 구조——도입부의 긴장, 전개부의 클라이맥스, 재현부의 해소</strong>——을 무시하면, 개별 음표의 완벽함이 오히려 교향곡 전체를 산산조각 낸다.</p>
+      <p>최적화의 단위가 "음표(호출)"가 아니라 "악장(경로)"이어야 하는 이유가 여기에 있다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 4 ── -->
+  <section class="section reveal">
+    <p class="section-label">Section 04</p>
+    <h2 class="section-title">빈 축의 발견: 기존 개념이 포착하지 못하는 간극</h2>
+
+    <p>TRACE-ROUTER의 지적은 현재 분석 프레임워크에서 명시적으로 포착되지 않는 <strong class="hl-warm">빈 축</strong>을 드러낸다. 아래 표를 보자.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>기존 분석 축</th>
+            <th>포착하는 것</th>
+            <th>포착하지 못하는 것</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="entity-tag">adaptive-inference</span></td>
+            <td>단일 호출의 최적 모델/전략 선택</td>
+            <td style="color:var(--accent-warm);">호출 간 경로 의존성</td>
+          </tr>
+          <tr>
+            <td><span class="entity-tag">aggregate-pipeline-serving</span></td>
+            <td>파이프라인 구조적 병목 (스키마 축적)</td>
+            <td style="color:var(--accent-warm);">병목 자체가 라우팅 결정의 함수라는 점</td>
+          </tr>
+          <tr>
+            <td><span class="entity-tag">agent-native-serving</span></td>
+            <td>에이전트 워크플로우에 최적화된 서빙</td>
+            <td style="color:var(--accent-warm);">경로 의존적 트레이드오프의 온라인 해결</td>
+          </tr>
+          <tr>
+            <td><span class="entity-tag">bottleneck-misattribution</span></td>
+            <td>병목 원인의 오귀인 문제</td>
+            <td style="color:var(--accent-warm);">워크플로우 경로를 최적화 단위로 삼아야 한다는 정언명령</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>네 개의 기존 엔티티가 각각 자신의 영역에서 훌륭하게 작동한다. 하지만 그 사이사이에 존재하는 간극——<mark>"경로 수준 동적 적응"</mark>이라는 빈 축——이 에이전트 워크플로우 최적화의 핵심을 놓치게 만든다.</p>
+
+    <p>TRACE-ROUTER가 요구하는 것은 <strong class="hl-green">"경로 일관적(path-consistent) 온라인 라우팅"</strong>이라는 새로운 최적화 범주다. 이것은 기존의 "호출 수준 적응"과 "파이프라인 수준 정적 최적화" 사이에 존재하는 제3의 축을 말한다.</p>
+
+    <ul class="custom-list green">
+      <li><strong>호출 수준 적응</strong>: "이 호출에 가장 좋은 모델은?" — <span style="color:var(--muted);">단위가 너무 작다</span></li>
+      <li><strong>경로 수준 동적 적응</strong>: "이 경로 전체의 비용-품질 균형을 유지하려면 각 호출을 어떻게 라우팅해야 하는가?" — <span style="color:var(--accent-green);">빈 축</span></li>
+      <li><strong>파이프라인 수준 정적 최적화</strong>: "서버 배치를 어떻게 할 것인가?" — <span style="color:var(--muted);">단위가 너무 크고 정적이다</span></li>
+    </ul>
+
+    <p>이 빈 축이 왜 중요한가? 에이전트 워크플로우의 비용-품질 트레이드오프가 <strong class="hl-warm">경로 의존적</strong>이기 때문이다. 같은 워크플로우라도 첫 번째 호출에서 어떤 모델을 선택했느냐에 따라 이후 호출들이 직면하는 문제의 난이도, 필요한 툴의 종류, 요구되는 출력 품질이 모두 달라진다. 이 경로 의존성을 무시하면, 각 호출의 "국소 최적"이 경로 전체의 "국소 최악"으로 귀결된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── 섹션 5 (결론) ── -->
+  <section class="section reveal">
+    <p class="section-label">Section 05 — 결론</p>
+    <h2 class="section-title">패러다임 전환: 부분 최적에서 경로 최적으로</h2>
+
+    <p>적응적 추론이 각 호출을 독립적으로 최적화하고, 파이프라인 서빙이 정적 구조적 병목을 해결한다고 할 때, 두 축의 합은 에이전트 워크플로우의 비용-품질 트레이드오프를 보장하지 못한다. 이것은 단순한 "미포착 영역"이 아니다. <mark>분리 분석의 방법론 자체가 만들어내는 시각적 맹점</mark>이다.</p>
+
+    <p>독립 라우팅 가정은 병목의 동적 기원을 은폐한다. "이 호출의 최적 모델은 X다"라는 판단이 다음 호출의 입력 분포를 바꾸고, 그것이 다음 병목의 위치와 크기를 결정한다는 인과관계가 보이지 않는다. 정적 병목 가정은 라우팅의 경로 효과를 은폐한다. "스키마 축적이 병목이다"라는 진단이 그 축적의 원인이 라우팅 결정에 있음을 숨긴다.</p>
+
+    <p>두 가정이 <strong class="hl-warm">상호 보완적으로 작동</strong>하여 진정한 병목——경로 수준의 라우팅 일관성 부재——을 구조적으로 숨긴다. 마치 두 개의 조명이 서로 다른 방향을 비추면서, 정작 가장 중요한 중앙의 어둠을 서로가 상대방의 빛이라고 착각하게 만드는 것과 같다.</p>
+
+    <div class="conclusion-card">
+      <h3>필요한 패러다임 전환</h3>
+      <p><strong class="hl-green">첫째, 최적화 단위를 "호출"에서 "경로"로 전환해야 한다.</strong> 개별 LLM 호출이 아니라, 에이전트가 수행하는 전체 작업 경로를 하나의 최적화 단위로 삼아야 한다. 경로의 각 노드(호출)에서의 라우팅 결정이 경로 전체의 비용-품질에 미치는 영향을 추정하고, 이를 기반으로 온라인에서 경로 일관적 라우팅을 수행해야 한다.</p>
+      <p><strong class="hl-green">둘째, 병목 분석을 "정적 구조"에서 "동적 경로 함수"로 전환해야 한다.</strong> 병목이 고정된 위치에 존재하는 것이 아니라, 라우팅 경로에 따라 이동하고 변형된다는 관점을 채택해야 한다. 이것은 모니터링과 진단의 패러다임을 바꾼다.</p>
+      <p><strong class="hl-green">셋째, 두 축의 분석을 "직교 축"에서 "인과 사슬"로 재통합해야 한다.</strong> 적응적 추론과 파이프라인 서빙을 독립 문제가 아니라 하나의 인과 사슬의 서로 다른 고리로 보아야 한다. 그래야만 "부분 최적의 합이 전체 최적이 아니다"라는 고전적 함정을 벗어날 수 있다.</p>
+    </div>
+
+    <blockquote>
+      "Existing routers primarily make independent routing decisions, failing to account for the path-dependent cost-quality trade-off in agentic workflows."
+      <cite>— TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI</cite>
+    </blockquote>
+
+    <p>이 한 문장이 포착하는 것은 단순한 기술적 결함이 아니다. <strong>우리가 복잡한 시스템을 분석하는 방식 자체에 대한 경고</strong>다. 시스템을 분해해서 각 부분을 최적화하는 것——이 reductionism은 물리학에서는 대성공을 거두었지만, 경로 의존성이 지배적인 에이전트 시스템에서는 <mark>체계적인 오류를 생산</mark>한다.</p>
+
+    <p>TRACE-ROUTER가 우리에게 던지는 진정한 질문은 이것이다. <strong class="hl-warm">"당신이 최적화하고 있다고 믿는 단위가, 실제로 최적화되어야 할 단위인가?"</strong> 이 질문에 정직하게 답하는 것이 에이전트 AI 서빙의 다음 단계를 여는 열쇠다.</p>
+  </section>
+
+  <footer class="article-footer">
+    <p>대상 논문: TRACE-ROUTER — Task-Consistent and Adaptive Online Routing for Agentic AI</p>
+    <p style="margin-top:6px;">관련 엔티티: adaptive-inference · aggregate-pipeline-serving · bottleneck-misattribution · abstraction-layer-mismatch · agent-native-serving · algorithm-system-translation-gap</p>
+  </footer>
+
+</article>
+
+<script>
+  // 스크롤 리빌 애니메이션
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach((el) => observer.observe(el));
+</script>
+
+</body>
+</html>

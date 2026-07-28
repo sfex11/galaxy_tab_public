@@ -2794,3 +2794,27 @@
 ## [2026-07-27 08:30] ingest | HGeo-TopoMap: Boosting Topological Mapping with Hierarchical Geometric Priors
 
 ## [2026-07-28 04:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1381개
+
+## [2026-07-28 06:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1381개
+
+## [2026-07-28 08:33] ingest | Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills
+
+## [2026-07-28 08:33] ingest | Explainable Reinforcement Learning for assisting Air Traffic Controllers
+
+## [2026-07-28 08:33] ingest | The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents
+
+## [2026-07-28 08:33] ingest | Opaque Epistemic Mediation: How LLM Deployment Configurations Shape the Validation of Pseudo-Science
+
+## [2026-07-28 08:33] ingest | CausalForge: A Formally Grounded, Self-Improving Agentic Framework for Automated Research in Causal Inference
+
+## [2026-07-28 08:33] ingest | MineValiCoder: Reliable Code Generation with Test Case Quality Mining and Bipartite Graph-Based Mutual Validation
+
+## [2026-07-28 08:33] ingest | TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI
+
+## [2026-07-28 08:33] ingest | Beyond Perspectives: A Trio-Ethnography of Interpretation Evolution in LLM-Supported Programming Education
+
+## [2026-07-28 08:33] ingest | Where FactsGo Missing: A LayerwiseTaxonomy and Per-Layer Attribution of Information Omissionin Air-Gapped LLM Agent Pipelines
+
+## [2026-07-28 08:33] ingest | Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture
+
+## [2026-07-28 08:33] ingest | HiKV: Hierarchical Importance-Aware KV Cache with Hardware Acceleration for LLM Decoding

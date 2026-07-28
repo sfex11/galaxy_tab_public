@@ -516,3 +516,7 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-07-27-agentic-context-management-solving-agent-memory-an.md]]
 
 - [[sources/2026-07-27-toward-continuous-assurance-for-the-democratizatio.md]]
+
+- [[sources/2026-07-28-the-regression-tax-decomposing-why-skills-help-and.md]]
+
+- [[sources/2026-07-28-dynamic-capability-scoping-for-enterprise-ai-agent.md]]
