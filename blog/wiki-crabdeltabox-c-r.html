@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반복한다고 고쳐지는 게 아니다 — 에이전트 하네스 신뢰성의 근본적 전환</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --muted: #7a736d;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06), 0 0.5px 2px rgba(44,40,37,0.04);
+    --serif: 'Source Serif 4', 'Georgia', serif;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── 레이아웃 ── */
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 히어로 ── */
+  .hero {
+    padding: clamp(48px, 10vw, 96px) 0 clamp(32px, 6vw, 56px);
+    text-align: center;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--accent-warm);
+    border-radius: 2px;
+    margin: clamp(20px, 4vw, 36px) auto 0;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(194,112,62,0.08);
+    padding: 5px 14px;
+    border-radius: 6px;
+    margin-bottom: clamp(16px, 3vw, 28px);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: clamp(1.65rem, 5vw, 2.55rem);
+    line-height: 1.3;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .hero-sub {
+    margin-top: clamp(14px, 2.5vw, 22px);
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
+    color: var(--muted);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* ── 메타 ── */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: clamp(28px, 5vw, 48px);
+    font-size: clamp(12px, 1.5vw, 13.5px);
+    color: var(--muted);
+  }
+  .meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: clamp(36px, 7vw, 64px); }
+  .section h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: clamp(14px, 3vw, 24px);
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+  }
+  .section h3 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    line-height: 1.45;
+    color: var(--fg);
+    margin: clamp(20px, 4vw, 32px) 0 clamp(8px, 1.5vw, 14px);
+  }
+  .section p {
+    margin-bottom: clamp(12px, 2vw, 18px);
+    font-size: clamp(0.93rem, 1.8vw, 1.02rem);
+  }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 4px solid var(--accent-warm);
+    padding: clamp(14px, 3vw, 22px) clamp(16px, 3vw, 28px);
+    margin: clamp(18px, 4vw, 32px) auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 10px 10px 0;
+    font-size: clamp(0.95rem, 1.8vw, 1.06rem);
+    font-style: italic;
+    color: var(--fg);
+    line-height: 1.8;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: clamp(0.82rem, 1.4vw, 0.9rem);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--accent-warm);
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 4vw, 28px);
+    margin: clamp(16px, 3vw, 28px) 0;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(6px);
+  }
+  .card-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(0.98rem, 2vw, 1.1rem);
+    color: var(--fg);
+    margin-bottom: 10px;
+  }
+  .card p { margin-bottom: 8px; font-size: clamp(0.9rem, 1.7vw, 0.98rem); }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── 강조 ── */
+  strong { font-weight: 600; color: var(--fg); }
+  .em-warm { color: var(--accent-warm); font-weight: 600; }
+  .em-cool { color: var(--accent-cool); font-weight: 600; }
+  .em-green { color: var(--accent-green); font-weight: 600; }
+
+  /* ── 표 ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: clamp(16px, 3vw, 28px) 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    background: var(--card-bg);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+    min-width: 480px;
+  }
+  thead th {
+    background: rgba(194,112,62,0.07);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid rgba(194,112,62,0.15);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(194,112,62,0.03); }
+
+  /* ── 순서/비순서 목록 ── */
+  .section ol, .section ul {
+    margin: clamp(10px, 2vw, 18px) 0 clamp(14px, 2.5vw, 22px);
+    padding-left: clamp(20px, 4vw, 32px);
+    font-size: clamp(0.93rem, 1.8vw, 1.02rem);
+  }
+  .section li { margin-bottom: 8px; }
+  .section li::marker { color: var(--accent-warm); font-weight: 600; }
+
+  /* ── 하이라이트 박스 ── */
+  .highlight-box {
+    border-radius: 12px;
+    padding: clamp(16px, 3.5vw, 24px) clamp(18px, 4vw, 28px);
+    margin: clamp(18px, 4vw, 32px) 0;
+    border: 1px solid;
+  }
+  .highlight-box.warm {
+    background: rgba(194,112,62,0.05);
+    border-color: rgba(194,112,62,0.18);
+  }
+  .highlight-box.cool {
+    background: rgba(91,124,153,0.05);
+    border-color: rgba(91,124,153,0.18);
+  }
+  .highlight-box.green {
+    background: rgba(107,158,122,0.05);
+    border-color: rgba(107,158,122,0.18);
+  }
+  .highlight-box p { margin-bottom: 6px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  /* ── 연결 다이어그램 ── */
+  .chain {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: clamp(20px, 4vw, 36px) 0;
+  }
+  .chain-node {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: clamp(14px, 3vw, 22px);
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    font-size: clamp(0.88rem, 1.7vw, 0.98rem);
+    font-weight: 500;
+  }
+  .chain-arrow {
+    text-align: center;
+    padding: 6px 0;
+    font-size: 20px;
+    color: var(--accent-warm);
+    line-height: 1;
+  }
+  .chain-node small {
+    display: block;
+    margin-top: 6px;
+    font-weight: 400;
+    font-size: clamp(0.8rem, 1.4vw, 0.88rem);
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── 결론 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.06) 0%, rgba(91,124,153,0.06) 100%);
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 16px;
+    padding: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px);
+    margin: clamp(20px, 4vw, 36px) 0;
+  }
+  .conclusion-box h2 {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: clamp(12px, 2.5vw, 20px);
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    margin-top: clamp(40px, 8vw, 72px);
+    padding: clamp(24px, 5vw, 40px) 0;
+    border-top: 1px solid rgba(44,40,37,0.08);
+    text-align: center;
+    font-size: clamp(0.82rem, 1.4vw, 0.9rem);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── 비유 캡션 ── */
+  .analogy {
+    font-size: clamp(0.88rem, 1.7vw, 0.97rem);
+    color: var(--muted);
+    border-left: 3px solid var(--accent-cool);
+    padding: 12px clamp(14px, 3vw, 22px);
+    margin: clamp(12px, 2.5vw, 20px) 0;
+    border-radius: 0 8px 8px 0;
+    background: rgba(91,124,153,0.03);
+    line-height: 1.75;
+  }
+  .analogy strong { color: var(--accent-cool); }
+
+  /* ── 태그 ── */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: clamp(20px, 4vw, 36px);
+  }
+  .tag {
+    font-size: clamp(11px, 1.4vw, 12.5px);
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(44,40,37,0.1);
+    color: var(--muted);
+    background: rgba(255,255,255,0.5);
+  }
+
+  /* ── 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section { animation: fadeUp 0.6s ease-out both; }
+  .section:nth-child(2) { animation-delay: 0.08s; }
+  .section:nth-child(3) { animation-delay: 0.16s; }
+  .section:nth-child(4) { animation-delay: 0.24s; }
+  .section:nth-child(5) { animation-delay: 0.32s; }
+  .section:nth-child(6) { animation-delay: 0.40s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section { animation: none; }
+  }
+
+  /* ── 네비 스타일 ── */
+  nav a {
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  nav a:hover {
+    background: rgba(194,112,62,0.08);
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrap">
+
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- 히어로 -->
+  <header class="hero">
+    <div class="hero-badge">Deep Analysis</div>
+    <h1>반복한다고 고쳐지는 게 아니다</h1>
+    <p class="hero-sub">에이전트 하네스 신뢰성의 기본 단위가<br>"반복 횟수"에서 "상태 유계 증거와 타입화된 수정 계약"으로 전환되어야 하는 이유</p>
+  </header>
+
+  <!-- 메타 -->
+  <div class="meta">
+    <span>📅 2025년 7월</span>
+    <span>📄 Looping Is Not Reliability (2025)</span>
+    <span>🏷️ Agentic Harness · C/R · 신뢰성</span>
+  </div>
+
+  <!-- ─── 섹션 1 ─── -->
+  <section class="section">
+    <h2>들어가며: 복사기를 끄고 다시 켜는 사람</h2>
+    <p>
+      복사기가 고장 났을 때 우리가 가장 먼저 하는 일은 뭘까요? 전원을 끄고 다시 켭니다. 한 번 안 되면 두 번, 세 번. 어느 순간 기계가 정상으로 돌아오면 "봐, 끄고 켜니까 되잖아"라고 말하죠. 하지만 잉크가 떨어져서 인쇄가 안 된 상황에서 전원을 백 번 재부팅해도 잉크는 생겨나지 않습니다. <span class="em-warm">재시도 횟수와 문제 해결은 구조적으로 다른 것</span>입니다.
+    </p>
+    <p>
+      에이전트 코드 수리(Agentic Code Repair) 시스템에서도 똑같은 일이 벌어지고 있습니다. 현재 Crab·DeltaBox 같은 C/R(Checkpoint/Recovery) 런타임은 에이전트 하네스의 신뢰성을 "체크포인트로 돌아가서 재시도하는 반복 횟수"에 기대어 구축합니다. 실패하면 롤백, 다시 시도, 또 실패하면 또 롤백. 이 루프가 곧 신뢰성이라는 암묵적 믿음이 깔려 있습니다.
+    </p>
+    <p>
+      그런데 최근 논문 <em>"Looping Is Not Reliability"</em>가 이 믿음에 정면으로 반박합니다. <span class="em-warm">정답을 이미 찾았음에도 보존·검증·제출 단계에서 구조적으로 실패한다</span>는 것을 실증적으로 보인 것입니다. 이 글에서는 왜 반복이 신뢰성이 될 수 없는지, 그리고 신뢰성의 기본 단위를 무엇으로 전환해야 하는지 파고들어 보겠습니다.
+    </p>
+  </section>
+
+  <!-- ─── 섹션 2 ─── -->
+  <section class="section">
+    <h2>기존 패러다임: C/R이 신뢰성이라고 믿은 시대</h2>
+    <p>
+      Crab 논문이 제시한 모델을 간단히 요약하면, C/R 런타임은 에이전트 하네스의 인프라 계층으로서 결함 내성(fault tolerance), 롤백(rollback), 분기(branching)를 직접 구현합니다. 에이전트가 코드를 수정하고 테스트를 돌렸는데 실패하면, 런타임이 이전 체크포인트로 상태를 복원하고 에이전트를 다시 실행합니다.
+    </p>
+
+    <div class="analogy">
+      <strong>비유:</strong> 게임에서 보스를 깼는데 죽으면, 가장 가까운 세이브 포인트로 돌아가서 다시 도전하는 방식입니다. 세이브 포인트가 많을수록, 도전 횟수가 많을수록 결국 클리어할 수 있다는 게 이 모델의 핵심 가정입니다.
+    </div>
+
+    <p>
+      여기서 신뢰성의 기본 단위는 명확합니다 — <span class="em-warm">"몇 번 반복했는가"</span>입니다. 3번 시도했으면 1번보다 신뢰할 만하고, 10번이면 더 신뢰할 만하다는 식의 사고입니다. 합의 기반 신뢰성(Agreement-based Reliability)의 한 형태로 볼 수도 있는데, 여러 번의 시도가 "같은 결과"를 낸다는 합의를 신뢰성의 근거로 삼는 것이죠.
+    </p>
+
+    <h3>하지만 Crab 자체가 이미 균열을 예고했다</h3>
+    <p>
+      재미있는 점은, Crab 논문이 자신의 모델 한계를 스스로 지적했다는 것입니다. 에이전트의 <span class="em-cool">의미론적 의존 그래프</span>(semantic dependency graph — 어떤 상태가 어떤 상태에 의존하는가)를 OS의 체크포인트 메커니즘(전체 스냅샷)으로 번역할 때 비효율이 발생한다는 지적이었습니다.
+    </p>
+    <p>
+      이건 단순한 성능 이야기가 아닙니다. 더 근본적인 질문을 던집니다: <span class="em-cool">롤백이 진정으로 의미론적 상태를 보존하는가?</span> 스냅샷은 픽셀을 찍는 것과 같아서, "왜 그 상태에 도달했는지"라는 맥락은 찍히지 않습니다. 사진을 찍어둔다고 그 순간의 사고 과정이 보존되지 않는 것처럼요.
+    </p>
+  </section>
+
+  <!-- ─── 섹션 3 ─── -->
+  <section class="section">
+    <h2>구조적 실패의 발견: 정답을 찾고도 잃어버리는 메커니즘</h2>
+    <p>
+      "Looping Is Not Reliability" 논문이 밝혀낸 가장 충격적인 발견은 이것입니다.
+    </p>
+
+    <blockquote>
+      생성-테스트-수정 루프에서 정답을 찾은 이후에도 보존(retain)·검증(verify)·제출(submit) 단계에서 구조적으로 실패할 수 있다.
+      <cite>— Looping Is Not Reliability (2025)</cite>
+    </blockquote>
+
+    <p>
+      이게 왜 충격적일까요? 기존 패러다임에서 "루프가 반복될수록 신뢰성이 높아진다"는 믿음은, <span class="em-warm">루프 내에서 정답에 도달하면 그 이후의 단계는 자연스럽게 성공할 것이라는 전제</span>에 기반합니다. 마치 미로를 풀 때 출구를 찾으면 밖으로 나가는 것은 자명하다고 생각하는 것처럼요.
+    </p>
+    <p>
+      하지만 논문은 출구를 찾은 뒤에도 세 가지 지점에서 구조적 실패가 일어난다고 보여줍니다.
+    </p>
+
+    <div class="card">
+      <div class="card-title">① 정답 발견과 정답 보존 사이의 간극</div>
+      <p>루프 내에서 올바른 패치를 생성했음에도, 다음 반복으로 넘어가는 <span class="em-warm">상태 전이 과정에서 그 정답을 유지하지 못합니다</span>. 비유하자면, 정답을 종이에 적어놓고 다음 페이지를 넘길 때 종이를 잃어버리는 상황입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">② 검증의 순환성 (Circular Validity Problem)</div>
+      <p>테스트를 통과했다고 해서 수정이 유효한 것이 아닙니다. 테스트 자체가 수정의 의미론적 올바름을 보장하지 못하는데, 이를 <span class="em-cool">순환적 유효성 문제</span>라고 합니다. "테스트가 통과했으니 올바르다" → "올바르니까 테스트가 통과했다" — 이 순환에서 실제 올바름은 검증되지 않습니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">③ 제출 시점의 의미론적 붕괴</div>
+      <p>최종 상태가 올바르더라도, 제출(submit) 과정에서 의미론적 일관성이 손실됩니다. 완성된 그림을 배송하는데 포장 과정에서 그림이 찢어지는 것과 같습니다. <span class="em-green">결과물의 생산과 결과물의 전달은 다른 문제</span>입니다.</p>
+    </div>
+
+    <div class="highlight-box warm">
+      <p><span class="em-warm">핵심 통찰:</span> 이 세 가지 실패는 "더 많이 반복하면 해결된다"는 논리로는 막을 수 없습니다. 왜냐하면 실패가 루프 <em>안쪽</em>이 아니라 루프의 <em>구조 자체</em>에서 비롯되기 때문입니다. 미로 출구를 백 번 찾아도, 출구에서 밖으로 나가는 문이 잠겨 있으면 백 번 무의미합니다.</p>
+    </div>
+  </section>
+
+  <!-- ─── 섹션 4 ─── -->
+  <section class="section">
+    <h2>왜 반복이 신뢰성을 오히려 깎는가: 체크포인트 합의 축소</h2>
+    <p>
+      여기서 한 가지 더 깊이 들어가야 할 현상이 있습니다. <span class="em-cool">체크포인트 합의 축소(Checkpoint Consensus Reduction)</span> 현상입니다.
+    </p>
+    <p>
+      반복 횟수를 신뢰성 단위로 삼을 때, 체크포인트 간의 "합의"가 반복될수록 오히려 신뢰성이 저하되는 역설이 발생합니다. 왜 그럴까요?
+    </p>
+
+    <div class="analogy">
+      <strong>비유:</strong> 여러 사람에게 같은 이야기를 전달하듯, 원본이 아닌 사본에서 사본을 만드는 과정을 생각해 보세요. 체크포인트가 의미론적 상태가 아니라 raw 스냅샷이기 때문에, 롤백할 때마다 상태의 의미론적 품질이 보존되지 않고 오히려 희석됩니다. 1차 복사본이 2차, 3차로 갈수록 선명도가 떨어지는 것과 같습니다.
+    </div>
+
+    <p>
+      더 문제적인 것은 <span class="em-cool">결여 기반 롤백(Absence-based Rollback)</span>과의 긴장 관계입니다. 롤백이 "결여 상태(absence)로의 복원"이라면, 정답을 찾은 후의 롤백은 <span class="em-warm">올바른 상태를 결여 상태로 퇴행시키는 것</span>입니다. 이미 찾은 열쇠를 버리고 열쇠 없는 상태로 돌아가서 다시 찾으라고 하는 셈이죠.
+    </p>
+
+    <p>
+      이것이 체크포인트 합의 축소의 핵심 메커니즘입니다. 반복이 정답에 가까워지는 것이 아니라, <span class="em-warm">반복 자체가 의미론적 품질의 희석 채널</span>로 작동합니다. "더 돌리면 더 좋아진다"는 직관이 여기서 완전히 붕괴합니다.
+    </p>
+
+    <div class="chain">
+      <div class="chain-node">
+        정답 상태 도달
+        <small>루프 내에서 올바른 패치 생성</small>
+      </div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node">
+        체크포인트 저장 (raw 스냅샷)
+        <small>의미론적 맥락은 저장되지 않음</small>
+      </div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node">
+        다음 반복에서 롤백 발생
+        <small>정답 상태 → 결여 상태로 퇴행</small>
+      </div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node">
+        의미론적 품질 희석
+        <small>복사본에서 복사본을 만드는 것과 동일</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 섹션 5 ─── -->
+  <section class="section">
+    <h2>새로운 패러다임: 상태 유계 증거와 타입화된 수정 계약</h2>
+    <p>
+      그렇다면 무엇으로 바꿔야 할까요? 논문이 제시하는 대안은 신뢰성의 기본 단위를 "반복 횟수"에서 <span class="em-green">"상태 유계 증거(State-Bound Evidence)"와 "타입화된 수정 계약(Typed Revision Contract)"</span>으로 전환하는 것입니다.
+    </p>
+
+    <div class="analogy">
+      <strong>비유:</strong> 건축 현장에서 "몇 번 시공했는가"가 아니라, "각 시공 단계에서 구조적 안전성 검증 서류가 있는가"를 신뢰성의 기준으로 삼는 것으로 바꾸는 것과 같습니다. 시공을 백 번 반복해도 서류가 없으면 불합격이고, 한 번이라도 서류가完备하면 합격입니다.
+    </div>
+
+    <h3>무엇이 달라지는가</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>차원</th>
+            <th>기존 (C/R 기반)</th>
+            <th>제안 (상태 유계 증거 기반)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>신뢰성 단위</strong></td>
+            <td>반복 횟수</td>
+            <td><span class="em-green">상태 유계 증거</span></td>
+          </tr>
+          <tr>
+            <td><strong>롤백 의미</strong></td>
+            <td>전체 스냅샷 복원</td>
+            <td><span class="em-green">타입화된 수정 계약 위반 여부</span></td>
+          </tr>
+          <tr>
+            <td><strong>성공 기준</strong></td>
+            <td>테스트 통과</td>
+            <td><span class="em-green">계약적 일관성 + 증거 보존</span></td>
+          </tr>
+          <tr>
+            <td><strong>의미론적 간극 대응</strong></td>
+            <td>스냅샷 세분화</td>
+            <td><span class="em-green">의미론적 의존 그래프를 계약으로 명시화</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>상태 유계 증거란 무엇인가</h3>
+    <p>
+      <span class="em-green">상태 유계 증거(State-Bound Evidence)</span>는 특정 상태에 묶여 있는(bound) 형태의 증거를 의미합니다. 즉, "이 패치가 올바르다"는 주장이 그 자체로 떠다니는 것이 아니라, <span class="em-green">"이 패치는 상태 S₁에서 S₂로의 전이에서 이러이러한 의미론적 조건을 만족한다"</span>는 형태로 상태와 결합되어 있습니다.
+    </p>
+    <p>
+      이게 중요한 이유는, 롤백이 발생하더라도 증거가 상태에 묶여 있기 때문에 <span class="em-green">롤백 후에도 "무엇을 잃어버렸는지"를 명시적으로 알 수 있다</span>는 점입니다. 기존 방식에서는 롤백 후 "뭔가 잃어버린 것 같은데 뭔지 모르겠다"는 상태가 되지만, 상태 유계 증거 모델에서는 "증거 E가 상태 S₂에 묶여 있었으므로, S₁으로 롤백하면 E를 잃게 된다"는 것이 타입 시스템 수준에서 명시됩니다.
+    </p>
+
+    <h3>타입화된 수정 계약이란 무엇인가</h3>
+    <p>
+      <span class="em-green">타입화된 수정 계약(Typed Revision Contract)</span>은 수정 행위 자체에 타입을 부여하는 것입니다. "이 수정은 어떤 전제 조건 아래에서, 어떤 의미론적 보장을 제공하는가"가 타입으로 명시됩니다.
+    </p>
+    <p>
+      이 계약이 위반되면 롤백이 발생하지만, <span class="em-green">계약이 유지되는 한 롤백은 발생하지 않습니다</span>. 즉, "테스트가 실패했으니 롤백"이 아니라 "계약이 위반되었으니 롤백"으로 로직이 바뀝니다. 테스트 실패가 곧 롤백 사유가 아니라, 계약 위반이 롤백 사유가 되는 것입니다. 이로써 앞서 본 순환적 유효성 문제가 구조적으로 차단됩니다.
+    </p>
+
+    <div class="highlight-box green">
+      <p><span class="em-green">핵심 변화:</span> "몇 번 시도했는가"에서 "각 반복에서 어떤 증거가 유계로 보존되었는가"로 감사(auditing) 단위가 전환됩니다. 이는 메트릭 변경이 아니라, 하네스가 에이전트의 의미론적 상태에 대해 가져야 하는 <strong>책임 모델의 근본적 재설계</strong>입니다.</p>
+    </div>
+  </section>
+
+  <!-- ─── 섹션 6: 결론 ─── -->
+  <section class="section">
+    <div class="conclusion-box">
+      <h2>결론: 전환은 선택이 아니라 필수다</h2>
+      <p>
+        세 가지 층위에서 이 전환의 필연성을 정리할 수 있습니다.
+      </p>
+
+      <h3>실증적 층위</h3>
+      <p>
+        "Looping Is Not Reliability"가 정답 발견 후 보존·제출 단계의 구조적 실패를 <span class="em-warm">실증</span>했습니다. 이것은 이론적 추론이 아니라 관찰된 현상입니다. 반복이 신뢰성을 보장하지 않는다는 것을 데이터가 말해줍니다.
+      </p>
+
+      <h3>이론적 층위</h3>
+      <p>
+        Crab이 이미 지적한 <span class="em-cool">의미론적 간극(Semantic Gap)</span>이 C/R의 의미론적 보존 한계를 예고했습니다. OS 수준 체크포인트가 의미론적 상태를 보존하지 못한다면, 롤백 기반 신뢰성은 근본적으로 한계를 가집니다.
+      </p>
+
+      <h3>구조적 층위</h3>
+      <p>
+        순환적 유효성 문제와 체크포인트 합의 축소가 <span class="em-green">반복 자체의 신뢰성 붕괴 메커니즘</span>을 설명합니다. 반복이 많을수록 신뢰성이 높아지는 것이 아니라, 특정 조건에서는 반복이 신뢰성을 갉아먹습니다.
+      </p>
+
+      <div class="highlight-box cool" style="margin-top: clamp(20px, 4vw, 32px);">
+        <p><span class="em-cool">전환의 방향성:</span> Agentic Harness Engineering은 이제 인프라 계층(C/R 런타임)에서 <strong>계약 계층(Typed Revision Contracts)</strong>으로 확장되어야 합니다. 에이전트 신뢰성 감사(Agent Reliability Auditing)의 질문도 "몇 번 시도했는가?"에서 "각 반복에서 어떤 증거가 유계로 보존되었는가?"로 바뀌어야 합니다.</p>
+        <p style="margin-top: 8px;">복사기를 백 번 재부팅하는 대신, 잉크 잔량을 확인하는 방식으로. <span class="em-warm">그것이 신뢰성의 본질입니다.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">Agentic Harness</span>
+    <span class="tag">C/R</span>
+    <span class="tag">Checkpoint/Recovery</span>
+    <span class="tag">State-Bound Evidence</span>
+    <span class="tag">Typed Revision Contract</span>
+    <span class="tag">Semantic Gap</span>
+    <span class="tag">Circular Validity</span>
+    <span class="tag">Code Repair</span>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <p>대상 논문: Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair (2025)</p>
+    <p style="margin-top: 6px;">참조: Crab · DeltaBox · Agent-OS Semantic Gap · Checkpoint Consensus Reduction</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
