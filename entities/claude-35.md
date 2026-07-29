@@ -43,3 +43,5 @@ _자동 생성됨_
 - [[sources/2026-07-27-openforgerl-train-harness-native-agents-in-any-env.md]]
 
 - [[sources/2026-07-28-opaque-epistemic-mediation-how-llm-deployment-conf.md]]
+
+- [[sources/2026-07-29-efficient-llm-generated-shuttling-compilers-for-co.md]]

@@ -137,3 +137,7 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-07-10-tf-engram-a-train-free-engram-with-ssd-backed-memo.md]]
 
 - [[sources/2026-07-23-adaflash-adaptive-speculative-decoding-via-on-poli.md]]
+
+- [[sources/2026-07-29-mmoe-modernizing-diffusion-transformers-with-effic.md]]
+
+- [[sources/2026-07-29-locks-page-local-compact-key-summaries-for-efficie.md]]

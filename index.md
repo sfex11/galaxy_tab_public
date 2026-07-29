@@ -1522,3 +1522,20 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-07-28-dynamic-capability-scoping-for-enterprise-ai-agent.md]] - Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture
 - [[sources/2026-07-28-hikv-hierarchical-importance-aware-kv-cache-with-h.md]] - HiKV: Hierarchical Importance-Aware KV Cache with Hardware Acceleration for LLM Decoding
+- [[sources/2026-07-29-data-pyramid-for-embodied-manipulation.md]] - Data Pyramid for Embodied Manipulation
+- [[sources/2026-07-29-clinfusion-a-vision-centric-multimodal-llm-system-.md]] - ClinFusion: A Vision-Centric Multimodal LLM System for Holistic Medical Understanding
+- [[sources/2026-07-29-the-physics-of-multi-turn-long-horizon-planning-fr.md]] - The Physics of Multi-Turn Long-Horizon Planning: From Pre-training to Post-training via Single- and Multi-Teacher On-Policy Agentic Distillation
+- [[sources/2026-07-29-dataorchestra-learning-to-orchestrate-per-example-.md]] - DataOrchestra: Learning to Orchestrate Per-Example Curation of Pretraining Data
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-07-29-efficient-llm-generated-shuttling-compilers-for-co.md]] - Efficient LLM-Generated Shuttling Compilers for Complex Trapped-Ion Architectures
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-29-explainable-reinforcement-learning-via-physics-awa.md]] - Explainable Reinforcement Learning via Physics-Aware Policy Distillation
+- [[entities/transformer]] - Transformer
+- [[sources/2026-07-29-mmoe-modernizing-diffusion-transformers-with-effic.md]] - MMOE: Modernizing Diffusion Transformers with Efficient Expert Design
+- [[sources/2026-07-29-a-corrective-agentic-hybrid-rag-and-an-operations-.md]] - A corrective agentic hybrid RAG and an operations-grounded evaluation for a scientific facility
+- [[sources/2026-07-29-efficiency-matters-in-autonomous-research.md]] - Efficiency Matters in Autonomous Research
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-29-agentic-permissions-policy-algebra-for-taint-confi.md]] - Agentic Permissions Policy Algebra for Taint Confinement in LLM Agents
+- [[sources/2026-07-29-looping-is-not-reliability-state-bound-evidence-an.md]] - Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair
+- [[entities/transformer]] - Transformer
+- [[sources/2026-07-29-locks-page-local-compact-key-summaries-for-efficie.md]] - LOCKS: Page-Local Compact Key Summaries for Efficient Long-Context Decoding

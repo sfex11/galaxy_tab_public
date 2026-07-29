@@ -2824,3 +2824,29 @@
 ## [2026-07-29 04:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1386개
 
 ## [2026-07-29 06:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1386개
+
+## [2026-07-29 08:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1386개
+
+## [2026-07-29 08:33] ingest | Data Pyramid for Embodied Manipulation
+
+## [2026-07-29 08:33] ingest | ClinFusion: A Vision-Centric Multimodal LLM System for Holistic Medical Understanding
+
+## [2026-07-29 08:33] ingest | The Physics of Multi-Turn Long-Horizon Planning: From Pre-training to Post-training via Single- and Multi-Teacher On-Policy Agentic Distillation
+
+## [2026-07-29 08:33] ingest | DataOrchestra: Learning to Orchestrate Per-Example Curation of Pretraining Data
+
+## [2026-07-29 08:33] ingest | Efficient LLM-Generated Shuttling Compilers for Complex Trapped-Ion Architectures
+
+## [2026-07-29 08:33] ingest | Explainable Reinforcement Learning via Physics-Aware Policy Distillation
+
+## [2026-07-29 08:33] ingest | MMOE: Modernizing Diffusion Transformers with Efficient Expert Design
+
+## [2026-07-29 08:33] ingest | A corrective agentic hybrid RAG and an operations-grounded evaluation for a scientific facility
+
+## [2026-07-29 08:33] ingest | Efficiency Matters in Autonomous Research
+
+## [2026-07-29 08:33] ingest | Agentic Permissions Policy Algebra for Taint Confinement in LLM Agents
+
+## [2026-07-29 08:33] ingest | Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair
+
+## [2026-07-29 08:33] ingest | LOCKS: Page-Local Compact Key Summaries for Efficient Long-Context Decoding
