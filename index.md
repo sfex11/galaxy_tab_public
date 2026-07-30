@@ -1539,3 +1539,18 @@
 - [[sources/2026-07-29-looping-is-not-reliability-state-bound-evidence-an.md]] - Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair
 - [[entities/transformer]] - Transformer
 - [[sources/2026-07-29-locks-page-local-compact-key-summaries-for-efficie.md]] - LOCKS: Page-Local Compact Key Summaries for Efficient Long-Context Decoding
+- [[entities/openclaw]] - OpenClaw
+- [[sources/2026-07-30-vetclaw-an-edge-cloud-multimodal-agentic-system-fo.md]] - VetClaw: An Edge-Cloud Multimodal Agentic System for Veterinary Disease Screening
+- [[sources/2026-07-30-desktop-delta-bench-do-computer-use-models-underst.md]] - Desktop-Delta Bench: Do Computer-Use Models Understand Desktop GUI Transitions?
+- [[sources/2026-07-30-llm4osc-profile-bound-natural-language-control-wit.md]] - LLM4OSC: Profile-Bound Natural Language Control with Deterministic Validation for Open Sound Control
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-30-unimem-complementary-episodic-to-parametric-memory.md]] - UniMem: Complementary Episodic-to-Parametric Memory for Boundary-Agnostic Task Streams
+- [[sources/2026-07-30-pictura-perspective-view-self-play-at-scale-for-dr.md]] - Pictura: Perspective-View Self-Play at Scale for Driving
+- [[sources/2026-07-30-does-runtime-topology-context-improve-llm-generate.md]] - Does Runtime Topology Context Improve LLM-Generated Kubernetes Security Patches?
+- [[sources/2026-07-30-memlens-a-value-aware-memory-management-system-wit.md]] - MemLens: A Value-Aware Memory Management System with Interactive Analytics for LLM-based Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-07-30-physics-aware-end-to-end-deep-reinforcement-learni.md]] - Physics-Aware End-to-End Deep Reinforcement Learning for Quadcopter Control with Actuator Dynamics
+- [[sources/2026-07-30-who-is-scientific-code-for-maintaining-human-reada.md]] - Who is scientific code for? Maintaining human-readable landmarks in agent-written code
+- [[sources/2026-07-30-evaluating-vlms-for-autonomous-agent-driven-geomet.md]] - Evaluating VLMs for Autonomous Agent-Driven Geometry Clipping Detection in Video Game QA
+- [[sources/2026-07-30-angelspec-towards-real-world-high-performance-infe.md]] - AngelSpec: Towards Real-World High Performance Inference with Speculative Decoding
+- [[sources/2026-07-30-speculate-while-you-reason-teaching-agents-to-pred.md]] - Speculate While You Reason: Teaching Agents to Predict Their Next Tool Call via Joint Agent-Speculator RL

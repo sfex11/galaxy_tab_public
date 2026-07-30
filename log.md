@@ -2850,3 +2850,29 @@
 ## [2026-07-29 08:33] ingest | Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair
 
 ## [2026-07-29 08:33] ingest | LOCKS: Page-Local Compact Key Summaries for Efficient Long-Context Decoding
+
+## [2026-07-30 06:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1395개
+
+## [2026-07-30 08:30] ingest | VetClaw: An Edge-Cloud Multimodal Agentic System for Veterinary Disease Screening
+
+## [2026-07-30 08:30] ingest | Desktop-Delta Bench: Do Computer-Use Models Understand Desktop GUI Transitions?
+
+## [2026-07-30 08:30] ingest | LLM4OSC: Profile-Bound Natural Language Control with Deterministic Validation for Open Sound Control
+
+## [2026-07-30 08:30] ingest | UniMem: Complementary Episodic-to-Parametric Memory for Boundary-Agnostic Task Streams
+
+## [2026-07-30 08:30] ingest | Pictura: Perspective-View Self-Play at Scale for Driving
+
+## [2026-07-30 08:30] ingest | Does Runtime Topology Context Improve LLM-Generated Kubernetes Security Patches?
+
+## [2026-07-30 08:30] ingest | MemLens: A Value-Aware Memory Management System with Interactive Analytics for LLM-based Agents
+
+## [2026-07-30 08:30] ingest | Physics-Aware End-to-End Deep Reinforcement Learning for Quadcopter Control with Actuator Dynamics
+
+## [2026-07-30 08:30] ingest | Who is scientific code for? Maintaining human-readable landmarks in agent-written code
+
+## [2026-07-30 08:30] ingest | Evaluating VLMs for Autonomous Agent-Driven Geometry Clipping Detection in Video Game QA
+
+## [2026-07-30 08:30] ingest | AngelSpec: Towards Real-World High Performance Inference with Speculative Decoding
+
+## [2026-07-30 08:30] ingest | Speculate While You Reason: Teaching Agents to Predict Their Next Tool Call via Joint Agent-Speculator RL

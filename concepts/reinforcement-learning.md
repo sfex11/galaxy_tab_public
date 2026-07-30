@@ -329,3 +329,5 @@ _자동 생성됨_
 - [[sources/2026-07-27-compact-latent-coordination-for-autonomous-vehicle.md]]
 
 - [[sources/2026-07-29-explainable-reinforcement-learning-via-physics-awa.md]]
+
+- [[sources/2026-07-30-physics-aware-end-to-end-deep-reinforcement-learni.md]]
