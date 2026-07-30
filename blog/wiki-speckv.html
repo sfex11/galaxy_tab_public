@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>추론 엔진과 도구 호출 사이의 벽이 무너지는 순간</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection { background: rgba(194,112,62,0.15); color: #2c2825; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #faf9f7;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.5vw, 17px);
+    line-height: 1.85;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 네비게이션 ── */
+  nav.top-nav {
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+  nav.top-nav a {
+    color: #c2703e;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: clamp(12px, 2vw, 14px);
+    transition: background 0.2s;
+  }
+  nav.top-nav a:hover { background: rgba(194,112,62,0.08); }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(48px, 10vw, 96px) 0 clamp(32px, 6vw, 56px);
+    text-align: center;
+  }
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.8vw, 13px);
+    font-weight: 500;
+    color: #c2703e;
+    background: rgba(194,112,62,0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 20px;
+  }
+  .article-subtitle {
+    font-size: clamp(14px, 2.2vw, 16px);
+    color: rgba(44,40,37,0.55);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .article-meta {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: clamp(11px, 1.8vw, 13px);
+    color: rgba(44,40,37,0.4);
+  }
+
+  /* ── 본문 ── */
+  .article-body { padding-bottom: clamp(60px, 12vw, 120px); }
+
+  .article-body h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
+    font-weight: 700;
+    color: #2c2825;
+    margin: clamp(40px, 8vw, 64px) 0 16px;
+    line-height: 1.4;
+    position: relative;
+  }
+  .article-body h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #c2703e;
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+
+  .article-body h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+    font-weight: 600;
+    color: #2c2825;
+    margin: 32px 0 10px;
+  }
+
+  .article-body p {
+    margin-bottom: 18px;
+    color: rgba(44,40,37,0.82);
+  }
+
+  .article-body strong {
+    color: #2c2825;
+    font-weight: 700;
+  }
+
+  .highlight-amber { color: #c2703e; font-weight: 600; }
+  .highlight-blue { color: #5b7c99; font-weight: 600; }
+  .highlight-green { color: #6b9e7a; font-weight: 600; }
+
+  /* ── 인용구 ── */
+  .article-body blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: rgba(44,40,37,0.7);
+  }
+  .article-body blockquote p { margin-bottom: 0; }
+
+  /* ── 카드 ── */
+  .insight-card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 28px);
+    margin: 28px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+  .insight-card .card-label {
+    font-size: clamp(11px, 1.8vw, 12px);
+    font-weight: 500;
+    color: #c2703e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .insight-card h3 {
+    margin-top: 0;
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+  }
+  .insight-card p {
+    font-size: clamp(14px, 2.2vw, 15.5px);
+    margin-bottom: 10px;
+  }
+  .insight-card p:last-child { margin-bottom: 0; }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: rgba(91,124,153,0.05);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 14px;
+    padding: clamp(20px, 4vw, 28px);
+    margin: 28px 0;
+  }
+  .metaphor-box .metaphor-label {
+    font-size: clamp(11px, 1.8vw, 12px);
+    font-weight: 500;
+    color: #5b7c99;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .metaphor-box p { color: rgba(44,40,37,0.75); }
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 다이어그램 ── */
+  .diagram-container {
+    margin: 32px 0;
+    padding: clamp(16px, 3vw, 24px);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(44,40,37,0.06);
+    border-radius: 14px;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  .diagram-box {
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .diagram-box.dim-infra {
+    background: rgba(107,158,122,0.12);
+    border: 1px solid rgba(107,158,122,0.25);
+    color: #6b9e7a;
+  }
+  .diagram-box.dim-action {
+    background: rgba(91,124,153,0.12);
+    border: 1px solid rgba(91,124,153,0.25);
+    color: #5b7c99;
+  }
+  .diagram-box.dim-merged {
+    background: rgba(194,112,62,0.12);
+    border: 1px solid rgba(194,112,62,0.25);
+    color: #c2703e;
+  }
+  .diagram-arrow {
+    color: rgba(44,40,37,0.3);
+    font-size: 18px;
+  }
+  .diagram-label {
+    font-size: clamp(11px, 1.8vw, 12px);
+    color: rgba(44,40,37,0.4);
+    margin-top: 4px;
+  }
+  .diagram-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(44,40,37,0.12);
+    margin: 8px 20px;
+  }
+  .diagram-vs {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+    color: rgba(44,40,37,0.2);
+    margin: 12px 0;
+  }
+
+  /* ── 순서 리스트 ── */
+  .article-body ol {
+    padding-left: 20px;
+    margin-bottom: 18px;
+  }
+  .article-body ol li {
+    margin-bottom: 12px;
+    color: rgba(44,40,37,0.82);
+    padding-left: 4px;
+  }
+  .article-body ol li::marker {
+    color: #c2703e;
+    font-weight: 600;
+  }
+
+  /* ── 구분선 ── */
+  .section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,40,37,0.08), transparent);
+    margin: clamp(36px, 8vw, 64px) 0;
+  }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.06);
+    padding: 32px 0;
+    text-align: center;
+    font-size: clamp(12px, 1.8vw, 13px);
+    color: rgba(44,40,37,0.35);
+  }
+  .article-footer a {
+    color: #c2703e;
+    text-decoration: none;
+  }
+  .article-footer a:hover { text-decoration: underline; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .diagram-divider { margin: 8px 10px; }
+    .article-meta { flex-direction: column; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="top-nav">
+    <a href="../index.html">📚 홈</a>
+    <a href="../sources.html">논문</a>
+    <a href="../slides.html">🎨 슬라이드</a>
+    <a href="../daily.html">📝 요약</a>
+    <a href="../reports.html">📊 보고서</a>
+    <a href="blog.html">🧠 분석</a>
+    <a href="../patent/README.html">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  </nav>
+
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">추론 엔진과 도구 호출 사이의 벽이 무너지는 순간</h1>
+    <p class="article-subtitle">적응적 추론은 인프라 문제고, 도구 호출은 행동 선택 문제다.&nbsp;이 두 차원이 RL로 학습된 하나의 능력으로 합쳐지면 무슨 일이 벌어지는가.</p>
+    <div class="article-meta">
+      <span>2025년 7월</span>
+      <span>·</span>
+      <span>Speculate While You Reason 분석</span>
+    </div>
+  </header>
+
+  <article class="article-body">
+
+    <!-- ─── 섹션 1 ─── -->
+    <h2>두 개의 독립된 방이라고 믿었던 것들</h2>
+
+    <p>LLM 에이전트 연구에서 우리는 오랫동안 두 가지 문제를 별개의 방에서 다뤘다. 하나는 <span class="highlight-green">적응적 추론(Adaptive Inference)</span>의 방이고, 다른 하나는 <span class="highlight-blue">도구 호출(Tool Calling)</span>의 방이다.</p>
+
+    <p>적응적 추론의 방에서는 SpecKV 같은 시스템이 묻는다: "<strong>다음 토큰을 몇 개나 추측할까?</strong>" 이것은 KV 캐시의 압축 비율이라는 <em>내부 시스템 상태</em>를 보고, γ(감마) 값을 조절하는 순수한 <span class="highlight-green">인프라 최적화</span> 문제다. 자동차로 치면 <strong>엔진의 연료 분사량을 조절하는 일</strong>이다.</p>
+
+    <p>도구 호출의 방에서는 "Tool Attention Is All You Need" 같은 연구가 묻는다: "<strong>수십 개의 서버에 흩어진 도구 중 어떤 것을 호출할까?</strong>" 이것은 MCP 배포 환경에서 스키마가 축적될 때 레이턴시 병목이 어디서 생기는지 다루는 <span class="highlight-blue">외부 행동 선택</span> 문제다. 자동차로 치면 <strong>목적지까지 어떤 경로로 갈지 정하는 일</strong>이다.</p>
+
+    <div class="diagram-container">
+      <div class="diagram-row">
+        <div class="diagram-box dim-infra">적응적 추론<br><span style="font-weight:400;font-size:0.85em;">γ 선택 · 토큰 추측</span></div>
+        <span class="diagram-arrow">∥</span>
+        <div class="diagram-box dim-action">도구 호출<br><span style="font-weight:400;font-size:0.85em;">스키마 선택 · 행동 결정</span></div>
+      </div>
+      <div class="diagram-label">기존 Wiki 분류: 두 차원은 독립</div>
+    </div>
+
+    <blockquote>
+      <p>SpecKV는 "추측 길이를 얼마로 할까"를 결정하고, 도구 호출 시스템은 "다음에 무엇을 할까"를 결정한다. 전자는 엔진이, 후자는 운전자가 각자 알아서 한다 — 이것이 지금까지의 암묵적 합의였다.</p>
+    </blockquote>
+
+    <p>하지만 "Speculate While You Reason"이라는 논문이 이 합의에 균열을 냈다. 에이전트가 <strong>자신의 다음 도구 호출을 RL로 학습해 미리 예측</strong>하면, 그 순간 추측은 더 이상 인프라의 일이 아니다. 그것은 <em>학습된 추론 능력</em>이 된다. 벽이 무너지는 순간이다.</p>
+
+    <hr class="section-divider">
+
+    <!-- ─── 섹션 2 ─── -->
+    <h2>벽이 무너지는 세 가지 축</h2>
+
+    <p>경계 붕괴는 단일 지점에서 일어나지 않는다. Joint Agent-Speculator RL은 세 축에서 동시에 공격한다.</p>
+
+    <h3>첫째, 추측의 단위가 토큰에서 행동으로 승격된다</h3>
+
+    <p>SpecKV가 예측하는 것은 <span class="highlight-green">다음 토큰 시퀀스</span>다. "the cat sat on the" 다음에 "mat"이 올 것 같으니 3개 토큰을 추측해보자 — 이런 식이다. 하지만 Joint RL에서 에이전트가 예측하는 것은 <span class="highlight-amber">자신의 다음 도구 호출</span>이다. "파일을 읽은 다음에는 아마 검색 도구를 쓸 것이다"라고 예측하는 것은, 토큰 수준의 추측과는 근본적으로 다른 계층의 일이다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>피아니스트가 다음 음을 예측하는 것(SpecKV)과, 지휘자가 다음 악장의 분위기를 예측하는 것(Joint RL)의 차이다. 음은 개별 토큰이지만, 악장의 분위기는 <em>행동 단위</em>의 예측이다. 전자는 손가락의 반사, 후자는 음악적 이해다.</p>
+    </div>
+
+    <h3>둘째, 최적화의 위치가 엔진에서 정책으로 이동한다</h3>
+
+    <p>SpecKV의 γ 선택은 추론 엔진 <em>내부</em>의 휴리스틱이다. 엔진이 "지금 KV 캐시가 70% 압축되었으니 추측 길이를 줄이자"라고 스스로 결정한다. 하지만 도구 호출 추측은 RL로 학습된 <span class="highlight-amber">에이전트 정책의 일부</span>다. "얼마나 추측할까"와 "다음에 무엇을 할까"가 <strong>동일한 매개변수 공간</strong>에서 최적화된다.</p>
+
+    <p>이것이 의미하는 바는 명확하다. 추측 길이 결정이 더 이상 엔진의 사적인 결정이 아니라, 에이전트의 <em>추론 능력 그 자체</em>와 뒤엉킨다는 것이다.</p>
+
+    <h3>셋째, 반응 대상이 시스템 상태에서 신념 상태로 이동한다</h3>
+
+    <p>여기가 가장 근본적인 변화다. Wiki의 adaptive-inference 엔티티는 적응의 대상을 두 가지로 구분했다: CADENCE는 <span class="highlight-blue">외부 환경</span>에 반응하고, SpecKV는 <span class="highlight-green">내부 시스템 상태</span>에 반응한다. 하지만 도구 호출 추측은 <span class="highlight-amber">에이전트의 신념 상태(belief state)</span>에 반응한다.</p>
+
+    <blockquote>
+      <p>내부 시스템 상태(KV 캐시 압축률)는 기계의 체온이다. 신념 상태("이 태스크에서는 검색이 먼저 와야 한다")는 <strong>기계가 형성한 이해</strong>다. 전자는 하드웨어가 측정하고, 후자는 학습이 만들어낸다.</p>
+    </blockquote>
+
+    <div class="diagram-container">
+      <div class="diagram-row">
+        <div class="diagram-box dim-infra">외부 환경<br><span style="font-weight:400;font-size:0.85em;">CADENCE</span></div>
+        <span class="diagram-arrow">→</span>
+        <div class="diagram-box dim-infra">내부 시스템 상태<br><span style="font-weight:400;font-size:0.85em;">SpecKV (γ)</span></div>
+        <span class="diagram-arrow">→</span>
+        <div class="diagram-box dim-merged">학습된 인지 상태<br><span style="font-weight:400;font-size:0.85em;">Joint RL (신념)</span></div>
+      </div>
+      <div class="diagram-label">적응의 스펙트럼 확장: 제3의 적응 유형 등장</div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ─── 섹션 3 ─── -->
+    <h2>새로운 연결이 요구하는 세 가지 개념</h2>
+
+    <p>경계가 붕괴되면, 기존 개념으로는 설명할 수 없는 현상이 나타난다. Wiki에 아직 존재하지 않는 세 가지 연결이 필요하다.</p>
+
+    <div class="insight-card">
+      <div class="card-label">Concept 1</div>
+      <h3>적응적 병목 이동 (Adaptive Bottleneck Migration)</h3>
+      <p>적응의 병목이 <span class="highlight-green">인프라 계층</span>에서 <span class="highlight-amber">인지 계층</span>으로 이동하는 현상이다. SpecKV가 고민하던 "추측 길이를 γ=4로 할까, 8로 할까"라는 병목이, Joint RL에서는 "에이전트가 다음 행동을 얼마나 잘 예측하도록 학습시킬까"라는 병목으로 <strong>전이</strong>된다.</p>
+      <p>자동차 비유를 이어가면, 연료 분사 타이밍을 최적화하던 문제가 "운전자가 코너를 얼마나 잘 읽는가"로 바뀌는 셈이다. 최적화의 대상이 기계에서 사람(에이전트)으로 넘어간다.</p>
+    </div>
+
+    <div class="insight-card">
+      <div class="card-label">Concept 2</div>
+      <h3>에이전트 루프 그 자체가 연산이다 (Agent Loop as Computation)</h3>
+      <p>에이전트 루프 — <em>관찰→추론→도구 호출→관찰</em> — 는 그동안 '프레임워크'로만 취급되었다. 루프 바깥에서 추론이 일어나고, 루프가 도구 호출을 실행하는 구조다. 하지만 도구 호출 추측은 루프의 <strong>한 사이클 전체를 하나의 계산 단위</strong>로 펼쳐놓는다.</p>
+      <p>루프와 추론 사이의 경계가 소멸한다. "도구를 호출하는 것"이 더 이상 추론의 외부 동작이 아니라, 추론의 <em>연장선</em>이 되는 것이다.</p>
+    </div>
+
+    <div class="insight-card">
+      <div class="card-label">Concept 3</div>
+      <h3>에이전트 네이티브 서빙 (Agent-Native Serving)</h3>
+      <p>만약 도구 호출 추측이 학습된 정책의 일부라면, 서빙 시스템의 역할이 근본적으로 바뀐다. 기존의 aggregate-pipeline-serving이 지적한 <span class="highlight-blue">스키마 축적 병목</span>은, 인프라 휴리스틱으로 스키마 로딩 지연을 숨기는 방식으로 해결하려 했다.</p>
+      <p>하지만 추측이 <span class="highlight-amber">학습된 능력</span>에 의존하게 되면, 서빙 시스템은 에이전트 정책의 <strong>신뢰도(confidence)</strong>에 따라 동적으로 파이프라인을 구성해야 한다. "이 에이전트는 지금 다음 행동을 92% 확신하므로 미리 스키마를 로드한다" — 이런 식의 서빙이 필요하다.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ─── 섹션 4 ─── -->
+    <h2>연속체 위에 놓인 적응: 더 이상 분리할 수 없는 것</h2>
+
+    <p>핵심을 정리하자. SpecKV가 adaptive-inference의 스펙트럼을 "외부 환경 → 내부 시스템 상태"로 확장했다면, Joint RL은 이를 <span class="highlight-amber">"내부 시스템 상태 → 학습된 인지 상태"</span>로 한 단계 더 밀어붙인다.</p>
+
+    <div class="diagram-container">
+      <div class="diagram-row" style="flex-direction:column;gap:16px;align-items:stretch;max-width:500px;margin:0 auto;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#5b7c99;flex-shrink:0;"></div>
+          <span style="font-size:clamp(12px,2vw,14px);color:rgba(44,40,37,0.7);">외부 환경 반응 (CADENCE)</span>
+        </div>
+        <div style="width:2px;height:20px;background:linear-gradient(to bottom,#5b7c99,#6b9e7a);margin:0 auto;"></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#6b9e7a;flex-shrink:0;"></div>
+          <span style="font-size:clamp(12px,2vw,14px);color:rgba(44,40,37,0.7);">내부 시스템 상태 반응 (SpecKV)</span>
+        </div>
+        <div style="width:2px;height:20px;background:linear-gradient(to bottom,#6b9e7a,#c2703e);margin:0 auto;"></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:12px;height:12px;border-radius:50%;background:#c2703e;flex-shrink:0;"></div>
+          <span style="font-size:clamp(12px,2vw,14px);color:rgba(44,40,37,0.7);font-weight:600;">학습된 인지 상태 반응 (Joint RL) ← 새로운 축</span>
+        </div>
+      </div>
+      <div class="diagram-label">적응적 추론의 연속체: 세 지점이 하나의 스펙트럼에 놓임</div>
+    </div>
+
+    <p>이 연속체 위에서 적응적 추론은 더 이상 인프라의 독립 차원이 아니다. 그것은 <strong>에이전트의 추론 능력 자체와 동일한 선 위에 놓인다.</strong> γ를 선택하는 것과 다음 도구를 예측하는 것이, 근본적으로 같은 종류의 인지적 결정이라는 뜻이다.</p>
+
+    <div class="metaphor-box">
+      <div class="metaphor-label">비유</div>
+      <p>초보 요리사에게 "불 세기를 조절해라"는 엔진 조작 지시다. 하지만 숙련된 요리사에게 불 세기 조절은 <em>요리 실력 자체</em>의 일부다. 숙련도가 올라갈수록 기술과 도구 조작 사이의 경계는 녹아내린다. Joint RL이 에이전트에게 하는 일이 바로 이것이다 — 추론 능력이 높아질수록 인프라 최적화와 행동 선택의 경계가 소멸한다.</p>
+    </div>
+
+    <p>이 관점에서 보면, Wiki의 현재 분류 체계가 가진 문제가 명확해진다. adaptive-inference와 aggregate-pipeline-serving을 독립 엔티티로 분리하는 것은, 요리 실력과 불 조절을 별도의 항목으로 분리하는 것과 같다. <strong>낮은 수준에서는 분리가 가능하지만, 높은 수준에서는 불가능하다.</strong></p>
+
+    <hr class="section-divider">
+
+    <!-- ─── 섹션 5 ─── -->
+    <h2>패러다임 전환: 분리에서 통합으로</h2>
+
+    <p>그렇다면 우리는 무엇을 바꿔야 하는가?</p>
+
+    <ol>
+      <li><strong>분류 체계의 재구성.</strong> 적응적 추론을 인프라 전용 카테고리가 아니라, <span class="highlight-amber">에이전트 능력 스펙트럼</span>의 일부로 재분류해야 한다. adaptive-inference 엔티티는 agent-reasoning의 하위 스펙트럼으로 이동하는 것이 개념적으로 정확하다.</li>
+      <li><strong>서빙 아키텍처의 재설계.</strong> 에이전트 네이티브 서빙은 단순한 파이프라인 최적화가 아니다. 서빙 시스템이 에이전트 정책의 <span class="highlight-amber">신뢰도를 읽고</span> 동적으로 행동해야 하는, 근본적으로 다른 패러다임이다. 스키마 로딩, 추론 병렬화, 도구 실행 스케줄링이 모두 "이 에이전트가 지금 얼마나 확신하는가"에 종속된다.</li>
+      <li><strong>평가 지표의 통합.</strong> 적응적 추론의 효율성(토큰 당 연산량)과 도구 호출의 정확성을 따로 측정하는 것은 더 이상 의미가 없다. <span class="highlight-green">"에이전트가 예측한 다음 행동이 실제 행동과 일치하는 비율"</span>이라는 단일 지표가, 동시에 추론 효율성과 행동 정확성을 포착한다.</li>
+      <li><strong>연구 방향의 전환.</strong> "추론 엔진을 어떻게 최적화할까"에서 "에이전트가 스스로 추론-실행 파이프라인을 학습하도록 어떻게 만들까"로 질문이 바뀌어야 한다. 엔진 설계자의 문제가 <span class="highlight-amber">RL 연구자의 문제</span>가 되는 것이다.</li>
+    </ol>
+
+    <blockquote>
+      <p>SpecKV가 "외부 환경 → 내부 시스템 상태"로 스펙트럼을 확장했다면, Joint RL은 "내부 시스템 상태 → 학습된 인지 상태"로 한 단계 더 확장한다. 적응적 추론은 더 이상 인프라의 독립 차원이 아니라, 에이전트의 추론 능력 자체와 동일한 연속체 위에 놓인다.</p>
+    </blockquote>
+
+    <p>벽이 무너진 자리에 새로운 지형이 보인다. 그 지형의 이름은 <strong>통합된 적응적 인지</strong>다. 인프라 최적화와 행동 선택이 하나의 학습 과정에서 나오는 세계 — 그것이 "Speculate While You Reason"이 열어 보인 다음 패러다임의 윤곽이다.</p>
+
+  </article>
+
+  <footer class="article-footer">
+    <p>분석 기반: <a href="#">Speculate While You Reason: Teaching Agents to Predict Their Next Tool Call via Joint Agent-Speculator RL</a></p>
+    <p style="margin-top:8px;">적응적 추론 · 도구 호출 · Joint RL · 에이전트 아키텍처</p>
+  </footer>
+
+</div>
+</body>
+</html>
