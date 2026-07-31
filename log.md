@@ -2876,3 +2876,29 @@
 ## [2026-07-30 08:30] ingest | AngelSpec: Towards Real-World High Performance Inference with Speculative Decoding
 
 ## [2026-07-30 08:30] ingest | Speculate While You Reason: Teaching Agents to Predict Their Next Tool Call via Joint Agent-Speculator RL
+
+## [2026-07-31 06:06] llm-ingest | 0편 분석, 엔티티 355개, 개념 1402개
+
+## [2026-07-31 08:33] ingest | TurboVLA: Real-Time Vision-Language-Action Model at 32 Hz on an RTX 4090 with <1 GB VRAM
+
+## [2026-07-31 08:33] ingest | Mental World Modeling
+
+## [2026-07-31 08:33] ingest | Can AI agents conduct open-ended AI research? Early evidence from two case studies
+
+## [2026-07-31 08:33] ingest | GraphQAG: A Knowledge-Graph-Guided Visual Analytics Framework for Question-Answer Pairs Generation
+
+## [2026-07-31 08:33] ingest | Partner Capability Estimation for Task-Agnostic Adaptation in Ad-Hoc Teamwork
+
+## [2026-07-31 08:33] ingest | SpecFirst: Behavioral Specification Elicitation as a First-Class Step in Agent-Based Program Synthesis from Scratch
+
+## [2026-07-31 08:33] ingest | OmegaUse-OfficeVal: Benchmarking LLM Agents on Long-Horizon Office-Suite Tasks with Economic Grounding
+
+## [2026-07-31 08:33] ingest | MindForge: Teaching Small Language Models Whole-Life-Cycle Software Engineering via Source-Free Program Synthesis
+
+## [2026-07-31 08:33] ingest | Minimal Markovization via Stable Quotients in Holonomy-Cover Decision Processes
+
+## [2026-07-31 08:33] ingest | AgentMap: Joint Equivalence and Subsumption Discovery for Ontology Matching
+
+## [2026-07-31 08:33] ingest | DIRECT: Direct Decoding for Efficient and Aligned Sequence Labeling with Large Language Models
+
+## [2026-07-31 08:33] ingest | Thinking Under Uncertainty: Evidence Use and Information-Seeking in Language Models

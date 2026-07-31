@@ -1554,3 +1554,19 @@
 - [[sources/2026-07-30-evaluating-vlms-for-autonomous-agent-driven-geomet.md]] - Evaluating VLMs for Autonomous Agent-Driven Geometry Clipping Detection in Video Game QA
 - [[sources/2026-07-30-angelspec-towards-real-world-high-performance-infe.md]] - AngelSpec: Towards Real-World High Performance Inference with Speculative Decoding
 - [[sources/2026-07-30-speculate-while-you-reason-teaching-agents-to-pred.md]] - Speculate While You Reason: Teaching Agents to Predict Their Next Tool Call via Joint Agent-Speculator RL
+- [[sources/2026-07-31-turbovla-real-time-vision-language-action-model-at.md]] - TurboVLA: Real-Time Vision-Language-Action Model at 32 Hz on an RTX 4090 with <1 GB VRAM
+- [[sources/2026-07-31-mental-world-modeling.md]] - Mental World Modeling
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-31-can-ai-agents-conduct-open-ended-ai-research-early.md]] - Can AI agents conduct open-ended AI research? Early evidence from two case studies
+- [[sources/2026-07-31-graphqag-a-knowledge-graph-guided-visual-analytics.md]] - GraphQAG: A Knowledge-Graph-Guided Visual Analytics Framework for Question-Answer Pairs Generation
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-31-partner-capability-estimation-for-task-agnostic-ad.md]] - Partner Capability Estimation for Task-Agnostic Adaptation in Ad-Hoc Teamwork
+- [[sources/2026-07-31-specfirst-behavioral-specification-elicitation-as-.md]] - SpecFirst: Behavioral Specification Elicitation as a First-Class Step in Agent-Based Program Synthesis from Scratch
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-07-31-omegause-officeval-benchmarking-llm-agents-on-long.md]] - OmegaUse-OfficeVal: Benchmarking LLM Agents on Long-Horizon Office-Suite Tasks with Economic Grounding
+- [[sources/2026-07-31-mindforge-teaching-small-language-models-whole-lif.md]] - MindForge: Teaching Small Language Models Whole-Life-Cycle Software Engineering via Source-Free Program Synthesis
+- [[sources/2026-07-31-minimal-markovization-via-stable-quotients-in-holo.md]] - Minimal Markovization via Stable Quotients in Holonomy-Cover Decision Processes
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-07-31-agentmap-joint-equivalence-and-subsumption-discove.md]] - AgentMap: Joint Equivalence and Subsumption Discovery for Ontology Matching
+- [[sources/2026-07-31-direct-direct-decoding-for-efficient-and-aligned-s.md]] - DIRECT: Direct Decoding for Efficient and Aligned Sequence Labeling with Large Language Models
+- [[sources/2026-07-31-thinking-under-uncertainty-evidence-use-and-inform.md]] - Thinking Under Uncertainty: Evidence Use and Information-Seeking in Language Models
