@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-29-looping-is-not-reliability-state-bound-evidence-an]]: 둘 다 LLM이 생성한 시스템 수준의 패치(수정 코드)의 품질과 신뢰성을 평가한다.

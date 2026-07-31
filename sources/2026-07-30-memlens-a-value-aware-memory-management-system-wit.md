@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-30-unimem-complementary-episodic-to-parametric-memory]]: 둘 다 LLM 기반 에이전트를 위한 메모리 관리 시스템으로, 장기적 작업 수행에서 메모리의 효율적 활용과 안정성-가소성 딜레마를 다룬다.

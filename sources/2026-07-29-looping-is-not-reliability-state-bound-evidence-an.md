@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-30-who-is-scientific-code-for-maintaining-human-reada]]: 둘 다 에이전트가 작성한 코드의 신뢰성과 유지보수성 문제를 다루며, 각각 코드 수리 루프의 한계와 과학 코드의 가독성 저하를 지적한다.
+- → [[sources/2026-07-30-does-runtime-topology-context-improve-llm-generate]]: 둘 다 LLM이 생성한 시스템 수준의 패치(수정 코드)의 품질과 신뢰성을 평가한다.

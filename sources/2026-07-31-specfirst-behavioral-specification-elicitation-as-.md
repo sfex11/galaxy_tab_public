@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-31-mindforge-teaching-small-language-models-whole-lif]]: 둘 다 기존 코드베이스 없이 자연어 명세만으로 프로그램을 처음부터 합성하는 에이전트 기반 프로그램 생성 문제를 다룬다.

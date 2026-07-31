@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-30-desktop-delta-bench-do-computer-use-models-underst]]: 둘 다 실제 컴퓨터 사용 환경에서 LLM 에이전트의 성능을 평가하기 위한 벤치마크를 제안한다.

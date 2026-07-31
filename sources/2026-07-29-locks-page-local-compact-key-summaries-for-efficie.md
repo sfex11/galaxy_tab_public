@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-30-angelspec-towards-real-world-high-performance-infe]]: 둘 다 LLM 추론의 디코딩 효율성을 개선하는 것을 목표로 하며, LOCKS는 KV 캐시 최적화를, AngelSpec은 추론적 디코딩을 다룬다.

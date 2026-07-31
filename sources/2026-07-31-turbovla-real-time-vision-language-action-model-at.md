@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-07-30-pictura-perspective-view-self-play-at-scale-for-dr]]: 둘 다 시각 관찰을 기반으로 실시간 자율 제어를 수행하는 모델로, 각각 자율주행과 로봇 제어에 적용된다.
