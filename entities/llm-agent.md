@@ -530,3 +530,5 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-07-31-partner-capability-estimation-for-task-agnostic-ad.md]]
 
 - [[sources/2026-07-31-omegause-officeval-benchmarking-llm-agents-on-long.md]]
+
+- [[sources/2026-08-01-askchem-claim-centered-infrastructure-for-chemistr.md]]

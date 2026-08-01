@@ -1570,3 +1570,18 @@
 - [[sources/2026-07-31-agentmap-joint-equivalence-and-subsumption-discove.md]] - AgentMap: Joint Equivalence and Subsumption Discovery for Ontology Matching
 - [[sources/2026-07-31-direct-direct-decoding-for-efficient-and-aligned-s.md]] - DIRECT: Direct Decoding for Efficient and Aligned Sequence Labeling with Large Language Models
 - [[sources/2026-07-31-thinking-under-uncertainty-evidence-use-and-inform.md]] - Thinking Under Uncertainty: Evidence Use and Information-Seeking in Language Models
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-01-askchem-claim-centered-infrastructure-for-chemistr.md]] - AskChem: Claim-Centered Infrastructure for Chemistry Literature Synthesis
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-08-01-osreward-instituting-standardized-evaluation-for-c.md]] - OSReward: Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models
+- [[sources/2026-08-01-using-theory-of-mind-to-arbitrate-between-social-a.md]] - Using Theory of Mind to Arbitrate between Social and Non-social Learning
+- [[sources/2026-08-01-change2task-from-repository-changes-to-executable-.md]] - Change2Task: From Repository Changes to Executable Coding Agent Tasks and Environments
+- [[sources/2026-08-01-paichecker-uncovering-and-checking-pr-issue-misali.md]] - PAIChecker: Uncovering and Checking PR-Issue Misalignment in SWE-Bench-Like Benchmarks
+- [[sources/2026-08-01-rethinking-inference-time-scaling-in-local-compute.md]] - Rethinking Inference-Time Scaling in Local Computer-Use Agents: Failure Modes and Compute Tradeoffs
+- [[sources/2026-08-01-aispa-user-centric-system-prompt-auditing-for-larg.md]] - AISPA: User-Centric System Prompt Auditing for Large Language Model Applications
+- [[sources/2026-08-01-orca-bench-how-ready-are-language-model-agents-for.md]] - ORCA-bench: How Ready Are Language Model Agents for Oncall?
+- [[sources/2026-08-01-inducing-language-models-to-assert-their-own-consc.md]] - Inducing language models to assert their own consciousness restores human beliefs and values
+- [[sources/2026-08-01-wide-boosting-adaptive-llm-inference-via-token-lev.md]] - WIDE: Boosting Adaptive LLM Inference via Token-level Dynamic Width Pruning
+- [[sources/2026-08-01-why-are-gui-agents-correct-but-late-decode-on-the-.md]] - Why Are GUI Agents Correct but Late? Decode on the Decision-Time Critical Path, Tested with Pre-Compiled Policy Trees
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-08-01-manta-multi-agent-network-topology-adaptation-for-.md]] - MANTA: Multi-Agent Network Topology Adaptation for Self-Evolving Multi-Agent Systems

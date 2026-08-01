@@ -2902,3 +2902,29 @@
 ## [2026-07-31 08:33] ingest | DIRECT: Direct Decoding for Efficient and Aligned Sequence Labeling with Large Language Models
 
 ## [2026-07-31 08:33] ingest | Thinking Under Uncertainty: Evidence Use and Information-Seeking in Language Models
+
+## [2026-08-01 02:05] llm-ingest | 0편 분석, 엔티티 355개, 개념 1408개
+
+## [2026-08-01 08:31] ingest | AskChem: Claim-Centered Infrastructure for Chemistry Literature Synthesis
+
+## [2026-08-01 08:31] ingest | OSReward: Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models
+
+## [2026-08-01 08:31] ingest | Using Theory of Mind to Arbitrate between Social and Non-social Learning
+
+## [2026-08-01 08:31] ingest | Change2Task: From Repository Changes to Executable Coding Agent Tasks and Environments
+
+## [2026-08-01 08:31] ingest | PAIChecker: Uncovering and Checking PR-Issue Misalignment in SWE-Bench-Like Benchmarks
+
+## [2026-08-01 08:31] ingest | Rethinking Inference-Time Scaling in Local Computer-Use Agents: Failure Modes and Compute Tradeoffs
+
+## [2026-08-01 08:31] ingest | AISPA: User-Centric System Prompt Auditing for Large Language Model Applications
+
+## [2026-08-01 08:31] ingest | ORCA-bench: How Ready Are Language Model Agents for Oncall?
+
+## [2026-08-01 08:31] ingest | Inducing language models to assert their own consciousness restores human beliefs and values
+
+## [2026-08-01 08:31] ingest | WIDE: Boosting Adaptive LLM Inference via Token-level Dynamic Width Pruning
+
+## [2026-08-01 08:31] ingest | Why Are GUI Agents Correct but Late? Decode on the Decision-Time Critical Path, Tested with Pre-Compiled Policy Trees
+
+## [2026-08-01 08:31] ingest | MANTA: Multi-Agent Network Topology Adaptation for Self-Evolving Multi-Agent Systems

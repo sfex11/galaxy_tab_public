@@ -331,3 +331,5 @@ _자동 생성됨_
 - [[sources/2026-07-29-explainable-reinforcement-learning-via-physics-awa.md]]
 
 - [[sources/2026-07-30-physics-aware-end-to-end-deep-reinforcement-learni.md]]
+
+- [[sources/2026-08-01-osreward-instituting-standardized-evaluation-for-c.md]]
