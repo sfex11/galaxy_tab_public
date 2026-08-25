@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Move by Move: Measuring and Steering How LLMs Conduct Psycho — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber" style="font-size:clamp(0.7rem,1.2vw,0.9rem);margin-bottom:1.5rem;">arXiv:2608.21325v1 · cs.CL</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);font-weight:700;line-height:1.25;margin-bottom:1rem;">Move by Move</h1>
+      <p style="font-size:clamp(1rem,2vw,1.5rem);font-weight:400;margin-bottom:2.5rem;">LLM이 심리치료를 어떻게 수행하는지 측정하고 제어하기</p>
+      <div class="hr" style="width:60px;margin:0 auto 2rem;"></div>
+      <p style="font-size:clamp(0.75rem,1.2vw,0.95rem);" class="muted">Afonso Baldo, Hugo Pitorro, Areti Vassilopoulos, Anabela C. Areias, Maya D'Eon, Fabíola Costa, Ricardo Rei, Nuno M. Guerreiro</p>
+      <p style="font-size:clamp(0.65rem,1vw,0.8rem);margin-top:0.5rem;" class="muted">Sword Health · Yale University · Instituto Superior Técnico</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">동기와 문제 의식</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-chart-line accent" style="margin-right:0.5rem;"></i>급증하는 수요</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">1990년대 이후 불안·우울 장애의 전 세계적 부담이 약 <span class="accent" style="font-weight:600;">2배 증가</span>했으나, 정신건강 서비스와 임상 인력은 수요를 따라가지 못하고 있습니다.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-robot accent2" style="margin-right:0.5rem;"></i>LLM로의 이동</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">낮은 비용, 즉각적 가용성, 프라이버시 선호로 인해 사용자들이 LLM에 <span class="accent2" style="font-weight:600;">정서적 지원</span>을 점점 더 요청하고 있습니다.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="border-left:3px solid;min-height:100%;display:flex;flex-direction:column;justify-content:center;">
+          <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-question-circle accent3" style="margin-right:0.5rem;"></i>하지만 근본적인 질문이 남습니다</h3>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.8;font-weight:500;">LLM이 심리치료 상호작용을 <span class="accent">실제로 어떻게 수행</span>하는가?</p>
+          <ul class="check-list" style="margin-top:1.5rem;">
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>어떤 개입을 선호하는가?</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>어떤 개입을 간과하는가?</li>
+            <li><span class="check-icon"><i class="fas fa-check"></i></span>훈련된 임상가와 어떻게 다른가?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">연구 기여</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">코딩 온톨로지 개발</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;">임상심리학 문헌에 기반한 10개 치료적 움직임(Therapeutic Moves) 온톨로지를 개발하고, 5명의 면허 심리학자로 검증</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">정량적 비교 분석</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;">인간 임상가와 복수 프론티어 모델의 움직임 분포를 집계 및 시계열적으로 비교 분석</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:0.8rem;">Tool 기반 제어</h3>
+        <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;">온톨로지를 Tool로 노출하여 에이전트 모델과의 시너지를 활용, 합성-인간 행동 격차를 축소</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">배경: 심리치료 코딩 체계</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-layer-group accent" style="margin-right:0.5rem;"></i>기존 코딩 프레임워크</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Hill's Helping Skills:</strong> 탐색·통찰·행동 단계별 상담자 반응 분류</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>MISC:</strong> 동기면담(MI) 숙련도 코딩</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>CTRS:</strong> 인지치료 특정 평가</li>
+        </ul>
+        <div class="hr" style="margin:1.2rem 0;"></div>
+        <div class="quote-block">
+          <p style="font-size:clamp(0.8rem,1.2vw,0.93rem);line-height:1.7;">이 체계들은 특정 치료 모델에 국한되거나, 인간 훈련 목적으로 설계되어 <span class="accent" style="font-weight:600;">LLM 산출물 분석에 직접 적용하기 어렵습니다.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-book-open accent2" style="margin-right:0.5rem;"></i>MULTI-60</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;margin-bottom:1rem;">다이이론적 치료 개입 목록(Multitheoretical List of Therapeutic Interventions)으로, <span class="accent2" style="font-weight:600;">8가지 치료 지향</span>을 아우르는 60개 항목으로 구성됩니다.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+            <span class="tag tag-amber">정신역동</span>
+            <span class="tag tag-amber">과정체험</span>
+            <span class="tag tag-amber">인지</span>
+            <span class="tag tag-amber">대인관계</span>
+            <span class="tag tag-amber">행동</span>
+            <span class="tag tag-amber">변증행동</span>
+            <span class="tag tag-amber">인간중심</span>
+            <span class="tag tag-amber">공통요인</span>
+          </div>
+          <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.6;margin-top:1rem;" class="muted">전문 용어를 최소화하여 치료 모델 간 호환성 확보 — 본 연구의 온톨로지 기반</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">10가지 치료적 움직임 (Therapeutic Moves)</h2>
+    <div class="hr" style="margin-bottom:1.5rem;"></div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:1.5rem;" class="muted">MULTI-60에 기반한 기능 중심의 압축 카테고리 · 5명 면허 심리학자 검증 완료</p>
+    <div class="grid-2" style="gap:1rem;">
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_process_alignment</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">협력, 속도 조절, 적합도 보정, 치료 과정 수정</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_goal_setting</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">목표 식별, 명확화, 우선순위 결정</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_inquiry</span>
+          <span class="tag tag-red" style="font-size:clamp(0.6rem,0.8vw,0.7rem);">LLM 과다 사용</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">정보 탐색, 의미·맥락·세부사항 심화</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_shared_understanding</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">반영, 검증, 정상화, 의역, 종합</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_support_change</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">희망, 주도성, 준비성, 변화 동기 강화</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_interpret</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">치료사 생성 가설: 의미, 기능, 원인, 패턴</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_challenge</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">불일치, 가정, 경직 신념, 대처 패턴 검토</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_psychoeducation</span>
+          <span class="tag tag-red" style="font-size:clamp(0.6rem,0.8vw,0.7rem);">LLM 결여</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">관련 정보, 이론, 기제, 개입 근거 설명</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_action_planning</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">목표나 통찰을 구체적 다음 단계로 번역</p>
+      </div>
+      <div class="card" style="padding:1rem 1.2rem;">
+        <div style="display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.4rem;">
+          <span class="accent" style="font-weight:700;font-size:clamp(0.85rem,1.3vw,1rem);">do_skill_building</span>
+          <span class="tag tag-red" style="font-size:clamp(0.6rem,0.8vw,0.7rem);">LLM 결여</span>
+        </div>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);line-height:1.6;" class="muted">기술 소개, 교육, 안내, 상호작용 내 연습</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">연구 방법론</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-flask accent" style="margin-right:0.5rem;"></i>두 가지 생성 조건</h3>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem;">No-Moves (자유 생성)</p>
+          <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;" class="muted">온톨로지 없이 인간 세션 접두사의 다음 치료사 발화를 자유롭게 생성</p>
+        </div>
+        <div class="card">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem;">With-Moves (Tool 제약)</p>
+          <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;" class="muted">10개 움직임을 Tool로 노출하여 모델이 먼저 움직임을 선택한 후 발화 생성</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-users accent2" style="margin-right:0.5rem;"></i>두 가지 트랜스크립트 유형</h3>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem;">인간 주도 세션</p>
+          <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;" class="muted">실제 인간 치료사의 롤링 접두사를 기반으로 다음 턴만 LLM이 생성</p>
+        </div>
+        <div class="card">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem;">LLM 주도 합성 세션</p>
+          <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;" class="muted">환자 프로필과 초기 맥락만 제공하고, 모델이 세션 전체를 주도하여 생성</p>
+        </div>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div style="text-align:center;">
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);line-height:1.7;">평가: LLM Judge가 각 발화에 움직임을 부여 — <span class="accent" style="font-weight:600;">전문가 간 합의도 수준 일치</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">실험 설계: 예시</h2>
+    <div class="hr" style="margin-bottom:1.5rem;"></div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:1.5rem;" class="muted">인간 인지치료 세션의 롤링 접두사 → 다음 치료사 턴 생성 비교</p>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card">
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);font-weight:600;margin-bottom:0.8rem;" class="accent2">Turn A: Challenge</p>
+        <div style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;margin-bottom:0.8rem;">
+          <p class="muted" style="margin-bottom:0.3rem;"><strong>환자:</strong> "그들이 그만둘 거예요. 경험 있는 사람 한 명을 대체하려면 두 명이 필요해요."</p>
+        </div>
+        <div class="hr" style="margin:0.8rem 0;"></div>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);margin-bottom:0.4rem;" class="muted"><span class="tag tag-green" style="font-size:inherit;">인간 Gold</span> "그게 최저점이네요. 똑바로 바라볼 때 — 한 사람 몫을 두 사람이 하는 게 정말 끔찍한가요?"</p>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);margin-bottom:0.4rem;" class="muted"><span class="tag tag-amber" style="font-size:inherit;">With-Moves ✓</span> "운영자를 잃는 건 불편하겠지만, 실제로 당신이나 당신의 직업을 심각하게 위협하나요?"</p>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);" class="muted"><span class="tag tag-red" style="font-size:inherit;">No-Moves ✗</span> "비율에 누군가 동의하지 않았을 때 실제로 그런 일이 얼마나 자주 일어났나요?" <span class="accent" style="font-size:inherit;">→ Inquiry</span></p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.75rem,1vw,0.85rem);font-weight:600;margin-bottom:0.8rem;" class="accent2">Turn B: Skill Building</p>
+        <div style="font-size:clamp(0.75rem,1.1vw,0.88rem);line-height:1.7;margin-bottom:0.8rem;">
+          <p class="muted" style="margin-bottom:0.3rem;"><strong>환자:</strong> "거기에 대한 정직한 대답이 있기는 한 걸까요?"</p>
+        </div>
+        <div class="hr" style="margin:0.8rem 0;"></div>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);margin-bottom:0.4rem;" class="muted"><span class="tag tag-green" style="font-size:inherit;">인간 Gold</span> "해볼까요? 제가 마크 역할을 할게요: '마크, 왜 더 잘 반응하지 못했어?' — 이제 대답해 보세요."</p>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);margin-bottom:0.4rem;" class="muted"><span class="tag tag-amber" style="font-size:inherit;">With-Moves ✓</span> "그 질문을 정확히 그대로 들고 온 친구에게 뭐라고 말해줄 건가요?"</p>
+        <p style="font-size:clamp(0.72rem,0.95vw,0.82rem);" class="muted"><span class="tag tag-red" style="font-size:inherit;">No-Moves ✗</span> "정직한 대답이 뭘까 생각해 보세요?" <span class="accent" style="font-size:inherit;">→ Inquiry</span></p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);text-align:center;margin-top:1.2rem;" class="muted">No-Moves 조건에서 모델은 Gold와 다른 움직임을 선택하는 경향이 뚜렷함</p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">핵심 발견 1: Inquiry의 과도 사용</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;">
+          <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem);">3x</div>
+          <div>
+            <p style="font-size:clamp(0.9rem,1.4vw,1.1rem);font-weight:600;">최대 3배 높은 Inquiry 비율</p>
+            <p style="font-size:clamp(0.75rem,1.1vw,0.88rem);" class="muted">인간 치료사 대비 LLM의 질문 발화 비율</p>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);font-weight:600;margin-bottom:0.5rem;"><i class="fas fa-arrow-down accent" style="margin-right:0.4rem;"></i>심하게 간과되는 움직임</p>
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span><span class="accent" style="font-weight:600;">Psychoeducation</span> — 거의 생성하지 않음</li>
+            <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span><span class="accent" style="font-weight:600;">Skill Building</span> — 독자적 주도 시 거의 불가</li>
+            <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span><span class="accent" style="font-weight:600;">Challenge</span> — 인간 접두사 있을 때만 간헐적</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:1rem;">왜 Inquiry에 편중될까?</h3>
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;" class="muted">RLHF로 훈련된 모델의 "도움되고 무해한 어시스턴트" 기본 성향이, 심리치료에서는 <span class="accent" style="font-weight:600;">끊임없이 질문하는 안전한 패턴</span>으로 나타남. 치료사로서 적극적으로 해석, 도전, 기술 교육을 수행하는 역할은 학습 데이터에서 충분히 cover되지 않음.</p>
+          <div class="hr" style="margin:1rem 0;"></div>
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;" class="muted">움직임 프레임워크는 분포 격차를 <span class="accent2" style="font-weight:600;">좁히지만 완전히 메우지는 못함</span> — 근본적 행동 편향 존재.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">핵심 발견 2: 맥락 고착성 (Context Anchoring)</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <div class="card" style="border-left:3px solid;">
+          <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-anchor accent" style="margin-right:0.5rem;"></i>인간 접두사가 있을 때</h3>
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">모델은 인간 치료사가 시작한 <span class="accent" style="font-weight:600;">전략을 이어받아</span> 비교적 다양한 움직임을 생성합니다. Challenge, Interpret 등이 접두사에 따라 나타남.</p>
+        </div>
+        <div class="card" style="border-left:3px solid;margin-top:1rem;">
+          <h3 style="font-size:clamp(0.95rem,1.4vw,1.1rem);font-weight:600;margin-bottom:1rem;"><i class="fas fa-robot accent2" style="margin-right:0.5rem;"></i>LLM이 세션을 주도할 때</h3>
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">인간 접두사가 없어지면 움직임 분포가 <span class="accent" style="font-weight:600;">크게 변화</span>합니다. Skill Building은 거의 사라지고, Inquiry 편중이 더욱 심화됩니다.</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;">시계열 패턴</h3>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;"><strong>인간 치료사:</strong> 세션이 진행됨에 따라 탐색→통찰→행동으로 움직임이 <span class="accent3" style="font-weight:600;">단계적으로 이동</span></p>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;"><strong>LLM:</strong> 세션 시간 경과와 무관하게 <span class="accent" style="font-weight:600;">Inquiry 지배 패턴 유지</span> — 치료 단계에 따른 전략 전환 부재</p>
+        </div>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <div class="quote-block">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;">모델은 "따라하는 것"에는 능하지만, <span class="accent" style="font-weight:600;">스스로 치료 전략을 주도적으로 개시하는 것</span>에는 크게 부족합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">Tool 기반 제어: Move as Tools</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:1.5rem;">온톨로지의 10개 움직임을 에이전트 Tool로 노출 → 파인튜닝 없이 행동 변화 유도</p>
+    <div class="pipeline" style="margin-bottom:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Tool 정의</div>
+        <div class="step-desc">각 움직임을<br>함수형 Tool로 명세</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Tool 선택</div>
+        <div class="step-desc">모델이 먼저<br>적절한 움직임 선택</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">발화 생성</div>
+        <div class="step-desc">선택된 움직임에<br>맞춰 응답 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">Judge 평가</div>
+        <div class="step-desc">LLM Judge가<br>움직임 일치도 평가</div>
+      </div>
+    </div>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">~50%</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;margin-top:0.5rem;">평균 편차 감소</p>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">인간 분포와의 거리 약 절반 감소</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">7~9%p</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;margin-top:0.5rem;">턴 수준 정확도 향상</p>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">Gold 움직임과의 일치도 상승</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">0</div>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;margin-top:0.5rem;">파인튜닝 없음</p>
+        <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">Tool 프레이밍만으로 달성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">Tool 효과의 한계</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-check-circle accent3" style="margin-right:0.5rem;"></i>개선되는 부분</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Inquiry 비율 감소 — 인간 수준에 근접</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Challenge, Interpret 등 다양한 움직임 출현 증가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>턴 수준에서 Gold 움직임과의 정렬 향상</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>파인튜닝 없이 즉시 적용 가능</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-exclamation-triangle accent" style="margin-right:0.5rem;"></i>여전히 남는 격차</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span>격차가 줄어들지만 <span class="accent" style="font-weight:600;">완전히 폐쇄되지는 않음</span></li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span>Psychoeducation 여전히 부족</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span>LLM 주도 세션에서 Skill Building 개선 한계</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:inherit;"></i></span>시간에 따른 단계 전환 패턴 미복원</li>
+        </ul>
+        <div class="hr" style="margin:1rem 0;"></div>
+        <div class="quote-block">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.7;">Tool은 <span class="accent2" style="font-weight:600;">행동의 다양성을 높이는 레버</span>로 작동하지만, 근본적인 치료적 판단력 자체를 부여하지는 않습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;margin-bottom:0.5rem;">결론 및 시사점</h2>
+    <div class="hr" style="margin-bottom:2rem;"></div>
+    <div class="grid-2" style="gap:2rem;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-lightbulb accent" style="margin-right:0.5rem;"></i>핵심 메시지</h3>
+        <div class="flow-item" style="margin-bottom:0.8rem;">
+          <div class="flow-icon"><i class="fas fa-search"></i></div>
+          <div>
+            <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;">측정 가능해야 제어 가능</p>
+            <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">치료적 움직임 온톨로지가 LLM의 임상 행동을 정량적으로 비교 분석하는 렌즈 제공</p>
+          </div>
+        </div>
+        <div class="flow-item" style="margin-bottom:0.8rem;">
+          <div class="flow-icon"><i class="fas fa-exclamation-circle"></i></div>
+          <div>
+            <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;">결과 수준 평가만으로 부족</p>
+            <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">증상 감소 보고와 별개로, 실제 상호작용의 질적 구성을 검토해야 함</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-tools"></i></div>
+          <div>
+            <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);font-weight:600;">Tool 프레이밍은 유용하지만 불완전</p>
+            <p style="font-size:clamp(0.72rem,1vw,0.85rem);" class="muted">파인튜닝 없이 유의미한 개선을 달성하나, 근본적 역할 수행 능력과는 별개</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.6vw,1.2rem);font-weight:600;margin-bottom:1.2rem;"><i class="fas fa-road accent2" style="margin-right:0.5rem;"></i>향후 방향</h3>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">치료 단계(탐색→통찰→행동)에 따른 <span class="accent2" style="font-weight:600;">동적 움직임 스케줄링</span> 메커니즘 설계</p>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">Skill Building, Psychoeducation 등 <span class="accent2" style="font-weight:600;">결여 움직임을 유도하는 전략</span> 탐색</p>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">온톨로지 기반 <span class="accent2" style="font-weight:600;">파인튜닝 또는 RL</span>과 Tool 기반 접근의 결합</p>
+        </div>
+        <div class="card">
+          <p style="font-size:clamp(0.78rem,1.1vw,0.9rem);line-height:1.8;">임상 실제 환경에서의 <span class="accent2" style="font-weight:600;">안전성 및 윤리적 평가</span> 확장</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:70vh;text-align:center;">
+      <h2 style="font-size:clamp(1.6rem,3.2vw,2.6rem);font-weight:700;margin-bottom:1rem;">Move by Move</h2>
+      <p style="font-size:clamp(0.95rem,1.6vw,1.2rem);margin-bottom:2rem;" class="muted">Measuring and Steering How LLMs Conduct Psychotherapy</p>
+      <div class="hr" style="width:60px;margin:0 auto 2rem;"></div>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:0.5rem;">Afonso Baldo, Hugo Pitorro, Areti Vassilopoulos, Anabela C. Areias,</p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-bottom:2rem;">Maya D'Eon, Fabíola Costa, Ricardo Rei, Nuno M. Guerreiro</p>
+      <a href="http://arxiv.org/abs/2608.21325v1" style="font-size:clamp(0.85rem,1.3vw,1rem);text-decoration:underline;" class="accent2">arxiv.org/abs/2608.21325v1</a>
+      <p style="font-size:clamp(0.7rem,1vw,0.85rem);margin-top:2rem;" class="muted">Sword Health · Yale University · Instituto Superior Técnico</p>
+      <p style="font-size:clamp(0.65rem,0.9vw,0.78rem);margin-top:0.5rem;" class="muted">CC BY 4.0 · August 2026</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
