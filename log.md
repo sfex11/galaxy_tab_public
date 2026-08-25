@@ -2928,3 +2928,5 @@
 ## [2026-08-01 08:31] ingest | Why Are GUI Agents Correct but Late? Decode on the Decision-Time Critical Path, Tested with Pre-Compiled Policy Trees
 
 ## [2026-08-01 08:31] ingest | MANTA: Multi-Agent Network Topology Adaptation for Self-Evolving Multi-Agent Systems
+
+## [2026-08-25 12:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1417개
