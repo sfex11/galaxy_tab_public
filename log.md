@@ -2970,3 +2970,5 @@
 ## [2026-08-26 08:32] ingest | Beyond the Stability-Exploration Dilemma: Environmental Regularization for LLM Policy Optimization
 
 ## [2026-08-26 08:32] ingest | Hidden in the Request: Explaining Unethical LLM Compliance through Token Relevance
+
+## [2026-08-27 04:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1426개
