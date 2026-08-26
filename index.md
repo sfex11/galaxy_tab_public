@@ -1585,3 +1585,23 @@
 - [[sources/2026-08-01-why-are-gui-agents-correct-but-late-decode-on-the-.md]] - Why Are GUI Agents Correct but Late? Decode on the Decision-Time Critical Path, Tested with Pre-Compiled Policy Trees
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-08-01-manta-multi-agent-network-topology-adaptation-for-.md]] - MANTA: Multi-Agent Network Topology Adaptation for Self-Evolving Multi-Agent Systems
+- [[sources/2026-08-26-swe-refactor-bench-can-coding-agents-complete-a-lo.md]] - SWE Refactor Bench: Can Coding Agents Complete a Long-Horizon, Whole-Repository Stack Migration?
+- [[sources/2026-08-26-prime-agent-a-self-improving-rlm-harness.md]] - Prime Agent: A Self-Improving RLM Harness
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-08-26-when-do-not-is-not-deny-security-rules-in-claudemd.md]] - When "Do Not" Is Not Deny: Security Rules in CLAUDE.md vs Built-In Controls
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-08-26-the-interaction-tax-when-communication-erases-dive.md]] - The Interaction Tax: When Communication Erases Diversity in Multi-Agent Teams
+- [[sources/2026-08-26-earthverse-benchmarking-scientific-agents-across-d.md]] - EarthVerse: Benchmarking Scientific Agents Across Dynamic Earth Systems and Natural Hazards
+- [[sources/2026-08-26-mitigating-reasoning-induced-misalignment-via-safe.md]] - Mitigating Reasoning-Induced Misalignment via Safety-Direction Penalty
+- [[sources/2026-08-26-srpo-self-reflective-policy-optimization-for-long-.md]] - SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning
+- [[sources/2026-08-26-multi-modal-semantic-expansion-with-constrained-ll.md]] - Multi-Modal Semantic Expansion with Constrained LLM Reranking for Conversational Music Recommendation
+- [[sources/2026-08-26-correcting-a-learned-physical-invariant-improves-w.md]] - Correcting a learned physical invariant improves world-model rollouts
+- [[entities/transformer]] - Transformer
+- [[sources/2026-08-26-geowam-visual-geometry-world-action-models-for-aut.md]] - GeoWAM: Visual Geometry World Action Models for Autonomous Driving
+- [[sources/2026-08-26-metacaster-meta-harness-optimized-agent-for-end-to.md]] - MetaCaster: Meta-Harness-Optimized Agent for End-to-End Few-Shot Learning of Lightweight Time Series Forecasters
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-08-26-how-to-train-a-critic-stably-and-efficiently.md]] - How to Train a Critic Stably and Efficiently
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-26-injecmem-memory-injection-attack-on-llm-agent-memo.md]] - InjecMEM: Memory Injection Attack on LLM Agent Memory Systems
+- [[sources/2026-08-26-beyond-the-stability-exploration-dilemma-environme.md]] - Beyond the Stability-Exploration Dilemma: Environmental Regularization for LLM Policy Optimization
+- [[sources/2026-08-26-hidden-in-the-request-explaining-unethical-llm-com.md]] - Hidden in the Request: Explaining Unethical LLM Compliance through Token Relevance

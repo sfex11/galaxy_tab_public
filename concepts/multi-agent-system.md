@@ -295,3 +295,5 @@ _자동 생성됨_
 - [[sources/2026-07-31-agentmap-joint-equivalence-and-subsumption-discove.md]]
 
 - [[sources/2026-08-01-manta-multi-agent-network-topology-adaptation-for-.md]]
+
+- [[sources/2026-08-26-the-interaction-tax-when-communication-erases-dive.md]]

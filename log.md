@@ -2938,3 +2938,35 @@
 ## [2026-08-25 22:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1417개
 
 ## [2026-08-26 04:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1420개
+
+## [2026-08-26 08:04] llm-ingest | 0편 분석, 엔티티 355개, 개념 1420개
+
+## [2026-08-26 08:32] ingest | SWE Refactor Bench: Can Coding Agents Complete a Long-Horizon, Whole-Repository Stack Migration?
+
+## [2026-08-26 08:32] ingest | Prime Agent: A Self-Improving RLM Harness
+
+## [2026-08-26 08:32] ingest | When "Do Not" Is Not Deny: Security Rules in CLAUDE.md vs Built-In Controls
+
+## [2026-08-26 08:32] ingest | The Interaction Tax: When Communication Erases Diversity in Multi-Agent Teams
+
+## [2026-08-26 08:32] ingest | EarthVerse: Benchmarking Scientific Agents Across Dynamic Earth Systems and Natural Hazards
+
+## [2026-08-26 08:32] ingest | Mitigating Reasoning-Induced Misalignment via Safety-Direction Penalty
+
+## [2026-08-26 08:32] ingest | SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning
+
+## [2026-08-26 08:32] ingest | Multi-Modal Semantic Expansion with Constrained LLM Reranking for Conversational Music Recommendation
+
+## [2026-08-26 08:32] ingest | Correcting a learned physical invariant improves world-model rollouts
+
+## [2026-08-26 08:32] ingest | GeoWAM: Visual Geometry World Action Models for Autonomous Driving
+
+## [2026-08-26 08:32] ingest | MetaCaster: Meta-Harness-Optimized Agent for End-to-End Few-Shot Learning of Lightweight Time Series Forecasters
+
+## [2026-08-26 08:32] ingest | How to Train a Critic Stably and Efficiently
+
+## [2026-08-26 08:32] ingest | InjecMEM: Memory Injection Attack on LLM Agent Memory Systems
+
+## [2026-08-26 08:32] ingest | Beyond the Stability-Exploration Dilemma: Environmental Regularization for LLM Policy Optimization
+
+## [2026-08-26 08:32] ingest | Hidden in the Request: Explaining Unethical LLM Compliance through Token Relevance
