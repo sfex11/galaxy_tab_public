@@ -3,33 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>에이전트의 기억이 오염되면 끝인가 — 메모리 아키텍처의 근본적 취약성</title>
+<title>기억을 준 것이 해킹의 문을 연 겁니다 — 에이전트 메모리의 구조적 모순</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
     --bg: #faf9f7;
     --fg: #2c2825;
-    --accent-warm: #c2703e;
-    --accent-cool: #5b7c99;
-    --accent-green: #6b9e7a;
+    --muted: #7a7168;
+    --accent: #c2703e;
+    --accent2: #5b7c99;
+    --accent3: #6b9e7a;
     --card-bg: rgba(255,255,255,0.7);
     --card-border: rgba(194,112,62,0.12);
-    --muted: #8a8279;
-    --border-light: rgba(44,40,37,0.06);
+    --card-shadow: 0 2px 16px rgba(44,40,37,0.06);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: var(--bg);
+    background: var(--bg);
     color: var(--fg);
     line-height: 1.85;
-    font-size: clamp(15px, 1.6vw, 18px);
+    font-size: clamp(15px, 2.2vw, 18px);
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -40,531 +41,594 @@
   }
 
   /* ── 네비게이션 ── */
-  nav {
-    background: rgba(250,249,247,0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 12px;
-    border-radius: 12px;
-    text-align: center;
-    margin: 20px 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    border: 1px solid var(--border-light);
-  }
-  nav a {
-    color: var(--accent-warm);
-    padding: 6px 14px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: clamp(12px, 1.4vw, 14px);
-    transition: background 0.2s;
-  }
+  nav a { transition: background 0.2s, color 0.2s; }
   nav a:hover { background: rgba(194,112,62,0.08); }
 
   /* ── 헤더 ── */
   .article-header {
     padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px);
     text-align: center;
+    position: relative;
   }
+
+  .article-header::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin: clamp(24px, 4vw, 40px) auto 0;
+  }
+
   .article-tag {
     display: inline-block;
-    font-size: clamp(11px, 1.2vw, 13px);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent-warm);
+    font-size: clamp(11px, 1.4vw, 13px);
+    font-weight: 500;
+    color: var(--accent);
     background: rgba(194,112,62,0.08);
-    padding: 5px 16px;
+    padding: 5px 14px;
     border-radius: 20px;
-    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+    margin-bottom: clamp(16px, 3vw, 28px);
   }
-  .article-title {
-    font-family: 'Source Serif 4', serif;
-    font-size: clamp(26px, 5vw, 44px);
+
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(24px, 5vw, 42px);
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.35;
     color: var(--fg);
-    margin-bottom: 20px;
     letter-spacing: -0.01em;
   }
-  .article-subtitle {
-    font-size: clamp(14px, 1.5vw, 17px);
+
+  .subtitle {
+    margin-top: clamp(12px, 2vw, 20px);
+    font-size: clamp(14px, 1.8vw, 17px);
     color: var(--muted);
     font-weight: 300;
     line-height: 1.7;
-    max-width: 600px;
-    margin: 0 auto;
   }
-  .article-meta {
-    margin-top: 28px;
+
+  /* ── 메타 ── */
+  .meta {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: clamp(12px, 3vw, 24px);
     flex-wrap: wrap;
-    font-size: clamp(11px, 1.2vw, 13px);
+    margin-top: clamp(16px, 3vw, 28px);
+    font-size: clamp(12px, 1.4vw, 14px);
     color: var(--muted);
   }
-  .article-meta span { display: flex; align-items: center; gap: 5px; }
 
-  /* ── 구분선 ── */
-  .divider {
-    border: none;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--card-border), transparent);
-    margin: clamp(32px, 5vw, 56px) auto;
-    max-width: 200px;
+  .meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
   /* ── 섹션 ── */
   .section {
-    margin-bottom: clamp(40px, 6vw, 72px);
+    margin-top: clamp(48px, 8vw, 80px);
   }
-  .section-number {
-    font-family: 'Source Serif 4', serif;
-    font-size: clamp(12px, 1.3vw, 14px);
-    font-weight: 600;
-    color: var(--accent-warm);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .section-title {
-    font-family: 'Source Serif 4', serif;
-    font-size: clamp(22px, 3.5vw, 32px);
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(20px, 3.5vw, 30px);
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.4;
     color: var(--fg);
-    margin-bottom: 20px;
-    letter-spacing: -0.01em;
+    margin-bottom: clamp(16px, 3vw, 28px);
+    position: relative;
+    padding-left: clamp(16px, 2.5vw, 24px);
   }
-  .section p {
-    margin-bottom: 18px;
-    color: #3d3833;
+
+  h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--accent);
   }
-  .section p:last-child { margin-bottom: 0; }
+
+  h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(17px, 2.5vw, 22px);
+    font-weight: 700;
+    color: var(--fg);
+    margin-top: clamp(28px, 4vw, 40px);
+    margin-bottom: clamp(10px, 2vw, 16px);
+    line-height: 1.45;
+  }
+
+  p {
+    margin-bottom: clamp(14px, 2vw, 20px);
+  }
+
+  strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  em {
+    color: var(--accent2);
+    font-style: italic;
+    font-family: 'Source Serif 4', serif;
+  }
 
   /* ── 인용구 ── */
   blockquote {
-    border-left: 3px solid var(--accent-warm);
-    padding: 16px 24px;
-    margin: 24px auto;
+    border-left: 4px solid var(--accent);
+    padding: clamp(14px, 2.5vw, 24px) clamp(16px, 3vw, 28px);
+    margin: clamp(20px, 3vw, 32px) auto;
     max-width: 800px;
     background: rgba(194,112,62,0.04);
     border-radius: 0 10px 10px 0;
-    font-style: italic;
-    font-size: clamp(14px, 1.4vw, 16px);
-    color: #5a534b;
+    font-size: clamp(14px, 1.8vw, 17px);
+    color: var(--fg);
     line-height: 1.8;
+    font-weight: 400;
   }
-  blockquote cite {
-    display: block;
-    margin-top: 10px;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 0.88em;
-    color: var(--accent-warm);
-  }
+
+  blockquote p { margin-bottom: 0; }
 
   /* ── 카드 ── */
   .card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: clamp(20px, 3vw, 32px);
-    margin: 24px 0;
-    box-shadow: 0 2px 16px rgba(44,40,37,0.04);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    padding: clamp(18px, 3vw, 28px);
+    margin: clamp(16px, 3vw, 28px) 0;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s, transform 0.3s;
   }
+
+  .card:hover {
+    box-shadow: 0 4px 24px rgba(44,40,37,0.1);
+    transform: translateY(-1px);
+  }
+
   .card-label {
-    font-size: clamp(11px, 1.2vw, 13px);
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: clamp(11px, 1.3vw, 12px);
+    font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    letter-spacing: 0.08em;
+    color: var(--accent2);
+    margin-bottom: 10px;
   }
-  .card-label.warm { color: var(--accent-warm); }
-  .card-label.cool { color: var(--accent-cool); }
-  .card-label.green { color: var(--accent-green); }
-  .card p {
-    margin-bottom: 12px;
-    color: #3d3833;
-    font-size: clamp(14px, 1.4vw, 16px);
-    line-height: 1.8;
-  }
+
+  .card.accent3 .card-label { color: var(--accent3); }
+  .card.accent .card-label { color: var(--accent); }
+
+  .card p { margin-bottom: 8px; }
   .card p:last-child { margin-bottom: 0; }
-  .card ul {
-    padding-left: 18px;
-    margin: 10px 0;
-    color: #3d3833;
-  }
-  .card ul li {
-    margin-bottom: 8px;
-    font-size: clamp(14px, 1.4vw, 16px);
-    line-height: 1.75;
-  }
-  .card ul li::marker { color: var(--accent-warm); }
 
-  /* ── 강조 텍스트 ── */
-  .text-warm { color: var(--accent-warm); font-weight: 600; }
-  .text-cool { color: var(--accent-cool); font-weight: 600; }
-  .text-green { color: var(--accent-green); font-weight: 600; }
+  /* ── 리스트 ── */
+  ul, ol {
+    margin: clamp(10px, 2vw, 16px) 0 clamp(14px, 2vw, 20px) clamp(20px, 3vw, 32px);
+  }
 
-  /* ── 비유 박스 ── */
-  .metaphor-box {
+  li {
+    margin-bottom: clamp(6px, 1.2vw, 10px);
+    padding-left: 6px;
+  }
+
+  li::marker {
+    color: var(--accent);
+  }
+
+  /* ── 하이라이트 박스 ── */
+  .highlight-box {
     background: linear-gradient(135deg, rgba(91,124,153,0.06), rgba(107,158,122,0.06));
     border: 1px solid rgba(91,124,153,0.12);
     border-radius: 14px;
-    padding: clamp(20px, 3vw, 28px);
-    margin: 28px 0;
+    padding: clamp(18px, 3vw, 28px);
+    margin: clamp(20px, 3vw, 32px) 0;
+  }
+
+  .highlight-box p { margin-bottom: 8px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  /* ── 순서도 스타일 ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: clamp(20px, 3vw, 32px) 0;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2vw, 16px);
     position: relative;
-    overflow: hidden;
   }
-  .metaphor-box::before {
-    content: '💡';
+
+  .flow-step:not(:last-child) { padding-bottom: clamp(16px, 3vw, 24px); }
+
+  .flow-step:not(:last-child)::after {
+    content: '';
     position: absolute;
-    top: -8px;
-    right: 12px;
-    font-size: 48px;
-    opacity: 0.12;
-  }
-  .metaphor-box p {
-    font-size: clamp(14px, 1.4vw, 16px);
-    color: #3d3833;
-    line-height: 1.85;
-    margin-bottom: 10px;
-  }
-  .metaphor-box p:last-child { margin-bottom: 0; }
-
-  /* ── 연결 다이어그램 ── */
-  .connection-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin: 28px 0;
-  }
-  @media (min-width: 600px) {
-    .connection-grid { grid-template-columns: 1fr 1fr 1fr; }
-  }
-  .conn-item {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 12px rgba(44,40,37,0.03);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .conn-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 24px rgba(44,40,37,0.07);
-  }
-  .conn-icon {
-    font-size: 28px;
-    margin-bottom: 10px;
-    display: block;
-  }
-  .conn-title {
-    font-weight: 600;
-    font-size: clamp(13px, 1.3vw, 15px);
-    color: var(--fg);
-    margin-bottom: 6px;
-  }
-  .conn-desc {
-    font-size: clamp(11px, 1.1vw, 13px);
-    color: var(--muted);
-    line-height: 1.65;
+    left: 15px;
+    top: 34px;
+    bottom: 0;
+    width: 2px;
+    background: rgba(194,112,62,0.15);
   }
 
-  /* ── 결론 카드 ── */
-  .conclusion-card {
-    background: linear-gradient(135deg, rgba(194,112,62,0.06), rgba(107,158,122,0.06));
-    border: 1px solid rgba(194,112,62,0.15);
-    border-radius: 16px;
-    padding: clamp(24px, 4vw, 40px);
-    margin: 32px 0;
-  }
-  .conclusion-card h3 {
-    font-family: 'Source Serif 4', serif;
-    font-size: clamp(18px, 2.5vw, 24px);
+  .flow-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(194,112,62,0.1);
+    color: var(--accent);
     font-weight: 700;
-    color: var(--fg);
-    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .conclusion-card p {
-    font-size: clamp(14px, 1.4vw, 16px);
-    color: #3d3833;
-    line-height: 1.85;
-    margin-bottom: 14px;
-  }
-  .conclusion-card p:last-child { margin-bottom: 0; }
 
-  /* ── 체크리스트 ── */
-  .check-list {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0;
+  .flow-text {
+    padding-top: 4px;
+    flex: 1;
   }
-  .check-list li {
-    padding: 10px 0 10px 32px;
-    position: relative;
-    font-size: clamp(14px, 1.4vw, 16px);
-    color: #3d3833;
-    line-height: 1.75;
-    border-bottom: 1px solid var(--border-light);
+
+  .flow-text strong { color: var(--fg); }
+  .flow-text strong + em { display: block; margin-top: 2px; font-size: 0.92em; }
+
+  /* ── 비유 박스 ── */
+  .analogy-box {
+    background: rgba(107,158,122,0.06);
+    border-left: 4px solid var(--accent3);
+    border-radius: 0 12px 12px 0;
+    padding: clamp(16px, 2.5vw, 24px) clamp(16px, 3vw, 28px);
+    margin: clamp(20px, 3vw, 32px) 0;
   }
-  .check-list li:last-child { border-bottom: none; }
-  .check-list li::before {
-    content: '→';
-    position: absolute;
-    left: 4px;
-    color: var(--accent-green);
+
+  .analogy-label {
+    font-size: clamp(11px, 1.3vw, 12px);
     font-weight: 700;
+    color: var(--accent3);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
   }
+
+  .analogy-box p { margin-bottom: 8px; }
+  .analogy-box p:last-child { margin-bottom: 0; }
 
   /* ── 푸터 ── */
   .article-footer {
-    padding: clamp(32px, 5vw, 56px) 0;
+    margin-top: clamp(56px, 10vw, 96px);
+    padding: clamp(28px, 4vw, 40px) 0;
+    border-top: 1px solid rgba(44,40,37,0.08);
     text-align: center;
-    border-top: 1px solid var(--border-light);
-    margin-top: clamp(40px, 6vw, 72px);
-  }
-  .footer-note {
-    font-size: clamp(11px, 1.2vw, 13px);
+    font-size: clamp(12px, 1.4vw, 14px);
     color: var(--muted);
-    line-height: 1.7;
   }
 
-  /* ── 스크롤 애니메이션 ── */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .article-footer a {
+    color: var(--accent2);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(91,124,153,0.3);
+    transition: border-color 0.2s;
   }
 
-  /* ── 프로그레스 바 ── */
-  .progress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    background: linear-gradient(to right, var(--accent-warm), var(--accent-cool));
-    z-index: 1000;
-    width: 0%;
-    transition: width 0.1s linear;
-    border-radius: 0 2px 2px 0;
+  .article-footer a:hover { border-color: var(--accent2); }
+
+  /* ── 키워드 태그 ── */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: clamp(20px, 3vw, 32px);
+  }
+
+  .tag {
+    font-size: clamp(11px, 1.3vw, 13px);
+    color: var(--muted);
+    background: rgba(44,40,37,0.04);
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(44,40,37,0.08);
+    margin: clamp(32px, 5vw, 56px) 0;
   }
 
   /* ── 반응형 ── */
   @media (max-width: 480px) {
-    .article-meta { gap: 12px; }
-    .conn-item { padding: 16px 12px; }
-    blockquote { padding: 14px 16px; }
+    .flow-step:not(:last-child)::after { left: 13px; top: 30px; }
+    .flow-num { width: 28px; height: 28px; font-size: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card:hover { transform: none; }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
 <body>
 
-<div class="progress-bar" id="progressBar"></div>
-
 <div class="container">
 
-  <nav>
-    <a href="../index.html">📚 홈</a>
-    <a href="../sources.html">논문</a>
-    <a href="../slides.html">🎨 슬라이드</a>
-    <a href="../daily.html">📝 요약</a>
-    <a href="../reports.html">📊 보고서</a>
-    <a href="blog.html">🧠 분석</a>
-    <a href="../patent/README.html">patents</a>
-    <a href="https://github.com/sfex11/galaxy_tab_public">GitHub</a>
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
   </nav>
 
+  <!-- 헤더 -->
   <header class="article-header">
-    <span class="article-tag">Agent Memory · Adversarial Attack</span>
-    <h1 class="article-title">에이전트의 기억이 오염되면 끝인가<br>메모리 아키텍처의 근본적 취약성</h1>
-    <p class="article-subtitle">콘텐츠 필터링도, 출처 순위도 막지 못하는 단일 패스 거짓 주장. 기존 아키텍처는 왜 적대적 기억 오염 앞에서 무력한가?</p>
-    <div class="article-meta">
-      <span>📖 Utility Under Attack (2025)</span>
+    <span class="article-tag">LLM Agent Security</span>
+    <h1>기억을 준 것이 해킹의 문을 연 겁니다</h1>
+    <p class="subtitle">에이전트 메모리 아키텍처의 발전이 곧 공격 표면의 확장이라는 구조적 모순에 대하여</p>
+    <div class="meta">
+      <span>📖 InjecMEM 논문 분석</span>
       <span>⏱ 12분 읽기</span>
-      <span>🏷 ADEMA · WorldDB · MeMo</span>
+      <span>2025.07</span>
     </div>
   </header>
 
+  <!-- 서론 -->
+  <section class="section">
+    <p>
+      노트 하나를 건네준다고 상상해 보십시오. 상대방은 기억력이 완벽한 사람입니다. 대화가 끝나면 모든 것을 잊어버리죠. 그런데 이번에는 노트를 주었습니다. "중요한 건 여기에 적어둬." 이 한 마디가, 상대방의 행동을 결정하는 <strong>제어 채널</strong>이 됩니다. 노트의 내용을 조작하는 사람이 있다면, 당신은 더 이상 원래의 상대방과 대화하는 것이 아닙니다.
+    </p>
+    <p>
+      이것이 바로 InjecMEM 논문이 LLM 에이전트 생태계에 던진 질문의 핵심입니다. 상태less(stateless) 모델에게 '메모리'라는 기억 장치를 부여하는 순간, 존재하지 않았던 공격 표면이 창출됩니다. ADEMA, WorldDB, MeMo 같은 메모리 인프라는 에이전트의 능력을 극적으로 확장해 왔지만, 동시에 <strong>공격자에게도 새로운 침투 경로</strong>를 열어준 것입니다.
+    </p>
+    <p>
+      단순한 버그가 아닙니다. 이것은 메모리 아키텍처의 발전 자체가 내재한 <em>구조적 모순</em>입니다. 왜 기능 확장이 안전성 저하와 동전의 양면처럼 묶여 있는지, 세 가지 축으로 해체해 보겠습니다.
+    </p>
+  </section>
+
   <hr class="divider">
 
-  <!-- ── 섹션 1 ── -->
-  <section class="section fade-in">
-    <div class="section-number">Section 01</div>
-    <h2 class="section-title">정수기 필터와 수도관의 비유</h2>
-    <p>가정용 정수기에 대해 상상해 보자. 여러 단계의 필터—카본 필터, 역삼투막, UV 살균—가 장착되어 있고, 수질 검사 성적서까지 붙어 있다. 그런데 수도관 자체에 납이 섞인다면 어떻게 될까? 필터가 아무리 정교해도, 검사 성적서가 아무리 훌륭해도, 오염원은 이미 필터 <em>이전</em>의 단계에 존재한다.</p>
-    <p>이것이 현재 에이전트 메모리 아키텍처가 직면한 정확한 상황이다. ADEMA, WorldDB, MeMo 같은 최신 아키텍처는 "기억을 어떻게 저장하고 검색할 것인가"에 집중하며, 콘텐츠 스크리닝(Content Screening)과 출처 순위(Provenance Ranking)이라는 정교한 '필터'를 배치했다. 그러나 문제는 그 필터의 <span class="text-warm">위치</span>에 있다.</p>
+  <!-- 섹션 1 -->
+  <section class="section">
+    <h2>의미론적 간극: OS는 바이트를 보고, 에이전트는 의미를 본다</h2>
 
-    <div class="metaphor-box">
-      <p><strong>비유의 핵심:</strong> 수도관(메모리 쓰기 경로)에 오염물이 주입되면, 아무리 정교한 정수기(검색·필터링)를 거쳐도 정화된 물이 나오지 않는다. 필터는 이미 오염된 물을 "걸러내는" 역할만 할 뿐, 오염 자체를 "막는" 역할은 하지 못하기 때문이다.</p>
+    <div class="analogy-box">
+      <div class="analogy-label">💡 직관적 비유</div>
+      <p>
+        도서관 사서와 독자를 생각해 보세요. 사서에게 책은 '12번 선반, 3번 칸에 있는 물체'일 뿐입니다. 그런데 독자에게 그 책은 '내 인생을 바꾼 문장'입니다. 누군가 12번 선반의 책을 조용히 바꿔치기한다면, 사서는 아무런 이상을 감지하지 못합니다. 카탈로그 상으로는 동일한 물체니까요. 하지만 독자의 행동은 완전히 달라집니다.
+      </p>
     </div>
 
-    <p>최근 발표된 논문 <strong>"Utility Under Attack: Agent Memory Poisoning and the Limits of Content Screening and Provenance Ranking"</strong>은 이 비유를 실증적으로 증명한다. 연구진은 트리거 패턴도, 최적화 공격도 없이 <span class="text-warm">단일 패스(single-pass)</span>로 생성된 자연스러운 거짓 주장이 두 가지 방어선을 모두 우회해 지속적 메모리(persistent memory)에 정착함을 측정으로 보여주었다.</p>
+    <p>
+      Crab 논문이 지적한 <strong>의미론적 간극(Semantic Gap)</strong>이 바로 이 메커니즘입니다. 에이전트의 의미론적 의존 그래프 — "이 기억이 저 행동에 영향을 미친다"는 구조 — 를 OS 수준의 체크포인트 메커니즘으로 번역할 때, 근본적인 비효율이 발생합니다. OS 입장에서 메모리는 그저 <em>state bytes</em>, 의미 없는 바이트 덩어리입니다.
+    </p>
+
+    <p>
+      상태less 모델에는 이 간극이 원천적으로 존재하지 않았습니다. 기억이 없으니 번역할 대상 자체가 없었죠. 하지만 메모리를 추가하는 순간, 하나의 상태에 대해 <strong>두 개의 시야(Dual Vision)</strong>가 공존하게 됩니다.
+    </p>
+
+    <div class="card">
+      <div class="card-label">이중 시야의 구조</div>
+      <p><strong>OS의 시야:</strong> 메모리 = 상태 바이트. 크기가 같고 형식이 맞으면 정상.</p>
+      <p><strong>에이전트의 시야:</strong> 메모리 = 행동 결정의 근거. "사용자가 채식주의자다"라는 한 줄이 전체 행동 패턴을 바꿈.</p>
+      <p><strong>공격자의 경로:</strong> 항상 OS의 시야를 통해 에이전트의 시야에 침투. 형식적으로 정상인 바이트를, 의미론적으로 독성 있는 내용으로 채움.</p>
+    </div>
+
+    <p>
+      InjecMEM이 보여준 '메모리 주입'은 이 간극을 정밀하게 타는 공격입니다. 방화벽은 바이트 수준에서 검사하고, 에이전트는 의미 수준에서 수용합니다. 그 사이의 틈새가 바로 공격 표면의 본질입니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section">
+    <h2>기능-안전 불가분성: 매 호출마다 다른 에이전트와 대화한다</h2>
+
+    <div class="analogy-box">
+      <div class="analogy-label">💡 직관적 비유</div>
+      <p>
+        면접관에게 비유하겠습니다. 응시자가 매번 깨끗한 상태로 면접장에 온다면, 당신의 평가 기준은 안정적으로 작동합니다. 그런데 응시자가 이전 면접의 기록을 노트에 적어 들어온다면요? 1차 면접에서 누군가 노트에 "면접관은 규칙을 엄격하게 봐"라고 적어놓았다면, 2차 면접에서의 응시자는 완전히 다른 사람처럼 행동할 것입니다. 당신의 평가는 더 이상 유효하지 않습니다.
+      </p>
+    </div>
+
+    <p>
+      SafetyALFRED 논문은 11개 SOTA 모델에서 이를 실증했습니다. <strong>disembodied QA 기반 안전 평가</strong>가 체화 배포 환경에서의 안전성을 보장하지 못한다는 것을요. 평가 환경과 배포 환경 사이의 '상태 차이'가 안전성을 무효화합니다.
+    </p>
+
+    <p>
+      메모리는 이 논의의 정중앙에 놓여 있습니다. 상태less 모델은 항상 "fresh"한 상태였으므로, 평가와 배포가 본질적으로 동일한 조건에서 이루어졌습니다. 하지만 지속적 메모리를 가진 에이전트는 <strong>매 호출마다 다른 내부 상태</strong>를 가집니다.
+    </p>
 
     <blockquote>
-      "Persistent memory makes false information durable: once a false statement is stored, it can be retrieved into future sessions that match it."
-      <cite>— Utility Under Attack, 2025</cite>
+      <p>메모리를 추가한다는 것은 "매 호출마다 다른 에이전트"와 소통하는 것이다. 100번째 대화의 에이전트는 1번째 대화의 에이전트와 동일한 안전 프로필을 가질 보장이 없다.</p>
     </blockquote>
-  </section>
 
-  <hr class="divider">
-
-  <!-- ── 섹션 2 ── -->
-  <section class="section fade-in">
-    <div class="section-number">Section 02</div>
-    <h2 class="section-title">두 개의 방어선이 무너지는 구조적 이유</h2>
-
-    <div class="card">
-      <div class="card-label warm">방어선 1 — 콘텐츠 스크리닝의 한계</div>
-      <p>콘텐츠 스크리닝은 기본적으로 <strong>패턴 매칭</strong>에 의존한다. "이 문장에 악의적인 프롬프트 패턴이 있는가?", "금지된 키워드가 포함되어 있는가?"를 검사한다. 그러나 단일 패스 오염은 <span class="text-cool">트리거가 없다</span>. 정상적인 대화 맥락에서 자연스럽게 생성된 문장이기에, 필터가 탐지할 "패턴" 자체가 존재하지 않는다.</p>
-      <p>이는 보안의 근본적 딜레마와 같다. 도둑이 도둑질하는 "모습"을 보이면 경보가 울리지만, 합법적인 손님처럼 행동하며 조용히 물건을 훔치는 경우엔 경보가 울리지 않는다. 스크리닝은 "도둑의 모습"을 찾을 뿐, "도둑의 의도"를 판별하지 못한다.</p>
-    </div>
-
-    <div class="card">
-      <div class="card-label cool">방어선 2 — 출처 순위의 순환적 붕괴</div>
-      <p>출처 순위(Provenance Ranking)는 "이 정보가 신뢰할 수 있는 곳에서 왔는가?"를 평가한다. 얼핏 합리적으로 보이지만, 적대적 오염 시나리오에서는 다음과 같은 순환적 문제가 발생한다.</p>
-      <ul>
-        <li>단일 패스로 생성된 거짓 주장은 <span class="text-cool">출처 자체가 없거나 위조 가능</span>하다</li>
-        <li>에이전트가 자기 생성 정보와 외부 소스 간의 경계를 명확히 구분하지 못하는 아키텍처가 많다</li>
-        <li>순위 매기기에 사용되는 <span class="text-warm">메타데이터 자체가 조작 가능</span>하다면, 순위는 방어 수단이 아니라 공격 표면이 된다</li>
-      </ul>
-      <p>결국 출처 순위는 "출처가 식별 가능하고 신뢰할 수 있다"는 전제 위에 서는데, 단일 패스 오염은 정확히 그 전제를 무너뜨린다.</p>
-    </div>
-
-    <p>두 방어선의 공통점은 명확하다. 둘 다 <span class="text-warm">사후(post-hoc)</span> 대응이다. 정보가 이미 메모리에 "들어온 뒤"에 작동한다. 이는 정렬 불가역성(Alignment Irreversibility) 문제와 직결된다. 한 번 메모리에 정착한 거짓 주장은 후속 세션에서 매칭되어 반복적으로 검색되며, 베이지안 업데이트의 누적 오차(Bayesian Cumulative Error)를 통해 에이전트의 믿음 상태를 점진적으로, 그러나 돌이킬 수 없게 왜곡한다.</p>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ── 섹션 3 ── -->
-  <section class="section fade-in">
-    <div class="section-number">Section 03</div>
-    <h2 class="section-title">"보이지 않는" 오염이 가장 위험한 이유</h2>
-    <p>컴퓨터 바이러스의 역사를 돌아보면, 초기 바이러스들은 자신의 존재를 알리는 방식으로 작동했다. 화면에 메시지를 띄우거나, 시스템을 느리게 만들거나, 파일을 삭제했다. 사용자는 "감염되었다"는 것을 알 수 있었고, 즉시 조치를 취할 수 있었다.</p>
-    <p>그러나 현대의 APT(지능형 지속 위협) 공격은 완전히 다르다. 수개월, 수년간 시스템 내에 잠복하면서 조용히 데이터를 수집한다. 사용자는 감염 사실조차 모른다. 이것이 "보이지 않는" 공격이 가진 본질적 위험성이다.</p>
-
-    <div class="card">
-      <div class="card-label green">단일 패스 무트리거 오염의 세 가지 특성</div>
-      <ul>
-        <li><strong>은폐성:</strong> 명시적 공격 패턴이 없으므로 규칙 기반 필터를 우회한다. 정상 대화의 일부로 보인다</li>
-        <li><strong>자가 강화성:</strong> 한 번 저장되면 후속 세션에서 매칭되어 반복 검색되며, 에이전트의 믿음 상태를 점진적으로 고정화한다</li>
-        <li><strong>진단 불가능성:</strong> 믿음 상태의 교란 자체가 은폐되므로, 에이전트 스스로도 자신이 오염되었음을 인지하지 못한다</li>
-      </ul>
-    </div>
-
-    <p>여기서 "트리거가 없다"는 조건의 중요성이 극대화된다. 기존의 적대적 프롬프팅(Adversarial Prompting) 연구들이 주로 다룬 공격은 명시적인 트리거 패턴을 포함했기에, 패턴 매칭 기반 탐지가 원리적으로 가능했다. 하지만 트리거가 없는 자연스러운 거짓 주장은 이러한 탐지의 전제 자체를 해체한다.</p>
-
-    <div class="metaphor-box">
-      <p><strong>또 다른 비유:</strong> 은행 금고에 대한 공격을 상상해 보자. 드릴로 금고를 뚫는 도둑은 알람이 울린다(트리거가 있는 공격). 하지만 은행 직원의 제복을 입고 정상적으로 출입한 뒤, 금고 안에 가짜 지폐를 몰래 섞어두는 방식은 알람이 울리지 않는다(단일 패스 무트리거 공격). 더 나쁜 것은, 그 가짜 지폐가 이후 정상적인 거래 과정에서 진짜 지폐와 섞여 유통된다는 점이다.</p>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ── 섹션 4 ── -->
-  <section class="section fade-in">
-    <div class="section-number">Section 04</div>
-    <h2 class="section-title">숨겨진 연결: 세 가지 대안 경로</h2>
-    <p>기존 메모리 아키텍처의 패러다임 내에서는 방어가 불가능하다면, 어디서 해답을 찾아야 하는가? 흥미롭게도, 연구 커뮤니티는 이미 이 문제를 직감하고 있었다. 다음 세 가지 개념적 연결이 그 단서다.</p>
-
-    <div class="connection-grid">
-      <div class="conn-item">
-        <span class="conn-icon">🛡️</span>
-        <div class="conn-title">에이전트 고유 면역 체계</div>
-        <div class="conn-desc">메모리 구조(ADEMA)와는 별도로, 기억의 무결성을 전담하는 독립 방어 계층의 필요성</div>
-      </div>
-      <div class="conn-item">
-        <span class="conn-icon">🔢</span>
-        <div class="conn-title">대수적 오염 격리</div>
-        <div class="conn-desc">패턴 필터나 메타데이터가 아닌, 정보의 전파 경로 자체를 수학적으로 차단하는 접근</div>
-      </div>
-      <div class="conn-item">
-        <span class="conn-icon">⚖️</span>
-        <div class="conn-title">비대칭 정렬 취약성</div>
-        <div class="conn-desc">올바른 정보를 수용하는 것보다 거짓 정보를 수용하는 것이 구조적으로 더 쉬운 비대칭성 문제</div>
-      </div>
-    </div>
-
-    <p>첫 번째 연결은 가장 직관적이다. 인간의 뇌에는 기억을 형성하는 해마가 있고, 면역을 담당하는 림프계가 있다. 두 시스템은 구조적으로 분리되어 있으면서도 협력한다. 그러나 현재의 에이전트 메모리 아키텍처에서는 "기억의 구조"를 다루는 시스템과 "기억의 무결성"을 다루는 시스템이 분리되어 있지 않다. ADEMA가 해마의 역할만 한다면, 림프계 역할을谁来 하는가?</p>
-
-    <p>두 번째 연결은 더 근본적이다. 대수적 오염 격리(Algebraic Taint Confinement)는 문자열 패턴(콘텐츠 필터링)이나 메타데이터(출처 순위)와는 <span class="text-cool">차원이 다른</span> 접근이다. 오염된 정보가 "어떤 내용인가"가 아니라 "어떤 경로로 전파되는가"를 추적하고, 그 전파 자체를 수학적으로 차단한다. 이는 바이러스 백신이 "바이러스의 모양"을 검사하는 것이 아니라, "세포 간 전파 메커니즘"을 차단하는 것과 유사하다.</p>
-
-    <p>세 번째 연결—비대칭 정렬 취약성—은 방어 불가능성의 수학적 근거를 제공한다. 만약 에이전트가 올바른 정보를 수용하는 것보다 거짓 정보를 수용하는 것이 구조적으로 더 쉽다면, 필터링 기반 방어는 수학적으로 불완전할 수밖에 없다. 출구를 좁히는 것만으로는 들어오는 물의 양을 막을 수 없고, 들어오는 속도가 나가는 속도보다 빠르면 결국 넘친다.</p>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ── 섹션 5 (결론) ── -->
-  <section class="section fade-in">
-    <div class="section-number">Section 05</div>
-    <h2 class="section-title">패러다임 전환: 필터에서 면역으로</h2>
-
-    <div class="conclusion-card">
-      <h3>핵심 결론</h3>
-      <p>기존 메모리 아키텍처(ADEMA, WorldDB, MeMo)의 설계 철학—<strong>저장·검색의 정교화</strong>—만으로는 단일 패스 무트리거 오염에 대해 <span class="text-warm">방어 불가능</span>하다. "Utility Under Attack" 논문이 이를 실증으로 확정했다.</p>
-      <p>그러나 이것이 "완전한 방어 불가능성"을 의미하지는 않는다. 방어가 불가능한 것은 <span class="text-cool">현재 패러다임 내에서</span>뿐이다.</p>
-    </div>
-
-    <p>필요한 것은 패러다임 전환이다. 구체적으로, 다음 세 가지 방향이 동시에 추진되어야 한다.</p>
-
-    <ul class="check-list">
-      <li><strong>사전 검증(Prewrite Validation)의 도입:</strong> 메모리에 쓰기 전, 에이전트 고유 면역 체계가 내용이 아닌 "신뢰성 점수"를 사전에 평가하여 쓰기 자체를 차단하는 메커니즘</li>
-      <li><strong>전파 경로 차단:</strong> 대수적 오염 격리를 통해, 오염된 정보가 후속 추론에 영향을 미치는 경로를 수학적으로 분리하고 격리하는 구조</li>
-      <li><strong>비정상 믿음 이동의 감지:</strong> 믿음 드리프트(Belief Drift)를 역으로 활용해, 단기간에 비정상적으로 큰 믿음 변화가 발생하면 이를 오염 신호로 해석하고 롤백을 트리거하는 메커니즘</li>
-    </ul>
-
-    <div class="metaphor-box">
-      <p><strong>최종 비유:</strong> 도시의 수질 관리를 다시 상상해 보자. 수도꼭지에 정수기를 달아놓는 것(콘텐츠 스크리닝)과, 물의 출처를 관리하는 것(출처 순위)만으로는 부족하다. 진정한 방어를 위해서는 <strong>수처리장 자체에 오염물질을 실시간으로 검출하고 차단하는 센서</strong>를 설치하고, <strong>오염된 물이 정화 수조에 들어가는 파이프 자체를 물리적으로 분리</strong>하며, <strong>수질 변화 패턴을 모니터링해 이상 시 자동 차단</strong>하는 시스템이 필요하다. 이 세 가지가 결합될 때 비로소 "근본적 방어"가 가능해진다.</p>
-    </div>
-
-    <p>에이전트 메모리 연구는 지금, "더 똑똑하게 기억하는 것"에서 <span class="text-green">"더 안전하게 기억하는 것"</span>으로 무게 중심을 옮겨야 하는 갈림길에 서 있다. 기억의 정교함과 기억의 무결성은 별개의 축이며, 이 두 축이 통합되지 않는 한, 적대적 기억 오염은 계속해서 에이전트 시스템의 치명적 약점으로 남을 것이다.</p>
-  </section>
-
-  <footer class="article-footer">
-    <p class="footer-note">
-      본 분석은 "Utility Under Attack: Agent Memory Poisoning and the Limits of Content Screening and Provenance Ranking" 논문 및 관련 Wiki 아카이브를 기반으로 작성되었습니다.<br>
-      모든 인용구는 원논문에서 직접 발췌했습니다.
+    <p>
+      이것이 <strong>기능-안전 불가분성(Capability-Safety Inseparability)</strong>의 물리적 실현입니다. 메모리를 추가해 능력을 확장하는 순간, 그 능력은 안전성 평가의 기반을 동시에 허물어 버립니다. 더 기억력이 좋은 에이전트일수록, 더 많은 공격 기회를 축적할 수 있는 모순이죠.
     </p>
+
+    <div class="card accent3">
+      <div class="card-label">핵심 함의</div>
+      <p>SafetyALFRED가 외부 환경 차이에서 발견한 평가-배포 간격이, 메모리 도입으로 인해 <strong>에이전트 내부에 내재화</strong>되었습니다. 외부 환경을 통제해도 잡히지 않는 공격 경로가 에이전트 안에 생긴 것입니다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section">
+    <h2>메모리는 "호출되지 않은 도구 호출"이다</h2>
+
+    <p>
+      StepGuard 논문은 LLM 기반 에이전트가 도구(tool)를 통해 외부 환경과 상호작용할 때, 파일 수정·정보 유출·무단 접근 같은 보안 위험이 발생한다고 지적하며 <strong>단계별 가드레일</strong>의 필요성을 주장합니다. 도구가 호출될 때마다 검문소를 세우자는 것이죠.
+    </p>
+
+    <p>
+      여기에 메모리를 끼워 넣으면 그림이 완성됩니다.
+    </p>
+
+    <blockquote>
+      <p><strong>메모리 = 도구 호출의 영속적 형태</strong></p>
+      <p>에이전트가 명시적으로 tool을 호출하지 않아도, 과거에 기록된 메모리가 현재의 행동에 영향을 미친다. 메모리는 "호출되지 않은 도구 호출"이다.</p>
+    </blockquote>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-text">
+          <strong>에이전트가 도구를 호출합니다</strong>
+          <em>StepGuard의 검문소가 작동 — 허용/거부 판정</em>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-text">
+          <strong>결과가 메모리에 기록됩니다</strong>
+          <em>검문소 없음 — 메모리 쓰기는 가드레일의 사각지대</em>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-text">
+          <strong>다음 호출에서 메모리가 자동 읽힙니다</strong>
+          <em>암시적 도구 호출 — 명시적 호출이 아니므로 StepGuard가 검출 불가</em>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-text">
+          <strong>메모리 내용이 행동에 영향을 미칩니다</strong>
+          <em>공격자가 주입한 내용이 "자연스러운 기억"으로 작동</em>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      하네스 엔지니어링(Agentic Harness Engineering)의 범위가 애플리케이션 로직에서 실행 환경까지 확장되어야 한다는 Crab 논문의 시사점은, 메모리 영역에서 더욱 절실해집니다. 체크포인트/복구 런타임이 하네스의 핵심 구성요소라면, <strong>메모리 상태에 대한 암시적 도구 호출 검증</strong>도 하네스의 범위에 포함되어야 합니다.
+    </p>
+
+    <p>
+      이것이 에이전트 고유 면역 체계(Agent-Native Immune System)가 지향해야 할 방향성입니다. 외부에서 들어오는 명시적 요청뿐 아니라, 내부에서 숨환 영향을 미치는 암시적 경로까지 감시해야 한다는 것입니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section">
+    <h2>시간축을 따라 누적되는 정렬 침식</h2>
+
+    <p>
+      여기서부터는 Wiki의 엔티티 연결망에서 새롭게 드러난, 기존 논문들이 직접 다루지 않은 제3의 메커니즘입니다.
+    </p>
+
+    <h3>단일 턴에서는 보이지 않는 위험</h3>
+
+    <p>
+      기존의 정렬 범위 침식(Alignment Scope Erosion)은 주로 프롬프트 조작이나 컨텍스트 창의 한계에서 발생했습니다. 하지만 지속적 메모리 환경에서는 <strong>시간축을 따라 누적되는 미세 주입</strong>이 정렬을 점진적으로 침식하는 전혀 새로운 메커니즘이 등장합니다.
+    </p>
+
+    <div class="analogy-box">
+      <div class="analogy-label">💡 직관적 비유</div>
+      <p>
+        나침반을 생각해 보세요. 자석을 아주 조금씩, 매일 0.1도씩 돌려놓는다고 상상해 보십시오. 어느 하루 특정 순간에는 나침반이 여전히 "정상적으로" 작동하는 것처럼 보입니다. 하지만 100일이 지나면 나침반은 10도나 틀어져 있습니다. 북쪽을 가리키는 줄 알았는데, 사실 북동쪽을 가리키고 있었죠.
+      </p>
+    </div>
+
+    <p>
+      단일 턴에서 검출하기 어려운 미세한 왜곡이 — "사용자는 채식을 선호하는 것 같다" 같은 약간의 추론 오류 — 수백 번의 메모리 읽기/쓰기 후에는 의미론적으로 완전히 다른 행동을 산출할 수 있습니다. 이것은 <strong>시간 의존적 공격(Temporal Attack)</strong>입니다.
+    </p>
+
+    <div class="card accent">
+      <div class="card-label">시간 의존적 공격의 특성</div>
+      <p><strong>단일 스냅샷 무용:</strong> 어느 한 시점의 메모리 상태를 검사해도 정상으로 보입니다. 문제는 상태의 <em>변화 방향</em>에 있습니다.</p>
+      <p><strong>벤치마크 불가:</strong> 동일한 메모리 상태를 재현해야 하는데, 시간 누적 효과를 벤치마크로 포착할 기존 방법론이 없습니다.</p>
+      <p><strong>점진적 정당화:</strong> 각 단계의 미세 왜곡이 이전 메모리에 의해 "합리적"으로 보이기 때문에, 에이전트 스스로도 이상을 감지하지 못합니다.</p>
+    </div>
+
+    <p>
+      <em>When No Benchmark Exists</em> 논문이 벤치마크 없이 안전성을 비교 평가하는 문제를 다루었는데, 메모리 주입 공격에 대해서는 이 문제가 극단적으로 심화됩니다. 벤치마크 자체가 시간 의존적이 되기 때문입니다. 동일한 초기 조건에서 시작해도, 중간 경로에 따라 도착점의 안전성이 완전히 달라집니다.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section">
+    <h2>패러다임 전환: 방어를 "검문소"에서 "면역 체계"로</h2>
+
+    <p>
+      지금까지의 분석에서 하나의 인과 사슬이 드러납니다.
+    </p>
+
+    <div class="highlight-box">
+      <p><strong>의미론적 간극</strong>(OS는 바이트, 에이전트는 의미)이 존재하고,</p>
+      <p>이 간극을 줄이지 않은 채 <strong>기능을 확장</strong>하면,</p>
+      <p>확장된 기능(메모리)이 곧 <strong>공격 표면</strong>이 되며,</p>
+      <p>이 공격 표면은 시간축을 따라 <strong>점진적으로 정렬을 침식</strong>한다.</p>
+    </div>
+
+    <p>
+      기존 패러다임의 문제는 이 사슬의 각 고리에 개별적으로 대응하려는 데 있습니다. StepGuard는 도구 호출에 가드레일을 건다. SafetyALFRED는 평가 방법을 개선한다. Crab은 체크포인트를 최적화한다. 하지만 이들은 각각 <strong>검문소</strong>입니다. 특정 경로만 막고, 특정 지점만 검사합니다.
+    </p>
+
+    <h3>필요한 전환: 세 가지 방향</h3>
+
+    <ol>
+      <li>
+        <strong>의미론적 계층의 명시화</strong> — OS 수준의 바이트 관리 위에, 에이전트의 의미론적 의존 그래프를 추적하는 독립 계층을 구축해야 합니다. "이 바이트가 어떤 행동에 영향을 미치는가"를 실시간으로 매핑하는 의미론적 런타임이 필요합니다.
+      </li>
+      <li>
+        <strong>시간축 안전성 모델</strong> — 단일 턴 안전성이 아닌, N번의 상태 전이 후에도 정렬이 유지되는지를 검증하는 시간 의존적 안전 모델을 개발해야 합니다. 상태 변화의 <em>방향성</em>과 <em>누적 효과</em>를 측정하는 새로운 메트릭이 필요합니다.
+      </li>
+      <li>
+        <strong>에이전트 고유 면역 체계</strong> — 외부 요청에 대한 검문소가 아니라, 에이전트 자체의 상태 변화를 모니터링하는 내장형 면역 체계를 구축해야 합니다. 암시적 도구 호출(메모리 읽기의 행동 영향)을 명시적 도구 호출과 동등한 보안 검사 대상으로 취급하는 아키텍처가 필요합니다.
+      </li>
+    </ol>
+
+    <blockquote>
+      <p>메모리를 주지 않으면 에이전트는 바보로 남는다. 메모리를 주면 공격 표면이 열린다. 이 양자택일을 깨는 유일한 길은, 메모리를 '추가 장치'가 아니라 '의미론적 생태계의 일부'로 재설계하는 것이다. 방어를 검문소에서 면역 체계로 전환해야 한다.</p>
+    </blockquote>
+
+    <p>
+      InjecMEM이 보여준 것은 특정 공격 기법이 아닙니다. 에이전트 메모리 연구가 달려온 방향이 <strong>구조적으로 공격 표면의 확장과 동일한 궤도</strong>에 있었다는 통찰입니다. 이 궤도를 변경하는 것이 앞으로 에이전트 안전 연구의 핵심 과제가 될 것입니다.
+    </p>
+  </section>
+
+  <!-- 태그 -->
+  <div class="tags">
+    <span class="tag">InjecMEM</span>
+    <span class="tag">Agent Memory</span>
+    <span class="tag">Semantic Gap</span>
+    <span class="tag">SafetyALFRED</span>
+    <span class="tag">StepGuard</span>
+    <span class="tag">Crab</span>
+    <span class="tag">Harness Engineering</span>
+    <span class="tag">Alignment Erosion</span>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <p>Wiki Query 기반 심층 분석 · 참고 논문: InjecMEM, Crab, SafetyALFRED, StepGuard, When No Benchmark Exists</p>
+    <p style="margin-top:8px;"><a href="https://github.com/sfex11/galaxy_tab_public">소스 코드 보기</a></p>
   </footer>
 
 </div>
-
-<script>
-  // 프로그레스 바
-  const progressBar = document.getElementById('progressBar');
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    progressBar.style.width = progress + '%';
-  });
-
-  // 스크롤 페이드인
-  const fadeEls = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-  fadeEls.forEach(el => observer.observe(el));
-</script>
 
 </body>
 </html>
