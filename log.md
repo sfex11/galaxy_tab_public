@@ -2972,3 +2972,33 @@
 ## [2026-08-26 08:32] ingest | Hidden in the Request: Explaining Unethical LLM Compliance through Token Relevance
 
 ## [2026-08-27 04:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1426개
+
+## [2026-08-27 08:37] ingest | Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses
+
+## [2026-08-27 08:37] ingest | SPO++: Stream-Aligned Policy Optimization for Asynchronous Agentic RL
+
+## [2026-08-27 08:37] ingest | Learning Whom to Trust : Decision-Generated Credibility in Social Learning
+
+## [2026-08-27 08:37] ingest | BrowserForge: Scaling Web Episode via Parallel Browser Sandboxes
+
+## [2026-08-27 08:37] ingest | Reading Is Not Using: Retrieval, Judgment, and the Design of AI Financial Research Workflows
+
+## [2026-08-27 08:37] ingest | A Dual-Dimensional LLM Framework for Automated Item Incidental Content Similarity Analysis in Large-Scale Assessments
+
+## [2026-08-27 08:37] ingest | Constrained Entity Selection under Partial Knowledge for LLM-Based Knowledge Graph QA
+
+## [2026-08-27 08:37] ingest | Structurally-bounded Agentic Graph Exploration for Evidence-Grounded Scholarly DeepSearch
+
+## [2026-08-27 08:37] ingest | StarHarness: Evolving Harnesses with Stratified Search for Enterprise Environments
+
+## [2026-08-27 08:37] ingest | CAFE: Self-Improving Search Agents Need Co-Evolving Feedback
+
+## [2026-08-27 08:37] ingest | Test-Time Collaborative Classification over Multi-Agent Networks
+
+## [2026-08-27 08:37] ingest | StepGuard: Learning Step-Level Guardrails with Scalable Supervision and Safety-Utility Balancing
+
+## [2026-08-27 08:37] ingest | Design and Empirical Characterization of a Hardware-Realized Turing Machine with Automated Card-Based Programming
+
+## [2026-08-27 08:37] ingest | The Invisible Editorial Layer: Formalizing Undisclosed Inference-Time Steering, Probability Placement, and the Attribution Problem in Deployed Language Models
+
+## [2026-08-27 08:37] ingest | Evidence Blindness in Direct Corpus Interaction: Persistent Navigation with AtlasNav

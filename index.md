@@ -1605,3 +1605,20 @@
 - [[sources/2026-08-26-injecmem-memory-injection-attack-on-llm-agent-memo.md]] - InjecMEM: Memory Injection Attack on LLM Agent Memory Systems
 - [[sources/2026-08-26-beyond-the-stability-exploration-dilemma-environme.md]] - Beyond the Stability-Exploration Dilemma: Environmental Regularization for LLM Policy Optimization
 - [[sources/2026-08-26-hidden-in-the-request-explaining-unethical-llm-com.md]] - Hidden in the Request: Explaining Unethical LLM Compliance through Token Relevance
+- [[sources/2026-08-27-recursive-experiential-working-memory-evolution-fo.md]] - Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-08-27-spo-stream-aligned-policy-optimization-for-asynchr.md]] - SPO++: Stream-Aligned Policy Optimization for Asynchronous Agentic RL
+- [[sources/2026-08-27-learning-whom-to-trust-decision-generated-credibil.md]] - Learning Whom to Trust : Decision-Generated Credibility in Social Learning
+- [[sources/2026-08-27-browserforge-scaling-web-episode-via-parallel-brow.md]] - BrowserForge: Scaling Web Episode via Parallel Browser Sandboxes
+- [[sources/2026-08-27-reading-is-not-using-retrieval-judgment-and-the-de.md]] - Reading Is Not Using: Retrieval, Judgment, and the Design of AI Financial Research Workflows
+- [[sources/2026-08-27-a-dual-dimensional-llm-framework-for-automated-ite.md]] - A Dual-Dimensional LLM Framework for Automated Item Incidental Content Similarity Analysis in Large-Scale Assessments
+- [[sources/2026-08-27-constrained-entity-selection-under-partial-knowled.md]] - Constrained Entity Selection under Partial Knowledge for LLM-Based Knowledge Graph QA
+- [[sources/2026-08-27-structurally-bounded-agentic-graph-exploration-for.md]] - Structurally-bounded Agentic Graph Exploration for Evidence-Grounded Scholarly DeepSearch
+- [[sources/2026-08-27-starharness-evolving-harnesses-with-stratified-sea.md]] - StarHarness: Evolving Harnesses with Stratified Search for Enterprise Environments
+- [[sources/2026-08-27-cafe-self-improving-search-agents-need-co-evolving.md]] - CAFE: Self-Improving Search Agents Need Co-Evolving Feedback
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-08-27-test-time-collaborative-classification-over-multi-.md]] - Test-Time Collaborative Classification over Multi-Agent Networks
+- [[sources/2026-08-27-stepguard-learning-step-level-guardrails-with-scal.md]] - StepGuard: Learning Step-Level Guardrails with Scalable Supervision and Safety-Utility Balancing
+- [[sources/2026-08-27-design-and-empirical-characterization-of-a-hardwar.md]] - Design and Empirical Characterization of a Hardware-Realized Turing Machine with Automated Card-Based Programming
+- [[sources/2026-08-27-the-invisible-editorial-layer-formalizing-undisclo.md]] - The Invisible Editorial Layer: Formalizing Undisclosed Inference-Time Steering, Probability Placement, and the Attribution Problem in Deployed Language Models
+- [[sources/2026-08-27-evidence-blindness-in-direct-corpus-interaction-pe.md]] - Evidence Blindness in Direct Corpus Interaction: Persistent Navigation with AtlasNav

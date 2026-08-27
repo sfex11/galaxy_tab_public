@@ -335,3 +335,5 @@ _자동 생성됨_
 - [[sources/2026-08-01-osreward-instituting-standardized-evaluation-for-c.md]]
 
 - [[sources/2026-08-26-how-to-train-a-critic-stably-and-efficiently.md]]
+
+- [[sources/2026-08-27-spo-stream-aligned-policy-optimization-for-asynchr.md]]
