@@ -3002,3 +3002,5 @@
 ## [2026-08-27 08:37] ingest | The Invisible Editorial Layer: Formalizing Undisclosed Inference-Time Steering, Probability Placement, and the Attribution Problem in Deployed Language Models
 
 ## [2026-08-27 08:37] ingest | Evidence Blindness in Direct Corpus Interaction: Persistent Navigation with AtlasNav
+
+## [2026-08-28 06:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1432개

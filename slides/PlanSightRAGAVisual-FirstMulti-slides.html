@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanSightRAG: A Visual-First Multimodal RAG for Automating Q — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;">
+    <div style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <span class="tag tag-amber">cs.IR · Multimodal RAG</span>
+    </div>
+    <h1 style="font-size:clamp(1.6rem,3.5vw,2.8rem);line-height:1.25;margin-bottom:clamp(0.8rem,1.5vw,1.5rem);">
+      PlanSightRAG
+    </h1>
+    <p style="font-size:clamp(1rem,2vw,1.4rem);margin-bottom:clamp(1.5rem,3vw,3rem);max-width:700px;">
+      토목 표준 도면의 자동 질의응답 및 규제 준수 검사를 위한<br><span class="accent">비전 우선 멀티모달 RAG</span> 프레임워크
+    </p>
+    <div class="hr" style="width:60px;margin:0 auto clamp(1.5rem,2.5vw,2.5rem);"></div>
+    <p style="font-size:clamp(0.8rem,1.2vw,1rem);" class="muted">
+      Nabaraj Subedi · Shuvo Dip Datta · Ahmed Abdelaty · Shivanand Venkanna Sheshappanavar
+    </p>
+    <p style="font-size:clamp(0.75rem,1vw,0.9rem);margin-top:clamp(0.5rem,1vw,1rem);" class="muted">
+      University of Wyoming
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(0.8rem,1.5vw,1.5rem);">
+      문제 정의: 토목 도면 규제 검사의 현실
+    </h2>
+    <div class="grid-2" style="margin-top:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.3rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-hard-hat" class="accent"></i> 현재 방식
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>엔지니어가 수천 장의 2D 도면을 수동 검토</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>비용이 높고, 느리며, 오류 발생 가능성 큼</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>다중 시트 간 복잡한 공간 규약 처리 어려움</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>DOT에서 레거시 도면 여전히 권위적 참조로 유지</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.3rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-robot" class="accent2"></i> 기존 자동화의 한계
+        </h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>OCR 기반 접근: 기하학·레이아웃 정보 소실</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>토큰화 후 도면을 "단어 주머니"로 축소</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>치수 체인, 단면 부호, 교차 뷰 심볼 상실</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>검색기가 관련 도면을 신뢰성 있게 찾지 못함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(1rem,2vw,2rem);">
+      핵심 간극: 토목 표준 도면의 <span class="accent">기본 의미론은 기하학과 레이아웃에 있으나</span>, 기존 RAG는 이를 텍스트 변환 과정에서 파괴한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(0.6rem,1.2vw,1.2rem);">
+      왜 비전 우선(Vision-First)인가?
+    </h2>
+    <p style="font-size:clamp(0.85rem,1.2vw,1.05rem);margin-bottom:clamp(1rem,2vw,2rem);" class="muted">
+      실제 WYDOT 질의: "철망 랩랩(stake spacing & wire-tie config, WYDOT 511-1A)?"
+    </p>
+    <table class="compare-table" style="font-size:clamp(0.8rem,1.1vw,1rem);">
+      <thead>
+        <tr>
+          <th>방식</th>
+          <th>처리 과정</th>
+          <th>결과</th>
+          <th>Recall@5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OCR + BM25 텍스트 RAG</td>
+          <td>"WIRE TYP SPACING FT SEE RIPRAP" 토큰화</td>
+          <td><span class="tag tag-red">실패</span> 기하학 소실</td>
+          <td>58.02%</td>
+        </tr>
+        <tr>
+          <td>VisionRAG (Pyramid)</td>
+          <td>저해상도 전역 패치</td>
+          <td><span class="tag tag-red">실패</span> 미세 디테일 소실</td>
+          <td>45.99%</td>
+        </tr>
+        <tr>
+          <td><span class="accent">ColNomic (본 연구)</span></td>
+          <td>32×32 멀티벡터 MaxSim</td>
+          <td><span class="tag tag-green">성공</span> 영역 기반 정밀 검색</td>
+          <td><span class="accent">92.69%</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin:clamp(1rem,2vw,2rem) 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">ColPali 계열의 시각 검색</h3>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">페이지를 패치 임베딩 그리드로 인덱싱, late-interaction MaxSim으로 레이아웃 보존</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">VLM의 도면 이해 능력</h3>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">Qwen-VL, Gemini 등이 다이어그램에서 정밀한 시각 그라운딩 시현</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      PlanSightRAG 프레임워크 전체 구조
+    </h2>
+    <div class="pipeline" style="font-size:clamp(0.75rem,1vw,0.9rem);">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">문서 수집</div>
+        <div class="step-desc">고해상도 타일링<br>메타데이터 부착</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">시각 인덱싱</div>
+        <div class="step-desc">ColNomic-3B<br>멀티벡터 임베딩</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">쿼리 처리·검색</div>
+        <div class="step-desc">하이브리드 밀집-희소<br>MaxSim 재랭킹</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">VQA 파이프라인</div>
+        <div class="step-desc">Qwen2.5-VL-72B<br>시각 그라운딩</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">준수 검사</div>
+        <div class="step-desc">에이전트 파이프라인<br>자동 규칙 추출</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(1.2rem,2.5vw,2.5rem) 0;"></div>
+    <div class="grid-3" style="font-size:clamp(0.78rem,1.05vw,0.95rem);">
+      <div class="card">
+        <div class="big-num">OCR-Free</div>
+        <p>텍스트 변환 없이<br>이미지로 직접 인덱싱</p>
+      </div>
+      <div class="card">
+        <div class="big-num">MaxSim</div>
+        <p>패치 수준의 증거 흔적<br>투명한 근거 제공</p>
+      </div>
+      <div class="card">
+        <div class="big-num">Agentic</div>
+        <p>Planner–Retriever–<br>Auditor–Synthesizer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      문서 수집 및 시각 인덱싱
+    </h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-th-large accent"></i> 고해상도 타일링 절차
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>대형 도면을 겹침(overlap)이 있는 타일로 분할</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>각 타일에 원본 페이지 메타데이터 부착</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미세 디테일(치수선, 심볼) 보존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>저해상도 전역 뷰의 한계 극복</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-project-diagram accent2"></i> ColNomic-3B 멀티벡터 인덱싱
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>ColPali 기반 late-interaction 모델</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>페이지를 32×32 패치 임베딩 그리드로 인덱싱</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>쿼리와 패치 간 MaxSim 점수로 순위화</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>레이아웃·기하학 정보를 임베딩에 직접 보존</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(1rem,2vw,2rem);font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      핵심 차별점: 도면을 텍스트로 변환하지 않고, <span class="accent">검색 계층 자체가 도면을 "본다"</span>. 패치 수준 인덱싱이 치수 체인과 단면 상징을 보존한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      쿼리 처리, 검색 및 시각 그라운딩
+    </h2>
+    <div class="flow-item" style="margin-bottom:clamp(0.8rem,1.5vw,1.5rem);font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <div class="flow-icon">1</div>
+      <div><strong>VLM Cross-Encoder 재랭킹:</strong> 초기 후보를 VLM이 교차 인코딩하여 정밀 재순위화</div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(0.8rem,1.5vw,1.5rem);font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <div class="flow-icon">2</div>
+      <div><strong>하이브리드 밀집-희소(Dense-Sparse) 융합:</strong> 시각 임베딩과 텍스트 희소 신호 결합</div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(0.8rem,1.5vw,1.5rem);font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <div class="flow-icon">3</div>
+      <div><strong>Sharpened MaxSim 히트맵:</strong> 패치 간 유사도를 날카롭게 sharpening하여 관련 영역 강조</div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(0.8rem,1.5vw,1.5rem);font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <div class="flow-icon">4</div>
+      <div><strong>영역 수준 그라운딩:</strong> 히트맵에서 임계값 이상 패치를 클러스터링하여 답변 근거 영역 추출</div>
+    </div>
+    <div class="hr" style="margin:clamp(1rem,2vw,2rem) 0;"></div>
+    <div class="card" style="font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">
+        <i class="fas fa-eye accent3"></i> 증거 흔적(Evidence Trail)
+      </h3>
+      <p>MaxSim 히트맵은 검색 결과의 <span class="accent">어느 패치가 쿼리와 일치하는지</span>를 시각적으로 보여주어, 단순한 텍스트 인용을 넘어 도면 상의 <span class="accent2">공간적 근거</span>를 제공한다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      에이전트 준수 검사 파이프라인
+    </h2>
+    <div class="pipeline" style="font-size:clamp(0.72rem,0.95vw,0.88rem);">
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-clipboard-list"></i></div>
+        <div class="step-label">Planner</div>
+        <div class="step-desc">복합 질의를<br>하위 작업으로 분해</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-search"></i></div>
+        <div class="step-label">Retriever</div>
+        <div class="step-desc">ColNomic 시각 검색<br>관련 도면 후보 확보</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-gavel"></i></div>
+        <div class="step-label">Auditor</div>
+        <div class="step-desc">VLM이 도면-설계 대조<br>위반/준수 판정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num"><i class="fas fa-file-alt"></i></div>
+        <div class="step-label">Synthesizer</div>
+        <div class="step-desc">최종 보고서 생성<br>MaxSim 히트맵 첨부</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(1.2rem,2.5vw,2.5rem) 0;"></div>
+    <div class="grid-2" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">자동 규칙 그라운딩</h3>
+        <p>사람이 규칙을 수동 주입하는 대신, 에이전트가 <span class="accent">사양 코퍼스에서 지배적 요구사항을 자동 검색</span>하고 수치 한계(예: d/2)를 기호 해석하여 자가 추출</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">투명한 감사 추적</h3>
+        <p>판정마다 <span class="accent2">Sharpened MaxSim 히트맵</span>이 첨부되어, 어떤 도면 영역이 규제 검사의 근거가 되었는지 시각적으로 확인 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      벤치마크 데이터셋 구축
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-database accent"></i> Five-DOT 시각 인덱스
+        </h3>
+        <div class="big-num">1,898</div>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">페이지 · 5개 주 DOT 표준 도면</p>
+        <div class="hr" style="margin:clamp(0.6rem,1vw,1rem) 0;"></div>
+        <div class="big-num">4,056</div>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">질의-응답 쌍 (총)</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-cogs accent2"></i> 구성 방법론
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Refine-Loop QnA 생성: VLM 기반 반복 정제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수동 큐레이션 앵커 셋 (78 WYDOT 쌍)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>환각률(Hallucination Rate) 범주 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>CAD 생성 준수 검사 테스트셋</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>데이터셋 표준화 절차 적용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      특징: 토목 표준 도면 검색 평가를 위한 <span class="accent">최초의 대규모 멀티-DOT 벤치마크</span>이며, 단순 QA를 넘어 준수 검사 태스크까지 포괄한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      검색 성능 결과
+    </h2>
+    <table class="compare-table" style="font-size:clamp(0.78rem,1.05vw,0.95rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      <thead>
+        <tr>
+          <th>검색 방식</th>
+          <th>Recall@5</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OCR + BM25</td>
+          <td>58.02%</td>
+          <td>기하학 소실</td>
+        </tr>
+        <tr>
+          <td>OCR + Dense (ColBERT)</td>
+          <td>~60%</td>
+          <td>텍스트 중심 한계</td>
+        </tr>
+        <tr>
+          <td>VisionRAG (Pyramid)</td>
+          <td>45.99%</td>
+          <td>저해상도 전역 뷰</td>
+        </tr>
+        <tr>
+          <td>OCR-free Document VLM</td>
+          <td>전이 실패</td>
+          <td>일반 문서 → 엔지니어링 도면 불가</td>
+        </tr>
+        <tr>
+          <td><span class="accent">ColNomic-3B (본 연구)</span></td>
+          <td><span class="accent">91.47%</span></td>
+          <td>Zero-shot, Five-DOT</td>
+        </tr>
+        <tr>
+          <td><span class="accent">ColNomic-3B (미시간 DOT)</span></td>
+          <td><span class="accent">91.40%</span></td>
+          <td>Zero-shot 전이</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid-2" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.3rem,0.6vw,0.6rem);">
+          <span class="tag tag-green">H1 지지됨</span>
+        </h3>
+        <p>패치 수준 시각 검색이 OCR 기반 및 하이브리드 대안을 <span class="accent">약 33%p 초과</span> 달성</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.3rem,0.6vw,0.6rem);">
+          <span class="tag tag-green">H3 지지됨</span>
+        </h3>
+        <p>LoRA 미세조정이 zero-shot 전이에 추가 이익 없음 → <span class="accent3">도메인 적응 불필요</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      준수 검사(Compliance) 결과
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-check-circle accent3"></i> 합성 CAD 테스트셋
+        </h3>
+        <div class="big-num">100%</div>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-bottom:clamp(0.4rem,0.8vw,0.8rem);">판정 정확도 (사전 해결 임계값 제공 시)</p>
+        <div class="hr" style="margin:clamp(0.4rem,0.8vw,0.8rem) 0;"></div>
+        <p style="font-size:clamp(0.78rem,1.05vw,0.92rem);" class="muted">
+          대조: 비-VLM OCR 베이스라인은 동일 조건에서 76.4%에 그침
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-layer-group accent2"></i> 멀티 플랜 준수 검사
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>N∈{2,3,4,5} 플랜 동시 검사 성공</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>멀티 플랜 스케일업 (n=100): 안정적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 문서 스케일업 (n=500): 안정적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>적대적 임계값 스트레스 테스트 (n=50) 통과</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <span class="tag tag-green">H2 지지됨</span> — 에이전트 파이프라인이 <span class="accent">밀집 다중 뷰 시트와 다중 플랜 설계를 신뢰성 있게 감사</span>한다. 단, 100% 정확도는 사전 해결된 임계값이라는 "통제된 천장"임을 명시.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      자동 시각 규칙 그라운딩
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-magic accent"></i> 문제 설정
+        </h3>
+        <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);">기존: 엔지니어가 규칙의 수치 임계값을 수동으로 파이프라인에 주입<br><br>본 연구: 에이전트가 <span class="accent">스스로 규칙을 찾고 수치를 추출</span></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-route accent2"></i> 수행 절차
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사양 코퍼스(1,913 후보)에서 지배적 요구사항 검색</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Recall@5 = <span class="accent">100%</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기호 해석: "d/2" 등 수식을 수치로 변환</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자가 추출 임계값으로 감사 수행</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(0.8rem,1.5vw,1.5rem) 0;"></div>
+    <div class="grid-2" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.3rem,0.6vw,0.6rem);">실제 931페이지 코퍼스 검증</h3>
+        <p>WYDOT 실제 사양 문서 931페이지에서 자율 규칙 그라운딩 성공</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.3rem,0.6vw,0.6rem);">의미</h3>
+        <p><span class="accent3">사람이 제공한 규칙 없이도</span> 수동 주입 천장(100%)과 동일한 성능 달성</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      교차 기관 일반화 및 외적 타당성
+    </h2>
+    <table class="compare-table" style="font-size:clamp(0.78rem,1.05vw,0.95rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      <thead>
+        <tr>
+          <th>평가 항목</th>
+          <th>결과</th>
+          <th>해석</th>
+        </tr>
+      </tbody>
+      <tr>
+        <td>미시간 DOT 제로샷 전이</td>
+        <td><span class="accent">91.40%</span> Recall@5</td>
+        <td>훈련에 없는 DOT에도 강력한 전이</td>
+      </tr>
+      <tr>
+        <td>LoRA 미세조정 추가 실험</td>
+        <td>이익 없음</td>
+        <td>사전 학습된 시각 표현이 충분</td>
+      </tr>
+      <tr>
+        <td>실제 WYDOT 프로젝트 도면</td>
+        <td>검색·감사 모두 전이 성공</td>
+        <td>합성 테스트를 넘어 실제 환경 검증</td>
+      </tr>
+      <tr>
+        <td>고해상도 타일링 효과</td>
+        <td><span class="tag tag-green">H4 부분 지지</span></td>
+        <td>판정 정확도 향상, 단 일부 실패 모드 존재</td>
+      </tr>
+    </table>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      <span class="accent">핵심 발견:</span> ColNomic-3B의 시각 표현이 토목 도면 도메인에 대해 이미 충분히 일반화되어 있어, <span class="accent3">추가 도메인 적응(LoRA)이 불필요</span>하다. 이는 배포 관점에서 매우 중요한 장점이다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      실패 분석 및 한계
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-exclamation-triangle" style="color:#d97706;"></i> 주요 실패 모드
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#dc2626;"></i></span>고해상도 타일링으로 인한 컨텍스트 파편화</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#dc2626;"></i></span>매우 작은 폰트의 주석 텍스트 오인식</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#dc2626;"></i></span>도면 간 교차 참조(cross-reference) 추론 한계</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#dc2626;"></i></span>복잡한 기호 해석(약식 표기, 단위 혼용)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-info-circle accent2"></i> 인정된 한계
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-minus-circle muted"></i></span>합성 테스트셋 기반 "통제된 천장"에서 100%이나, 실제 도면에서는 미달 가능</li>
+          <li><span class="check-icon"><i class="fas fa-minus-circle muted"></i></span>VLM의 환각 가능성이 판정에 영향</li>
+          <li><span class="check-icon"><i class="fas fa-minus-circle muted"></i></span>대규모 코퍼스에서의 지연 시간(Latency) 문제</li>
+          <li><span class="check-icon"><i class="fas fa-minus-circle muted"></i></span>비영어 도면에 대한 검증 미수행</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="font-size:clamp(0.8rem,1.1vw,0.95rem);">
+      <h3 style="font-size:clamp(0.95rem,1.3vw,1.15rem);margin-bottom:clamp(0.3rem,0.6vw,0.6rem);">H4 평가: 고해상도 타일링</h3>
+      <p>판정 정확도는 향상되나, 타일링이 도면의 전체 맥락을 단절시키는 <span class="muted">trade-off</span>가 존재. 이는 향후 해결해야 할 구조적 한계로 식별됨.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(1rem,2vw,2rem);">
+      결론 및 향후 과제
+    </h2>
+    <div class="grid-2" style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-flag-checkered accent"></i> 핵심 성과
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>OCR 없이 토목 도면을 직접 인덱싱·검색하는 최초의 엔드투엔드 시스템</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>5개 DOT 벤치마크에서 91.47% Recall@5 달성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>미공개 기관에 제로샷 91.40% 전이</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사람 제공 규칙 없이 자율 규칙 그라운딩 시현</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MaxSim 히트맵 기반 투명한 증거 추적</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.5vw,1.25rem);margin-bottom:clamp(0.6rem,1vw,1rem);">
+          <i class="fas fa-road accent2"></i> 향후 과제
+        </h3>
+        <ul class="check-list" style="font-size:clamp(0.78rem,1.05vw,0.92rem);">
+          <li><span class="check-icon"><i class="fas fa-arrow-right muted"></i></span>고해상도 타일링의 맥락 파편화 문제 해결</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right muted"></i></span>실제 프로젝트 도면에서의 대규모 평가</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right muted"></i></span>비영어 토목 도면으로의 확장</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right muted"></i></span>지연 시간 최적화 및 실시간 감사</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right muted"></i></span>다중 에이전트 협업 구조 고도화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.82rem,1.1vw,0.98rem);">
+      PlanSightRAG는 토목 인프라 규제 검사에서 <span class="accent">OCR 의존성을 완전히 제거</span>하고, 시각 정보를 보존한 채 엔드투엔드 자동화를 달성한 <span class="accent2">새로운 패러다임</span>을 제시한다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100%;text-align:center;">
+    <div style="margin-bottom:clamp(1rem,2vw,2rem);">
+      <span class="tag tag-amber">논문 정보</span>
+    </div>
+    <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:clamp(0.6rem,1.2vw,1.2rem);line-height:1.3;">
+      PlanSightRAG: A Visual-First Multimodal RAG for Automating Question Answering and Compliance Checking for Civil Standard Plans
+    </h2>
+    <div class="hr" style="width:60px;margin:clamp(1rem,2vw,2rem) auto;"></div>
+    <p style="font-size:clamp(0.85rem,1.2vw,1.05rem);margin-bottom:clamp(0.5rem,1vw,1rem);">
+      Nabaraj Subedi · Shuvo Dip Datta · Ahmed Abdelaty · Shivanand Venkanna Sheshappanavar
+    </p>
+    <p style="font-size:clamp(0.8rem,1.1vw,0.95rem);margin-bottom:clamp(1.2rem,2.5vw,2.5rem);" class="muted">
+      University of Wyoming · arXiv:2608.26091v1 · August 2026
+    </p>
+    <div class="grid-3" style="width:100%;max-width:700px;font-size:clamp(0.78rem,1.05vw,0.92rem);">
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(1.2rem,2vw,1.8rem);">91.47%</div>
+        <p>Recall@5<br><span class="muted">Five-DOT</span></p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(1.2rem,2vw,1.8rem);">100%</div>
+        <p>준수 판정 정확도<br><span class="muted">합성 테스트셋</span></p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(1.2rem,2vw,1.8rem);">4,056</div>
+        <p>QA 쌍<br><span class="muted">5개 DOT</span></p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.75rem,1vw,0.9rem);margin-top:clamp(1.5rem,3vw,3rem);" class="muted">
+      <i class="fas fa-external-link-alt"></i> arxiv.org/abs/2608.26091v1
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
