@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-08-27-the-invisible-editorial-layer-formalizing-undisclo]]: 두 논문은 LLM이 추론 시점(inference-time)에 외부 맥락이나 개입(추론 가속 또는 은밀한 출력 편집)을 통해 어떻게 최종 응답을 생성하는지 그 메커니즘과 영향을 분석합니다.

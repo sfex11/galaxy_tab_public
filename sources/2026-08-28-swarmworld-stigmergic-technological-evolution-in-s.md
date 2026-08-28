@@ -31,3 +31,7 @@ Collective intelligence can emerge when individuals coordinate through a shared 
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-08-27-test-time-collaborative-classification-over-multi-]]: 두 논문은 다중 에이전트 시스템에서 개별 에이전트들이 직접적인 대화나 중앙 통제 없이도 협력하여 집단 지성을 발휘하고 의사결정을 내리는 메커니즘을 연구합니다.

@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-08-27-stepguard-learning-step-level-guardrails-with-scal]]: 두 논문 모두 LLM 에이전트의 최종 결과물뿐만 아니라 도구 호출 등 중간 실행 단계의 유효성과 안전성을 평가 및 보장하는 메커니즘에 초점을 맞춥니다.
+- → [[sources/2026-08-28-traceml-an-empirical-analysis-of-human-agent-plann]]: 두 논문은 LLM 에이전트가 복잡한 작업을 수행할 때 기록되는 실행 추적(trace) 데이터를 분석하여 에이전트의 추론 과정을 평가하고 이해하는 방법론을 다룹니다.
