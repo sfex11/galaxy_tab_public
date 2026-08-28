@@ -1622,3 +1622,23 @@
 - [[sources/2026-08-27-design-and-empirical-characterization-of-a-hardwar.md]] - Design and Empirical Characterization of a Hardware-Realized Turing Machine with Automated Card-Based Programming
 - [[sources/2026-08-27-the-invisible-editorial-layer-formalizing-undisclo.md]] - The Invisible Editorial Layer: Formalizing Undisclosed Inference-Time Steering, Probability Placement, and the Attribution Problem in Deployed Language Models
 - [[sources/2026-08-27-evidence-blindness-in-direct-corpus-interaction-pe.md]] - Evidence Blindness in Direct Corpus Interaction: Persistent Navigation with AtlasNav
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-28-agentic-autoresearch-for-cell-edge-power-control-r.md]] - Agentic Autoresearch for Cell-Edge Power Control: Radically Redefining the Researcher's Role
+- [[sources/2026-08-28-plansightrag-a-visual-first-multimodal-rag-for-aut.md]] - PlanSightRAG: A Visual-First Multimodal RAG for Automating Question Answering and Compliance Checking for Civil Standard Plans
+- [[sources/2026-08-28-traceml-an-empirical-analysis-of-human-agent-plann.md]] - TraceML: An Empirical Analysis of Human-Agent Planning in Machine Learning Development
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-08-28-swarmworld-stigmergic-technological-evolution-in-s.md]] - SwarmWorld: Stigmergic technological evolution in societies of language-model agents
+- [[sources/2026-08-28-trace-integrity-for-llm-data-agents-a-vision-for-a.md]] - Trace Integrity for LLM Data Agents: A Vision for Auditable Structured Reasoning in Real-World Systems
+- [[sources/2026-08-28-planetary-prediction-engine-autonomous-geospatial-.md]] - Planetary Prediction Engine: Autonomous Geospatial Prediction via Intelligent Data Selection and Foundation Model Embeddings
+- [[sources/2026-08-28-virtoos-a-ros-2---unity-virtualization-toolkit-for.md]] - VirTooS: A ROS 2 - Unity Virtualization Toolkit for Fleet Management of Autonomous Mobile Robots
+- [[sources/2026-08-28-gating-before-commitment-anticipating-intent-diver.md]] - Gating Before Commitment: Anticipating Intent Divergence to Prevent Post-Interaction Decision Failures in Autonomous Driving
+- [[sources/2026-08-28-when-obstacles-bend-modeling-vegetation-deformatio.md]] - When Obstacles Bend: Modeling Vegetation Deformation in the context of Field Robotics
+- [[sources/2026-08-28-visa-agentic-self-evolving-data-synthesis-for-mult.md]] - VISA: Agentic Self-Evolving Data Synthesis for Multimodal Instruction Following
+- [[sources/2026-08-28-zero-wam-in-context-world-action-modeling-from-hum.md]] - Zero-WAM: In-Context World-Action Modeling from Human Videos for Open-Ended Task Generalization
+- [[sources/2026-08-28-a-visual-dependence-aware-framework-for-multimodal.md]] - A Visual Dependence-Aware Framework for Multimodal Unsupervised Continual Post-Training
+- [[sources/2026-08-28-asymspec-context-asymmetric-speculative-decoding-f.md]] - AsymSpec: Context-Asymmetric Speculative Decoding for Agentic LLMs
+- [[entities/transformer]] - Transformer
+- [[sources/2026-08-28-descent-directed-edge-scene-encoding-for-airport-s.md]] - DESCENT: Directed Edge Scene Encoding for Airport Surface Movement Prediction
+- [[sources/2026-08-28-when-personality-meets-quantization-a-layer-wise-m.md]] - When Personality Meets Quantization: A Layer-wise MBTI Analysis of Quantized LLMs
+- [[sources/2026-08-28-livingrag-augmenting-graph-rag-with-experience.md]] - LivingRAG: Augmenting Graph RAG with Experience

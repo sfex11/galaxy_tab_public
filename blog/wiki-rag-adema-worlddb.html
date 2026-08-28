@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지도는 있는데 길을 못 찾는 이유 — AI 에이전트 '증거 맹목'의 근본 원인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --fg: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-cool: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+    --muted: #8a8279;
+    --subtle: #b5aea5;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .article-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 헤더 ── */
+  .article-header {
+    padding: clamp(40px, 8vw, 80px) 0 clamp(32px, 5vw, 56px);
+    text-align: left;
+    border-bottom: 1px solid rgba(44,40,37,0.08);
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .article-tag {
+    display: inline-block;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 500;
+    color: var(--accent-warm);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 4px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    background: rgba(194,112,62,0.05);
+  }
+
+  .article-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(26px, 5.5vw, 44px);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  .article-subtitle {
+    font-size: clamp(15px, 2.2vw, 18px);
+    color: var(--muted);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .article-meta {
+    margin-top: 20px;
+    font-size: clamp(12px, 1.6vw, 14px);
+    color: var(--subtle);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .article-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── 본문 ── */
+  .section { margin-bottom: clamp(36px, 6vw, 64px); }
+
+  .section-label {
+    font-size: clamp(11px, 1.5vw, 12px);
+    font-weight: 700;
+    color: var(--accent-warm);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--fg);
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(18px, 3vw, 23px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--fg);
+    margin: 32px 0 14px;
+  }
+
+  p { margin-bottom: 18px; }
+
+  a { color: var(--accent-warm); text-decoration: none; border-bottom: 1px solid rgba(194,112,62,0.3); transition: border-color 0.2s; }
+  a:hover { border-color: var(--accent-warm); }
+
+  strong { color: var(--fg); font-weight: 700; }
+  em { font-style: italic; color: var(--muted); }
+
+  .highlight-warm { color: var(--accent-warm); font-weight: 700; }
+  .highlight-cool { color: var(--accent-cool); font-weight: 700; }
+  .highlight-green { color: var(--accent-green); font-weight: 700; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid var(--accent-warm);
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.04);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14.5px, 2.2vw, 17px);
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  blockquote p { margin-bottom: 0; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05), 0 0.5px 2px rgba(44,40,37,0.04);
+    backdrop-filter: blur(4px);
+  }
+
+  .card-label {
+    font-size: clamp(11px, 1.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-label.warm { color: var(--accent-warm); }
+  .card-label.cool { color: var(--accent-cool); }
+  .card-label.green { color: var(--accent-green); }
+
+  /* ── 비유 박스 ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, rgba(91,124,153,0.06) 0%, rgba(107,158,122,0.06) 100%);
+    border: 1px solid rgba(91,124,153,0.12);
+    border-radius: 14px;
+    padding: clamp(18px, 3vw, 28px);
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metaphor-box::before {
+    content: '💡';
+    position: absolute;
+    top: -8px;
+    right: 16px;
+    font-size: 48px;
+    opacity: 0.12;
+  }
+
+  .metaphor-box p:last-child { margin-bottom: 0; }
+
+  /* ── 테이블 ── */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(13px, 1.8vw, 15px);
+  }
+
+  thead { background: rgba(44,40,37,0.03); }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--fg);
+    border-bottom: 2px solid rgba(44,40,37,0.08);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.05);
+    color: var(--muted);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr.row-highlight td {
+    background: rgba(194,112,62,0.05);
+    color: var(--fg);
+  }
+
+  /* ── 키워드 태그 ── */
+  .kw {
+    display: inline-block;
+    font-size: clamp(11px, 1.4vw, 12px);
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .kw.warm { background: rgba(194,112,62,0.1); color: var(--accent-warm); }
+  .kw.cool { background: rgba(91,124,153,0.1); color: var(--accent-cool); }
+  .kw.green { background: rgba(107,158,122,0.1); color: var(--accent-green); }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,40,37,0.1), transparent);
+    margin: clamp(36px, 6vw, 64px) 0;
+  }
+
+  /* ── 결론 강조 ── */
+  .conclusion-callout {
+    background: linear-gradient(135deg, rgba(194,112,62,0.07) 0%, rgba(194,112,62,0.02) 100%);
+    border-left: 4px solid var(--accent-warm);
+    border-radius: 0 14px 14px 0;
+    padding: clamp(20px, 3.5vw, 32px);
+    margin: 28px 0;
+  }
+
+  .conclusion-callout p:last-child { margin-bottom: 0; }
+
+  /* ── 푸터 ── */
+  .article-footer {
+    border-top: 1px solid rgba(44,40,37,0.08);
+    padding: clamp(28px, 4vw, 48px) 0;
+    text-align: center;
+    font-size: clamp(12px, 1.6vw, 14px);
+    color: var(--subtle);
+  }
+
+  /* ── 스크롤바 ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(44,40,37,0.15); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(44,40,37,0.25); }
+
+  /* ── 리스트 스타일 ── */
+  .analysis-list { list-style: none; padding: 0; }
+  .analysis-list li {
+    position: relative;
+    padding: 10px 0 10px 24px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+  }
+  .analysis-list li:last-child { border-bottom: none; }
+  .analysis-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 18px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-warm);
+    opacity: 0.6;
+  }
+  .analysis-list li:nth-child(2)::before { background: var(--accent-cool); }
+  .analysis-list li:nth-child(3)::before { background: var(--accent-green); }
+
+  /* ── 다이어그램 스타일 ── */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 28px 0;
+    padding: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+  }
+
+  .flow-node {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: clamp(13px, 1.8vw, 15px);
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .flow-node.active {
+    background: rgba(194,112,62,0.12);
+    border: 1.5px solid rgba(194,112,62,0.3);
+    color: var(--accent-warm);
+  }
+
+  .flow-node.neutral {
+    background: rgba(44,40,37,0.04);
+    border: 1.5px solid rgba(44,40,37,0.1);
+    color: var(--fg);
+  }
+
+  .flow-node.fail {
+    background: rgba(194,62,62,0.08);
+    border: 1.5px dashed rgba(194,62,62,0.3);
+    color: #a04040;
+  }
+
+  .flow-arrow {
+    font-size: 18px;
+    color: var(--subtle);
+    line-height: 1;
+    padding: 4px 0;
+  }
+
+  .flow-annotation {
+    font-size: clamp(11px, 1.4vw, 12px);
+    color: var(--muted);
+    text-align: center;
+    margin-top: -2px;
+    margin-bottom: 4px;
+    font-style: italic;
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 480px) {
+    .table-wrapper { margin-left: -16px; margin-right: -16px; border-radius: 0; }
+    th, td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="article-wrapper">
+
+  <!-- 네비게이션 -->
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <span class="article-tag">Deep Analysis</span>
+    <h1 class="article-title">지도는 있는데 길을 못 찾는 이유</h1>
+    <p class="article-subtitle">AI 에이전트의 '증거 맹목'이 말하는 것 — 인프라가 아니라 전략이 병목이라면, 우리는 무엇을 바꿔야 하는가</p>
+    <div class="article-meta">
+      <span>VLN · 에이전트 내비게이션</span>
+      <span>·</span>
+      <span>RAG · 기획 간극 · 메타인지</span>
+    </div>
+  </header>
+
+  <!-- 섹션 1: 문제 제기 -->
+  <section class="section">
+    <span class="section-label">Section 01</span>
+    <h2>도서관 안에서 길을 잃은 사람</h2>
+
+    <p>거대한 도서관에 들어왔다고 상상해 보십시오. 천만 권의 책이 완벽하게 분류되어 있고, 검색 시스템은 흠잡을 데 없이 정교합니다. "1900년대 초 파리의 건축"이라고 검색하면 정확히 그 책이 손끝에 닿습니다. 그런데 이 사람이 책을 펼쳐도, 읽어도, 다음에 어디로 가야 할지 전혀 결정하지 못합니다. 책의 내용은 눈앞에 있는데, 그것을 자신의 목적에 맞게 연결하지 못하는 겁니다.</p>
+
+    <p>이것이 바로 AI 에이전트가 직면한 <span class="highlight-warm">'증거 맹목(Evidence Blindness)'</span>의 핵심입니다. 증거가 도달 가능한데도 유한한 상호작용 예산 안에서 그것을 사용하지 못하는 현상 — 문제는 도서관의 구조가 아니라, <strong>도서관 안에서 길을 찾는 방법</strong>에 있습니다.</p>
+
+    <div class="metaphor-box">
+      <p><strong>더 직관적인 비유:</strong> GPS 내비게이션은 지도 데이터를 완벽하게 가지고 있지만, "지금 내가 어디쯤 와 있는지"를 모르면 다음 경로를 제시할 수 없습니다. 지도 데이터(인프라)가 아무리 정교해도, 자기 위치 인식(전략)이 없으면 내비게이션은 성립하지 않습니다. 반대로 대략적인 지도라도 "지금 여기 있고, 저기로 가야 해"라는 전략적 인식만 있으면 목적지에 도달할 수 있습니다.</p>
+    </div>
+
+    <p>최근 제기된 질문은 이 지점을 정확히 찌릅니다. RAG, ADEMA, WorldDB 같은 인프라의 정교화가 에이전트의 증거 접근 한계를 해결할 것이라는 통설에 대해 — <span class="highlight-cool">만약 증거가 도달 가능해도 유한 예산 하에서 사용 불가능하다면, 병목은 인프라가 아니라 내비게이션 전략 자체</span>가 아닌가?</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2: 인프라 환상 -->
+  <section class="section">
+    <span class="section-label">Section 02</span>
+    <h2>인프라 환상: 더 나은 검색이 모든 것을 해결할 수 있을까</h2>
+
+    <p>현재 AI 에이전트 생태계에는 암묵적인 믿음이 하나 흐르고 있습니다. <em>"에이전트가 실패하는 이유는 필요한 정보를 못 찾아서다. 그러니 검색을 더 정교하게, 메모리를 더 길게, 인덱스를 더 세밀하게 만들면 된다."</em> 이것을 <strong>인프라 환상(Infrastructure Illusion)</strong>이라 부르겠습니다.</p>
+
+    <p>ADEMA(Awareness-Driven Episodic Memory Architecture)는 이 환상의 정점에 있는 기술입니다. '지식 상태 오케스트레이션'이라는 이름 아래, 장문맥에서 메모리를 정교하게 관리하고, 에이전트가 무엇을 알고 무엇을 모르는지 추적하려 합니다. WorldDB는 환경 구조를 체계적으로 저장하고, RAG는 관련 문서를检索해 옵니다.</p>
+
+    <p>이것들이 쓸모없다는 말이 아닙니다. 문제는 이것들이 <strong>필요조건이지 충분조건이 아니라는 점</strong>을 간과한다는 데 있습니다.</p>
+
+    <div class="card">
+      <span class="card-label warm">인프라가 해결하는 것 vs. 해결하지 못하는 것</span>
+      <div class="table-wrapper" style="margin:12px 0 0;border:none;padding:0;background:transparent;">
+        <table>
+          <thead>
+            <tr>
+              <th>층위</th>
+              <th>해결 가능한 문제</th>
+              <th>해결 불가능한 문제</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="kw warm">검색층</span></td>
+              <td>관련 문서를 찾지 못하는 문제</td>
+              <td>찾은 문서를 기획에 통합하지 못하는 문제</td>
+            </tr>
+            <tr>
+              <td><span class="kw cool">메모리층</span></td>
+              <td>과거 정보를 잊어버리는 문제</td>
+              <td>기억하고 있으면서도 활용하지 못하는 문제</td>
+            </tr>
+            <tr>
+              <td><span class="kw green">구조층</span></td>
+              <td>환경의 공간적 구조를 모르는 문제</td>
+              <td>구조를 알면서도 경로를 세우지 못하는 문제</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>문제는 "저장된 증거를 다단계 기획에 어떻게 통합하는가"이지 "증거를 저장하는가"가 아니다.</p>
+    </blockquote>
+
+    <p>요컨대, 인프라 정교화는 도서관의 색인 시스템을 완벽하게 만드는 일입니다. 하지만 색인이 완벽해도 독자가 "이 책을 읽은 뒤 저 책을 읽어야겠다"는 <strong>독서 전략</strong>을 가지고 있지 않으면, 완벽한 색인은 그저 완벽한 색인일 뿐입니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3: 전략 병목의 세 가지 증거 -->
+  <section class="section">
+    <span class="section-label">Section 03</span>
+    <h2>전략 병목을 말해주는 세 가지 증거</h2>
+
+    <p>인프라가 아닌 전략이 병목이라는 주장은 추측이 아닙니다. 기존 연구들이 이미 이 현상을 여러 각도에서 포착하고 있습니다.</p>
+
+    <!-- 증거 1 -->
+    <h3>① 지각은 되는데 기획은 안 된다: agentic-vlm</h3>
+
+    <p>Three-Step Nav 논문이 실증한 것은 제로샷 VLN(시각-언어 내비게이션) 환경에서 MLLM 기반 에이전트의 <span class="highlight-warm">구조적 실패</span>입니다. 에이전트는 경로 이탈(path deviation)과 조기 정지(early stopping)라는 두 가지 패턴으로 실패하는데, 핵심은 이 실패가 "증거를 못 찾아서"가 아니라는 겁니다.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-node active">스텝 N: 장면을 정확히 인식함</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-annotation">지각-기획 간극이 여기서 발생</div>
+      <div class="flow-node fail">스텝 N+1: 인식한 정보를 경로 계획에 통합하지 못함</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-node fail">결과: 경로 이탈 또는 조기 정지</div>
+    </div>
+
+    <p>각 스텝에서의 지각 증거는 <strong>충분히 도달 가능</strong>합니다. 에이전트는 "왼쪽에 계단이 있다"는 것을 봅니다. 하지만 그것을 "계단을 올라가면 목적지 방향으로 전진할 수 있다"는 <strong>다단계 경로 기획</strong>으로 연결하지 못합니다. 지각과 기획 사이에 존재하는 이 간극은 검색 엔진을 아무리 바꿔도 메모리를 아무리 늘려도 좁혀지지 않습니다.</p>
+
+    <!-- 증거 2 -->
+    <h3>② 자기가 뭘 모르는지 모른다: agent-scene-instruction-triad</h3>
+
+    <p>AwareVLN이 제시하는 삼원적 인식 프레임 — <span class="kw cool">장면(Scene)</span>, <span class="kw warm">지시(Instruction)</span>, <span class="kw green">자기 상태(Agent State)</span> — 은 전략 병목의 두 번째 단서를 줍니다.</p>
+
+    <p>에이전트가 장면을 보고 지시를 이해해도, <strong>자신이 현재 어떤 증거를 보유하고 있고 무엇이 부족한지를 메타인지하지 못하면</strong>, 이미 가진 증거는 기능적으로 무의미해집니다. 이것은 도서관 비유로 돌아가면 이해가 쉽습니다.</p>
+
+    <div class="metaphor-box">
+      <p>책 A를 이미 읽었는데 그 사실을 잊어버린 사람은, 책 B를 읽을 때 책 A의 내용을 활용하지 못합니다. 책 A가 여전히 책架上에 있고 내가 그것을 읽은 적이 있다는 '인프라적 사실'은 변하지 않지만, 내가 "나는 책 A를 읽었다"는 <strong>자기 상태 인식</strong>이 없으면 두 책 사이의 연결은 만들어지지 않습니다.</p>
+    </div>
+
+    <p>이 메타인지의 결여는 ADEMA 같은 메모리 인프라가 아무리 정교해도 해결되지 않습니다. 왜냐하면 메모리 시스템이 "에이전트가 무엇을 알고 있는지"를 추적하더라도, <strong>에이전트 자신이 그 추적 정보를 자신의 의사결정에 반영하지 않으면</strong> 소용없기 때문입니다. 인식의 주체는 인프라가 아니라 에이전트여야 합니다.</p>
+
+    <!-- 증거 3 -->
+    <h3>③ 외부뿐 아니라 내부 상태에 반응해야 한다: adaptive-inference</h3>
+
+    <p>SpecKV가 보여주는 적응 패턴은 병질적으로 내비게이션에도 적용됩니다. 외부 환경 반응(CADENCE 등)에서 <strong>내부 시스템 상태 반응</strong>으로 적응 차원을 확장하는 이 패턴은, 내비게이션에서 다음과 같이 번역됩니다.</p>
+
+    <ul class="analysis-list">
+      <li><strong>기존 접근:</strong> "증거가 있는지 없는지" — 외부 환경 정보에만 반응</li>
+      <li><strong>필요한 접근:</strong> "현재 예산 대비 증거 활용 효율이 어떤지" — 내부 메타 상태에도 반응</li>
+      <li><strong>전략적 의미:</strong> 남은 스텝이 3步인데 아직 핵심 증거를 통합하지 못했다면, 탐색 전략을 근본적으로 전환해야 함</li>
+    </ul>
+
+    <p>이것은 순수하게 <span class="highlight-green">전략 수준의 적응</span>입니다. 인프라가 내부 상태를 측정해 줄 수는 있어도, 그 측정값에 기반해 "지금까지의 접근법을 폐기하고 완전히 다른 전략으로 전환한다"는 결정은 에이전트의 인지 전략 영역입니다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4: 간극의 심화 -->
+  <section class="section">
+    <span class="section-label">Section 04</span>
+    <h2>접근-이해 간극을 넘어서: '기획 통합의 실패'라는 새로운 층위</h2>
+
+    <p>기존 Wiki에서 이 현상에 가장 근접한 개념은 <span class="kw warm">접근-이해 간극(access-understanding-gap)</span>입니다. 에이전트가 정보에 접근할 수 있어도 이해하지 못하는 현상을 가리키는 이 개념은 유용하지만, 우리가 여기서 다루는 현상을 완전히 포괄하지 못합니다.</p>
+
+    <div class="card">
+      <span class="card-label cool">간극의 세 가지 층위</span>
+      <div class="table-wrapper" style="margin:12px 0 0;border:none;padding:0;background:transparent;">
+        <table>
+          <thead>
+            <tr>
+              <th>층위</th>
+              <th>상태</th>
+              <th>비유</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>접근 불가</strong></td>
+              <td>증거를 찾지 못함</td>
+              <td>책을 찾지 못함</td>
+            </tr>
+            <tr>
+              <td><strong>접근-이해 간극</strong></td>
+              <td>증거에 접근했으나 이해하지 못함</td>
+              <td>책을 찾았으나 읽지 못함</td>
+            </tr>
+            <tr class="row-highlight">
+              <td><strong>기획 통합 실패</strong></td>
+              <td>증거에 접근·이해했으나 다단계 기획에 통합하지 못함</td>
+              <td>책을 읽었으나 논문에 인용하지 못함</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p>세 번째 층위 — <span class="highlight-warm">기획 통합의 실패</span> — 는 앞의 두 가지와 근본적으로 다릅니다. 첫 번째는 인프라 문제이고, 두 번째는 모델의 이해력 문제입니다. 하지만 세 번째는 <strong>"이해한 것을 여러 단계에 걸쳐 어떻게 조합하고 활용하는가"라는 순수한 기획 문제</strong>입니다.</p>
+
+    <p>agentic-vlm의 지각-기획 간극과 agent-scene-instruction-triad의 자기 인식 결여가 결합할 때, 에이전트는 정확히 이 세 번째 층위에 빠집니다. "증거를 가지고 있음을 모르거나, 가지고 있어도 기획에 통합하지 못하는" 상태입니다.</p>
+
+    <p>만약 AtlasNav 논문이 "증거 도달 가능성 하의 증거 맹목"을 실증한다면, 이것은 단순히 기존 개념의 재확인이 아닙니다. <strong>access-understanding-gap의 정의를 확장하거나, 새로운 하위 개념으로 분리해야 하는 학적 사건</strong>이 됩니다.</p>
+
+    <blockquote>
+      <p>접근은 되었으나 기획 통합이 실패하는 현상 — 이것을 우리는 '증거 맹목'이라 부를 수 있을까? 맹인이 빛을 감지할 수 없는 것이 아니라, 빛을 감지하면서도 그것이 '보이는 것'임을 인식하지 못하는 상태와 유사하다.</p>
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section">
+    <span class="section-label">Section 05</span>
+    <h2>패러다임 전환: '더 많은 정보'에서 '더 나은 전략'으로</h2>
+
+    <p>지금까지의 분석이 하나의 명확한 결론을 향해 수렴합니다.</p>
+
+    <div class="conclusion-callout">
+      <p><strong>인프라 정교화(RAG, ADEMA, WorldDB)가 에이전트의 내비게이션 실패를 해결하지 못할 가능성은, 기존 증거만으로도 충분히 뒷받침된다.</strong> 문제의 근원은 검색층·메모리층·구조층에 있는 것이 아니라, 에이전트의 인지 전략 — 지각을 기획으로 통합하는 능력, 자기 상태를 메타인지하는 능력, 내부 상태에 반응해 전략을 전환하는 능력 — 에 있다.</p>
+    </div>
+
+    <p>그렇다면 우리는 무엇을 바꿔야 합니까? 세 가지 전환이 필요합니다.</p>
+
+    <h3>첫째, 연구 초점의 전환</h3>
+    <p>"에이전트에게 더 많은 정보를 어떻게 줄 것인가"에서 <span class="highlight-cool">"에이전트가 가진 정보를 어떻게 기획에 통합할 것인가"</span>로 연구의 무게 중심을 옮겨야 합니다. 이것은 검색 엔지니어링에서 인지 아키텍처 설계로의 이동을 의미합니다.</p>
+
+    <h3>둘째, 평가 지표의 전환</h3>
+    <p>정보 검색 정확도(Recall@K), 메모리 적중률 같은 인프라 지표만으로는 전략 병목을 포착할 수 없습니다. <span class="highlight-green">"도달 가능한 증거 중 실제로 기획에 통합된 비율"</span> 같은 새로운 지표가 필요합니다. 이것을 <em>Evidence Integration Rate (EIR)</em>이라 부를 수 있을 것입니다.</p>
+
+    <h3>셋째, 개념 체계의 확장</h3>
+    <p>access-understanding-gap을 넘어 '기획 통합 실패'를 명시적으로 포함하는 개념 체계가 필요합니다. AtlasNav가 이를 실증한다면, 기존 간극 프레임워크에 제3의 층위를 공식화하는 것이 학적으로 의미 있는 다음 걸음이 될 것입니다.</p>
+
+    <div class="card">
+      <span class="card-label green">핵심 정리</span>
+      <p style="margin-bottom:12px;">도서관을 더 크게 지어도, 색인을 더 정교하게 만들어도, 책을 더 많이 저장해도 — 독자가 "다음에 어떤 책을 읽어야 할지" 스스로 결정하는 전략을 갖추지 못하면, 도서관은 그저 커다란 창고로 남습니다.</p>
+      <p style="margin-bottom:0;">AI 에이전트의 '증거 맹목'이 말하는 것은 명확합니다. <strong>병목은 인프라가 아니라 전략에 있다.</strong> 이 인식에서 출발해야, 비로소 다음 세대의 에이전트 내비게이션을 설계할 수 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="article-footer">
+    <p>본 분석은 Wiki 지식 베이스의 교차 검증을 기반으로 작성되었습니다.</p>
+    <p style="margin-top:6px;">AtlasNav 논문의 Wiki 등재 후 정확한 교차 검증이 추가로 필요합니다.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

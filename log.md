@@ -3004,3 +3004,35 @@
 ## [2026-08-27 08:37] ingest | Evidence Blindness in Direct Corpus Interaction: Persistent Navigation with AtlasNav
 
 ## [2026-08-28 06:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1432개
+
+## [2026-08-28 08:31] ingest | Agentic Autoresearch for Cell-Edge Power Control: Radically Redefining the Researcher's Role
+
+## [2026-08-28 08:31] ingest | PlanSightRAG: A Visual-First Multimodal RAG for Automating Question Answering and Compliance Checking for Civil Standard Plans
+
+## [2026-08-28 08:31] ingest | TraceML: An Empirical Analysis of Human-Agent Planning in Machine Learning Development
+
+## [2026-08-28 08:31] ingest | SwarmWorld: Stigmergic technological evolution in societies of language-model agents
+
+## [2026-08-28 08:31] ingest | Trace Integrity for LLM Data Agents: A Vision for Auditable Structured Reasoning in Real-World Systems
+
+## [2026-08-28 08:31] ingest | Planetary Prediction Engine: Autonomous Geospatial Prediction via Intelligent Data Selection and Foundation Model Embeddings
+
+## [2026-08-28 08:31] ingest | VirTooS: A ROS 2 - Unity Virtualization Toolkit for Fleet Management of Autonomous Mobile Robots
+
+## [2026-08-28 08:31] ingest | Gating Before Commitment: Anticipating Intent Divergence to Prevent Post-Interaction Decision Failures in Autonomous Driving
+
+## [2026-08-28 08:31] ingest | When Obstacles Bend: Modeling Vegetation Deformation in the context of Field Robotics
+
+## [2026-08-28 08:31] ingest | VISA: Agentic Self-Evolving Data Synthesis for Multimodal Instruction Following
+
+## [2026-08-28 08:31] ingest | Zero-WAM: In-Context World-Action Modeling from Human Videos for Open-Ended Task Generalization
+
+## [2026-08-28 08:31] ingest | A Visual Dependence-Aware Framework for Multimodal Unsupervised Continual Post-Training
+
+## [2026-08-28 08:31] ingest | AsymSpec: Context-Asymmetric Speculative Decoding for Agentic LLMs
+
+## [2026-08-28 08:31] ingest | DESCENT: Directed Edge Scene Encoding for Airport Surface Movement Prediction
+
+## [2026-08-28 08:31] ingest | When Personality Meets Quantization: A Layer-wise MBTI Analysis of Quantized LLMs
+
+## [2026-08-28 08:31] ingest | LivingRAG: Augmenting Graph RAG with Experience

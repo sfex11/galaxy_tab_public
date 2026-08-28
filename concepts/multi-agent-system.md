@@ -299,3 +299,5 @@ _자동 생성됨_
 - [[sources/2026-08-26-the-interaction-tax-when-communication-erases-dive.md]]
 
 - [[sources/2026-08-27-test-time-collaborative-classification-over-multi-.md]]
+
+- [[sources/2026-08-28-swarmworld-stigmergic-technological-evolution-in-s.md]]
