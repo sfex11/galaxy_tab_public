@@ -3036,3 +3036,5 @@
 ## [2026-08-28 08:31] ingest | When Personality Meets Quantization: A Layer-wise MBTI Analysis of Quantized LLMs
 
 ## [2026-08-28 08:31] ingest | LivingRAG: Augmenting Graph RAG with Experience
+
+## [2026-08-29 04:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1438개
