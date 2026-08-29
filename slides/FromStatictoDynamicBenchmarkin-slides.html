@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Static to Dynamic: Benchmarking Real-World Code Review  — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="font-size:clamp(1rem,1.5vw,1.25rem)" class="muted">ISSTA 2026 · PACMSE</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);margin:0.5em 0 0.3em;">정적에서 동적으로: <span class="accent">MCR-Bench</span>를 통한<br>실세계 코드 리뷰 벤치마킹</h1>
+    <div style="font-size:clamp(0.95rem,1.8vw,1.3rem)" class="muted">From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench</div>
+    <div class="hr"></div>
+    <div style="font-size:clamp(0.85rem,1.4vw,1.05rem)">
+      <span class="muted">정우주 · 왕언린 · 왕시원 · 단케펑</span> <span class="muted">(중산대학교)</span><br>
+      <span class="muted">장홍위</span> <span class="muted">(중경대학교)</span> · <span class="muted">류실린 · 마위치</span> <span class="muted">(화웨이 클라우드)</span> · <span class="muted">정지빈</span> <span class="muted">(중산대학교)</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">코드 리뷰의 현실</h2>
+    <div class="grid-2">
+      <div>
+        <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem)">~50%</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)">실제 Gerrit 프로젝트에서 <span class="accent">다중 라운드 리뷰</span>가 필요한 코드 변경의 비율</p>
+        <div class="hr"></div>
+        <div class="big-num" style="font-size:clamp(2.5rem,5vw,4rem)">0.3일 → 31.3일</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)">단일 라운드(0.3일)에서 6라운드 초과(31.3일)로 <span class="accent">리뷰 시간 급증</span></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">핵심 특징</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>개발자와 리뷰어 간의 <span class="accent2">반복적 상호작용</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>커밋별로 결함 상태가 <span class="accent2">동적으로 변화</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전 피드백에 대한 <span class="accent2">맥락 의존성</span>이 높음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>비용과 시간이 많이 소요되는 프로세스</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">기존 접근법의 한계</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Hunk 수준</div>
+        <div class="step-desc">고립된 diff 조각 단위, 맥락 부족</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">PR 수준 (기존)</div>
+        <div class="step-desc">초기 PR 상태만 기반, <span class="accent">단일 라운드</span> 피드백</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">PR 수준 (본 논문)</div>
+        <div class="step-desc"><span class="accent3">다중 라운드</span> 상호작용 및 결함 상태 추적</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.4em;"><span class="tag tag-red">문제점</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>다중 라운드 상호작용 무시</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>결함의 동적 진화 미포착</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>이전 리뷰 코멘트에 대한 추적 불가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.4em;"><span class="tag tag-green">필요한 것</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>라운드 간 맥락 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>결함 수명주기 상태 추적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 리뷰 프로세스 반영</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">MCR-Bench 소개</h2>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem);margin-bottom:1em;">실제 다중 라운드 코드 리뷰를 위한 <span class="accent">최초의 결함 상태 인식 벤치마크</span></p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(2rem,4vw,3rem)">2,269</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">실제 다중 라운드<br>리뷰 태스크</p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(2rem,4vw,3rem)">5</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">프로그래밍 언어<br>Python, Java, JS, TS, C#</p>
+      </div>
+      <div class="card">
+        <div class="big-num" style="font-size:clamp(2rem,4vw,3rem)">상태 라벨</div>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">New → Open → Resolved<br>라운드 간 상태 전이</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">결함 메타데이터 구성</h3>
+    <div class="grid-2">
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">상세 설명</span> — 결함 내용 텍스트</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">위치 정보</span> — 파일 및 라인 번호</li>
+      </ul>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">카테고리</span> — 결함 유형 분류</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">심각도</span> — 심각도 수준</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">벤치마크 구축 파이프라인</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">언어 및 저장소 선정</div>
+        <div class="step-desc">5개 언어, 고품질 저장소 필터링</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">PR 데이터 수집</div>
+        <div class="step-desc">다중 라운드 PR만 선별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">LLM 기반 상태 인식 주석</div>
+        <div class="step-desc">"국소 검출 → 전역 추적" 전략</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">교차 검증</div>
+        <div class="step-desc">수동 검수로 정확도 확보</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="card">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">핵심: 상태 인식 주석 파이프라인</h3>
+      <div class="grid-2">
+        <div>
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)"><span class="accent">국소 검출 (Local Detection)</span></p>
+          <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">개별 리뷰 라운드 내에서 후보 결함 식별</p>
+        </div>
+        <div>
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)"><span class="accent">전역 추적 (Global Tracking)</span></p>
+          <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">전체 코드 변경과 리뷰 논의를 활용한 라운드 간 결함 병합 및 수명주기 추적</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">MCR-Bench 통계 및 특징</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">주요 통계</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>항목</th><th>값</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>전체 리뷰 태스크</td><td><span class="accent">2,269개</span></td></tr>
+            <tr><td>총 리뷰 라운드</td><td>6,194개</td></tr>
+            <tr><td>평균 라운드/태스크</td><td>2.73개</td></tr>
+            <tr><td>총 주석 결함 수</td><td>7,847개</td></tr>
+            <tr><td>평균 결함/태스크</td><td>3.46개</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">언어별 분포</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>언어</th><th>태스크 수</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Python</td><td>620</td></tr>
+            <tr><td>Java</td><td>534</td></tr>
+            <tr><td>JavaScript</td><td>462</td></tr>
+            <tr><td>TypeScript</td><td>398</td></tr>
+            <tr><td>C#</td><td>255</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)" class="muted"><i class="fas fa-info-circle"></i> 모든 태스크는 실제 오픈소스 프로젝트에서 수집된 <span class="accent2">실제 리뷰 데이터</span>를 기반으로 구축됨</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">실험 설계</h2>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">연구 질문</h3>
+    <div class="flow-item"><div class="flow-icon">RQ1</div><div>주류 LLM의 다중 라운드 코드 리뷰 <span class="accent">전반적 성능</span>은 어떠한가?</div></div>
+    <div class="flow-item"><div class="flow-icon">RQ2</div><div>라운드 수가 증가함에 따라 성능이 <span class="accent">어떻게 변화</span>하는가?</div></div>
+    <div class="flow-item"><div class="flow-icon">RQ3</div><div>오류의 <span class="accent">근본 원인</span>은 무엇인가?</div></div>
+    <div class="flow-item"><div class="flow-icon">RQ4</div><div>생성된 리뷰 코멘트의 <span class="accent">품질</span>은 어떠한가?</div></div>
+    <div class="hr"></div>
+    <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">평가 대상 모델</h3>
+    <div class="grid-3">
+      <div class="card">
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)"><span class="accent">프로피엇 계열</span></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">GPT-4o, Claude-3.5-Sonnet, Gemini-2.5-Pro</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)"><span class="accent2">오픈 소스 계열</span></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">DeepSeek-V3, Qwen2.5-Coder, GLM-4</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)"><span class="accent3">베이스라인</span></p>
+        <p style="font-size:clamp(0.8rem,1.3vw,0.95rem)" class="muted">PR-Level ACR 기존 방법론들</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">RQ1: 전반적 성능</h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">결함 탐지 성능</h3>
+        <div class="card">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span>주류 LLM 모두 <span class="accent">제한적인 성능</span>만 보여줌</li>
+            <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span>결함을 정확히 식별하더라도 <span class="accent">수명주기 상태 예측은 여전히 큰 과제</span></li>
+            <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span>PR 수준 기존 베이스라인보다 LLM이 우세하지만 절대적 수치는 낮음</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">결함 상태 추적 능력</h3>
+        <div class="card">
+          <ul class="check-list">
+            <li><span class="check-icon"><i class="fas fa-times-circle"></i></span>상태 추적 정확도가 결함 탐지보다 <span class="accent">현저히 낮음</span></li>
+            <li><span class="check-icon"><i class="fas fa-times-circle"></i></span>모델들이 Resolved 상태와 Open 상태를 <span class="accent">혼동하는 경향</span></li>
+            <li><span class="check-icon"><i class="fas fa-times-circle"></i></span>다중 라운드 맥락에서 상태 전이를 올바르게 인식하지 못함</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)">"결함 탐지와 상태 추적은 서로 다른 인지 능력을 요구하며, 후자가 현재 LLM에게 훨씬 더 어려운 과제이다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">RQ2: 라운드 수에 따른 성능 변화</h2>
+    <div class="card" style="margin-bottom:1em;">
+      <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;">핵심 발견: 라운드 증가 → 성능 저하</h3>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1R</div>
+          <div class="step-label">단일 라운드</div>
+          <div class="step-desc">상대적으로 양호한 성능</div>
+        </div>
+        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipeline-step">
+          <div class="step-num">2-3R</div>
+          <div class="step-label">중간 라운드</div>
+          <div class="step-desc"><span class="accent">성능 점진적 하락</span></div>
+        </div>
+        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="pipeline-step">
+          <div class="step-num">4R+</div>
+          <div class="step-label">고라운드</div>
+          <div class="step-desc"><span class="accent">현저한 성능 저하</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.4em;">결함 유형별 편차</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>의미적으로 <span class="accent2">단순한 결함</span>: 비교적 잘 탐지</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>의미적으로 <span class="accent">복잡한 결함</span>: 누락률 현저히 높음</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span class="accent">저돌출성(Low-salience)</span> 결함: 탐지 확률 급감</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-bottom:0.4em;">심각도별 편차</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent3">높은 심각도</span>: 상대적으로 잘 탐지</li>
+          <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span><span class="accent3">낮은 심각도</span>: 누락 비율 크게 증가</li>
+          <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span>라운드가 진행될수록 <span class="muted">심각도 간 격차 확대</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">RQ3: 오류 근본 원인 분석</h2>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem);margin-bottom:1em;">오픈 코딩 분석을 통한 <span class="accent">위양성(False Positive)</span>과 <span class="accent2">위음성(False Negative)</span>의 세분화된 원인 분류</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;"><span class="tag tag-red">위양성 (False Positive)</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-bug"></i></span><span class="accent">시간적 오정렬</span>: 과거에 해결된 결함을 현재 미해결로 잘못 판단</li>
+          <li><span class="check-icon"><i class="fas fa-bug"></i></span><span class="accent">과도한 감지</span>: 실제 결함이 아닌 스타일 차이를 결함으로 오인</li>
+          <li><span class="check-icon"><i class="fas fa-bug"></i></span><span class="accent">맥락 혼동</span>: 다른 파일/라인의 결함을 잘못된 위치에 할당</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;"><span class="tag tag-amber">위음성 (False Negative)</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-eye-slash"></i></span><span class="accent2">장거리 기억 부족</span>: 이전 라운드에서 식별된 결함을 잊어버림</li>
+          <li><span class="check-icon"><i class="fas fa-eye-slash"></i></span><span class="accent2">의미적 복잡성</span>: 논리적 결함 등 복잡한 결함 탐지 실패</li>
+          <li><span class="check-icon"><i class="fas fa-eye-slash"></i></span><span class="accent2">새로 도입된 결함 누락</span>: 후속 커밋에서 새로 생긴 결함 미탐지</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem)">핵심 취약점: <span class="accent">라운드 간 시간적 오정렬</span>과 <span class="accent2">장거리 기억 부족</span>이 다중 라운드 리뷰에서 LLM의 가장 치명적인 한계로 확인됨</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">핵심 발견 요약</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:clamp(1.2rem,2.2vw,1.6rem);margin-bottom:0.3em;"><span class="accent">발견 1</span></div>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-bottom:0.4em;">제한된 전반적 역량</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">주류 LLM은 결함 탐지와 수명주기 상태 추적에서 모두 제한적 성능을 보이며, 상호작용 라운드가 증가할수록 성능이 <span class="accent">유의미하게 저하</span>됨</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1.2rem,2.2vw,1.6rem);margin-bottom:0.3em;"><span class="accent2">발견 2</span></div>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-bottom:0.4em;">결함 민감적 성능 편차</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">결함 유형과 심각도에 따라 성능이 <span class="accent2">크게 편차</span>를 보이며, 의미적으로 복잡하거나 돌출성이 낮은 결함이 누락될 확률이 유의미하게 높음</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1.2rem,2.2vw,1.6rem);margin-bottom:0.3em;"><span class="accent3">발견 3</span></div>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-bottom:0.4em;">근본적 실패 메커니즘</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">위양성과 위음성의 원인이 <span class="accent3">다름</span>: 위양성은 시간적 오정렬에서, 위음성은 장거리 기억 부족에서 주로 발생</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(1.2rem,2.2vw,1.6rem);margin-bottom:0.3em;"><span class="muted">발견 4</span></div>
+        <h3 style="font-size:clamp(1.05rem,1.8vw,1.3rem);margin-bottom:0.4em">코멘트 품질 한계</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem)" class="muted">생성된 리뷰 코멘트는 실제 리뷰어 수준에 <span class="muted">미치지 못하며</span>, 구체성과 실행 가능성 측면에서 개선 여지가 큼</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">기여 및 시사점</h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;"><span class="tag tag-green">주요 기여</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실제 다중 라운드 코드 리뷰를 위한 <span class="accent">최초의 상태 인식 벤치마크</span> 구축</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>"국소 검출 → 전역 추적" 전략 기반의 <span class="accent">자동화 구축 파이프라인</span> 개발</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>주류 LLM의 <span class="accent">다중 라운드 리뷰 능력 경계</span>를 체계적으로 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>위양성/위음성 원인에 대한 <span class="accent">세분화된 분류 체계</span> 제안</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.1rem,2vw,1.4rem);margin-bottom:0.5em;"><span class="tag tag-amber">향후 방향</span></h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-arrow-right"></i></span>라운드 간 <span class="accent2">장거리 기억 메커니즘</span> 강화 필요</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right"></i></span><span class="accent2">시간적 정렬 능력</span>을 갖춘 아키텍처 연구</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right"></i></span>결함 유형별 <span class="accent2">특화된 탐지 전략</span> 개발</li>
+          <li><span class="check-icon"><i class="fas fa-arrow-right"></i></span>에이전트 기반 <span class="accent2">반복적 리뷰 시스템</span> 설계</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.5rem);margin-bottom:0.6em;">논문 정보</h2>
+    <div class="card">
+      <h3 style="font-size:clamp(1.2rem,2.2vw,1.6rem);margin-bottom:0.5em;">From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench</h3>
+      <div class="hr"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-bottom:0.5em;"><span class="muted">저자:</span> 정우주, 왕언린, 왕시원, 단케펑 (중산대학교) · 장홍위 (중경대학교) · 류실린, 마위치 (화웨이 클라우드) · 정지빈 (중산대학교)</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-bottom:0.5em;"><span class="muted">학회:</span> ISSTA 2026, PACMSE Volume 3</p>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-bottom:0.5em;"><span class="muted">DOI:</span> 10.1145/3832219</p>
+      <div class="hr"></div>
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem)"><i class="fas fa-external-link-alt"></i> <span class="accent2">arXiv: http://arxiv.org/abs/2608.27442v1</span></p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
