@@ -3070,3 +3070,5 @@
 ## [2026-08-29 08:30] ingest | Prediction of Prediction (PoP): Inter-Layer Activation Fusion for Single-Pass Hallucination Detection in Large Language Models
 
 ## [2026-08-29 08:30] ingest | One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
+
+## [2026-08-30 04:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1445개
