@@ -145,3 +145,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-08-26-geowam-visual-geometry-world-action-models-for-aut.md]]
 
 - [[sources/2026-08-28-descent-directed-edge-scene-encoding-for-airport-s.md]]
+
+- [[sources/2026-08-29-making-clinical-language-models-auditable-concept-.md]]

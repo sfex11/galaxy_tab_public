@@ -301,3 +301,5 @@ _자동 생성됨_
 - [[sources/2026-08-27-test-time-collaborative-classification-over-multi-.md]]
 
 - [[sources/2026-08-28-swarmworld-stigmergic-technological-evolution-in-s.md]]
+
+- [[sources/2026-08-29-one-model-many-minds-unlocking-multi-agent-synergy.md]]

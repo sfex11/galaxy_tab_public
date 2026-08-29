@@ -1642,3 +1642,26 @@
 - [[sources/2026-08-28-descent-directed-edge-scene-encoding-for-airport-s.md]] - DESCENT: Directed Edge Scene Encoding for Airport Surface Movement Prediction
 - [[sources/2026-08-28-when-personality-meets-quantization-a-layer-wise-m.md]] - When Personality Meets Quantization: A Layer-wise MBTI Analysis of Quantized LLMs
 - [[sources/2026-08-28-livingrag-augmenting-graph-rag-with-experience.md]] - LivingRAG: Augmenting Graph RAG with Experience
+- [[sources/2026-08-29-criticl-inference-time-weak-to-strong-generalizati.md]] - CritICL: Inference-Time Weak-to-Strong Generalization from Small Language Model Failure Modes
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-29-wikiskill-compiling-agent-experience-into-persiste.md]] - WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution
+- [[sources/2026-08-29-swe-prime-fewer-trajectories-better-performance.md]] - SWE-Prime: Fewer Trajectories, Better Performance
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-29-do-user-authored-permission-policies-improve-prote.md]] - Do User-Authored Permission Policies Improve Protection Against AI Agent Overreach?
+- [[sources/2026-08-29-from-static-to-dynamic-benchmarking-real-world-cod.md]] - From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench
+- [[sources/2026-08-29-redevoagent-automatic-red-teaming-agent-with-exper.md]] - RedEvoAgent: Automatic Red-Teaming Agent with Experience-Driven Skill Evolution
+- [[sources/2026-08-29-persona-execution-separation-an-architecture-patte.md]] - Persona-Execution Separation: An Architecture Pattern for Evolving LLM Agents under Execution Audit
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-08-29-boosting-llm-exploration-via-weak-model-guidance-i.md]] - Boosting LLM Exploration via Weak-Model Guidance in RLVR
+- [[sources/2026-08-29-clap-cross-embodiment-video-world-models-are-zero-.md]] - CLAP: Cross-Embodiment Video World Models are Zero-Shot Physical Simulators
+- [[sources/2026-08-29-embodied-scene-rearrangement-planning.md]] - Embodied Scene Rearrangement Planning
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-08-29-ttpo-test-time-policy-optimization.md]] - TTPO: Test-Time Policy Optimization
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-08-29-intent-as-a-tool-makes-it-easy-to-track-agentic-mi.md]] - INTENT-AS-A-TOOL Makes it Easy to Track Agentic Misalignment
+- [[sources/2026-08-29-how-language-models-organize-and-structure-moral-k.md]] - How Language Models Organize and Structure Moral Knowledge
+- [[entities/transformer]] - Transformer
+- [[sources/2026-08-29-making-clinical-language-models-auditable-concept-.md]] - Making Clinical Language Models Auditable: Concept-Guided Fine-Tuning for Robust Prediction
+- [[sources/2026-08-29-prediction-of-prediction-pop-inter-layer-activatio.md]] - Prediction of Prediction (PoP): Inter-Layer Activation Fusion for Single-Pass Hallucination Detection in Large Language Models
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-08-29-one-model-many-minds-unlocking-multi-agent-synergy.md]] - One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
