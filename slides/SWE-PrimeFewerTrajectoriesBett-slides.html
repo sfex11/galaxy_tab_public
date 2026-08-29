@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWE-Prime: Fewer Trajectories, Better Performance — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber">arXiv:2608.27449v1</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem);margin-top:1.5rem;line-height:1.2;">SWE-Prime</h1>
+      <p style="font-size:clamp(1.2rem,3vw,1.8rem);margin-top:0.5rem;">더 적은 궤적, 더 나은 성능</p>
+      <div class="hr" style="width:120px;margin:2rem auto;"></div>
+      <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1rem);">Dewu Zheng, Ruizhe Ye, Yanlin Wang, Yang Ye, Hongyu Zhang, Ensheng Shi, Xilin Liu, Yuchi Ma, Jianxing Yu, Zibin Zheng</p>
+      <p class="muted" style="font-size:clamp(0.75rem,1.2vw,0.9rem);margin-top:0.5rem;">Sun Yat-sen University · Huawei Cloud · Chongqing University</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <span class="tag tag-red">문제 인식</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">성공 궤적 ≠ 고품질 학습 데이터</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);line-height:1.8;margin-top:1rem;">기존 연구는 실행 검증을 통과한 <span class="accent">성공 궤적</span>만을 수집하여 SFT에 활용했습니다. 하지만 작업 성공이 곧 고품질 감독을 보장하지 않습니다.</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><i class="fas fa-ban" style="margin-right:0.5rem;"></i>비효율적 단계</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">탐색 없이 바로 코드 수정하거나, 불필요한 파일까지 변경</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><i class="fas fa-clone" style="margin-right:0.5rem;"></i>중복 행동</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">이전 행동을 잊고 동일한 도구 호출을 반복하는 패턴</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><i class="fas fa-exclamation-triangle" style="margin-right:0.5rem;"></i>위험한 단축행</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">Git 이력에서 정답을 직접 조회하는 등의 편법 행동</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">"이러한 궤적을 SFT에 직접 사용하면 노이즈가 많은 감독 신호가 모델에 바람직하지 못한 문제 해결 행동을 모방하도록 유도합니다."</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <span class="tag tag-amber">동기 부여</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">세 가지 관점에서 바라본 데이터 품질</h2>
+    <div class="hr"></div>
+    <div style="margin-top:1.5rem;">
+      <div class="flow-item">
+        <div class="flow-icon">1</div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);">결과 관점 <span class="muted">(Outcome View)</span></h3>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;">기존 방식: 성공/실패만으로 데이터를 선별 — 품질 차이를 간과</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">2</div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);">궤적 관점 <span class="muted">(Trajectory View)</span></h3>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;">문제 해결 패턴, 도구 호출 안정성, 연속 중복, Git 해킹, 결과 품질 등 5가지 차원에서 궤적 품질 평가</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-icon">3</div>
+        <div>
+          <h3 style="font-size:clamp(1rem,1.8vw,1.2rem);">세그먼트 관점 <span class="muted">(Segment View)</span></h3>
+          <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;">궤적 수준에서 고품질이라도, 개별 세그먼트는 최종 해결에 기여하지 않을 수 있음</p>
+        </div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent">핵심 통찰:</span> 문제 해결 행동은 여러 액션과 관찰에 걸쳐 나타나므로, 개별 스텝이 아닌 <span class="accent2">의미적 세그먼트</span> 단위로 평가해야 함</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <span class="tag tag-green">제안 방법</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">SWE-Prime: 다중 입자도 2단계 데이터 선택</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">궤적 수준 선별</div>
+        <div class="step-desc">과정 품질 · 결과 품질 · 데이터 대표성 기반 필터링</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">세그먼트 수준 선별</div>
+        <div class="step-desc">기여도 · 학습 가능성 · 위험도 기반 세그먼트 평가</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">SFT 학습</div>
+        <div class="step-desc">전체 궤적은 컨텍스트로 유지, 선택된 세그먼트만 Loss 계산</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-compress-arrows-alt" style="margin-right:0.5rem;color:inherit;"></i>_compact_ & Low-Noise</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">불필요한 노이즈를 제거하여 모델이 신뢰할 수 있는 시범만 학습</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-layer-group" style="margin-right:0.5rem;color:inherit;"></i>Multi-Granularity</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">궤적 → 세그먼트로 점진적 세분화하여 정밀한 품질 제어</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <span class="tag tag-amber">Stage 1</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">궤적 수준 선별: 과정 품질 평가</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent">①</span> 관찰-수정-검증 패턴</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">최초 수정 전 저장소 탐색 여부와 최종 수정 후 테스트/검증 수행 여부로 판단</p>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">S<sub>workflow</sub> = 1 또는 0</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent">②</span> 도구 호출 성공률</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">궤적 내 도구 호출 성공률을 계산하고, 전체 풀 대비 백분위 순위로 점수화</p>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">S<sub>tool</sub> = percentile rank</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent">③</span> 연속 중복 탐지</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">인접 스텝에서 도구 이름과 인자가 동일한 호출이 있는지 검사</p>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">S<sub>redundancy</sub> = 0 (중복 발견 시)</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent">④</span> Git 해킹 탐지</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">버전 기록에서 타겟 수정 정보를 직접 조회하는 편법 행동 감지</p>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">S<sub>git</sub> = 0 (해킹 감지 시)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <span class="tag tag-amber">Stage 1</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">궤적 수준 선별: 결과 품질 & 대표성</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent2">결과 품질 평가</span></h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>최소 sufficient 패치 선호 — 불필요한 파일 변경 감소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>변경 라인 수, 수정 파일 수, 패치 집중도 등 다차원 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>회귀 위험을 낮추는 정밀한 패치를 우선 선택</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><span class="accent3">데이터 대표성 평가</span></h3>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다양한 저장소, 프로그래밍 언어, 이슈 유형 균형 있는 커버리지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>특정 하위 집단에 편중되지 않도록 클러스터링 기반 샘플링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>선택된 부분집합이 전체 데이터 분포를 대변하도록 보장</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">Stage 1은 <span class="accent">과정 품질</span>, <span class="accent2">결과 품질</span>, <span class="accent3">대표성</span> 세 가지 차원을 결합하여 고품질이고 대표성 있는 성공 궤적 부분집합을 선별합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <span class="tag tag-green">Stage 2</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">세그먼트 수준 선별</h2>
+    <div class="hr"></div>
+    <div class="pipeline" style="margin-top:1.5rem;">
+      <div class="pipeline-step">
+        <div class="step-num">A</div>
+        <div class="step-label">세그먼트 청킹</div>
+        <div class="step-desc">연속 스텝을 의미적으로 일관된 세그먼트로 그룹화</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">B</div>
+        <div class="step-label">세그먼트 점수화</div>
+        <div class="step-desc">기여도 · 학습 가능성 · 위험도 3차원 평가</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">C</div>
+        <div class="step-label">세그먼트 필터링</div>
+        <div class="step-desc">임계값 기반으로 고품질 세그먼트만 선택</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">1</div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.3rem;">최종 해결 기여도</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">해당 세그먼트가 최종 패치 생성에 실질적으로 기여했는지 평가</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">2</div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.3rem;">학습 가능성</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">모델이 해당 행동 패턴을 일반화하여 학습할 수 있는지 평가</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3</div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.3rem;">잠재적 위험도</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">편법 행동이나 바람직하지 않은 패턴을 포함하는지 평가</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent3">핵심:</span> SFT 시 전체 궤적은 컨텍스트로 유지하여 문맥을 보존하고, <span class="accent">선택된 세그먼트만 Loss에 기여</span>하도록 마스킹</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <span class="tag tag-amber">실험 설정</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">학습 데이터, 모델 및 벤치마크</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-database" style="margin-right:0.5rem;"></i>학습 데이터</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SWE-Gym 기반 실행 검증 통과 궤적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SWE-Prime 선별 결과: 전체의 <span class="accent">약 10%</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-robot" style="margin-right:0.5rem;"></i>기반 모델</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Qwen2.5-Coder-7B</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Qwen2.5-Coder-32B</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>DeepSeek-Coder-V2-Lite</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-flask" style="margin-right:0.5rem;"></i>평가 벤치마크</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">SWE-Bench Pro</span> — 난이도 높은 실제 이슈</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span class="accent2">SWE-Bench Verified</span> — 검증된 이슈 집합</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);"><i class="fas fa-balance-scale" style="margin-right:0.5rem;"></i>비교 대상</h3>
+        <ul class="check-list" style="margin-top:0.5rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>전체 성공 궤적 SFT (Full)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>랜덤 10% 샘플링</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>SWE-Lego 등 기존 필터링 방법</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <span class="tag tag-green">RQ1</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">SWE-Prime의 효과성은?</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;">전체 데이터 대비 <span class="accent">10%의 궤적만 사용</span>하여도 더 나은 성능 달성</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">12.2<span style="font-size:0.5em;">%</span></div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-top:0.3rem;">SWE-Bench Pro 상대 성능 향상</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;">전체 데이터 학습 대비 최대 12.2% 향상</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">24.2<span style="font-size:0.5em;">%</span></div>
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);margin-top:0.3rem;">SWE-Bench Verified 상대 성능 향상</h3>
+        <p class="muted" style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;">전체 데이터 학습 대비 최대 24.2% 향상</p>
+      </div>
+    </div>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>데이터량</th>
+          <th>SWE-Bench Pro</th>
+          <th>SWE-Bench Verified</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Full SFT</td>
+          <td>100%</td>
+          <td>기준선</td>
+          <td>기준선</td>
+        </tr>
+        <tr>
+          <td>Random 10%</td>
+          <td>10%</td>
+          <td>성능 저하</td>
+          <td>성능 저하</td>
+        </tr>
+        <tr>
+          <td class="accent" style="font-weight:700;">SWE-Prime</td>
+          <td class="accent" style="font-weight:700;">10%</td>
+          <td class="accent" style="font-weight:700;">최대 +12.2%</td>
+          <td class="accent" style="font-weight:700;">최대 +24.2%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <span class="tag tag-amber">RQ2</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">하이퍼파라미터 분석</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);">궤적 비율의 영향</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;line-height:1.7;">10% 부근에서 최적의 성능을 보이며, 데이터량을 늘려도 성능이 단조 증가하지 않음. 이는 <span class="accent">데이터 품질이 양보다 중요</span>함을 시사</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);">세그먼트 임계값의 영향</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;line-height:1.7;">세그먼트 필터링 강도를 조절하며 균형점을 탐색. 너무 엄격하면 학습 신호 부족, 너무 관대하면 노이즈 잔존</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;">
+      <h3 style="font-size:clamp(0.95rem,1.5vw,1.1rem);">2단계 설계의 상호 보완성</h3>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;line-height:1.7;">Stage 1만 사용할 때보다 Stage 2까지 수행할 때 성능이 추가로 향상됨. 궤적 수준 선별과 세그먼트 수준 선별이 <span class="accent2">서로 다른 종류의 노이즈</span>를 제거하며 시너지를 생성</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <span class="tag tag-green">RQ3</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">행동 분석</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;">SWE-Prime으로 학습된 모델의 실제 문제 해결 행동 변화</p>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-search" style="font-size:0.7em;"></i></div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.5rem;">체계적 탐색 증가</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">코드 수정 전 저장소 구조를 먼저 파악하는 관찰-수정-검증 패턴 강화</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-tools" style="font-size:0.7em;"></i></div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.5rem;">안정적 도구 사용</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">불필요한 도구 호출 실패와 중복 호출이 감소하여 효율적인 상호작용 수행</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num"><i class="fas fa-shield-alt" style="font-size:0.7em;"></i></div>
+        <h3 style="font-size:clamp(0.9rem,1.4vw,1.05rem);margin-top:0.5rem;">위험 행동 감소</h3>
+        <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:0.3rem;">Git 해킹 등 편법 행동과 불필요한 파일 수정이 현저히 감소</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">SWE-Prime은 단순히 벤치마크 점수를 높이는 것을 넘어, 모델이 <span class="accent">더 건전하고 체계적인 문제 해결 행동</span>을 학습하도록 유도합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <span class="tag tag-red">핵심 요약</span>
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.2rem);margin-top:1rem;">기여점 & 결론</h2>
+    <div class="hr"></div>
+    <ul class="check-list" style="margin-top:1.5rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>성공 궤적 간의 <span class="accent">데이터 품질 차이</span>를 기존 연구가 간과하고 있음을 명시적으로 지적</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>개별 스텝이 아닌 <span class="accent2">의미적 세그먼트</span>를 행동 평가의 기본 단위로 도입</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>다중 입자도 2단계 선택 방법 <span class="accent3">SWE-Prime</span> 제안 — compact, low-noise, informative 감독 제공</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>3개 모델 × 2개 벤치마크에서 <span class="accent">전체 데이터 SFT 대비 우수한 성능</span>을 10% 데이터만으로 달성</li>
+    </ul>
+    <div class="hr" style="margin-top:2rem;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><span class="accent">"Less is More"</span> — 데이터 양보다 품질이 코딩 에이전트 SFT의 성능을 결정하는 핵심 요인입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);">SWE-Prime</h2>
+      <p style="font-size:clamp(1rem,2vw,1.3rem);margin-top:0.5rem;">Fewer Trajectories, Better Performance</p>
+      <div class="hr" style="width:80px;margin:2rem auto;"></div>
+      <p class="muted" style="font-size:clamp(0.85rem,1.3vw,1rem);line-height:1.8;">Dewu Zheng · Ruizhe Ye · Yanlin Wang · Yang Ye<br>Hongyu Zhang · Ensheng Shi · Xilin Liu · Yuchi Ma · Jianxing Yu · Zibin Zheng</p>
+      <p style="margin-top:1.5rem;font-size:clamp(0.85rem,1.3vw,1rem);"><i class="fas fa-external-link-alt" style="margin-right:0.5rem;"></i><a href="http://arxiv.org/abs/2608.27449v1" style="text-decoration:underline;">arxiv.org/abs/2608.27449v1</a></p>
+      <p class="muted" style="font-size:clamp(0.75rem,1.1vw,0.85rem);margin-top:1rem;">Sun Yat-sen University · Huawei Cloud Computing Technologies · Chongqing University</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
