@@ -83,3 +83,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/technical-ecosystem-translation-gap.md|technical ecosystem translation gap]]
+
+---
+**관련**: [[concepts/cognitive-heterogeneity-orchestration.md|cognitive heterogeneity orchestration]]

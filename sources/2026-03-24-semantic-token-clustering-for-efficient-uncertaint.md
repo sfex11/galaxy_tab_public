@@ -86,3 +86,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]
+
+---
+**관련**: [[concepts/algebraic-taint-confinement.md|algebraic taint confinement]]

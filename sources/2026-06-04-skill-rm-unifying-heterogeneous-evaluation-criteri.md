@@ -191,3 +191,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]
+
+---
+**관련**: [[concepts/net-skill-value.md|net skill value]]
+
+---
+**관련**: [[concepts/monotonic-skill-benefit-assumption.md|monotonic skill benefit assumption]]
+
+---
+**관련**: [[concepts/state-bound-evidence.md|state bound evidence]]
+
+---
+**관련**: [[concepts/heterogeneous-resource-price-mapping-problem.md|heterogeneous resource price mapping problem]]
+
+---
+**관련**: [[concepts/pipeline-constituted-safety.md|pipeline constituted safety]]
+
+---
+**관련**: [[concepts/harness-native-training.md|harness native training]]
+
+---
+**관련**: [[concepts/failure-feedback-routing.md|failure feedback routing]]
+
+---
+**관련**: [[concepts/evaluation-infrastructure-circularity.md|evaluation infrastructure circularity]]
+
+---
+**관련**: [[concepts/signal-decomposition-information-ceiling.md|signal decomposition information ceiling]]

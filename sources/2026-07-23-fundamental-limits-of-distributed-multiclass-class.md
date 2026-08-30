@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/distributed-backdoor.md|distributed backdoor]]
+
+---
+**관련**: [[concepts/spectrum-classification-fallacy.md|spectrum classification fallacy]]

@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/environmental-deafness.md|environmental deafness]]
+
+---
+**관련**: [[concepts/pre-compiled-policy-tree.md|pre compiled policy tree]]

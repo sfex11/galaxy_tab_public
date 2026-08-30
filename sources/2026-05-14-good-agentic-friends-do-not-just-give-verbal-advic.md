@@ -114,3 +114,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]
+
+---
+**관련**: [[concepts/communication-increase-paradox.md|communication increase paradox]]

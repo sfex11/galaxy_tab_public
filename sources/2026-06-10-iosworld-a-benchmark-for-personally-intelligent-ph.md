@@ -79,3 +79,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/contextual-integrity-first-class-constraint.md|contextual integrity first class constraint]]
+
+---
+**관련**: [[concepts/preference-discovery-construction-boundary.md|preference discovery construction boundary]]

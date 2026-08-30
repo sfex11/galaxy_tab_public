@@ -22,7 +22,7 @@ Modern large language models scale successfully by pairing capacity growth with 
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

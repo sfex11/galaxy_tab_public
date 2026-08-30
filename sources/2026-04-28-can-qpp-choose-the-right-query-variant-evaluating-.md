@@ -274,3 +274,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-selection-authority.md|semantic selection authority]]
+
+---
+**관련**: [[concepts/submission-semantic-collapse.md|submission semantic collapse]]
+
+---
+**관련**: [[concepts/cumulative-semantic-opacity.md|cumulative semantic opacity]]
+
+---
+**관련**: [[concepts/rollback-semantic-discontinuity.md|rollback semantic discontinuity]]
+
+---
+**관련**: [[concepts/taint-semantic-flattening.md|taint semantic flattening]]

@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-08-27-cafe-self-improving-search-agents-need-co-evolving]]: 두 논문은 에이전트가 도구를 사용하거나 탐색하는 긴 궤적 내에서 발생하는 중간 오류를 수정하고 정책을 개선하기 위한 강화 학습 기반의 피드백 메커니즘을 다룹니다.
+
+---
+**관련**: [[concepts/informational-dependency-gap.md|informational dependency gap]]

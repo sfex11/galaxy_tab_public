@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-08-28-descent-directed-edge-scene-encoding-for-airport-s]]: 두 논문은 자율 주행 및 공항 지상 이동과 같은 동적 환경에서 다양한 에이전트의 이동 궤적과 의도를 예측하여 안전하고 효율적인 경로 계획을 돕는 모델을 제안합니다.
+
+---
+**관련**: [[concepts/upstream-irrecoverability.md|upstream irrecoverability]]

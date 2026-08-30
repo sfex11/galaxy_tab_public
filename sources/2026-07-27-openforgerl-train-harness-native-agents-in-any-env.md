@@ -24,7 +24,7 @@ Modern AI agents rely on elaborate inference harnesses such as Claude Code, Code
 
 - [[LLM Agent]]
 - [[Claude 3.5]]
-- [[OpenClaw]]
+- [[entities/openclaw.md|openclaw]]
 
 ## 추출된 개념
 

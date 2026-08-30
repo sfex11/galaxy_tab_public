@@ -76,3 +76,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/distribution-bypass.md|distribution bypass]]
+
+---
+**관련**: [[concepts/speculative-decoding-losslessness-premise-collapse.md|speculative decoding losslessness premise collapse]]
+
+---
+**관련**: [[concepts/routing-path-dependent-bottleneck.md|routing path dependent bottleneck]]
+
+---
+**관련**: [[concepts/structured-resistance.md|structured resistance]]
+
+---
+**관련**: [[concepts/structure-to-value-axis-shift.md|structure to value axis shift]]

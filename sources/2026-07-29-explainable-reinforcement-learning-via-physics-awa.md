@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-30-physics-aware-end-to-end-deep-reinforcement-learni]]: 둘 다 물리적 지식을 강화학습에 통합하는 물리 인식(physics-aware) 접근법을 채택하고 있다.
+
+---
+**관련**: [[concepts/risk-translation-loss-as-safety.md|risk translation loss as safety]]

@@ -265,3 +265,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-feedback-routing.md|failure feedback routing]]
+
+---
+**관련**: [[concepts/memory-as-alignment-participant.md|memory as alignment participant]]
+
+---
+**관련**: [[concepts/decision-time-critical-path.md|decision time critical path]]
+
+---
+**관련**: [[concepts/materialization-failure.md|materialization failure]]
+
+---
+**관련**: [[concepts/transient-event-miss-failure.md|transient event miss failure]]

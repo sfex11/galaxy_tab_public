@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/request-centric-optimization.md|request centric optimization]]
+
+---
+**관련**: [[concepts/diversity-quality-dual-optimization.md|diversity quality dual optimization]]

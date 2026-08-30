@@ -229,3 +229,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dvm-hall-model.md|dvm hall model]]
+
+---
+**관련**: [[concepts/pipeline-level-information-asymmetry.md|pipeline level information asymmetry]]
+
+---
+**관련**: [[concepts/cumulative-memory-contamination.md|cumulative memory contamination]]
+
+---
+**관련**: [[concepts/concealed-memory-contamination.md|concealed memory contamination]]
+
+---
+**관련**: [[concepts/inference-cognition-continuum.md|inference cognition continuum]]
+
+---
+**관련**: [[concepts/communication-diversity-exchange-rate.md|communication diversity exchange rate]]
+
+---
+**관련**: [[concepts/internal-boundary-penetration.md|internal boundary penetration]]
+
+---
+**관련**: [[concepts/value-differential-memory-management.md|value differential memory management]]

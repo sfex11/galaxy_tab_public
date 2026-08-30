@@ -395,3 +395,27 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/forgetting-as-agent-decision.md|forgetting as agent decision]]
+
+---
+**관련**: [[concepts/temporal-alignment-erosion.md|temporal alignment erosion]]
+
+---
+**관련**: [[concepts/cost-aware-agent-evaluation.md|cost aware agent evaluation]]
+
+---
+**관련**: [[concepts/alignment-information-dilution.md|alignment information dilution]]
+
+---
+**관련**: [[concepts/triaxial-agent-uncertainty.md|triaxial agent uncertainty]]
+
+---
+**관련**: [[concepts/peer-agent-memory-architecture.md|peer agent memory architecture]]
+
+---
+**관련**: [[concepts/proactive-memory-agent.md|proactive memory agent]]
+
+---
+**관련**: [[concepts/absence-based-rollback.md|absence based rollback]]
+
+---
+**관련**: [[concepts/multi-agent-communication-fallacy.md|multi agent communication fallacy]]

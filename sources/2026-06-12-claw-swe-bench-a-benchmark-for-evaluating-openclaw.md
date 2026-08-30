@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-use-optimizability-stratification.md|tool use optimizability stratification]]
+
+---
+**관련**: [[concepts/typed-revision-contract.md|typed revision contract]]

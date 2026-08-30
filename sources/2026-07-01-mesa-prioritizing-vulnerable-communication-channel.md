@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/maximum-effort-fallacy.md|maximum effort fallacy]]
+
+---
+**관련**: [[concepts/distributed-backdoor.md|distributed backdoor]]

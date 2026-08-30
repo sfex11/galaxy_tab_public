@@ -56,3 +56,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-task-matching-bottleneck.md|harness task matching bottleneck]]
+
+---
+**관련**: [[concepts/pipeline-level-cost-attribution.md|pipeline level cost attribution]]
+
+---
+**관련**: [[concepts/cross-layer-bottleneck-isomorphism.md|cross layer bottleneck isomorphism]]

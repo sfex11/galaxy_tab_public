@@ -31,3 +31,18 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/autonomous-commerce.md|autonomous commerce]]
+
+---
+**관련**: [[concepts/runtime-design-time-abstraction-complementarity.md|runtime design time abstraction complementarity]]
+
+---
+**관련**: [[concepts/harness-design-combinatorics.md|harness design combinatorics]]
+
+---
+**관련**: [[concepts/environment-grounded-validity.md|environment grounded validity]]
+
+---
+**관련**: [[concepts/environment-mediated-alignment.md|environment mediated alignment]]

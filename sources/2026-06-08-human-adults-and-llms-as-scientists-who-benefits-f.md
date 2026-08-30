@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rule-variation-causal-attribution.md|rule variation causal attribution]]
+
+---
+**관련**: [[concepts/reactive-paradigm-trap.md|reactive paradigm trap]]

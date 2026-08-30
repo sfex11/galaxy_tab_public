@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/schema-accumulation-attack-surface.md|schema accumulation attack surface]]
+
+---
+**관련**: [[concepts/stigmergic-coordination.md|stigmergic coordination]]

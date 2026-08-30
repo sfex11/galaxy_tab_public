@@ -128,3 +128,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/belief-state-grounding.md|belief state grounding]]
+
+---
+**관련**: [[concepts/persona-execution-separation.md|persona execution separation]]
+
+---
+**관련**: [[concepts/persona-execution-plan-dichotomy.md|persona execution plan dichotomy]]

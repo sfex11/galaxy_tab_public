@@ -176,3 +176,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/multi-agent-communication-fallacy.md|multi agent communication fallacy]]
+
+---
+**관련**: [[concepts/external-abstraction-injection.md|external abstraction injection]]
+
+---
+**관련**: [[concepts/action-level-speculation.md|action level speculation]]
+
+---
+**관련**: [[concepts/design-runtime-alignment-duality.md|design runtime alignment duality]]
+
+---
+**관련**: [[concepts/net-human-agent-score.md|net human agent score]]
+
+---
+**관련**: [[concepts/agent-human-economic-power-asymmetry.md|agent human economic power asymmetry]]
+
+---
+**관련**: [[concepts/action-coordination-identity.md|action coordination identity]]
+
+---
+**관련**: [[concepts/dvm-hall-model.md|dvm hall model]]

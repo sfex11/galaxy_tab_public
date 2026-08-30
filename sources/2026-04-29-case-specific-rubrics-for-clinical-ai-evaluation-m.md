@@ -342,3 +342,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cross-layer-bottleneck-isomorphism.md|cross layer bottleneck isomorphism]]
+
+---
+**관련**: [[concepts/infinite-budget-evaluation-paradox.md|infinite budget evaluation paradox]]
+
+---
+**관련**: [[concepts/evaluation-self-referential-collapse.md|evaluation self referential collapse]]
+
+---
+**관련**: [[concepts/evaluation-execution-safety-disconnect.md|evaluation execution safety disconnect]]
+
+---
+**관련**: [[concepts/evaluation-training-boundary-dissolution.md|evaluation training boundary dissolution]]
+
+---
+**관련**: [[concepts/prewrite-validation.md|prewrite validation]]
+
+---
+**관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]

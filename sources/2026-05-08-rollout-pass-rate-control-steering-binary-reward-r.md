@@ -347,3 +347,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-stability-failure.md|representation stability failure]]
+
+---
+**관련**: [[concepts/termination-guarantee-problem.md|termination guarantee problem]]
+
+---
+**관련**: [[concepts/exit-filtering-dependency.md|exit filtering dependency]]

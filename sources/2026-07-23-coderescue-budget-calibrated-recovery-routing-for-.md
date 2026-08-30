@@ -48,3 +48,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/two-stage-translation-failure.md|two stage translation failure]]
+
+---
+**관련**: [[concepts/path-consistent-online-routing.md|path consistent online routing]]
+
+---
+**관련**: [[concepts/verification-execution-gap.md|verification execution gap]]

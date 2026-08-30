@@ -31,3 +31,24 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/digital-optimization-physical-impossibility.md|digital optimization physical impossibility]]
+
+---
+**관련**: [[concepts/dual-axis-optimization-inversion.md|dual axis optimization inversion]]
+
+---
+**관련**: [[concepts/bidding-meta-inference-circularity.md|bidding meta inference circularity]]
+
+---
+**관련**: [[concepts/alignment-scope-erosion.md|alignment scope erosion]]
+
+---
+**관련**: [[concepts/optimization-premise-collapse.md|optimization premise collapse]]
+
+---
+**관련**: [[concepts/transferability-targeted-optimization.md|transferability targeted optimization]]
+
+---
+**관련**: [[concepts/enforcement-domain-mismatch.md|enforcement domain mismatch]]

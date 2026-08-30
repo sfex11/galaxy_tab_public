@@ -3104,3 +3104,11 @@
 ## [2026-08-30 08:31] ingest | Prediction of Prediction (PoP): Inter-Layer Activation Fusion for Single-Pass Hallucination Detection in Large Language Models
 
 ## [2026-08-30 08:31] ingest | One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
+
+## [2026-08-30 17:06] lint | Wiki 건전성 체크
+- Issues: 3129개
+- Orphans: 965, Missing: 2164, Contradictions: 0
+
+## [2026-08-30 17:44] lint | Wiki 건전성 체크
+- Issues: 3057개
+- Orphans: 893, Missing: 2164, Contradictions: 0

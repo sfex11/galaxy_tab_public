@@ -97,3 +97,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/legitimate-division-of-labor-as-attack-surface.md|legitimate division of labor as attack surface]]
+
+---
+**관련**: [[concepts/cross-episode-closed-loop.md|cross episode closed loop]]
+
+---
+**관련**: [[concepts/strategic-bottleneck.md|strategic bottleneck]]
+
+---
+**관련**: [[concepts/cross-episode-reuse-failure.md|cross episode reuse failure]]
+
+---
+**관련**: [[concepts/control-layer-ontological-limit.md|control layer ontological limit]]
+
+---
+**관련**: [[concepts/interaction-tax.md|interaction tax]]

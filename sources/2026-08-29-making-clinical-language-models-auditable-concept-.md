@@ -22,7 +22,7 @@ Clinical language models can achieve strong in-hospital accuracy yet fail under 
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

@@ -303,3 +303,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/responsibility-dissipation.md|responsibility dissipation]]
+
+---
+**관련**: [[concepts/forgetting-as-agent-decision.md|forgetting as agent decision]]

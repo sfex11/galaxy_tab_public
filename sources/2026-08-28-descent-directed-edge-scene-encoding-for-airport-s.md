@@ -22,7 +22,7 @@ Advanced automation is a key technology for enhancing the safety of ground opera
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

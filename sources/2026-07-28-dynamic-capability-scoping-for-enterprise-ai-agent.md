@@ -31,3 +31,15 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/safety-source-misattribution.md|safety source misattribution]]
+
+---
+**관련**: [[concepts/data-exfiltration-prevention.md|data exfiltration prevention]]
+
+---
+**관련**: [[concepts/will-source-inaccessibility.md|will source inaccessibility]]
+
+---
+**관련**: [[concepts/permission-policy-algebra.md|permission policy algebra]]

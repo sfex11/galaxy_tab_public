@@ -58,3 +58,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-detection-computation-gap.md|failure detection computation gap]]
+
+---
+**관련**: [[concepts/information-preservation-boundary.md|information preservation boundary]]
+
+---
+**관련**: [[concepts/prior-informational-dependency-graph.md|prior informational dependency graph]]
+
+---
+**관련**: [[concepts/access-planning-gap.md|access planning gap]]
+
+---
+**관련**: [[concepts/implicit-tool-invocation.md|implicit tool invocation]]
+
+---
+**관련**: [[concepts/perception-action-timing-combinatorics.md|perception action timing combinatorics]]
+
+---
+**관련**: [[concepts/explicit-absence-state.md|explicit absence state]]

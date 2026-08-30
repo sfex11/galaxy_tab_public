@@ -22,7 +22,7 @@ We present VetClaw, an edge-cloud multimodal agentic system for early veterinary
 
 ## 추출된 엔티티
 
-- [[OpenClaw]]
+- [[entities/openclaw.md|openclaw]]
 
 ## 추출된 개념
 

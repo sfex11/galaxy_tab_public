@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-side-compensation.md|harness side compensation]]
+
+---
+**관련**: [[concepts/discovery-preservation-gap.md|discovery preservation gap]]

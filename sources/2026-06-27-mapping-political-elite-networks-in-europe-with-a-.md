@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/routing-adversarial-hijacking.md|routing adversarial hijacking]]
+
+---
+**관련**: [[concepts/relational-governance.md|relational governance]]

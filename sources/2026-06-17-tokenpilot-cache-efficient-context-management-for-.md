@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cache-phase-preservation.md|cache phase preservation]]
+
+---
+**관련**: [[concepts/responsibility-accumulation.md|responsibility accumulation]]
