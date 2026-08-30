@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boosting LLM Exploration via Weak-Model Guidance in RLVR — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100%;gap:1.5rem;">
+    <div style="font-size:clamp(0.8rem,1.2vw,1rem);letter-spacing:0.15em;text-transform:uppercase;" class="muted">arXiv: 2608.27420v1 · 2026</div>
+    <h1 style="font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;line-height:1.25;max-width:800px;">약한 모델의 안내를 통한<br>RLVR 탐색 강화</h1>
+    <p style="font-size:clamp(0.95rem,1.3vw,1.15rem);max-width:640px;line-height:1.7;" class="muted">Reinforcement Learning with Verifiable Rewards에서<br>약한 모델의 접두사를 활용해 엔트로피 붕괴를 완화하는 새로운 접근법</p>
+    <div class="hr" style="width:60px;margin:0.5rem 0;"></div>
+    <div style="font-size:clamp(0.85rem,1.1vw,1rem);line-height:1.8;" class="muted">Xingyu Shen · Huishuai Zhang · Peng Li · Yinchun Wang · Dongyan Zhao<br>왕쉬안 컴퓨터 기술 연구소, 베이징 대학교</div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">RLVR: 검증 가능한 보상을 통한 강화학습</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1.2rem;">RLVR는 외부 검증자(verifier)로부터 피드백을 받아 LLM의 추론 능력을 향상시키는 사후 학습 방법입니다. 추가 인간 주석 없이 시퀀스 수준 최적화가 가능합니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>DeepSeek-R1, GPT-5, Gemini 등에 채택</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학 추론 벤치마크에서 높은 정확도 달성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>인간 피드백 없이 자동으로 학습 가능</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent2">RLVR 학습 루프</div>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="step-num">1</div>
+            <div class="step-label">프롬프트 입력</div>
+            <div class="step-desc">문제 q 제시</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">2</div>
+            <div class="step-label">응답 생성</div>
+            <div class="step-desc">G개 샘플 생성</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">3</div>
+            <div class="step-label">보상 평가</div>
+            <div class="step-desc">외부 검증자</div>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <div class="step-num">4</div>
+            <div class="step-label">정책 업데이트</div>
+            <div class="step-desc">GRPO 적용</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">문제 정의: 엔트로피 붕괴</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">RLVR 학습 과정에서 정책 엔트로피가 급격히 감소하는 현상이 관찰됩니다. 모델이 소수의 추론 경로에 과신념(over-confidence)을 갖게 되어 다양성이 상실됩니다.</p>
+        <div class="quote-block" style="margin-bottom:1rem;">
+          <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.7;">"LLM은 강화학습 과정에서 엔트로피를 성능과 교환하는 경향이 있다." — Cui et al. (2025)</p>
+        </div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;" class="muted">pass@k 지표에서 k가 충분히 크면, 기반 모델이 RLVR 학습 모델을 역전하는 현상이 발생합니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent">엔트로피 붕괴의 결과</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>추론 커버리지 축소</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>pass@k (큰 k) 성능 저하</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>대안 경로 탐색 기회 상실</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>특정 쿼리에 확률 질량 붕괴</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">토큰 레벨 엔트로피가 0에 가까워지면 불확실성과 탐색 능력이 함께 감소합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:0.5rem;">기존 접근법과 한계</h2>
+    <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;" class="muted">엔트로피 붕괴를 완화하기 위한 기존 방법들은 모두 목표 모델의 내부 탐색 공간 내에서만 동작합니다.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>방법</th>
+          <th>접근 방식</th>
+          <th>한계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-amber">엔트로피 정규화</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">학습 과정에 엔트로피 항 추가</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">내부 분포 내에서만 탐색</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-amber">그래디언트 보정</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">선택적 토큰의 정책 그래디언트 조절</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">복잡한 조정 메커니즘 필요</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-amber">보상 설계</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">탐색을 장려하는 보상/이점 함수 수정</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">정교한 보상 엔지니어링 요구</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">본 연구</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><strong class="accent">크로스 모델 비파라메트릭 섭동</strong></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);" class="accent3">직교적 관점, 단순하고 효과적</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">동기: 크로스 모델 접두사가 정책 불확실성을 증가시키는 메커니즘</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">사전 학습 데이터, 모델 아키텍처, 최적화 역학의 차이로 인해 동일한 문제에 대해 서로 다른 모델은 substantially 다른 추론 궤적을 생성합니다.</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">핵심 가설: <strong class="accent">목표 모델이 익숙하지 않은 부분 궤적에서 이어서 생성하도록 강제하면</strong>, 기존 RLVR에서 과신념으로 인해 낮은 확률이 할당되었을 대안 경로를 탐색하게 됩니다.</p>
+        <div class="hr"></div>
+        <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.7;" class="muted"><i class="fas fa-info-circle accent2"></i> 지식 증류와의 차이: 강한 모델이 약한 모델을 가르치는 것이 아니라, <strong class="accent2">약한 모델이 강한 모델의 탐색을 돕는</strong> 구조입니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent2">분포 차이 → 불확실성 증가 → 탐색 확장</div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-robot"></i></div>
+          <div>
+            <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;">약한 모델 생성</div>
+            <div style="font-size:clamp(0.75rem,0.95vw,0.85rem);" class="muted">부분 추론 궤적(접두사) 생성</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-random"></i></div>
+          <div>
+            <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;">분포 불일치</div>
+            <div style="font-size:clamp(0.75rem,0.95vw,0.85rem);" class="muted">목표 모델에게 익숙하지 않은 패턴</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+          <div>
+            <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;">정책 불확실성 증가</div>
+            <div style="font-size:clamp(0.75rem,0.95vw,0.85rem);" class="muted">과신념 파괴, 다양한 경로 탐색</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">방법론: 접두사 안내 RLVR 프레임워크</h2>
+    <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;">세 가지 핵심 구성요소로 구성된 단순하면서도 효과적인 프레임워크를 제안합니다.</p>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div class="card">
+        <div class="big-num accent">1</div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin:0.8rem 0 0.5rem;">접두사-완성 RLVR</h3>
+        <p style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">약한 보조 모델이 부분 추론 궤적(접두사)을 생성하고, 목표 모델이 이를 이어받아 완성합니다. 표준 GRPO 목적 함수를 접두사 조건부 생성에 적용합니다.</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent2">2</div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin:0.8rem 0 0.5rem;">엔트로피 기반 접두사 절단</h3>
+        <p style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">목표 모델의 엔트로피를 모니터링하여, 불확실성이 임계값 이하로 떨어지는 지점에서 접두사를 절단합니다. 최적의 탐색 자극 지점을 동적으로 결정합니다.</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent3">3</div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin:0.8rem 0 0.5rem;">혼합 학습</h3>
+        <p style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">접두사 안내 샘플과 일반(접두사 없는) 샘플을 혼합하여 학습합니다. 원래의 학습 신호를 유지하면서 탐색 다양성을 추가합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">접두사-완성 RLVR 상세</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">보조 모델 π<sub>aux</sub>가 프롬프트 q에 대해 부분 궤적 p를 생성합니다. 목표 모델 π<sub>θ</sub>는 p를 접두사로 받아 나머지를 완성합니다.</p>
+        <div class="card" style="margin-bottom:1rem;">
+          <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:0.8rem;" class="accent">학습 과정</div>
+          <div class="pipeline">
+            <div class="pipeline-step">
+              <div class="step-num">1</div>
+              <div class="step-label">접두사 생성</div>
+              <div class="step-desc">π<sub>aux</sub>(p|q)</div>
+            </div>
+            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-num">2</div>
+              <div class="step-label">완성 생성</div>
+              <div class="step-desc">π<sub>θ</sub>(c|q,p)</div>
+            </div>
+            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-num">3</div>
+              <div class="step-label">보상 평가</div>
+              <div class="step-desc">R(q, p⊕c)</div>
+            </div>
+            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="pipeline-step">
+              <div class="step-num">4</div>
+              <div class="step-label">GRPO 업데이트</div>
+              <div class="step-desc">접두사 이후 토큰만</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">GRPO 업데이트 시 <strong>접두사 토큰은 고정</strong>하고, 완성 부분의 토큰에 대해서만 정책 그래디언트를 계산합니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>보조 모델은 더 작고 약한 모델 사용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>접두사가 최적 해결책으로 이어지지 않아도 무방</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>비파라메트릭 방해 신호로서 동작</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 SFT나 복잡한 프롬프팅 불필요</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">핵심: 접두사의 품질이 아니라 <strong class="accent">분포적 불일치</strong> 자체가 탐색을 촉진하는 메커니즘</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">엔트로피 기반 접두사 절단 & 혼합 학습</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent2">엔트로피 기반 접두사 절단</h3>
+        <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.8;margin-bottom:1rem;">모든 접두사가 동일하게 효과적인 것이 아닙니다. 목표 모델이 이미 낮은 불확실성을 보이는 구간에서는 접두사가 탐색 효과를 내지 못합니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스텝 레벨 엔트로피 H̄(s<sub>j</sub>) 계산</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>엔트로피가 임계값 τ 미만인 지점에서 절단</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>높은 불확실성 구간만 접두사로 활용</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">목표: 목표 모델이 "당황하는" 지점에서만 외부 접두사를 주입하여 효율적으로 탐색 자극</div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent3">혼합 학습 전략</h3>
+        <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.8;margin-bottom:1rem;">접두사 안내 샘플만으로 학습하면 원래의 학습 신호가 희석될 수 있습니다. 비율 α로 두 종류의 샘플을 혼합합니다.</p>
+        <div class="flow-item">
+          <div class="flow-icon">α</div>
+          <div>
+            <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;">접두사 안내 샘플</div>
+            <div style="font-size:clamp(0.75rem,0.95vw,0.85rem);" class="muted">π<sub>aux</sub> 접두사 + π<sub>θ</sub> 완성</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon">1−α</div>
+          <div>
+            <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;">일반 샘플</div>
+            <div style="font-size:clamp(0.75rem,0.95vw,0.85rem);" class="muted">π<sub>θ</sub>가 처음부터 전체 생성</div>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">원래 RLVR의 이점을 유지하면서 탐색 다양성을 추가하는 균형 있는 접근</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">실험 설정</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent">모델 구성</div>
+        <table class="compare-table">
+          <thead>
+            <tr><th>역할</th><th>모델</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">목표 모델</td>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">Qwen2.5-32B, Qwen2.5-7B</td>
+            </tr>
+            <tr>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">보조 모델</td>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">Qwen2.5-3B, Qwen2.5-1.5B, Qwen2.5-0.5B</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent2">벤치마크</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>AIME 2024 — 고등 수학 경시대회</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>MATH-500 — 수학 문제 해결</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>GPQA — 대학원 수준 추론</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>LiveCodeBench — 코딩 벤치마크</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="grid-3" style="gap:1.5rem;">
+      <div style="text-align:center;">
+        <div class="big-num accent">pass@1</div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">단일 시도 정확도</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-num accent2">pass@k</div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">k번 시도 내 정답 확률</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-num accent3">엔트로피</div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);" class="muted">정책 다양성 지표</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">주요 실험 결과</h2>
+    <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;">다양한 벤치마크에서 제안 방법이 vanilla RLVR을 일관되게 초과하는 성능을 보입니다.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>벤치마크</th>
+          <th>Vanilla GRPO</th>
+          <th>+ 접두사 안내</th>
+          <th>향상</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);font-weight:600;">MATH-500 (pass@1)</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">기준선</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="accent">지속적 향상</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">↑</span></td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);font-weight:600;">AIME 2024 (pass@1)</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">기준선</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="accent">유의미한 향상</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">↑</span></td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);font-weight:600;">pass@k (k 증가 시)</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);">급격한 포화</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="accent2">지속적 성능 상승</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">↑↑</span></td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);font-weight:600;">정책 엔트로피</td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-red">급감</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">안정적 유지</span></td>
+          <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="accent3">북괴 완화</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.7;"><strong class="accent">핵심 발견:</strong> k가 커질수록 성능 격차가 더욱 벌어지며, 이는 추론 커버리지가 실제로 확장되었음을 시사합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">분석: 학습 역학</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent">엔트로피 유지 효과</h3>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">Vanilla GRPO는 학습 초기에 엔트로피가 급격히 감소하지만, 접두사 안내 방법은 엔트로피를 안정적으로 유지합니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>초기 학습 단계에서 엔트로피 붕괴 억제</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스텝 레벨 엔트로피 분포가 더 넓게 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>후반 학습 단계에서도 지속적 탐색</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent2">보조 모델 크기의 영향</h3>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1rem;">흥미롭게도, 더 작은 보조 모델이 때로 더 큰 효과를 냅니다. 분포 불일치가 클수록 탐색 자극이 강해지기 때문입니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>0.5B 모델도 32B 목표 모델 탐색에 효과적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델 간 분포 차이가 핵심 인자</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>접두사 품질보다 분포 거리가 더 중요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:1.5rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.7;">약한 보조 모델의 접두사가 거의 도움이 되지 않거나 심지어 오도하는 경우에도, 분포 불일치 자체가 탐색 촉진 메커니즘으로서 효과적으로 작동합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">절제 연구</h2>
+    <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:1.8;margin-bottom:1.5rem;">각 구성요소의 기여도를 체계적으로 분석합니다.</p>
+    <div class="grid-2" style="gap:2rem;">
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent">구성요소별 기여</div>
+        <table class="compare-table">
+          <thead>
+            <tr><th>설정</th><th>효과</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">접두사 안내만</td>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">중간 향상</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">+ 엔트로피 절단</td>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">추가 향상</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);">+ 혼합 학습</td>
+              <td style="font-size:clamp(0.8rem,1vw,0.9rem);"><span class="tag tag-green">최종 최고 성능</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);font-weight:600;margin-bottom:1rem;" class="accent2">혼합 비율 α의 영향</div>
+        <p style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.8;margin-bottom:0.8rem;">α = 0.5 전후에서 최적 성능을 보입니다.</p>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>α = 0: vanilla GRPO와 동일</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>α = 1: 원래 학습 신호 상실</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>α ≈ 0.5: 균형 잡힌 향상 달성</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.8rem,1vw,0.9rem);line-height:1.7;" class="muted">세 구성요소가 모두 조합되었을 때 시너지 효과가 최대화됩니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;margin-bottom:1.5rem;">핵심 요약 & 시사점</h2>
+    <div class="grid-2" style="gap:2rem;align-items:start;">
+      <div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent">주요 기여</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>크로스 모델 생성 다양성이 RLVR 탐색 역학에 미치는 영향을 체계적으로 연구</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>약한 모델의 부분 궤적을 활용한 접두사 안내 RLVR 프레임워크 제안</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>pass@k 성능 향상이 k 증가에 비례하여 커짐을 통해 추론 커버리지 확장 실증</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>분포 불일치가 탐색 촉진의 핵심 메커니즘임을 규명</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;margin-bottom:1rem;" class="accent2">실용적 장점</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 SFT 단계 불필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복잡한 보상 설계 불필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복잡한 프롬프트 엔지니어링 불필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>매우 작은 보조 모델(0.5B)로도 효과적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>기존 RLVR 파이프라인에 최소 변경으로 적용 가능</li>
+        </ul>
+        <div class="hr"></div>
+        <div style="font-size:clamp(0.85rem,1.1vw,0.95rem);line-height:1.7;" class="muted"><strong>단순함이 핵심:</strong> 알고리즘적 복잡도 대신 크로스 모델 다양성이라는 직교적 차원의 해결책</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100%;gap:1.5rem;">
+    <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:700;line-height:1.3;">Boosting LLM Exploration via<br>Weak-Model Guidance in RLVR</h2>
+    <div class="hr" style="width:60px;"></div>
+    <div style="font-size:clamp(0.9rem,1.2vw,1.05rem);line-height:2;" class="muted">Xingyu Shen · Huishuai Zhang · Peng Li · Yinchun Wang · Dongyan Zhao<br>왕쉬안 컴퓨터 기술 연구소, 베이징 대학교</div>
+    <div style="margin-top:0.5rem;">
+      <a href="http://arxiv.org/abs/2608.27420v1" style="font-size:clamp(0.85rem,1.1vw,0.95rem);text-decoration:none;" class="accent2"><i class="fas fa-external-link-alt"></i> arxiv.org/abs/2608.27420v1</a>
+    </div>
+    <div style="font-size:clamp(0.8rem,1vw,0.9rem);margin-top:1rem;" class="muted">CC BY 4.0 · arXiv:2608.27420v1 [cs.CL] · 2026년 8월 27일</div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
