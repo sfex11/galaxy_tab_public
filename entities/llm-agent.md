@@ -544,3 +544,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-08-29-do-user-authored-permission-policies-improve-prote.md]]
 
 - [[sources/2026-08-29-intent-as-a-tool-makes-it-easy-to-track-agentic-mi.md]]
+
+- [[sources/2026-08-30-wikiskill-compiling-agent-experience-into-persiste.md]]
+
+- [[sources/2026-08-30-do-user-authored-permission-policies-improve-prote.md]]
+
+- [[sources/2026-08-30-intent-as-a-tool-makes-it-easy-to-track-agentic-mi.md]]

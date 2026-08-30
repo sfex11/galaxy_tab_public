@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persona-Execution Separation: An Architecture Pattern for Ev — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <span class="tag tag-amber">arXiv:2608.27427v1 · cs.SE · 2026</span>
+      <h1 style="font-size:clamp(1.8rem,4vw,3.2rem);margin-top:1.5rem;line-height:1.3;">Persona–Execution Separation</h1>
+      <p style="font-size:clamp(1rem,2vw,1.5rem);margin-top:0.8rem;" class="muted">실행 감사 하에서 진화하는 LLM 에이전트를 위한 아키텍처 패턴</p>
+      <div class="hr" style="width:120px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">Yisen Xi · 독립 연구자, 베이징, 중국</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">문제 상황: 두 가지 상충하는 요구</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">LLM 에이전트가 조직의 자산에 대해 상태 변경 작업을 수행하면서 동시에 진화해야 할 때 발생하는 구조적 갈등</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-masks-theater accent"></i> 페르소나 자유 진화</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.8rem;">운영자가 지속적으로 지시사항, 어조, 스킬 바인딩을 조정하여 시스템을 개선해야 함</p>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>지시사항 자유 수정</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>어조 및 자기 표현 변경</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>스킬 바인딩 진화</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-shield-halved accent2"></i> 실행 추적 가능성</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.8rem;">모든 상태 변경 작업은 게이트되고, 기록되고, 감사 가능해야 함</p>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>펀드 운영, 컴플라이언스</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실사(Due Diligence) 작업</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>완전한 감사 추적</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);"><span class="accent">단일 신뢰 도메인</span>은 두 요구를 동시에 저렴하게 충족시킬 수 없다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">단일 도메인의 딜레마</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">기존 에이전트 아키텍처에서 페르소나와 실행이 하나의 프로세스·신뢰 도메인을 공유할 때의 근본적 문제</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><span class="tag tag-red">엄격 통제 시</span></h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:1rem;">페르소나 수정마다 전체 실행 경로의 재검증이 트리거됨</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;" class="accent">→ 페르소나 동결, 진화 정체</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><span class="tag tag-red">관대 통제 시</span></h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:1rem;">실행이 더 이상 신뢰성 있게 추적되지 않음</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;" class="accent">→ 감사 추적 상실</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">LLM의 <span class="accent2">표현적 구분 불가능성(Representational Indistinguishability)</span> 하에서 두 관심사가 동일한 도메인에 있으면 독립적인 조율이 불가능하다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">에이전트 아키텍처 스펙트럼</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">진화 자유도 vs. 실행 추적 가능성 — 두 축에서의 네 가지 위치</p>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>위치</th>
+          <th>아키텍처</th>
+          <th>진화 자유도</th>
+          <th>실행 추적</th>
+          <th>한계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="muted">(1)</span></td>
+          <td>단일 도메인</td>
+          <td>동결</td>
+          <td>직원 수준</td>
+          <td class="accent">동결 또는 완화 선택</td>
+        </tr>
+        <tr>
+          <td><span class="muted">(2)</span></td>
+          <td>에이전트 + 도구</td>
+          <td>자유</td>
+          <td>도구 수준</td>
+          <td class="accent">직원 수준 추적 없음</td>
+        </tr>
+        <tr>
+          <td><span class="muted">(3)</span></td>
+          <td>에이전트 + 서브에이전트</td>
+          <td>자유</td>
+          <td>종속 수준</td>
+          <td class="accent">추적이 오케스트레이터 종속</td>
+        </tr>
+        <tr>
+          <td><span class="accent3"><strong>(4)</strong></span></td>
+          <td><strong>PES (본 연구)</strong></td>
+          <td><strong>자유 드리프트</strong></td>
+          <td><strong>직원 수준</strong></td>
+          <td class="accent3"><strong>계약 브리지 비용</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1.5rem;" class="muted">PES는 남은 한 모서리를 차지하며, 그 대가로 govern된 contract bridge를 지불한다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">세 가지 설계 목표</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">분리가 최저비용 해결책이 되는 세 가지 목표</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">G1</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">자유 드리프트</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">페르소나가 실행 재검증 없이 자유롭게 변경될 수 있어야 함</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">G2</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">실행 추적 가능성</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">모든 상태 변경 작업이 게이트·기록·감사 가능해야 함</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">G3</div>
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);margin-top:0.5rem;">분리(Decoupling)</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">G1과 G2가 독립적으로 조율 가능해야 함</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">LLM 표현적 구분 불가능성 하에서, 세 목표를 모두 충족하는 <span class="accent">단일 도메인 메커니즘</span>은 타입화된 변경 객체, 외부 게이트, 안정적 감사 앵커를 재도입해야 하며, 이는 <span class="accent">더 높은 결합 비용으로 PES를 재건축</span>하는 것과 동일하다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">PES 패턴: 핵심 아이디어</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">두 얼굴, 한 직원 — 한 신원이 두 신뢰 도메인에 걸쳐 존재</p>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-face-smile accent"></i> 표현면 (Expression Surface)</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.8rem;"><span class="accent">허용적 도메인</span> (Permissive Domain)</p>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>페르소나가 거주하는 곳</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>자유 드리프트 허용</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>가벼운 추적만</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>사용자가 에이전트를 보고 편집하는 곳</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-gears accent2"></i> 실행면 (Execution Surface)</h3>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.8rem;"><span class="accent2">제한적 도메인</span> (Restrictive Domain)</p>
+        <ul class="check-list" style="margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실행이 수행·감사되는 곳</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>무얼굴(Faceless) — 페르소나 없음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>완전한 게이팅과 추적</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>조직 자산에 대한 상태 변경</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);text-align:center;">두 도메인은 <span class="accent3">Governed Contract Bridge</span>로 연결되며, <span class="accent3">한 직원 신원</span>이 연속적으로 유지된다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">Governed Contract Bridge</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">두 도메인 간의 정보 흐름을 통제하는 세 가지 메커니즘</p>
+    <div class="pipeline" style="margin-top:2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">승인 매트릭스</div>
+        <div class="step-desc">어떤 정보가 도메인 간에 이동할 수 있는지 정의</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">DLP (데이터 유출 방지)</div>
+        <div class="step-desc">등급화된 예외를 제외하고 데이터 본체는 제한적 도메인에 유지</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">감사 (Audit)</div>
+        <div class="step-desc">모든 도메인 간 이동이 기록되고 감사 가능</div>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);"><i class="fas fa-arrow-right accent3"></i> 허용 → 제한 방향</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">승인된 승격(promotion) 채널을 통해서만 — 일방향 밸브</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);"><i class="fas fa-arrow-left accent"></i> 제한 → 허용 방향</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;">상태 요약만 반환 — 데이터 본체는 제한적 도메인에 잔류</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">"에이전트가 도구를 호출하는 것"과의 차이</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">PES는 단순한 도구 호출 패턴과 근본적으로 다르다</p>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>측면</th>
+          <th>에이전트 + 도구</th>
+          <th>PES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>관계</td>
+          <td class="muted">주인-종속 (Master–Servant)</td>
+          <td class="accent3">한 직원, 두 얼굴</td>
+        </tr>
+        <tr>
+          <td>신원</td>
+          <td class="muted">도구에 직원 수준 신원 없음</td>
+          <td class="accent3">도메인 간 연속적 신원</td>
+        </tr>
+        <tr>
+          <td>추적</td>
+          <td class="muted">도구 수준 로그</td>
+          <td class="accent3">직원 수준 감사 추적</td>
+        </tr>
+        <tr>
+          <td>정보 흐름</td>
+          <td class="muted">통제되지 않음</td>
+          <td class="accent3">Governed bridge (승인+DLP+감사)</td>
+        </tr>
+        <tr>
+          <td>페르소나 변경 영향</td>
+          <td class="muted">실행 측면에 영향 가능</td>
+          <td class="accent3">실행 의미 불변 (bridge 강제 시)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">사례 연구: FIA Workbench</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">금융 기관용 디지털 직원 플랫폼에서 한 달간의 의사결정 체인</p>
+    <div class="flow-item" style="margin-top:2rem;">
+      <div class="flow-icon">P1</div>
+      <div>
+        <strong style="font-size:clamp(0.95rem,1.5vw,1.15rem);">시드: 페르소나의 거점 확보</strong>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;" class="muted">페르소나를 허용적 도메인에 단일 거점(Singly-homed)으로 배치</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1rem;">
+      <div class="flow-icon">P2</div>
+      <div>
+        <strong style="font-size:clamp(0.95rem,1.5vw,1.15rem);">계약: 흐름 방향의 통제</strong>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;" class="muted">정보 흐름이 govern된 계약에 의해 규제되도록 설계</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1rem;">
+      <div class="flow-icon">P3</div>
+      <div>
+        <strong style="font-size:clamp(0.95rem,1.5vw,1.15rem);">채널: 승격 작업 지시</strong>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;" class="muted">승격을 위한 전용 채널 도입</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-top:1rem;">
+      <div class="flow-icon">P4</div>
+      <div>
+        <strong style="font-size:clamp(0.95rem,1.5vw,1.15rem);">결정화: 이중 얼굴 모델</strong>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.3rem;" class="muted">하나의 직원이 두 도메인에서 각각 다른 얼굴을 가지는 모델로 확정</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1.5rem;" class="muted">각 결정마다 기각된 대안이 기록됨</p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">기존 아키텍처와의 비교</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">8개 오픈소스 플랫폼 + 학술 연구와의 체계적 비교</p>
+    <table class="compare-table" style="margin-top:2rem;">
+      <thead>
+        <tr>
+          <th>플랫폼</th>
+          <th>실행 자유도</th>
+          <th>통제된 정보 흐름</th>
+          <th>신원 분리</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LangChain / Dify / n8n</td>
+          <td class="muted">도구 수준</td>
+          <td class="muted">없음</td>
+          <td class="muted">없음</td>
+        </tr>
+        <tr>
+          <td>AutoGen / CrewAI / Swarm</td>
+          <td class="muted">서브에이전트</td>
+          <td class="muted">부분</td>
+          <td class="muted">종속</td>
+        </tr>
+        <tr>
+          <td>보안 실행 클러스터 (2025–26)</td>
+          <td class="muted">의도-실행 분리</td>
+          <td class="muted">부분</td>
+          <td class="muted">없음</td>
+        </tr>
+        <tr>
+          <td><strong>PES</strong></td>
+          <td class="accent3"><strong>자유 드리프트</strong></td>
+          <td class="accent3"><strong>Bridge 통제</strong></td>
+          <td class="accent3"><strong>연속적 신원</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top:1.5rem;">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">2022–2026 스캔 결과, <span class="accent">G1–G3을 공동 충족하는 기존 아키텍처는 없었다.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">메커니즘 검증 결과</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">세 가지 검증 프로토콜 (2026-08-21 실행)</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);"><span class="tag tag-green">V1</span> 자유 드리프트 검증</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem;">5개 모델 구성에서 페르소나 교란 시</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;" class="accent3"><strong>실행 측 재검증 없음</strong> <i class="fas fa-check accent3"></i></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);"><span class="tag tag-green">V2</span> 추적 격리 검증</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem;">구조적 + 데이터 수준에서</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;" class="accent3"><strong>페르소나 지문 없음</strong> <i class="fas fa-check accent3"></i></p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);"><span class="tag tag-amber">V3</span> 필연성 탐침</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem;">분리 전 빌드 복원 후</p>
+        <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.5rem;" class="accent"><strong>누락에 의한 분리, 구조에 의한 것이 아님</strong></p>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="quote-block">
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);">V3 탐침: 분리 전 빌드에서 실행 경로는 <span class="accent">누락(omission)에 의해</span> 페르소나와 분리되어 있었으며, <span class="accent">후속 배선 변경이 격리를 역전</span>시킬 수 있었다. PES는 이를 <span class="accent3">감사된 아키텍처 규칙</span>으로 만든다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">이론적 기반</h2>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1rem;" class="muted">PES의 신뢰 도메인 분리는 세 가지 이론 체계에 뿌리를 둔다</p>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">정보 흐름 통제</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">Denning의 격자 모델 (1976)</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">보안 등급과 허용된 흐름 방향 → PES는 조직적 수준에서 이를 인스턴스화</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">Bell-LaPadula 모델</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">No-Read-Up / No-Write-Down</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">일방향 밸브의 이론적 근거 — 분류 레이블이 아닌 조직 도메인으로</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">변경 격리</h3>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.8rem;">Change Isolation (이론적 앵커)</p>
+        <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">한 관심사의 변경이 다른 관심사의 동작을 변경하지 않아야 한다는 원칙</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">적용 조건, 한계 및 향후 과제</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-bullseye accent3"></i> 적용 조건 (셋 모두 충족 시)</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다 사용자 배포 (Multi-user deployment)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실행 감사 필요 (Execution audit)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>페르소나 변동 예상 (Expected persona churn)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-triangle-exclamation accent"></i> 한계</h3>
+        <ul class="check-list" style="margin-top:1rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 사례 (개발/파일럿)에 기반</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>정식 보장(formal guarantee) 불가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>올바르게 구현된 bridge에 의존</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>건강보험/공공행정은 추가 검증 필요</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr" style="margin:2rem 0;"></div>
+    <div class="card">
+      <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-road accent2"></i> 향후 과제</h3>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.8rem;">다중 사례 검증 · bridge 구현의 정규화 · 페르소나 드리프트의 자동 감지 · 도메인 간 신원 연속성의 형식화 · 보안 실행 클러스터와의 통합 경로 탐색</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">핵심 요약</h2>
+    <div class="grid-2" style="margin-top:2rem;">
+      <div>
+        <div class="card" style="margin-bottom:1rem;">
+          <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">기여 1: 아키텍처 패턴</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">페르소나와 실행을 두 신뢰 도메인에 분리하고, govern된 contract bridge로 연결</p>
+        </div>
+        <div class="card" style="margin-bottom:1rem;">
+          <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">기여 2: 의사결정 체인 기록</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">FIA Workbench에서 한 달간 5개 결정과 기각된 대안의 문서화</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:clamp(0.95rem,1.5vw,1.15rem);">기여 3: 기존 플랫폼 비교</h3>
+          <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:0.5rem;" class="muted">8개 오픈소스 + 학술 연구에서 G1–G3 공동 충족 사례 없음</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);text-align:center;">PES의 핵심 메시지</h3>
+        <div class="quote-block" style="margin-top:1.5rem;">
+          <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);">에이전트가 규제된 작업을 수행하게 되면, <span class="accent">페르소나 진화와 실행 추적 가능성의 결합은 아키텍처 문제</span>이지 프롬프트 튜닝 문제가 아니다.</p>
+        </div>
+        <div class="hr"></div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>페르소나는 단일 거점, 자유 드리프트</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>실행은 무얼굴, 완전 감사</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>신원은 연속적 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Bridge가 두 도메인의 계약을 강제</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="14">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;">
+      <h2 style="font-size:clamp(1.4rem,3vw,2.2rem);">Persona–Execution Separation</h2>
+      <p style="font-size:clamp(0.95rem,1.5vw,1.2rem);margin-top:0.5rem;" class="muted">An Architecture Pattern for Evolving LLM Agents under Execution Audit</p>
+      <div class="hr" style="width:100px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(1rem,1.5vw,1.15rem);"><strong>Yisen Xi</strong></p>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;" class="muted">Independent Researcher, Beijing, China</p>
+      <p style="font-size:clamp(0.85rem,1.3vw,1rem);margin-top:0.3rem;" class="muted">xys21@tsinghua.org.cn</p>
+      <div class="hr" style="width:60px;margin:2rem auto;"></div>
+      <p style="font-size:clamp(0.9rem,1.5vw,1.1rem);"><a href="http://arxiv.org/abs/2608.27427v1" class="accent2">arxiv.org/abs/2608.27427v1 <i class="fas fa-external-link-alt"></i></a></p>
+      <p style="font-size:clamp(0.8rem,1.2vw,0.95rem);margin-top:1rem;" class="muted">arXiv:2608.27427v1 · cs.SE · 2026년 8월 27일</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

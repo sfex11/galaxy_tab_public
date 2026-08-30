@@ -341,3 +341,7 @@ _자동 생성됨_
 - [[sources/2026-08-29-boosting-llm-exploration-via-weak-model-guidance-i.md]]
 
 - [[sources/2026-08-29-ttpo-test-time-policy-optimization.md]]
+
+- [[sources/2026-08-30-boosting-llm-exploration-via-weak-model-guidance-i.md]]
+
+- [[sources/2026-08-30-ttpo-test-time-policy-optimization.md]]
