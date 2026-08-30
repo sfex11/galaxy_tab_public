@@ -3112,3 +3112,5 @@
 ## [2026-08-30 17:44] lint | Wiki 건전성 체크
 - Issues: 3057개
 - Orphans: 893, Missing: 2164, Contradictions: 0
+
+## [2026-08-31 02:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1450개
