@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logos: An Agent Harness on a Cross-Process Bus — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:clamp(12px,2vw,24px);">
+      <span class="tag tag-amber">AAMAS 2027</span>
+      <h1 style="font-size:clamp(28px,4.5vw,56px);font-weight:800;text-align:center;line-height:1.2;">Logos: An Agent Harness<br>on a Cross-Process Bus</h1>
+      <p style="font-size:clamp(14px,1.8vw,20px);text-align:center;max-width:680px;" class="muted">공간시간 조합성 계산법을 프로세스 경계를 넘어 확장하는<br>분산 에이전트 하네스 아키텍처</p>
+      <div class="hr" style="max-width:200px;margin:clamp(8px,1.5vw,16px) 0;"></div>
+      <p style="font-size:clamp(12px,1.4vw,16px);text-align:center;" class="muted">Hanzhang Jia, Liheng Zeng, Hao Cheng, Yi Gao, Bo Ma</p>
+      <p style="font-size:clamp(11px,1.2vw,14px);" class="muted">University of Sussex · Zhejiang Gongshang University · Shanghai Shuyuan</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">단일 프로세스 에이전트 시스템의 한계</h2>
+    <p style="font-size:clamp(13px,1.6vw,18px);margin-bottom:clamp(20px,3vw,36px);max-width:780px;">현대 에이전트 시스템은 런타임에 기능을 동적으로 조립합니다. 이 조립은 공간시간 조합성 계산법(spatiotemporal-composability calculus)으로 형식화되었으나, 기존 구현은 <span class="accent">단일 프로세스</span>에 모든 것을 올립니다.</p>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-bolt" style="margin-right:8px;" class="accent"></i>장애 전파</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">크래시, 메모리 고갈, 이벤트 루프 블록이 모든 컴포넌트를 동시에 중단시킵니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-link-slash" style="margin-right:8px;" class="accent"></i>의존성 연쇄 해제</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">하나의 서비스 철수가 의존 컴포넌트까지 해제하여 도구를 일시적 불가능하게 만듭니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-stop-circle" style="margin-right:8px;" class="accent"></i>세션 일괄 종료</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">프로세스 사망 시 모든 공존 세션이 동시에 종료되고 전체 스택을 재시작해야 합니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-language" style="margin-right:8px;" class="accent"></i>단일 언어 제약</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">플러그인이 호스트 언어에 갇히며, 교차 언어 재사용에 번역층과 원격 호출이 필요합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">공간시간 조합성 계산법이란</h2>
+    <div class="quote-block" style="margin-bottom:clamp(20px,3vw,36px);">
+      <p style="font-size:clamp(13px,1.6vw,18px);font-style:italic;">"기능은 추적된 역함수를 갖는 컴포넌트이며, 에이전트는 플러그인으로서 조립된다."</p>
+      <p style="font-size:clamp(11px,1.2vw,14px);margin-top:8px;" class="muted">— Shi et al., 2026</p>
+    </div>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);">조립 (Assembly)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">효과 함수 <span class="accent2">f</span>가 상태 γ를 새 상태 δ와 역함수 g의 쌍으로 매핑합니다. g(δ) = γ를 보장합니다.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);">제거 (Removal)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">기록된 역함수를 적용하여 효과를 완전히 되돌립니다. 가역성 보장의 핵심입니다.</p>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid;">
+      <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent3">핵심 관찰:</span> 계산법의 모델링도, 수학도 에이전트를 단일 프로세스에 묶지 않습니다. 언어 모델 추론의 <span class="accent">무상태성(statelessness)</span>이 교차 단계 상태를 이미 모델 외부에 두며, 건전성 불변식은 상태 공간만으로 정의됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">네 가지 보조정리 — 프로세스 간 조합성의 충분조건</h2>
+    <p style="font-size:clamp(12px,1.5vw,17px);margin-bottom:clamp(20px,3vw,36px);" class="muted">새로운 수학적 가설 없이, 계산법의 기존 가정과 언어 모델의 무상태성만으로부터 도출됩니다.</p>
+    <div class="flow-item">
+      <div class="flow-icon">1</div>
+      <div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;">편집 외부성 (Orchestration Externality)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">모델의 순방향 패스는 무상태 순수 맵이며, 교차 단계 상태는 이미 모델 외부에 존재하고 입력은 어디서든 합성 가능합니다.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">2</div>
+      <div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;">반송체 대체 (Carrier Substitution)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">상태를 임의의 지속적 반송체로 이동할 수 있으며, 반송체로부터 재구축된 복구는 관측적 동치 하에서 제자리 복구와 동등합니다.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">3</div>
+      <div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;">복구 지역화 (Recovery Localization)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">계산법의 컴포넌트 독립성 가정에 따라, 각 컴포넌트의 복구는 다른 컴포넌트와의 조정이 필요 없습니다.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">4</div>
+      <div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;">외부 해결 (External Resolution)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">의존성 해결을 프로세스 외부로, 기능 이름을 키로 하는 테이블로 이동할 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">정리 1 — 프로세스 간 가역성 보장</h2>
+    <div class="card" style="margin-bottom:clamp(20px,3vw,36px);border-left:3px solid;">
+      <p style="font-size:clamp(13px,1.6vw,18px);font-style:italic;">공간시간 조합성 계산법의 가역성 보장은, 네 가지 보조정리의 전제가 충족되는 한, 단일 프로세스 경계를 넘어 성립한다.</p>
+    </div>
+    <div style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <p style="font-size:clamp(12px,1.4vw,16px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);">전제 요약</p>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>계산법이 이미 가정하는 컴포넌트 독립성과 추적된 역함수</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>언어 모델 추론의 무상태성 (stateless forward pass)</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>교차 단계 상태가 모델 외부에 존재함</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>건전성 불변식이 상태 공간만으로 정의됨</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent">결론:</span> 새로운 수학적 가설 없이, 기존 체계의 논리적 귀결로서 프로세스 간 조합성이 보장됩니다. 이것이 Logos 구축의 이론적 기반입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">Logos 아키텍처 개요</h2>
+    <p style="font-size:clamp(13px,1.6vw,18px);margin-bottom:clamp(20px,3vw,36px);max-width:780px;">ROS 아키텍처를 기반으로 한 <span class="accent">분산 플러그인 기반 시스템</span>. 버스 위의 피어 프로세스 집합으로 실행됩니다.</p>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(24px,3vw,36px);margin-bottom:clamp(6px,1vw,12px);"><i class="fas fa-route" class="accent"></i></div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(4px,0.8vw,8px);">라우터 (Router)</div>
+        <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">노드 등록 및 수신자 기반 메시지 전달. 라우팅 테이블만 보유.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(24px,3vw,36px);margin-bottom:clamp(6px,1vw,12px);"><i class="fas fa-crown" class="accent2"></i></div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(4px,0.8vw,8px);">하네스 (Harness)</div>
+        <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">하나의 세션에 대해 입력 합성, 모델 호출, 출력 정산의 루프를 실행.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:clamp(24px,3vw,36px);margin-bottom:clamp(6px,1vw,12px);"><i class="fas fa-wrench" class="accent3"></i></div>
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(4px,0.8vw,8px);">툴 (Tool)</div>
+        <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">하나의 기능을 제공하는 독립 프로세스.</p>
+      </div>
+    </div>
+    <div class="hr" style="margin:clamp(16px,2.5vw,28px) 0;"></div>
+    <div class="grid-2">
+      <div class="card" style="border-left:3px solid;">
+        <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent">핵심 원칙 1:</span> 플러그인 = 프로세스. 각 기능이 자체 OS 프로세스를 가집니다.</p>
+      </div>
+      <div class="card" style="border-left:3px solid;">
+        <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent">핵심 원칙 2:</span> 유일한 공유 상태 = 추가 전용 트랜스크립트. 어떤 프로세스도 소유하지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">추가 전용 트랜스크립트와 콜드 스위칭</h2>
+    <div class="grid-2" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-scroll" style="margin-right:6px;" class="accent"></i>트랜스크립트 (Transcript)</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>세션의 모든 단계를 순서대로 기록</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 전용 (append-only) — 어떤 프로세스도 소유하지 않음</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프로세스 사망 후 복구의 유일한 정보원</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-snowflake" style="margin-right:6px;" class="accent2"></i>콜드 스위칭 (Cold Switching)</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>프로세스 사망 시 새 프로세스가 트랜스크립트에서 세션 재구축</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>복구된 프로세스가 중단 지점부터 계속 실행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>이전에 실행된 액션은 절대 반복되지 않음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">정상 실행</div>
+        <div class="step-desc">모든 단계가 트랜스크립트에 기록됨</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">프로세스 사망</div>
+        <div class="step-desc">장애 발생 — 다른 노드는 영향 없음</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">트랜스크립트 읽기</div>
+        <div class="step-desc">새 프로세스가 기록된 상태를 재구축</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">재개</div>
+        <div class="step-desc">중단 지점부터 손실 없이 계속</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">기존 프레임워크와의 비교</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>프레임워크</th>
+          <th>프로세스 밖으로 이동</th>
+          <th>프로세스 내부에 남음</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MCP 및 파생</td>
+          <td>툴 서버와 호출</td>
+          <td>조립 및 세션 상태</td>
+        </tr>
+        <tr>
+          <td>Temporal 등</td>
+          <td>실행</td>
+          <td>조립 및 워크플로우 정의</td>
+        </tr>
+        <tr>
+          <td>AutoGen, LangGraph</td>
+          <td>없음</td>
+          <td>모든 기능 (인프로세스 객체)</td>
+        </tr>
+        <tr>
+          <td><span class="accent" style="font-weight:700;">Logos</span></td>
+          <td><span class="accent">조립, 조립 상태 → 트랜스크립트</span></td>
+          <td>라우팅 테이블뿐</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hr" style="margin:clamp(16px,2.5vw,28px) 0;"></div>
+    <div class="card" style="border-left:3px solid;">
+      <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent">Logos의 차별점:</span> 기존 프레임워크는 실행이나 툴 호출만 프로세스 밖으로 내보내고 조립은 호스트에 남깁니다. Logos는 <span class="accent">조립과 조립 자체</span>를 피어 노드 간 등록과 브로드캐스트로 프로세스 밖으로 이동시킵니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">다국어 운영과 자율 도구 채택</h2>
+    <div class="grid-2" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-code" style="margin-right:6px;" class="accent3"></i>혼합 언어 버스</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Go — 라우터</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Python — 하네스 및 툴</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Node.js — 툴</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모두 동일 버스 위의 피어로 실행</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(8px,1.2vw,14px);"><i class="fas fa-plug" style="margin-right:6px;" class="accent2"></i>자율 도구 채택</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">작업 수행 중 새 툴이 온라인되면, 레지스트리 업데이트 브로드캐스트 이후 모델이 <span class="accent">8.4초</span> 만에 자율적으로 첫 호출을 수행합니다.</p>
+        <div class="hr" style="margin:clamp(8px,1.2vw,14px) 0;"></div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">버스 홉의 중앙값 비용은 <span class="accent">0.215ms</span>로, 모델의 첫 토큰 지연시간 177ms의 <span class="accent">1/823</span>에 불과합니다.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent3">의미:</span> 단일 언어 제약(비용 #4)이 완전히 제거됩니다. 프로토콜 준수만 하면 어떤 언어의 프로세스도 피어로 마운트 가능합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">실험 결과 — 런타임 검증</h2>
+    <div class="grid-3" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="card" style="text-align:center;">
+        <div class="big-num">3,500</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(4px,0.8vw,8px);" class="muted">최대 200개 동시 발신자의 호출<br>손실·중복·오귀속 <span class="accent3"> zero</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">100:1</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(4px,0.8vw,8px);" class="muted">동일 이름 동시 등록 경쟁<br>1개 승리, 99개 명시적 거부</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num">50×30</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(4px,0.8vw,8px);" class="muted">50개 제공자 × 30라운드 교체<br>두 관찰자의 공급 변화 순서 <span class="accent3">일치</span></p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-shield-halved" style="margin-right:6px;" class="accent"></i>메시지 무결성</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">메시지 손실 없음, 중복 없음, 순서 재배치 없음. 기능명당 하나의 등록자 유지. 공급 변화 알림 순서대로 전달.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:clamp(6px,1vw,10px);"><i class="fas fa-skull-crossbones" style="margin-right:6px;" class="accent2"></i>라우터 킬 테스트</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">동시 다중 에이전트 시나리오에서 라우터 프로세스 강제 종료 후 라우팅 자동 복구. 하네스의 작업이 정상적으로 완료됨.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">실험 결과 — 엔드투엔드 콜드 스위칭</h2>
+    <p style="font-size:clamp(13px,1.6vw,18px);margin-bottom:clamp(16px,2.5vw,28px);">툴 호출 사이클의 <span class="accent">네 가지 경계</span>에서 프로세스 킬을 가한 후 복구 검증</p>
+    <div class="grid-2" style="margin-bottom:clamp(16px,2.5vw,28px);">
+      <div>
+        <div class="flow-item">
+          <div class="flow-icon" style="font-size:clamp(10px,1.2vw,14px);">A</div>
+          <div>
+            <div style="font-size:clamp(12px,1.4vw,16px);font-weight:700;">툴 실행 중</div>
+            <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">툴이 아직 결과를 반환하지 않은 시점</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon" style="font-size:clamp(10px,1.2vw,14px);">B</div>
+          <div>
+            <div style="font-size:clamp(12px,1.4vw,16px);font-weight:700;">반환 후, 영속화 전</div>
+            <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">결과를 받았으나 트랜스크립트에 기록 전</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon" style="font-size:clamp(10px,1.2vw,14px);">C</div>
+          <div>
+            <div style="font-size:clamp(12px,1.4vw,16px);font-weight:700;">영속화 후, 공지 전</div>
+            <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">기록됐으나 다른 노드에 알리기 전</p>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon" style="font-size:clamp(10px,1.2vw,14px);">D</div>
+          <div>
+            <div style="font-size:clamp(12px,1.4vw,16px);font-weight:700;">공지 후</div>
+            <p style="font-size:clamp(10px,1.2vw,14px);" class="muted">모든 노드에 결과가 전파된 후</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:clamp(12px,1.8vw,20px);">
+          <div class="big-num">12</div>
+          <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(4px,0.8vw,8px);" class="muted">초기 세션에서 6회 프로세스 킬<br>모두 콜드 스위칭으로 재개 · 이전 액션 반복 <span class="accent3">zero</span></p>
+        </div>
+        <div class="card">
+          <div class="big-num">80</div>
+          <p style="font-size:clamp(11px,1.3vw,15px);margin-top:clamp(4px,0.8vw,8px);" class="muted">4개 킬 포인트 × 20세션<br>모두 재개 완료 · 반복 효과 <span class="accent3">zero</span><br>재작업량 = 트랜스크립트 미기록분과 <span class="accent">정확히 일치</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">단일 프로세스 vs 프로세스 간 — 장애 격리 비교</h2>
+    <div class="grid-2" style="margin-bottom:clamp(20px,3vw,36px);">
+      <div class="card" style="border-top:3px solid;">
+        <div style="font-size:clamp(14px,1.7vw,20px);font-weight:700;margin-bottom:clamp(10px,1.5vw,18px);text-align:center;">단일 프로세스 참조 구성</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b;"></i></span>하나의 장애가 <span class="muted">모든</span> 공존 세션을 중단</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b;"></i></span>모든 컴포넌트가 동시에 종료</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b;"></i></span>전체 스택 재시작 필요</li>
+          <li><span class="check-icon"><i class="fas fa-times" style="color:#c0392b;"></i></span>수학적 격리가 물리적 공유로 무력화</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid;">
+        <div style="font-size:clamp(14px,1.7vw,20px);font-weight:700;margin-bottom:clamp(10px,1.5vw,18px);text-align:center;">Logos 피어 프로세스 구성</div>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하나의 장애가 <span class="accent">하나의 노드</span>에서만 종료</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>다른 노드와 세션은 정상 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>콜드 스위칭으로 영향 노드만 재개</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>수학적 격리가 물리적 격리와 일치</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid;">
+      <p style="font-size:clamp(12px,1.4vw,16px);"><span class="accent">핵심 메시지:</span> 동일 장애 조건에서 단일 프로세스는 모든 세션이 중단되지만, Logos에서는 장애 노드 하나만 영향을 받습니다. 조합성 계산법의 수학적 격리가 비로소 물리적으로 의미를 갖습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(22px,3vw,38px);font-weight:700;margin-bottom:clamp(16px,2.5vw,32px);">세 가지 기여 요약</h2>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px);">
+      <div class="flow-icon">1</div>
+      <div>
+        <div style="font-size:clamp(14px,1.7vw,20px);font-weight:700;">충분조건 (제4절)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">공간시간 조합성 계산법의 가역성 보장이 프로세스 간에 성립하는 정리 1과 네 가지 보조정리. 전제는 계산법 자체의 가정과 언어 모델 무상태성뿐.</p>
+      </div>
+    </div>
+    <div class="flow-item" style="margin-bottom:clamp(12px,1.8vw,20px);">
+      <div class="flow-icon">2</div>
+      <div>
+        <div style="font-size:clamp(14px,1.7vw,20px);font-weight:700;">Logos 구성 (제5절)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">ROS 아키텍처 기반의 최소 분산 에이전트 하네스. 플러그인은 프로세스, 유일한 공유 상태는 추가 전용 트랜스크립트. 라우팅 테이블 외에 프로세스 간 공유 상태 없음.</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">3</div>
+      <div>
+        <div style="font-size:clamp(14px,1.7vw,20px);font-weight:700;">적대적·엔드투엔드 평가 (제6절)</div>
+        <p style="font-size:clamp(11px,1.3vw,15px);" class="muted">라우터 장애 하 동시 복구, 프로세스 종료 후 콜드 스위칭 재개, 작업 중 도구 자율 채택, 단일 버스 상 혼합 언어 운영에 대한 철저한 검증.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;gap:clamp(12px,2vw,24px);">
+      <h2 style="font-size:clamp(24px,3.5vw,42px);font-weight:800;text-align:center;">Logos: An Agent Harness<br>on a Cross-Process Bus</h2>
+      <div class="hr" style="max-width:200px;"></div>
+      <p style="font-size:clamp(12px,1.4vw,16px);text-align:center;" class="muted">Hanzhang Jia, Liheng Zeng, Hao Cheng, Yi Gao, Bo Ma</p>
+      <p style="font-size:clamp(11px,1.2vw,14px);text-align:center;" class="muted">University of Sussex · Zhejiang Gongshang University · Shanghai Shuyuan</p>
+      <p style="font-size:clamp(11px,1.2vw,14px);text-align:center;" class="muted">AAMAS 2027, Hanoi, Vietnam</p>
+      <div style="margin-top:clamp(8px,1.5vw,16px);">
+        <a href="http://arxiv.org/abs/2608.28553v1" target="_blank" style="font-size:clamp(13px,1.5vw,17px);" class="accent"><i class="fas fa-external-link-alt" style="margin-right:6px;"></i>arXiv:2608.28553v1</a>
+      </div>
+      <div class="hr" style="max-width:120px;"></div>
+      <p style="font-size:clamp(11px,1.2vw,14px);text-align:center;max-width:600px;" class="muted">"조립과 조립 자체를 버스 위로 — 플러그인은 프로세스가 되고,<br>유일한 공유 상태는 아무도 소유하지 않는 트랜스크립트뿐이다."</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
