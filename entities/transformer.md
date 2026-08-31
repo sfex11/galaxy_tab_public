@@ -149,3 +149,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-08-29-making-clinical-language-models-auditable-concept-.md]]
 
 - [[sources/2026-08-30-making-clinical-language-models-auditable-concept-.md]]
+
+- [[sources/2026-08-31-making-clinical-language-models-auditable-concept-.md]]

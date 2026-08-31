@@ -3116,3 +3116,35 @@
 ## [2026-08-31 02:02] llm-ingest | 0편 분석, 엔티티 355개, 개념 1450개
 
 ## [2026-08-31 04:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1450개
+
+## [2026-08-31 08:38] ingest | CritICL: Inference-Time Weak-to-Strong Generalization from Small Language Model Failure Modes
+
+## [2026-08-31 08:38] ingest | WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution
+
+## [2026-08-31 08:38] ingest | SWE-Prime: Fewer Trajectories, Better Performance
+
+## [2026-08-31 08:38] ingest | Do User-Authored Permission Policies Improve Protection Against AI Agent Overreach?
+
+## [2026-08-31 08:38] ingest | From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench
+
+## [2026-08-31 08:38] ingest | RedEvoAgent: Automatic Red-Teaming Agent with Experience-Driven Skill Evolution
+
+## [2026-08-31 08:38] ingest | Persona-Execution Separation: An Architecture Pattern for Evolving LLM Agents under Execution Audit
+
+## [2026-08-31 08:38] ingest | Boosting LLM Exploration via Weak-Model Guidance in RLVR
+
+## [2026-08-31 08:38] ingest | CLAP: Cross-Embodiment Video World Models are Zero-Shot Physical Simulators
+
+## [2026-08-31 08:38] ingest | Embodied Scene Rearrangement Planning
+
+## [2026-08-31 08:38] ingest | TTPO: Test-Time Policy Optimization
+
+## [2026-08-31 08:38] ingest | INTENT-AS-A-TOOL Makes it Easy to Track Agentic Misalignment
+
+## [2026-08-31 08:38] ingest | How Language Models Organize and Structure Moral Knowledge
+
+## [2026-08-31 08:38] ingest | Making Clinical Language Models Auditable: Concept-Guided Fine-Tuning for Robust Prediction
+
+## [2026-08-31 08:38] ingest | Prediction of Prediction (PoP): Inter-Layer Activation Fusion for Single-Pass Hallucination Detection in Large Language Models
+
+## [2026-08-31 08:38] ingest | One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
