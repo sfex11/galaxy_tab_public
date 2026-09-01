@@ -1711,3 +1711,21 @@
 - [[sources/2026-08-31-prediction-of-prediction-pop-inter-layer-activatio.md]] - Prediction of Prediction (PoP): Inter-Layer Activation Fusion for Single-Pass Hallucination Detection in Large Language Models
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-08-31-one-model-many-minds-unlocking-multi-agent-synergy.md]] - One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
+- [[sources/2026-09-01-logos-an-agent-harness-on-a-cross-process-bus.md]] - Logos: An Agent Harness on a Cross-Process Bus
+- [[sources/2026-09-01-darts-decoder-aware-representation-tuning-via-surg.md]] - DARTS: Decoder-Aware Representation Tuning via Surgery for Model Merging
+- [[sources/2026-09-01-offline-verifiable-accountability-for-cross-organi.md]] - Offline-Verifiable Accountability for Cross-Organization Agent Messaging: A Preserved Evidence-Bundle Approach
+- [[sources/2026-09-01-on-the-maintenance-and-co-evolution-of-agent-plugi.md]] - On the Maintenance and Co-evolution of Agent Plugins: An Empirical Study of Claude Code Plugin Marketplaces
+- [[sources/2026-09-01-ladders-in-chaos-when-how-and-perhaps-why-does-tes.md]] - Ladders in Chaos: When, How, (and Perhaps Why) Does Test-Time Scaling Improve LLM Machine Translation
+- [[sources/2026-09-01-llm-based-agents-for-software-and-systems-security.md]] - LLM-Based Agents for Software and Systems Security: Approaches, Applications, and Assessment
+- [[sources/2026-09-01-how-proper-scoring-rules-shape-llm-forecasting.md]] - How Proper Scoring Rules Shape LLM Forecasting
+- [[sources/2026-09-01-contextpilot-teaching-agents-for-proactive-context.md]] - ContextPilot: Teaching Agents for Proactive Context Management via Fine-grained RL
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-01-cover-identifiable-evaluation-of-coalition-routing.md]] - COVER: Identifiable Evaluation of Coalition Routing
+- [[sources/2026-09-01-acquire-repair-preserve-a-diagnosis-guided-post-tr.md]] - Acquire, Repair, Preserve: A Diagnosis-Guided Post-Training Recipe for Small-Model Dialogue Game Agents
+- [[sources/2026-09-01-fidelity-is-not-enough-dispatch-level-instrumentat.md]] - Fidelity Is Not Enough: Dispatch-Level Instrumentation for Agentic Datasheet Extraction
+- [[sources/2026-09-01-when-robots-mishear-us-mapping-the-safety-risks-of.md]] - When Robots Mishear Us: Mapping the Safety Risks of Voice-Controlled Embodied AI
+- [[sources/2026-09-01-nl2agbench-benchmarking-llm-auto-formalization-for.md]] - NL2AGBench: Benchmarking LLM Auto-Formalization for AlphaGeometry
+- [[sources/2026-09-01-a-formal-limitation-on-learning-human-language-fro.md]] - A Formal Limitation on Learning Human Language From Textual Corpora
+- [[sources/2026-09-01-parser-states-already-know-structure-conditioned-k.md]] - Parser States Already Know: Structure-Conditioned KV Persistence for Structured Generation
+- [[sources/2026-09-01-stay-within-your-bounds-distance-guided-decoding-f.md]] - Stay Within Your Bounds: Distance-Guided Decoding for Guaranteed Context-Free Grammar Compliance
+- [[sources/2026-09-01-blind-men-and-the-elephant-probing-the-epistemic-m.md]] - Blind Men and the Elephant: Probing the Epistemic Myopia of LLMs under Long-Tail Divergent Knowledge

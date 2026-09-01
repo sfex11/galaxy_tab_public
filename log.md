@@ -3150,3 +3150,37 @@
 ## [2026-08-31 08:38] ingest | One Model, Many Minds: Unlocking Multi-Agent Synergy in a Single Agent via Mixture of Roles
 
 ## [2026-09-01 02:01] llm-ingest | 0편 분석, 엔티티 355개, 개념 1454개
+
+## [2026-09-01 08:34] ingest | Logos: An Agent Harness on a Cross-Process Bus
+
+## [2026-09-01 08:34] ingest | DARTS: Decoder-Aware Representation Tuning via Surgery for Model Merging
+
+## [2026-09-01 08:34] ingest | Offline-Verifiable Accountability for Cross-Organization Agent Messaging: A Preserved Evidence-Bundle Approach
+
+## [2026-09-01 08:34] ingest | On the Maintenance and Co-evolution of Agent Plugins: An Empirical Study of Claude Code Plugin Marketplaces
+
+## [2026-09-01 08:34] ingest | Ladders in Chaos: When, How, (and Perhaps Why) Does Test-Time Scaling Improve LLM Machine Translation
+
+## [2026-09-01 08:34] ingest | LLM-Based Agents for Software and Systems Security: Approaches, Applications, and Assessment
+
+## [2026-09-01 08:34] ingest | How Proper Scoring Rules Shape LLM Forecasting
+
+## [2026-09-01 08:34] ingest | ContextPilot: Teaching Agents for Proactive Context Management via Fine-grained RL
+
+## [2026-09-01 08:34] ingest | COVER: Identifiable Evaluation of Coalition Routing
+
+## [2026-09-01 08:34] ingest | Acquire, Repair, Preserve: A Diagnosis-Guided Post-Training Recipe for Small-Model Dialogue Game Agents
+
+## [2026-09-01 08:34] ingest | Fidelity Is Not Enough: Dispatch-Level Instrumentation for Agentic Datasheet Extraction
+
+## [2026-09-01 08:34] ingest | When Robots Mishear Us: Mapping the Safety Risks of Voice-Controlled Embodied AI
+
+## [2026-09-01 08:34] ingest | NL2AGBench: Benchmarking LLM Auto-Formalization for AlphaGeometry
+
+## [2026-09-01 08:34] ingest | A Formal Limitation on Learning Human Language From Textual Corpora
+
+## [2026-09-01 08:34] ingest | Parser States Already Know: Structure-Conditioned KV Persistence for Structured Generation
+
+## [2026-09-01 08:34] ingest | Stay Within Your Bounds: Distance-Guided Decoding for Guaranteed Context-Free Grammar Compliance
+
+## [2026-09-01 08:34] ingest | Blind Men and the Elephant: Probing the Epistemic Myopia of LLMs under Long-Tail Divergent Knowledge

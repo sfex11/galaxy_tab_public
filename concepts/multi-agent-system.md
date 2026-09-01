@@ -307,3 +307,5 @@ _자동 생성됨_
 - [[sources/2026-08-30-one-model-many-minds-unlocking-multi-agent-synergy.md]]
 
 - [[sources/2026-08-31-one-model-many-minds-unlocking-multi-agent-synergy.md]]
+
+- [[sources/2026-09-01-cover-identifiable-evaluation-of-coalition-routing.md]]
