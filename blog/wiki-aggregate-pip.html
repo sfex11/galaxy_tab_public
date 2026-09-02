@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>병목을 찾아서: 스키마가 아닌 파서의 눈을 보라</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection {
+    background: rgba(194,112,62,0.18);
+    color: #2c2825;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.85;
+    color: #2c2825;
+    background: #faf9f7;
+    overflow-x: hidden;
+  }
+
+  /* ── 레이아웃 ── */
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  /* ── 히어로 ── */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px) 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c2703e, transparent);
+    border-radius: 1px;
+  }
+
+  .hero-label {
+    display: inline-block;
+    font-size: clamp(11px, 1.5vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #c2703e;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding: 5px 14px;
+    border: 1px solid rgba(194,112,62,0.2);
+    border-radius: 20px;
+    background: rgba(194,112,62,0.04);
+  }
+
+  .hero h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(26px, 5vw, 42px);
+    line-height: 1.35;
+    color: #2c2825;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #7a736b;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── 메타 ── */
+  .meta {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 28px 0 48px 0;
+    font-size: 13px;
+    color: #9a938b;
+  }
+
+  .meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #c2703e;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 3.5vw, 30px);
+    line-height: 1.4;
+    color: #2c2825;
+    margin-bottom: 20px;
+    letter-spacing: -0.005em;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 600;
+    font-size: clamp(17px, 2.5vw, 21px);
+    line-height: 1.45;
+    color: #2c2825;
+    margin: 32px 0 12px 0;
+  }
+
+  p {
+    margin-bottom: 18px;
+    color: #3d3833;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #2c2825;
+  }
+
+  .accent-orange { color: #c2703e; }
+  .accent-blue { color: #5b7c99; }
+  .accent-green { color: #6b9e7a; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 3px solid #c2703e;
+    padding: 16px 20px;
+    margin: 24px auto;
+    max-width: 800px;
+    background: rgba(194,112,62,0.03);
+    border-radius: 0 8px 8px 0;
+    font-size: clamp(14px, 1.8vw, 16px);
+    line-height: 1.75;
+    color: #5a534b;
+    font-style: italic;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: 12px;
+    color: #9a938b;
+    font-weight: 500;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 12px;
+    padding: clamp(20px, 3vw, 28px);
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.04), 0 0.5px 2px rgba(44,40,37,0.06);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 20px rgba(44,40,37,0.07), 0 1px 3px rgba(44,40,37,0.08);
+    transform: translateY(-1px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .card-icon.orange { background: rgba(194,112,62,0.1); }
+  .card-icon.blue { background: rgba(91,124,153,0.1); }
+  .card-icon.green { background: rgba(107,158,122,0.1); }
+
+  .card-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2vw, 17px);
+    color: #2c2825;
+  }
+
+  .card p {
+    margin-bottom: 10px;
+    font-size: clamp(14px, 1.8vw, 15.5px);
+    line-height: 1.8;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── 비유 박스 ── */
+  .analogy-box {
+    background: linear-gradient(135deg, rgba(107,158,122,0.06), rgba(91,124,153,0.04));
+    border: 1px solid rgba(107,158,122,0.15);
+    border-radius: 12px;
+    padding: clamp(18px, 3vw, 26px);
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .analogy-box::before {
+    content: '💡';
+    position: absolute;
+    top: -8px;
+    right: 16px;
+    font-size: 48px;
+    opacity: 0.08;
+  }
+
+  .analogy-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #6b9e7a;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .analogy-box p {
+    margin-bottom: 12px;
+    font-size: clamp(14px, 1.8vw, 15.5px);
+    line-height: 1.8;
+    color: #3d3833;
+  }
+
+  .analogy-box p:last-child { margin-bottom: 0; }
+
+  /* ── 연결 다이어그램 ── */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 32px 0;
+    padding: clamp(20px, 3vw, 32px);
+    background: rgba(255,255,255,0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(44,40,37,0.05);
+  }
+
+  .diagram-node {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: clamp(12px, 1.6vw, 14px);
+    font-weight: 500;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .diagram-node.n1 {
+    background: rgba(194,112,62,0.08);
+    border: 1px solid rgba(194,112,62,0.2);
+    color: #c2703e;
+  }
+
+  .diagram-node.n2 {
+    background: rgba(91,124,153,0.08);
+    border: 1px solid rgba(91,124,153,0.2);
+    color: #5b7c99;
+  }
+
+  .diagram-node.n3 {
+    background: rgba(107,158,122,0.08);
+    border: 1px solid rgba(107,158,122,0.2);
+    color: #6b9e7a;
+  }
+
+  .diagram-arrow {
+    font-size: 18px;
+    color: #bbb4ab;
+    line-height: 1;
+    padding: 4px 0;
+  }
+
+  .diagram-gap {
+    padding: 8px 16px;
+    background: rgba(194,112,62,0.04);
+    border: 1px dashed rgba(194,112,62,0.25);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #c2703e;
+    letter-spacing: 0.02em;
+    text-align: center;
+    max-width: 240px;
+  }
+
+  /* ── 리스트 ── */
+  .styled-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+
+  .styled-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    font-size: clamp(14px, 1.8vw, 15.5px);
+    line-height: 1.75;
+    color: #3d3833;
+  }
+
+  .styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c2703e;
+    opacity: 0.5;
+  }
+
+  .styled-list.blue li::before { background: #5b7c99; }
+  .styled-list.green li::before { background: #6b9e7a; }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.15), transparent);
+    margin: clamp(32px, 5vw, 56px) 0;
+  }
+
+  /* ── 하이라이트 텍스트 ── */
+  .highlight-text {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .highlight-text.orange {
+    background: rgba(194,112,62,0.08);
+    color: #c2703e;
+  }
+
+  .highlight-text.blue {
+    background: rgba(91,124,153,0.08);
+    color: #5b7c99;
+  }
+
+  .highlight-text.green {
+    background: rgba(107,158,122,0.08);
+    color: #6b9e7a;
+  }
+
+  /* ── 결론 카드 ── */
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(194,112,62,0.05), rgba(91,124,153,0.03));
+    border: 1px solid rgba(194,112,62,0.15);
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+    box-shadow: 0 4px 24px rgba(44,40,37,0.04);
+  }
+
+  .conclusion-card h3 {
+    margin-top: 0;
+    color: #c2703e;
+  }
+
+  /* ── 푸터 ── */
+  .footer {
+    text-align: center;
+    padding: clamp(32px, 5vw, 56px) 0;
+    font-size: 12px;
+    color: #b5ada4;
+    border-top: 1px solid rgba(44,40,37,0.05);
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+
+  /* ── 태그 ── */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(44,40,37,0.08);
+    color: #7a736b;
+    background: rgba(255,255,255,0.5);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(44,40,37,0.06);
+    border-radius: 10px;
+    padding: clamp(16px, 2.5vw, 24px);
+    margin: 0 0 clamp(36px, 5vw, 56px) 0;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9a938b;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    counter-reset: toc-counter;
+  }
+
+  .toc ol li {
+    counter-increment: toc-counter;
+    margin-bottom: 8px;
+  }
+
+  .toc ol li a {
+    text-decoration: none;
+    color: #5a534b;
+    font-size: clamp(13px, 1.7vw, 14.5px);
+    font-weight: 400;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    transition: color 0.2s ease;
+  }
+
+  .toc ol li a::before {
+    content: counter(toc-counter);
+    font-size: 11px;
+    font-weight: 600;
+    color: #c2703e;
+    opacity: 0.6;
+    min-width: 16px;
+  }
+
+  .toc ol li a:hover {
+    color: #c2703e;
+  }
+
+  /* ── 인라인 코드 ── */
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Noto Sans KR', monospace;
+    font-size: 0.88em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(44,40,37,0.05);
+    color: #c2703e;
+    font-weight: 500;
+  }
+
+  /* ── 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .fade-up.d1 { animation-delay: 0.1s; }
+  .fade-up.d2 { animation-delay: 0.2s; }
+  .fade-up.d3 { animation-delay: 0.3s; }
+  .fade-up.d4 { animation-delay: 0.4s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up { animation: none; opacity: 1; }
+  }
+
+  /* ── 비교 테이블 ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    font-size: clamp(13px, 1.7vw, 14.5px);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .compare-table th {
+    background: rgba(194,112,62,0.06);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #5a534b;
+    border-bottom: 1px solid rgba(44,40,37,0.06);
+  }
+
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44,40,37,0.04);
+    color: #3d3833;
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .compare-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .compare-table tr:hover td {
+    background: rgba(194,112,62,0.02);
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="article-wrapper">
+
+  <!-- 히어로 -->
+  <header class="hero fade-up">
+    <span class="hero-label">Deep Analysis</span>
+    <h1>병목을 찾아서:<br>스키마가 아니라 파서의 눈을 보라</h1>
+    <p class="hero-sub">에이전트 구조적 출력의 비용 병목을 "스키마 축적"으로 진단하는 것은<br>정확한 관찰이지만, 잘못된 처방이다.</p>
+  </header>
+
+  <!-- 메타 -->
+  <div class="meta fade-up d1">
+    <span>2026-05-06</span>
+    <span>·</span>
+    <span>약 12분 읽기</span>
+    <span>·</span>
+    <span>Structured Generation · KV Cache · Parser</span>
+  </div>
+
+  <!-- 목차 -->
+  <div class="toc fade-up d2">
+    <div class="toc-title">목차</div>
+    <ol>
+      <li><a href="#s1">1차 진단은 맞았다 — 하지만 증상을 원인으로 착각했다</a></li>
+      <li><a href="#s2">파서는 이미 알고 있다: 구조적 가시성의 미활용 간극</a></li>
+      <li><a href="#s3">같은 패턴, 다른 얼굴: 알고리즘-시스템 번역 간극</a></li>
+      <li><a href="#s4">파서-캐시 조건화: 새로운 최적화 차원의 발견</a></li>
+      <li><a href="#s5">병목 전이에서 진정한 공격면으로: 패러다임 전환의 필요성</a></li>
+    </ol>
+  </div>
+
+  <!-- 섹션 1 -->
+  <section class="section fade-up d3" id="s1">
+    <span class="section-label">Section 01</span>
+    <h2>1차 진단은 맞았다 — 하지만 증상을 원인으로 착각했다</h2>
+
+    <p>최근 연구 생태계에서 에이전트 구조적 출력의 비용 병목을 진단하는 논의가 활발하다. 특히 <em>"Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Loading"</em>(2026-04-26)은 다중 서버 MCP 배포 환경에서 <strong>파이프라인 전체 레이턴시의 병목이 개별 LLM 호출 자체가 아니라 스키마 축적에 의해 결정된다</strong>는 사실을 명확히 보여주었다.</p>
+
+    <p>이 진단은 의미가 있다. 기존에는 "모델 추론이 느리다"는 식의 단일 지점 분석에 갇혀 있었는데, 파이프라인 전체를 조망하여 병목의 위치를 '서빙 계층'으로 올려놓았기 때문이다. 하지만 이 재정의가 여전히 <strong>표층적 병목</strong>에 머물러 있다는 것이 핵심적인 비판이다.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-label">비유</span>
+      <p>병원 응급실에서 환자가 계속 기다리고 있다. 누군가 "수술실이 부족해서 그래"라고 진단했다. 수술실 확충은 분명 도움이 된다. 하지만 정작 환자의 상태를 이미 파악하고 있는 <strong>분류 담당 간호사의 정보가 수술실 배정에 전혀 활용되지 않고 있다면</strong>, 수술실을 아무리 늘려도 근본적 해결은 아니다. 간호사는 이미 "이 환자는 수술이 필요 없어"라고 알고 있는데, 시스템은 그 정보를 무시하고 모든 환자를 수술실 대기열에 넣고 있는 것이다.</p>
+    </div>
+
+    <p>스키마 축적이 병목이라는 진단은 "수술실이 부족하다"는 관찰에 해당한다. 맞는 말이지만, <strong>왜 불필요한 스키마가 축적되는지</strong>에 대한 질문으로 이어지지 않으면 해법이 엉뚱한 방향으로 수렴한다. 그 방향이 바로 "스키마 로딩을 최적화하자"인데 — 이는 병목을 제거한 것이 아니라 형태를 바꾼 것에 불과할 수 있다.</p>
+
+    <blockquote>
+      "스키마 축적은 증상이지 원인이 아니다. 더 근본적인 원인은 파서가 이미 예측한 구조 정보가 KV 관리에 조건화되지 않는 간극에 있다."
+      <cite>— Wiki 질문자의 핵심 지적</cite>
+    </blockquote>
+
+    <p>Wiki의 <code>bottleneck-misattribution</code> 엔티티가 정확히 이 현상을 지칭한다. 병목을 잘못 귀인하는 것. <code>aggregate-pipeline-serving</code>이 "스키마 축적이 병목"이라고 진단한 것 자체가, 더 근본적인 원인인 <strong>파서-모델 간 구조적 가시성의 미활용</strong>을 은폐하는 2차적 오귀인일 수 있다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 2 -->
+  <section class="section" id="s2">
+    <span class="section-label">Section 02</span>
+    <h2>파서는 이미 알고 있다: 구조적 가시성의 미활용 간극</h2>
+
+    <p>제약 디코딩(constrained decoding)의 파서는 토큰을 생성하기 <strong>이전에</strong> 이미 다음에 올 구조를 예측한다. JSON 스키마로 출력한다고 가정해 보자. 파서는 현재 <code>"name": "홍길동", "age"</code>까지 생성했다면, 다음이 콜론과 숫자 값이 될 것을 이미 알고 있다. 객체의 어떤 필드가 남았는지, 배열의 몇 번째 요소를 처리 중인지 — 이 모든 구조 정보가 파서 상태에 이미 존재한다.</p>
+
+    <p>그런데 현재 시스템은 이 정보를 <strong>KV 캐시 관리에 전혀 활용하지 않는다.</strong> 모델은 파서가 이미 알고 있는 구조적 진행도를 무시한 채, 이전 토큰들의 KV 캐시를 일괄적으로 유지한다. 마치 네비게이션이 "앞으로 500m 후 좌회전"이라고 알려주고 있는데, 운전자가 그 정보를 무시하고 매번 지도를 처음부터 다시 펼치는 것과 같다.</p>
+
+    <div class="diagram">
+      <div class="diagram-node n1">파서 전이 상태<br><span style="font-weight:300;font-size:11px;opacity:0.7;">(구조 예측 완료)</span></div>
+      <div class="diagram-gap">구조적 가시성 단절</div>
+      <div class="diagram-node n2">KV 캐시 관리<br><span style="font-weight:300;font-size:11px;opacity:0.7;">(파서 정보 미반영)</span></div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-node n3">불필요한 캐시 유지<br><span style="font-weight:300;font-size:11px;opacity:0.7;">(메모리 &amp; 연산 낭비)</span></div>
+    </div>
+
+    <p>대상 논문 <em>"Parser States Already Know: Structure-Conditioned KV Persistence for Structured Generation"</em>의 제목 자체가 이 간극을 정확히 가리킨다. <strong>"파서 상태는 이미 알고 있다"</strong> — 그런데 시스템은 듣지 않는다.</p>
+
+    <p>여기서 '구조적 가시성(structural visibility)'이라는 개념이 핵심적이다. 파서가 예측한 생성 구조가 모델의 KV 관리 레이어까지 <strong>보인다면</strong>, 더 이상 생성될 구조와 무관한 이전 레이어의 KV 엔트리를 안전하게 드롭할 수 있다. 이는 단순한 캐시 최적화가 아니라, <strong>이미 계산된 정보의 흐름을 시스템 하위 계층까지 연결하는 문제</strong>다.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">🔍</div>
+        <div class="card-title">구조적 가시성이란 무엇인가</div>
+      </div>
+      <p>파서의 전이 상태(현재 JSON의 어떤 필드, 어떤 깊이, 어떤 타입을 처리 중인지)가 KV 캐시 지속성(persistence) 결정에 입력으로 사용될 수 있는가? 현재는 불가능하다. 파서와 KV 관리는 독립적으로 동작하며, 둘 사이에 정보 경로가 존재하지 않는다. 이것이 '가시성의 미활용'이다.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 3 -->
+  <section class="section" id="s3">
+    <span class="section-label">Section 03</span>
+    <h2>같은 패턴, 다른 얼굴: 알고리즘-시스템 번역 간극</h2>
+
+    <p>이 간극은 완전히 새로운 현상이 아니다. Wiki의 <code>algorithm-system-translation-gap</code> 엔티티가 이미 동일한 패턴을 다른 영역에서 포착했다.</p>
+
+    <h3>Crab의 사례: 의미론 → OS 스냅샷</h3>
+    <p><em>"Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes"</em>(2026-05-02)는 에이전트의 <strong>의미론적 의존 그래프</strong>를 OS의 체크포인트 메커니즘으로 번역할 때 발생하는 비효율을 다룬다. 에이전트는 "이 변수와 저 변수 사이에 의존관계가 있다"는 의미론적 정보를 이미 가지고 있는데, OS 체크포인트는 이를 모른 채 전체 메모리 스냅샷을 찍는다.</p>
+
+    <h3>질문자의 사례: 파서 전이 → KV 캐시 지속성</h3>
+    <p>동일한 패턴이다. 파서는 이미 "이 구조 요소는 끝났다"는 정보를 가지고 있는데, KV 캐시 관리는 이를 모른 촤 일괄 유지한다.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>구조적 정보</th>
+          <th>하위 시스템 관리</th>
+          <th>간극의 결과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="accent-blue">의미론적 의존 그래프</span><br><span style="font-size:12px;color:#9a938b;">(Crab)</span></td>
+          <td>OS 체크포인트<br><span style="font-size:12px;color:#9a938b;">전체 스냅샷</span></td>
+          <td>불필요한 메모리 복사</td>
+        </tr>
+        <tr>
+          <td><span class="accent-orange">파서 전이 구조</span><br><span style="font-size:12px;color:#9a938b;">(본 논의)</span></td>
+          <td>KV 캐시 지속성<br><span style="font-size:12px;color:#9a938b;">일괄 유지</span></td>
+          <td>불필요한 캐시 유지</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>두 사례의 공통 구조는 명확하다: <strong>상위 레벨에서 이미 계산된 구조적 정보가 하위 시스템의 관리 결정에 번역되지 않는다.</strong> 이 간극을 메우는 것이 최적화의 실제 공격면이다.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-label">비유</span>
+      <p>건축 설계사가 이미 "이 벽은 비하중 벽이라 언제든 철거 가능하다"라고 도면에 표시해 두었다. 그런데 해체 현장의 작업자는 그 도면을 보지 못하고, 모든 벽을 동등한 '철거 대상'으로 분류한 뒤 하나하나 시험해 본다. 설계 정보가 현장 관리 결정에 번역되지 않으면, 이미 알고 있는 정보를 다시 '발견'하는 비용이 발생한다.</p>
+    </div>
+
+    <h3>SpecKV의 시사점: 내부 상태 기반 적응</h3>
+    <p><code>adaptive-inference</code> 엔티티에서 <em>"SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Selection"</em>(2026-05-05)은 적응적 추론의 입력을 <strong>외부 환경 반응에서 내부 시스템 상태 반응으로 확장</strong>했다. 압축 상태라는 내부 신호에 반응하여 추론 전략을 조정하는 것이다.</p>
+
+    <p>질문자의 제안은 이를 한 단계 더 밀어붙인다: <strong>적응의 입력을 파서가 예측한 생성 구조로 확장</strong>하는 것. 압축 상태가 내부 신호로 유효하다면, 파서 전이가 예측하는 구조적 진행도 역시 동등한 내부 신호로 활용 가능하다는 논리다. SpecKV가 "압축률을 보고 판단한다"면, 파서-캐시 조건화는 "구조 진행도를 보고 판단한다"가 된다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 4 -->
+  <section class="section" id="s4">
+    <span class="section-label">Section 04</span>
+    <h2>파서-캐시 조건화: 새로운 최적화 차원의 발견</h2>
+
+    <p>지금까지의 논의를 하나의 메커니즘으로 통합하면, 다음 개념이 도출된다.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🆕</div>
+        <div class="card-title">파서-캐시 조건화 (Parser-Cache Conditioning)</div>
+      </div>
+      <p>제약 디코딩의 파서 전이가 생성 구조를 예측하므로, 이를 KV 지속성 결정에 조건화하여 불필요한 캐시를 드롭하는 메커니즘.</p>
+      <p>이 개념은 현재 Wiki에 자립적 슬러그로 존재하지 않는 <strong>새로운 연결</strong>이다. 세 엔티티의 교집합에 위치한다.</p>
+    </div>
+
+    <ul class="styled-list">
+      <li><span class="highlight-text orange">aggregate-pipeline-serving</span> — 스키마 축적이 파이프라인 병목이라는 <strong>진단</strong> 제공</li>
+      <li><span class="highlight-text blue">algorithm-system-translation-gap</span> — 상위 구조 정보가 하위 시스템 관리에 번역되지 않는 <strong>간극 패턴</strong> 제공</li>
+      <li><span class="highlight-text green">adaptive-inference</span> — 내부 시스템 상태에 반응하여 추론을 적응시키는 <strong>패러다임</strong> 제공</li>
+    </ul>
+
+    <p>이 세 가지가 만나는 지점이 바로 파서-캐시 조건화다. 구체적으로 어떻게 동작할까?</p>
+
+    <h3>작동 원리의 개념적 스케치</h3>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon orange">⚙️</div>
+        <div class="card-title">단계별 메커니즘</div>
+      </div>
+      <p><strong>1. 파서 전이 관찰:</strong> 제약 디코딩 파서가 현재 상태 전이를 수행할 때, 어떤 구조 요소가 종료되었는지 감지한다. 예: JSON 객체의 특정 필드 완료, 배열 요소 종료.</p>
+      <p><strong>2. 구조적 의존도 평가:</strong> 종료된 구조 요소에 해당하는 이전 토큰들의 KV 엔트리가, 앞으로 생성될 토큰들과 얼마나 의존관계가 있는지 평가한다. 파서의 문법 지식을 기반으로 이 평가는 저비용으로 수행 가능하다.</p>
+      <p><strong>3. 조건부 캐시 드롭:</strong> 의존도가 낮은 KV 엔트리를 안전하게 드롭한다. 이는 무작위 드롭이 아니라, 파서의 구조 예측에 <strong>조건화된</strong> 드롭이다.</p>
+      <p><strong>4. 지속성 보장:</strong> 여전히 필요한 KV 엔트리(예: 아직 닫히지 않은 객체의 키 정보)는 유지한다.</p>
+    </div>
+
+    <p>중요한 점은 이 메커니즘이 <strong>외부에서 추가 정보를 로딩하지 않는다</strong>는 것이다. 이미 파서 내부에 존재하는 정보를 활용할 뿐이다. 이것이 "스키마 로딩 최적화"와 근본적으로 다른 이유다. 스키마 로딩 최적화는 외부 정보의 처리 효율을 높이는 것이지만, 파서-캐시 조건화는 <strong>이미 내부에 있는 정보의 활용도를 높이는 것</strong>이다.</p>
+
+    <blockquote>
+      "최적화의 실제 공격면은 외부 스키마 로딩이 아니라 파서-모델 간 구조적 가시성의 미활용에 있다."
+      <cite>— 원 질문의 핵심 명제</cite>
+    </blockquote>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 섹션 5: 결론 -->
+  <section class="section" id="s5">
+    <span class="section-label">Section 05</span>
+    <h2>병목 전이에서 진정한 공격면으로: 패러다임 전환의 필요성</h2>
+
+    <p>Wiki의 <code>bottleneck-transference</code> 엔티티는 병목이 제거된 것이 아니라 다른 형태로 옮겨간 현상을 지칭한다. "스키마 축적이 병목이니 로딩을 최적화하자"는 접근은 정확히 이 전이 패턴에 해당할 위험이 있다.</p>
+
+    <p>스키마 로딩 병목은 줄었지만, 파서가 이미 가진 구조 정보를 버리고 KV 캐시를 무조건 유지하는 비효율이 잔존한다. 병목의 <strong>형태</strong>가 바뀌었을 뿐, <strong>본질</strong> — 상위 계층 정보가 하위 계층 관리에 반영되지 않는다 — 은 그대로다.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-label">비유</span>
+      <p>회사에서 부서 간 협업이 느리다. 누군가 "회의실 예약 시스템이 병목이다"라고 진단하고, 예약 시스템을 자동화했다. 회의실 잡는 시간은 줄었다. 하지만 정작 회의에 필요한 <strong>선행 정보</strong>가 다른 부서에서 이미 준비되어 있는데도 매번 회의에서 처음부터 논의된다면, 회의 자체의 비효율은 해결되지 않은 것이다. 회의실 예약을 빠르게 한 것이 협업의 근본 문제를 해결한 착각을 준다.</p>
+    </div>
+
+    <div class="conclusion-card">
+      <h3>패러다임 전환: 외부 최적화에서 내부 가시성으로</h3>
+      <p>현재 패러다임은 <strong>"외부에서 들어오는 것을 어떻게 효율적으로 처리할까"</strong>에 맞춰져 있다. 스키마 로딩을 줄이고, 툴 호출을 게이팅하고, 파이프라인을 병렬화한다. 모두 유효한 최적화지만, 같은 방향의 개선이다.</p>
+      <p>필요한 전환은 <strong>"내부에 이미 있는 것을 어떻게 시스템 전체에 보이게 할까"</strong>로 방향을 틀는 것이다. 파서가 아는 것을 KV 관리가 보게 하고, 의미론적 의존을 OS가 보게 하고, 구조적 진행도를 캐시 정책이 보게 하는 것. 이것이 <code>algorithm-system-translation-gap</code>이 제시하는 간극을 메우는 근본적 접근이다.</p>
+      <p>파서-캐시 조건화는 이 전환의 구체적 사례다. 새로운 논문을 기다릴 필요 없이, 기존 엔티티들의 교집합에서 이미 도출 가능한 설계 공간이다. 다만, 이 메커니즘을 직접 검증한 논문이 현재 Wiki에 없으므로 <strong>새로운 연결로 기록</strong>되어야 한다.</p>
+    </div>
+
+    <p>결론적으로, 에이전트 구조적 출력 최적화의 실제 전장은 스키마 로딩이 아닌 <strong>정보의 수직적 흐름</strong>에 있다. 상위 계층(파서)에서 하위 계층(KV 캐시 관리)으로 구조적 정보가 얼마나 깊이, 얼마나 빠르게 전달되는가. 이 가시성의 정도가 곧 최적화의 상한선을 결정한다. 스키마를 줄이는 것은 병목을 옮기는 것이고, 파서의 눈을 KV 관리에 연결하는 것이 병목을 해체하는 것이다.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- 태그 -->
+  <div class="tag-list">
+    <span class="tag">Structured Generation</span>
+    <span class="tag">KV Cache</span>
+    <span class="tag">Constrained Decoding</span>
+    <span class="tag">Parser-Model Gap</span>
+    <span class="tag">Bottleneck Analysis</span>
+    <span class="tag">Adaptive Inference</span>
+    <span class="tag">MCP Pipeline</span>
+    <span class="tag">Algorithm-System Translation</span>
+  </div>
+
+  <footer class="footer">
+    Wiki Query 기반 심층 분석 · 2026-05-06
+  </footer>
+
+</article>
+
+<script>
+  // 스크롤 기반 페이드인
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.section, .conclusion-card, .analogy-box, .card, .diagram, .compare-table');
+
+    // 초기에 보이는 요소들은 이미 애니메이션 완료 처리
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // 히어로 이후의 요소들에 스크롤 애니메이션 적용
+    document.querySelectorAll('.section, .conclusion-card').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `opacity 0.6s ease ${i * 0.05}s, transform 0.6s ease ${i * 0.05}s`;
+      observer.observe(el);
+    });
+
+    // 카드와 비유 박스는 부모 섹션 안에서 지연 적용
+    document.querySelectorAll('.card, .analogy-box, .diagram, .compare-table').forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+      el.style.transition = 'opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s';
+      observer.observe(el);
+    });
+
+    // reduced-motion 존중
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.section, .conclusion-card, .card, .analogy-box, .diagram, .compare-table').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.transition = 'none';
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
