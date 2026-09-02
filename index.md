@@ -1729,3 +1729,22 @@
 - [[sources/2026-09-01-parser-states-already-know-structure-conditioned-k.md]] - Parser States Already Know: Structure-Conditioned KV Persistence for Structured Generation
 - [[sources/2026-09-01-stay-within-your-bounds-distance-guided-decoding-f.md]] - Stay Within Your Bounds: Distance-Guided Decoding for Guaranteed Context-Free Grammar Compliance
 - [[sources/2026-09-01-blind-men-and-the-elephant-probing-the-epistemic-m.md]] - Blind Men and the Elephant: Probing the Epistemic Myopia of LLMs under Long-Tail Divergent Knowledge
+- [[sources/2026-09-02-ontoaligner-ensemble-voting-based-fusion-across-he.md]] - OntoAligner-Ensemble: Voting-Based Fusion across Heterogeneous Ontology Alignment Techniques
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-02-diasentinel-an-auditable-multi-agent-system-for-gu.md]] - DIASENTINEL: An Auditable Multi-Agent System for Guideline-Grounded Diabetes Risk Screening
+- [[sources/2026-09-02-when-does-bigger-help-a-controlled-study-of-llm-sc.md]] - When Does Bigger Help? A Controlled Study of LLM Scale for Ontology Learning
+- [[sources/2026-09-02-aspire-can-models-self-evolve-from-vague-goals.md]] - Aspire: Can Models Self-Evolve from Vague Goals?
+- [[sources/2026-09-02-bloom-wilt-logit-tilting-for-behaviour-elicitation.md]] - BLOOM-WILT: Logit Tilting for Behaviour Elicitation in Automated LLM Auditing
+- [[sources/2026-09-02-llm-post-training-as-brownfield-maintenance-an-ind.md]] - LLM Post-Training as Brownfield Maintenance: An Industrial Perspective on Dataware Engineering
+- [[sources/2026-09-02-s3gym-can-llms-turn-self-testing-and-self-judging-.md]] - S3Gym: Can LLMs Turn Self-Testing and Self-Judging into Self-Improvement?
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-02-token-efficient-data-reasoning-agents-via-adaptive.md]] - Token-Efficient Data Reasoning Agents via Adaptive Structuring of Unstructured Data
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-02-reconciling-process-supervision-with-outcome-based.md]] - Reconciling Process Supervision with Outcome-Based Credit in Agentic Policy Optimization
+- [[sources/2026-09-02-learning-to-evaluate-before-improving-automatic-ru.md]] - Learning to Evaluate Before Improving: Automatic Rubric Induction for Automatic Research Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-02-scaling-large-reasoning-models-beyond-human-superv.md]] - Scaling Large Reasoning Models beyond Human Supervision: A Path toward Superintelligence
+- [[sources/2026-09-02-the-first-token-is-a-clue-verbalizing-multi-token-.md]] - The First Token Is a Clue: Verbalizing Multi-Token Concepts from the J-lens
+- [[sources/2026-09-02-a-model-with-no-head-and-many-thoughts.md]] - A Model with No Head and Many Thoughts
+- [[sources/2026-09-02-wrong-prediction-right-answer-recovering-evidence-.md]] - Wrong Prediction, Right Answer: Recovering Evidence from Collapsed LLM Sequence Scores
+- [[sources/2026-09-02-a-universal-context-reuse-layer-for-cross-model-kv.md]] - A Universal Context-Reuse Layer for Cross-Model KV Sharing

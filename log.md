@@ -3184,3 +3184,33 @@
 ## [2026-09-01 08:34] ingest | Stay Within Your Bounds: Distance-Guided Decoding for Guaranteed Context-Free Grammar Compliance
 
 ## [2026-09-01 08:34] ingest | Blind Men and the Elephant: Probing the Epistemic Myopia of LLMs under Long-Tail Divergent Knowledge
+
+## [2026-09-02 08:35] ingest | OntoAligner-Ensemble: Voting-Based Fusion across Heterogeneous Ontology Alignment Techniques
+
+## [2026-09-02 08:35] ingest | DIASENTINEL: An Auditable Multi-Agent System for Guideline-Grounded Diabetes Risk Screening
+
+## [2026-09-02 08:35] ingest | When Does Bigger Help? A Controlled Study of LLM Scale for Ontology Learning
+
+## [2026-09-02 08:35] ingest | Aspire: Can Models Self-Evolve from Vague Goals?
+
+## [2026-09-02 08:35] ingest | BLOOM-WILT: Logit Tilting for Behaviour Elicitation in Automated LLM Auditing
+
+## [2026-09-02 08:35] ingest | LLM Post-Training as Brownfield Maintenance: An Industrial Perspective on Dataware Engineering
+
+## [2026-09-02 08:35] ingest | S3Gym: Can LLMs Turn Self-Testing and Self-Judging into Self-Improvement?
+
+## [2026-09-02 08:35] ingest | Token-Efficient Data Reasoning Agents via Adaptive Structuring of Unstructured Data
+
+## [2026-09-02 08:35] ingest | Reconciling Process Supervision with Outcome-Based Credit in Agentic Policy Optimization
+
+## [2026-09-02 08:35] ingest | Learning to Evaluate Before Improving: Automatic Rubric Induction for Automatic Research Agents
+
+## [2026-09-02 08:35] ingest | Scaling Large Reasoning Models beyond Human Supervision: A Path toward Superintelligence
+
+## [2026-09-02 08:35] ingest | The First Token Is a Clue: Verbalizing Multi-Token Concepts from the J-lens
+
+## [2026-09-02 08:35] ingest | A Model with No Head and Many Thoughts
+
+## [2026-09-02 08:35] ingest | Wrong Prediction, Right Answer: Recovering Evidence from Collapsed LLM Sequence Scores
+
+## [2026-09-02 08:35] ingest | A Universal Context-Reuse Layer for Cross-Model KV Sharing
