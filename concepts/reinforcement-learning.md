@@ -353,3 +353,9 @@ _자동 생성됨_
 - [[sources/2026-09-02-reconciling-process-supervision-with-outcome-based.md]]
 
 - [[sources/2026-09-02-scaling-large-reasoning-models-beyond-human-superv.md]]
+
+- [[sources/2026-09-03-the-rise-of-verbal-reinforcement-learning.md]]
+
+- [[sources/2026-09-03-nashdreamer-model-based-reinforcement-learning-for.md]]
+
+- [[sources/2026-09-03-scaling-near-optimal-sft-rl-annotation-budget-allo.md]]

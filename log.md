@@ -3214,3 +3214,33 @@
 ## [2026-09-02 08:35] ingest | Wrong Prediction, Right Answer: Recovering Evidence from Collapsed LLM Sequence Scores
 
 ## [2026-09-02 08:35] ingest | A Universal Context-Reuse Layer for Cross-Model KV Sharing
+
+## [2026-09-03 08:37] ingest | Beyond Scores: Understanding LLM-as-a-Judge Mechanisms in Summarization Evaluation
+
+## [2026-09-03 08:37] ingest | Efficient SWE Agent Benchmarking via Trajectory-Aware Evaluation
+
+## [2026-09-03 08:37] ingest | Adaptive Critical Token-Aware Retrieval for Repository-Level Code Generation
+
+## [2026-09-03 08:37] ingest | CordisBench: Can Language Models Reason About Component Lifecycles in Dynamic Agent Harnesses?
+
+## [2026-09-03 08:37] ingest | The Rise of Verbal Reinforcement Learning
+
+## [2026-09-03 08:37] ingest | Mechanism Design for Alignment and Control
+
+## [2026-09-03 08:37] ingest | StudentSim: Training LLM-based Student Simulators
+
+## [2026-09-03 08:37] ingest | Designing Proactive Thought Partners for Writing
+
+## [2026-09-03 08:37] ingest | The Structure of Quantization Damage in LLMs: Why the Next Bit Should Be Spent Globally
+
+## [2026-09-03 08:37] ingest | Selective Agent Guidance via Entropy: Learning Autonomous Policies from Imperfect VLM Teachers
+
+## [2026-09-03 08:37] ingest | Retrieved but not ranked: surface-form bias in structural retrieval, from mathematics to agent trajectories
+
+## [2026-09-03 08:37] ingest | NashDreamer: Model-Based Reinforcement Learning for Zero-Sum Imperfect-Information Games
+
+## [2026-09-03 08:37] ingest | From Production Traffic to Post-Training: Building a Self-Hosted LLM That Covers the Corporate Request Mix
+
+## [2026-09-03 08:37] ingest | Scaling Near-Optimal SFT-RL Annotation Budget Allocation from Small to Large LLMs
+
+## [2026-09-03 08:37] ingest | Bandits in Prod: Hyperparameter Optimization at Inference Time

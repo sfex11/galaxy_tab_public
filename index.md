@@ -1748,3 +1748,24 @@
 - [[sources/2026-09-02-a-model-with-no-head-and-many-thoughts.md]] - A Model with No Head and Many Thoughts
 - [[sources/2026-09-02-wrong-prediction-right-answer-recovering-evidence-.md]] - Wrong Prediction, Right Answer: Recovering Evidence from Collapsed LLM Sequence Scores
 - [[sources/2026-09-02-a-universal-context-reuse-layer-for-cross-model-kv.md]] - A Universal Context-Reuse Layer for Cross-Model KV Sharing
+- [[sources/2026-09-03-beyond-scores-understanding-llm-as-a-judge-mechani.md]] - Beyond Scores: Understanding LLM-as-a-Judge Mechanisms in Summarization Evaluation
+- [[sources/2026-09-03-efficient-swe-agent-benchmarking-via-trajectory-aw.md]] - Efficient SWE Agent Benchmarking via Trajectory-Aware Evaluation
+- [[sources/2026-09-03-adaptive-critical-token-aware-retrieval-for-reposi.md]] - Adaptive Critical Token-Aware Retrieval for Repository-Level Code Generation
+- [[sources/2026-09-03-cordisbench-can-language-models-reason-about-compo.md]] - CordisBench: Can Language Models Reason About Component Lifecycles in Dynamic Agent Harnesses?
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-03-the-rise-of-verbal-reinforcement-learning.md]] - The Rise of Verbal Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-03-mechanism-design-for-alignment-and-control.md]] - Mechanism Design for Alignment and Control
+- [[sources/2026-09-03-studentsim-training-llm-based-student-simulators.md]] - StudentSim: Training LLM-based Student Simulators
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-03-designing-proactive-thought-partners-for-writing.md]] - Designing Proactive Thought Partners for Writing
+- [[sources/2026-09-03-the-structure-of-quantization-damage-in-llms-why-t.md]] - The Structure of Quantization Damage in LLMs: Why the Next Bit Should Be Spent Globally
+- [[sources/2026-09-03-selective-agent-guidance-via-entropy-learning-auto.md]] - Selective Agent Guidance via Entropy: Learning Autonomous Policies from Imperfect VLM Teachers
+- [[sources/2026-09-03-retrieved-but-not-ranked-surface-form-bias-in-stru.md]] - Retrieved but not ranked: surface-form bias in structural retrieval, from mathematics to agent trajectories
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-03-nashdreamer-model-based-reinforcement-learning-for.md]] - NashDreamer: Model-Based Reinforcement Learning for Zero-Sum Imperfect-Information Games
+- [[sources/2026-09-03-from-production-traffic-to-post-training-building-.md]] - From Production Traffic to Post-Training: Building a Self-Hosted LLM That Covers the Corporate Request Mix
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-03-scaling-near-optimal-sft-rl-annotation-budget-allo.md]] - Scaling Near-Optimal SFT-RL Annotation Budget Allocation from Small to Large LLMs
+- [[sources/2026-09-03-bandits-in-prod-hyperparameter-optimization-at-inf.md]] - Bandits in Prod: Hyperparameter Optimization at Inference Time
