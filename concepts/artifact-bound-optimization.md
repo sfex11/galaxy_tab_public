@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Cited but Not Verified: Parsing and Evaluating Source Attribution in L (2026-05-10)
+
+### Discriminative World Models for Web Agents (2026-09-04)
+
+→ [[sources/2026-09-04-discriminative-world-models-for-web-agents.md|상세 보기]]
