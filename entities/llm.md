@@ -200,3 +200,9 @@ LLM이 턴 간 상태를 유지하지 않는 stateless 처리 방식의 보안 �
 ### LLM as Clinical Graph Structure Refiner: Enhancing Representation Lear (2026-05-02)
 
 LLM의 능력 스펙트럼에 '그래프 위상 정제'를 추가한다. 텍스트 생성이나 도구 사용이 아닌, 수치적 신호에서 구성된 그래프의 구조적 타당성을 추론하는 비전통적 배포 맥락을 제공한다.
+
+### DiscoSign: Discourse-Aware Text to Sign Language Gloss Translation (2026-09-04)
+
+LLM을 단일 블랙박스가 아닌 담화 현상별 모듈로 분해하는 파이프라인 구성 방식을 제시한다. 도메인 특화 언어 구조 처리에서 모듈형 LLM 아키텍처의 유효성에 대한 추가 근거를 제공한다.
+
+→ [[sources/2026-09-04-discosign-discourse-aware-text-to-sign-language-gl.md|상세 보기]]

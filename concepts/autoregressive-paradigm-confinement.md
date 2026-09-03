@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
+
+→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]

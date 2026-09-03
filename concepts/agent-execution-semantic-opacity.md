@@ -16,3 +16,7 @@
 _수동 Wiki Query에서 추출됨_
 
 ### Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes (2026-05-03)
+
+### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
+
+→ [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]

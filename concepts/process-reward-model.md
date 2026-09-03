@@ -18,3 +18,11 @@ _자동 Wiki Query에서 추출됨_
 ### Discriminative World Models for Web Agents (2026-09-04)
 
 → [[sources/2026-09-04-discriminative-world-models-for-web-agents.md|상세 보기]]
+
+### Cliff: Learning Process Rewards from the First Mistake (2026-09-04)
+
+→ [[sources/2026-09-04-cliff-learning-process-rewards-from-the-first-mist.md|상세 보기]]
+
+### EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction (2026-09-04)
+
+→ [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|상세 보기]]

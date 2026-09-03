@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction (2026-09-04)
+
+→ [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|상세 보기]]

@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### An AI Agent Execution Environment to Safeguard User Data (2026-04-23)
 
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
+
+### Toward Robust LiDAR Semantic Segmentation for Real-World Deployment: E (2026-09-04)
+
+→ [[sources/2026-09-04-toward-robust-lidar-semantic-segmentation-for-real.md|상세 보기]]

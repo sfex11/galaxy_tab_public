@@ -3244,3 +3244,19 @@
 ## [2026-09-03 08:37] ingest | Scaling Near-Optimal SFT-RL Annotation Budget Allocation from Small to Large LLMs
 
 ## [2026-09-03 08:37] ingest | Bandits in Prod: Hyperparameter Optimization at Inference Time
+
+## [2026-09-04 06:38] llm-ingest | 14편 분석, 엔티티 403개, 개념 1519개
+- 2026-09-04-discriminative-world-models-for-web-agents.md
+- 2026-09-04-user-feedback-provides-a-unique-signal-that-llms-c.md
+- 2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md
+- 2026-09-04-cliff-learning-process-rewards-from-the-first-mist.md
+- 2026-09-04-large-language-models-llms-for-telecom-root-cause-.md
+- 2026-09-04-discosign-discourse-aware-text-to-sign-language-gl.md
+- 2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md
+- 2026-09-04-towards-trustworthy-autonomous-robots-an-explainab.md
+- 2026-09-04-toward-robust-lidar-semantic-segmentation-for-real.md
+- 2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md
+- 2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md
+- 2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md
+- 2026-09-04-post-training-language-models-for-gold-medal-perfo.md
+- 2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md

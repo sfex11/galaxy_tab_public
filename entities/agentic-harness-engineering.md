@@ -26,3 +26,9 @@ C/R 런타임이 하네스의 핵심 구성요소(결함 내성·롤백·분기)
 ### Design Conductor 2.0: An agent builds a TurboQuant inference accelerat (2026-05-08)
 
 Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아닌 모델 발전 주기와 동기화된 지속적 진화 과정임을 결정적 실증으로 제공한다. 4개월간 프론티어 모델 진화와 하네스 개선이 병행되어 80배 규모 확장을 달성한 경로를 구체화하여, 기존 '관측 가능성 주도 진화' 개념을 '공진화적 하네스 설계'로 확장한다.
+
+### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
+
+하네스 업데이트만으로는 안전이 보장되지 않으며, 하네스 정책 자체가 모델 정렬과 공진화해야 한다는 방향을 제시한다. 하네스를 정적 실행 인프라가 아닌 경험에서 진화하는 안전 정렬 주체로 재정의한다.
+
+→ [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|상세 보기]]

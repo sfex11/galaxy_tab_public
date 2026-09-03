@@ -44,3 +44,9 @@ DV-World는 '코드 샌드박스 격리→단일 언어 생성 전용→완전 �
 ### Automated Benchmark Auditing for AI Agents and Large Language Models (2026-05-27)
 
 벤치마크의 결과 신뢰성이 구조적 한계에 기인한다는 메커니즘을 제공한다. 기존 연구(dynamic-evaluation-landscape, ceiling-performance-problem 등)가 벤치마크 결과의 정확성을 문제 삼았다면, ABA는 벤치마크 구성 과정 자체의 무결성을 검증한다. claw-eval-live가 평가 대상을 동적으로 갱신한다면, ABA는 평가 대상을 구성하는 과정의 무결성을 검증한다. 이로 인해 sandbox-liveworld-gap이 검증 불가능한 정적 성능을 실제 환경에서의 실패로 교차하는 구조적 간극의 구체적 사례가 된다.
+
+### EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction (2026-09-04)
+
+기존 Wiki 논의(MathDuels, RoboGrid)가 벤치마크의 측정 대상과 타당성에 집중했다면, 본 논문은 측정 비용을 독립적 설계 변수로 격상시킨다. 프론티어 모델의 에이전틱 벤치마크 1회 통과가 수백~수천 달러에 달하는 현실에서, 벤치마크 설계는 측정 문제이자 경제 문제가 되며, 태스크 수 축소(증류)와 태스크당 비용 축소(조기 결과 예측)라는 상보적 두 축으로 분해된다.
+
+→ [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|상세 보기]]

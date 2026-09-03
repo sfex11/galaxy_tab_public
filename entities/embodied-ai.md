@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Safe Navigation using Neural Radiance Fields via Reachable Sets (2026-05-01)
 
 체화 AI의 안전 내비게이션 문제를 '동역학 제어'와 '환경 표현'의 양축으로 구조화하며, 환경 측면에서 NeRF 기반 기하학적 안전 보장 경로를 구체화한다.
+
+### Towards Trustworthy Autonomous Robots: An Explainable AI-Based Decisio (2026-09-04)
+
+체화 AI 안전 논의에 사후 감사 가능성이라는 제3축을 추가한다. SafetyALFRED가 지적한 평가-배포 간극이 '사전 평가'의 한계였다면, TRACE는 '사후 조사'가 성립하기 위한 아키텍처 전제를 다룬다.
+
+→ [[sources/2026-09-04-towards-trustworthy-autonomous-robots-an-explainab.md|상세 보기]]

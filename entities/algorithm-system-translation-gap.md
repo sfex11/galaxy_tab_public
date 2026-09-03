@@ -42,3 +42,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 ### BAMI: Training-Free Bias Mitigation in GUI Grounding (2026-05-10)
 
 모델(저해상도에서 정상)과 시스템(고해상도 디스플레이) 간 변환에서 해상도 상승이 정밀도 편향을 유발하는 구체적 사례를 제공하여, 이 간극이 텍스트·컨텍스트 도메인에 국한되지 않고 시각-공간 도메인에서도 현현됨을 실증한다.
+
+### Unfolding the Leech Lattice: Fused Multi-Shell Decoding and VRAM Layou (2026-09-04)
+
+양자화 도메인의 정밀한 사례를 제공한다 — Leech 격자의 이론적 rate가 요구하는 멀티-셸 디코더의 부재가 곧 최고 품질 기법의 미채택 원인이었으며, 알고리즘 우월성만으로 실용화가 보장되지 않음을 실증한다.
+
+→ [[sources/2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md|상세 보기]]

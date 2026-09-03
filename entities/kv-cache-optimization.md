@@ -34,3 +34,9 @@ KV 캐시 최적화의 대상을 텍스트 토큰에서 시각 토큰으로 확�
 ### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-05)
 
 KV 캐시 압축(LightKV 등)이 추측 디코딩의 γ 선택과 어떻게 상호작용하는지에 대한 구조적 질문을 제기한다. 압축 수준이 γ의 최적값을 변화시킨다면, KV 압축과 추측 디코딩은 독립적으로 최적화할 수 없는 결합 최적화 문제가 됨을 시사한다.
+
+### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
+
+컨텍스트 오프로딩·토큰 프루닝 같은 캐시 최적화가 스트리밍 설정에서 질의 도착 전 단계로 이동하며, '언제 깊이를 예약할 것인가'라는 시간적 축이 캐시 관리에 추가됨을 보여준다.
+
+→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]

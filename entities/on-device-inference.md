@@ -26,3 +26,15 @@ _Wiki 축적 중_
 ### EMO: Pretraining Mixture of Experts for Emergent Modularity (2026-05-10)
 
 온디바이스 배포의 메모리 제약 해결 경로를 모델 압축에서 아키텍처 수준의 선택적 전문가 활성화로 확장한다. 압축이 모델 전체의 균질적 축소라면, EMO는 도메인에 맞는 전문가만 선택적으로 탑재하는 비균질적 접근으로, 특정 도메인에서 규모가 큰 모델과 동등한 성능을 더 작은 메모리로 달성하는 새로운 축을 제공한다.
+
+### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
+
+상점 바닥 하드웨어 제약 하에서 온프레미스 RAG 에이전트를 실현하는 구체적 배포 경로를 제공하며, 온디바이스 배포의 프론티어가 '작은 모델 찾기'에서 '적응 후 실측 선택'으로 이동함을 시사한다.
+
+→ [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|상세 보기]]
+
+### Unfolding the Leech Lattice: Fused Multi-Shell Decoding and VRAM Layou (2026-09-04)
+
+2비트 가중치 서빙의 실용적 경계를 배치 1 디코드 페이즈 GEMV 실측 비용으로 구체화하여, 극저비트 온디바이스 배포 논의가 압축률 수치에서 커널 수준 비용으로 이동해야 함을 시사한다.
+
+→ [[sources/2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md|상세 보기]]

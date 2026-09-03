@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-10-strata-incentivizing-agentic-reinforcement-learnin.md|StraTA: Incentivizing Agentic Reinforcement Learning with St]]
+
+### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
+
+→ [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|상세 보기]]

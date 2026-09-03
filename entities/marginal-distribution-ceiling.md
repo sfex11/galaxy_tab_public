@@ -34,3 +34,9 @@ position-aware drafting이 타겟 분포를 변경하지 않고 내부 구조만
 ### Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key (2026-05-10)
 
 표현력 한계가 P(y)의 구조적 특성으로 귀인됨을 실증하여, 성능 천장의 원인을 '사전학습 데이터 양'이 아닌 '학습된 표현 체계의 논리적 표현력'으로 확장한다.
+
+### Post-Training Language Models for Gold-Medal Performance in Coding Com (2026-09-04)
+
+Nano(SFT+RL) vs Ultra(SFT만)의 대조를 통해, 사전학습 주변 분포의 상한이 높은 대형 모델은 조건부 SFT만으로 상한 근접이 가능하지만 소형 모델은 RL이 상한 접근을 촉진해야 한다는 스케일 의존적 구조를 실증한다.
+
+→ [[sources/2026-09-04-post-training-language-models-for-gold-medal-perfo.md|상세 보기]]

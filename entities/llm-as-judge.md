@@ -22,3 +22,9 @@ LLM-as-Judge의 적용 범위가 텍스트 생성 평가를 넘어 ASR 후보 �
 ### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
 
 LLM 판정자의 신뢰성을 근본적 능력 문제가 아닌 '판정자 고정'이라는 계약 조건으로 재구성하여, LLM-as-Judge의 한계를 프레임워크 내 파라미터로 흡수하는 설계 전략을 보여준다.
+
+### User Feedback Provides a Unique Signal that LLMs Can not Detect (2026-09-04)
+
+LLM 판정자가 사용자 피드백의 고유 신호를 감지하지 못한다는 결과는, LLM-as-Judge 평가 체계가 학습 신호의 가치를 구조적으로 과소평가할 수 있음을 보여주며 평가자 선택의 인식론적 위험을 부각시킨다.
+
+→ [[sources/2026-09-04-user-feedback-provides-a-unique-signal-that-llms-c.md|상세 보기]]

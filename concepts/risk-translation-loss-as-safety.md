@@ -12,3 +12,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
+
+→ [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]

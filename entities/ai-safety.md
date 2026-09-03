@@ -42,3 +42,15 @@ TTI는 턴 단위 무상태 검열이 체계적 공격 표면을 생성함을 �
 ### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
 
 안전성 평가를 레이블 의존적 벤치마크에서 계약 기반 시나리오 감사로 전환하는 형식적 프레임워크를 제공하여, '벤치마크가 없는' 실제 배포 환경에서도 안전성 비교가 가능함을 보인다.
+
+### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
+
+언어 출력이 내부 연산의 왜곡된 대리물임을 보임으로써, 출력 필터링·프롬프트 모니터링 같은 표면 기반 방어의 인식론적 한계를 이론적으로 규정하고 방어 계층을 연산 구조 검증 쪽으로 재설계할 필요를 제시한다.
+
+→ [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]
+
+### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
+
+안전 정렬이 사후 방어(가드레일, 필터)나 일회성 정렬 학습에서 경험 기반 동적 공진화로 이동하는 패러다임 전환 사례를 제공한다. 최종 출력뿐 아니라 다단계 실행 궤적까지 정렬 대상에 포함한다.
+
+→ [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|상세 보기]]

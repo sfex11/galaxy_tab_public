@@ -16,3 +16,11 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction (2026-09-04)
+
+→ [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|상세 보기]]
+
+### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
+
+→ [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|상세 보기]]

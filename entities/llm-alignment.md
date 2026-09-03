@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Three Models of RLHF Annotation: Extension, Evidence, and Authority (2026-04-30)
 
 RLHF가 '정렬'을 수행한다는 명제의 규범적 전제를 해체하여, 정렬이 설계자 연장(Extension)·사실 증거(Evidence)·독립 권위(Authority) 중 어느 모델에 기반하는지에 따라 정렬의 의미와 정당성이 근본적으로 달라짐을 보여준다. 기존 '_Wiki 축적 중_' 상태를 규범적 분석으로 구체화하는 첫 논문.
+
+### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
+
+정렬 평가가 언어 산출물에 의존하는 한 내부 연산의 정렬 여부를 검증할 수 없다는 전제 비판을 추가하여, 정렬의 검증 가능성 요구와 [[algorithm-system-translation-gap]] 계열 논의를 연결한다.
+
+→ [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]

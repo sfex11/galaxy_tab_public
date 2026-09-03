@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### When LLMs Stop Following Steps: A Diagnostic Study of Procedural Execu (2026-05-05)
 
 추론 무결성의 대상을 논리적 타당성·감정적 추론에서 '절차적 충실도'로 확장한다. 모델이 정답을 맞히더라도 지정된 절차를 따르지 않는다면 무결성이 결여된 것으로 간주해야 함을 실증하여, 추론 무결성 평가가 최종 출력뿐 아니라 중간 과정의 준수 여부를 포함해야 함을 명시한다.
+
+### Large Language Models (LLMs) for Telecom Root Cause Analysis (RCA): A  (2026-09-04)
+
+'불안정한 추론'이라는 바닐라 LLM 진단을 통해, 추론 무결성 문제가 평가 맥락을 넘어 산업 운영 배포에서 시스템 신뢰성의 직접적 병목이 됨을 실증하고, 구조화된 추론 프레임워크가 무결성 보장의 실용적 경로임을 제안한다.
+
+→ [[sources/2026-09-04-large-language-models-llms-for-telecom-root-cause-.md|상세 보기]]

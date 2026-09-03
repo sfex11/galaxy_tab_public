@@ -34,3 +34,7 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-06)
 
 γ 선택이 드래프트 모델 품질뿐 아니라 타겟 모델의 메모리 압축 상태에도 의존한다는 새로운 의존 축을 추가한다. 기존 '드래프트-타겟 품질 격차'에 '압축-수용률 격차'라는 제2의 조율 문제가 존재함을 시사한다.
+
+### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
+
+→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]
