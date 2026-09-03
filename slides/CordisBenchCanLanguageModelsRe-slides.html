@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CordisBench: Can Language Models Reason About Component Life — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:3vh;">
+      <div>
+        <span class="tag tag-amber" style="font-size:clamp(0.75rem,1.4vw,1rem);">Benchmark · 1,200 Questions</span>
+        <span class="tag tag-green" style="font-size:clamp(0.75rem,1.4vw,1rem);">Dynamic Agent Harnesses</span>
+      </div>
+      <h1 style="font-size:clamp(2rem,5vw,3.4rem); margin-top:2.5vh;">CordisBench</h1>
+      <p class="accent2" style="font-size:clamp(1rem,2.3vw,1.55rem); font-weight:600; margin-top:1vh;">Can Language Models Reason About Component Lifecycles in Dynamic Agent Harnesses?</p>
+      <p style="font-size:clamp(0.95rem,2vw,1.3rem); margin-top:1.5vh;">언어 모델은 동적 에이전트 하네스의 컴포넌트 라이프사이클을 추론할 수 있는가?</p>
+      <div class="hr" style="margin:3.5vh auto; max-width:55%;"></div>
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); font-weight:600;">Damien Sileo &nbsp;·&nbsp; Dimitri Kachler</p>
+      <p class="muted" style="font-size:clamp(0.8rem,1.5vw,1rem); margin-top:0.5vh;">Univ. Lille · Inria · CNRS · Centrale Lille · UMR 9189 CRIStAL</p>
+      <p class="muted" style="font-size:clamp(0.8rem,1.5vw,1rem); margin-top:1vh;"><i class="fas fa-link"></i> arXiv: 2609.01600</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-robot accent"></i> 배경: 런타임에 변하는 에이전트 하네스</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">유연성의 새로운 대가</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>에이전트가 필요에 따라 플러그인·서비스·메모리 정책·도구를 실행 중에 추가·제거·재구성</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하네스 자체가 에이전트의 진화하는 상태의 일부가 됨</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>로컬 플러그인 하나의 변경이 의존성과 정리(cleanup)를 통해 전파</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">실제 사례: DeepSeek Harness</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>모델이 동적 플러그인을 직접 구성하고 조작</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cordis 런타임이 의존성·수명·정리를 관리</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cordis는 변경을 충실히 수행하지만, 결과 상태가 의도와 일치하는지는 모델이 예측해야 함</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2.5vh;">
+      <span class="accent" style="font-size:clamp(1rem,2vw,1.3rem); font-weight:700;">핵심 질문</span> — 기호적 도움도 실행 피드백도 없이 스스로 결과를 예측해야 할 때, 이 라이프사이클 추론은 규모가 커져도 안정적인가?
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-layer-group accent2"></i> 문제 예시: 순서에 민감한 정리(cleanup)</h2>
+    <p style="font-size:clamp(0.95rem,1.9vw,1.25rem); margin-top:1.5vh;">두 플러그인이 같은 설정값을 임시 수정 — 각자 <b>시작 시 값을 저장</b>하고, <b>종료 시 저장한 값을 복원</b></p>
+    <div class="grid-3" style="margin-top:2vh;">
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(0.95rem,1.8vw,1.25rem);">초기 상태</h3>
+        <p style="font-size:clamp(0.9rem,1.7vw,1.15rem);">mode = <b>NORMAL</b></p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(0.95rem,1.8vw,1.25rem);">A 시작</h3>
+        <p style="font-size:clamp(0.9rem,1.7vw,1.15rem);">NORMAL 저장 → <b>FAST</b> 기록</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(0.95rem,1.8vw,1.25rem);">B 시작</h3>
+        <p style="font-size:clamp(0.9rem,1.7vw,1.15rem);">FAST 저장 → <b>SAFE</b> 기록</p>
+      </div>
+    </div>
+    <table class="compare-table" style="margin-top:2vh;">
+      <thead>
+        <tr><th>해체(teardown) 순서</th><th>상태 전이</th><th>최종 상태</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>B → A</td><td>SAFE → FAST → NORMAL</td><td><span class="tag tag-green">NORMAL (의도)</span></td></tr>
+        <tr><td>A → B</td><td>SAFE → NORMAL → FAST</td><td><span class="tag tag-red">FAST (의도와 다름)</span></td></tr>
+      </tbody>
+    </table>
+    <div class="quote-block" style="margin-top:2vh;">각 정리는 개별적으로 합리적이지만, 수명이 겹치면 <b>법적인 해체 순서에 따라 서로 다른 최종 상태</b>가 남는다</div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-cubes accent"></i> CordisBench 개요</h2>
+    <div class="grid-3" style="margin-top:3vh;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">1,200</div>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">구조화 출력 질문<br><span class="muted">240개 독립 생성 시스템</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">2→32</div>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">관련 상호작용 수 6단계<br><span class="muted">작업 형태·채점은 고정</span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">528</div>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">실행 검증 질문<br><span class="muted">참조 의미론 100% 일치</span></p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:2.5vh;">
+      <h3 style="font-size:clamp(1.05rem,2vw,1.4rem);">두 가지 평가 설정</h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><b>형식(formal) 설정</b> — 컴팩트한 형식 언어로 통제된 인스턴스 구성</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><b>Cordis 네이티브 설정</b> — 실제 Cordis 런타임에서 플러그인 프로그램 실행</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>출력은 구조화된 집합·상태 시퀀스·정수·액션 집합, <b>결정론적 작업별 채점</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-tasks accent2"></i> 5가지 작업 군(Task Families)</h2>
+    <div class="grid-3" style="margin-top:2.5vh;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-search"></i> Localization</h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">요청된 변경의 영향을 받을 수 있는 컴포넌트·슬롯 식별 — 최종 상태 계산 전 <b>의존성 추적</b> 능력 평가</p>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-stream"></i> Schedule Prediction</h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">주어진 해체 순서의 결과인 응용 관찰 상태 반환 — 더 큰 문제는 <b>추적할 상태 변화만 추가</b></p>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-check-double"></i> Guaranteed Conditions</h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">모든 고려된 순서에서 성립하는 조건 전체 반환 — <b>보편적(universal) 추론</b> 요구</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-route"></i> Reachable Conditions</h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">적어도 하나의 순서에서 성립하는 조건 전체 반환 — 동일한 대안들에 대한 <b>존재적(existential) 추론</b></p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-wrench"></i> Reconfiguration <span class="muted">(Cordis 네이티브)</span></h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">모든 나열된 해체 순서에서 목표 달성을 위한 <b>최소 선제 제거 종속 집합</b> 반환 — 제안은 실제 dispose(...) 실행으로 채점</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(0.95rem,1.8vw,1.25rem);"><i class="fas fa-calculator"></i> Outcome Count <span class="muted">(진단)</span></h3>
+        <p style="font-size:clamp(0.85rem,1.6vw,1.1rem);">서로 다른 최종 관찰의 개수 반환 — 기본 작업과 <b>분리하여 별도 보고</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-wrench accent2"></i> 대표 예시: Cordis 네이티브 재구성</h2>
+    <div class="card" style="margin-top:2vh;">
+      <p style="font-size:clamp(0.95rem,1.9vw,1.25rem);"><b>초기 상태:</b> 슬롯 S = 488151 &nbsp;→&nbsp; 제공자 P의 두 종속이 순서대로 시작: <b>A가 36000 기록</b>, 이후 <b>B가 934261 기록</b></p>
+      <p style="font-size:clamp(0.95rem,1.9vw,1.25rem); margin-top:1vh;"><b>해체 순서:</b> dispose(P) 시 s₁: A→B, s₂: B→A &nbsp;·&nbsp; 각 플러그인 정리는 <b>자신이 시작할 때 본 값</b>을 복원</p>
+      <p style="font-size:clamp(0.95rem,1.9vw,1.25rem); margin-top:1vh;"><b>목표:</b> 모든 나열된 순서에서 S를 488151로 복원하는 <b>최소 선제 제거 집합</b>은? &nbsp;→&nbsp; <span class="tag tag-green">참조 답: ["B"]</span></p>
+    </div>
+    <div class="pipeline" style="margin-top:3vh;">
+      <div class="pipeline-step"><div class="step-num">1</div><div class="step-label">상황 파악</div><div class="step-desc">두 종속이 같은 슬롯을 수정</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">2</div><div class="step-label">캡처 추적</div><div class="step-desc">A는 488151, B는 36000을 저장</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">3</div><div class="step-label">순서 분석</div><div class="step-desc">s₂(B→A)에서는 B가 36000을 남김</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">4</div><div class="step-label">최소 선택</div><div class="step-desc">B를 선제 제거하면 두 순서 모두 목표 달성</div></div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.8rem,1.5vw,1rem); margin-top:2vh;">모델은 각 효과가 시작 시 캡처한 값을 추적하며, 두 해체 순서 모두에서 목표가 성립하도록 제거할 종속을 결정해야 함</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-ruler-combined accent"></i> 벤치마크 설계: 상호작용 수에 따른 스케일링</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div>
+        <table class="compare-table">
+          <thead>
+            <tr><th>설정</th><th>상호작용 수</th><th>질문 수</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Formal</td><td>2, 4</td><td>192</td></tr>
+            <tr><td>Formal</td><td>8, 16, 24, 32</td><td>480</td></tr>
+            <tr><td>Cordis 네이티브</td><td>2, 4</td><td>240</td></tr>
+            <tr><td>Cordis 네이티브</td><td>8, 16, 24, 32</td><td>288</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="font-size:clamp(0.8rem,1.5vw,1rem); margin-top:1.5vh;">총 1,200문항 = 기본 작업 1,056 + 결과 개수 진단 144</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">"상호작용"의 의미</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>Formal 설정</b> — 효과 그룹: 같은 인접 상태 엔트리 쌍에 닿는 컴포넌트들의 집합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>Cordis 네이티브</b> — 관찰된 슬롯을 바꿀 수 있는 종속(queried dependent)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>허니 사이즈가 아니라 <b>동시에 고려해야 할 상호작용의 수</b>를 측정 — 작업과 설정이 고정된 상태에서만 비교</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2vh;">질문 형태·답 형식·채점 규칙은 그대로 유지한 채, <b>추적해야 하는 상호작용만 2개에서 32개로</b> 증가</div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-code-branch accent3"></i> 두 설정과 유한 참조 의미론</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1.05rem,2vw,1.4rem);">형식(Formal) 설정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>응용 상태 = 고정 폭 정수 벡터 (mod m)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>효과 = 엔트리에 대한 짧은 산술 프로그램</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컴포넌트 의존성과 대상 변경을 명시</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1.05rem,2vw,1.4rem);">Cordis 네이티브 설정</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>동일 라이프사이클 패턴을 Cordis 플러그인으로 컴파일</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>Cordis 4.0.0-rc.7에서 실제 실행</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>효과는 활성화 시 상태를 캡처, Cordis가 의존성 해소·종속 정리</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:2.5vh;">
+      <h3 class="accent3" style="font-size:clamp(1.05rem,2vw,1.4rem);"><i class="fas fa-balance-scale"></i> 유한 참조 의미론(Finite Reference Semantics)</h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>생성된 시스템이 유한하므로, 답에 영향을 주는 모든 법적 라이프사이클 연속을 열거하여 종단까지 실행</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>종단 관찰로 5개 작업의 <b>정확한 참조 답</b> 산출</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span>Cordis의 전역 복원·수렴 보장 조건을 <b>의도적으로 벗어나는 간섭 사례 포함</b> — 모델이 직접 추론해야 함</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-flask accent"></i> 실험 설정</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">모델과 조건</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>효율 지향 모델 3개</b>를 낮은 추론 노력(low reasoning effort)으로 평가</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>상호작용 수 6단계: 2, 4, 8, 16, 24, 32</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>구조화된 출력 형식 강제: 집합·상태 시퀀스·정수·액션 집합</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">채점과 통제</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>결정론적 작업별 채점</b> — 구조화 출력과 참조 의미론만으로 검증 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>재구성 제안은 Cordis dispose(...) 연산으로 변환 후 <b>실제 실행</b></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>출력 한도·고정 일정·결과 개수 등 <b>별도 진단</b>으로 원인 분리</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2.5vh;">단답·객관식이 아닌 <b>구조화 출력 + 실행 검증</b>으로, 그럴듯한 그릇된 답을 배제</div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-chart-line accent"></i> 결과 ① 규모가 커질수록 저하, 작업마다 속도는 다르다</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(1.05rem,2vw,1.4rem);"><i class="fas fa-thumbs-up"></i> 잘 되는 것</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>소규모 시스템(2~4 상호작용)은 대체로 안정적으로 처리</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>Localization</b>은 상대적으로 완만하게 저하 — 의존성 추적 자체는 유지됨</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1.05rem,2vw,1.4rem);"><i class="fas fa-thumbs-down"></i> 어려워지는 것</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>최종 상태 예측</b>(schedule prediction)이 크게 저하</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><b>해체 순서 전반의 추론</b>(보편/도달 조건)도 급격히 감소</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 상호작용은 무관한 맥락이 아니라 <b>추적해야 할 실제 효과</b>를 늘림</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2.5vh;"><b>핵심 발견:</b> 작은 시스템에서의 성능이 더 큰 구성으로 <b>신뢰롭게 전이되지 않는다</b> — 출력 한도·고정 일정 진단이 이 저하가 과제 자체의 어려움임을 확인</div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-coins accent2"></i> 결과 ② 추가 추론은 신뢰도를 높이지만, 비용이 크다</h2>
+    <div class="grid-2" style="margin-top:2.5vh;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">≈3,000</div>
+        <p style="font-size:clamp(0.9rem,1.7vw,1.15rem);">질문당 추론 토큰 수<br><span class="muted">GPT-5.6 Luna · 16-상호작용 부분집합 · medium effort</span></p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1.05rem,2vw,1.4rem);">비용-편익 분석</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 추론 노력이 일부 모델에서 <b>뚜렷한 신뢰도 회복</b>을 가져옴</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>그러나 이 통제된 인스턴스에서는 그 비용이 <b>불필요</b></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>독립적인 유한 참조 의미론이 모든 관찰·액션 결과를 기계적으로 계산·검증 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:2.5vh;">모델의 <b>자발적 야기적 예측</b>과 <b>기계적 검증</b> 사이에는 실질적인 비용 격차가 존재 — 하네스 설계 시 어느 쪽에 맡길지가 중요한 판단 기준</div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
