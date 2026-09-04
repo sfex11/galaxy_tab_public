@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cliff: Learning Process Rewards from the First Mistake — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="margin-bottom: clamp(16px, 3vh, 32px);">
+      <span class="tag tag-amber">RLVR</span>
+      <span class="tag tag-green">Process Reward</span>
+      <span class="tag tag-red">보상 셰이핑</span>
+    </div>
+    <h1 style="font-size: clamp(28px, 5vw, 54px); margin-bottom: clamp(12px, 2vh, 24px); line-height: 1.3;">
+      <span class="accent">Cliff</span>: 첫 번째 실수로부터<br>프로세스 보상을 학습하다
+    </h1>
+    <p class="muted" style="font-size: clamp(15px, 2vw, 22px); margin-bottom: clamp(16px, 3vh, 32px);">
+      Learning Process Rewards from the First Mistake
+    </p>
+    <div class="hr"></div>
+    <p style="font-size: clamp(14px, 1.8vw, 20px); line-height: 1.6;">
+      Peixuan Han, Runhui Wang, Ketan Ramaneti, Jie Hao, Gerald Friedland, Chris Kong<br>
+      <span class="muted">Amazon Web Services · University of Illinois Urbana-Champaign</span>
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(14px, 2.5vh, 28px);">배경: RLVR의 성공과 한계</h2>
+    <div class="card" style="margin-bottom: clamp(12px, 2vh, 24px);">
+      <p style="font-size: clamp(15px, 2vw, 21px); line-height: 1.6;"><strong class="accent2">RLVR (검증 가능한 보상을 활용한 강화학습)</strong>은 LLM 포스트트레이닝의 표준 패러다임 — 인간 주석 없이 확장 가능하고 편향 없는 학습을 가능하게 함</p>
+    </div>
+    <p style="font-size: clamp(17px, 2.3vw, 26px); margin-bottom: clamp(12px, 2vh, 22px);"><strong class="accent">하지만 outcome reward는 지나치게 성글다 (coarse-grained)</strong></p>
+    <ul class="check-list" style="font-size: clamp(14px, 1.9vw, 20px); line-height: 1.6;">
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span>최종 결과만 평가 → 중간 추론 과정에 대한 가이던스 부족</span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span>사소한 오류 1개만 있는 거의 완성된 풀이와 완전히 틀린 풀이가 <strong>동일한 벌점</strong></span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span>어디서 성공/실패했는지 알 수 없어 credit assignment가 어렵고 학습 효율 저하</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(10px, 2vh, 20px);">기존 세밀한 감독 접근법의 한계</h2>
+    <p class="muted" style="font-size: clamp(14px, 1.9vw, 20px); margin-bottom: clamp(14px, 2.5vh, 28px);">두 가지 주요 방향 모두 추가 제약 조건이 존재</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(18px, 2.5vw, 27px); margin-bottom: clamp(10px, 1.5vh, 18px);">Process Reward Model (PRM)</h3>
+        <ul class="check-list" style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>추가 보상 모델 학습 필요 → 일반화가 어려움</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>일반화를 위해 대규모 데이터 요구</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>보상 해킹(reward hacking)에 취약</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size: clamp(18px, 2.5vw, 27px); margin-bottom: clamp(10px, 1.5vh, 18px);">On-Policy Distillation (OPD)</h3>
+        <ul class="check-list" style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>학생이 자신의 궤적 위에서 교사의 행동을 모방</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>동일한 tokenizer와 추론 패턴 필요</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span>교사·학생이 같은 계열일 때만 최적 성능</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(14px, 2.5vh, 28px);">핵심 질문: 프로세스 신호는 얼마나 세밀해야 하는가?</h2>
+    <div class="quote-block" style="margin-bottom: clamp(14px, 2.5vh, 28px);">
+      <p style="font-size: clamp(17px, 2.6vw, 28px); line-height: 1.55;">"모든 중간 단계·토큰을 정밀 평가할 필요는 없다.<br><strong class="accent">추론이 처음 잘못되기 시작한 지점</strong>만 찾으면 충분하다."</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(17px, 2.2vw, 24px); margin-bottom: clamp(8px, 1.5vh, 16px);"><i class="fas fa-lightbulb accent"></i> 형식논리의 Vacuous Implication</h3>
+        <p style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">전건 A가 거짓이면 함의 "A → B"는 B와 무관하게 참 — 잘못된 prefix에 조건부된 이후 추론은 추가 정보가 제한적</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(17px, 2.2vw, 24px); margin-bottom: clamp(8px, 1.5vh, 16px);"><i class="fas fa-compass accent2"></i> 디자인 원칙</h3>
+        <p style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">이후의 모든 것을 정밀 평가하는 대신, <strong>추론이 처음 어긋나는 지점만</strong> 식별하는 것으로 프로세스 감독이 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(10px, 2vh, 20px);">Cliff: 롤아웃을 단 한 번 분할</h2>
+    <p class="muted" style="font-size: clamp(14px, 1.9vw, 20px); margin-bottom: clamp(14px, 2.5vh, 26px);">교사 LLM이 학생 롤아웃의 첫 번째 실수(pitfall step)를 찾아 두 구간으로 분해</p>
+    <div class="pipeline" style="margin-bottom: clamp(14px, 2.5vh, 26px);">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">롤아웃 생성</div>
+        <div class="step-desc">정책으로 N개 롤아웃 샘플링</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">교사 판정</div>
+        <div class="step-desc">첫 실수 위치 특정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">분할</div>
+        <div class="step-desc">올바른 prefix + 잘못된 suffix</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">토큰별 advantage</div>
+        <div class="step-desc">prefix는 양(+), suffix는 음(−)</div>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size: clamp(15px, 2vw, 21px); line-height: 1.6;"><span class="tag tag-green">올바른 prefix</span>&nbsp; 상대적으로 높은 advantage &nbsp;&nbsp;|&nbsp;&nbsp; <span class="tag tag-red">잘못된 suffix</span>&nbsp; GRPO처럼 음(−)의 피드백</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(12px, 2vh, 24px);">기반 알고리즘: GRPO</h2>
+    <p class="muted" style="font-size: clamp(14px, 1.9vw, 20px); margin-bottom: clamp(12px, 2vh, 22px);">Cliff는 GRPO를 확장 — objective는 동일, advantage만 교체</p>
+    <div class="quote-block" style="margin-bottom: clamp(12px, 2vh, 22px);">
+      <p style="font-size: clamp(16px, 2.2vw, 24px); font-family: monospace;">A<sub>i,j</sub> = ( R(q, a<sub>i</sub>) − mean[R(q, a<sub>1..N</sub>)] ) / std[R(q, a<sub>1..N</sub>)]</p>
+    </div>
+    <ul class="check-list" style="font-size: clamp(14px, 1.9vw, 20px); line-height: 1.6; margin-bottom: clamp(10px, 1.5vh, 18px);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span>질문 하나당 N개의 롤아웃을 그룹으로 샘플링, 그룹 내 상대 비교</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span>실제 구현은 DAPO의 token-level loss aggregation 채택</span></li>
+      <li><span class="check-icon"><i class="fas fa-times"></i></span><span><strong>한계:</strong> 같은 롤아웃의 모든 토큰이 동일한 결과 기반 advantage 공유 → 어디가 틀렸는지 정보 없음</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(10px, 2vh, 20px);">방법 ① — Pitfall Step 식별</h2>
+    <p class="muted" style="font-size: clamp(14px, 1.9vw, 20px); margin-bottom: clamp(14px, 2.5vh, 26px);">교사 모델의 감독은 두 단계로 수행</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(17px, 2.3vw, 25px); margin-bottom: clamp(10px, 1.5vh, 18px);"><span class="accent">Stage 1</span> — 교사 스스로 검증</h3>
+        <ul class="check-list" style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span>교사가 질문에 대한 참조 풀이(reference solution)를 독립적으로 생성</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span>자동 검증기(verifier)로 교사 풀이를 평가, 정답 그룹만 유지</span></li>
+          <li><span class="check-icon"><i class="fas fa-exclamation-triangle"></i></span><span>교사가 오답이면 → 해당 그룹은 <strong>vanilla GRPO로 fallback</strong> (신뢰할 수 없는 지도 방지)</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(17px, 2.3vw, 25px); margin-bottom: clamp(10px, 1.5vh, 18px);"><span class="accent2">Stage 2</span> — 학생 롤아웃 판정</h3>
+        <ul class="check-list" style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span>교사가 질문 + 자신의 검증된 풀이를 근거로 학생 답안을 판정</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span>오답으로 판정되면 <strong>첫 실수가 발생한 위치</strong>를 특정</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span>경계(boundary)를 기준으로 올바른 prefix / 잘못된 suffix로 분할</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(12px, 2.5vh, 26px);">방법 ② — Cliff Advantage 할당</h2>
+    <div class="grid-2" style="margin-bottom: clamp(12px, 2vh, 24px);">
+      <div class="card">
+        <h3 class="accent3" style="font-size: clamp(17px, 2.3vw, 25px); margin-bottom: clamp(8px, 1.5vh, 16px);">첫 실수 이전 — 올바른 prefix</h3>
+        <div class="big-num accent3" style="font-size: clamp(36px, 6vw, 64px);">+</div>
+        <p style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">상대적으로 높은(양수) advantage 부여 → 옳은 추론 경로 강화, 계수 <strong>λ</strong>로 강도 조절</p>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size: clamp(17px, 2.3vw, 25px); margin-bottom: clamp(8px, 1.5vh, 16px);">첫 실수 이후 — 잘못된 suffix</h3>
+        <div class="big-num accent" style="font-size: clamp(36px, 6vw, 64px);">−</div>
+        <p style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6;">GRPO와 동일하게 결과 보상 기반 음(−)의 피드백 — 이미 무효한 prefix에 조건부된 토큰들</p>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size: clamp(15px, 2vw, 21px); line-height: 1.6;"><i class="fas fa-star accent2"></i>&nbsp; 단 하나의 결과 보상을 <strong>정보가 풍부한 프로세스 수준 피드백</strong>으로 변환 — 토큰/단계별 보상 모델이 전혀 필요 없음</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(10px, 2vh, 20px);">교사는 첫 실수를 잘 찾아낼 수 있는가?</h2>
+    <p class="muted" style="font-size: clamp(14px, 1.9vw, 20px); margin-bottom: clamp(14px, 2.5vh, 26px);">판정 품질(Judge Quality) 분석 결과</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2vw, 22px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-gavel accent"></i> 판정 정확도</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">교사 LLM이 학생 답안을 판정하고 첫 문제 지점을 <strong>정확하게</strong> 식별 — 교사 자체 풀이 성능이 완벽하지 않아도 가능</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2vw, 22px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-book accent2"></i> 참조 풀이의 역할</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">검증된 참조 풀이를 함께 제공하면 판정 품질 향상 — 특히 <strong>약한 judge 모델</strong>에는 ground truth 활용이 유익</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2vw, 22px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-magnifying-glass accent3"></i> 숨은 오류도 포착</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">자동 검증기를 통과한 오답 풀이까지 교사가 잡아내는 사례 확인 (Case Study)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(14px, 2.5vh, 28px);">주요 결과: 12개 시나리오에서 일관된 향상</h2>
+    <div class="grid-3" style="margin-bottom: clamp(14px, 2.5vh, 28px);">
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent" style="font-size: clamp(40px, 7vw, 76px);">15%</div>
+        <p style="font-size: clamp(14px, 1.8vw, 19px);">On-Policy Distillation 대비<br>성능 향상</p>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent2" style="font-size: clamp(40px, 7vw, 76px);">7%</div>
+        <p style="font-size: clamp(14px, 1.8vw, 19px);">표준 GRPO 대비<br>성능 향상</p>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="big-num accent3" style="font-size: clamp(40px, 7vw, 76px);">12</div>
+        <p style="font-size: clamp(14px, 1.8vw, 19px);">서로 다른 평가 시나리오에서<br>일관된 개선</p>
+      </div>
+    </div>
+    <div class="card">
+      <p style="font-size: clamp(15px, 2vw, 21px); line-height: 1.6;"><span class="tag tag-amber">핵심</span>&nbsp; <strong>중간 정도 능력의 교사 모델</strong>로도 충분 — 강력한 전용 보상 모델도, 동일 계열의 교사도 필요 없음</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(14px, 2.5vh, 28px);">분석: 왜 잘 동작하는가?</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-filter accent"></i> Ground Truth 필터</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">교사 풀이가 검증을 통과한 그룹만 Cliff 적용 — 필터 없이도 동작하지만, 약한 judge에서는 ground truth 활용이 유익</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-sliders-h accent2"></i> 계수 λ의 선택</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">prefix advantage의 강도를 조절하는 하이퍼파라미터 — λ 값에 따라 성능이 민감하게 변화</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-chart-line accent3"></i> 학습 동역학</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">올바른 prefix를 강화하며 GRPO와 다른 수렴 패턴 — truncation과 응답 길이 편향(length bias)에도 강건</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-shield-halved accent"></i> 보상 해킹 저항성</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">보상이 "첫 실수의 위치"로 결정 → <strong>실수를 늦추는 것이 항상 유리</strong>, 완전히 올바른 롤아웃은 정의상 최적</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 42px); margin-bottom: clamp(14px, 2.5vh, 28px);">왜 Cliff인가? — 세 가지 매력 포인트</h2>
+    <div class="grid-3" style="margin-bottom: clamp(14px, 2.5vh, 28px);">
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-feather accent"></i> 단순함</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">RLVR의 간단한 공식을 그대로 유지 — 전용 보상 모델·복잡한 파이프라인 불필요, 롤아웃을 단 한 번만 분할</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-globe accent2"></i> 범용성</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">모델·과제에 구애 없음(model/task-agnostic) — 추론이 특정 지점까지 옳은지만 확인하면 되므로 다양한 도메인에 적용 가능</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size: clamp(16px, 2.1vw, 23px); margin-bottom: clamp(8px, 1.5vh, 14px);"><i class="fas fa-lock accent3"></i> 해킹 저항</h3>
+        <p style="font-size: clamp(14px, 1.7vw, 18px); line-height: 1.6;">같은 실수라면 늦게 저지르는 쪽이 항상 더 높은 보상 → 실수를 미루거나 우회하는 전략으로 보상을 속일 수 없음</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size: clamp(16px, 2.2vw, 24px); line-height: 1.55;">성글며 성긴(coarse) 결과 보상을 정보가 풍부한 학습 신호로 바꾸는 <strong class="accent">단순하고, 일반적이며, 효과적인</strong> 접근법</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(24px, 4vw, 44px); margin-bottom: clamp(12px, 2vh, 24px); line-height: 1.3;">Cliff: Learning Process Rewards<br>from the First Mistake</h2>
+    <p style="font-size: clamp(15px, 2vw, 21px); line-height: 1.6; margin-bottom: clamp(12px, 2vh, 22px);"><strong class="accent">첫 실수 지점에서의 분할</strong> 하나로 coarse한 결과 보상을 세밀한 프로세스 감독으로 — RLVR을 위한 간단하고 견고한 확장</p>
+    <ul class="check-list" style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.6; margin-bottom: clamp(14px, 2.5vh, 28px);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span>교사가 판정한 첫 실수로 prefix(+) / suffix(−) 분할 → 토큰별 advantage</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span>12개 시나리오에서 OPD 대비 <strong class="accent">15%</strong>, GRPO 대비 <strong class="accent2">7%</strong> 향상</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span>모델·과제에 범용적이며, 보상 해킹에 자연 저항</span></li>
+    </ul>
+    <div class="hr" style="margin-bottom: clamp(12px, 2vh, 22px);"></div>
+    <p style="font-size: clamp(14px, 1.8vw, 19px); line-height: 1.7; margin-bottom: clamp(10px, 1.5vh, 18px);">
+      <strong>저자:</strong> Peixuan Han, Runhui Wang, Ketan Ramaneti, Jie Hao, Gerald Friedland, Chris Kong<br>
+      <span class="muted">Amazon Web Services · University of Illinois Urbana-Champaign</span>
+    </p>
+    <p style="font-size: clamp(14px, 1.8vw, 19px);">
+      <i class="fas fa-link accent2"></i>&nbsp;
+      <a href="http://arxiv.org/abs/2609.02817v1">arxiv.org/abs/2609.02817v1</a>
+    </p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
