@@ -3260,3 +3260,37 @@
 - 2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md
 - 2026-09-04-post-training-language-models-for-gold-medal-perfo.md
 - 2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md
+
+## [2026-09-05 08:33] ingest | Clean Engineering, Unstable Measurement: A Preregistered Reliability Failure of Black-Box LLM Observers on Shared Endpoints
+
+## [2026-09-05 08:33] ingest | Legibility is Not Interpretability: Comparing Judged and Actual Importance in Chain-Of-Thought Reasoning
+
+## [2026-09-05 08:33] ingest | Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for Weakly-Supervised Dense Video Captioning
+
+## [2026-09-05 08:33] ingest | Knowledge Acquisition During Pre-training? Large Language Models Learn Better With Auxiliary Views
+
+## [2026-09-05 08:33] ingest | A Case Study on Emergent Cheating and Whistleblowing in Autonomous Research Swarms
+
+## [2026-09-05 08:33] ingest | SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineering Agents
+
+## [2026-09-05 08:33] ingest | SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the Security Operations Center
+
+## [2026-09-05 08:33] ingest | Formation Matrix and Energy-based Control of Multi-Agent Systems
+
+## [2026-09-05 08:33] ingest | Terminal-Universe: Turning Agent Trajectories into Scalable Terminal Environments
+
+## [2026-09-05 08:33] ingest | Efficient Test-Time Adaptation through Human-AI Interaction
+
+## [2026-09-05 08:33] ingest | A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Miniature Ackermann Vehicle
+
+## [2026-09-05 08:33] ingest | The Natural Language Interaction Protocol and Standard for AI Agents
+
+## [2026-09-05 08:33] ingest | Environment Evolution for Terminal Agents
+
+## [2026-09-05 08:33] ingest | Corner Cases: Headland Coverage Path Planning for Autonomous Driving in Arable Farming
+
+## [2026-09-05 08:33] ingest | Continuous Actions from Discrete Minds: Latent-Aligned Planning for End-to-End Autonomous Driving
+
+## [2026-09-05 08:33] ingest | Translation as a Decision Space: A Multi-Agent Perspective on Low-Resource Dialect Generation
+
+## [2026-09-05 08:33] ingest | Unlocking Lossless Speedups in LLMs via Discrete Diffusion

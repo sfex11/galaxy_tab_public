@@ -313,3 +313,5 @@ _자동 생성됨_
 - [[sources/2026-09-02-diasentinel-an-auditable-multi-agent-system-for-gu.md]]
 
 - [[sources/2026-09-03-nashdreamer-model-based-reinforcement-learning-for.md]]
+
+- [[sources/2026-09-05-a-case-study-on-emergent-cheating-and-whistleblowi.md]]

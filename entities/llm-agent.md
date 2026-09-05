@@ -562,3 +562,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-09-03-mechanism-design-for-alignment-and-control.md]]
 
 - [[sources/2026-09-03-designing-proactive-thought-partners-for-writing.md]]
+
+- [[sources/2026-09-05-a-case-study-on-emergent-cheating-and-whistleblowi.md]]
+
+- [[sources/2026-09-05-efficient-test-time-adaptation-through-human-ai-in.md]]
+
+- [[sources/2026-09-05-the-natural-language-interaction-protocol-and-stan.md]]

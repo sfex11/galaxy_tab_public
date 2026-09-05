@@ -1769,3 +1769,24 @@
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-09-03-scaling-near-optimal-sft-rl-annotation-budget-allo.md]] - Scaling Near-Optimal SFT-RL Annotation Budget Allocation from Small to Large LLMs
 - [[sources/2026-09-03-bandits-in-prod-hyperparameter-optimization-at-inf.md]] - Bandits in Prod: Hyperparameter Optimization at Inference Time
+- [[sources/2026-09-05-clean-engineering-unstable-measurement-a-preregist.md]] - Clean Engineering, Unstable Measurement: A Preregistered Reliability Failure of Black-Box LLM Observers on Shared Endpoints
+- [[sources/2026-09-05-legibility-is-not-interpretability-comparing-judge.md]] - Legibility is Not Interpretability: Comparing Judged and Actual Importance in Chain-Of-Thought Reasoning
+- [[sources/2026-09-05-seeing-before-synthesizing-vlm-guided-transition-e.md]] - Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for Weakly-Supervised Dense Video Captioning
+- [[sources/2026-09-05-knowledge-acquisition-during-pre-training-large-la.md]] - Knowledge Acquisition During Pre-training? Large Language Models Learn Better With Auxiliary Views
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-05-a-case-study-on-emergent-cheating-and-whistleblowi.md]] - A Case Study on Emergent Cheating and Whistleblowing in Autonomous Research Swarms
+- [[sources/2026-09-05-swe-gate-passing-functional-tests-is-not-enough-fo.md]] - SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineering Agents
+- [[sources/2026-09-05-sentinel-rl-offloading-topological-reasoning-from-.md]] - SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the Security Operations Center
+- [[sources/2026-09-05-formation-matrix-and-energy-based-control-of-multi.md]] - Formation Matrix and Energy-based Control of Multi-Agent Systems
+- [[sources/2026-09-05-terminal-universe-turning-agent-trajectories-into-.md]] - Terminal-Universe: Turning Agent Trajectories into Scalable Terminal Environments
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-05-efficient-test-time-adaptation-through-human-ai-in.md]] - Efficient Test-Time Adaptation through Human-AI Interaction
+- [[sources/2026-09-05-a-low-cost-open-platform-for-end-to-end-autonomous.md]] - A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Miniature Ackermann Vehicle
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-05-the-natural-language-interaction-protocol-and-stan.md]] - The Natural Language Interaction Protocol and Standard for AI Agents
+- [[sources/2026-09-05-environment-evolution-for-terminal-agents.md]] - Environment Evolution for Terminal Agents
+- [[sources/2026-09-05-corner-cases-headland-coverage-path-planning-for-a.md]] - Corner Cases: Headland Coverage Path Planning for Autonomous Driving in Arable Farming
+- [[sources/2026-09-05-continuous-actions-from-discrete-minds-latent-alig.md]] - Continuous Actions from Discrete Minds: Latent-Aligned Planning for End-to-End Autonomous Driving
+- [[sources/2026-09-05-translation-as-a-decision-space-a-multi-agent-pers.md]] - Translation as a Decision Space: A Multi-Agent Perspective on Low-Resource Dialect Generation
+- [[sources/2026-09-05-unlocking-lossless-speedups-in-llms-via-discrete-d.md]] - Unlocking Lossless Speedups in LLMs via Discrete Diffusion
