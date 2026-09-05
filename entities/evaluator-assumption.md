@@ -44,3 +44,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Automated Benchmark Auditing for AI Agents and Large Language Models (2026-05-27)
 
 이 논문은 평가자의 가정이 태스크 작성 시점에 암묵적으로 삽입되어 인간 주석이 근본적으로 달라질 수 있는 구조적 원인을 명확히 한다. 기존에 결과 독립적 평가를 보장하는 접근(verify-backed-generation, benchmarkless-comparative-safety-scoring 등)과 대비되어, '누가 평가하는가'가 아닌 '무엇을 평가하는가'라는 근본 문제를 제기한다.
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
+
+'same request, same model name, same reading tomorrow'라는 가장 기초적이고 암묵적인 평가자 가정을 최초로 정량적 감사 대상으로 삼아, 이 개념의 범위를 벤치마크 설계 차원에서 측정 인프라 차원으로 확장한다.
+
+→ [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]

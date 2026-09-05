@@ -16,3 +16,7 @@ LLM-as-Judge 평가에서 A>B, B>C이지만 A<C가 되는 비일관적 판단 �
 _자동 Wiki Query에서 추출됨_
 
 ### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-27)
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
+
+→ [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]
