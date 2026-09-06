@@ -91,3 +91,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/autonomous-commerce.md|autonomous commerce]]
+
+---
+**관련**: [[concepts/alignment-information-dilution.md|alignment information dilution]]
+
+---
+**관련**: [[concepts/single-output-opacity.md|single output opacity]]
+
+---
+**관련**: [[concepts/implicit-physical-coordination.md|implicit physical coordination]]
+
+---
+**관련**: [[concepts/environment-grounded-validity.md|environment grounded validity]]

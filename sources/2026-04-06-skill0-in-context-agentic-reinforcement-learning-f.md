@@ -125,3 +125,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/internal-prediction-readout.md|internal prediction readout]]
+
+---
+**관련**: [[concepts/internal-boundary-penetration.md|internal boundary penetration]]

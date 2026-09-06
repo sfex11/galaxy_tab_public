@@ -130,3 +130,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/action-level-speculation.md|action level speculation]]
+
+---
+**관련**: [[concepts/cross-layer-dependency.md|cross layer dependency]]
+
+---
+**관련**: [[concepts/smooth-turn-coverage-limitation.md|smooth turn coverage limitation]]
+
+---
+**관련**: [[concepts/action-coordination-identity.md|action coordination identity]]

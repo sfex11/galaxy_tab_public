@@ -34,3 +34,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/autonomy-quality-decoupling.md|autonomy quality decoupling]]
+
+---
+**관련**: [[concepts/diversity-quality-dual-optimization.md|diversity quality dual optimization]]
+
+---
+**관련**: [[concepts/triggerless-single-pass-contamination.md|triggerless single pass contamination]]
+
+---
+**관련**: [[concepts/trust-domain-capture-axis.md|trust domain capture axis]]
+
+---
+**관련**: [[concepts/interaction-tax.md|interaction tax]]

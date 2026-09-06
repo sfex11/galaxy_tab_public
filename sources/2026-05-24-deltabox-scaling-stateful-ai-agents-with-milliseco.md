@@ -206,3 +206,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rollback-semantic-discontinuity.md|rollback semantic discontinuity]]
+
+---
+**관련**: [[concepts/power-of-two-quantization.md|power of two quantization]]

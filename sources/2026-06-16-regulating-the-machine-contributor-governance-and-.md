@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/provenance-ranking.md|provenance ranking]]
+
+---
+**관련**: [[concepts/relational-governance.md|relational governance]]

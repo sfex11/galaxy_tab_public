@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/codebase-dependency-contamination.md|codebase dependency contamination]]
+
+---
+**관련**: [[concepts/informational-dependency-gap.md|informational dependency gap]]

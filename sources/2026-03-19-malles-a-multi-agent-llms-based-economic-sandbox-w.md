@@ -437,3 +437,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/passive-energy-based-control.md|passive energy based control]]
+
+---
+**관련**: [[concepts/dual-axis-alignment-dispersion.md|dual axis alignment dispersion]]
+
+---
+**관련**: [[concepts/net-human-agent-score.md|net human agent score]]
+
+---
+**관련**: [[concepts/multi-dimensional-translation-validity.md|multi dimensional translation validity]]
+
+---
+**관련**: [[concepts/agent-human-economic-power-asymmetry.md|agent human economic power asymmetry]]
+
+---
+**관련**: [[concepts/incentive-compatible-alignment.md|incentive compatible alignment]]
+
+---
+**관련**: [[concepts/environment-mediated-alignment.md|environment mediated alignment]]

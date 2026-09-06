@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/net-skill-value.md|net skill value]]
+
+---
+**관련**: [[concepts/structure-to-value-axis-shift.md|structure to value axis shift]]

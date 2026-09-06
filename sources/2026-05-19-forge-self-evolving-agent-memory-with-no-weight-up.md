@@ -298,3 +298,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/vague-goal-self-evolution.md|vague goal self evolution]]
+
+---
+**관련**: [[concepts/substrate-level-self-evolution.md|substrate level self evolution]]
+
+---
+**관련**: [[concepts/cumulative-memory-contamination.md|cumulative memory contamination]]
+
+---
+**관련**: [[concepts/batch-size-gradient-redundancy.md|batch size gradient redundancy]]
+
+---
+**관련**: [[concepts/meta-evolution-layer.md|meta evolution layer]]
+
+---
+**관련**: [[concepts/concealed-memory-contamination.md|concealed memory contamination]]
+
+---
+**관련**: [[concepts/evolution-fragmentation.md|evolution fragmentation]]
+
+---
+**관련**: [[concepts/alternative-decision-trajectory.md|alternative decision trajectory]]
+
+---
+**관련**: [[concepts/harness-policy-co-evolution.md|harness policy co evolution]]
+
+---
+**관련**: [[concepts/post-hoc-decision-reconstruction.md|post hoc decision reconstruction]]
+
+---
+**관련**: [[concepts/prompt-governance-translation-gap.md|prompt governance translation gap]]
+
+---
+**관련**: [[concepts/bilevel-self-evolution.md|bilevel self evolution]]
+
+---
+**관련**: [[concepts/layered-decision-auditability.md|layered decision auditability]]

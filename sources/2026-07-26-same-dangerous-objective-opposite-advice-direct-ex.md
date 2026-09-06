@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/intent-laundering.md|intent laundering]]
+
+---
+**관련**: [[concepts/episode-reset-concealment.md|episode reset concealment]]

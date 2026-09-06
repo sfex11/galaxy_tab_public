@@ -150,3 +150,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/cyber-physical-ontology-gap.md|cyber physical ontology gap]]
+
+---
+**관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]

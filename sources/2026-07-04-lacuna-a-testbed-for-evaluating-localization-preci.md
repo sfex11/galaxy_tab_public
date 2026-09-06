@@ -94,3 +94,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/transient-adaptation-state.md|transient adaptation state]]
+
+---
+**관련**: [[concepts/pipeline-level-cost-attribution.md|pipeline level cost attribution]]
+
+---
+**관련**: [[concepts/runtime-paradigm-switching.md|runtime paradigm switching]]

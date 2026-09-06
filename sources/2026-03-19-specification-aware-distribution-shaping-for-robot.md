@@ -118,3 +118,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/distribution-bypass.md|distribution bypass]]
+
+---
+**관련**: [[concepts/field-robotics.md|field robotics]]

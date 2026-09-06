@@ -54,3 +54,6 @@ NMT가 입력당 단일 출력을 산출하는 관행은 다국어 디코딩 내
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/will-source-inaccessibility.md|will source inaccessibility]]

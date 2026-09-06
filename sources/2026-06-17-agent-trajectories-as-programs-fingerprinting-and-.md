@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/probe-cascade.md|probe cascade]]
+
+---
+**관련**: [[concepts/mechanistic-probe-unreliability.md|mechanistic probe unreliability]]

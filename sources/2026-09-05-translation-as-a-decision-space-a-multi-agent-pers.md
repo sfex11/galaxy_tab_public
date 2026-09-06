@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/locational-opacity-of-risk.md|locational opacity of risk]]
+
+---
+**관련**: [[concepts/bias-opacity.md|bias opacity]]

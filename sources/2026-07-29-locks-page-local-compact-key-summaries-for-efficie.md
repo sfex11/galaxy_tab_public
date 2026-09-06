@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/depth-dependent-divergent-bottleneck.md|depth dependent divergent bottleneck]]
+
+---
+**관련**: [[concepts/harness-task-matching-bottleneck.md|harness task matching bottleneck]]

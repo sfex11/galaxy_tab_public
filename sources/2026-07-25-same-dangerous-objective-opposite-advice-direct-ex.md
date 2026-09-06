@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representational-inevitability-of-danger.md|representational inevitability of danger]]
+
+---
+**관련**: [[concepts/paradoxical-mediation-backfire.md|paradoxical mediation backfire]]

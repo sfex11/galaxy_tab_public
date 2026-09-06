@@ -313,3 +313,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/information-preservation-boundary.md|information preservation boundary]]
+
+---
+**관련**: [[concepts/user-policy-as-unverifiable-vulnerability-layer.md|user policy as unverifiable vulnerability layer]]
+
+---
+**관련**: [[concepts/vision-grounded-synthesis.md|vision grounded synthesis]]

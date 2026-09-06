@@ -134,3 +134,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/persona-execution-plan-dichotomy.md|persona execution plan dichotomy]]
+
+---
+**관련**: [[concepts/machine-behavior.md|machine behavior]]
+
+---
+**관련**: [[concepts/synthetic-grounding-gap.md|synthetic grounding gap]]

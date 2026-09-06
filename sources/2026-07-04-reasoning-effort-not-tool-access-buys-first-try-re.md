@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/maximum-effort-fallacy.md|maximum effort fallacy]]
+
+---
+**관련**: [[concepts/regression-criterion-self-structuring.md|regression criterion self structuring]]

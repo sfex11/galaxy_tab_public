@@ -221,3 +221,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/diagnostic-agent-task-class.md|diagnostic agent task class]]
+
+---
+**관련**: [[concepts/constraint-induced-action-erasure.md|constraint induced action erasure]]
+
+---
+**관련**: [[concepts/action-tokenization.md|action tokenization]]
+
+---
+**관련**: [[concepts/governance-as-social-condition-design.md|governance as social condition design]]
+
+---
+**관련**: [[concepts/failure-embedded-difficulty-distribution.md|failure embedded difficulty distribution]]
+
+---
+**관련**: [[concepts/decode-phase-gemv-serving-cost.md|decode phase gemv serving cost]]
+
+---
+**관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]

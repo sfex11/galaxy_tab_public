@@ -76,3 +76,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/on-policy-environment-coupling.md|on policy environment coupling]]
+
+---
+**관련**: [[concepts/re-queryable-environment.md|re queryable environment]]
+
+---
+**관련**: [[concepts/environment-frontier-drift.md|environment frontier drift]]
+
+---
+**관련**: [[concepts/self-trajectory-environment-closed-loop.md|self trajectory environment closed loop]]
+
+---
+**관련**: [[concepts/sensor-evidence-causal-chain.md|sensor evidence causal chain]]
+
+---
+**관련**: [[concepts/value-differential-memory-management.md|value differential memory management]]
+
+---
+**관련**: [[concepts/environment-mutation-operator.md|environment mutation operator]]

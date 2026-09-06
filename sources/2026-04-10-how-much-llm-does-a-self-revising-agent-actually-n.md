@@ -47,3 +47,6 @@ LLM 에이전트의 역량을 LLM 자체의 기여와 외부 구조(계획, 반�
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/judged-actual-importance-divergence.md|judged actual importance divergence]]

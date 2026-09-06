@@ -72,3 +72,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/submission-semantic-collapse.md|submission semantic collapse]]
+
+---
+**관련**: [[concepts/attribution-basis-collapse.md|attribution basis collapse]]

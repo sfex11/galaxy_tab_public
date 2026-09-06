@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/emergent-cheating-whistleblowing-swarm.md|emergent cheating whistleblowing swarm]]
+
+---
+**관련**: [[concepts/emergent-cheating-whistleblowing-swarm.md|emergent cheating whistleblowing swarm]]

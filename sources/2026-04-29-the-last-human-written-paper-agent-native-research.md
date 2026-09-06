@@ -179,3 +179,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/structural-certification.md|structural certification]]
+
+---
+**관련**: [[concepts/structural-safety-guarantee.md|structural safety guarantee]]

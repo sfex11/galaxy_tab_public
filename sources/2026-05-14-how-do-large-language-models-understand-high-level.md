@@ -149,3 +149,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/analysis-unit-mis-specification.md|analysis unit mis specification]]
+
+---
+**관련**: [[concepts/cumulative-semantic-opacity.md|cumulative semantic opacity]]
+
+---
+**관련**: [[concepts/path-consistent-online-routing.md|path consistent online routing]]
+
+---
+**관련**: [[concepts/rollback-semantic-discontinuity.md|rollback semantic discontinuity]]
+
+---
+**관련**: [[concepts/taint-semantic-flattening.md|taint semantic flattening]]

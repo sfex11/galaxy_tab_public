@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/bootstrap-paradox.md|bootstrap paradox]]
+
+---
+**관련**: [[concepts/bootstrap-paradox.md|bootstrap paradox]]

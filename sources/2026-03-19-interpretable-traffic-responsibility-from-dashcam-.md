@@ -309,3 +309,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/video-understanding.md|video understanding]]
+
+---
+**관련**: [[concepts/triaxial-agent-uncertainty.md|triaxial agent uncertainty]]

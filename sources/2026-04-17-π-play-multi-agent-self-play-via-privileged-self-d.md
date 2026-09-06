@@ -156,3 +156,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/depth-weighted-credit-assignment.md|depth weighted credit assignment]]
+
+---
+**관련**: [[concepts/convergence-independence-credit-discrimination.md|convergence independence credit discrimination]]

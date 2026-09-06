@@ -42,3 +42,6 @@ ActionParty는 비디오 확산 모델(video diffusion model) 기반의 월드 �
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/loyalty-loop-subject-transition.md|loyalty loop subject transition]]

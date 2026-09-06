@@ -266,3 +266,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-cost-decomposition.md|evaluation cost decomposition]]
+
+---
+**관련**: [[concepts/decision-time-critical-path.md|decision time critical path]]
+
+---
+**관련**: [[concepts/undetectable-feedback-signal.md|undetectable feedback signal]]
+
+---
+**관련**: [[concepts/mechanism-bounded-compliance-scope.md|mechanism bounded compliance scope]]
+
+---
+**관련**: [[concepts/verifier-mediated-goal-delegation.md|verifier mediated goal delegation]]
+
+---
+**관련**: [[concepts/rollout-as-audit-evidence.md|rollout as audit evidence]]
+
+---
+**관련**: [[concepts/imagination-relocation-to-training.md|imagination relocation to training]]
+
+---
+**관련**: [[concepts/evaluation-paradigm-feedback-bias.md|evaluation paradigm feedback bias]]

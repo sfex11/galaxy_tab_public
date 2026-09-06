@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptive-credit-granularity.md|adaptive credit granularity]]
+
+---
+**관련**: [[concepts/enforcement-domain-mismatch.md|enforcement domain mismatch]]

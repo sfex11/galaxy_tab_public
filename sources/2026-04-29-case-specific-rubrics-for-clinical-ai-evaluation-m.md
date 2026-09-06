@@ -369,3 +369,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cross-episode-closed-loop.md|cross episode closed loop]]
+
+---
+**관련**: [[concepts/deployment-only-improvement-observability.md|deployment only improvement observability]]
+
+---
+**관련**: [[concepts/scoring-sufficient-state-projection.md|scoring sufficient state projection]]
+
+---
+**관련**: [[concepts/sim-to-real-validation-infrastructure.md|sim to real validation infrastructure]]
+
+---
+**관련**: [[concepts/evaluation-infrastructure-circularity.md|evaluation infrastructure circularity]]
+
+---
+**관련**: [[concepts/benchmarkless-comparative-safety-scoring.md|benchmarkless comparative safety scoring]]
+
+---
+**관련**: [[concepts/review-constraint-compliance.md|review constraint compliance]]

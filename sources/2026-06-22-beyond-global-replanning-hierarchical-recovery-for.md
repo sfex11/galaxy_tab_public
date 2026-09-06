@@ -97,3 +97,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-optimization-reconfiguration.md|hierarchical optimization reconfiguration]]
+
+---
+**관련**: [[concepts/access-planning-gap.md|access planning gap]]

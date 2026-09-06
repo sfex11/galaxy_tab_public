@@ -77,3 +77,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategic-bottleneck.md|strategic bottleneck]]
+
+---
+**관련**: [[concepts/evaluation-execution-safety-disconnect.md|evaluation execution safety disconnect]]
+
+---
+**관련**: [[concepts/routing-path-dependent-bottleneck.md|routing path dependent bottleneck]]
+
+---
+**관련**: [[concepts/structured-resistance.md|structured resistance]]
+
+---
+**관련**: [[concepts/distributed-surveillance-emergence.md|distributed surveillance emergence]]
+
+---
+**관련**: [[concepts/pipeline-constituted-safety.md|pipeline constituted safety]]
+
+---
+**관련**: [[concepts/schema-accumulation-as-composability-bottleneck.md|schema accumulation as composability bottleneck]]

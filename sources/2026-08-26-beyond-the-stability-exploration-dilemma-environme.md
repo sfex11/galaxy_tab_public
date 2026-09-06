@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pre-compiled-policy-tree.md|pre compiled policy tree]]
+
+---
+**관련**: [[concepts/dual-axis-optimization-inversion.md|dual axis optimization inversion]]
+
+---
+**관련**: [[concepts/permission-policy-algebra.md|permission policy algebra]]

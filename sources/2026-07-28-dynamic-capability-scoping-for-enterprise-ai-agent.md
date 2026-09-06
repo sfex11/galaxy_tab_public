@@ -52,3 +52,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/user-side-capability-safety-inseparability.md|user side capability safety inseparability]]
+
+---
+**관련**: [[concepts/capability-task-quality-decoupling.md|capability task quality decoupling]]
+
+---
+**관련**: [[concepts/surface-completeness-misreading.md|surface completeness misreading]]
+
+---
+**관련**: [[concepts/self-directed-choice-architecture.md|self directed choice architecture]]
+
+---
+**관련**: [[concepts/capability-gap-self-diagnosis.md|capability gap self diagnosis]]
+
+---
+**관련**: [[concepts/legitimate-division-of-labor-as-attack-surface.md|legitimate division of labor as attack surface]]

@@ -59,3 +59,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/residual-stream-length-encoding.md|residual stream length encoding]]
+
+---
+**관련**: [[concepts/reactive-paradigm-trap.md|reactive paradigm trap]]

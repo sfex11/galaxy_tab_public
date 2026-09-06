@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/authority-delegation-topology.md|authority delegation topology]]
+
+---
+**관련**: [[concepts/prewrite-validation.md|prewrite validation]]

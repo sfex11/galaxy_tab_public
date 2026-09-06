@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/infrastructure-deviance-duality.md|infrastructure deviance duality]]
+
+---
+**관련**: [[concepts/infrastructure-deviance-duality.md|infrastructure deviance duality]]

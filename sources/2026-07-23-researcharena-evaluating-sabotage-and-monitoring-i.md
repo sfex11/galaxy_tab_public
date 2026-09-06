@@ -72,3 +72,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/learned-safety-revocability.md|learned safety revocability]]
+
+---
+**관련**: [[concepts/trust-boundary-interface-semantic.md|trust boundary interface semantic]]
+
+---
+**관련**: [[concepts/safety-source-misattribution.md|safety source misattribution]]
+
+---
+**관련**: [[concepts/dual-layer-safety-inevitability.md|dual layer safety inevitability]]
+
+---
+**관련**: [[concepts/ambiguity-safety-margin.md|ambiguity safety margin]]

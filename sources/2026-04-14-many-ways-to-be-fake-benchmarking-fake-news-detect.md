@@ -103,3 +103,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/real-time-threshold-detection.md|real time threshold detection]]
+
+---
+**관련**: [[concepts/spectrum-classification-fallacy.md|spectrum classification fallacy]]

@@ -59,3 +59,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/physical-acceleration-cr.md|physical acceleration cr]]
+
+---
+**관련**: [[concepts/warp-divergence-free-dequantization.md|warp divergence free dequantization]]

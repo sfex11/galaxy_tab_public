@@ -70,3 +70,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/control-layer-ontological-limit.md|control layer ontological limit]]
+
+---
+**관련**: [[concepts/evaluation-training-boundary-dissolution.md|evaluation training boundary dissolution]]
+
+---
+**관련**: [[concepts/fixed-assignment-fragility.md|fixed assignment fragility]]
+
+---
+**관련**: [[concepts/parser-cache-conditioning.md|parser cache conditioning]]
+
+---
+**관련**: [[concepts/early-outcome-prediction.md|early outcome prediction]]

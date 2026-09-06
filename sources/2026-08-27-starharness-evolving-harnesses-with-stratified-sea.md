@@ -71,3 +71,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interface-subordinate-optimization.md|interface subordinate optimization]]
+
+---
+**관련**: [[concepts/harness-design-combinatorics.md|harness design combinatorics]]
+
+---
+**관련**: [[concepts/materialization-failure.md|materialization failure]]
+
+---
+**관련**: [[concepts/failure-feedback-routing.md|failure feedback routing]]
+
+---
+**관련**: [[concepts/transient-event-miss-failure.md|transient event miss failure]]
+
+---
+**관련**: [[concepts/algebraic-harness.md|algebraic harness]]
+
+---
+**관련**: [[concepts/configuration-scoped-safety-certification.md|configuration scoped safety certification]]

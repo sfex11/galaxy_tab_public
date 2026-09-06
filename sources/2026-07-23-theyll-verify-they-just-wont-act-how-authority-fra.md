@@ -38,3 +38,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/alert-triage-automation.md|alert triage automation]]
+
+---
+**관련**: [[concepts/authority-delegation-topology.md|authority delegation topology]]
+
+---
+**관련**: [[concepts/shadow-certification.md|shadow certification]]

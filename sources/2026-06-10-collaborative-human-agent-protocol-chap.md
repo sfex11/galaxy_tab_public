@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/responsibility-dissipation.md|responsibility dissipation]]
+
+---
+**관련**: [[concepts/responsibility-accumulation.md|responsibility accumulation]]

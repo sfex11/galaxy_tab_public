@@ -106,3 +106,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/machine-translation.md|machine translation]]
+
+---
+**관련**: [[concepts/sentence-discourse-granularity-gap.md|sentence discourse granularity gap]]

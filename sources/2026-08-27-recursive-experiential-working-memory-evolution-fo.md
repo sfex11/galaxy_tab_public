@@ -47,3 +47,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/functional-state-dichotomy.md|functional state dichotomy]]
+
+---
+**관련**: [[concepts/belief-state-responsive-adaptation.md|belief state responsive adaptation]]
+
+---
+**관련**: [[concepts/implicit-tool-invocation.md|implicit tool invocation]]
+
+---
+**관련**: [[concepts/meta-harness-policy.md|meta harness policy]]
+
+---
+**관련**: [[concepts/verification-execution-gap.md|verification execution gap]]
+
+---
+**관련**: [[concepts/harness-state-responsive-adaptation.md|harness state responsive adaptation]]

@@ -59,3 +59,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/alignment-scope-erosion.md|alignment scope erosion]]
+
+---
+**관련**: [[concepts/algebraic-taint-confinement.md|algebraic taint confinement]]

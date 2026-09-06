@@ -147,3 +147,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/prior-informational-dependency-graph.md|prior informational dependency graph]]
+
+---
+**관련**: [[concepts/spring-damper-network.md|spring damper network]]
+
+---
+**관련**: [[concepts/bond-graph.md|bond graph]]
+
+---
+**관련**: [[concepts/open-ended-epistemic-measurability-gap.md|open ended epistemic measurability gap]]

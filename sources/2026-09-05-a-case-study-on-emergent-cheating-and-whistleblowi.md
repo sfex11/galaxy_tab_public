@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/unverified-whistleblowing-as-rumor.md|unverified whistleblowing as rumor]]
+
+---
+**관련**: [[concepts/unverified-whistleblowing-as-rumor.md|unverified whistleblowing as rumor]]

@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/risk-translation-loss-as-safety.md|risk translation loss as safety]]
+
+---
+**관련**: [[concepts/pre-compiled-policy-tree.md|pre compiled policy tree]]
