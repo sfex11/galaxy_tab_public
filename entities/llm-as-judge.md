@@ -34,3 +34,9 @@ LLM judge를 '판단자'가 아닌 '측정 도구(instrument)'로 재정의하�
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
 
 판단의 추이성 위반이라는 '일관성' 문제를 넘어, 판단 대상(추론 스텝)의 텍스트가 기능적 역할 정보를 담지 않는다는 '측정 가능성' 수준의 근본 한계를 부여한다. judge의 중요도 판단이 인과적 기여와 발산함이 실증되어, judge 기반 step 평가의 타당성 기반 자체가 흔들린다.
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-07)
+
+LLM-as-Judge 논의의 축을 '판단 품질'(정확도·편향·추이성)에서 '측정 기기 신뢰성'(재현성·안정성)으로 확장한다. transitivity-violation 연구가 세션 내 비일관성을 다뤘다면, 본 논문은 시간이 지나면 동일 요청이 다른 판독값을 내는 시간축 비안정성을 실증하여, judge 실패 모드에 기기 드리프트라는 차원을 추가한다.
+
+→ [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]

@@ -32,3 +32,9 @@ MathDuels가 정적 태스크 기반 LLM 벤치마크의 근본적 한계(고정
 ### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
 
 기존 벤치마크가 '정답 레이블 존재'를 암묵적 전제로 삼는다는 근본적 한계를 노출하며, 레이블 없는 '사전 벤치마크(pre-benchmark)' 간극을 채우는 메타-평가 프레임워크를 제공한다.
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-07)
+
+리더보드가 judge 기반 평가에 의존하는 순간 측정 도구의 시간 드리프트가 점수 비교 자체를 무효화할 수 있음을 보여준다. 점수 하락이 모델 능력 변화가 아니라 측정 도구 변화에서 비롯될 수 있다는 새로운 혼입 원천을 제시하여, 측정 시점과 엔드포인트 정보를 평가 메타데이터의 필수 항목으로 격상시킨다.
+
+→ [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]

@@ -10,3 +10,9 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|Clean Engineering, Unstable Measurement: A Preregistered Rel]]
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-07)
+
+이 엔티티의 원천 연구로, LLM judge를 판단자가 아닌 측정 기기로 취급할 때의 신뢰성(reliability)을 정량적으로 입증한다. 52,988건 감사에서 same-window 반복 순위 합의가 Spearman 0.400에 그쳐, '같은 요청은 같은 판독값을 낸다'는 측정 도구의 기본 전제가 black-box 공유 엔드포인트에서 실증적으로 붕괴함을 보이며, judge 연구에 판단 품질을 넘어선 재현성(repeatability)이라는 제4의 평가 축을 부여한다.
+
+→ [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]

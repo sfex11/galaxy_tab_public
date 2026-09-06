@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### When No Benchmark Exists: Validating Comparative LLM Safety Scoring Wi (2026-05-10)
 
 정답 레이블 전제를 일관성 검사로 대체하는 대안 경로를 제시하여, 통계적 인증의 적용 가능 범위를 '레이블 있는 도메인'에서 '레이블 없는 비교 설정'으로 확장한다.
+
+### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-07)
+
+통계적 인증의 은묵적 전제 — 측정 도구의 시간 불변성 — 가 black-box LLM observer에서 성립하지 않음을 실증한다. 인증 시점의 판독값이 배포 시점과 달라질 수 있으므로, 통계적 보장의 근거 자체가 측정 재현성에 조건부임을 보여주며, 인증 프레임워크에 도구 안정성 검증이라는 새로운 선행 조건을 요구한다.
+
+→ [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]
