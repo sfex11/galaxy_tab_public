@@ -164,3 +164,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/evaluation-attractor-spiral.md|evaluation attractor spiral]]
+
+---
+**관련**: [[entities/trajectory-opacity.md|trajectory opacity]]

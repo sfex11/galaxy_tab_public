@@ -20,10 +20,10 @@
 2. 토큰 예산 고정 조건에서 반복→보조 뷰 재할당이 순수 반복 대비 학습을 개선
 
 **Wiki 연결**:
-- [[entity-surface-form]]과의 인과적 대응: RedirectQA가 평가 단계에서 표면 형식 접근성과 사실 저장의 혼재를 진단했다면, 본 논문은 사전학습 단계에서 다중 표면 형식(보조 뷰)의 인과적 기여를 통제 실험으로 입증한다. 평가-훈련 양 단계를 잇는 사슬이 완성된다.
-- [[fact-access-decoupling]]: 동일 형태 반복이 저장 강건성을, 보조 뷰가 다양한 접근 경로를 공급함을 시사
-- [[implicit-curriculum]]: '무엇을 언제 학습하는가'에 데이터 구성의 인과적 축 추가
-- [[training-data-pruning]]: 데이터 최적화를 '빼기'에서 '고정 예산 내 재구성으로 채우기'로 확장
+- [[concepts/entity-surface-form.md|entity surface form]]과의 인과적 대응: RedirectQA가 평가 단계에서 표면 형식 접근성과 사실 저장의 혼재를 진단했다면, 본 논문은 사전학습 단계에서 다중 표면 형식(보조 뷰)의 인과적 기여를 통제 실험으로 입증한다. 평가-훈련 양 단계를 잇는 사슬이 완성된다.
+- [[concepts/fact-access-decoupling.md|fact access decoupling]]: 동일 형태 반복이 저장 강건성을, 보조 뷰가 다양한 접근 경로를 공급함을 시사
+- [[concepts/implicit-curriculum.md|implicit curriculum]]: '무엇을 언제 학습하는가'에 데이터 구성의 인과적 축 추가
+- [[concepts/training-data-pruning.md|training data pruning]]: 데이터 최적화를 '빼기'에서 '고정 예산 내 재구성으로 채우기'로 확장
 
 **시사점**: 반복률 최적화와 재구성률 최적화는 분리 가능한 독립 제어 변수이며, Adam's Law의 텍스트 빈도 법칙 위에 표현 다양성 차원이 추가된다.
 

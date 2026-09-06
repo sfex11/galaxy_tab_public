@@ -46,3 +46,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/authority-delegation-topology.md|authority delegation topology]]
+
+---
+**관련**: [[entities/judge-instrument-reliability.md|judge instrument reliability]]
+
+---
+**관련**: [[concepts/linguistic-illegibility.md|linguistic illegibility]]
+
+---
+**관련**: [[concepts/net-skill-value.md|net skill value]]

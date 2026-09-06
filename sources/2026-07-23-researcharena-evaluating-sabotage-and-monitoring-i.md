@@ -63,3 +63,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/trust-domain-capture-axis.md|trust domain capture axis]]
+
+---
+**관련**: [[entities/risk-translation-loss-as-safety.md|risk translation loss as safety]]
+
+---
+**관련**: [[entities/fused-dequantize-matvec-kernel.md|fused dequantize matvec kernel]]
+
+---
+**관련**: [[concepts/learned-safety-revocability.md|learned safety revocability]]

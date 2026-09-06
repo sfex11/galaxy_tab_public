@@ -277,3 +277,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/transient-event-miss-failure.md|transient event miss failure]]
+
+---
+**관련**: [[entities/translation-decision-space.md|translation decision space]]
+
+---
+**관련**: [[entities/endogenous-self-evolution.md|endogenous self evolution]]
+
+---
+**관련**: [[entities/on-policy-distillation.md|on policy distillation]]
+
+---
+**관련**: [[concepts/distributed-safety-failure-surface.md|distributed safety failure surface]]
+
+---
+**관련**: [[concepts/cross-episode-reuse-failure.md|cross episode reuse failure]]
+
+---
+**관련**: [[concepts/protocol-recursion.md|protocol recursion]]
+
+---
+**관련**: [[concepts/vague-goal-self-evolution.md|vague goal self evolution]]

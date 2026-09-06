@@ -27,16 +27,10 @@ LLM 판정자의 신뢰성을 근본적 능력 문제가 아닌 '판정자 고�
 
 LLM 판정자가 사용자 피드백의 고유 신호를 감지하지 못한다는 결과는, LLM-as-Judge 평가 체계가 학습 신호의 가치를 구조적으로 과소평가할 수 있음을 보여주며 평가자 선택의 인식론적 위험을 부각시킨다.
 
-→ [[sources/2026-09-04-user-feedback-provides-a-unique-signal-that-llms-c.md|상세 보기]]
-
 ### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
 
 LLM judge를 '판단자'가 아닌 '측정 도구(instrument)'로 재정의하고, 그 도구가 전제하는 시간적 재현성(test-retest reliability)이 실증적으로 붕괴되어 있음을 사전등록 감사로 보여준다. 기존의 편향·추이성 논의에 '같은 요청-같은 모델 이름-다른 시점 = 다른 판독값'이라는 제3의 실패 축을 추가한다.
 
-→ [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]
-
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
 
 판단의 추이성 위반이라는 '일관성' 문제를 넘어, 판단 대상(추론 스텝)의 텍스트가 기능적 역할 정보를 담지 않는다는 '측정 가능성' 수준의 근본 한계를 부여한다. judge의 중요도 판단이 인과적 기여와 발산함이 실증되어, judge 기반 step 평가의 타당성 기반 자체가 흔들린다.
-
-→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

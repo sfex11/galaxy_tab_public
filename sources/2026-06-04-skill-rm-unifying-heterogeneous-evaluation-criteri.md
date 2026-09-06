@@ -218,3 +218,51 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/signal-decomposition-information-ceiling.md|signal decomposition information ceiling]]
+
+---
+**관련**: [[entities/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]
+
+---
+**관련**: [[entities/end-to-end-vla-training.md|end to end vla training]]
+
+---
+**관련**: [[entities/tacit-criteria-surfacing.md|tacit criteria surfacing]]
+
+---
+**관련**: [[entities/closed-loop-training.md|closed loop training]]
+
+---
+**관련**: [[entities/evidence-grounded-diagnosis.md|evidence grounded diagnosis]]
+
+---
+**관련**: [[entities/cascade-reinforcement-learning.md|cascade reinforcement learning]]
+
+---
+**관련**: [[entities/deployment-readiness-evaluation.md|deployment readiness evaluation]]
+
+---
+**관련**: [[entities/closed-loop-evaluation.md|closed loop evaluation]]
+
+---
+**관련**: [[entities/verifier-mediated-goal-delegation.md|verifier mediated goal delegation]]
+
+---
+**관련**: [[entities/user-feedback-signal.md|user feedback signal]]
+
+---
+**관련**: [[concepts/learning-signal-exhaustion.md|learning signal exhaustion]]
+
+---
+**관련**: [[concepts/evidence-grounded-diagnosis.md|evidence grounded diagnosis]]
+
+---
+**관련**: [[concepts/safety-critical-label-semantics.md|safety critical label semantics]]
+
+---
+**관련**: [[concepts/pre-mechanism-principal-selection.md|pre mechanism principal selection]]
+
+---
+**관련**: [[concepts/tacit-criteria-surfacing.md|tacit criteria surfacing]]
+
+---
+**관련**: [[concepts/evaluation-cost-decomposition.md|evaluation cost decomposition]]

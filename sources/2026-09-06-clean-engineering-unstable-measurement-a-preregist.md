@@ -19,12 +19,12 @@ LLM judge는 이제 훈련 데이터 게이팅, 생성물 점수화, 리더보�
 
 ## Wiki 관점에서의 위치
 
-- [[llm-as-judge]]의 신뢰성 논의를 '판단 품질'에서 '측정 재현성'으로 확장한다. 기존 [[transitivity-violation]]이 동시적 판단 간 추이성 위반이었다면, 이 논문은 시간축 test-retest 불안정성이라는 제3의 실패 축을 추가한다.
-- [[certification-monitoring-discontinuity]]의 실증 근거를 제공한다: 측정 도구 자체가 이동하면 인증 시점의 통계적 경계([[statistical-certification]])는 사실상 하루 만에 무효화된다.
-- [[evaluator-assumption]]이 지적한 평가자의 암묵적 가정 중 가장 기초적인 것—측정 가능성의 전제—을 정량적으로 감사한 최초 사례다.
-- [[benchmarkless-comparative-safety-scoring]]과 [[conditional-reliability-recalibration]]처럼 LLM judge 기반 비교 평가에 의존하는 방법론 전체에 상류 오염이 된다: judge가 불안정하면 합의도 자체가 소음을 측정하는 것이 된다.
-- [[mechanistic-probe-unreliability]]와 평행 구조: 내부 프로브와 외부 블랙박스 관찰자 모두 '신뢰할 수 있는 판독기'라는 전제에서 실패한다.
-- 사전등록 방법론은 [[score-narrative-conflation]]을 방어하는 문화적 장치이기도 하다: 결과에 앞서 기준을 고정함으로써 불안정한 측정을 서사로 포장하는 것을 차단한다.
+- [[concepts/llm-as-judge.md|llm as judge]]의 신뢰성 논의를 '판단 품질'에서 '측정 재현성'으로 확장한다. 기존 [[concepts/transitivity-violation.md|transitivity violation]]이 동시적 판단 간 추이성 위반이었다면, 이 논문은 시간축 test-retest 불안정성이라는 제3의 실패 축을 추가한다.
+- [[concepts/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]의 실증 근거를 제공한다: 측정 도구 자체가 이동하면 인증 시점의 통계적 경계([[concepts/statistical-certification.md|statistical certification]])는 사실상 하루 만에 무효화된다.
+- [[concepts/evaluator-assumption.md|evaluator assumption]]이 지적한 평가자의 암묵적 가정 중 가장 기초적인 것—측정 가능성의 전제—을 정량적으로 감사한 최초 사례다.
+- [[concepts/benchmarkless-comparative-safety-scoring.md|benchmarkless comparative safety scoring]]과 [[concepts/conditional-reliability-recalibration.md|conditional reliability recalibration]]처럼 LLM judge 기반 비교 평가에 의존하는 방법론 전체에 상류 오염이 된다: judge가 불안정하면 합의도 자체가 소음을 측정하는 것이 된다.
+- [[concepts/mechanistic-probe-unreliability.md|mechanistic probe unreliability]]와 평행 구조: 내부 프로브와 외부 블랙박스 관찰자 모두 '신뢰할 수 있는 판독기'라는 전제에서 실패한다.
+- 사전등록 방법론은 [[concepts/score-narrative-conflation.md|score narrative conflation]]을 방어하는 문화적 장치이기도 하다: 결과에 앞서 기준을 고정함으로써 불안정한 측정을 서사로 포장하는 것을 차단한다.
 
 ## 핵심 인사이트
 

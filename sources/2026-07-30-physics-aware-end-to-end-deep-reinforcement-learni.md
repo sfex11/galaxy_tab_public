@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-07-29-explainable-reinforcement-learning-via-physics-awa]]: 둘 다 물리적 지식을 강화학습에 통합하는 물리 인식(physics-aware) 접근법을 채택하고 있다.
+
+---
+**관련**: [[concepts/fidelity-illusion.md|fidelity illusion]]

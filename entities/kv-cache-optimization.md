@@ -38,5 +38,3 @@ KV 캐시 압축(LightKV 등)이 추측 디코딩의 γ 선택과 어떻게 상�
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
 컨텍스트 오프로딩·토큰 프루닝 같은 캐시 최적화가 스트리밍 설정에서 질의 도착 전 단계로 이동하며, '언제 깊이를 예약할 것인가'라는 시간적 축이 캐시 관리에 추가됨을 보여준다.
-
-→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]

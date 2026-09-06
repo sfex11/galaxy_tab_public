@@ -39,10 +39,6 @@ position-aware drafting이 타겟 분포를 변경하지 않고 내부 구조만
 
 Nano(SFT+RL) vs Ultra(SFT만)의 대조를 통해, 사전학습 주변 분포의 상한이 높은 대형 모델은 조건부 SFT만으로 상한 근접이 가능하지만 소형 모델은 RL이 상한 접근을 촉진해야 한다는 스케일 의존적 구조를 실증한다.
 
-→ [[sources/2026-09-04-post-training-language-models-for-gold-medal-perfo.md|상세 보기]]
-
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
 
 AR 가중치를 표준 NTP 목적함수로 그대로 학습함으로써 주변 분포 P(y)의 지형을 보존하고, 병렬화 가속이 조건부 최적화의 성능 상한선을 훼손하지 않음을 설계 수준에서 보장하는 실증 사례를 제공한다.
-
-→ [[sources/2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

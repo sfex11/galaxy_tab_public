@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-27-from-model-scaling-to-system-scaling-scaling-the-h.md|From Model Scaling to System Scaling: Scaling the Harness in]]
 
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-06)
-
-→ [[sources/2026-09-06-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]

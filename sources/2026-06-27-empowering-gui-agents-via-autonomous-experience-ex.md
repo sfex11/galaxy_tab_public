@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/planning-on-degraded-foundation.md|planning on degraded foundation]]
+
+---
+**관련**: [[entities/generalization-gap.md|generalization gap]]

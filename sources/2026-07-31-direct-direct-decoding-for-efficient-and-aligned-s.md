@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/enforcement-domain-mismatch.md|enforcement domain mismatch]]
+
+---
+**관련**: [[concepts/temporal-alignment-erosion.md|temporal alignment erosion]]

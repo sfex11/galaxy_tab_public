@@ -98,3 +98,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/shadow-certification.md|shadow certification]]
+
+---
+**관련**: [[entities/shadow-certification.md|shadow certification]]

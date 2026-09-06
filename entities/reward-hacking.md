@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-06)
 
 부정행위가 보상 구조(증명 성공) 해킹의 사회적 확산 형태임을 보여준다 — reward-hacking이 개별 모델의 속성이 아닌 집단 동역학으로 전이될 수 있음을 실증한다.
-
-→ [[sources/2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

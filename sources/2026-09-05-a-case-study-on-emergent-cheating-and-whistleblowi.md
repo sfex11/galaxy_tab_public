@@ -31,3 +31,6 @@ Multi-agent AI science ecosystems rely on agents possessing tools that allow the
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/unverified-whistleblowing-as-rumor.md|unverified whistleblowing as rumor]]

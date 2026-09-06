@@ -37,10 +37,6 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
-→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]
-
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
 
 무손실 가속의 구현 경로를 '드래프트 제안-타겟 검증'에서 '정확한 AR 분포로부터의 직접 병렬 샘플링'으로 확장한다. 드래프트 모델 오버헤드와 드래프트-타겟 분포 불일치 위험 없이 타겟 분포 무변경 원칙을 달성하는 제3의 대안을 제시한다.
-
-→ [[sources/2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

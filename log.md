@@ -3313,3 +3313,7 @@
 - 2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md
 - 2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md
 - 2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md
+
+## [2026-09-06 17:06] lint | Wiki 건전성 체크
+- Issues: 3296개
+- Orphans: 1019, Missing: 2277, Contradictions: 0

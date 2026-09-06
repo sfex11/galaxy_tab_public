@@ -74,10 +74,6 @@ DiffMAS는 기존 다중 에이전트 시스템이 고정된 텍스트 통신 �
 
 명시적 통신을 요구하지 않는 물리적 멀티 에이전트 조율의 반례를 제공한다. LLM 기반 에이전트가 조율을 위해 통신 병목에 직면하는 반면, 에너지 기반 접근은 에이전트 간 상대 위치라는 물리적 상호작용으로 암묵적 조율을 달성하여, 두 패러다임이 조율 메커니즘 축의 양극단에 위치함을 보여준다.
 
-→ [[sources/2026-09-06-formation-matrix-and-energy-based-control-of-multi.md|상세 보기]]
-
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 다중 에이전트를 협력 조율 대상이 아닌 결정 공간의 분담 탐색자로 활용하는 새로운 응용 영역을 제시하며, 에이전트 역할 구성이 탐색-평가 분리로 이어질 수 있음을 시사한다.
-
-→ [[sources/2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md|상세 보기]]

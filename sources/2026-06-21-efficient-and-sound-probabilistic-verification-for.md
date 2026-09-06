@@ -139,3 +139,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/runtime-paradigm-switching.md|runtime paradigm switching]]
+
+---
+**관련**: [[entities/adaptive-transition-discovery.md|adaptive transition discovery]]
+
+---
+**관련**: [[entities/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]
+
+---
+**관련**: [[entities/hidden-state-risk-space.md|hidden state risk space]]
+
+---
+**관련**: [[concepts/verification-infrastructure-recursive-modification.md|verification infrastructure recursive modification]]
+
+---
+**관련**: [[concepts/state-bound-evidence.md|state bound evidence]]
+
+---
+**관련**: [[concepts/verification-target-structural-migration.md|verification target structural migration]]

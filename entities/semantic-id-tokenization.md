@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-06)
 
 시맨틱 ID 토큰화의 적용 대상을 추천 아이템에서 연속적 행동 신호로 확장하여, '비텍스트 대상의 구조적 이산화'라는 공통 설계 패턴을 강화한다.
-
-→ [[sources/2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]

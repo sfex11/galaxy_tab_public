@@ -43,3 +43,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/permission-policy-algebra.md|permission policy algebra]]
+
+---
+**관련**: [[entities/living-dataset.md|living dataset]]
+
+---
+**관련**: [[concepts/unrealized-branch-diversity-source.md|unrealized branch diversity source]]
+
+---
+**관련**: [[concepts/user-side-capability-safety-inseparability.md|user side capability safety inseparability]]

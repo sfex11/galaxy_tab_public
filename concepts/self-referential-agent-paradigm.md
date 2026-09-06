@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
-
-→ [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|상세 보기]]

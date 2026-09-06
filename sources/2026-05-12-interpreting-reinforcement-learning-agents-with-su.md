@@ -29,3 +29,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/utility-ontological-mislocation.md|utility ontological mislocation]]
+
+---
+**관련**: [[entities/legibility-interpretability-gap.md|legibility interpretability gap]]

@@ -11,11 +11,11 @@
 
 ## 📖 분석
 
-SafeEvolve는 안전 정렬의 두 대립 패러다임 — 외부 하네스 업데이트(런타임 제어)와 내부 정책 최적화(내재적 안전) — 중 어느 하나의 고립적 적용은 런타임 제어와 내재적 안전 사이의 간극을 메우지 못한다고 진단한다. 이는 [[dual-layer-safety-inevitability]]의 직접적 실증이다: 안전성이 모델 내부에 내재되어야 한다는 요구([[capability-safety-inseparability]])와 외부에서 검증·제어되어야 한다는 요구([[algorithm-system-translation-gap]])가 동시에 충족되어야 하기 때문이다.
+SafeEvolve는 안전 정렬의 두 대립 패러다임 — 외부 하네스 업데이트(런타임 제어)와 내부 정책 최적화(내재적 안전) — 중 어느 하나의 고립적 적용은 런타임 제어와 내재적 안전 사이의 간극을 메우지 못한다고 진단한다. 이는 [[concepts/dual-layer-safety-inevitability.md|dual layer safety inevitability]]의 직접적 실증이다: 안전성이 모델 내부에 내재되어야 한다는 요구([[concepts/capability-safety-inseparability.md|capability safety inseparability]])와 외부에서 검증·제어되어야 한다는 요구([[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]])가 동시에 충족되어야 하기 때문이다.
 
-기존 [[harness-model-co-evolution]](Design Conductor 2.0)이 하드웨어 설계의 성능 최적화를 대상으로 했다면, SafeEvolve는 공진화의 대상을 안전 정렬로 확장한다. 에이전트 경험에서 하네스 정책과 모델 정책을 동시에 진화시켜, 안전을 정적 속성이 아닌 지속 유지가 필요한 조건부 상태([[safety-as-conditional-state]])로 다룬다.
+기존 [[concepts/harness-model-co-evolution.md|harness model co evolution]](Design Conductor 2.0)이 하드웨어 설계의 성능 최적화를 대상으로 했다면, SafeEvolve는 공진화의 대상을 안전 정렬로 확장한다. 에이전트 경험에서 하네스 정책과 모델 정책을 동시에 진화시켜, 안전을 정적 속성이 아닌 지속 유지가 필요한 조건부 상태([[concepts/safety-as-conditional-state.md|safety as conditional state]])로 다룬다.
 
-이 논문은 세 지점에서 기존 Wiki를 연결한다: (1) [[harness-native-training]]의 훈련-배포 인터페이스 통합 논리를 안전 차원으로 이식한다. (2) [[experience-based-alignment]]가 스킬 성공률 기반 행동 최적화였다면, 안전 경험 자체가 정렬의 학습 원료가 됨을 보여준다. (3) 유해 최종 응답과 다단계 실행 궤적을 모두 위험 대상으로 삼아, [[trajectory-opacity]]가 지적한 궤적 수준 안전 문제를 자가 진화 루프로 해결하려 한다. 다만 [[endogenous-self-evolution]]의 자기 참조적 위험([[exploration-hacking]])이 안전 진화 루프에서도 재현될 수 있다는 점은 후속 검증 과제로 남는다.
+이 논문은 세 지점에서 기존 Wiki를 연결한다: (1) [[concepts/harness-native-training.md|harness native training]]의 훈련-배포 인터페이스 통합 논리를 안전 차원으로 이식한다. (2) [[concepts/experience-based-alignment.md|experience based alignment]]가 스킬 성공률 기반 행동 최적화였다면, 안전 경험 자체가 정렬의 학습 원료가 됨을 보여준다. (3) 유해 최종 응답과 다단계 실행 궤적을 모두 위험 대상으로 삼아, [[concepts/trajectory-opacity.md|trajectory opacity]]가 지적한 궤적 수준 안전 문제를 자가 진화 루프로 해결하려 한다. 다만 [[concepts/endogenous-self-evolution.md|endogenous self evolution]]의 자기 참조적 위험([[concepts/exploration-hacking.md|exploration hacking]])이 안전 진화 루프에서도 재현될 수 있다는 점은 후속 검증 과제로 남는다.
 
 ## 🔗 관련 논문
 
@@ -45,3 +45,6 @@ SafeEvolve는 안전 정렬의 두 대립 패러다임 — 외부 하네스 업�
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/triaxial-inseparability.md|triaxial inseparability]]

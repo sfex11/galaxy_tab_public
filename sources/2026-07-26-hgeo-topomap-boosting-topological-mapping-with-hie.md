@@ -76,3 +76,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explicit-absence-state.md|explicit absence state]]
+
+---
+**관련**: [[entities/spatial-coreference-resolution.md|spatial coreference resolution]]
+
+---
+**관련**: [[entities/implicit-curriculum.md|implicit curriculum]]
+
+---
+**관련**: [[entities/headland-coverage-path-planning.md|headland coverage path planning]]
+
+---
+**관련**: [[concepts/pipeline-level-information-asymmetry.md|pipeline level information asymmetry]]
+
+---
+**관련**: [[concepts/autonomous-commerce.md|autonomous commerce]]

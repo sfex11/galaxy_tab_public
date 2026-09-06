@@ -31,10 +31,6 @@ _Wiki 축적 중_
 
 체화 AI 안전 논의에 사후 감사 가능성이라는 제3축을 추가한다. SafetyALFRED가 지적한 평가-배포 간극이 '사전 평가'의 한계였다면, TRACE는 '사후 조사'가 성립하기 위한 아키텍처 전제를 다룬다.
 
-→ [[sources/2026-09-04-towards-trustworthy-autonomous-robots-an-explainab.md|상세 보기]]
-
 ### A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Minia (2026-09-06)
 
 체화 자율주행 연구의 접근성 문제를 저비용 미니어처 플랫폼으로 해소하는 실천적 경로를 제공한다. SafetyALFRED가 진단한 disembodied 안전 평가의 한계를 실물 차량 실험 환경으로 보완할 수 있는 인프라를 제안한다.
-
-→ [[sources/2026-09-06-a-low-cost-open-platform-for-end-to-end-autonomous.md|상세 보기]]

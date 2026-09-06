@@ -33,16 +33,10 @@ SFT가 행동을 모델에 유도할 때 그 행동의 내부 분포에 구조�
 
 PRM 학습이나 온폴리시 증류 같은 별도 파이프라인 없이, 기존 결과 보상 신호에서 프로세스 수준 가이드를 추출하는 post-training의 경량화 설계를 제시한다. 기존 post-training 스펙트럼(RL, 증류, PRM)에 '보상 분해 기반' 제4의 경로를 추가한다.
 
-→ [[sources/2026-09-04-cliff-learning-process-rewards-from-the-first-mist.md|상세 보기]]
-
 ### Post-Training Language Models for Gold-Medal Performance in Coding Com (2026-09-04)
 
 문제 큐레이션(22,000개)→합성 검증 트레이스→SFT→RL로 이어지는 완결적 도메인 특화 파이프라인을 제시하여, post-training이 사전학습 능력의 정제가 아닌 경쟁급 능력의 창출 경로임을 IOI·ICPC 금메달 수준에서 실증한다.
 
-→ [[sources/2026-09-04-post-training-language-models-for-gold-medal-perfo.md|상세 보기]]
-
 ### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-06)
 
 포스트트레이닝의 실제 요구가 데이터가 아닌 환경임을 규정한다 — 환경은 다중 검증 가능 태스크와 실행 피드백을 제공하는 반면 궤적은 고정 데모에 불과하다는 구조적 대비를 확립한다.
-
-→ [[sources/2026-09-06-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]

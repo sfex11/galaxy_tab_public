@@ -19,11 +19,11 @@ CoT 추론 흔적은 모델의 사고 과정에 대한 '가독 가능한 창'처
 
 ## 기존 Wiki와의 관계
 
-- [[llm-as-judge]]: 추이성 위반이 '측정 일관성'의 문제였다면, 본 논문은 측정 대상 자체가 텍스트에 실체화되지 않는 '측정 가능성' 문제로 격상시킨다.
-- [[process-reward-model]]: 단계별 감독이 실제 기능적 기여가 아닌 판독 가능한 서사에 최적화될 위험을 제시한다.
-- [[reasoning-integrity]]: 프로세스 제어·논리 부분공간 논의에 '표면 정합성 ≠ 인과 무결성' 구분을 추가한다.
-- [[meaning-insensitive-metric]]: WER의 '의미 무감각성'과 동형인 '기능 무감각성'의 추론 평가판이다.
-- [[evaluator-assumption]]: '텍스트가 기능을 담는다'는 평가자의 암묵적 가정을 실증적으로 해체한다.
+- [[concepts/llm-as-judge.md|llm as judge]]: 추이성 위반이 '측정 일관성'의 문제였다면, 본 논문은 측정 대상 자체가 텍스트에 실체화되지 않는 '측정 가능성' 문제로 격상시킨다.
+- [[concepts/process-reward-model.md|process reward model]]: 단계별 감독이 실제 기능적 기여가 아닌 판독 가능한 서사에 최적화될 위험을 제시한다.
+- [[concepts/reasoning-integrity.md|reasoning integrity]]: 프로세스 제어·논리 부분공간 논의에 '표면 정합성 ≠ 인과 무결성' 구분을 추가한다.
+- [[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]: WER의 '의미 무감각성'과 동형인 '기능 무감각성'의 추론 평가판이다.
+- [[concepts/evaluator-assumption.md|evaluator assumption]]: '텍스트가 기능을 담는다'는 평가자의 암묵적 가정을 실증적으로 해체한다.
 
 ## 구조적 연결
 

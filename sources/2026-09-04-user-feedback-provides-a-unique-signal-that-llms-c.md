@@ -17,16 +17,16 @@
 
 ## Wiki에서의 위치: 병목 오귀인의 학습 데이터 버전
 
-논증 구조는 [[bottleneck-misattribution]]의 확장이다 — 실패 원인을 '데이터 노이즈'에 귀인하던 통념을 '측정 도구의 편향'으로 재귀인한다. 제목의 'LLM이 감지할 수 없는 고유 신호'는 [[llm-as-judge]] 기반 평가가 학습 신호의 가치를 구조적으로 과소평가할 수 있음을 시사한다: 인간 사용자가 전달하는 신호를 LLM 평가자는 읽지 못한다.
+논증 구조는 [[concepts/bottleneck-misattribution.md|bottleneck misattribution]]의 확장이다 — 실패 원인을 '데이터 노이즈'에 귀인하던 통념을 '측정 도구의 편향'으로 재귀인한다. 제목의 'LLM이 감지할 수 없는 고유 신호'는 [[concepts/llm-as-judge.md|llm as judge]] 기반 평가가 학습 신호의 가치를 구조적으로 과소평가할 수 있음을 시사한다: 인간 사용자가 전달하는 신호를 LLM 평가자는 읽지 못한다.
 
 ## 기존 개념과의 연결
 
-- [[user-turn-generation]]: 사용자 턴을 '탐침'으로 쓰던 관점을 학습 신호 원천으로 확장
-- [[evaluation-deployment-unit-mismatch]]·[[deployment-only-improvement-observability]]: 배포의 반복 상호작용에서만 관찰되는 개선의 실증
-- [[signal-evaluation-decoupling]]: 신호(피드백)는 존재하나 평가 계층이 판독하지 못하는 구조
-- [[human-trace-external-anchoring]]: 자기 참조 루프([[circular-validity-problem]])를 여는 외부 닻
+- [[concepts/user-turn-generation.md|user turn generation]]: 사용자 턴을 '탐침'으로 쓰던 관점을 학습 신호 원천으로 확장
+- [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]·[[concepts/deployment-only-improvement-observability.md|deployment only improvement observability]]: 배포의 반복 상호작용에서만 관찰되는 개선의 실증
+- [[concepts/signal-evaluation-decoupling.md|signal evaluation decoupling]]: 신호(피드백)는 존재하나 평가 계층이 판독하지 못하는 구조
+- [[concepts/human-trace-external-anchoring.md|human trace external anchoring]]: 자기 참조 루프([[concepts/circular-validity-problem.md|circular validity problem]])를 여는 외부 닻
 
-SWE-chat의 실사용 상호작용 데이터셋, production traffic 기반 post-training 연구와 함께 '실세계 데이터의 학습 가치' 축을 형성하며, [[living-dataset]]을 관찰 자료가 아닌 신호 저장소로 격상시킨다.
+SWE-chat의 실사용 상호작용 데이터셋, production traffic 기반 post-training 연구와 함께 '실세계 데이터의 학습 가치' 축을 형성하며, [[concepts/living-dataset.md|living dataset]]을 관찰 자료가 아닌 신호 저장소로 격상시킨다.
 
 ## 🔗 관련 논문
 

@@ -46,3 +46,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-mediated-alignment.md|environment mediated alignment]]
+
+---
+**관련**: [[entities/environment-capability-co-evolution.md|environment capability co evolution]]
+
+---
+**관련**: [[entities/environment-absence-bottleneck.md|environment absence bottleneck]]
+
+---
+**관련**: [[entities/environment-capability-causality.md|environment capability causality]]
+
+---
+**관련**: [[entities/autonomous-driving-perception.md|autonomous driving perception]]
+
+---
+**관련**: [[concepts/environment-as-audit-object.md|environment as audit object]]
+
+---
+**관련**: [[concepts/trajectory-to-environment-derivation.md|trajectory to environment derivation]]
+
+---
+**관련**: [[concepts/environment-as-training-primitive.md|environment as training primitive]]
+
+---
+**관련**: [[concepts/design-runtime-alignment-duality.md|design runtime alignment duality]]
+
+---
+**관련**: [[concepts/environment-diversity-layered-guarantee.md|environment diversity layered guarantee]]
+
+---
+**관련**: [[concepts/on-policy-environment-coupling.md|on policy environment coupling]]

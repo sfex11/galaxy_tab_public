@@ -138,3 +138,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/hybrid-verification-architecture.md|hybrid verification architecture]]
+
+---
+**관련**: [[entities/bond-graph-modeling.md|bond graph modeling]]
+
+---
+**관련**: [[entities/semantic-dependency-graph.md|semantic dependency graph]]
+
+---
+**관련**: [[concepts/prior-informational-dependency-graph.md|prior informational dependency graph]]

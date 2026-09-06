@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/turn-level-credit-estimation.md|turn level credit estimation]]
+
+---
+**관련**: [[concepts/experience-infrastructuralization.md|experience infrastructuralization]]

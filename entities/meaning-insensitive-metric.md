@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
 
 표면 형식 정합성이 실제 목표와 어긋나는 구조를 ASR(WER)에서 추론 평가로 확장한다. 가독성 판단이 실제 인과적 기여를 측정하지 못하는 것은 WER의 '의미 무감각성'과 동일한 평가 철학적 오류의 변형임을 보여준다.
-
-→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

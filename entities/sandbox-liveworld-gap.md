@@ -38,5 +38,3 @@ DiscoverPhysics가 이 간극에 대한 하나의 해결책을 제시한다—�
 ### A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Minia (2026-09-06)
 
 통제된 환경과 실세계의 단절을 미니어처 규모에서 명시적으로 가교하는 구조적 해법의 첫 사례를 제공한다. Webots 트윈-실차 연결 구조가 시뮬레이션 평가의 실세계 전이 가능성을 검증 가능하게 만든다.
-
-→ [[sources/2026-09-06-a-low-cost-open-platform-for-end-to-end-autonomous.md|상세 보기]]

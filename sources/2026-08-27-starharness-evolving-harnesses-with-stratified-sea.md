@@ -59,3 +59,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-state-responsive-adaptation.md|harness state responsive adaptation]]
+
+---
+**관련**: [[entities/harness-side-compensation.md|harness side compensation]]
+
+---
+**관련**: [[entities/post-adaptation-selection.md|post adaptation selection]]
+
+---
+**관련**: [[concepts/monotonic-skill-benefit-assumption.md|monotonic skill benefit assumption]]
+
+---
+**관련**: [[concepts/interface-subordinate-optimization.md|interface subordinate optimization]]

@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 엔터프라이즈 인증 그래프라는 실제 규모의 이종 그래프가 의미론적 의존성을 외부 구조로 명시화하는 사례를 제공하며, 그래프가 상태 표현이 아닌 추론 엔진의 역할을 수행함을 보여준다.
-
-→ [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

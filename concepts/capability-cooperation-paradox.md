@@ -19,5 +19,3 @@ _자동 Wiki Query에서 추출됨_
 ### Learning to Communicate: Toward End-to-End Optimization of Multi-Agent (2026-04-26)
 
 ### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-06)
-
-→ [[sources/2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

@@ -304,3 +304,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/legitimate-division-of-labor-as-attack-surface.md|legitimate division of labor as attack surface]]
+
+---
+**관련**: [[entities/vision-grounded-synthesis.md|vision grounded synthesis]]
+
+---
+**관련**: [[entities/dual-layer-safety-inevitability.md|dual layer safety inevitability]]
+
+---
+**관련**: [[concepts/information-preservation-boundary.md|information preservation boundary]]

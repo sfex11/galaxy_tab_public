@@ -17,18 +17,18 @@ LLM의 외부화된 언어 산출물과 기제적으로 추출한 언어 특징 
 
 ## 기존 Wiki와의 관계
 
-- [[risk-translation-loss-as-safety]]가 제기한 '안전한 출력 = 위험 정보의 번역 손실' 역설을 조작적 개념으로 일반화한다.
-- [[hidden-state-risk-space]]의 은닉 상태 위험 가설에 이론적 뼈대를 제공한다.
-- [[agent-execution-semantic-opacity]]의 불투명성을 에이전트-OS 경계에서 모델-언어 경계로 확장한다.
+- [[concepts/risk-translation-loss-as-safety.md|risk translation loss as safety]]가 제기한 '안전한 출력 = 위험 정보의 번역 손실' 역설을 조작적 개념으로 일반화한다.
+- [[concepts/hidden-state-risk-space.md|hidden state risk space]]의 은닉 상태 위험 가설에 이론적 뼈대를 제공한다.
+- [[concepts/agent-execution-semantic-opacity.md|agent execution semantic opacity]]의 불투명성을 에이전트-OS 경계에서 모델-언어 경계로 확장한다.
 
 ## 보안 함의
 
-1. **표면 감시의 한계**: 프롬프트 모니터링·출력 필터링은 [[shadow-certification]]의 확장판이다.
-2. **기제적 판독의 불충분성**: [[probe-cascade]], pre-decoding-refusal-detection 같은 활성화 판독 기법의 신뢰 전제가 흔들린다.
-3. **잠재 채널 위험**: [[latent-communication-channel]]과 [[kv-cache-information-leakage]]가 시사하듯 언어에 실체화되지 않은 채널이 주요 공격면이 된다.
-4. **인증 이중 하락**: [[will-source-inaccessibility]]를 넘어, 내부에 접근해도 언어 산출물의 왜곡된 대표를 피할 수 없다.
+1. **표면 감시의 한계**: 프롬프트 모니터링·출력 필터링은 [[concepts/shadow-certification.md|shadow certification]]의 확장판이다.
+2. **기제적 판독의 불충분성**: [[concepts/probe-cascade.md|probe cascade]], pre-decoding-refusal-detection 같은 활성화 판독 기법의 신뢰 전제가 흔들린다.
+3. **잠재 채널 위험**: [[concepts/latent-communication-channel.md|latent communication channel]]과 [[concepts/kv-cache-information-leakage.md|kv cache information leakage]]가 시사하듯 언어에 실체화되지 않은 채널이 주요 공격면이 된다.
+4. **인증 이중 하락**: [[concepts/will-source-inaccessibility.md|will source inaccessibility]]를 넘어, 내부에 접근해도 언어 산출물의 왜곡된 대표를 피할 수 없다.
 
-결론: 검증 대상이 언어 표면에서 연산 구조로 이동해야 하며, 이는 [[algorithm-system-translation-gap]]의 번역 손실 문제와 동형이다.
+결론: 검증 대상이 언어 표면에서 연산 구조로 이동해야 하며, 이는 [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]의 번역 손실 문제와 동형이다.
 
 ## 🔗 관련 논문
 

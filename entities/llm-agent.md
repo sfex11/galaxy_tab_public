@@ -572,5 +572,3 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 자율 번역 에이전트라는 새로운 역할을 추가하며, 에이전트가 단일 최적 해 산출이 아닌 공간 탐색과 대안 제시를 수행함을 보여준다.
-
-→ [[sources/2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md|상세 보기]]

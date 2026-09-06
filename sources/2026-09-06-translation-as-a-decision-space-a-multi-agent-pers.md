@@ -19,15 +19,15 @@ NMT가 입력당 단일 출력을 산출하는 관행은 다국어 디코딩 내
 
 ## 기존 Wiki와의 관계
 
-- **[[evaluator-assumption]]**: '입력당 정답은 하나'라는 관행은 평가자 가정의 번역 도메인 사례이며, 유효 실현의 다원성을 체계적으로 은폐한다.
-- **[[geometric-collapse]]**: 단일 출력 산출은 다중 유효 모드 중 하나로의 수렴이라는 점에서 모드 붕괴 문제의 번역 버전이다.
-- **[[agent-environment-generation]]**: 태스크(번역)가 자체적으로 탐색 가능한 환경(결정 공간)을 구성하는 사례로, 환경 생성의 대상이 외부 소프트웨어에서 태스크 내부 구조로 확장됨을 보여준다.
-- **[[discourse-aware-translation]]**: DiscoSign의 담화 인지 축과 본 논문의 대안 탐색 축이 병렬을 이루어, 번역 연구가 문장 수준 정적 매핑에서 맥락·대안을 아우르는 동적 과제로 확장되는 흐름을 강화한다.
-- **[[multi-agent-system]]**: 에이전트를 협력 조율 대상이 아닌 결정 공간의 분담 탐색자로 활용하는 새로운 응용을 제시한다.
+- **[[concepts/evaluator-assumption.md|evaluator assumption]]**: '입력당 정답은 하나'라는 관행은 평가자 가정의 번역 도메인 사례이며, 유효 실현의 다원성을 체계적으로 은폐한다.
+- **[[concepts/geometric-collapse.md|geometric collapse]]**: 단일 출력 산출은 다중 유효 모드 중 하나로의 수렴이라는 점에서 모드 붕괴 문제의 번역 버전이다.
+- **[[concepts/agent-environment-generation.md|agent environment generation]]**: 태스크(번역)가 자체적으로 탐색 가능한 환경(결정 공간)을 구성하는 사례로, 환경 생성의 대상이 외부 소프트웨어에서 태스크 내부 구조로 확장됨을 보여준다.
+- **[[entities/discourse-aware-translation.md|discourse aware translation]]**: DiscoSign의 담화 인지 축과 본 논문의 대안 탐색 축이 병렬을 이루어, 번역 연구가 문장 수준 정적 매핑에서 맥락·대안을 아우르는 동적 과제로 확장되는 흐름을 강화한다.
+- **[[concepts/multi-agent-system.md|multi agent system]]**: 에이전트를 협력 조율 대상이 아닌 결정 공간의 분담 탐색자로 활용하는 새로운 응용을 제시한다.
 
 ## 연구 지형적 의미
 
-정적 단일 참조 평가의 한계를 노출한다는 점에서 [[dynamic-benchmark]]·[[self-play-benchmark]] 계열과 합류하며, 번역을 '함수 평가'에서 '공간 탐색'으로 전환한다.
+정적 단일 참조 평가의 한계를 노출한다는 점에서 [[concepts/dynamic-benchmark.md|dynamic benchmark]]·[[concepts/self-play-benchmark.md|self play benchmark]] 계열과 합류하며, 번역을 '함수 평가'에서 '공간 탐색'으로 전환한다.
 
 ## 🔗 관련 논문
 

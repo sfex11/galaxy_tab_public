@@ -360,3 +360,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]
+
+---
+**관련**: [[entities/grounded-clinical-qa.md|grounded clinical qa]]
+
+---
+**관련**: [[entities/deployment-only-improvement-observability.md|deployment only improvement observability]]
+
+---
+**관련**: [[concepts/cross-episode-closed-loop.md|cross episode closed loop]]

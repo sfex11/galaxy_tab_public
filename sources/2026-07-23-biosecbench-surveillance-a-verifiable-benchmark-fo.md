@@ -62,3 +62,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cross-layer-bottleneck-isomorphism.md|cross layer bottleneck isomorphism]]
+
+---
+**관련**: [[entities/distributed-surveillance-emergence.md|distributed surveillance emergence]]
+
+---
+**관련**: [[entities/collective-safety-analysis.md|collective safety analysis]]
+
+---
+**관련**: [[concepts/infinite-budget-evaluation-paradox.md|infinite budget evaluation paradox]]
+
+---
+**관련**: [[concepts/evaluation-self-referential-collapse.md|evaluation self referential collapse]]
+
+---
+**관련**: [[concepts/strategic-bottleneck.md|strategic bottleneck]]

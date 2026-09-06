@@ -373,3 +373,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/prompt-governance-translation-gap.md|prompt governance translation gap]]
+
+---
+**관련**: [[concepts/parameter-decoupling.md|parameter decoupling]]

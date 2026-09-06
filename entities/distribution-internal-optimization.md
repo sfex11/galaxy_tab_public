@@ -26,5 +26,3 @@ TeCoD가 템플릿 기반으로 출력 공간을 축소했다면, POPO는 암묵
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
 
 분포 내부 최적화 원칙의 생성 메커니즘 수준 실현 사례다 — 타겟 분포 자체는 유지하면서 샘플링 연산만 확산 기반 병렬화로 교체하여, 외부 근사 없이 출력 공간의 통계적 동등성을 유지한다.
-
-→ [[sources/2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

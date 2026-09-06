@@ -14,3 +14,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/bias-synchronization.md|bias synchronization]]
+
+---
+**관련**: [[entities/bias-synchronization.md|bias synchronization]]

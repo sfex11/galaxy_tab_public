@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-06)
 
 사고-행동 간극의 근원을 능력 부족이 아닌 표현 형식의 차이(이산 토큰 추론 vs 연속 물리 동역학)로 구체화하고, 잠재 공간 정렬이 간극을 봉합하는 해법 경로를 제시한다.
-
-→ [[sources/2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]

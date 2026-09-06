@@ -90,5 +90,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-clawbench-can-ai-agents-complete-everyday-online-t.md|ClawBench: Can AI Agents Complete Everyday Online Tasks?]] (2026-04-13)
 
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-06)
-
-→ [[sources/2026-09-06-swe-gate-passing-functional-tests-is-not-enough-fo.md|상세 보기]]

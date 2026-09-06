@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-26-machine-behavior-in-relational-moral-dilemmas-mora.md|Machine Behavior in Relational Moral Dilemmas: Moral Rightne]]
 
 ### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-06)
-
-→ [[sources/2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

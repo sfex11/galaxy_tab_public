@@ -69,3 +69,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/optimization-premise-collapse.md|optimization premise collapse]]
+
+---
+**관련**: [[concepts/submission-semantic-collapse.md|submission semantic collapse]]

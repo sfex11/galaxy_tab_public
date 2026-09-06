@@ -30,5 +30,3 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 ### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
 
 하네스 업데이트만으로는 안전이 보장되지 않으며, 하네스 정책 자체가 모델 정렬과 공진화해야 한다는 방향을 제시한다. 하네스를 정적 실행 인프라가 아닌 경험에서 진화하는 안전 정렬 주체로 재정의한다.
-
-→ [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|상세 보기]]

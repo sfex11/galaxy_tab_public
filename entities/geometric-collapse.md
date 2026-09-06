@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 단일 출력 산출이 다중 유효 모드 중 하나로의 수렴이라는 점에서, 모드 붕괴 문제의 번역 도메인 발현 사례를 제공하고 두 개념의 연결 가능성을 연다.
-
-→ [[sources/2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md|상세 보기]]

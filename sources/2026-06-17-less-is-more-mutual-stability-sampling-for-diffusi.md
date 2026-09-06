@@ -64,3 +64,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cost-safety-efficiency.md|cost safety efficiency]]
+
+---
+**관련**: [[concepts/speculative-decoding-losslessness-premise-collapse.md|speculative decoding losslessness premise collapse]]
+
+---
+**관련**: [[concepts/control-layer-ontological-limit.md|control layer ontological limit]]

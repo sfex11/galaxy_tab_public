@@ -31,10 +31,6 @@ _Wiki 축적 중_
 
 상점 바닥 하드웨어 제약 하에서 온프레미스 RAG 에이전트를 실현하는 구체적 배포 경로를 제공하며, 온디바이스 배포의 프론티어가 '작은 모델 찾기'에서 '적응 후 실측 선택'으로 이동함을 시사한다.
 
-→ [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|상세 보기]]
-
 ### Unfolding the Leech Lattice: Fused Multi-Shell Decoding and VRAM Layou (2026-09-04)
 
 2비트 가중치 서빙의 실용적 경계를 배치 1 디코드 페이즈 GEMV 실측 비용으로 구체화하여, 극저비트 온디바이스 배포 논의가 압축률 수치에서 커널 수준 비용으로 이동해야 함을 시사한다.
-
-→ [[sources/2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md|상세 보기]]

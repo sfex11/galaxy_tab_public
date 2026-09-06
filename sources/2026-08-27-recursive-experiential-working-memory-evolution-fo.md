@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/transient-adaptation-state.md|transient adaptation state]]
+
+---
+**관련**: [[concepts/functional-state-dichotomy.md|functional state dichotomy]]

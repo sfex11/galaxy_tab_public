@@ -19,15 +19,15 @@ AI 에이전트는 인구 규모 데이터로 훈련되어 다수 실무자의 �
 
 ## Wiki에서의 위치
 
-이 논문은 [[adaptive-inference]]의 적응 차원에 제4의 축을 추가한다. 기존 적응이 외부 환경(CADENCE), 내부 시스템 상태(SpecKV), 신념 상태에 반응했다면, 본 논문은 사용자와의 반복 교환에서 발현되는 **암묵적 개인 기준**에 반응하는 적응 유형을 제시한다.
+이 논문은 [[concepts/adaptive-inference.md|adaptive inference]]의 적응 차원에 제4의 축을 추가한다. 기존 적응이 외부 환경(CADENCE), 내부 시스템 상태(SpecKV), 신념 상태에 반응했다면, 본 논문은 사용자와의 반복 교환에서 발현되는 **암묵적 개인 기준**에 반응하는 적응 유형을 제시한다.
 
-[[marginal-distribution-ceiling]] 관점에서 인구 규모 훈련은 주변 분포가 평균 실무자의 분포를 인코딩하게 만들며, 개인 기준은 조건화되지 않은 암묵적 조건들이다. 이 간극을 메우는 경로가 파라미터 재학습이 아닌 추론 시점 상호작용임을 시사한다.
+[[concepts/marginal-distribution-ceiling.md|marginal distribution ceiling]] 관점에서 인구 규모 훈련은 주변 분포가 평균 실무자의 분포를 인코딩하게 만들며, 개인 기준은 조건화되지 않은 암묵적 조건들이다. 이 간극을 메우는 경로가 파라미터 재학습이 아닌 추론 시점 상호작용임을 시사한다.
 
 2026-09-04의 "User Feedback Provides a Unique Signal that LLMs Can not Detect"가 사용자 피드백 신호가 LLM 평가 계층에서 판독되지 않는 문제를 진단했다면, 본 논문은 반복 상호작용 프로토콜로 그 신호를 점진적으로 추출하는 해법 측을 제공하여 문제-해법 쌍을 형성한다.
 
 ## 새로운 인사이트
 
-[[preference-discovery-construction-boundary]]의 경계 문제에 대한 구체적 사례를 제공한다. 사용자가 표현할 수 없는 기준이 반복적 교환을 통해 표면화될 때, 선호 발견과 구성이 동일한 과정의 두 측면으로 융합된다. [[goal-operationalization]] 또한 에이전트의 단방향 변환이 아닌 인간-AI 간 공동 구성으로 재정의되어야 함을 보여준다.
+[[concepts/preference-discovery-construction-boundary.md|preference discovery construction boundary]]의 경계 문제에 대한 구체적 사례를 제공한다. 사용자가 표현할 수 없는 기준이 반복적 교환을 통해 표면화될 때, 선호 발견과 구성이 동일한 과정의 두 측면으로 융합된다. [[concepts/goal-operationalization.md|goal operationalization]] 또한 에이전트의 단방향 변환이 아닌 인간-AI 간 공동 구성으로 재정의되어야 함을 보여준다.
 
 ## 🔗 관련 논문
 

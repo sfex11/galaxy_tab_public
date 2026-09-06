@@ -112,3 +112,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interaction-tax.md|interaction tax]]
+
+---
+**관련**: [[entities/trace-framework.md|trace framework]]
+
+---
+**관련**: [[entities/circular-validity-problem.md|circular validity problem]]
+
+---
+**관련**: [[entities/strategic-exploitation.md|strategic exploitation]]
+
+---
+**관련**: [[entities/error-attribution-problem.md|error attribution problem]]
+
+---
+**관련**: [[concepts/problem-curation-pipeline.md|problem curation pipeline]]
+
+---
+**관련**: [[concepts/action-level-speculation.md|action level speculation]]

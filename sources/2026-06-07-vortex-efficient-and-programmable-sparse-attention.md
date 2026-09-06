@@ -197,3 +197,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dvm-hall-model.md|dvm hall model]]
+
+---
+**관련**: [[entities/miniature-vehicle-research-platform.md|miniature vehicle research platform]]
+
+---
+**관련**: [[entities/representation-action-gap.md|representation action gap]]
+
+---
+**관련**: [[entities/governance-as-social-condition-design.md|governance as social condition design]]
+
+---
+**관련**: [[entities/action-tokenization.md|action tokenization]]
+
+---
+**관련**: [[entities/security-operations-agent.md|security operations agent]]
+
+---
+**관련**: [[entities/agent-execution-semantic-opacity.md|agent execution semantic opacity]]
+
+---
+**관련**: [[concepts/design-deployment-safety-dissolution.md|design deployment safety dissolution]]
+
+---
+**관련**: [[concepts/diagnostic-agent-task-class.md|diagnostic agent task class]]

@@ -419,3 +419,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/multi-agent-communication-fallacy.md|multi agent communication fallacy]]
+
+---
+**관련**: [[entities/alignment-base-opacity.md|alignment base opacity]]
+
+---
+**관련**: [[entities/experience-based-alignment.md|experience based alignment]]
+
+---
+**관련**: [[entities/energy-based-control.md|energy based control]]
+
+---
+**관련**: [[concepts/multi-shell-decoding.md|multi shell decoding]]
+
+---
+**관련**: [[concepts/experience-driven-safety-alignment.md|experience driven safety alignment]]
+
+---
+**관련**: [[concepts/passive-energy-based-control.md|passive energy based control]]

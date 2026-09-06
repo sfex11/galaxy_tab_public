@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/plan-centric-steering.md|plan centric steering]]
+
+---
+**관련**: [[entities/auditability-as-scaling-requirement.md|auditability as scaling requirement]]

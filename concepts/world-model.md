@@ -30,5 +30,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-13)
 
 ### Discriminative World Models for Web Agents (2026-09-04)
-
-→ [[sources/2026-09-04-discriminative-world-models-for-web-agents.md|상세 보기]]

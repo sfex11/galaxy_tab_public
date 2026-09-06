@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compression-relevance-isomorphism.md|compression relevance isomorphism]]
+
+---
+**관련**: [[entities/extreme-low-bit-quantization.md|extreme low bit quantization]]
+
+---
+**관련**: [[entities/leech-lattice-quantization.md|leech lattice quantization]]

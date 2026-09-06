@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
 
 검색 그라운딩 적응이 모델 크기에 따른 품질 격차를 축소하는 평탄화 효과를 실증하여, RAG를 단순 지식 주입이 아닌 '모델 규모 간 능력 등화 메커니즘'으로 재해석한다.
-
-→ [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|상세 보기]]

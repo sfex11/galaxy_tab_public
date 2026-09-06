@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 체화 지능·자율주행·웨어러블 등 상시 스트림 응용에서 MLLM의 연속 처리 비용이 실용화의 병목임을 확인하고, 질의 도착 전 얕은 유지 전략이 에이전트 관찰 예산 문제의 실용적 해법이 됨을 시사한다.
 
-→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]
-
 ### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-06)
 
 VLM의 역할을 '에이전틱 행동 수행'에서 '지도 학습 신호의 능동적 생성'으로 확장한다. VLM의 시각적 관찰이 weakly-supervised 설정에서 감독 신호의 근거가 되는 구조를 제공하며, VLM 능력이 훈련 데이터 품질의 상한선을 결정하는 새로운 인과 방향을 제시한다.
-
-→ [[sources/2026-09-06-seeing-before-synthesizing-vlm-guided-transition-e.md|상세 보기]]

@@ -11,11 +11,11 @@
 
 ## 📖 분석
 
-이 논문은 LiDAR 시맨틱 세그멘테이션에서 표준 벤치마크 성능과 실제 배포 준비성 간의 구조적 간극을 진단하고, 거친 라벨 체계·악천후 센싱·도메인 시프트를 아우르는 통합 스트레스 평가 프로토콜을 제시한다. 이는 [[sandbox-liveworld-gap]]의 지각 모듈 버전이다: 통제된 단일 도메인 벤치마크의 SOTA 성능이 배포 조건 앞에서 얼마나 유지되는지를 세 축으로 분해해 측정한다.
+이 논문은 LiDAR 시맨틱 세그멘테이션에서 표준 벤치마크 성능과 실제 배포 준비성 간의 구조적 간극을 진단하고, 거친 라벨 체계·악천후 센싱·도메인 시프트를 아우르는 통합 스트레스 평가 프로토콜을 제시한다. 이는 [[concepts/sandbox-liveworld-gap.md|sandbox liveworld gap]]의 지각 모듈 버전이다: 통제된 단일 도메인 벤치마크의 SOTA 성능이 배포 조건 앞에서 얼마나 유지되는지를 세 축으로 분해해 측정한다.
 
-기존 Wiki 축적과의 관계: [[evaluation-deployment-unit-mismatch]]가 SafetyALFRED에서 'disembodied QA vs 체화 행동' 간극으로 확인됐다면, 본 논문은 LiDAR 지각에서 동일 구조('벤치마크 조건 vs 배포 센싱 조건')를 실증하여 이 패턴의 보편성을 강화한다. [[evaluator-assumption]]의 구체적 사례로, 세밀 라벨 체계의 mIoU가 안전 중요 클래스 구분의 보존과 독립적임을 드러낸다.
+기존 Wiki 축적과의 관계: [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]가 SafetyALFRED에서 'disembodied QA vs 체화 행동' 간극으로 확인됐다면, 본 논문은 LiDAR 지각에서 동일 구조('벤치마크 조건 vs 배포 센싱 조건')를 실증하여 이 패턴의 보편성을 강화한다. [[concepts/evaluator-assumption.md|evaluator assumption]]의 구체적 사례로, 세밀 라벨 체계의 mIoU가 안전 중요 클래스 구분의 보존과 독립적임을 드러낸다.
 
-Fail2Drive가 closed-loop 주행 일반화를, RoboGrid가 축 분리 스트레스 테스트 패러다임을 제시했듯, 본 논문은 라벨 병합·조건 열화·도메인 전이를 독립 축으로 분리 평가하는 방법론을 지각 도메인으로 확장한다. 특히 거친 라벨 병합 하에서도 안전 중요 클래스(보행자·차량)의 위상이 보존되는지를 별도 검증 축으로 삼는 것은 [[safety-critical-control]]과의 새 연결점을 형성하며, 지각 오류가 안전 결함으로 직접 전이되는 경로를 정량화할 토대를 제공한다.
+Fail2Drive가 closed-loop 주행 일반화를, RoboGrid가 축 분리 스트레스 테스트 패러다임을 제시했듯, 본 논문은 라벨 병합·조건 열화·도메인 전이를 독립 축으로 분리 평가하는 방법론을 지각 도메인으로 확장한다. 특히 거친 라벨 병합 하에서도 안전 중요 클래스(보행자·차량)의 위상이 보존되는지를 별도 검증 축으로 삼는 것은 [[concepts/safety-critical-control.md|safety critical control]]과의 새 연결점을 형성하며, 지각 오류가 안전 결함으로 직접 전이되는 경로를 정량화할 토대를 제공한다.
 
 ## 🔗 관련 논문
 

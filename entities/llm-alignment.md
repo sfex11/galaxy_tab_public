@@ -21,6 +21,4 @@ RLHF가 '정렬'을 수행한다는 명제의 규범적 전제를 해체하여, 
 
 ### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
 
-정렬 평가가 언어 산출물에 의존하는 한 내부 연산의 정렬 여부를 검증할 수 없다는 전제 비판을 추가하여, 정렬의 검증 가능성 요구와 [[algorithm-system-translation-gap]] 계열 논의를 연결한다.
-
-→ [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]
+정렬 평가가 언어 산출물에 의존하는 한 내부 연산의 정렬 여부를 검증할 수 없다는 전제 비판을 추가하여, 정렬의 검증 가능성 요구와 [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]] 계열 논의를 연결한다.

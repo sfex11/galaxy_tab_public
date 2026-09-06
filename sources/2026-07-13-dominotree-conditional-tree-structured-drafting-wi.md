@@ -88,3 +88,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structure-to-value-axis-shift.md|structure to value axis shift]]
+
+---
+**관련**: [[entities/diffusion-augmented-llm.md|diffusion augmented llm]]
+
+---
+**관련**: [[entities/discrete-diffusion.md|discrete diffusion]]
+
+---
+**관련**: [[entities/safety-as-conditional-state.md|safety as conditional state]]
+
+---
+**관련**: [[concepts/first-mistake-anchoring.md|first mistake anchoring]]
+
+---
+**관련**: [[concepts/conditional-world-modeling-meta-decision.md|conditional world modeling meta decision]]
+
+---
+**관련**: [[concepts/distribution-preserving-acceleration.md|distribution preserving acceleration]]
+
+---
+**관련**: [[concepts/codebook-lookup-decoding.md|codebook lookup decoding]]

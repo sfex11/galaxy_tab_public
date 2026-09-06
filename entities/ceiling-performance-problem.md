@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Environment Evolution for Terminal Agents (2026-09-06)
 
 벤치마크의 정적 문제 집합 천장과 동일한 구조가 훈련 환경에서도 발생함을 보여준다. 평가 측 천장이 측정 문제라면 훈련 측 천장은 학습 신호 고갈 문제로, MathDuels류 동적 평가의 논리가 훈련 환경 생성으로 확장됨을 시사한다.
-
-→ [[sources/2026-09-06-environment-evolution-for-terminal-agents.md|상세 보기]]

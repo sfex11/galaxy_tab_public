@@ -16,5 +16,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)
 
 ### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-06)
-
-→ [[sources/2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

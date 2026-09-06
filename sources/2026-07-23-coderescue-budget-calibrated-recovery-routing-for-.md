@@ -54,3 +54,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/verification-execution-gap.md|verification execution gap]]
+
+---
+**관련**: [[entities/discourse-aware-translation.md|discourse aware translation]]
+
+---
+**관련**: [[entities/domain-grounded-contract-execution.md|domain grounded contract execution]]
+
+---
+**관련**: [[concepts/sft-rl-budget-allocation.md|sft rl budget allocation]]

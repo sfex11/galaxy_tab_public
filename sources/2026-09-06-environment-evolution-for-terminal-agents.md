@@ -13,13 +13,13 @@
 
 ## Environment Evolution for Terminal Agents (2026-09-06)
 
-터미널 에이전트 훈련을 위한 상호작용적·검증 가능 환경의 스케일링 문제를 다룬다. 핵심 진단은 ceiling-performance-problem의 훈련 환경 버전이다: 프론티어 모델이 강해질수록 처음부터 합성된 환경은 도전적이지 않아 학습 신호가 구조적으로 고갈되며, 검증 가능성 유지와 난이도 재조정의 양립이 [[rlvr]] 인프라의 핵심 병목으로 부상한다.
+터미널 에이전트 훈련을 위한 상호작용적·검증 가능 환경의 스케일링 문제를 다룬다. 핵심 진단은 ceiling-performance-problem의 훈련 환경 버전이다: 프론티어 모델이 강해질수록 처음부터 합성된 환경은 도전적이지 않아 학습 신호가 구조적으로 고갈되며, 검증 가능성 유지와 난이도 재조정의 양립이 [[concepts/rlvr.md|rlvr]] 인프라의 핵심 병목으로 부상한다.
 
 최근 공진화(co-evolution) 접근이 롤아웃에서 노출된 약점에 기반해 모델의 학습 가능 경계 근처에서 환경을 반복 합성함을 정리하되, 이들의 온폴리시 롤아웃 의존성이 일반화와 지속적 학습 신호 공급을 동시에 제한한다고 비판한다.
 
-이는 [[agent-environment-generation]]의 스코프를 3단계로 확장한다 — Gym-Anything의 정적 소프트웨어→환경 변환, Nemobot Games의 도메인 특화 생성에 이어, '환경이 모델과 함께 지속 진화하는' 제3단계를 제시한다. 환경은 한 번 구축되는 자산이 아니라 학습 신호를 재생산해야 하는 갱신 가능 계층([[refreshable-signal-layer]]의 훈련 측 아날로그)이 된다.
+이는 [[concepts/agent-environment-generation.md|agent environment generation]]의 스코프를 3단계로 확장한다 — Gym-Anything의 정적 소프트웨어→환경 변환, Nemobot Games의 도메인 특화 생성에 이어, '환경이 모델과 함께 지속 진화하는' 제3단계를 제시한다. 환경은 한 번 구축되는 자산이 아니라 학습 신호를 재생산해야 하는 갱신 가능 계층([[concepts/refreshable-signal-layer.md|refreshable signal layer]]의 훈련 측 아날로그)이 된다.
 
-[[environment-absence-bottleneck]]의 진화된 형태도 제공한다: 환경이 존재해도 모델 능력 대비 도전성이 부족하면 학습 루프는 여전히 차단되며, 이는 '부재'가 아닌 '신호 피로'에 의한 병목이다. SafeEvolve의 하네스-정책 공진화와 함께, [[environment-capability-co-evolution]]이 온폴리시 구속에서 벗어나려는 2026년 9월의 흐름을 형성한다.
+[[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]의 진화된 형태도 제공한다: 환경이 존재해도 모델 능력 대비 도전성이 부족하면 학습 루프는 여전히 차단되며, 이는 '부재'가 아닌 '신호 피로'에 의한 병목이다. SafeEvolve의 하네스-정책 공진화와 함께, [[concepts/environment-capability-co-evolution.md|environment capability co evolution]]이 온폴리시 구속에서 벗어나려는 2026년 9월의 흐름을 형성한다.
 
 ## 🔗 관련 논문
 

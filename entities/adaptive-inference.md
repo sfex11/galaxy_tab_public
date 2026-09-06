@@ -31,16 +31,10 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 
 적응적 계산의 결정 차원을 배포 시점(추측 길이 γ, 라우트 선택)에서 평가 시점(궤적 지속 여부)으로 확장한다. SpecKV가 내부 압축 상태에 반응했다면, EarlyEval은 조기 예측된 결과의 확신도에 반응해 계산을 중단하되, 적응 주체가 모델이 아닌 평가 하네스이며 중단이 측정 충실도를 훼손하지 않아야 한다는 제약이 결합된 새로운 적응 유형임을 보여준다.
 
-→ [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|상세 보기]]
-
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
 적응의 트리거 축에 '질의 도착 이벤트'라는 제4유형을 추가한다. 외부 환경 반응(CADENCE), 내부 시스템 상태 반응(SpecKV)과 달리, ShallowStream은 질의 도착 전후로 계산 깊이 자체를 이단계로 분리하는 구조적 적응을 보여준다.
 
-→ [[sources/2026-09-04-shallowstream-index-shallow-then-answer-deep-for-s.md|상세 보기]]
-
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-06)
 
 적응적 추론의 반응 대상 스펙트럼에 '인간 상호작용에서 발현되는 암묵적 개인 기준'이라는 제4유형을 추가한다. 외부 환경(CADENCE)·내부 시스템 상태(SpecKV)·신념 상태에 이어, 사용자와의 반복 교환을 통한 기준 표면화가 테스트 시점 적응의 새로운 결정 차원임을 보여준다.
-
-→ [[sources/2026-09-06-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

@@ -167,3 +167,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/compression-relevance-isomorphism.md|compression relevance isomorphism]]
+
+---
+**관련**: [[concepts/coverage-quality-triple-metric.md|coverage quality triple metric]]

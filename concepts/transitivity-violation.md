@@ -18,5 +18,3 @@ _자동 Wiki Query에서 추출됨_
 ### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-27)
 
 ### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
-
-→ [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]

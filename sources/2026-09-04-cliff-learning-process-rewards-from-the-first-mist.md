@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-Cliff는 RLVR(검증 가능 보상 기반 강화학습)의 구조적 한계—거친 결과 보상이 중간 추론 과정에 가이드를 주지 못하는 문제—를, 전문화된 프로세스 보상 모델(PRM)이나 교사-학생 동일 추론 패턴 가정 없이 해결하는 경로를 제시한다. 핵심은 '첫 번째 실수(first mistake)'를 프로세스 보상의 앵커로 삼는 것이다: 롤아웃에서 첫 실수가 발생하는 클리프 지점을 탐지하고, 그 이전 prefix는 최종 성공에서 긍정 신호를, 이후 suffix는 부정 신호를 상속하도록 크레딧을 분해한다. 이는 unrecoverable-reasoning-error의 진단적 통찰—오류 이후 모든 토큰이 복합화된다는 것—을 훈련 신호 설계로 전환한 것으로, 오류 지점 자체가 최대 정보를 담는 앵커가 됨을 보여준다. 기존 [[rlvr]]이 purely-reactive-optimization에 머물렀던 것과 달리 프로세스 수준 신호를 자체 유도하며, 'Reconciling Process Supervision with Outcome-Based Rewards'(2026-09-02)가 다룬 프로세스-결과 보상 갈등에 대한 제3의 경로를 제공한다. 또한 [[on-policy-distillation]]의 교사-학생 동질성 가정을 벗어나 검증기만으로 프로세스 신호를 도출하므로, 'Scaling Large Reasoning Models beyond Human Supervision'(2026-09-03)과 함께 인간 감독 의존을 낮추는 보상 설계 축을 형성한다.
+Cliff는 RLVR(검증 가능 보상 기반 강화학습)의 구조적 한계—거친 결과 보상이 중간 추론 과정에 가이드를 주지 못하는 문제—를, 전문화된 프로세스 보상 모델(PRM)이나 교사-학생 동일 추론 패턴 가정 없이 해결하는 경로를 제시한다. 핵심은 '첫 번째 실수(first mistake)'를 프로세스 보상의 앵커로 삼는 것이다: 롤아웃에서 첫 실수가 발생하는 클리프 지점을 탐지하고, 그 이전 prefix는 최종 성공에서 긍정 신호를, 이후 suffix는 부정 신호를 상속하도록 크레딧을 분해한다. 이는 unrecoverable-reasoning-error의 진단적 통찰—오류 이후 모든 토큰이 복합화된다는 것—을 훈련 신호 설계로 전환한 것으로, 오류 지점 자체가 최대 정보를 담는 앵커가 됨을 보여준다. 기존 [[concepts/rlvr.md|rlvr]]이 purely-reactive-optimization에 머물렀던 것과 달리 프로세스 수준 신호를 자체 유도하며, 'Reconciling Process Supervision with Outcome-Based Rewards'(2026-09-02)가 다룬 프로세스-결과 보상 갈등에 대한 제3의 경로를 제공한다. 또한 [[concepts/on-policy-distillation.md|on policy distillation]]의 교사-학생 동질성 가정을 벗어나 검증기만으로 프로세스 신호를 도출하므로, 'Scaling Large Reasoning Models beyond Human Supervision'(2026-09-03)과 함께 인간 감독 의존을 낮추는 보상 설계 축을 형성한다.
 
 ## 🔗 관련 논문
 

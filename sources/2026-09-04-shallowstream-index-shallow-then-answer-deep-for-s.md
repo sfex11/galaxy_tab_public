@@ -15,11 +15,11 @@
 
 ShallowStream은 연속 비디오 스트림의 MLLM 처리 비용 문제를 "Index Shallow then Answer Deep"이라는 이단계 추론 패러다임으로 해결한다. 기존 접근(토큰 프루닝, 병합, 양자화, 온디맨드 프레임 검색, 컨텍스트 오프로딩)이 연속 스트림의 국소적 비용을 줄이는 최적화에 머물렀다면, 본 논문은 **질의 도착 전 계산과 질의 도착 후 계산을 구조적으로 분리**한다. 질의가 없는 구간에서는 가벼운 얕은 처리로 과거 프레임의 인덱스만 유지하고, 질의 도착 시점에만 깊은 처리를 발동해 답변을 생성한다.
 
-이는 [[streaming-adaptive-inference]]의 가장 구체적 구현이다. [[adaptive-inference]] 관점에서 적응 트리거의 새 유형을 추가한다 — 외부 환경 반응(CADENCE), 내부 시스템 상태 반응(SpecKV)과 달리, '질의 도착'이라는 사용자 이벤트가 계산 깊이 자체를 결정한다.
+이는 [[concepts/streaming-adaptive-inference.md|streaming adaptive inference]]의 가장 구체적 구현이다. [[concepts/adaptive-inference.md|adaptive inference]] 관점에서 적응 트리거의 새 유형을 추가한다 — 외부 환경 반응(CADENCE), 내부 시스템 상태 반응(SpecKV)과 달리, '질의 도착'이라는 사용자 이벤트가 계산 깊이 자체를 결정한다.
 
-핵심은 **미래 질의 불확실성**이다. 질의 도착 전에는 어떤 정보가 관련성 있을지 알 수 없는 상태에서 압축·인덱싱이 수행되어야 하므로, 인덱스는 "임의 질의에 대해 후속 깊은 처리로 확장 가능한" 질의 무관적 보존 단위로 설계되어야 한다. 이는 [[compression-relevance-isomorphism]]의 역문제이며, [[non-selective-context-accumulation]]의 대척점에 있는 선택적 유보 전략이다.
+핵심은 **미래 질의 불확실성**이다. 질의 도착 전에는 어떤 정보가 관련성 있을지 알 수 없는 상태에서 압축·인덱싱이 수행되어야 하므로, 인덱스는 "임의 질의에 대해 후속 깊은 처리로 확장 가능한" 질의 무관적 보존 단위로 설계되어야 한다. 이는 [[concepts/compression-relevance-isomorphism.md|compression relevance isomorphism]]의 역문제이며, [[concepts/non-selective-context-accumulation.md|non selective context accumulation]]의 대척점에 있는 선택적 유보 전략이다.
 
-또한 [[autoregressive-paradigm-confinement]]를 완화한다 — 모든 입력을 순차 풀 처리하는 자기회귀 전제 대신 질의 조건부 지연 실행으로 스트리밍을 재구성한다. 체화 지능·자율주행·감시 등 상시 스트림 응용([[embodied-ai]], [[agentic-vlm]])에서 질의 도착 전 계산 예산을 절감하면서 답변 품질을 유지하는 실용적 경로를 제공한다. SpecKV(압축 상태 반응형 적응), Make Your LVLM KV Cache More Lightweight(시각 토큰 KV 압축), LongSeeker(탄력적 컨텍스트 조율)와 함께 스트리밍 효율화의 축을 형성한다.
+또한 [[concepts/autoregressive-paradigm-confinement.md|autoregressive paradigm confinement]]를 완화한다 — 모든 입력을 순차 풀 처리하는 자기회귀 전제 대신 질의 조건부 지연 실행으로 스트리밍을 재구성한다. 체화 지능·자율주행·감시 등 상시 스트림 응용([[concepts/embodied-ai.md|embodied ai]], [[concepts/agentic-vlm.md|agentic vlm]])에서 질의 도착 전 계산 예산을 절감하면서 답변 품질을 유지하는 실용적 경로를 제공한다. SpecKV(압축 상태 반응형 적응), Make Your LVLM KV Cache More Lightweight(시각 토큰 KV 압축), LongSeeker(탄력적 컨텍스트 조율)와 함께 스트리밍 효율화의 축을 형성한다.
 
 ## 🔗 관련 논문
 
