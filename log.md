@@ -3294,3 +3294,22 @@
 ## [2026-09-05 08:33] ingest | Translation as a Decision Space: A Multi-Agent Perspective on Low-Resource Dialect Generation
 
 ## [2026-09-05 08:33] ingest | Unlocking Lossless Speedups in LLMs via Discrete Diffusion
+
+## [2026-09-06 03:00] llm-ingest | 17편 분석, 엔티티 456개, 개념 1585개
+- 2026-09-06-clean-engineering-unstable-measurement-a-preregist.md
+- 2026-09-06-legibility-is-not-interpretability-comparing-judge.md
+- 2026-09-06-seeing-before-synthesizing-vlm-guided-transition-e.md
+- 2026-09-06-knowledge-acquisition-during-pre-training-large-la.md
+- 2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md
+- 2026-09-06-swe-gate-passing-functional-tests-is-not-enough-fo.md
+- 2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md
+- 2026-09-06-formation-matrix-and-energy-based-control-of-multi.md
+- 2026-09-06-terminal-universe-turning-agent-trajectories-into-.md
+- 2026-09-06-efficient-test-time-adaptation-through-human-ai-in.md
+- 2026-09-06-a-low-cost-open-platform-for-end-to-end-autonomous.md
+- 2026-09-06-the-natural-language-interaction-protocol-and-stan.md
+- 2026-09-06-environment-evolution-for-terminal-agents.md
+- 2026-09-06-corner-cases-headland-coverage-path-planning-for-a.md
+- 2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md
+- 2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md
+- 2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md

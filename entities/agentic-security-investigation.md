@@ -16,3 +16,9 @@ _Wiki 축적 중_
 보안 알림 조사와 동형 구조(관찰→가설→인과 귀인→검증)의 진단 태스크가 통신 장애 분석에서도 요구됨을 보여, 구조화된 운영 데이터에 대한 진단 추론이 도메인 불변의 공통 요구임을 강화한다.
 
 → [[sources/2026-09-04-large-language-models-llms-for-telecom-root-cause-.md|상세 보기]]
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
+
+보안 알림 조사의 구조 동형성(관찰→가설→검증)을 제공한 기존 논의에, 위상 추론을 의미 추론과 분리해 전담 그래프 구성요소에 위임하는 아키텍처 패턴을 추가한다. 진단 추론의 도메인 불변성이 구성요소 분해 가능성으로 정교화된다.
+
+→ [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

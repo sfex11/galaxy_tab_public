@@ -48,3 +48,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-syntax-is-easy-semantics-is-hard-evaluating-llms-f.md|Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL T]] (2026-04-10)
 
 - [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
+
+→ [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

@@ -206,3 +206,9 @@ LLM의 능력 스펙트럼에 '그래프 위상 정제'를 추가한다. 텍스�
 LLM을 단일 블랙박스가 아닌 담화 현상별 모듈로 분해하는 파이프라인 구성 방식을 제시한다. 도메인 특화 언어 구조 처리에서 모듈형 LLM 아키텍처의 유효성에 대한 추가 근거를 제공한다.
 
 → [[sources/2026-09-04-discosign-discourse-aware-text-to-sign-language-gl.md|상세 보기]]
+
+### Knowledge Acquisition During Pre-training? Large Language Models Learn (2026-09-06)
+
+지식 습득이 파라미터 스케일 이전에 데이터 구성의 인과 함수임을 보여준다. 고정 토큰 예산에서 반복 대비 재구성 재할당의 우위는 LLM 사전학습 효율성 연구에 '데이터 표현 다양성'이라는 스케일링과 별개의 독립 제어 축을 추가한다.
+
+→ [[sources/2026-09-06-knowledge-acquisition-during-pre-training-large-la.md|상세 보기]]

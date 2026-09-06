@@ -48,3 +48,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 양자화 도메인의 정밀한 사례를 제공한다 — Leech 격자의 이론적 rate가 요구하는 멀티-셸 디코더의 부재가 곧 최고 품질 기법의 미채택 원인이었으며, 알고리즘 우월성만으로 실용화가 보장되지 않음을 실증한다.
 
 → [[sources/2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md|상세 보기]]
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
+
+번역 간극을 줄이는 대신, 번역이 필요한 위상 추론 자체를 시스템 측 구성요소로 이전하여 간극의 발생 자체를 최소화하는 아키텍처 전략을 제공한다.
+
+→ [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

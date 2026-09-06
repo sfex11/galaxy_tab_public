@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-25-tool-attention-is-all-you-need-dynamic-tool-gating.md|Tool Attention Is All You Need: Dynamic Tool Gating and Lazy]]
 
 ### Tool Attention Is All You Need: Dynamic Tool Gating and Lazy Schema Lo (2026-04-26)
+
+### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-06)
+
+→ [[sources/2026-09-06-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]

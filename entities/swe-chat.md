@@ -22,3 +22,9 @@ SWE-chat 분석에서 'MCP Tax를 제어 변수로 포함해야 함'으로 시�
 ### Agentic Harness Engineering: Observability-Driven Automatic Evolution  (2026-04-30)
 
 SWE-chat이 실제 세션에서 도구 오버헤드를 진단했다면, AHE는 하네스 계층 자체를 자동 진화시켜 상류에서 해결하는 상보적 접근을 제공하며, 두 논문이 합쳐 코딩 에이전트 인프라의 진단-치료 파이프라인을 완성한다.
+
+### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-06)
+
+SWE-chat이 야생 사용 환경과 벤치마크 태스크의 간극을 실사용자 상호작용 데이터로 보였다면, SWE-Gate는 평가 계약 자체가 실세계 수용 워크플로우(리뷰)를 누락한다는 평가 측면의 보완 증거를 제공한다.
+
+→ [[sources/2026-09-06-swe-gate-passing-functional-tests-is-not-enough-fo.md|상세 보기]]

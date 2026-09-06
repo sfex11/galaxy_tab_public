@@ -50,3 +50,21 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 'same request, same model name, same reading tomorrow'라는 가장 기초적이고 암묵적인 평가자 가정을 최초로 정량적 감사 대상으로 삼아, 이 개념의 범위를 벤치마크 설계 차원에서 측정 인프라 차원으로 확장한다.
 
 → [[sources/2026-09-06-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
+
+평가자의 암묵적 가정 목록에 '추론 텍스트가 기능적 역할을 인코딩한다'는 전제를 추가한다. LLM judge, PRM, generative critic이 공유하는 이 전제가 실증적으로 깨지면, 이들 평가 도구 전체의 타당성이 평가 대상의 실체화 가능성에 의존함이 드러난다.
+
+→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]
+
+### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-06)
+
+'테스트 통과 = 수용 가능한 패치'라는 평가자의 암묵적 가정을 폭로하고, 실제 수용 판단에는 리뷰어의 명시적·암묵적 제약이 개입함을 보여준다.
+
+→ [[sources/2026-09-06-swe-gate-passing-functional-tests-is-not-enough-fo.md|상세 보기]]
+
+### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
+
+'입력당 정답은 하나'라는 암묵적 가정이 저자원 방언 설정에서 유효 실현의 다원성을 체계적으로 은폐함을 구체적 사례로 입증한다.
+
+→ [[sources/2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md|상세 보기]]

@@ -315,3 +315,7 @@ _자동 생성됨_
 - [[sources/2026-09-03-nashdreamer-model-based-reinforcement-learning-for.md]]
 
 - [[sources/2026-09-05-a-case-study-on-emergent-cheating-and-whistleblowi.md]]
+
+### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-06)
+
+→ [[sources/2026-09-06-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

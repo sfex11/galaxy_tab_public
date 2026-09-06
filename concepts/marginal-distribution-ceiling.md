@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
 
 → [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|상세 보기]]
+
+### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-06)
+
+→ [[sources/2026-09-06-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key (2026-05-10)
 
 천장 성능이 고정된 문제 집합이 아니라 기저 논리의 표현력에 의해 구조적으로 결정됨을 합성 환경에서 통제 변수로 증명하여, 천장 문제의 원인을 벤치마크 설계에서 표현 체계로 이동시킨다.
+
+### Environment Evolution for Terminal Agents (2026-09-06)
+
+벤치마크의 정적 문제 집합 천장과 동일한 구조가 훈련 환경에서도 발생함을 보여준다. 평가 측 천장이 측정 문제라면 훈련 측 천장은 학습 신호 고갈 문제로, MathDuels류 동적 평가의 논리가 훈련 환경 생성으로 확장됨을 시사한다.
+
+→ [[sources/2026-09-06-environment-evolution-for-terminal-agents.md|상세 보기]]

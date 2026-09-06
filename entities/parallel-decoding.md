@@ -19,3 +19,9 @@ Cola DLM은 병렬 디코딩의 적용 대상을 자회귀 생성 내부(추측 
 
 ### Visual-Redundancy-Controlled Parallel Decoding for Diffusion-Based Multimodal LLMs (2026-05-27)
 기존 신뢰도 기반 병렬 디코딩이 타겟 분포 무변경 원칙 하에서만 각 마스크 위치의 신뢰도를 독립적으로 순위하여 상위-K를 커밋하는 한계를 식별한다. dMLLM의 비순차 생성 특성(시각 토큰의 지역적 연관성)을 고려하여, 위치 간 상호 연관성이 높은 그룹을 단위로 커밋하는 **위치 간 중복성 제어**를 도입한다. 이는 자회귀 접근이 불필요한 연산을 낭비하는 동시에, 독립적 순위만으로는 불충분한 컨텍스트를 생성하는 기존 접근의 구조적 한계를 해소한다.
+
+### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
+
+병렬 디코딩의 적용 방식에 'AR 분포로부터의 확산 기반 직접 샘플링'이라는 새 경로를 추가한다. 분포 재설계(Cola DLM)와 수용률 최적화(추측 디코딩) 사이의 중간 지점을 채운다.
+
+→ [[sources/2026-09-06-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

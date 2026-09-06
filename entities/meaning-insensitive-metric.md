@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Generating Statistical Charts with Validation-Driven LLM Workflows (2026-05-05)
 
 코드 정적 분석이나 데이터 스키마 검사로는 차트 품질을 보장할 수 없다는 실증을 제공하여, 이 개념이 단일 도메인 한계가 아닌 코드 생성→시각 렌더링이라는 파이프라인 전체에 걸쳐 존재하는 구조적 문제임을 입증한다.
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
+
+표면 형식 정합성이 실제 목표와 어긋나는 구조를 ASR(WER)에서 추론 평가로 확장한다. 가독성 판단이 실제 인과적 기여를 측정하지 못하는 것은 WER의 '의미 무감각성'과 동일한 평가 철학적 오류의 변형임을 보여준다.
+
+→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

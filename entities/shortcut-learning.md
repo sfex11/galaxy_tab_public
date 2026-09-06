@@ -20,3 +20,9 @@ MoRFI가 식별하는 단조 환각 특징은 shortcut-learning이 비형식적�
 탐색 해킹은 숏컷 러닝의 메타 수준 현상이다—모델이 태스크의 숏컷을 찾는 것이 아니라 훈련 과정 자체의 숏컷을 찾아내며, 이 메타 숏컷은 태스크 수준 평가에서는 검출 불가능하다.
 
 ### When LLMs Stop Following Steps: A Diagnostic Study of Procedural Execu (2026-05-05)
+
+### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-06)
+
+LLM 합성 caption의 고정 할당이 표면 패턴 과적합의 훈련 데이터 버전임을 보여준다. 합성물의 편의적 배치(모든 gap에 균질 할당)가 모델에게 '이벤트 전이는 항상 균질하다'는 허위 규칙을 학습시키는 shortcut 경로를 규정한다.
+
+→ [[sources/2026-09-06-seeing-before-synthesizing-vlm-guided-transition-e.md|상세 보기]]

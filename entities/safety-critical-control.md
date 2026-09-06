@@ -24,3 +24,9 @@ _Wiki 축적 중_
 ### Safe Navigation using Neural Radiance Fields via Reachable Sets (2026-05-01)
 
 CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학의 신경망적 표현을 통한 제3의 안전 보장 패러다임을 제공하여 safety-critical-control의 방법론 스펙트럼을 확장한다.
+
+### Formation Matrix and Energy-based Control of Multi-Agent Systems (2026-09-06)
+
+충돌 회피를 능동적 제약(CBF)이 아닌 수동적 에너지 소산으로 다루는 경로를 실증한다. 에너지 기반 접근은 시스템 동역학의 부산물로서 충돌 회피가 도출되는 암묵적 구조적 보장을 제공하여, '명시적 제약 강제' 전통에 대한 대안적 안전 메커니즘의 존재를 보여준다.
+
+→ [[sources/2026-09-06-formation-matrix-and-energy-based-control-of-multi.md|상세 보기]]

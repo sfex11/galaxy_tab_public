@@ -24,3 +24,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 기제적 프로브로 추출한 언어 특징조차 실제 연산을 대표하지 못할 수 있다는 메타-비판을 제공하여, MoRFI나 shared logical subspace 같은 SAE·스티어링 기반 판독 연구가 암묵적으로 전제하던 '언어 특징 = 연산' 동일성 가정을 문제화한다.
 
 → [[sources/2026-09-04-the-implications-of-linguistic-illegibility-for-ll.md|상세 보기]]
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
+
+가독성(legibility)과 해석가능성(interpretability)을 구분하는 용어적 기준을 제공한다. CoT 텍스트는 해석가능성의 근거가 아니라 가독성의 증거일 뿐이며, 실제 스텝 중요도는 어블레이션 등 개입 기반 방법으로만 확립 가능함을 시사하여 개입 기반 해석가능성의 위상을 높인다.
+
+→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

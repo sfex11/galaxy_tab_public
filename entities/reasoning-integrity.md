@@ -24,3 +24,15 @@ _Wiki 축적 중_
 '불안정한 추론'이라는 바닐라 LLM 진단을 통해, 추론 무결성 문제가 평가 맥락을 넘어 산업 운영 배포에서 시스템 신뢰성의 직접적 병목이 됨을 실증하고, 구조화된 추론 프레임워크가 무결성 보장의 실용적 경로임을 제안한다.
 
 → [[sources/2026-09-04-large-language-models-llms-for-telecom-root-cause-.md|상세 보기]]
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
+
+추론 무결성 평가에서 '가독성과 해석가능성의 분리'라는 새 구분을 제공한다. CoT 텍스트의 표면적 정합성이 실제 계산의 인과적 역할과 다를 수 있으므로, 무결성 감사를 텍스트 판독이 아닌 개입 기반 검증으로 확장해야 함을 시사한다.
+
+→ [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
+
+'권장 행동이 작동하는 토폴로지와 일치함을 보장할 수 없다'는 문제 정식화가 추론 무결성의 보안 도메인 구체화이며, 출력 필터링이 아닌 구조적 검증(그래프)에 의한 무결성 보장 경로를 제공한다.
+
+→ [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]
