@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-06)
+
+### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
+
+→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]

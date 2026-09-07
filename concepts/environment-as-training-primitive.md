@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-terminal-universe-turning-agent-trajectories-into-.md|Terminal-Universe: Turning Agent Trajectories into Scalable ]]
+
+### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-07)
+
+→ [[sources/2026-09-07-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]

@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
+
+→ [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

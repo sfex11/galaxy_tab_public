@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-04-measurement-driven-sub-network-selection-for-on-pr.md|Measurement-Driven Sub-Network Selection for On-Premise Retr]]
 
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-06)
+
+### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
+
+→ [[sources/2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

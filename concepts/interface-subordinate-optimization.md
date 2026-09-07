@@ -16,3 +16,11 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
+
+→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
+
+### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
+
+→ [[sources/2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

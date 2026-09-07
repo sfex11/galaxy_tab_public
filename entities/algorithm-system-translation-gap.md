@@ -50,3 +50,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 번역 간극을 줄이는 대신, 번역이 필요한 위상 추론 자체를 시스템 측 구성요소로 이전하여 간극의 발생 자체를 최소화하는 아키텍처 전략을 제공한다.
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
+
+의미론적 의사결정(행동 추천)과 시스템적 검증(위상 일관성)의 경계를 명시적으로 설계하여, 번역 간극을 암묵적 컨텍스트 위임이 아닌 아키텍처 분리로 해소하는 정석적 패턴을 제공한다.
+
+→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

@@ -30,3 +30,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-visually-grounded-humanoid-agents.md|Visually-grounded Humanoid Agents]] (2026-04-13)
 
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
+
+### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-07)
+
+→ [[sources/2026-09-07-seeing-before-synthesizing-vlm-guided-transition-e.md|상세 보기]]

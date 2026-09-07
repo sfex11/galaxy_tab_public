@@ -77,3 +77,15 @@ DiffMAS는 기존 다중 에이전트 시스템이 고정된 텍스트 통신 �
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 다중 에이전트를 협력 조율 대상이 아닌 결정 공간의 분담 탐색자로 활용하는 새로운 응용 영역을 제시하며, 에이전트 역할 구성이 탐색-평가 분리로 이어질 수 있음을 시사한다.
+
+### Formation Matrix and Energy-based Control of Multi-Agent Systems (2026-09-07)
+
+LLM 기반 다중 에이전트 연구에 물리적 참조점을 부여한다. 통신·정렬·오케스트레이션이 핵심 난제인 LLM 다중 에이전트와 달리, 결합 동역학만으로 조정이 실현됨을 보여 '조정에 필요한 최소 통신'의 하한을 물리적으로 제시한다.
+
+→ [[sources/2026-09-07-formation-matrix-and-energy-based-control-of-multi.md|상세 보기]]
+
+### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
+
+이질적 프레임워크로 구축된 에이전트들의 상호운용성 문제를 시스템 수준 요구사항으로 규정하고, 공통 통신 프로토콜이라는 새로운 해법 계층을 제시한다.
+
+→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]

@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### A Case Study on Emergent Cheating and Whistleblowing in Autonomous Res (2026-09-07)
+
+→ [[sources/2026-09-07-a-case-study-on-emergent-cheating-and-whistleblowi.md|상세 보기]]

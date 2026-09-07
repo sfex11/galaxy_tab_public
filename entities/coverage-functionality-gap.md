@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-06)
 
 RESTestBench가 커버리지↔기능적 검증의 간극을 보였다면, SWE-Gate는 테스트 통과↔수용 가능성의 간극이라는 동형 구조를 패치 평가로 확장하여, 측정 프록시와 실제 목표의 단절이 평가 방법론의 범용적 결함임을 강화한다.
+
+### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-07)
+
+RESTestBench가 커버리지↔기능적 검증의 간극을 보였다면, SWE-Gate는 테스트 통과↔수용 가능성의 간극이라는 동형 구조를 패치 평가로 확장하여, 측정 프록시와 실제 목표의 단절이 평가 방법론의 범용적 결함임을 교차 검증한다.
+
+→ [[sources/2026-09-07-swe-gate-passing-functional-tests-is-not-enough-fo.md|상세 보기]]

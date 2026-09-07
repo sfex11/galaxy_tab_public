@@ -1,0 +1,438 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM은 추론하는가, 번역하는가 — SENTINEL-RL이 강제하는 '추론 주체의 분할'</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Noto Sans KR', sans-serif;
+  background:#faf9f7;
+  color:#2c2825;
+  line-height:1.85;
+  font-size:clamp(0.95rem, 2.4vw, 1.05rem);
+  -webkit-font-smoothing:antialiased;
+}
+
+#progress {
+  position:fixed; top:0; left:0;
+  height:3px; width:0%;
+  background:#c2703e;
+  z-index:999;
+  transition:width 0.1s linear;
+}
+
+.container {
+  max-width:860px;
+  margin:0 auto;
+  padding:0 20px 60px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding:clamp(40px,8vw,72px) 0 8px;
+  text-align:center;
+}
+.eyebrow {
+  display:inline-block;
+  font-size:clamp(0.72rem,1.8vw,0.8rem);
+  font-weight:700;
+  letter-spacing:0.12em;
+  color:#5b7c99;
+  border:1px solid rgba(91,124,153,0.35);
+  border-radius:999px;
+  padding:5px 16px;
+  margin-bottom:22px;
+  background:rgba(91,124,153,0.06);
+}
+h1 {
+  font-family:'Source Serif 4','Noto Sans KR',serif;
+  font-size:clamp(1.75rem, 5.4vw, 2.9rem);
+  font-weight:900;
+  line-height:1.35;
+  letter-spacing:-0.01em;
+  margin-bottom:18px;
+}
+h1 .accent { color:#c2703e; }
+.subtitle {
+  font-size:clamp(0.95rem, 2.6vw, 1.15rem);
+  color:rgba(44,40,37,0.72);
+  max-width:640px;
+  margin:0 auto 30px;
+  line-height:1.75;
+}
+.meta-card {
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(194,112,62,0.12);
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  border-radius:14px;
+  padding:18px 22px;
+  text-align:left;
+  font-size:clamp(0.82rem,2vw,0.9rem);
+  line-height:2;
+}
+.meta-card b { color:#c2703e; font-weight:700; }
+.meta-card .q { color:#5b7c99; font-style:italic; }
+
+/* ---------- TOC ---------- */
+.toc {
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(194,112,62,0.12);
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  border-radius:14px;
+  padding:20px 24px;
+  margin:34px 0 10px;
+}
+.toc-title {
+  font-size:0.78rem; font-weight:900;
+  letter-spacing:0.14em;
+  color:#6b9e7a; margin-bottom:10px;
+}
+.toc a {
+  display:block;
+  color:#2c2825;
+  text-decoration:none;
+  font-size:clamp(0.85rem,2.2vw,0.92rem);
+  padding:6px 0;
+  border-bottom:1px dashed rgba(44,40,37,0.1);
+}
+.toc a:last-child { border-bottom:none; }
+.toc a span { color:#c2703e; font-weight:700; margin-right:8px; font-family:'Source Serif 4',serif; }
+
+/* ---------- Lead ---------- */
+.lead {
+  font-size:clamp(1rem,2.8vw,1.14rem);
+  padding:36px 0 10px;
+}
+.lead p { margin-bottom:1.4em; }
+.lead p:first-child::first-letter {
+  font-family:'Source Serif 4',serif;
+  font-size:3.1em; font-weight:700;
+  float:left; line-height:0.9;
+  padding:6px 10px 0 0; color:#c2703e;
+}
+
+/* ---------- Sections ---------- */
+section { padding:34px 0 8px; }
+.sec-head { margin-bottom:22px; }
+.sec-num {
+  font-family:'Source Serif 4',serif;
+  font-size:clamp(2.2rem,6vw,3rem);
+  font-weight:900; color:rgba(194,112,62,0.28);
+  line-height:1;
+}
+h2 {
+  font-family:'Source Serif 4','Noto Sans KR',serif;
+  font-size:clamp(1.35rem,4.2vw,1.8rem);
+  font-weight:700;
+  line-height:1.45;
+  margin-top:-14px;
+  letter-spacing:-0.01em;
+}
+.sec-sub {
+  color:#5b7c99;
+  font-size:clamp(0.82rem,2.2vw,0.9rem);
+  font-weight:500;
+  margin-top:6px;
+}
+section p { margin-bottom:1.35em; }
+
+.term { color:#5b7c99; font-weight:700; }
+.term-o { color:#c2703e; font-weight:700; }
+.term-g { color:#6b9e7a; font-weight:700; }
+
+/* ---------- Quote ---------- */
+blockquote {
+  border-left:4px solid #c2703e;
+  max-width:800px;
+  margin:30px auto;
+  padding:18px 26px;
+  background:rgba(255,255,255,0.7);
+  border-radius:0 14px 14px 0;
+  box-shadow:0 3px 14px rgba(44,40,37,0.05);
+  font-family:'Source Serif 4','Noto Sans KR',serif;
+  font-size:clamp(1rem,2.8vw,1.12rem);
+  font-weight:600;
+  line-height:1.8;
+  color:#2c2825;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(194,112,62,0.12);
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  border-radius:14px;
+  padding:22px 24px;
+  margin:18px 0;
+}
+.card h3 {
+  font-family:'Source Serif 4','Noto Sans KR',serif;
+  font-size:clamp(1.02rem,2.8vw,1.15rem);
+  font-weight:700;
+  margin-bottom:10px;
+}
+.card p { margin-bottom:0.8em; font-size:0.95em; }
+.card p:last-child { margin-bottom:0; }
+
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:18px 0; }
+.grid2 .card { margin:0; }
+.border-blue { border-left:4px solid #5b7c99; }
+.border-orange { border-left:4px solid #c2703e; }
+.border-green { border-left:4px solid #6b9e7a; }
+
+.analogy {
+  background:rgba(107,158,122,0.07);
+  border:1px dashed rgba(107,158,122,0.45);
+  border-radius:14px;
+  padding:20px 24px;
+  margin:24px 0;
+}
+.analogy .label {
+  font-size:0.74rem; font-weight:900;
+  letter-spacing:0.14em;
+  color:#6b9e7a;
+  display:block; margin-bottom:8px;
+}
+.analogy p { margin-bottom:0.8em; font-size:0.96em; }
+.analogy p:last-child { margin-bottom:0; }
+
+.insight {
+  background:rgba(91,124,153,0.07);
+  border:1px solid rgba(91,124,153,0.2);
+  border-radius:14px;
+  padding:20px 24px;
+  margin:24px 0;
+  font-size:0.97em;
+}
+.insight b { color:#5b7c99; }
+
+/* ---------- Table ---------- */
+.table-wrap {
+  overflow-x:auto;
+  margin:24px 0;
+  border-radius:14px;
+  border:1px solid rgba(194,112,62,0.12);
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  background:rgba(255,255,255,0.7);
+  -webkit-overflow-scrolling:touch;
+}
+table {
+  width:100%;
+  min-width:640px;
+  border-collapse:collapse;
+  font-size:clamp(0.8rem,2vw,0.88rem);
+  line-height:1.7;
+}
+th {
+  background:rgba(194,112,62,0.08);
+  color:#c2703e;
+  font-weight:700;
+  text-align:left;
+  padding:12px 16px;
+  border-bottom:2px solid rgba(194,112,62,0.2);
+  white-space:nowrap;
+}
+td {
+  padding:12px 16px;
+  border-bottom:1px solid rgba(44,40,37,0.07);
+  vertical-align:top;
+}
+tr:last-child td { border-bottom:none; }
+td.axis { font-weight:700; color:#5b7c99; white-space:nowrap; }
+td.paper { font-weight:500; white-space:nowrap; }
+
+/* ---------- Steps (결론) ---------- */
+.step {
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(194,112,62,0.12);
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  border-radius:14px;
+  padding:18px 20px;
+  margin:14px 0;
+}
+.step .n {
+  font-family:'Source Serif 4',serif;
+  font-size:1.5rem; font-weight:900;
+  color:#6b9e7a; line-height:1.2;
+  flex-shrink:0; min-width:2rem;
+  text-align:center;
+}
+.step .body h3 {
+  font-size:clamp(0.95rem,2.5vw,1.05rem);
+  font-weight:700; margin-bottom:4px;
+}
+.step .body p { font-size:0.92em; margin:0; }
+.step .body .from { color:rgba(44,40,37,0.55); text-decoration:line-through; text-decoration-color:rgba(194,112,62,0.5); }
+.step .body .to { color:#c2703e; font-weight:700; }
+
+.conclusion-box {
+  background:rgba(107,158,122,0.08);
+  border:1px solid rgba(107,158,122,0.28);
+  border-radius:14px;
+  padding:24px 26px;
+  margin:26px 0;
+}
+.conclusion-box h3 {
+  font-family:'Source Serif 4','Noto Sans KR',serif;
+  font-size:clamp(1.05rem,3vw,1.2rem);
+  font-weight:700;
+  color:#2c2825;
+  margin-bottom:12px;
+}
+.conclusion-box p { font-size:0.97em; margin-bottom:0.9em; }
+.conclusion-box p:last-child { margin-bottom:0; }
+
+.divider {
+  width:56px; height:3px;
+  background:#c2703e;
+  border-radius:2px;
+  margin:34px auto;
+  opacity:0.5;
+}
+
+footer {
+  text-align:center;
+  padding:36px 20px 48px;
+  color:rgba(44,40,37,0.5);
+  font-size:clamp(0.76rem,2vw,0.84rem);
+  line-height:2;
+}
+
+@media (max-width:640px){
+  .grid2 { grid-template-columns:1fr; }
+  .container { padding:0 16px 48px; }
+  blockquote { padding:16px 18px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<article class="container">
+
+<header class="hero">
+  <span class="eyebrow">심층 분석 · WIKI DEEP DIVE</span>
+  <h1>LLM은 <span class="accent">추론</span>하는가,<br><span class="accent">번역</span>하는가</h1>
+  <p class="subtitle">SENTINEL-RL이 강제하는 '추론 주체의 분할' — 보안운영센터의 수천 호스트 위상 그래프가 밝힌 LLM 에이전트의 새로운 정체</p>
+  <div class="meta-card">
+    <b>대상 논문</b> · SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the Security Operations Center<br>
+    <b>핵심 질문</b> · <span class="q">"LLM 에이전트에서 LLM은 추론의 주체인가, 아니면 이질적 전문 추론기들을 오케스트레이션하는 인터페이스인가?"</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-title">CONTENTS</div>
+  <a href="#sec1"><span>01</span>양단에서 무너지는 전제들 — 입력과 출력의 동시 침식</a>
+  <a href="#sec2"><span>02</span>이미 진행된 이탈 — 위키가 기록한 수렴의 증거</a>
+  <a href="#sec3"><span>03</span>'인터페이스'라는 말은 절반만 맞다 — 추론 주체의 분할</a>
+  <a href="#sec4"><span>04</span>중립적 인프라의 종언 — 하네스 중립성 명제의 붕괴</a>
+  <a href="#sec5"><span>05</span>결론 · 침대 옆의 의사 — 패러다임 전환의 세 가지 실천</a>
+</nav>
+
+<div class="lead">
+  <p>매일 울리는 수천 건의 보안 경보. 보안운영센터(SOC)의 야간 교대대가 LLM 에이전트에 조사를 맡기는 풍경은 이제 어색하지 않다. 위키의 기존 분류도 바로 그렇게 그리고 있었다. LLM 에이전트가 보안 경보를 조사하는 <span class="term-o">기능 범주</span>. 주어는 LLM이고, 하네스와 파이프라인은 그 추론을 안정적으로 받쳐주는 중립적 실행 인프라였다.</p>
+  <p>그런데 SENTINEL-RL이라는 논문이 이 그림의 두 끝을 동시에 건드린다. 수천 호스트의 연결 관계를 담은 위상 그래프는 LLM의 컨텍스트 윈도우에 물리적으로 들어가지 않는다. 그리고 LLM이 자유롭게 생성한 텍스트는 "이 조치를 취해도 된다"는 안전 보장이 되어주지 못한다.</p>
+  <p>그렇다면 'LLM 에이전트'라는 표현 속의 LLM은 무엇인가? 추론의 주체인가, 아니면 전문 추론기들을 부르는 오케스트레이션 인터페이스인가? 이 글의 답은 어느 쪽 절반도 아니다. 정확히는 — <b>추론 주체가 '분할'된다</b>는 것이다.</p>
+</div>
+
+<div class="analogy">
+  <span class="label">🔍 하나의 비유로 시작하며</span>
+  <p>이 상황은 <b>환자 5,000명의 생체 신호를 한 번에 머릿속에 담고, 직감만으로 처방전을 쓰라는 요구</b>와 같다. 어떤 의사도 그런 식으로 진단하지 않는다.</p>
+  <p>대신 의사는 검사실에 위임하고, 장비가 뱉은 결과지를 해석하며, 마지막으로 자기 이름으로 서명한다. SENTINEL-RL의 주장을 한 문장으로 압축하면 이것이다 — <b>LLM에게도 이제 검사실이 필요하다.</b></p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 1 ═══════════ -->
+<section id="sec1">
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <h2>양단에서 무너지는 전제들<br>— 입력과 출력의 동시 침식</h2>
+    <div class="sec-sub">SENTINEL-RL은 무엇을 공격하는가</div>
+  </div>
+
+  <p>위키의 현재 프레임은 두 개의 암묵적 전제 위에 서 있다. 그리고 SENTINEL-RL의 두 제한은 이 전제들을 <b>양단에서 동시에</b> 침식한다.</p>
+
+  <div class="card border-blue">
+    <h3>전제 A · 하네스 중립성</h3>
+    <p>Crab(<b>agentic-harness-engineering</b>)은 결함 내성·롤백·분기를 구현하는 인프라 계층으로 규정된다. 'Semantics-Aware'라는 명칭 자체가 <b>LLM이 만든 의미론이 1차이고, C/R 런타임은 이를 보존·서빙하는 2차 계층</b>임을 전제한다. 상태 의미론의 경계 문제(<b>agent-os-semantic-gap</b>) 역시 '무엇이 어디까지 상태인가'의 문제지, '누가 추론을 수행하는가'의 문제가 아니었다.</p>
+  </div>
+
+  <div class="card border-orange">
+    <h3>전제 B · 기능 범주의 단일 주체</h3>
+    <p><b>agentic-security-investigation</b>은 "LLM 에이전트가 보안 경보를 조사하는" 기능 범주다. 조사 행위의 주체는 LLM이고, 도구들은 그 손발이다. '조사한다'는 동사의 목적어 아래 언제나 LLM이 암묵적 주어로 놓여 있었다.</p>
+  </div>
+
+  <p>SENTINEL-RL은 이 두 전제를 입구와 출구에서 각각 무너뜨린다.</p>
+
+  <div class="grid2">
+    <div class="card border-blue">
+      <h3>⬇ 입력측의 침식</h3>
+      <p>수천 호스트의 위상 그래프가 컨텍스트 윈도우를 초과한다. 이는 검색·요약으로 완화 가능한 '정보 과잉'이 아니다. <b>추론 대상 자체가 LLM의 표현 용량 밖에 있다</b>는 판정이다.</p>
+    </div>
+    <div class="card border-orange">
+      <h3>⬆ 출력측의 침식</h3>
+      <p>자유 형식 생성은 행동 보장을 못 한다. LLM의 출력 모달리티(텍스트)와 SOC 행동의 안전 요건(검증된 조치) 사이에 <b>모달리티 불일치</b>가 존재한다.</p>
+    </div>
+  </div>
+
+  <p>입력측의 침식은 생각보다 훨씬 원리적이다. 위상 정보의 핵심은 <span class="term">도달성</span>인데, 도달성은 경로 전체가 살아 있어야만 의미가 있다. "A호스트에서 B데이터베이스까지 뚫려 있다"는 사실은 중간 노드를 생략한 요약에서 사라진다.</p>
+
+  <div class="analogy">
+    <span class="label">🔍 비유로 보면</span>
+    <p>도시 전체의 수도관 지도를 포스트잇 몇 장에 요약해 옮기라고 하면 어떻게 되는가? 지도의 '분위기'는 남는다. 하지만 <b>어느 밸브가 막혔을 때 어느 동네까지 물이 끊기는지</b>는 알 수 없게 된다. 요약은 위상을 보존하지 못한다. 위상의 가치는 오직 '전체'에만 있다.</p>
+  </div>
+
+  <p>출력측도 마찬가지다. "격리를 권고합니다"라는 문장은 조치가 아니다. 검증 절차를 통과한, 서명된 행동 명세만이 조치다. 말과 행동 사이에는 안전이 요구되는 모든 영역에서 동일한 간극이 존재한다.</p>
+
+  <blockquote>
+    따라서 이 오프로딩은 "컨텍스트를 늘리거나 RAG를 붙이면 되는" 최적화가 아니라, <b>어떤 추론이 원리적으로 LLM 내부에 있을 수 없는가</b>에 대한 아키텍처 판정이다.
+  </blockquote>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 2 ═══════════ -->
+<section id="sec2">
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <h2>이미 진행된 이탈<br>— 위키가 기록한 수렴의 증거</h2>
+    <div class="sec-sub">SENTINEL-RL은 쿠데타가 아니라 마지막 퍼즐이다</div>
+  </div>
+
+  <p>SENTINEL-RL은 갑작스러운 이론적 반란이 아니다. 'LLM = 단일 추론 주체'라는 관점은 SENTINEL-RL 이전부터 위키 전반에서 침식되어 왔다. 여섯 편의 논문이 남긴 기록을 축별로 정리하면 다음과 같다.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>논문</th><th>이탈 축</th><th>인터페이스화의 형태</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="paper">Continuous Actions from Discrete Minds<br><span style="font-weight:400;font-size:0.9em;color:rgba(44,40,37,0.55);">action-tokenization</span></td>
+          
+</body>
+</html>

@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)
 
 ### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-27)
+
+### Environment Evolution for Terminal Agents (2026-09-07)
+
+→ [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]

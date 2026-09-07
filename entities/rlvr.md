@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Environment Evolution for Terminal Agents (2026-09-06)
 
 검증 가능 환경의 스케일링이 RLVR의 핵심 전제임을 재확인하고, 검증 가능성을 유지한 채 난이도를 지속적으로 재조정하는 환경 진화를 RLVR 인프라의 필수 구성요소로 격상시킨다.
+
+### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-07)
+
+RLVR의 검증 가능 태스크 부족 병목에 대한 공급 측 해법을 제공한다. 궤적을 소모성 SFT 데이터로 소비하는 대신 재질의 가능한 검증 태스크 생성기로 변환함으로써, 학습 신호의 공급량을 궤적 축적량에 연동한다.
+
+→ [[sources/2026-09-07-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]

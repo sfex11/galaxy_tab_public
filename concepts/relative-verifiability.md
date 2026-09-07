@@ -18,3 +18,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Discriminative World Models for Web Agents (2026-09-04)
+
+### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-07)
+
+→ [[sources/2026-09-07-translation-as-a-decision-space-a-multi-agent-pers.md|상세 보기]]

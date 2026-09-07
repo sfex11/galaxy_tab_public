@@ -40,3 +40,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
 
 무손실 가속의 구현 경로를 '드래프트 제안-타겟 검증'에서 '정확한 AR 분포로부터의 직접 병렬 샘플링'으로 확장한다. 드래프트 모델 오버헤드와 드래프트-타겟 분포 불일치 위험 없이 타겟 분포 무변경 원칙을 달성하는 제3의 대안을 제시한다.
+
+### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
+
+동일 목표(분포 보존 하 가속)의 제2 경로를 제공한다. 드래프트 모델의 수용률 최적화 대신 확산 조건부 샘플링을 사용하며, 두 방식의 비교는 무손실 병렬화의 설계 공간을 명확히 한다.
+
+→ [[sources/2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

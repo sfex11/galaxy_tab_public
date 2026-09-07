@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-07)
+
+→ [[sources/2026-09-07-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]

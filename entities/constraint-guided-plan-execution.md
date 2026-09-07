@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 RunAgent가 계획 실행을 제약으로 강제했다면, Sentinel-RL은 계획 자체의 구성(위상 일관성)을 그래프가 검증하는 수준으로 확장한다. 제약이 실행 시점 단일 개입이 아니라 행동 생성-선택 전반에 걸쳐 작동한다.
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
+
+RunAgent가 계획 실행을 제약으로 강제했다면, 본 논문은 제약의 적용 시점을 실행 개입이 아닌 행동 생성-선택 전반으로 확장하고, 그래프 구조가 제약의 근거를 제공하는 형태로 발전시킨다.
+
+→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

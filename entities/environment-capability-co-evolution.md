@@ -10,3 +10,9 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-environment-evolution-for-terminal-agents.md|Environment Evolution for Terminal Agents]]
+
+### Environment Evolution for Terminal Agents (2026-09-07)
+
+공진화의 작동 메커니즘(롤아웃에서 노출된 약점 기반 학습 가능 경계 부근 환경 합성)을 구체화하면서, 온폴리시 의존성이 일반화와 신호 지속성을 제한한다는 구조적 한계를 규명하여 이 엔티티를 '공진화의 작동'에서 '공진화의 결속 조건' 논의로 심화한다.
+
+→ [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]

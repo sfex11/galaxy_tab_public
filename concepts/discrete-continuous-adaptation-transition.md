@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-06)
+
+### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
+
+→ [[sources/2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]

@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 알림 조사 자동화가 진단 추론을 넘어 격리 행동의 위상적 타당성까지 다뤄야 함을 보여주며, 트리아지의 스코프를 '탐지'에서 '구조적으로 안전한 대응 생성'으로 확장한다.
+
+### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
+
+트리아지가 진단(관찰→가설→인과 귀인)을 넘어 대응 행동의 구조적 타당성까지 포함해야 함을 보여주며, 진단 도메인의 스코프를 '이해'에서 '구조적으로 안전한 조치 생성'으로 확장한다.
+
+→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

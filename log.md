@@ -3321,3 +3321,22 @@
 ## [2026-09-06 18:44] lint | Wiki 건전성 체크
 - Issues: 3242개
 - Orphans: 965, Missing: 2277, Contradictions: 0
+
+## [2026-09-07 07:14] llm-ingest | 17편 분석, 엔티티 487개, 개념 1607개
+- 2026-09-07-clean-engineering-unstable-measurement-a-preregist.md
+- 2026-09-07-legibility-is-not-interpretability-comparing-judge.md
+- 2026-09-07-seeing-before-synthesizing-vlm-guided-transition-e.md
+- 2026-09-07-knowledge-acquisition-during-pre-training-large-la.md
+- 2026-09-07-a-case-study-on-emergent-cheating-and-whistleblowi.md
+- 2026-09-07-swe-gate-passing-functional-tests-is-not-enough-fo.md
+- 2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md
+- 2026-09-07-formation-matrix-and-energy-based-control-of-multi.md
+- 2026-09-07-terminal-universe-turning-agent-trajectories-into-.md
+- 2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md
+- 2026-09-07-a-low-cost-open-platform-for-end-to-end-autonomous.md
+- 2026-09-07-the-natural-language-interaction-protocol-and-stan.md
+- 2026-09-07-environment-evolution-for-terminal-agents.md
+- 2026-09-07-corner-cases-headland-coverage-path-planning-for-a.md
+- 2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md
+- 2026-09-07-translation-as-a-decision-space-a-multi-agent-pers.md
+- 2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md

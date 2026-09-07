@@ -572,3 +572,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 자율 번역 에이전트라는 새로운 역할을 추가하며, 에이전트가 단일 최적 해 산출이 아닌 공간 탐색과 대안 제시를 수행함을 보여준다.
+
+### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
+
+에이전트 생태계의 파편화(프레임워크·모델·프로토콜 이질성)가 사회적·사업적 잠재력 실현의 병목임을 진단하고, 표준 통신 계층으로 이를 해소하려는 산업·학계 공동 움직임의 정점이다.
+
+→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]

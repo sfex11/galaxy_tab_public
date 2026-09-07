@@ -14,3 +14,7 @@ RLHF의 권위 모델이 극단적으로 실현된 결과로, 에이전트가 �
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
+
+→ [[sources/2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

@@ -14,3 +14,7 @@ AR, Diffusion 등 근본적으로 다른 생성 패러다임 간을 추론 시�
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Corner Cases: Headland Coverage Path Planning for Autonomous Driving i (2026-09-07)
+
+→ [[sources/2026-09-07-corner-cases-headland-coverage-path-planning-for-a.md|상세 보기]]

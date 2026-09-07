@@ -38,3 +38,9 @@ Gym-Anything 등 소프트웨어 환경 생성과 대비되는 물리적 환경 
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 태스크(번역)가 스스로 탐색 가능한 환경(결정 공간)을 구성하는 사례로, 환경 생성의 대상이 외부 소프트웨어·게임에서 태스크 내부 구조의 공간화로 확장됨을 보여준다.
+
+### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-07)
+
+환경 생성의 원천 스펙트럼을 확장한다. Gym-Anything(소프트웨어→환경), Nemobot Games(게임→환경)과 대비되는 '궤적→환경' 경로를 추가하여, 환경 생성이 실세계 관찰·소프트웨어·에이전트 궤적이라는 삼원천을 갖는 스펙트럼임을 구체화한다.
+
+→ [[sources/2026-09-07-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]

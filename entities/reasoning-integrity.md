@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 '권장 행동이 작동하는 토폴로지와 일치함을 보장할 수 없다'는 문제 정식화가 추론 무결성의 보안 도메인 구체화이며, 출력 필터링이 아닌 구조적 검증(그래프)에 의한 무결성 보장 경로를 제공한다.
+
+### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
+
+추론 무결성을 관찰 가능한 trace 제약으로 강제하던 기존 접근(Box Maze 등)의 전제를 흔든다 — trace 텍스트의 무결성과 추론의 기능적 무결성이 분리되어 있어, 전자의 준수가 후자를 보장하지 않음을 보여준다.
+
+→ [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]
