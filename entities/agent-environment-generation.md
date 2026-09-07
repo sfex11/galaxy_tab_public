@@ -44,3 +44,9 @@ Gym-Anything 등 소프트웨어 환경 생성과 대비되는 물리적 환경 
 환경 생성의 원천 스펙트럼을 확장한다. Gym-Anything(소프트웨어→환경), Nemobot Games(게임→환경)과 대비되는 '궤적→환경' 경로를 추가하여, 환경 생성이 실세계 관찰·소프트웨어·에이전트 궤적이라는 삼원천을 갖는 스펙트럼임을 구체화한다.
 
 → [[sources/2026-09-07-terminal-universe-turning-agent-trajectories-into-.md|상세 보기]]
+
+### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
+
+Gym-Anything이 소프트웨어를 환경으로 변환했다면, EDGE는 API 네트워크를 학습 데이터 생산기로 변환한다. 환경 생성의 산출물이 평가 환경뿐 아니라 훈련 데이터로도 소비될 수 있음을 보여준다.
+
+→ [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]

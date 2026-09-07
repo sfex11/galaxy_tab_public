@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Unfolding the Leech Lattice: Fused Multi-Shell Decoding and VRAM Layou (2026-09-04)
 
 2비트 가중치 서빙의 실용적 경계를 배치 1 디코드 페이즈 GEMV 실측 비용으로 구체화하여, 극저비트 온디바이스 배포 논의가 압축률 수치에서 커널 수준 비용으로 이동해야 함을 시사한다.
+
+### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
+
+데이터 주권 규제가 온디바이스·온프레미스 배포의 새로운 구동 요인이 됨을 보여준다. 기존의 비용·프라이버시 동기 외에 법적 요구가 오픈소스 LLM 에이전트 배포를 강제하는 구조적 조건을 추가한다.
+
+→ [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]

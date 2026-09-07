@@ -38,3 +38,9 @@ MathDuels가 정적 태스크 기반 LLM 벤치마크의 근본적 한계(고정
 리더보드가 judge 기반 평가에 의존하는 순간 측정 도구의 시간 드리프트가 점수 비교 자체를 무효화할 수 있음을 보여준다. 점수 하락이 모델 능력 변화가 아니라 측정 도구 변화에서 비롯될 수 있다는 새로운 혼입 원천을 제시하여, 측정 시점과 엔드포인트 정보를 평가 메타데이터의 필수 항목으로 격상시킨다.
 
 → [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|상세 보기]]
+
+### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
+
+벤치마크 표적이 정적 데이터셋이 아닌 라이브 공공 API임을 보여주며, 벤치마크의 실세계 근접성 논의에 공공 도메인 차원을 추가한다.
+
+→ [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]

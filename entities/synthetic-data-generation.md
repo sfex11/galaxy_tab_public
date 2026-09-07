@@ -24,3 +24,9 @@ _Wiki 축적 중_
 의역 재구성 데이터의 인과적 효용을 확정하되, 그 이득이 작은 배치 크기에서만 나타난다는 조건을 추가한다 — 합성 재구성의 투자 판단이 데이터 측면뿐 아니라 옵티마이저 구성과 공동 결정되어야 함을 의미한다.
 
 → [[sources/2026-09-07-knowledge-acquisition-during-pre-training-large-la.md|상세 보기]]
+
+### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
+
+합성 데이터의 목적을 벤치마크 보강이 아닌 능력 간극의 인위적 해소로 특정한다. 실행 근거라는 합성 원리가 대상 도메인(API 스키마 구조)에 구조적으로 의존함을 보여준다.
+
+→ [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]

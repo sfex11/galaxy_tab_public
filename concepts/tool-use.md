@@ -120,3 +120,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-act-wisely-cultivating-meta-cognitive-tool-use-in-.md|Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic M]] (2026-04-13)
 
 - [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-13)
+
+### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
+
+→ [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]
