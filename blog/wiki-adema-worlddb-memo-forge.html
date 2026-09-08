@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>저장소는 살아 있는데, 기억은 죽는다 — 에이전트 메모리와 모델 업그레이드의 역설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background-color: #faf9f7;
+    background-image:
+      radial-gradient(ellipse 90% 40% at 50% -10%, rgba(194,112,62,0.06), transparent),
+      radial-gradient(ellipse 60% 30% at 100% 20%, rgba(91,124,153,0.05), transparent),
+      radial-gradient(ellipse 70% 40% at 0% 70%, rgba(107,158,122,0.05), transparent);
+    background-attachment: fixed;
+    color: #2c2825;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(15px, 2.5vw, 17px);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 72px;
+  }
+  /* ---------- Header ---------- */
+  header.hero { padding: 48px 0 8px; }
+  .kicker {
+    display: inline-block;
+    font-size: clamp(11px, 2.4vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #c2703e;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    padding: 5px 14px;
+    border: 1px solid rgba(194,112,62,0.35);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.6);
+  }
+  h1 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 900;
+    font-size: clamp(28px, 6.2vw, 46px);
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+  }
+  h1 .accent-orange { color: #c2703e; }
+  .subtitle {
+    font-size: clamp(15px, 3.2vw, 18px);
+    color: #5b7c99;
+    font-weight: 500;
+    margin: 0 0 26px;
+    line-height: 1.7;
+  }
+  .meta-card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(44,40,37,0.06);
+    padding: 16px 20px;
+    font-size: clamp(12.5px, 2.8vw, 14px);
+    color: #5a544e;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    align-items: center;
+  }
+  .meta-card strong { color: #2c2825; font-weight: 700; }
+  /* ---------- TOC ---------- */
+  .toc {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(44,40,37,0.06);
+    padding: 22px 24px;
+    margin: 36px 0;
+  }
+  .toc h2 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(15px, 3vw, 17px);
+    margin: 0 0 12px;
+    color: #c2703e;
+  }
+  .toc ol { margin: 0; padding-left: 22px; }
+  .toc li { padding: 3px 0; }
+  .toc a { color: #2c2825; text-decoration: none; border-bottom: 1px dashed rgba(91,124,153,0.5); }
+  .toc a:hover { color: #5b7c99; }
+  /* ---------- Sections ---------- */
+  section { margin-top: 64px; }
+  .section-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+  .sec-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 19px;
+    margin-top: 4px;
+  }
+  .num-o { background: rgba(194,112,62,0.12); color: #c2703e; }
+  .num-b { background: rgba(91,124,153,0.12); color: #5b7c99; }
+  .num-g { background: rgba(107,158,122,0.14); color: #6b9e7a; }
+  h2.sec-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 4.6vw, 29px);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  h3 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(17px, 3.6vw, 20px);
+    margin: 40px 0 12px;
+    color: #2c2825;
+  }
+  h3 .dot { color: #c2703e; }
+  p { margin: 0 0 20px; }
+  strong { font-weight: 700; }
+  .hl-o { color: #c2703e; font-weight: 700; }
+  .hl-b { color: #5b7c99; font-weight: 700; }
+  .hl-g { color: #6b9e7a; font-weight: 700; }
+  /* ---------- Blockquote ---------- */
+  blockquote {
+    border-left: 4px solid #c2703e;
+    max-width: 800px;
+    margin: 34px auto;
+    padding: 6px 8px 6px 22px;
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-size: clamp(16px, 3.4vw, 19px);
+    font-weight: 600;
+    color: #2c2825;
+    background: linear-gradient(90deg, rgba(194,112,62,0.06), transparent 70%);
+    border-radius: 0 10px 10px 0;
+  }
+  blockquote .src {
+    display: block;
+    margin-top: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-size: clamp(12px, 2.6vw, 13.5px);
+    color: #5a544e;
+  }
+  /* ---------- Cards ---------- */
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(44,40,37,0.07);
+    padding: 24px 24px;
+    margin: 30px 0;
+  }
+  .card-title {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    font-weight: 700;
+    font-size: clamp(16px, 3.4vw, 18px);
+    margin: 0 0 14px;
+  }
+  .analogy {
+    border-left: 4px solid #5b7c99;
+    background: rgba(91,124,153,0.06);
+    border-radius: 0 14px 14px 0;
+    padding: 18px 20px;
+    margin: 26px 0;
+  }
+  .analogy .label {
+    font-size: clamp(11px, 2.4vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #5b7c99;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .analogy p { margin-bottom: 0; font-size: 0.96em; }
+  /* ---------- Summary card ---------- */
+  .summary-card { border-top: 4px solid #6b9e7a; }
+  .summary-card ol { margin: 0; padding-left: 22px; }
+  .summary-card li { margin-bottom: 12px; }
+  .summary-card li:last-child { margin-bottom: 0; }
+  .summary-card .mode { font-weight: 700; color: #2c2825; }
+  /* ---------- Failure mode boxes ---------- */
+  .mode-box {
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 3px 14px rgba(44,40,37,0.05);
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 0.95em;
+  }
+  .mode-box .t { font-weight: 700; }
+  .t-o { color: #c2703e; }
+  .t-b { color: #5b7c99; }
+  .t-g { color: #6b9e7a; }
+  /* ---------- Diagram ---------- */
+  .diagram {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.12);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(44,40,37,0.07);
+    padding: 26px 22px;
+    margin: 34px 0;
+    text-align: center;
+  }
+  .diagram .d-title {
+    font-weight: 700;
+    font-size: clamp(13px, 2.8vw, 14px);
+    letter-spacing: 0.08em;
+    color: #5a544e;
+    margin-bottom: 18px;
+  }
+  .layer {
+    border-radius: 12px;
+    padding: 14px 12px;
+    margin: 0 auto;
+    max-width: 520px;
+    font-size: clamp(12.5px, 2.8vw, 14px);
+  }
+  .layer .lname { font-weight: 900; display: block; margin-bottom: 4px; }
+  .layer-interp { background: rgba(194,112,62,0.09); border: 1.5px solid rgba(194,112,62,0.3); }
+  .layer-interp .lname { color: #c2703e; }
+  .layer-store { background: rgba(107,158,122,0.09); border: 1.5px solid rgba(107,158,122,0.35); }
+  .layer-store .lname { color: #6b9e7a; }
+  .layer .sub { color: #5a544e; font-size: 0.9em; }
+  .arrow-wrap { padding: 10px 0; color: #c2703e; font-weight: 700; font-size: clamp(15px, 3.4vw, 18px); }
+  .arrow-wrap .alabel { font-size: 0.72em; color: #5a544e; display: block; font-weight: 500; }
+  /* ---------- Wiki chips ---------- */
+  .wl {
+    display: inline-block;
+    color: #5b7c99;
+    background: rgba(91,124,153,0.09);
+    border: 1px solid rgba(91,124,153,0.22);
+    border-radius: 7px;
+    padding: 0 7px;
+    font-size: 0.86em;
+    font-weight: 500;
+    white-space: nowrap;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  /* ---------- Paradigm box ---------- */
+  .paradigm { border: 1.5px solid rgba(194,112,62,0.25); background: rgba(255,255,255,0.75); }
+  .paradigm .row { display: flex; flex-direction: column; gap: 14px; }
+  @media (min-width: 640px) {
+    .paradigm .row { flex-direction: row; align-items: stretch; }
+    .paradigm .p-col { flex: 1; }
+  }
+  .p-col {
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 0.93em;
+    line-height: 1.75;
+  }
+  .p-old { background: rgba(44,40,37,0.045); }
+  .p-new { background: rgba(107,158,122,0.09); border: 1px solid rgba(107,158,122,0.3); }
+  .p-col .pt { font-weight: 900; display: block; margin-bottom: 8px; font-size: 1.02em; }
+  .p-old .pt { color: #5a544e; }
+  .p-new .pt { color: #6b9e7a; }
+  .p-col em { font-style: normal; border-bottom: 2px solid rgba(107,158,122,0.5); }
+  /* ---------- Checklist ---------- */
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li {
+    padding: 12px 0 12px 34px;
+    position: relative;
+    border-bottom: 1px dashed rgba(44,40,37,0.1);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 4px; top: 12px;
+    width: 22px; height: 22px;
+    border-radius: 7px;
+    background: rgba(107,158,122,0.14);
+    color: #6b9e7a;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checklist .ck-t { font-weight: 700; display: block; }
+  .checklist .ck-d { font-size: 0.92em; color: #5a544e; }
+  /* ---------- Divider ---------- */
+  hr.sep {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.25), transparent);
+    margin: 56px auto;
+    max-width: 800px;
+  }
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(44,40,37,0.1);
+    font-size: clamp(12px, 2.6vw, 13.5px);
+    color: #5a544e;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .tag {
+    font-size: 0.9em;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(194,112,62,0.15);
+    color: #c2703e;
+  }
+  .refs { font-size: 0.92em; line-height: 1.9; }
+  .refs strong { color: #2c2825; }
+  a { color: #5b7c99; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<header class="hero">
+  <span class="kicker">🧠 심층 분석 · 위키 심화</span>
+  <h1>저장소는 살아 있는데,<br>기억은 <span class="accent-orange">죽는다</span></h1>
+  <p class="subtitle">에이전트 메모리, 모델 업그레이드를 살아남을 수 있는가? — 메모리 이식성 연구가 드러낸 '저장과 해석'의 분리</p>
+  <div class="meta-card">
+    <span><strong>원문 논문</strong> Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study of Memory Portability</span>
+    <span><strong>게시</strong> 2026-09-08</span>
+    <span><strong>연결 노드</strong> <span class="wl">[[adaptive-validity]]</span> <span class="wl">[[adema]]</span></span>
+  </div>
+</header>
+
+<div class="toc">
+  <h2>목차</h2>
+  <ol>
+    <li><a href="#intro">사라지지 않은 것과 사라진 것</a></li>
+    <li><a href="#sec1">사서가 바뀌면, 같은 책이 다르게 읽힌다 — 재해석 불일치</a></li>
+    <li><a href="#sec2">흔들린 좌표계 — 임베딩 혼재와 검색의 조용한 붕괴</a></li>
+    <li><a href="#sec3">네거티브 없는 인화본 — 되돌릴 수 없는 순간</a></li>
+    <li><a href="#sec4">"저장소가 살아 있으면 메모리도 살아 있다"는 신화</a></li>
+    <li><a href="#sec5">결론: 버전을 모르는 아키텍처에서, 버전을 아는 아키텍처로</a></li>
+  </ol>
+</div>
+
+<!-- ================= INTRO ================= -->
+<section id="intro">
+  <div class="section-head">
+    <div class="sec-num num-o">序</div>
+    <h2 class="sec-title">사라지지 않은 것과 사라진 것</h2>
+  </div>
+
+  <p>2026년, 모델 업그레이드는 에이전트에게 이사만큼 흔한 일이 되었다. 성능 좋은 새 모델로 갈아타고, 프롬프트를 조금 다듬고, 배포를 누르면 끝이다. 데이터베이스 스키마를 마이그레이션하듯 공들여야 할 무언가가 있다는 인식조차 드물다. <strong>메모리 저장소는 어차피 그대로 있을 테니까.</strong></p>
+
+  <p>이 논문은 바로 그 "어차피"를 뒤집는다. 통제된 실험을 통해 밝혀진 것은 이렇다 — 모델을 업그레이드해도 메모리 저장소를 한 글자도 건드리지 않으면, 그럼에도 불구하고 에이전트는 잊는다. 아니, 정확히는 <span class="hl-o">저장된 것은 전부 남아 있는데 기억은 작동하지 않는다.</span> 이 논문이 세 가지 고장 모드로 요약하는 바로 그 현상이다.</p>
+
+  <blockquote>
+    "에이전트는 동일한 메모리 저장소를 유지하고도 잊을 수 있다."
+    <span class="src">저장소의 존속 ≠ 메모리의 존속. 이 논문 전체를 압축하는 한 문장.</span>
+  </blockquote>
+
+  <p>위키에서 제기된 질문 — <em>"메모리의 수명과 정체성이 아키텍처가 아닌 모델 라이프사이클에 종속되는 것 아닌가?"</em> — 는 직관적으로 아주 타당하다. 그러나 반 보만 더 나아가면 더 정밀한 그림이 나온다. 정확히 말하면 메모리가 모델에 종속되는 것이 아니다. <span class="hl-b">메모리의 저장 계층(비트)과 해석 계층(의미)은 애초에 분리되어 있었고, 그중 해석 계층만이 모델 버전에 상대적</span>이라는 것이 이 논문의 실제 발견이다.</p>
+
+  <div class="analogy">
+    <span class="label">비유로 먼저 잡기</span>
+    <p>도서관을 상상해 보자. 책(원본 기록)은 서가에 그대로 꽂혀 있다. 그런데 사서(모델)가 통째로 교체되었다. 새 사서는 책을 전혀 다른 방식으로 읽고, 다른 것을 중요하다고 여기고, 다른 요약을 내놓는다. 게다가 이전 사서가 붙여 놓은 색인 카드의 분류 기호는 구식이 되어, 이제는 아무것도 제대로 검색되지 않는다. 도서관 건물은 멀쩡하다. 그러나 <strong>이 도서관은 사실상 다른 도서관이 되었다.</strong> 이 글 전체에서 돌아갈 장면이다.</p>
+  </div>
+
+  <div class="card summary-card">
+    <p class="card-title">논문이 밝힌 세 가지 고장 모드</p>
+    <ol>
+      <li><span class="mode hl-o">재해석 불일치</span> — 새 모델이 동일한 과거 기록을 다르게 해석한다. 기록은 그대로인데 의미가 바뀐다.</li>
+      <li><span class="mode hl-b">검색 계층 붕괴</span> — 구버전과 신버전 임베딩이 한 인덱스에 섞이면서 retrieval이 깨진다.</li>
+      <li><span class="mode hl-g">비가역성</span> — 원본 증거(raw evidence)가 없다면, 어긋난 해석을 되돌릴 근거 자체가 존재하지 않는다.</li>
+    </ol>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ================= SECTION 1 ================= -->
+<section id="sec1">
+  <div class="section-head">
+    <div class="sec-num num-o">1</div>
+    <h2 class="sec-title">사서가 바뀌면, 같은 책이 다르게 읽힌다 — 재해석 불일치</h2>
+  </div>
+
+  <p>첫 번째 고장은 가장 철학적이다. LLM은 메모리를 저장하는 장치이기 이전에, 메모리를 <strong>읽어내는 장치</strong>다. 에이전트의 기억은 대부분 원문 그대로가 아니라 요약·주석·구조화된 형태로 축적되는데, 이 모든 과정에는 해석이 개입한다. 그리고 해석을 수행하는 주체가 바로 모델이다.</p>
+
+  <div class="analogy">
+    <span class="label">일상의 비유</span>
+    <p>열 살 때 쓴 일기를 서른 살의 내가 다시 읽는 상황을 떠올려 보라. 글자는 한 개도 바뀌지 않았다. 그런데 "나는 왜 그렇게 말했을까"가 완전히 다르게 읽힌다. 어휘가 늘었고, 맥락을 잇는 힘이 생겼고, 무엇을 중요하게 여기는지 자체가 달라졌기 때문이다. <strong>텍스트는 같아도 그것이 담고 있는 의미는 해석자의 사전과 함께 다시 쓰인다.</strong> 모델 업그레이드는 이 일을 산업적 규모로, 단 하루 만에 벌어지게 만든다.</p>
+  </div>
+
+  <p>구체적으로 생각해 보자. 여섯 달 전, 에이전트는 사용자 회의에서 "지금은 좀 아무래도 좋"이라는 발언을 기록하고 이렇게 해석해 두었다 — <em>"사용자가 세부 사양에 무관심. 자율 판단 위임 신호."</em> 모델이 바뀐 뒤, 동일한 발언은 <em>"번아웃 초기 신호. 개입과 지원 필요"</em>로 읽힐 수 있다. 어느 쪽이 맞는가? <span class="hl-o">답이 없다. 해석은 해석자에 상대적이기 때문이다.</span> 문제는 이 상대성이 결함이 아니라는 점, 그러니까 패치로 없앨 수 있는 것이 아니라는 점이다.</p>
+
+  <p>여기서 위키의 <span class="wl">[[black-box-instrument-drift]]</span>와의 연결이 힘을 얻는다. 모델은 과거 기록의 해석 장치, 즉 <strong>계측기</strong>이기도 하다. 계측기 자체가 드리프트하면 어떻게 되는가? 과거에 재었던 값들이 소급적으로 의미가 변한다. 온도계가 바뀌면 작년의 기온 기록까지 다시 읽혀야 하는 상황 — 그것이 기록의 세계에서 실제로 일어난다.</p>
+
+  <h3><span class="dot">◆</span> 핵심 포인트: 기억은 회상 시점에 완성된다</h3>
+  <p>기억의 의미는 저장 시점에 확정되는 것이 아니라 회상 시점에 완성된다. 이 관점을 받아들이면 재해석 불일치는 예상 가능한 구조적 현상이 된다. 그러므로 대응도 달라져야 한다. "해석이 안 변하게" 할 수는 없다. 대신 <span class="hl-b">"해석이 변했을 때 그 변화를 감지하고, 원문으로 돌아가 재정렬할 수 있게"</span> 설계해야 한다. 이것이 뒤에서 다룰 원본 증거 보존의 철학적 근거다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ================= SECTION 2 ================= -->
+<section id="sec2">
+  <div class="section-head">
+    <div class="sec-num num-b">2</div>
+    <h2 class="sec-title">흔들린 좌표계 — 임베딩 혼재와 검색의 조용한 붕괴</h2>
+  </div>
+
+  <p>두 번째 고장은 더 기술적이고, 훨씬 더 교활하다. 대부분의 에이전트 메모리 시스템은 검색(retrieval) 위에서 동작한다. 메모리 항목은 텍스트 그 자체로 조회되는 것이 아니라, 임베딩 공간 위의 <strong>좌표</strong>로 조회된다. 그리고 임베딩 모델이 바뀌면 그 좌표계 전체가 바뀐다.</p>
+
+  <div class="analogy">
+    <span class="label">일상의 비유</span>
+    <p>도서관이 분류 체계를 전면 교체하는 중이라고 하자. 절반의 책은 여전히 십진분류 기호로, 나머지 절반은 새 주제 코드로 서가에 섞여 있다. 책 한 권도 사라지지 않았다. 그런데 아무도 제 위치를 알 수 없다. 더 나쁜 것은, 검색이 <strong>"성공한 것처럼 보인다"</strong>는 점이다. 시스템은 자신 있게 엉뚱한 책을 내밀고, 그럴듯한 제목 때문에 아무도 의심하지 않는다.</p>
+  </div>
+
+  <p>기술적으로 풀어 보면 이렇다. 새 모델의 임베딩 공간은 이전과 기하학적으로 다른 공간이다. 축이 다르고, 거리의 의미가 다르고, "비슷함"의 정의 자체가 다르다. 그런데 업그레이드 후에도 인덱스에는 <span class="hl-b">구 좌표계로 찍힌 옛 기억과 신 좌표계로 찍힌 새 기억이 공존</span>한다. 사용자의 질의는 신 좌표계로 인코딩된다. 세 좌표가 만나는 지점에서 검색은 조용히 무너진다.</p>
+
+  <p>이 고장이 특히 위험한 이유는 <strong>조용하기 때문</strong>이다. 재해석 불일치는 출력을 관찰하면 "어? 이 반응이 왜 이렇지?"라는 감지 가능한 이상 신호를 준다. 그러나 검색 붕괴는 에러를 던지지 않는다. 로그에는 성공이 찍힌다. 다만 반환된 것이 부정확한 기억이고, 그 위에서 에이전트가 그럴듯한 환각을 만들어 낼 뿐이다. 서비스 지표는 멀쩡하고, 에이전트만 서서히 성격이 변하고 실수를 반복한다. <span class="hl-o">가장 무서운 장애는 알람이 울리지 않는 장애다.</span></p>
+
+  <p>위키 관점에서 이것은 <span class="wl">[[black-box-instrument-drift]]</span>의 의미 있는 변형이다. 지금까지 드리프트 논의의 주체는 모델의 <em>출력</em>이었다. 그런데 여기서는 드리프트가 <strong>인덱스 자체</strong>, 즉 계측값을 보관하는 저장소에서 일어난다. 계측기가 아니라 계측 기록 보관함이 미러 속에서 변하는 셈이다. 검색 인프라의 건강 상태를 모니터링하는 것은 선택이 아니라 생존 조건이라는 근거가 된다.</p>
+
+  <h3><span class="dot">◆</span> 왜 "다시 임베딩하면 되지 않나"는 절반의 답인가</h3>
+  <p>전체 인덱스를 새 임베딩 모델로 재계산하면 되지 않느냐는 자연스러운 반문이다. 맞다 — 그것이 정상 경로다. 그러나 이 논문이 지적하는 함정은 바로 그 "다시 임베딩"이 통제 없이 이루어졌을 때 생긴다. 재인코딩이 부분적으로만 적용되거나, 재인코딩 시점에 원문이 아니라 <em>이미 요약된 메모리</em>를 입력으로 사용하면, 요약 위의 요약이 누적되며 원래 의미에서의 표류가 시작된다. 해결책의 존재와 해결책의 <strong>강제</strong>는 별개의 문제다. 이것이 다음 섹션의 주제다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ================= SECTION 3 ================= -->
+<section id="sec3">
+  <div class="section-head">
+    <div class="sec-num num-g">3</div>
+    <h2 class="sec-title">네거티브 없는 인화본 — 되돌릴 수 없는 순간</h2>
+  </div>
+
+  <p>세 번째 고장은 앞의 두 가지를 치명적으로 만든다. 원본 증거(raw evidence) 없이는 복구가 불가능하다는 것.</p>
+
+  <div class="analogy">
+    <span class="label">일상의 비유</span>
+    <p>필름 카메라 시절을 기억하는가? 네거티브를 버리고 인화본만 남겼다면, 인화본의 색이 바래거나 커피를 쏟았을 때 그 순간을 복원할 방법이 이 세상에 존재하지 않는다. 사진이 있으니 안전한 것 같지만, 사실 <strong>인화본은 필름의 특정 해석일 뿐</strong>이다. 노출을 어떻게 잡고 색을 어떻게 보정할지는 현상소의 선택이었다. 그 선택이 영원히 고정되어 버린 것.</p>
+  </div>
+
+  <p>메모리 시스템이 정확히 이 구조를 따르는 경우가 많다. 대화 원문은 버리고(용량! 비용!) 요약과 재구성된 기억만 남긴다. 평소에는 아무 문제가 없다. 그러다 모델이 업그레이드되고 해석이 어긋난다. 그때 비로소 깨닫는다 — <span class="hl-o">어긋난 것을 '어긋났다'고 판정할 기준 원문 자체가 존재하지 않는다.</span> 원본 없이는 현재 해석이 틀렸는지조차 확인할 수 없고, 확인이 안 되면 복구는 논의 대상이 아니다.</p>
+
+  <p>이 지점에서 위키의 감사 가능성 논의와 정확히 맞닿는다. <span class="wl">[[auditability-as-scaling-requirement]]</span>와 <span class="wl">[[agent-reliability-auditing]]</span>는 "에이전트가 왜 그렇게 판단했는지 추적할 수 있어야 신뢰가 확장된다"고 말한다. 이 논문은 그 주장에 새로운 근거를 얹는다. 원본 증거는 감사의 재료일 뿐 아니라 <span class="hl-b">재해석의 앵커</span>이기도 하다. <span class="wl">[[belief-state-grounding]]</span>의 관점에서 보면, 새 모델이 기존 기억을 다시 읽을 때 "원문은 무엇이었나"를 참조할 수 있어야만 재정렬이 약속할 수 있는 것이 된다. 앵커 없는 재해석은 표류일 뿐이다.</p>
+
+  <blockquote>
+    원본 증거는 백업이 아니다. 백업은 '되돌리기 위한' 자산이고, 원본 증거는 '다시 해석하기 위한' 자산이다.
+    <span class="src">업그레이드가 일상이 된 시대에, 후자가 더 자주 쓰인다.</span>
+  </blockquote>
+
+  <p>정리하면 이 섹션의 처방은 단 하나다. 메모리 설계에서 raw evidence는 부가 옵션이 아니라 <strong>1급 시민(first-class citizen)</strong>이어야 한다. 저장 비용은 보험이다. 프리미엄은 비싸 보이지만, 사고가 났을 때 보험 없는 상황의 이름은 비가역성이다.</p>
+</section>
+
+<hr class="sep">
+
+<!-- ================= SECTION 4 ================= -->
+<section id="sec4">
+  <div class="section-head">
+    <div class="sec-num num-o">4</div>
+    <h2 class="sec-title">"저장소가 살아 있으면 메모리도 살아 있다"는 신화</h2>
+  </div>
+
+  <p>지금까지의 세 가지 고장을 하나의 관점으로 압축해 보자. 에이전트 메모리에는 두 개의 층이 있다.</p>
+
+  <div class="diagram">
+    <div class="d-title">에이전트 메모리의 두 계층</div>
+    <div class="layer layer-interp">
+      <span class="lname">해석 계층 — 모델</span>
+      <span class="sub">v2025.1 → v2026.1 : 기록에서 '의미'를 만들어 낸다. 업그레이드로 교체된다.</span>
+    </div>
+    <div class="arrow-wrap">▲▼<span class="alabel">모델 업그레이드 — 위층만 바뀌는데 아래층의 의미가 함께 흔들린다</span></div>
+    <div class="layer layer-store">
+      <span class="lname">저장 계층 — 아키텍처</span>
+      <span class="sub">raw evidence · 임베딩 인덱스 · 메모리 스키마 : 의미를 '담을' 뿐, 만들지는 않는다.</span>
+    </div>
+  </div>
+
+  <p>위키의 기존 지형은 이 그림의 아래층에 집중해 왔다. <span class="wl">[[adema]]</span>는 메모리를 모델과 독립된 지식 상태 오케스트레이션 아키텍처로 보는 관점의 대표 사례다. 인프라 계층으로서의 메모리 — 이 관점에는 강력한 직관이 깔려 있다. 하드웨어가 다르게 바뀌어도 파일 시스템은 유지되듯, 모델이 바뀌어도 메모리 아키텍처는 유지되어야 한다는 것. 그러나 그 주장에는 암묵적 전제가 숨어 있다. <em>저장소가 살아 있으면 메모리도 살아 있다.</em></p>
+
+  <p>이 논문은 바로 그 전제를 실증적으로 무너뜨린다. 아래층(비트)은 온전히 보존되었는데 위층(의미)이 작동하지 않는 세 가지 방식을 보여 주었으니까. 그렇다면 결론은 "메모리를 다시 모델에 종속시키자"가 아니라 <span class="hl-g">아래층의 보존은 아키텍처가, 위층의 재정렬도 아키텍처가 책임진다</span>는 쪽이다.</p>
+
+  <h3><span class="dot">◆</span> 정체성의 질문: 어제의 에이전트와 오늘의 에이전트는 같은 개체인가</h3>
+  <p>여기서 위키의 또 다른 축이 등장한다. <span class="wl">[[agent-interchangeability]]</span>와 <span class="wl">[[agent-identity]]</span> — 에이전트 팀에서 구성원은 정말 교체 가능한가를 직접 테스트한 연구다. 메모리 이식성 논문은 그 <strong>이질적 쌍생</strong>이다. 두 논문은 같은 질문을 서로 다른 방향에서 묻는다.</p>
+
+  <p><em>구성요소를 교체한 후에도 시스템의 연속성과 정체성이 유지되는가?</em></p>
+
+  <p>에이전트 교체 가능성 연구가 "역할을 채우는 개체는 바꿔도 되는가"를 묻는다면, 메모리 논문은 정반대에서 "개체를 유지한 채 해석기를 바꿨을 때 <span class="hl-b">같은 메모리를 가진 것으로 간주할 수 있는가</span>"를 묻는다. 저장소를 공유한다고 해서 연속성이 보장되지 않는다면, 위키에 새로 명시될 간선은 이렇다 — <strong>"동일 저장소 = 동일 메모리"라는 가정의 붕괴.</strong> 기억의 정체성은 하드디스크에서가 아니라 해석의 일관성에서 온다.</p>
+
+  <h3><span class="dot">◆</span> 이미 같은 구조를 본 적 있다 — 상태 보존 ≠ 의미 보존</h3>
+  <p><span class="wl">[[agent-os-semantic-gap]]</span>과 <span class="wl">[[agent-sandbox-state-management]]</span>가 다룬 Crab의 체크포인트/리스토어 문제를 기억하는가? 바이트는 완벽하게 보존되지만, 그 상태를 해석할 실행 환경의 의미 체계는 보존되지 않는 간극. 메모리 포터빌리티 문제는 <strong>정확히 동형 구조</strong>다. 체크포인트 도메인의 발견을 메모리 도메인으로 확장하는 간선이 여기서 완성된다.</p>
+
+  <p><span class="wl">[[abstraction-layer-mismatch]]</span> 역시 같은 운명을 공유한다. "오늘의 추상화에 구워진 가정이 내일의 모델과 시스템에 의해 무효화된다"는 진단은 메모리 스키
+</body>
+</html>
