@@ -89,3 +89,9 @@ LLM 기반 다중 에이전트 연구에 물리적 참조점을 부여한다. �
 이질적 프레임워크로 구축된 에이전트들의 상호운용성 문제를 시스템 수준 요구사항으로 규정하고, 공통 통신 프로토콜이라는 새로운 해법 계층을 제시한다.
 
 → [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
+
+### Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in  (2026-09-08)
+
+합의라는 조율 기본 과제에 적대적 관찰자 하의 잠재 목표 은닉 제약을 추가하여, 다중 에이전트 최적화의 목적함수가 수렴 품질과 프라이버시 비용의 이중 축으로 확장됨을 보여준다.
+
+→ [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]

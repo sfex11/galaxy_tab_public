@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-07)
 
 → [[sources/2026-09-07-swe-gate-passing-functional-tests-is-not-enough-fo.md|상세 보기]]
+
+### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
+
+→ [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]

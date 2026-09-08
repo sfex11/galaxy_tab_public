@@ -50,3 +50,9 @@ Gym-Anything 등 소프트웨어 환경 생성과 대비되는 물리적 환경 
 Gym-Anything이 소프트웨어를 환경으로 변환했다면, EDGE는 API 네트워크를 학습 데이터 생산기로 변환한다. 환경 생성의 산출물이 평가 환경뿐 아니라 훈련 데이터로도 소비될 수 있음을 보여준다.
 
 → [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]
+
+### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
+
+환경 생성의 스펙트럼에 '실존 소프트웨어 래핑' 경로를 추가한다 — 궤적 유도(Terminal-Universe), 공진화 합성(Environment Evolution)과 달리 실제 애플리케이션을 GUI+CLI 이중 인터페이스로 감싸는 환경화 전략이다.
+
+→ [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]

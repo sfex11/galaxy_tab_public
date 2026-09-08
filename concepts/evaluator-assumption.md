@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-26)
 
 ### Toward Robust LiDAR Semantic Segmentation for Real-World Deployment: E (2026-09-04)
+
+### Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Fronti (2026-09-08)
+
+→ [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|상세 보기]]

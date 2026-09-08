@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Cited but Not Verified: Parsing and Evaluating Source Attribution in L (2026-05-10)
 
 검증 대상이 코드 출력이나 렌더링된 시각물이 아닌 '인용 구조'라는 구문론적 아티팩트라는 구체적 사례를 제공한다. AST 파서가 실행 검증의 도구로 재활용됨을 보여주며, 검증이 텍스트·시각·구문 도메인에 걸쳐 통합적 프레임워크로 발전하고 있음을 시사한다.
+
+### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
+
+재실행 가능성 검증이 디컴파일 도메인의 표준이 되었음에도, 실행 검증의 성공 신호가 정보 손실을 인증하는 역설을 드러낸다. 실행 검증의 대상이 '동작 여부'에서 '보존 여부'로 확장되어야 함을 시사한다.
+
+→ [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-05-escaping-mode-collapse-in-llm-generation-via-geome.md|Escaping Mode Collapse in LLM Generation via Geometric Regul]]
+
+### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
+
+→ [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]

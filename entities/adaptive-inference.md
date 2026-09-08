@@ -38,3 +38,15 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-06)
 
 적응적 추론의 반응 대상 스펙트럼에 '인간 상호작용에서 발현되는 암묵적 개인 기준'이라는 제4유형을 추가한다. 외부 환경(CADENCE)·내부 시스템 상태(SpecKV)·신념 상태에 이어, 사용자와의 반복 교환을 통한 기준 표면화가 테스트 시점 적응의 새로운 결정 차원임을 보여준다.
+
+### Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in  (2026-09-08)
+
+적응의 결정 차원을 계산량·내부 상태에서 '정보 공개 수준'으로 확장하는 사례를 제공한다 — 신뢰 상태에 반응해 공개를 조절하는 것은 사회적 상태 반응형 적응이라는 새로운 유형이다.
+
+→ [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]
+
+### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
+
+추론의 적응 축에 아키텍처 깊이 축을 새로 추가한다. SpecKV의 내부 상태 반응과 CADENCE의 외부 컨텍스트 반응이 고정 아키텍처 내에서 작동했다면, 계층 수준 탄력성은 모델 깊이 자체의 런타임 선택을 가능하게 하여 [[token-pruning]]의 깊이축 확장이다.
+
+→ [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]

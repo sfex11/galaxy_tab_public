@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
+
+### Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Fronti (2026-09-08)
+
+→ [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|상세 보기]]

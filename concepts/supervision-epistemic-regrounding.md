@@ -16,3 +16,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Testing Interchangeability in LLM Agent Teams (2026-09-08)
+
+→ [[sources/2026-09-08-testing-interchangeability-in-llm-agent-teams.md|상세 보기]]

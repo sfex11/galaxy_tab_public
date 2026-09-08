@@ -21,3 +21,7 @@ _자동 Wiki Query에서 추출됨_
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
 
 ### Toward Robust LiDAR Semantic Segmentation for Real-World Deployment: E (2026-09-04)
+
+### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
+
+→ [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]

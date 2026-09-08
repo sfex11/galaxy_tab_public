@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Distill Globally, Adapt Locally: Reasoning Distillation and Product-Ty (2026-09-08)
+
+→ [[sources/2026-09-08-distill-globally-adapt-locally-reasoning-distillat.md|상세 보기]]

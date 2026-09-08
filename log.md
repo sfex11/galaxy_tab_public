@@ -3340,3 +3340,23 @@
 - 2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md
 - 2026-09-07-translation-as-a-decision-space-a-multi-agent-pers.md
 - 2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md
+
+## [2026-09-08 08:33] ingest | Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Training and Inference
+
+## [2026-09-08 08:33] ingest | How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
+
+## [2026-09-08 08:33] ingest | PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting
+
+## [2026-09-08 08:36] llm-ingest | 12편 분석, 엔티티 538개, 개념 1643개
+- 2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md
+- 2026-09-08-necessary-or-sufficient-evaluating-llm-explanation.md
+- 2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md
+- 2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md
+- 2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md
+- 2026-09-08-design-docs-are-all-you-need-an-ai-native-machine-.md
+- 2026-09-08-distill-globally-adapt-locally-reasoning-distillat.md
+- 2026-09-08-crossdepth-geometry-constrained-attention-for-gene.md
+- 2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md
+- 2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md
+- 2026-09-08-testing-interchangeability-in-llm-agent-teams.md
+- 2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md

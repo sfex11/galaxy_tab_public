@@ -578,3 +578,5 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 에이전트 생태계의 파편화(프레임워크·모델·프로토콜 이질성)가 사회적·사업적 잠재력 실현의 병목임을 진단하고, 표준 통신 계층으로 이를 해소하려는 산업·학계 공동 움직임의 정점이다.
 
 → [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
+
+- [[sources/2026-09-08-how-to-speculate-about-uncertainty-in-agentic-codi.md]]

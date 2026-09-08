@@ -56,3 +56,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 의미론적 의사결정(행동 추천)과 시스템적 검증(위상 일관성)의 경계를 명시적으로 설계하여, 번역 간극을 암묵적 컨텍스트 위임이 아닌 아키텍처 분리로 해소하는 정석적 패턴을 제공한다.
 
 → [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]
+
+### Design Docs Are All You Need: An AI-native Machine-Learning Performanc (2026-09-08)
+
+이 간극이 일회성 번역 실패가 아니라 모델·시스템 진화에 의해 구조적으로 재발함을 ML 성능 모델링 도메인에서 확인시킨다. 추상화 가정의 주기적 무효화는 해법이 간극 소멸이 아니라 재번역 비용의 상쇄(전체 재생성)임을 시사한다.
+
+→ [[sources/2026-09-08-design-docs-are-all-you-need-an-ai-native-machine-.md|상세 보기]]

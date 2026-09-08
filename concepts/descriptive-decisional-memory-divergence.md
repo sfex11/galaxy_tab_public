@@ -17,3 +17,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
+
+→ [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]

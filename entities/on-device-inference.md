@@ -40,3 +40,9 @@ _Wiki 축적 중_
 데이터 주권 규제가 온디바이스·온프레미스 배포의 새로운 구동 요인이 됨을 보여준다. 기존의 비용·프라이버시 동기 외에 법적 요구가 오픈소스 LLM 에이전트 배포를 강제하는 구조적 조건을 추가한다.
 
 → [[sources/2026-09-08-multi-step-tool-calling-over-korean-open-public-ap.md|상세 보기]]
+
+### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
+
+단일 사전학습 모델이 다중 깊이를 지원하면 온디바이스 배포의 모델 선택 문제가 '하나를 고르기'에서 '하나로 다중 스케일 커버'로 전환됨을 보여준다. 배포 효율이 개별 압축 파이프라인의 이산적 선택에서 분리된다.
+
+→ [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]

@@ -46,3 +46,9 @@ SE 벤치마크 성능이 계산 과학 워크플로우로 전이되지 않음�
 ### BAMI: Training-Free Bias Mitigation in GUI Grounding (2026-05-10)
 
 컴퓨터 사용 에이전트의 실패 모드가 CFG 해석·도구 스키마 오버헤드에 더해 시각-공간적 편향(정밀도·모호성)이라는 제3축을 가짐을 구조화하여, 에이전트의 시각 기반 행동 정확도가 입력 해상도와 인터페이스 복잡도에 의해 체계적으로 왜곡됨을 보여준다.
+
+### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
+
+CUA의 비효율 궤적이 모델 한계가 아닌 GUI 단일 모달리티 환경 제약의 산물임을 보여, CUA 능력 정의를 'GUI 조작 숙련'에서 '공유 애플리케이션 상태 위의 GUI+CLI 이질 인터페이스 조율'로 확장한다.
+
+→ [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]

@@ -1790,3 +1790,8 @@
 - [[sources/2026-09-05-continuous-actions-from-discrete-minds-latent-alig.md]] - Continuous Actions from Discrete Minds: Latent-Aligned Planning for End-to-End Autonomous Driving
 - [[sources/2026-09-05-translation-as-a-decision-space-a-multi-agent-pers.md]] - Translation as a Decision Space: A Multi-Agent Perspective on Low-Resource Dialect Generation
 - [[sources/2026-09-05-unlocking-lossless-speedups-in-llms-via-discrete-d.md]] - Unlocking Lossless Speedups in LLMs via Discrete Diffusion
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md]] - Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Training and Inference
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-08-how-to-speculate-about-uncertainty-in-agentic-codi.md]] - How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
+- [[sources/2026-09-08-price-a-systematic-study-of-llm-adaptation-choices.md]] - PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting

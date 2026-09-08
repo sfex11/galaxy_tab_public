@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
 
 검색 그라운딩 적응이 모델 크기에 따른 품질 격차를 축소하는 평탄화 효과를 실증하여, RAG를 단순 지식 주입이 아닌 '모델 규모 간 능력 등화 메커니즘'으로 재해석한다.
+
+### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
+
+청킹+임베딩 파이프라인의 숨은 결합 의존성을 드러낸다. 검색 인덱스가 생성 시점의 임베딩 모델 버전에 결합되어 버전 혼재 시 검색이 구조적으로 깨진다는 것은, RAG를 상태 없는 조회 시스템이 아니라 모델 교체에 취약한 상태저장 시스템으로 재분류한다.
+
+→ [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]

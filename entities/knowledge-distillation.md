@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Standing on the Shoulders of Giants: Stabilized Knowledge Distillation (2026-05-06)
 
 지식 증류의 병목을 '용량 전이'에서 '형식 준수 전이'로 확장한다. 기존 TIDE가 아키텍처 간 표현 공간 불일치를 다루고 Select to Think가 SLM 내재 능력의 동적 활성화를 다루었다면, 본 논문은 규모 간 형식 준수성이라는 제3의 병목 축을 식별하여 지식 증류의 적용 전제를 구조적으로 재검토하게 한다.
+
+### Distill Globally, Adapt Locally: Reasoning Distillation and Product-Ty (2026-09-08)
+
+증류의 종착점을 언어 모델에서 벗어나 비생성적 판별 모델로 확장한다 — 전이되는 것이 토큰 분포가 아니라 '무엇이 업그레이드이고 무엇이 의도 이탈인가'라는 판단 기준임을 보여, TIDE(아키텍처 간 전이)·안정화 KD(형식 안정성 전이)와 함께 증류의 스펙트럼에 '추론→결정 논리 전이'라는 새 축을 추가한다.
+
+→ [[sources/2026-09-08-distill-globally-adapt-locally-reasoning-distillat.md|상세 보기]]
