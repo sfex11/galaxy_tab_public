@@ -28,3 +28,9 @@ _Wiki 축적 중_
 청킹+임베딩 파이프라인의 숨은 결합 의존성을 드러낸다. 검색 인덱스가 생성 시점의 임베딩 모델 버전에 결합되어 버전 혼재 시 검색이 구조적으로 깨진다는 것은, RAG를 상태 없는 조회 시스템이 아니라 모델 교체에 취약한 상태저장 시스템으로 재분류한다.
 
 → [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]
+
+### ReCite: Agentic Reasoning for Faithful Citation (2026-09-10)
+
+RAG 아키텍처가 존재하지 않는 참조의 조작은 대체로 해소했으나 실존 문헌의 잘못된 귀속 문제는 남긴다는 한계 정밀화를 제공한다. 검색 성공(문헌 존재성)과 인용 성공(주장 지지성)의 분리라는 새로운 평가 축을 도입한다.
+
+→ [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]

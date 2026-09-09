@@ -46,3 +46,9 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 ### Cited but Not Verified: Parsing and Evaluating Source Attribution in L (2026-05-10)
 
 자동연구의 스코프를 '연구 실행'에서 '산출물 인식론적 검증'으로 확장한다. Intern-Atlas가 방법론적 맥락을 추적했다면, 본 논문은 산출물 내 인용의 의미론적 유효성을 추적하는 상보적 경로를 제공하여, autoresearch 파이프라인에 검증 계층을 내장해야 한다는 요구를 정량적으로 뒷받침한다.
+
+### ReCite: Agentic Reasoning for Faithful Citation (2026-09-10)
+
+자동 연구 파이프라인의 인용 단계가 산출물 신뢰성의 주요 병목임을 보여준다. autoresearch 산출물의 인식론적 결함 중 인용 오귀속이 핵심 원인이며, 에이전틱 검증으로 파이프라인 내부에서 해결하는 경로를 제시한다.
+
+→ [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]
