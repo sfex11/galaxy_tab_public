@@ -580,3 +580,7 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 → [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
 
 - [[sources/2026-09-08-how-to-speculate-about-uncertainty-in-agentic-codi.md]]
+
+- [[sources/2026-09-09-multi-step-tool-calling-over-korean-open-public-ap.md]]
+
+- [[sources/2026-09-09-how-to-speculate-about-uncertainty-in-agentic-codi.md]]

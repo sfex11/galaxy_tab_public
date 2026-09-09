@@ -3360,3 +3360,31 @@
 - 2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md
 - 2026-09-08-testing-interchangeability-in-llm-agent-teams.md
 - 2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md
+
+## [2026-09-09 08:30] ingest | Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and a Data-Synthesis Recipe
+
+## [2026-09-09 08:30] ingest | Necessary or Sufficient? Evaluating LLM Explanations With Behavioural Evidence
+
+## [2026-09-09 08:30] ingest | Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Frontier Language Models
+
+## [2026-09-09 08:30] ingest | CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Agents
+
+## [2026-09-09 08:30] ingest | When LLM Decompilers Recompile More and Preserve Less
+
+## [2026-09-09 08:30] ingest | Design Docs Are All You Need: An AI-native Machine-Learning Performance Tool
+
+## [2026-09-09 08:30] ingest | Distill Globally, Adapt Locally: Reasoning Distillation and Product-Type Test-Time Training for Scalable Trade-Up Recommendation
+
+## [2026-09-09 08:30] ingest | CrossDepth: Geometry-Constrained Attention for Generalizable Multi-View Surround Depth Estimation
+
+## [2026-09-09 08:30] ingest | Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in Multi-Agent Networks
+
+## [2026-09-09 08:30] ingest | Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study of Memory Portability
+
+## [2026-09-09 08:30] ingest | Testing Interchangeability in LLM Agent Teams
+
+## [2026-09-09 08:30] ingest | Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Training and Inference
+
+## [2026-09-09 08:30] ingest | How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
+
+## [2026-09-09 08:30] ingest | PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting

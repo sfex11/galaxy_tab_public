@@ -1795,3 +1795,22 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-09-08-how-to-speculate-about-uncertainty-in-agentic-codi.md]] - How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
 - [[sources/2026-09-08-price-a-systematic-study-of-llm-adaptation-choices.md]] - PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-09-multi-step-tool-calling-over-korean-open-public-ap.md]] - Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and a Data-Synthesis Recipe
+- [[sources/2026-09-09-necessary-or-sufficient-evaluating-llm-explanation.md]] - Necessary or Sufficient? Evaluating LLM Explanations With Behavioural Evidence
+- [[sources/2026-09-09-molecular-déjà-vu-digit-level-retrieval-of-publish.md]] - Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Frontier Language Models
+- [[sources/2026-09-09-cua-universe-a-scalable-and-dynamic-environment-fo.md]] - CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Agents
+- [[sources/2026-09-09-when-llm-decompilers-recompile-more-and-preserve-l.md]] - When LLM Decompilers Recompile More and Preserve Less
+- [[sources/2026-09-09-design-docs-are-all-you-need-an-ai-native-machine-.md]] - Design Docs Are All You Need: An AI-native Machine-Learning Performance Tool
+- [[sources/2026-09-09-distill-globally-adapt-locally-reasoning-distillat.md]] - Distill Globally, Adapt Locally: Reasoning Distillation and Product-Type Test-Time Training for Scalable Trade-Up Recommendation
+- [[sources/2026-09-09-crossdepth-geometry-constrained-attention-for-gene.md]] - CrossDepth: Geometry-Constrained Attention for Generalizable Multi-View Surround Depth Estimation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-09-trust-aware-adaptive-disclosure-for-inference-priv.md]] - Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in Multi-Agent Networks
+- [[sources/2026-09-09-does-your-agents-memory-survive-a-model-upgrade-a-.md]] - Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study of Memory Portability
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-09-testing-interchangeability-in-llm-agent-teams.md]] - Testing Interchangeability in LLM Agent Teams
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-09-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md]] - Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Training and Inference
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-09-how-to-speculate-about-uncertainty-in-agentic-codi.md]] - How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
+- [[sources/2026-09-09-price-a-systematic-study-of-llm-adaptation-choices.md]] - PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting
