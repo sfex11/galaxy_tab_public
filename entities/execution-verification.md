@@ -28,3 +28,9 @@ _Wiki 축적 중_
 재실행 가능성 검증이 디컴파일 도메인의 표준이 되었음에도, 실행 검증의 성공 신호가 정보 손실을 인증하는 역설을 드러낸다. 실행 검증의 대상이 '동작 여부'에서 '보존 여부'로 확장되어야 함을 시사한다.
 
 → [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]
+
+### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
+
+실행 피드백의 신뢰성이 테스트 품질의 함수임을 보여, 테스트 작성을 가정된 능력이 아닌 훈련된 스킬로 격상시킨다. 실행 근거의 유효성이 검증 생성자의 역량에 조건부화됨을 시사한다.
+
+→ [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md|상세 보기]]

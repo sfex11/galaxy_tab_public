@@ -28,3 +28,9 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 ### Formation Matrix and Energy-based Control of Multi-Agent Systems (2026-09-06)
 
 충돌 회피를 능동적 제약(CBF)이 아닌 수동적 에너지 소산으로 다루는 경로를 실증한다. 에너지 기반 접근은 시스템 동역학의 부산물로서 충돌 회피가 도출되는 암묵적 구조적 보장을 제공하여, '명시적 제약 강제' 전통에 대한 대안적 안전 메커니즘의 존재를 보여준다.
+
+### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
+
+학습된 표현이 안전 제약의 입력이 되는 설정에서 제어 보장이 표현 품질의 상한에 구속됨을 시사한다. 관측 게이트 필터링이 제약 입력의 신뢰 하한을 확보하는 경로를 제공한다.
+
+→ [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-.md|상세 보기]]

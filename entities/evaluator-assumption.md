@@ -60,3 +60,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-06)
 
 '입력당 정답은 하나'라는 암묵적 가정이 저자원 방언 설정에서 유효 실현의 다원성을 체계적으로 은폐함을 구체적 사례로 입증한다.
+
+### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
+
+평가 형식 자체가 실패 모드의 관찰 가능성을 결정한다는 명제의 sycophancy 도메인 실증을 제공한다 — 짧은 사전 지정 대화는 지속적 압력에서만 발현하는 붕괴를 구조적으로 놓친다는 반증 사례다.
+
+→ [[sources/2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur.md|상세 보기]]

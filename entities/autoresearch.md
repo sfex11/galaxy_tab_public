@@ -52,3 +52,9 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 자동 연구 파이프라인의 인용 단계가 산출물 신뢰성의 주요 병목임을 보여준다. autoresearch 산출물의 인식론적 결함 중 인용 오귀속이 핵심 원인이며, 에이전틱 검증으로 파이프라인 내부에서 해결하는 경로를 제시한다.
 
 → [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]
+
+### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
+
+오토리서치의 스코프를 '연구 실행 자동화'에서 '감사 대상 모델에 대한 연구 수행'으로 특화한다. judgment-bottleneck에서 지적된 '좋은 가설과 나쁜 가설을 구별하는 능력'이 해석가능성 도메인에서 정량 평가될 수 있는 최초의 무대를 제공한다.
+
+→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]

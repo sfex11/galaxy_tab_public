@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-23-chat2workflow-a-benchmark-for-generating-executabl.md|Chat2Workflow: A Benchmark for Generating Executable Visual ]]
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

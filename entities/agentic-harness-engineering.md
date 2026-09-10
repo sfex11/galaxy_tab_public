@@ -30,3 +30,15 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 ### SafeEvolve: Harness-Policy Co-Evolution from Agent Experience for Safe (2026-09-04)
 
 하네스 업데이트만으로는 안전이 보장되지 않으며, 하네스 정책 자체가 모델 정렬과 공진화해야 한다는 방향을 제시한다. 하네스를 정적 실행 인프라가 아닌 경험에서 진화하는 안전 정렬 주체로 재정의한다.
+
+### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+절차 지식(순서·조건)을 실행 인프라의 1급 객체로 격상시켜, 하네스 엔지니어링의 범위를 '실행 환경 제공'에서 '절차 상태의 명시적 관리와 진화'로 확장한다. 실행 구조가 스스로 진화하므로 하네스가 더 이상 고정 인프라가 아님을 보여준다.
+
+→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]
+
+### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
+
+하네스의 자동 진화 프레임이 소형 모델 비용 효율화라는 경제적 동기와 결합함을 보여준다. 하네스가 은닉 변수가 아니라 명시적 진화 대상임을 7개 엔터프라이즈 태스크에서 정량 실증한다.
+
+→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]

@@ -26,3 +26,9 @@ _Wiki 축적 중_
 폐루프 훈련의 지속가능성 조건을 2차원으로 확장한다 — 환경이 모델 능력 성장에 대응해 갱신되어야 함에 더해, 갱신의 데이터 소스가 온폴리시 롤아웃에 결속되면 루프는 닫혀 보여도 일반화 차원에서는 여전히 열려 있음을 보인다.
 
 → [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로 자동화하여, 폐루프 훈련이 요구하는 환경 수요를 충족하는 저비용 인프라를 제공한다.
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

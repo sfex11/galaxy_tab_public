@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

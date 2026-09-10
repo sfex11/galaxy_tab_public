@@ -26,3 +26,15 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-06)
 
 가독성(legibility)과 해석가능성(interpretability)을 구분하는 용어적 기준을 제공한다. CoT 텍스트는 해석가능성의 근거가 아니라 가독성의 증거일 뿐이며, 실제 스텝 중요도는 어블레이션 등 개입 기반 방법으로만 확립 가능함을 시사하여 개입 기반 해석가능성의 위상을 높인다.
+
+### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
+
+해석가능성의 위상을 개별 기법 축적(MoRFI의 모노토닉 특징, 감정 추론 회로 분석)에서 '자기 개선 시스템의 사후 감시 기둥'으로 재배치한다. 기존 Wiki가 해석가능성을 도구 관점에서 축적했다면, 본 논문은 이를 RSI 안전 아키텍처의 필수 구성요소로 격상한다.
+
+→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]
+
+### It's Not RoPE that Creates Sinks: The Role of Self-Concentration and V (2026-09-10)
+
+현상 원인의 오귀인(RoPE→마스크 구조)을 개입 실험으로 교정하는 방법론적 모범 사례를 제공하여, 상관 관찰을 넘어 인과 규명으로 이동하는 연구 표준을 보여준다.
+
+→ [[sources/2026-09-10-its-not-rope-that-creates-sinks-the-role-of-self-c.md|상세 보기]]

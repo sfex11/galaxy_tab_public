@@ -28,3 +28,9 @@ ADEMA는 메모리를 '지식 상태의 연속성 보장 매체'로 재정의하
 ADEMA가 메모리를 '지식 상태의 연속성 보장 매체'로 정의했다면, 본 논문은 그 연속성이 세션 경계뿐 아니라 모델 버전 경계에서도 깨진다는 제2의 단절 축을 추가한다. 메모리 관리의 설계 질문을 '무엇을 저장할까'에서 '어떤 형식으로 저장해야 해석기 교체를 견디는가'로 확장하며, 원문/청킹/노트/구조화 4형식 비교라는 통제 실험 기반을 제공한다.
 
 → [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]
+
+### MeClear: Cooperative Game-Theoretic Attribution and Risk-Aware Memory  (2026-09-10)
+
+저장·검색·망각의 삼분화에 '적극적 정리(clearance)'라는 제4 연산을 추가한다. clearance는 수동적 망각과 달리 태스크 조건 하 기여도 분석에 기반한 능동적·선택적 제거로 정의되며, 메모리 관리가 검색 최적화에서 오염 관리로 확장됨을 보여준다.
+
+→ [[sources/2026-09-10-meclear-cooperative-game-theoretic-attribution-and.md|상세 보기]]

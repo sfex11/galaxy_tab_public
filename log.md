@@ -3388,3 +3388,18 @@
 ## [2026-09-09 08:30] ingest | How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
 
 ## [2026-09-09 08:30] ingest | PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting
+
+## [2026-09-10 02:35] llm-ingest | 13편 분석, 엔티티 584개, 개념 1707개
+- 2026-09-10-recite-agentic-reasoning-for-faithful-citation.md
+- 2026-09-10-procedural-graphs-self-evolving-execution-structur.md
+- 2026-09-10-copying-explains-the-collective-behavior-of-ai-age.md
+- 2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md
+- 2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md
+- 2026-09-10-meclear-cooperative-game-theoretic-attribution-and.md
+- 2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md
+- 2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur.md
+- 2026-09-10-its-not-rope-that-creates-sinks-the-role-of-self-c.md
+- 2026-09-10-rethinking-learned-occupancy-in-autonomous-active-.md
+- 2026-09-10-a-distributed-consensus-particle-filter-for-target.md
+- 2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md
+- 2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md

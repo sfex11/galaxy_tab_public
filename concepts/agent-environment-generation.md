@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
 → [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

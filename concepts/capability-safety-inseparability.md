@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
+
+→ [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-.md|상세 보기]]

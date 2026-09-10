@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-04-post-training-language-models-for-gold-medal-perfo.md|Post-Training Language Models for Gold-Medal Performance in ]]
+
+### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
+
+→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]

@@ -20,3 +20,9 @@ _Wiki 축적 중_
 완전성-우아함 트레이드오프에 '후진 기동 허용'이라는 제3의 해법 축을 추가한다. 우아한 경로를 전면 포기하지 않고도 기동 어휘 확장으로 완전성을 확보할 수 있음을 3축 정량 비교로 실증한다.
 
 → [[sources/2026-09-07-corner-cases-headland-coverage-path-planning-for-a.md|상세 보기]]
+
+### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
+
+커버리지 경로 계획이 알려진 기하 위의 경로 최적화라면, 활성 매핑은 어디를 감지할지 결정하는 상위 문제임을 구분시킨다. 감지 결정의 신뢰성이 커버리지 품질의 선행 조건임을 보여준다.
+
+→ [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-.md|상세 보기]]

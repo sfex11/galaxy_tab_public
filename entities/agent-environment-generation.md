@@ -56,3 +56,9 @@ Gym-Anything이 소프트웨어를 환경으로 변환했다면, EDGE는 API 네
 환경 생성의 스펙트럼에 '실존 소프트웨어 래핑' 경로를 추가한다 — 궤적 유도(Terminal-Universe), 공진화 합성(Environment Evolution)과 달리 실제 애플리케이션을 GUI+CLI 이중 인터페이스로 감싸는 환경화 전략이다.
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도메인 특화 생성 사이에, LLM 텍스트 생성으로 환경을 제로부터 합성하는 제3의 경로를 추가한다. 환경 합성의 입력이 기존 소프트웨어나 도메인 지식이 아닌 최소 프롬프트로 축소됨을 실증한다.
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

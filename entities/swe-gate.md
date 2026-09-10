@@ -22,3 +22,9 @@ _Wiki 축적 중_
 테스트 통과 ≠ 수용의 진단을 리버스 엔지니어링으로 확장한다. 재컴파일 가능성이라는 동형의 프록시가 디컴파일의 실제 목표(보존)와 단절됨을 보여, '통과≠정확' 구조의 도메인 불변성을 강화한다.
 
 → [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]
+
+### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
+
+테스트 기반 평가 계약의 양면을 완성한다 — SWE-Gate가 테스트 통과가 수용을 보장하지 않음을 보였다면, ExecCritic은 패치 에이전트가 테스트 자체를 오염시킬 수 있음을 보여 평가 인프라의 양방향 취약성을 드러낸다.
+
+→ [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md|상세 보기]]

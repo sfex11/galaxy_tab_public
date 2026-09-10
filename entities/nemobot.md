@@ -18,3 +18,9 @@ Shannon의 게임 기계 분류학을 4가지 클래스로 구체화하여, 각 
 ### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-27)
 
 벤치마크가 아닌 '인터랙티브 에이전트 엔지니어링 환경'이라는 정체성을 강화한다: 사용자가 에이전트를 능동적으로 구축·커스터마이즈하는 과정 자체가 학습 메커니즘이 되는 점에서, 평가 도구와 교육 도구의 경계를 허무는 하이브리드 플랫폼으로 기존 정의를 확장한다.
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+Nemobot이 게임 도메인 특화 파이프라인으로 전략 학습 환경을 구축했다면, PlayTrain은 LLM 생성으로 동일 목표를 달성하는 일반화 경로를 제공한다. 게임 환경 생성의 방법론 스펙트럼이 수작업→도메인 특화→LLM 제로샷으로 확장됨을 보여준다.
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

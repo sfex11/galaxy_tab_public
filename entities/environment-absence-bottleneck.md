@@ -26,3 +26,9 @@ _Wiki 축적 중_
 GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임을 실증한다 — 실제 애플리케이션 위에서 양 모달리티를 모두 지원하려면 막대한 인프라 비용이 들어 환경 공급 자체가 병목이 되며, 본 논문은 이 병목의 직접적 해소 사례다.
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+새 환경 개발·기존 환경 수정이 수작업 코딩을 요구한다는 산업적 진단을 제공하여, 환경 공급 부족이 RL 연구의 실제 병목임을 확인시킨다. LLM 생성으로 병목이 완화되지만, 병목이 '생성'에서 '생성된 환경의 훈련 적합성 검증'으로 이동할 수 있음을 시사한다.
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

@@ -24,3 +24,9 @@ _Wiki 축적 중_
 통신 기반 조정 연구와 대비되는 물리 기반 조정의 극단적 사례를 제공한다. 에이전트 간 메시지 교환 없이 스프링-댐퍼 결합만으로 형성 유지와 충돌 회피가 창발함을 보여, 조정 메커니즘의 스펙트럼이 통신 지배에서 동역학 지배까지 확장됨을 시사한다.
 
 → [[sources/2026-09-07-formation-matrix-and-energy-based-control-of-multi.md|상세 보기]]
+
+### A Distributed Consensus Particle Filter for Target Tracking using Auto (2026-09-10)
+
+중앙 조율 없는 분산 조율의 해양 도메인 사례를 추가한다. 통신 가용성이 시공간적으로 변동하는 환경에서의 협력 추정이라는 새 하위 축을 제공한다.
+
+→ [[sources/2026-09-10-a-distributed-consensus-particle-filter-for-target.md|상세 보기]]

@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
+
+→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]

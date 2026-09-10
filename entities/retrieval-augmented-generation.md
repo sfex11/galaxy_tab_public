@@ -34,3 +34,9 @@ _Wiki 축적 중_
 RAG 아키텍처가 존재하지 않는 참조의 조작은 대체로 해소했으나 실존 문헌의 잘못된 귀속 문제는 남긴다는 한계 정밀화를 제공한다. 검색 성공(문헌 존재성)과 인용 성공(주장 지지성)의 분리라는 새로운 평가 축을 도입한다.
 
 → [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]
+
+### MeClear: Cooperative Game-Theoretic Attribution and Risk-Aware Memory  (2026-09-10)
+
+RAG의 semantic similarity 중심 검색이 downstream utility와 무관함을 실증하며, 검색 이후 정리(clearance)라는 상류 개입 계층을 제안한다. 검색-정리 이중 축으로 RAG 파이프라인 설계가 재구성된다.
+
+→ [[sources/2026-09-10-meclear-cooperative-game-theoretic-attribution-and.md|상세 보기]]

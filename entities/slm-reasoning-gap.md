@@ -16,3 +16,9 @@ _Wiki 축적 중_
 소형 모델의 추론 격차를 '추론 능력 향상'이 아닌 '추론 필요성의 제거'로 해소하는 대안 경로를 제공한다 — 교사 LLM이 추론하고 비생성적 학생은 증류된 결정만 수행함으로써, Select to Think의 '국소 충분성 기반 선택'과 달리 격차 자체를 우회한다.
 
 → [[sources/2026-09-08-distill-globally-adapt-locally-reasoning-distillat.md|상세 보기]]
+
+### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
+
+격차 해소의 제3의 경로를 연다. Select to Think의 추론 시점 선택, Distill Globally Adapt Locally의 증류-결정 분리와 달리, 하네스 진화+온폴리시 정정은 약한 모델의 자기 행동 분포 내에서 직접 학습시킨다. 모방 실패 진단은 격차의 본질이 능력 부족이 아니라 학습 분포 불일치임을 시사한다.
+
+→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]

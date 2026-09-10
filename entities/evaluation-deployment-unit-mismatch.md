@@ -26,3 +26,9 @@ _Wiki 축적 중_
 GUI 전용 평가 단위와 하이브리드 실제 작업 단위의 불일치를 환경 차원에서 실증한다 — 벤치마크가 GUI만 측정하면 CLI가 필수적인 실제 컴퓨터 작업에서의 역량과 효율성을 측정할 수 없다.
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
+
+리뷰 품질의 평가 단위(진단 정확성 vs 수정 수용 가능성)를 명시적으로 분리하여, 과제 분해 자체가 평가 단위 불일치를 조작 가능하게 만드는 설계 전략의 사례를 제공한다. 불일치의 해소가 과제 재정의에서 나올 수 있음을 보여준다.
+
+→ [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]

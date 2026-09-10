@@ -22,3 +22,9 @@ _Wiki 축적 중_
 본 논문이 이 개념의 원천 논문이다. 2026-09-07 판은 표면화에 '효율성' 차원을 추가한다 — 기준 표면화가 상호작용 라운드 최소화라는 명시적 설계 목표가 되며, 표면화가 비용 구조를 가진 계산 과정임을 명확히 한다.
 
 → [[sources/2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]
+
+### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
+
+rebuttal 데이터가 암묵적 리뷰 기준(유효 진단의 조건, 수용 가능한 수정의 범위)을 감독 라벨로 외면화하는 새로운 원천을 제공한다. SWE-Gate가 코드 리뷰의 수용 기준 형식화를, 본 논문이 학술 피어 리뷰에서 rebuttal 기반 형식화를 실증하여 암묵 기준 외면화의 도메인 일반성을 강화한다.
+
+→ [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]

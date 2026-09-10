@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-26)
 
 ### Nemobot Games: Crafting Strategic AI Gaming Agents for Interactive Lea (2026-04-27)
+
+### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

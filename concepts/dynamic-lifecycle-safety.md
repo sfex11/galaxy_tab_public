@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]

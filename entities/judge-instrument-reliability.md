@@ -22,3 +22,9 @@ _Wiki 축적 중_
 평가 도구(LLM judge)의 신뢰성을 채점 일관성의 문제가 아니라 측정 대상 자체의 타당성 문제로 격상시킨다 — judge가 아무리 일관되어도 잘못된 것(가독성)을 측정하고 있다면 신뢰도 프레임워크 전체가 재설계를 요구한다.
 
 → [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]
+
+### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
+
+LLM 프록시를 도전자 기기로 사용하는 평가에 측정기기 신뢰성 문제가 재현됨을 시사한다 — 도전자 프록시 자체의 전략 일관성과 반박 품질이 결과 재현성의 상한을 규정한다.
+
+→ [[sources/2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur.md|상세 보기]]

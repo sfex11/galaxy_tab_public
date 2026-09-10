@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
 
 → [[sources/2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]
+
+### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]

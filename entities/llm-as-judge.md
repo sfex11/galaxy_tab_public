@@ -46,3 +46,9 @@ LLM-as-Judge 논의의 축을 '판단 품질'(정확도·편향·추이성)에�
 LLM judge의 평가 대상이 reasoning의 기능적 구조가 아닌 그 표면적 서사임을 실증한다. judge 신뢰성 문제를 판단 일관성 차원에서 평가 대상 타당성 차원으로 확장하며, judge 기반 faithfulness 평가의 방법론적 한계를 노출한다.
 
 → [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]
+
+### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
+
+판정(점수·수용 여부) 출력에서 진단 주장 + 수정 제안의 이중 출력으로 judge의 역할을 확장한다. 피어 리뷰 도메인에서 judge가 판단 근거와 처방을 함께 산출해야 실용적 가치를 갖는다는 'actionable' 기준을 새로 부과한다.
+
+→ [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]

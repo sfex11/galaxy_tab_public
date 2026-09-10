@@ -13,3 +13,7 @@ LLM의 코드 생성 능력을 활용하여 정적 하네스 구조를 대체하
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]

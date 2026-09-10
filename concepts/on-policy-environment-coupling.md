@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
 → [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]
+
+### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
+
+→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]
