@@ -58,3 +58,9 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 오토리서치의 스코프를 '연구 실행 자동화'에서 '감사 대상 모델에 대한 연구 수행'으로 특화한다. judgment-bottleneck에서 지적된 '좋은 가설과 나쁜 가설을 구별하는 능력'이 해석가능성 도메인에서 정량 평가될 수 있는 최초의 무대를 제공한다.
 
 → [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]
+
+### IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea  (2026-09-11)
+
+아이디어 생성 능력에 집중해 온 자율 연구 연구에 구현 명세화라는 후행 병목을 제시한다 — artifact-bound-optimization의 최적화 대상이 논문 형식에서 구현 가능한 명세로 이동해야 함을 시사한다.
+
+→ [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]

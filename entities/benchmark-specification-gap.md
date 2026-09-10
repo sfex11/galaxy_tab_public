@@ -28,3 +28,9 @@ _Wiki 축적 중_
 OSWorld·AndroidWorld가 명세에서 누락한 CLI 모달리티가 실제 작업 효율성을 결정함을 보여, 명세 간극이 측정 누락을 넘어 에이전트 행동 패턴(GUI 몰입 비효율) 자체를 구조적으로 왜곡함을 입증한다.
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea  (2026-09-11)
+
+측정 명세(벤치마크)의 불완전성 문제를 구현 명세(연구 방법) 도메인으로 확장한다 — 명세 불완전성이 어떤 대상을 왜곡하는가는 도메인 불변의 구조적 결함임을 보여준다.
+
+→ [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]

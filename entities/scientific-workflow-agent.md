@@ -42,3 +42,9 @@ _Wiki 축적 중_
 연구 워크플로우에 pre-submission self-review라는 품질 게이트 계층을 추가한다. 자동화된 연구 파이프라인에서 산출물이 외부 심사로 향하기 전 자기 교정 루프를 거치는 구조를 제안하여 연구 자동화의 품질 보증 축을 확장한다.
 
 → [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]
+
+### IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea  (2026-09-11)
+
+3층 아키텍처의 중간 계층인 '재현 가능한 명세'의 품질을 독립 변수로 측정 가능하게 한다 — 명세 생성 능력과 명세 충분성이 별개 능력임을 실증적으로 분리하는 평가 기반을 제공한다.
+
+→ [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]
