@@ -23,3 +23,7 @@ _자동 Wiki Query에서 추출됨_
 ### Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Fronti (2026-09-08)
 
 → [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|상세 보기]]
+
+### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
+
+→ [[sources/2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md|상세 보기]]

@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-lenswalk-agentic-video-understanding-by-planning-h.md|LensWalk: Agentic Video Understanding by Planning How You Se]] (2026-03-27)
 
 - [[sources/2026-03-31-adapttoken-entropy-based-adaptive-token-selection-.md|AdaptToken: Entropy-based Adaptive Token Selection for MLLM ]] (2026-03-31)
+
+### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

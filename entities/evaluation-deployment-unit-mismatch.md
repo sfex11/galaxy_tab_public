@@ -32,3 +32,9 @@ GUI 전용 평가 단위와 하이브리드 실제 작업 단위의 불일치를
 리뷰 품질의 평가 단위(진단 정확성 vs 수정 수용 가능성)를 명시적으로 분리하여, 과제 분해 자체가 평가 단위 불일치를 조작 가능하게 만드는 설계 전략의 사례를 제공한다. 불일치의 해소가 과제 재정의에서 나올 수 있음을 보여준다.
 
 → [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]
+
+### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
+
+평가 단위(단일 기기·정적 태스크)와 배포 단위(다중 기기·동적 워크플로우)의 구조적 불일치가 GUI 도메인에서 과대낙관적 평가를 산출하는 사례를 제공한다. 평가 단위가 배포 워크플로우의 최소 단위와도 일치하지 않는 극단적 사례다.
+
+→ [[sources/2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md|상세 보기]]

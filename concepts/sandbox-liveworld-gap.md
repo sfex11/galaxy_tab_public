@@ -25,3 +25,7 @@ _자동 Wiki Query에서 추출됨_
 ### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
+
+→ [[sources/2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md|상세 보기]]

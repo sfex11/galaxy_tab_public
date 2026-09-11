@@ -34,3 +34,9 @@ _Wiki 축적 중_
 실행 피드백의 신뢰성이 테스트 품질의 함수임을 보여, 테스트 작성을 가정된 능력이 아닌 훈련된 스킬로 격상시킨다. 실행 근거의 유효성이 검증 생성자의 역량에 조건부화됨을 시사한다.
 
 → [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md|상세 보기]]
+
+### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
+
+결정론적 인터프리터가 의미 행동→로봇 행동 매핑을 검증 가능하게 만들어, 실행 검증의 대상을 불투명한 모델 출력 전체에서 인터페이스 계약 준수 여부로 좁혀 감사 가능성을 높인다.
+
+→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]

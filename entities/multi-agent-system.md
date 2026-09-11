@@ -95,3 +95,9 @@ LLM 기반 다중 에이전트 연구에 물리적 참조점을 부여한다. �
 합의라는 조율 기본 과제에 적대적 관찰자 하의 잠재 목표 은닉 제약을 추가하여, 다중 에이전트 최적화의 목적함수가 수렴 품질과 프라이버시 비용의 이중 축으로 확장됨을 보여준다.
 
 → [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]
+
+### Glyph: A Multi-Strategy Agentic System for Column Description and Sens (2026-09-11)
+
+Descriptor(설명 생성)와 Tagger(민감도 태깅)의 이원 협업 구조를 제공하여, 결합된 두 하위 문제를 각기 특화된 에이전트로 분해하고 상태 그래프로 조율하는 실용적 사례를 추가한다.
+
+→ [[sources/2026-09-11-glyph-a-multi-strategy-agentic-system-for-column-d.md|상세 보기]]

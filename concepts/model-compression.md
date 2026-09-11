@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-03-27-tuneshift-kd-knowledge-distillation-and-transfer-f.md|TuneShift-KD: Knowledge Distillation and Transfer for Fine-t]] (2026-03-27)
 
 - [[sources/2026-03-30-sustainability-is-not-linear-quantifying-performan.md|Sustainability Is Not Linear: Quantifying Performance, Energ]] (2026-03-30)
+
+### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

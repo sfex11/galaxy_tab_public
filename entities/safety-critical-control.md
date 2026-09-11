@@ -34,3 +34,9 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 학습된 표현이 안전 제약의 입력이 되는 설정에서 제어 보장이 표현 품질의 상한에 구속됨을 시사한다. 관측 게이트 필터링이 제약 입력의 신뢰 하한을 확보하는 경로를 제공한다.
 
 → [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-.md|상세 보기]]
+
+### Multi-Agent Reinforcement Learning for Autonomous UAV Exploration in W (2026-09-11)
+
+위험 스칼라 필드 매핑 연구가 안전 임계치 회피 탐사를 다루었다면, 본 논문은 위험 지역의 능동적 접근·감시라는 상보적 과제를 제시하여 안전 필수 응용의 과제 축을 넓힌다.
+
+→ [[sources/2026-09-11-multi-agent-reinforcement-learning-for-autonomous-.md|상세 보기]]

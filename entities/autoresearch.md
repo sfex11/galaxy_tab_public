@@ -64,3 +64,9 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 아이디어 생성 능력에 집중해 온 자율 연구 연구에 구현 명세화라는 후행 병목을 제시한다 — artifact-bound-optimization의 최적화 대상이 논문 형식에서 구현 가능한 명세로 이동해야 함을 시사한다.
 
 → [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]
+
+### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
+
+과학 워크플로우 자동화에 시스템 인프라 계층의 좌표를 추가한다. 오토리서치가 연구 발견·실행의 에이전트화를 다룬다면, Avatar는 그 아래 WMS 실행 계층의 오케스트레이션 정책 자체를 자율화 대상으로 삼아 자동화의 대상 계층을 한 단계 아래로 내린다.
+
+→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]

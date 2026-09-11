@@ -62,3 +62,9 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 이 간극이 일회성 번역 실패가 아니라 모델·시스템 진화에 의해 구조적으로 재발함을 ML 성능 모델링 도메인에서 확인시킨다. 추상화 가정의 주기적 무효화는 해법이 간극 소멸이 아니라 재번역 비용의 상쇄(전체 재생성)임을 시사한다.
 
 → [[sources/2026-09-08-design-docs-are-all-you-need-an-ai-native-machine-.md|상세 보기]]
+
+### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
+
+의도-행동 번역을 암묵적 모델 출력이 아닌 명시적 인터페이스 계약으로 설계하여, 번역 간극을 회피 대상이 아닌 관리 가능한 설계 대상으로 만드는 실현 사례를 제공한다.
+
+→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]

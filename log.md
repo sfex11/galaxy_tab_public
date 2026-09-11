@@ -3403,3 +3403,15 @@
 - 2026-09-10-a-distributed-consensus-particle-filter-for-target.md
 - 2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md
 - 2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md
+
+## [2026-09-11 06:29] llm-ingest | 10편 분석, 엔티티 608개, 개념 1749개
+- 2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md
+- 2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md
+- 2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md
+- 2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md
+- 2026-09-11-convmem-convolutional-memory-for-long-context-reas.md
+- 2026-09-11-forgetting-only-what-matters-layer-selective-unlea.md
+- 2026-09-11-multi-agent-reinforcement-learning-for-autonomous-.md
+- 2026-09-11-glyph-a-multi-strategy-agentic-system-for-column-d.md
+- 2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md
+- 2026-09-11-beyond-one-size-fits-all-sample-adaptive-strategy-.md

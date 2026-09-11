@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-05-make-your-lvlm-kv-cache-more-lightweight.md|Make Your LVLM KV Cache More Lightweight]]
+
+### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

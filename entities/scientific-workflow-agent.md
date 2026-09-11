@@ -48,3 +48,9 @@ _Wiki 축적 중_
 3층 아키텍처의 중간 계층인 '재현 가능한 명세'의 품질을 독립 변수로 측정 가능하게 한다 — 명세 생성 능력과 명세 충분성이 별개 능력임을 실증적으로 분리하는 평가 기반을 제공한다.
 
 → [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]
+
+### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
+
+Avatar는 이 엔티티의 스코프를 '연구 질문→워크플로우의 의미론적 번역 자동화'에서 '실행 중 오케스트레이션 정책의 자율화'로 확장한다. 기존 3층 아키텍처가 정적 명세 생성이었다면, Avatar는 재스케줄링·오류 처리 등 동적 실행 결정에 에이전틱 추론을 도입하는 후속 경로를 제시한다.
+
+→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]

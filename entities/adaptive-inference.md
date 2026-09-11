@@ -50,3 +50,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 추론의 적응 축에 아키텍처 깊이 축을 새로 추가한다. SpecKV의 내부 상태 반응과 CADENCE의 외부 컨텍스트 반응이 고정 아키텍처 내에서 작동했다면, 계층 수준 탄력성은 모델 깊이 자체의 런타임 선택을 가능하게 하여 [[token-pruning]]의 깊이축 확장이다.
 
 → [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]
+
+### Beyond One-Size-Fits-All: Sample-Adaptive Strategy Routing for Vision  (2026-09-11)
+
+적응의 결정 차원에 제3의 축을 추가한다. 기존 확장이 외부 환경 반응(CADENCE)과 내부 시스템 상태 반응(SpecKV)이었다면, 본 논문은 입력 샘플에 대한 알고리즘·전략 선택이라는 새로운 적응 유형을 제시하여, 적응 대상이 파라미터 튜닝에서 알고리즘 간 라우팅으로 격상됨을 보여준다.
+
+→ [[sources/2026-09-11-beyond-one-size-fits-all-sample-adaptive-strategy-.md|상세 보기]]

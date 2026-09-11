@@ -22,3 +22,9 @@ _Wiki 축적 중_
 하네스 보상의 경제적 극대화 사례를 제공한다. 단일 기능 오프로딩(Sentinel-RL의 위상 추론, RunAgent의 제약 실행)을 넘어 프롬프트·도구·훅·컨텍스트 관리 전체의 진화적 재설계만으로 소형 모델이 프론티어급 태스크 수행에 도달함을 보여, 보상의 단위가 '기능'에서 '행동 인터페이스 전체'로 확장됨을 실증한다.
 
 → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]
+
+### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
+
+모델이 가지지 못한 능력(로봇 운동 제어)을 하네스가 구조적으로 대체하는 체화 도메인의 대표 사례를 제공한다. 오프로딩 단위가 단일 인지 과제(SENTINEL-RL의 위상 추론)에서 전체 운동 실행으로 확장됨을 보여준다.
+
+→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]

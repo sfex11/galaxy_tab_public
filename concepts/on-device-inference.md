@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-03-universal-yoco-for-efficient-depth-scaling.md|Universal YOCO for Efficient Depth Scaling]] (2026-04-03)
 
 - [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)
+
+### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

@@ -34,3 +34,9 @@ OSWorld·AndroidWorld가 명세에서 누락한 CLI 모달리티가 실제 작�
 측정 명세(벤치마크)의 불완전성 문제를 구현 명세(연구 방법) 도메인으로 확장한다 — 명세 불완전성이 어떤 대상을 왜곡하는가는 도메인 불변의 구조적 결함임을 보여준다.
 
 → [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]
+
+### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
+
+GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결과 이전, 공유 상태, 이종 조율)이 실제 사용 준비도를 결정함을 보여, 명세 간극이 측정 누락을 넘어 '준비도 과대평가'라는 배포 리스크로 직결됨을 입증한다.
+
+→ [[sources/2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md|상세 보기]]

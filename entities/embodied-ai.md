@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Minia (2026-09-06)
 
 체화 자율주행 연구의 접근성 문제를 저비용 미니어처 플랫폼으로 해소하는 실천적 경로를 제공한다. SafetyALFRED가 진단한 disembodied 안전 평가의 한계를 실물 차량 실험 환경으로 보완할 수 있는 인프라를 제안한다.
+
+### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
+
+기존 정의가 체화 환경의 안전 평가와 내비게이션 실패 진단에 집중했다면, 본 논문은 '범용 모델 + 하네스'로 체화 능력을 확보하는 대안 경로를 추가한다. 체화 능력이 반드시 모델 내부 파라미터에 내재될 필요가 없음을 시사한다.
+
+→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]

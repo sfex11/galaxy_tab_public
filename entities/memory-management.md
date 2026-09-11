@@ -34,3 +34,9 @@ ADEMA가 메모리를 '지식 상태의 연속성 보장 매체'로 정의했다
 저장·검색·망각의 삼분화에 '적극적 정리(clearance)'라는 제4 연산을 추가한다. clearance는 수동적 망각과 달리 태스크 조건 하 기여도 분석에 기반한 능동적·선택적 제거로 정의되며, 메모리 관리가 검색 최적화에서 오염 관리로 확장됨을 보여준다.
 
 → [[sources/2026-09-10-meclear-cooperative-game-theoretic-attribution-and.md|상세 보기]]
+
+### ConvMem: Convolutional Memory for Long-Context Reasoning (2026-09-11)
+
+메모리를 외부 저장-검색 인프라가 아닌 모델 내부의 합성곱 연산 구조로 내재화하는 경로를 제공한다. ADEMA·LongSeeker가 시스템 계층에서 메모리를 조율했다면, ConvMem은 메모리를 네트워크 아키텍처 프리미티브로 격상시켜 메모리 관리의 설계 공간을 연산 계층으로 확장한다.
+
+→ [[sources/2026-09-11-convmem-convolutional-memory-for-long-context-reas.md|상세 보기]]

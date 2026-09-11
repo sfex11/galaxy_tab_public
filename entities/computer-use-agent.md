@@ -52,3 +52,9 @@ SE 벤치마크 성능이 계산 과학 워크플로우로 전이되지 않음�
 CUA의 비효율 궤적이 모델 한계가 아닌 GUI 단일 모달리티 환경 제약의 산물임을 보여, CUA 능력 정의를 'GUI 조작 숙련'에서 '공유 애플리케이션 상태 위의 GUI+CLI 이질 인터페이스 조율'로 확장한다.
 
 → [[sources/2026-09-08-cua-universe-a-scalable-and-dynamic-environment-fo.md|상세 보기]]
+
+### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
+
+GUI 에이전트의 능력 지형에 '기기 경계' 차원을 추가한다. 단일 화면 내 조작 준수 능력과 달리, 다중 기기 워크플로우는 중간 결과 전달·공유 상태 유지·이종 환경 조율을 요구하며, 이것이 별개의 능력 계층임을 시사한다.
+
+→ [[sources/2026-09-11-jarvisgui-towards-cross-device-gui-agents-with-dyn.md|상세 보기]]

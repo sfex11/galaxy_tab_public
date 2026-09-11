@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### ConvMem: Convolutional Memory for Long-Context Reasoning (2026-09-11)
+
+→ [[sources/2026-09-11-convmem-convolutional-memory-for-long-context-reas.md|상세 보기]]

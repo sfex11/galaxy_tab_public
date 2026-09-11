@@ -69,3 +69,9 @@ MLLM을 자율적 에이전트로 확장하려는 시도가 활발하다. **MARC
 ### SafetyALFRED: Evaluating Safety-Conscious Planning of Multimodal Large (2026-04-23)
 
 SafetyALFRED는 MLLM의 멀티모달 이해 능력이 체화 환경에서 안전 의사결정으로 변환되는지를 평가하여, 기존 '이해→출력' 연구에서 '이해→계획→행동'으로 평가 패러다임을 확장한다.
+
+### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+VideoLLM이 MLLM 연구의 최전선 응용 영역이며, 프레임 수·컨텍스트 길이에 비례하는 계산·메모리 비용이 배포의 구조적 제약임을 서베이 차원에서 규정한다. MLLM 효율화 연구의 비디오 특화 지형도를 제공한다.
+
+→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

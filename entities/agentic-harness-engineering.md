@@ -42,3 +42,15 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 하네스의 자동 진화 프레임이 소형 모델 비용 효율화라는 경제적 동기와 결합함을 보여준다. 하네스가 은닉 변수가 아니라 명시적 진화 대상임을 7개 엔터프라이즈 태스크에서 정량 실증한다.
 
 → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]
+
+### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
+
+하네스의 역할을 디지털 환경 실행 계층에서 물리 로봇 제어 계층으로 확장한다. embodiment-specific interpreter라는 새로운 하네스 구성요소를 제공하여, 하네스가 도메인(로봇 구현)의 특수성을 흡수하는 책임 지점임을 보여준다.
+
+→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]
+
+### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
+
+하네스가 정적 인프라가 아닌 액터별 정책 교체 가능한 플러그형 구조일 수 있음을 보여준다. '어디에 에이전틱 추론을 도입할 것인가'가 하네스 설계의 1급 결정 차원으로 부상함을 시사한다.
+
+→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]
