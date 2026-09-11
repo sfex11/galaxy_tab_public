@@ -42,3 +42,8 @@ field-robotics 축에서는 농업 커버리지(sources/2026-09-07-corner-cases-
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram]]: 둘 다 시뮬레이션 환경에서의 RL 훈련을 다루며, LLM 생성 게임 환경과 야생화재 시뮬레이션이라는 환경 공급 방식의 대조적 사례를 보여준다.
+- → [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-]]: 동적 환경에서의 자율 탐색이라는 공통 과제에서, 학습된 occupancy가 탐색 결정을 지원하는 방식과 RL 정책이 화재 경계 추적을 항행 신호로 삼는 방식이 대응된다.

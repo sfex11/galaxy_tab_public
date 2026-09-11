@@ -45,3 +45,8 @@ SAEScientist-Bench는 재귀적 자기 개선(RSI) 연구가 훈련 파이프라
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-]]: 자율 과학 연구 자동화라는 공통 목표에서 SAEScientist-Bench가 에이전트의 연구 수행 능력을 평가한다면, Avatar는 과학 워크플로우의 자율 오케스트레이션을 실행 인프라로 구현한다.
+- → [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap]]: 자율 연구 파이프라인의 두 병목을 각각 벤치마크로 격상시킨다 — 아이디어의 명세화 준비도(IdeaAMBIG)와 연구 수행·감사 능력(SAEScientist-Bench).

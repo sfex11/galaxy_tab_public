@@ -45,3 +45,8 @@ PlayTrain은 LLM이 최소한의 인간 프롬프트만으로 견고하게 JavaS
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct]]: 둘 다 RL 훈련의 환경·스캐폴드 측을 재설계하며, 병목이 환경 제작이나 모방 학습에서 '생성된 구조의 훈련 적합성 검증'으로 이동함을 공통으로 지적한다.
+- → [[sources/2026-09-11-multi-agent-reinforcement-learning-for-autonomous-]]: 둘 다 시뮬레이션 환경에서의 RL 훈련을 다루며, LLM 생성 게임 환경과 야생화재 시뮬레이션이라는 환경 공급 방식의 대조적 사례를 보여준다.

@@ -47,3 +47,7 @@ Wiki 관점에서 이 논문은 세 축을 강화한다. 첫째, representation-
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct]]: 둘 다 모델 능력이 아니라 하네스·인터페이스 설계가 에이전트 성능의 병목임을 보인다 — 동결된 VLM에 의미 행동 인터페이스를 제공하거나, 하네스를 진화시켜 소형 모델이 따라잡게 한다.

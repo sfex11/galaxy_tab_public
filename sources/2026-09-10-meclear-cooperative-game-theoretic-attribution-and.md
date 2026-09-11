@@ -55,3 +55,8 @@ Long-horizon LLM 에이전트의 외부 메모리에서 downstream utility가 �
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-11-forgetting-only-what-matters-layer-selective-unlea]]: 둘 다 '유틸리티 손실 없이 필요한 것만 잊는' 선택적 망각을 다루며, MeClear가 외부 메모리의 음의 기여 기억 제거라면 본 논문은 파라미터 수준의 레이어 선택적 언러닝으로 망각의 계층을 확장한다.
+- → [[sources/2026-09-11-convmem-convolutional-memory-for-long-context-reas]]: 장기 에이전트의 메모리 관리라는 공통 주제에서 ConvMem은 컨텍스트를 병렬 압축으로 유지하고, MeClear는 downstream utility 기준으로 기억을 삭제하는 상보적 전략을 제시한다.

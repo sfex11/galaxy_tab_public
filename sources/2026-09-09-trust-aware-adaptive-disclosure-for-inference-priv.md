@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-a-distributed-consensus-particle-filter-for-target]]: 다중 에이전트 네트워크에서 정보 공개의 양극단을 다룬다 — 적대자로부터 목표를 숨기는 최소 공개(Trust-Aware)와 간헐적 합의 통신으로 과신을 교정하는 공유(Consensus).

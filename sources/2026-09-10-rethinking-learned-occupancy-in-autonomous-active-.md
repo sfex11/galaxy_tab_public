@@ -46,3 +46,8 @@ Observation-Gated Filtering은 [[raw-evidence-anchoring]]의 제어적 실현이
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-a-distributed-consensus-particle-filter-for-target]]: 자기 관측만으로 유지된 신념의 위험을 공통으로 진단하며, 외부 합의(전자)와 관측 지지 게이트(후자)로 각각 과신 추정과 비지지 occupancy를 필터링한다.
+- → [[sources/2026-09-11-multi-agent-reinforcement-learning-for-autonomous-]]: 동적 환경에서의 자율 탐색이라는 공통 과제에서, 학습된 occupancy가 탐색 결정을 지원하는 방식과 RL 정책이 화재 경계 추적을 항행 신호로 삼는 방식이 대응된다.

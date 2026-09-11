@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-09-molecular-déjà-vu-digit-level-retrieval-of-publish]]: 둘 다 표면 지표가 진짜 능력을 담보하지 않음을 감사한다 — 정확도가 예측과 축자적 검색을 구분하지 못함(전자), 설명된 요인이 행동 증거와 일치하지 않을 수 있음(후자).
+- → [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation]]: 둘 다 명시된 근거(설명·인용)와 실제 증거의 정합을 의미 유사도 같은 표면 신호 대신 행동적·에이전틱 검증으로 확인해야 한다고 주장한다.
+- → [[sources/2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur]]: 평가 방법론의 설계가 측정 가능한 실패의 존재론을 결정한다는 공통 통찰 — 설명의 행동적 검증(전자)과 지속적 다중 턴 압력에서만 발현되는 아첨 측정(후자).

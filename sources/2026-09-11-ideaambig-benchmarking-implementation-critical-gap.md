@@ -53,3 +53,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou]]: 자율 연구 파이프라인의 두 병목을 각각 벤치마크로 격상시킨다 — 아이디어의 명세화 준비도(IdeaAMBIG)와 연구 수행·감사 능력(SAEScientist-Bench).
+- → [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-]]: 자율 연구 워크플로우 자동화를 공유하며, 명세의 충분성(IdeaAMBIG)이 자율 오케스트레이션(Avatar) 성공의 입력 품질 조건이 되는 아이디어-실행 인터페이스 문제를 연결한다.

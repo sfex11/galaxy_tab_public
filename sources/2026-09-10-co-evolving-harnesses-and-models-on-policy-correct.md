@@ -43,3 +43,9 @@ Wiki 맥락에서 본 논문은 [[harness-model-co-evolution]]의 능력 도메�
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots]]: 둘 다 모델 능력이 아니라 하네스·인터페이스 설계가 에이전트 성능의 병목임을 보인다 — 동결된 VLM에 의미 행동 인터페이스를 제공하거나, 하네스를 진화시켜 소형 모델이 따라잡게 한다.
+- → [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin]]: 코딩 에이전트의 RL 기반 개선이라는 공통 축에서, Co-Evolving이 온폴리시 정정으로 교사 모방을 대체한다면 ExecCritic은 보상 신호 오염을 막기 위해 검증자(테스트 작성) 자체를 별도 RL 대상으로 훈련한다.
+- → [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram]]: 둘 다 RL 훈련의 환경·스캐폴드 측을 재설계하며, 병목이 환경 제작이나 모방 학습에서 '생성된 구조의 훈련 적합성 검증'으로 이동함을 공통으로 지적한다.

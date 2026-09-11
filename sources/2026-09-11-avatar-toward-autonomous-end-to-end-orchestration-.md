@@ -40,3 +40,8 @@ Avatar는 과학 워크플로우 관리 시스템(WMS)의 오케스트레이션�
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou]]: 자율 과학 연구 자동화라는 공통 목표에서 SAEScientist-Bench가 에이전트의 연구 수행 능력을 평가한다면, Avatar는 과학 워크플로우의 자율 오케스트레이션을 실행 인프라로 구현한다.
+- → [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap]]: 자율 연구 워크플로우 자동화를 공유하며, 명세의 충분성(IdeaAMBIG)이 자율 오케스트레이션(Avatar) 성공의 입력 품질 조건이 되는 아이디어-실행 인터페이스 문제를 연결한다.

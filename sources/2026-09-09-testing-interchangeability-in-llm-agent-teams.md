@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-copying-explains-the-collective-behavior-of-ai-age]]: 둘 다 LLM 다중 에이전트 집단 행동을 실증적으로 탐구하며, 공유 매체 복사를 통한 협력 창발(Copying)과 역할 교체 가능성 가정의 붕괴(Interchangeability)라는 집단 역학의 두 면을 보여준다.

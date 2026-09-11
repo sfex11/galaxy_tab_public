@@ -48,3 +48,9 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-09-trust-aware-adaptive-disclosure-for-inference-priv]]: 다중 에이전트 네트워크에서 정보 공개의 양극단을 다룬다 — 적대자로부터 목표를 숨기는 최소 공개(Trust-Aware)와 간헐적 합의 통신으로 과신을 교정하는 공유(Consensus).
+- → [[sources/2026-09-10-rethinking-learned-occupancy-in-autonomous-active-]]: 자기 관측만으로 유지된 신념의 위험을 공통으로 진단하며, 외부 합의(전자)와 관측 지지 게이트(후자)로 각각 과신 추정과 비지지 occupancy를 필터링한다.
+- → [[sources/2026-09-11-multi-agent-reinforcement-learning-for-autonomous-]]: 자율 선박·드론 팀이 스스로 움직이는 동적 표적(화재 경계·표적)을 추적하는 물리 도메인 다중 에이전트 시스템이라는 공통점을 공유한다.

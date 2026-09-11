@@ -37,3 +37,8 @@ ConvMem은 고정 컨텍스트 한계를 극복하는 순차적 접근(MemAgent 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-meclear-cooperative-game-theoretic-attribution-and]]: 장기 에이전트의 메모리 관리라는 공통 주제에서 ConvMem은 컨텍스트를 병렬 압축으로 유지하고, MeClear는 downstream utility 기준으로 기억을 삭제하는 상보적 전략을 제시한다.
+- → [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur]]: 둘 다 긴 궤적·컨텍스트에서의 목표 상실과 저하를 구조적으로 방어하려 하며, 절차 지식의 명시적 그래프화와 메모리의 합성곱 압축이라는 상보적 수단을 제안한다.

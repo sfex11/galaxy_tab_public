@@ -46,3 +46,7 @@ ExecCritic은 코딩 에이전트 실행 피드백의 가장 약한 고리 — �
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct]]: 코딩 에이전트의 RL 기반 개선이라는 공통 축에서, Co-Evolving이 온폴리시 정정으로 교사 모방을 대체한다면 ExecCritic은 보상 신호 오염을 막기 위해 검증자(테스트 작성) 자체를 별도 RL 대상으로 훈련한다.

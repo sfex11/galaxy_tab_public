@@ -44,3 +44,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-10-meclear-cooperative-game-theoretic-attribution-and]]: 둘 다 '유틸리티 손실 없이 필요한 것만 잊는' 선택적 망각을 다루며, MeClear가 외부 메모리의 음의 기여 기억 제거라면 본 논문은 파라미터 수준의 레이어 선택적 언러닝으로 망각의 계층을 확장한다.
