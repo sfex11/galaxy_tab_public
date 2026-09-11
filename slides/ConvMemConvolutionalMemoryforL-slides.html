@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConvMem: Convolutional Memory for Long-Context Reasoning — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <span class="tag tag-amber">Long-Context Reasoning</span>
+    <h1 style="font-size: clamp(2.2rem, 5.5vw, 3.8rem);">ConvMem</h1>
+    <h2 class="accent2" style="font-size: clamp(1.3rem, 3vw, 2rem);">Convolutional Memory for Long-Context Reasoning</h2>
+    <p class="muted" style="font-size: clamp(1rem, 2vw, 1.3rem);">긴 문맥 추론을 위한 합성곱 메모리</p>
+    <div class="hr"></div>
+    <p style="font-size: clamp(0.9rem, 1.8vw, 1.1rem);">Hongming Zhang, Zhaozhen Gu, Fengshuo Bai, Ming Hao, Qingyang Zhang, 외</p>
+    <p class="muted">중국과학원 자동화연구소 (Institute of Automation, CAS)</p>
+    <p><a href="http://arxiv.org/abs/2609.10441v1">arXiv:2609.10441v1</a></p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">문제 상황: 초장문맥 처리의 한계</h2>
+    <p class="muted" style="font-size: clamp(1rem, 2vw, 1.2rem);">LLM은 책 전체를 소화하거나 복잡한 다단계 추론을 수행하기 어렵습니다</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent"><i class="fas fa-explosion"></i> 이차 복잡도 O(N²)</h3>
+        <p>표준 self-attention은 토큰 수에 대해 이차 복잡도를 가지며, 대량의 입력 처리를 사실상 불가능하게 만듭니다</p>
+      </div>
+      <div class="card">
+        <h3 class="accent"><i class="fas fa-eye-low-vision"></i> Lost in the Middle</h3>
+        <p>문맥 길이가 길어질수록 추론 성능이 저하되어, 중간에 위치한 핵심 정보를 놓치기 쉽습니다</p>
+      </div>
+    </div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>위치 인코딩·어텐션 개선으로 수백만 토큰 확장은 가능하나, 실제 배포 시 지연 시간과 성능 저하가 병목</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">기존 접근법: 순차 메모리 에이전트의 두 가지 한계</h2>
+    <p class="muted" style="font-size: clamp(1rem, 2vw, 1.2rem);">MemAgent, Mem-α 등은 세그먼트를 읽으며 고정 크기 메모리를 반복 갱신 (O(N))</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent"><i class="fas fa-link-slash"></i> 순차적 병목 (Sequential Bottleneck)</h3>
+        <p>메모리 상태의 엄격한 시간 의존성으로 인해 병렬화가 불가능하며, 추론 지연 시간이 큽니다</p>
+      </div>
+      <div class="card">
+        <h3 class="accent"><i class="fas fa-triangle-exclamation"></i> RL 과적합 위험</h3>
+        <p>메모리 정책 최적화에 강화학습(RL)이 필수적인데, 특정 데이터셋에 과적합되어 사전학습 지식에 기반한 그럴듯한 hallucination을 생성합니다</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p>RL 기반 에이전트는 문맥 내 추론이 아닌 파라메트릭 암기(parametric memorization)에 의존하는 경향이 관찰되었습니다</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">핵심 아이디어: CNN을 닮은 계층적 추론</h2>
+    <p style="font-size: clamp(1.05rem, 2.2vw, 1.35rem);"><span class="accent2"><strong>학습 불필요(training-free)</strong></span>하며 <span class="accent2"><strong>고도로 병렬화 가능</strong></span>한 프레임워크</p>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>질의가 주어진 <strong>동결된 LLM을 의미론적 합성곱 커널</strong>로 취급</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>텍스트 세그먼트를 계층적으로 요약하여 <strong>선형 체인 → 로그 트리 (O(log N) 깊이)</strong>로 변환</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>추론 경로 단축으로 <strong>오차 누적 완화</strong> + 텍스트 세그먼트·추론 스레드 양방향 대규모 병렬화</li>
+    </ul>
+    <div class="grid-3">
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-arrows-left-right"></i> Strides</h3>
+        <p>겹치는 윈도우로 강건한 증거 포착</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-route"></i> Skip Connections</h3>
+        <p>고신뢰 원본 증거의 세부 보존</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-layer-group"></i> Multi-Kernel</h3>
+        <p>복잡한 질의의 의미 채널 분리</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">문제 공식화: CNN 표기법의 텍스트 적응</h2>
+    <p class="muted" style="font-size: clamp(1rem, 2vw, 1.2rem);">N개 토큰의 문서 𝒟과 질의 Q가 주어졌을 때, 증거에 기반한 정확한 답변 A 생성</p>
+    <table class="compare-table">
+      <thead>
+        <tr><th>기호</th><th>이름</th><th>의미</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>W</strong></td><td>Kernel Size</td><td>단일 LLM 커널이 스캔하는 최대 토큰 길이</td></tr>
+        <tr><td><strong>S</strong></td><td>Stride</td><td>스캔 보폭. S &lt; W이면 겹치는 윈도우 생성, 각 토큰을 W/S회 스캔하여 회상률 향상</td></tr>
+        <tr><td><strong>L</strong></td><td>Depth</td><td>계층 구조의 총 레이어 수</td></tr>
+        <tr><td><strong>C</strong></td><td>Channels</td><td>질의 Q에서 분해된 하위 질문 수</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">의미론적 합성곱 커널 (Semantic Convolutional Kernel)</h2>
+    <div class="quote-block">
+      <p style="font-size: clamp(1.1rem, 2.5vw, 1.5rem);">(h, r) = 𝒦<sub>LLM</sub>(x, q; p)</p>
+      <p class="muted">동결된 LLM과 지시 프롬프트 p로 매개변수화된 비선형 텍스트→텍스트 변환</p>
+    </div>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>h</strong>: 수용 영역(receptive field) 역할의 텍스트 세그먼트 x에서 질의 q에 관련된 정보를 추출·압축한 요약</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>r</strong>: 세그먼트 중요도의 이산 관련성 점수 (Skip Connection에서 활용)</li>
+    </ul>
+    <div class="grid-3">
+      <div class="card"><span class="tag tag-red">r = 0</span><p><strong>Irrelevant</strong><br>유용한 정보 없음</p></div>
+      <div class="card"><span class="tag tag-amber">r = 1</span><p><strong>Relevant</strong><br>유용할 수 있는 배경/맥락 존재</p></div>
+      <div class="card"><span class="tag tag-green">r = 2</span><p><strong>Critical</strong><br>직접적 증거 또는 정답 포함</p></div>
+    </div>
+    <p class="muted">동시에 두 가지 기능: <span class="accent">정보 추출(노이즈 필터링)</span> + <span class="accent">차원 축소(토큰 길이 압축)</span></p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">핵심 기법 ① Configurable Strides</h2>
+    <p style="font-size: clamp(1.05rem, 2.2vw, 1.3rem);">겹치는 윈도우를 통한 <span class="accent"><strong>다중 뷰 스캔</strong></span>으로 강건한 증거 포착</p>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>단일 패스만 사용하면 <strong>경계 절단(boundary truncation)</strong>과 모델의 <strong>확률적 변동성</strong>에 취약</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>Stride S &lt; W로 설정하여 각 토큰을 여러 수용 영역에서 반복 스캔</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>서로 다른 수용 영역 간 정보를 <strong>교차 검증</strong>하여 핵심 증거의 안정성과 회상률 향상</li>
+    </ul>
+    <div class="card">
+      <h3 class="accent2"><i class="fas fa-magnifying-glass"></i> Over-Scanning 요인</h3>
+      <p>W/S 비율을 조절하여 증거 누락 위험과 계산 비용 간의 균형을 설정할 수 있습니다</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">핵심 기법 ② Skip Connections &amp; ③ Multi-Kernel Convolution</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-route"></i> Skip Connections: 세부 정보 보존</h3>
+        <p>계층적 요약은 정보를 압축하여 미세한 세부사항을 잃을 위험이 있습니다</p>
+        <p><span class="tag tag-green">해결</span> 고신뢰 원본 증거(r=2 세그먼트)가 중간 레이어를 <strong>우회(bypass)</strong>하여 최종 추론 단계로 직접 전파</p>
+        <p class="muted">답변이 정확한 세부사항에 기반하도록 보장하는 의미론적 잔차(semantic residual) 메커니즘</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2"><i class="fas fa-layer-group"></i> Multi-Kernel Convolution: 의미 분리</h3>
+        <p>복잡한 작업은 얽힌 논리 스레드를 포함합니다</p>
+        <p><span class="tag tag-amber">해결</span> 질의를 하위 질문으로 분해하고, 서로 다른 커널이 <strong>분리된 의미 채널</strong>에 관련 정보를 추출</p>
+        <p class="muted">직교하는 추론 경로 간 간섭 방지</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">계층적 병렬 추론 워크플로우</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Layer 0: 입력 처리</div>
+        <div class="step-desc">커널 𝒦가 원본 텍스트 세그먼트들을 병렬로 스캔하여 요약 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">Layer l: 재귀 요약</div>
+        <div class="step-desc">이전 레이어의 연결된 요약들을 재귀적으로 처리, 정보 점진적 응축</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">최종 집계</div>
+        <div class="step-desc">Skip Connection된 원본 증거와 최종 요약을 결합하여 답변 생성</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="accent"><i class="fas fa-bolt"></i> 병렬화</h3>
+      <p>모든 세그먼트 스캔이 각 레이어에서 동시 수행되며, 다중 채널(하위 질문)도 독립적으로 병렬 실행 — 순차 병목을 근본적으로 제거</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">실험 설정</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2"><i class="fas fa-database"></i> 데이터셋</h3>
+        <p><strong>RULER-HotpotQA</strong> 및 <strong>RULER-2WikiMultiHopQA</strong> — 다중 홉 QA를 초장문맥 설정으로 확장한 벤치마크</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2"><i class="fas fa-scale-balanced"></i> 평가 지표</h3>
+        <p><strong>Sub-EM</strong> (부분 문자열 정확 일치) + <strong>LLM-as-a-Judge</strong> — 데이터셋 모호성과 결측 증거에 강건한 평가</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-users"></i> 베이스라인</h3>
+        <p>Training-free 베이스라인 + RL 훈련 기반 메모리 에이전트 (MemAgent 등)</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3"><i class="fas fa-microchip"></i> 구현</h3>
+        <p>동결된 LLM 위에서 동작하며, 질의 분해·파싱 및 계층적 재귀 구성으로 학습 과정 완전히 제거</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">주요 결과</h2>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>Training-free 베이스라인 대비 우수성</strong> — 두 벤치마크에서 최고 성능 달성 (학습 불필요 방법 중 SOTA)</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>RL 유발 불안정성에 대한 강건성</strong> — RL 훈련 에이전트는 데이터셋에 과적합되어 파라메트릭 hallucination 발생</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>분포 외(OOD) 일반화</strong> — RL 훈련 모델은 사전학습 지식에 기반한 그럴듯한 오답 생성, ConvMem은 제공된 문맥에 충실하게 추론</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>모델 불문성과 확장성</strong> — 다양한 LLM 백본에서 동작하며 문서 길이 증가에도 성능 유지</li>
+    </ul>
+    <div class="quote-block">
+      <p>ConvMem은 학습 비용 없이 O(log N) 깊이의 병렬 추론으로 O(N) 순차 방식의 성능을 능가합니다</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">어블레이션 스터디</h2>
+    <table class="compare-table">
+      <thead>
+        <tr><th>구성 요소</th><th>제거 시 영향</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Strides</strong> (Over-Scanning)</td><td>겹치는 윈도우 제거 시 경계 절단으로 핵심 증거 회상률 하락</td></tr>
+        <tr><td><strong>Skip Connections</strong></td><td>제거 시 계층 압축으로 세부 정보 손실, 정밀한 답변 도출 저하</td></tr>
+        <tr><td><strong>Multi-Kernel Convolution</strong></td><td>제거 시 얽힌 논리 스레드 간 간섭 발생, 복잡 질의 성능 저하</td></tr>
+        <tr><td><strong>Kernel Size</strong></td><td>W 크기에 민감 — 적절한 수용 영역 설정이 성능에 중요</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="font-size: clamp(0.95rem, 1.8vw, 1.1rem);">세 가지 CNN 영감 메커니즘이 모두 시너지적으로 기여함을 확인</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">결론 및 기여</h2>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>최초의 학습 불필요 CNN 영감 계층 프레임워크</strong> — 순차 병목을 깨고 병렬화 가능한 초장문맥 추론 실현</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>RL 기반 메모리 에이전트의 과적합 위험 실증</strong> — 성능이 문맥 내 추론이 아닌 파라메트릭 암기에 의존함을 밝힘</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>원칙적 메커니즘 통합</strong> — Configurable Strides + Semantic Skip Connections + Multi-Kernel Convolution으로 training-free SOTA 및 우수한 OOD 일반화 달성</li>
+    </ul>
+    <div class="hr"></div>
+    <p class="muted" style="font-size: clamp(0.95rem, 1.8vw, 1.15rem);"><i class="fas fa-circle-info"></i> 한계: LLM 호출 횟수에 따른 계산 비용, 질의 분해 품질 의존성 등이 향후 과제로 남아 있습니다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="13">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(2rem, 5vw, 3.4rem);">감사합니다</h2>
+    <div class="hr"></div>
+    <h3 style="font-size: clamp(1.2rem, 2.8vw, 1.8rem);">ConvMem: Convolutional Memory for Long-Context Reasoning</h3>
+    <p style="font-size: clamp(1rem, 2vw, 1.2rem);">Hongming Zhang, Zhaozhen Gu, Fengshuo Bai, Ming Hao, Qingyang Zhang, Yuanyuan Wang, Shiyang Tang, Yanna Wang, Bo Xu</p>
+    <p class="muted">Institute of Automation, Chinese Academy of Sciences</p>
+    <p><a href="http://arxiv.org/abs/2609.10441v1"><i class="fas fa-file-lines"></i> arXiv:2609.10441v1</a></p>
+    <div class="grid-3">
+      <div class="card"><p class="accent"><i class="fas fa-ban"></i> <strong>Training-Free</strong></p></div>
+      <div class="card"><p class="accent2"><i class="fas fa-bolt"></i> <strong>O(log N) 병렬 추론</strong></p></div>
+      <div class="card"><p class="accent3"><i class="fas fa-shield-halved"></i> <strong>강건한 일반화</strong></p></div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
