@@ -16,3 +16,9 @@ _Wiki 축적 중_
 행동의 계속/정지/변경 판단은 '현재 행동이 여전히 타당한가'를 지속 재평가하는 적응적 타당성 판단의 행동 수준 실현이다. 메모리 도메인에서 정의된 적응적 타당성이 행동 지속성 도메인으로 확장됨을 보여준다.
 
 → [[sources/2026-09-12-artificial-id-drive-and-persistent-alignment-in-ag.md|상세 보기]]
+
+### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-13)
+
+행동의 계속/정지/변경 판단은 '현재 행동이 여전히 타당한가'를 지속 재평가하는 적응적 타당성 판단의 행동 수준 실현이다. 메모리 도메인(모델 업그레이드)에서 정의된 이 개념이 시스템의 최상위 행동 제어 변수로 승격되는 경로를 제공한다.
+
+→ [[sources/2026-09-13-artificial-id-drive-and-persistent-alignment-in-ag.md|상세 보기]]

@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 → [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]
+
+### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-13)
+
+→ [[sources/2026-09-13-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]

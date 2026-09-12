@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 → [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
+
+→ [[sources/2026-09-13-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

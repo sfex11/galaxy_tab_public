@@ -20,3 +20,9 @@ _Wiki 축적 중_
 토큰 소비 총량이 서빙 비용을 직접 지배하는 구조에 대한 훈련 시점 대응을 제공한다. 추론·인프라 최적화와 별개로 출력 길이 자체가 정렬 방법론의 파라미터화 선택에 의해 조정 가능함을 보여, 비용-행동 차원 결합의 인과 경로를 명확히 한다.
 
 → [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+행동 축(토큰 소비 총량)의 제어점을 추론 최적화 이전의 사후학습 매개변수화 단계로 확장한다. 레이턴시 병목은 인프라에, 토큰 소비는 업데이트 부공간에 각기 다른 조작 지점이 존재함이 명확해진다.
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

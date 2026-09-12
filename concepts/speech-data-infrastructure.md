@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-nuha-speech-building-general-purpose-arabic-speech.md|Nuha-Speech: Building General-Purpose Arabic Speech-LLMs]]
+
+### Nuha-Speech: Building General-Purpose Arabic Speech-LLMs (2026-09-13)
+
+→ [[sources/2026-09-13-nuha-speech-building-general-purpose-arabic-speech.md|상세 보기]]

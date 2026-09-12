@@ -52,3 +52,9 @@ PRM 학습이나 온폴리시 증류 같은 별도 파이프라인 없이, 기�
 포스트트레이닝 업데이트의 파라미터화(저랭크 부공간 선택)가 생성 행동(길이)의 인과 제어 변수임을 밝힘. 기존 포스트트레이닝 논의가 '무엇을 학습시킬까'(손실·데이터·방법)에 머물렀다면, 본 논문은 '어떤 표현 공간에서 학습시킬까'라는 제2의 설계 축을 제시하며, 선호 정렬이 유틸리티 개선 없이 장황함을 부풀린다는 진단과 함께 그 보정 경로를 제공한다.
 
 → [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+사후학습 설계 공간에 '데이터·손실 이후의 제3 축'으로 업데이트 부공간 선택을 추가한다. 동일한 정렬 목표라도 업데이트가 어느 부공간에 위치하느냐에 따라 행동 특성(길이)이 달라짐을 보여준다.
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

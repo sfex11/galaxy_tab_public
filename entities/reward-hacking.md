@@ -32,3 +32,9 @@ _Wiki 축적 중_
 '루브릭을 충족하는 표면적으로 그럴듯한 피드백' 생성을 유인하는 새로운 게이밍 표면을 제공한다. actionable함을 측정하는 루브릭 자체가 Goodhart 대상이 될 수 있음을 시사하며, reward-hacking의 적용 도메인을 훈련에서 생성형 피드백 품질로 확장한다.
 
 → [[sources/2026-09-10-actreview-rebuttal-guided-training-data-and-rubric.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+유틸리티 개선 없이 장황함을 부풀리는 preference alignment의 경향은 길이 프록시가 보상 신호로 유입되는 온건한 mis-specification 사례다. 본 논문은 이를 보상 재설계 대신 업데이트 공간 제약으로 구조적으로 차단하는 대응 경로를 제공한다.
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

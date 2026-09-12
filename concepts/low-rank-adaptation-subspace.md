@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)
 
 - [[sources/2026-04-13-ads-in-ai-chatbots-an-analysis-of-how-large-langua.md|Ads in AI Chatbots? An Analysis of How Large Language Models]] (2026-04-13)
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

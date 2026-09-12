@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

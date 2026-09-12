@@ -68,3 +68,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 적응의 결정 축에 '언제 계산하는가(출력 이전 vs 이후)'라는 시간 배치 차원을 추가한다. 기존 정의가 예산·라우팅·궤적 축의 적응을 다뤘다면, 회고적 추론은 추론 연산의 출력 대비 위치 자체를 적응 대상으로 삼아 지연 민감 도메인에서 사고-응답 순서가 자유로운 설계 변수임을 보여준다.
 
 → [[sources/2026-09-12-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
+
+적응의 결정 차원을 계산량(γ·깊이) 조절에서 관찰 행위(프레임 검색 여부)로 확장한다. 외부 환경 반응도 내부 시스템 상태 반응도 아닌 '현재 추론이 요구하는 증거 유형'에 반응하는 적응의 새 유형을 제시한다.
+
+→ [[sources/2026-09-13-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

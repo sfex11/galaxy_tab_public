@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-truncated-noisy-best-response-algorithms-toward-ga.md|Truncated Noisy Best-Response Algorithms: Toward Game Theore]]
+
+### Truncated Noisy Best-Response Algorithms: Toward Game Theoretic Learni (2026-09-13)
+
+→ [[sources/2026-09-13-truncated-noisy-best-response-algorithms-toward-ga.md|상세 보기]]

@@ -22,3 +22,7 @@ _Wiki 축적 중_
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
 
 → [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]
+
+### Nuha-Speech: Building General-Purpose Arabic Speech-LLMs (2026-09-13)
+
+→ [[sources/2026-09-13-nuha-speech-building-general-purpose-arabic-speech.md|상세 보기]]

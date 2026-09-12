@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-learning-agent-based-model-predictive-control-for-.md|Learning Agent-based Model Predictive Control for Holistic V]]
+
+### Learning Agent-based Model Predictive Control for Holistic Vehicle Per (2026-09-13)
+
+→ [[sources/2026-09-13-learning-agent-based-model-predictive-control-for-.md|상세 보기]]

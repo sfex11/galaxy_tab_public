@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-artificial-id-drive-and-persistent-alignment-in-ag.md|Artificial Id: Drive and Persistent Alignment in Agentic AI]]
+
+### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-13)
+
+→ [[sources/2026-09-13-artificial-id-drive-and-persistent-alignment-in-ag.md|상세 보기]]

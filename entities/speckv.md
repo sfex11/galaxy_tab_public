@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-06)
 
 압축 수준을 관측하여 γ를 동적으로 선택하는 적응적 추측 디코딩 프레임워크로 정의를 구체화한다. 고정 γ가 압축 환경에서 야기하는 과추측/과소추측의 구조적 비효율을 진단하고, 압축률-γ 매핑을 통해 이를 해결하는 메커니즘을 제공한다.
+
+### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-13)
+
+추측 디코딩 텔레메트리의 이중 용도를 함께 형성한다. SpecKV가 압축 상태를 성능 적응의 입력으로 판독한다면, SpecGuard는 동일 계열의 서빙 신호를 보안 탐지의 입력으로 판독하여 내부 상태 관측의 응용 스펙트럼을 완성한다.
+
+→ [[sources/2026-09-13-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

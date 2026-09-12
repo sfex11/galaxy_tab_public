@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-13)
+
+→ [[sources/2026-09-13-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]

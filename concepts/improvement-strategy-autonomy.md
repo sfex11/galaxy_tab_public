@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-12-the-last-ai-built-by-humans-toward-genuine-recursi.md|The Last AI Built by Humans: Toward Genuine Recursive Self-I]]
+
+### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-13)
+
+→ [[sources/2026-09-13-the-last-ai-built-by-humans-toward-genuine-recursi.md|상세 보기]]

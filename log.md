@@ -3430,3 +3430,18 @@
 - 2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md
 - 2026-09-12-component-aware-differential-privacy-for-federated.md
 - 2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md
+
+## [2026-09-13 02:42] llm-ingest | 13편 분석, 엔티티 689개, 개념 1811개
+- 2026-09-13-artificial-id-drive-and-persistent-alignment-in-ag.md
+- 2026-09-13-caption-once-frames-on-demand-visual-need-routing-.md
+- 2026-09-13-nuha-speech-building-general-purpose-arabic-speech.md
+- 2026-09-13-the-last-ai-built-by-humans-toward-genuine-recursi.md
+- 2026-09-13-learning-agent-based-model-predictive-control-for-.md
+- 2026-09-13-retrothinker-enabling-retrospective-thinking-in-sp.md
+- 2026-09-13-truncated-noisy-best-response-algorithms-toward-ga.md
+- 2026-09-13-near-optimal-reinforcement-learning-with-multi-ste.md
+- 2026-09-13-understanding-operator-attitudes-toward-ai-support.md
+- 2026-09-13-domain-specific-hallucination-detection-in-large-l.md
+- 2026-09-13-specguard-inference-time-backdoor-detection-for-fr.md
+- 2026-09-13-component-aware-differential-privacy-for-federated.md
+- 2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md

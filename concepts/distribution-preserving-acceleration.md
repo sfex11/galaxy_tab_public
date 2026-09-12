@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
 
 → [[sources/2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
+
+→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

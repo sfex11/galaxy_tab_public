@@ -32,3 +32,9 @@ LLM 추론이 아닌 제어 계층이라는 명확한 적용 대상을 지정하
 기존 정의가 통계적 인증·분포 시프트 위험 경계에 집중했다면, 본 논문은 MC Dropout을 환각 감지의 실용적 UQ 기법으로 적용하여 불확실성 정량화의 응용 스펙트럼을 '규제적 안전 인증'에서 '출력 신뢰성 진단'으로 확장한다.
 
 → [[sources/2026-09-12-domain-specific-hallucination-detection-in-large-l.md|상세 보기]]
+
+### Domain-Specific Hallucination Detection in Large Language Models (2026-09-13)
+
+MC Dropout이 출력 수준 환각 감지의 경량 UQ 구현 경로임을 실증한다. 별도 앙상블 학습 없이 단일 모델의 드롭아웃 샘플링만으로 인식론적 불확실성을 환각 판별 신호로 전환할 수 있음을 보여, UQ의 실용적 적용 범위를 확장한다.
+
+→ [[sources/2026-09-13-domain-specific-hallucination-detection-in-large-l.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-23-planning-in-entropy-regularized-markov-decision-pr.md|Planning in entropy-regularized Markov decision processes an]]
+
+### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
+
+→ [[sources/2026-09-13-near-optimal-reinforcement-learning-with-multi-ste.md|상세 보기]]

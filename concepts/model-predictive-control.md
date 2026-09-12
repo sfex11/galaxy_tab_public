@@ -20,3 +20,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-12-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-12)
 
 - [[sources/2026-04-13-density-driven-optimal-control-convergence-guarant.md|Density-Driven Optimal Control: Convergence Guarantees for S]] (2026-04-13)
+
+### Learning Agent-based Model Predictive Control for Holistic Vehicle Per (2026-09-13)
+
+→ [[sources/2026-09-13-learning-agent-based-model-predictive-control-for-.md|상세 보기]]

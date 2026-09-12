@@ -22,3 +22,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-evaluating-in-context-translation-with-synchronous.md|Evaluating In-Context Translation with Synchronous Context-F]] (2026-04-10)
 
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
+
+### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-13)
+
+→ [[sources/2026-09-13-component-aware-differential-privacy-for-federated.md|상세 보기]]

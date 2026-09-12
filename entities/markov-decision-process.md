@@ -20,3 +20,9 @@ _Wiki 축적 중_
 MDP 계획 이론에 '전이 전망(look-ahead)'이라는 관측 조건 축을 추가한다. 기존 논의(엔트로피 정규화 계획, Interval POMDP shielding)가 정규화·불확실성 구조에 따른 계획 가능성을 다루었다면, 본 논문은 미래 관측 능력 자체가 계산 난해성을 해소하는지를 묻고, 난해성이 할인 인자 범위에 조건부임을 규명하여 복잡도 지형을 정밀화한다.
 
 → [[sources/2026-09-12-near-optimal-reinforcement-learning-with-multi-ste.md|상세 보기]]
+
+### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
+
+표준 MDP에 관측 가능한 다중 스텝 전이 전망이라는 정보 구조를 추가할 때 발생하는 계획 복잡도의 비단조적 변화를 규명하여, MDP 계획 이론에 '정보 증폭이 난해성에 미치는 영향'이라는 새 축을 제공한다.
+
+→ [[sources/2026-09-13-near-optimal-reinforcement-learning-with-multi-ste.md|상세 보기]]
