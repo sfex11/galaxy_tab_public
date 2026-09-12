@@ -30,3 +30,9 @@ _Wiki 축적 중_
 중앙 조율 없는 분산 조율의 해양 도메인 사례를 추가한다. 통신 가용성이 시공간적으로 변동하는 환경에서의 협력 추정이라는 새 하위 축을 제공한다.
 
 → [[sources/2026-09-10-a-distributed-consensus-particle-filter-for-target.md|상세 보기]]
+
+### Truncated Noisy Best-Response Algorithms: Toward Game Theoretic Learni (2026-09-12)
+
+에너지 기반 제어·분산 합의 추정 등 물리적 조율 경로와 별도의, 게임 이론적 학습 역학에 의한 조정 경로를 제시한다. 커버리지·할당형 목표의 전형인 서브모듈러 구조 하에서 보장이 있는 학습을 가능하게 한다.
+
+→ [[sources/2026-09-12-truncated-noisy-best-response-algorithms-toward-ga.md|상세 보기]]

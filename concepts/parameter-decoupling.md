@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
 
 → [[sources/2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-12)
+
+→ [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

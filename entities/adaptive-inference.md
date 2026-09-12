@@ -56,3 +56,15 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 적응의 결정 차원에 제3의 축을 추가한다. 기존 확장이 외부 환경 반응(CADENCE)과 내부 시스템 상태 반응(SpecKV)이었다면, 본 논문은 입력 샘플에 대한 알고리즘·전략 선택이라는 새로운 적응 유형을 제시하여, 적응 대상이 파라미터 튜닝에서 알고리즘 간 라우팅으로 격상됨을 보여준다.
 
 → [[sources/2026-09-11-beyond-one-size-fits-all-sample-adaptive-strategy-.md|상세 보기]]
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
+
+적응의 결정 차원을 계산량 조절(토큰 예산, 압축률)에서 모달리티 선택으로 확장한다. '얼마나 계산할까'가 아닌 '언제 시각적으로 볼까'는 토큰 수준 적응과 직교하는 새로운 적응 축이며, 시각 필요성 판별이라는 내부 인지 상태 기반 적응 유형으로 분류된다.
+
+→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]
+
+### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-12)
+
+적응의 결정 축에 '언제 계산하는가(출력 이전 vs 이후)'라는 시간 배치 차원을 추가한다. 기존 정의가 예산·라우팅·궤적 축의 적응을 다뤘다면, 회고적 추론은 추론 연산의 출력 대비 위치 자체를 적응 대상으로 삼아 지연 민감 도메인에서 사고-응답 순서가 자유로운 설계 변수임을 보여준다.
+
+→ [[sources/2026-09-12-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]

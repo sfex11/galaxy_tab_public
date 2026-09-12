@@ -52,3 +52,9 @@ _Wiki 축적 중_
 ### LongSeeker: Elastic Context Orchestration for Long-Horizon Search Agen (2026-05-08)
 
 토큰 효율화의 범위를 '주어진 컨텍스트 내 토큰 제거'(token-pruning)에서 '컨텍스트 구조 자체를 관련도에 따라 다층적으로 재구성'하는 수준으로 격상시킨다. 단순한 토큰 수 절감이 아닌, 정보의 의미론적 중요도에 비례한 예산 분배라는 원칙을 제공하여 기존의 양적 접근을 질적 접근으로 보완한다.
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-12)
+
+토큰 효율화의 적용 계층을 입력/컨텍스트 측과 추론 측에서 훈련 시점 파라미터화로 확장한다. 출력 토큰 수 자체를 유틸리티 제약 하 최적화 대상으로 삼아, 효율화의 범위를 '주어진 생성의 압축'에서 '생성 구조의 사전 설계'로 이동시킨다.
+
+→ [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

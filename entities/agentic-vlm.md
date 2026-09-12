@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-06)
 
 VLM의 역할을 '에이전틱 행동 수행'에서 '지도 학습 신호의 능동적 생성'으로 확장한다. VLM의 시각적 관찰이 weakly-supervised 설정에서 감독 신호의 근거가 되는 구조를 제공하며, VLM 능력이 훈련 데이터 품질의 상한선을 결정하는 새로운 인과 방향을 제시한다.
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
+
+VLM 에이전트의 시각 지각을 '모든 프레임을 보는 것'에서 '필요할 때만 보는 것'으로 재정의하여, 시각 예산이 에이전트 아키텍처의 1급 설계 변수임을 보여준다. 프레임 검색 도구의 발동 조건이 곧 에이전트의 지각 정책이 된다.
+
+→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

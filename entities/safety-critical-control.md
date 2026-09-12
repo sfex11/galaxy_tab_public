@@ -40,3 +40,9 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 위험 스칼라 필드 매핑 연구가 안전 임계치 회피 탐사를 다루었다면, 본 논문은 위험 지역의 능동적 접근·감시라는 상보적 과제를 제시하여 안전 필수 응용의 과제 축을 넓힌다.
 
 → [[sources/2026-09-11-multi-agent-reinforcement-learning-for-autonomous-.md|상세 보기]]
+
+### Understanding Operator Attitudes Toward AI-Supported Decision Making i (2026-09-12)
+
+해양 충돌 회피라는 물리적 안전 중요 도메인에서 기술적 안전성과 인간적 수용성이 결합되어야 실제 안전이 달성됨을 보여준다. 능력-안전 불가분성 논의의 인간 요인 확장 사례로, 안전 보장의 구성요소에 심리적 구인을 추가한다.
+
+→ [[sources/2026-09-12-understanding-operator-attitudes-toward-ai-support.md|상세 보기]]

@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
 
 → [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]
+
+### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
+
+→ [[sources/2026-09-12-domain-specific-hallucination-detection-in-large-l.md|상세 보기]]

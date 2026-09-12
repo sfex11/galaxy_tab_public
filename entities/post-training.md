@@ -40,3 +40,15 @@ PRM 학습이나 온폴리시 증류 같은 별도 파이프라인 없이, 기�
 ### Terminal-Universe: Turning Agent Trajectories into Scalable Terminal E (2026-09-06)
 
 포스트트레이닝의 실제 요구가 데이터가 아닌 환경임을 규정한다 — 환경은 다중 검증 가능 태스크와 실행 피드백을 제공하는 반면 궤적은 고정 데모에 불과하다는 구조적 대비를 확립한다.
+
+### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
+
+서드파티 파인튜닝이 백도어의 주요 유입 경로임을 전제로, 유입 차단이 아닌 출구 감시라는 상보적 대응을 제시한다. 포스트트레이닝 파이프라인의 신뢰 가정이 깨질 수 있음을 인정하면서도 런타임 계층에서 이를 보완하는 설계다.
+
+→ [[sources/2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]
+
+### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-12)
+
+포스트트레이닝 업데이트의 파라미터화(저랭크 부공간 선택)가 생성 행동(길이)의 인과 제어 변수임을 밝힘. 기존 포스트트레이닝 논의가 '무엇을 학습시킬까'(손실·데이터·방법)에 머물렀다면, 본 논문은 '어떤 표현 공간에서 학습시킬까'라는 제2의 설계 축을 제시하며, 선호 정렬이 유틸리티 개선 없이 장황함을 부풀린다는 진단과 함께 그 보정 경로를 제공한다.
+
+→ [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

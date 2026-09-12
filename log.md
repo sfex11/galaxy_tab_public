@@ -3415,3 +3415,18 @@
 - 2026-09-11-glyph-a-multi-strategy-agentic-system-for-column-d.md
 - 2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md
 - 2026-09-11-beyond-one-size-fits-all-sample-adaptive-strategy-.md
+
+## [2026-09-12 02:43] llm-ingest | 13편 분석, 엔티티 655개, 개념 1797개
+- 2026-09-12-artificial-id-drive-and-persistent-alignment-in-ag.md
+- 2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md
+- 2026-09-12-nuha-speech-building-general-purpose-arabic-speech.md
+- 2026-09-12-the-last-ai-built-by-humans-toward-genuine-recursi.md
+- 2026-09-12-learning-agent-based-model-predictive-control-for-.md
+- 2026-09-12-retrothinker-enabling-retrospective-thinking-in-sp.md
+- 2026-09-12-truncated-noisy-best-response-algorithms-toward-ga.md
+- 2026-09-12-near-optimal-reinforcement-learning-with-multi-ste.md
+- 2026-09-12-understanding-operator-attitudes-toward-ai-support.md
+- 2026-09-12-domain-specific-hallucination-detection-in-large-l.md
+- 2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md
+- 2026-09-12-component-aware-differential-privacy-for-federated.md
+- 2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md

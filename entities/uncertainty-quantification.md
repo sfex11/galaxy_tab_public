@@ -26,3 +26,9 @@ LLM 추론이 아닌 제어 계층이라는 명확한 적용 대상을 지정하
 ### Joint Treatment Effect Estimation from Incomplete Healthcare Data: Tem (2026-05-08)
 
 불확실성의 근원을 모델 예측 오차나 분포 변화에서 '결측 메커니즘의 인과적 역할'로 전환한다. MNAR 결측이 단순한 데이터 손실이 아니라 인과 그래프의 구조적 편향 원천임을 정규화 흐름과 결합하여 실증함으로써, 불확실성 정량화의 적용 대상을 규제·안전 도메인에서 임상 인과 추론 도메인으로 확장한다.
+
+### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
+
+기존 정의가 통계적 인증·분포 시프트 위험 경계에 집중했다면, 본 논문은 MC Dropout을 환각 감지의 실용적 UQ 기법으로 적용하여 불확실성 정량화의 응용 스펙트럼을 '규제적 안전 인증'에서 '출력 신뢰성 진단'으로 확장한다.
+
+→ [[sources/2026-09-12-domain-specific-hallucination-detection-in-large-l.md|상세 보기]]

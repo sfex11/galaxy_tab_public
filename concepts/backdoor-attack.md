@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-31-fl-pbm-pre-training-backdoor-mitigation-for-federa.md|FL-PBM: Pre-Training Backdoor Mitigation for Federated Learn]]
+
+### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
+
+→ [[sources/2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

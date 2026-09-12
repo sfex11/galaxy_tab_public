@@ -46,3 +46,9 @@ _Wiki 축적 중_
 단일 사전학습 모델이 다중 깊이를 지원하면 온디바이스 배포의 모델 선택 문제가 '하나를 고르기'에서 '하나로 다중 스케일 커버'로 전환됨을 보여준다. 배포 효율이 개별 압축 파이프라인의 이산적 선택에서 분리된다.
 
 → [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
+
+컴퓨트·대역폭 예산이 타이트한 엣지 환경에서 수 시간 길이 비디오의 이해가 실현 가능함을 보여주며, 예산 제약이 단순 장애물이 아니라 적응적 라우팅 설계의 구속 조건으로 기능함을 실증한다.
+
+→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

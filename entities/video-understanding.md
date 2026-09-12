@@ -20,3 +20,9 @@ _Wiki 축적 중_
 밀도 높은 비디오 캡셔닝의 weakly-supervised 설정에서 합성 보조 데이터가 병목임을 식별하고, 시각적 관찰 우선 원칙으로 이를 해결하는 경로를 제공한다. ShallowStream의 지연 실행과 함께 비디오 이해 연구가 '언제 무엇을 볼 것인가'의 문제로 수렴함을 시사한다.
 
 → [[sources/2026-09-07-seeing-before-synthesizing-vlm-guided-transition-e.md|상세 보기]]
+
+### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
+
+CFD는 장시간 비디오 이해의 예산 문제를 토큰 하위 샘플링(시간 구조 소실)과 텍스트 전용 메모리(속성 소실)의 이분법을 넘어, 모달리티별 기능적 우위에 기반한 라우팅으로 해결하는 경로를 제공한다.
+
+→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

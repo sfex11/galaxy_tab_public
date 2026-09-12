@@ -46,3 +46,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 동일 목표(분포 보존 하 가속)의 제2 경로를 제공한다. 드래프트 모델의 수용률 최적화 대신 확산 조건부 샘플링을 사용하며, 두 방식의 비교는 무손실 병렬화의 설계 공간을 명확히 한다.
 
 → [[sources/2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]
+
+### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
+
+추측 디코딩의 위상을 효율화 전용에서 가속+보안 감지의 이중 목적 메커니즘으로 확장한다. 드래프트-타겟 검증 연산이 수용률 최적화와 런타임 백도어 감지를 동시에 수행할 수 있음을 보여, 동일 연산의 다중 역할 가능성을 입증한다.
+
+→ [[sources/2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

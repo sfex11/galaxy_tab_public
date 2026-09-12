@@ -24,3 +24,9 @@ _Wiki 축적 중 (claude 분석 대기)_
 ### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-25)
 
 LLM 백본이 내재한 청각 지식이 LALM 성능 상한을 결정한다는 기존 발견을 평가 측면에서 보완한다—동일한 지식이 ASR 후보 평가의 신뢰성 상한선으로도 기능한다.
+
+### Nuha-Speech: Building General-Purpose Arabic Speech-LLMs (2026-09-12)
+
+LALM의 성능이 백본 LLM의 청각 지식에 의존한다는 기존 발견에 대해, 아랍어처럼 백본 사전학습에서 대표성이 낮은 언어의 경우 이 의존 구조가 역설적으로 병목이 됨을 시사한다. 백본 지식 이론의 언어 조건부 한계를 제시한다.
+
+→ [[sources/2026-09-12-nuha-speech-building-general-purpose-arabic-speech.md|상세 보기]]

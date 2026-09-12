@@ -22,3 +22,9 @@ _Wiki 축적 중_
 격차 해소의 제3의 경로를 연다. Select to Think의 추론 시점 선택, Distill Globally Adapt Locally의 증류-결정 분리와 달리, 하네스 진화+온폴리시 정정은 약한 모델의 자기 행동 분포 내에서 직접 학습시킨다. 모방 실패 진단은 격차의 본질이 능력 부족이 아니라 학습 분포 불일치임을 시사한다.
 
 → [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]
+
+### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-12)
+
+소형 모델이 아닌 음성 모달에서 동형의 추론 격차(음성 LLM < 텍스트 LLM)가 존재함을 실증한다. 추론 격차의 원인이 파라미터 규모만이 아니라 입력 모달리티에도 기인할 수 있음을 시사하여 격차 진단의 축을 확장한다.
+
+→ [[sources/2026-09-12-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]

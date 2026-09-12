@@ -54,3 +54,9 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 하네스가 정적 인프라가 아닌 액터별 정책 교체 가능한 플러그형 구조일 수 있음을 보여준다. '어디에 에이전틱 추론을 도입할 것인가'가 하네스 설계의 1급 결정 차원으로 부상함을 시사한다.
 
 → [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]
+
+### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-12)
+
+하네스가 목표·재시도·검증·정지 규칙을 외부에서 '손으로' 명세한다는 현행 패러다임의 구조적 한계를 명시하고, 이 제어 기능의 내부화라는 반대 방향 설계 축을 제안한다. 하네스 엔지니어링의 질문을 '외부 제어를 얼마나 정교화할까'에서 '어떤 제어를 내부에 이양할까'로 전환한다.
+
+→ [[sources/2026-09-12-artificial-id-drive-and-persistent-alignment-in-ag.md|상세 보기]]
