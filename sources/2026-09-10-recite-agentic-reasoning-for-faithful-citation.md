@@ -45,3 +45,9 @@ _LLM 분석으로 생성됨_
 
 - → [[sources/2026-09-09-molecular-déjà-vu-digit-level-retrieval-of-publish]]: 모두 검색·인용이 실제 이해나 근거를 담보하지 않는 문제를 다루며, 분자 특성 값의 축자적 검색 감사와 인용의 주장-지지 검증이라는 두 도메인 발현이다.
 - → [[sources/2026-09-09-necessary-or-sufficient-evaluating-llm-explanation]]: 둘 다 명시된 근거(설명·인용)와 실제 증거의 정합을 의미 유사도 같은 표면 신호 대신 행동적·에이전틱 검증으로 확인해야 한다고 주장한다.
+
+---
+**관련**: [[concepts/safety-source-misattribution.md|safety source misattribution]]
+
+---
+**관련**: [[concepts/attribution-basis-collapse.md|attribution basis collapse]]

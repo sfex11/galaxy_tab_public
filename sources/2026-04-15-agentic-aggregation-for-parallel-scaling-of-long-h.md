@@ -244,3 +244,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/observation-gated-filtering.md|observation gated filtering]]
+
+---
+**관련**: [[concepts/observation-support-gating.md|observation support gating]]
+
+---
+**관련**: [[concepts/rollout-as-audit-evidence.md|rollout as audit evidence]]
+
+---
+**관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]

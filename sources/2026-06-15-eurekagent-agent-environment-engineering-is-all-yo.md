@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/multidimensional-generalization-metric.md|multidimensional generalization metric]]
+
+---
+**관련**: [[concepts/discovery-preservation-gap.md|discovery preservation gap]]

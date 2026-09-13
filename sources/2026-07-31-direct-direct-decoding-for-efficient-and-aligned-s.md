@@ -58,3 +58,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/alignment-base-opacity.md|alignment base opacity]]
+
+---
+**관련**: [[concepts/dual-axis-alignment-dispersion.md|dual axis alignment dispersion]]
+
+---
+**관련**: [[concepts/governance-label-automation.md|governance label automation]]
+
+---
+**관련**: [[concepts/diversity-quality-dual-optimization.md|diversity quality dual optimization]]
+
+---
+**관련**: [[concepts/incentive-compatible-alignment.md|incentive compatible alignment]]
+
+---
+**관련**: [[concepts/ownership-domain-crossing-boundary.md|ownership domain crossing boundary]]

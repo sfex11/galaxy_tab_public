@@ -322,3 +322,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/layer-dropout.md|layer dropout]]
+
+---
+**관련**: [[concepts/interpretability-as-audit-layer.md|interpretability as audit layer]]
+
+---
+**관련**: [[concepts/control-layer-ontological-limit.md|control layer ontological limit]]
+
+---
+**관련**: [[concepts/per-layer-differential-privacy.md|per layer differential privacy]]
+
+---
+**관련**: [[concepts/zero-shot-layer-pruning.md|zero shot layer pruning]]

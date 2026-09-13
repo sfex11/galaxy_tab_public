@@ -312,3 +312,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/triaxial-agent-uncertainty.md|triaxial agent uncertainty]]
+
+---
+**관련**: [[concepts/verified-reasoning-trace.md|verified reasoning trace]]
+
+---
+**관련**: [[concepts/weakly-supervised-dense-video-captioning.md|weakly supervised dense video captioning]]
+
+---
+**관련**: [[concepts/multi-dimensional-translation-validity.md|multi dimensional translation validity]]
+
+---
+**관련**: [[concepts/cleanup-obligation-reasoning.md|cleanup obligation reasoning]]
+
+---
+**관련**: [[concepts/lifecycle-propagation-reasoning.md|lifecycle propagation reasoning]]

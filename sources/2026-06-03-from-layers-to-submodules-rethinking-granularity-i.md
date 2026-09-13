@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-06-04-netkv-network-aware-decode-instance-selection-for-]]: 두 논문 모두 LLM의 효율적인 추론을 위한 자원 최적화를 다루며, 전자는 모델 구조 압축을 통한 연산량 최적화, 후자는 분리형 추론 환경에서의 네트워크 지연 최소화를 다룹니다.
+
+---
+**관련**: [[concepts/replacement-as-recomposition.md|replacement as recomposition]]
+
+---
+**관련**: [[concepts/replacement-non-atomicity.md|replacement non atomicity]]

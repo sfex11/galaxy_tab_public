@@ -67,3 +67,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/black-box-instrument-drift.md|black box instrument drift]]
+
+---
+**관련**: [[concepts/black-box-instrument-drift.md|black box instrument drift]]
+
+---
+**관련**: [[concepts/detector-as-instrument.md|detector as instrument]]
+
+---
+**관련**: [[concepts/environment-grounded-validity.md|environment grounded validity]]
+
+---
+**관련**: [[concepts/value-non-mixing.md|value non mixing]]

@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/citation-verifiability-gap.md|citation verifiability gap]]
+
+---
+**관련**: [[concepts/non-cognitive-oracle.md|non cognitive oracle]]

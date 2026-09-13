@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/proactive-auditability.md|proactive auditability]]
+
+---
+**관련**: [[concepts/prior-informational-dependency-graph.md|prior informational dependency graph]]

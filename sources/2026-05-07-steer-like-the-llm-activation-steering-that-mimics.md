@@ -129,3 +129,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/massive-activation.md|massive activation]]
+
+---
+**관련**: [[concepts/inference-cognition-continuum.md|inference cognition continuum]]

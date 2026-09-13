@@ -85,3 +85,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/fixed-assignment-fragility.md|fixed assignment fragility]]
+
+---
+**관련**: [[concepts/commit-envelope-task-boundary.md|commit envelope task boundary]]
+
+---
+**관련**: [[concepts/codebook-lookup-decoding.md|codebook lookup decoding]]
+
+---
+**관련**: [[concepts/alternative-decision-trajectory.md|alternative decision trajectory]]
+
+---
+**관련**: [[concepts/imagination-relocation-to-training.md|imagination relocation to training]]

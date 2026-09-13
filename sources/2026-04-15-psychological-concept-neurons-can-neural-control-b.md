@@ -159,3 +159,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/price-representation-applicability.md|price representation applicability]]
+
+---
+**관련**: [[concepts/sustained-adversarial-probing.md|sustained adversarial probing]]
+
+---
+**관련**: [[concepts/internal-boundary-penetration.md|internal boundary penetration]]
+
+---
+**관련**: [[concepts/representation-contract.md|representation contract]]

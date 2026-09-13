@@ -75,3 +75,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/attribution-basis-collapse.md|attribution basis collapse]]
+
+---
+**관련**: [[concepts/audit-independence-collapse.md|audit independence collapse]]

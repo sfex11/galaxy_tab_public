@@ -50,3 +50,6 @@ Wiki 관점에서 이 논문의 위치는 명확하다. [[concepts/benchmark-spe
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/readability-importance-divergence.md|readability importance divergence]]

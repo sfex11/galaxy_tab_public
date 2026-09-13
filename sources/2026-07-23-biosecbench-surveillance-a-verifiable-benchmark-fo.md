@@ -101,3 +101,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/prediction-accuracy-bottleneck.md|prediction accuracy bottleneck]]
+
+---
+**관련**: [[concepts/prediction-accuracy-bottleneck.md|prediction accuracy bottleneck]]
+
+---
+**관련**: [[concepts/premise-dual-structure-decomposition.md|premise dual structure decomposition]]
+
+---
+**관련**: [[concepts/competition-grade-inference.md|competition grade inference]]
+
+---
+**관련**: [[concepts/structure-to-value-axis-shift.md|structure to value axis shift]]
+
+---
+**관련**: [[concepts/capacity-guarantee-dual-bottleneck.md|capacity guarantee dual bottleneck]]
+
+---
+**관련**: [[concepts/maneuver-class-extension.md|maneuver class extension]]
+
+---
+**관련**: [[concepts/evaluation-infrastructure-circularity.md|evaluation infrastructure circularity]]
+
+---
+**관련**: [[concepts/misattribution-over-fabrication-shift.md|misattribution over fabrication shift]]
+
+---
+**관련**: [[concepts/execution-handoff-bottleneck.md|execution handoff bottleneck]]

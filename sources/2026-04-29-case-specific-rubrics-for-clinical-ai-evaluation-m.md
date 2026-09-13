@@ -402,3 +402,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/documentation-debt.md|documentation debt]]
+
+---
+**관련**: [[concepts/state-object-attached-ownership.md|state object attached ownership]]
+
+---
+**관련**: [[concepts/cross-episode-reuse-failure.md|cross episode reuse failure]]
+
+---
+**관련**: [[concepts/evaluation-cost-decomposition.md|evaluation cost decomposition]]
+
+---
+**관련**: [[concepts/cross-layer-dependency.md|cross layer dependency]]
+
+---
+**관련**: [[concepts/pre-submission-self-review.md|pre submission self review]]
+
+---
+**관련**: [[concepts/patch-test-error-agreement.md|patch test error agreement]]
+
+---
+**관련**: [[concepts/embodiment-specific-interpreter.md|embodiment specific interpreter]]
+
+---
+**관련**: [[concepts/evaluation-paradigm-feedback-bias.md|evaluation paradigm feedback bias]]

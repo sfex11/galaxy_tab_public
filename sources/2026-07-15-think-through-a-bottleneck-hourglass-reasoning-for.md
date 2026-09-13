@@ -39,3 +39,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interpretive-vs-structural-enforcement.md|interpretive vs structural enforcement]]
+
+---
+**관련**: [[concepts/informationally-porous-isolation.md|informationally porous isolation]]

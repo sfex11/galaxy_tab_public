@@ -47,3 +47,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/local-coherence-global-incoherence.md|local coherence global incoherence]]
+
+---
+**관련**: [[concepts/strategic-bottleneck.md|strategic bottleneck]]
+
+---
+**관련**: [[concepts/routing-path-dependent-bottleneck.md|routing path dependent bottleneck]]
+
+---
+**관련**: [[concepts/parser-cache-conditioning.md|parser cache conditioning]]
+
+---
+**관련**: [[concepts/schema-accumulation-as-composability-bottleneck.md|schema accumulation as composability bottleneck]]

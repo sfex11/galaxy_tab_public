@@ -18,3 +18,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/incentive-induced-sabotage.md|incentive induced sabotage]]
+
+---
+**관련**: [[concepts/memetic-transmission.md|memetic transmission]]

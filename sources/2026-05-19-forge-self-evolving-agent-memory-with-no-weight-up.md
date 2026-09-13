@@ -361,3 +361,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/zero-knowledge-negotiation.md|zero knowledge negotiation]]
+
+---
+**관련**: [[entities/bilevel-self-evolution.md|bilevel self evolution]]
+
+---
+**관련**: [[concepts/fluent-failure-masking.md|fluent failure masking]]
+
+---
+**관련**: [[concepts/procedural-knowledge-explicitation.md|procedural knowledge explicitation]]
+
+---
+**관련**: [[concepts/mass-decision-support.md|mass decision support]]
+
+---
+**관련**: [[concepts/pluggable-decision-policy.md|pluggable decision policy]]
+
+---
+**관련**: [[concepts/discovered-shared-artifact.md|discovered shared artifact]]
+
+---
+**관련**: [[concepts/absence-based-rollback.md|absence based rollback]]
+
+---
+**관련**: [[concepts/failure-visibility-spectrum.md|failure visibility spectrum]]

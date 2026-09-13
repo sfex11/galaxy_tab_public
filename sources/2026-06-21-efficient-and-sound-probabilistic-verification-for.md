@@ -196,3 +196,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/consequential-state-retention.md|consequential state retention]]
+
+---
+**관련**: [[concepts/claim-support-verification.md|claim support verification]]
+
+---
+**관련**: [[concepts/free-security-observability.md|free security observability]]
+
+---
+**관련**: [[concepts/transition-lookahead.md|transition lookahead]]
+
+---
+**관련**: [[concepts/safety-critical-label-semantics.md|safety critical label semantics]]
+
+---
+**관련**: [[concepts/transition-event-discovery.md|transition event discovery]]
+
+---
+**관련**: [[concepts/decision-time-critical-path.md|decision time critical path]]
+
+---
+**관련**: [[concepts/behavioural-explanation-verification.md|behavioural explanation verification]]
+
+---
+**관련**: [[concepts/scoring-sufficient-state-projection.md|scoring sufficient state projection]]
+
+---
+**관련**: [[concepts/role-attributed-state-ownership.md|role attributed state ownership]]
+
+---
+**관련**: [[concepts/consequential-state-retention.md|consequential state retention]]

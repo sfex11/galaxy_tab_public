@@ -40,3 +40,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/digital-world-access.md|digital world access]]
+
+---
+**관련**: [[entities/fused-dequantize-matvec-kernel.md|fused dequantize matvec kernel]]

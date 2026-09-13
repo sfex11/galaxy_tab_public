@@ -43,3 +43,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/retrospective-thinking.md|retrospective thinking]]
+
+---
+**관련**: [[concepts/cumulative-semantic-opacity.md|cumulative semantic opacity]]
+
+---
+**관련**: [[concepts/retrospective-thinking.md|retrospective thinking]]
+
+---
+**관련**: [[concepts/taint-semantic-flattening.md|taint semantic flattening]]

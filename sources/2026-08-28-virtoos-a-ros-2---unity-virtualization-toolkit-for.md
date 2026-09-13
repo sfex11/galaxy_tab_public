@@ -109,3 +109,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/environment-adaptation-autonomy.md|environment adaptation autonomy]]
+
+---
+**관련**: [[concepts/design-deployment-safety-dissolution.md|design deployment safety dissolution]]
+
+---
+**관련**: [[concepts/infrastructure-sensor-duality.md|infrastructure sensor duality]]
+
+---
+**관련**: [[concepts/environment-as-shared-coordinate-frame.md|environment as shared coordinate frame]]
+
+---
+**관련**: [[concepts/sensor-as-attack-surface.md|sensor as attack surface]]
+
+---
+**관련**: [[concepts/environment-adaptation-autonomy.md|environment adaptation autonomy]]
+
+---
+**관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]

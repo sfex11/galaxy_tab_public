@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/cot-as-translated-report.md|cot as translated report]]
+
+---
+**관련**: [[concepts/opportunistic-consensus.md|opportunistic consensus]]

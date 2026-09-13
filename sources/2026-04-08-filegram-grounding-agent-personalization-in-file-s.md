@@ -149,3 +149,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/synthetic-grounding-gap.md|synthetic grounding gap]]
+
+---
+**관련**: [[concepts/deterministic-grounding.md|deterministic grounding]]
+
+---
+**관련**: [[concepts/command-conditioned-behavior-cloning.md|command conditioned behavior cloning]]
+
+---
+**관련**: [[concepts/interpretability-grounding-privilege.md|interpretability grounding privilege]]
+
+---
+**관련**: [[concepts/behavioral-control-internalization.md|behavioral control internalization]]
+
+---
+**관련**: [[concepts/behavioral-transition-internalization.md|behavioral transition internalization]]
+
+---
+**관련**: [[concepts/test-encoded-behavioral-target.md|test encoded behavioral target]]

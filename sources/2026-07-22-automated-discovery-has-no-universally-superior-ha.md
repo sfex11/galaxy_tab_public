@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/discovery-preservation-gap.md|discovery preservation gap]]
+
+---
+**관련**: [[concepts/stochastic-depth.md|stochastic depth]]
+
+---
+**관련**: [[concepts/triggerless-single-pass-contamination.md|triggerless single pass contamination]]

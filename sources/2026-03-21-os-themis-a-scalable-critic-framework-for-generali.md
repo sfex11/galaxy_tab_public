@@ -102,3 +102,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/reward-dimension-encoding-gap.md|reward dimension encoding gap]]
+
+---
+**관련**: [[entities/trajectory-opacity.md|trajectory opacity]]

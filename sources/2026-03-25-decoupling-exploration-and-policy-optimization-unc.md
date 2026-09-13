@@ -57,3 +57,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/necessity-sufficiency-decoupling.md|necessity sufficiency decoupling]]
+
+---
+**관련**: [[concepts/necessity-sufficiency-decoupling.md|necessity sufficiency decoupling]]

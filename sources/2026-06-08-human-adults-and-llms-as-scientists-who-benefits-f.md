@@ -82,3 +82,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/observation-fidelity-paradox.md|observation fidelity paradox]]
+
+---
+**관련**: [[concepts/runtime-paradigm-switching.md|runtime paradigm switching]]

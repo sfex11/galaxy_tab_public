@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/utility-ontological-mislocation.md|utility ontological mislocation]]
+
+---
+**관련**: [[concepts/speech-data-infrastructure.md|speech data infrastructure]]

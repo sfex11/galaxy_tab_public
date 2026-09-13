@@ -103,3 +103,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/credit-assignment-granularity.md|credit assignment granularity]]
+
+---
+**관련**: [[concepts/verifiability-role-decomposition.md|verifiability role decomposition]]
+
+---
+**관련**: [[concepts/composition-time-task-contract.md|composition time task contract]]

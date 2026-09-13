@@ -58,3 +58,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]
+
+---
+**관련**: [[entities/truncated-noisy-best-response.md|truncated noisy best response]]
+
+---
+**관련**: [[concepts/provenance-complete-observation.md|provenance complete observation]]
+
+---
+**관련**: [[concepts/agentic-drive.md|agentic drive]]
+
+---
+**관련**: [[concepts/same-request-same-reading-assumption.md|same request same reading assumption]]
+
+---
+**관련**: [[concepts/decode-phase-gemv-serving-cost.md|decode phase gemv serving cost]]

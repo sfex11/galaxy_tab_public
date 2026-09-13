@@ -65,3 +65,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/interval-pomdp.md|interval pomdp]]
+
+---
+**관련**: [[concepts/future-query-agnostic-compression.md|future query agnostic compression]]

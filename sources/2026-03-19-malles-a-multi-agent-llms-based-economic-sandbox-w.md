@@ -467,3 +467,21 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/alignment-scope-erosion.md|alignment scope erosion]]
+
+---
+**관련**: [[concepts/audit-oracle-self-reference.md|audit oracle self reference]]
+
+---
+**관련**: [[concepts/diagnostic-agent-task-class.md|diagnostic agent task class]]
+
+---
+**관련**: [[concepts/multi-step-tool-calling.md|multi step tool calling]]
+
+---
+**관련**: [[concepts/alignment-dual-attribution.md|alignment dual attribution]]
+
+---
+**관련**: [[concepts/alignment-verifiability-asymmetry.md|alignment verifiability asymmetry]]
+
+---
+**관련**: [[concepts/persistent-alignment.md|persistent alignment]]

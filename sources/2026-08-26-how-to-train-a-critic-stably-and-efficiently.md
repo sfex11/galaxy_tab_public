@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/price-of-anarchy-bound.md|price of anarchy bound]]
+
+---
+**관련**: [[concepts/equilibrium-instability-exploitation.md|equilibrium instability exploitation]]

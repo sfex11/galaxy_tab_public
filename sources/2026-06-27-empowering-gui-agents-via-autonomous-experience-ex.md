@@ -46,3 +46,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/privacy-coordination-tension.md|privacy coordination tension]]
+
+---
+**관련**: [[concepts/experience-infrastructuralization.md|experience infrastructuralization]]
+
+---
+**관련**: [[concepts/power-of-two-quantization.md|power of two quantization]]

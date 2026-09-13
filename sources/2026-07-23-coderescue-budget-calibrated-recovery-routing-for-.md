@@ -81,3 +81,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/strategy-routing.md|strategy routing]]
+
+---
+**관련**: [[entities/improvement-execution-autonomy.md|improvement execution autonomy]]
+
+---
+**관련**: [[concepts/execution-grounded-synthesis.md|execution grounded synthesis]]
+
+---
+**관련**: [[concepts/component-aware-clipping.md|component aware clipping]]
+
+---
+**관련**: [[concepts/persona-execution-separation.md|persona execution separation]]
+
+---
+**관련**: [[concepts/visual-need-routing.md|visual need routing]]
+
+---
+**관련**: [[concepts/persona-execution-plan-dichotomy.md|persona execution plan dichotomy]]
+
+---
+**관련**: [[concepts/risk-aware-forgetting.md|risk aware forgetting]]
+
+---
+**관련**: [[concepts/materialization-failure.md|materialization failure]]

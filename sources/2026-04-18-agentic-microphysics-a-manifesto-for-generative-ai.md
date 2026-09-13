@@ -142,3 +142,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/collective-vulnerability-propagation.md|collective vulnerability propagation]]
+
+---
+**관련**: [[concepts/ephemeral-individual-durable-collective.md|ephemeral individual durable collective]]

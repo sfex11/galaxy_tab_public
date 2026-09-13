@@ -51,3 +51,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/headroom-closed-index.md|headroom closed index]]
+
+---
+**관련**: [[concepts/temporal-alignment-erosion.md|temporal alignment erosion]]

@@ -127,3 +127,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/field-robotics.md|field robotics]]
+
+---
+**관련**: [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]

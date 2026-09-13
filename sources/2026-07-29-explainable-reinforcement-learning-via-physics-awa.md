@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pre-compiled-policy-tree.md|pre compiled policy tree]]
+
+---
+**관련**: [[concepts/open-experimental-platform.md|open experimental platform]]

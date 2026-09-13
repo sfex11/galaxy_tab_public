@@ -64,3 +64,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/adaptive-forgetting-as-function.md|adaptive forgetting as function]]
+
+---
+**관련**: [[concepts/cross-episode-closed-loop.md|cross episode closed loop]]
+
+---
+**관련**: [[concepts/embedding-version-mixing.md|embedding version mixing]]
+
+---
+**관련**: [[concepts/negative-downstream-utility.md|negative downstream utility]]

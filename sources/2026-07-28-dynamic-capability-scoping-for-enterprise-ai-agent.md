@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/capability-gap-self-diagnosis.md|capability gap self diagnosis]]
+
+---
+**관련**: [[concepts/mechanism-bounded-compliance-scope.md|mechanism bounded compliance scope]]
+
+---
+**관련**: [[concepts/transient-event-miss-failure.md|transient event miss failure]]

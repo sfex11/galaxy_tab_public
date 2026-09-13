@@ -115,3 +115,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/episodic-persistent-state-gap.md|episodic persistent state gap]]
+
+---
+**관련**: [[concepts/first-mistake-anchoring.md|first mistake anchoring]]
+
+---
+**관련**: [[concepts/ai-native-software-lifecycle.md|ai native software lifecycle]]
+
+---
+**관련**: [[concepts/action-level-speculation.md|action level speculation]]
+
+---
+**관련**: [[concepts/device-heterogeneity-coordination.md|device heterogeneity coordination]]
+
+---
+**관련**: [[concepts/halu-eval-benchmark-evaluation.md|halu eval benchmark evaluation]]
+
+---
+**관련**: [[concepts/saescientist-bench.md|saescientist bench]]
+
+---
+**관련**: [[concepts/action-coordination-identity.md|action coordination identity]]
+
+---
+**관련**: [[concepts/benchmark-contamination-audit.md|benchmark contamination audit]]

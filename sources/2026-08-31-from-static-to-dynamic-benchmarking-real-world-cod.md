@@ -46,3 +46,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interaction-tax.md|interaction tax]]
+
+---
+**관련**: [[concepts/single-output-opacity.md|single output opacity]]
+
+---
+**관련**: [[concepts/post-hoc-decision-reconstruction.md|post hoc decision reconstruction]]
+
+---
+**관련**: [[concepts/layered-decision-auditability.md|layered decision auditability]]

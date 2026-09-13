@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/encoder-decoder-norm-asymmetry.md|encoder decoder norm asymmetry]]
+
+---
+**관련**: [[concepts/encoder-decoder-norm-asymmetry.md|encoder decoder norm asymmetry]]

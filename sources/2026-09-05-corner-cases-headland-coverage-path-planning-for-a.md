@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/reversing-turn-coverage.md|reversing turn coverage]]
+
+---
+**관련**: [[entities/corner-case-completeness.md|corner case completeness]]
+
+---
+**관련**: [[concepts/minimal-overlap-surround-view.md|minimal overlap surround view]]

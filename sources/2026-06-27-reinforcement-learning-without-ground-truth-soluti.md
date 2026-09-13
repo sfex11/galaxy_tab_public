@@ -103,3 +103,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/distributed-optimization.md|distributed optimization]]
+
+---
+**관련**: [[entities/zero-sum-optimization-trap.md|zero sum optimization trap]]
+
+---
+**관련**: [[concepts/supervision-epistemic-regrounding.md|supervision epistemic regrounding]]

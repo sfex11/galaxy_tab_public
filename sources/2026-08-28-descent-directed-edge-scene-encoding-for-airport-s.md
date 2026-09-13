@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/technology-anxiety.md|technology anxiety]]
+
+---
+**관련**: [[concepts/technology-anxiety.md|technology anxiety]]

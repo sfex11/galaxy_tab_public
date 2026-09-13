@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environmental-deafness.md|environmental deafness]]
+
+---
+**관련**: [[concepts/regeneration-over-maintenance.md|regeneration over maintenance]]

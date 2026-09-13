@@ -379,3 +379,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/visual-textual-duality.md|visual textual duality]]
+
+---
+**관련**: [[concepts/prediction-retrieval-ambiguity.md|prediction retrieval ambiguity]]
+
+---
+**관련**: [[concepts/digit-level-verbatim-retrieval.md|digit level verbatim retrieval]]
+
+---
+**관련**: [[concepts/visual-textual-duality.md|visual textual duality]]

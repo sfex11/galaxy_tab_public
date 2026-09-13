@@ -51,3 +51,12 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere]]: 비디오 LLM 효율화 서베이가 토큰 프루닝·적응적 추론을 핵심 메커니즘으로 제시하는 가운데, 본 논문은 이를 샘플 적응적 전략 라우팅이라는 메타 계층으로 구체화한 사례다.
+
+---
+**관련**: [[concepts/adaptive-disagreement-pressure.md|adaptive disagreement pressure]]
+
+---
+**관련**: [[concepts/dual-vision-semantic-gap.md|dual vision semantic gap]]
+
+---
+**관련**: [[concepts/path-consistent-online-routing.md|path consistent online routing]]

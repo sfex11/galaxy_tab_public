@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/autonomy-spectrum.md|autonomy spectrum]]
+
+---
+**관련**: [[concepts/low-rank-adaptation-subspace.md|low rank adaptation subspace]]

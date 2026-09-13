@@ -100,3 +100,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/runtime-paradigm-switching.md|runtime paradigm switching]]
+
+---
+**관련**: [[entities/target-tracking.md|target tracking]]
+
+---
+**관련**: [[concepts/parametric-level-forgetting.md|parametric level forgetting]]
+
+---
+**관련**: [[concepts/functional-state-dichotomy.md|functional state dichotomy]]
+
+---
+**관련**: [[concepts/verification-target-structural-migration.md|verification target structural migration]]
+
+---
+**관련**: [[concepts/belief-state-responsive-adaptation.md|belief state responsive adaptation]]

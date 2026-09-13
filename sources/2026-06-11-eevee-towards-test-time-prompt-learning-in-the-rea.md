@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/domain-contingent-boundary-status.md|domain contingent boundary status]]
+
+---
+**관련**: [[concepts/enforcement-domain-mismatch.md|enforcement domain mismatch]]

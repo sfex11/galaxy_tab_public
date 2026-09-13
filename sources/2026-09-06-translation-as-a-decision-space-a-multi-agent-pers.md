@@ -60,3 +60,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/risk-translation-loss-as-safety.md|risk translation loss as safety]]
+
+---
+**관련**: [[concepts/unrealized-branch-diversity-source.md|unrealized branch diversity source]]

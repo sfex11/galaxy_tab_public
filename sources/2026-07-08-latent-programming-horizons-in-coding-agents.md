@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/regression-tax.md|regression tax]]
+
+---
+**관련**: [[entities/regression-tax.md|regression tax]]
+
+---
+**관련**: [[concepts/regression-criterion-self-structuring.md|regression criterion self structuring]]

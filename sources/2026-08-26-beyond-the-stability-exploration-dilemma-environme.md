@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/verifier-mediated-goal-delegation.md|verifier mediated goal delegation]]
+
+---
+**관련**: [[concepts/environmental-forgetting-absence.md|environmental forgetting absence]]

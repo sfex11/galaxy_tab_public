@@ -89,3 +89,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/algebraic-taint-confinement.md|algebraic taint confinement]]
+
+---
+**관련**: [[concepts/uncertainty-underestimation.md|uncertainty underestimation]]
+
+---
+**관련**: [[concepts/mc-dropout-uncertainty.md|mc dropout uncertainty]]

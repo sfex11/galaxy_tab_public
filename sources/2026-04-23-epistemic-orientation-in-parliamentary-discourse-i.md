@@ -84,3 +84,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/snapshot-semantic-epistemic-gap.md|snapshot semantic epistemic gap]]
+
+---
+**관련**: [[concepts/sentence-discourse-granularity-gap.md|sentence discourse granularity gap]]
+
+---
+**관련**: [[concepts/open-ended-epistemic-measurability-gap.md|open ended epistemic measurability gap]]

@@ -176,3 +176,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/coverage-quality-triple-metric.md|coverage quality triple metric]]
+
+---
+**관련**: [[concepts/average-metric-concealment.md|average metric concealment]]

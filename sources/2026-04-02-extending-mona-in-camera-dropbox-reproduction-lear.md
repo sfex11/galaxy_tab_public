@@ -98,3 +98,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/substrate-design.md|substrate design]]
+
+---
+**관련**: [[concepts/learned-safety-revocability.md|learned safety revocability]]

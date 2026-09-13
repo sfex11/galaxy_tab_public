@@ -289,3 +289,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]
+
+---
+**관련**: [[concepts/semantic-utility-divergence.md|semantic utility divergence]]
+
+---
+**관련**: [[concepts/early-outcome-prediction.md|early outcome prediction]]

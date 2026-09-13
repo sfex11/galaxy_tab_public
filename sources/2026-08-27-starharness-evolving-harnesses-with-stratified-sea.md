@@ -104,3 +104,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/harness-mutability.md|harness mutability]]
+
+---
+**관련**: [[concepts/distributed-safety-failure-surface.md|distributed safety failure surface]]
+
+---
+**관련**: [[concepts/net-skill-value.md|net skill value]]
+
+---
+**관련**: [[concepts/pre-mechanism-principal-selection.md|pre mechanism principal selection]]
+
+---
+**관련**: [[concepts/vague-goal-self-evolution.md|vague goal self evolution]]
+
+---
+**관련**: [[concepts/embodied-harness.md|embodied harness]]
+
+---
+**관련**: [[concepts/substrate-level-self-evolution.md|substrate level self evolution]]
+
+---
+**관련**: [[concepts/machine-behavior.md|machine behavior]]
+
+---
+**관련**: [[concepts/meta-evolution-layer.md|meta evolution layer]]
+
+---
+**관련**: [[concepts/evolution-fragmentation.md|evolution fragmentation]]
+
+---
+**관련**: [[concepts/idea-to-specification-interface.md|idea to specification interface]]
+
+---
+**관련**: [[concepts/prompt-governance-translation-gap.md|prompt governance translation gap]]
+
+---
+**관련**: [[concepts/substrate-as-interface.md|substrate as interface]]

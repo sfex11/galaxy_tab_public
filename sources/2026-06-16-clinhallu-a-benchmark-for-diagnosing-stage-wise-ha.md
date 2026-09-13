@@ -55,3 +55,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/correlated-error-summation.md|correlated error summation]]
+
+---
+**관련**: [[concepts/diagnosis-remedy-pairing.md|diagnosis remedy pairing]]
+
+---
+**관련**: [[concepts/capability-gap-self-diagnosis.md|capability gap self diagnosis]]
