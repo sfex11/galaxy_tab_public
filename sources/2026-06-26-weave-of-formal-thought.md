@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tokenization.md|tokenization]]
+
+---
+**관련**: [[entities/tokenization.md|tokenization]]

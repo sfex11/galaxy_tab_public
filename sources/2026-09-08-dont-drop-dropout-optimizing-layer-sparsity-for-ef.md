@@ -17,11 +17,11 @@
 
 ### 기존 Wiki 내 위치
 
-[[model-compression]] 축에서 새로운 위치를 점유한다. 기존 압축 연구가 post-training(양자화, 증류, 프루닝) 중심으로 전개되어 왔다면, 본 논문은 '사전학습 시점에 프루닝 가능한 모델을 만들어내는' 경로를 연다. Layer dropout은 훈련 기법이지만 그 실질 가치는 추론 시점에 실현된다 — 재훈련 없이 계층을 제거하는 elastic depth 추론이라는 [[model-pruning]]의 새로운 전제다.
+[[concepts/model-compression.md|model compression]] 축에서 새로운 위치를 점유한다. 기존 압축 연구가 post-training(양자화, 증류, 프루닝) 중심으로 전개되어 왔다면, 본 논문은 '사전학습 시점에 프루닝 가능한 모델을 만들어내는' 경로를 연다. Layer dropout은 훈련 기법이지만 그 실질 가치는 추론 시점에 실현된다 — 재훈련 없이 계층을 제거하는 elastic depth 추론이라는 [[concepts/model-pruning.md|model pruning]]의 새로운 전제다.
 
-[[adaptive-inference]] 관점에서도 새로운 적응 축이 추가된다. SpecKV의 압축률 반응과 CADENCE의 컨텍스트 반응은 모두 고정 아키텍처 내부에서 작동했으나, 계층 수준 탄력성은 아키텍처 깊이 선택 자체를 가능하게 한다.
+[[concepts/adaptive-inference.md|adaptive inference]] 관점에서도 새로운 적응 축이 추가된다. SpecKV의 압축률 반응과 CADENCE의 컨텍스트 반응은 모두 고정 아키텍처 내부에서 작동했으나, 계층 수준 탄력성은 아키텍처 깊이 선택 자체를 가능하게 한다.
 
-[[knowledge-distillation]]과의 대조도 중요하다. TIDE류 증류는 소형 모델로의 전이에 재훈련을 요구하지만, layer dropout은 '재훈련 없이, 하나의 모델로 다중 깊이'를 제공한다. 이는 [[post-training]] 논의와 공명한다 — 일부 능력(탄력성)은 사후 추가가 아니라 사전학습에 내장되어야 한다는 교훈이다.
+[[concepts/knowledge-distillation.md|knowledge distillation]]과의 대조도 중요하다. TIDE류 증류는 소형 모델로의 전이에 재훈련을 요구하지만, layer dropout은 '재훈련 없이, 하나의 모델로 다중 깊이'를 제공한다. 이는 [[concepts/post-training.md|post training]] 논의와 공명한다 — 일부 능력(탄력성)은 사후 추가가 아니라 사전학습에 내장되어야 한다는 교훈이다.
 
 ### 핵심
 

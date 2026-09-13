@@ -19,9 +19,9 @@ LLM이 분자 속성 벤치마크에서 높은 정확도를 보여도, 그것이
 
 ## Wiki 연결
 
-[[fact-memorization]]에 문자열 수준을 넘어 자릿수 수준이라는 최대 엄격 기준의 실증을 제공한다. [[redirectqa]]와 [[entity-surface-form]] 계열 연구가 표면 형식을 다양화해 사실 기억과 접근성을 분리하려 했다면, 본 논문은 그 분리가 왜 필요한가에 대한 극단적 정당화 — 출판 값의 자릿수 재생 — 를 제시한다.
+[[concepts/fact-memorization.md|fact memorization]]에 문자열 수준을 넘어 자릿수 수준이라는 최대 엄격 기준의 실증을 제공한다. [[entities/redirectqa.md|redirectqa]]와 [[concepts/entity-surface-form.md|entity surface form]] 계열 연구가 표면 형식을 다양화해 사실 기억과 접근성을 분리하려 했다면, 본 논문은 그 분리가 왜 필요한가에 대한 극단적 정당화 — 출판 값의 자릿수 재생 — 를 제시한다.
 
-[[benchmark-specification-gap]] 관점에서 분자 벤치마크는 예측 능력과 검색 능력 중 무엇을 측정하는지 명세하지 않았으며, 정확도라는 [[meaning-insensitive-metric]]이 두 능력을 단일 점수로 병합하는 구조가 문제의 본질이다. [[data-contamination-resistance]]와 [[training-phase-knowledge-contamination]] 논의에 오염의 셀 수준 이질 분포라는 새로운 입자도를 부여한다.
+[[concepts/benchmark-specification-gap.md|benchmark specification gap]] 관점에서 분자 벤치마크는 예측 능력과 검색 능력 중 무엇을 측정하는지 명세하지 않았으며, 정확도라는 [[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]이 두 능력을 단일 점수로 병합하는 구조가 문제의 본질이다. [[concepts/data-contamination-resistance.md|data contamination resistance]]와 [[concepts/training-phase-knowledge-contamination.md|training phase knowledge contamination]] 논의에 오염의 셀 수준 이질 분포라는 새로운 입자도를 부여한다.
 
 ## 새 개념
 

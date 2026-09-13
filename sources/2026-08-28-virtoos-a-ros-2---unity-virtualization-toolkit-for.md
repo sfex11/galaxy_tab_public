@@ -94,3 +94,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-mutation-operator.md|environment mutation operator]]
+
+---
+**관련**: [[entities/environment-mutation-operator.md|environment mutation operator]]
+
+---
+**관련**: [[entities/task-reality-divergence.md|task reality divergence]]
+
+---
+**관련**: [[entities/infrastructure-sensor-duality.md|infrastructure sensor duality]]
+
+---
+**관련**: [[entities/sensor-as-attack-surface.md|sensor as attack surface]]
+
+---
+**관련**: [[entities/environment-adaptation-autonomy.md|environment adaptation autonomy]]

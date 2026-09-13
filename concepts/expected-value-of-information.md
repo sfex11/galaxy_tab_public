@@ -14,5 +14,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
-
-→ [[sources/2026-09-13-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

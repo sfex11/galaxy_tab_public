@@ -13,9 +13,9 @@
 
 ReCite는 학술 인용 자동화의 문제 지형이 '존재하지 않는 논문 조작(fabrication)'에서 '실존 논문의 잘못된 귀속(misattribution)'으로 이동했음을 진단하고, 의미 유사도 기반 선택을 에이전틱 추론 기반 검증으로 대체하는 프레임워크를 제시한다.
 
-본 논문은 [[citation-claim-decoupling]]의 생성 측 해법이다. 'Cited but Not Verified'([[citation-verifiability-gap]], [[source-attribution-evaluation]])가 평가 측에서 인용-주장 탈동기화를 진단했다면, ReCite는 검증을 생성 파이프라인 내부로 이동시켜 사후 평가와 사전 예방의 양축을 완성한다. 의미 유사도는 화제 근접성만 측정할 뿐 주장 지지를 보장하지 못한다는 점에서 [[single-surface-signal-insufficiency]]의 인용 도메인 발현이며, 이를 [[reasoning-conditioned-retrieval]]로 극복하는 구체적 구현이기도 하다.
+본 논문은 [[concepts/citation-claim-decoupling.md|citation claim decoupling]]의 생성 측 해법이다. 'Cited but Not Verified'([[concepts/citation-verifiability-gap.md|citation verifiability gap]], [[entities/source-attribution-evaluation.md|source attribution evaluation]])가 평가 측에서 인용-주장 탈동기화를 진단했다면, ReCite는 검증을 생성 파이프라인 내부로 이동시켜 사후 평가와 사전 예방의 양축을 완성한다. 의미 유사도는 화제 근접성만 측정할 뿐 주장 지지를 보장하지 못한다는 점에서 [[concepts/single-surface-signal-insufficiency.md|single surface signal insufficiency]]의 인용 도메인 발현이며, 이를 [[concepts/reasoning-conditioned-retrieval.md|reasoning conditioned retrieval]]로 극복하는 구체적 구현이기도 하다.
 
-또한 '진짜 논문을 인용했지만 근거가 아닌' 실패가 행동 제어·능력 평가로 포착 불가능한 산출물 수준 결함임을 보여 [[output-epistemic-reliability]]를 강화하고, [[autoresearch]] 파이프라인의 인용 품질 병목을 직접 공략하며, RAG([[retrieval-augmented-generation]])가 조작은 해소했으나 귀속 정확성은 남긴다는 한계 정밀화를 제공한다.
+또한 '진짜 논문을 인용했지만 근거가 아닌' 실패가 행동 제어·능력 평가로 포착 불가능한 산출물 수준 결함임을 보여 [[concepts/output-epistemic-reliability.md|output epistemic reliability]]를 강화하고, [[concepts/autoresearch.md|autoresearch]] 파이프라인의 인용 품질 병목을 직접 공략하며, RAG([[concepts/retrieval-augmented-generation.md|retrieval augmented generation]])가 조작은 해소했으나 귀속 정확성은 남긴다는 한계 정밀화를 제공한다.
 
 ## 🔗 관련 논문
 

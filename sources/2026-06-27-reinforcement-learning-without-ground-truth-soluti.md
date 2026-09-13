@@ -94,3 +94,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/optimization-standardization-complementarity.md|optimization standardization complementarity]]
+
+---
+**관련**: [[entities/hci-aai-optimization-divergence.md|hci aai optimization divergence]]
+
+---
+**관련**: [[entities/score-narrative-conflation.md|score narrative conflation]]
+
+---
+**관련**: [[entities/distributed-optimization.md|distributed optimization]]

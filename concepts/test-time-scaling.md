@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Discriminative World Models for Web Agents (2026-09-04)
 
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
-
-→ [[sources/2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

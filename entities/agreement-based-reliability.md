@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-13)
 
 다중 독립 신호(분류·불확실성·보정) 간 일치가 단일 판단자의 절대 신뢰도보다 우월하다는 원리를 환각 감지 도메인에서 확인시킨다. 이종 신호원 간 합의가 판단 오류를 상쇄하는 구조를 실증적 근거로 뒷받침한다.
-
-→ [[sources/2026-09-13-domain-specific-hallucination-detection-in-large-l.md|상세 보기]]

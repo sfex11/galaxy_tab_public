@@ -17,17 +17,17 @@ Long-horizon LLM 에이전트의 외부 메모리에서 downstream utility가 �
 
 ### 기존 Wiki와의 관계
 
-**1. [[value-differential-memory-management]]의 게임이론적 구현**: 기억 가치를 차등 평가하라는 추상적 패러다임에 구체적 메커니즘을 제공한다. 가치 평가를 협력적 게임이론 귀속으로 형식화하여, 기억의 가치가 태스크 조건부이며 음수일 수 있음을 조작적으로 정의한다.
+**1. [[concepts/value-differential-memory-management.md|value differential memory management]]의 게임이론적 구현**: 기억 가치를 차등 평가하라는 추상적 패러다임에 구체적 메커니즘을 제공한다. 가치 평가를 협력적 게임이론 귀속으로 형식화하여, 기억의 가치가 태스크 조건부이며 음수일 수 있음을 조작적으로 정의한다.
 
-**2. [[deletion-non-monotonicity]]의 체계적 해법**: '삭제할수록 점수가 오르는 역설'의 원인을 semantic-compatible하지만 utility-음수인 기억의 컨텍스트 오염으로 진단한다. 귀속 기반 선별은 역선택을 검증 가능한 최적화로 전환한다.
+**2. [[concepts/deletion-non-monotonicity.md|deletion non monotonicity]]의 체계적 해법**: '삭제할수록 점수가 오르는 역설'의 원인을 semantic-compatible하지만 utility-음수인 기억의 컨텍스트 오염으로 진단한다. 귀속 기반 선별은 역선택을 검증 가능한 최적화로 전환한다.
 
-**3. [[utility-ontological-mislocation]]의 실증**: 검색이 최적화하는 semantic compatibility와 downstream utility의 분리를 보여, 유용성이 기억-질의 쌍의 정적 속성이 아닌 추론 체인 전체에 분산된 인과적 속성임을 뒷받침한다.
+**3. [[concepts/utility-ontological-mislocation.md|utility ontological mislocation]]의 실증**: 검색이 최적화하는 semantic compatibility와 downstream utility의 분리를 보여, 유용성이 기억-질의 쌍의 정적 속성이 아닌 추론 체인 전체에 분산된 인과적 속성임을 뒷받침한다.
 
-**4. [[adaptive-forgetting-as-function]]·[[forgetting-as-agent-decision]]의 통합**: 기능적 망각에 '누가·무엇을·얼마나 위험하게'라는 귀속 계층과 위험 제약을 추가한다.
+**4. [[concepts/adaptive-forgetting-as-function.md|adaptive forgetting as function]]·[[concepts/forgetting-as-agent-decision.md|forgetting as agent decision]]의 통합**: 기능적 망각에 '누가·무엇을·얼마나 위험하게'라는 귀속 계층과 위험 제약을 추가한다.
 
-**5. [[credit-assignment-granularity]]의 대상 확장**: 크레딧 할당 대상을 행동·토큰에서 외부 기억 단위로 확장한다.
+**5. [[concepts/credit-assignment-granularity.md|credit assignment granularity]]의 대상 확장**: 크레딧 할당 대상을 행동·토큰에서 외부 기억 단위로 확장한다.
 
-'Cooperative'가 협력적 게임이론을 지칭한다는 점에서 [[cooperative-forgetting]](사회적 딜레마)과 어원이 다르지만, 두 개념 모두 망각을 전략적 선택으로 취급한다는 점에서 수렴한다.
+'Cooperative'가 협력적 게임이론을 지칭한다는 점에서 [[concepts/cooperative-forgetting.md|cooperative forgetting]](사회적 딜레마)과 어원이 다르지만, 두 개념 모두 망각을 전략적 선택으로 취급한다는 점에서 수렴한다.
 
 ## 🔗 관련 논문
 

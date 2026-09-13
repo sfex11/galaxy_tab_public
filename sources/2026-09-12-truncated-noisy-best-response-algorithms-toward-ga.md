@@ -15,9 +15,9 @@
 
 서브모듈러 최대화 목표의 다중 에이전트 조정 문제에서 나시 평형은 항상 최적해의 50% 이내임이 알려져 있으나, 이 최악 경계를 달성하는 평형은 구조적으로 불안정하다. TNBR 알고리즘 계열은 에이전트가 절단(truncation)과 잡음(noise)을 매개변수화한 최적 반응 역학을 유연하게 구성하여, 이 불안정성을 취약점이 아닌 학습 자원으로 전환한다 — 더 좋은 평형으로의 탈출을 유도하면서 최적 대비 하한 보장을 유지한다.
 
-이는 [[equilibrium-conditioned-guarantee]]의 "보장은 평형에서만 성립하며 비평형 역학은 위험"이라는 진단에 대한 구조적 반전이다: 평형이 불안정하기에 역학 설계 자체가 개입 지점이 된다. [[fictitious-play-agentic-orchestration]]의 고정된 최적 반응 반복을 매개변수 설계 공간으로 확장하며, [[strategic-convergence-condition]]에 서브모듈러 목표 구조라는 새 수렴 조건을 추가한다.
+이는 [[concepts/equilibrium-conditioned-guarantee.md|equilibrium conditioned guarantee]]의 "보장은 평형에서만 성립하며 비평형 역학은 위험"이라는 진단에 대한 구조적 반전이다: 평형이 불안정하기에 역학 설계 자체가 개입 지점이 된다. [[concepts/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]의 고정된 최적 반응 반복을 매개변수 설계 공간으로 확장하며, [[concepts/strategic-convergence-condition.md|strategic convergence condition]]에 서브모듈러 목표 구조라는 새 수렴 조건을 추가한다.
 
-[[capability-cooperation-paradox]] 관점에서 이 논문은 조정 결과가 게임 구조만의 함수가 아니라 학습 역학의 함수임을 이론적으로 확립한다. 서브모듈러 구조는 [[task-allocation]]의 표준 수학적 기반이므로, [[multi-robot-coordination]]과 [[multi-agent-reinforcement-learning]] 연구에 안전 보장이 있는 게임 이론적 학습 경로를 제공한다.
+[[concepts/capability-cooperation-paradox.md|capability cooperation paradox]] 관점에서 이 논문은 조정 결과가 게임 구조만의 함수가 아니라 학습 역학의 함수임을 이론적으로 확립한다. 서브모듈러 구조는 [[concepts/task-allocation.md|task allocation]]의 표준 수학적 기반이므로, [[concepts/multi-robot-coordination.md|multi robot coordination]]과 [[concepts/multi-agent-reinforcement-learning.md|multi agent reinforcement learning]] 연구에 안전 보장이 있는 게임 이론적 학습 경로를 제공한다.
 
 ## 🔗 관련 논문
 

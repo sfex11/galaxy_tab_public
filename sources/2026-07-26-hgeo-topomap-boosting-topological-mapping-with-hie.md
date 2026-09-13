@@ -103,3 +103,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-grounded-validity.md|environment grounded validity]]
+
+---
+**관련**: [[entities/explanation-quality-perception.md|explanation quality perception]]
+
+---
+**관련**: [[entities/transition-lookahead-planning.md|transition lookahead planning]]
+
+---
+**관련**: [[entities/perception-cognitive-capacity-mismatch.md|perception cognitive capacity mismatch]]
+
+---
+**관련**: [[entities/access-planning-gap.md|access planning gap]]
+
+---
+**관련**: [[entities/single-output-opacity.md|single output opacity]]
+
+---
+**관련**: [[entities/error-attribution-problem.md|error attribution problem]]

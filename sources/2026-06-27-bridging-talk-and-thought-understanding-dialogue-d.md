@@ -139,3 +139,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/action-coordination-identity.md|action coordination identity]]
+
+---
+**관련**: [[entities/cross-device-workflow.md|cross device workflow]]
+
+---
+**관련**: [[entities/smooth-turn-coverage-limitation.md|smooth turn coverage limitation]]
+
+---
+**관련**: [[entities/termination-guarantee-problem.md|termination guarantee problem]]
+
+---
+**관련**: [[entities/cross-component-budget-collapse.md|cross component budget collapse]]
+
+---
+**관련**: [[entities/cross-session-identity-erosion.md|cross session identity erosion]]
+
+---
+**관련**: [[entities/dynamic-task-composition.md|dynamic task composition]]
+
+---
+**관련**: [[entities/dynamic-criteria-certification-failure.md|dynamic criteria certification failure]]

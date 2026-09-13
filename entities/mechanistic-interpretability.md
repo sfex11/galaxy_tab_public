@@ -31,10 +31,6 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 
 해석가능성의 위상을 개별 기법 축적(MoRFI의 모노토닉 특징, 감정 추론 회로 분석)에서 '자기 개선 시스템의 사후 감시 기둥'으로 재배치한다. 기존 Wiki가 해석가능성을 도구 관점에서 축적했다면, 본 논문은 이를 RSI 안전 아키텍처의 필수 구성요소로 격상한다.
 
-→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]
-
 ### It's Not RoPE that Creates Sinks: The Role of Self-Concentration and V (2026-09-10)
 
 현상 원인의 오귀인(RoPE→마스크 구조)을 개입 실험으로 교정하는 방법론적 모범 사례를 제공하여, 상관 관찰을 넘어 인과 규명으로 이동하는 연구 표준을 보여준다.
-
-→ [[sources/2026-09-10-its-not-rope-that-creates-sinks-the-role-of-self-c.md|상세 보기]]

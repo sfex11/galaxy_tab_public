@@ -17,15 +17,15 @@
 
 ### 기존 Wiki와의 관계
 
-- [[self-improving-agent]]: SkillOS의 스킬 큐레이션, MOSS의 소스 재작성, Design Docs의 재생성이 각각 4축 중 일부만 다룬 부분적 자기 개선임을 명확히 한다. 각 축이 독립적으로 진단 가능하므로 자기 개선 연구의 성숙도 평가 기준이 된다.
-- [[evolutionary-agency-axis]]: 진화 주체성(내생 vs 외생) 질문을 개선 단계별로 세분화한다. 경험 획득·환경 적응 자율성은 [[endogenous-self-evolution]]의 전제 조건이다.
-- [[designer-foresight-boundary]]: 자율성 축의 확장 정도가 설계자 예견 경계의 침식 척도가 된다.
-- [[bilevel-self-evolution]]: 개선 전략 자율성이 능력 층위와 개선 방법 층위의 분리에 해당함을 보여준다.
-- [[substrate-level-self-evolution]]과 [[meta-evolution-layer]]: 메타 개선 단계가 하네스 기반층까지의 진화를 포괄함을 시사한다.
+- [[concepts/self-improving-agent.md|self improving agent]]: SkillOS의 스킬 큐레이션, MOSS의 소스 재작성, Design Docs의 재생성이 각각 4축 중 일부만 다룬 부분적 자기 개선임을 명확히 한다. 각 축이 독립적으로 진단 가능하므로 자기 개선 연구의 성숙도 평가 기준이 된다.
+- [[concepts/evolutionary-agency-axis.md|evolutionary agency axis]]: 진화 주체성(내생 vs 외생) 질문을 개선 단계별로 세분화한다. 경험 획득·환경 적응 자율성은 [[concepts/endogenous-self-evolution.md|endogenous self evolution]]의 전제 조건이다.
+- [[concepts/designer-foresight-boundary.md|designer foresight boundary]]: 자율성 축의 확장 정도가 설계자 예견 경계의 침식 척도가 된다.
+- [[concepts/bilevel-self-evolution.md|bilevel self evolution]]: 개선 전략 자율성이 능력 층위와 개선 방법 층위의 분리에 해당함을 보여준다.
+- [[concepts/substrate-level-self-evolution.md|substrate level self evolution]]과 [[concepts/meta-evolution-layer.md|meta evolution layer]]: 메타 개선 단계가 하네스 기반층까지의 진화를 포괄함을 시사한다.
 
 ### 새 인사이트
 
-RSI의 병목은 능력 자체가 아니라 '개선 과정의 자율성 조합'에 있다. HCI가 기존 모델의 포화 지점을 정량화하므로, 자기 개선 연구는 단일 벤치마크 성능이 아니라 축별 자율성 진단으로 재편되어야 한다. [[environment-capability-co-evolution]]과 [[agent-environment-generation]]이 환경 적응·경험 획득 축의 선구 사례로 재해석된다.
+RSI의 병목은 능력 자체가 아니라 '개선 과정의 자율성 조합'에 있다. HCI가 기존 모델의 포화 지점을 정량화하므로, 자기 개선 연구는 단일 벤치마크 성능이 아니라 축별 자율성 진단으로 재편되어야 한다. [[concepts/environment-capability-co-evolution.md|environment capability co evolution]]과 [[concepts/agent-environment-generation.md|agent environment generation]]이 환경 적응·경험 획득 축의 선구 사례로 재해석된다.
 
 ## 🔗 관련 논문
 

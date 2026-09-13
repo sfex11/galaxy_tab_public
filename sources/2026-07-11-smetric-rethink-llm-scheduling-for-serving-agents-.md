@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/auditability-as-scaling-requirement.md|auditability as scaling requirement]]
+
+---
+**관련**: [[entities/fictitious-play-agentic-orchestration.md|fictitious play agentic orchestration]]

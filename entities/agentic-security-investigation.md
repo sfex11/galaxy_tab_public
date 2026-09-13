@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
 
 보안 조사 에이전트의 두 실패 축(용량 부족, 위상 비일관성)을 명시화하고, 조사 자동화의 설계 원칙으로 '추론 영역의 구조 분리'를 제안한다.
-
-→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

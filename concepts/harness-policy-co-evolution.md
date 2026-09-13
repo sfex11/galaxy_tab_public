@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-04-safeevolve-harness-policy-co-evolution-from-agent-.md|SafeEvolve: Harness-Policy Co-Evolution from Agent Experienc]]
 
 ### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
-
-→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]

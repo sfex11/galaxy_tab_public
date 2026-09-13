@@ -3445,3 +3445,7 @@
 - 2026-09-13-specguard-inference-time-backdoor-detection-for-fr.md
 - 2026-09-13-component-aware-differential-privacy-for-federated.md
 - 2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md
+
+## [2026-09-13 17:06] lint | Wiki 건전성 체크
+- Issues: 3345개
+- Orphans: 1033, Missing: 2312, Contradictions: 0

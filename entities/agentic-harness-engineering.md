@@ -35,28 +35,18 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 
 절차 지식(순서·조건)을 실행 인프라의 1급 객체로 격상시켜, 하네스 엔지니어링의 범위를 '실행 환경 제공'에서 '절차 상태의 명시적 관리와 진화'로 확장한다. 실행 구조가 스스로 진화하므로 하네스가 더 이상 고정 인프라가 아님을 보여준다.
 
-→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]
-
 ### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
 
 하네스의 자동 진화 프레임이 소형 모델 비용 효율화라는 경제적 동기와 결합함을 보여준다. 하네스가 은닉 변수가 아니라 명시적 진화 대상임을 7개 엔터프라이즈 태스크에서 정량 실증한다.
-
-→ [[sources/2026-09-10-co-evolving-harnesses-and-models-on-policy-correct.md|상세 보기]]
 
 ### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
 
 하네스의 역할을 디지털 환경 실행 계층에서 물리 로봇 제어 계층으로 확장한다. embodiment-specific interpreter라는 새로운 하네스 구성요소를 제공하여, 하네스가 도메인(로봇 구현)의 특수성을 흡수하는 책임 지점임을 보여준다.
 
-→ [[sources/2026-09-11-show-harness-just-a-vlm-agent-can-play-robots.md|상세 보기]]
-
 ### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
 
 하네스가 정적 인프라가 아닌 액터별 정책 교체 가능한 플러그형 구조일 수 있음을 보여준다. '어디에 에이전틱 추론을 도입할 것인가'가 하네스 설계의 1급 결정 차원으로 부상함을 시사한다.
 
-→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]
-
 ### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-12)
 
 하네스가 목표·재시도·검증·정지 규칙을 외부에서 '손으로' 명세한다는 현행 패러다임의 구조적 한계를 명시하고, 이 제어 기능의 내부화라는 반대 방향 설계 축을 제안한다. 하네스 엔지니어링의 질문을 '외부 제어를 얼마나 정교화할까'에서 '어떤 제어를 내부에 이양할까'로 전환한다.
-
-→ [[sources/2026-09-12-artificial-id-drive-and-persistent-alignment-in-ag.md|상세 보기]]

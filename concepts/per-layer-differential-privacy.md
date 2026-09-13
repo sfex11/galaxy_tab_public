@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-12-component-aware-differential-privacy-for-federated.md|Component-Aware Differential Privacy for Federated Multiling]]
 
 ### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-13)
-
-→ [[sources/2026-09-13-component-aware-differential-privacy-for-federated.md|상세 보기]]

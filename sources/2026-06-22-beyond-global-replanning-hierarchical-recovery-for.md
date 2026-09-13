@@ -100,3 +100,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/access-planning-gap.md|access planning gap]]
+
+---
+**관련**: [[entities/credit-assignment-granularity.md|credit assignment granularity]]

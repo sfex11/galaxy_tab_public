@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
 
 격리 행동의 위상적 타당성이 구조적 인증의 새로운 대상임을 보여준다 — 행동이 '정확한가'가 아니라 '작동 대상 위상과 일치하는가'를 검증하는 구조적 보장의 실증 사례다.
-
-→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

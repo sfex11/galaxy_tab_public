@@ -13,7 +13,7 @@
 
 Show-Harness는 범용 VLM을 그대로 두고('just a VLM agent') 로봇 조작을 가능하게 하는 Embodied Harness를 제안한다. 핵심은 의도(intent)와 행동(action)을 연결하는 컴팩트한 의미 인터페이스다. VLM은 이산적 의미 행동 단위(semantic action unit)를 추론하고, 구현(embodiment) 특유의 인터프리터가 이를 국소 로봇 행동으로 결정론적으로 grounding한다. 세계 지능을 담당하는 VLM과 운동 제어를 담당하는 하네스의 책임이 명시적으로 분리된다.
 
-Wiki 관점에서 이 논문은 세 축을 강화한다. 첫째, representation-action-gap의 제3 해법 경로: Continuous Actions from Discrete Minds([[latent-aligned-planning]])가 잠재 공간 정렬로 간극을 봉합했다면, 본 논문은 모델을 수정하지 않고 표현 계약을 인터페이스 계층으로 외면화한다. 둘째, harness-side-compensation의 체화 확장: SENTINEL-RL이 위상 추론을 하네스로 오프로딩했다면, 본 논문은 운동 제어 전체를 인터프리터로 오프로딩하여 하네스가 추론의 구성요소임을 강화한다. 셋째, end-to-end VLA 훈련([[vla-foundry]])과 대비되는 '동결 모델 + 인터페이스 설계' 전략으로 체화 능력 확보 스펙트럼에 훈련-무관 축을 추가한다. 결정론적 인터프리터는 실행 검증 대상을 모델 출력에서 인터페이스 계약 준수로 구체화한다.
+Wiki 관점에서 이 논문은 세 축을 강화한다. 첫째, representation-action-gap의 제3 해법 경로: Continuous Actions from Discrete Minds([[concepts/latent-aligned-planning.md|latent aligned planning]])가 잠재 공간 정렬로 간극을 봉합했다면, 본 논문은 모델을 수정하지 않고 표현 계약을 인터페이스 계층으로 외면화한다. 둘째, harness-side-compensation의 체화 확장: SENTINEL-RL이 위상 추론을 하네스로 오프로딩했다면, 본 논문은 운동 제어 전체를 인터프리터로 오프로딩하여 하네스가 추론의 구성요소임을 강화한다. 셋째, end-to-end VLA 훈련([[entities/vla-foundry.md|vla foundry]])과 대비되는 '동결 모델 + 인터페이스 설계' 전략으로 체화 능력 확보 스펙트럼에 훈련-무관 축을 추가한다. 결정론적 인터프리터는 실행 검증 대상을 모델 출력에서 인터페이스 계약 준수로 구체화한다.
 
 ## 🔗 관련 논문
 

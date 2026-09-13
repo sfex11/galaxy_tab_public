@@ -54,3 +54,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/uncertainty-propagation-disconnection.md|uncertainty propagation disconnection]]
+
+---
+**관련**: [[entities/necessity-sufficiency-decoupling.md|necessity sufficiency decoupling]]

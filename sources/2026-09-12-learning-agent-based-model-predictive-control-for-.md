@@ -22,13 +22,13 @@ Agent-based MPC(AMPC)는 복수 에이전트의 협력으로 차량의 전체(ho
 ## Wiki 연결
 
 ### 분산 MPC 논의의 확장
-기존 [[model-predictive-control]] 축(ADMM 기반 분산 MPC, 밀도 구동 최적 제어)은 형식적 보장에 집중했다. LAMPC는 분산 MPC의 실용화 병목이 계산이 아니라 **에이전트 지식 완전성**에 있음을 규명한다.
+기존 [[concepts/model-predictive-control.md|model predictive control]] 축(ADMM 기반 분산 MPC, 밀도 구동 최적 제어)은 형식적 보장에 집중했다. LAMPC는 분산 MPC의 실용화 병목이 계산이 아니라 **에이전트 지식 완전성**에 있음을 규명한다.
 
 ### 이상화 가정 붕괴의 제어 도메인 발현
-'모든 에이전트 기여를 안다'는 전제는 [[pre-existing-data-assumption]]과 동형의 이상화 가정이다. 이상화 전제가 구현에서 붕괴하면 학습이 간극을 흡수한다는 Wiki의 축적 패턴이 제어 도메인에서 재현된다.
+'모든 에이전트 기여를 안다'는 전제는 [[concepts/pre-existing-data-assumption.md|pre existing data assumption]]과 동형의 이상화 가정이다. 이상화 전제가 구현에서 붕괴하면 학습이 간극을 흡수한다는 Wiki의 축적 패턴이 제어 도메인에서 재현된다.
 
 ### 모델+데이터 하이브리드
-해석적 모델의 구조적 보장과 학습의 미지 기여 보상을 결합하는 설계는 [[model-based-rl]] 패러다임과 수렴하며, 순수 모델 기반의 취약성과 순수 데이터 기반의 샘플 비효율을 동시에 완화한다.
+해석적 모델의 구조적 보장과 학습의 미지 기여 보상을 결합하는 설계는 [[concepts/model-based-rl.md|model based rl]] 패러다임과 수렴하며, 순수 모델 기반의 취약성과 순수 데이터 기반의 샘플 비효율을 동시에 완화한다.
 
 ## 핵심 인사이트
 

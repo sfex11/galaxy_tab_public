@@ -21,10 +21,6 @@ _Wiki 축적 중_
 
 목표 추적 상실을 기억 소실이 아닌 절차 지식의 암묵성 문제로 재귀인한다. 목표·순서·조건을 그래프 노드로 외재화하면 컨텍스트 길이에 무관한 드리프트 저항이 가능함을 시사한다.
 
-→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]
-
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 지식 상태 표류의 유발 조건(지속적·적응적 반박)을 명시하며, 표류가 정적 지식 충돌의 산물이 아니라 동적 사회적 압력의 누적 효과임을 보여준다.
-
-→ [[sources/2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur.md|상세 보기]]

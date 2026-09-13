@@ -13,7 +13,7 @@
 
 KOPA-Bench는 데이터 주권 규제로 온프레미스 오픈소스 배포가 강제되는 공공기관을 겨냥해, 한국 공공 개방 API 위에서 다단계 도구 호출을 수행하는 145개 실제 태스크로 구성된 벤치마크를 제시한다. 오픈소스 모델이 이 설정에서 일관되게 열위이며 기존 벤치마크가 이 간극을 측정하지 못한다는 진단에 따라, EDGE(Execution-grounded Dynamic Graph)라는 도구 호출 학습 데이터 합성 레시피를 함께 제안한다.
 
-Wiki 지형에서의 위치: Claw-Eval-Live가 실세계 워크플로우 수요로 벤치마크 신호를 갱신했다면([[refreshable-signal-layer]]), KOPA-Bench는 라이브 정부 API를 표적으로 삼아 같은 원리를 공공 도메인에 구현한다. Tool Attention([[mcp-tax]])이 도구 스키마 오버헤드라는 인프라 병목을 드러냈다면, 본 논문은 병목의 다른 축인 오픈소스 모델의 멀티스텝 호출 능력 부족을 정량화한다. EDGE의 실행 근거 데이터 합성은 [[verifiable-training-data-synthesis]]의 구체적 실현이며, [[agent-environment-generation]]이 환경 생성에서 학습 데이터 합성으로 확장된 사례다. 데이터 주권이라는 규제 요인이 [[on-device-inference]]의 새로운 구동 축이 되고, 오픈소스 모델의 열위는 [[slm-reasoning-gap]]의 도구 호출 도메인 발현으로 읽힌다.
+Wiki 지형에서의 위치: Claw-Eval-Live가 실세계 워크플로우 수요로 벤치마크 신호를 갱신했다면([[concepts/refreshable-signal-layer.md|refreshable signal layer]]), KOPA-Bench는 라이브 정부 API를 표적으로 삼아 같은 원리를 공공 도메인에 구현한다. Tool Attention([[concepts/mcp-tax.md|mcp tax]])이 도구 스키마 오버헤드라는 인프라 병목을 드러냈다면, 본 논문은 병목의 다른 축인 오픈소스 모델의 멀티스텝 호출 능력 부족을 정량화한다. EDGE의 실행 근거 데이터 합성은 [[concepts/verifiable-training-data-synthesis.md|verifiable training data synthesis]]의 구체적 실현이며, [[concepts/agent-environment-generation.md|agent environment generation]]이 환경 생성에서 학습 데이터 합성으로 확장된 사례다. 데이터 주권이라는 규제 요인이 [[concepts/on-device-inference.md|on device inference]]의 새로운 구동 축이 되고, 오픈소스 모델의 열위는 [[concepts/slm-reasoning-gap.md|slm reasoning gap]]의 도구 호출 도메인 발현으로 읽힌다.
 
 ## 🔗 관련 논문
 

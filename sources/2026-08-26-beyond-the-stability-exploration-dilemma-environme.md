@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/permission-policy-algebra.md|permission policy algebra]]
+
+---
+**관련**: [[entities/verifier-mediated-goal-delegation.md|verifier mediated goal delegation]]

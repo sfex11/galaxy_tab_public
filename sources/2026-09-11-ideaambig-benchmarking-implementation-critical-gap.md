@@ -19,10 +19,10 @@
 
 ## 기존 Wiki와의 관계
 
-- [[reproducible-specification-generation]]: Design Docs가 설계 문서를 코드 재생성의 단일 진실원으로 삼았다면, 본 논문은 그 명세가 재생성에 실제로 충분한지 감사하는 품질 축을 제공한다. 명세 중심 패러다임의 필수 보완이다.
-- [[scientific-workflow-agent]]: 연구 질문→구조화된 의도→재현 가능한 명세→실행의 3층 아키텍처에서 중간 '명세' 계층의 품질을 독립적으로 측정하는 평가 인프라다.
-- [[autoresearch]]: 아이디어 생성과 충실한 구현이 구조적으로 분리된 능력임을 시사하며, artifact-bound-optimization의 대상을 논문 산출물에서 구현 명세로 확장할 축을 연다.
-- [[benchmark-specification-gap]]: 벤치마크 명세의 불완전성이 측정 대상을 왜곡하듯 구현 명세의 불완전성이 구현 대상을 왜곡함을 보여 동형 구조를 확장한다.
+- [[concepts/reproducible-specification-generation.md|reproducible specification generation]]: Design Docs가 설계 문서를 코드 재생성의 단일 진실원으로 삼았다면, 본 논문은 그 명세가 재생성에 실제로 충분한지 감사하는 품질 축을 제공한다. 명세 중심 패러다임의 필수 보완이다.
+- [[entities/scientific-workflow-agent.md|scientific workflow agent]]: 연구 질문→구조화된 의도→재현 가능한 명세→실행의 3층 아키텍처에서 중간 '명세' 계층의 품질을 독립적으로 측정하는 평가 인프라다.
+- [[concepts/autoresearch.md|autoresearch]]: 아이디어 생성과 충실한 구현이 구조적으로 분리된 능력임을 시사하며, artifact-bound-optimization의 대상을 논문 산출물에서 구현 명세로 확장할 축을 연다.
+- [[concepts/benchmark-specification-gap.md|benchmark specification gap]]: 벤치마크 명세의 불완전성이 측정 대상을 왜곡하듯 구현 명세의 불완전성이 구현 대상을 왜곡함을 보여 동형 구조를 확장한다.
 
 ## 핵심 인사이트
 

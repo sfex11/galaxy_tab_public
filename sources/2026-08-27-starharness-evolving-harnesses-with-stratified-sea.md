@@ -89,3 +89,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/configuration-scoped-safety-certification.md|configuration scoped safety certification]]
+
+---
+**관련**: [[entities/hidden-state-risk-space.md|hidden state risk space]]
+
+---
+**관련**: [[entities/task-aware-subspace-selection.md|task aware subspace selection]]
+
+---
+**관련**: [[entities/show-harness.md|show harness]]
+
+---
+**관련**: [[entities/configuration-scoped-safety-certification.md|configuration scoped safety certification]]
+
+---
+**관련**: [[entities/harness-mutability.md|harness mutability]]

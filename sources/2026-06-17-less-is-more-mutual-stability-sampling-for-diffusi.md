@@ -82,3 +82,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/early-outcome-prediction.md|early outcome prediction]]
+
+---
+**관련**: [[entities/fixed-assignment-fragility.md|fixed assignment fragility]]

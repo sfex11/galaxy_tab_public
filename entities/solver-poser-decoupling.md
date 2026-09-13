@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
 
 단일 에이전트 내에서 역할별 강화학습으로 해결자(패치)-출제자(테스트) 분리를 실현하는 방법론을 제공한다. 별도 에이전트가 아닌 역할 조건화된 훈련으로 분리가 가능함을 보여준다.
-
-→ [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md|상세 보기]]

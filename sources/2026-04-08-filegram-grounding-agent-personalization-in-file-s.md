@@ -140,3 +140,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/synthetic-grounding-gap.md|synthetic grounding gap]]
+
+---
+**관련**: [[entities/copying-collective-behavior.md|copying collective behavior]]
+
+---
+**관련**: [[entities/trace-framework.md|trace framework]]
+
+---
+**관련**: [[entities/synthetic-grounding-gap.md|synthetic grounding gap]]

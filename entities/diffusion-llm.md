@@ -22,5 +22,3 @@ Cola DLM은 확산 언어 모델이 아키텍처 간 지식 전이의 대상(TID
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
 
 확산 LM의 스코프를 '자체 분포의 비순차 생성 모델'에서 'AR 분포의 샘플링 메커니즘'으로 확장한다. 확산과 자회귀가 경쟁이 아닌 조합 가능한 축임을 보여준다.
-
-→ [[sources/2026-09-07-unlocking-lossless-speedups-in-llms-via-discrete-d.md|상세 보기]]

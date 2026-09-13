@@ -13,9 +13,9 @@
 
 Avatar는 과학 워크플로우 관리 시스템(WMS)의 오케스트레이션을 고정된 수제 규칙에서 LLM 에이전트 기반 자율 방식으로 전환하되, '어디에 에이전틱 추론을 도입할 것인가'를 아키텍처 파라미터로 격상시킨다. 오케스트레이터·실행자·출처 감시자(provenance monitor)로 분해된 액터 구조에서 각 액터의 결정 정책을 규칙 기반/LLM 기반으로 플러그형 교체 가능하게 설계하고, 어댑터 검증 액션 카탈로그가 LLM 결정을 사전 검증된 행동 공간으로 구속해 위험을 경계짓는다.
 
-이는 [[computation-unit-meta-selection]]이 연산 단위(SLM vs LLM) 수준에서 다룬 선택 문제를 워크플로우 액터 수준의 정책 선택으로 확장한다. 어댑터 검증 액션 카탈로그는 [[representation-contract]]의 계약 관점과 [[interpretive-vs-structural-enforcement]]의 이분법에 새로운 구현 축을 제공한다 — 해석적/구조적 강제의 선택이 정적 설계가 아닌 런타임 구성 변수가 된다.
+이는 [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]이 연산 단위(SLM vs LLM) 수준에서 다룬 선택 문제를 워크플로우 액터 수준의 정책 선택으로 확장한다. 어댑터 검증 액션 카탈로그는 [[concepts/representation-contract.md|representation contract]]의 계약 관점과 [[concepts/interpretive-vs-structural-enforcement.md|interpretive vs structural enforcement]]의 이분법에 새로운 구현 축을 제공한다 — 해석적/구조적 강제의 선택이 정적 설계가 아닌 런타임 구성 변수가 된다.
 
-출처 감시자를 일급 액터로 배치한 것은 [[auditability-as-scaling-requirement]]의 최초 아키텍처 수준 구현 사례다. 기존 [[scientific-workflow-agent]]가 '연구 질문→워크플로우 번역 자동화'였다면, Avatar는 '오케스트레이션 정책 자체의 자율화'로 스코프를 확장하며 [[autoresearch]]의 연구 실행 자동화에 시스템 인프라 계층의 좌표를 추가한다.
+출처 감시자를 일급 액터로 배치한 것은 [[concepts/auditability-as-scaling-requirement.md|auditability as scaling requirement]]의 최초 아키텍처 수준 구현 사례다. 기존 [[entities/scientific-workflow-agent.md|scientific workflow agent]]가 '연구 질문→워크플로우 번역 자동화'였다면, Avatar는 '오케스트레이션 정책 자체의 자율화'로 스코프를 확장하며 [[concepts/autoresearch.md|autoresearch]]의 연구 실행 자동화에 시스템 인프라 계층의 좌표를 추가한다.
 
 ## 🔗 관련 논문
 

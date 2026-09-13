@@ -17,7 +17,7 @@
 
 ## Wiki 맥락
 
-[[latent-inter-agent-communication]]이 '얼마나 공유해야 능력이 향상되는가'를 다뤘다면, 본 논문은 '얼마나 숨겨야 목표가 보호되는가'를 다루어 통신 공개 제어의 양면을 완성한다. [[zero-knowledge-negotiation]]이 암호학적 증명으로 완전 비공개 합의를 달성하는 극단 경로라면, 본 논문은 신뢰에 비례한 점진적 공개라는 연속체 상의 중간 지점을 제공한다. [[information-preservation-boundary]]의 '각 에이전트가 독립 유지해야 할 정보 범위'를 잠재 목표로 구체화하고, 고정 설계 원칙을 신뢰의 함수로 동적 조정 가능한 대상으로 재정의한다. [[differential-privacy]]의 정적 통계적 난독화와 대비되는, 상호작용 이력에 따라 갱신되는 동적 신뢰 기반 보장이다. [[communication-increase-paradox]]에 '통신량 증가가 목표 추론 공격 표면을 확대한다'는 보안 축을 추가한다.
+[[entities/latent-inter-agent-communication.md|latent inter agent communication]]이 '얼마나 공유해야 능력이 향상되는가'를 다뤘다면, 본 논문은 '얼마나 숨겨야 목표가 보호되는가'를 다루어 통신 공개 제어의 양면을 완성한다. [[concepts/zero-knowledge-negotiation.md|zero knowledge negotiation]]이 암호학적 증명으로 완전 비공개 합의를 달성하는 극단 경로라면, 본 논문은 신뢰에 비례한 점진적 공개라는 연속체 상의 중간 지점을 제공한다. [[concepts/information-preservation-boundary.md|information preservation boundary]]의 '각 에이전트가 독립 유지해야 할 정보 범위'를 잠재 목표로 구체화하고, 고정 설계 원칙을 신뢰의 함수로 동적 조정 가능한 대상으로 재정의한다. [[concepts/differential-privacy.md|differential privacy]]의 정적 통계적 난독화와 대비되는, 상호작용 이력에 따라 갱신되는 동적 신뢰 기반 보장이다. [[concepts/communication-increase-paradox.md|communication increase paradox]]에 '통신량 증가가 목표 추론 공격 표면을 확대한다'는 보안 축을 추가한다.
 
 ## 새 개념 제안
 

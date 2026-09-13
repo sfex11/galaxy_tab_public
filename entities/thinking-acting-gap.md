@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
 
 기존 분석이 간극의 근원을 표현 형식 차이로 지적했다면, 본 논문은 그 해법을 '공유 어휘 구축'으로 구체화한다. VQ-VAE 잠재 공간은 VLM의 의미 추론과 차량의 운동 실행이 동일한 토큰 형식으로 소통할 수 있는 중간 언어로 기능한다.
-
-→ [[sources/2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]

@@ -38,3 +38,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/triggerless-single-pass-contamination.md|triggerless single pass contamination]]
+
+---
+**관련**: [[entities/edge-data-synthesis.md|edge data synthesis]]
+
+---
+**관련**: [[entities/citation-hallucination.md|citation hallucination]]
+
+---
+**관련**: [[entities/citation-verifiability-gap.md|citation verifiability gap]]

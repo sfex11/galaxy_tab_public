@@ -31,10 +31,6 @@ _Wiki 축적 중_
 
 회귀 벤치마크 정확도가 정답의 출처(일반화된 예측 vs 기억된 검색)에 체계적으로 무감각함을 실증하여, 점수가 능력의 증거가 아니라 오염 통제 후에만 해석 가능함을 보여준다.
 
-→ [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|상세 보기]]
-
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
 
 재컴파일 가능성이 디컴파일 출력의 의미 보존을 측정하지 못하는 사례를 제공한다. WER(음성), 코드 커버리지(테스트)에 이어 세 번째 도메인 발현으로, 이 결함이 평가 방법론의 범용적 구조임을 강화한다.
-
-→ [[sources/2026-09-08-when-llm-decompilers-recompile-more-and-preserve-l.md|상세 보기]]

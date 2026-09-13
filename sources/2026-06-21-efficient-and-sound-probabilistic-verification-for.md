@@ -178,3 +178,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explicit-absence-state.md|explicit absence state]]
+
+---
+**관련**: [[entities/shared-state-architecture.md|shared state architecture]]
+
+---
+**관련**: [[entities/residual-stream-monitoring.md|residual stream monitoring]]
+
+---
+**관련**: [[entities/free-security-observability.md|free security observability]]
+
+---
+**관련**: [[entities/safety-as-conditional-state.md|safety as conditional state]]
+
+---
+**관련**: [[entities/runtime-verification-layer.md|runtime verification layer]]
+
+---
+**관련**: [[entities/consequential-state-retention.md|consequential state retention]]

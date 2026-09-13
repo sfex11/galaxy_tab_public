@@ -133,3 +133,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dvm-hall-model.md|dvm hall model]]
+
+---
+**관련**: [[entities/inference-budget-progressive-investment.md|inference budget progressive investment]]
+
+---
+**관련**: [[entities/strategic-convergence-condition.md|strategic convergence condition]]
+
+---
+**관련**: [[entities/distribution-preserving-acceleration.md|distribution preserving acceleration]]
+
+---
+**관련**: [[entities/distribution-shift.md|distribution shift]]
+
+---
+**관련**: [[entities/streaming-adaptive-inference.md|streaming adaptive inference]]
+
+---
+**관련**: [[entities/goal-inference-attack.md|goal inference attack]]
+
+---
+**관련**: [[entities/experience-based-alignment.md|experience based alignment]]
+
+---
+**관련**: [[entities/step-importance-causal-verification.md|step importance causal verification]]
+
+---
+**관련**: [[entities/inference-time-behavior-control.md|inference time behavior control]]
+
+---
+**관련**: [[entities/sequentiality-distribution-separation.md|sequentiality distribution separation]]

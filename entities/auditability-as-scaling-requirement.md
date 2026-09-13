@@ -15,16 +15,10 @@ _Wiki 축적 중_
 
 감사·인증·권한 위임 등 신뢰 경계를 넘는 상호작용은 해독 불가능한 잠재 채널이 아닌 감사 가능한 표준 NL 프로토콜로 수행되어야 한다는 원리의 제도적 근거를 제공한다.
 
-→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
-
 ### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
 
 감사 가능성 요구의 구체적 기술 경로를 제공한다 — RSI의 감시 기둥으로서 해석가능성 도구(SAE)가 필수적이며, 이를 운용하는 능력 자체가 에이전트 평가의 새로운 축이 됨을 벤치마크로 형식화한다.
 
-→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]
-
 ### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
 
 출처 감시자(provenance monitor)를 오케스트레이션 아키텍처의 일급 액터로 배치하는 구현 사례를 제공한다. 감시가 외부 부가 기능이 아닌 액터 분해의 구성 요소일 때 자율 오케스트레이션의 감사 가능성이 구조적으로 확보됨을 보여준다.
-
-→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]

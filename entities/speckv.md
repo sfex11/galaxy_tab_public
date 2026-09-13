@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-13)
 
 추측 디코딩 텔레메트리의 이중 용도를 함께 형성한다. SpecKV가 압축 상태를 성능 적응의 입력으로 판독한다면, SpecGuard는 동일 계열의 서빙 신호를 보안 탐지의 입력으로 판독하여 내부 상태 관측의 응용 스펙트럼을 완성한다.
-
-→ [[sources/2026-09-13-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

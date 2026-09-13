@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cumulative-semantic-audit.md|cumulative semantic audit]]
+
+---
+**관련**: [[entities/retrospective-thinking.md|retrospective thinking]]

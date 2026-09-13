@@ -17,14 +17,14 @@ LLM 에이전트의 절차 지식(무엇을, 어떤 순서로, 어떤 조건에�
 
 ## 기존 Wiki와의 관계
 
-- [[constraint-guided-plan-execution]]: RunAgent가 고정 자연어 계획을 제약으로 강제했다면, 절차 그래프는 계획 자체를 실행 중 변이 가능한 대상으로 만들어 '고정 계획' 전제를 해소한다.
-- [[process-control-architecture]]: Box Maze가 토큰 스트림 수준 강제였다면, 절차 그래프는 제어 객체를 계획 그래프로 이동시킨 상보적 경로다.
-- [[algorithm-system-translation-gap]]: 절차 지식의 토큰 평탄화([[semantic-structure-flattening]])를 구조적 명시로 역전시키는 구현 사례다.
-- [[knowledge-state-drift]]: 목표 상실을 기억 소실이 아닌 절차 지식의 암묵성 문제로 재진단하고, 목표 추적을 그래프 노드로 외재화한다.
+- [[concepts/constraint-guided-plan-execution.md|constraint guided plan execution]]: RunAgent가 고정 자연어 계획을 제약으로 강제했다면, 절차 그래프는 계획 자체를 실행 중 변이 가능한 대상으로 만들어 '고정 계획' 전제를 해소한다.
+- [[concepts/process-control-architecture.md|process control architecture]]: Box Maze가 토큰 스트림 수준 강제였다면, 절차 그래프는 제어 객체를 계획 그래프로 이동시킨 상보적 경로다.
+- [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]: 절차 지식의 토큰 평탄화([[concepts/semantic-structure-flattening.md|semantic structure flattening]])를 구조적 명시로 역전시키는 구현 사례다.
+- [[concepts/knowledge-state-drift.md|knowledge state drift]]: 목표 상실을 기억 소실이 아닌 절차 지식의 암묵성 문제로 재진단하고, 목표 추적을 그래프 노드로 외재화한다.
 
 ## 새 인사이트
 
-자기 진화의 단위가 소스 코드(MOSS)나 스킬(SkillOS)에서 **런타임 실행 구조**로 축소되어 종단 간 진화의 가장 미세한 입자가 되었다. 그러나 실행 구조가 진화하면 구조 검증 자체가 재귀 문제가 된다([[verification-infrastructure-recursive-modification]]) — 실패 궤적이 절차 그래프에 흡수되면 후속 실행이 오염된 절차를 상속한다. [[procedural-identity]]는 명시적·이식 가능한 운반체를 얻지만, 진화에 따라 동일 명세의 에이전트 간 절차 분기라는 새로운 위험을 함께 얻는다.
+자기 진화의 단위가 소스 코드(MOSS)나 스킬(SkillOS)에서 **런타임 실행 구조**로 축소되어 종단 간 진화의 가장 미세한 입자가 되었다. 그러나 실행 구조가 진화하면 구조 검증 자체가 재귀 문제가 된다([[concepts/verification-infrastructure-recursive-modification.md|verification infrastructure recursive modification]]) — 실패 궤적이 절차 그래프에 흡수되면 후속 실행이 오염된 절차를 상속한다. [[concepts/procedural-identity.md|procedural identity]]는 명시적·이식 가능한 운반체를 얻지만, 진화에 따라 동일 명세의 에이전트 간 절차 분기라는 새로운 위험을 함께 얻는다.
 
 ## 🔗 관련 논문
 

@@ -51,22 +51,14 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 
 자동 연구 파이프라인의 인용 단계가 산출물 신뢰성의 주요 병목임을 보여준다. autoresearch 산출물의 인식론적 결함 중 인용 오귀속이 핵심 원인이며, 에이전틱 검증으로 파이프라인 내부에서 해결하는 경로를 제시한다.
 
-→ [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]
-
 ### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
 
 오토리서치의 스코프를 '연구 실행 자동화'에서 '감사 대상 모델에 대한 연구 수행'으로 특화한다. judgment-bottleneck에서 지적된 '좋은 가설과 나쁜 가설을 구별하는 능력'이 해석가능성 도메인에서 정량 평가될 수 있는 최초의 무대를 제공한다.
-
-→ [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|상세 보기]]
 
 ### IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea  (2026-09-11)
 
 아이디어 생성 능력에 집중해 온 자율 연구 연구에 구현 명세화라는 후행 병목을 제시한다 — artifact-bound-optimization의 최적화 대상이 논문 형식에서 구현 가능한 명세로 이동해야 함을 시사한다.
 
-→ [[sources/2026-09-11-ideaambig-benchmarking-implementation-critical-gap.md|상세 보기]]
-
 ### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
 
 과학 워크플로우 자동화에 시스템 인프라 계층의 좌표를 추가한다. 오토리서치가 연구 발견·실행의 에이전트화를 다룬다면, Avatar는 그 아래 WMS 실행 계층의 오케스트레이션 정책 자체를 자율화 대상으로 삼아 자동화의 대상 계층을 한 단계 아래로 내린다.
-
-→ [[sources/2026-09-11-avatar-toward-autonomous-end-to-end-orchestration-.md|상세 보기]]

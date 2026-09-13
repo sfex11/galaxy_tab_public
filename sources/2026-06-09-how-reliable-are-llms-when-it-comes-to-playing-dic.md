@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/probabilistic-guarantee-redefinition.md|probabilistic guarantee redefinition]]
+
+---
+**관련**: [[entities/living-dataset.md|living dataset]]

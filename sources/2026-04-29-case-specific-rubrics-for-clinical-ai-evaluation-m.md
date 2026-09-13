@@ -387,3 +387,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/review-constraint-compliance.md|review constraint compliance]]
+
+---
+**관련**: [[entities/agreement-pressure.md|agreement pressure]]
+
+---
+**관련**: [[entities/deployment-readiness-evaluation.md|deployment readiness evaluation]]
+
+---
+**관련**: [[entities/review-constraint-compliance.md|review constraint compliance]]
+
+---
+**관련**: [[entities/ai-architecture-documentation.md|ai architecture documentation]]
+
+---
+**관련**: [[entities/documentation-debt.md|documentation debt]]

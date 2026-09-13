@@ -17,13 +17,13 @@ LLM이 사전학습에서 지식을 습득하는 메커니즘을 통제 실험�
 
 ## 기존 Wiki와의 관계
 
-- [[auxiliary-views]]: 이 논문이 최초 정의를 제공한다 — 지식의 재구성된 뷰가 단순 데이터 증강이 아닌 인과적 학습 원천이라는 조작적 정의.
-- [[training-data-pruning]]: 데이터 최적화 축을 '무엇을 뺄 것인가'에서 '고정 예산 내 무엇으로 채울 것인가'로 전환.
-- [[token-budget-reallocation]]: 토큰을 '소비량'이 아닌 '뷰 구성의 설계 변수'로 재정의하는 최초의 인과 근거.
-- [[batch-size-gradient-redundancy]]: 의역 효과의 배치 크기 조건부성이 이 개념의 직접적 실증 근거.
-- [[fact-access-decoupling]]: 보조 뷰가 사실 저장이 아닌 접근 경로의 다각화 메커니즘임을 시사.
-- [[entity-surface-form]]: 비엄격 기억 연구의 다중 표면 형식 개념과 훈련 데이터 구성 차원에서 수렴.
-- [[implicit-curriculum]]: '모델이 무엇을 언제 배우는가'라는 사전학습 커리큘럼 문제의 인과적 후속.
+- [[entities/auxiliary-views.md|auxiliary views]]: 이 논문이 최초 정의를 제공한다 — 지식의 재구성된 뷰가 단순 데이터 증강이 아닌 인과적 학습 원천이라는 조작적 정의.
+- [[concepts/training-data-pruning.md|training data pruning]]: 데이터 최적화 축을 '무엇을 뺄 것인가'에서 '고정 예산 내 무엇으로 채울 것인가'로 전환.
+- [[concepts/token-budget-reallocation.md|token budget reallocation]]: 토큰을 '소비량'이 아닌 '뷰 구성의 설계 변수'로 재정의하는 최초의 인과 근거.
+- [[concepts/batch-size-gradient-redundancy.md|batch size gradient redundancy]]: 의역 효과의 배치 크기 조건부성이 이 개념의 직접적 실증 근거.
+- [[concepts/fact-access-decoupling.md|fact access decoupling]]: 보조 뷰가 사실 저장이 아닌 접근 경로의 다각화 메커니즘임을 시사.
+- [[concepts/entity-surface-form.md|entity surface form]]: 비엄격 기억 연구의 다중 표면 형식 개념과 훈련 데이터 구성 차원에서 수렴.
+- [[concepts/implicit-curriculum.md|implicit curriculum]]: '모델이 무엇을 언제 배우는가'라는 사전학습 커리큘럼 문제의 인과적 후속.
 
 ## 핵심 통찰
 

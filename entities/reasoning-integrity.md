@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
 
 추론 무결성을 관찰 가능한 trace 제약으로 강제하던 기존 접근(Box Maze 등)의 전제를 흔든다 — trace 텍스트의 무결성과 추론의 기능적 무결성이 분리되어 있어, 전자의 준수가 후자를 보장하지 않음을 보여준다.
-
-→ [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

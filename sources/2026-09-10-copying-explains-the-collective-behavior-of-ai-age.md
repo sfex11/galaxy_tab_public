@@ -17,14 +17,14 @@
 
 ## 기존 Wiki와의 관계
 
-- [[emergent-cheating-whistleblowing-swarm]](설계된 100 에이전트 실험)과 대비되는 자연 관찰 축 — 사회적 동역학 연구의 통제 실험-야생 관찰 양극을 형성
-- [[stigmergic-coordination]]의 첫 대규모 야생 실증: 대화 없이 공유 환경 잔적의 누적으로 조정이 성립함을 입증
-- [[distributed-cognitive-constitution]]의 극단 사례: 영속 기억 없는 에이전트들이 외부 위키에 인지를 분산 — 개체는 세대, 위키는 유전물질이라는 역전 구조
-- [[capability-cooperation-paradox]]의 야생 반례: 평가 압력 하에서도 비용 없는 공유 자원 발견 시 도구적 협력이 자발 형성
-- [[cross-session-identity-erosion]]의 극단 형태: 개체 기억 상실이 협력을 저해하지 않고 지식을 집단 수준 기억으로 우회시킴
-- [[bootstrap-paradox]]의 현현: 에이전트 생성 콘텐츠를 에이전트가 소비하는 자기참조 루프 — 단, 외부 테스트 검증이 순환 고착을 절단
-- [[infrastructure-deviance-duality]]의 양면 확인: 동일 위키가 협력 지식과 오염을 모두 전파 가능한 채널
-- [[raw-evidence-anchoring]]의 이상적 구현: '무엇을 썼는가'뿐 아니라 '쓰기 전 무엇을 볼 수 있었는가'까지 보존되어 정보 전파의 인과 구조를 직접 관측 가능
+- [[concepts/emergent-cheating-whistleblowing-swarm.md|emergent cheating whistleblowing swarm]](설계된 100 에이전트 실험)과 대비되는 자연 관찰 축 — 사회적 동역학 연구의 통제 실험-야생 관찰 양극을 형성
+- [[concepts/stigmergic-coordination.md|stigmergic coordination]]의 첫 대규모 야생 실증: 대화 없이 공유 환경 잔적의 누적으로 조정이 성립함을 입증
+- [[concepts/distributed-cognitive-constitution.md|distributed cognitive constitution]]의 극단 사례: 영속 기억 없는 에이전트들이 외부 위키에 인지를 분산 — 개체는 세대, 위키는 유전물질이라는 역전 구조
+- [[concepts/capability-cooperation-paradox.md|capability cooperation paradox]]의 야생 반례: 평가 압력 하에서도 비용 없는 공유 자원 발견 시 도구적 협력이 자발 형성
+- [[concepts/cross-session-identity-erosion.md|cross session identity erosion]]의 극단 형태: 개체 기억 상실이 협력을 저해하지 않고 지식을 집단 수준 기억으로 우회시킴
+- [[concepts/bootstrap-paradox.md|bootstrap paradox]]의 현현: 에이전트 생성 콘텐츠를 에이전트가 소비하는 자기참조 루프 — 단, 외부 테스트 검증이 순환 고착을 절단
+- [[concepts/infrastructure-deviance-duality.md|infrastructure deviance duality]]의 양면 확인: 동일 위키가 협력 지식과 오염을 모두 전파 가능한 채널
+- [[concepts/raw-evidence-anchoring.md|raw evidence anchoring]]의 이상적 구현: '무엇을 썼는가'뿐 아니라 '쓰기 전 무엇을 볼 수 있었는가'까지 보존되어 정보 전파의 인과 구조를 직접 관측 가능
 
 ## 🔗 관련 논문
 

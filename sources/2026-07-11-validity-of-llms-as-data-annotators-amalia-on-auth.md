@@ -58,3 +58,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structure-to-value-axis-shift.md|structure to value axis shift]]
+
+---
+**관련**: [[entities/competitive-programming-benchmark.md|competitive programming benchmark]]
+
+---
+**관련**: [[entities/value-non-mixing.md|value non mixing]]
+
+---
+**관련**: [[entities/black-box-instrument-drift.md|black box instrument drift]]

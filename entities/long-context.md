@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
 
 원문 보존(LC-RAW) 형식이 모델 교체에 가장 강건한 이식성을 제공하는 조건을 정량화한다. 장기 컨텍스트를 순수한 효율 문제가 아니라 이식성 보험으로 재평가하며, 압축이 곧 해석기 의존성의 도입임을 보여주는 대조점을 제공한다.
-
-→ [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]

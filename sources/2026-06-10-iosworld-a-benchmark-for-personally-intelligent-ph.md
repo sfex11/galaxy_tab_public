@@ -100,3 +100,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/persona-execution-plan-dichotomy.md|persona execution plan dichotomy]]
+
+---
+**관련**: [[entities/threat-defense-surface-identity.md|threat defense surface identity]]
+
+---
+**관련**: [[entities/isolated-estimate-overconfidence.md|isolated estimate overconfidence]]
+
+---
+**관련**: [[entities/kopa-bench.md|kopa bench]]
+
+---
+**관련**: [[entities/procedural-identity.md|procedural identity]]
+
+---
+**관련**: [[entities/episodic-persistent-state-gap.md|episodic persistent state gap]]

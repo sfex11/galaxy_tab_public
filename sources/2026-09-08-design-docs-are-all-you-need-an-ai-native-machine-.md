@@ -17,13 +17,13 @@ ML 성능 모델링은 장수 소프트웨어에 가장 적대적인 영역이�
 
 ## Wiki 맥락
 
-1. **코드의 위상 전환**: [[code-as-agent-harness]]가 하네스를 LLM 생성 코드의 동적 번역 계층으로 재정의했다면, SMART는 그 단위를 전체 라이브러리로 확장해 코드를 설계 문서에서 컴파일되는 일회성 산출물로 격하한다. [[source-level-self-rewriting]](MOSS)의 '소스 수정'과 대비되는 '폐기·재생성' 극점이다.
+1. **코드의 위상 전환**: [[concepts/code-as-agent-harness.md|code as agent harness]]가 하네스를 LLM 생성 코드의 동적 번역 계층으로 재정의했다면, SMART는 그 단위를 전체 라이브러리로 확장해 코드를 설계 문서에서 컴파일되는 일회성 산출물로 격하한다. [[entities/source-level-self-rewriting.md|source level self rewriting]](MOSS)의 '소스 수정'과 대비되는 '폐기·재생성' 극점이다.
 
-2. **간극의 재발성**: [[algorithm-system-translation-gap]]과 [[abstraction-layer-mismatch]]의 부정합이 모델·시스템 진화에 의해 구조적으로 재발한다는 전제는, 해법이 추상화 정교화가 아니라 재번역 비용을 상쇄하는 재생성 인프라임을 시사한다.
+2. **간극의 재발성**: [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]과 [[concepts/abstraction-layer-mismatch.md|abstraction layer mismatch]]의 부정합이 모델·시스템 진화에 의해 구조적으로 재발한다는 전제는, 해법이 추상화 정교화가 아니라 재번역 비용을 상쇄하는 재생성 인프라임을 시사한다.
 
-3. **명세의 일차성**: [[reproducible-specification-generation]]에 '명세→코드베이스 전체 재생성' 소비 측을 추가하고, [[ai-architecture-documentation]]에 문서가 코드보다 오래 사는 종단 사례를 제공한다.
+3. **명세의 일차성**: [[concepts/reproducible-specification-generation.md|reproducible specification generation]]에 '명세→코드베이스 전체 재생성' 소비 측을 추가하고, [[concepts/ai-architecture-documentation.md|ai architecture documentation]]에 문서가 코드보다 오래 사는 종단 사례를 제공한다.
 
-4. **부채의 재평가**: [[regression-tax]]의 소프트웨어 버전 — 기술 부채 상환 비용 — 을 재생성 비용과의 명시적 트레이드오프로 격상시킨다. 에이전트 주도 인프라 구축의 선행 사례 [[design-conductor]]에 '순환적 재구축' 차원을 더한다.
+4. **부채의 재평가**: [[concepts/regression-tax.md|regression tax]]의 소프트웨어 버전 — 기술 부채 상환 비용 — 을 재생성 비용과의 명시적 트레이드오프로 격상시킨다. 에이전트 주도 인프라 구축의 선행 사례 [[entities/design-conductor.md|design conductor]]에 '순환적 재구축' 차원을 더한다.
 
 ## 신규 개념 제안
 

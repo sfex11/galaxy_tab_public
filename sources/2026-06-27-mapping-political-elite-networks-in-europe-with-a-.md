@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/relational-governance.md|relational governance]]
+
+---
+**관련**: [[entities/multilingual-coverage-gap.md|multilingual coverage gap]]
+
+---
+**관련**: [[entities/multilingual-nlp.md|multilingual nlp]]

@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Relative Principals, Pluralistic Alignment, and the Structural Value A (2026-04-24)
 
 ### Truncated Noisy Best-Response Algorithms: Toward Game Theoretic Learni (2026-09-13)
-
-→ [[sources/2026-09-13-truncated-noisy-best-response-algorithms-toward-ga.md|상세 보기]]

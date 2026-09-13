@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
-
-→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

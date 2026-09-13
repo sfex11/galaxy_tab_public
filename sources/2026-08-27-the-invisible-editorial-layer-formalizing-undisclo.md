@@ -45,3 +45,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/distribution-bypass.md|distribution bypass]]
+
+---
+**관련**: [[entities/closed-book-qa-hallucination.md|closed book qa hallucination]]
+
+---
+**관련**: [[entities/headroom-closed-index.md|headroom closed index]]

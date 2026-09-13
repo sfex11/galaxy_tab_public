@@ -15,8 +15,4 @@ _Wiki 축적 중_
 
 ### Learning Agent-based Model Predictive Control for Holistic Vehicle Per (2026-09-13)
 
-→ [[sources/2026-09-13-learning-agent-based-model-predictive-control-for-.md|상세 보기]]
-
 ### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
-
-→ [[sources/2026-09-13-near-optimal-reinforcement-learning-with-multi-ste.md|상세 보기]]

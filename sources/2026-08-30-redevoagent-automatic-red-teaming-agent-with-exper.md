@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/experience-infrastructuralization.md|experience infrastructuralization]]
+
+---
+**관련**: [[entities/turn-driven-drift.md|turn driven drift]]
+
+---
+**관련**: [[entities/experience-acquisition-autonomy.md|experience acquisition autonomy]]

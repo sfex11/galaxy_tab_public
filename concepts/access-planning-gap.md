@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
-
-→ [[sources/2026-09-13-near-optimal-reinforcement-learning-with-multi-ste.md|상세 보기]]

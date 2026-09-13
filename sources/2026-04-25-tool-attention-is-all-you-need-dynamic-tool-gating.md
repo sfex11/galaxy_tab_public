@@ -59,3 +59,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/knowledge-injection-interference.md|knowledge injection interference]]
+
+---
+**관련**: [[entities/mcp-tax.md|mcp tax]]

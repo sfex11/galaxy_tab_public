@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
 
 패치-테스트 오류 합의가 RL 훈련에서 위양성 수렴 신호로 작동하는 경로를 제공한다. 검증 오류와 행동 오류가 정합하면 학습이 진전 없이 안정적으로 보이는 조건을 명시한다.
-
-→ [[sources/2026-09-10-execcritic-learn-to-test-test-to-improve-for-codin.md|상세 보기]]

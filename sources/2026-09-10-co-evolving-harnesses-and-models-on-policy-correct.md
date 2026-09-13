@@ -13,9 +13,9 @@
 
 이 논문은 에이전트 하네스(시스템 프롬프트, 도구 집합, 실행 훅, 컨텍스트 관리 스캐폴딩)와 모델 가중치의 공진화를 능력·비용 도메인에서 통제 실험한다. 7개 엔터프라이즈 태스크에서 하네스 진화만으로 소형 모델이 프론티어 비용의 일부로 도메인 태스크를 수행함을 보이고, '하네스 진화와 경량 파인튜닝을 어떻게 결합할 것인가'에 대해 모방이 실패하는 약한 모델 영역에서 온폴리시 정정이 따라잡기를 가능하게 함을 실증한다.
 
-Wiki 맥락에서 본 논문은 [[harness-model-co-evolution]]의 능력 도메인 확장이다. SafeEvolve([[harness-policy-co-evolution]])가 안전 정렬을 위한 공진화를 제안했다면, 본 논문은 동일 구조가 비용 효율적 능력 확장에서도 작동함을 보여 공진화가 목표 불문 원리임을 강화한다. [[harness-side-compensation]]의 최대 규모 실증이기도 하다 — 단일 기능 오프로딩(SENTINEL-RL)을 넘어 하네스 전체의 진화적 재설계만으로 소형 모델이 프론티어급 수행에 도달한다.
+Wiki 맥락에서 본 논문은 [[concepts/harness-model-co-evolution.md|harness model co evolution]]의 능력 도메인 확장이다. SafeEvolve([[concepts/harness-policy-co-evolution.md|harness policy co evolution]])가 안전 정렬을 위한 공진화를 제안했다면, 본 논문은 동일 구조가 비용 효율적 능력 확장에서도 작동함을 보여 공진화가 목표 불문 원리임을 강화한다. [[concepts/harness-side-compensation.md|harness side compensation]]의 최대 규모 실증이기도 하다 — 단일 기능 오프로딩(SENTINEL-RL)을 넘어 하네스 전체의 진화적 재설계만으로 소형 모델이 프론티어급 수행에 도달한다.
 
-핵심 발견은 학습 방법 선택이 모델 강도에 조건부라는 점이다. 교사 궤적 모방은 약한 모델이 흡수하지 못해 실패하지만, 진화된 하네스 하에서 모델 자신의 행동 분포 내 정정 학습은 성공한다. 이는 [[on-policy-environment-coupling]]의 훈련 측 실증이며 [[harness-native-training]]의 완전한 실현 사례다. [[slm-reasoning-gap]]에는 선택·증류에 이은 제3의 해법 경로를 연다.
+핵심 발견은 학습 방법 선택이 모델 강도에 조건부라는 점이다. 교사 궤적 모방은 약한 모델이 흡수하지 못해 실패하지만, 진화된 하네스 하에서 모델 자신의 행동 분포 내 정정 학습은 성공한다. 이는 [[concepts/on-policy-environment-coupling.md|on policy environment coupling]]의 훈련 측 실증이며 [[concepts/harness-native-training.md|harness native training]]의 완전한 실현 사례다. [[concepts/slm-reasoning-gap.md|slm reasoning gap]]에는 선택·증류에 이은 제3의 해법 경로를 연다.
 
 ## 🔗 관련 논문
 

@@ -50,3 +50,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/judged-actual-importance-divergence.md|judged actual importance divergence]]
+
+---
+**관련**: [[entities/judged-actual-importance-divergence.md|judged actual importance divergence]]

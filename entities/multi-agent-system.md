@@ -82,22 +82,14 @@ DiffMAS는 기존 다중 에이전트 시스템이 고정된 텍스트 통신 �
 
 LLM 기반 다중 에이전트 연구에 물리적 참조점을 부여한다. 통신·정렬·오케스트레이션이 핵심 난제인 LLM 다중 에이전트와 달리, 결합 동역학만으로 조정이 실현됨을 보여 '조정에 필요한 최소 통신'의 하한을 물리적으로 제시한다.
 
-→ [[sources/2026-09-07-formation-matrix-and-energy-based-control-of-multi.md|상세 보기]]
-
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
 
 이질적 프레임워크로 구축된 에이전트들의 상호운용성 문제를 시스템 수준 요구사항으로 규정하고, 공통 통신 프로토콜이라는 새로운 해법 계층을 제시한다.
-
-→ [[sources/2026-09-07-the-natural-language-interaction-protocol-and-stan.md|상세 보기]]
 
 ### Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in  (2026-09-08)
 
 합의라는 조율 기본 과제에 적대적 관찰자 하의 잠재 목표 은닉 제약을 추가하여, 다중 에이전트 최적화의 목적함수가 수렴 품질과 프라이버시 비용의 이중 축으로 확장됨을 보여준다.
 
-→ [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]
-
 ### Glyph: A Multi-Strategy Agentic System for Column Description and Sens (2026-09-11)
 
 Descriptor(설명 생성)와 Tagger(민감도 태깅)의 이원 협업 구조를 제공하여, 결합된 두 하위 문제를 각기 특화된 에이전트로 분해하고 상태 그래프로 조율하는 실용적 사례를 추가한다.
-
-→ [[sources/2026-09-11-glyph-a-multi-strategy-agentic-system-for-column-d.md|상세 보기]]

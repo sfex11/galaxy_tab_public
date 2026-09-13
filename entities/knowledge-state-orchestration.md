@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
 
 ADEMA가 선언 지식 상태를 오케스트레이션했다면, 절차 그래프는 '무엇을 어떤 순서·조건으로 할 것인가'라는 절차 상태 축을 추가하여 에이전트 상태 관리의 선언-절차 이분법을 완성한다.
-
-→ [[sources/2026-09-10-procedural-graphs-self-evolving-execution-structur.md|상세 보기]]

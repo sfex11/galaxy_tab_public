@@ -63,3 +63,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/sft-rl-budget-allocation.md|sft rl budget allocation]]
+
+---
+**관련**: [[entities/component-aware-privacy-budget.md|component aware privacy budget]]
+
+---
+**관련**: [[entities/audio-question-answering.md|audio question answering]]
+
+---
+**관련**: [[entities/visual-need-routing.md|visual need routing]]
+
+---
+**관련**: [[entities/cascade-reinforcement-learning.md|cascade reinforcement learning]]
+
+---
+**관련**: [[entities/speech-question-answering.md|speech question answering]]
+
+---
+**관련**: [[entities/strategy-routing.md|strategy routing]]

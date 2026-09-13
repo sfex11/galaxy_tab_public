@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### ReCite: Agentic Reasoning for Faithful Citation (2026-09-10)
 
 접근성·관련성·사실 일관성 3차원 프레임워크가 식별하는 '관련성≠지지성' 간극의 생성 측 대응책을 제공한다. 평가가 측정하는 실패 모드(접근 가능하지만 주장을 지지하지 않는 인용)를 에이전틱 생성 단계에서 직접 예방하는 상보 관계다.
-
-→ [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|상세 보기]]

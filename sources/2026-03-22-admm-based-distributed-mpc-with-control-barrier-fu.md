@@ -81,3 +81,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/distributed-backdoor.md|distributed backdoor]]
+
+---
+**관련**: [[entities/distributed-surveillance-emergence.md|distributed surveillance emergence]]
+
+---
+**관련**: [[entities/distributed-cognitive-constitution.md|distributed cognitive constitution]]
+
+---
+**관련**: [[entities/distributed-consensus-estimation.md|distributed consensus estimation]]

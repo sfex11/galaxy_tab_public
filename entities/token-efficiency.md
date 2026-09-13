@@ -57,10 +57,6 @@ _Wiki 축적 중_
 
 토큰 효율화의 적용 계층을 입력/컨텍스트 측과 추론 측에서 훈련 시점 파라미터화로 확장한다. 출력 토큰 수 자체를 유틸리티 제약 하 최적화 대상으로 삼아, 효율화의 범위를 '주어진 생성의 압축'에서 '생성 구조의 사전 설계'로 이동시킨다.
 
-→ [[sources/2026-09-12-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]
-
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 토큰 효율화의 실현 계층을 컨텍스트 압축·지연 스키마 로딩·추측 디코딩 등 추론 측 기법에서 사후학습 부공간 선택으로 확장한다. 추론 시점 제어와 별개로 모델에 토큰 절약 성향을 사전 주입하는 경로를 제공한다.
-
-→ [[sources/2026-09-13-locus-task-aware-low-rank-post-training-for-token-.md|상세 보기]]

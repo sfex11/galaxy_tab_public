@@ -11,11 +11,11 @@
 
 ## 📖 분석
 
-ExecCritic은 코딩 에이전트 실행 피드백의 가장 약한 고리 — 테스트 자체의 품질 — 를 공략한다. 이슈가 요구하는 행동을 테스트가 온전히 포착하지 못하면 [[rlvr]]의 검증 가능 보상 신호 자체가 오염된다. 핵심 진단은 [[circular-validity-problem]]의 SWE 도메인 발현이다: 동일 궤적이 패치와 테스트를 모두 작성하면 두 오류가 '합의'하여 허위 신뢰를 생성한다. 이는 [[correlated-error-summation]]의 자기 생성 버전이자 [[self-referential-training-vulnerability]]의 구체적 메커니즘이며, RL 훈련에서 [[false-positive-convergence]]로 이어지는 경로를 연다.
+ExecCritic은 코딩 에이전트 실행 피드백의 가장 약한 고리 — 테스트 자체의 품질 — 를 공략한다. 이슈가 요구하는 행동을 테스트가 온전히 포착하지 못하면 [[concepts/rlvr.md|rlvr]]의 검증 가능 보상 신호 자체가 오염된다. 핵심 진단은 [[concepts/circular-validity-problem.md|circular validity problem]]의 SWE 도메인 발현이다: 동일 궤적이 패치와 테스트를 모두 작성하면 두 오류가 '합의'하여 허위 신뢰를 생성한다. 이는 [[concepts/correlated-error-summation.md|correlated error summation]]의 자기 생성 버전이자 [[concepts/self-referential-training-vulnerability.md|self referential training vulnerability]]의 구체적 메커니즘이며, RL 훈련에서 [[concepts/false-positive-convergence.md|false positive convergence]]로 이어지는 경로를 연다.
 
-해법은 이중 구조다 — (1) test-verify-revise 스캐폴드로 생성-검증-수정 루프를 구조화하고, (2) 역할별 강화학습으로 테스트 작성 능력 자체를 학습 대상으로 격상시킨다. 이는 [[solver-poser-decoupling]]의 단일 에이전트 내 실현이며, [[execution-verification]]의 전제를 '실행 근거 자체도 훈련되어야 한다'로 심화한다.
+해법은 이중 구조다 — (1) test-verify-revise 스캐폴드로 생성-검증-수정 루프를 구조화하고, (2) 역할별 강화학습으로 테스트 작성 능력 자체를 학습 대상으로 격상시킨다. 이는 [[concepts/solver-poser-decoupling.md|solver poser decoupling]]의 단일 에이전트 내 실현이며, [[concepts/execution-verification.md|execution verification]]의 전제를 '실행 근거 자체도 훈련되어야 한다'로 심화한다.
 
-[[swe-gate]]와 상보적 위치다 — SWE-Gate가 테스트 통과가 수용을 보장하지 않음을 보였다면, ExecCritic은 패치 에이전트가 테스트를 오염시킬 수 있음을 보여 검증 계약의 양면을 완성한다. 약한 테스트는 [[reward-hacking]]의 잠재 공격 표면이기도 하다.
+[[entities/swe-gate.md|swe gate]]와 상보적 위치다 — SWE-Gate가 테스트 통과가 수용을 보장하지 않음을 보였다면, ExecCritic은 패치 에이전트가 테스트를 오염시킬 수 있음을 보여 검증 계약의 양면을 완성한다. 약한 테스트는 [[concepts/reward-hacking.md|reward hacking]]의 잠재 공격 표면이기도 하다.
 
 ## 🔗 관련 논문
 

@@ -26,5 +26,3 @@ VLM의 역할을 '에이전틱 행동 수행'에서 '지도 학습 신호의 능
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
 
 VLM 에이전트의 시각 지각을 '모든 프레임을 보는 것'에서 '필요할 때만 보는 것'으로 재정의하여, 시각 예산이 에이전트 아키텍처의 1급 설계 변수임을 보여준다. 프레임 검색 도구의 발동 조건이 곧 에이전트의 지각 정책이 된다.
-
-→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

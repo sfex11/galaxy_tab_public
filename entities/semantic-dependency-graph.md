@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-07)
 
 엔터프라이즈 규모의 이종 인증 그래프가 의미론적 의존 구조의 실제 규모 사례를 제공하며, 그래프가 상태 저장소가 아니라 추론 수행자(위상 검증기)로 기능하는 역할 전환을 실증한다.
-
-→ [[sources/2026-09-07-sentinel-rl-offloading-topological-reasoning-from-.md|상세 보기]]

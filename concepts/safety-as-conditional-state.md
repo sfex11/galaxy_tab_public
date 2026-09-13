@@ -15,5 +15,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Truncated Noisy Best-Response Algorithms: Toward Game Theoretic Learni (2026-09-13)
-
-→ [[sources/2026-09-13-truncated-noisy-best-response-algorithms-toward-ga.md|상세 보기]]

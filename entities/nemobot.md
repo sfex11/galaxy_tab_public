@@ -22,5 +22,3 @@ Shannon의 게임 기계 분류학을 4가지 클래스로 구체화하여, 각 
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
 
 Nemobot이 게임 도메인 특화 파이프라인으로 전략 학습 환경을 구축했다면, PlayTrain은 LLM 생성으로 동일 목표를 달성하는 일반화 경로를 제공한다. 게임 환경 생성의 방법론 스펙트럼이 수작업→도메인 특화→LLM 제로샷으로 확장됨을 보여준다.
-
-→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]

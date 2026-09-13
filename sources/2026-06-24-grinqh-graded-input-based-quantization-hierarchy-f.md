@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/quantum-computing.md|quantum computing]]
+
+---
+**관련**: [[entities/leech-lattice-quantization.md|leech lattice quantization]]

@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-task-matching-bottleneck.md|harness task matching bottleneck]]
+
+---
+**관련**: [[entities/local-coherence-global-incoherence.md|local coherence global incoherence]]

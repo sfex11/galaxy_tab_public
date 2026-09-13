@@ -89,5 +89,3 @@ VLM의 메모리 병목이 추론 능력이 아니라 시각 토큰의 KV 캐시
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 VideoLLM을 VLM의 시간 축 확장 형태로 위치시키며, 이미지 VLM의 효율화 기법(시각 토큰 프루닝, KV 캐시 압축)이 프레임 시퀀스라는 시간 구조가 추가될 때 어떻게 변형·일반화되는지를 분류한다.
-
-→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

@@ -84,3 +84,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ambiguity-safety-margin.md|ambiguity safety margin]]
+
+---
+**관련**: [[entities/selective-forgetting-as-safety.md|selective forgetting as safety]]
+
+---
+**관련**: [[entities/deployment-only-improvement-observability.md|deployment only improvement observability]]
+
+---
+**관련**: [[entities/trust-in-automation.md|trust in automation]]
+
+---
+**관련**: [[entities/learned-safety-revocability.md|learned safety revocability]]
+
+---
+**관련**: [[entities/trust-aware-adaptive-disclosure.md|trust aware adaptive disclosure]]
+
+---
+**관련**: [[entities/dual-layer-safety-inevitability.md|dual layer safety inevitability]]

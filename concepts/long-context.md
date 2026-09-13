@@ -39,8 +39,4 @@ _Wiki 축적 중_
 
 ### ConvMem: Convolutional Memory for Long-Context Reasoning (2026-09-11)
 
-→ [[sources/2026-09-11-convmem-convolutional-memory-for-long-context-reas.md|상세 보기]]
-
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
-
-→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
 
 '원본 증거 없이는 복구가 실패한다'는 발견은 Crab의 의존-근원 보존 논리와 동형이다. 해석된 파생물(노트)이 아닌 의존의 근원(원문)이 보존 단위여야 수리·복원이 가능하며, 메모리 형식 선택이 체크포인트의 그래프 위상 보존 문제와 동일한 구조임을 연결한다.
-
-→ [[sources/2026-09-08-does-your-agents-memory-survive-a-model-upgrade-a-.md|상세 보기]]

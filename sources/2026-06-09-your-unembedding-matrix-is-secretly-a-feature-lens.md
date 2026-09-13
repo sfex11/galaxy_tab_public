@@ -58,3 +58,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/residual-stream-length-encoding.md|residual stream length encoding]]
+
+---
+**관련**: [[entities/smart-performance-library.md|smart performance library]]
+
+---
+**관련**: [[entities/adaptive-forgetting-as-function.md|adaptive forgetting as function]]

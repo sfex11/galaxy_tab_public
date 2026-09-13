@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-06-a-low-cost-open-platform-for-end-to-end-autonomous.md|A Low-Cost, Open Platform for End-to-End Autonomous Driving ]]
 
 ### A Low-Cost, Open Platform for End-to-End Autonomous Driving on a Minia (2026-09-07)
-
-→ [[sources/2026-09-07-a-low-cost-open-platform-for-end-to-end-autonomous.md|상세 보기]]

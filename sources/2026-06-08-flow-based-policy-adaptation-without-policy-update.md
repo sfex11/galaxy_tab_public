@@ -67,3 +67,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/autonomy-quality-decoupling.md|autonomy quality decoupling]]
+
+---
+**관련**: [[entities/low-rank-adaptation-subspace.md|low rank adaptation subspace]]
+
+---
+**관련**: [[entities/autonomy-spectrum.md|autonomy spectrum]]

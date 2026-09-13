@@ -13,7 +13,7 @@
 
 LOCUS는 사후학습 업데이트의 매개변수화 자체가 출력 길이를 결정하는 독립 제어 축임을 실증한다 — 정렬 손실을 전혀 수정하지 않고 업데이트 부공간(저계수 적응 공간)의 태스크 인지적 선택만으로 토큰 비용을 최소화하되 유틸리티 제약을 유지한다. 본 논문은 2026-09-12에 이미 수록되어 있으므로 이 항목은 기존 분석의 심화판이다.
 
-훈련 시점 축 추가: [[parameter-decoupling]] 논의에서 이산 확산의 샘플러 교체([[distribution-preserving-acceleration]])가 추론 시점의 분포-절차 분리였다면, 본 논문은 품질 목표(정렬 손실)와 비용 목표(시퀀스 길이)가 업데이트 파라미터의 위치에서 분해됨을 보여준다. [[length-inflation]]과의 관계도 재정의된다 — OPD의 길이 부풀림이 억제 대상 병리였다면 LOCUS는 길이를 양방향 조정 가능한 출력 차원으로 격상시킨다. preference alignment의 장황화([[reward-hacking]]의 온건한 발현)에 보상 재설계가 아닌 부공간 제약으로 응답하는 구조적 경로를 제공하며, [[cost-dominance-dimension-asymmetry]]의 행동 축(토큰 소비) 제어점을 추론 최적화 이전 사후학습 단계로 이동시킨다. '어디에 업데이트할 것인가'의 국소화는 [[layer-selective-unlearning]]의 '어디를 잊을 것인가'와 병렬되는 매개변수 공간 국소화 패턴을 형성한다.
+훈련 시점 축 추가: [[concepts/parameter-decoupling.md|parameter decoupling]] 논의에서 이산 확산의 샘플러 교체([[concepts/distribution-preserving-acceleration.md|distribution preserving acceleration]])가 추론 시점의 분포-절차 분리였다면, 본 논문은 품질 목표(정렬 손실)와 비용 목표(시퀀스 길이)가 업데이트 파라미터의 위치에서 분해됨을 보여준다. [[concepts/length-inflation.md|length inflation]]과의 관계도 재정의된다 — OPD의 길이 부풀림이 억제 대상 병리였다면 LOCUS는 길이를 양방향 조정 가능한 출력 차원으로 격상시킨다. preference alignment의 장황화([[concepts/reward-hacking.md|reward hacking]]의 온건한 발현)에 보상 재설계가 아닌 부공간 제약으로 응답하는 구조적 경로를 제공하며, [[concepts/cost-dominance-dimension-asymmetry.md|cost dominance dimension asymmetry]]의 행동 축(토큰 소비) 제어점을 추론 최적화 이전 사후학습 단계로 이동시킨다. '어디에 업데이트할 것인가'의 국소화는 [[entities/layer-selective-unlearning.md|layer selective unlearning]]의 '어디를 잊을 것인가'와 병렬되는 매개변수 공간 국소화 패턴을 형성한다.
 
 ## 🔗 관련 논문
 

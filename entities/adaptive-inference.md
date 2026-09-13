@@ -43,34 +43,22 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 
 적응의 결정 차원을 계산량·내부 상태에서 '정보 공개 수준'으로 확장하는 사례를 제공한다 — 신뢰 상태에 반응해 공개를 조절하는 것은 사회적 상태 반응형 적응이라는 새로운 유형이다.
 
-→ [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]
-
 ### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
 
-추론의 적응 축에 아키텍처 깊이 축을 새로 추가한다. SpecKV의 내부 상태 반응과 CADENCE의 외부 컨텍스트 반응이 고정 아키텍처 내에서 작동했다면, 계층 수준 탄력성은 모델 깊이 자체의 런타임 선택을 가능하게 하여 [[token-pruning]]의 깊이축 확장이다.
-
-→ [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]
+추론의 적응 축에 아키텍처 깊이 축을 새로 추가한다. SpecKV의 내부 상태 반응과 CADENCE의 외부 컨텍스트 반응이 고정 아키텍처 내에서 작동했다면, 계층 수준 탄력성은 모델 깊이 자체의 런타임 선택을 가능하게 하여 [[concepts/token-pruning.md|token pruning]]의 깊이축 확장이다.
 
 ### Beyond One-Size-Fits-All: Sample-Adaptive Strategy Routing for Vision  (2026-09-11)
 
 적응의 결정 차원에 제3의 축을 추가한다. 기존 확장이 외부 환경 반응(CADENCE)과 내부 시스템 상태 반응(SpecKV)이었다면, 본 논문은 입력 샘플에 대한 알고리즘·전략 선택이라는 새로운 적응 유형을 제시하여, 적응 대상이 파라미터 튜닝에서 알고리즘 간 라우팅으로 격상됨을 보여준다.
 
-→ [[sources/2026-09-11-beyond-one-size-fits-all-sample-adaptive-strategy-.md|상세 보기]]
-
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
 
 적응의 결정 차원을 계산량 조절(토큰 예산, 압축률)에서 모달리티 선택으로 확장한다. '얼마나 계산할까'가 아닌 '언제 시각적으로 볼까'는 토큰 수준 적응과 직교하는 새로운 적응 축이며, 시각 필요성 판별이라는 내부 인지 상태 기반 적응 유형으로 분류된다.
-
-→ [[sources/2026-09-12-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]
 
 ### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-12)
 
 적응의 결정 축에 '언제 계산하는가(출력 이전 vs 이후)'라는 시간 배치 차원을 추가한다. 기존 정의가 예산·라우팅·궤적 축의 적응을 다뤘다면, 회고적 추론은 추론 연산의 출력 대비 위치 자체를 적응 대상으로 삼아 지연 민감 도메인에서 사고-응답 순서가 자유로운 설계 변수임을 보여준다.
 
-→ [[sources/2026-09-12-retrothinker-enabling-retrospective-thinking-in-sp.md|상세 보기]]
-
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 적응의 결정 차원을 계산량(γ·깊이) 조절에서 관찰 행위(프레임 검색 여부)로 확장한다. 외부 환경 반응도 내부 시스템 상태 반응도 아닌 '현재 추론이 요구하는 증거 유형'에 반응하는 적응의 새 유형을 제시한다.
-
-→ [[sources/2026-09-13-caption-once-frames-on-demand-visual-need-routing-.md|상세 보기]]

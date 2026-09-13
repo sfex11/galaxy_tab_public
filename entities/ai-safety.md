@@ -54,5 +54,3 @@ TTI는 턴 단위 무상태 검열이 체계적 공격 표면을 생성함을 �
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
 
 LLM 보안의 방어 계층에 추론 시점 백도어 감지라는 런타임 축을 추가한다. 잦은 모델 업데이트로 사전 감사가 무효화되는 배포 환경에서도 안전 감시가 서빙 지연과 무관하게 지속될 수 있는 구조적 경로를 제공한다.
-
-→ [[sources/2026-09-12-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

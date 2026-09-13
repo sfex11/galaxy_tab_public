@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/bias-opacity.md|bias opacity]]
+
+---
+**관련**: [[entities/locational-opacity-of-risk.md|locational opacity of risk]]

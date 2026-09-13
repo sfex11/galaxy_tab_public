@@ -334,3 +334,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/layered-decision-auditability.md|layered decision auditability]]
+
+---
+**관련**: [[entities/ai-decision-making.md|ai decision making]]
+
+---
+**관련**: [[entities/knowledge-loss-translation.md|knowledge loss translation]]
+
+---
+**관련**: [[entities/distill-globally-adapt-locally.md|distill globally adapt locally]]
+
+---
+**관련**: [[entities/alternative-decision-trajectory.md|alternative decision trajectory]]
+
+---
+**관련**: [[entities/repository-operational-knowledge.md|repository operational knowledge]]
+
+---
+**관련**: [[entities/training-phase-knowledge-contamination.md|training phase knowledge contamination]]
+
+---
+**관련**: [[entities/goal-fixation-meta-decision.md|goal fixation meta decision]]
+
+---
+**관련**: [[entities/ontological-concealment-of-failure.md|ontological concealment of failure]]
+
+---
+**관련**: [[entities/zero-knowledge-negotiation.md|zero knowledge negotiation]]

@@ -19,9 +19,9 @@
 
 ## Wiki 연결
 
-- [[monocular-depth-estimation]] (CADENCE, 2026-04-10)이 '컨텍스트 적응적 깊이 추정'을 다뤘다면, 본 논문은 단안 깊이가 다중 뷰에서 상호 일관되도록 강제하는 '교차 뷰 일관성' 축을 추가한다. 단안 깊이가 독립 예측에서 교차 뷰 검증 대상으로 재정의된다.
-- [[autonomous-driving-perception]]과 [[3d-scene-understanding]] 관점에서 LiDAR 융합([[lidar-camera-fusion]]) 없이 카메라만으로 3D 신뢰성을 확보하는 순수 비전 경로를 제시한다.
-- 'Generalizable'이라는 목표는 [[generalization-gap]]에 센서 리그 구성 변화(카메라 개수·배치)에 대한 강건성이라는 새 하위 축을 제안한다.
+- [[concepts/monocular-depth-estimation.md|monocular depth estimation]] (CADENCE, 2026-04-10)이 '컨텍스트 적응적 깊이 추정'을 다뤘다면, 본 논문은 단안 깊이가 다중 뷰에서 상호 일관되도록 강제하는 '교차 뷰 일관성' 축을 추가한다. 단안 깊이가 독립 예측에서 교차 뷰 검증 대상으로 재정의된다.
+- [[concepts/autonomous-driving-perception.md|autonomous driving perception]]과 [[concepts/3d-scene-understanding.md|3d scene understanding]] 관점에서 LiDAR 융합([[concepts/lidar-camera-fusion.md|lidar camera fusion]]) 없이 카메라만으로 3D 신뢰성을 확보하는 순수 비전 경로를 제시한다.
+- 'Generalizable'이라는 목표는 [[concepts/generalization-gap.md|generalization gap]]에 센서 리그 구성 변화(카메라 개수·배치)에 대한 강건성이라는 새 하위 축을 제안한다.
 
 ## 새 개념
 

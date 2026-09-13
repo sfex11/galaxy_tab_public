@@ -22,5 +22,3 @@ regulatory-vacuity를 채우는 구체적 기술 경로를 제공하여, ai-gove
 ### Glyph: A Multi-Strategy Agentic System for Column Description and Sens (2026-09-11)
 
 데이터 거버넌스의 병목이 정책 설계가 아니라 메타데이터 생산 부채에 있음을 보여주며, 접근 제어·규제 준수의 기반이 되는 민감도 라벨의 자동 생성이라는 하류 자동화 경로를 추가한다.
-
-→ [[sources/2026-09-11-glyph-a-multi-strategy-agentic-system-for-column-d.md|상세 보기]]

@@ -17,15 +17,15 @@ Agentic AI가 경계된 과업 실행에서 벗어나 결과적 상태를 보존
 
 ## 기존 Wiki와의 관계
 
-본 논문은 Wiki의 분산된 축들을 하나의 문제로 수렴시킨다. [[adaptive-validity]]의 타당성 재평가가 메모리에서 행동 전이로 승격되고, [[metacognition]]이 복잡도 판단을 넘어 행동 지속성에 대한 존재론적 메타인지로 확장되며, [[termination-guarantee-problem]]은 정지 규칙의 내면화로 재정의된다. [[internal-external-control-continuum]] 위에서 SENTINEL-RL의 하네스 오프로딩과 정반대 극점을 차지한다.
+본 논문은 Wiki의 분산된 축들을 하나의 문제로 수렴시킨다. [[concepts/adaptive-validity.md|adaptive validity]]의 타당성 재평가가 메모리에서 행동 전이로 승격되고, [[concepts/metacognition.md|metacognition]]이 복잡도 판단을 넘어 행동 지속성에 대한 존재론적 메타인지로 확장되며, [[concepts/termination-guarantee-problem.md|termination guarantee problem]]은 정지 규칙의 내면화로 재정의된다. [[concepts/internal-external-control-continuum.md|internal external control continuum]] 위에서 SENTINEL-RL의 하네스 오프로딩과 정반대 극점을 차지한다.
 
 ## 핵심 긴장
 
-행동 통제의 내면화([[behavioral-control-internalization]])는 [[designer-foresight-boundary]]를 직접 침식하고 [[pseudo-alignment-by-self-consistency]]의 위험을 구조적으로 내장한다. 여기서 [[alignment-dual-attribution]]이 요구된다 — 정렬의 존재는 내부 지속 상태로 이동하되 제3자 검증 가능성은 외부 하네스에 의존해야 한다는 이중 귀속이다. [[consequential-state-retention]]과 [[agentic-drive]], [[persistent-alignment]]가 이 논문에서 파생된 핵심 개념이다.
+행동 통제의 내면화([[concepts/behavioral-control-internalization.md|behavioral control internalization]])는 [[concepts/designer-foresight-boundary.md|designer foresight boundary]]를 직접 침식하고 [[concepts/pseudo-alignment-by-self-consistency.md|pseudo alignment by self consistency]]의 위험을 구조적으로 내장한다. 여기서 [[concepts/alignment-dual-attribution.md|alignment dual attribution]]이 요구된다 — 정렬의 존재는 내부 지속 상태로 이동하되 제3자 검증 가능성은 외부 하네스에 의존해야 한다는 이중 귀속이다. [[concepts/consequential-state-retention.md|consequential state retention]]과 [[concepts/agentic-drive.md|agentic drive]], [[concepts/persistent-alignment.md|persistent alignment]]가 이 논문에서 파생된 핵심 개념이다.
 
 ## 연결점
 
-The Last AI Built by Humans가 제시한 자기 개선의 4개 자율성 축 중 전략 자율성의 정점이 이 내부 구동이며, 메모리 업그레이드 연구([[model-upgrade-forgetting]])에서 관찰된 적응적 타당성이 행동 도메인으로 이식된 최근 사례다.
+The Last AI Built by Humans가 제시한 자기 개선의 4개 자율성 축 중 전략 자율성의 정점이 이 내부 구동이며, 메모리 업그레이드 연구([[concepts/model-upgrade-forgetting.md|model upgrade forgetting]])에서 관찰된 적응적 타당성이 행동 도메인으로 이식된 최근 사례다.
 
 ## 🔗 관련 논문
 

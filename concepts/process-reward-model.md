@@ -22,5 +22,3 @@ _자동 Wiki Query에서 추출됨_
 ### EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction (2026-09-04)
 
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
-
-→ [[sources/2026-09-07-legibility-is-not-interpretability-comparing-judge.md|상세 보기]]

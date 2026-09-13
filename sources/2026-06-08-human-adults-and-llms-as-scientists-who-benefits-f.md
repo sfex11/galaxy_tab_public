@@ -79,3 +79,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/diagnostic-therapeutic-causal-inversion.md|diagnostic therapeutic causal inversion]]
+
+---
+**관련**: [[entities/observation-fidelity-paradox.md|observation fidelity paradox]]

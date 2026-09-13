@@ -49,3 +49,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/complexity-meta-cognition.md|complexity meta cognition]]
+
+---
+**관련**: [[entities/grounded-clinical-qa.md|grounded clinical qa]]
+
+---
+**관련**: [[entities/correlated-error-summation.md|correlated error summation]]

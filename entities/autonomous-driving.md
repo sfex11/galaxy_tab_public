@@ -27,16 +27,10 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 
 기존 LiDAR 인지-배포 간극 중심의 논의에서 end-to-end 정책 연구를 위한 개방형 실험 인프라 차원을 추가한다. 미니어처 Ackermann 플랫폼이 고비용 산업 실험 없이도 시뮬레이션-실차 검증 루프를 구축 가능하게 하여, 자율주행 연구의 병목이 알고리즘이 아닌 실험 인프라 접근성에 있음을 시사한다.
 
-→ [[sources/2026-09-07-a-low-cost-open-platform-for-end-to-end-autonomous.md|상세 보기]]
-
 ### Corner Cases: Headland Coverage Path Planning for Autonomous Driving i (2026-09-07)
 
 자율주행의 적용 영역을 도로 주행에서 농경지 헤드랜드로 확장하는 도메인 변주를 제공한다. 도로 주행과 다른 목표 함수(커버리지)와 평가 축(gap·overlap·경계 침범)을 요구함을 보여준다.
 
-→ [[sources/2026-09-07-corner-cases-headland-coverage-path-planning-for-a.md|상세 보기]]
-
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
 
-엔드투엔드 자율주행에서 인지-계획-제어 통합이 VLM 기반으로 가능함을 보여주며, LiDAR 인지 강화([[autonomous-driving-perception]])와 개방형 실험 플랫폼 연구와 결합하면 자율주행 VLA 스택의 방법-인프라 전체 지형이 완성된다.
-
-→ [[sources/2026-09-07-continuous-actions-from-discrete-minds-latent-alig.md|상세 보기]]
+엔드투엔드 자율주행에서 인지-계획-제어 통합이 VLM 기반으로 가능함을 보여주며, LiDAR 인지 강화([[concepts/autonomous-driving-perception.md|autonomous driving perception]])와 개방형 실험 플랫폼 연구와 결합하면 자율주행 VLA 스택의 방법-인프라 전체 지형이 완성된다.

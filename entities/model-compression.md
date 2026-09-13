@@ -32,5 +32,3 @@ _Wiki 축적 중_
 ### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
 
 기존 post-training 중심 압축(양자화·증류·프루닝) 분류에 '사전학습 시점에 프루닝 가능한 모델을 생성'하는 경로를 추가한다. Layer dropout 최적화는 훈련 시점 개입으로 압축이 사후 산출물이 아니라 모델에 내장된 속성임을 보여준다.
-
-→ [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]

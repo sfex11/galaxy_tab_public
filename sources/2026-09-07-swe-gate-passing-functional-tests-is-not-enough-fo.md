@@ -13,9 +13,9 @@
 
 SWE-Gate는 저장소 수준 소프트웨어 엔지니어링 벤치마크가 기능 테스트 통과라는 단일 프록시에 의존하며, 실제 패치 수용을 좌우하는 리뷰 기반 수용 제약(review constraints)을 간과한다는 문제 진단에서 출발한다. 리뷰 제약 준수를 명시적 평가 차원으로 채택한 최초의 저장소 수준 벤치마크로, 기능적 정확성과 수용 가능성 사이의 간극을 측정 가능하게 만든다.
 
-Wiki 관점에서 본 논문은 세 층위로 기여한다. 첫째, [[evaluation-deployment-unit-mismatch]]에 '코드 리뷰 문화'라는 도메인 특정 차원을 추가한다 — 테스트 통과라는 평가 단위와 리뷰 승인이라는 배포 수용 단위의 불일치가 실제 개발에서 체계적으로 발생함을 실증한다. 둘째, [[restestbench]]의 [[coverage-functionality-gap]]과 동형 구조를 형성한다 — 측정 프록시와 실제 목표의 단절이 소프트웨어 평가의 범용적 결함임을 교차 검증한다. 셋째, [[review-constraint-compliance]]를 통해 리뷰 제약이 [[repository-operational-knowledge]]의 외면화된 형태임을 보여준다 — 프로젝트의 암묵적 규범이 리뷰 제약으로 형식화되는 것은 [[tacit-criteria-surfacing]]의 SWE 도메인 발현이다.
+Wiki 관점에서 본 논문은 세 층위로 기여한다. 첫째, [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]에 '코드 리뷰 문화'라는 도메인 특정 차원을 추가한다 — 테스트 통과라는 평가 단위와 리뷰 승인이라는 배포 수용 단위의 불일치가 실제 개발에서 체계적으로 발생함을 실증한다. 둘째, [[entities/restestbench.md|restestbench]]의 [[concepts/coverage-functionality-gap.md|coverage functionality gap]]과 동형 구조를 형성한다 — 측정 프록시와 실제 목표의 단절이 소프트웨어 평가의 범용적 결함임을 교차 검증한다. 셋째, [[concepts/review-constraint-compliance.md|review constraint compliance]]를 통해 리뷰 제약이 [[concepts/repository-operational-knowledge.md|repository operational knowledge]]의 외면화된 형태임을 보여준다 — 프로젝트의 암묵적 규범이 리뷰 제약으로 형식화되는 것은 [[concepts/tacit-criteria-surfacing.md|tacit criteria surfacing]]의 SWE 도메인 발현이다.
 
-[[llm-as-code-reviewer]] 관점에서 SWE-Gate는 코드 리뷰 능력이 별도의 평가 축임을 정당화한다. 코딩 에이전트는 코드 의미론을 넘어 커뮤니티 규범을 모델링해야 하며, 이는 [[swe-chat]]이 제기한 [[task-reality-divergence]] 문제를 벤치마크 설계 수준에서 해소하는 경로가 된다.
+[[entities/llm-as-code-reviewer.md|llm as code reviewer]] 관점에서 SWE-Gate는 코드 리뷰 능력이 별도의 평가 축임을 정당화한다. 코딩 에이전트는 코드 의미론을 넘어 커뮤니티 규범을 모델링해야 하며, 이는 [[entities/swe-chat.md|swe chat]]이 제기한 [[concepts/task-reality-divergence.md|task reality divergence]] 문제를 벤치마크 설계 수준에서 해소하는 경로가 된다.
 
 ## 🔗 관련 논문
 

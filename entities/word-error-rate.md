@@ -18,5 +18,3 @@ WER가 '의미 무감각적' 메트릭이라는 비판을 넘어, 이것이 ASR�
 ### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-13)
 
 프라이버시 메커니즘의 설계 선택이 WER에 직접 전이되는 하류 성능 지표로서의 역할을 확정한다. 예산 배분 방식 3종(flat, per-layer 단일 풀, 컴포넌트 인식) 간 WER 격차가 프라이버시 설계의 실질 비용을 측정하는 축이 된다.
-
-→ [[sources/2026-09-13-component-aware-differential-privacy-for-federated.md|상세 보기]]

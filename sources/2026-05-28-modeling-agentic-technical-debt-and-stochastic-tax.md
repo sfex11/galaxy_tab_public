@@ -92,3 +92,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/external-abstraction-injection.md|external abstraction injection]]
+
+---
+**관련**: [[entities/measurement-repeatability.md|measurement repeatability]]

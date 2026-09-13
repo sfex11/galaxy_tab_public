@@ -22,10 +22,10 @@
 두 속성은 독립적이며, 설명 텍스트의 표면 판독만으로는 구별 불가능하다. 행동 증거(반사실적 개입)를 통한 검증으로만 분리 판정 가능하다.
 
 ### Wiki와의 관계
-[[legibility-interpretability-gap]] 논문(2026-09-07)이 judge가 판단한 단계 중요도와 개입 실험으로 측정한 실제 중요도의 발산을 실증했다면, 본 논문은 설명 평가를 '일치/불일치' 이분법에서 필요성·충분성의 인과 지위 공간으로 정밀화한다. [[step-importance-causal-verification]]의 방법론적 후속으로, 개입 검증의 대상을 reasoning step 중요도에서 설명에 명명된 요인의 지위로 확장한다. 이는 [[cot-as-translated-report]] 인식론 — 가독적 텍스트가 계산의 실재를 전달한다는 보장 부재 — 을 에이전트 운영 계층으로 확장하는 실증 사례다.
+[[concepts/legibility-interpretability-gap.md|legibility interpretability gap]] 논문(2026-09-07)이 judge가 판단한 단계 중요도와 개입 실험으로 측정한 실제 중요도의 발산을 실증했다면, 본 논문은 설명 평가를 '일치/불일치' 이분법에서 필요성·충분성의 인과 지위 공간으로 정밀화한다. [[concepts/step-importance-causal-verification.md|step importance causal verification]]의 방법론적 후속으로, 개입 검증의 대상을 reasoning step 중요도에서 설명에 명명된 요인의 지위로 확장한다. 이는 [[concepts/cot-as-translated-report.md|cot as translated report]] 인식론 — 가독적 텍스트가 계산의 실재를 전달한다는 보장 부재 — 을 에이전트 운영 계층으로 확장하는 실증 사례다.
 
 ### 실무적 함의
-운영자가 설명을 모니터링·오류 진단·에스컬레이션 결정에 사용하는 [[human-oversight]] 인프라에서, 설명-행동 불일치는 감독의 실효성을 은밀하게 훼손한다. [[process-reward-model]]과 [[judged-actual-importance-divergence]]가 지적한 감독 신호 취약성을 설명 평가 도메인에서 반복 확인시킨다.
+운영자가 설명을 모니터링·오류 진단·에스컬레이션 결정에 사용하는 [[concepts/human-oversight.md|human oversight]] 인프라에서, 설명-행동 불일치는 감독의 실효성을 은밀하게 훼손한다. [[concepts/process-reward-model.md|process reward model]]과 [[concepts/judged-actual-importance-divergence.md|judged actual importance divergence]]가 지적한 감독 신호 취약성을 설명 평가 도메인에서 반복 확인시킨다.
 
 ## 🔗 관련 논문
 

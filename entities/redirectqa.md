@@ -18,5 +18,3 @@ Wikipedia 리다이렉트 정보를 활용해 각 엔티티에 대해 다중 표
 ### Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Fronti (2026-09-08)
 
 RedirectQA가 사실 기억과 표면 접근성의 혼재 문제를 해결하려 한 이유를 자릿수 수준 검색의 광범위함으로 사후 정당화하며, 기억 감사의 표면 형식 축과 자릿수 축이라는 상보적 방법론 축을 구성한다.
-
-→ [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|상세 보기]]

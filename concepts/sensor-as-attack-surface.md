@@ -18,5 +18,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-13)
-
-→ [[sources/2026-09-13-specguard-inference-time-backdoor-detection-for-fr.md|상세 보기]]

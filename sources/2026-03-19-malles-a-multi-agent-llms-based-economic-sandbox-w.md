@@ -455,3 +455,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/environment-mediated-alignment.md|environment mediated alignment]]
+
+---
+**관련**: [[entities/multi-signal-hallucination-detection.md|multi signal hallucination detection]]
+
+---
+**관련**: [[entities/agreement-based-reliability.md|agreement based reliability]]
+
+---
+**관련**: [[entities/multi-dimensional-translation-validity.md|multi dimensional translation validity]]
+
+---
+**관련**: [[entities/alignment-scope-erosion.md|alignment scope erosion]]

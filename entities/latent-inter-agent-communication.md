@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Trust-Aware Adaptive Disclosure for Inference Privacy Preservation in  (2026-09-08)
 
 기존 정의가 능력 향상 축에서 '얼마나 공유할 것인가'를 다뤘다면, 본 논문은 프라이버시 축에서 '얼마나 숨길 것인가'를 다루어 통신 공개 수준 제어의 양면 구조를 완성한다.
-
-→ [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|상세 보기]]

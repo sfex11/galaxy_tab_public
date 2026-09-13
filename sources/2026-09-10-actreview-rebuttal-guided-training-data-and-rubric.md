@@ -17,16 +17,16 @@ LLM 사전심사(self-review) 맥락에서 피드백의 품질 기준을 '약점
 
 ## 핵심 메커니즘: Rebuttal의 감독 신호화
 
-저자의 rebuttal은 리뷰어 진단에 대한 실제 대응 기록이므로, '어떤 진단이 유효하고 어떤 수정이 대응 가능한가'에 대한 자연적 감독 라벨이다. 이는 [[tacit-criteria-surfacing]]의 학습 데이터 버전 — 암묵적 리뷰 기준이 상호작용 흔적에서 형식화된다. [[human-trace-external-anchoring]] 관점에서 rebuttal은 자기 생성 데이터의 순환 타당성을 절단하는 인간 근거 닻으로 기능한다.
+저자의 rebuttal은 리뷰어 진단에 대한 실제 대응 기록이므로, '어떤 진단이 유효하고 어떤 수정이 대응 가능한가'에 대한 자연적 감독 라벨이다. 이는 [[concepts/tacit-criteria-surfacing.md|tacit criteria surfacing]]의 학습 데이터 버전 — 암묵적 리뷰 기준이 상호작용 흔적에서 형식화된다. [[concepts/human-trace-external-anchoring.md|human trace external anchoring]] 관점에서 rebuttal은 자기 생성 데이터의 순환 타당성을 절단하는 인간 근거 닻으로 기능한다.
 
 ## Wiki 내 위치
 
-- [[llm-as-judge]]의 확장: 판정형 출력(점수/수용 여부)에서 진단+수정의 이중 출력으로
-- [[llm-as-code-reviewer]]와 평행 구조: SWE-Gate의 리뷰 제약 준수와 동형 — 수용 가능한 수정 제안이 리뷰의 실제 수용 단위
-- [[rlvr]]·[[process-reward-model]]의 도메인 확장: rubric reward는 정답 부재 도메인에서의 검증 가능 보상이나, [[reward-hacking]] 표면(루브릭을 충족하는 표면적 피드백)을 수반
-- [[scientific-workflow-agent]]: 연구 수명주기에 pre-submission 품질 게이트 계층 추가
+- [[concepts/llm-as-judge.md|llm as judge]]의 확장: 판정형 출력(점수/수용 여부)에서 진단+수정의 이중 출력으로
+- [[entities/llm-as-code-reviewer.md|llm as code reviewer]]와 평행 구조: SWE-Gate의 리뷰 제약 준수와 동형 — 수용 가능한 수정 제안이 리뷰의 실제 수용 단위
+- [[concepts/rlvr.md|rlvr]]·[[concepts/process-reward-model.md|process reward model]]의 도메인 확장: rubric reward는 정답 부재 도메인에서의 검증 가능 보상이나, [[concepts/reward-hacking.md|reward hacking]] 표면(루브릭을 충족하는 표면적 피드백)을 수반
+- [[entities/scientific-workflow-agent.md|scientific workflow agent]]: 연구 수명주기에 pre-submission 품질 게이트 계층 추가
 
-진단과 수정의 분리는 [[evaluation-deployment-unit-mismatch]]를 조작 가능한 형태로 전환한다 — 리뷰 품질의 측정 축(진단 정확성 vs 수정 수용 가능성)이 명시적이 되기 때문이다.
+진단과 수정의 분리는 [[concepts/evaluation-deployment-unit-mismatch.md|evaluation deployment unit mismatch]]를 조작 가능한 형태로 전환한다 — 리뷰 품질의 측정 축(진단 정확성 vs 수정 수용 가능성)이 명시적이 되기 때문이다.
 
 ## 🔗 관련 논문
 

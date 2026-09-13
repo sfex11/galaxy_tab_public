@@ -11,7 +11,7 @@ LLM 기반 게임 환경 생성은 RL 훈련의 환경 공급 병목을 수작�
 
 ## 📖 분석
 
-PlayTrain은 LLM이 최소한의 인간 프롬프트만으로 견고하게 JavaScript 게임을 생성하고, 어떤 JS 게임이든 표준 'gym' 환경에서 실행할 수 있는 효율적 파이프라인을 결합한 RL 프레임워크다. 이는 [[agent-environment-generation]]의 게임 도메인 구체화로서, Gym-Anything이 기존 소프트웨어를 환경으로 변환했다면 PlayTrain은 LLM 생성 능력으로 환경을 제로부터 합성하는 제3의 경로를 연다. 논문이 진단하는 '새 VGE 개발·수정에 광범위한 수작업 코딩 필요'는 [[environment-absence-bottleneck]]이 지적한 환경 공급 문제의 산업적 실증이며, [[environment-capability-causality]]의 인과 경로(환경 가용성 → 훈련 가능성)를 생성 자동화로 단축한다. 'adaptable' 게임 수정 지원은 [[environment-mutation-operator]]의 실용적 구현으로, 기존 환경에 새 기능을 추가하는 변이를 프롬프트 수준으로 끌어올린다. 다만 생성 편의성이 확보되면 병목은 환경 '생성'에서 '생성된 환경의 훈련 적합성 검증'으로 이동하며, 프롬프트에 명시되지 않은 난이도·보상 구조가 훈련 신호 품질을 좌우하는 새로운 형태의 [[designer-foresight-boundary]]가 프롬프트 작성자에게 이전됨을 시사한다.
+PlayTrain은 LLM이 최소한의 인간 프롬프트만으로 견고하게 JavaScript 게임을 생성하고, 어떤 JS 게임이든 표준 'gym' 환경에서 실행할 수 있는 효율적 파이프라인을 결합한 RL 프레임워크다. 이는 [[concepts/agent-environment-generation.md|agent environment generation]]의 게임 도메인 구체화로서, Gym-Anything이 기존 소프트웨어를 환경으로 변환했다면 PlayTrain은 LLM 생성 능력으로 환경을 제로부터 합성하는 제3의 경로를 연다. 논문이 진단하는 '새 VGE 개발·수정에 광범위한 수작업 코딩 필요'는 [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]이 지적한 환경 공급 문제의 산업적 실증이며, [[concepts/environment-capability-causality.md|environment capability causality]]의 인과 경로(환경 가용성 → 훈련 가능성)를 생성 자동화로 단축한다. 'adaptable' 게임 수정 지원은 [[concepts/environment-mutation-operator.md|environment mutation operator]]의 실용적 구현으로, 기존 환경에 새 기능을 추가하는 변이를 프롬프트 수준으로 끌어올린다. 다만 생성 편의성이 확보되면 병목은 환경 '생성'에서 '생성된 환경의 훈련 적합성 검증'으로 이동하며, 프롬프트에 명시되지 않은 난이도·보상 구조가 훈련 신호 품질을 좌우하는 새로운 형태의 [[concepts/designer-foresight-boundary.md|designer foresight boundary]]가 프롬프트 작성자에게 이전됨을 시사한다.
 
 ## 🔗 관련 논문
 

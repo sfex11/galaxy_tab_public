@@ -21,9 +21,9 @@ SpeechLLM은 ASR 캐스케이드를 우회해 지연을 줄이고 부가언어�
 
 ## 기존 Wiki 논의와의 관계
 
-[[adaptive-inference]]의 적응 축에 시간 배치 차원('언제 계산하는가')을 추가한다. 기존 논의가 예산 축(얼마나 계산할까)과 궤적 축(어떤 방향으로)을 다뤘다면, 본 논문은 추론 연산의 출력 대비 위치 자체를 독립 설계 변수로 격상시킨다. 이는 [[inference-budget-progressive-investment]]의 초기 응답 후 점진 투입 원리를 음성 도메인에서 실현한 사례이며, [[streaming-adaptive-inference]]의 실시간 제약 하 깊은 추론 유지 과제에 대한 구체적 해법이다.
+[[concepts/adaptive-inference.md|adaptive inference]]의 적응 축에 시간 배치 차원('언제 계산하는가')을 추가한다. 기존 논의가 예산 축(얼마나 계산할까)과 궤적 축(어떤 방향으로)을 다뤘다면, 본 논문은 추론 연산의 출력 대비 위치 자체를 독립 설계 변수로 격상시킨다. 이는 [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]의 초기 응답 후 점진 투입 원리를 음성 도메인에서 실현한 사례이며, [[concepts/streaming-adaptive-inference.md|streaming adaptive inference]]의 실시간 제약 하 깊은 추론 유지 과제에 대한 구체적 해법이다.
 
-[[thought-action-topology]] 관점에서 [사고→행동]의 선형 순서를 [행동→사고→정제]로 역전시켜 CoT의 지연 비용을 상호작용 흐름 속에 은닉하는 위상 변형 사례다. 음성 모달의 추론 격차 진단은 [[slm-reasoning-gap]]의 모달리티 확장으로 읽히며, ASR 캐스케이드 대비 부가언어 보존 우위는 [[audio-language-model]]의 모달리티 정보 손실 논의와 직결된다.
+[[concepts/thought-action-topology.md|thought action topology]] 관점에서 [사고→행동]의 선형 순서를 [행동→사고→정제]로 역전시켜 CoT의 지연 비용을 상호작용 흐름 속에 은닉하는 위상 변형 사례다. 음성 모달의 추론 격차 진단은 [[concepts/slm-reasoning-gap.md|slm reasoning gap]]의 모달리티 확장으로 읽히며, ASR 캐스케이드 대비 부가언어 보존 우위는 [[concepts/audio-language-model.md|audio language model]]의 모달리티 정보 손실 논의와 직결된다.
 
 ## 🔗 관련 논문
 

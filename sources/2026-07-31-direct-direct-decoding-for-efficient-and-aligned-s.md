@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-alignment-erosion.md|temporal alignment erosion]]
+
+---
+**관련**: [[entities/alignment-base-opacity.md|alignment base opacity]]

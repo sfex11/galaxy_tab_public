@@ -47,10 +47,6 @@ AR 가중치를 표준 NTP 목적함수로 그대로 학습함으로써 주변 �
 
 교사 LLM의 추론 품질이 증류 학생의 성능 천장을 규정하는 구조를 제공한다 — P(y)→P(y|x) 천장 개념이 교사-학생 증류 관계로 확장되며, 증류는 천장을 돌파하는 것이 아니라 천장을 학생에게 최대한 이전하는 작업임을 시사한다.
 
-→ [[sources/2026-09-08-distill-globally-adapt-locally-reasoning-distillat.md|상세 보기]]
-
 ### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
 
 Layer dropout이 사전학습 분포 P(y)의 형성 자체를 수정하면서도 정확도 저하를 완화 가능함을 보여, P(y)의 형상화에 설계 자유도가 스케일링 관행이 가정한 것보다 크다는 증거를 제공한다. 정규화가 일반화 수단을 넘어 P(y)의 추론 옵션을 결정하는 매개변수로 재해석된다.
-
-→ [[sources/2026-09-08-dont-drop-dropout-optimizing-layer-sparsity-for-ef.md|상세 보기]]

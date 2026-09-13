@@ -67,3 +67,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/legitimate-division-of-labor-as-attack-surface.md|legitimate division of labor as attack surface]]
+
+---
+**관련**: [[entities/surface-completeness-misreading.md|surface completeness misreading]]
+
+---
+**관련**: [[entities/backdoor-attack.md|backdoor attack]]
+
+---
+**관련**: [[entities/capability-safety-inseparability.md|capability safety inseparability]]
+
+---
+**관련**: [[entities/capability-gap-self-diagnosis.md|capability gap self diagnosis]]

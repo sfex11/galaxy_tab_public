@@ -287,3 +287,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-paradigm-feedback-bias.md|evaluation paradigm feedback bias]]
+
+---
+**관련**: [[entities/rebuttal-as-supervision-signal.md|rebuttal as supervision signal]]
+
+---
+**관련**: [[entities/single-surface-signal-insufficiency.md|single surface signal insufficiency]]
+
+---
+**관련**: [[entities/rubric-to-reward-reducibility.md|rubric to reward reducibility]]
+
+---
+**관련**: [[entities/placebo-controlled-swap-evaluation.md|placebo controlled swap evaluation]]
+
+---
+**관련**: [[entities/test-time-training.md|test time training]]
+
+---
+**관련**: [[entities/raw-evidence-anchoring.md|raw evidence anchoring]]
+
+---
+**관련**: [[entities/verifiable-training-data-synthesis.md|verifiable training data synthesis]]
+
+---
+**관련**: [[entities/federated-continual-learning.md|federated continual learning]]
+
+---
+**관련**: [[entities/undetectable-feedback-signal.md|undetectable feedback signal]]

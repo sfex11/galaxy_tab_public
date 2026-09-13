@@ -15,5 +15,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-13)
-
-→ [[sources/2026-09-13-the-last-ai-built-by-humans-toward-genuine-recursi.md|상세 보기]]

@@ -73,5 +73,3 @@ SafetyALFRED는 MLLM의 멀티모달 이해 능력이 체화 환경에서 안전
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 VideoLLM이 MLLM 연구의 최전선 응용 영역이며, 프레임 수·컨텍스트 길이에 비례하는 계산·메모리 비용이 배포의 구조적 제약임을 서베이 차원에서 규정한다. MLLM 효율화 연구의 비디오 특화 지형도를 제공한다.
-
-→ [[sources/2026-09-11-why-is-video-still-so-expensive-a-survey-of-infere.md|상세 보기]]

@@ -153,3 +153,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/rubric-ontology-rigidity.md|rubric ontology rigidity]]
+
+---
+**관련**: [[entities/sensitivity-ontology-tagging.md|sensitivity ontology tagging]]

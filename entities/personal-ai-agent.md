@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
 
 개인화 에이전트의 존재 이유를 '인구 규모 능력과 개인 수준 품질의 간극 해소'로 규정한다. 평균적 능력은 사전학습으로 공리화되지만 개인 기준은 과제마다 유도되어야 하므로, 이 간극이 개인화의 존재론적·비용적 근거가 된다.
-
-→ [[sources/2026-09-07-efficient-test-time-adaptation-through-human-ai-in.md|상세 보기]]

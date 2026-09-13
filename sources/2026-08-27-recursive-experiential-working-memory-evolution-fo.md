@@ -62,3 +62,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-state-responsive-adaptation.md|harness state responsive adaptation]]
+
+---
+**관련**: [[entities/recursive-meta-improvement.md|recursive meta improvement]]
+
+---
+**관련**: [[entities/evidence-grounded-diagnosis.md|evidence grounded diagnosis]]
+
+---
+**관련**: [[entities/recursive-self-improvement.md|recursive self improvement]]
+
+---
+**관련**: [[entities/improvement-strategy-autonomy.md|improvement strategy autonomy]]
+
+---
+**관련**: [[entities/post-adaptation-selection.md|post adaptation selection]]
+
+---
+**관련**: [[entities/improvement-autonomy-taxonomy.md|improvement autonomy taxonomy]]
+
+---
+**관련**: [[entities/domain-grounded-contract-execution.md|domain grounded contract execution]]

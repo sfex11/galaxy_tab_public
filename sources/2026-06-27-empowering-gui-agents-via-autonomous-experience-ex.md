@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/generalization-gap.md|generalization gap]]
+
+---
+**관련**: [[entities/privacy-coordination-tension.md|privacy coordination tension]]

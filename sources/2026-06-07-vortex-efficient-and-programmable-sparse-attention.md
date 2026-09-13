@@ -239,3 +239,60 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]
+
+---
+**관련**: [[entities/autonomous-interpretability-research.md|autonomous interpretability research]]
+
+---
+**관련**: [[entities/abstraction-layer-mismatch.md|abstraction layer mismatch]]
+
+---
+**관련**: [[entities/ephemeral-agent-durable-collective.md|ephemeral agent durable collective]]
+
+---
+**관련**: [[entities/sign-language-gloss-translation.md|sign language gloss translation]]
+
+---
+**관련**: [[entities/algorithm-level-adaptation.md|algorithm level adaptation]]
+
+---
+**관련**: [[entities/research-capability-benchmark.md|research capability benchmark]]
+
+---
+**관련**: [[entities/agent-interchangeability.md|agent interchangeability]]
+
+---
+**관련**: [[entities/multi-agent-bayesian-consensus.md|multi agent bayesian consensus]]
+
+---
+**관련**: [[entities/glyph-system.md|glyph system]]
+
+---
+**관련**: [[entities/attention-sink.md|attention sink]]
+
+---
+**관련**: [[entities/length-inflation.md|length inflation]]
+
+---
+**관련**: [[entities/attention-self-concentration.md|attention self concentration]]
+
+---
+**관련**: [[entities/in-the-wild-agent-dataset.md|in the wild agent dataset]]
+
+---
+**관련**: [[entities/agent-native-immune-system.md|agent native immune system]]
+
+---
+**관련**: [[entities/forgetting-as-agent-decision.md|forgetting as agent decision]]
+
+---
+**관련**: [[entities/agent-identity.md|agent identity]]
+
+---
+**관련**: [[entities/discriminative-world-model.md|discriminative world model]]
+
+---
+**관련**: [[entities/code-as-agent-harness.md|code as agent harness]]
+
+---
+**관련**: [[entities/scale-conditional-training-strategy.md|scale conditional training strategy]]

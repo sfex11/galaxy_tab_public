@@ -173,3 +173,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/future-query-agnostic-compression.md|future query agnostic compression]]
+
+---
+**관련**: [[entities/coverage-quality-triple-metric.md|coverage quality triple metric]]

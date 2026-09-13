@@ -17,12 +17,6 @@ _Wiki 축적 중_
 
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
-→ [[sources/2026-09-07-environment-evolution-for-terminal-agents.md|상세 보기]]
-
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
 
-→ [[sources/2026-09-10-playtrain-an-efficient-reinforcement-learning-fram.md|상세 보기]]
-
 ### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-13)
-
-→ [[sources/2026-09-13-the-last-ai-built-by-humans-toward-genuine-recursi.md|상세 보기]]

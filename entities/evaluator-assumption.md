@@ -64,5 +64,3 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 평가 형식 자체가 실패 모드의 관찰 가능성을 결정한다는 명제의 sycophancy 도메인 실증을 제공한다 — 짧은 사전 지정 대화는 지속적 압력에서만 발현하는 붕괴를 구조적으로 놓친다는 반증 사례다.
-
-→ [[sources/2026-09-10-measuring-llm-sycophancy-under-sustained-multi-tur.md|상세 보기]]

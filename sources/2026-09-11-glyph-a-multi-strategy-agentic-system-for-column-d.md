@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-Glyph는 엔터프라이즈 데이터 레이크의 문서화 부채(컬럼 설명 누락, 거버넌스 라벨 미할당)를 컬럼 설명 생성과 민감도 타입 주석이라는 두 개의 결합된 문제로 공식화하고, 상태 그래프로 오케스트레이션되는 협업 LLM 에이전트(Descriptor, Tagger)로 해결하는 프로덕션 시스템이다. 본 논문은 [[semantic-metadata-eliminability-hypothesis]]에 대한 중요한 보완 관점을 제공한다 — 기존 가설이 메타데이터를 에이전트 파이프라인의 오버헤드로 보았다면, Glyph는 메타데이터 생산 자체를 LLM 에이전트의 태스크로 재정의하여, 문제의 본질이 '메타데이터의 가치'가 아니라 '인간 기반 생산의 병목'이었음을 드러낸다. Descriptor와 Tagger의 이원 협업 구조는 [[multi-agent-system]]의 하위 문제 분해 사례를 추가하며, 상태 그래프 오케스트레이션은 [[agent-loop-as-computation]]의 구현 축을 강화한다. 민감도 온톨로지 태깅은 [[ai-governance]]의 규제 준수를 데이터 스키마 계층의 자동 갱신 아티팩트로 하류화하여, 거버넌스가 문서가 아닌 지속 생성되는 산출물이 되는 방향을 시사한다.
+Glyph는 엔터프라이즈 데이터 레이크의 문서화 부채(컬럼 설명 누락, 거버넌스 라벨 미할당)를 컬럼 설명 생성과 민감도 타입 주석이라는 두 개의 결합된 문제로 공식화하고, 상태 그래프로 오케스트레이션되는 협업 LLM 에이전트(Descriptor, Tagger)로 해결하는 프로덕션 시스템이다. 본 논문은 [[concepts/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]에 대한 중요한 보완 관점을 제공한다 — 기존 가설이 메타데이터를 에이전트 파이프라인의 오버헤드로 보았다면, Glyph는 메타데이터 생산 자체를 LLM 에이전트의 태스크로 재정의하여, 문제의 본질이 '메타데이터의 가치'가 아니라 '인간 기반 생산의 병목'이었음을 드러낸다. Descriptor와 Tagger의 이원 협업 구조는 [[concepts/multi-agent-system.md|multi agent system]]의 하위 문제 분해 사례를 추가하며, 상태 그래프 오케스트레이션은 [[concepts/agent-loop-as-computation.md|agent loop as computation]]의 구현 축을 강화한다. 민감도 온톨로지 태깅은 [[concepts/ai-governance.md|ai governance]]의 규제 준수를 데이터 스키마 계층의 자동 갱신 아티팩트로 하류화하여, 거버넌스가 문서가 아닌 지속 생성되는 산출물이 되는 방향을 시사한다.
 
 ## 🔗 관련 논문
 
