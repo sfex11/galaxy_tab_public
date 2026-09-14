@@ -1,23 +1,23 @@
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-09-07  
+**생성일**: 2026-09-14  
 **관련 논문**: 8편  
-**최종 업데이트**: 2026-09-07
+**최종 업데이트**: 2026-09-14
 
 # Reinforcement Learning: 합성 분석
 
 **생성일**: 2026-07-27
 **관련 논문**: 8편 등록 (고유 4편 — 중복 4편 정리)
 **최종 업데이트**: 2026-12-01
-**변경 사항**: 신규 논문 없음. 중복 등록 정리, 수명 주기 관점 심화, 절단되었던 개념 섹션 복원
+**변경 사항**: 신규 논문 없음. 이전 버전에서 누락되었던 개념 섹션 완전 복원, 중복 헤더 제거
 
 ## 공통 주제: 배포 가능한 RL의 세 가지 근원적 난제
 
 고유 4편은 "벤치마크 점수를 넘어선 신뢰성"이라는 메타 주제로 수렴한다.
 
-**비정상성.** 드리프트·마모로 동역학이 진화하는 환경을 다루는 GP 기반 Continual MBRL과, sim-to-real 간극을 다루는 진화적 RL은 정상성(stationarity) 가정의 붕괴라는 동일 근원을 공유하며, 모두 이를 분포 이동의 변주로 규정한다.
+**비정상성.** 드리프트·마모로 동역학이 에피소드마다 진화하는 환경을 다루는 GP 기반 Continual MBRL과, sim-to-real 간극을 다루는 진화적 RL은 정상성(stationarity) 가정의 붕괴라는 동일 근원을 공유하며, 모두 이를 분포 이동의 변주로 규정한다.
 
-**검증의 부재.** 심볼릭 속성 분석은 점 속성(point properties) 검증으로는 전체 상태 공간에서의 DRL 행동을 보장할 수 없다는 진단에서 출발한다. 적응형 비디오 스트리밍·혼잡 제어 등 임계 인프라 적용이 이 병목의 실무적 무게를 보여준다.
+**검증의 부재.** 심볼릭 속성 분석은 고정 입력의 점 속성(point properties) 검증으로는 전체 상태 공간에서의 DRL 행동을 보장할 수 없다는 진단에서 출발한다. 적응형 비디오 스트리밍·혼잡 제어 등 임계 인프라 적용이 이 병목의 실무적 무게를 보여준다.
 
 **훈련 비효율.** Android Coach는 SSSA(단일 상태-단일 행동) 패러다임과 에뮬레이터 지연이 겹친 구조적 샘플 낭비를 스냅샷 복원 기반 SSMA 분기 탐색으로 해소한다.
 
@@ -31,25 +31,26 @@
 
 ## 연구 트렌드와 미해결 과제
 
-**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화로 이동한다. Android 에이전트 연구는 RL과 [[concepts/computer-use-agent.md|computer-use agent]] 연구의 접점을 제공하며, 관련 LLM 가드레일 연구(TraceSafe)와의 수렴도 주목된다.
+**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화로 이동한다. Android 에이전트 연구는 RL과 [[concepts/computer-use-agent.md|computer-use agent]] 연구의 접점을 제공하며, LLM 가드레일 연구(TraceSafe)와의 신뢰성 담론 수렴도 주목된다.
 
 **미해결 과제.** ① MB+진화적 RL 하이브리드 아키텍처의 부재, ② 고차원 상태 공간에서 심볼릭 검증의 계산 확장성, ③ 비가역 환경에서의 SSMA 대체 기법, ④ 세 차원 탐색을 아우르는 통합 이론.
 
 ## 📐 관련 개념
 
-- [[concepts/reinforcement-learning.md|reinforcement-learning]]
-- [[concepts/distribution-shift.md|distribution-shift]]
-- [[concepts/model-based-rl.md|model-based-rl]]
-- [[concepts/world-model.md|world-model]]
-- [[concepts/meta-learning.md|meta-learning]]
-- [[concepts/model-predictive-control.md|model-predictive-control]]
-- [[concepts/formal-verification.md|formal-verification]]
-- [[concepts/ai-safety.md|ai-safety]]
-- [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
-- [[concepts/token-efficiency.md|token-efficiency]]
-- [[concepts/computer-use-agent.md|computer-use-agent]]
-- [[concepts/embodied-ai.md|embodied-ai]]
-- [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]]
+**핵심**: [[concepts/reinforcement-learning.md|reinforcement-learning]] · [[concepts/distribution-shift.md|distribution-shift]] · [[concepts/model-based-rl.md|model-based-rl]]
+
+**적응·모델링**: [[concepts/world-model.md|world-model]] · [[concepts/meta-learning.md|meta-learning]] · [[concepts/model-predictive-control.md|model-predictive-control]]
+
+**검증·안전**: [[concepts/formal-verification.md|formal-verification]] · [[concepts/ai-safety.md|ai-safety]] · [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
+
+**에이전트·효율**: [[concepts/computer-use-agent.md|computer-use-agent]] · [[concepts/token-efficiency.md|token-efficiency]] · [[concepts/embodied-ai.md|embodied-ai]] · [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]]
+
+## 🔗 논문 목록
+
+1. [Model-Based RL for Control under Time-Varying Dynamics](http://arxiv.org/abs/2604.02260v1) — GP 기반 continual MBRL
+2. [Analyzing Symbolic Properties for DRL Agents](http://arxiv.org/abs/2604.04914v1) — 전역 행동 검증
+3. [Android Coach](http://arxiv.org/abs/2604.07277v1) — SSMA 샘플 효율화
+4. [Robust Quadruped Locomotion via Evolutionary RL](http://arxiv.org/abs/2604.07224v1) — CEM+DDPG/TD3
 
 ---
 _LLM 분석으로 재생성됨_
