@@ -586,3 +586,5 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 ### Glyph: A Multi-Strategy Agentic System for Column Description and Sens (2026-09-11)
 
 문서화·분류라는 엔터프라이즈 데이터 인프라 운영 태스크에서 LLM 에이전트 협업이 프로덕션 배포됨을 보여, 에이전트 적용 스펙트럼을 코드·웹 도메인 너머 데이터 카탈로그 영역으로 확장한다.
+
+- [[sources/2026-09-15-from-review-to-reuse-how-post-task-workflow-can-su.md]]

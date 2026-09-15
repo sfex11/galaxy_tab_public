@@ -3453,3 +3453,19 @@
 ## [2026-09-13 18:25] lint | Wiki 건전성 체크
 - Issues: 3304개
 - Orphans: 992, Missing: 2312, Contradictions: 0
+
+## [2026-09-15 08:37] ingest | From Review to Reuse: How Post-Task Workflow Can Support Human-AI Agent Interaction
+
+## [2026-09-15 08:37] ingest | Rethinking Heterogeneous System Disaggregation for Subquadratic Attention
+
+## [2026-09-15 08:37] ingest | Continue, Adapt, or Yield: In-Turn Adaptation to Overlapping Speech in Full-Duplex Agents
+
+## [2026-09-15 08:37] ingest | ASTRIL-MPC: Autonomous Traversal Framework of Articulated Tracked Robots with Language-Guided Neural-Kinematic MPC
+
+## [2026-09-15 08:37] ingest | Embodied-BenchForge: A Closed-Loop Agentic Workflow for Embodied Benchmark Construction
+
+## [2026-09-15 08:37] ingest | MP-Bench: Evaluating Voice Agents as a Multiparty Conversation Participant
+
+## [2026-09-15 08:37] ingest | Autonomous Research for Open-Ended Problems: A Case Study on Telecom Ticket Retrieval
+
+## [2026-09-15 08:37] ingest | Anchoring Clinical Events in Time: UID-Preserving Multimodal Reconstruction and Source-Grounded Adjudication

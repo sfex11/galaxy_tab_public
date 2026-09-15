@@ -1814,3 +1814,13 @@
 - [[entities/llm-agent]] - LLM Agent
 - [[sources/2026-09-09-how-to-speculate-about-uncertainty-in-agentic-codi.md]] - How to Speculate about Uncertainty in Agentic Coding? A Draft-Model Gate Method
 - [[sources/2026-09-09-price-a-systematic-study-of-llm-adaptation-choices.md]] - PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-15-from-review-to-reuse-how-post-task-workflow-can-su.md]] - From Review to Reuse: How Post-Task Workflow Can Support Human-AI Agent Interaction
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-15-rethinking-heterogeneous-system-disaggregation-for.md]] - Rethinking Heterogeneous System Disaggregation for Subquadratic Attention
+- [[sources/2026-09-15-continue-adapt-or-yield-in-turn-adaptation-to-over.md]] - Continue, Adapt, or Yield: In-Turn Adaptation to Overlapping Speech in Full-Duplex Agents
+- [[sources/2026-09-15-astril-mpc-autonomous-traversal-framework-of-artic.md]] - ASTRIL-MPC: Autonomous Traversal Framework of Articulated Tracked Robots with Language-Guided Neural-Kinematic MPC
+- [[sources/2026-09-15-embodied-benchforge-a-closed-loop-agentic-workflow.md]] - Embodied-BenchForge: A Closed-Loop Agentic Workflow for Embodied Benchmark Construction
+- [[sources/2026-09-15-mp-bench-evaluating-voice-agents-as-a-multiparty-c.md]] - MP-Bench: Evaluating Voice Agents as a Multiparty Conversation Participant
+- [[sources/2026-09-15-autonomous-research-for-open-ended-problems-a-case.md]] - Autonomous Research for Open-Ended Problems: A Case Study on Telecom Ticket Retrieval
+- [[sources/2026-09-15-anchoring-clinical-events-in-time-uid-preserving-m.md]] - Anchoring Clinical Events in Time: UID-Preserving Multimodal Reconstruction and Source-Grounded Adjudication
