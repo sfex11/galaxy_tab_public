@@ -52,3 +52,9 @@ PRM 학습이나 온폴리시 증류 같은 별도 파이프라인 없이, 기�
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 사후학습 설계 공간에 '데이터·손실 이후의 제3 축'으로 업데이트 부공간 선택을 추가한다. 동일한 정렬 목표라도 업데이트가 어느 부공간에 위치하느냐에 따라 행동 특성(길이)이 달라짐을 보여준다.
+
+### Bellman Policy Optimization (2026-09-16)
+
+LLM 사후학습의 최적화 설계 공간에 크리틱 없는 이론적 기초 방법을 추가하여, 사후학습 방법론 선택이 경험적 성능 비교를 넘어 최적해 동등성이라는 이론적 기준으로 평가될 수 있음을 시사한다.
+
+→ [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]

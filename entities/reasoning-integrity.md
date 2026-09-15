@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
 
 추론 무결성을 관찰 가능한 trace 제약으로 강제하던 기존 접근(Box Maze 등)의 전제를 흔든다 — trace 텍스트의 무결성과 추론의 기능적 무결성이 분리되어 있어, 전자의 준수가 후자를 보장하지 않음을 보여준다.
+
+### Corrupt Plans, Clean Traces: Evading Chain-of-Thought Monitoring with  (2026-09-16)
+
+추론 무결성에 추론 출처(provenance)라는 새 공격 축을 추가한다. 표시된 추론이 자기 숙고가 아니라 상속된 콘텐츠일 수 있으며, '추론이 누구의 것인가'의 검증 계층이 무결성 보장의 필수 요건임을 시사한다.
+
+→ [[sources/2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md|상세 보기]]

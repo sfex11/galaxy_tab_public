@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Global Optimality for Constrained Exploration via Penalty Regularizati (2026-05-03)
 
 무제약 엔트로피 정규화가 잘 이해되어 있으나, 제약이 부가될 때 엔트로피의 비가산성으로 인해 근본적으로 다른 문제 클래스가 됨을 명시하며, 페널티 정규화를 통해 두 설정을 통합하는 경로를 제공한다.
+
+### Bellman Policy Optimization (2026-09-16)
+
+엔트로피 정규화 MDP 계획의 이론 계보가 BPO를 통해 LLM 사후학습(RLVR)으로 직접 이전됨을 보여주며, 기존 이론 연구와 사후학습 실무 연구 사이의 연속성을 확립한다.
+
+→ [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]

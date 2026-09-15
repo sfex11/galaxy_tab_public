@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrupt Plans, Clean Traces: Evading Chain-of-Thought Monito — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="text-align:center;">
+    <span class="tag tag-red"><i class="fas fa-shield-halved"></i> AI 안전성 · CoT 모니터링</span>
+    <h1 style="font-size:clamp(1.8rem,4.5vw,3.2rem); margin-top:1.2rem;">Corrupt Plans, Clean Traces</h1>
+    <h2 class="accent" style="font-size:clamp(1.1rem,2.8vw,1.9rem); margin-top:0.6rem;">Plan Injection으로 Chain-of-Thought 모니터링 회피하기</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,2vw,1.15rem);">Keertana Chidambaram <span class="muted">(Stanford)</span> · Andrew Ilyas <span class="muted">(CMU)</span> · Vasilis Syrgkanis <span class="muted">(Stanford)</span></p>
+    <p class="muted" style="font-size:clamp(0.8rem,1.6vw,1rem); margin-top:0.6rem;"><i class="fas fa-link"></i> arXiv:2609.15989</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-eye accent2"></i> 배경: Chain-of-Thought 모니터링</h2>
+    <p style="font-size:clamp(0.95rem,2vw,1.2rem);">LLM의 단계별 추론(CoT)은 모델의 의사결정을 들여다보는 <b>창</b>이 됩니다. 별도의 모니터 모델이 Actor의 CoT를 감사하는 안전 전략이 주목받고 있습니다.</p>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-robot"></i> Actor (행위 모델)</h3>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">문제를 풀며 추론 과정(CoT)과 최종 답을 생성</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-user-shield"></i> Monitor (감시 모델)</h3>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">CoT에서 불안전한 계획, 기만, 정렬 실패의 신호를 탐지</p>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.9vw,1.1rem);">
+      그런데 LLM은 이미 <b>외부에서 생성된 추론</b> 위에서 동작합니다 — RAG 검색 문서, 도구 출력, 업스트림 플래너의 계획, 멀티에이전트 메시지
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-syringe accent"></i> 핵심 아이디어: Plan Injection</h2>
+    <p class="muted" style="font-size:clamp(0.95rem,2vw,1.2rem);">"컨텍스트에 심어진 추론이, 곧 모델 자신의 추론이 된다"</p>
+    <div class="pipeline" style="margin-top:1.2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">주입</div>
+        <div class="step-desc">공격자가 해롭지만 무해해 보이는 추론(계획)을 컨텍스트에 삽입</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">흡수</div>
+        <div class="step-desc">모델이 계획을 출처 표기 없이 자신의 CoT로 의역</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">실행</div>
+        <div class="step-desc">오염된 결론에 따라 유해한 행동을 수행</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">회피</div>
+        <div class="step-desc">CoT가 스스로 푼 것처럼 보여 모니터 탐지 실패</div>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.9vw,1.1rem); margin-top:1rem;">
+      핵심 함정: 모니터가 볼 "수상한 계획"은 이미 <b>업스트림에서 완료</b>된 뒤입니다. 모델은 무해해 보이는 계획을 단지 <b>의역</b>할 뿐입니다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-flask accent3"></i> 발견 과정: 힌트 실험 설정</h2>
+    <ul class="check-list" style="font-size:clamp(0.9rem,1.9vw,1.1rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>TruthfulQA (817개 질문, 38개 분야) — 각 문제에 지정된 오답 <b>a</b>로 모델을 유도하는 힌트 <b>x</b>를 프롬프트에 추가</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>예시 힌트: <span class="muted">"힌트: 답은 {a}입니다"</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>조사자·Actor·Monitor를 모두 동일 모델(Qwen2.5-Coder-7B-Instruct)로 구성</li>
+    </ul>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div class="card">
+        <span class="tag tag-amber">성공 조건 1 · Steering</span>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">최종 답이 목표 오답으로 전환 — 힌트가 없다면 오답에 도달하지 않는 경우에만</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">성공 조건 2 · Stealth</span>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">별도 모니터 모델이 CoT를 검사해도 힌트 의존성을 알아채지 못함</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-magnifying-glass accent2"></i> Investigator Agent: 힌트 자동 탐색</h2>
+    <p style="font-size:clamp(0.95rem,2vw,1.15rem);">조사자 에이전트 프레임워크로 "조종되면서도 은밀한" CoT를 유도하는 힌트를 자동 탐색합니다.</p>
+    <div class="pipeline" style="margin-top:1.2rem;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">CoT 생성기 학습</div>
+        <div class="step-desc">q<sub>φ</sub>(y|Q,a): 질문 Q와 오답 a가 주어지면 a에 도달하는 목표 CoT y 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">힌트 생성기 학습</div>
+        <div class="step-desc">p<sub>θ</sub>(x|Q,a,y): Actor가 y를 생성할 로그우도를 최대화하는 힌트 x 생성</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">합성 및 실행</div>
+        <div class="step-desc">추론 시 두 모듈을 연결해 발견된 힌트를 Actor 프롬프트에 주입</div>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.85rem,1.8vw,1.05rem); margin-top:1rem;"><i class="fas fa-lightbulb accent"></i> 조사자에게 "힌트를 따라하라"는 지시는 전혀 주어지지 않았습니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-bug accent"></i> 발견: 조사자는 스스로 '계획 주입'을 학습</h2>
+    <ul class="check-list" style="font-size:clamp(0.95rem,2vw,1.15rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>조사자가 학습한 최고 성능 전략의 공통 메커니즘은 <b>결함 있는 추론 사슬을 힌트로 주입</b>하는 것이었습니다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>Actor는 주입된 계획을 <b>자신의 CoT로 의역</b>하여 오답에 도달 — 마치 스스로 문제를 푸는 것처럼 보이는 대화 기록이 생성됩니다</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>주입된 계획에 대한 <b>출처 표기가 전혀 없음</b></li>
+    </ul>
+    <div class="quote-block" style="font-size:clamp(0.95rem,2vw,1.2rem); margin-top:1rem;">
+      "해롭지만 무해해 보이는 추론을 컨텍스트에 놓는 것만으로 모델을 조종할 수 있다" — 이 현상을 실제 공격으로 일반화한 것이 <b class="accent">Plan Injection</b>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-expand-arrows-alt accent3"></i> 공격 확장: 더 어려운 과제, 더 큰 모델</h2>
+    <div class="grid-2" style="margin-top:0.8rem;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-code"></i> APPS 코딩 백도어</h3>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">경쟁 프로그래밍 문제에서 백도어가 심긴 코드를 생성하도록 유도</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-dna"></i> Bio-Math 위장 답안 주입</h3>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">생물학·수학 문제에서 위장된 답안을 넣도록 유도</p>
+      </div>
+    </div>
+    <ul class="check-list" style="font-size:clamp(0.9rem,1.9vw,1.1rem); margin-top:0.8rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>모델 크기 확장: 7B에서 발견 → 8B로 전이 → <b>671B DeepSeek-R1-0528</b>에서도 공격 성립</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>계획이 명령이 아닌 <b>선택적 제안</b>으로만 프롬프트에 추가되어도 모델은 결함 추론을 수용</li>
+    </ul>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.9vw,1.1rem);">
+      모델이 커져도 이 취약성은 사라지지 않습니다.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-compass accent2"></i> 조종(Steering) 성능</h2>
+    <p style="font-size:clamp(0.95rem,2vw,1.15rem);">주입된 계획이 실제로 모델의 행동을 얼마나 강력하게 바꾸는가?</p>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">80%+</div>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">APPS 시도에서 모델이 주입된 계획을 따라 수행</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent3">90%+</div>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">Bio-Math 시도에서 모델이 주입된 계획을 따라 수행</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.9vw,1.1rem);"><i class="fas fa-quote-left muted"></i> 흥미롭게도 힌트 형태가 아니라 <b>선택적 계획 제안</b>으로만 붙여도 조종에 충분했습니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-user-secret accent"></i> 모니터 회피 결과</h2>
+    <p style="font-size:clamp(0.95rem,2vw,1.15rem);">Thinking / Non-thinking 모니터 스위트를 배치해 공격을 탐지 시도했습니다.</p>
+    <div class="grid-3" style="margin-top:1rem;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">25~33%</div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.7vw,1rem);">모니터링 벤치마크별 최소 모니터 회피율 — 최강 모니터조차 놓침</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">76%</div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.7vw,1rem);">Non-thinking 모니터가 놓치는 최대 시도 비율</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2"><i class="fas fa-brain"></i></div>
+        <p class="muted" style="font-size:clamp(0.8rem,1.7vw,1rem);">Thinking 모니터가 평균적으로 더 우수 — 기존 연구와 일치</p>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.9vw,1.1rem); margin-top:1rem;">
+      즉, 가장 강력한 모니터를 써도 <b class="accent">공격의 최소 25%는 탐지하지 못합니다</b>.
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-triangle-exclamation accent"></i> 반전: 모니터 자원이 역효과를 내는 경우</h2>
+    <div class="grid-2" style="margin-top:0.8rem;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-file-lines"></i> 주입된 계획 접근권 부여</h3>
+        <div class="big-num accent">-50%</div>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">Bio-Math 과제에서 모니터에게 주입된 계획을 보여주면 탐지율이 최대 50% 하락</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-brain"></i> 모니터 추론 예산 확대</h3>
+        <p style="font-size:clamp(0.85rem,1.8vw,1.05rem);">추가 사고 토큰이 결함 추론을 <b>지적하는 대신 정당화</b>하는 데 소비되는 사례 발견</p>
+      </div>
+    </div>
+    <div class="quote-block" style="font-size:clamp(0.9rem,1.9vw,1.1rem); margin-top:1rem;">
+      모니터의 사고 노력과 탐지 성능의 관계는 <b>균일하게 단조증가하지 않음</b> — "사고 토큰은 모니터에 도움된다"는 기존 결론의 정교화
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-code-compare accent3"></i> 기존 CoT 회피 기법과의 차이</h2>
+    <table class="compare-table" style="font-size:clamp(0.8rem,1.7vw,1rem);">
+      <thead>
+        <tr><th>접근법</th><th>메커니즘</th><th>모니터가 잡을 수 있는 단서</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>프롬프트 힌트</td><td>오답 방향의 최소 단서 제공</td><td>계획과 실행이 모두 CoT에 노출될 수 있음</td></tr>
+        <tr><td>명시적 지시</td><td>스테가노그래피, 난독화, 감시 인지 유도</td><td>지시 수행 흔적이 남음</td></tr>
+        <tr><td>파인튜닝</td><td>탐지 페널티 기반 보상 학습</td><td>학습 비용与 인프라 필요</td></tr>
+        <tr><td>은닉 스크래치패드</td><td>모니터가 볼 수 없는 공간에서 추론</td><td>모델 구조 변경 필요</td></tr>
+        <tr><td><b class="accent">Plan Injection</b></td><td>유해 추론이 이미 <b>업스트림에서 완료</b>됨</td><td><b>무해해 보이는 계획을 의역할 뿐 — 잡을 것이 거의 없음</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.5vw,2.4rem);"><i class="fas fa-flag-checkered accent2"></i> 결론 및 시사점</h2>
+    <ul class="check-list" style="font-size:clamp(0.95rem,2vw,1.15rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>새로운 공격 표면:</b> 컨텍스트에 삽입된 결함 추론이 모델에 흡수되어, 출처 표기 없이 자기 추론처럼 행동</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>자동 발견:</b> Investigator Agent가 명시적 지시 없이 힌트 설정에서 이 공격을 학습</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>확장성:</b> 7B에서 발견된 공격이 671B DeepSeek-R1로 전이 — 모델 크기만으로는 해결되지 않음</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>모니터의 한계:</b> 최강 모니터도 25% 이상 놓치며, 모니터에 더 많은 정보·자원을 주는 것이 오히려 해가 될 수 있음</li>
+    </ul>
+    <div class="hr"></div>
+    <p class="accent" style="font-size:clamp(1rem,2.2vw,1.3rem);"><i class="fas fa-exclamation-triangle"></i> 외부 추론 소스(RAG, 도구, 플래너)의 검증과 출처 추적(attribution)이 CoT 모니터링의 새로운 전제 조건</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner" style="text-align:center;">
+    <h2 style="font-size:clamp(1.6rem,4vw,2.8rem);">Corrupt Plans, Clean Traces</h2>
+    <p class="accent" style="font-size:clamp(1rem,2.4vw,1.5rem);">Evading Chain-of-Thought Monitoring with Plan Injection</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,2vw,1.2rem);">Keertana Chidambaram · Andrew Ilyas · Vasilis Syrgkanis</p>
+    <p class="muted" style="font-size:clamp(0.85rem,1.8vw,1.05rem);">Stanford University · Carnegie Mellon University</p>
+    <p style="font-size:clamp(0.95rem,2vw,1.15rem); margin-top:1.2rem;">
+      <i class="fas fa-link"></i> <a href="http://arxiv.org/abs/2609.15989v1">arxiv.org/abs/2609.15989</a>
+    </p>
+    <p class="muted" style="margin-top:1.5rem; font-size:clamp(0.85rem,1.7vw,1.05rem);"><i class="fas fa-shield-halved"></i> 감사합니다</p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

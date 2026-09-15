@@ -34,3 +34,9 @@ RLVR의 검증 가능 태스크 부족 병목에 대한 공급 측 해법을 제
 ### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
 
 rubric reward를 통해 검증 가능 보상의 적용 범위를 정답이 명확한 과제(코딩, 수학)에서 주관적 품질 판단 도메인(피어 리뷰)으로 확장한다. 루브릭 형식화가 ground truth 부재를 우회하는 경로를 제시하나 상대적 검증의 한계를 그대로 계승한다.
+
+### Bellman Policy Optimization (2026-09-16)
+
+RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필요할 수 있음을 증명하여, GRPO 계열 크리틱 프리 설계에 대한 이론적 정당화 근거를 제공한다.
+
+→ [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]
