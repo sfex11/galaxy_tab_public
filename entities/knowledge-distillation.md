@@ -26,3 +26,15 @@ _Wiki 축적 중_
 ### Distill Globally, Adapt Locally: Reasoning Distillation and Product-Ty (2026-09-08)
 
 증류의 종착점을 언어 모델에서 벗어나 비생성적 판별 모델로 확장한다 — 전이되는 것이 토큰 분포가 아니라 '무엇이 업그레이드이고 무엇이 의도 이탈인가'라는 판단 기준임을 보여, TIDE(아키텍처 간 전이)·안정화 KD(형식 안정성 전이)와 함께 증류의 스펙트럼에 '추론→결정 논리 전이'라는 새 축을 추가한다.
+
+### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
+
+증류의 품질 상한 문제가 스텝 압축 도메인에서 어떻게 발현되는지 규명한다 — 교사의 다단계 분포만 학습 가능한 학생의 원스텝 생성은 구조적으로 교사 품질 이하로 갇히며, DBTM은 생성 목표를 직접 훈련해 이 종속성을 제거한다.
+
+→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]
+
+### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
+
+증류(교사 출력 모방)와 병합(가중치 직접 결합)이 외부 지식 통합의 별개 경로임을 대비시킨다. 교사 모델의 런타임 추론 없이도 텍스트 전용 LM의 지식이 음성 모델로 이전 가능함을 시사한다.
+
+→ [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]

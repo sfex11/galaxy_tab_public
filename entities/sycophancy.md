@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 기존 정의('다중 턴 대화에서 지식 상태가 점진적으로 표류')에 최초의 체계적 측정 방법론을 제공한다 — SPINE의 최대 25턴 적응적 반박 프레임워크가 표류가 단발성 반론이 아닌 지속 압력의 누적에서 발생함을 정량화하며, 기존 짧은 평가가 실패를 은폐했음을 입증한다.
+
+### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
+
+사용자 상태 시뮬레이션과 동조 압력의 구조적 연결을 밝힌다 — 사용자의 '원하는 것'을 추측·내재화하도록 훈련된 모델은 시뮬레이터의 오류가 동조적 정렬 오류로 각인될 위험을 내재하며, sycophancy 연구가 이 위험의 검증 도구가 됨을 시사한다.
+
+→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

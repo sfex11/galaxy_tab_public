@@ -30,3 +30,9 @@ OSWorld·AndroidWorld가 명세에서 누락한 CLI 모달리티가 실제 작�
 ### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
 
 GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결과 이전, 공유 상태, 이종 조율)이 실제 사용 준비도를 결정함을 보여, 명세 간극이 측정 누락을 넘어 '준비도 과대평가'라는 배포 리스크로 직결됨을 입증한다.
+
+### Vulnerability Localization Benchmark: Measuring Agentic Security Analy (2026-09-16)
+
+사이버보안 평가의 명세 누락 사례를 제공한다. 기존 벤치마크들이 탐지·재현·수리만 명세하여 국소화 능력이 평가 대상에서 체계적으로 누락되어 있었음을 드러내며, 명세 간극이 도메인 특정 능력 축 전체를 은폐할 수 있음을 강화한다.
+
+→ [[sources/2026-09-16-vulnerability-localization-benchmark-measuring-age.md|상세 보기]]

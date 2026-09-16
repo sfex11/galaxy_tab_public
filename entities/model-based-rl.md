@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
 
 모델 접근이 계획을 돕는다는 암묵적 전제를 정밀화한다. ℓ-스텝 전망 질의는 완전한 국소 모델 질의의 극한 형태로서, 접근 가능성이 성능 향상은 보장해도 최적 계획의 다항시간 계산 가능성까지는 보장하지 않음을 이론적으로 입증한다.
+
+### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
+
+메타 학습된 태스크 신념이 암묵적 세계 모델의 파라미터로 기능하는 특수 구조를 추가한다. 모델 불확실성이 환경 동역학 불확실성이 아닌 태스크 동일성 불확실성인 경우, 안전이 모델 신뢰성 문제에서 신념 수렴 문제로 전환됨을 시사한다.
+
+→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

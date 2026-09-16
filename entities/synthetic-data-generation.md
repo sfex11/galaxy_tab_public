@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
 
 합성 데이터의 목적을 벤치마크 보강이 아닌 능력 간극의 인위적 해소로 특정한다. 실행 근거라는 합성 원리가 대상 도메인(API 스키마 구조)에 구조적으로 의존함을 보여준다.
+
+### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
+
+합성 데이터의 인과적 원천성 논의를 '지식 재구성'에서 '사용자 정신 상태 재구성'으로 확장한다. 관찰 불가능한 변수의 시뮬레이션도 합성 재구성의 한 형태이며, 배치 크기 의존성 논의와 유사하게 옵티마이저 동역학과의 결합 조건이 남는 미해결 질문이 된다.
+
+→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

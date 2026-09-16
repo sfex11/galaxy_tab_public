@@ -46,3 +46,9 @@ LLM judge의 평가 대상이 reasoning의 기능적 구조가 아닌 그 표면
 ### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
 
 판정(점수·수용 여부) 출력에서 진단 주장 + 수정 제안의 이중 출력으로 judge의 역할을 확장한다. 피어 리뷰 도메인에서 judge가 판단 근거와 처방을 함께 산출해야 실용적 가치를 갖는다는 'actionable' 기준을 새로 부과한다.
+
+### Learning to Coach for Experiential Learning (2026-09-16)
+
+평가자 역할의 반전을 제공한다 — LLM이 판단하지 않고 지도하는 LLM-as-Coach로 전환하며, 코치 품질 판정을 외부 보상(액터 정확도)에 위임하여 judge 비일관성 문제를 구조적으로 우회한다.
+
+→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]

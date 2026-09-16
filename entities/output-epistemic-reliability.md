@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
 
 예측 맵이라는 산출물의 인식론적 신뢰성이 계획 소비자(정보 이득 점수화 vs 충돌 제약)별로 달리 요구됨을 보여준다. 관측 지지 여부라는 산출물 내재적 신뢰 지표를 제안한다.
+
+### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
+
+산출물의 인식론적 신뢰성이 사용자의 검증 능력과 결합된 관계 속성임을 보여준다. 동일한 인용이라도 검증 비용에 따라 인식론적 가치가 달라지며, 신뢰성 설계에 수신자 제약(임상의의 시간)이 명시적 변수로 포함되어야 함을 시사한다.
+
+→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

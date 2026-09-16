@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
 
 rebuttal이라는 실제 저자-리뷰어 상호작용 흔적이 post-training 감독의 외부 닻으로 기능함을 실증한다. 자기 생성 데이터로 자기를 개선하는 순환 타당성 문제에 대해, 상호작용 로그라는 인간 근거 데이터 출처에서 오는 해법 경로를 제시한다.
+
+### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
+
+외부 닻의 층위를 행동 흔적에서 정신 상태로 심화한다. 흔적이 존재하기 전의 내재 상태를 시뮬레이션으로 재구성함으로써, 순환 타당성 문제의 해법이 흔적 기반에서 상태 재구성 기반으로 이동함을 보여준다.
+
+→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

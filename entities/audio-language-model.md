@@ -28,3 +28,9 @@ LLM 기반 ASR 평가가 오디오-언어 모델의 능력 평가가 아닌 일�
 ### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-12)
 
 LALM 연구가 청각 지식 습득과 추론 능력 평가에 집중했다면, 본 논문은 speech-LLM의 훈련 측 구조를 조명한다. 음향 인코더-언어 디코더 간 업데이트 노름의 한 자릿수 비대칭은 이 아키텍처 계열의 고유 속성으로, 프라이버시 보존 훈련에서 도메인 특화 설계를 강제한다.
+
+### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
+
+텍스트 전용 LM 지식을 음성 도메인에 흡수하는 파라미터 수준 경로를 추가한다. 오디오-언어 통합이 아키텍처 교체가 아닌 가중치 병합으로도 실현 가능함을 보여준다.
+
+→ [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]

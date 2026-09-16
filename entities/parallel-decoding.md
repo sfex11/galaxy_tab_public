@@ -23,3 +23,9 @@ Cola DLM은 병렬 디코딩의 적용 대상을 자회귀 생성 내부(추측 
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-06)
 
 병렬 디코딩의 적용 방식에 'AR 분포로부터의 확산 기반 직접 샘플링'이라는 새 경로를 추가한다. 분포 재설계(Cola DLM)와 수용률 최적화(추측 디코딩) 사이의 중간 지점을 채운다.
+
+### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
+
+비순차 생성의 실현 경로에 '동역학계 고정점으로의 수렴'을 추가한다. 스텝 수를 외부 하이퍼파라미터가 아닌 자율 사상의 반복 적용으로 결정하는 구조는 병렬 디코딩의 스텝-품질 딜레마에 대한 새로운 접근이다.
+
+→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

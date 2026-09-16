@@ -30,3 +30,9 @@ MCP Tax가 컨텍스트 윈도우를 팽창시켜 발생시키는 하류 문제(
 ### To Call or Not to Call: A Framework to Assess and Optimize LLM Tool Ca (2026-05-05)
 
 기존 '어떤 도구에 주의를 기울일 것인가'의 문제에 '도구 사용 자체가 정당한가'라는 선행 결정을 추가함으로써, tool-attention의 스코프를 도구 선택 문제에서 도구 사용 여부 판단 문제로 상향 확장한다.
+
+### The Router Within: Eliciting Native Skill Routing from a Frozen LLM (2026-09-16)
+
+도구 게이팅의 판단 근거를 외부 관련성 계산에서 모델 내재 신호로 이동시키는 후속 경로를 제공한다. 동적 게이팅이 쿼리-도구 관련성을 별도 계산했다면, 본 논문은 그 판단이 이미 동결 모델의 순방향 연산에 존재함을 보여 게이팅 메커니즘의 정보원을 내재화한다.
+
+→ [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f.md|상세 보기]]

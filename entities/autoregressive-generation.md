@@ -18,3 +18,9 @@ AR의 본질을 '순차 생성 절차'가 아닌 '분포 속성'으로 재규정
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
 
 기존 분석(순차성은 절차가 아닌 분포 속성)을 매개변수 수준에서 강화한다: AR 가중치를 유지한 채 샘플러만 교체해도 동일 분포에서의 생성이 가능함이 실증된다.
+
+### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
+
+AR 대안 패러다임의 스펙트럼에 '자율 동역학계' 축을 추가한다. 순차성 제거가 시간 의존 ODE의 다단계 근사 없이는 비싸다는 통념에 대해, 시간 독립 사상의 반복 적용으로 교사 없이 소수 스텝 생성을 실현함을 반박한다.
+
+→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

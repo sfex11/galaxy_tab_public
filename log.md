@@ -3469,3 +3469,18 @@
 ## [2026-09-15 08:37] ingest | Autonomous Research for Open-Ended Problems: A Case Study on Telecom Ticket Retrieval
 
 ## [2026-09-15 08:37] ingest | Anchoring Clinical Events in Time: UID-Preserving Multimodal Reconstruction and Source-Grounded Adjudication
+
+## [2026-09-16 08:29] llm-ingest | 13편 분석, 엔티티 720개, 개념 1886개
+- 2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md
+- 2026-09-16-bellman-policy-optimization.md
+- 2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md
+- 2026-09-16-the-router-within-eliciting-native-skill-routing-f.md
+- 2026-09-16-mind2dialogue-training-human-aware-language-models.md
+- 2026-09-16-verifiable-by-construction-claim-level-evaluation-.md
+- 2026-09-16-vulnerability-localization-benchmark-measuring-age.md
+- 2026-09-16-hypoevolve-genetic-algorithms-enable-multi-agent-l.md
+- 2026-09-16-safe-meta-reinforcement-learning-via-information-s.md
+- 2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md
+- 2026-09-16-learning-to-coach-for-experiential-learning.md
+- 2026-09-16-look-before-you-leap-factual-decoding-with-interna.md
+- 2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md

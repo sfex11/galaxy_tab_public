@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-24-interval-pomdp-shielding-for-imperfect-perception-.md|Interval POMDP Shielding for Imperfect-Perception Agents]]
+
+### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
+
+→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

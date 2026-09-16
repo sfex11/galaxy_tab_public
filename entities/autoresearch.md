@@ -62,3 +62,15 @@ ADEMA는 오토리서치 파이프라인 내부의 지식 상태 일관성을 �
 ### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
 
 과학 워크플로우 자동화에 시스템 인프라 계층의 좌표를 추가한다. 오토리서치가 연구 발견·실행의 에이전트화를 다룬다면, Avatar는 그 아래 WMS 실행 계층의 오케스트레이션 정책 자체를 자율화 대상으로 삼아 자동화의 대상 계층을 한 단계 아래로 내린다.
+
+### Stellar Colosseum: A Many-Agent Harness for Long-Horizon Research in M (2026-09-16)
+
+autoresearch의 스코프를 '연구 단계 간 파이프라인 자동화'에서 '단일 수학 과제 내부의 장기 호라이즌 탐색 오케스트레이션'으로 확장하는 보완 축을 제공한다.
+
+→ [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]
+
+### HypoEvolve: Genetic Algorithms Enable Multi-Agent LLMs to Discover Sci (2026-09-16)
+
+자율 연구의 스코프를 '가설 발견 단계의 협력 위상 최적화'로 세분화한다. 파이프라인 전체 자동화 논의에서 가설 생성 단계만 떼어내 그 내부 설계 공간(협력 형태)을 체계적으로 탐색하는 방향을 제시한다.
+
+→ [[sources/2026-09-16-hypoevolve-genetic-algorithms-enable-multi-agent-l.md|상세 보기]]

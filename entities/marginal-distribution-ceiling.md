@@ -50,3 +50,9 @@ AR 가중치를 표준 NTP 목적함수로 그대로 학습함으로써 주변 �
 ### Don't Drop Dropout: Optimizing Layer Sparsity for Efficient LLM Traini (2026-09-08)
 
 Layer dropout이 사전학습 분포 P(y)의 형성 자체를 수정하면서도 정확도 저하를 완화 가능함을 보여, P(y)의 형상화에 설계 자유도가 스케일링 관행이 가정한 것보다 크다는 증거를 제공한다. 정규화가 일반화 수단을 넘어 P(y)의 추론 옵션을 결정하는 매개변수로 재해석된다.
+
+### Learning to Coach for Experiential Learning (2026-09-16)
+
+동결 액터 하에서 P(y)가 불변으로 유지되고 코칭은 조건부 유도 P(y|guidance)만 개선하는 구조가 된다 — 사전학습 분포 상한선 내에서 코칭이 도달 범위를 재구성하는 방식을 보여준다.
+
+→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]

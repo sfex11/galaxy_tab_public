@@ -50,3 +50,9 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 ### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-12)
 
 하네스가 목표·재시도·검증·정지 규칙을 외부에서 '손으로' 명세한다는 현행 패러다임의 구조적 한계를 명시하고, 이 제어 기능의 내부화라는 반대 방향 설계 축을 제안한다. 하네스 엔지니어링의 질문을 '외부 제어를 얼마나 정교화할까'에서 '어떤 제어를 내부에 이양할까'로 전환한다.
+
+### Stellar Colosseum: A Many-Agent Harness for Long-Horizon Research in M (2026-09-16)
+
+하네스 엔지니어링의 적용 축을 실행 인프라·평가 계약에서 '연구 오케스트레이션'으로 확장한다. 모델 불가지론적 설계는 하네스의 기여가 모델 능력과 분리·측정 가능함을 전제로 하며, model-harness-decomposability 논의에 수학 도메인 실증을 제공한다.
+
+→ [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]

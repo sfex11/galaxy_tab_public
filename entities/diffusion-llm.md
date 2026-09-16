@@ -22,3 +22,9 @@ Cola DLM은 확산 언어 모델이 아키텍처 간 지식 전이의 대상(TID
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
 
 확산 LM의 스코프를 '자체 분포의 비순차 생성 모델'에서 'AR 분포의 샘플링 메커니즘'으로 확장한다. 확산과 자회귀가 경쟁이 아닌 조합 가능한 축임을 보여준다.
+
+### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
+
+다단계 확산 샘플링을 압축하는 표준 방법(교사 증류)이 학생을 교사 품질로 상한 고정하고 2단계 파이프라인 비용을 요구한다는 구조적 한계를 명시적으로 진단하고, 시간 독립 수송 사상으로 이 한계를 우회하는 대안을 제공한다.
+
+→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

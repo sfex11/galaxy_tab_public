@@ -40,3 +40,9 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 ### Understanding Operator Attitudes Toward AI-Supported Decision Making i (2026-09-12)
 
 해양 충돌 회피라는 물리적 안전 중요 도메인에서 기술적 안전성과 인간적 수용성이 결합되어야 실제 안전이 달성됨을 보여준다. 능력-안전 불가분성 논의의 인간 요인 확장 사례로, 안전 보장의 구성요소에 심리적 구인을 추가한다.
+
+### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
+
+안전 제어의 적용 전제를 고정 태스크·알려진 동역학에서 미지 태스크·학습 중 동역학으로 확장한다. 안전 필터가 신념 조건부가 되어야 하며, 제어 장벽 개념이 물리 공간에서 정보 공간으로 재정의될 필요를 제시한다.
+
+→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

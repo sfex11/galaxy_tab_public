@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
 
 테스트 기반 평가 계약의 양면을 완성한다 — SWE-Gate가 테스트 통과가 수용을 보장하지 않음을 보였다면, ExecCritic은 패치 에이전트가 테스트 자체를 오염시킬 수 있음을 보여 평가 인프라의 양방향 취약성을 드러낸다.
+
+### Vulnerability Localization Benchmark: Measuring Agentic Security Analy (2026-09-16)
+
+'측정 프록시와 실제 수용 능력의 단절' 진단의 보안 도메인 쌍생을 제공한다. SWE-Gate가 테스트 통과가 리뷰 수용을 담보하지 않음을 보였다면, 본 논문은 탐지·수리 성공률이 국소화 능력을 담보하지 않을 수 있음을 시사하여 명세 간극의 도메인 불변성을 강화한다.
+
+→ [[sources/2026-09-16-vulnerability-localization-benchmark-measuring-age.md|상세 보기]]

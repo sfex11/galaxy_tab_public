@@ -30,3 +30,9 @@ LLM이 텍스트 생성·근거 추적을 넘어 임상 신호의 구조적 표�
 ### Joint Treatment Effect Estimation from Incomplete Healthcare Data: Tem (2026-05-08)
 
 EHR 데이터를 대화적 QA나 그래프 정제의 대상이 아닌 인과 추론의 원재료로 취급함으로써, medical-ai의 분석 패러다임을 '정보 추출·표현'에서 '인과 구조 발견'으로 확장한다. 결측률 50~80%라는 EHR의 현실적 조건이 인과 추정에 미치는 영향을 최초로 체계적으로 문제화한다.
+
+### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
+
+임상 AI 신뢰성 논의에 '검증 가능성의 구성 보장(verifiable by construction)'이라는 새 축을 추가한다. 대화적 동정심(Can AI Be a Doctor?), 문서 기반 근거 생성(HealthNLP_Retrievers)에 이어, 인용의 검증 비용을 사용자 측에서 구조적으로 제거하는 접근으로 스코프를 확장한다.
+
+→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

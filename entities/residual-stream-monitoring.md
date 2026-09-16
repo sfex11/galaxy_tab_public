@@ -10,3 +10,15 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-10-its-not-rope-that-creates-sinks-the-role-of-self-c.md|It's Not RoPE that Creates Sinks: The Role of Self-Concentra]]
+
+### The Router Within: Eliciting Native Skill Routing from a Frozen LLM (2026-09-16)
+
+내부 표현 판독의 응용을 안전 감시·거부 감지에서 스킬 라우팅으로 확장한다. 내부 상태 판독이 감독 도구일 뿐 아니라 능력 구성 도구로 기능할 수 있음을 보여주며, 선형 맵이라는 최소 판독기로 충분함을 입증한다.
+
+→ [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f.md|상세 보기]]
+
+### Look Before You Leap: Factual Decoding with Internal Attribution Signa (2026-09-16)
+
+내부 신호 판독의 용도를 진단(관찰)에서 개입(제어)으로 격상한다 — 판독된 귀속 신호가 곧 디코딩 제어 입력이 되는 폐루프를 구현하며, 감지-수정 루프가 모델 자기 내부에서 닫히는 사례가 된다.
+
+→ [[sources/2026-09-16-look-before-you-leap-factual-decoding-with-interna.md|상세 보기]]
