@@ -22,3 +22,9 @@ LaPla의 latent-aligned planning은 VLA Foundry의 통합 훈련 프레임워크
 ### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
 
 종단간 VLA 훈련 프레임워크와 대비되는 '동결 VLM + 하네스' 경로를 제시하여, 체화 능력 확보 전략의 스펙트럼을 '훈련 기반'과 '인터페이스 기반'의 이중 축으로 확장한다.
+
+### In-Context Robot Learning with VLM Agents (2026-09-18)
+
+미세조정 중심 VLA 통합 훈련 파이프라인과 대비되는 훈련 프리 적응 경로를 제공한다. 로봇 적응이 사후학습 단계에서 추론 단계로 이동하는 스펙트럼의 반대 극점을 형성한다.
+
+→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

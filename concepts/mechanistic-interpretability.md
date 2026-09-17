@@ -32,3 +32,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-what-drives-representation-steering-a-mechanistic-.md|What Drives Representation Steering? A Mechanistic Case Stud]] (2026-04-13)
 
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

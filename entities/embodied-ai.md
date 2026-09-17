@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
 
 기존 정의가 체화 환경의 안전 평가와 내비게이션 실패 진단에 집중했다면, 본 논문은 '범용 모델 + 하네스'로 체화 능력을 확보하는 대안 경로를 추가한다. 체화 능력이 반드시 모델 내부 파라미터에 내재될 필요가 없음을 시사한다.
+
+### In-Context Robot Learning with VLM Agents (2026-09-18)
+
+데모 수집→미세조정의 전통 로봇 학습 패러다임에 '배포 시점 컨텍스트 학습'이라는 제3 적응 축을 추가한다. 일반화의 성립 조건이 훈련 분포 확장에서 배포 시점 컨텍스트 구성으로 이동함을 시사한다.
+
+→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-24-diagnosing-cfg-interpretation-in-llms.md|Diagnosing CFG Interpretation in LLMs]]
+
+### Affora: A Design System for Agent-Friendly Interfaces (2026-09-18)
+
+→ [[sources/2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md|상세 보기]]

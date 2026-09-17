@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-02-exploration-hacking-can-llms-learn-to-resist-rl-tr.md|Exploration Hacking: Can LLMs Learn to Resist RL Training?]]
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

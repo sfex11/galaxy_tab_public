@@ -34,3 +34,15 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 ### It's Not RoPE that Creates Sinks: The Role of Self-Concentration and V (2026-09-10)
 
 현상 원인의 오귀인(RoPE→마스크 구조)을 개입 실험으로 교정하는 방법론적 모범 사례를 제공하여, 상관 관찰을 넘어 인과 규명으로 이동하는 연구 표준을 보여준다.
+
+### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
+
+해석 대상을 단일 모델 내부 표현에서 다중 에이전트 집단의 신념 동역학으로 확장한다. 활성화 패칭 등 개입 기반 검증이 스웜 수준 신념 형성의 인과적 분석으로 이전될 수 있는 방법론적 교량을 제시한다.
+
+→ [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md|상세 보기]]
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+해석가능성의 응용 대상을 환각·감정 추론에서 보상 해킹 감시로 확장한다. 평균 차이 벡터라는 최소 판독기로도 이상 행동 감시가 가능함을 보여, 해석가능성이 이론 연구를 넘어 실용적 안전 감사 계층으로 기능하는 경로를 입증한다.
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

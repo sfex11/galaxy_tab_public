@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 → [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]
+
+### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
+
+→ [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md|상세 보기]]

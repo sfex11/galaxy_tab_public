@@ -54,3 +54,9 @@ CUA의 비효율 궤적이 모델 한계가 아닌 GUI 단일 모달리티 환�
 ### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
 
 GUI 에이전트의 능력 지형에 '기기 경계' 차원을 추가한다. 단일 화면 내 조작 준수 능력과 달리, 다중 기기 워크플로우는 중간 결과 전달·공유 상태 유지·이종 환경 조율을 요구하며, 이것이 별개의 능력 계층임을 시사한다.
+
+### Affora: A Design System for Agent-Friendly Interfaces (2026-09-18)
+
+Affora는 이 엔티티의 문제 공간을 '인간용 UI를 읽어내는 에이전트 능력'에서 'UI가 에이전트를 독자로 포함하도록 설계되는 것'으로 전환한다. 에이전트 측 적응(스크린샷 파싱, DOM 추론)이 아닌 환경 측 가독성이 호환성의 원천이 됨을 제안하여, 해법 스펙트럼에 인터페이스 설계 축을 추가한다.
+
+→ [[sources/2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md|상세 보기]]

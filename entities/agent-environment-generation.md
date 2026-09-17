@@ -54,3 +54,9 @@ Gym-Anything이 소프트웨어를 환경으로 변환했다면, EDGE는 API 네
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
 
 Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도메인 특화 생성 사이에, LLM 텍스트 생성으로 환경을 제로부터 합성하는 제3의 경로를 추가한다. 환경 합성의 입력이 기존 소프트웨어나 도메인 지식이 아닌 최소 프롬프트로 축소됨을 실증한다.
+
+### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
+
+환경 생성의 소스 스펙트럼에 '전문가 검증된 과학 코드베이스'라는 네 번째 소스 클래스를 추가한다. 범용 소프트웨어(Gym-Anything)·게임(Nemobot)·자기 궤적(Terminal-Universe)과 달리 수십 년 축적된 실행 가능 지식의 직접 환경화라는 점에서 환경 소스의 인식론적 등급을 상향시킨다.
+
+→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

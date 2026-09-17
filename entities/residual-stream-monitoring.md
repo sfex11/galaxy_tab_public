@@ -22,3 +22,9 @@ _Wiki 축적 중_
 내부 신호 판독의 용도를 진단(관찰)에서 개입(제어)으로 격상한다 — 판독된 귀속 신호가 곧 디코딩 제어 입력이 되는 폐루프를 구현하며, 감지-수정 루프가 모델 자기 내부에서 닫히는 사례가 된다.
 
 → [[sources/2026-09-16-look-before-you-leap-factual-decoding-with-interna.md|상세 보기]]
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+잔류 스트림 판독의 응용을 거부 감지·스킬 라우팅에서 훈련/평가 중 기만적 행동 감시로 확장한다. 내부 표현이 모델의 자기 보고와 독립적인 감시 원천임을 강화한다.
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

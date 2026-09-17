@@ -26,3 +26,9 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
 
 새 환경 개발·기존 환경 수정이 수작업 코딩을 요구한다는 산업적 진단을 제공하여, 환경 공급 부족이 RL 연구의 실제 병목임을 확인시킨다. LLM 생성으로 병목이 완화되지만, 병목이 '생성'에서 '생성된 환경의 훈련 적합성 검증'으로 이동할 수 있음을 시사한다.
+
+### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
+
+과학 도메인에서 병목의 정체를 정밀화한다 — 환경이 부재한 것이 아니라 코드와 지식은 존재하나 툴체인 파편화와 암묵적 관례 때문에 경험으로 '변환되지 않는' 병목이며, 이를 과학 경험 병목으로 명명하고 인프라 계층 해법을 제시한다.
+
+→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

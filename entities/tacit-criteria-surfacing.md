@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
 
 rebuttal 데이터가 암묵적 리뷰 기준(유효 진단의 조건, 수용 가능한 수정의 범위)을 감독 라벨로 외면화하는 새로운 원천을 제공한다. SWE-Gate가 코드 리뷰의 수용 기준 형식화를, 본 논문이 학술 피어 리뷰에서 rebuttal 기반 형식화를 실증하여 암묵 기준 외면화의 도메인 일반성을 강화한다.
+
+### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
+
+전문가의 암묵적 도메인 관례와 특수 정확성 기준이 환경 정의·유도 과정을 통해 명시적 사양으로 외면화되는 구조적 경로를 제공한다. 코드 리뷰·테스트 적합성에서 관찰된 암묵 기준의 형식화가 과학 코드 환경화에서도 재현됨을 보여준다.
+
+→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

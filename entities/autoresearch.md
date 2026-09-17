@@ -74,3 +74,9 @@ autoresearch의 스코프를 '연구 단계 간 파이프라인 자동화'에서
 자율 연구의 스코프를 '가설 발견 단계의 협력 위상 최적화'로 세분화한다. 파이프라인 전체 자동화 논의에서 가설 생성 단계만 떼어내 그 내부 설계 공간(협력 형태)을 체계적으로 탐색하는 방향을 제시한다.
 
 → [[sources/2026-09-16-hypoevolve-genetic-algorithms-enable-multi-agent-l.md|상세 보기]]
+
+### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
+
+오토리서치가 문헌·계산 도메인에 머물던 것과 달리 물리 실험 루프(설계-실행-측정-재설계)까지 감싸는 극단적 확장 사례를 제공한다. 자동 실험실이 환경 검증자 역할을 수행하는 폐루프 연구 자동화의 물리 세계 버전이다.
+
+→ [[sources/2026-09-18-evidence-grounded-agentic-formulation-development-.md|상세 보기]]

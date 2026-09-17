@@ -62,3 +62,15 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 적응의 결정 차원을 계산량(γ·깊이) 조절에서 관찰 행위(프레임 검색 여부)로 확장한다. 외부 환경 반응도 내부 시스템 상태 반응도 아닌 '현재 추론이 요구하는 증거 유형'에 반응하는 적응의 새 유형을 제시한다.
+
+### Cognitive Extensions for Dual-Process Language Agents: Memory and Self (2026-09-18)
+
+검증 자체를 계산 예산의 대상으로 삼아, 적응의 축이 '얼마나 추론할까'에서 '얼마나 검증할까'로 확장됨을 보여준다. bounded 검증은 예산 인식적 적응의 검증 도메인 버전이다.
+
+→ [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]
+
+### EarStreAM: A Closed-Loop Earable System for Personalized Stress-Adapti (2026-09-18)
+
+적응 트리거 택소노미(외부 환경 → 내부 시스템 상태 → 자기 발화)에 '사용자 생체 상태'를 네 번째 트리거로 추가하여, 적응 신호의 원천이 모델 경계를 넘어 사용자의 몸으로 확장됨을 보여준다. 생성 입력 분포가 비텍스트적으로 실시간 변동하는 새로운 트리거 유형이다.
+
+→ [[sources/2026-09-18-earstream-a-closed-loop-earable-system-for-persona.md|상세 보기]]

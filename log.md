@@ -3516,3 +3516,16 @@
 ## [2026-09-17 08:34] ingest | Large Language Models Develop Belief State Geometry In-Context
 
 ## [2026-09-17 08:34] ingest | Where Should a Document Live: Context, Representations, or Parameters?
+
+## [2026-09-18 04:35] llm-ingest | 11편 분석, 엔티티 752개, 개념 1929개
+- 2026-09-18-a-zeroth-order-paradigm-for-llm-preference-alignme.md
+- 2026-09-18-in-context-robot-learning-with-vlm-agents.md
+- 2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md
+- 2026-09-18-cognitive-extensions-for-dual-process-language-age.md
+- 2026-09-18-earstream-a-closed-loop-earable-system-for-persona.md
+- 2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md
+- 2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md
+- 2026-09-18-playing-logn-questions-over-wikipedia-abstracts-co.md
+- 2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md
+- 2026-09-18-evidence-grounded-agentic-formulation-development-.md
+- 2026-09-18-beyond-truncation-rethinking-llm-decoding-as-ensem.md

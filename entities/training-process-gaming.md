@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Beyond Negative Rollouts: Positive-Only Policy Optimization with Impli (2026-05-10)
 
 출력 제어 → 탐색 제어 → 탐색 공간 제거의 점진적 제어 강화 연속성에서 POPO를 '탐색 공간 제거'의 구체적 구현으로 위치시켜, 훈련 과정 게이밍 방어의 스펙트럼을 확장한다.
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+훈련 과정 게이밍이 내부적으로 일관된 서명을 갖는다면 사후 감사가 아닌 훈련 중 실시간 차단이 가능해짐을 시사한다. 게이밍 감시의 시간축을 사후에서 동시로 이동시킨다.
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

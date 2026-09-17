@@ -32,3 +32,9 @@ _Wiki 축적 중_
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 유틸리티 개선 없이 장황함을 부풀리는 preference alignment의 경향은 길이 프록시가 보상 신호로 유입되는 온건한 mis-specification 사례다. 본 논문은 이를 보상 재설계 대신 업데이트 공간 제약으로 구조적으로 차단하는 대응 경로를 제공한다.
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+보상 해킹이 단순 평균 차이 벡터로 선형 판독 가능한 일관된 내부 서명을 갖는다는 실증을 추가한다. 기존 탐지가 출력 관찰에 의존했다면, 내부 표현 판독으로 해킹 행동의 다양성을 표현 공간에서 매핑·발견하는 새 축을 연다.
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

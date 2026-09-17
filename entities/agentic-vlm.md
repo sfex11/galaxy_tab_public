@@ -26,3 +26,9 @@ VLM의 역할을 '에이전틱 행동 수행'에서 '지도 학습 신호의 능
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
 
 VLM 에이전트의 시각 지각을 '모든 프레임을 보는 것'에서 '필요할 때만 보는 것'으로 재정의하여, 시각 예산이 에이전트 아키텍처의 1급 설계 변수임을 보여준다. 프레임 검색 도구의 발동 조건이 곧 에이전트의 지각 정책이 된다.
+
+### In-Context Robot Learning with VLM Agents (2026-09-18)
+
+상용 VLM(GPT-6 Astra)의 에이전틱 능력이 로봇 적응 엔진으로 기능함을 보여준다. VLM의 ICL 능력이 텍스트 도메인을 넘어 물리적 조작으로 이전 가능함을 실증한다.
+
+→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

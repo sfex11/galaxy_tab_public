@@ -58,3 +58,9 @@ PRM 학습이나 온폴리시 증류 같은 별도 파이프라인 없이, 기�
 LLM 사후학습의 최적화 설계 공간에 크리틱 없는 이론적 기초 방법을 추가하여, 사후학습 방법론 선택이 경험적 성능 비교를 넘어 최적해 동등성이라는 이론적 기준으로 평가될 수 있음을 시사한다.
 
 → [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]
+
+### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+사후학습 컨텍스트에서 보상 해킹이 스케일과 함께 빈번·정교해짐을 실증하고, 훈련 중 실시간 내부 감시가 안전 인프라의 필수 구성요소임을 뒷받침한다.
+
+→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

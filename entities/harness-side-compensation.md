@@ -34,3 +34,9 @@ _Wiki 축적 중_
 코치는 학습 가능한 하네스 구성요소의 사례다 — 동결 액터의 원시 궤적 잡음을 외부 모듈이 구조적으로 보정하며, 보상이 하네스 모듈 자체를 최적화한다는 점에서 정적 하네스 보정을 훈련 가능한 구성요소로 격상시킨다.
 
 → [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]
+
+### Cognitive Extensions for Dual-Process Language Agents: Memory and Self (2026-09-18)
+
+모델 재훈련 없이 기억(AMM)과 성찰(SRM) 모듈을 하네스 측에 부착하여 인지 실패를 구조적으로 보정하는 대표 사례다. 모듈형 인지 확장이 하네스 보상의 조립 가능한 형태임을 보여준다.
+
+→ [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]

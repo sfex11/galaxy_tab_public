@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
 
 LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로 자동화하여, 폐루프 훈련이 요구하는 환경 수요를 충족하는 저비용 인프라를 제공한다.
+
+### EarStreAM: A Closed-Loop Earable System for Personalized Stress-Adapti (2026-09-18)
+
+훈련 시점이 아닌 배포 시점(감지-해석-생성-개입)에 형성되는 루프를 제시하여 폐루프의 운영 축을 구분할 기회를 제공한다. 폐루프 개념이 훈련 환경에 국한되지 않고 실시간 개입 운영으로 확장됨을 드러낸다.
+
+→ [[sources/2026-09-18-earstream-a-closed-loop-earable-system-for-persona.md|상세 보기]]

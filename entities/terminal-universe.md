@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
 
 구조적 자매 연구다. Terminal-Universe가 에이전트 궤적을 터미널 환경으로 재질의하는 '유도 경로'라면, CUA-Universe는 실제 애플리케이션을 래핑하는 '래핑 경로'로, 확장 가능 환경 구축의 두 갈래를 형성한다.
+
+### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
+
+환경 재질화의 소스 대비 축을 제공한다. Terminal-Universe가 과거 실행 궤적을 환경으로 재질의했다면 ScienceIDE는 인간이 축적한 코드베이스를 환경으로 변환하여, '자기 생성 지식'과 '인간 축적 지식'이라는 두 환경 소스 계열을 형성한다.
+
+→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

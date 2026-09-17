@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|Mind2Dialogue: Training Human-Aware Language Models by Simul]]
+
+### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
+
+→ [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md|상세 보기]]

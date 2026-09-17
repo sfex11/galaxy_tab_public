@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-12)
 
 환경 적응이 공진화의 부수 효과가 아니라 RSI의 독립적 단계(환경-적응 자율성)로 격상됨을 제시한다. 에이전트가 자기 환경을 수정·적응시킬 수 있어야 개선 루프가 폐쇄된다는 명제를 추가한다.
+
+### Affora: A Design System for Agent-Friendly Interfaces (2026-09-18)
+
+공진화 논의를 훈련 환경 계층에서 생산 소프트웨어의 UI 설계 계층으로 확장한다. 에이전트 배포 수요 자체가 인터페이스 디자인 시스템의 진화 압력으로 작동하며, 환경(소프트웨어)이 에이전트 능력을 향상시키는 비학습적 경로를 실증한다.
+
+→ [[sources/2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md|상세 보기]]
