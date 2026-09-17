@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When Should LLMs Abstain? Chain-of-Self-Questioning for Sele — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:clamp(2rem,6vh,4rem);">
+      <span class="tag tag-amber" style="font-size:clamp(0.8rem,1.5vw,1.1rem);">Selective Prediction × LLM</span>
+      <h1 style="font-size:clamp(1.8rem,4.5vw,3.4rem); margin-top:clamp(1rem,3vh,2rem); line-height:1.3;">
+        LLM은 언제 <span class="accent">응답을 거절</span>해야 하는가?
+      </h1>
+      <p style="font-size:clamp(1rem,2.2vw,1.5rem); margin-top:clamp(0.8rem,2vh,1.5rem);" class="muted">
+        Chain-of-Self-Questioning (CoSQ)을 통한 선택적 리스크 제어
+      </p>
+      <div class="hr" style="margin:clamp(1.5rem,4vh,3rem) auto; width:60%;"></div>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.2rem);">
+        Ali Şenol · 타르수스 대학교 (Tarsus University)
+      </p>
+      <p class="muted" style="font-size:clamp(0.8rem,1.5vw,1rem); margin-top:0.5rem;">arXiv: 2609.17516v1 [cs.CL]</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">배경: 유창하지만 뒷받침 없는 답변</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(1rem,2vw,1.35rem); line-height:1.7;">
+      LLM은 사실적 근거가 부족한 상황에서도 그럴듯한 답을 생성할 수 있습니다 — 이것이 바로 <span class="accent">환각(hallucination)</span>입니다.
+    </p>
+    <div class="grid-2" style="margin-top:clamp(1.2rem,3vh,2rem); gap:clamp(1rem,2.5vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-exclamation-triangle accent"></i> 기존 평가의 맹점</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          대부분의 QA 평가는 "무조건 답하기"를 암묵적으로 보상합니다. 전부 추측하는 모델도 종합 점수는 나올 수 있지만, 자신이 신뢰할 수 있는 질문과 없는 질문을 구분하지 못합니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-hospital accent2"></i> 고위험 영역의 요구</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          의료·법률·금융·행정에서는 확신에 찬 근거 없는 답변보다, 명시적인 거절(abstention)이 검증·사람의 검토를 유발하는 책임 있는 선택이 될 수 있습니다.
+        </p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); margin-top:clamp(1rem,2.5vh,1.8rem);">
+      <i class="fas fa-lightbulb accent3"></i> 핵심 질문: 모델이 <strong>답을 생성하기 전에</strong> "이 질문에 답할 수 있는가?"를 스스로 판단할 수 있을까?
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">CoSQ: 사고의 자기 질문 연쇄</h2>
+    <p class="muted" style="font-size:clamp(0.95rem,1.8vw,1.2rem);">Chain-of-Self-Questioning — 프롬프트만으로 구현하는 선택적 응답 프레임워크</p>
+    <div class="hr"></div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">정보 단위 식별</div>
+        <div class="step-desc">질문 q에 답하기 위해 필요한 정보 단위 I(q) = {i₁, …, iₘ}을 명시적으로 나열</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">근거 평가</div>
+        <div class="step-desc">각 정보 단위에 신뢰 점수 sⱼ ∈ [0,1]을 부여하고 자신의 지지 정도를 평가</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">응답 또는 거절</div>
+        <div class="step-desc">문지기(gate)를 통과한 정보만으로 답변하거나, 부족하면 거절</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(1.2rem,3vh,2rem);">
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); line-height:1.7;">
+        <i class="fas fa-key accent"></i> <strong>핵심 원리:</strong> 의사가 근거가 불충분할 때 전문의에게 의뢰하는 것은 진료 실패가 아니라 책임 있는 결정입니다. CoSQ는 같은 원칙을 LLM 응답에 적용합니다. 임계값 τ는 보정된 확률이 아니라 <span class="accent2">리스크–커버리지 경계선 위의 운영 매개변수</span>입니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">세 가지 CoSQ 변형</h2>
+    <div class="hr"></div>
+    <div class="grid-3" style="gap:clamp(0.8rem,2vw,1.5rem);">
+      <div class="card">
+        <span class="tag tag-green">주요 변형</span>
+        <h3 style="font-size:clamp(1rem,1.9vw,1.3rem); margin-top:0.7rem;">Grounded-CoSQ</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1.05rem); line-height:1.6; margin-top:0.7rem;">
+          정보 단위 평가 결과가 최종 답변을 직접 조건화합니다. 근거가 있는 정보만으로 답을 구성하는 <strong>리스크 지향적</strong> 핵심 구성입니다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">인접 운영점</span>
+        <h3 style="font-size:clamp(1rem,1.9vw,1.3rem); margin-top:0.7rem;">Critical-CoSQ</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1.05rem); line-height:1.6; margin-top:0.7rem;">
+          정보 단위를 위험도 기준으로 분류하고, 중요 정보에 대한 근거 부족에 더 민감하게 반응하는 <strong>비판적</strong> 정책입니다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">인접 운영점</span>
+        <h3 style="font-size:clamp(1rem,1.9vw,1.3rem); margin-top:0.7rem;">Adaptive-CoSQ</h3>
+        <p style="font-size:clamp(0.85rem,1.5vw,1.05rem); line-height:1.6; margin-top:0.7rem;">
+          질문 유형에 따라 역할 인지 평가를 수행하고 일관성 검사를 거치는 <strong>적응형</strong> 정책입니다.
+        </p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); margin-top:clamp(1rem,2.5vh,1.8rem); line-height:1.6;">
+      <i class="fas fa-info-circle accent2"></i> 세 변형은 서로 다른 커버리지–정확도 지점을 제공하는 <strong>이웃한 선택적 정책</strong>이며, Grounded가 모든 상황에서 우월하다는 주장이 아닙니다.
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">기존 접근법과의 차별성</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="font-size:clamp(0.8rem,1.5vw,1.05rem);">
+      <thead>
+        <tr><th>접근법</th><th>개입 시점</th><th>요구 사항</th><th>한계</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CoT 프롬프팅</td><td>답변 생성 중</td><td>없음</td><td>거절 결정을 만들지 않음 — 거짓 답으로도 일관되게 추론 가능</td>
+        </tr>
+        <tr>
+          <td>검색 증강 (RAG)</td><td>답변 생성 전/중</td><td>검색 인프라</td><td>검색·증거 선택 실패 모드 도입</td>
+        </tr>
+        <tr>
+          <td>사후 검증 (SelfCheckGPT 등)</td><td>답변 생성 후</td><td>다중 샘플링·별도 모델</td><td>이미 생성된 후보 답변을 개입</td>
+        </tr>
+        <tr>
+          <td><strong>CoSQ</strong></td><td><strong>답변 확정 이전</strong></td><td><strong>프롬프트만</strong></td><td>블랙박스·호스팅 모델에 바로 적용 가능</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card" style="margin-top:clamp(1rem,2.5vh,1.8rem);">
+      <p style="font-size:clamp(0.95rem,1.8vw,1.15rem); line-height:1.6;">
+        <i class="fas fa-puzzle-piece accent3"></i> CoSQ는 검색 이전·이후, 사후 검증과 <strong>병행 사용 가능한 보완재</strong>입니다. 거절 옵션 분류의 리스크–커버리지 개념을 LLM 프롬프팅에 이식한 것입니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">실험 설계</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:clamp(1rem,2.5vw,2rem);">
+      <div>
+        <ul class="check-list" style="font-size:clamp(0.9rem,1.7vw,1.15rem); line-height:1.6;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>데이터:</strong> TruthfulQA 객관식 검증 세트 817문항 (일반 오개념 탐지)</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>모델:</strong> 오픈 웨이트 + 호스팅 <strong>11개 모델 계열</strong></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>조건:</strong> 17개 조건, 균형 잡힌 선택지 위치 프로토콜</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>기준선:</strong> 강제 선택(chain-of-thought) 프롬프팅</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>일반화:</strong> Natural Questions Short-Answer 2차 평가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.25rem);"><i class="fas fa-chart-line accent"></i> 핵심 지표 3가지</h3>
+        <div style="margin-top:clamp(0.8rem,2vh,1.4rem);">
+          <div class="flow-item" style="margin-bottom:0.8rem;">
+            <div class="flow-icon"><i class="fas fa-bullseye"></i></div>
+            <div><strong>응답 정확도</strong> — 커밋한 질문 중 정답 비율 (조건부)</div>
+          </div>
+          <div class="flow-item" style="margin-bottom:0.8rem;">
+            <div class="flow-icon"><i class="fas fa-percentage"></i></div>
+            <div><strong>커버리지</strong> — 전체 중 답변을 시도한 비율</div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-icon"><i class="fas fa-ban"></i></div>
+            <div><strong>무조건 오커밋률</strong> — 전체 중 잘못된 답변 커밋 비율</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">가설과 연구 질문</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:clamp(1rem,2.5vw,2rem);">
+      <div class="card">
+        <span class="tag tag-red">H1 · 리스크 감소</span>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          τ = 0.90에서 Grounded-CoSQ는 강제 선택 CoT 대비 <strong>더 낮은 무조건 오커밋률</strong>을 보인다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">H2 · 조건부 신뢰성</span>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          커밋한 답변 중에서 Grounded-CoSQ는 <strong>더 높은 응답 정확도</strong>를 보인다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">RQ1 · 운영점 제어</span>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          신뢰 임계값 τ는 정확도·커버리지·오커밋률에 어떻게 영향을 주는가? → <strong>전체 임계값 스윕</strong>으로 검증
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">RQ2 · 일반화</span>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          효과는 모델 계열과 다른 QA 환경에 얼마나 일관되게 일반화되는가? → <strong>모델별 결과 + NQ-Short</strong>로 검증
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">주요 결과: 두 가지 승리</h2>
+    <p class="muted" style="font-size:clamp(0.9rem,1.7vw,1.15rem);">Grounded-CoSQ (τ = 0.90) vs CoT 기준선 · 균형 선택지 최종 프로토콜</p>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:clamp(1rem,2.5vw,2rem);">
+      <div class="card" style="text-align:center;">
+        <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1rem);">오커밋률 (H1 ✓)</p>
+        <div class="big-num accent" style="font-size:clamp(2rem,5vw,4rem);">32.1%</div>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">상대적 감소</p>
+        <div class="hr" style="width:50%; margin:0.8rem auto;"></div>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);"><span class="accent">13.1%</span> → <span class="accent3"><strong>8.9%</strong></span></p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1rem);">응답 정확도 (H2 ✓)</p>
+        <div class="big-num accent2" style="font-size:clamp(2rem,5vw,4rem);">+2.8%p</div>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);">정확도 향상</p>
+        <div class="hr" style="width:50%; margin:0.8rem auto;"></div>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);"><span class="muted">86.9%</span> → <span class="accent2"><strong>89.7%</strong></span></p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(1rem,2.5vh,1.8rem);">
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); line-height:1.6;">
+        <i class="fas fa-check-double accent3"></i> 커버리지 <strong>87.6%</strong>를 유지하면서 두 개선이 동시에 달성되었습니다. 11개 모델 <strong>전체</strong>, 평가한 <strong>모든 임계값</strong>에서 개선이 유지되었습니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">세 변형의 운영점 비교</h2>
+    <div class="hr"></div>
+    <table class="compare-table" style="font-size:clamp(0.85rem,1.6vw,1.1rem);">
+      <thead>
+        <tr><th>정책</th><th>커버리지</th><th>특징</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Grounded-CoSQ</strong> (τ=0.90)</td><td>87.6%</td><td>최고 평균 응답 정확도, 패널 최저 오커밋률과 0.03%p 이내, 균형 잡힌 주요 구성</td>
+        </tr>
+        <tr>
+          <td><strong>Critical-CoSQ</strong></td><td>88.6%</td><td>더 높은 커버리지 운영점, 기준선보다 여전히 신뢰성 높음</td>
+        </tr>
+        <tr>
+          <td><strong>Adaptive-CoSQ</strong></td><td>86.5%</td><td>더 보수적인 운영점, 기준선보다 여전히 신뢰성 높음</td>
+        </tr>
+        <tr>
+          <td class="muted">CoT 기준선 (강제 선택)</td><td class="muted">100%</td><td class="muted">오커밋률 13.1%, 거절 능력 없음</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); margin-top:clamp(1rem,2.5vh,1.8rem); line-height:1.6;">
+      <i class="fas fa-sliders-h accent"></i> 세 변형은 하나의 <span class="accent2">리스크–커버리지 경계선</span> 위의 서로 다른 지점을 제공합니다. 응용의 비용 구조(오답 vs 위탁 비용)에 따라 운영점을 선택할 수 있습니다.
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">일반화와 통계적 검증</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:clamp(1rem,2.5vw,2rem);">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-globe accent2"></i> NQ-Short 교차 데이터셋</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          개방형 단답형 Natural Questions 평가에서도 <strong>수렴하는 증거</strong>를 확인했습니다. 객관식 프로토콜에 국한되지 않는 일반화 가능성입니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,1.8vw,1.3rem);"><i class="fas fa-layer-group accent3"></i> 모델 수준 일관성</h3>
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          11개 모델 계열 <strong>전체</strong>에서 개선이 유지되었으며, 쌍별 모델 수준 검정·신뢰 구간으로 효과를 통계적으로 확인했습니다.
+        </p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:clamp(1.2rem,3vh,2rem);">
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); line-height:1.7;">
+        "자기 평가 신호는 보정된 확률이나 메타인지적 자각의 측정이 아니라, <strong>리스크–커버리지 프로파일을 실제로 바꿀 때</strong> 유용하다는 행동적·선택적 주장입니다."
+      </p>
+    </div>
+    <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1.05rem); margin-top:clamp(0.8rem,2vh,1.4rem);">
+      "자기 질문(self-questioning)"은 인간 같은 내성이 아니라, 신뢰 신호를 응답-거절 결정으로 변환하는 <strong>프롬프트 수준 절차</strong>를 의미합니다.
+    </p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">시사점과 한계</h2>
+    <div class="hr"></div>
+    <div class="grid-2" style="gap:clamp(1rem,2.5vw,2rem);">
+      <div>
+        <h3 style="font-size:clamp(1.05rem,2vw,1.4rem);" class="accent3"><i class="fas fa-seedling"></i> 시사점</h3>
+        <ul class="check-list" style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>추가 훈련·인프라 없이 블랙박스 모델에 즉시 적용 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>오답 비용이 위탁 비용보다 큰 환경(의료·법률·금융)에 적합</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>τ 조정으로 리스크–커버리지 트레이드오프를 명시적으로 제어</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>RAG·사후 검증과 결합 가능한 보완적 안전 장치</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:clamp(1.05rem,2vw,1.4rem);" class="accent"><i class="fas fa-exclamation-circle"></i> 한계</h3>
+        <ul class="check-list" style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6; margin-top:0.8rem;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>τ = 0.90은 보정된 확률이 아닌 경험적 운영 매개변수</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>거절 시 커버리지 손실(12~14%)이 발생 — 값진 정보의 손실 가능</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>낮은 커버리지를 그 자체로 실패로 보지 않으려면 리스크 동시 보고 필요</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>평가는 사실 QA 중심 — 다른 과제로의 확장은 후속 연구 과제</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:clamp(1.5rem,5vh,3.5rem);">
+      <h2 style="font-size:clamp(1.5rem,3.2vw,2.5rem);">결론</h2>
+      <div class="hr" style="margin:clamp(1rem,2.5vh,1.8rem) auto; width:40%;"></div>
+      <p style="font-size:clamp(1.1rem,2.4vw,1.7rem); line-height:1.7; max-width:70rem; margin:0 auto;">
+        자기 평가(self-assessment)는 <span class="accent">명시적이고 조절 가능한 응답-거절 결정</span>을 지원할 수 있습니다.<br>
+        근거 없는 확약이 위탁·검토보다 비용이 클 때,<br>
+        <span class="accent2"><strong>묻는 것이 먼저</strong></span>입니다.
+      </p>
+      <div class="grid-3" style="margin-top:clamp(1.5rem,4vh,2.5rem); gap:clamp(0.8rem,2vw,1.5rem); text-align:left;">
+        <div class="card">
+          <div class="big-num accent" style="font-size:clamp(1.6rem,3.5vw,2.8rem);">-32.1%</div>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);">오커밋률 상대 감소</p>
+        </div>
+        <div class="card">
+          <div class="big-num accent2" style="font-size:clamp(1.6rem,3.5vw,2.8rem);">89.7%</div>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);">응답 정확도 (87.6% 커버리지)</p>
+        </div>
+        <div class="card">
+          <div class="big-num accent3" style="font-size:clamp(1.6rem,3.5vw,2.8rem);">11</div>
+          <p style="font-size:clamp(0.85rem,1.5vw,1rem);">모든 모델 계열에서 개선 유지</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:clamp(2rem,6vh,4rem);">
+      <span class="tag tag-amber" style="font-size:clamp(0.8rem,1.5vw,1.05rem);">Paper</span>
+      <h2 style="font-size:clamp(1.4rem,3vw,2.4rem); margin-top:clamp(1rem,2.5vh,1.8rem); line-height:1.4;">
+        When Should LLMs Abstain?<br>
+        Chain-of-Self-Questioning for Selective Risk Control
+      </h2>
+      <div class="hr" style="margin:clamp(1.2rem,3vh,2rem) auto; width:50%;"></div>
+      <p style="font-size:clamp(1rem,2vw,1.35rem);">
+        <i class="fas fa-user accent"></i> Ali Şenol
+      </p>
+      <p class="muted" style="font-size:clamp(0.9rem,1.6vw,1.1rem); margin-top:0.5rem;">
+        Department of Computer Engineering, Tarsus University, Türkiye
+      </p>
+      <p style="font-size:clamp(0.95rem,1.8vw,1.2rem); margin-top:clamp(1rem,2.5vh,1.8rem);">
+        <i class="fas fa-link accent2"></i>
+        <a href="http://arxiv.org/abs/2609.17516v1">arxiv.org/abs/2609.17516v1</a>
+      </p>
+      <div class="card" style="margin-top:clamp(1.5rem,4vh,2.5rem); max-width:50rem; margin-left:auto; margin-right:auto;">
+        <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); line-height:1.6;">
+          <i class="fas fa-quote-left accent3"></i> 감사합니다. 질문과 토론을 환영합니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
