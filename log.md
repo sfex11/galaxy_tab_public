@@ -3484,3 +3484,35 @@
 - 2026-09-16-learning-to-coach-for-experiential-learning.md
 - 2026-09-16-look-before-you-leap-factual-decoding-with-interna.md
 - 2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md
+
+## [2026-09-17 08:34] ingest | Agentic Societies Need a Social Harness
+
+## [2026-09-17 08:34] ingest | ScienceBuddy: Recursive-in-Recursive Self-Improvement for Interactive Scientific Agents
+
+## [2026-09-17 08:34] ingest | When Should LLMs Abstain? Chain-of-Self-Questioning for Selective Risk Control
+
+## [2026-09-17 08:34] ingest | What Breaks Under Pruning in Smart Homes, and When? Evaluating LLM Degradation Across Architectures and Task Complexity
+
+## [2026-09-17 08:34] ingest | ENCP: Episode-Normalized Conformal Prediction for Vision-and-Language Navigation
+
+## [2026-09-17 08:34] ingest | Verifiable Social Reasoning for LLM Assistants
+
+## [2026-09-17 08:34] ingest | JustFit: 200K-Token LLM Serving on a 24 GiB Laptop with Just-in-Time State Management
+
+## [2026-09-17 08:34] ingest | Coupled Calibration and Learning: Mitigating Teacher Bias in LLM Distillation without Target-Domain Reward Feedback
+
+## [2026-09-17 08:34] ingest | Decomposition Buys Integrity, Not Yield
+
+## [2026-09-17 08:34] ingest | Tables Decoded: DELTA for Structure, TARQA for Understanding
+
+## [2026-09-17 08:34] ingest | Evaluating Verified Autonomy in Quantum Engineering
+
+## [2026-09-17 08:34] ingest | Enhancing Accessibility of Medical Texts through Large Language Model-Driven Plain Language Adaptation
+
+## [2026-09-17 08:34] ingest | Coding Agents Have Converged: Why the SWE-bench Leaderboard Can No Longer Order Its Top Entries, and What to Measure Instead
+
+## [2026-09-17 08:34] ingest | FlashVector: Agent for Hierarchical Model Serving Stack Optimization
+
+## [2026-09-17 08:34] ingest | Large Language Models Develop Belief State Geometry In-Context
+
+## [2026-09-17 08:34] ingest | Where Should a Document Live: Context, Representations, or Parameters?

@@ -359,3 +359,5 @@ _자동 생성됨_
 - [[sources/2026-09-03-nashdreamer-model-based-reinforcement-learning-for.md]]
 
 - [[sources/2026-09-03-scaling-near-optimal-sft-rl-annotation-budget-allo.md]]
+
+- [[sources/2026-09-17-sciencebuddy-recursive-in-recursive-self-improveme.md]]

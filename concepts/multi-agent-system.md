@@ -321,3 +321,7 @@ _자동 생성됨_
 - [[sources/2026-09-09-trust-aware-adaptive-disclosure-for-inference-priv.md]]
 
 - [[sources/2026-09-09-testing-interchangeability-in-llm-agent-teams.md]]
+
+- [[sources/2026-09-17-verifiable-social-reasoning-for-llm-assistants.md]]
+
+- [[sources/2026-09-17-decomposition-buys-integrity-not-yield.md]]

@@ -1824,3 +1824,24 @@
 - [[sources/2026-09-15-mp-bench-evaluating-voice-agents-as-a-multiparty-c.md]] - MP-Bench: Evaluating Voice Agents as a Multiparty Conversation Participant
 - [[sources/2026-09-15-autonomous-research-for-open-ended-problems-a-case.md]] - Autonomous Research for Open-Ended Problems: A Case Study on Telecom Ticket Retrieval
 - [[sources/2026-09-15-anchoring-clinical-events-in-time-uid-preserving-m.md]] - Anchoring Clinical Events in Time: UID-Preserving Multimodal Reconstruction and Source-Grounded Adjudication
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-17-agentic-societies-need-a-social-harness.md]] - Agentic Societies Need a Social Harness
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-17-sciencebuddy-recursive-in-recursive-self-improveme.md]] - ScienceBuddy: Recursive-in-Recursive Self-Improvement for Interactive Scientific Agents
+- [[sources/2026-09-17-when-should-llms-abstain-chain-of-self-questioning.md]] - When Should LLMs Abstain? Chain-of-Self-Questioning for Selective Risk Control
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-17-what-breaks-under-pruning-in-smart-homes-and-when-.md]] - What Breaks Under Pruning in Smart Homes, and When? Evaluating LLM Degradation Across Architectures and Task Complexity
+- [[sources/2026-09-17-encp-episode-normalized-conformal-prediction-for-v.md]] - ENCP: Episode-Normalized Conformal Prediction for Vision-and-Language Navigation
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-17-verifiable-social-reasoning-for-llm-assistants.md]] - Verifiable Social Reasoning for LLM Assistants
+- [[sources/2026-09-17-justfit-200k-token-llm-serving-on-a-24-gib-laptop-.md]] - JustFit: 200K-Token LLM Serving on a 24 GiB Laptop with Just-in-Time State Management
+- [[sources/2026-09-17-coupled-calibration-and-learning-mitigating-teache.md]] - Coupled Calibration and Learning: Mitigating Teacher Bias in LLM Distillation without Target-Domain Reward Feedback
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-17-decomposition-buys-integrity-not-yield.md]] - Decomposition Buys Integrity, Not Yield
+- [[sources/2026-09-17-tables-decoded-delta-for-structure-tarqa-for-under.md]] - Tables Decoded: DELTA for Structure, TARQA for Understanding
+- [[sources/2026-09-17-evaluating-verified-autonomy-in-quantum-engineerin.md]] - Evaluating Verified Autonomy in Quantum Engineering
+- [[sources/2026-09-17-enhancing-accessibility-of-medical-texts-through-l.md]] - Enhancing Accessibility of Medical Texts through Large Language Model-Driven Plain Language Adaptation
+- [[sources/2026-09-17-coding-agents-have-converged-why-the-swe-bench-lea.md]] - Coding Agents Have Converged: Why the SWE-bench Leaderboard Can No Longer Order Its Top Entries, and What to Measure Instead
+- [[sources/2026-09-17-flashvector-agent-for-hierarchical-model-serving-s.md]] - FlashVector: Agent for Hierarchical Model Serving Stack Optimization
+- [[sources/2026-09-17-large-language-models-develop-belief-state-geometr.md]] - Large Language Models Develop Belief State Geometry In-Context
+- [[sources/2026-09-17-where-should-a-document-live-context-representatio.md]] - Where Should a Document Live: Context, Representations, or Parameters?
