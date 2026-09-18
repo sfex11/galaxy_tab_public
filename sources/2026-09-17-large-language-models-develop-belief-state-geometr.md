@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f]]: 모두 내부 표현이 컨텍스트로부터 형성되는 과업 관련 정보를 선형적 기하 구조로 부호화함을 보이며, 각각 스킬 라우팅과 ICL 지원이라는 응용으로 이어진다.
+- → [[sources/2026-09-18-beyond-truncation-rethinking-llm-decoding-as-ensem]]: 토큰 후보 선택과 ICL 표현이라는 상이한 대상에서 숨은 공간의 기하 구조(공분산 구조, 신념 기하)가 스칼라 확률이 소실시키는 정보를 보존함을 보인다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-]]: ground truth가 부재하거나 검증 비용이 큰 영역(임상 인용, 사회적 추론)에서 검증 가능성을 평가 설계 단계에서 구축한다는 공통 전략을 취한다.

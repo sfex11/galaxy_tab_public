@@ -49,3 +49,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-evaluating-verified-autonomy-in-quantum-engineerin]]: 물리적 자동 실험실이 모델과 독립된 외부 검증자로 작동할 때 에이전트 추론이 실험 설계를 주도할 수 있음을 양자 공학과 제형 개발에서 각각 보여준다.

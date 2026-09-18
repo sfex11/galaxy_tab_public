@@ -44,3 +44,9 @@ The Router Within은 스킬 라우팅의 위치를 외부 하네스에서 동결
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int]]: 두 논문 모두 동결된 LLM 내부 상태에서 선형 판독(스킬 라우팅 신호 프로브, 보상 해킹 평균 차이 벡터)으로 과업 관련 정보가 직접 읽힘을 보여, 내부 표현 기반 제어·감시라는 공통 축 위에 있다.
+- → [[sources/2026-09-17-large-language-models-develop-belief-state-geometr]]: 모두 내부 표현이 컨텍스트로부터 형성되는 과업 관련 정보를 선형적 기하 구조로 부호화함을 보이며, 각각 스킬 라우팅과 ICL 지원이라는 응용으로 이어진다.
+- → [[sources/2026-09-17-where-should-a-document-live-context-representatio]]: 스킬 정보를 컨텍스트 주입 대신 내부 상태에서 읽자는 제안과 문서의 거처(컨텍스트/표현/파라미터)를 묻는 질문은 '정보를 어디에 둘 것인가'라는 동일한 설계 문제의 양면이다.

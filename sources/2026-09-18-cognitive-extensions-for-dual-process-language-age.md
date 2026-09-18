@@ -50,3 +50,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents]]: 재훈련 없이 배포 시점 컨텍스트 소비(ICL)와 부착형 기억 모듈(AMM)로 적응을 달성한다는 '컴파일이 아닌 소비·부착' 전략을 공유한다.
+- → [[sources/2026-09-17-agentic-societies-need-a-social-harness]]: 에이전트의 한계를 모델 재훈련이 아닌 외부 하네스(사회적)와 모듈 부착(인지적)이라는 시스템 수준 개입으로 치료한다는 입장을 공유한다.

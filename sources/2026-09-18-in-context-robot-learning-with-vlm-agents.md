@@ -46,3 +46,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-where-should-a-document-live-context-representatio]]: 지식을 가중치에 컴파일하는 대신 배포 시점에 컨텍스트로 소비하는 것이 효율적·유연한 적응 경로라는 공통 전제를 공유한다.
+- → [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age]]: 재훈련 없이 배포 시점 컨텍스트 소비(ICL)와 부착형 기억 모듈(AMM)로 적응을 달성한다는 '컴파일이 아닌 소비·부착' 전략을 공유한다.

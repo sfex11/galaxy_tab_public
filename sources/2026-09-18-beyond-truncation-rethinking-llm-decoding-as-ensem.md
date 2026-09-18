@@ -37,3 +37,7 @@ ME-Decoding(Mahalanobis-Ensemble Decoding)은 후보 토큰 선택을 앙상블 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-large-language-models-develop-belief-state-geometr]]: 토큰 후보 선택과 ICL 표현이라는 상이한 대상에서 숨은 공간의 기하 구조(공분산 구조, 신념 기하)가 스칼라 확률이 소실시키는 정보를 보존함을 보인다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-]]: 임상 텍스트를 대상으로 LLM을 적용하며, 각각 검증 가능한 인용과 환자 접근성이라는 신뢰성 요건을 충족시키려 한다.

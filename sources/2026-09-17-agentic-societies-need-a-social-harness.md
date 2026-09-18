@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-decomposition-buys-integrity-not-yield]]: 다중 에이전트 시스템의 구조 설계(신뢰 경계를 넘는 사회 하네스 vs 분해 트리)가 에이전트 간 정보 전달과 최종 성과를 결정한다는 공통 문제의식을 갖는다.
+- → [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp]]: 부분 관찰 조건에서 에이전트 집단의 신념 형성·확산과 조정 실패라는 동일 현상을 실험 하네스와 통제된 장난감 모델로 상호 보완적으로 다룬다.
+- → [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age]]: 에이전트의 한계를 모델 재훈련이 아닌 외부 하네스(사회적)와 모듈 부착(인지적)이라는 시스템 수준 개입으로 치료한다는 입장을 공유한다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-16-vulnerability-localization-benchmark-measuring-age]]: 기존 코딩·보안 에이전트 평가의 포화와 사각지대를 진단하고, 국소화 축 분리와 리더보드 대안 지표라는 새로운 측정 방식을 제안한다.

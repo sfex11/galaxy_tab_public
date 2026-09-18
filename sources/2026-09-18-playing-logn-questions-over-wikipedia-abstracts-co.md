@@ -45,3 +45,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp]]: 통제된 게임 프로토콜(log₂(N) 질문 예산, 숨겨진 국기)로 정보 비대칭 하의 자연어 통신 손실과 집단 신념 역학을 격리·정량화한다는 방법론을 공유한다.

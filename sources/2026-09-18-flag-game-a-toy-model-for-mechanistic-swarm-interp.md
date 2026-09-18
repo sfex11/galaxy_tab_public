@@ -54,3 +54,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-agentic-societies-need-a-social-harness]]: 부분 관찰 조건에서 에이전트 집단의 신념 형성·확산과 조정 실패라는 동일 현상을 실험 하네스와 통제된 장난감 모델로 상호 보완적으로 다룬다.
+- → [[sources/2026-09-18-playing-logn-questions-over-wikipedia-abstracts-co]]: 통제된 게임 프로토콜(log₂(N) 질문 예산, 숨겨진 국기)로 정보 비대칭 하의 자연어 통신 손실과 집단 신념 역학을 격리·정량화한다는 방법론을 공유한다.

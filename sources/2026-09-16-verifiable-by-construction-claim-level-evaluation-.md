@@ -55,3 +55,8 @@ verbatim 인용도 절삭(문맥 제거)에 의한 왜곡 가능성은 남는다
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-17-verifiable-social-reasoning-for-llm-assistants]]: ground truth가 부재하거나 검증 비용이 큰 영역(임상 인용, 사회적 추론)에서 검증 가능성을 평가 설계 단계에서 구축한다는 공통 전략을 취한다.
+- → [[sources/2026-09-17-enhancing-accessibility-of-medical-texts-through-l]]: 임상 텍스트를 대상으로 LLM을 적용하며, 각각 검증 가능한 인용과 환자 접근성이라는 신뢰성 요건을 충족시키려 한다.
