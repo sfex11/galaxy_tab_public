@@ -46,3 +46,9 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 안전 제어의 적용 전제를 고정 태스크·알려진 동역학에서 미지 태스크·학습 중 동역학으로 확장한다. 안전 필터가 신념 조건부가 되어야 하며, 제어 장벽 개념이 물리 공간에서 정보 공간으로 재정의될 필요를 제시한다.
 
 → [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
+
+안전 제약 평가 대상이 전통적 신경망 정책에서 코드 생성 에이전트로 확장됨을 보여준다. 충돌 회피라는 안전-목표 이중 제약 하에서의 에이전트 평가 프레임을 제공한다.
+
+→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

@@ -16,3 +16,9 @@ _Wiki 축적 중_
 Show-Harness가 VLM 에이전트의 로봇 '실행'을 보였다면 본 논문은 '컨텍스트 학습'으로 확장한다. VLM 에이전트의 정적 실행 능력에서 배포 시점 적응 능력으로의 진화 선상에 위치한다.
 
 → [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
+
+VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경로의 안전 평가를 제공하여, 로봇 에이전트 제어 패러다임 스펙트럼을 완성한다. 두 경로 모두 안전 제약이 에이전트 입력에 명시되어야 한다는 요구를 공유한다.
+
+→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

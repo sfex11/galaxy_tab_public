@@ -40,3 +40,9 @@ _Wiki 축적 중_
 모델 재훈련 없이 기억(AMM)과 성찰(SRM) 모듈을 하네스 측에 부착하여 인지 실패를 구조적으로 보정하는 대표 사례다. 모듈형 인지 확장이 하네스 보상의 조립 가능한 형태임을 보여준다.
 
 → [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
+
+모델의 안전 맹점을 하네스가 구조적으로 보정하는 로보틱스 사례를 추가한다. [[sentinel-rl]]의 위상 추론 오프로딩과 동일한 '인지 한계의 구조적 대체' 원리가 안전 제약 가시화 영역에서도 작동함을 보여준다.
+
+→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
