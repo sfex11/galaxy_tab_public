@@ -1,0 +1,283 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1비트의 승리 — AI 통신의 병목은 '파이프'가 아니라 '상대 읽기'다</title>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,900&display=swap');
+
+  :root{
+    --bg:#faf9f7;
+    --ink:#2c2825;
+    --orange:#c2703e;
+    --blue:#5b7c99;
+    --green:#6b9e7a;
+    --orange-deep:#a85c2e;
+    --blue-deep:#47637c;
+    --green-deep:#4e7a5c;
+    --card:rgba(255,255,255,0.7);
+    --card-border:rgba(194,112,62,0.12);
+    --muted:rgba(44,40,37,0.62);
+    --hairline:rgba(44,40,37,0.08);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:clamp(1rem,0.95rem + 0.4vw,1.075rem);
+    line-height:1.9;
+    font-weight:400;
+    letter-spacing:-0.01em;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 85% 0%, rgba(194,112,62,0.05), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 0% 100%, rgba(91,124,153,0.05), transparent 70%);
+    background-attachment:fixed;
+  }
+
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg,var(--orange),var(--blue));
+    z-index:99;border-radius:0 3px 3px 0;
+  }
+
+  .page{max-width:800px;margin:0 auto;padding:16px clamp(14px,4vw,24px) 80px;}
+
+  /* ── 내비게이션 (지정 그대로) ── */
+  nav{background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);}
+  nav a{color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;}
+  nav a:hover{background:rgba(194,112,62,0.08);}
+
+  /* ── 히어로 ── */
+  .hero{padding:clamp(28px,6vw,56px) 0 clamp(18px,4vw,28px);text-align:left;}
+  .kicker{
+    display:inline-block;font-size:0.78rem;font-weight:700;letter-spacing:0.18em;
+    color:var(--orange-deep);text-transform:uppercase;
+    border:1px solid rgba(194,112,62,0.3);border-radius:999px;
+    padding:4px 14px;margin-bottom:20px;background:rgba(194,112,62,0.06);
+  }
+  h1{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.72rem,1.2rem + 3.2vw,2.7rem);
+    font-weight:900;line-height:1.32;letter-spacing:-0.02em;margin-bottom:18px;
+  }
+  h1 .hl-o{color:var(--orange-deep);}
+  h1 .hl-b{color:var(--blue-deep);}
+  .subtitle{font-size:clamp(0.98rem,0.94rem + 0.3vw,1.1rem);color:var(--muted);line-height:1.8;font-weight:400;}
+  .paper-meta{
+    margin-top:22px;padding:12px 16px;border-radius:10px;
+    background:var(--card);border:1px solid var(--card-border);
+    font-size:0.82rem;color:var(--muted);line-height:1.7;
+  }
+  .paper-meta em{font-family:'Source Serif 4',serif;font-style:italic;color:var(--ink);}
+
+  /* ── 인용구 ── */
+  blockquote{
+    border-left:4px solid #c2703e;
+    max-width:800px;margin:auto;
+    padding:18px 22px;margin-top:clamp(22px,5vw,34px);margin-bottom:clamp(22px,5vw,34px);
+    background:rgba(255,255,255,0.55);border-radius:0 12px 12px 0;
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.05rem,1rem + 0.5vw,1.2rem);
+    line-height:1.85;color:var(--ink);font-weight:600;
+  }
+  blockquote .src{display:block;margin-top:10px;font-family:'Noto Sans KR',sans-serif;font-size:0.8rem;font-weight:500;color:var(--muted);}
+
+  /* ── 섹션 ── */
+  section{margin:clamp(3rem,8vw,4.5rem) 0;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;}
+  .sec-num{
+    font-family:'Source Serif 4',serif;font-weight:900;
+    font-size:clamp(2rem,1.4rem + 2.4vw,2.8rem);line-height:1;
+    color:var(--orange);opacity:0.85;flex-shrink:0;
+  }
+  .sec-num.b{color:var(--blue);}
+  .sec-num.g{color:var(--green);}
+  h2{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.32rem,1.15rem + 1.2vw,1.8rem);
+    font-weight:700;line-height:1.4;letter-spacing:-0.02em;
+  }
+  .sec-sub{font-size:0.9rem;color:var(--muted);margin:8px 0 26px;padding-left:2px;}
+  section h3{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.08rem,1rem + 0.6vw,1.25rem);
+    font-weight:700;margin:34px 0 12px;
+  }
+  section p{margin-bottom:18px;}
+  .lead-p{font-size:clamp(1.03rem,1rem + 0.35vw,1.14rem);font-weight:500;line-height:1.95;}
+  strong{font-weight:700;}
+  .em-o{color:var(--orange-deep);font-weight:700;}
+  .em-b{color:var(--blue-deep);font-weight:700;}
+  .em-g{color:var(--green-deep);font-weight:700;}
+  code{
+    font-family:'Source Serif 4',serif;
+    background:rgba(91,124,153,0.1);color:var(--blue-deep);
+    padding:1px 7px;border-radius:6px;font-size:0.92em;font-weight:600;white-space:nowrap;
+  }
+
+  /* ── 카드 ── */
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    box-shadow:0 6px 24px rgba(44,40,37,0.06);
+    border-radius:16px;
+    padding:clamp(18px,4vw,28px);
+    margin:26px 0;
+  }
+  .card-title{font-family:'Source Serif 4',serif;font-weight:700;font-size:1.02rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .dot.o{background:var(--orange);} .dot.b{background:var(--blue);} .dot.g{background:var(--green);}
+  .card p:last-child{margin-bottom:0;}
+
+  .tldr li{margin:0 0 10px 0;list-style:none;padding-left:24px;position:relative;}
+  .tldr li::before{content:'→';position:absolute;left:0;color:var(--orange);font-weight:700;}
+
+  /* ── 공식 박스 ── */
+  .formula{
+    font-family:'Source Serif 4',serif;
+    text-align:center;font-size:clamp(1.15rem,1.05rem + 0.7vw,1.45rem);
+    font-weight:600;padding:18px 10px;letter-spacing:0.01em;
+  }
+  .formula small{display:block;font-family:'Noto Sans KR',sans-serif;font-weight:400;font-size:0.78rem;color:var(--muted);margin-top:8px;}
+  sub,sup{font-size:0.65em;}
+
+  /* ── 개념 칩 ── */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;}
+  .chip{
+    display:inline-block;font-size:0.78rem;font-weight:500;
+    padding:4px 12px;border-radius:999px;line-height:1.6;
+    font-family:'Source Serif 4',serif;letter-spacing:0;
+  }
+  .chip-b{background:rgba(91,124,153,0.11);color:var(--blue-deep);border:1px solid rgba(91,124,153,0.25);}
+  .chip-g{background:rgba(107,158,122,0.13);color:var(--green-deep);border:1px solid rgba(107,158,122,0.3);}
+  .chip-o{background:rgba(194,112,62,0.1);color:var(--orange-deep);border:1px solid rgba(194,112,62,0.25);}
+
+  /* ── 그림 1: 이분 시각화 ── */
+  .viz-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+  .viz-label{font-size:0.68rem;font-weight:700;color:var(--muted);width:64px;flex-shrink:0;text-align:right;line-height:1.3;}
+  .viz-track{display:flex;gap:2px;flex:1;height:14px;}
+  .viz-track span{flex:1;border-radius:2.5px;background:rgba(44,40,37,0.07);}
+  .viz-track span.on-g{background:var(--green);}
+  .viz-track span.on-b{background:var(--blue);}
+  .viz-track span.on-o{background:var(--orange);}
+  .viz-cap{font-size:0.76rem;color:var(--muted);margin-top:14px;line-height:1.7;}
+
+  /* ── 그림 2: 오차 붕괴 바차트 ── */
+  .bars{display:flex;align-items:flex-end;gap:clamp(3px,1.2vw,8px);height:130px;margin-top:10px;}
+  .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;}
+  .bar i{display:block;width:100%;border-radius:4px 4px 2px 2px;
+    background:linear-gradient(180deg,var(--blue),rgba(91,124,153,0.55));}
+  .bar b{font-size:0.62rem;color:var(--muted);font-weight:500;margin-top:5px;}
+  .bar .pct{font-size:0.6rem;font-weight:700;color:var(--blue-deep);margin-bottom:4px;}
+
+  /* ── 비유 박스 ── */
+  .analogy{
+    border-left:4px solid var(--blue);
+    background:rgba(91,124,153,0.06);
+    border-radius:0 12px 12px 0;
+    padding:16px 20px;margin:22px 0;
+  }
+  .analogy .tag{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--blue-deep);text-transform:uppercase;display:block;margin-bottom:6px;}
+  .analogy.g{border-left-color:var(--green);background:rgba(107,158,122,0.07);}
+  .analogy.g .tag{color:var(--green-deep);}
+  .analogy.o{border-left-color:var(--orange);background:rgba(194,112,62,0.06);}
+  .analogy.o .tag{color:var(--orange-deep);}
+
+  /* ── 결론 ── */
+  .conclusion{
+    background:var(--card);border:1px solid var(--card-border);
+    box-shadow:0 8px 32px rgba(44,40,37,0.07);
+    border-radius:20px;padding:clamp(22px,5vw,36px);margin-top:clamp(2.5rem,7vw,4rem);
+  }
+  .shift{display:grid;grid-template-columns:1fr;gap:12px;margin:20px 0;}
+  .shift-item{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:14px 16px;border-radius:12px;background:rgba(255,255,255,0.6);
+    border:1px solid var(--hairline);
+  }
+  .shift-arrow{font-family:'Source Serif 4',serif;font-weight:900;color:var(--orange);font-size:1.05rem;flex-shrink:0;padding-top:2px;}
+  .shift-item p{margin:0;font-size:0.94rem;line-height:1.8;}
+
+  /* ── 푸터 ── */
+  footer{margin-top:clamp(3rem,8vw,5rem);padding-top:24px;border-top:1px solid var(--hairline);font-size:0.8rem;color:var(--muted);line-height:1.9;text-align:center;}
+
+  /* ── 구분선 ── */
+  hr{border:none;height:1px;background:linear-gradient(90deg,transparent,rgba(194,112,62,0.25),transparent);margin:clamp(2rem,6vw,3rem) 0;}
+
+  /* ── 등장 애니메이션 ── */
+  .js .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.7s ease,transform 0.7s ease;}
+  .js .reveal.visible{opacity:1;transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    .js .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  @media (max-width:480px){
+    .viz-label{width:56px;font-size:0.63rem;}
+    section p{margin-bottom:16px;}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="page">
+
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+    <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+    <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+    <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+    <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+    <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+    <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+    <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+    <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <!-- ══════════ 히어로 ══════════ -->
+  <header class="hero reveal">
+    <span class="kicker">논문 심층 분석 · 멀티에이전트 통신</span>
+    <h1>1비트의 승리<br>— AI 통신 효율의 병목은 <span class="hl-o">'파이프'</span>가 아니라 <span class="hl-b">'상대 읽기'</span>다</h1>
+    <p class="subtitle">자연어에서 KV 캐시로, 다시 가중치 직접 업데이트로 — 에이전트들은 서로 더 넓은 통로로 대화하려 합니다. 그런데 채널을 극한까지 좁혀 <strong>단 하나의 예/아니오</strong>만 남겼을 때 벌어진 일은, 그 서사의 근본 전제을 흔듭니다.</p>
+    <div class="paper-meta">
+      분석 대상 · <em>Playing log(N)-Questions over Wikipedia Abstracts: Communication Efficiency Between Paired Frontier Models</em><br>
+      핵심 질의 · 채널을 최소 대역폭으로 고정해도 정보이론적 한계 log<sub>2</sub>N 도달 여부가 갈린다면, 진짜 병목은 채널 용량이 아니라 상대 에이전트의 신념 상태를 모델링하는 질문 생성 능력 아닌가?
+    </div>
+  </header>
+
+  <blockquote class="reveal">
+    "채널 용량은 갈 수 있는 가장 먼 곳을 알려줄 뿐, 그곳에 도달하게 하는 것은 전략이다.<br>1비트짜리 전화기로도 천 개의 비밀을 꿰찰 수 있다 — 상대를 읽는 질문만 있다면."
+    <span class="src">— 본 글의 핵심 주장 요약</span>
+  </blockquote>
+
+  <!-- ══════════ TL;DR ══════════ -->
+  <div class="card reveal">
+    <div class="card-title"><span class="dot o"></span>세 줄 요약</div>
+    <ul class="tldr">
+      <li><strong>채널 용량은 '상한(converse)'</strong>일 뿐이고, 그 상한에 <strong>도달하는 것(achievability)은 질문 정책의 몫</strong>입니다. 필요조건은 단지 T ≥ log<sub>2</sub>N.</li>
+      <li>질문의 분할 비율은 질문자가 <strong>응답자의 사전분포와 응답 정책을 얼마나 내재화했는가</strong>의 함수입니다. 즉 질문 생성 = 상대 신념 모델링.</li>
+      <li>다만 병목은 질문자 일방이 아닙니다. 답변 오류는 (1−ε)<sup>log₂N</sup>으로 <strong>지수적으로 누적</strong>되므로, 결론은 <strong>양방향 신념 정렬</strong>입니다.</li>
+    </ul>
+  </div>
+
+  <!-- ══════════ 섹션 1 ══════════ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">01</span><h2>스무 고개의 역설 — 규칙은 공평한데 성적은 갈린다</h2></div>
+    <p class="sec-sub">채널을 극소로 고정하는 것은 제약이 아니라, 실험 설계상의 걸작이다</p>
+
+    <p class="lead-p">스무 고개를 떠올려 보세요. 규칙은 누구나 압니다. 예/아니오로만 답하고, 스무 번 안에 맞히면 됩니다. 그런데 이 게임의 <strong>고수와 초보의 격차는 상상을 초월</strong>합니다. 고수는 첫 질문부터 "이 게 살아있는 건가요?"로 세계를 정확히 절반으로 자르지만, 초보는 "그게 김수한무인가요?"라며 소중한 기회 하나를 통째로 낭비합니다.</p>
+
+    <p>규칙, 즉 <span class="em-o">채널</span>은 모두에게 완전히 동일합니다. 그런데 성적은 갈립니다. 왜일까요? 이유는 하나입니다. <strong>질문 하나하나가 담고 있는 정보의 양이 다르기 때문</strong>입니다. 이 논문이 프론티어 모델 두 대를 마주 앉힌 것은 바로 이 게임의 학술 버전입니다. N개의 위키피디아 요약문 가운데 하나가 응답자에게만 주어진 은닉 목표가 되고, 질문자는 오직 예/아니오 답변 T회 안에 그것을 특정해야 합니다.</p>
+
+    <p>여기서 정보이론이 말해주는 하한은 냉정합니다. N개의 선택지를 가리려면 최소 log<sub>2</sub>N번의 이진 판단이 필요하다는 것, 즉 <code>T ≥ log<sub>2</sub>N
+</body>
+</html>
