@@ -28,3 +28,9 @@ _Wiki 축적 중_
 산출물의 인식론적 신뢰성이 사용자의 검증 능력과 결합된 관계 속성임을 보여준다. 동일한 인용이라도 검증 비용에 따라 인식론적 가치가 달라지며, 신뢰성 설계에 수신자 제약(임상의의 시간)이 명시적 변수로 포함되어야 함을 시사한다.
 
 → [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]
+
+### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-19)
+
+산출물 수준 인식론적 신뢰성의 조작적 정의를 제공한다 — 최종 응답의 신뢰성을 컨텍스트 대비 모순률로 측정하는 방식으로, 산출물의 지식적 유효성을 행동 제어와 독립적으로 평가하는 구체적 경로를 연다.
+
+→ [[sources/2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

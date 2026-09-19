@@ -16,3 +16,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-02-better-than-average-spatially-aware-aggregation-of.md|Better than Average: Spatially-Aware Aggregation of Segmenta]] (2026-04-02)
 
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

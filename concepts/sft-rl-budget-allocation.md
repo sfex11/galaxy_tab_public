@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-04-post-training-language-models-for-gold-medal-perfo.md|Post-Training Language Models for Gold-Medal Performance in ]]
 
 ### Co-Evolving Harnesses and Models: On-Policy Correction Helps Weaker Mo (2026-09-10)
+
+### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
+
+→ [[sources/2026-09-19-retireopd-self-retiring-on-policy-distillation-for.md|상세 보기]]

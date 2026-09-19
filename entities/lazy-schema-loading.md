@@ -20,3 +20,9 @@ _Wiki 축적 중_
 지연 로딩의 극한 형태를 제시한다 — 스키마를 '필요할 때 로드'하는 단계를 넘어 선택 판단을 스키마 로드 없이 내부 신호로 수행함으로써 로딩 이벤트 자체를 제거한다. lazy 로딩이 인프라 최적화였다면 본 논문은 선택 능력의 내재화다.
 
 → [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f.md|상세 보기]]
+
+### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
+
+지연 실행 패턴의 적용 대상을 외부 자원(스키마·인덱스·픽셀)에서 모델 내부 연산(전역 어텐션)으로 확장한다. 필요 전까지 로드하지 않는 원리가 연산 수준에서 재현되어 지연 실행의 도메인 불변성이 한 계층 더 강화된다.
+
+→ [[sources/2026-09-19-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

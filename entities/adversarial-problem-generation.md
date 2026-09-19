@@ -22,3 +22,9 @@ VHG는 적대적 문제 생성의 실패 모드를 구체화한다 — 적대적
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 적대적 생성의 대상을 수학 문제에서 사용자 반론으로 확장한다 — 기초→난이도 상향→적대적의 3단계 구조가 대화 턴 반복으로 재실현되며, '적응적 도전자'라는 새 변형을 추가한다.
+
+### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
+
+적대적 생성의 대상을 '훈련/평가용 난제 생성'에서 '기존 시스템의 명세 위반 반례 탐색'으로 확장한다. 난제 생성이 새로운 문제를 만드는 생성적 적대성이라면, 반증은 기존 시스템의 취약점을 찾는 조사적 적대성이다.
+
+→ [[sources/2026-09-19-large-language-models-as-falsifiers-for-cyber-phys.md|상세 보기]]

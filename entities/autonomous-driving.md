@@ -34,3 +34,9 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
 
 엔드투엔드 자율주행에서 인지-계획-제어 통합이 VLM 기반으로 가능함을 보여주며, LiDAR 인지 강화([[concepts/autonomous-driving-perception.md|autonomous driving perception]])와 개방형 실험 플랫폼 연구와 결합하면 자율주행 VLA 스택의 방법-인프라 전체 지형이 완성된다.
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
+
+인지·계획·커버리지 논의에 이어 end-to-end 정책의 폐루프 사후학습 축을 추가한다. 렌더링 프리 훈련은 자율주행 폐루프 학습의 계산 비용 장벽을 낮추는 인프라 방향을 제시한다.
+
+→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

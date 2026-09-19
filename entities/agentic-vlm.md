@@ -32,3 +32,9 @@ VLM 에이전트의 시각 지각을 '모든 프레임을 보는 것'에서 '필
 상용 VLM(GPT-6 Astra)의 에이전틱 능력이 로봇 적응 엔진으로 기능함을 보여준다. VLM의 ICL 능력이 텍스트 도메인을 넘어 물리적 조작으로 이전 가능함을 실증한다.
 
 → [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
+
+VLM 에이전트의 역할을 '전 과제 수행'에서 '스테이지 전이 판별'로 특화하는 축소 전략을 제공한다. VLM을 오프라인 증류 교사로, 소형 판별기를 온라인 실행자로 두어 추론 비용-실시간성 트레이드오프를 해소함을 보여준다.
+
+→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

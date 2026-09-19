@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 LLM 프록시를 도전자 기기로 사용하는 평가에 측정기기 신뢰성 문제가 재현됨을 시사한다 — 도전자 프록시 자체의 전략 일관성과 반박 품질이 결과 재현성의 상한을 규정한다.
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+LLM 예측기의 위상을 '판단자'에서 '편향 교정 대상 보조 추정기'로 재배치한다. 기기로서의 절대 신뢰성 요구(52,988건 감사에서 관찰된 낮은 반복 합의 문제)를 레이블 고정 추정에서의 분산 감소 기여로 완화하여, judge 신뢰성 병목을 우회하는 통계적 경로를 제시한다.
+
+→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

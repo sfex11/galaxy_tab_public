@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-03-19-on-min-storey-estimators-for-multiple-testing-and-.md|On min-Storey estimators for multiple testing and conformal ]]
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-04-earlyeval-cheaper-agent-evaluation-via-early-outco.md|EarlyEval: Cheaper Agent Evaluation via Early Outcome Predic]]
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

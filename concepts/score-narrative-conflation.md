@@ -17,3 +17,7 @@ _자동 Wiki Query에서 추출됨_
 ### Clean Engineering, Unstable Measurement: A Preregistered Reliability F (2026-09-06)
 
 ### Molecular Déjà Vu: Digit-Level Retrieval of Published Values in Fronti (2026-09-08)
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

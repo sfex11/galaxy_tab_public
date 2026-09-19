@@ -3529,3 +3529,21 @@
 - 2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md
 - 2026-09-18-evidence-grounded-agentic-formulation-development-.md
 - 2026-09-18-beyond-truncation-rethinking-llm-decoding-as-ensem.md
+
+## [2026-09-19 06:57] llm-ingest | 16편 분석, 엔티티 796개, 개념 1986개
+- 2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md
+- 2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md
+- 2026-09-19-an-empirical-study-of-harness-design-for-coding-ag.md
+- 2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md
+- 2026-09-19-retireopd-self-retiring-on-policy-distillation-for.md
+- 2026-09-19-semantic-action-graph-a-shared-representation-for-.md
+- 2026-09-19-prediction-powered-smoothing-and-validation-for-di.md
+- 2026-09-19-raft-a-stateful-retrieval-augmented-framework-for-.md
+- 2026-09-19-large-language-models-as-falsifiers-for-cyber-phys.md
+- 2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md
+- 2026-09-19-paint-anything-unified-any-color-control-for-image.md
+- 2026-09-19-on-demand-attention-language-models-know-when-to-r.md
+- 2026-09-19-qa-on-any-spreadsheet-requires-interpreting-its-gr.md
+- 2026-09-19-deep-noir-autonomous-steering-discovery-via-archit.md
+- 2026-09-19-how-does-distribution-shift-shape-pretraining-gain.md
+- 2026-09-19-score-centering-stabilizes-off-policy-reinforcemen.md

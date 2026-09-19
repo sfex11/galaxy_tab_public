@@ -64,3 +64,15 @@ LLM 사후학습의 최적화 설계 공간에 크리틱 없는 이론적 기초
 사후학습 컨텍스트에서 보상 해킹이 스케일과 함께 빈번·정교해짐을 실증하고, 훈련 중 실시간 내부 감시가 안전 인프라의 필수 구성요소임을 뒷받침한다.
 
 → [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
+
+사후학습의 스코프를 언어 모델에서 physical AI로 확장한다. 오프폴리시 행동 복제의 오류 누적이 안전 임계 사고로 직결됨을 보여, 사후학습이 자율주행에서 효율이 아닌 안전성의 구성요소임을 규정한다.
+
+→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]
+
+### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-19)
+
+RL 기반 사후학습에서 비동기 롤아웃 인프라(vLLM 등)를 통한 효율 확보가 TIM을 구조적으로 불가피하게 만듦을 규정하고, 효율을 희생하지 않는 안정화 원칙(점수 중심화)을 사후학습 인프라 설계의 구성요소로 격상시킨다.
+
+→ [[sources/2026-09-19-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]

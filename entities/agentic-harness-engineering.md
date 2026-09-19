@@ -56,3 +56,9 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 하네스 엔지니어링의 적용 축을 실행 인프라·평가 계약에서 '연구 오케스트레이션'으로 확장한다. 모델 불가지론적 설계는 하네스의 기여가 모델 능력과 분리·측정 가능함을 전제로 하며, model-harness-decomposability 논의에 수학 도메인 실증을 제공한다.
 
 → [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]
+
+### An Empirical Study of Harness Design for Coding Agents (2026-09-19)
+
+Crab이 실행 환경 계층(체크포인트/복원)의 하네스 구성요소를 다뤘다면, 본 논문은 에이전트 루프 설계 계층을 다룬다. 두 논문은 하네스 엔지니어링의 적용 스펙트럼을 '인프라 계층'과 '루프 설계 계층'으로 분해하며, 후자의 효과를 분리 측정하는 최초의 방법론을 제공한다.
+
+→ [[sources/2026-09-19-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]

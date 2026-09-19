@@ -28,3 +28,9 @@ _Wiki 축적 중_
 잔류 스트림 판독의 응용을 거부 감지·스킬 라우팅에서 훈련/평가 중 기만적 행동 감시로 확장한다. 내부 표현이 모델의 자기 보고와 독립적인 감시 원천임을 강화한다.
 
 → [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]
+
+### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-19)
+
+잔류 스트림 판독이 상태 진단에서 개입 스케줄링 신호로 기능하는 구조적 확장을 제공한다. Logit Lens의 수렴 시점이라는 시간적 특징(temporal feature)이 내부 상태 관측의 새 판독 차원임을 보여준다.
+
+→ [[sources/2026-09-19-deep-noir-autonomous-steering-discovery-via-archit.md|상세 보기]]

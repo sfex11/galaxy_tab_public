@@ -50,3 +50,9 @@ _Wiki 축적 중_
 체화 AI의 안전 논의에 코드 생성 제어 경로를 추가한다. VLM 직접 제어와 코드 생성이라는 이종 제어 경로가 안전 제약 가시화라는 공통 병목으로 수렴함을 보여준다.
 
 → [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
+
+장기 로봇 태스크의 스킬 조합 실행에서 실질 병목이 개별 스킬 품질이 아니라 스킬 간 전이 판단임을 규정하는 실증 근거를 제공한다.
+
+→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

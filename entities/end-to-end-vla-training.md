@@ -18,3 +18,9 @@ command-conditioned behavior cloning이라는 최소 구성의 end-to-end 기준
 ### Continuous Actions from Discrete Minds: Latent-Aligned Planning for En (2026-09-07)
 
 잔여 VQ-VAE 액션 토크나이저로 차량 운동학을 이산 토큰화함으로써, VLA 종단간 훈련이 로봇 조작에서 자율주행이라는 연속·물리제약 도메인으로 확장 가능함을 실증한다. VLA 훈련 패러다임의 도메인 불변성을 검증하는 테스트 케이스가 된다.
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
+
+오픈루프 행동 복제 사전학습과 폐루프 온폴리시 파인튜닝의 이단계 구조를 제시하여, end-to-end 정책 훈련이 사전학습-사후학습의 연속체임을 자율주행에서 구체화한다.
+
+→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

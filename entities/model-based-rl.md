@@ -28,3 +28,9 @@ _Wiki 축적 중_
 메타 학습된 태스크 신념이 암묵적 세계 모델의 파라미터로 기능하는 특수 구조를 추가한다. 모델 불확실성이 환경 동역학 불확실성이 아닌 태스크 동일성 불확실성인 경우, 안전이 모델 신뢰성 문제에서 신념 수렴 문제로 전환됨을 시사한다.
 
 → [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
+
+세계 모델 접근 없이 교사 모델이 환경 시뮬레이션의 판단 기능만 대체하는 경량 경로를 제공한다. 모델 기반 RL의 '모델링 비용' 문제에 대해 '동역학 모델링 생략 + 행동 품질 판단 유지'라는 대안 축을 형성한다.
+
+→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

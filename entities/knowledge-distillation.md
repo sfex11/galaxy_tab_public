@@ -38,3 +38,9 @@ _Wiki 축적 중_
 증류(교사 출력 모방)와 병합(가중치 직접 결합)이 외부 지식 통합의 별개 경로임을 대비시킨다. 교사 모델의 런타임 추론 없이도 텍스트 전용 LM의 지식이 음성 모델로 이전 가능함을 시사한다.
 
 → [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
+
+증류의 원료가 지식(로짓)이 아니라 판단 행위 자체임을 보여준다 — VLM의 전이 판단 궤적이 증류 데이터가 되는 agentic distillation이라는 새 변형이다.
+
+→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

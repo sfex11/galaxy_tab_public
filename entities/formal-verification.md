@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### From Research Question to Scientific Workflow: Leveraging Agentic AI f (2026-04-27)
 
 기존 '블랙박스 AI에 대한 통계적 경계' 논의(Bounding the Black Box)와 대비되는 보완적 경로를 제시한다 — 통계적 인증이 배포 후 행동을 경계짓는다면, 본 논문의 validated generator는 배포 전 명세의 형식적 무결성을 경계짓는 사전 차선(prior line of defense)으로 기능한다.
+
+### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
+
+반증(falsification)이라는 쌍대 축을 추가한다. 검증이 명세 만족의 긍정적 증명이라면, 반증은 명세 위반의 부정적 증거를 찾는 적대적 탐색이며, LLM 기반 접근이 이 양축을 아우를 수 있음을 시사한다. 반증 실패가 안전 보장이 아니라는 비대칭성을 명확히 한다.
+
+→ [[sources/2026-09-19-large-language-models-as-falsifiers-for-cyber-phys.md|상세 보기]]

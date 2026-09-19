@@ -34,3 +34,15 @@ RAG 아키텍처가 존재하지 않는 참조의 조작은 대체로 해소했�
 ### MeClear: Cooperative Game-Theoretic Attribution and Risk-Aware Memory  (2026-09-10)
 
 RAG의 semantic similarity 중심 검색이 downstream utility와 무관함을 실증하며, 검색 이후 정리(clearance)라는 상류 개입 계층을 제안한다. 검색-정리 이중 축으로 RAG 파이프라인 설계가 재구성된다.
+
+### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-19)
+
+RAG의 '정적 문서 = 지식 단위' 전제가 다단계 상태 프로세스인 트러블슈팅 케이스에서 구조적으로 불충분함을 실증한다. 지식 표현이 시간적·상태적 구조를 보존해야 한다는 stateful RAG 방향을 제시하여 RAG 설계 공간에 '검색 단위의 상태성'이라는 새 축을 추가한다.
+
+→ [[sources/2026-09-19-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]
+
+### Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure (2026-09-19)
+
+구조 인지 청킹이 RAG의 검색이 아닌 생성 계층을 개선함을 실증한다. 청킹 전략의 평가 축에 '해석 가능성에 의한 컨텍스트 풍부화'를 추가하고, 검색 정확도와 하류 답변 품질이 직교할 수 있음을 보여준다.
+
+→ [[sources/2026-09-19-qa-on-any-spreadsheet-requires-interpreting-its-gr.md|상세 보기]]

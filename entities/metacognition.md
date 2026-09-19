@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Artificial Id: Drive and Persistent Alignment in Agentic AI (2026-09-13)
 
 '계속할까, 멈출까, 바꿀까'라는 판단이 도구 호출이나 계산 예산 차원을 넘어 행동 전이 자체의 대상이 됨을 보여준다. 복잡도 메타인지보다 상위의 존재론적 메타인지 — 행동 지속성에 대한 메타 판단 — 로 엔티티의 범위를 확장한다.
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
+
+'계속할까/멈출까/바꿀까' 메타 판단이 에이전트 전이 수준에서 스킬 전이라는 저위험·고빈도·학습 가능한 단위로 국소화됨을 보여준다.
+
+→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

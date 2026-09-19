@@ -88,3 +88,9 @@ RAO는 RL이 '사후학습 능력 흡수'의 수단이라는 [[concepts/explorat
 ### Can RL Teach Long-Horizon Reasoning to LLMs? Expressiveness Is Key (2026-05-10)
 
 합성 논리 추론 환경에서 RL 학습 효과가 태스크 난이도의 두 축(깊이 vs 표현력)에 대해 비선형적으로 스케일링됨을 최초로 정량화하여, RL이 장기 추론을 가르칠 수 있다는 주장에 '표현력 선행 조건'이라는 구조적 한계를 부과한다.
+
+### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-19)
+
+RL 훈련 안정성 병인 지형에 시스템 계층 원인(엔진 불일치 누적 편향)을 추가한다. 기존 논의가 보상 설계·탐색 분포·크레딧 할당 등 알고리즘 내부 요인에 집중했다면, 본 논문은 점수 중심화라는 최소 개입으로 인프라 기원 불안정도 제거 가능함을 보여 안정성 문제를 알고리즘-인프라 경계 문제로 정식화한다.
+
+→ [[sources/2026-09-19-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]

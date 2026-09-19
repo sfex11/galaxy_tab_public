@@ -16,3 +16,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Testing Interchangeability in LLM Agent Teams (2026-09-08)
+
+### An Empirical Study of Harness Design for Coding Agents (2026-09-19)
+
+→ [[sources/2026-09-19-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]
