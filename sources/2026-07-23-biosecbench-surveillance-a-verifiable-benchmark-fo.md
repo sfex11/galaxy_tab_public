@@ -131,3 +131,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]
+
+---
+**관련**: [[entities/shift-component-decomposition.md|shift component decomposition]]
+
+---
+**관련**: [[entities/scientific-experience-bottleneck.md|scientific experience bottleneck]]
+
+---
+**관련**: [[concepts/scientific-experience-bottleneck.md|scientific experience bottleneck]]
+
+---
+**관련**: [[concepts/surveillance-channel-triangulation.md|surveillance channel triangulation]]
+
+---
+**관련**: [[concepts/saescientist-bench.md|saescientist bench]]
+
+---
+**관련**: [[concepts/shift-component-decomposition.md|shift component decomposition]]
+
+---
+**관련**: [[concepts/benchmark-contamination-audit.md|benchmark contamination audit]]

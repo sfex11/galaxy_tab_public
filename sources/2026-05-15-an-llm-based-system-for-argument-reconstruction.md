@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]
+
+---
+**관련**: [[concepts/self-directed-choice-architecture.md|self directed choice architecture]]

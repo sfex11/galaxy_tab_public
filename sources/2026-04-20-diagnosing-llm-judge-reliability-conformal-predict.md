@@ -109,3 +109,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/consistency-bias-conflation.md|consistency bias conflation]]
+
+---
+**관련**: [[concepts/reporting-norm-violation.md|reporting norm violation]]

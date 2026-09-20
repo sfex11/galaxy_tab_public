@@ -253,3 +253,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]
+
+---
+**관련**: [[concepts/timeline-entry-chain.md|timeline entry chain]]
+
+---
+**관련**: [[concepts/institutional-effect-independence.md|institutional effect independence]]
+
+---
+**관련**: [[concepts/agentic-drive.md|agentic drive]]

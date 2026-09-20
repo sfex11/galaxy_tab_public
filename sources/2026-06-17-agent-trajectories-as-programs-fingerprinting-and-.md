@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/score-narrative-conflation.md|score narrative conflation]]
+
+---
+**관련**: [[concepts/probe-randomization-defense.md|probe randomization defense]]

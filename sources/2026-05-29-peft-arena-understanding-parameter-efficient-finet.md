@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/data-contamination-resistance.md|data contamination resistance]]
+
+---
+**관련**: [[concepts/uncontrolled-upgrade-forgetting.md|uncontrolled upgrade forgetting]]

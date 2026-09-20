@@ -55,3 +55,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/communication-diversity-exchange-rate.md|communication diversity exchange rate]]
+
+---
+**관련**: [[concepts/sustained-adversarial-probing.md|sustained adversarial probing]]
+
+---
+**관련**: [[concepts/audit-independence-collapse.md|audit independence collapse]]

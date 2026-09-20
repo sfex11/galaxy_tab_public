@@ -209,3 +209,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/power-of-two-quantization.md|power of two quantization]]
+
+---
+**관련**: [[concepts/parametric-level-forgetting.md|parametric level forgetting]]
+
+---
+**관련**: [[concepts/delegation-rollback.md|delegation rollback]]
+
+---
+**관련**: [[concepts/mechanism-bounded-compliance-scope.md|mechanism bounded compliance scope]]
+
+---
+**관련**: [[concepts/schema-accumulation-as-composability-bottleneck.md|schema accumulation as composability bottleneck]]

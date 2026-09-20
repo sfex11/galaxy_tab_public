@@ -47,3 +47,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/shadow-certification.md|shadow certification]]
+
+---
+**관련**: [[entities/free-security-observability.md|free security observability]]
+
+---
+**관련**: [[concepts/free-security-observability.md|free security observability]]

@@ -168,3 +168,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/representation-contract.md|representation contract]]
+
+---
+**관련**: [[concepts/dual-role-representation-coupling.md|dual role representation coupling]]

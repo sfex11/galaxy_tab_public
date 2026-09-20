@@ -238,3 +238,48 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/interface-complexity-ambiguity.md|interface complexity ambiguity]]
+
+---
+**관련**: [[entities/episodic-persistent-state-gap.md|episodic persistent state gap]]
+
+---
+**관련**: [[concepts/state-object-attached-ownership.md|state object attached ownership]]
+
+---
+**관련**: [[concepts/deterministic-grounding.md|deterministic grounding]]
+
+---
+**관련**: [[concepts/state-relative-contamination-rejudgment.md|state relative contamination rejudgment]]
+
+---
+**관련**: [[concepts/environment-diversity-layered-guarantee.md|environment diversity layered guarantee]]
+
+---
+**관련**: [[concepts/intent-free-verification-definition.md|intent free verification definition]]
+
+---
+**관련**: [[concepts/formal-falsification.md|formal falsification]]
+
+---
+**관련**: [[concepts/provenance-monitor-actor.md|provenance monitor actor]]
+
+---
+**관련**: [[concepts/state-transition-anchored-reward.md|state transition anchored reward]]
+
+---
+**관련**: [[concepts/dynamical-invariant-monitoring.md|dynamical invariant monitoring]]
+
+---
+**관련**: [[concepts/prediction-retrieval-ambiguity.md|prediction retrieval ambiguity]]
+
+---
+**관련**: [[concepts/unique-optimal-solution-guarantee.md|unique optimal solution guarantee]]
+
+---
+**관련**: [[concepts/digit-level-verbatim-retrieval.md|digit level verbatim retrieval]]
+
+---
+**관련**: [[concepts/forgery-resistant-representation-monitoring.md|forgery resistant representation monitoring]]
+
+---
+**관련**: [[concepts/behavioral-transition-internalization.md|behavioral transition internalization]]

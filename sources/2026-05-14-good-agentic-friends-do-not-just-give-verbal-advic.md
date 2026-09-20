@@ -123,3 +123,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/intermittent-communication.md|intermittent communication]]
+
+---
+**관련**: [[entities/communication-increase-paradox.md|communication increase paradox]]
+
+---
+**관련**: [[concepts/intermediate-result-transfer.md|intermediate result transfer]]
+
+---
+**관련**: [[concepts/parser-cache-conditioning.md|parser cache conditioning]]
+
+---
+**관련**: [[concepts/substrate-as-interface.md|substrate as interface]]

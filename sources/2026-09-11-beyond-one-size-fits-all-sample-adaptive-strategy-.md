@@ -63,3 +63,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/visual-need-routing.md|visual need routing]]
+
+---
+**관련**: [[concepts/zero-shot-layer-pruning.md|zero shot layer pruning]]

@@ -182,3 +182,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/attention-sink.md|attention sink]]
+
+---
+**관련**: [[entities/attention-self-concentration.md|attention self concentration]]
+
+---
+**관련**: [[concepts/geometry-constrained-attention.md|geometry constrained attention]]
+
+---
+**관련**: [[concepts/attention-self-concentration.md|attention self concentration]]
+
+---
+**관련**: [[concepts/teacher-free-step-compression.md|teacher free step compression]]

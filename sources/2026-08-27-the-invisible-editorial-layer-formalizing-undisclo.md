@@ -54,3 +54,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-alignment-erosion.md|temporal alignment erosion]]
+
+---
+**관련**: [[concepts/unsupported-assumption.md|unsupported assumption]]
+
+---
+**관련**: [[concepts/user-policy-as-unverifiable-vulnerability-layer.md|user policy as unverifiable vulnerability layer]]
+
+---
+**관련**: [[concepts/incentive-compatible-alignment.md|incentive compatible alignment]]

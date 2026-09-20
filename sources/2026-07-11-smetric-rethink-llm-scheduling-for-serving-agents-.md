@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/decode-phase-gemv-serving-cost.md|decode phase gemv serving cost]]
+
+---
+**관련**: [[concepts/misattribution-over-fabrication-shift.md|misattribution over fabrication shift]]

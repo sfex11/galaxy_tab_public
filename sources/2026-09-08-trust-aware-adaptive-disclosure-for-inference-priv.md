@@ -56,3 +56,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/self-preservation-bias.md|self preservation bias]]
+
+---
+**관련**: [[concepts/recompilability-preservation-gap.md|recompilability preservation gap]]

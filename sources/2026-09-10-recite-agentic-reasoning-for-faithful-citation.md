@@ -51,3 +51,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/attribution-basis-collapse.md|attribution basis collapse]]
+
+---
+**관련**: [[concepts/alignment-dual-attribution.md|alignment dual attribution]]
+
+---
+**관련**: [[concepts/ast-citation-parsing.md|ast citation parsing]]

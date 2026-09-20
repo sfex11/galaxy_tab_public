@@ -112,3 +112,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/improvement-strategy-autonomy.md|improvement strategy autonomy]]
+
+---
+**관련**: [[entities/strategy-routing.md|strategy routing]]
+
+---
+**관련**: [[concepts/theorem-decomposition-representation.md|theorem decomposition representation]]
+
+---
+**관련**: [[concepts/device-heterogeneity-coordination.md|device heterogeneity coordination]]

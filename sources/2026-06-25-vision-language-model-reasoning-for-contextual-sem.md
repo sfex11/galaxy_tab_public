@@ -53,3 +53,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/price-representation-applicability.md|price representation applicability]]
+
+---
+**관련**: [[entities/safe-navigation.md|safe navigation]]

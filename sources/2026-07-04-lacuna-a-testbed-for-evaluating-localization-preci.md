@@ -127,3 +127,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/paradigm-translation-cost.md|paradigm translation cost]]
+
+---
+**관련**: [[entities/repository-operational-knowledge.md|repository operational knowledge]]
+
+---
+**관련**: [[entities/federated-continual-learning.md|federated continual learning]]
+
+---
+**관련**: [[entities/zero-knowledge-negotiation.md|zero knowledge negotiation]]
+
+---
+**관련**: [[concepts/vulnerability-localization.md|vulnerability localization]]
+
+---
+**관련**: [[concepts/stigmergic-collective-learning.md|stigmergic collective learning]]
+
+---
+**관련**: [[concepts/test-encoded-behavioral-target.md|test encoded behavioral target]]

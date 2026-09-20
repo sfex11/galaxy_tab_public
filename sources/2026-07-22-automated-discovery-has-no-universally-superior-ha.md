@@ -52,3 +52,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/improvement-autonomy-taxonomy.md|improvement autonomy taxonomy]]
+
+---
+**관련**: [[concepts/improvement-autonomy-taxonomy.md|improvement autonomy taxonomy]]
+
+---
+**관련**: [[concepts/recursive-meta-improvement.md|recursive meta improvement]]

@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structural-safety-guarantee.md|structural safety guarantee]]
+
+---
+**관련**: [[concepts/yield-as-floor-transfer.md|yield as floor transfer]]

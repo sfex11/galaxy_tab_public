@@ -76,3 +76,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/hci-aai-optimization-divergence.md|hci aai optimization divergence]]
+
+---
+**관련**: [[entities/zero-sum-optimization-trap.md|zero sum optimization trap]]
+
+---
+**관련**: [[concepts/lightweight-domain-schema.md|lightweight domain schema]]
+
+---
+**관련**: [[concepts/alignment-verifiability-asymmetry.md|alignment verifiability asymmetry]]

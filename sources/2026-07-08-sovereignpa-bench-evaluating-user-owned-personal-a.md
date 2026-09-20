@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/paradoxical-mediation-backfire.md|paradoxical mediation backfire]]
+
+---
+**관련**: [[concepts/data-sovereignty.md|data sovereignty]]

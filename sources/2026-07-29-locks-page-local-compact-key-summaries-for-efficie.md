@@ -65,3 +65,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/prediction-accuracy-bottleneck.md|prediction accuracy bottleneck]]
+
+---
+**관련**: [[entities/isolated-estimate-overconfidence.md|isolated estimate overconfidence]]
+
+---
+**관련**: [[entities/logit-lens-convergence.md|logit lens convergence]]
+
+---
+**관련**: [[concepts/capacity-guarantee-dual-bottleneck.md|capacity guarantee dual bottleneck]]
+
+---
+**관련**: [[concepts/discovered-shared-artifact.md|discovered shared artifact]]
+
+---
+**관련**: [[concepts/logit-lens-convergence-timing.md|logit lens convergence timing]]
+
+---
+**관련**: [[concepts/execution-handoff-bottleneck.md|execution handoff bottleneck]]
+
+---
+**관련**: [[concepts/value-non-mixing.md|value non mixing]]

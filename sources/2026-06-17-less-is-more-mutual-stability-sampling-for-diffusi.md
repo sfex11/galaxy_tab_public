@@ -100,3 +100,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/test-time-training.md|test time training]]
+
+---
+**관련**: [[entities/symbolic-computation.md|symbolic computation]]
+
+---
+**관련**: [[entities/verifiable-training-data-synthesis.md|verifiable training data synthesis]]
+
+---
+**관련**: [[concepts/ai-native-software-lifecycle.md|ai native software lifecycle]]
+
+---
+**관련**: [[concepts/correct-position-abandonment.md|correct position abandonment]]
+
+---
+**관련**: [[concepts/fixed-loop-component-ablation.md|fixed loop component ablation]]
+
+---
+**관련**: [[concepts/data-efficiency-gains-from-pretraining.md|data efficiency gains from pretraining]]
+
+---
+**관련**: [[concepts/rebuttal-guided-post-training.md|rebuttal guided post training]]
+
+---
+**관련**: [[concepts/seeing-before-synthesizing.md|seeing before synthesizing]]
+
+---
+**관련**: [[concepts/improvement-procedure-persistence.md|improvement procedure persistence]]
+
+---
+**관련**: [[concepts/rollout-efficiency-exactness-tradeoff.md|rollout efficiency exactness tradeoff]]

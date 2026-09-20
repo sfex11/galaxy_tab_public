@@ -88,3 +88,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/evolutionary-agency-axis.md|evolutionary agency axis]]
+
+---
+**관련**: [[entities/observation-gated-filtering.md|observation gated filtering]]
+
+---
+**관련**: [[concepts/provenance-complete-observation.md|provenance complete observation]]
+
+---
+**관련**: [[concepts/observation-support-gating.md|observation support gating]]

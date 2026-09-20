@@ -47,3 +47,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/schema-conflation-fallacy.md|schema conflation fallacy]]
+
+---
+**관련**: [[entities/eager-schema-injection.md|eager schema injection]]
+
+---
+**관련**: [[concepts/capacity-achievability-dichotomy.md|capacity achievability dichotomy]]

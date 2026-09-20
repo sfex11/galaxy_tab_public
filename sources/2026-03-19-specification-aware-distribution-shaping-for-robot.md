@@ -130,3 +130,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]
+
+---
+**관련**: [[entities/sequentiality-distribution-separation.md|sequentiality distribution separation]]
+
+---
+**관련**: [[concepts/risk-aware-forgetting.md|risk aware forgetting]]
+
+---
+**관련**: [[concepts/idea-to-specification-interface.md|idea to specification interface]]

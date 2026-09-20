@@ -68,3 +68,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/future-query-agnostic-compression.md|future query agnostic compression]]
+
+---
+**관련**: [[entities/3d-scene-understanding.md|3d scene understanding]]
+
+---
+**관련**: [[concepts/weakly-supervised-dense-video-captioning.md|weakly supervised dense video captioning]]
+
+---
+**관련**: [[concepts/query-deferred-representation-contract.md|query deferred representation contract]]

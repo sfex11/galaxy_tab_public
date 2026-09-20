@@ -43,3 +43,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/discount-regime-hardness.md|discount regime hardness]]
+
+---
+**관련**: [[concepts/channel-capacity-bounded-refinement.md|channel capacity bounded refinement]]
+
+---
+**관련**: [[concepts/latent-goal-confidentiality.md|latent goal confidentiality]]

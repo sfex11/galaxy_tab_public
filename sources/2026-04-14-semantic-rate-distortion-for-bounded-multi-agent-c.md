@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interval-pomdp.md|interval pomdp]]
+
+---
+**관련**: [[concepts/unsupported-extrapolation-distortion.md|unsupported extrapolation distortion]]

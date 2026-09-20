@@ -36,3 +36,6 @@ _자동 생성됨_
 
 - → [[sources/2026-06-26-triviewbench-controlled-complexity-scaling-for-mul]]: 둘 다 멀티모달 대형 언어 모델(MLLM)의 신뢰성과 추론 능력을 평가하기 위한 새로운 벤치마크를 제안하며, 각각 입력 순서 민감성과 다중 뷰 구조적 추론을 측정함.
 - → [[sources/2026-06-25-grad-detect-gradient-based-hallucination-detection]]: 둘 다 LLM/MLLM 출력의 신뢰성 결함을 탐지하는 방법론을 제안하며, 각각 기울기 기반 환각 감지와 입력 순서에 따른 답변 변동성 감사를 다룸.
+
+---
+**관련**: [[concepts/role-as-relational-property.md|role as relational property]]

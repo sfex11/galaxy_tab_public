@@ -67,3 +67,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/policy-mirror-descent.md|policy mirror descent]]
+
+---
+**관련**: [[entities/bellman-policy-optimization.md|bellman policy optimization]]
+
+---
+**관련**: [[concepts/embodied-harness.md|embodied harness]]
+
+---
+**관련**: [[concepts/post-emission-revision-policy.md|post emission revision policy]]

@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/agreement-pressure.md|agreement pressure]]
+
+---
+**관련**: [[concepts/ephemeral-individual-durable-collective.md|ephemeral individual durable collective]]

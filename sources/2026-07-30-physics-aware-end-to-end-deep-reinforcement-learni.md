@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/fidelity-illusion.md|fidelity illusion]]
+
+---
+**관련**: [[concepts/reporting-fidelity-propensity.md|reporting fidelity propensity]]

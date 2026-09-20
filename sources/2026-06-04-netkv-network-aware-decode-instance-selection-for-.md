@@ -67,3 +67,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cache-redundancy-responsive-adaptation.md|cache redundancy responsive adaptation]]
+
+---
+**관련**: [[concepts/render-free-teacher.md|render free teacher]]

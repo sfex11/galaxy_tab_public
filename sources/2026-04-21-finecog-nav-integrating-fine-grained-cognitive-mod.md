@@ -112,3 +112,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cognitive-heterogeneity-orchestration.md|cognitive heterogeneity orchestration]]
+
+---
+**관련**: [[concepts/modular-cognitive-extension.md|modular cognitive extension]]

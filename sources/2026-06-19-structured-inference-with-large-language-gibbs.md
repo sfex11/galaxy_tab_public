@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/complementarity-cancellation-transition.md|complementarity cancellation transition]]
+
+---
+**관련**: [[concepts/llm-as-coach.md|llm as coach]]

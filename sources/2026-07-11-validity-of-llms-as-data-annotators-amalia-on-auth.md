@@ -85,3 +85,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/detector-as-instrument.md|detector as instrument]]
+
+---
+**관련**: [[concepts/meta-level-instrument-drift.md|meta level instrument drift]]
+
+---
+**관련**: [[concepts/representation-validity-reevaluation.md|representation validity reevaluation]]
+
+---
+**관련**: [[concepts/router-within.md|router within]]
+
+---
+**관련**: [[concepts/tiered-forgetting-authority.md|tiered forgetting authority]]
+
+---
+**관련**: [[concepts/state-value-estimation-avoidance.md|state value estimation avoidance]]
+
+---
+**관련**: [[concepts/patch-test-error-agreement.md|patch test error agreement]]
+
+---
+**관련**: [[concepts/privileged-reliability-decoupling.md|privileged reliability decoupling]]

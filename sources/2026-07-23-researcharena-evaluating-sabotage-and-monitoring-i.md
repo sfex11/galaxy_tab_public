@@ -129,3 +129,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/benchmarkless-comparative-safety-scoring.md|benchmarkless comparative safety scoring]]
+
+---
+**관련**: [[entities/internal-external-control-continuum.md|internal external control continuum]]
+
+---
+**관련**: [[concepts/utterance-stream-concurrency-control.md|utterance stream concurrency control]]
+
+---
+**관련**: [[concepts/any-color-control.md|any color control]]
+
+---
+**관련**: [[concepts/behavioral-control-internalization.md|behavioral control internalization]]
+
+---
+**관련**: [[concepts/imagination-relocation-to-training.md|imagination relocation to training]]
+
+---
+**관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]

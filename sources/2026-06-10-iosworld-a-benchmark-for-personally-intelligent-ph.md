@@ -157,3 +157,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/research-capability-benchmark.md|research capability benchmark]]
+
+---
+**관련**: [[concepts/research-capability-benchmark.md|research capability benchmark]]
+
+---
+**관련**: [[concepts/audit-oracle-self-reference.md|audit oracle self reference]]
+
+---
+**관련**: [[concepts/constraint-induced-action-erasure.md|constraint induced action erasure]]
+
+---
+**관련**: [[concepts/native-skill-routing.md|native skill routing]]

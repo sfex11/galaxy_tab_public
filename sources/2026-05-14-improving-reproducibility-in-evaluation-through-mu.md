@@ -104,3 +104,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/loyalty-loop-subject-transition.md|loyalty loop subject transition]]
+
+---
+**관련**: [[entities/utility-ontological-mislocation.md|utility ontological mislocation]]

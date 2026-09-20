@@ -58,3 +58,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/review-constraint-compliance.md|review constraint compliance]]
+
+---
+**관련**: [[entities/single-output-opacity.md|single output opacity]]
+
+---
+**관련**: [[entities/goal-fixation-meta-decision.md|goal fixation meta decision]]
+
+---
+**관련**: [[concepts/pluggable-decision-policy.md|pluggable decision policy]]
+
+---
+**관련**: [[concepts/pre-submission-self-review.md|pre submission self review]]

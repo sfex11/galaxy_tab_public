@@ -340,3 +340,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/interpretability-as-audit-layer.md|interpretability as audit layer]]
+
+---
+**관련**: [[entities/runtime-verification-layer.md|runtime verification layer]]
+
+---
+**관련**: [[concepts/partial-reclassification.md|partial reclassification]]

@@ -48,3 +48,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/recursive-grammar-stress-test.md|recursive grammar stress test]]
+
+---
+**관련**: [[entities/wearable-ai.md|wearable ai]]

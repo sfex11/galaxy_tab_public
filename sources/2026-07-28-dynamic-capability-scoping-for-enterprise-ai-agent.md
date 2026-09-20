@@ -100,3 +100,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/goal-inference-attack.md|goal inference attack]]
+
+---
+**관련**: [[entities/dynamic-task-composition.md|dynamic task composition]]
+
+---
+**관련**: [[entities/sensor-as-attack-surface.md|sensor as attack surface]]
+
+---
+**관련**: [[concepts/distributed-safety-failure-surface.md|distributed safety failure surface]]
+
+---
+**관련**: [[concepts/privacy-as-dynamic-resource.md|privacy as dynamic resource]]
+
+---
+**관련**: [[concepts/pre-mechanism-principal-selection.md|pre mechanism principal selection]]
+
+---
+**관련**: [[concepts/copying-as-minimal-mechanism.md|copying as minimal mechanism]]
+
+---
+**관련**: [[concepts/capability-improvement-headroom.md|capability improvement headroom]]
+
+---
+**관련**: [[concepts/transition-event-discovery.md|transition event discovery]]
+
+---
+**관련**: [[concepts/localization-capability-axis.md|localization capability axis]]
+
+---
+**관련**: [[concepts/interpretability-grounding-privilege.md|interpretability grounding privilege]]
+
+---
+**관련**: [[concepts/dynamic-boundary-tracking.md|dynamic boundary tracking]]

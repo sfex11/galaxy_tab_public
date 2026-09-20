@@ -143,3 +143,48 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/dual-readership-interface.md|dual readership interface]]
+
+---
+**관련**: [[entities/obstacle-aware-harness.md|obstacle aware harness]]
+
+---
+**관련**: [[entities/ontological-concealment-of-failure.md|ontological concealment of failure]]
+
+---
+**관련**: [[entities/fixed-assignment-fragility.md|fixed assignment fragility]]
+
+---
+**관련**: [[entities/bilevel-self-evolution.md|bilevel self evolution]]
+
+---
+**관련**: [[concepts/harness-event-sourcing.md|harness event sourcing]]
+
+---
+**관련**: [[concepts/interface-contract-renegotiation.md|interface contract renegotiation]]
+
+---
+**관련**: [[concepts/command-conditioned-behavior-cloning.md|command conditioned behavior cloning]]
+
+---
+**관련**: [[concepts/premise-dual-structure-decomposition.md|premise dual structure decomposition]]
+
+---
+**관련**: [[concepts/social-level-harness.md|social level harness]]
+
+---
+**관련**: [[concepts/embodiment-specific-interpreter.md|embodiment specific interpreter]]
+
+---
+**관련**: [[concepts/scalar-probability-selection-insufficiency.md|scalar probability selection insufficiency]]
+
+---
+**관련**: [[concepts/harness-institutional-layering.md|harness institutional layering]]
+
+---
+**관련**: [[concepts/same-provider-pairing.md|same provider pairing]]
+
+---
+**관련**: [[concepts/dual-readership-interface.md|dual readership interface]]
+
+---
+**관련**: [[concepts/failure-visibility-spectrum.md|failure visibility spectrum]]

@@ -115,3 +115,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/relative-credit-assignment.md|relative credit assignment]]
+
+---
+**관련**: [[entities/relative-verifiability.md|relative verifiability]]
+
+---
+**관련**: [[entities/score-centering.md|score centering]]
+
+---
+**관련**: [[concepts/stl-robustness-optimization.md|stl robustness optimization]]
+
+---
+**관련**: [[concepts/mirror-descent-optimization.md|mirror descent optimization]]

@@ -339,3 +339,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/topological-reasoning-offloading.md|topological reasoning offloading]]
+
+---
+**관련**: [[entities/reasoning-conditioned-retrieval.md|reasoning conditioned retrieval]]
+
+---
+**관련**: [[entities/heterogeneous-graph-reasoning.md|heterogeneous graph reasoning]]
+
+---
+**관련**: [[entities/machine-interpretable-interface-compliance.md|machine interpretable interface compliance]]
+
+---
+**관련**: [[concepts/multi-step-tool-calling.md|multi step tool calling]]
+
+---
+**관련**: [[concepts/memory-portability-as-harness-responsibility.md|memory portability as harness responsibility]]

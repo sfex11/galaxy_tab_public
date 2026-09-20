@@ -105,3 +105,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/materialization-failure.md|materialization failure]]
+
+---
+**관련**: [[concepts/exact-entropy-question-budget.md|exact entropy question budget]]
+
+---
+**관련**: [[concepts/modality-budget-pair-unit.md|modality budget pair unit]]
+
+---
+**관련**: [[concepts/audit-feedback-closure.md|audit feedback closure]]
+
+---
+**관련**: [[concepts/routing-rationale-internalization.md|routing rationale internalization]]

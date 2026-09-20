@@ -50,3 +50,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-cognitive-oracle.md|non cognitive oracle]]
+
+---
+**관련**: [[entities/mental-health-ai.md|mental health ai]]
+
+---
+**관련**: [[entities/documentation-debt.md|documentation debt]]
+
+---
+**관련**: [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]
+
+---
+**관련**: [[concepts/same-request-same-reading-assumption.md|same request same reading assumption]]
+
+---
+**관련**: [[concepts/comparison-oracle.md|comparison oracle]]

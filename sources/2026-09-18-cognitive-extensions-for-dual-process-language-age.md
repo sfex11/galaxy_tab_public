@@ -70,3 +70,24 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/perception-cognitive-capacity-mismatch.md|perception cognitive capacity mismatch]]
+
+---
+**관련**: [[entities/distributed-cognitive-constitution.md|distributed cognitive constitution]]
+
+---
+**관련**: [[entities/adaptive-forgetting-as-function.md|adaptive forgetting as function]]
+
+---
+**관련**: [[concepts/adaptive-disagreement-pressure.md|adaptive disagreement pressure]]
+
+---
+**관련**: [[concepts/self-emission-adaptive-trigger.md|self emission adaptive trigger]]
+
+---
+**관련**: [[concepts/trust-aware-adaptive-disclosure.md|trust aware adaptive disclosure]]
+
+---
+**관련**: [[concepts/non-cognitive-oracle.md|non cognitive oracle]]
+
+---
+**관련**: [[concepts/maneuver-class-extension.md|maneuver class extension]]

@@ -95,3 +95,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/measurement-repeatability.md|measurement repeatability]]
+
+---
+**관련**: [[concepts/governance-label-automation.md|governance label automation]]

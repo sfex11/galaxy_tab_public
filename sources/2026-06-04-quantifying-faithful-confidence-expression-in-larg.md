@@ -65,3 +65,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/linguistic-illegibility.md|linguistic illegibility]]
+
+---
+**관련**: [[concepts/uncertainty-underestimation.md|uncertainty underestimation]]
+
+---
+**관련**: [[concepts/mc-dropout-uncertainty.md|mc dropout uncertainty]]
+
+---
+**관련**: [[concepts/readability-importance-divergence.md|readability importance divergence]]

@@ -162,3 +162,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/stateful-graph-orchestration.md|stateful graph orchestration]]
+
+---
+**관련**: [[entities/infrastructure-sensor-duality.md|infrastructure sensor duality]]
+
+---
+**관련**: [[concepts/procedural-graph.md|procedural graph]]
+
+---
+**관련**: [[concepts/infrastructure-sensor-duality.md|infrastructure sensor duality]]
+
+---
+**관련**: [[concepts/graph-as-verifier.md|graph as verifier]]

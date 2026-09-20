@@ -167,3 +167,18 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/test-encoded-behavioral-target.md|test encoded behavioral target]]
+
+---
+**관련**: [[entities/trace-as-attack-surface.md|trace as attack surface]]
+
+---
+**관련**: [[concepts/trace-documentation-authorship.md|trace documentation authorship]]
+
+---
+**관련**: [[concepts/belief-state-grounding.md|belief state grounding]]
+
+---
+**관련**: [[concepts/plan-trace-separation.md|plan trace separation]]
+
+---
+**관련**: [[concepts/trace-as-attack-surface.md|trace as attack surface]]

@@ -105,3 +105,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/trajectory-opacity.md|trajectory opacity]]
+
+---
+**관련**: [[concepts/team-trajectory-equivalence.md|team trajectory equivalence]]
+
+---
+**관련**: [[concepts/internalization-trajectory-lock.md|internalization trajectory lock]]

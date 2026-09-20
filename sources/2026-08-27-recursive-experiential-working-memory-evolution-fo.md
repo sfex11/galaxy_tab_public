@@ -128,3 +128,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/local-coherence-global-incoherence.md|local coherence global incoherence]]
+
+---
+**관련**: [[entities/consequential-state-retention.md|consequential state retention]]
+
+---
+**관련**: [[concepts/execution-grounded-synthesis.md|execution grounded synthesis]]
+
+---
+**관련**: [[concepts/vague-goal-self-evolution.md|vague goal self evolution]]
+
+---
+**관련**: [[concepts/auditor-evidence-corruption.md|auditor evidence corruption]]
+
+---
+**관련**: [[concepts/evolution-fragmentation.md|evolution fragmentation]]
+
+---
+**관련**: [[concepts/improvement-delegation.md|improvement delegation]]
+
+---
+**관련**: [[concepts/scoring-sufficient-state-projection.md|scoring sufficient state projection]]
+
+---
+**관련**: [[concepts/role-attributed-state-ownership.md|role attributed state ownership]]
+
+---
+**관련**: [[concepts/algebraic-harness.md|algebraic harness]]
+
+---
+**관련**: [[concepts/self-interpreter-improvement.md|self interpreter improvement]]
+
+---
+**관련**: [[concepts/rollout-as-audit-evidence.md|rollout as audit evidence]]

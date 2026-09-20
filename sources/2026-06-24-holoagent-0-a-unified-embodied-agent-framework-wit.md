@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/steering-read-manipulation-duality.md|steering read manipulation duality]]
+
+---
+**관련**: [[concepts/role-specialized-rl.md|role specialized rl]]

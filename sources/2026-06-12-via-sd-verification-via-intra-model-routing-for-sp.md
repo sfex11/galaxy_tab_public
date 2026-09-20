@@ -47,3 +47,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/routing-adversarial-hijacking.md|routing adversarial hijacking]]
+
+---
+**관련**: [[entities/turn-as-derived-unit.md|turn as derived unit]]
+
+---
+**관련**: [[concepts/turn-as-derived-unit.md|turn as derived unit]]

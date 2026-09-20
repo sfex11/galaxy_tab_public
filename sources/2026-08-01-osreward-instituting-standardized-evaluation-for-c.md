@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temporal-shallowness-of-instruction.md|temporal shallowness of instruction]]
+
+---
+**관련**: [[concepts/open-experimental-platform.md|open experimental platform]]

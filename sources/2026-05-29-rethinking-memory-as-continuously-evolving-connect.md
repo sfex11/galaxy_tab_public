@@ -30,3 +30,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/thinking-acting-gap.md|thinking acting gap]]
+
+---
+**관련**: [[concepts/intermittent-connectivity.md|intermittent connectivity]]

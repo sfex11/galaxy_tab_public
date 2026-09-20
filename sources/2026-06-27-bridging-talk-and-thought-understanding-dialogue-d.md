@@ -211,3 +211,60 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/capability-collaboration-decoupling.md|capability collaboration decoupling]]
+
+---
+**관련**: [[entities/on-demand-frame-fetch.md|on demand frame fetch]]
+
+---
+**관련**: [[entities/independent-effect-tracking-problem.md|independent effect tracking problem]]
+
+---
+**관련**: [[concepts/memory-identity-continuity-across-swap.md|memory identity continuity across swap]]
+
+---
+**관련**: [[concepts/on-demand-frame-fetch.md|on demand frame fetch]]
+
+---
+**관련**: [[concepts/intent-action-interface.md|intent action interface]]
+
+---
+**관련**: [[concepts/safety-constraint-context-legibility.md|safety constraint context legibility]]
+
+---
+**관련**: [[concepts/containment-action-topology-consistency.md|containment action topology consistency]]
+
+---
+**관련**: [[concepts/cleanup-obligation-reasoning.md|cleanup obligation reasoning]]
+
+---
+**관련**: [[concepts/environment-as-shared-coordinate-frame.md|environment as shared coordinate frame]]
+
+---
+**관련**: [[concepts/disclosure-as-control-action.md|disclosure as control action]]
+
+---
+**관련**: [[concepts/adapter-validated-action-catalog.md|adapter validated action catalog]]
+
+---
+**관련**: [[concepts/report-context-divergence.md|report context divergence]]
+
+---
+**관련**: [[concepts/demonstration-as-context.md|demonstration as context]]
+
+---
+**관련**: [[concepts/lifecycle-propagation-reasoning.md|lifecycle propagation reasoning]]
+
+---
+**관련**: [[concepts/imitation-without-intent.md|imitation without intent]]
+
+---
+**관련**: [[concepts/cross-scale-bottleneck-migration.md|cross scale bottleneck migration]]
+
+---
+**관련**: [[concepts/capability-collaboration-decoupling.md|capability collaboration decoupling]]
+
+---
+**관련**: [[concepts/overlap-window-interaction-atom.md|overlap window interaction atom]]
+
+---
+**관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]

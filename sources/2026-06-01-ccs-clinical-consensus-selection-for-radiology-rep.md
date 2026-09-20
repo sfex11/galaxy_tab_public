@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/opportunistic-consensus.md|opportunistic consensus]]
+
+---
+**관련**: [[concepts/self-report-audit.md|self report audit]]

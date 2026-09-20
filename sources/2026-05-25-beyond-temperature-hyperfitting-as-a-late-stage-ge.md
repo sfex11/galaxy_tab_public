@@ -11,3 +11,6 @@ Recent work has identified a counterintuitive phenomenon termed "Hyperfitting", 
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[concepts/slot-equivalence-fallacy.md|slot equivalence fallacy]]

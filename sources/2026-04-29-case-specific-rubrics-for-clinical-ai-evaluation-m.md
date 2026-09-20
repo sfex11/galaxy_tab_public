@@ -441,3 +441,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/placebo-controlled-swap-evaluation.md|placebo controlled swap evaluation]]
+
+---
+**관련**: [[concepts/design-deployment-safety-dissolution.md|design deployment safety dissolution]]
+
+---
+**관련**: [[concepts/document-trajectory-conflation.md|document trajectory conflation]]
+
+---
+**관련**: [[concepts/rubric-reward.md|rubric reward]]
+
+---
+**관련**: [[concepts/live-api-evaluation.md|live api evaluation]]
+
+---
+**관련**: [[concepts/cross-image-consistency.md|cross image consistency]]
+
+---
+**관련**: [[concepts/bounded-execution-time-validation.md|bounded execution time validation]]
+
+---
+**관련**: [[concepts/trajectory-level-objective.md|trajectory level objective]]
+
+---
+**관련**: [[concepts/evaluation-horizon-dependence.md|evaluation horizon dependence]]

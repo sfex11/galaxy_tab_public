@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/safety-monotonicity-assumption.md|safety monotonicity assumption]]
+
+---
+**관련**: [[concepts/embedding-version-mixing.md|embedding version mixing]]

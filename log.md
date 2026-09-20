@@ -3579,3 +3579,7 @@
 ## [2026-09-20 08:31] ingest | How Does Distribution Shift Shape Pretraining Gains in Neural PDE Surrogates?
 
 ## [2026-09-20 08:31] ingest | Score Centering Stabilizes Off-policy Reinforcement Learning
+
+## [2026-09-20 19:19] lint | Wiki 건전성 체크
+- Issues: 3375개
+- Orphans: 1024, Missing: 2351, Contradictions: 0

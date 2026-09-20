@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/multimodal-llm.md|multimodal llm]]
+
+---
+**관련**: [[concepts/experience-acquisition-autonomy.md|experience acquisition autonomy]]

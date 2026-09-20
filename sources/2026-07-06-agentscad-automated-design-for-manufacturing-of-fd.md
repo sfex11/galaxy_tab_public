@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/collapsible-boundary-independence-paradox.md|collapsible boundary independence paradox]]
+
+---
+**관련**: [[concepts/reporting-integrity-axis.md|reporting integrity axis]]

@@ -73,3 +73,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/redundancy-as-bottleneck.md|redundancy as bottleneck]]
+
+---
+**관련**: [[entities/monocular-depth-estimation.md|monocular depth estimation]]
+
+---
+**관련**: [[entities/surround-depth-estimation.md|surround depth estimation]]
+
+---
+**관련**: [[concepts/generalizable-depth-estimation.md|generalizable depth estimation]]

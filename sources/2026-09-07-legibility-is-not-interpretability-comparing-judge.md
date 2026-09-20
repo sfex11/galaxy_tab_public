@@ -53,3 +53,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/readability-importance-divergence.md|readability importance divergence]]
+
+---
+**관련**: [[concepts/mechanistic-swarm-interpretability.md|mechanistic swarm interpretability]]

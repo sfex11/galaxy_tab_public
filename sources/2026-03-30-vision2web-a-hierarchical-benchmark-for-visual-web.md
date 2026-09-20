@@ -114,3 +114,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-recovery.md|hierarchical recovery]]
+
+---
+**관련**: [[concepts/behavioural-explanation-verification.md|behavioural explanation verification]]

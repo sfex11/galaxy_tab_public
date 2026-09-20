@@ -150,3 +150,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/representation-steering.md|representation steering]]
+
+---
+**관련**: [[concepts/retrospective-inference-risk.md|retrospective inference risk]]
+
+---
+**관련**: [[concepts/elastic-depth-inference.md|elastic depth inference]]
+
+---
+**관련**: [[concepts/closed-loop-intervention.md|closed loop intervention]]
+
+---
+**관련**: [[concepts/inference-privacy.md|inference privacy]]
+
+---
+**관련**: [[concepts/independent-success-adjudication.md|independent success adjudication]]

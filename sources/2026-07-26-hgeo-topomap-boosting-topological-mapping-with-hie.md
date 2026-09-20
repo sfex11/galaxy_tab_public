@@ -169,3 +169,45 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/environment-mutation-operator.md|environment mutation operator]]
+
+---
+**관련**: [[entities/coverage-quality-triple-metric.md|coverage quality triple metric]]
+
+---
+**관련**: [[entities/information-usability-gap.md|information usability gap]]
+
+---
+**관련**: [[entities/environment-adaptation-autonomy.md|environment adaptation autonomy]]
+
+---
+**관련**: [[entities/information-preservation-boundary.md|information preservation boundary]]
+
+---
+**관련**: [[concepts/coupled-problem-decomposition.md|coupled problem decomposition]]
+
+---
+**관련**: [[concepts/hierarchical-yield-decay.md|hierarchical yield decay]]
+
+---
+**관련**: [[concepts/geometric-selection-criterion.md|geometric selection criterion]]
+
+---
+**관련**: [[concepts/format-preserving-epistemic-demotion.md|format preserving epistemic demotion]]
+
+---
+**관련**: [[concepts/prior-weighted-bisection.md|prior weighted bisection]]
+
+---
+**관련**: [[concepts/recursive-ai-audit-problem.md|recursive ai audit problem]]
+
+---
+**관련**: [[concepts/average-metric-concealment.md|average metric concealment]]
+
+---
+**관련**: [[concepts/trust-conditioned-information-flow.md|trust conditioned information flow]]
+
+---
+**관련**: [[concepts/emitted-output-irreversibility.md|emitted output irreversibility]]
+
+---
+**관련**: [[concepts/environment-adaptation-autonomy.md|environment adaptation autonomy]]
