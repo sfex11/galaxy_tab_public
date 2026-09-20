@@ -17,9 +17,9 @@
 
 ## Wiki와의 관계
 
-[[inter-agent-translation-gap]]에 최초의 통제된 측정 기기를 제공한다 — 이종 모델 간 번역 손실 논의와 달리 동일 모델 쌍의 자기 통신을 격리하여, 번역 간극이 이종성 없이도 자연어 채널에서 발생함을 보여준다. 동일 가중치 양역은 [[latent-communication-homogeneity-dependency]]의 극단 구성으로, 완전 동질성이 통신 성공을 보장하지 않음을 시사한다.
+[[concepts/inter-agent-translation-gap.md|inter agent translation gap]]에 최초의 통제된 측정 기기를 제공한다 — 이종 모델 간 번역 손실 논의와 달리 동일 모델 쌍의 자기 통신을 격리하여, 번역 간극이 이종성 없이도 자연어 채널에서 발생함을 보여준다. 동일 가중치 양역은 [[concepts/latent-communication-homogeneity-dependency.md|latent communication homogeneity dependency]]의 극단 구성으로, 완전 동질성이 통신 성공을 보장하지 않음을 시사한다.
 
-정확히 log₂(N) 질문 예산은 [[information-theoretic-capacity]]의 비트 상한을 평가 조건으로 연산화한다 — 균등 사전의 엔트로피를 정확히 소진하도록 강제하여 질문당 실현 정보량을 1비트 천장 대비 정량화한다. 동일 원천 간 합의가 올바름을 담보하지 못한다는 [[consistency-correctness-divergence]] 비판의 역발상으로, 여기서는 동일성을 진단 조건으로 전용해 실패를 내부 표현-통신 정렬 결함으로 국소화한다. 질문자의 가설 공간 분할과 응답자의 단어 디코딩은 [[theory-of-mind]]의 최소 실험이며, N=4→1024 스케일링과 한 단어 채널 설계는 [[llm-benchmark]]에 정보론적 분모를 갖는 새 평가 패러다임을 추가한다.
+정확히 log₂(N) 질문 예산은 [[concepts/information-theoretic-capacity.md|information theoretic capacity]]의 비트 상한을 평가 조건으로 연산화한다 — 균등 사전의 엔트로피를 정확히 소진하도록 강제하여 질문당 실현 정보량을 1비트 천장 대비 정량화한다. 동일 원천 간 합의가 올바름을 담보하지 못한다는 [[concepts/consistency-correctness-divergence.md|consistency correctness divergence]] 비판의 역발상으로, 여기서는 동일성을 진단 조건으로 전용해 실패를 내부 표현-통신 정렬 결함으로 국소화한다. 질문자의 가설 공간 분할과 응답자의 단어 디코딩은 [[concepts/theory-of-mind.md|theory of mind]]의 최소 실험이며, N=4→1024 스케일링과 한 단어 채널 설계는 [[concepts/llm-benchmark.md|llm benchmark]]에 정보론적 분모를 갖는 새 평가 패러다임을 추가한다.
 
 ## 🔗 관련 논문
 

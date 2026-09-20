@@ -41,3 +41,9 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/multilingual-coverage-gap.md|multilingual coverage gap]]
+
+---
+**관련**: [[entities/speech-data-infrastructure.md|speech data infrastructure]]

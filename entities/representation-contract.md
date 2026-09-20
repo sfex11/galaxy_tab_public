@@ -23,16 +23,10 @@ _Wiki 축적 중_
 
 인터페이스가 이중 표현 계약의 장이 됨을 실증한다 — 인간 독자를 위한 시각 계약(시각적 자유, 익숙한 워크플로우)과 기계 독자를 위한 명시 계약(행동·상태 단서)이 동일 UI 내에서 공존 가능하며, 계약의 이중화가 어느 한쪽의 형식으로 다른 쪽을 강제하지 않음을 보여준다.
 
-→ [[sources/2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md|상세 보기]]
-
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
 안전 제약의 표현 형식이 하네스-에이전트 간 계약의 대상임을 보여준다. 제약의 존재가 아니라 그 가시화 방식이 행동을 결정한다는 점에서 표현 계약 논의를 물리 안전 도메인으로 확장한다.
 
-→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
-
 ### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-19)
 
 비구조·프레임 수준 표현을 이산적 그래프로 번역하되, 그 번역물이 에이전트(그라운딩)와 인간(해석·조향) 양측에 이행 가능한 형식을 갖추게 하는 구체적 사례를 제공한다. 계약의 이행이 관찰 가능하고 검증 가능한 상태로 유지된다는 점에서 표현 계약의 성공 조건을 명확히 한다.
-
-→ [[sources/2026-09-19-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]

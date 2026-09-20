@@ -327,3 +327,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/lifecycle-propagation-reasoning.md|lifecycle propagation reasoning]]
+
+---
+**관련**: [[entities/multi-dimensional-translation-validity.md|multi dimensional translation validity]]
+
+---
+**관련**: [[entities/reasoning-distillation.md|reasoning distillation]]
+
+---
+**관련**: [[entities/latency-constrained-reasoning.md|latency constrained reasoning]]
+
+---
+**관련**: [[entities/topological-reasoning-offloading.md|topological reasoning offloading]]

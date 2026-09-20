@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
 
 이산 생성의 논의에 '샘플러 교체'(AR 분포 유지)와 '분포 재설계'(비순차 확산)에 이어 '교사 없는 자율 수송'이라는 제3 경로를 추가한다. 이산 확산의 스텝 압축이 교사 증류를 필수로 만들었다는 진단과 그 우회 설계를 제공한다.
-
-→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

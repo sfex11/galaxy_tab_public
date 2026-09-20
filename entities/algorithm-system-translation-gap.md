@@ -66,5 +66,3 @@ Crab이 이 간극을 구체적 런타임 문제로 현현한다—의미론적 
 ### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-19)
 
 TIM을 이 간극의 수치 계층 발현 사례로 추가한다. 시스템 최적화의 산물(이기종 엔진)이 알고리즘 계층 실패(RL 발산)로 번역되며, 간극 제거가 아니라 번역된 손상의 선택적 상쇄라는 완화 전략의 유효성을 제시한다.
-
-→ [[sources/2026-09-19-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]

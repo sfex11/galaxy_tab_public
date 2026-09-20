@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
 능력(조작)과 안전(충돌 회피)의 불가분성이 프롬프트 신호 비대칭에서 기인하는 하위 메커니즘을 제공한다. 안전이 별도 최적화 목표로 명시되지 않으면 능력 최적화가 안전을 구조적으로 침식함을 실증한다.
-
-→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

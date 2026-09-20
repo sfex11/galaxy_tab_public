@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
 
 추적 가능성의 종착점을 '출처 문서 식별'에서 '주장-근거 직접 대조'로 이동시킨다. Cited but Not Verified가 인용 체인의 단절을 진단했다면, 본 논문은 체인 자체를 축소(인용=원문 재현)하여 단절 가능 지점을 원천 제거하는 설계 전략을 제공한다.
-
-→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

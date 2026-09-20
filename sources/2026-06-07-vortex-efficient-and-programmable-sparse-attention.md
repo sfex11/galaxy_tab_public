@@ -350,3 +350,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/design-doc-primacy.md|design doc primacy]]
+
+---
+**관련**: [[entities/model-upgrade-forgetting.md|model upgrade forgetting]]
+
+---
+**관련**: [[entities/thought-action-topology.md|thought action topology]]
+
+---
+**관련**: [[entities/design-probe.md|design probe]]
+
+---
+**관련**: [[entities/autonomous-laboratory-agent.md|autonomous laboratory agent]]
+
+---
+**관련**: [[entities/on-demand-attention.md|on demand attention]]
+
+---
+**관련**: [[entities/evolutionary-hypothesis-search.md|evolutionary hypothesis search]]
+
+---
+**관련**: [[entities/hybrid-model-data-control.md|hybrid model data control]]
+
+---
+**관련**: [[entities/agent-coordination.md|agent coordination]]
+
+---
+**관련**: [[entities/human-ai-trust-calibration.md|human ai trust calibration]]

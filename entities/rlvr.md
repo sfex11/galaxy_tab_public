@@ -39,10 +39,6 @@ rubric reward를 통해 검증 가능 보상의 적용 범위를 정답이 명�
 
 RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필요할 수 있음을 증명하여, GRPO 계열 크리틱 프리 설계에 대한 이론적 정당화 근거를 제공한다.
 
-→ [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]
-
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 검증 가능 훈련의 도메인 확장 근거를 제공한다. 과학 코드의 특수 정확성 기준이 실행 검증으로 형식화될 수 있음을 보여, RLVR이 수학·코딩 경쟁을 넘어 과학 컴퓨팅 도메인으로 확장될 수 있는 조건을 명시한다.
-
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

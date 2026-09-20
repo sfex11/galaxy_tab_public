@@ -202,3 +202,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/action-tokenization.md|action tokenization]]
+
+---
+**관련**: [[entities/strategic-convergence-condition.md|strategic convergence condition]]
+
+---
+**관련**: [[entities/cooperation-competition-spectrum.md|cooperation competition spectrum]]
+
+---
+**관련**: [[entities/capability-collaboration-decoupling.md|capability collaboration decoupling]]

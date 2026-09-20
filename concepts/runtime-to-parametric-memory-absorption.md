@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
-
-→ [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]

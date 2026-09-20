@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 '계속할까/멈출까/바꿀까' 메타 판단이 에이전트 전이 수준에서 스킬 전이라는 저위험·고빈도·학습 가능한 단위로 국소화됨을 보여준다.
-
-→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

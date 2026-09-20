@@ -356,3 +356,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/audit-feedback-closure.md|audit feedback closure]]
+
+---
+**관련**: [[entities/small-portfolio-evaluation.md|small portfolio evaluation]]
+
+---
+**관련**: [[entities/skill-curation-as-learning.md|skill curation as learning]]
+
+---
+**관련**: [[entities/transfer-learning.md|transfer learning]]
+
+---
+**관련**: [[entities/critic-free-optimization.md|critic free optimization]]

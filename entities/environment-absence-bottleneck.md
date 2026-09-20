@@ -30,5 +30,3 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 과학 도메인에서 병목의 정체를 정밀화한다 — 환경이 부재한 것이 아니라 코드와 지식은 존재하나 툴체인 파편화와 암묵적 관례 때문에 경험으로 '변환되지 않는' 병목이며, 이를 과학 경험 병목으로 명명하고 인프라 계층 해법을 제시한다.
-
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

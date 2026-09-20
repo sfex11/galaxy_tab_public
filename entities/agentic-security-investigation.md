@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Vulnerability Localization Benchmark: Measuring Agentic Security Analy (2026-09-16)
 
 보안 조사의 능력 구성에 '국소화' 계층을 추가한다. 기존 정의가 알림 조사·근거 진단(관찰→가설→인과 귀인)에 집중했다면, 본 논문은 진단에 선행하는 저장소 탐색 단계를 독립 평가 대상으로 격상시켜, 조사 에이전트의 실패가 추론 오류인지 탐색 실패인지 구분 가능한 측정 기반을 마련한다.
-
-→ [[sources/2026-09-16-vulnerability-localization-benchmark-measuring-age.md|상세 보기]]

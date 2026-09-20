@@ -109,3 +109,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/composition-time-task-contract.md|composition time task contract]]
+
+---
+**관련**: [[entities/improvement-strategy-autonomy.md|improvement strategy autonomy]]

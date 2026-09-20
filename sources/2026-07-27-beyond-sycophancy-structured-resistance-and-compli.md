@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/typed-revision-contract.md|typed revision contract]]
+
+---
+**관련**: [[entities/data-contamination-resistance.md|data contamination resistance]]

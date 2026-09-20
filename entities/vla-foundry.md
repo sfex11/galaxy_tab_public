@@ -26,5 +26,3 @@ LaPla의 latent-aligned planning은 VLA Foundry의 통합 훈련 프레임워크
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
 
 미세조정 중심 VLA 통합 훈련 파이프라인과 대비되는 훈련 프리 적응 경로를 제공한다. 로봇 적응이 사후학습 단계에서 추론 단계로 이동하는 스펙트럼의 반대 극점을 형성한다.
-
-→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

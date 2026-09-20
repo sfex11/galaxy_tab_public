@@ -115,3 +115,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/belief-state-responsive-adaptation.md|belief state responsive adaptation]]
+
+---
+**관련**: [[entities/knowledge-loss-translation.md|knowledge loss translation]]
+
+---
+**관련**: [[entities/algorithm-level-adaptation.md|algorithm level adaptation]]
+
+---
+**관련**: [[entities/audio-question-answering.md|audio question answering]]
+
+---
+**관련**: [[entities/paradigm-translation-cost.md|paradigm translation cost]]

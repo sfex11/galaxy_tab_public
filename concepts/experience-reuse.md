@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Testing Interchangeability in LLM Agent Teams (2026-09-08)
 
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
-
-→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

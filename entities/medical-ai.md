@@ -34,5 +34,3 @@ EHR 데이터를 대화적 QA나 그래프 정제의 대상이 아닌 인과 추
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
 
 임상 AI 신뢰성 논의에 '검증 가능성의 구성 보장(verifiable by construction)'이라는 새 축을 추가한다. 대화적 동정심(Can AI Be a Doctor?), 문서 기반 근거 생성(HealthNLP_Retrievers)에 이어, 인용의 검증 비용을 사용자 측에서 구조적으로 제거하는 접근으로 스코프를 확장한다.
-
-→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

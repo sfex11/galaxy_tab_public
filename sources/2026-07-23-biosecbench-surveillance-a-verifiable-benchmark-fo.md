@@ -128,3 +128,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/execution-handoff-bottleneck.md|execution handoff bottleneck]]
+
+---
+**관련**: [[entities/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]

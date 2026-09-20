@@ -17,15 +17,15 @@
 
 ### 기존 Wiki와의 관계
 
-**[[citation-claim-decoupling]]**의 해법 스펙트럼을 확장한다. Cited but Not Verified가 평가 측 진단(AST 파싱 기반 접근성·관련성·사실 일관성 검사), ReCite가 생성 시점 에이전틱 추론 검증이었다면, 본 논문은 제3의 경로 — verbatim 재현 제약 — 를 제시한다. 인용을 원문의 부분 집합으로 강제하면 인용과 참조 문서의 탈동기화가 구조적으로 불가능해지며, 인용 환각 탐지도 원문 대조로 단순화된다.
+**[[concepts/citation-claim-decoupling.md|citation claim decoupling]]**의 해법 스펙트럼을 확장한다. Cited but Not Verified가 평가 측 진단(AST 파싱 기반 접근성·관련성·사실 일관성 검사), ReCite가 생성 시점 에이전틱 추론 검증이었다면, 본 논문은 제3의 경로 — verbatim 재현 제약 — 를 제시한다. 인용을 원문의 부분 집합으로 강제하면 인용과 참조 문서의 탈동기화가 구조적으로 불가능해지며, 인용 환각 탐지도 원문 대조로 단순화된다.
 
-**[[source-attribution-evaluation]]**의 접근성 축을 극단화한다. 3차원 프레임에서 '접근성'을 '문서 열기'가 아닌 '인용 자체가 근거의 실체'로 재정의하여, 평가 단위를 문서 수준에서 주장 수준으로 세분화한다.
+**[[concepts/source-attribution-evaluation.md|source attribution evaluation]]**의 접근성 축을 극단화한다. 3차원 프레임에서 '접근성'을 '문서 열기'가 아닌 '인용 자체가 근거의 실체'로 재정의하여, 평가 단위를 문서 수준에서 주장 수준으로 세분화한다.
 
-**[[grounded-clinical-qa]]**에 사용자 모델 차원을 추가한다. HealthNLP_Retrievers가 파이프라인 구조로 근거 추적성을 확보했다면, 본 논문은 '시간 제약 하 임상의'라는 수신자 제약을 평가 설계에 직접 내장한다.
+**[[concepts/grounded-clinical-qa.md|grounded clinical qa]]**에 사용자 모델 차원을 추가한다. HealthNLP_Retrievers가 파이프라인 구조로 근거 추적성을 확보했다면, 본 논문은 '시간 제약 하 임상의'라는 수신자 제약을 평가 설계에 직접 내장한다.
 
 ### 남는 문제
 
-verbatim 인용도 절삭(문맥 제거)에 의한 왜곡 가능성은 남는다. [[single-surface-signal-insufficiency]] 관점에서 claim-level 세분화가 표면 신호의 충분성을 어디까지 높이는지는 향후 검증 과제다.
+verbatim 인용도 절삭(문맥 제거)에 의한 왜곡 가능성은 남는다. [[concepts/single-surface-signal-insufficiency.md|single surface signal insufficiency]] 관점에서 claim-level 세분화가 표면 신호의 충분성을 어디까지 높이는지는 향후 검증 과제다.
 
 ## 🔗 관련 논문
 

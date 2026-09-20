@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Learning to Coach for Experiential Learning (2026-09-16)
 
 동결된 중개자(액터)를 통과하는 크레딧 할당의 새 사례를 제공한다 — 코치의 보상이 액터의 유도 응답 정확도로 정의되므로, 개선 행위와 성능 행위가 다른 파라미터 공간에 있을 때의 간접 크레딧 구조를 보여준다.
-
-→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]

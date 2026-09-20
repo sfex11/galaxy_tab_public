@@ -19,14 +19,14 @@ RLVR(검증 가능 보상 강화학습)의 추론 능력 향상을 위한 크리
 
 ## 기존 Wiki와의 관계
 
-- **[[rlvr]]**: Wiki의 RLVR 논의([[grpo]], [[positive-only-policy-optimization]])는 크리틱 프리 설계를 경험적 휴리스틱으로 채택해왔다. BPO는 동일한 설계가 PMD 이론에서 자연스럽게 유도됨을 보여 이론적 정당화를 제공한다.
-- **[[relative-credit-assignment]]**: 중간 상태 가치 추정 없이도 종단 보상이 궤적 분포에 반영될 수 있음을 증명하여, 크레딧 할당 문제를 '추정 문제'에서 'Bellman 재구성 문제'로 전환한다.
-- **[[entropy-regularized-planning]]**: 엔트로피 정규화 MDP 계획 이론이 LLM 사후학습으로 이전되는 직접 사례로, 이론-실무 연속성을 확립한다.
-- **[[reward-sparsity]]**: 종단(희소) 보상이 궤적 수준 재구성의 적용 조건이라는 점에서, 희소성이 병목이 아니라 크리틱 제거의 근거가 될 수 있음을 시사한다.
+- **[[concepts/rlvr.md|rlvr]]**: Wiki의 RLVR 논의([[concepts/grpo.md|grpo]], [[concepts/positive-only-policy-optimization.md|positive only policy optimization]])는 크리틱 프리 설계를 경험적 휴리스틱으로 채택해왔다. BPO는 동일한 설계가 PMD 이론에서 자연스럽게 유도됨을 보여 이론적 정당화를 제공한다.
+- **[[concepts/relative-credit-assignment.md|relative credit assignment]]**: 중간 상태 가치 추정 없이도 종단 보상이 궤적 분포에 반영될 수 있음을 증명하여, 크레딧 할당 문제를 '추정 문제'에서 'Bellman 재구성 문제'로 전환한다.
+- **[[concepts/entropy-regularized-planning.md|entropy regularized planning]]**: 엔트로피 정규화 MDP 계획 이론이 LLM 사후학습으로 이전되는 직접 사례로, 이론-실무 연속성을 확립한다.
+- **[[concepts/reward-sparsity.md|reward sparsity]]**: 종단(희소) 보상이 궤적 수준 재구성의 적용 조건이라는 점에서, 희소성이 병목이 아니라 크리틱 제거의 근거가 될 수 있음을 시사한다.
 
 ## Wiki 관점의 의의
 
-RL 이론([[transition-lookahead-planning]] 계열)과 사후학습 실무([[grpo]]) 사이의 결측 간선 — 'LLM 자회귀 생성을 MDP로 형식화할 때 이론적으로 최소인 최적화 구조는 무엇인가' — 를 채운다. 사후학습 방법의 평가 축이 성능 비교에서 최적해 동등성 증명으로 확장될 수 있음을 제안한다.
+RL 이론([[concepts/transition-lookahead-planning.md|transition lookahead planning]] 계열)과 사후학습 실무([[concepts/grpo.md|grpo]]) 사이의 결측 간선 — 'LLM 자회귀 생성을 MDP로 형식화할 때 이론적으로 최소인 최적화 구조는 무엇인가' — 를 채운다. 사후학습 방법의 평가 축이 성능 비교에서 최적해 동등성 증명으로 확장될 수 있음을 제안한다.
 
 ## 🔗 관련 논문
 

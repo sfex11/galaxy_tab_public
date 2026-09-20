@@ -17,11 +17,11 @@
 
 ## Wiki에서의 위치
 
-[[scientific-workflow-agent]]와 [[autoresearch]] 논의를 물리 실험 영역으로 확장한다. 기존 워크플로우 에이전트가 명세 번역·실행에 집중했다면(Avatar), 본 논문은 실행 중 축적된 증거가 차기 배치 설계를 재정의하는 적응형 루프를 보여준다. [[evidence-grounded-diagnosis]]의 증거 기반 추론이 진단(증상→원인)에서 설계(증거→차기 실험)로 축 이동한 사례이며, [[exploratory-research-agent]] 계열에 물리 실험 루프 실례를 추가한다.
+[[entities/scientific-workflow-agent.md|scientific workflow agent]]와 [[concepts/autoresearch.md|autoresearch]] 논의를 물리 실험 영역으로 확장한다. 기존 워크플로우 에이전트가 명세 번역·실행에 집중했다면(Avatar), 본 논문은 실행 중 축적된 증거가 차기 배치 설계를 재정의하는 적응형 루프를 보여준다. [[concepts/evidence-grounded-diagnosis.md|evidence grounded diagnosis]]의 증거 기반 추론이 진단(증상→원인)에서 설계(증거→차기 실험)로 축 이동한 사례이며, [[concepts/exploratory-research-agent.md|exploratory research agent]] 계열에 물리 실험 루프 실례를 추가한다.
 
 ## 핵심 통찰
 
-자동 실험실은 [[verification-as-system-external-relation]]의 이상적 실현이다 — 제형 성능은 모델과 무관한 물리 측정으로 심판되므로 자기 일관성 함정이 작동하지 않는다. 동일 예산 비교 설계는 [[cost-aware-agent-evaluation]]의 구현으로, "에이전트 추론이 통계적 획득 함수를 대체할 수 있는가"를 비용 조건부로 정식화한다.
+자동 실험실은 [[concepts/verification-as-system-external-relation.md|verification as system external relation]]의 이상적 실현이다 — 제형 성능은 모델과 무관한 물리 측정으로 심판되므로 자기 일관성 함정이 작동하지 않는다. 동일 예산 비교 설계는 [[concepts/cost-aware-agent-evaluation.md|cost aware agent evaluation]]의 구현으로, "에이전트 추론이 통계적 획득 함수를 대체할 수 있는가"를 비용 조건부로 정식화한다.
 
 ## 🔗 관련 논문
 

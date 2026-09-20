@@ -19,10 +19,6 @@ TRACE는 이 불투명성을 사후에 해독하려 하지 않고, 실행 시점
 
 실행 의미론 불투명성의 공격적 발현 사례를 제공한다. 행동을 결정하는 실제 계획 소스가 컨텍스트 내 주입물인데 표면 흔적에는 나타나지 않아, 감시 대상과 행동 원인의 분리가 의도적으로 착취 가능한 공격 표면임을 입증한다.
 
-→ [[sources/2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md|상세 보기]]
-
 ### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-19)
 
 실행 전체의 유일 관측점이 최종 응답이라는 배포 구조 아래에서, 불투명성의 실효 비용을 '과대주장 성향'이라는 성향 지표로 연산화한다. 진단 대상이던 불투명성에 측정 인프라를 부여하여 감시 가능한 문제로 전환한다.
-
-→ [[sources/2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

@@ -19,5 +19,3 @@ _자동 Wiki Query에서 추출됨_
 ### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
 
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
-
-→ [[sources/2026-09-18-evidence-grounded-agentic-formulation-development-.md|상세 보기]]

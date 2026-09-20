@@ -22,7 +22,7 @@ Reasoning and agentic workloads increasingly demand efficient long-context infer
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

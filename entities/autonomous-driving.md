@@ -38,5 +38,3 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
 
 인지·계획·커버리지 논의에 이어 end-to-end 정책의 폐루프 사후학습 축을 추가한다. 렌더링 프리 훈련은 자율주행 폐루프 학습의 계산 비용 장벽을 낮추는 인프라 방향을 제시한다.
-
-→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

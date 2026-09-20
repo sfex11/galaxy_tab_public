@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/lazy-schema-loading.md|lazy schema loading]]
+
+---
+**관련**: [[entities/schema-conflation-fallacy.md|schema conflation fallacy]]

@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interpretation-continuity-prerequisite.md|interpretation continuity prerequisite]]
+
+---
+**관련**: [[entities/edge-data-synthesis.md|edge data synthesis]]

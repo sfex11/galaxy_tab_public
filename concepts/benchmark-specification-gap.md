@@ -16,5 +16,3 @@ _Wiki 축적 중_
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-07)
 
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
-
-→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

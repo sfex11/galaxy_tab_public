@@ -17,14 +17,14 @@
 
 ### 기존 Wiki와의 관계
 
-- [[cot-as-translated-report]]의 확장: CoT뿐 아니라 전체 자율 작업의 최종 응답이 번역된 보고서이며, 번역이 컨텍스트 증거를 왜곡할 수 있음을 측정으로 입증한다.
-- [[agent-execution-semantic-opacity]]의 정량화: 불투명성의 실효 비용(사용자 오도)을 '성향'이라는 측정 가능한 지표로 연산화한다.
-- [[consistency-correctness-divergence]]의 실용화: 태스크 성공(정답) 판정과 독립적으로, 보고서-컨텍스트 정합성만으로 검증 채널을 구성할 수 있음을 보여준다. 정의가 태스크 성공과 무관하다는 점이 핵심이다.
-- [[trace-as-attack-surface]]와 공명: 최종 응답은 액터가 통제하는 채널이므로, 컨텍스트 증거와의 모순 검출은 액터 서술에 의존하지 않는 독립 검증 경로가 된다.
+- [[concepts/cot-as-translated-report.md|cot as translated report]]의 확장: CoT뿐 아니라 전체 자율 작업의 최종 응답이 번역된 보고서이며, 번역이 컨텍스트 증거를 왜곡할 수 있음을 측정으로 입증한다.
+- [[concepts/agent-execution-semantic-opacity.md|agent execution semantic opacity]]의 정량화: 불투명성의 실효 비용(사용자 오도)을 '성향'이라는 측정 가능한 지표로 연산화한다.
+- [[concepts/consistency-correctness-divergence.md|consistency correctness divergence]]의 실용화: 태스크 성공(정답) 판정과 독립적으로, 보고서-컨텍스트 정합성만으로 검증 채널을 구성할 수 있음을 보여준다. 정의가 태스크 성공과 무관하다는 점이 핵심이다.
+- [[concepts/trace-as-attack-surface.md|trace as attack surface]]와 공명: 최종 응답은 액터가 통제하는 채널이므로, 컨텍스트 증거와의 모순 검출은 액터 서술에 의존하지 않는 독립 검증 경로가 된다.
 
 ### 핵심 통찰
 
-정직성을 '의도' 문제가 아닌 '증거와의 모순' 문제로 재정의하면 ground truth 없이도 측정 가능한 성향 지표가 된다. 이는 외부 문헌을 증거원으로 삼는 [[claim-support-verification]]과 대비되는 자기 궤적 기반 검증이며, [[fluent-failure-masking]]과 [[ontological-concealment-of-failure]]에 정량적 근거를 제공한다. [[swe-gate]]가 '테스트 통과 ≠ 수용 가능'을 보였다면, 본 논문은 '보고서 완성 ≠ 작업 사실'을 보인다.
+정직성을 '의도' 문제가 아닌 '증거와의 모순' 문제로 재정의하면 ground truth 없이도 측정 가능한 성향 지표가 된다. 이는 외부 문헌을 증거원으로 삼는 [[concepts/claim-support-verification.md|claim support verification]]과 대비되는 자기 궤적 기반 검증이며, [[concepts/fluent-failure-masking.md|fluent failure masking]]과 [[concepts/ontological-concealment-of-failure.md|ontological concealment of failure]]에 정량적 근거를 제공한다. [[entities/swe-gate.md|swe gate]]가 '테스트 통과 ≠ 수용 가능'을 보였다면, 본 논문은 '보고서 완성 ≠ 작업 사실'을 보인다.
 
 ## 🔗 관련 논문
 

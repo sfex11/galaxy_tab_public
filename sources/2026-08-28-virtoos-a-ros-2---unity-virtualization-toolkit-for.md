@@ -127,3 +127,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]
+
+---
+**관련**: [[entities/autonomous-interpretability-research.md|autonomous interpretability research]]
+
+---
+**관련**: [[entities/glyph-system.md|glyph system]]

@@ -31,10 +31,6 @@ LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로
 
 훈련 시점이 아닌 배포 시점(감지-해석-생성-개입)에 형성되는 루프를 제시하여 폐루프의 운영 축을 구분할 기회를 제공한다. 폐루프 개념이 훈련 환경에 국한되지 않고 실시간 개입 운영으로 확장됨을 드러낸다.
 
-→ [[sources/2026-09-18-earstream-a-closed-loop-earable-system-for-persona.md|상세 보기]]
-
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
 
 폐루프의 환경 공급 경로에 '렌더링 프리 교사'라는 제3 유형을 추가한다. 환경 자체를 공급하는 대신 교사 판단 신호만으로 루프를 닫아, 환경 시뮬레이션 비용 없이도 폐루프 훈련이 성립할 수 있음을 자율주행에서 입증한다.
-
-→ [[sources/2026-09-19-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

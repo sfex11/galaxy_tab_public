@@ -485,3 +485,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/persistent-alignment.md|persistent alignment]]
+
+---
+**관련**: [[entities/ephemeral-agent-durable-collective.md|ephemeral agent durable collective]]
+
+---
+**관련**: [[entities/agent-interchangeability.md|agent interchangeability]]
+
+---
+**관련**: [[entities/multi-agent-bayesian-consensus.md|multi agent bayesian consensus]]

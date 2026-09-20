@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Bellman Policy Optimization (2026-09-16)
 
 엔트로피 정규화 MDP 계획의 이론 계보가 BPO를 통해 LLM 사후학습(RLVR)으로 직접 이전됨을 보여주며, 기존 이론 연구와 사후학습 실무 연구 사이의 연속성을 확립한다.
-
-→ [[sources/2026-09-16-bellman-policy-optimization.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 신념 상태의 역할을 통신 격리 하 표적 추정(합의 필터)에서 안전 판정의 기반으로 확장한다. 신념이 '무엇을 믿는가'의 표현 수준을 넘어 '신념이 어떤 궤적으로 수렴할 때 안전이 유지되는가'를 분석하는 도달 가능성 변수로 기능함을 보여준다.
-
-→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

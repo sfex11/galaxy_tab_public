@@ -28,10 +28,6 @@ Cola DLM은 병렬 디코딩의 적용 대상을 자회귀 생성 내부(추측 
 
 비순차 생성의 실현 경로에 '동역학계 고정점으로의 수렴'을 추가한다. 스텝 수를 외부 하이퍼파라미터가 아닌 자율 사상의 반복 적용으로 결정하는 구조는 병렬 디코딩의 스텝-품질 딜레마에 대한 새로운 접근이다.
 
-→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]
-
 ### Beyond Truncation: Rethinking LLM Decoding as Ensemble Pruning (2026-09-18)
 
 병렬화(얼마나 동시에 생성하는가)와 선택(어떤 후보를 남길 것인가)이 직교하는 최적화 축임을 명확히 한다. 순차 디코딩 내부의 선택 계층 개선이 병렬화 논의와 독립적으로 성립하는 사례를 제공한다.
-
-→ [[sources/2026-09-18-beyond-truncation-rethinking-llm-decoding-as-ensem.md|상세 보기]]

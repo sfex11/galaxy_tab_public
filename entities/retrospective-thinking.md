@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Cognitive Extensions for Dual-Process Language Agents: Memory and Self (2026-09-18)
 
 RetroThinker가 발화 후 회고로 사고의 재귀성을 확보했다면, SRM은 실행 중 bounded 검증이라는 다른 시간축 지점을 점유한다. 회고의 범위를 전체 궤적 재검토에서 현재 스텝 국소 검증으로 축소하는 비용 효율적 대안을 제시한다.
-
-→ [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]

@@ -18,5 +18,3 @@ Cola DLM의 '분포 재설계' 경로와 본 논문의 '샘플러 교체' 경로
 ### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
 
 Cola DLM이 연속 잠재 공간에서 분포를 비순차적으로 재설계했다면, DBTM은 이산 공간에서 동일한 재설계 목표를 자율 수송 사상으로 달성한다. 연속-이산 양극을 가로지르는 '교사 없는 직접 훈련' 원리를 확립한다.
-
-→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

@@ -23,10 +23,6 @@ _Wiki 축적 중_
 
 MLP 어블레이션(슬라이딩 윈도우)을 해석 연구의 사후 검증 도구에서 생성 제어 신호의 식별 기법으로 전용하여, 인과적 해석이 실시간 추론 제어로 번역되는 새 경로를 실증한다.
 
-→ [[sources/2026-09-16-look-before-you-leap-factual-decoding-with-interna.md|상세 보기]]
-
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-19)
 
 인과적 헤드 기여 분석이 해석 자체의 목적을 넘어 개입 파라미터 검색 공간을 축소하는 탐색 프리미티브로 재용도됨을 보여준다. '가능성 있는' 후보를 데이터로 좁히는 구조를 모델 내부 구조 개입 검증 체계에 추가한다.
-
-→ [[sources/2026-09-19-deep-noir-autonomous-steering-discovery-via-archit.md|상세 보기]]

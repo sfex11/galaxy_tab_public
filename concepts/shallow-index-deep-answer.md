@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
-
-→ [[sources/2026-09-19-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

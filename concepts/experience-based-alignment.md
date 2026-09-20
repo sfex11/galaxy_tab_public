@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
-
-→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

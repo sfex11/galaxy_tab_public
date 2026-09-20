@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Vulnerability Localization Benchmark: Measuring Agentic Security Analy (2026-09-16)
 
 트리아지·조사의 선행 단계인 취약점 국소화를 측정 가능하게 만들어, '어디를 조사할 것인가'라는 상류 결정 품질에 대한 독립 평가 축을 열어준다. 조사 자동화 논의가 알림 수신 이후에만 집중했던 전제를 상류로 확장한다.
-
-→ [[sources/2026-09-16-vulnerability-localization-benchmark-measuring-age.md|상세 보기]]

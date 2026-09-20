@@ -27,22 +27,14 @@ _Wiki 축적 중_
 
 하네스 보상의 역방향 사례를 제공한다. 모델의 내재 신호가 하네스의 라우팅 기능을 대체함으로써, 하네스가 모델의 한계를 보상하는 것이 아니라 모델이 하네스 기능을 흡수하는 아키텍처 이동 방향을 보여준다.
 
-→ [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f.md|상세 보기]]
-
 ### Learning to Coach for Experiential Learning (2026-09-16)
 
 코치는 학습 가능한 하네스 구성요소의 사례다 — 동결 액터의 원시 궤적 잡음을 외부 모듈이 구조적으로 보정하며, 보상이 하네스 모듈 자체를 최적화한다는 점에서 정적 하네스 보정을 훈련 가능한 구성요소로 격상시킨다.
-
-→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]
 
 ### Cognitive Extensions for Dual-Process Language Agents: Memory and Self (2026-09-18)
 
 모델 재훈련 없이 기억(AMM)과 성찰(SRM) 모듈을 하네스 측에 부착하여 인지 실패를 구조적으로 보정하는 대표 사례다. 모듈형 인지 확장이 하네스 보상의 조립 가능한 형태임을 보여준다.
 
-→ [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]
-
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
-모델의 안전 맹점을 하네스가 구조적으로 보정하는 로보틱스 사례를 추가한다. [[sentinel-rl]]의 위상 추론 오프로딩과 동일한 '인지 한계의 구조적 대체' 원리가 안전 제약 가시화 영역에서도 작동함을 보여준다.
-
-→ [[sources/2026-09-19-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
+모델의 안전 맹점을 하네스가 구조적으로 보정하는 로보틱스 사례를 추가한다. [[entities/sentinel-rl.md|sentinel rl]]의 위상 추론 오프로딩과 동일한 '인지 한계의 구조적 대체' 원리가 안전 제약 가시화 영역에서도 작동함을 보여준다.

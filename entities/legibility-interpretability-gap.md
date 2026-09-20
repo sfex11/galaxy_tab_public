@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Corrupt Plans, Clean Traces: Evading Chain-of-Thought Monitoring with  (2026-09-16)
 
 모니터링 도메인의 실증으로 확장한다. 판독 가능한 깨끗한 CoT가 실제 계획의 충실한 표현이 아님을 안전 감시 실패로 직접 보여주어, legibility가 interpretability의 대체가 아님을 가장 실용적 맥락에서 확인시킨다.
-
-→ [[sources/2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md|상세 보기]]

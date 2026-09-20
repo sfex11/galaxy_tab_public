@@ -24,5 +24,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-10-android-coach-improve-online-agentic-training-effi.md|Android Coach: Improve Online Agentic Training Efficiency wi]] (2026-04-10)
 
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
-
-→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

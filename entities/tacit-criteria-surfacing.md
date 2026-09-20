@@ -26,5 +26,3 @@ rebuttal 데이터가 암묵적 리뷰 기준(유효 진단의 조건, 수용 �
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 전문가의 암묵적 도메인 관례와 특수 정확성 기준이 환경 정의·유도 과정을 통해 명시적 사양으로 외면화되는 구조적 경로를 제공한다. 코드 리뷰·테스트 적합성에서 관찰된 암묵 기준의 형식화가 과학 코드 환경화에서도 재현됨을 보여준다.
-
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

@@ -13,8 +13,4 @@ _Wiki 축적 중_
 
 ### Look Before You Leap: Factual Decoding with Internal Attribution Signa (2026-09-16)
 
-→ [[sources/2026-09-16-look-before-you-leap-factual-decoding-with-interna.md|상세 보기]]
-
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
-
-→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

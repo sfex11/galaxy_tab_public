@@ -18,5 +18,3 @@ WER 중심에서 LLM 기반 다차원 평가(쌍별 선택·의미 거리·정�
 ### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
 
 ASR 개선의 축을 평가 방법론에서 지식 통합 방법론으로 확장한다. 디코딩 구조 변경 없이 파라미터 병합만으로 LM 퓨전 수준의 개선이 달성 가능함을 보여준다.
-
-→ [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]

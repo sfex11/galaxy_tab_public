@@ -21,5 +21,3 @@ _자동 Wiki Query에서 추출됨_
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
 
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
-
-→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

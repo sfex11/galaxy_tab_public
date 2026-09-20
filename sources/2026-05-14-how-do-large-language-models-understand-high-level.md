@@ -164,3 +164,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/submission-semantic-collapse.md|submission semantic collapse]]
+
+---
+**관련**: [[entities/architectural-chronometry.md|architectural chronometry]]
+
+---
+**관련**: [[entities/semantic-metadata-eliminability-hypothesis.md|semantic metadata eliminability hypothesis]]

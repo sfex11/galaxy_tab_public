@@ -388,3 +388,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/visual-textual-duality.md|visual textual duality]]
+
+---
+**관련**: [[entities/trigger-driven-retrieval.md|trigger driven retrieval]]

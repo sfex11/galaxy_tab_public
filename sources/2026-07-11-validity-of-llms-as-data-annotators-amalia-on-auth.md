@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/value-non-mixing.md|value non mixing]]
+
+---
+**관련**: [[entities/agreement-pressure.md|agreement pressure]]
+
+---
+**관련**: [[entities/detector-as-instrument.md|detector as instrument]]

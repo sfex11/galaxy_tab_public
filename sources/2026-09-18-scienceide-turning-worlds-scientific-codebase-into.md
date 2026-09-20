@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-ScienceIDE는 과학 코드베이스를 과학 에이전트의 프로그래밍 가능 학습 환경으로 변환하는 인프라다. 과학 코드가 수십 년간의 실행 가능 지식을 담고 있음에도 파편화된 툴체인·암묵적 도메인 관례·특수 정확성 기준이 신뢰 가능한 학습 경험으로의 전환을 막는 **과학 경험 병목(scientific experience bottleneck)**을 진단한다. 이는 [[environment-absence-bottleneck]]의 과학 도메인 발현으로, [[environment-capability-causality]](환경 가용성이 능력 확장을 결정)를 과학 연구 도메인에서 확정한다. 환경 생성 소스의 계보에서 Gym-Anything(범용 소프트웨어)·Nemobot(게임)·[[terminal-universe]](자기 궤적)에 이어 '전문가 검증된 과학 코드베이스'라는 네 번째 소스 클래스를 추가한다. 궤적 재활용이 과거 실행의 재질화라면 코드베이스 환경화는 인간 축적 지식의 직접 인프라화로, [[experience-infrastructuralization]]의 소스 축을 확장한다. [[saescientist-bench]]가 과학 에이전트의 평가 축(자율 해석 연구)을 공급했다면 본 논문은 훈련 축(환경 공급)을 공급하여 과학 에이전트 연구의 평가-훈련 양축이 성립한다. 전문가 정의 과학 지식에 의한 환경 유도는 전문가의 암묵적 정확성 기준이 환경 사양으로 외면화되는 [[tacit-criteria-surfacing]]의 실현이며, 실행 검증 가능한 코드의 정확성 기준은 과학 도메인 [[rlvr]] 훈련의 확장 조건을 연다. Avatar(실행 오케스트레이션)·[[scientific-workflow-agent]](의미 번역 자동화)와 함께 과학 자동화 연구가 실행-번역-훈련 3축으로 분화함을 보여준다.
+ScienceIDE는 과학 코드베이스를 과학 에이전트의 프로그래밍 가능 학습 환경으로 변환하는 인프라다. 과학 코드가 수십 년간의 실행 가능 지식을 담고 있음에도 파편화된 툴체인·암묵적 도메인 관례·특수 정확성 기준이 신뢰 가능한 학습 경험으로의 전환을 막는 **과학 경험 병목(scientific experience bottleneck)**을 진단한다. 이는 [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]의 과학 도메인 발현으로, [[concepts/environment-capability-causality.md|environment capability causality]](환경 가용성이 능력 확장을 결정)를 과학 연구 도메인에서 확정한다. 환경 생성 소스의 계보에서 Gym-Anything(범용 소프트웨어)·Nemobot(게임)·[[entities/terminal-universe.md|terminal universe]](자기 궤적)에 이어 '전문가 검증된 과학 코드베이스'라는 네 번째 소스 클래스를 추가한다. 궤적 재활용이 과거 실행의 재질화라면 코드베이스 환경화는 인간 축적 지식의 직접 인프라화로, [[concepts/experience-infrastructuralization.md|experience infrastructuralization]]의 소스 축을 확장한다. [[concepts/saescientist-bench.md|saescientist bench]]가 과학 에이전트의 평가 축(자율 해석 연구)을 공급했다면 본 논문은 훈련 축(환경 공급)을 공급하여 과학 에이전트 연구의 평가-훈련 양축이 성립한다. 전문가 정의 과학 지식에 의한 환경 유도는 전문가의 암묵적 정확성 기준이 환경 사양으로 외면화되는 [[concepts/tacit-criteria-surfacing.md|tacit criteria surfacing]]의 실현이며, 실행 검증 가능한 코드의 정확성 기준은 과학 도메인 [[concepts/rlvr.md|rlvr]] 훈련의 확장 조건을 연다. Avatar(실행 오케스트레이션)·[[entities/scientific-workflow-agent.md|scientific workflow agent]](의미 번역 자동화)와 함께 과학 자동화 연구가 실행-번역-훈련 3축으로 분화함을 보여준다.
 
 ## 🔗 관련 논문
 
@@ -48,3 +48,6 @@ _LLM 분석으로 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-09-17-sciencebuddy-recursive-in-recursive-self-improveme]]: 과학 에이전트 능력의 병목을 모델이 아닌 환경·경험(연구 워크플로우 증거, 과학 코드베이스)의 구축으로 보고 각각 재귀적 자기 개선과 학습 환경화로 해결한다.
+
+---
+**관련**: [[entities/paint-anything.md|paint anything]]

@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/deletion-non-monotonicity.md|deletion non monotonicity]]
+
+---
+**관련**: [[entities/deletion-non-monotonicity.md|deletion non monotonicity]]

@@ -32,3 +32,6 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/theory-of-mind.md|theory of mind]]

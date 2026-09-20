@@ -18,5 +18,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-how-ai-aggregation-affects-knowledge.md|How AI Aggregation Affects Knowledge]] (2026-04-08)
 
 ### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
-
-→ [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md|상세 보기]]

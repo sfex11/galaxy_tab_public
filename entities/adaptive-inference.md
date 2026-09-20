@@ -67,16 +67,10 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 
 검증 자체를 계산 예산의 대상으로 삼아, 적응의 축이 '얼마나 추론할까'에서 '얼마나 검증할까'로 확장됨을 보여준다. bounded 검증은 예산 인식적 적응의 검증 도메인 버전이다.
 
-→ [[sources/2026-09-18-cognitive-extensions-for-dual-process-language-age.md|상세 보기]]
-
 ### EarStreAM: A Closed-Loop Earable System for Personalized Stress-Adapti (2026-09-18)
 
 적응 트리거 택소노미(외부 환경 → 내부 시스템 상태 → 자기 발화)에 '사용자 생체 상태'를 네 번째 트리거로 추가하여, 적응 신호의 원천이 모델 경계를 넘어 사용자의 몸으로 확장됨을 보여준다. 생성 입력 분포가 비텍스트적으로 실시간 변동하는 새로운 트리거 유형이다.
 
-→ [[sources/2026-09-18-earstream-a-closed-loop-earable-system-for-persona.md|상세 보기]]
-
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
 
 적응의 결정 차원에 '이 스텝에서 전역 히스토리를 읽을 것인가'라는 새 축을 추가한다. 트리거가 내부 디코딩 상태라는 점에서 내부 상태 반응형 적응의 어텐션 버전으로 위치한다.
-
-→ [[sources/2026-09-19-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

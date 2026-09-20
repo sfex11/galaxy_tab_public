@@ -553,3 +553,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/imitation-without-intent.md|imitation without intent]]
+
+---
+**관련**: [[entities/thought-action-separation.md|thought action separation]]
+
+---
+**관련**: [[entities/information-theoretic-capacity.md|information theoretic capacity]]
+
+---
+**관련**: [[entities/salience-gated-episodic-memory.md|salience gated episodic memory]]
+
+---
+**관련**: [[entities/reward-hacking-internal-signature.md|reward hacking internal signature]]
+
+---
+**관련**: [[entities/human-aware-training-supervision-gap.md|human aware training supervision gap]]
+
+---
+**관련**: [[entities/verification-as-system-external-relation.md|verification as system external relation]]
+
+---
+**관련**: [[entities/planning-without-physical-constraint-encoding.md|planning without physical constraint encoding]]
+
+---
+**관련**: [[entities/latent-user-state-simulation.md|latent user state simulation]]

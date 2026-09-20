@@ -64,3 +64,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/pre-compiled-policy-tree.md|pre compiled policy tree]]
+
+---
+**관련**: [[entities/policy-mirror-descent.md|policy mirror descent]]

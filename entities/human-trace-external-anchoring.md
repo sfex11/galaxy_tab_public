@@ -22,5 +22,3 @@ rebuttal이라는 실제 저자-리뷰어 상호작용 흔적이 post-training �
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
 
 외부 닻의 층위를 행동 흔적에서 정신 상태로 심화한다. 흔적이 존재하기 전의 내재 상태를 시뮬레이션으로 재구성함으로써, 순환 타당성 문제의 해법이 흔적 기반에서 상태 재구성 기반으로 이동함을 보여준다.
-
-→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

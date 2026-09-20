@@ -85,3 +85,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/transient-event-miss-failure.md|transient event miss failure]]
+
+---
+**관련**: [[entities/shared-state-architecture.md|shared state architecture]]
+
+---
+**관련**: [[entities/threat-defense-surface-identity.md|threat defense surface identity]]
+
+---
+**관련**: [[entities/synthetic-grounding-gap.md|synthetic grounding gap]]
+
+---
+**관련**: [[entities/ai-architecture-documentation.md|ai architecture documentation]]
+
+---
+**관련**: [[entities/goal-inference-attack.md|goal inference attack]]

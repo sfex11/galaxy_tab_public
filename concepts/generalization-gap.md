@@ -16,5 +16,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-13)
 
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
-
-→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

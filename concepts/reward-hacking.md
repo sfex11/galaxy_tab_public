@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
-
-→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

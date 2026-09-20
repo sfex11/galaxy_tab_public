@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-비자회귀 생성 연구의 스텝 압축 문제에 제3의 경로를 추가한다. 기존 Wiki에서 이산 생성 가속은 두 극점으로 논의되어 왔다 — Unlocking Lossless Speedups 계열의 '샘플러 교체'(AR 분포 무변경, [[distribution-preserving-acceleration]])와 Cola DLM([[cola-dlm]])의 '분포 재설계'([[parallel-decoding]], [[diffusion-llm]]). DBTM은 이들 공통의 암묵 전제를 공격한다: 다단계 샘플링을 소수 스텝으로 압축하려면 사전학습 교사의 증류([[knowledge-distillation]])가 필요했고, 이는 학생 품질을 교사로 상한 고정하며 2단계 훈련 파이프라인 비용을 부과한다 — 패러다임 전환 비용([[paradigm-translation-cost]])이 가속의 필수 통행료였던 셈이다. 해법은 시간 독립적(time-independent) 흐름이다: 단일 자율 수송 사상의 반복 적용으로 임베딩 공간의 임의의 점이 어휘 집합(정점)의 고정점으로 수렴함이 보장되므로, 생성이 다단계 ODE 근사가 아닌 동역학계 수렴으로 정의되고 교사 없이 직접 훈련된다. 토큰이 생성의 산출물이 아니라 흡인자로서 수렴의 종착점이 된다는 위상 재정의가 핵심이며, [[discrete-diffusion]] 계보에 '교사 없는 자율 수송'이라는 축을 부여하고 언어 모델링·추론 과제에서 그 성립을 실증한다.
+비자회귀 생성 연구의 스텝 압축 문제에 제3의 경로를 추가한다. 기존 Wiki에서 이산 생성 가속은 두 극점으로 논의되어 왔다 — Unlocking Lossless Speedups 계열의 '샘플러 교체'(AR 분포 무변경, [[concepts/distribution-preserving-acceleration.md|distribution preserving acceleration]])와 Cola DLM([[entities/cola-dlm.md|cola dlm]])의 '분포 재설계'([[concepts/parallel-decoding.md|parallel decoding]], [[concepts/diffusion-llm.md|diffusion llm]]). DBTM은 이들 공통의 암묵 전제를 공격한다: 다단계 샘플링을 소수 스텝으로 압축하려면 사전학습 교사의 증류([[concepts/knowledge-distillation.md|knowledge distillation]])가 필요했고, 이는 학생 품질을 교사로 상한 고정하며 2단계 훈련 파이프라인 비용을 부과한다 — 패러다임 전환 비용([[concepts/paradigm-translation-cost.md|paradigm translation cost]])이 가속의 필수 통행료였던 셈이다. 해법은 시간 독립적(time-independent) 흐름이다: 단일 자율 수송 사상의 반복 적용으로 임베딩 공간의 임의의 점이 어휘 집합(정점)의 고정점으로 수렴함이 보장되므로, 생성이 다단계 ODE 근사가 아닌 동역학계 수렴으로 정의되고 교사 없이 직접 훈련된다. 토큰이 생성의 산출물이 아니라 흡인자로서 수렴의 종착점이 된다는 위상 재정의가 핵심이며, [[entities/discrete-diffusion.md|discrete diffusion]] 계보에 '교사 없는 자율 수송'이라는 축을 부여하고 언어 모델링·추론 과제에서 그 성립을 실증한다.
 
 ## 🔗 관련 논문
 

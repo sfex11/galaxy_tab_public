@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Stellar Colosseum: A Many-Agent Harness for Long-Horizon Research in M (2026-09-16)
 
 준비도 게이트를 통해 적응적 타당성 판단의 새 영역을 추가한다 — '경로가 분해에 성숙했는가'는 현재 상태의 타당성 재평가이며, 회복 불가능한 조기 분해를 게이트로 지연시켜 장기 호라이즌 신뢰성을 확보한다.
-
-→ [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]

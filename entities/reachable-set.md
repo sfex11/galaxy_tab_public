@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 도달 가능성 분석의 공간을 물리 상태(NeRF 항행의 reachable set)에서 정보 공간으로 확장한다. '안전한 물리 상태에 도달 가능한가'가 '안전한 행동을 지원할 신념 상태에 도달 가능한가'로 재정의되며, reachability가 기하학적 분석 도구에서 인식론적 분석 도구로 격상됨을 보여준다.
-
-→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

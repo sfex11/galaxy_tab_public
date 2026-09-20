@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
 
 합성 데이터의 인과적 원천성 논의를 '지식 재구성'에서 '사용자 정신 상태 재구성'으로 확장한다. 관찰 불가능한 변수의 시뮬레이션도 합성 재구성의 한 형태이며, 배치 크기 의존성 논의와 유사하게 옵티마이저 동역학과의 결합 조건이 남는 미해결 질문이 된다.
-
-→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-30-agentic-harness-engineering-observability-driven-a.md|Agentic Harness Engineering: Observability-Driven Automatic ]]
 
 ### An Empirical Study of Harness Design for Coding Agents (2026-09-19)
-
-→ [[sources/2026-09-19-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]

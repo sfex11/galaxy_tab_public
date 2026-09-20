@@ -26,5 +26,3 @@ MDP 계획 이론에 '전이 전망(look-ahead)'이라는 관측 조건 축을 �
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 상태 개념이 물리 상태에서 (물리 상태, 태스크 신념)의 확장 상태로 재정의되는 사례를 제공한다. Meta-RL의 태스크 적응이 사실상 POMDP의 신념 갱신과 동형임을 시사하여, MDP-POMDP 경계가 태스크 가용성에 상대적임을 보여준다.
-
-→ [[sources/2026-09-16-safe-meta-reinforcement-learning-via-information-s.md|상세 보기]]

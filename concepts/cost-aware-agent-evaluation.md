@@ -22,5 +22,3 @@ _자동 Wiki Query에서 추출됨_
 ### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
 
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
-
-→ [[sources/2026-09-18-evidence-grounded-agentic-formulation-development-.md|상세 보기]]

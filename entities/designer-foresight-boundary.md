@@ -26,5 +26,3 @@ HCI(Headroom-Closed Index)가 설계자 예견 경계를 정량 측정하는 최
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 사전 설계 완료 체커가 설계자 예견 경계에 갇히는 구체적 실패 조건을 제공하고, VLM 증류가 예견 의존성을 학습 가능한 판단으로 완화하는 경로를 실증한다.
-
-→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

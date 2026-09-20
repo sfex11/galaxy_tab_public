@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### HypoEvolve: Genetic Algorithms Enable Multi-Agent LLMs to Discover Sci (2026-09-16)
 
 역설의 진단적 반전을 제공한다. 역설이 능력-협력의 음의 상관을 보였다면, 본 논문은 능력을 통제한 채 협력 구조만 변이시켜 협력 위상의 독립 효과를 분리하는 방법론을 부여하여, 역설 논의가 '상관 관찰'에서 '인과 분해'로 진전될 수 있는 실험 설계를 확보한다.
-
-→ [[sources/2026-09-16-hypoevolve-genetic-algorithms-enable-multi-agent-l.md|상세 보기]]

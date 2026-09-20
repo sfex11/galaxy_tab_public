@@ -55,10 +55,6 @@ Layer dropout이 사전학습 분포 P(y)의 형성 자체를 수정하면서도
 
 동결 액터 하에서 P(y)가 불변으로 유지되고 코칭은 조건부 유도 P(y|guidance)만 개선하는 구조가 된다 — 사전학습 분포 상한선 내에서 코칭이 도달 범위를 재구성하는 방식을 보여준다.
 
-→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]
-
 ### Beyond Truncation: Rethinking LLM Decoding as Ensemble Pruning (2026-09-18)
 
 스칼라 확률 순위가 P(y)의 1차원 판독에 불과하며 후보 간 의미 중복이라는 조건부 구조 정보를 소실시킨다는 점을 구체화한다. 조건부 구조의 판독만으로도 P(y)를 바꾸지 않고 선택 품질이 향상됨을 보여, P(y|x) 정제의 여유공간을 실증한다.
-
-→ [[sources/2026-09-18-beyond-truncation-rethinking-llm-decoding-as-ensem.md|상세 보기]]

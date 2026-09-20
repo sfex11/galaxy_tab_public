@@ -46,3 +46,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/triggerless-single-pass-contamination.md|triggerless single pass contamination]]
+
+---
+**관련**: [[entities/recursive-meta-improvement.md|recursive meta improvement]]
+
+---
+**관련**: [[entities/improvement-autonomy-taxonomy.md|improvement autonomy taxonomy]]

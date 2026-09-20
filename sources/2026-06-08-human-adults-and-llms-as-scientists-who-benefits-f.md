@@ -85,3 +85,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/runtime-paradigm-switching.md|runtime paradigm switching]]
+
+---
+**관련**: [[entities/evolutionary-agency-axis.md|evolutionary agency axis]]

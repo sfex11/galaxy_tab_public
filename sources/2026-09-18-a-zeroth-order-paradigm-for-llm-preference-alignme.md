@@ -17,7 +17,7 @@ DPO 계열 직접 선호 정렬의 계산·메모리 효율성을 유지하면�
 
 핵심은 정렬 신호의 패러다임 전환이다. 기존 방법은 선호 쌍을 우도 경사의 원료로 취급하여, 우도 마진이 작은 쌍에서 선호 응답의 우도마저 감소시키는 병리가 발생한다. ComPO는 선호 쌍을 비교 오라클(comparison oracle)의 출력으로 재해석해 우도 값이 아닌 쌍 간 방향성 정보만 추출한다.
 
-이는 [[llm-alignment]]에 '비교 기반' 최적화 축을 추가하고, [[relative-verifiability]]가 다룬 상대적 신호의 극한 형태 — 절대 값 없이 비교만으로 학습 — 를 정렬 도메인에서 실현한다. [[grpo]]가 그룹 비교로 advantage를 구성한다면, ComPO는 쌍 비교로 더 원자적 단위에서 동일 원리를 수행한다. [[positive-only-policy-optimization]]과 함께 제한적 피드백 하 견고한 신호 추출이라는 공통 축을 형성한다.
+이는 [[concepts/llm-alignment.md|llm alignment]]에 '비교 기반' 최적화 축을 추가하고, [[concepts/relative-verifiability.md|relative verifiability]]가 다룬 상대적 신호의 극한 형태 — 절대 값 없이 비교만으로 학습 — 를 정렬 도메인에서 실현한다. [[concepts/grpo.md|grpo]]가 그룹 비교로 advantage를 구성한다면, ComPO는 쌍 비교로 더 원자적 단위에서 동일 원리를 수행한다. [[concepts/positive-only-policy-optimization.md|positive only policy optimization]]과 함께 제한적 피드백 하 견고한 신호 추출이라는 공통 축을 형성한다.
 
 우도 모델링과 정렬 신호의 구조적 분리 가능성이 이 논문이 후속 연구에 던지는 핵심 질문이다.
 

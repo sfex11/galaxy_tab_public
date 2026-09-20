@@ -34,5 +34,3 @@ MCP Tax가 컨텍스트 윈도우를 팽창시켜 발생시키는 하류 문제(
 ### The Router Within: Eliciting Native Skill Routing from a Frozen LLM (2026-09-16)
 
 도구 게이팅의 판단 근거를 외부 관련성 계산에서 모델 내재 신호로 이동시키는 후속 경로를 제공한다. 동적 게이팅이 쿼리-도구 관련성을 별도 계산했다면, 본 논문은 그 판단이 이미 동결 모델의 순방향 연산에 존재함을 보여 게이팅 메커니즘의 정보원을 내재화한다.
-
-→ [[sources/2026-09-16-the-router-within-eliciting-native-skill-routing-f.md|상세 보기]]

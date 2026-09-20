@@ -121,3 +121,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/stigmergic-coordination.md|stigmergic coordination]]
+
+---
+**관련**: [[entities/stigmergic-coordination.md|stigmergic coordination]]

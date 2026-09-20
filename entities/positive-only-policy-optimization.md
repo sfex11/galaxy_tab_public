@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### A Zeroth-Order Paradigm for LLM Preference Alignment (2026-09-18)
 
 제한적 피드백에서의 견고한 신호 추출이라는 공통 문제의 제2 사례를 제공한다. POPO가 음성 롤아웃 노이즈를 배제한다면, ComPO는 우도 이동을 유발하는 1차 경사 신호 자체를 비교 신호로 대체하여, 신호 추출 방식의 교체만으로 학습 병리를 회피 가능함을 확장한다.
-
-→ [[sources/2026-09-18-a-zeroth-order-paradigm-for-llm-preference-alignme.md|상세 보기]]

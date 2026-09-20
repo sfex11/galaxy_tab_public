@@ -21,9 +21,9 @@ Meta-RL은 제한된 경험으로 미지 태스크에 적응하는 능력을 제
 
 ## 기존 Wiki와의 관계
 
-- [[interval-pomdp]]가 지각 불확실성(관측 노이즈)을 구간으로 모델링해 shielding했다면, 본 논문은 태스크 불확실성(적응 대상의 미지성)을 신념 공간에서 다룬다. 인지 불확실성 하 안전 연구가 '지각 노이즈'에서 '태스크 신념'으로 확장되는 축을 형성한다.
-- [[reachable-set]]과 [[safety-aware-exploration]]의 도달 가능성 기반 안전 탐색을 물리 공간에서 정보 공간으로 이식한다. "안전한 상태에 도달 가능한가"가 "안전한 행동을 지원할 신념에 도달 가능한가"로 재정의되며, reachability가 기하학적 도구에서 인식론적 도구로 격상된다.
-- [[safety-as-conditional-state]]의 조건부 안전 관점에 적응 시간축을 더한다: 안전은 현재 신념뿐 아니라 신념 수렴 궤적 전체에 조건부인 진행 중 속성이다.
+- [[concepts/interval-pomdp.md|interval pomdp]]가 지각 불확실성(관측 노이즈)을 구간으로 모델링해 shielding했다면, 본 논문은 태스크 불확실성(적응 대상의 미지성)을 신념 공간에서 다룬다. 인지 불확실성 하 안전 연구가 '지각 노이즈'에서 '태스크 신념'으로 확장되는 축을 형성한다.
+- [[concepts/reachable-set.md|reachable set]]과 [[concepts/safety-aware-exploration.md|safety aware exploration]]의 도달 가능성 기반 안전 탐색을 물리 공간에서 정보 공간으로 이식한다. "안전한 상태에 도달 가능한가"가 "안전한 행동을 지원할 신념에 도달 가능한가"로 재정의되며, reachability가 기하학적 도구에서 인식론적 도구로 격상된다.
+- [[concepts/safety-as-conditional-state.md|safety as conditional state]]의 조건부 안전 관점에 적응 시간축을 더한다: 안전은 현재 신념뿐 아니라 신념 수렴 궤적 전체에 조건부인 진행 중 속성이다.
 
 ## 시사점
 

@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
 
 집단 수준 분석에 기계론적 방법론 계층을 추가한다. 기존의 사회적 현상 관찰(협력 형성, 편향 동기화, 부정행위 전파)을 넘어, 그 기반이 되는 신념 형성 메커니즘의 내부 검증 경로를 제공한다.
-
-→ [[sources/2026-09-18-flag-game-a-toy-model-for-mechanistic-swarm-interp.md|상세 보기]]

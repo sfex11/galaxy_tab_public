@@ -17,5 +17,3 @@ _자동 Wiki Query에서 추출됨_
 ### Cliff: Learning Process Rewards from the First Mistake (2026-09-04)
 
 ### Look Before You Leap: Factual Decoding with Internal Attribution Signa (2026-09-16)
-
-→ [[sources/2026-09-16-look-before-you-leap-factual-decoding-with-interna.md|상세 보기]]

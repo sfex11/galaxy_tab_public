@@ -385,3 +385,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-visibility-spectrum.md|failure visibility spectrum]]
+
+---
+**관련**: [[entities/cooperative-memory-attribution.md|cooperative memory attribution]]

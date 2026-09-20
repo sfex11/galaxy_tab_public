@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 환경 가용성이 능력 확장을 결정한다는 인과율의 과학 연구 도메인 실증이다. 과학 에이전트 능력의 병목이 모델 능력이 아니라 과학 코드의 환경 전환 가능성에 있음을 확정한다.
-
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]

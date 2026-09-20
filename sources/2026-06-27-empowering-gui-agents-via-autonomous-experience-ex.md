@@ -52,3 +52,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/power-of-two-quantization.md|power of two quantization]]
+
+---
+**관련**: [[entities/smooth-turn-coverage-limitation.md|smooth turn coverage limitation]]
+
+---
+**관련**: [[entities/experience-acquisition-autonomy.md|experience acquisition autonomy]]
+
+---
+**관련**: [[entities/multimodal-llm.md|multimodal llm]]

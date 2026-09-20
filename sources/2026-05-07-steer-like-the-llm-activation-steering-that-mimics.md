@@ -132,3 +132,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/inference-cognition-continuum.md|inference cognition continuum]]
+
+---
+**관련**: [[entities/activation-steering.md|activation steering]]
+
+---
+**관련**: [[entities/steering-read-manipulation-duality.md|steering read manipulation duality]]
+
+---
+**관련**: [[entities/binary-analysis.md|binary analysis]]
+
+---
+**관련**: [[entities/activation-patching.md|activation patching]]
+
+---
+**관련**: [[entities/intra-generative-intervention.md|intra generative intervention]]
+
+---
+**관련**: [[entities/representation-steering.md|representation steering]]

@@ -15,13 +15,13 @@ OPTED는 자율주행 end-to-end 정책의 오픈루프 행동 복제 사전학�
 
 ## 기존 Wiki와의 관계
 
-- [[closed-loop-training]]: '폐루프는 어떻게 환경을 공급받는가'라는 질문에 제3의 답을 제공한다. 궤적 재활용이나 환경 진화가 환경 자체를 공급했다면, OPTED는 환경 렌더링 없이 교사의 판단 신호만으로 루프를 닫는 '환경 없는 폐루프' 경로를 연다. 이는 [[environment-absence-bottleneck]]에 대한 역설적 해법이다.
-- [[compounding-error]]: 회복 불가능한 오류의 자율주행 도메인 발현을 제공하며, 오프폴리시 사전학습 → 폐루프 배포의 인과 경로를 입증한다.
-- [[on-policy-distillation]]: 온폴리시 정정의 목적을 약한 모델 따라잡기에서 분포 이탈 방지(안전)로 확장하며, 물리 도메인에서의 유효성을 입증한다.
-- [[model-based-rl]]: 세계 모델링 없이 교사가 환경 시뮬레이션의 판단 기능만 대체하는 경량 경로를 제시한다.
-- [[end-to-end-vla-training]]: 행동 복제 기준선의 구조적 한계를 진단하고 같은 파이프라인 안에 폐루프 파인튜닝 계층을 추가한다.
+- [[concepts/closed-loop-training.md|closed loop training]]: '폐루프는 어떻게 환경을 공급받는가'라는 질문에 제3의 답을 제공한다. 궤적 재활용이나 환경 진화가 환경 자체를 공급했다면, OPTED는 환경 렌더링 없이 교사의 판단 신호만으로 루프를 닫는 '환경 없는 폐루프' 경로를 연다. 이는 [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]에 대한 역설적 해법이다.
+- [[concepts/compounding-error.md|compounding error]]: 회복 불가능한 오류의 자율주행 도메인 발현을 제공하며, 오프폴리시 사전학습 → 폐루프 배포의 인과 경로를 입증한다.
+- [[concepts/on-policy-distillation.md|on policy distillation]]: 온폴리시 정정의 목적을 약한 모델 따라잡기에서 분포 이탈 방지(안전)로 확장하며, 물리 도메인에서의 유효성을 입증한다.
+- [[concepts/model-based-rl.md|model based rl]]: 세계 모델링 없이 교사가 환경 시뮬레이션의 판단 기능만 대체하는 경량 경로를 제시한다.
+- [[concepts/end-to-end-vla-training.md|end to end vla training]]: 행동 복제 기준선의 구조적 한계를 진단하고 같은 파이프라인 안에 폐루프 파인튜닝 계층을 추가한다.
 
-physical AI에서 사후학습의 위상이 효율 최적화에서 안전 보장으로 이동하는 흐름([[post-training]])을 자율주행으로 확장한다.
+physical AI에서 사후학습의 위상이 효율 최적화에서 안전 보장으로 이동하는 흐름([[concepts/post-training.md|post training]])을 자율주행으로 확장한다.
 
 ## 🔗 관련 논문
 

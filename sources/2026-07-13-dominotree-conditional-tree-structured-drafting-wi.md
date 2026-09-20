@@ -205,3 +205,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/failure-embedded-difficulty-distribution.md|failure embedded difficulty distribution]]
+
+---
+**관련**: [[entities/prediction-powered-inference.md|prediction powered inference]]
+
+---
+**관련**: [[entities/spreadsheet-grid-structure.md|spreadsheet grid structure]]
+
+---
+**관련**: [[entities/parallel-token-sampling.md|parallel token sampling]]
+
+---
+**관련**: [[entities/mahalanobis-ensemble-decoding.md|mahalanobis ensemble decoding]]

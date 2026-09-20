@@ -426,3 +426,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-paradigm-feedback-bias.md|evaluation paradigm feedback bias]]
+
+---
+**관련**: [[entities/cross-component-budget-collapse.md|cross component budget collapse]]
+
+---
+**관련**: [[entities/rubric-to-reward-reducibility.md|rubric to reward reducibility]]
+
+---
+**관련**: [[entities/trajectory-level-objective.md|trajectory level objective]]
+
+---
+**관련**: [[entities/bounded-execution-time-validation.md|bounded execution time validation]]
+
+---
+**관련**: [[entities/placebo-controlled-swap-evaluation.md|placebo controlled swap evaluation]]

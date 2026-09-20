@@ -22,7 +22,7 @@ Pruning can reduce the deployment cost of large language models (LLMs), but its 
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

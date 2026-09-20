@@ -15,7 +15,7 @@
 
 동시에 스프레드시트가 2차원 비정형 데이터로서 연속적 셀 관계와 무한한 구성 잠재력을 갖는다는 근본 한계(하드 천장)를 진단한다. 이산 청크로 연속 구조를 완전히 포착할 수 없다는 구조적 경계의 명시다.
 
-Wiki 관계: [[retrieval-augmented-generation]]에 '구조 인지 청킹' 축을 추가한다. [[text-to-sql]]과 대비되는 표 형식 데이터 접근 인터페이스로서, SQL 번역 경로가 아닌 구조 주석 경로의 대안성을 보여준다. TarQA 계열 표 구조 이해 연구의 스프레드시트 도메인 확장이며, 청크 해석 가능성이 하류 생성 품질을 결정한다는 발견은 [[retrieval-as-black-box]]의 병목 귀인 논의에 검색 지표-생성 품질 직교성 사례를 제공한다.
+Wiki 관계: [[concepts/retrieval-augmented-generation.md|retrieval augmented generation]]에 '구조 인지 청킹' 축을 추가한다. [[entities/text-to-sql.md|text to sql]]과 대비되는 표 형식 데이터 접근 인터페이스로서, SQL 번역 경로가 아닌 구조 주석 경로의 대안성을 보여준다. TarQA 계열 표 구조 이해 연구의 스프레드시트 도메인 확장이며, 청크 해석 가능성이 하류 생성 품질을 결정한다는 발견은 [[concepts/retrieval-as-black-box.md|retrieval as black box]]의 병목 귀인 논의에 검색 지표-생성 품질 직교성 사례를 제공한다.
 
 ## 🔗 관련 논문
 

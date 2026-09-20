@@ -24,5 +24,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-06-batched-contextual-reinforcement-a-task-scaling-la.md|Batched Contextual Reinforcement: A Task-Scaling Law for Eff]] (2026-04-06)
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
-
-→ [[sources/2026-09-19-retireopd-self-retiring-on-policy-distillation-for.md|상세 보기]]

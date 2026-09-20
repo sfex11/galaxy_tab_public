@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Learning to Coach for Experiential Learning (2026-09-16)
 
 스킬 추출과 환경 합성 외에 코치 훈련이라는 제3의 소비 경로를 제공한다. 다만 코치의 산출물은 명시적 규칙이 아닌 학습된 가이던스이므로, '궤적→절차 지식' 변환의 단위가 기호에서 파라미터로 이동함을 보여준다.
-
-→ [[sources/2026-09-16-learning-to-coach-for-experiential-learning.md|상세 보기]]

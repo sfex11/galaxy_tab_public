@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/layered-decision-auditability.md|layered decision auditability]]
+
+---
+**관련**: [[entities/review-constraint-compliance.md|review constraint compliance]]

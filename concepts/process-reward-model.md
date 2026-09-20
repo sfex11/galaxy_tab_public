@@ -24,5 +24,3 @@ _자동 Wiki Query에서 추출됨_
 ### Legibility is Not Interpretability: Comparing Judged and Actual Import (2026-09-07)
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
-
-→ [[sources/2026-09-19-retireopd-self-retiring-on-policy-distillation-for.md|상세 보기]]

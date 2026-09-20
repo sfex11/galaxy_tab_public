@@ -17,15 +17,15 @@
 
 ## 기존 Wiki와의 관계
 
-**야생 관찰의 기계론적 보완.** [[copying-collective-behavior]]가 야생 데이터에서 복사를 집단 행동의 최소 메커니즘으로 규명했다면, 본 논문은 동일 현상을 통제된 장난감 모델에서 내부까지 열어 검증한다. 야생(외생적)↔실험(내생적)의 방법론 양극이 완성된다.
+**야생 관찰의 기계론적 보완.** [[entities/copying-collective-behavior.md|copying collective behavior]]가 야생 데이터에서 복사를 집단 행동의 최소 메커니즘으로 규명했다면, 본 논문은 동일 현상을 통제된 장난감 모델에서 내부까지 열어 검증한다. 야생(외생적)↔실험(내생적)의 방법론 양극이 완성된다.
 
-**케이스 스터디의 기반 해부.** [[emergent-cheating-whistleblowing-swarm]]이 부정행위·고발이라는 사회적 현상을 관찰했다면, Flag Game은 그 공통 기반인 신념 형성 역학을 기계론적으로 추적한다. 협력과 편차 전파가 동일 신념 채널을 공유한다는 [[infrastructure-deviance-duality]] 통찰의 메커니즘적 토대를 제공한다.
+**케이스 스터디의 기반 해부.** [[concepts/emergent-cheating-whistleblowing-swarm.md|emergent cheating whistleblowing swarm]]이 부정행위·고발이라는 사회적 현상을 관찰했다면, Flag Game은 그 공통 기반인 신념 형성 역학을 기계론적으로 추적한다. 협력과 편차 전파가 동일 신념 채널을 공유한다는 [[concepts/infrastructure-deviance-duality.md|infrastructure deviance duality]] 통찰의 메커니즘적 토대를 제공한다.
 
-**해석가능성의 대상 확장.** [[mechanistic-interpretability]]가 단일 모델 내부를 다뤘다면, 본 논문은 이를 다중 에이전트 집단의 신념 상태로 확장한다. [[interpretability-as-audit-layer]] 관점에서 감사 대상이 개체 내부에서 스웜 신념 동역학으로 이동함을 시사한다.
+**해석가능성의 대상 확장.** [[concepts/mechanistic-interpretability.md|mechanistic interpretability]]가 단일 모델 내부를 다뤘다면, 본 논문은 이를 다중 에이전트 집단의 신념 상태로 확장한다. [[concepts/interpretability-as-audit-layer.md|interpretability as audit layer]] 관점에서 감사 대상이 개체 내부에서 스웜 신념 동역학으로 이동함을 시사한다.
 
 ## 새 인사이트
 
-집단 정렬(collective alignment)의 전제 조건은 신념 역학의 해석 가능성이다. 부분 관찰 하 신념 통합 논의([[belief-aggregation]], [[distributed-consensus-estimation]])가 물리 도메인에 머물렀다면, 본 논문은 이를 언어 에이전트 집단으로 이식하며 [[collective-safety-analysis]]에 개입 가능한 진단 계층을 부여한다.
+집단 정렬(collective alignment)의 전제 조건은 신념 역학의 해석 가능성이다. 부분 관찰 하 신념 통합 논의([[concepts/belief-aggregation.md|belief aggregation]], [[entities/distributed-consensus-estimation.md|distributed consensus estimation]])가 물리 도메인에 머물렀다면, 본 논문은 이를 언어 에이전트 집단으로 이식하며 [[concepts/collective-safety-analysis.md|collective safety analysis]]에 개입 가능한 진단 계층을 부여한다.
 
 ## 🔗 관련 논문
 

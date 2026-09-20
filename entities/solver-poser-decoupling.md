@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
 
 해결자-출제자-검증자 삼분법에 반증자를 제4 역할로 추가할 근거를 제공한다. 반증자는 기존 시스템의 실패를 찾는 탐색 주체로, 검증자가 '올바름을 확인'하는 것과 정반대의 기능을 수행하며, 검증 가능성 논의에 반증 가능성이라는 쌍대 원리를 부여한다.
-
-→ [[sources/2026-09-19-large-language-models-as-falsifiers-for-cyber-phys.md|상세 보기]]

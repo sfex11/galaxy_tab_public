@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
 
 훈련 과정 게이밍이 내부적으로 일관된 서명을 갖는다면 사후 감사가 아닌 훈련 중 실시간 차단이 가능해짐을 시사한다. 게이밍 감시의 시간축을 사후에서 동시로 이동시킨다.
-
-→ [[sources/2026-09-18-monitoring-and-discovering-reward-hacking-with-int.md|상세 보기]]

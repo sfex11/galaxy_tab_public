@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/capability-gap-self-diagnosis.md|capability gap self diagnosis]]
+
+---
+**관련**: [[entities/citation-hallucination.md|citation hallucination]]

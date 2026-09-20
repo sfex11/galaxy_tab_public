@@ -27,10 +27,6 @@ _Wiki 축적 중_
 
 환경 재질화의 소스 대비 축을 제공한다. Terminal-Universe가 과거 실행 궤적을 환경으로 재질의했다면 ScienceIDE는 인간이 축적한 코드베이스를 환경으로 변환하여, '자기 생성 지식'과 '인간 축적 지식'이라는 두 환경 소스 계열을 형성한다.
 
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]
-
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-19)
 
 궤적 재활용의 새 소비 경로를 제공한다. Terminal-Universe가 궤적을 학습 환경으로 변환했다면, RAFT는 폐쇄 트러블슈팅 케이스를 엔트리 체인 검색 지식으로 변환하여 '궤적의 검색 인프라화'를 실증한다.
-
-→ [[sources/2026-09-19-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

@@ -32,5 +32,3 @@ LALM 연구가 청각 지식 습득과 추론 능력 평가에 집중했다면, 
 ### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
 
 텍스트 전용 LM 지식을 음성 도메인에 흡수하는 파라미터 수준 경로를 추가한다. 오디오-언어 통합이 아키텍처 교체가 아닌 가중치 병합으로도 실현 가능함을 보여준다.
-
-→ [[sources/2026-09-16-merging-the-knowledge-of-llms-for-automatic-speech.md|상세 보기]]

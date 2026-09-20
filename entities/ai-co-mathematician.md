@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Stellar Colosseum: A Many-Agent Harness for Long-Horizon Research in M (2026-09-16)
 
 동일 수학 연구 도메인에서 오케스트레이션 초점이 실패 가설 추적에서 '분해 개시 타이밍'으로 이동함을 보여준다. 두 시스템 모두 불확실한 진행을 다중 경로로 관리하되, Colosseum은 커밋 판단을 명시적 게이트로 격상시킨다.
-
-→ [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]

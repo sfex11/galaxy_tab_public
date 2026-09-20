@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
 
 사용자 턴 뒤의 정신 상태 자체를 시뮬레이션 대상으로 확장한다. 턴 생성이 관찰 프로브였다면, 본 논문은 정신 상태 시뮬레이션이 응답 감독의 근거가 되는 생성적 용법을 추가하여 프로브-생성의 양축을 완성한다.
-
-→ [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|상세 보기]]

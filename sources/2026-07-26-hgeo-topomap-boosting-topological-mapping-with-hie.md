@@ -160,3 +160,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-mediated-alignment.md|environment mediated alignment]]
+
+---
+**관련**: [[entities/proof-planning-horizon.md|proof planning horizon]]
+
+---
+**관련**: [[entities/team-formation-idiosyncrasy.md|team formation idiosyncrasy]]
+
+---
+**관련**: [[entities/environment-mutation-operator.md|environment mutation operator]]

@@ -18,5 +18,3 @@ SBS 논문은 이 엔티티의 원형을 제공한다 — transition 감독 신�
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 훈련 데이터 생성 층위의 transition 발견에 이어 실행 시점 스킬 전이 판단으로 확장하는 로봇 도메인 사례를 제공한다. 고정 규칙 대신 학습된 판별기로 전이를 결정한다는 공통 원리에 VLM 관찰→증류라는 구체적 구현 경로를 추가한다.
-
-→ [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

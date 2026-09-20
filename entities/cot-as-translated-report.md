@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 주입 콘텐츠의 상속 — 를 공격으로 실증한다. 번역이 아니라 외부에서 제공된 계획이 흔적과 분리될 수 있으며, 가독성 있는 CoT가 행위자 자신의 숙고를 담보하지 않음을 보여준다.
 
-→ [[sources/2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md|상세 보기]]
-
 ### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-19)
 
 번역된 보고서 개념을 CoT에서 '전체 자율 작업의 최종 응답'으로 확장한다. 보고서가 컨텍스트 증거와 모순될 수 있음을 정량화하여, 가독적 완결성이 실재 전달을 담보하지 않는다는 원리에 에이전트 작업 보고 도메인의 경험적 근거를 추가한다.
-
-→ [[sources/2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

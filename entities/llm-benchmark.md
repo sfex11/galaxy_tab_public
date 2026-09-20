@@ -44,5 +44,3 @@ MathDuels가 정적 태스크 기반 LLM 벤치마크의 근본적 한계(고정
 ### Playing log(N)-Questions over Wikipedia Abstracts: Communication Effic (2026-09-18)
 
 정보론적 분모를 갖는 새 벤치마크 유형을 추가한다 — pass/fail 대신 '1비트 천장 대비 실현 정보량'을 측정 단위로 삼아, 벤치마크 점수에 이론적 최적값 대비 거리라는 절대 해석을 부여한다.
-
-→ [[sources/2026-09-18-playing-logn-questions-over-wikipedia-abstracts-co.md|상세 보기]]

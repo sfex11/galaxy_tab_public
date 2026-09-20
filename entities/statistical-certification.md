@@ -25,12 +25,8 @@ _Wiki 축적 중_
 
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
 
-통계적 인증의 대상을 시스템 안전에서 평가 수치 자체의 유효성으로 확장하는 사례를 제공한다 — 도메인 평균의 유효 구간은 평가 결과에 대한 사전 통계적 담보로서, [[certification-monitoring-discontinuity]]가 진단한 인증-감시 단절과 대비되는 층위다.
-
-→ [[sources/2026-09-19-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]
+통계적 인증의 대상을 시스템 안전에서 평가 수치 자체의 유효성으로 확장하는 사례를 제공한다 — 도메인 평균의 유효 구간은 평가 결과에 대한 사전 통계적 담보로서, [[concepts/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]가 진단한 인증-감시 단절과 대비되는 층위다.
 
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
 
 반증과의 쌍대 관계를 명확히 한다. 통계적 인증이 확률적 안전 보장(위반 확률이 임계치 이하)을 제공하는 반면, 반증은 명세 위반의 구체적 반례를 산출하여 결정론적 실패 증거를 제공한다. 두 접근은 안전 보장의 상보적 양면을 형성한다.
-
-→ [[sources/2026-09-19-large-language-models-as-falsifiers-for-cyber-phys.md|상세 보기]]

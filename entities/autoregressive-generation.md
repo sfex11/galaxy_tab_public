@@ -22,5 +22,3 @@ AR의 본질을 '순차 생성 절차'가 아닌 '분포 속성'으로 재규정
 ### Discrete Beckmann Transport Models for One-Step Language Modeling and  (2026-09-16)
 
 AR 대안 패러다임의 스펙트럼에 '자율 동역학계' 축을 추가한다. 순차성 제거가 시간 의존 ODE의 다단계 근사 없이는 비싸다는 통념에 대해, 시간 독립 사상의 반복 적용으로 교사 없이 소수 스텝 생성을 실현함을 반박한다.
-
-→ [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|상세 보기]]

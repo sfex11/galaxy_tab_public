@@ -22,5 +22,3 @@ _자동 Wiki Query에서 추출됨_
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
 
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
-
-→ [[sources/2026-09-18-in-context-robot-learning-with-vlm-agents.md|상세 보기]]

@@ -59,3 +59,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/schema-accumulation-as-composability-bottleneck.md|schema accumulation as composability bottleneck]]
+
+---
+**관련**: [[entities/value-non-mixing.md|value non mixing]]
+
+---
+**관련**: [[entities/prediction-accuracy-bottleneck.md|prediction accuracy bottleneck]]

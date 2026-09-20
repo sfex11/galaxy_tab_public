@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
 
 가독성 평가의 대상을 텍스트의 언어적 이해 용이성에서 근거의 검증 용이성으로 확장한다. '읽기 쉬운 답변'뿐 아니라 '검증하기 쉬운 인용'이 임상 커뮤니케이션 품질의 독립 축임을 제시한다.
-
-→ [[sources/2026-09-16-verifiable-by-construction-claim-level-evaluation-.md|상세 보기]]

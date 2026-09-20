@@ -179,3 +179,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/average-metric-concealment.md|average metric concealment]]
+
+---
+**관련**: [[entities/attention-sink.md|attention sink]]

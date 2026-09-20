@@ -15,11 +15,11 @@
 
 Wiki 지형에서 이 논문은 세 간선으로 연결된다.
 
-1. **지연 실행 원리의 신규 도메인** — [[lazy-schema-loading]]이 지연 실행을 '스키마→픽셀'을 아우르는 도메인 불변 패턴으로 규정했다면, ODA는 같은 원리를 컨텍스트 히스토리에 적용한다. [[on-demand-frame-fetch]]가 시각 원본을 소급 인출했다면 ODA는 어텐션 접근을 소급 인출하며, '필요 전까지 로드하지 않는다'는 원리가 외부 자원을 넘어 모델 내부 연산 수준까지 내려옴을 보여준다.
+1. **지연 실행 원리의 신규 도메인** — [[concepts/lazy-schema-loading.md|lazy schema loading]]이 지연 실행을 '스키마→픽셀'을 아우르는 도메인 불변 패턴으로 규정했다면, ODA는 같은 원리를 컨텍스트 히스토리에 적용한다. [[concepts/on-demand-frame-fetch.md|on demand frame fetch]]가 시각 원본을 소급 인출했다면 ODA는 어텐션 접근을 소급 인출하며, '필요 전까지 로드하지 않는다'는 원리가 외부 자원을 넘어 모델 내부 연산 수준까지 내려옴을 보여준다.
 
-2. **내부 판독의 효율화 응용** — [[internal-prediction-readout]]의 판독 대상을 '수행되지 않은 연산의 이익'으로 확장한다. [[router-within]]이 스킬 게이팅을 동결 모델 내재 신호의 판독으로 환원했다면, ODA는 어텐션 게이팅을 동일하게 환원한다.
+2. **내부 판독의 효율화 응용** — [[concepts/internal-prediction-readout.md|internal prediction readout]]의 판독 대상을 '수행되지 않은 연산의 이익'으로 확장한다. [[concepts/router-within.md|router within]]이 스킬 게이팅을 동결 모델 내재 신호의 판독으로 환원했다면, ODA는 어텐션 게이팅을 동일하게 환원한다.
 
-3. **국소 충분성의 어텐션 실현** — [[local-sufficiency]](Select to Think)의 국소 충분성 판단을 토큰 선택에서 어텐션 스코프로 옮긴다. recall head는 [[expected-value-of-information]]의 학습된 근사기이며, [[adaptive-inference]]의 결정 차원에 '전역 읽기 수행 여부'라는 새 축을 추가한다.
+3. **국소 충분성의 어텐션 실현** — [[concepts/local-sufficiency.md|local sufficiency]](Select to Think)의 국소 충분성 판단을 토큰 선택에서 어텐션 스코프로 옮긴다. recall head는 [[concepts/expected-value-of-information.md|expected value of information]]의 학습된 근사기이며, [[concepts/adaptive-inference.md|adaptive inference]]의 결정 차원에 '전역 읽기 수행 여부'라는 새 축을 추가한다.
 
 ## 🔗 관련 논문
 

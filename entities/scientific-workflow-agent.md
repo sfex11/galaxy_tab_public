@@ -53,10 +53,6 @@ Avatar는 이 엔티티의 스코프를 '연구 질문→워크플로우의 의�
 
 과학 자동화 연구의 스코프를 실행(오케스트레이션)과 번역(질문→워크플로우)을 넘어 훈련 환경 구축으로 확장한다. 과학 자동화가 실행-번역-훈련 3축으로 분화하는 지형을 완성한다.
 
-→ [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|상세 보기]]
-
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 기존 정의가 '연구 질문→워크플로우 번역 자동화'였다면, 본 논문은 워크플로우가 실행 중 축적된 실험 증거에 따라 스스로 갱신되는 적응형 형태를 제시하여 범위를 '명세 실행'에서 '증거 기반 명세 재정의'로 확장한다.
-
-→ [[sources/2026-09-18-evidence-grounded-agentic-formulation-development-.md|상세 보기]]

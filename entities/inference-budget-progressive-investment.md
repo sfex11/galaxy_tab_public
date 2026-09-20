@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Stellar Colosseum: A Many-Agent Harness for Long-Horizon Research in M (2026-09-16)
 
 추론 예산의 경로 단위 점진 투입을 수학 연구에서 구현한다. 예산이 단일 궤적의 깊이 연장이 아니라 병렬 경로 간 배분과 성숙도 기반 커밋의 결합으로 재구성됨을 보여준다.
-
-→ [[sources/2026-09-16-stellar-colosseum-a-many-agent-harness-for-long-ho.md|상세 보기]]

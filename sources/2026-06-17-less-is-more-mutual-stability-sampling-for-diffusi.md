@@ -97,3 +97,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/imagination-relocation-to-training.md|imagination relocation to training]]
+
+---
+**관련**: [[entities/test-time-training.md|test time training]]

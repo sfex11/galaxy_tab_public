@@ -226,3 +226,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/consequential-state-retention.md|consequential state retention]]
+
+---
+**관련**: [[entities/formal-falsification.md|formal falsification]]
+
+---
+**관련**: [[entities/temporal-state-dependency.md|temporal state dependency]]
+
+---
+**관련**: [[entities/claim-support-verification.md|claim support verification]]
+
+---
+**관련**: [[entities/interface-complexity-ambiguity.md|interface complexity ambiguity]]

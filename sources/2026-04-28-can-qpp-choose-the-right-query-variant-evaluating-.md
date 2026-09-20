@@ -295,3 +295,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/early-outcome-prediction.md|early outcome prediction]]
+
+---
+**관련**: [[entities/selective-forgetting-as-safety.md|selective forgetting as safety]]
+
+---
+**관련**: [[entities/smart-performance-library.md|smart performance library]]

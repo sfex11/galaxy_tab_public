@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/reversible-sft.md|reversible sft]]
+
+---
+**관련**: [[entities/necessity-sufficiency-decoupling.md|necessity sufficiency decoupling]]

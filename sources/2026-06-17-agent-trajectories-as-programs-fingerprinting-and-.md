@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/mechanistic-probe-unreliability.md|mechanistic probe unreliability]]
+
+---
+**관련**: [[entities/score-narrative-conflation.md|score narrative conflation]]

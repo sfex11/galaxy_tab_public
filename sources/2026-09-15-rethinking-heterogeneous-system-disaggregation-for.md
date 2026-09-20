@@ -22,7 +22,7 @@ Frontier language models are more aggressively using subquadratic attention to r
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 
