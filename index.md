@@ -1845,3 +1845,23 @@
 - [[sources/2026-09-17-flashvector-agent-for-hierarchical-model-serving-s.md]] - FlashVector: Agent for Hierarchical Model Serving Stack Optimization
 - [[sources/2026-09-17-large-language-models-develop-belief-state-geometr.md]] - Large Language Models Develop Belief State Geometry In-Context
 - [[sources/2026-09-17-where-should-a-document-live-context-representatio.md]] - Where Should a Document Live: Context, Representations, or Parameters?
+- [[sources/2026-09-20-coding-agents-with-an-obstacle-aware-harness-for-s.md]] - Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulation
+- [[sources/2026-09-20-quantifying-overclaiming-propensity-in-frontier-ll.md]] - Quantifying Overclaiming Propensity in Frontier LLM Agents
+- [[sources/2026-09-20-an-empirical-study-of-harness-design-for-coding-ag.md]] - An Empirical Study of Harness Design for Coding Agents
+- [[sources/2026-09-20-stageguard-learning-stage-transitions-for-long-hor.md]] - StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks via Agentic Distillation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-20-retireopd-self-retiring-on-policy-distillation-for.md]] - RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning
+- [[sources/2026-09-20-semantic-action-graph-a-shared-representation-for-.md]] - Semantic Action Graph: A Shared Representation for Agent Grounding and Human Interpretation of Sports Highlights
+- [[sources/2026-09-20-prediction-powered-smoothing-and-validation-for-di.md]] - Prediction-Powered Smoothing and Validation for Disaggregated AI Evaluation
+- [[sources/2026-09-20-raft-a-stateful-retrieval-augmented-framework-for-.md]] - RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Agents
+- [[sources/2026-09-20-large-language-models-as-falsifiers-for-cyber-phys.md]] - Large Language Models as Falsifiers for Cyber-Physical Systems
+- [[sources/2026-09-20-opted-on-policy-fine-tuning-for-end-to-end-driving.md]] - OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Free Teacher
+- [[sources/2026-09-20-paint-anything-unified-any-color-control-for-image.md]] - Paint-Anything: Unified Any-Color Control for Image Generation and Editing
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-20-on-demand-attention-language-models-know-when-to-r.md]] - On-Demand Attention: Language Models Know When to Recall
+- [[sources/2026-09-20-qa-on-any-spreadsheet-requires-interpreting-its-gr.md]] - Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure
+- [[concepts/activation-steering]] - Activation Steering
+- [[sources/2026-09-20-deep-noir-autonomous-steering-discovery-via-archit.md]] - Deep Noir: Autonomous Steering Discovery via Architectural Chronometry in Transformer Models
+- [[sources/2026-09-20-how-does-distribution-shift-shape-pretraining-gain.md]] - How Does Distribution Shift Shape Pretraining Gains in Neural PDE Surrogates?
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-09-20-score-centering-stabilizes-off-policy-reinforcemen.md]] - Score Centering Stabilizes Off-policy Reinforcement Learning

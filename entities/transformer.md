@@ -159,3 +159,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-09-15-rethinking-heterogeneous-system-disaggregation-for.md]]
 
 - [[sources/2026-09-17-what-breaks-under-pruning-in-smart-homes-and-when-.md]]
+
+- [[sources/2026-09-20-on-demand-attention-language-models-know-when-to-r.md]]

@@ -361,3 +361,7 @@ _자동 생성됨_
 - [[sources/2026-09-03-scaling-near-optimal-sft-rl-annotation-budget-allo.md]]
 
 - [[sources/2026-09-17-sciencebuddy-recursive-in-recursive-self-improveme.md]]
+
+- [[sources/2026-09-20-retireopd-self-retiring-on-policy-distillation-for.md]]
+
+- [[sources/2026-09-20-score-centering-stabilizes-off-policy-reinforcemen.md]]

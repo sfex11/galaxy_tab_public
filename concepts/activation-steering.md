@@ -31,3 +31,5 @@ _자동 수집 중_
 _자동 생성됨_
 
 - [[sources/2026-05-07-steer-like-the-llm-activation-steering-that-mimics.md]]
+
+- [[sources/2026-09-20-deep-noir-autonomous-steering-discovery-via-archit.md]]

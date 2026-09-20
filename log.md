@@ -3547,3 +3547,35 @@
 - 2026-09-19-deep-noir-autonomous-steering-discovery-via-archit.md
 - 2026-09-19-how-does-distribution-shift-shape-pretraining-gain.md
 - 2026-09-19-score-centering-stabilizes-off-policy-reinforcemen.md
+
+## [2026-09-20 08:31] ingest | Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulation
+
+## [2026-09-20 08:31] ingest | Quantifying Overclaiming Propensity in Frontier LLM Agents
+
+## [2026-09-20 08:31] ingest | An Empirical Study of Harness Design for Coding Agents
+
+## [2026-09-20 08:31] ingest | StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks via Agentic Distillation
+
+## [2026-09-20 08:31] ingest | RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning
+
+## [2026-09-20 08:31] ingest | Semantic Action Graph: A Shared Representation for Agent Grounding and Human Interpretation of Sports Highlights
+
+## [2026-09-20 08:31] ingest | Prediction-Powered Smoothing and Validation for Disaggregated AI Evaluation
+
+## [2026-09-20 08:31] ingest | RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Agents
+
+## [2026-09-20 08:31] ingest | Large Language Models as Falsifiers for Cyber-Physical Systems
+
+## [2026-09-20 08:31] ingest | OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Free Teacher
+
+## [2026-09-20 08:31] ingest | Paint-Anything: Unified Any-Color Control for Image Generation and Editing
+
+## [2026-09-20 08:31] ingest | On-Demand Attention: Language Models Know When to Recall
+
+## [2026-09-20 08:31] ingest | Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure
+
+## [2026-09-20 08:31] ingest | Deep Noir: Autonomous Steering Discovery via Architectural Chronometry in Transformer Models
+
+## [2026-09-20 08:31] ingest | How Does Distribution Shift Shape Pretraining Gains in Neural PDE Surrogates?
+
+## [2026-09-20 08:31] ingest | Score Centering Stabilizes Off-policy Reinforcement Learning
