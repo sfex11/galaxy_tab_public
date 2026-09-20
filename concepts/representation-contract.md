@@ -17,3 +17,11 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Affora: A Design System for Agent-Friendly Interfaces (2026-09-18)
+
+### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
+
+→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]
+
+### Paint-Anything: Unified Any-Color Control for Image Generation and Edi (2026-09-21)
+
+→ [[sources/2026-09-21-paint-anything-unified-any-color-control-for-image.md|상세 보기]]

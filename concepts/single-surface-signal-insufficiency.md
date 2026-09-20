@@ -21,3 +21,7 @@ _자동 Wiki Query에서 추출됨_
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
 
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
+
+### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
+
+→ [[sources/2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

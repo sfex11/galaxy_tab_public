@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-10-why-global-llm-leaderboards-are-misleading-small-p.md|Why Global LLM Leaderboards Are Misleading: Small Portfolios]]
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
+
+→ [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

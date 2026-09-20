@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-19-stageguard-learning-stage-transitions-for-long-hor.md|StageGuard: Learning Stage Transitions for Long-Horizon Robo]]
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-21)
+
+→ [[sources/2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

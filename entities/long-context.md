@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
 
 원문 보존(LC-RAW) 형식이 모델 교체에 가장 강건한 이식성을 제공하는 조건을 정량화한다. 장기 컨텍스트를 순수한 효율 문제가 아니라 이식성 보험으로 재평가하며, 압축이 곧 해석기 의존성의 도입임을 보여주는 대조점을 제공한다.
+
+### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
+
+추론·에이전틱 워크로드의 장기 컨텍스트 비용 문제에 '읽기 필요성 판정'이라는 새 해법 축을 제공한다. 역사를 매 스텝 전부 읽는 대신 이익이 예측될 때만 읽는 구조로, 장기 컨텍스트 관리가 표현 압축 문제에서 접근 스케줄링 문제로 확장됨을 보여준다.
+
+→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

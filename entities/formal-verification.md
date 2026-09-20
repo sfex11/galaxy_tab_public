@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
 
 반증(falsification)이라는 쌍대 축을 추가한다. 검증이 명세 만족의 긍정적 증명이라면, 반증은 명세 위반의 부정적 증거를 찾는 적대적 탐색이며, LLM 기반 접근이 이 양축을 아우를 수 있음을 시사한다. 반증 실패가 안전 보장이 아니라는 비대칭성을 명확히 한다.
+
+### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-21)
+
+증명의 쌍대 문제인 falsification에 LLM을 배치하는 방향을 추가한다. 형식적 안전 증명이 어려운 CPS에서 반례 탐색이 실용적 보완 경로가 됨을 보여준다.
+
+→ [[sources/2026-09-21-large-language-models-as-falsifiers-for-cyber-phys.md|상세 보기]]

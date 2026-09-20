@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-19)
 
 궤적 소비 스펙트럼(스킬, 환경, 코칭 신호)에 '상태 체인 검색 지식'이라는 제4 경로를 추가한다. 동일 궤적이 검색 시점에 현재 상태 조건부로 재조립되는 간접 재사용 구조를 보여준다.
+
+### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
+
+궤적 소비의 제4 경로로 '검색 지식 단위화'를 추가한다. 과거 사례 궤적이 스킬·환경·코칭 신호 외에 상태 조건부 검색 체인으로 재질화됨을 보여준다.
+
+→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

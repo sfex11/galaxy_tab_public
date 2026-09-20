@@ -68,3 +68,9 @@ LLM 사후학습의 최적화 설계 공간에 크리틱 없는 이론적 기초
 ### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-19)
 
 RL 기반 사후학습에서 비동기 롤아웃 인프라(vLLM 등)를 통한 효율 확보가 TIM을 구조적으로 불가피하게 만듦을 규정하고, 효율을 희생하지 않는 안정화 원칙(점수 중심화)을 사후학습 인프라 설계의 구성요소로 격상시킨다.
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
+
+'사전학습 데이터 확장의 한계 수익'이라는 언어 도메인 전제가 물리 AI로 이식됨을 보여준다. 포스트트레이닝이 언어 전용 단계가 아니라 언어·에이전틱·물리 에이전트 계열의 공통 후속 학습 패러다임으로 일반화되고 있음을 확인시킨다.
+
+→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

@@ -38,3 +38,9 @@ KV 캐시 압축(LightKV 등)이 추측 디코딩의 γ 선택과 어떻게 상�
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
 컨텍스트 오프로딩·토큰 프루닝 같은 캐시 최적화가 스트리밍 설정에서 질의 도착 전 단계로 이동하며, '언제 깊이를 예약할 것인가'라는 시간적 축이 캐시 관리에 추가됨을 보여준다.
+
+### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
+
+최적화의 상위·직교 축을 추가한다 — 압축·프루닝이 '캐시를 어떻게 줄일까'라면 ODA는 '캐시를 언제 읽을까'를 최적화한다. 같은 캐시라도 읽기 빈도를 줄이는 경로와 캐시 크기를 줄이는 경로가 독립적으로 결합 가능함을 시사한다.
+
+→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

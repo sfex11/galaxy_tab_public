@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 증류의 원료가 지식(로짓)이 아니라 판단 행위 자체임을 보여준다 — VLM의 전이 판단 궤적이 증류 데이터가 되는 agentic distillation이라는 새 변형이다.
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-21)
+
+증류의 대상을 표현·능력에서 '판단 경계의 정렬'로 확장한다. 교사 모델의 결정 경계가 학생 태스크의 완료 기준과 자동으로 일치하지 않는다는 새 문제 설정을 추가한다.
+
+→ [[sources/2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]

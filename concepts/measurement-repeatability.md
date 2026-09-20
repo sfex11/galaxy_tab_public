@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|Clean Engineering, Unstable Measurement: A Preregistered Rel]]
 
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
+
+→ [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
 
 지연 실행 패턴의 적용 대상을 외부 자원(스키마·인덱스·픽셀)에서 모델 내부 연산(전역 어텐션)으로 확장한다. 필요 전까지 로드하지 않는 원리가 연산 수준에서 재현되어 지연 실행의 도메인 불변성이 한 계층 더 강화된다.
+
+### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
+
+지연 실행 원리의 제3 도메인 실현을 제공한다 — 도구 스키마, 시각 프레임에 이어 어텐션 접근 자체가 '필요하기 전까지 수행하지 않는다'의 대상이 되어, 지연 실행이 이종 자원(스키마, 픽셀, KV 캐시)을 아우르는 도메인 불변 최적화 패턴임을 강화한다.
+
+→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

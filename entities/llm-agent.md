@@ -590,3 +590,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-09-15-from-review-to-reuse-how-post-task-workflow-can-su.md]]
 
 - [[sources/2026-09-17-agentic-societies-need-a-social-harness.md]]
+
+### An Empirical Study of Harness Design for Coding Agents (2026-09-21)
+
+코딩 에이전트의 롱호라이즌 소프트웨어 엔지니어링 성능이 모델 능력 자체가 아니라 하네스 구성요소(계획·행동 공간·컨텍스트 관리)의 설계 선택에 의해 상당 부분 결정됨을 다중 모델 실증으로 검증하는 실험 기반을 제공한다.
+
+→ [[sources/2026-09-21-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]

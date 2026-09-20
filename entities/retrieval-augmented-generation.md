@@ -42,3 +42,9 @@ RAG의 '정적 문서 = 지식 단위' 전제가 다단계 상태 프로세스�
 ### Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure (2026-09-19)
 
 구조 인지 청킹이 RAG의 검색이 아닌 생성 계층을 개선함을 실증한다. 청킹 전략의 평가 축에 '해석 가능성에 의한 컨텍스트 풍부화'를 추가하고, 검색 정확도와 하류 답변 품질이 직교할 수 있음을 보여준다.
+
+### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
+
+RAG의 정적 문서 검색 전제를 붕괴시키는 사례로, 검색 대상의 상태성이 검색 프레임워크 설계 자체를 바꾸어야 함을 시사한다.
+
+→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

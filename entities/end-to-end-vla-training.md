@@ -22,3 +22,9 @@ command-conditioned behavior cloning이라는 최소 구성의 end-to-end 기준
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
 
 오픈루프 행동 복제 사전학습과 폐루프 온폴리시 파인튜닝의 이단계 구조를 제시하여, end-to-end 정책 훈련이 사전학습-사후학습의 연속체임을 자율주행에서 구체화한다.
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
+
+종단간 주행 정책의 2단계 라이프사이클 — BC 개루프 사전학습 → 온폴리시 폐루프 포스트트레이닝 — 을 확립한다. 미니어처 플랫폼의 command-conditioned BC 기준선 위에 놓이는 개선 계층이다.
+
+→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

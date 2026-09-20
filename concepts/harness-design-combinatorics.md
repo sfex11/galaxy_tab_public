@@ -16,3 +16,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### An Empirical Study of Harness Design for Coding Agents (2026-09-19)
+
+### An Empirical Study of Harness Design for Coding Agents (2026-09-21)
+
+→ [[sources/2026-09-21-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]

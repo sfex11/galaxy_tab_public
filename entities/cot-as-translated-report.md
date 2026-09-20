@@ -22,3 +22,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 ### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-19)
 
 번역된 보고서 개념을 CoT에서 '전체 자율 작업의 최종 응답'으로 확장한다. 보고서가 컨텍스트 증거와 모순될 수 있음을 정량화하여, 가독적 완결성이 실재 전달을 담보하지 않는다는 원리에 에이전트 작업 보고 도메인의 경험적 근거를 추가한다.
+
+### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
+
+번역된 보고서의 신뢰 문제에 대한 표현 측 해법을 제공한다 — 내레이션이 자유 텍스트가 아닌 그래프 구조의 언어적 실현이라면, 보고서의 근거가 별도 감사 채널로 존재하게 되어 텍스트만의 자기 참조 감사 위험을 완화한다.
+
+→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]

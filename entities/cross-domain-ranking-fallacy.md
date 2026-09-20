@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
 
 집계 순위가 도메인별 이질성을 소각한다는 진단에 처방을 부여한다. 도메인별 평활 추정과 유효 구간은 '도메인 조건부 성능 보고'가 통계적으로 실현 가능함을 보여, 비판 논의를 실천 방법론으로 완성한다.
+
+### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
+
+집계 순위가 도메인 이질성을 소각하는 구조에 대한 통계적 처방을 제공한다. 도메인별 구간 추정은 겹치는 차이의 보고 자격을 박탈하여, 노이즈에 의한 가짜 순위 차가 통계적 유의성 검증으로 필터링되게 한다.
+
+→ [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

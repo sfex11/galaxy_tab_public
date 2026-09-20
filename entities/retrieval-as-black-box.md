@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure (2026-09-19)
 
 주석 개입이 검색 지표를 움직이지 않으면서도 답변 품질을 높이는 사례를 제공한다. 검색 성능이 하류 생성 품질의 대리 지표가 아닐 수 있음을 보여, 병목 귀인 논의에 '지표-효과 분리' 차원을 추가한다.
+
+### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
+
+검색이 외부화될 때 그 효용은 검색 대상 표현 단위 설계에 의해 조건화됨을 보여준다 — 검색 단위 설계가 능력 외부화의 실질 품질을 결정하는 새 축을 제공한다.
+
+→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

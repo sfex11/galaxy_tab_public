@@ -16,3 +16,11 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
+
+→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]
+
+### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-21)
+
+→ [[sources/2026-09-21-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]

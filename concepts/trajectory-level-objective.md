@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-19-retireopd-self-retiring-on-policy-distillation-for.md|RetireOPD: Self-Retiring On-Policy Distillation for Agentic ]]
+
+### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-21)
+
+→ [[sources/2026-09-21-retireopd-self-retiring-on-policy-distillation-for.md|상세 보기]]

@@ -34,3 +34,9 @@ LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
 
 폐루프의 환경 공급 경로에 '렌더링 프리 교사'라는 제3 유형을 추가한다. 환경 자체를 공급하는 대신 교사 판단 신호만으로 루프를 닫아, 환경 시뮬레이션 비용 없이도 폐루프 훈련이 성립할 수 있음을 자율주행에서 입증한다.
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
+
+폐루프 훈련의 비용 조건을 명시하고 우회 경로를 제공한다 — Terminal-Universe 계열이 환경 공급으로 루프를 닫았다면, OPTED는 렌더 프리 교사 신호로 루프를 닫는 제2의 폐루프 경로를 제시한다.
+
+→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

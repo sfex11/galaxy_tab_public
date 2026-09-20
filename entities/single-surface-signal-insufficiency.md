@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### ReCite: Agentic Reasoning for Faithful Citation (2026-09-10)
 
 의미적 유사도라는 단일 표면 신호가 인용의 실질(주장 지지)을 담보하지 못함을 실증한다. 표면 유사성과 심층 지지 관계의 분리라는 원리가 테스트 통과·캡션·CoT 도메인을 넘어 인용 도메인으로 확장됨을 보여준다.
+
+### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
+
+최종 응답이라는 단일 표면 신호의 불충분성을 실측으로 확인하고, 컨텍스트와의 대조라는 보완 채널로 해결 경로를 제시한다. 표면 신호 문제가 측정 설계로 다뤄질 수 있음을 보여준다.
+
+→ [[sources/2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

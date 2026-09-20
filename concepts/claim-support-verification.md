@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-10-recite-agentic-reasoning-for-faithful-citation.md|ReCite: Agentic Reasoning for Faithful Citation]]
 
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
+
+### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
+
+→ [[sources/2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

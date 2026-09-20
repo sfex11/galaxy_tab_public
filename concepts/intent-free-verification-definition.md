@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md|Quantifying Overclaiming Propensity in Frontier LLM Agents]]
+
+### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
+
+→ [[sources/2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]

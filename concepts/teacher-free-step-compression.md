@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-16-discrete-beckmann-transport-models-for-one-step-la.md|Discrete Beckmann Transport Models for One-Step Language Mod]]
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
+
+### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-21)
+
+→ [[sources/2026-09-21-retireopd-self-retiring-on-policy-distillation-for.md|상세 보기]]

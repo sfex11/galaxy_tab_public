@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
+
+→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

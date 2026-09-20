@@ -3583,3 +3583,21 @@
 ## [2026-09-20 19:19] lint | Wiki 건전성 체크
 - Issues: 3375개
 - Orphans: 1024, Missing: 2351, Contradictions: 0
+
+## [2026-09-21 02:51] llm-ingest | 16편 분석, 엔티티 842개, 개념 2035개
+- 2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md
+- 2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md
+- 2026-09-21-an-empirical-study-of-harness-design-for-coding-ag.md
+- 2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md
+- 2026-09-21-retireopd-self-retiring-on-policy-distillation-for.md
+- 2026-09-21-semantic-action-graph-a-shared-representation-for-.md
+- 2026-09-21-prediction-powered-smoothing-and-validation-for-di.md
+- 2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md
+- 2026-09-21-large-language-models-as-falsifiers-for-cyber-phys.md
+- 2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md
+- 2026-09-21-paint-anything-unified-any-color-control-for-image.md
+- 2026-09-21-on-demand-attention-language-models-know-when-to-r.md
+- 2026-09-21-qa-on-any-spreadsheet-requires-interpreting-its-gr.md
+- 2026-09-21-deep-noir-autonomous-steering-discovery-via-archit.md
+- 2026-09-21-how-does-distribution-shift-shape-pretraining-gain.md
+- 2026-09-21-score-centering-stabilizes-off-policy-reinforcemen.md

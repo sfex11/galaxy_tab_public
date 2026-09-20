@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
+
+### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
+
+→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]

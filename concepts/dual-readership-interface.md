@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-18-affora-a-design-system-for-agent-friendly-interfac.md|Affora: A Design System for Agent-Friendly Interfaces]]
+
+### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
+
+→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]

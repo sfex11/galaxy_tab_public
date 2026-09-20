@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-synthetic-sandbox-for-training-machine-learning-en.md|Synthetic Sandbox for Training Machine Learning Engineering ]] (2026-04-08)
 
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
+
+→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]

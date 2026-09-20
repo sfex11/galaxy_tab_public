@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 '계속할까/멈출까/바꿀까' 메타 판단이 에이전트 전이 수준에서 스킬 전이라는 저위험·고빈도·학습 가능한 단위로 국소화됨을 보여준다.
+
+### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-21)
+
+'계속할까, 전환할까'의 메타 판단이 물리 로봇 도메인에서 학습 가능한 정책으로 실현되는 사례를 제공한다. 복잡도·행동 지속성 메타인지에 이어 스테이지 전환 메타인지의 제3 실현 축이다.
+
+→ [[sources/2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]
