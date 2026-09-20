@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
 모델의 안전 맹점을 하네스가 구조적으로 보정하는 로보틱스 사례를 추가한다. [[entities/sentinel-rl.md|sentinel rl]]의 위상 추론 오프로딩과 동일한 '인지 한계의 구조적 대체' 원리가 안전 제약 가시화 영역에서도 작동함을 보여준다.
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-21)
+
+모델의 안전 판단 한계를 하네스가 구조적으로 보정하는 로보틱스 구현 사례다. 장애물 정보를 하네스가 소유·검증함으로써 안전 책임이 모델 준수에서 인프라 보장으로 이전됨을 보여준다.
+
+→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

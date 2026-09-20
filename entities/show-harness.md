@@ -18,3 +18,9 @@ Show-Harness가 VLM 에이전트의 로봇 '실행'을 보였다면 본 논문�
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
 VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경로의 안전 평가를 제공하여, 로봇 에이전트 제어 패러다임 스펙트럼을 완성한다. 두 경로 모두 안전 제약이 에이전트 입력에 명시되어야 한다는 요구를 공유한다.
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-21)
+
+VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경로의 안전 병목을 특정한다. 실행 매체가 달라도 양 경로 모두 하네스 계층의 안전 인코딩을 요구하며, 안전 병목의 구조가 동형임을 시사한다.
+
+→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

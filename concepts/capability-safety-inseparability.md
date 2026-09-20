@@ -16,3 +16,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Rethinking Learned Occupancy in Autonomous Active Mapping with Observa (2026-09-10)
+
+### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-21)
+
+→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
