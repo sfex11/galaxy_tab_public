@@ -24,3 +24,9 @@ _Wiki 축적 중_
 코딩 에이전트의 물리 도메인 결정적 사례를 제공한다. 조작 목표에 최적화된 강한 코드 생성 능력이 안전 위반을 예방하지 못함을 정량 실증하여, 능력 최적화와 안전 확보의 분리가 체화 도메인으로 확장됨을 보여준다.
 
 → [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+Bounded Reach가 사용자 가치 그룹으로 측정되어, 능력-안전 불가분성이 기술적 아키텍처 문제인 동시에 사용자가 인식하는 가치 문제임을 보여준다. 사용자는 에이전트의 능력과 그 도달 범위 제한을 분리하지 않고 평가한다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

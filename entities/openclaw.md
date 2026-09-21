@@ -66,3 +66,9 @@ Claw-Eval(2026-04-09)은 기존 벤치마크의 "최종 출력만 확인" 문제
 - [[sources/2026-07-27-openforgerl-train-harness-native-agents-in-any-env.md]]
 
 - [[sources/2026-07-30-vetclaw-an-edge-cloud-multimodal-agentic-system-fo.md]]
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+기존 엔티티가 프레임워크 정의와 보안 평가에 집중했다면, 본 논문은 73,093건 실사용자 레딧 게시물 기반의 가치 분석이라는 사용자 경험 축을 추가한다. OpenClaw가 자율성·신뢰성·검토 가능성 등 어떤 가치를 실현하거나 저해하는지의 실증 근거를 제공하여, 프레임워크 평가가 기술·보안 차원에서 사용자 가치 차원으로 확장됨을 보여준다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

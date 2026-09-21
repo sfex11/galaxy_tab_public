@@ -44,3 +44,9 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 폐루프 안전 문제를 학습 문제로 재정의한다 — 배포 시 분포 이탈 위험을 폐루포스트트레이닝으로 사전 완화하는 경로를 제공하여, 자율주행 연구가 인지-계획 성능에서 훈련-배포 분포 정렬로 축을 이동 중임을 보여준다.
 
 → [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]
+
+### PRIME: Perception Feedback with Situational Memory Embeddings in VLA M (2026-09-22)
+
+자율주행 VLA 연구에 '지각 피드백' 설계 축을 추가한다. feedforward 추론이 표준이던 end-to-end 주행에서, 상황 기억을 통한 하류 조건부 지각이 새로운 설계 변수가 됨을 제시한다.
+
+→ [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]

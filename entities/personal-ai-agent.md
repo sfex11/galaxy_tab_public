@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### EarStreAM: A Closed-Loop Earable System for Personalized Stress-Adapti (2026-09-18)
 
 개인 에이전트의 개입 대상이 사용자 내부 상태이고 개입 효과가 생체 신호로 검증되는 새로운 응용 차원을 제시한다. 개인화가 텍스트 선호 학습이 아닌 지속적 생체 모니터링 기반의 능동 개입 기능으로 성립함을 보여준다.
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+일상적 위임 상황에서 사용자가 우선하는 가치 지형(21개 가치, 6개 그룹)을 제공하여, 개인 AI 에이전트의 설계 목표를 능력 달성에서 가치 충족으로 재정의한다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

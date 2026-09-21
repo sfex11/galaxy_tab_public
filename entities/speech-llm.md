@@ -22,3 +22,9 @@ RetroThinker가 speech-LLM의 추론 능력 축(사후 재고)을 공급한 데 
 ### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-13)
 
 acoustic encoder와 language decoder 간 update norm의 order-of-magnitude 격차라는 speech-LLM 특유의 이질성이 프라이버시 메커니즘 효과의 1차 변수가 됨을 실증한다. 멀티모달 이질 아키텍처가 학습 알고리즘 설계에 요구하는 조건부를 보여준다.
+
+### NemotronLabs VoiceChat: An Open Full-duplex Speech-to-Speech Model wit (2026-09-22)
+
+speech-llm 연구가 추론 축(RetroThinker의 회고)과 언어 커버리지 축(Nuha-Speech의 아랍어 전 파이프라인)으로 분화되어 온 지형에 제3의 직교 축인 '행동 축(네이티브 도구 호출)'을 공급한다. 음성 모델의 범용성 정의가 음성 입출력 품질에서 동시 다중 스트림 에이전시로 확장됨을 보여준다.
+
+→ [[sources/2026-09-22-nemotronlabs-voicechat-an-open-full-duplex-speech-.md|상세 보기]]

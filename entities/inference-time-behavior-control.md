@@ -22,3 +22,9 @@ LOCUS의 파라미터 부공간 제어(무엇을 업데이트할지)에 이어 '
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-19)
 
 LOCUS 계열이 제시한 파라미터 축-신호 축 분해에 제3의 자동화 축을 추가한다 — 개입 시점(수렴 크로노메트리), 위치(헤드 어트리뷰션), 강도는 모두 신호 기반으로 자동 결정 가능하며, 추론 시점 제어의 설계 공간이 완전히 명세 가능함을 시사한다.
+
+### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
+
+하드 최대화 vs 원분포 유지의 이분법을 소프트니스라는 연속 다이얼로 확장하며, n(계산량)과 소프트니스(분포 이동)가 독립 제어 축으로 분해됨을 보여준다.
+
+→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

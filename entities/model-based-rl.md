@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-19)
 
 세계 모델 접근 없이 교사 모델이 환경 시뮬레이션의 판단 기능만 대체하는 경량 경로를 제공한다. 모델 기반 RL의 '모델링 비용' 문제에 대해 '동역학 모델링 생략 + 행동 품질 판단 유지'라는 대안 축을 형성한다.
+
+### Benchmarking World Models for Continual Learning on Compositional Task (2026-09-22)
+
+모델 기반 RL에서 세계 모델 컴포넌트 자체의 수명주기 관리가 병목이 될 수 있음을 시사한다. 정책 학습에 앞서 세계 모델의 지속학습 능력이 장기 성능의 전제조건임을 보여준다.
+
+→ [[sources/2026-09-22-benchmarking-world-models-for-continual-learning-o.md|상세 보기]]

@@ -24,3 +24,9 @@ _Wiki 축적 중_
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 지식 상태 표류의 유발 조건(지속적·적응적 반박)을 명시하며, 표류가 정적 지식 충돌의 산물이 아니라 동적 사회적 압력의 누적 효과임을 보여준다.
+
+### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
+
+지식 상태 추적의 최소 구현을 제공한다. 신념이 외부 검사 가능한 확률 장부로 이동하면 드리프트가 관찰 가능하고 베이지안 수렴으로 상한이 묶이며, 암묵적 컨텍스트 속 드리프트의 가시성 문제가 해소된다.
+
+→ [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]

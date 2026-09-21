@@ -20,3 +20,9 @@ _Wiki 축적 중_
 검색 개선 병목이 쿼리 생성 전략이 아니라 지식 표현 단위 설계에 있을 수 있음을 실증하여, 검색 프론티어 논의에 표현 계층 축을 추가한다.
 
 → [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]
+
+### Predictable Failure in Multi-Hop Retrieval: Score-Distributional Confi (2026-09-22)
+
+검색 실패가 구조적으로 예측 가능한 하위 모집단에 집중됨을 보여, 검색 에이전트 설계에 '실패 사전 감지 → abstention' 계층의 도입 근거를 제공한다. 검색 개선의 병목이 표현 단위 설계에 있다는 기존 시사에 실패 감시 계층이라는 제2의 병목 축을 추가한다.
+
+→ [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]

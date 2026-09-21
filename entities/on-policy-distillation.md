@@ -32,3 +32,9 @@ OPD 연구 계열에 '수명' 축을 추가한다 — 길이 부풀림 안정화
 온폴리시성 요구의 완화 가능성을 제시한다 — TIM이 존재해도 drift 제거만으로 오프폴리시 학습이 안정화되면, 교사-학생 온폴리시 일치에 의존하던 증류 전략의 필요 조건이 '수치 일치'에서 'drift 제거'로 재정의될 수 있음을 시사한다.
 
 → [[sources/2026-09-21-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]
+
+### SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Man (2026-09-22)
+
+밀집 교사 신호로 희소 보상을 완화한 OPD 동기와 대비되는 알고리즘 측 대안을 제공한다. 희소성 완화가 '신호 밀도화'와 '추정 입도 조정'의 두 독립 경로로 분해됨을 보여준다.
+
+→ [[sources/2026-09-22-seeq-training-generalist-value-functions-for-long-.md|상세 보기]]

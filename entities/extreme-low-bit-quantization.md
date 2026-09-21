@@ -18,3 +18,9 @@ MAs의 발생 원인을 아키텍처 구조로 설명함으로써, Leech Lattice
 ### Forgetting Only What Matters: Layer-Selective Unlearning toward Robust (2026-09-11)
 
 본 논문의 핵심 위협 모델이 된다. 포스트 트레이닝 양자화가 언러닝으로 제거된 지식을 부분 부활시킬 수 있음을 보여, 양자화가 단순 압축이 아니라 모델 지식 상태를 재해석하는 변환임을 실증한다.
+
+### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
+
+저비트 양자화의 적용 대상을 자회귀 LLM decode(Leech Lattice 계열)에서 확산 트랜스포머로 확장한다. 병목이 대역폭 집약적 decode가 아닌 반복적 denoising 스텝이라는 점에서 양자화의 효과 지점이 도메인에 따라 다름을 시사한다.
+
+→ [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]

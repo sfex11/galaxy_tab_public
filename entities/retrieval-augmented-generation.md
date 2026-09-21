@@ -48,3 +48,9 @@ RAG의 '정적 문서 = 지식 단위' 전제가 다단계 상태 프로세스�
 RAG의 정적 문서 검색 전제를 붕괴시키는 사례로, 검색 대상의 상태성이 검색 프레임워크 설계 자체를 바꾸어야 함을 시사한다.
 
 → [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]
+
+### An Interpretable Memory Decision Controller for LLM Agents Based on Th (2026-09-22)
+
+RAG의 맹목 주입 문제에 대한 결정적 진단을 제공한다 — 충돌 메모리 환경에서 RAG의 환각률이 메모리-free 기준선보다 높다는 역설적 실증으로, 검색 품질 최적화만으로는 RAG 신뢰성이 담보되지 않으며 검색 후 신뢰 조정 계층이 필수임을 보여준다.
+
+→ [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]

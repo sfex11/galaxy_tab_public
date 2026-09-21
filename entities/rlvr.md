@@ -48,3 +48,9 @@ RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필
 검증 가능 보상이 부재한 창작 도메인에서 개선이 어떻게 지속되는지의 대조 사례를 제공한다. RLVR 부재가 자기 개선의 병목이 아니라 신호 원천 전환(사용자 행동)의 동기가 됨을 시사한다.
 
 → [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]
+
+### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
+
+신뢰할 수 있는 검증자를 갖춘 다양한 태스크 공급이라는 RLVR의 전제 조건을 코드베이스 자체에서 충족하는 경로를 제공한다. 검증 가능성이 외부 벤치마크의 속성이 아니라 코드의 실제 실행 가능성에서 유래함을 보여준다.
+
+→ [[sources/2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md|상세 보기]]

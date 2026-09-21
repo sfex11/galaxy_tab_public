@@ -38,3 +38,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-19)
 
 기존 로봇 조작 벤치마크가 안전 축을 명세하지 않은 명세 간극의 실례를 제공한다. 목표-장애물 쌍 명세는 조작 평가에 안전 제약 준수라는 제2의 측정 축을 도입한다.
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+평가 체계가 태스크 완성도를 측정하는 동안 사용자는 Bounded Reach·Reviewability 같은 가치를 우선한다는 발견으로, 명세 간극에 '사용자 가치의 명세 부재'라는 새 차원을 추가한다. 평가 대상이 이미 초기 명세 단계에서 사용자의 실제 관심사와 어긋남을 야생 데이터로 실증한다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

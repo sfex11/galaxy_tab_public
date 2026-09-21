@@ -58,3 +58,9 @@ Layer dropout이 사전학습 분포 P(y)의 형성 자체를 수정하면서도
 ### Beyond Truncation: Rethinking LLM Decoding as Ensemble Pruning (2026-09-18)
 
 스칼라 확률 순위가 P(y)의 1차원 판독에 불과하며 후보 간 의미 중복이라는 조건부 구조 정보를 소실시킨다는 점을 구체화한다. 조건부 구조의 판독만으로도 P(y)를 바꾸지 않고 선택 품질이 향상됨을 보여, P(y|x) 정제의 여유공간을 실증한다.
+
+### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
+
+KL 정규화가 주변 분포 천장을 암묵적 상한이 아닌 정규화 강도로 조율 가능한 명시적 목적 함수 항으로 만들어, 기존 천장 논의에 조작적 제어 변수를 부여한다.
+
+→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

@@ -44,3 +44,9 @@ _Wiki 축적 중_
 증류의 대상을 표현·능력에서 '판단 경계의 정렬'로 확장한다. 교사 모델의 결정 경계가 학생 태스크의 완료 기준과 자동으로 일치하지 않는다는 새 문제 설정을 추가한다.
 
 → [[sources/2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]
+
+### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
+
+교사 텍스트 인코더의 출력 분포를 학생 소형 인코더+번역기에 전달하는 '조건화 계층 증류'라는 새 축을 추가한다. TIDE가 전체 모델 간 전이를 다뤘다면 본 논문은 모델-조건화기 경계의 번역 네트워크로 증류 단위를 세분화한다.
+
+→ [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]

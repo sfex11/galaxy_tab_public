@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Avatar: Toward Autonomous End-to-End Orchestration of Scientific Workf (2026-09-11)
 
 출처 감시자(provenance monitor)를 오케스트레이션 아키텍처의 일급 액터로 배치하는 구현 사례를 제공한다. 감시가 외부 부가 기능이 아닌 액터 분해의 구성 요소일 때 자율 오케스트레이션의 감사 가능성이 구조적으로 확보됨을 보여준다.
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+Reviewability가 사용자 가치로 정량 측정되어, 감사 가능성 요구가 엔지니어링·규제 요구사항을 넘어 사용자 수용의 실질 조건임을 입증한다. 감사 가능성의 수요자가 설계자·규제자에서 사용자로 확장됨을 시사한다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

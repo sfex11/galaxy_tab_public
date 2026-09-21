@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### PRIME: Perception Feedback with Situational Memory Embeddings in VLA M (2026-09-22)
+
+→ [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]

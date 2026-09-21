@@ -26,3 +26,9 @@ DP의 정적 통계적 난독화와 대비되는 '상호작용 이력(신뢰)에
 ### Component-Aware Differential Privacy for Federated Multilingual Speech (2026-09-13)
 
 DP의 적용을 통계적 보장 형식화에서 연합 미세조정의 gradient clipping 설계로 확장한다. 프라이버시 메커니즘 자체가 하류 성능(WER)의 결정 변수가 되는 사례로, 보장 강도와 성능 비용의 상호작용이 모델 구조에 조건부임을 시사한다.
+
+### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
+
+지수 노이즈 메커니즘이 프라이버시 목적 밖에서 통계적 보장(유한 시간 수렴)을 갖춘 선택자로 재활용됨을 보여, DP 기제의 목적 독립적 이식성을 강화한다.
+
+→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

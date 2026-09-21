@@ -28,3 +28,15 @@ command-conditioned behavior cloning이라는 최소 구성의 end-to-end 기준
 종단간 주행 정책의 2단계 라이프사이클 — BC 개루프 사전학습 → 온폴리시 폐루프 포스트트레이닝 — 을 확립한다. 미니어처 플랫폼의 command-conditioned BC 기준선 위에 놓이는 개선 계층이다.
 
 → [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]
+
+### SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Man (2026-09-22)
+
+VLA 정책 개선에 외부 가치 함수가 후보 행동을 순위화하는 결합 계층을 추가한다. end-to-end 훈련이 정책 단독 최적화를 넘어 정책-가치 결합 구조를 포괄함을 시사한다.
+
+→ [[sources/2026-09-22-seeq-training-generalist-value-functions-for-long-.md|상세 보기]]
+
+### PRIME: Perception Feedback with Situational Memory Embeddings in VLA M (2026-09-22)
+
+PRIME는 종단간 VLA의 피드포워드 구조 자체가 지각의 맹목성을 낳는다고 진단하고, 계획→지각 학습 피드백으로 위계 내부에 폐루프를 삽입한다. end-to-end의 정의를 '단방향 단일 파이프라인'에서 '양방향 정보 흐름을 갖는 파이프라인'으로 확장한다.
+
+→ [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]

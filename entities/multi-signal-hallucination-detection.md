@@ -18,3 +18,15 @@ _Wiki 축적 중_
 ### Look Before You Leap: Factual Decoding with Internal Attribution Signa (2026-09-16)
 
 동일 환각 문제에 대한 시간축 반대편 해법을 제공한다 — 3신호(분류·불확실성·보정) 결합이 '생성 완료 후' 감지라면 DescaPE는 내부 귀속 신호로 '생성 중' 환각 궤적을 억제하여, 환각 개입이 사후 감지와 선제 억제의 이중 구조로 분화함을 보여준다.
+
+### Predictable Failure in Multi-Hop Retrieval: Score-Distributional Confi (2026-09-22)
+
+직교 정보원 결합 원리의 검색 도메인 대응물을 제공한다 — LLM-judge 특징과 dense 특징의 상보성이 어느 단일 신호원만으로는 confident-failure 감축이 불완전함을 이론적으로 확립하여, 다중 신호 파이프라인의 필요성을 환각 감지 너머 검색 품질 감시로 확장한다.
+
+→ [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]
+
+### An Interpretable Memory Decision Controller for LLM Agents Based on Th (2026-09-22)
+
+다중 신호 결합 원리의 위상 전환을 제공한다 — 환각을 사후 감지하는 분류·불확실성·보정 파이프라인과 달리, 본 논문은 동일 다중 신호 원리를 메모리 수용 판단에 배치하여 감지에서 예방으로 이동시킨다.
+
+→ [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]

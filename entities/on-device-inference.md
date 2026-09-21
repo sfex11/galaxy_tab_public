@@ -46,3 +46,9 @@ _Wiki 축적 중_
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-12)
 
 컴퓨트·대역폭 예산이 타이트한 엣지 환경에서 수 시간 길이 비디오의 이해가 실현 가능함을 보여주며, 예산 제약이 단순 장애물이 아니라 적응적 라우팅 설계의 구속 조건으로 기능함을 실증한다.
+
+### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
+
+확산 모델의 소비자 GPU 배포 사례를 제공한다. LLM 추론 루프의 표준화와 대비되는 확산 파이프라인의 비표준 오케스트레이션(임베더·트랜스포머·디코더·후처리)이 배포 병목임을 보여, 온디바이스 확산은 인프라 표준화 없이는 확산되지 않음을 시사한다.
+
+→ [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]

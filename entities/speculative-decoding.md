@@ -52,3 +52,15 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-13)
 
 성능 가속 장치에서 보안 센서로의 위상 확장을 제공한다. 추측 디코딩의 검증 과정에서 이미 계산되는 수락/거부 신호가 타겟 모델의 트리거 반응 행동을 노출하는 이중 기능을 갖음을 보여준다.
+
+### Watermarkable Multi-Draft Speculative Sampling via Poisson Processes (2026-09-22)
+
+다중 드래프트 설정으로의 확장 경로를 제공한다. 드래프트 선택 메커니즘이 타겟 분포 보존과 워터마크 삽입을 동시에 만족하도록 설계될 수 있음을 보여, 추측 샘플링의 설계 공간이 '무손실 가속'에서 '조건부 보장 하 가속'으로 확장됨을 시사한다.
+
+→ [[sources/2026-09-22-watermarkable-multi-draft-speculative-sampling-via.md|상세 보기]]
+
+### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
+
+동적 트리 구축(EAGLE-3식 top-K 확장·전역 프루닝)이 탐욕 디코딩에서는 최적이지만 T>0에서는 드래프트 분포를 원핫으로 붕괴시켜 수용률이 급락하는 실패 모드를 체계화한다. 추측 디코딩 가속이 샘플링 체제에 구조적으로 조건부임을 규명한다.
+
+→ [[sources/2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md|상세 보기]]

@@ -58,3 +58,9 @@ Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도�
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 환경 생성의 소스 스펙트럼에 '전문가 검증된 과학 코드베이스'라는 네 번째 소스 클래스를 추가한다. 범용 소프트웨어(Gym-Anything)·게임(Nemobot)·자기 궤적(Terminal-Universe)과 달리 수십 년 축적된 실행 가능 지식의 직접 환경화라는 점에서 환경 소스의 인식론적 등급을 상향시킨다.
+
+### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
+
+환경 생성의 원천 스펙트럼에 '기존 코드베이스에서의 기능 추출'을 추가한다. Gym-Anything(소프트웨어→환경), Terminal-Universe(궤적→환경)에 이어 코드→환경 경로를 확정하며, 개발 아티팩트 의존의 한계를 진단하고 제품 중심 추출로 전환한다.
+
+→ [[sources/2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md|상세 보기]]

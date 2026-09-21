@@ -16,3 +16,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### NemotronLabs VoiceChat: An Open Full-duplex Speech-to-Speech Model wit (2026-09-22)
+
+→ [[sources/2026-09-22-nemotronlabs-voicechat-an-open-full-duplex-speech-.md|상세 보기]]

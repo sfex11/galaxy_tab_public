@@ -32,3 +32,9 @@ LLM 예측기의 위상을 '판단자'에서 '편향 교정 대상 보조 추정
 LLM 예측기를 저비용 의사 레이블 생성기로 채택하되 그 편향이 희소 금 레이블로 교정되는 구조를 제공한다. 판단 기기의 신뢰성 요구가 '기기가 정확하다'에서 '기기 오차가 레이블로 교정 가능하다'로 재정의되는 사례다.
 
 → [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]
+
+### Predictable Failure in Multi-Hop Retrieval: Score-Distributional Confi (2026-09-22)
+
+LLM-judge가 판단 산출물 제공자를 넘어 성공-실패 예측 정보를 담는 측정 채널로 기능함을 정량화한다 — judge 유래 특징의 상호정보 우위가 레짐 간 AUC-AC 격차의 원인임을 보여, judge를 정보원으로 평가하는 새 기준을 제시한다.
+
+→ [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]

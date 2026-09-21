@@ -3601,3 +3601,20 @@
 - 2026-09-21-deep-noir-autonomous-steering-discovery-via-archit.md
 - 2026-09-21-how-does-distribution-shift-shape-pretraining-gain.md
 - 2026-09-21-score-centering-stabilizes-off-policy-reinforcemen.md
+
+## [2026-09-22 04:39] llm-ingest | 15편 분석, 엔티티 885개, 개념 2102개
+- 2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md
+- 2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md
+- 2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md
+- 2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md
+- 2026-09-22-benchmarking-world-models-for-continual-learning-o.md
+- 2026-09-22-an-interpretable-memory-decision-controller-for-ll.md
+- 2026-09-22-seeq-training-generalist-value-functions-for-long-.md
+- 2026-09-22-prime-perception-feedback-with-situational-memory-.md
+- 2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md
+- 2026-09-22-nemotronlabs-voicechat-an-open-full-duplex-speech-.md
+- 2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md
+- 2026-09-22-watermarkable-multi-draft-speculative-sampling-via.md
+- 2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md
+- 2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md
+- 2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md

@@ -18,3 +18,9 @@ pre-submission self-review라는 형태로 인간 감독의 사전 시뮬레이�
 ### Understanding Operator Attitudes Toward AI-Supported Decision Making i (2026-09-12)
 
 조건부 자율 선박 맥락에서 운영자를 최종 결정자로 유지하는 설계의 실증적 정당화를 제공한다. 감독이 단순한 관행이 아니라 AI 수용의 신뢰 전제조건이며, 해양이라는 고위험 도메인에서 인간 감독 유지가 배포 성패의 결정 변수임을 시사한다.
+
+### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
+
+Reviewability 가치 그룹을 통해 인간 감독이 감독자·설계자 측의 요구가 아니라 사용자의 능동적 가치 요구임을 실증하며, 감독의 당위를 사용자 중심으로 재위치시킨다.
+
+→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

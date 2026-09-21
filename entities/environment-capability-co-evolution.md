@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Affora: A Design System for Agent-Friendly Interfaces (2026-09-18)
 
 공진화 논의를 훈련 환경 계층에서 생산 소프트웨어의 UI 설계 계층으로 확장한다. 에이전트 배포 수요 자체가 인터페이스 디자인 시스템의 진화 압력으로 작동하며, 환경(소프트웨어)이 에이전트 능력을 향상시키는 비학습적 경로를 실증한다.
+
+### Benchmarking World Models for Continual Learning on Compositional Task (2026-09-22)
+
+환경 설계가 능력 판별을 가능하게 하는 평가 측 사례를 제공한다. 구성적 태스크 환경이 세계 모델의 보존-적응 이중 능력을 분리 관측 가능하게 만드는 환경의 능동적 역할을 보여준다.
+
+→ [[sources/2026-09-22-benchmarking-world-models-for-continual-learning-o.md|상세 보기]]

@@ -20,3 +20,9 @@ recall head가 전역 읽기의 기대 이익을 근사하는 학습된 EVI 추�
 recall head가 전역 읽기의 기대 이익을 근사하는 학습된 EVI 추정기로 기능함을 보여준다. 도구 호출 판단에서 정의되던 EVI가 어텐션 접근 판단으로 확장되는 사례로, EVI의 도메인 불변성을 강화한다.
 
 → [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]
+
+### Predictable Failure in Multi-Hop Retrieval: Score-Distributional Confi (2026-09-22)
+
+감지·행동 판단의 정보 전제를 형식화한다 — confident-failure 감축이 검색 특징의 성공 상호정보를 필요충분조건으로 요구한다는 정리는, 'recall head가 이익을 예측할 수 있는가'와 같은 EVI 질문에 검색 실패 도메인의 정리적 답을 제공한다.
+
+→ [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]

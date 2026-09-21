@@ -74,3 +74,15 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
 
 적응의 결정 차원에 '이 스텝에서 전역 히스토리를 읽을 것인가'라는 새 축을 추가한다. 트리거가 내부 디코딩 상태라는 점에서 내부 상태 반응형 적응의 어텐션 버전으로 위치한다.
+
+### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
+
+가속 메커니즘의 유효 조건이 디코딩 체제(탐욕 vs 확률적)에 조건부임을 실증하여, SpecKV의 '압축 상태 기반 γ 선택'과 병렬되는 '샘플링 체제 기반 메커니즘 선택'이라는 적응 조건 축을 확장한다.
+
+→ [[sources/2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md|상세 보기]]
+
+### AutoViewMem: Self-Configuring Orthogonal Views for Conversational Long (2026-09-22)
+
+적응의 대상이 연산 예산을 넘어 기억 스키마 구성까지 확장됨을 보여준다 — 뷰의 자기 설정은 추론 시점 스키마 적응이라는 새 차원이다.
+
+→ [[sources/2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md|상세 보기]]

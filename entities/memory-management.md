@@ -34,3 +34,15 @@ ADEMA가 메모리를 '지식 상태의 연속성 보장 매체'로 정의했다
 ### ConvMem: Convolutional Memory for Long-Context Reasoning (2026-09-11)
 
 메모리를 외부 저장-검색 인프라가 아닌 모델 내부의 합성곱 연산 구조로 내재화하는 경로를 제공한다. ADEMA·LongSeeker가 시스템 계층에서 메모리를 조율했다면, ConvMem은 메모리를 네트워크 아키텍처 프리미티브로 격상시켜 메모리 관리의 설계 공간을 연산 계층으로 확장한다.
+
+### An Interpretable Memory Decision Controller for LLM Agents Based on Th (2026-09-22)
+
+메모리 관리의 결정 축을 확장한다 — 저장·검색·망각에 이어 '수용 여부'라는 네 번째 결정(사용 시점 신뢰 판정)을 명시하고, 이 결정이 해석 가능한 컨트롤러로 구현 가능함을 보여준다.
+
+→ [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]
+
+### AutoViewMem: Self-Configuring Orthogonal Views for Conversational Long (2026-09-22)
+
+정적 스키마와 고정 입도의 실패 조건을 명시한다 — 이질적 정보 혼합 시 의미 간섭이 발생함을 보여, 기억 관리의 설계 공간에 '뷰 구성 자체의 적응'이라는 새 축을 추가한다.
+
+→ [[sources/2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md|상세 보기]]
