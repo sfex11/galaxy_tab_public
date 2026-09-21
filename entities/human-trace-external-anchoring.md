@@ -22,3 +22,9 @@ rebuttal이라는 실제 저자-리뷰어 상호작용 흔적이 post-training �
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
 
 외부 닻의 층위를 행동 흔적에서 정신 상태로 심화한다. 흔적이 존재하기 전의 내재 상태를 시뮬레이션으로 재구성함으로써, 순환 타당성 문제의 해법이 흔적 기반에서 상태 재구성 기반으로 이동함을 보여준다.
+
+### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
+
+사용자 트래픽이 오라클 부재 도메인에서 개선 신호의 외부 앵커로 기능함을 보여준다. 자기 판단의 순환을 피하기 위해 인간 행동 흔적을 닻으로 사용하는 원리가 자기 개선 도메인으로 확장된 사례다.
+
+→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

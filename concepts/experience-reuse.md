@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Testing Interchangeability in LLM Agent Teams (2026-09-08)
 
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
+
+### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
+
+→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

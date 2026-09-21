@@ -42,3 +42,9 @@ RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 검증 가능 훈련의 도메인 확장 근거를 제공한다. 과학 코드의 특수 정확성 기준이 실행 검증으로 형식화될 수 있음을 보여, RLVR이 수학·코딩 경쟁을 넘어 과학 컴퓨팅 도메인으로 확장될 수 있는 조건을 명시한다.
+
+### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
+
+검증 가능 보상이 부재한 창작 도메인에서 개선이 어떻게 지속되는지의 대조 사례를 제공한다. RLVR 부재가 자기 개선의 병목이 아니라 신호 원천 전환(사용자 행동)의 동기가 됨을 시사한다.
+
+→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

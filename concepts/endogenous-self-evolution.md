@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-13)
+
+### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
+
+→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]
