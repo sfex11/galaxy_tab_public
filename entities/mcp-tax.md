@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
 
 도구 호출 비용 논의를 인프라 축(스키마 오버헤드)과 능력 축(멀티스텝 호출 성공률)으로 분해하는 근거를 제공한다. 스키마 축적 문제를 해결해도 오픈소스 모델의 능력 간극은 남음을 시사한다.
+
+### A2M: Trace-Optimized Agent Hijacking in the MCP Ecosystem (2026-09-24)
+
+스키마 주입 전략이 부과하는 세금이 동시에 공격자에게 도구 메타데이터 최적화의 최적 벡터가 됨을 보여준다. 오버헤드 최적화(eager→lazy 전환)와 보안 최적화(신뢰 검증 도입)가 상충하는 제약을 따름을 시사한다.
+
+→ [[sources/2026-09-24-a2m-trace-optimized-agent-hijacking-in-the-mcp-eco.md|상세 보기]]

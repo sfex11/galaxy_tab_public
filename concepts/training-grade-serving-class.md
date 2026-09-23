@@ -16,3 +16,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

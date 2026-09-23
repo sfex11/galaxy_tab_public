@@ -50,3 +50,9 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 자율주행 VLA 연구에 '지각 피드백' 설계 축을 추가한다. feedforward 추론이 표준이던 end-to-end 주행에서, 상황 기억을 통한 하류 조건부 지각이 새로운 설계 변수가 됨을 제시한다.
 
 → [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]
+
+### TM-APR: Thermal Temporal-Memory Localization via Analytic Online Adapt (2026-09-24)
+
+위치 인식(VPR)이 자율 항행의 전제조건임을 명시하며, 열화상 센서라는 극단적 조건 도메인으로의 확장 사례를 추가한다. 기존 end-to-end 주행·플랫폼 논의가 정책 학습에 집중했다면, 본 논문은 그 하위 전제인 장소 인식의 배포 가능성을 다룬다.
+
+→ [[sources/2026-09-24-tm-apr-thermal-temporal-memory-localization-via-an.md|상세 보기]]

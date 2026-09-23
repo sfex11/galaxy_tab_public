@@ -60,3 +60,9 @@ _Wiki 축적 중_
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 토큰 효율화의 실현 계층을 컨텍스트 압축·지연 스키마 로딩·추측 디코딩 등 추론 측 기법에서 사후학습 부공간 선택으로 확장한다. 추론 시점 제어와 별개로 모델에 토큰 절약 성향을 사전 주입하는 경로를 제공한다.
+
+### CliffCompaction: Cost-Efficient Compaction for Long-Horizon Coding Age (2026-09-24)
+
+50% 비용 절감 실증으로 세션 수준 컨텍스트 압축이 토큰 효율화의 제3 절감 계층(KV 캐시·스키마 축적과 별도)임을 확증하고, per-rollout 절감이 성능-비용 프론티어를 이동시킴을 보여준다.
+
+→ [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long.md|상세 보기]]

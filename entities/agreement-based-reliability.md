@@ -20,3 +20,9 @@ _Wiki 축적 중_
 다중 신호 보완성 원리를 신뢰도-정합성-제3신호의 삼중 구조로 구현한다. 환각 감지의 사후 3신호 파이프라인과 대비되는 사용 전 예방적 배치를 제공하며, 신호 간 독립성이 결합 이득의 조건임을 시사한다.
 
 → [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+다중 독립 신호 간 합의 없이도 단일 편향 주석자 + 소량 골드 스탠다드의 교정으로 신뢰 가능한 추정이 가능함을 보여, 합의 기반 신뢰성과 대비되는 교정 기반 신뢰성이라는 상보 축을 추가한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

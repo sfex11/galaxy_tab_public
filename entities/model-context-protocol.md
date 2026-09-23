@@ -22,3 +22,9 @@ MCP의 상태 없는 설계가 의도치 않게 10k~60k 토큰/턴의 숨겨진 
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
 
 NLIP는 MCP와 상보적·경쟁적 위치에서 표준화 논의를 확장한다. MCP가 도구 호출 인터페이스를 표준화하는 반면 NLIP는 에이전트 간 통신 자체를 자연어로 표준화하여, 인터페이스 표준화의 대상을 도구에서 통신으로 확장한다.
+
+### A2M: Trace-Optimized Agent Hijacking in the MCP Ecosystem (2026-09-24)
+
+MCP의 시맨틱 매칭 기반 도구 선택이 제3자 서버의 공격자 제어 메타데이터·출력을 통한 시맨틱 공급망 공격 표면으로 기능함을 최초로 실증한다. 기존 MCP Tax 논의(오버헤드 차원)를 보안 위협(하이재킹 차원)으로 확장한다.
+
+→ [[sources/2026-09-24-a2m-trace-optimized-agent-hijacking-in-the-mcp-eco.md|상세 보기]]

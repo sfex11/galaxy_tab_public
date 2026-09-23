@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
+
+→ [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]

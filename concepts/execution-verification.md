@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-05-02-claw-eval-live-a-live-agent-benchmark-for-evolving.md|Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-Wor]]
 
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
+
+### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
+
+→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]

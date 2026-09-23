@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Multi-Step Tool-Calling over Korean Open Public APIs: A Benchmark and  (2026-09-08)
 
 멀티스텝 도구 호출이 단일 호출과 질적으로 다른 난이도 계층임을 실증한다. 오픈소스 모델의 열위가 능력 한계가 아닌 훈련 데이터 분포의 문제일 수 있음을 시사하며, 도구 사용 능력의 데이터 의존성을 드러낸다.
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+도구 사용 능력의 측정 가능성 조건을 규정한다. 유효한 도구 호출은 모델 단독 능력이 아니라 서빙 계층이 도구 정의를 전달하고 출력을 파싱하는 프로토콜 계약의 산물이며, Phi-3·Gemma-3 사례는 능력 부재가 아니라 접근 차단일 수 있음을 보여준다.
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

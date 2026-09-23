@@ -24,3 +24,9 @@ pre-submission self-review라는 형태로 인간 감독의 사전 시뮬레이�
 Reviewability 가치 그룹을 통해 인간 감독이 감독자·설계자 측의 요구가 아니라 사용자의 능동적 가치 요구임을 실증하며, 감독의 당위를 사용자 중심으로 재위치시킨다.
 
 → [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+인간 전문가 감독을 무한 자원이 아닌 희소 예산 자원으로 취급하고, 어느 표본에 감독을 배분할지 최적화하는 문제로 재정의한다. 감독의 총량이 아닌 배치 위치가 시스템 신뢰성을 결정함을 통계적으로 뒷받침한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

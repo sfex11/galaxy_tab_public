@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-05-12-flow-opd-on-policy-distillation-for-flow-matching-.md|Flow-OPD: On-Policy Distillation for Flow Matching Models]]
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
+
+### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
+
+→ [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]

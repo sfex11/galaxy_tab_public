@@ -30,3 +30,9 @@ _Wiki 축적 중_
 지식 상태 추적의 최소 구현을 제공한다. 신념이 외부 검사 가능한 확률 장부로 이동하면 드리프트가 관찰 가능하고 베이지안 수렴으로 상한이 묶이며, 암묵적 컨텍스트 속 드리프트의 가시성 문제가 해소된다.
 
 → [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]
+
+### SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dial (2026-09-24)
+
+상태 변화 추적이 다자 대화 메모리의 기본 책임에 추가된다. 시간에 따른 상태 갱신을 명시적 트랙으로 저장하면 드리프트가 사후 관찰 대상이 아닌 구조적으로 관리 가능한 대상이 됨을 시사한다.
+
+→ [[sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f.md|상세 보기]]

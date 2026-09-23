@@ -44,3 +44,15 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 평가 체계가 태스크 완성도를 측정하는 동안 사용자는 Bounded Reach·Reviewability 같은 가치를 우선한다는 발견으로, 명세 간극에 '사용자 가치의 명세 부재'라는 새 차원을 추가한다. 평가 대상이 이미 초기 명세 단계에서 사용자의 실제 관심사와 어긋남을 야생 데이터로 실증한다.
 
 → [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]
+
+### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
+
+레포 수준 SWE 벤치마크가 추론 서빙을 다루지 않는 커버리지 공백을 실증한다. 벤치마크 스펙 간극이 '기존 벤치마크의 미시 오차'가 아니라 '도메인 전체의 측정 부재'로 발현될 수 있음을 보여준다.
+
+→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+서빙 스택 구성이 벤치마크가 명세하지 않은 은닉 차원임을 보여준다. 동일 모델이라도 로컬 서빙 구성에 따라 측정되는 능력이 달라지므로, 평가 명세에 서빙 계층 고정·공개 조건이 포함되어야 함을 시사한다.
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

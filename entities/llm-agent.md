@@ -602,3 +602,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-09-23-rrsi-regularized-recursive-self-improvement-of-age.md]]
 
 - [[sources/2026-09-23-emergent-collusion-in-long-horizon-llm-agent-inter.md]]
+
+### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
+
+에이전트 능력 프론티어를 인프라 엔지니어링으로 확장한다. 코드 생성을 넘어 서빙 스택 전반의 계층 간 변경 조율 능력이 새로운 측정 대상이 되며, 에이전트가 소프트웨어 생태계의 하위 기반부까지 다루는 단계로 진화함을 시사한다.
+
+→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]

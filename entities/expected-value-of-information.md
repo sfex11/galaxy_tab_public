@@ -26,3 +26,9 @@ recall head가 전역 읽기의 기대 이익을 근사하는 학습된 EVI 추�
 감지·행동 판단의 정보 전제를 형식화한다 — confident-failure 감축이 검색 특징의 성공 상호정보를 필요충분조건으로 요구한다는 정리는, 'recall head가 이익을 예측할 수 있는가'와 같은 EVI 질문에 검색 실패 도메인의 정리적 답을 제공한다.
 
 → [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+EVI 판단의 대상을 도구 호출·어텐션 접근에서 주석 획득으로 확장한다. 전문가 라벨의 기대 정보 가치가 비용을 초과할 때만 구매하는 순차 정책이 EVI의 새 도메인 실현이며, 정보 구매가 측정 설계의 핵심 축임을 시사한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

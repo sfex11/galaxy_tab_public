@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
 
 → [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

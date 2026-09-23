@@ -30,3 +30,9 @@ GUI 전용 평가 단위와 하이브리드 실제 작업 단위의 불일치를
 ### JarvisGUI: Towards Cross-Device GUI Agents with Dynamic Task Compositi (2026-09-11)
 
 평가 단위(단일 기기·정적 태스크)와 배포 단위(다중 기기·동적 워크플로우)의 구조적 불일치가 GUI 도메인에서 과대낙관적 평가를 산출하는 사례를 제공한다. 평가 단위가 배포 워크플로우의 최소 단위와도 일치하지 않는 극단적 사례다.
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+평가 단위(모델 능력)와 배포 작동 단위(모델+서빙 스택)의 불일치에 서빙 계층이라는 구체적 차원을 추가한다. 로컬 배포에서는 서빙 구성이 능력의 실현 조건이므로, 평가 환경의 서빙 스택이 배포 환경과 일치하지 않으면 결과의 외면 타당성이 붕괴한다.
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

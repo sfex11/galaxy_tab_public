@@ -50,3 +50,9 @@ LLM judge의 평가 대상이 reasoning의 기능적 구조가 아닌 그 표면
 ### Learning to Coach for Experiential Learning (2026-09-16)
 
 평가자 역할의 반전을 제공한다 — LLM이 판단하지 않고 지도하는 LLM-as-Coach로 전환하며, 코치 품질 판정을 외부 보상(액터 정확도)에 위임하여 judge 비일관성 문제를 구조적으로 우회한다.
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+judge의 역할을 출력 평가자에서 데이터 주석자(annotator)로 확장한다. 알 수 없는 편향의 저비용 주석자로서 LLM judge가 전문가 골드 스탠다드와 최적으로 결합되는 구조를 형식화하여, judge에 '보정 가능한 측정기'라는 새 지위를 부여한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

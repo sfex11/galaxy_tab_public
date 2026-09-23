@@ -16,3 +16,9 @@ _Wiki 축적 중_
 PPI의 한계 조건을 명시한다 — PPI가 각 도메인의 레이블만 사용하면 희소 도메인에서 정밀도가 붕괴하며, 본 논문은 도메인 간 정보 차용으로 PPI를 분할 평가 설정으로 확장한다. PPI가 '어떻게 교정하는가'였다면 본 논문은 '교정 근거를 어디서 빌려오는가'를 다룬다.
 
 → [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+PPI가 각 도메인의 고정된 소량 라벨로 예측기를 교정하는 정적 구조였다면, 본 논문은 교정 라벨의 획득 자체를 순차 최적화 대상으로 격상시킨다. '교정 근거를 어디서 빌려오는가' 논의에 '어디에 살 것인가'라는 제3의 질문을 추가한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

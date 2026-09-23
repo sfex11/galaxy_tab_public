@@ -20,3 +20,9 @@ _Wiki 축적 중_
 기기 드리프트에 대한 통계적 헤지 조건을 정교화한다 — 예측기가 드리프트해도 레이블 기반 교정이 편향을 흡수하나, 교정 레이블의 도메인 커버리지가 헤지의 유효 조건이 된다. 드리프트가 측정 무효화가 아닌 정밀도 손실로 격하되는 경계를 명시한다.
 
 → [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+드리프트하는 측정기를 폐기하는 대안으로, 알 수 없는 편향의 측정기를 소량의 정답과 결합해 통계적으로 사용하는 경로를 제공한다. 측정기 결함이 측정 불가능성이 아니라 보정 비용의 문제로 환원될 수 있음을 시사한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]

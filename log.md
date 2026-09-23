@@ -3642,3 +3642,17 @@
 ## [2026-09-23 08:35] ingest | Decoding Guardrails: XAI-Guided Perturbation Analysis of Prompt Injection Detection
 
 ## [2026-09-23 08:35] ingest | Adapting Tree-Structured Speculative Decoding to DeepSeek-V4 for Efficient Inference
+
+## [2026-09-24 02:33] llm-ingest | 12편 분석, 엔티티 913개, 개념 2162개
+- 2026-09-24-flash-dllm-io-aware-kv-caching-and-parallel-decodi.md
+- 2026-09-24-agensh-scaling-organizational-intelligence-to-1024.md
+- 2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f.md
+- 2026-09-24-cliffcompaction-cost-efficient-compaction-for-long.md
+- 2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md
+- 2026-09-24-a2m-trace-optimized-agent-hijacking-in-the-mcp-eco.md
+- 2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md
+- 2026-09-24-tm-apr-thermal-temporal-memory-localization-via-an.md
+- 2026-09-24-beyond-repeated-sampling-learning-search-policies-.md
+- 2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md
+- 2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md
+- 2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md

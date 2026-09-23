@@ -44,3 +44,9 @@ KV 캐시 압축(LightKV 등)이 추측 디코딩의 γ 선택과 어떻게 상�
 최적화의 상위·직교 축을 추가한다 — 압축·프루닝이 '캐시를 어떻게 줄일까'라면 ODA는 '캐시를 언제 읽을까'를 최적화한다. 같은 캐시라도 읽기 빈도를 줄이는 경로와 캐시 크기를 줄이는 경로가 독립적으로 결합 가능함을 시사한다.
 
 → [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]
+
+### Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory (2026-09-24)
+
+KV 캐싱의 적용 대상을 AR 모델에서 dLLM으로 확장한다. dLLM에서 KV 캐싱이 '효율화 기법'이 아니라 '존재하지 않는 기반 인프라'였음을 진단하고, 캐시 재사용-병렬 디코딩 상호작용이라는 새로운 병목 축을 캐시 최적화 논의에 추가한다.
+
+→ [[sources/2026-09-24-flash-dllm-io-aware-kv-caching-and-parallel-decodi.md|상세 보기]]

@@ -58,3 +58,9 @@ Design Conductor 2.0은 하네스 엔지니어링이 단발성 최적화가 아�
 ### An Empirical Study of Harness Design for Coding Agents (2026-09-19)
 
 Crab이 실행 환경 계층(체크포인트/복원)의 하네스 구성요소를 다뤘다면, 본 논문은 에이전트 루프 설계 계층을 다룬다. 두 논문은 하네스 엔지니어링의 적용 스펙트럼을 '인프라 계층'과 '루프 설계 계층'으로 분해하며, 후자의 효과를 분리 측정하는 최초의 방법론을 제공한다.
+
+### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
+
+하네스 엔지니어링의 시점을 확장한다 — 관측가능성 주도 자동 진화가 진단·변이에 머물렀다면, 본 논문은 strategy-free scaffold에서의 실패 신호 기반 '성장'이라는 훈련 시점 최적화를 추가하여 하네스 설계가 학습 가능한 대상임을 제시한다.
+
+→ [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]

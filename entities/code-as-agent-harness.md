@@ -20,3 +20,9 @@ _Wiki 축적 중_
 코드-하네스 패러다임의 평가 범위를 조작 성공률에서 안전 제약 준수로 확장하는 물리 도메인 사례를 제공한다. 컨트롤러 코드 생성이 기능적 성공과 물리적 안전을 동시에 담보해야 하며, 후자는 전자의 부산물로 자동 성립하지 않음을 실증한다.
 
 → [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
+
+### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
+
+하네스 코드의 기원을 확장한다 — 인간 작성 코드나 에이전트가 해석하는 계약(RunAgent)이 아니라 task feedback으로부터 학습되어 성장하는 코드임을 실증하여, 하네스를 구성하는 코드가 설계 시점 산출물이 아닌 훈련의 산출물이 됨을 보여준다.
+
+→ [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]

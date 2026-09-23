@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-07)
+
+### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
+
+→ [[sources/2026-09-24-beyond-repeated-sampling-learning-search-policies-.md|상세 보기]]

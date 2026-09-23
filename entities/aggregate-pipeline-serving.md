@@ -28,3 +28,9 @@ Pythia는 파이프라인 서빙 최적화가 가능한 근본 원인을 제공�
 파이프라인 병목이 스키마 축적(상류)에 의해 결정된다는 기존 분석에, KV 캐시 접근 패턴의 단편화(하류)가 추가적인 병목원임을 제공하여 병목 원인의 스펙트럼을 확장한다.
 
 ### To Call or Not to Call: A Framework to Assess and Optimize LLM Tool Ca (2026-05-05)
+
+### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
+
+파이프라인 서빙의 병목을 진단해온 흐름에, 그 병목 영역(추론 서빙) 자체를 에이전트가 엔지니어링하는 후속 단계를 제공한다. 서빙 인프라의 진화 주체가 인간 개발자에서 에이전트로 이동 가능함을 시사한다.
+
+→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]

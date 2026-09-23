@@ -30,3 +30,9 @@ _Wiki 축적 중_
 기존 논의가 OPTED의 자기유발 이동(이동의 원인이 정책 자신의 행동)을 추가했다면, 본 논문은 이동을 원인별로 분류하는 대신 성분별로 분해하여 전이 효과를 조건화하는 구조 축을 추가한다. 이동의 분류 체계에 '성분 분해' 차원을 도입한다.
 
 → [[sources/2026-09-21-how-does-distribution-shift-shape-pretraining-gain.md|상세 보기]]
+
+### TM-APR: Thermal Temporal-Memory Localization via Analytic Online Adapt (2026-09-24)
+
+열화상 환경 변화가 도메인 불변 표현 학습으로 다루어질 수 있는 인지 도메인 사례를 추가한다. 위치 인식에서 분포 이동의 비용이 '정확도 하락'이 아니라 '재학습 오버헤드'라는 시스템 비용으로 현현함을 보여준다.
+
+→ [[sources/2026-09-24-tm-apr-thermal-temporal-memory-localization-via-an.md|상세 보기]]

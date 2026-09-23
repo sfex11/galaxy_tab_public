@@ -20,3 +20,7 @@ _자동 Wiki Query에서 추출됨_
 ### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
 
 → [[sources/2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md|상세 보기]]
+
+### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
+
+→ [[sources/2026-09-24-beyond-repeated-sampling-learning-search-policies-.md|상세 보기]]

@@ -93,3 +93,15 @@ LLM 기반 다중 에이전트 연구에 물리적 참조점을 부여한다. �
 ### Glyph: A Multi-Strategy Agentic System for Column Description and Sens (2026-09-11)
 
 Descriptor(설명 생성)와 Tagger(민감도 태깅)의 이원 협업 구조를 제공하여, 결합된 두 하위 문제를 각기 특화된 에이전트로 분해하고 상태 그래프로 조율하는 실용적 사례를 추가한다.
+
+### Agensh: Scaling Organizational Intelligence to 1,024 Agents (2026-09-24)
+
+Agensh는 다중 에이전트 시스템의 확장 상한이 개별 에이전트 능력이 아니라 중앙 오케스트레이터의 조정 용량에 의해 결정됨을 진단하고, 자기조직화 협력 루프로 1,024 에이전트까지 확장하는 실증을 제공한다. 시스템 규모의 병목이 아키텍처의 조정 계층에 있음을 보여준다.
+
+→ [[sources/2026-09-24-agensh-scaling-organizational-intelligence-to-1024.md|상세 보기]]
+
+### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
+
+협업 토폴로지를 수동 설계 대상에서 밀집 보상 RL로 학습 가능한 대상으로 전환한다. 서브태스크별 이질적 협업 요구가 단일 입도(개체 전용 또는 집단 전용) 생성기로는 포착 불가능함을 실증하여, 시스템 설계 공간에 '입도 혼합'이라는 새 축을 추가한다.
+
+→ [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]

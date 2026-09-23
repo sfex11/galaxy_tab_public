@@ -19,3 +19,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Does Your Agent's Memory Survive a Model Upgrade? A Controlled Study o (2026-09-08)
+
+### CliffCompaction: Cost-Efficient Compaction for Long-Horizon Coding Age (2026-09-24)
+
+→ [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long.md|상세 보기]]

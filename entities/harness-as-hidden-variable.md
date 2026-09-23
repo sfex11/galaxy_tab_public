@@ -28,3 +28,9 @@ CPU 설계(12시간)와 추론 가속기 설계(80시간)의 비선형 스케일
 ### Claw-Anything: Benchmarking Always-On Personal Assistants with Broader (2026-05-27)
 
 Claw-Anything은 벤치마크가 에이전이 접근 가능한 사용자 세계의 어느 부분을 규명하지 않음을 보여준다. 좁은 벤치마크의 툴 가용자 도구나 제한된 API 집합이 에이전의 '항상 켘' 요구조건에 미달하는 사례를 체계적으로 분석하며, 단순한 능력 문제가 아니라 사용자의 디지털 세계에 대한 구조적 무지에서 기인한 실패임을 보여준다.
+
+### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+서빙 계층이 도구 호출 가능성의 은닉 변수로 작동하는 체계적 사례를 제공한다. 측정 대상(모델)과 측정 경로(서빙 스택)를 구분하지 않으면 도구 사용 점수의 귀속 자체가 불가능함을 보인다.
+
+→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

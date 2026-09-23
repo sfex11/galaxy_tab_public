@@ -38,3 +38,9 @@ LLM 예측기를 저비용 의사 레이블 생성기로 채택하되 그 편향
 LLM-judge가 판단 산출물 제공자를 넘어 성공-실패 예측 정보를 담는 측정 채널로 기능함을 정량화한다 — judge 유래 특징의 상호정보 우위가 레짐 간 AUC-AC 격차의 원인임을 보여, judge를 정보원으로 평가하는 새 기준을 제시한다.
 
 → [[sources/2026-09-22-predictable-failure-in-multi-hop-retrieval-score-d.md|상세 보기]]
+
+### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
+
+LLM judge의 알 수 없는 편향을 계측기 결함이 아닌 통계적으로 교정 가능한 파라미터로 취급하는 경로를 제공한다. 계측기 신뢰성을 'judge 자체의 일관성' 문제에서 '소량 오라클과의 결합 설계' 문제로 재정의한다.
+
+→ [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]
