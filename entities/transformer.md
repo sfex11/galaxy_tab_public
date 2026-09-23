@@ -161,3 +161,5 @@ _Wiki 축적 중 (claude 분석 대기)_
 - [[sources/2026-09-17-what-breaks-under-pruning-in-smart-homes-and-when-.md]]
 
 - [[sources/2026-09-20-on-demand-attention-language-models-know-when-to-r.md]]
+
+- [[sources/2026-09-23-adapting-tree-structured-speculative-decoding-to-d.md]]

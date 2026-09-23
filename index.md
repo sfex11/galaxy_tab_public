@@ -1865,3 +1865,20 @@
 - [[sources/2026-09-20-how-does-distribution-shift-shape-pretraining-gain.md]] - How Does Distribution Shift Shape Pretraining Gains in Neural PDE Surrogates?
 - [[concepts/reinforcement-learning]] - Reinforcement Learning
 - [[sources/2026-09-20-score-centering-stabilizes-off-policy-reinforcemen.md]] - Score Centering Stabilizes Off-policy Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-23-who-does-what-in-ai-auditing-designing-human-ai-co.md]] - Who Does What in AI Auditing? Designing Human-AI Collaboration for Auditing Generative AI
+- [[sources/2026-09-23-onpanda-efficient-annotation-of-on-policy-alignmen.md]] - onPanda: Efficient Annotation of On-Policy Alignment Data for LLMs and Agents via Token-Level Correction
+- [[sources/2026-09-23-lora-generating-hypernetworks-for-efficient-on-dev.md]] - LoRA-generating hypernetworks for efficient on-device LLM generative personalization
+- [[sources/2026-09-23-harness-zero-harness-distillation-via-agent-as-har.md]] - Harness-Zero: Harness Distillation via Agent-as-Harness
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-23-rrsi-regularized-recursive-self-improvement-of-age.md]] - RRSI: Regularized Recursive Self-Improvement of Agent Harnesses
+- [[sources/2026-09-23-dolphinbench-mapping-the-pareto-frontier-of-agent-.md]] - DolphinBench: Mapping the Pareto Frontier of Agent Memory
+- [[sources/2026-09-23-rare-event-estimation-via-iterative-unalignment.md]] - Rare Event Estimation via Iterative Unalignment
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-09-23-emergent-collusion-in-long-horizon-llm-agent-inter.md]] - Emergent Collusion in Long-Horizon LLM Agent Interaction
+- [[sources/2026-09-23-whose-facts-count-a-culturally-responsive-audit-of.md]] - Whose Facts Count? A Culturally Responsive Audit of LLM Evaluation Benchmarks
+- [[sources/2026-09-23-spectra-adaptive-execution-of-speculative-decoding.md]] - SPECTRA: Adaptive Execution of Speculative Decoding on a Runtime-Reconfigurable Tiled Architecture
+- [[sources/2026-09-23-decoding-guardrails-xai-guided-perturbation-analys.md]] - Decoding Guardrails: XAI-Guided Perturbation Analysis of Prompt Injection Detection
+- [[entities/transformer]] - Transformer
+- [[sources/2026-09-23-adapting-tree-structured-speculative-decoding-to-d.md]] - Adapting Tree-Structured Speculative Decoding to DeepSeek-V4 for Efficient Inference

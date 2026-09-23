@@ -3618,3 +3618,27 @@
 - 2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md
 - 2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md
 - 2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md
+
+## [2026-09-23 08:35] ingest | Who Does What in AI Auditing? Designing Human-AI Collaboration for Auditing Generative AI
+
+## [2026-09-23 08:35] ingest | onPanda: Efficient Annotation of On-Policy Alignment Data for LLMs and Agents via Token-Level Correction
+
+## [2026-09-23 08:35] ingest | LoRA-generating hypernetworks for efficient on-device LLM generative personalization
+
+## [2026-09-23 08:35] ingest | Harness-Zero: Harness Distillation via Agent-as-Harness
+
+## [2026-09-23 08:35] ingest | RRSI: Regularized Recursive Self-Improvement of Agent Harnesses
+
+## [2026-09-23 08:35] ingest | DolphinBench: Mapping the Pareto Frontier of Agent Memory
+
+## [2026-09-23 08:35] ingest | Rare Event Estimation via Iterative Unalignment
+
+## [2026-09-23 08:35] ingest | Emergent Collusion in Long-Horizon LLM Agent Interaction
+
+## [2026-09-23 08:35] ingest | Whose Facts Count? A Culturally Responsive Audit of LLM Evaluation Benchmarks
+
+## [2026-09-23 08:35] ingest | SPECTRA: Adaptive Execution of Speculative Decoding on a Runtime-Reconfigurable Tiled Architecture
+
+## [2026-09-23 08:35] ingest | Decoding Guardrails: XAI-Guided Perturbation Analysis of Prompt Injection Detection
+
+## [2026-09-23 08:35] ingest | Adapting Tree-Structured Speculative Decoding to DeepSeek-V4 for Efficient Inference
