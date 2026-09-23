@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
 
 재컴파일 가능성이 디컴파일 출력의 의미 보존을 측정하지 못하는 사례를 제공한다. WER(음성), 코드 커버리지(테스트)에 이어 세 번째 도메인 발현으로, 이 결함이 평가 방법론의 범용적 구조임을 강화한다.
+
+### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
+
+WER 비판과 동형인 구조가 코드 보안 도메인에서 재현됨을 확정한다. 실질 목표(보안 속성 회복)와 평가 대상(표면 구문 정합)의 오규정이 도메인 불변임을 실증하며, 특히 취약 코드 자체가 컴파일 가능하다는 태스크 특성으로 기준선이 포화되는 강화 변형을 제공한다.
+
+→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]

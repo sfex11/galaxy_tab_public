@@ -56,3 +56,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 서빙 스택 구성이 벤치마크가 명세하지 않은 은닉 차원임을 보여준다. 동일 모델이라도 로컬 서빙 구성에 따라 측정되는 능력이 달라지므로, 평가 명세에 서빙 계층 고정·공개 조건이 포함되어야 함을 시사한다.
 
 → [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]
+
+### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
+
+지표의 바닥선 포화라는 새 변형을 추가한다. 벤치마크가 명세한 지표(컴파일률)가 태스크의 초기 상태에 의해 이미 달성되어 측정 자체가 무정보가 되는 경우로, 명세 간극이 '누락된 차원'에서 '포화된 기준선'으로 확장됨을 보여준다.
+
+→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]

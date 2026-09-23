@@ -14,3 +14,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-06)
+
+### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
+
+→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]

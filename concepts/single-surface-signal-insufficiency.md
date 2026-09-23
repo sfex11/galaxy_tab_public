@@ -25,3 +25,7 @@ _자동 Wiki Query에서 추출됨_
 ### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
 
 → [[sources/2026-09-21-quantifying-overclaiming-propensity-in-frontier-ll.md|상세 보기]]
+
+### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
+
+→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]

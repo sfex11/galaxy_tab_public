@@ -32,3 +32,9 @@ _Wiki 축적 중_
 SWE-Gate가 리뷰 제약이라는 제2 측정 축을 추가했다면, 본 논문은 프로덕션 추론이라는 도메인 특화 축을 추가한다. SWE 벤치마크 계열이 기능 정확성 단일 축에서 축·도메인이 분화되는 구조로 진화 중임을 강화한다.
 
 → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
+
+### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
+
+동일한 평가 프록시 무력화 문제의 하위 계층 사례를 제공한다. SWE-Gate가 테스트 통과→수용의 간극을 다뤘다면 본 논문은 컴파일→진전의 간극을 다루어, 코드 평가 관문 전체에서 형식적 성공 신호가 계층별로 순차적으로 무력화됨을 확립한다.
+
+→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]

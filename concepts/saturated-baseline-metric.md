@@ -1,0 +1,12 @@
+# saturated-baseline-metric
+
+**분야**: 미분류
+**생성일**: 2026-09-24
+
+## 정의
+
+_Wiki 축적 중_
+
+## 관련 논문
+
+- [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|Metrics Failure in LLM-Based Code Vulnerability Repair: An E]]
