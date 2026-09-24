@@ -3656,3 +3656,8 @@
 - 2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md
 - 2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md
 - 2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md
+
+## [2026-09-24 08:07] llm-ingest | 3편 분석, 엔티티 921개, 개념 2170개
+- 2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md
+- 2026-09-24-does-ai-save-time-on-product-design-a-randomized-c.md
+- 2026-09-24-the-sirens-song-when-proximal-background-context-o.md

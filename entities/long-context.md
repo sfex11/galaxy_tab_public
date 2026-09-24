@@ -28,3 +28,9 @@ _Wiki 축적 중_
 추론·에이전틱 워크로드의 장기 컨텍스트 비용 문제에 '읽기 필요성 판정'이라는 새 해법 축을 제공한다. 역사를 매 스텝 전부 읽는 대신 이익이 예측될 때만 읽는 구조로, 장기 컨텍스트 관리가 표현 압축 문제에서 접근 스케줄링 문제로 확장됨을 보여준다.
 
 → [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]
+
+### The Sirens' Song: When Proximal Background Context Overshadows Distant (2026-09-24)
+
+지연 실행·얕은 인덱스(LongSeeker, ShallowStream) 계열 전략이 유효한 병인을 규정한다 — 컨텍스트 축소가 도움이 되는 이유는 길이 자체가 아니라 근접 무관 배경이 원거리 신호를 익사시키기 때문이며, 무엇을 남길지의 기준이 '거리'에서 '경쟁 밀도'로 이동해야 함을 시사한다.
+
+→ [[sources/2026-09-24-the-sirens-song-when-proximal-background-context-o.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### User Feedback Provides a Unique Signal that LLMs Can not Detect (2026-09-04)
 
 피드백의 무효성을 '데이터 노이즈'에 귀인하던 통념이 실제로는 '측정 도구의 체계적 편향'에 기인함을 보여주는, 병목 오귀인 패턴의 학습 데이터 도메인 확장 사례다.
+
+### The Sirens' Song: When Proximal Background Context Overshadows Distant (2026-09-24)
+
+어텐션 내부 역학으로의 확장 사례를 제공한다 — '거리가 병목'이라는 표면 진단 대신 근접 무관 배경의 누적 경쟁이 실제 병목임을 실증하여, 병목 오귀인 패턴이 파이프라인·서빙을 넘어 어텐션 할당 계층까지 성립함을 보여준다.
+
+→ [[sources/2026-09-24-the-sirens-song-when-proximal-background-context-o.md|상세 보기]]
