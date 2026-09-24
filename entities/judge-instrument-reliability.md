@@ -44,3 +44,9 @@ LLM-judge가 판단 산출물 제공자를 넘어 성공-실패 예측 정보를
 LLM judge의 알 수 없는 편향을 계측기 결함이 아닌 통계적으로 교정 가능한 파라미터로 취급하는 경로를 제공한다. 계측기 신뢰성을 'judge 자체의 일관성' 문제에서 '소량 오라클과의 결합 설계' 문제로 재정의한다.
 
 → [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]
+
+### Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Ben (2026-09-25)
+
+LLM 판정기의 신뢰성 문제를 회피하는 설계 대안으로 실행 근거 평가를 제시한다. 판정기 자체의 불안정성을 보정하는 대신 판정 대상을 검증 가능한 실행 결과로 이동시키는 구조적 전환의 사례다.
+
+→ [[sources/2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor.md|상세 보기]]

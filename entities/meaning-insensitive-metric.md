@@ -40,3 +40,9 @@ _Wiki 축적 중_
 WER 비판과 동형인 구조가 코드 보안 도메인에서 재현됨을 확정한다. 실질 목표(보안 속성 회복)와 평가 대상(표면 구문 정합)의 오규정이 도메인 불변임을 실증하며, 특히 취약 코드 자체가 컴파일 가능하다는 태스크 특성으로 기준선이 포화되는 강화 변형을 제공한다.
 
 → [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]
+
+### Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Ben (2026-09-25)
+
+기존 저장소 QA 벤치마크의 LLM 기반 평가 의존이 가진 측정 불안정성에 대한 해법 측을 제공한다. LLM 판정을 실행 오라클로 대체하는 경로의 저장소 규모 실증 사례다.
+
+→ [[sources/2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor.md|상세 보기]]

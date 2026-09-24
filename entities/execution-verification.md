@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
 
 결정론적 인터프리터가 의미 행동→로봇 행동 매핑을 검증 가능하게 만들어, 실행 검증의 대상을 불투명한 모델 출력 전체에서 인터페이스 계약 준수 여부로 좁혀 감사 가능성을 높인다.
+
+### Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Ben (2026-09-25)
+
+실행 검증의 적용 스케일을 함수·스니펫 수준에서 저장소 전체 런타임 동역학으로 확장하는 사례를 제공한다. 480개 실행 기반 인스턴스는 실행 오라클이 저장소 규모 평가에서도 성립함을 보여준다.
+
+→ [[sources/2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor.md|상세 보기]]
