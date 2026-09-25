@@ -57,3 +57,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-flash-dllm-io-aware-kv-caching-and-parallel-decodi]]: 프로덕션 추론 서빙이라는 동일 도메인에서 Flash-dLLM은 최적화 기법, SWE-Serve는 그 인프라를 다루는 에이전트 능력의 평가 벤치마크로 상호 보완적이다.
+- → [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h]]: 서빙 스택이 도구 사용 결과를 좌우한다는 문제의식을 공유하며, 한쪽은 이를 로컬 평가의 교란 변수로 규명하고 다른 한쪽은 이를 에이전트 엔지니어링의 새로운 벤치마크 도메인으로 격상시킨다.

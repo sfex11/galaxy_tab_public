@@ -48,3 +48,10 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro]]: 서빙 스택이 도구 사용 결과를 좌우한다는 문제의식을 공유하며, 한쪽은 이를 로컬 평가의 교란 변수로 규명하고 다른 한쪽은 이를 에이전트 엔지니어링의 새로운 벤치마크 도메인으로 격상시킨다.
+- → [[sources/2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor]]: 정적·선언적 평가의 한계를 지적하고, 서빙 스택의 실제 개입과 런타임 실행 같은 동적 행위를 직접 관찰해야 한다는 실행 기반 평가 방법론을 공유한다.
+- → [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re]]: 평가 점수에 숨은 교란 변수(서빙 스택 게이팅, 포화된 컴파일률)가 모델 능력 신호를 오염시킴을 실증하는 평가 타당성 연구로 연결된다.
+- → [[sources/2026-09-23-whose-facts-count-a-culturally-responsive-audit-of]]: 벤치마크 점수가 모델 능력이 아니라 평가 인프라(문화적 편향, 서빙 스택 게이팅)의 속성에 조건부임을 보이는 평가 도구 감사라는 관점을 공유한다.

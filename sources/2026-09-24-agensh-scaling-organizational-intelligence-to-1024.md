@@ -46,3 +46,8 @@ Agensh는 중앙 오케스트레이터 없이 자기조직화 협력 루프만�
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-23-rrsi-regularized-recursive-self-improvement-of-age]]: 에이전트 시스템의 확장 한계를 개별 모델 능력이 아닌 구조(하네스 개선 규제, 조정 용량 탈중앙화)의 문제로 재정의한다는 관점을 공유한다.
+- → [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment]]: 다중 에이전트 시스템에서 중앙 오케스트레이터 병목과 고정 입도 토폴로지라는 구조적 한계를 각각 자기조직화 루프와 혼합 입도 그래프 학습으로 해결하며, 협업 구조를 성능·비용의 결정 변수로 다룬다.

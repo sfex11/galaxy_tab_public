@@ -43,3 +43,10 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre]]: 장기 코딩 에이전트의 컨텍스트 팽창 문제를 자동 압축과 하네스 컴파일이라는 상호 보완적 전략으로 다루며, 컨텍스트를 계속 키우는 대신 구조로 전환한다는 관점을 공유한다.
+- → [[sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f]]: 무한정 늘어나는 세션·대화 이력을 구조화된 메모리(자동 압축, 화자 중심 분해 트랙)로 이월하는 장기 기억 관리라는 공통 문제를 다룬다.
+- → [[sources/2026-09-24-the-sirens-song-when-proximal-background-context-o]]: 장기 컨텍스트의 정보 과잉이 성능을 저하한다는 진단을 공유하며, 내용 기반 주의 정렬과 자동 압축이라는 상호 보완적 컨텍스트 관리 기법을 제시한다.
+- → [[sources/2026-09-25-agent-editing-world-model-rethinking-world-modelin]]: 장기 과업에서 오염된 에이전트 상태(낡은 계획, 누적 컨텍스트)의 정제를 세계 모델 개입과 자동 압축으로 각각 수행하는 에이전트 상태 관리 연구로 연결된다.

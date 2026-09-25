@@ -48,3 +48,8 @@ A2M은 MCP 생태계에서 에이전트의 도구 선택이 의존하는 시맨�
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-23-onpanda-efficient-annotation-of-on-policy-alignmen]]: 에이전트 실행 궤적을 핵심 객체로 다룬다는 점에서 연결되며, onPanda의 궤적 주석·교정은 A2M 유형 하이재킹 궤적의 탐지·정제를 위한 방어 측 데이터 기반을 제공할 수 있다.
+- → [[sources/2026-09-23-rare-event-estimation-via-iterative-unalignment]]: 자율 에이전트 배포가 만드는 안전 위협을 다루되, 한쪽은 능동적 공격 벡터(MCP 하이재킹)를, 다른 한쪽은 희귀 재난 이벤트의 발생 확률 추정을 다루는 에이전트 안전 연구로 연결된다.

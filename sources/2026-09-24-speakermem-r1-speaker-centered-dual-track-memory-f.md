@@ -54,3 +54,7 @@ AutoViewMem([[self-configuring-memory-schema]])이 정보 유형별 직교 뷰 �
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long]]: 무한정 늘어나는 세션·대화 이력을 구조화된 메모리(자동 압축, 화자 중심 분해 트랙)로 이월하는 장기 기억 관리라는 공통 문제를 다룬다.

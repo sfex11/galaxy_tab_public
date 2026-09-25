@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h]]: 벤치마크 점수가 모델 능력이 아니라 평가 인프라(문화적 편향, 서빙 스택 게이팅)의 속성에 조건부임을 보이는 평가 도구 감사라는 관점을 공유한다.
+- → [[sources/2026-09-23-who-does-what-in-ai-auditing-designing-human-ai-co]]: AI 감사를 명시적 연구 대상으로 삼되, 한쪽은 벤치마크의 문화적 반응성을 감사하고 다른 한쪽은 감사 작업 자체의 인간-AI 협업 구조를 설계한다.

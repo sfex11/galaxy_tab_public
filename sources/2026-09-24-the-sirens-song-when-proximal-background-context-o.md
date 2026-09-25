@@ -42,3 +42,7 @@ Wiki와의 핵심 연결은 세 가지다. 첫째, [[attention-self-concentratio
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long]]: 장기 컨텍스트의 정보 과잉이 성능을 저하한다는 진단을 공유하며, 내용 기반 주의 정렬과 자동 압축이라는 상호 보완적 컨텍스트 관리 기법을 제시한다.

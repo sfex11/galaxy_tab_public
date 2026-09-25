@@ -58,3 +58,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-23-rrsi-regularized-recursive-self-improvement-of-age]]: 두 논문 모두 에이전트 하네스를 일급 최적화 대상으로 보고, 태스크 피드백으로부터 프롬프트·제어 흐름·도구 구성을 자동으로 개선·컴파일하는 하네스 자동화 축을 공유한다.
+- → [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long]]: 장기 코딩 에이전트의 컨텍스트 팽창 문제를 자동 압축과 하네스 컴파일이라는 상호 보완적 전략으로 다루며, 컨텍스트를 계속 키우는 대신 구조로 전환한다는 관점을 공유한다.

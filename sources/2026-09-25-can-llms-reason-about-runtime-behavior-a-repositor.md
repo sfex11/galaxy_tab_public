@@ -42,3 +42,8 @@ Wiki 관점에서 이 논문은 두 축의 교차점을 확정한다. [[reposito
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h]]: 정적·선언적 평가의 한계를 지적하고, 서빙 스택의 실제 개입과 런타임 실행 같은 동적 행위를 직접 관찰해야 한다는 실행 기반 평가 방법론을 공유한다.
+- → [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re]]: 코드 LLM 평가에서 포화·불신뢰한 프록시 지표(LLM 판정, 컴파일률)를 배제하고 실행 오라클 기반 평가로 전환해야 한다는 지표 타당성 문제의식을 공유한다.

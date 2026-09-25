@@ -46,3 +46,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-23-onpanda-efficient-annotation-of-on-policy-alignmen]]: 저비용 모델(토큰 수준 교정, LLM judge) 출력에 고비용 인간 교정을 최적으로 배치해 주석 비용과 품질의 균형을 맞춘다는 효율적 주석 설계 문제를 공유한다.
+- → [[sources/2026-09-23-who-does-what-in-ai-auditing-designing-human-ai-co]]: 감사와 오프폴리시 평가에서 AI의 확장성과 인간 판단의 신뢰성을 순차·구조적으로 결합하는 역할 분담 프레임을 공유한다.

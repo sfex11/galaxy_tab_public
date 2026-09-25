@@ -43,3 +43,8 @@ Diffusion LLM(dLLM)의 실용 배포가 지연된 근본 원인은 유효한 KV 
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-09-23-spectra-adaptive-execution-of-speculative-decoding]]: 메모리·연산 제약 하의 LLM 추론 가속이라는 동일 문제의식 아래 추측 디코딩의 런타임 적응 실행과 KV 캐싱·병렬 디코딩의 IO 인지 공동 설계라는 상호 보완적 기법을 제시한다.
+- → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro]]: 프로덕션 추론 서빙이라는 동일 도메인에서 Flash-dLLM은 최적화 기법, SWE-Serve는 그 인프라를 다루는 에이전트 능력의 평가 벤치마크로 상호 보완적이다.
