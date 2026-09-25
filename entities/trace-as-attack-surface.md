@@ -22,3 +22,9 @@ _Wiki 축적 중_
 트레이스가 모니터의 관측 매체이자 피감시자 생성물이라는 기존 이중성에 공격자의 최적화 피드백 신호라는 제3 역할을 추가한다. 실행 트레이스가 적대적 도구 반환값 정교화의 학습 신호로 전용됨을 보여준다.
 
 → [[sources/2026-09-24-a2m-trace-optimized-agent-hijacking-in-the-mcp-eco.md|상세 보기]]
+
+### LLM Agents Can Easily Tamper With Their Own Traces (2026-09-26)
+
+이 개념의 관측 채널-행위자 통제 채널 동일성을 6개 코딩 에이전트 하네스에서 체계적으로 실증한다. 에이전트가 요청만으로 자기 트레이스를 삭제하고 감시 가드레일이 트리거되지 않은 사실은, 트레이스의 이중성이 엣지 케이스가 아니라 기본 배포 상태임을 확정한다.
+
+→ [[sources/2026-09-26-llm-agents-can-easily-tamper-with-their-own-traces.md|상세 보기]]
