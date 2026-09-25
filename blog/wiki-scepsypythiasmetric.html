@@ -1,356 +1,295 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>모델이 아니라 피아노를 채점했는가 — 도구 호출 평가 뒤에 숨은 서빙 스택 교란 변수</title>
-<meta name="description" content="로컬 도구 사용 평가에서 서빙 스택이 만드는 숨은 교란 변수(serving-layer confound)에 대한 심층 분석. 측정 타당성 관점에서 에이전틱 서빙과 벤치마크 점수의 관계를 다시 짓는다.">
+<title>에이전트가 자기 주방을 고치는 대회 — SWE-Serve와 '인프라 최적화'의 재정의</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
+  :root {
+    --bg: #faf9f7;
+    --text: #2c2825;
+    --accent-warm: #c2703e;
+    --accent-blue: #5b7c99;
+    --accent-green: #6b9e7a;
+    --card-bg: rgba(255,255,255,0.7);
+    --card-border: rgba(194,112,62,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    background:#faf9f7;
-    color:#2c2825;
-    font-family:'Noto Sans KR', -apple-system, sans-serif;
-    font-size:clamp(15px, 1rem + 0.25vw, 17.5px);
-    line-height:1.95;
-    word-break:keep-all;
-    overflow-wrap:anywhere;
-    padding:0 clamp(16px, 4vw, 32px) 60px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
+    font-size: clamp(0.95rem, 0.9rem + 0.4vw, 1.08rem);
+    letter-spacing: -0.01em;
   }
-  ::selection { background:rgba(194,112,62,0.22); }
-
-  /* ---------- 레이아웃 ---------- */
-  .wrap { max-width:760px; margin:0 auto; }
-  section { margin:clamp(3rem, 8vw, 4.5rem) 0; }
-
-  /* ---------- 네비게이션 위 공백 ---------- */
-  body > nav { max-width:860px; margin-left:auto; margin-right:auto; }
-  nav a:hover { background:rgba(194,112,62,0.09); }
-
-  /* ---------- 히어로 ---------- */
-  .hero {
-    padding:clamp(2.5rem, 7vw, 4.5rem) 0 clamp(1.8rem, 5vw, 2.8rem);
-    background:
-      radial-gradient(600px 300px at 12% 0%, rgba(194,112,62,0.07), transparent 70%),
-      radial-gradient(500px 280px at 88% 12%, rgba(91,124,153,0.07), transparent 70%),
-      radial-gradient(420px 240px at 60% 100%, rgba(107,158,122,0.06), transparent 70%);
-    border-radius:0 0 28px 28px;
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(16px, 4vw, 32px);
   }
-  .kicker {
-    display:inline-block;
-    font-size:0.78rem;
-    font-weight:700;
-    letter-spacing:0.18em;
-    color:#c2703e;
-    text-transform:uppercase;
-    border:1px solid rgba(194,112,62,0.35);
-    padding:5px 14px;
-    border-radius:999px;
-    margin-bottom:1.4rem;
-    background:rgba(255,255,255,0.7);
+  h1, h2, h3, h4 {
+    font-family: 'Source Serif 4', 'Noto Sans KR', serif;
+    line-height: 1.4;
   }
+  /* ── 헤더 ── */
+  .post-header { padding: clamp(8px, 2vw, 20px) 0 clamp(20px, 4vw, 40px); }
+  .meta-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .badge {
+    font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0;
+  }
+  .badge-warm { background: rgba(194,112,62,0.12); color: #a05a2c; }
+  .badge-blue { background: rgba(91,124,153,0.12); color: #46617a; }
+  .badge-green { background: rgba(107,158,122,0.14); color: #4f7a5e; }
   h1 {
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.65rem, 4.2vw + 0.5rem, 2.7rem);
-    line-height:1.35;
-    font-weight:700;
-    letter-spacing:-0.01em;
-    margin-bottom:1.2rem;
+    font-size: clamp(1.65rem, 4.5vw + 0.5rem, 2.7rem);
+    font-weight: 900;
+    line-height: 1.32;
+    margin-bottom: 18px;
+    word-break: keep-all;
   }
-  h1 .accent-a { color:#c2703e; }
-  h1 .accent-b { color:#5b7c99; }
-  .hero-sub {
-    font-size:clamp(1rem, 1rem + 0.4vw, 1.15rem);
-    color:rgba(44,40,37,0.78);
-    max-width:640px;
-    margin-bottom:1.8rem;
+  h1 .hl { color: var(--accent-warm); }
+  .lead {
+    font-size: clamp(1rem, 0.95rem + 0.5vw, 1.18rem);
+    color: rgba(44,40,37,0.78);
+    font-weight: 300;
+    max-width: 720px;
+    word-break: keep-all;
   }
-  .pill-row { display:flex; flex-wrap:wrap; gap:8px; }
-  .pill {
-    font-size:0.8rem;
-    font-weight:500;
-    padding:5px 13px;
-    border-radius:999px;
-    border:1px solid rgba(44,40,37,0.12);
-    background:rgba(255,255,255,0.7);
-    color:rgba(44,40,37,0.75);
+  .meta-line {
+    margin-top: 22px;
+    font-size: 0.82rem;
+    color: rgba(44,40,37,0.5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
   }
-  .pill.c1 { border-color:rgba(194,112,62,0.3); color:#c2703e; }
-  .pill.c2 { border-color:rgba(91,124,153,0.3); color:#5b7c99; }
-  .pill.c3 { border-color:rgba(107,158,122,0.35); color:#6b9e7a; }
-
-  /* ---------- 섹션 헤더 ---------- */
-  .sec-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:1.6rem; }
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 4px solid #c2703e;
+    max-width: 800px;
+    margin: 2.2rem auto;
+    padding: 1.1rem 1.4rem;
+    background: var(--card-bg);
+    border-radius: 0 12px 12px 0;
+    box-shadow: 0 2px 12px rgba(44,40,37,0.05);
+    font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+    word-break: keep-all;
+  }
+  blockquote .q-src {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: rgba(44,40,37,0.55);
+    font-weight: 500;
+  }
+  /* ── 섹션 공통 ── */
+  section { padding: clamp(18px, 4vw, 36px) 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
   .sec-num {
-    flex:0 0 auto;
-    width:46px; height:46px;
-    display:flex; align-items:center; justify-content:center;
-    border-radius:14px;
-    font-family:'Source Serif 4',serif;
-    font-weight:700;
-    font-size:1.25rem;
-    margin-top:2px;
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    font-weight: 900;
+    color: rgba(194,112,62,0.28);
+    line-height: 1;
   }
-  .n1 { background:rgba(194,112,62,0.12); color:#c2703e; }
-  .n2 { background:rgba(91,124,153,0.12); color:#5b7c99; }
-  .n3 { background:rgba(107,158,122,0.14); color:#6b9e7a; }
-  .n4 { background:rgba(194,112,62,0.12); color:#c2703e; }
-  .n5 { background:rgba(91,124,153,0.12); color:#5b7c99; }
   h2 {
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.3rem, 2vw + 0.6rem, 1.75rem);
-    line-height:1.4;
-    font-weight:700;
-    letter-spacing:-0.01em;
+    font-size: clamp(1.3rem, 3.2vw + 0.3rem, 1.75rem);
+    font-weight: 700;
+    word-break: keep-all;
   }
+  h2 .accent-warm { color: var(--accent-warm); }
+  h2 .accent-blue { color: var(--accent-blue); }
+  h2 .accent-green { color: var(--accent-green); }
   .sec-sub {
-    font-size:0.86rem;
-    font-weight:500;
-    color:rgba(44,40,37,0.55);
-    margin-top:4px;
+    font-size: clamp(0.86rem, 2.4vw, 0.92rem);
+    color: rgba(44,40,37,0.55);
+    margin-bottom: 22px;
+    font-weight: 400;
   }
   h3 {
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.08rem, 1.4vw + 0.5rem, 1.3rem);
-    font-weight:700;
-    margin:2.4rem 0 0.9rem;
-    padding-left:12px;
-    border-left:3px solid #6b9e7a;
-    line-height:1.5;
+    font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+    font-weight: 700;
+    margin: 1.8em 0 0.6em;
+    word-break: keep-all;
   }
-  h3.blue { border-color:#5b7c99; }
-  h3.orange { border-color:#c2703e; }
-
-  p { margin-bottom:1.25rem; }
-  p.wide { max-width:800px; margin-left:auto; margin-right:auto; }
-  strong { font-weight:700; }
-  .em-o { color:#c2703e; font-weight:700; }
-  .em-b { color:#5b7c99; font-weight:700; }
-  .em-g { color:#6b9e7a; font-weight:700; }
-
-  /* ---------- 인용구 ---------- */
-  blockquote {
-    border-left:4px solid #c2703e;
-    max-width:800px;
-    margin:2.4rem auto;
-    padding:1.2rem 1.5rem;
-    background:rgba(255,255,255,0.7);
-    border-radius:0 14px 14px 0;
-    box-shadow:0 4px 18px rgba(44,40,37,0.05);
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.05rem, 1.2vw + 0.6rem, 1.25rem);
-    line-height:1.75;
-    font-weight:600;
+  p { margin-bottom: 1.1em; word-break: keep-all; }
+  p strong { font-weight: 700; color: #2c2825; }
+  .em-warm { color: var(--accent-warm); font-weight: 700; }
+  .em-blue { color: var(--accent-blue); font-weight: 700; }
+  .em-green { color: var(--accent-green); font-weight: 700; }
+  .slug {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.82em;
+    background: rgba(91,124,153,0.1);
+    color: #46617a;
+    padding: 2px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
   }
-  blockquote .who {
-    display:block;
-    margin-top:0.7rem;
-    font-family:'Noto Sans KR',sans-serif;
-    font-size:0.82rem;
-    font-weight:500;
-    color:rgba(44,40,37,0.55);
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,112,62,0.3), transparent);
+    margin: clamp(20px, 5vw, 40px) auto;
+    max-width: 400px;
   }
-
-  /* ---------- 카드 ---------- */
+  /* ── 카드 ── */
   .card {
-    background:rgba(255,255,255,0.7);
-    border:1px solid rgba(194,112,62,0.12);
-    border-radius:16px;
-    box-shadow:0 6px 24px rgba(44,40,37,0.06);
-    padding:clamp(1.2rem, 3.5vw, 1.8rem);
-    margin:1.8rem 0;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(44,40,37,0.06);
+    padding: clamp(16px, 3.5vw, 24px);
+    margin: 1.4rem 0;
   }
   .card-title {
-    font-weight:700;
-    font-size:1.02rem;
-    margin-bottom:0.6rem;
-    display:flex; align-items:center; gap:8px;
+    font-weight: 700;
+    font-size: clamp(0.98rem, 2.6vw, 1.08rem);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    word-break: keep-all;
   }
-  .dot { width:9px; height:9px; border-radius:50%; display:inline-block; flex:0 0 auto; }
-  .d-o { background:#c2703e; } .d-b { background:#5b7c99; } .d-g { background:#6b9e7a; }
-  .card p { margin-bottom:0.7rem; font-size:0.95em; }
-  .card p:last-child { margin-bottom:0; }
-
-  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .grid-3 { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
-  @media (max-width:680px) {
-    .grid-2, .grid-3 { grid-template-columns:1fr; }
+  .card p:last-child { margin-bottom: 0; }
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 1.4rem 0;
   }
-
-  /* ---------- 플로우 다이어그램 ---------- */
-  .flow {
-    max-width:640px;
-    margin:2.2rem auto;
-    display:flex;
-    flex-direction:column;
-    align-items:stretch;
-    gap:6px;
+  @media (min-width: 680px) {
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
   }
-  .fbox {
-    background:rgba(255,255,255,0.85);
-    border-radius:12px;
-    padding:0.85rem 1.1rem;
-    text-align:center;
-    font-size:0.92rem;
-    font-weight:700;
-    border:1px solid rgba(44,40,37,0.1);
-    box-shadow:0 3px 12px rgba(44,40,37,0.05);
+  /* ── 비유 박스 ── */
+  .analogy {
+    background: rgba(107,158,122,0.08);
+    border: 1.5px dashed rgba(107,158,122,0.5);
+    border-radius: 14px;
+    padding: clamp(16px, 3.5vw, 24px);
+    margin: 1.6rem 0;
   }
-  .fbox small {
-    display:block;
-    font-weight:400;
-    font-size:0.8rem;
-    color:rgba(44,40,37,0.6);
-    margin-top:3px;
-    line-height:1.55;
+  .analogy-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4f7a5e;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
   }
-  .f-model { border-color:rgba(91,124,153,0.35); }
-  .f-model small b { color:#5b7c99; }
-  .f-serve { border-color:rgba(194,112,62,0.4); background:rgba(194,112,62,0.05); }
-  .f-serve small b { color:#c2703e; }
-  .farrow {
-    text-align:center;
-    font-size:0.8rem;
-    color:rgba(44,40,37,0.55);
-    font-weight:500;
-    padding:2px 0;
+  .analogy p:last-child { margin-bottom: 0; }
+  /* ── 개념 박스 ── */
+  .concept {
+    background: rgba(91,124,153,0.08);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 0 12px 12px 0;
+    padding: clamp(14px, 3vw, 20px);
+    margin: 1.5rem 0;
   }
-  .fsplit { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  @media (max-width:560px) { .fsplit { grid-template-columns:1fr; } }
-  .f-yes { border-color:rgba(107,158,122,0.4); background:rgba(107,158,122,0.06); }
-  .f-no  { border-color:rgba(194,112,62,0.4); background:rgba(194,112,62,0.06); }
-
-  /* ---------- 테이블 ---------- */
-  .tablewrap {
-    overflow-x:auto;
-    margin:2rem 0;
-    border-radius:14px;
-    border:1px solid rgba(194,112,62,0.12);
-    box-shadow:0 6px 24px rgba(44,40,37,0.06);
-    background:rgba(255,255,255,0.7);
+  /* ── 주의 박스 ── */
+  .caution {
+    background: rgba(194,112,62,0.07);
+    border-left: 4px solid var(--accent-warm);
+    border-radius: 0 12px 12px 0;
+    padding: clamp(14px, 3vw, 20px);
+    margin: 1.5rem 0;
   }
-  table { border-collapse:collapse; width:100%; min-width:560px; font-size:0.9rem; }
-  th, td { padding:0.85rem 1rem; text-align:left; border-bottom:1px solid rgba(44,40,37,0.07); line-height:1.6; }
-  thead th {
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:0.95rem;
+  /* ── 리스트 ── */
+  ul.styled, ol.styled { padding-left: 1.2em; margin-bottom: 1.2em; }
+  ul.styled li, ol.styled li {
+    margin-bottom: 0.7em;
+    padding-left: 0.3em;
+    word-break: keep-all;
   }
-  thead th:nth-child(1) { color:rgba(44,40,37,0.6); }
-  thead th:nth-child(2) { color:#5b7c99; }
-  thead th:nth-child(3) { color:#c2703e; }
-  tbody tr:last-child td { border-bottom:none; }
-  tbody tr:nth-child(even) { background:rgba(194,112,62,0.025); }
-
-  /* ---------- 체크리스트 ---------- */
-  .check-list { list-style:none; }
-  .check-list li {
-    display:flex;
-    gap:14px;
-    padding:1rem 0;
-    border-bottom:1px dashed rgba(44,40,37,0.12);
-    align-items:flex-start;
+  ul.styled li::marker { color: var(--accent-warm); }
+  ol.styled li::marker { color: var(--accent-blue); font-weight: 700; }
+  /* ── before/after 전환 카드 ── */
+  .shift {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 1.5rem 0;
   }
-  .check-list li:last-child { border-bottom:none; }
-  .chk-num {
-    flex:0 0 auto;
-    width:30px; height:30px;
-    border-radius:9px;
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700;
-    font-size:0.88rem;
-    margin-top:2px;
+  @media (min-width: 680px) {
+    .shift { grid-template-columns: 1fr 40px 1fr; align-items: center; }
   }
-  .ck1 { background:rgba(194,112,62,0.12); color:#c2703e; }
-  .ck2 { background:rgba(91,124,153,0.12); color:#5b7c99; }
-  .ck3 { background:rgba(107,158,122,0.14); color:#6b9e7a; }
-  .ck4 { background:rgba(194,112,62,0.12); color:#c2703e; }
-  .check-list b { display:block; margin-bottom:2px; }
-  .check-list span { font-size:0.92em; color:rgba(44,40,37,0.8); }
-
-  /* ---------- 엔티티 위키 링크 스타일 ---------- */
-  .wiki {
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:0.85em;
-    background:rgba(91,124,153,0.09);
-    color:#5b7c99;
-    padding:2px 8px;
-    border-radius:6px;
-    white-space:nowrap;
+  .shift-side {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: 0 3px 14px rgba(44,40,37,0.06);
   }
-  .wiki.o { background:rgba(194,112,62,0.09); color:#c2703e; }
-  .wiki.g { background:rgba(107,158,122,0.12); color:#6b9e7a; }
-
-  /* ---------- 논문 카드 ---------- */
-  .paper-card {
-    border:1px solid rgba(194,112,62,0.2);
-    background:linear-gradient(135deg, rgba(194,112,62,0.05), rgba(255,255,255,0.75));
+  .shift-side .lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    display: block;
   }
-  .paper-en {
-    font-family:'Source Serif 4',serif;
-    font-style:italic;
-    font-size:clamp(1rem, 1.2vw + 0.5rem, 1.15rem);
-    line-height:1.6;
-    margin-bottom:0.6rem;
+  .shift-before { border: 1px solid rgba(44,40,37,0.12); }
+  .shift-before .lbl { color: rgba(44,40,37,0.5); }
+  .shift-after { border: 1.5px solid rgba(107,158,122,0.45); }
+  .shift-after .lbl { color: #4f7a5e; }
+  .shift-arrow {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--accent-warm);
+    font-weight: 900;
+    display: none;
   }
-  .paper-ko { font-size:0.88rem; color:rgba(44,40,37,0.65); }
-
-  /* ---------- 결론 박스 ---------- */
-  .conclusion {
-    background:linear-gradient(150deg, rgba(194,112,62,0.07), rgba(107,158,122,0.06) 60%, rgba(91,124,153,0.06));
-    border:1px solid rgba(194,112,62,0.18);
+  @media (min-width: 680px) {
+    .shift-arrow { display: block; }
   }
-  .shift-row {
-    display:grid;
-    grid-template-columns:1fr 30px 1fr;
-    gap:8px;
-    align-items:center;
-    margin:0.9rem 0;
-    font-size:0.9rem;
+  /* ── 결론 박스 ── */
+  .conclusion-box {
+    background: linear-gradient(135deg, rgba(194,112,62,0.07), rgba(107,158,122,0.07));
+    border: 1.5px solid rgba(194,112,62,0.22);
+    border-radius: 16px;
+    padding: clamp(20px, 4vw, 32px);
+    margin: 2rem 0;
+    box-shadow: 0 6px 24px rgba(44,40,37,0.07);
   }
-  .shift-before {
-    background:rgba(44,40,37,0.045);
-    border-radius:10px;
-    padding:0.7rem 0.9rem;
-    color:rgba(44,40,37,0.65);
+  .num-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent-warm);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
   }
-  .shift-after {
-    background:rgba(107,158,122,0.1);
-    border:1px solid rgba(107,158,122,0.3);
-    border-radius:10px;
-    padding:0.7rem 0.9rem;
-  }
-  .shift-arrow { text-align:center; color:#c2703e; font-weight:700; }
-  @media (max-width:560px) {
-    .shift-row { grid-template-columns:1fr; }
-    .shift-arrow { transform:rotate(90deg); }
-  }
-
-  /* ---------- 푸터 ---------- */
+  /* ── 푸터 ── */
   footer {
-    max-width:800px;
-    margin:4rem auto 0;
-    padding-top:2rem;
-    border-top:1px solid rgba(44,40,37,0.1);
-    font-size:0.85rem;
-    color:rgba(44,40,37,0.6);
-    text-align:center;
-    line-height:1.9;
+    text-align: center;
+    padding: 40px 16px 60px;
+    color: rgba(44,40,37,0.45);
+    font-size: 0.82rem;
+    line-height: 1.9;
   }
-  .divider-orn {
-    text-align:center;
-    color:rgba(194,112,62,0.4);
-    letter-spacing:0.6em;
-    font-size:0.9rem;
-    margin:2.5rem 0;
+  footer .foot-rule {
+    width: 60px; height: 3px;
+    background: rgba(194,112,62,0.35);
+    border-radius: 2px;
+    margin: 0 auto 20px;
   }
 </style>
 </head>
 <body>
+<div class="container">
 
 <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
 <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
@@ -363,109 +302,267 @@
 <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <span class="kicker">Deep Dive · 측정 타당성 × 에이전틱 서빙</span>
-    <h1>모델이 아니라 <span class="accent-a">피아노</span>를 채점했는가<br>— 도구 호출 평가 뒤에 숨은 <span class="accent-b">서빙 스택 교란 변수</span></h1>
-    <p class="hero-sub">벤치마크 점수는 에이전트의 능력이라고 우리는 믿어왔다. 그러나 그 점수의 일부는 모델이 아니라, 모델을 받쳐 준 서빙 스택의 것이었을지 모른다. 하나의 논문이 위키의 두 축을 잇는 숨은 통로를 드러냈다.</p>
-    <div class="pill-row">
-      <span class="pill c1">serving-layer confound</span>
-      <span class="pill c2">measurement–execution coupling</span>
-      <span class="pill c3">parseability boundary</span>
-      <span class="pill">tool-use evaluation</span>
-    </div>
+<header class="post-header">
+  <div class="meta-badges">
+    <span class="badge badge-warm">Wiki Query 심층 분석</span>
+    <span class="badge badge-blue">SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving</span>
+    <span class="badge badge-green">에이전틱 서빙 스택 · 벤치마크</span>
+  </div>
+  <h1>에이전트가 <span class="hl">자기 주방을 고치는 대회</span>가 열린다면<br>— SWE-Serve와 '인프라 최적화'의 재정의</h1>
+  <p class="lead">
+    지금까지 주방(서빙 스택)은 설계자가 다듬는 무대 뒤 배경이었고, 요리 대회(벤치마크)는 에이전트의 실력을 잴 때 빌려 쓰는 앞 무대였습니다. 그런데 대회 과제 자체가 <strong>"주방을 직접 개조하고, 그 주방에서 최고의 서빙을 해내라"</strong>로 바뀌는 순간 — 두 개의 별도 문서는 한 장의 지도로 합쳐지기 시작합니다.
+  </p>
+  <div class="meta-line">
+    <span>🧠 Wiki 기반 심층 분석 아티클</span>
+    <span>·</span>
+    <span>읽는 시간 약 9분</span>
+    <span>·</span>
+    <span>키워드: SWE-Serve, 에이전틱 서빙, 벤치마크 위상 반전</span>
   </div>
 </header>
 
-<main class="wrap">
+<blockquote>
+  "서빙 스택 자체를 에이전트가 구현·수정해야 할 태스크 대상으로 삼는 벤치마크가 등장하면, '인프라 최적화'는 인간 설계자의 활동이 아니라 에이전트가 수행하고 평가받는 능력 축으로 재정의되지 않는가?"
+  <span class="q-src">— Wiki Query 원문 중</span>
+</blockquote>
 
-<!-- ============ 섹션 1 ============ -->
+<p>
+  결론부터 말하면, <strong class="em-warm">답은 '예'이며, 위키에는 이미 이 재정의의 전조가 축적되어 있습니다.</strong> "서빙 스택 = 설계자가 최적화하는 실행 인프라", "벤치마크 = 에이전트 능력 측정의 외부 태스크"라는 이분법은, 서빙 스택 자체가 태스크 대상이 되는 순간 위상적으로 붕괴합니다. 이 글에서는 그 붕괴가 왜 자연스러운지, 무엇이 새로 생기는지, 그리고 어떤 그림자가 함께 따라오는지를 짚어봅니다.
+</p>
+
+<hr class="divider">
+
+<!-- ═══════════ 섹션 1 ═══════════ -->
 <section>
   <div class="sec-head">
-    <div class="sec-num n1">1</div>
-    <div>
-      <h2>심사위원은 연주자를 보지 못했다</h2>
-      <div class="sec-sub">아무도 의심하지 않은 전제 — "점수 = 능력"</div>
-    </div>
+    <span class="sec-num">01</span>
+    <h2>지금까지의 지도: <span class="accent-blue">주방과 요리 대회는 별개 서류였다</span></h2>
+  </div>
+  <p class="sec-sub">두 축이 어떻게 분리되어 축적되어 왔는지 — 전제 확인</p>
+
+  <div class="analogy">
+    <span class="analogy-label">🍳 비유로 먼저 잡기</span>
+    <p>
+      식당을 하나 상상해 봅시다. <strong>주방</strong>은 화력, 동선, 기구 배치가 정해진 설비 공간이고, <strong>요리 대회</strong>는 요리사의 실력을 재는 무대입니다. 지금까지의 관례에서 주방 설계는 '설비 담당자'의 일이었고, 요리 실력 측정은 '대회 주최 측'의 일이었습니다. 요리사는 주방을 <em>빌려 쓸</em> 뿐, 주방 자체를 고쳐 채점받을 일은 없었습니다.
+    </p>
   </div>
 
-  <p>피아노 콩쿠르를 상상해 보자. 모든 참가자는 주최 측이 제공한 악기로 연주해야 하고, 심사위원은 무대에서 들리는 소리만으로 점수를 매긴다. 그런데 3번 무대의 피아노는 한쪽 끝의 건반 몇 개가 아무리 눌러도 소리가 나지 않는 고장 난 악기였다. 그 무대에 오른 연주자가 아무리 정확한 운지를 해도 그 음은 홀에 닿지 않는다. 심사위원의 코멘트에는 이렇게 기록될 것이다 — <strong>"탄력이 약하고 음이 누락된다. 실력이 부족하다."</strong></p>
+  <p>
+    위키의 현재 상태가 정확히 이 지도입니다. <strong>Scepsy·Pythia·SMetric</strong>으로 대표되는 에이전틱 서빙 스택은 '설계자가 최적화하는 실행 인프라' 축으로, 그리고 벤치마크 논문들은 '에이전트 능력을 측정하는 외부 태스크' 축으로, 서로 다른 페이지에서 별개로 정리되어 왔습니다.
+  </p>
 
-  <p>이 채점표가 기록한 것은 연주자의 능력이 아니다. <span class="em-o">연주자와 악기가 결합된 시스템</span>의 성능이다. 그리고 진짜 문제는 그 점수가 '연주자 랭킹'이라는 이름으로, 다른 무대의 다른 악기 위에서 나온 점수들과 한 표에 합쳐진다는 데 있다. 순위표는 악기의 고장과 연주자의 실력을 구분할 문법을 갖고 있지 않다.</p>
+  <ul class="styled">
+    <li>
+      <strong>"Measuring the Serving Stack Instead of the Model"</strong> 논문은 tool-call의 파싱 가능성이 모델 능력이 아니라 로컬 서빙 스택의 특성에 좌우됨을 보여주면서도, 서빙 스택을 오직 <span class="em-blue">평가의 숨은 교란 변수</span>로만 다룹니다. 주방이 요리 실력 측정을 흔들리게 하는 '시야 방해 물체'로만 등장하는 셈입니다.
+    </li>
+    <li>
+      <strong>SpecKV</strong>(<span class="slug">adaptive-inference</span>, 2026-05-05)는 압축 상태에 반응해 추측 길이 γ를 선택하는 서빙 측 적응을 제시하지만, 그 적응 메커니즘을 심는 주체는 여전히 <span class="em-warm">시스템 설계자</span>입니다. 불 조절 장치는 이미 설비에 내장되어 있는 형국입니다.
+    </li>
+    <li>
+      <span class="slug">agent-native-serving</span>, <span class="slug">aggregate-pipeline-serving</span> 슬러그는 존재하지만 정의는 "_Wiki 축적 중_". 개념의 존재는 인식됐으나, 독립된 축으로 정리되기 직전의 미완 문서 상태입니다.
+    </li>
+  </ul>
 
-  <p>에이전틱 LLM의 도구 사용 벤치마크가 정확히 이 구조 위에 놓여 있다. 코딩 에이전트의 행동은 <span class="em-b">유효한 도구 호출</span>, 즉 제공된 스키마에 대해 <strong>파싱 가능한(parseable)</strong> 호출을 내보내는 것에서 출발한다. 파싱이 되지 않으면 하네스는 그 호출을 실행하지 못하고, 실행되지 않은 호출은 태스크 실패로 기록된다. 여기까지는 "모델이 형식을 지키지 못했다"는 능력의 문제처럼 들린다.</p>
+  <div class="concept">
+    <p style="margin-bottom:0;">
+      <strong class="em-blue">핵심 구조:</strong> 이 지도에서 서빙 스택은 에이전트의 성능을 좌우하되 <em>점수로 계산되지 않는</em> 환경 변수입니다. 요리사의 점수표에는 레시피와 손끝이 적히고, 주방의 화력과 동선은 적히지 않습니다. SWE-Serve는 바로 이 점수표의 누락 항목을 정면으로 겨냥합니다.
+    </p>
+  </div>
+</section>
 
-  <p>그런데 이번에 위키에 편입된 논문은 이 체인의 한 복록을 실증적으로 뜯어냈다. <span class="em-o">파싱 가능성 자체가 로컬 서빙 스택(Scepsy·Pythia·SMetric)의 구현 방식에 따라 달라진다</span>는 것이다. 파서가 스키마를 검증하는 위치, 스트리밍 출력을 조립하는 방식, 토큰 단위의 경계 처리 — 이런 서빙 계층의 구현 디테일이 같은 모델의 같은 출력을 '유효한 호출'로도, '쓰레기 출력'으로도 만들 수 있다.</p>
+<hr class="divider">
+
+<!-- ═══════════ 섹션 2 ═══════════ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>위키에 이미 적혀 있던 <span class="accent-warm">예고편</span></h2>
+  </div>
+  <p class="sec-sub">같은 이동을 부분적으로 예고했던 네 가지 구조적 선례</p>
+
+  <p>
+    SWE-Serve형 벤치마크의 등장은 갑작스러운 격변이 아니라, 위키 내부에서 이미 반복되던 패턴의 확장입니다. 네 개의 선례가 이 이동의 방향을 미리 가리키고 있었습니다.
+  </p>
+
+  <div class="card-grid cols-2">
+    <div class="card">
+      <div class="card-title">🎭 (a) Agent-Editing World Model — 동일 이동의 직접 선례</div>
+      <p>
+        "Agent-Editing World Model"(2026-09-25)은 세계 모델 — 전통적으로 에이전트에 <em>제공되는</em> 실행 인프라 — 을 <strong>에이전트가 편집하는 대상</strong>으로 재정의했습니다. 무대 장치를 관객이 아니라 <span class="em-warm">배우가 직접 고치는 연극</span>이 이미 한 번 무대에 올랐던 것입니다. "Agent-Editing Serving Stack"은 이 패턴의 자연스러운 다음 장입니다.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">🧩 (b) 하네스 개념의 이동</div>
+      <p>
+        <span class="slug">agent-as-harness</span> → <span class="slug">agentic-harness-engineering</span> → <span class="slug">agent-loop-as-computation</span>의 흐름에서 하네스는 '감싸는 틀'에서 <strong>'설계·수정 대상'</strong>으로 이동해 왔습니다. 에이전트 루프를 계산 단위로 보는 관점에서는, 그 계산을 구동하는 서빙 스택의 품질이 곧 <span class="em-blue">에이전트 수행 품질의 구성 요소</span>입니다.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">⚙️ (c) 경계 붕괴 개념의 조작화</div>
+      <p>
+        <span class="slug">algorithm-system-boundary-collapse</span>는 능력(알고리즘)과 인프라(시스템)의 경계 붕괴를 <em>개념</em>으로 포착했습니다. SWE-Serve형 벤치마크는 이 경계 붕괴를 <strong>측정 가능한 태스크로 조작화</strong>하는 첫 사례가 됩니다. 철학적 통찰이 채점 문항으로 강등(혹은 승격)되는 지점입니다.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 (d) "Measuring the Serving Stack"의 재해석</div>
+      <p>
+        이 논문의 발견 — 서빙 스택이 tool-call 유효성을 좌우한다 — 은 사실 <strong>서빙 스택 품질이 이미 '에이전트 성능'의 은닉된 구성 요소임</strong>을 암시합니다. 벤치마크가 서빙 스택을 대상으로 삼으면, 같은 현상이 <span class="em-warm">"교란 변수(측정 측)"에서 "능력 축(피측정 측)"으로 이름을 바꿀 뿐</span>입니다. 숨어 있던 채점 항목이 앞으로 나오는 것입니다.
+      </p>
+    </div>
+  </div>
 
   <blockquote>
-    동일한 모델이라도 어떤 서빙 구현 위에 세워져 있는지에 따라 "도구 사용 능력"의 측정값이 달라진다. 우리가 모델이라고 부르며 채점해 온 숫자는, 사실 모델과 서빙 스택이 결합된 시스템의 관측값이었다.
-    <span class="who">— 이번 분석의 핵심 주장을 한 문장으로</span>
+    네 선례의 공통분모: <strong>"에이전트에게 주어지는 것"이었던 대상(세계 모델, 하네스, 시스템 경계, 서빙 스택)이 차례로 '에이전트가 만지는 것'으로 격상</strong>되어 왔다. SWE-Serve는 이 시퀀스의 네 번째 격상일 뿐이다.
+  </blockquote>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════ 섹션 3 ═══════════ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>새로 태어나는 능력 축: <span class="accent-green">'주방 설계'가 채점 항목이 된다</span></h2>
+  </div>
+  <p class="sec-sub">재정의가 실제로 무엇을 측정하게 만드는가</p>
+
+  <div class="analogy">
+    <span class="analogy-label">🍳 비유로 잡기</span>
+    <p>
+      요리 대회의 점수표에 새로운 칸이 생긴다고 상상해 봅시다. "불 조절 능력", "주방 동선 설계", "기구 배치 최적화". 요리사는 이제 <em>주방에서 요리하는 실력</em>과 <em>주방 자체를 설계하는 실력</em>, 두 개의 다른 과목을 시험받습니다. 화력이 센 주방에서 요리 잘하는 것과, 화력이 센 주방을 <strong>직접 만들어내는</strong> 것은 전혀 다른 능력이기 때문입니다.
+    </p>
+  </div>
+
+  <h3>① 관측 → 결정 간극의 확장</h3>
+  <p>
+    <span class="slug">access-planning-gap</span>의 원 논문(Near-Optimal RL with Multi-Step Transition Lookahead, 2026-09-13)은 정보 접근과 계획 능력 사이의 간극을 계산 복잡도 언어로 형식화했습니다. 같은 틀이 <strong>"텔레메트리 관측 접근 ↔ 최적 서빙 결정"</strong> 사이의 간극에도 적용될 수 있으며, 에이전트가 이 간극을 넘는 능력이 곧 <span class="em-green">측정 대상</span>이 됩니다. 로그를 볼 수 있는 것과 그 로그에서 최적의 배압·캐싱·스케줄링 결정을 이끌어내는 것은 다른 능력이라는 뜻입니다.
+  </p>
+
+  <h3>② 런타임 추론 능력</h3>
+  <p>
+    "Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Benchmark"은 정적 코드가 아닌 <strong>실행 동작에 대한 추론</strong>을 이미 테스트하고 있습니다. 서빙 스택은 전형적인 런타임 행위 시스템 — 큐, 캐시, 동시성, 메모리가 얽힌 살아있는 대상 — 이므로, 이 벤치마크 계열이 <span class="em-blue">자연스러운 교두보</span>가 됩니다. 소스 코드를 읽는 능력이 아니라, 그 코드가 <em>부하 아래에서 어떻게 굴러가는지</em>를 읽는 능력입니다.
+  </p>
+
+  <h3>③ 인프라 기능의 행동 공간 편입</h3>
+  <p>
+    <span class="slug">autocompaction</span>, <span class="slug">agent-sandbox-state-management</span>, <span class="slug">action-level-speculation</span> 같은 슬러그가 가리키는 기능들은 지금 시스템에 <em>내장된</em> 기능입니다. 재정의가 완료되면 이들은 <strong>시스템 내장 기능에서 에이전트 액션으로 격상</strong>됩니다. 자동 압축은 기본 사양이 아니라 에이전트가 선택하고 구현하는 <span class="em-warm">행동 하나</span>가 되는 것입니다.
+  </p>
+
+  <div class="concept">
+    <p style="margin-bottom:0;">
+      <strong class="em-green">요약하면:</strong> 새 능력 축 = <strong>"관측 → 진단 → 수정 → 재관측"</strong>의 폐쇄 루프를 인프라 규모에서 수행하는 힘. 이것은 기존의 코딩 벤치마크(함수 하나 구현)나 에이전트 벤치마크(도구 호출 정확도) 어느 쪽과도 겹치지 않는, 제3의 과목입니다.
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════ 섹션 4 ═══════════ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>그러나 저울이 <span class="accent-warm">스스로를 조율할 때</span> — 유보 조건과 새로 생기는 문제</h2>
+  </div>
+  <p class="sec-sub">재정의가 공짜가 아닌 이유: 네 개의 유보 조항</p>
+
+  <h3>(a) 대체가 아니라 축의 이중화 + 위상 반전</h3>
+  <p>
+    인간 설계자의 인프라 최적화가 소멸하는 것이 아니라, "에이전트가 수행·평가받는 인프라 최적화"라는 축이 <strong>추가</strong>됩니다. 핵심 변화는 대체가 아니라 <span class="em-warm">위상적 이중 지시</span> — <strong>동일한 서빙 스택이 측정 기기(에이전트를 구동)이자 측정 대상(태스크)</strong>이 된다는 점입니다. 주방이 요리를 재는 저울인 동시에 채점 문항이 되는 상황입니다.
+  </p>
+
+  <div class="caution">
+    <p style="margin-bottom:0;">
+      <strong class="em-warm">⚠ (b) 평가 오라클의 자기참조 — </strong><span class="slug">audit-oracle-self-reference</span>의 소환.
+      피평가 에이전트가 <em>자신의 실행 기반</em>을 수정하는 구조에서는, "태스크로서의 스택 개선"과 "채점 인프라에 대한 변조"를 구분할 수 없는 위험이 생깁니다. 요리 대회에서 참가자가 채점용 저울을 손질하면 반칙이지만, 주방 개조 자체는 과제입니다 — 그런데 저울도 주방 안에 있다면? 이 구분은 <span class="slug">agent-reliability-auditing</span>의 새 과제를 정의하며, <span class="slug">agent-execution-semantic-opacity</span> 관점에서 에이전트가 수정한 스택 위에 수집되는 <strong>실행 흔적의 해석 가능성 자체</strong>가 훼손될 수 있음을 경고합니다.
+    </p>
+  </div>
+
+  <h3>(c) 비교 타당성의 근본적 어려움</h3>
+  <p>
+    "When No Benchmark Exists"(2026-05-10)의 문제의식이 <span class="slug">acceptable-risk-quantification</span>과 함께 재소환됩니다. 하드웨어·워크로드·네트워크 조건이 다른 서빙 스택 간 비교는 근본적으로 통제가 어렵습니다. 같은 요리 대회라도 대회장마다 가스 화력과 수압이 다른 셈이므로, 벤치마크 점수의 <strong>허용 가능한 오차·위험 수준에 대한 정량화</strong>가 점수표보다 먼저 선행되어야 합니다.
+  </p>
+
+  <h3>(d) 설계 → 구현 번역 간극의 측정화</h3>
+  <p>
+    <span class="slug">algorithm-system-translation-gap</span>과 "Design Docs Are All You Need"의 논의도 다시 등장합니다. 설계 문서와 실제 구현 사이의 간극이 '이론적 논점'에서 <strong>측정 가능한 점수 항목</strong>으로 바뀌면서, 에이전트가 설계 의도를 얼마나 충실히 인프라 코드로 번역하는지도 암묵적으로 채점됩니다. 번역 간극이 커지면 아무리 좋은 설계도 주방이 되지 못합니다.
+  </p>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════ 섹션 5: 결론 ═══════════ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>결론: 인프라는 <span class="accent-green">배경이 아니라 과목이다</span></h2>
+  </div>
+  <p class="sec-sub">기존 패러다임 → 새 패러다임, 세 가지 전환</p>
+
+  <p>
+    질문의 직관은 타당했고, 위키의 축적은 그 방향을 이미 담보하고 있었습니다. 남은 일은 패러다임의 문장을 바꾸는 일입니다. 기존 문장은 이렇습니다: <strong>"서빙 스택은 에이전트의 성능을 좌우하는 환경 변수이며, 그 개선은 인간 설계자의 직무다."</strong> SWE-Serve형 벤치마크는 이 문장을 다음과 같이 고쳐 씁니다 —
+  </p>
+
+  <blockquote>
+    <strong>"서빙 스택은 에이전트가 학습하고, 구현하고, 평가받는 과목이며,<br>그 품질은 이제 환경이 아니라 실력의 이름으로 불린다."</strong>
   </blockquote>
 
-  <p>위키가 질문을 던졌다. 도구 호출의 유효성이 서빙 구현에 좌우된다면, 기존 도구 사용 평가가 측정한 것은 모델 능력이 아니라 <strong>서빙 계층의 숨은 교란 변수</strong>가 아닌가. 이 글의 결론을 먼저 말하면 — <span class="em-g">네, 그 가설은 위키에 축적된 증거들에 의해 상당 부분 뒷받침되며, 기존 이중 축 분석의 전제 자체를 재검토해야 한다.</span></p>
+  <p>이 전환을 실행하려면 세 가지 관점의 이동이 필요합니다.</p>
+
+  <div class="shift">
+    <div class="shift-side shift-before">
+      <span class="lbl">BEFORE — 관점</span>
+      <strong>서빙 스택 = 환경.</strong> 고쳐지길 기다리는 설비. 성능 지표에서는 보이지 않는 숨은 교란 변수.
+    </div>
+    <div class="shift-arrow">→</div>
+    <div class="shift-side shift-after">
+      <span class="lbl">AFTER — 관점</span>
+      <strong>서빙 스택 = 커리큘럼.</strong> 에이전트가 학습·구현·평가되는 제3의 능력 과목. 점수표에 명시적으로 기재되는 항목.
+    </div>
+  </div>
+
+  <div class="shift">
+    <div class="shift-side shift-before">
+      <span class="lbl">BEFORE — 평가 설계</span>
+      벤치마크는 실행 인프라를 <em>신뢰 가능한 검은 상자</em>로 가정하고 위에서 점수를 매긴다.
+    </div>
+    <div class="shift-arrow">→</div>
+    <div class="shift-side shift-after">
+      <span class="lbl">AFTER — 평가 설계</span>
+      측정 기기와 측정 대상이 같아지는 <strong>자기참조 통제 장치</strong>(감사 오라클 분리, 변조 탐지)를 벤치마크 설계의 1급 제약으로 격상한다.
+    </div>
+  </div>
+
+  <div class="shift">
+    <div class="shift-side shift-before">
+      <span class="lbl">BEFORE — 인간의 역할</span>
+      설계자는 인프라 최적화의 <em>수행자</em>. 에이전트는 최적화된 인프라를 소비하는 존재.
+    </div>
+    <div class="shift-arrow">→</div>
+    <div class="shift-side shift-after">
+      <span class="lbl">AFTER — 인간의 역할</span>
+      설계자는 <strong>평가 틀과 문항의 설계자</strong>로 이동. "무엇이 좋은 주방인가"를 정의하는 출제위원이 되고, 실제 주방 짓기는 에이전트의 몫이 된다.
+    </div>
+  </div>
+
+  <div class="conclusion-box">
+    <p style="font-size: clamp(0.95rem, 2.6vw, 1.05rem); font-weight: 500;">
+      <span class="num-chip">1</span><strong>관점 전환</strong> — 서빙 스택을 '환경 변수'에서 '커리큘럼 항목'으로 재분류하고, 위키의 두 축(에이전틱 서빙 스택 / 벤치마크)을 병합 축으로 재색인합니다.<br>
+      <span class="num-chip">2</span><strong>평가 설계 전환</strong> — 측정 기기이자 측정 대상이라는 위상적 이중 지시를 전제로, 감사·변조 탐지·비교 조건 통제(<span class="slug">audit-oracle-self-reference</span>, <span class="slug">acceptable-risk-quantification</span>)를 벤치마크 명세의 필수 항목으로 요구합니다.<br>
+      <span class="num-chip">3</span><strong>역할 전환</strong> — 인간 설계자의 가치는 최적화 수행에서 <strong>과목과 채점 기준의 설계</strong>로 이동한다고 명시합니다. 인프라 최적화는 사라지지 않고, 수행 주체만 바뀝니다.
+    </p>
+  </div>
+
+  <p>
+    요리사가 자기 주방을 리모델링하는 대회가 열리는 순간, 우리가 사들여야 할 것은 '더 좋은 주방'이 아니라 <strong class="em-warm">'좋은 주방을 정의하는 채점표'</strong>입니다. SWE-Serve가 던진 질문은 결국 에이전트에게가 아니라, 무엇을 재고 어떻게 공정하게 재울지를 결정해 온 우리에게 향한 것입니다.
+  </p>
 </section>
 
-<!-- ============ 섹션 2 ============ -->
-<section>
-  <div class="sec-head">
-    <div class="sec-num n2">2</div>
-    <div>
-      <h2>파싱 가능성이라는 좁은 문</h2>
-      <div class="sec-sub">논문이 실증한 것 — 능력의 경계는 가중치 밖에 있다</div>
-    </div>
-  </div>
+<footer>
+  <div class="foot-rule"></div>
+  본 아티클은 Wiki Query 분석 결과("SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving" 관련 축적 노트)를 기반으로 재구성한 심층 분석 글입니다.<br>
+  인용 슬러그: agent-native-serving · aggregate-pipeline-serving · adaptive-inference · agent-as-harness · agentic-harness-engineering · agent-loop-as-computation · algorithm-system-boundary-collapse · access-planning-gap · audit-oracle-self-reference · agent-reliability-auditing · agent-execution-semantic-opacity · acceptable-risk-quantification · algorithm-system-translation-gap · autocompaction · agent-sandbox-state-management · action-level-speculation
+</footer>
 
-  <div class="card paper-card">
-    <div class="card-title"><span class="dot d-o"></span>대상 논문</div>
-    <p class="paper-en">Measuring the Serving Stack Instead of the Model: Hidden Confounds in Local Tool-Use Evaluation</p>
-    <p class="paper-ko">"모델 대신 서빙 스택을 측정하기: 로컬 도구 사용 평가에 숨은 교란 변수들" — 제목 자체가 이미 논지의 전부이자, 기존 평가 문화에 대한 고발장이다.</p>
-  </div>
-
-  <p>논문의 논지 구조는 세 단계로 압축된다. <strong>첫째,</strong> 코딩 에이전트의 모든 행동은 유효한 도구 호출에서 출발하며, 유효성의 최소 조건은 파싱 가능성이다. <strong>둘째,</strong> 이 파싱 가능성은 모델 가중치만의 함수가 아니라 로컬 서빙 스택의 구현 방식이 결정하는 속성이다. <strong>셋째,</strong> 따라서 동일 모델을 서로 다른 서빙 구현 위에서 평가하면 "도구 사용 능력" 점수가 달라지며, 기존 평가는 모델 대신 서빙 스택을 측정하고 있었을 가능성이 있다. 각 단계가 단순한 추측이 아니라 관측으로 뒷받침되었다는 점이 이 논문을 "흥미로운 의견"에서 "측정 타당성에 대한 실증적 문제 제기"로 격상시킨다.</p>
-
-  <p>직관적인 비유를 하나 더 들자. 모델은 답안지에 표시를 하는 수험생이고, 서빙 스택의 파서는 그 표시를 읽어 들이는 <span class="em-o">OMR 스캐너</span>다. 스캐너의 센서가 어긋나 있으면, 답이 비록 수험생의 머릿속에 — 여기서는 가중치 안에 — 정확히 존재했더라도 그 답은 오답으로 기록된다. 우리가 오답노트를 펴서 "이 학생은 이 개념을 몰랐구나"라고 결론 내리는 순간, 측정은 학생이 아니라 <strong>스캐너의 정렬 상태</strong>를 향하고 있었던 것이다.</p>
-
-  <h3 class="blue">파싱 가능성 경계 (parseability boundary)</h3>
-
-  <p>이 논지를 관념화한 개념이 바로 <span class="em-b">파싱 가능성 경계</span>다. "이 모델은 무엇을 할 수 있는가?"라는 질문에 답할 때 우리는 무의식적으로 가중치만을 생각한다. 그러나 도구 사용 맥락에서 능력의 실질적 경계선은 <strong>서빙 스택의 파서와 스키마 검증기가 그린다</strong>. 파서가 인식하지 못하는 출력 형식은, 모델이 아무리 그럴듯하게 생성해도 존재하지 않는 것과 같다. 능력의 지도에서 국경을 긋는 주체가 국가(모델)가 아니라 이웃 나라의 세관(서빙)인 셈이다.</p>
-
-  <div class="flow">
-    <div class="fbox f-model">모델 가중치<small>토큰 출력 — "도구를 호출하겠다"는 텍스트를 생성</small></div>
-    <div class="farrow">▼</div>
-    <div class="fbox f-serve">서빙 스택 — 파서 · 스키마 검증기<small><b>Scepsy · Pythia · SMetric</b> 등, 구현 방식마다 다른 유효성 판정</small></div>
-    <div class="farrow">▼ 파싱 가능한가?</div>
-    <div class="fsplit">
-      <div class="fbox f-yes">YES<small>하네스가 호출을 실행 → 결과가 점수에 반영</small></div>
-      <div class="fbox f-no">NO<small>실행 자체가 이루어지지 않음 → '실패'로 기록</small></div>
-    </div>
-  </div>
-
-  <p>이 다이어그램이 시사하는 바는 냉정하다. <span class="em-o">NO 분기에서 삭감되는 점수는 모델의 탓일 수도, 서빙의 탓일 수도 있지만, 채점표에는 그 구분이 남지 않는다.</span> 교란 변수의 정의가 정확히 이것이다 — 결과에 유입되지만 그 출처가 측정표에 기록되지 않는 변수.</p>
-
-  <h3 class="blue">묵시적 계약으로서의 서빙 계층</h3>
-
-  <p>위키의 <span class="wiki">[[action-tokenization]]</span> 논의와의 구조적 평행이 여기서 빛난다. "Continuous Actions from Discrete Minds" 논문은 토크나이저 설계가 물리 제약의 인코딩 방식을 결정하는 <strong>'표현 계약'</strong>임을 보였다. 서빙 스택의 파서·스키마 검증기도 정확히 같은 성격이다 — <span class="em-g">행동의 유효성을 정의하는 묵시적 계약이 모델 가중치 바깥 계층에 존재한다</span>. 토크나이저가 연속 행동을 이산 토큰으로 번역하듯, 서빙 파서는 생성 텍스트를 실행 가능한 구조화 호출로 번역한다. 두 경우 모두 "번역기의 문법"이 "번역 대상의 능력"보다 앞선다. 계약이 바뀌면 같은 발화가 다른 의미를 갖는다.</p>
-</section>
-
-<!-- ============ 섹션 3 ============ -->
-<section>
-  <div class="sec-head">
-    <div class="sec-num n3">3</div>
-    <div>
-      <h2>두 개의 축은 처음부터 독립적이지 않았다</h2>
-      <div class="sec-sub">위키 프레임워크의 붕괴 지점 — 측정-실행 인프라 결합</div>
-    </div>
-  </div>
-
-  <p>위키가 유지해 온 분석 구조는 깔끔한 이중 축이었다. <span class="em-b">서빙 스택은 최적화할 인프라</span>, 즉 독립 변수다. <span class="wiki">[[agent-native-serving]]</span>, <span class="wiki">[[aggregate-pipeline-serving]]</span>, 그리고 Flash-dLLM류의 IO-aware KV 캐싱·병렬 디코딩 최적화 연구들이 이 축에 쌓여 왔다. 반면 <span class="em-o">벤치마크 점수는 에이전트 능력의 측정값</span>, 즉 종속 변수다. SWE-Serve 등 에이전틱 벤치마크 연구들이 이 축을 담당한다. 두 축은 서로 다른 문헌군에서, 서로 다른 질문에 답하며 별개로 성장해 왔다.</p>
-
-  <p>이번 논문이 드러낸 것은 이 지도에 없던 <strong>세 번째 경로</strong>다. 서빙 스택이 "도구 호출 유효성"이라는 매개를 통해 종속 변수 — 점수 — 에 <span class="em-o">직접 개입</span>한다. 인프라가 점수를 바꾼다. 두 축은 독립적이지 않으며, 측정 파이프라인 자체가 실행 인프라와 결합되어 있다.</p>
-
-  <div class="card">
-    <div class="card-title"><span class="dot d-g"></span>측정-실행 인프라 결합 (measurement–execution coupling)</div>
-    <p>평가 하네스와 실행 하네스가 <strong>같은 스택을 공유하는 순간</strong>, 측정값은 인프라의 구현 디테일을 흡수한다. 채점 도구가 피평가 대상의 구현 위에서 돌아가는 순환성 — 측정하려는 시스템이 측정 장치의 일부가 되는 구조다. 이는 자기참조적 오라클 문제의 인프라 버전이며, 독립 엔티티로 등재할 가치가 있다.</p>
-  </div>
-
-  <p>이 결합은 위키의 하네스 계보에서도 한 발 더 나아간 문제다. <span class="wiki">[[agent-as-harness]]</span>와 <span class="wiki">[[agentic-harness-engineering]]</span>의 논의가 "하네스를 어떻게 설
+</div>
 </body>
 </html>
