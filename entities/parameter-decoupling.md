@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
 
 지식 통합의 시점 축을 추가한다. LOCUS가 품질-비용을 별도 파라미터 축으로 분해했다면, 본 논문은 외부 LM 지식을 추론 시 매개할지 파라미터에 사전 흡수할지의 선택 자체가 파라미터화 결정임을 보여준다.
+
+### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
+
+보존 목표의 분해 가능성을 제시한다. LOCUS가 품질-비용 목표를 별도 파라미터 축으로 분해했다면, 본 논문은 '일반 능력 보존'과 'MT-IF 보존'이 분리 가능한 별도 축이며, 완화 기법의 앵커링(보조 데이터/모델 출력/교사 출력) 선택이 두 축 간 트레이드오프의 배분을 결정함을 보여준다. 파라미터화-행동 분리의 보존 목표 확장 사례다.
+
+→ [[sources/2026-09-25-fine-tuning-llms-for-translation-general-forgettin.md|상세 보기]]

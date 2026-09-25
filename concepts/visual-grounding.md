@@ -32,3 +32,7 @@ _Wiki 축적 중_
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
 
 ### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-07)
+
+### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
+
+→ [[sources/2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md|상세 보기]]

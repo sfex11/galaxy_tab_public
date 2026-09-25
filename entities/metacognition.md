@@ -28,3 +28,9 @@ _Wiki 축적 중_
 '계속할까, 전환할까'의 메타 판단이 물리 로봇 도메인에서 학습 가능한 정책으로 실현되는 사례를 제공한다. 복잡도·행동 지속성 메타인지에 이어 스테이지 전환 메타인지의 제3 실현 축이다.
 
 → [[sources/2026-09-21-stageguard-learning-stage-transitions-for-long-hor.md|상세 보기]]
+
+### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
+
+'길을 잃었음'의 자가 감지가 도움 요청 행동의 선행 조건임을 보여준다. 과제 복잡도 판단에서 상태 불확실성 판단으로 메타인지의 대상이 확장되며, 불확실성이 회복 행동을 유발하는 입력이 됨을 입증한다.
+
+→ [[sources/2026-09-25-talk2escape-conversational-grounding-for-vision-an.md|상세 보기]]

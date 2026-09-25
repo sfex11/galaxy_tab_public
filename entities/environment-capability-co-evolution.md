@@ -28,3 +28,9 @@ _Wiki 축적 중_
 환경 설계가 능력 판별을 가능하게 하는 평가 측 사례를 제공한다. 구성적 태스크 환경이 세계 모델의 보존-적응 이중 능력을 분리 관측 가능하게 만드는 환경의 능동적 역할을 보여준다.
 
 → [[sources/2026-09-22-benchmarking-world-models-for-continual-learning-o.md|상세 보기]]
+
+### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
+
+계획 도메인과 인간 시연의 분업 구조를 제공한다 — 자동화 가능/불가능 구간의 경계가 시스템의 학습 가능 경계에 대응하며, 커버리지 프론티어가 미세조정과 함께 이동하면 공진화의 데이터 수집 버전이 성립한다.
+
+→ [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|상세 보기]]

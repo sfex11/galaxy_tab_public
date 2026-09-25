@@ -34,3 +34,21 @@ VLM 에이전트의 시각 지각을 '모든 프레임을 보는 것'에서 '필
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 VLM 에이전트의 역할을 '전 과제 수행'에서 '스테이지 전이 판별'로 특화하는 축소 전략을 제공한다. VLM을 오프라인 증류 교사로, 소형 판별기를 온라인 실행자로 두어 추론 비용-실시간성 트레이드오프를 해소함을 보여준다.
+
+### Where Should I Join? Robot Group Joining via Language-Guided Goal Pred (2026-09-25)
+
+정적 장면 이해를 넘어 집단의 실시간 활동과 형성을 판독해 합류 지점을 예측하는 '집단 행동 이해' 능력 축을 추가한다. 로봇 안내견·자율 이동 스쿠터라는 실용 응용이 VLM 항법의 새로운 응용 스펙트럼을 제시한다.
+
+→ [[sources/2026-09-25-where-should-i-join-robot-group-joining-via-langua.md|상세 보기]]
+
+### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
+
+접근-기획 간극의 훈련 측 해법을 제공한다 — 결정 필수 시각 요소를 명시한 접지 사고 연쇄 감독이 없으면 VLM은 배경과 근거를 구분하지 못하며, 간극의 원인이 아키텍처 능력이 아니라 증거-계획 결합 감독의 부재일 수 있음을 시사한다.
+
+→ [[sources/2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md|상세 보기]]
+
+### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
+
+Three-Step Nav가 진단한 VLN 구조적 실패(경로 이탈·조기 정지)에 대한 대화 기반 처방을 제공한다. MLLM 내비게이션 에이전트의 치명적 실패가 능력 부족이 아니라 개방형 루프 구조의 산물임을 밝히고, 통신 채널 추가로 실패를 회복 가능한 사건으로 전환하는 경로를 연다.
+
+→ [[sources/2026-09-25-talk2escape-conversational-grounding-for-vision-an.md|상세 보기]]

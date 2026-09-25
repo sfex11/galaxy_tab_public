@@ -62,3 +62,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 지표의 바닥선 포화라는 새 변형을 추가한다. 벤치마크가 명세한 지표(컴파일률)가 태스크의 초기 상태에 의해 이미 달성되어 측정 자체가 무정보가 되는 경우로, 명세 간극이 '누락된 차원'에서 '포화된 기준선'으로 확장됨을 보여준다.
 
 → [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]
+
+### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
+
+망각 완화 평가의 명세 간극 사례를 제공한다. '일반 벤치마크 유지율'이라는 표준 평가 관행이 실제 보존 목표(태스크 특화 지시 수행)를 명세하지 못하며, 명세의 누락이 완화 기법 연구의 결론 전환을 유발할 수 있음을 실증한다. SWE-Gate의 테스트-수용 단절과 동형인 '유지율-실보존' 간극이다.
+
+→ [[sources/2026-09-25-fine-tuning-llms-for-translation-general-forgettin.md|상세 보기]]

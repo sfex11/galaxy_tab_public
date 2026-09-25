@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
 
 ### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+### Agent-Editing World Model: Rethinking World Modeling for LLM Agents (2026-09-25)
+
+→ [[sources/2026-09-25-agent-editing-world-model-rethinking-world-modelin.md|상세 보기]]

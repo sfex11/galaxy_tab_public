@@ -32,3 +32,9 @@ _Wiki 축적 중_
 집단(사전 정의된 에이전트 그룹)을 협업 그래프의 선택 가능한 중간 추상화 계층으로 재활용한다. 계층이 고정된 위임 구조가 아니라 서브태스크별로 on/off 선택되는 참여 입도가 되어, 계층 사용의 유연성 차원을 추가한다.
 
 → [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]
+
+### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
+
+TAMP의 고정 계획 도메인이 장기 조작 태스크의 모든 단계를 지원하지 못한다는 발견은 계획의 커버리지 한계를 명시한다 — 계획의 실패 지점이 논리 오류가 아니라 도메인 표현 범위일 수 있음을 시사하며, 인간 시연이 계획 도메인 밖 구간의 폴백 메커니즘이 된다.
+
+→ [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|상세 보기]]

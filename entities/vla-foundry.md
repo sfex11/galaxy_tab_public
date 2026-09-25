@@ -26,3 +26,9 @@ LaPla의 latent-aligned planning은 VLA Foundry의 통합 훈련 프레임워크
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
 
 미세조정 중심 VLA 통합 훈련 파이프라인과 대비되는 훈련 프리 적응 경로를 제공한다. 로봇 적응이 사후학습 단계에서 추론 단계로 이동하는 스펙트럼의 반대 극점을 형성한다.
+
+### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
+
+VLA Foundry가 훈련 파이프라인 측을 다뤘다면 TANDEM은 데이터 획득 측의 상류 병목을 다룬다 — 시연 수집 자동화가 통합 훈련 프레임워크가 전제하는 대규모 데이터 공급을 실현하는 상보적 위치다.
+
+→ [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|상세 보기]]

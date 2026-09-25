@@ -28,3 +28,9 @@ _Wiki 축적 중_
 메모리 타당성 판단에 사용 시점(use-time) 계층을 추가한다. 기존 논의가 저장·모델 해석 시점의 타당성을 다뤘다면, 본 논문은 검색 후 사용 직전에 3신호로 타당성을 재판정하는 결정 컨트롤러를 제시하여 적응적 타당성이 실행 가능한 아키텍처 구성요소임을 실증한다.
 
 → [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]
+
+### Agent-Editing World Model: Rethinking World Modeling for LLM Agents (2026-09-25)
+
+적응적 타당성 실패(낡은 계획의 지속)의 구체적 병리와 해법 경로를 제공한다. 타당성 재평가가 메모리 관리 기법이 아니라 세계 모델의 기능으로 구현될 수 있음을 시사한다.
+
+→ [[sources/2026-09-25-agent-editing-world-model-rethinking-world-modelin.md|상세 보기]]

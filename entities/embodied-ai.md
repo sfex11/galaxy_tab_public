@@ -50,3 +50,9 @@ _Wiki 축적 중_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 장기 로봇 태스크의 스킬 조합 실행에서 실질 병목이 개별 스킬 품질이 아니라 스킬 간 전이 판단임을 규정하는 실증 근거를 제공한다.
+
+### Where Should I Join? Robot Group Joining via Language-Guided Goal Pred (2026-09-25)
+
+목표가 주어지는 표준 항법 설정과 달리 목표를 사회적 맥락에서 추론해야 하는 새 과제 클래스를 추가한다. 사회적 동반자 로봇(안내견, 스쿠터)이 체화 AI의 응용 지평을 확장한다.
+
+→ [[sources/2026-09-25-where-should-i-join-robot-group-joining-via-langua.md|상세 보기]]

@@ -1,0 +1,478 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세계 모델이 그림 그리기를 멈추면, 우리는 무엇을 채점하는가 — 편집형 세계 모델과 평가 기준의 재층화</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f7;
+    --ink:#2c2825;
+    --accent:#c2703e;
+    --blue:#5b7c99;
+    --green:#6b9e7a;
+    --card:rgba(255,255,255,0.7);
+    --card-border:rgba(194,112,62,0.12);
+    --soft:rgba(44,40,37,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:clamp(0.97rem,2.4vw,1.07rem);
+    line-height:1.9;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;
+  }
+  .container{
+    max-width:860px;
+    margin:0 auto;
+    padding:0 18px 64px;
+  }
+  /* ── 헤더 ── */
+  header{padding:44px 0 10px;}
+  .badge{
+    display:inline-block;
+    font-size:clamp(0.72rem,1.8vw,0.8rem);
+    font-weight:700;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    background:rgba(194,112,62,0.09);
+    border:1px solid rgba(194,112,62,0.25);
+    border-radius:999px;
+    padding:4px 14px;
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.72rem,6vw,2.65rem);
+    font-weight:700;
+    line-height:1.32;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    font-family:'Source Serif 4',serif;
+    font-style:italic;
+    font-size:clamp(1.02rem,3vw,1.25rem);
+    color:var(--blue);
+    margin:0 0 22px;
+    line-height:1.6;
+  }
+  .meta{
+    font-size:clamp(0.78rem,1.9vw,0.86rem);
+    color:rgba(44,40,37,0.55);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    border-top:1px solid var(--soft);
+    border-bottom:1px solid var(--soft);
+    padding:12px 2px;
+    margin-bottom:34px;
+  }
+  /* ── 리드 ── */
+  .lede{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(44,40,37,0.05);
+    padding:clamp(20px,4.5vw,32px);
+    margin-bottom:44px;
+    font-size:clamp(1.0rem,2.6vw,1.12rem);
+    line-height:2.0;
+  }
+  .lede strong{color:var(--accent);}
+  /* ── 섹션 ── */
+  section{margin-bottom:52px;}
+  h2{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.32rem,4.4vw,1.85rem);
+    font-weight:700;
+    line-height:1.4;
+    margin:0 0 6px;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+  }
+  h2 .num{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.0rem,3vw,1.25rem);
+    color:var(--accent);
+    font-weight:600;
+    flex-shrink:0;
+  }
+  .h-rule{
+    width:52px;height:3px;
+    background:var(--accent);
+    border-radius:2px;
+    margin:10px 0 24px;
+  }
+  h3{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.08rem,3.4vw,1.32rem);
+    font-weight:600;
+    margin:34px 0 12px;
+  }
+  p{margin:0 0 18px;}
+  strong{font-weight:700;}
+  .c-accent{color:var(--accent);font-weight:700;}
+  .c-blue{color:var(--blue);font-weight:700;}
+  .c-green{color:var(--green);font-weight:700;}
+  em{
+    font-family:'Source Serif 4',serif;
+    font-style:italic;
+    color:rgba(44,40,37,0.82);
+  }
+  /* ── 위키 엔티티 표기 ── */
+  .wiki{
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:0.82em;
+    font-weight:500;
+    background:rgba(91,124,153,0.1);
+    color:var(--blue);
+    border:1px solid rgba(91,124,153,0.18);
+    border-radius:6px;
+    padding:1px 7px;
+    white-space:nowrap;
+  }
+  /* ── 인용구 ── */
+  blockquote{
+    border-left:4px solid #c2703e;
+    max-width:800px;
+    margin:30px auto;
+    padding:16px 24px;
+    background:rgba(255,255,255,0.7);
+    border-radius:0 12px 12px 0;
+    box-shadow:0 3px 12px rgba(44,40,37,0.04);
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.02rem,2.8vw,1.18rem);
+    font-style:italic;
+    line-height:1.8;
+    color:rgba(44,40,37,0.9);
+  }
+  blockquote .bq-src{
+    display:block;
+    font-family:'Noto Sans KR',sans-serif;
+    font-style:normal;
+    font-size:0.78em;
+    color:rgba(44,40,37,0.5);
+    margin-top:10px;
+  }
+  /* ── 카드 ── */
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+    padding:clamp(18px,4vw,26px);
+    margin:22px 0;
+  }
+  .card h4{
+    margin:0 0 10px;
+    font-size:clamp(1.0rem,2.8vw,1.12rem);
+    font-weight:700;
+  }
+  .card p:last-child{margin-bottom:0;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:24px 0;}
+  .layer{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+    padding:clamp(18px,4vw,24px);
+    border-top:4px solid var(--blue);
+  }
+  .layer.l2{border-top-color:var(--green);}
+  .layer.l3{border-top-color:var(--accent);}
+  .layer .tag{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    border-radius:999px;
+    padding:2px 11px;
+    margin-bottom:10px;
+    background:rgba(91,124,153,0.1);
+    color:var(--blue);
+  }
+  .layer.l2 .tag{background:rgba(107,158,122,0.12);color:var(--green);}
+  .layer.l3 .tag{background:rgba(194,112,62,0.1);color:var(--accent);}
+  .layer h4{
+    margin:0 0 8px;
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.05rem,3vw,1.2rem);
+    font-weight:700;
+    line-height:1.45;
+  }
+  .layer p{font-size:clamp(0.9rem,2.2vw,0.97rem);line-height:1.8;margin-bottom:8px;}
+  .layer p:last-child{margin-bottom:0;}
+  /* ── 논거 리스트 ── */
+  .arg{
+    display:flex;
+    gap:14px;
+    margin:20px 0;
+    align-items:flex-start;
+  }
+  .arg .n{
+    font-family:'Source Serif 4',serif;
+    font-weight:700;
+    font-size:clamp(1.15rem,3.2vw,1.4rem);
+    color:var(--accent);
+    line-height:1.5;
+    flex-shrink:0;
+    width:34px;
+    text-align:center;
+    background:rgba(194,112,62,0.08);
+    border-radius:10px;
+    padding:2px 0;
+  }
+  .arg>div{flex:1;}
+  .arg h4{margin:0 0 6px;font-size:clamp(1.0rem,2.8vw,1.1rem);font-weight:700;}
+  .arg p{margin-bottom:8px;font-size:clamp(0.93rem,2.3vw,1.0rem);line-height:1.85;}
+  /* ── 체크리스트 ── */
+  ul.checklist{list-style:none;padding:0;margin:16px 0;}
+  ul.checklist li{
+    position:relative;
+    padding:6px 0 6px 34px;
+    margin-bottom:8px;
+  }
+  ul.checklist li::before{
+    content:"→";
+    position:absolute;
+    left:2px;top:6px;
+    color:var(--accent);
+    font-weight:700;
+    font-family:'Source Serif 4',serif;
+  }
+  /* ── 대비 박스(전환 전후) ── */
+  .shift{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin:24px 0;
+  }
+  .shift .from,.shift .to{
+    border-radius:14px;
+    padding:18px 22px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+  }
+  .shift .from{border-left:4px solid rgba(44,40,37,0.25);}
+  .shift .to{border-left:4px solid var(--green);}
+  .shift .label{
+    font-size:0.74rem;
+    font-weight:700;
+    letter-spacing:0.1em;
+    color:rgba(44,40,37,0.45);
+    display:block;
+    margin-bottom:6px;
+  }
+  .shift .to .label{color:var(--green);}
+  .shift p{margin:0;font-size:clamp(0.93rem,2.3vw,1.0rem);}
+  /* ── 푸터 ── */
+  footer{
+    border-top:1px solid var(--soft);
+    padding-top:26px;
+    margin-top:56px;
+    font-size:clamp(0.8rem,2vw,0.88rem);
+    color:rgba(44,40,37,0.55);
+    line-height:1.8;
+  }
+  .tagline{
+    display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;
+  }
+  .tagline span{
+    background:rgba(107,158,122,0.1);
+    color:var(--green);
+    border:1px solid rgba(107,158,122,0.2);
+    border-radius:999px;
+    padding:3px 12px;
+    font-size:0.8rem;
+    font-weight:500;
+  }
+  @media (max-width:560px){
+    header{padding-top:30px;}
+    blockquote{padding:14px 16px;}
+    .arg .n{width:28px;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+</nav>
+
+<header>
+  <span class="badge">DEEP DIVE · WORLD MODELS × AGENTS</span>
+  <h1>세계 모델이 그림 그리기를 멈추면,<br>우리는 무엇을 채점하는가</h1>
+  <p class="subtitle">— 편집형 세계 모델과 평가 기준의 재층화 (re-stratification)</p>
+  <div class="meta">
+    <span>대상 논문: <em>Agent-Editing World Model: Rethinking World Modeling for LLM Agents</em> (2026-09-25)</span>
+    <span>읽는 시간 약 12분</span>
+  </div>
+</header>
+
+<div class="lede">
+  지금까지 세계 모델(world model)은 <strong>"다음 장면을 그려내는 화가"</strong>였다. 환경의 다음 관측을 예측하는 내적 시뮬레이터 — 심지어 판별형 세계 모델조차 후보 행동에 대한 다음 상태를 <em>생성</em>하는 일을 전제로 했다. 그런데 <em>Agent-Editing World Model</em>이 등장하며 화가는 붓을 내려놓고 <strong>교정 펜을 든 장부지기</strong>가 되었다. 고엔트로피·실행 의존적인 도구 응답을 다시 그리는 것을 포기하고, 기존 상태를 직접 <em>편집</em>하기 시작한 것이다. 화가를 평가하던 잣대 — 예측 충실도 — 로 장부지기를 평가할 수 있는가? 이 글의 답은 다음과 같다. <strong>이동해야 한다는 방향은 옳다. 다만 "교체"가 아니라 "재층화"다.</strong>
+</div>
+
+<!-- ═══════════════ 섹션 1 ═══════════════ -->
+<section>
+  <h2><span class="num">01</span>화가에서 장부지기로 — 무엇이 바뀌었나</h2>
+  <div class="h-rule"></div>
+
+  <p>가장 쉬운 비유부터 시작하자. 예측형 세계 모델은 <span class="c-accent">내일 잔고를 그림으로 그려주는 은행원</span>이다. "당신이 이 카드를 쓰면, 통장 잔고는 이런 풍경이 될 겁니다" — 그리고 우리는 그 그림이 실제와 얼마나 닮았는지를 채점해 왔다. 이것이 '예측 충실도(predictive fidelity)'다.</p>
+
+  <p><em>Agent-Editing World Model</em>은 이 그림 그리기를 <strong>포기한다</strong>. 대신 장부에 직접 기입한다. 도구 응답처럼 엔트로피가 높고 실제 실행이 일어나야만 알 수 있는 출력을 재구성하려 드는 것은 애초에 잘못된 과업이라는 것이다 — 그림을 잘 그리는 능력을 아무리 키워도, 은행 서버의 실제 거래 결과는 그림으로 재현되지 않는다. 그래서 모델은 "다음 관측을 생성"하는 대신 <span class="c-blue">기존 상태의 특정 필드를 규칙에 따라 고쳐 쓰는</span> 쪽으로 정체를 바꾼다.</p>
+
+  <p>주목할 만한 것은 위키의 반응이다. <span class="wiki">[[agent-editing-world-model]]</span>은 기존 세계 모델 개념에 병합되지 않고 <strong>독립 엔티티로 생성</strong>되었다. 초록의 단서("existing language world models typic…")와 제목의 "Rethinking"이 시사하듯, 이 논문은 기존 정의를 정면으로 재검토하는 당사자다. 위키 스스로 "이것은 기존 정의로 포섭 불가능한 새 유형"임을 인지한 셈이고, 그 판단은 정확하다.</p>
+
+  <p>이 전환의 배경에는 위키가 이미 기록해 온 전제가 있다: <strong>도구 호출은 검증 불가능한 원자적 외부 실행</strong>이라는 것. 이는 <span class="wiki">[[agent-loop-as-computation]]</span>과 <span class="wiki">[[agent-execution-semantic-opacity]]</span> 계열의 분석으로 이어진다. 특히 후자의 TRACE 토론(2026-09-04)은 "실행 시맨틱 불투명성을 사후에 해독하려 하지 말고, 실행 시점에 인과 체인을 문서화하는 설계 시점 해법"을 제시했는데 — 이 패턴은 편집 타당성 문제에 그대로 이식 가능한 씨앗이다.</p>
+
+  <blockquote>
+    예측형 세계 모델의 생성물은 소멸하는 말이고, 편집형 세계 모델의 편집 기록은 남는 문서다. 채점 대상이 말에서 문서로 바뀌었다면, 채점 기준도 바뀌어야 하지 않은가.
+  </blockquote>
+</section>
+
+<!-- ═══════════════ 섹션 2 ═══════════════ -->
+<section>
+  <h2><span class="num">02</span>예측 충실도는 원래 '대리 지표'였다 — 이동해야 할 네 가지 근거</h2>
+  <div class="h-rule"></div>
+
+  <p>"평가 기준이 이동해야 한다"는 주장은 감상이 아니라, 위키에 이미 축적된 네 개의 독립적 근거가 모두 같은 방향을 가리키는 결과다.</p>
+
+  <div class="arg">
+    <div class="n">1</div>
+    <div>
+      <h4>예측 충실도는 처음부터 목적이 아니라 수단이었다</h4>
+      <p><span class="wiki">[[access-planning-gap]]</span> — <em>Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahead</em>(2026-09-13) — 는 ℓ-스텝 예지 접근이 관측을 제공하더라도 이를 최적 결정으로 번역하는 것이 구조적으로 어려운 영역이 존재함을 계산 복잡도로 형식화했다. 다시 말해 <strong>예측 충실도는 우리가 진짜 신경 쓰는 것(결정 품질)의 간접 지표</strong>였다. 비유하자면, 지금까지 우리는 엔진 소리를 듣고 차량 상태를 추정해 온 것이다. 그런데 소리를 아예 내지 않는 차 — 상태를 생성하지 않고 편집만 하는 모델 — 가 등장했다면, 더 이상 소리를 들을 수 없고 계기판을 직접 봐야 한다. 편집 모델은 이 대리 관계를 <em>스스로 끊는다</em>. 그러므로 종단 기준을 직접 평가할 수밖에 없다.</p>
+    </div>
+  </div>
+
+  <div class="arg">
+    <div class="n">2</div>
+    <div>
+      <h4>위키는 이미 이동을 시작했다</h4>
+      <p><span class="wiki">[[adaptive-forgetting]]</span> 엔티티에 걸린 <em>Benchmarking World Models for Continual Learning on Compositional Task</em>(2026-09-22)은 세계 모델의 망각 비용이 <strong>구성적 태스크 재방문 시점에 직접 관측 가능</strong>하며, 망각을 고장이 아닌 측정 가능한 능력 축으로 다룬다. 이는 세계 모델 평가가 "내부 생성 품질"에서 "하류에서 관측 가능한 기능적 축"으로 이동하는 흐름이다. 편집 오류도 정확히 같은 시간 구조를 갖는다 — <span class="c-green">편집 시점이 아니라 사용·재방문 시점에 관측된다</span>. 장부의 오기는 기입하는 순간이 아니라, 그 돈이 필요한 순간에 문제가 된다.</p>
+    </div>
+  </div>
+
+  <div class="arg">
+    <div class="n">3</div>
+    <div>
+      <h4>지표의 형태 자체가 부적합해졌다</h4>
+      <p>예측 충실도는 본질적으로 <strong>평균·분포 지표</strong>다. 반면 상태 편집의 실패는 <span class="c-accent">이산적·국소적·치명적인 사건</span>이다. <span class="wiki">[[average-metric-concealment]]</span>가 경고하는 구도 그대로, "평균 편집 정확도 99.2%"라는 숫자는 그 희귀하지만 치명적인 한 번의 잘못된 편집 — 사용자의 예약 상태를 지워버린 편집 하나 — 을 평균 안에 은폐해 버린다. 연간 평균 사고율이 아무리 낮아도, 운전자에게 중요한 것은 자신의 사고 한 번이다.</p>
+    </div>
+  </div>
+
+  <div class="arg">
+    <div class="n">4</div>
+    <div>
+      <h4>'타당성' 패러다임에는 이미 계보가 있다</h4>
+      <p><span class="wiki">[[adaptive-validity]]</span>는 메모리 도메인(<em>Does Your Agent's Memory Survive a Model Upgrade?</em>)에서 정의된 적응적 타당성이 <em>Artificial Id</em>(2026-09-12)를 통해 행동 지속성으로 확장됨을 기록한다 — "현재 상태가 여전히 타당한가"의 지속 재평가. 또한 <span class="wiki">[[adaptive-transition-discovery]]</span>(2026-09-07)는 적응의 판단 기준을 <strong>증거 가용성</strong>으로 구체화하는 선례를 남겼다 — '무엇을 근거로 타당하다 하는가'를 명시하라는 것이다. 상태 편집형 세계 모델은 이 계보의 <span class="c-blue">자연스러운 세 번째 정거장</span>이다. 메모리의 타당성, 행동의 타당성, 그리고 이제 <em>상태 편집의 타당성</em>.</p>
+    </div>
+  </div>
+
+  <p>네 근거는 서로 다른 계열에서 나왔지만 한 점에서 만난다. <strong>평가의 무게중심이 "모델이 무엇을 그려내는가"에서 "모델이 무엇을 고쳐 쓰는가, 그리고 그것이 나중에 어떻게 작동하는가"로 옮겨가고 있다</strong>는 것. 질문의 핵심 명제 — 편집형 세계 모델의 등장이 평가 기준의 이동을 강제한다 — 는 정합적이다.</p>
+</section>
+
+<!-- ═══════════════ 섹션 3 ═══════════════ -->
+<section>
+  <h2><span class="num">03</span>'보장'이라는 단어의 무게 — 평가의 3층 재층화</h2>
+  <div class="h-rule"></div>
+
+  <p>그러나 여기서 절반의 동의와 절반의 정정이 필요하다. 정정할 대상은 질문 속 한 단어, <span class="c-accent">"보장(guarantee)"</span>이다. 실행 의존적 결과가 사전에 검증 불가능하다는 것은 이 논의의 <em>전제 그 자체</em>다. 전제가 검증 불가능성이라면, 그 위에 세울 수 있는 '보장'은 단일 축일 수 없다. 장부의 세계에서도 보장은 세 겹으로 나뉜다.</p>
+
+  <div class="grid">
+    <div class="layer">
+      <span class="tag">LAYER 1 · 사전</span>
+      <h4>구조적 타당성<br><span style="font-size:0.72em;font-weight:500;color:rgba(44,40,37,0.6);">실행 없이 검증 가능</span></h4>
+      <p>편집 델타가 <strong>스키마·불변식·사전조건·인과 제약</strong>을 준수하는가. 차변과 대변이 균형을 이루는지 회계 감사가 실행 전에 장부만으로 검사할 수 있듯, 편집도 제약 하 연산으로 검증된다. <span class="wiki">[[belief-state-as-constraint]]</span> 관점에서 편집은 믿음 상태에 대한 제약 하 연산이다.</p>
+    </div>
+    <div class="layer l2">
+      <span class="tag">LAYER 2 · 사후</span>
+      <h4>지연 타당성<br><span style="font-size:0.72em;font-weight:500;color:rgba(44,40,37,0.6);">실행이 검증자</span></h4>
+      <p>편집은 <strong>반증 가능한 가설</strong>이고, 실제 도구 실행이 검증자다. 은행 명세서가 도착하면 장부와 대사(reconciliation)하듯, "예측→검증" 루프가 실행 계층에서 닫힌다. <span class="wiki">[[absence-based-rollback]]</span>, <span class="wiki">[[audit-feedback-closure]]</span>, <span class="wiki">[[action-level-speculation]]</span>이 이 루프의 부품이다.</p>
+    </div>
+    <div class="layer l3">
+      <span class="tag">LAYER 3 · 불가역</span>
+      <h4>검증 불가 영역의<br>위험 정량화<br><span style="font-size:0.72em;font-weight:500;color:rgba(44,40,37,0.6);">보장 → 보정된 신뢰</span></h4>
+      <p>오라클이 존재하지 않는 영역에서 '보장'은 <strong>보정된 신뢰(calibrated confidence)</strong>로 강등된다. 현금 거래처럼 영수증이 없는 부분에는 절대 증명 대신 한도와 겸손을 둔다. <span class="wiki">[[acceptable-risk-quantification]]</span> — <em>When No Benchmark Exists: Validating Comparative LLM Safety</em> — 가 제시하는 바로 그 전환이다.</p>
+    </div>
+  </div>
+
+  <p>이 3층 구조 속에는 이 글의 가장 중요한 반전이 숨어 있다. <strong>1층에서 예측은 소멸하지 않는다.</strong> 어떤 필드가 변하는가, 어떤 부작용 서명이 따르는가 — 이런 <span class="c-blue">저엔트로피 구조 예측</span>은 여전히 가능하고, 측정되어야 한다. 도구 응답 전체를 재구성하는 고엔트로피 예측은 포기하되, 편집의 구조적 귀결에 대한 저엔트로피 예측은 남는다. 즉 예측 충실도는 죽지 않는다. <em>살아남을 영역이 다시 그려질 뿐이다.</em></p>
+
+  <blockquote>
+    예측 충실도가 소멸하는 것이 아니라, 예측이 살아남을 영역이 다시 그려지는 것이다 — 고엔트로피 장면 생성에서 죽고, 저엔트로피 구조 불변성에서 산다.
+    <span class="bq-src">— 이 글의 중심 명제</span>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ 섹션 4 ═══════════════ -->
+<section>
+  <h2><span class="num">04</span>영수증을 남기는 모델 — 감사 가능성의 역설</h2>
+  <div class="h-rule"></div>
+
+  <p>직관에 반하는 사실이 하나 있다. 편집형 세계 모델은 감사 가능성이라는 요구를 <strong>충족하기는커녕, 오히려 유리한 위치에 놓인다</strong>.</p>
+
+  <p><span class="wiki">[[agent-reliability-auditing]]</span>과 <span class="wiki">[[auditable-gap]]</span>이 오래 요구해 온 것은 "에이전트의 판단을 외부에서 검사할 수 있는가"였다. 그런데 예측형 세계 모델의 산출물은 본질적으로 검사하기 어려운 대상이었다. 모델이 '그려낸' 다음 관측은 수없이 발산하는 표본 가운데 하나일 뿐이고, 그중 실제로 무엇이 판단에 쓰였는지 추적하려면 생성 과정 전체를 재구성해야 한다. 몽환적인 풍경화를 감사하는 것과 같다.</p>
+
+  <p>반면 편집형 모델은 <strong>검사 가능한 아티팩트</strong> — 편집 기록, 즉 "무엇에서 무엇으로 바꿨는가"의 델타 — 를 남긴다. 타임스탬프가 찍힌 수정 이력이다. 이는 TRACE 토론이 제안했던 "실행 시점에 인과 체인을 문서화한다"는 설계 시점 해법과 정확히 맞물린다. 편집 기록은 문서화된 인과 체인 그 자체이기 때문이다.</p>
+
+  <div class="card">
+    <h4><span class="c-green">역설의 정식화</span></h4>
+    <p>우리는 편집형 모델이 "예측을 포기했기 때문에" 검증이 어려워졌다고 걱정하지만, 실제로는 반대다. 예측형 모델은 <strong>관측을 '생성'했기 때문에</strong> 관측 자체를 신뢰할 수 없었고, 편집형 모델은 관측 생성을 포기한 대신 <strong>수정 행위의 흔적</strong>을 남긴다. 검증 불가능한 창작물보다, 오류가 남긴 지문이 감사에 훨씬 유용하다. <span class="wiki">[[absence-based-rollback]]</span>이 보여주듯 — 기대한 확인의 '부재'조차 롤백 신호가 될 수 있는 세계에서, 편집 기록은 풍부한 신호원이 된다.</p>
+  </div>
+
+  <p>다만 이 유리함은 조건부다. 편집 기록이 감사 아티팩트가 되려면 <span class="wiki">[[adaptive-transition-discovery]]</span>의 교훈을 따라 <strong>'무엇을 근거로 이 편집이 타당하다고 판단했는가'가 기록 안에 명시</strong>되어야 한다. 델타만 남기고 근거를 남기지 않으면, 영수증 없는 장부와 다르지 않다.</p>
+</section>
+
+<!-- ═══════════════ 섹션 5 ═══════════════ -->
+<section>
+  <h2><span class="num">05</span>교체가 아니라 재층화 — 패러다임 전환의 지침</h2>
+  <div class="h-rule"></div>
+
+  <p>정리하자. 질문의 핵심 명제 — <em>편집형 세계 모델의 등장이 평가 기준의 이동을 강제한다</em> — 는 위키의 근거들과 정합적이며, 옳다. 그러나 이동의 형태는 "예측 충실도 → 편집 타당성"의 단순 대체가 아니라, <span class="c-accent">평가가 3층 구조로 재층화되는 것</span>이고, 예측 충실도는 소멸하지 않고 <strong>저엔트로피 불변성 영역으로 수렴</strong>한다. 그리고 '보장'이라는 단어 자체도 — 검증 불가능성이 전제인 이상 — 재정의되어야 한다.</p>
+
+  <div class="shift">
+    <div class="from">
+      <span class="label">기존 패러다임 (생성·예측 중심)</span>
+      <p>세계 모델 = 다음 관측을 그려내는 내적 시뮬레이터. 평가 = 그림이 실제와 얼마나 닮았는가(예측 충실도, 평균·분포 지표). 검증 불가능성은 채점 영역 밖의 문제로 남는다.</p>
+    </div>
+    <div class="to">
+      <span class="label">전환된 패러다임 (편집·재층화 중심)</span>
+      <p>세계 모델 = 상태를 규칙에 따라 고쳐 쓰는 장부지기. 평가 = ① 구조적 제약 준수(사전) → ② 실행 기반 반증(사후) → ③ 보정된 신뢰(불가역), 그리고 이 셋 위에 저엔트로피 구조 예측의 충실도가 공존한다.</p>
+    </div>
+  </div>
+
+  <p>구체적으로, 패러다임 전환은 다음 다섯 가지 실천 지침으로 요약된다.</p>
+
+  <div class="card">
+    <h4>패러다임 전환을 위한 다섯 가지 지침</h4>
+    <ul class="checklist">
+      <li><strong>평가 축의 재배치, 폐기 아님</strong> — 예측 충실도를 버리지 말고 저엔트로피 불변성 영역(어떤 필드가 변하고 어떤 부작용 서명이 따르는가)으로 한정하라. 여기서 예측은 여전히 산다.</li>
+      <li><strong>종단 기준의 직접 평가</strong> — <span class="wiki">[[access-planning-gap]]</span>과 <span class="wiki">[[adaptive-forgetting]]</span>이 보여주듯, 결정 품질과 재방문 시점의 기능을 대리 지표 없이 직접 잰다. 편집 오류는 편집 시점이 아니라 사용·재방문 시점에 측정한다.</li>
+      <li><strong>'보장'의 언어 교체</strong> — 단일 보장이 아니라 세 층으로 분해하라: 실행 없이 검증 가능한 구조적 검증, 실행이 검증자가 되는 반증 루프, 그리고 오라클 부재 영역의 보정된 신뢰.</li>
+      <li><strong>편집 기록의 일급 아티팩트화</strong> — 델타와 함께 '판단 근거'를 기록하라. <span class="wiki">[[agent-reliability-auditing]]</span>이 요구한 감사 가능성은 편집형 모델에서 가장 실현 가능성이 높다.</li>
+      <li><strong>평균 지표에 대한 경계</strong> — <span class="wiki">[[average-metric-concealment]]</span>의 교
+</body>
+</html>

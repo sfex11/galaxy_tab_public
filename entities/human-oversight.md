@@ -30,3 +30,9 @@ Reviewability 가치 그룹을 통해 인간 감독이 감독자·설계자 측�
 인간 전문가 감독을 무한 자원이 아닌 희소 예산 자원으로 취급하고, 어느 표본에 감독을 배분할지 최적화하는 문제로 재정의한다. 감독의 총량이 아닌 배치 위치가 시스템 신뢰성을 결정함을 통계적으로 뒷받침한다.
 
 → [[sources/2026-09-24-optimal-sequential-annotations-for-off-policy-eval.md|상세 보기]]
+
+### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
+
+상시 감독이 아닌 온디맨드 감독 유발의 체화 로봇 실현 사례를 제공한다. 감독의 트리거 주체가 감독자에서 에이전트로 이동하여, 에이전트가 자신의 위험·불확실성 신호를 감지하면 감독자를 궤적에 능동적으로 참여시키는 구조다.
+
+→ [[sources/2026-09-25-talk2escape-conversational-grounding-for-vision-an.md|상세 보기]]

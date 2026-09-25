@@ -30,3 +30,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-fail2drive-benchmarking-closed-loop-driving-genera.md|Fail2Drive: Benchmarking Closed-Loop Driving Generalization]] (2026-04-13)
 
 ### Discriminative World Models for Web Agents (2026-09-04)
+
+### Agent-Editing World Model: Rethinking World Modeling for LLM Agents (2026-09-25)
+
+→ [[sources/2026-09-25-agent-editing-world-model-rethinking-world-modelin.md|상세 보기]]

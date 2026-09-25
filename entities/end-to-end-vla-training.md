@@ -40,3 +40,9 @@ VLA 정책 개선에 외부 가치 함수가 후보 행동을 순위화하는 �
 PRIME는 종단간 VLA의 피드포워드 구조 자체가 지각의 맹목성을 낳는다고 진단하고, 계획→지각 학습 피드백으로 위계 내부에 폐루프를 삽입한다. end-to-end의 정의를 '단방향 단일 파이프라인'에서 '양방향 정보 흐름을 갖는 파이프라인'으로 확장한다.
 
 → [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]
+
+### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
+
+TANDEM은 VLA 미세조정의 데이터 수집 병목에 대한 해법을 제공한다 — TAMP가 자율 수행 가능 행동의 시연을 자동화하고 인간 시연을 계획 커버리지 밖 구간으로 한정하여, 훈련 파이프라인 축과 별도로 데이터 획득 축의 효율화 경로를 연다.
+
+→ [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|상세 보기]]

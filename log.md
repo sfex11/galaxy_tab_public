@@ -3661,3 +3661,14 @@
 - 2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md
 - 2026-09-24-does-ai-save-time-on-product-design-a-randomized-c.md
 - 2026-09-24-the-sirens-song-when-proximal-background-context-o.md
+
+## [2026-09-25 08:24] llm-ingest | 9편 분석, 엔티티 946개, 개념 2204개
+- 2026-09-25-studentbench-ai-and-human-tutoring-yield-equivalen.md
+- 2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor.md
+- 2026-09-25-agent-editing-world-model-rethinking-world-modelin.md
+- 2026-09-25-fine-tuning-llms-for-translation-general-forgettin.md
+- 2026-09-25-shopping-by-algorithm-how-agentic-ai-deploys-human.md
+- 2026-09-25-where-should-i-join-robot-group-joining-via-langua.md
+- 2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md
+- 2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md
+- 2026-09-25-talk2escape-conversational-grounding-for-vision-an.md
