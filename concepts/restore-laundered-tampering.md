@@ -15,3 +15,7 @@ C/R 복원 입력이 에이전트 쓰기 가능하면 추적 변조가 '역사 �
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### LLM Agents Can Easily Tamper With Their Own Traces (2026-09-27)
+
+→ [[sources/2026-09-27-llm-agents-can-easily-tamper-with-their-own-traces.md|상세 보기]]

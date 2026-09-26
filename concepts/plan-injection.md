@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-16-corrupt-plans-clean-traces-evading-chain-of-though.md|Corrupt Plans, Clean Traces: Evading Chain-of-Thought Monito]]
+
+### LLM Agents Can Easily Tamper With Their Own Traces (2026-09-27)
+
+→ [[sources/2026-09-27-llm-agents-can-easily-tamper-with-their-own-traces.md|상세 보기]]
