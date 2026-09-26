@@ -64,3 +64,9 @@ Affora는 이 엔티티의 문제 공간을 '인간용 UI를 읽어내는 에이
 컴퓨터 사용 에이전트의 적용 범위를 GUI 작업 완료에서 전문 창작 소프트웨어의 장기 구조화 산출물 생성으로 확장한다. 230개 이상의 도구 규모와 편집 가능 아티팩트 산출이 기존 벤치마크류 연구와의 차별점이다.
 
 → [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]
+
+### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
+
+모바일 GUI 도메인에서 매 단계 VLM 의존의 지연·비용 문제를 진단하고 저빈도 계획-고빈도 실행 대안을 제시하여, 컴퓨터 사용 에이전트의 실용화 병목이 능력이 아닌 아키텍처에 있을 수 있음을 시사한다.
+
+→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
 훈련측 신호 갱신의 두 번째 사례를 제공하되, Claw-Eval-Live가 외부 실세계 수요로 갱신 근거를 확보한 것과 달리 본 논문의 환경 갱신은 온폴리시 롤아웃에 의존하므로, 신호 갱신의 정책 결속성이라는 새 비판 축을 형성한다.
+
+### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
+
+신호 갱신 원리의 제3 구현 경로를 제공한다. Claw-Eval-Live(실세계 수요 갱신)와 이 논문(EHR 데이터에서 자동 생성)은 갱신 소스의 이원화를 형성하며, 갱신 가능 신호 계층이 평가 인프라의 범용 패턴임을 입증한다.
+
+→ [[sources/2026-09-26-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

@@ -34,3 +34,9 @@ Pythia는 파이프라인 서빙 최적화가 가능한 근본 원인을 제공�
 파이프라인 서빙의 병목을 진단해온 흐름에, 그 병목 영역(추론 서빙) 자체를 에이전트가 엔지니어링하는 후속 단계를 제공한다. 서빙 인프라의 진화 주체가 인간 개발자에서 에이전트로 이동 가능함을 시사한다.
 
 → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
+
+### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
+
+파이프라인 병목에 대한 상류 해법을 제공한다. 스키마 축적·디코딩 최적화가 하류 접근이라면, VLM 호출 빈도 자체의 구조적 감소는 병목의 발생을 원천적으로 줄이는 상류 아키텍처 최적화다.
+
+→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

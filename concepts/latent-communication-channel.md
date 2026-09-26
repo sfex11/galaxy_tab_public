@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-26-learning-to-communicate-toward-end-to-end-optimiza.md|Learning to Communicate: Toward End-to-End Optimization of M]]
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
+
+→ [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

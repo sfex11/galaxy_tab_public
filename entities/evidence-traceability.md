@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Verifiable by Construction: Claim-Level Evaluation of Verbatim Citatio (2026-09-16)
 
 추적 가능성의 종착점을 '출처 문서 식별'에서 '주장-근거 직접 대조'로 이동시킨다. Cited but Not Verified가 인용 체인의 단절을 진단했다면, 본 논문은 체인 자체를 축소(인용=원문 재현)하여 단절 가능 지점을 원천 제거하는 설계 전략을 제공한다.
+
+### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-26)
+
+source-grounded 파이프라인이라는 구현 사례를 제공한다. 법률 도메인에서는 추출된 사실 진술이 원문에 추적 가능해야 그래프의 인식론적 신뢰성이 성립하며, 이것이 구조화 추출의 설계 전제임을 확인시킨다.
+
+→ [[sources/2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

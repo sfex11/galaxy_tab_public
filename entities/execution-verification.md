@@ -40,3 +40,9 @@ _Wiki 축적 중_
 실행 검증의 적용 스케일을 함수·스니펫 수준에서 저장소 전체 런타임 동역학으로 확장하는 사례를 제공한다. 480개 실행 기반 인스턴스는 실행 오라클이 저장소 규모 평가에서도 성립함을 보여준다.
 
 → [[sources/2026-09-25-can-llms-reason-about-runtime-behavior-a-repositor.md|상세 보기]]
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-26)
+
+로봇 실행 검증이 액션 프리미티브 위의 반복 정제 루프로 실현됨을 보여준다. 검증이 정적 분석이 아닌 실행 가능 명세 기반의 동적 확인임을 물리 도메인에서 강화한다.
+
+→ [[sources/2026-09-26-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]

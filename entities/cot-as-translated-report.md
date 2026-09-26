@@ -28,3 +28,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 번역된 보고서의 신뢰 문제에 대한 표현 측 해법을 제공한다 — 내레이션이 자유 텍스트가 아닌 그래프 구조의 언어적 실현이라면, 보고서의 근거가 별도 감사 채널로 존재하게 되어 텍스트만의 자기 참조 감사 위험을 완화한다.
 
 → [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
+
+번역된 보고서 문제의 생성 측 구현 사례를 제공한다. 듀얼 익스퍼트 구조에서 근거 전문가가 산출하는 설명은 판단 전문가의 내부 계산과 별개로 생성되므로, '근거가 실제 이유인가'의 질문이 아키텍처 수준에서 명시적으로 분리되어 검증 대상이 된다.
+
+→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

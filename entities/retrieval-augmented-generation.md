@@ -54,3 +54,9 @@ RAG의 정적 문서 검색 전제를 붕괴시키는 사례로, 검색 대상�
 RAG의 맹목 주입 문제에 대한 결정적 진단을 제공한다 — 충돌 메모리 환경에서 RAG의 환각률이 메모리-free 기준선보다 높다는 역설적 실증으로, 검색 품질 최적화만으로는 RAG 신뢰성이 담보되지 않으며 검색 후 신뢰 조정 계층이 필수임을 보여준다.
 
 → [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]
+
+### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
+
+EHR 기반 RAG 시스템의 평가가 자동 생성된 QA 쌍으로 지속 검증될 수 있는 경로를 제공한다. RAG 시스템 평가의 근거 문서가 실제 환자 기록으로 유지됨을 의미한다.
+
+→ [[sources/2026-09-26-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

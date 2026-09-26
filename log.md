@@ -3672,3 +3672,16 @@
 - 2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md
 - 2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md
 - 2026-09-25-talk2escape-conversational-grounding-for-vision-an.md
+
+## [2026-09-26 08:21] llm-ingest | 11편 분석, 엔티티 975개, 개념 2254개
+- 2026-09-26-llm-agents-can-easily-tamper-with-their-own-traces.md
+- 2026-09-26-temporal-gradient-inversion-for-private-trajectory.md
+- 2026-09-26-agentic-detection-of-online-conspiracies.md
+- 2026-09-26-rapid-robot-agentic-programming-from-demonstration.md
+- 2026-09-26-coding-agents-for-generalized-task-and-motion-plan.md
+- 2026-09-26-instrumental-monitor-evasion-emerges-under-ordinar.md
+- 2026-09-26-a-living-benchmark-for-information-retrieval-from-.md
+- 2026-09-26-sage-mitigating-long-horizon-reasoning-biases-via-.md
+- 2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md
+- 2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md
+- 2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md

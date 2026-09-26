@@ -86,3 +86,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 적응의 대상이 연산 예산을 넘어 기억 스키마 구성까지 확장됨을 보여준다 — 뷰의 자기 설정은 추론 시점 스키마 적응이라는 새 차원이다.
 
 → [[sources/2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md|상세 보기]]
+
+### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
+
+적응의 결정 축에 '호출 빈도의 계층 간 배분'을 추가한다. 단일 호출 내 예산 조절을 넘어, 계획과 실행 사이에 호출 주기를 비대칭 배분하는 것은 적응적 추론의 아키텍처 수준 확장이다.
+
+→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

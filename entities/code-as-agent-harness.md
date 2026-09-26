@@ -26,3 +26,15 @@ _Wiki 축적 중_
 하네스 코드의 기원을 확장한다 — 인간 작성 코드나 에이전트가 해석하는 계약(RunAgent)이 아니라 task feedback으로부터 학습되어 성장하는 코드임을 실증하여, 하네스를 구성하는 코드가 설계 시점 산출물이 아닌 훈련의 산출물이 됨을 보여준다.
 
 → [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-26)
+
+로봇 제어기 코드 생성의 명세 원천이 인간 프롬프트가 아닌 시각적 인간 시연이 됨을 보여준다. 코드-하네스 패러다임의 입력 인터페이스가 언어에서 비디오로 확장됨을 시사한다.
+
+→ [[sources/2026-09-26-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]
+
+### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-26)
+
+코드가 하네스로 기능하는 패러다임의 방향을 역전시킨다. 코드가 에이전트의 실행 환경이 아니라, 에이전트의 산출물로서 계획 문제의 도메인 특화 해법 인프라가 되는 사례다.
+
+→ [[sources/2026-09-26-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

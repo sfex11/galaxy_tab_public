@@ -20,3 +20,9 @@ _Wiki 축적 중_
 타인 신념 모델링이 추론 시점의 능력이 아니라 저장 계층의 1급 데이터(대인 지각 기억)가 되는 전환 사례를 제공한다. 마음 이론의 위치가 게임 수행 조건에서 메모리 스키마 설계 조건으로 이동함을 보여준다.
 
 → [[sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f.md|상세 보기]]
+
+### Agentic Detection of Online Conspiracies (2026-09-26)
+
+마음 이론의 실용 확장 사례를 제공한다 — 응답자 신념 모델링이 아닌 화자 의도 모델링이 콘텐츠 판별의 성패를 결정하며, 사회적 맥락이 신념 상태 추론의 근거 계층으로 기능함을 보여준다.
+
+→ [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]

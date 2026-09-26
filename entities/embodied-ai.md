@@ -56,3 +56,9 @@ _Wiki 축적 중_
 목표가 주어지는 표준 항법 설정과 달리 목표를 사회적 맥락에서 추론해야 하는 새 과제 클래스를 추가한다. 사회적 동반자 로봇(안내견, 스쿠터)이 체화 AI의 응용 지평을 확장한다.
 
 → [[sources/2026-09-25-where-should-i-join-robot-group-joining-via-langua.md|상세 보기]]
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
+
+체화 에이전트의 프라이버시 경계가 센서 격리가 아니라 모든 파생 전송물의 반전 가능성으로 재정의되어야 함을 보여준다. 센서 데이터가 디바이스에 머물러도 정책 그래디언트라는 간접 채널을 통해 관찰-행동 궤적 전체가 외부로 유출될 수 있다.
+
+→ [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

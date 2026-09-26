@@ -608,3 +608,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 에이전트 능력 프론티어를 인프라 엔지니어링으로 확장한다. 코드 생성을 넘어 서빙 스택 전반의 계층 간 변경 조율 능력이 새로운 측정 대상이 되며, 에이전트가 소프트웨어 생태계의 하위 기반부까지 다루는 단계로 진화함을 시사한다.
 
 → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
+
+### Agentic Detection of Online Conspiracies (2026-09-26)
+
+에이전트의 응용 스펙트럼에 소셜 미디어 콘텐츠 분석이라는 새 도메인을 추가한다 — 도구 사용·코드 실행·환경 탐색에 이어 사회적 맥락 추론이 에이전트의 능력 요구사항으로 등장함을 보여준다.
+
+→ [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]

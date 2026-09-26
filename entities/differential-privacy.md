@@ -32,3 +32,9 @@ DP의 적용을 통계적 보장 형식화에서 연합 미세조정의 gradient
 지수 노이즈 메커니즘이 프라이버시 목적 밖에서 통계적 보장(유한 시간 수렴)을 갖춘 선택자로 재활용됨을 보여, DP 기제의 목적 독립적 이식성을 강화한다.
 
 → [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
+
+그래디언트에 노이즈를 주는 DP 방어의 위협 모델 근거를 체화 RL에서 제공한다. 그래디언트가 사적 궤적의 완전한 복원 경로가 될 수 있음을 보여, '원시 데이터 미전송 = 프라이버시'라는 아키텍처 전제가 노이즈 주입 없이는 무방비함을 실증한다.
+
+→ [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

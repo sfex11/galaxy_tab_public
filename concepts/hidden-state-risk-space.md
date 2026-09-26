@@ -16,3 +16,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
+
+→ [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
 
 패치-테스트 오류 합의가 RL 훈련에서 위양성 수렴 신호로 작동하는 경로를 제공한다. 검증 오류와 행동 오류가 정합하면 학습이 진전 없이 안정적으로 보이는 조건을 명시한다.
+
+### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-26)
+
+탐색 편향의 구체 메커니즘을 제공한다 — '국소적으로 그럴듯한' 분기 선택이 본질적으로 구조적으로 불안정한 경로에 대한 위양성 수렴이며, 이 현상이 RL 훈련 도메인을 넘어 추론 시점 탐색에서도 재현됨을 보여준다.
+
+→ [[sources/2026-09-26-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

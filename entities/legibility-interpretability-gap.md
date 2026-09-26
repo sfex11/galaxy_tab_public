@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Corrupt Plans, Clean Traces: Evading Chain-of-Thought Monitoring with  (2026-09-16)
 
 모니터링 도메인의 실증으로 확장한다. 판독 가능한 깨끗한 CoT가 실제 계획의 충실한 표현이 아님을 안전 감시 실패로 직접 보여주어, legibility가 interpretability의 대체가 아님을 가장 실용적 맥락에서 확인시킨다.
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
+
+가독성-해석가능성 간극의 구조적 완화 후보를 제공한다. 근거 생성을 판단 전문가와 분리된 별도 전문가에 위임하면, 설명의 가독성이 판단 경로의 무결성과 독립적으로 최적화될 수 있으나, 근거의 충실성(faithfulness) 검증은 별도로 요구된다.
+
+→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

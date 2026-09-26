@@ -26,3 +26,9 @@ _Wiki 축적 중_
 일반 벤치마크 유지율이라는 단일 표면 신호가 망각 완화의 실질(태스크 특화 지시 수행 보존)을 담보하지 못함을 MT 도메인에서 실증한다. 테스트 통과·캡션·CoT에 이어 '벤치마크 유지율'이 단일 표면 신호 불충분성 원리의 새 인스턴스임을 확정한다.
 
 → [[sources/2026-09-25-fine-tuning-llms-for-translation-general-forgettin.md|상세 보기]]
+
+### Agentic Detection of Online Conspiracies (2026-09-26)
+
+어휘 마커라는 새로운 표면 신호 유형에서 원리를 확인한다. 어휘 마커만으로는 음모론 지지와 풍자를 구별할 수 없음을 보여, 표면 신호 불충분성이 코드·캡션·추적 도메인을 넘어 담화 분석으로 확장됨을 입증한다.
+
+→ [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]

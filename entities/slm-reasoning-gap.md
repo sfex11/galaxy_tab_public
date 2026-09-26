@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-12)
 
 소형 모델이 아닌 음성 모달에서 동형의 추론 격차(음성 LLM < 텍스트 LLM)가 존재함을 실증한다. 추론 격차의 원인이 파라미터 규모만이 아니라 입력 모달리티에도 기인할 수 있음을 시사하여 격차 진단의 축을 확장한다.
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
+
+소형 모델 추론 격차의 제3의 완화 경로를 제공한다. 능력 향상(Distill Globally)이나 추론 필요성 제거(TeCoD)와 달리, 판단과 설명을 분리하여 각 전문가의 요구 능력을 축소하는 아키텍처 분업 경로를 제시한다.
+
+→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

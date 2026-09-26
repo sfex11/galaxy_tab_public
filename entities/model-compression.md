@@ -38,3 +38,9 @@ _Wiki 축적 중_
 생성 백본의 품질을 유지하면서 조건화 계층(거대 텍스트 인코더)을 소형 인코더+임베딩 번역기로 치환하는 선택적 풋프린트 절감 전략을 제공한다. 압축 대상이 전체 모델이 아니라 파이프라인 구성요소별 기여도에 따라 결정되어야 함을 보여준다.
 
 → [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
+
+압축의 목표 축에 '설명 가능성 보존'을 추가한다. 파라미터 축소가 성능뿐 아니라 투명성을 함께 감소시키는 경향에 대해, 근거 생성 전문가를 유지하는 구조적 설계로 트레이드오프를 관리하는 사례를 제공한다.
+
+→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]
