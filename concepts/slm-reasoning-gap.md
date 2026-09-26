@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-01-select-to-think-unlocking-slm-potential-with-local.md|Select to Think: Unlocking SLM Potential with Local Sufficie]]
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+→ [[sources/2026-09-27-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

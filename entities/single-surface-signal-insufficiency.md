@@ -32,3 +32,9 @@ _Wiki 축적 중_
 어휘 마커라는 새로운 표면 신호 유형에서 원리를 확인한다. 어휘 마커만으로는 음모론 지지와 풍자를 구별할 수 없음을 보여, 표면 신호 불충분성이 코드·캡션·추적 도메인을 넘어 담화 분석으로 확장됨을 입증한다.
 
 → [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]
+
+### Agentic Detection of Online Conspiracies (2026-09-27)
+
+어휘 마커라는 단일 표면 신호가 음모론 발화 검출에 불충분함을 보여, 이 원칙이 테스트 통과·캡션·CoT를 넘어 콘텐츠 조정 도메인으로 확장됨을 확정한다.
+
+→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

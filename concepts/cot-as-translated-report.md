@@ -25,3 +25,7 @@ _자동 Wiki Query에서 추출됨_
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
 
 → [[sources/2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md|상세 보기]]
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+→ [[sources/2026-09-27-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

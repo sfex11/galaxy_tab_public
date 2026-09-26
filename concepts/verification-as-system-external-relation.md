@@ -16,3 +16,7 @@ RLVR의 '검증 가능'은 태스크 형식의 내재적 속성이 아니라 보
 _자동 Wiki Query에서 추출됨_
 
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
+
+→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]

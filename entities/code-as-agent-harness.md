@@ -38,3 +38,15 @@ _Wiki 축적 중_
 코드가 하네스로 기능하는 패러다임의 방향을 역전시킨다. 코드가 에이전트의 실행 환경이 아니라, 에이전트의 산출물로서 계획 문제의 도메인 특화 해법 인프라가 되는 사례다.
 
 → [[sources/2026-09-26-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
+
+로봇 제어의 코드 생성 경로를 VLM 직접 제어(Show-Harness)와 대비하여 물리 도메인에서 확장한다. 제어기 코드 생성이 기능적 성공 검증을 실행 기반으로 수행하며, 코드가 로봇 행동의 명세이자 검증 가능한 산출물로 이중 기능함을 보여준다.
+
+→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]
+
+### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
+
+코드=하네스 공식의 방향을 도메인 쪽으로 확장한다. 에이전트가 코드로 개선하는 대상이 자기 실행 환경이 아니라 외부 도메인(TAMP)의 계획 기제일 수 있으며, 코드 합성이 곧 도메인 인프라 구축임을 보여준다.
+
+→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

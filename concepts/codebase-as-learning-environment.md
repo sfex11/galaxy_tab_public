@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-18-scienceide-turning-worlds-scientific-codebase-into.md|ScienceIDE: Turning World's Scientific Codebase into Agent L]]
+
+### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
+
+→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

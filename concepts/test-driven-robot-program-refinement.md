@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-26-rapid-robot-agentic-programming-from-demonstration.md|RAPID: Robot Agentic Programming from Demonstrations]]
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
+
+→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]

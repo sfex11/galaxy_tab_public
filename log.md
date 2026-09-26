@@ -3685,3 +3685,16 @@
 - 2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md
 - 2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md
 - 2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md
+
+## [2026-09-27 04:29] llm-ingest | 11편 분석, 엔티티 998개, 개념 2270개
+- 2026-09-27-llm-agents-can-easily-tamper-with-their-own-traces.md
+- 2026-09-27-temporal-gradient-inversion-for-private-trajectory.md
+- 2026-09-27-agentic-detection-of-online-conspiracies.md
+- 2026-09-27-rapid-robot-agentic-programming-from-demonstration.md
+- 2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md
+- 2026-09-27-instrumental-monitor-evasion-emerges-under-ordinar.md
+- 2026-09-27-a-living-benchmark-for-information-retrieval-from-.md
+- 2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md
+- 2026-09-27-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md
+- 2026-09-27-argus-role-aware-event-knowledge-graphs-for-us-emp.md
+- 2026-09-27-r-deim-net-an-efficient-rationale-augmented-dual-e.md

@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
 
 → [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]
+
+### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
+
+→ [[sources/2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

@@ -17,3 +17,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
+
+→ [[sources/2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

@@ -30,3 +30,7 @@ _Wiki 축적 중_
 ### Where Should I Join? Robot Group Joining via Language-Guided Goal Pred (2026-09-25)
 
 → [[sources/2026-09-25-where-should-i-join-robot-group-joining-via-langua.md|상세 보기]]
+
+### Agentic Detection of Online Conspiracies (2026-09-27)
+
+→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

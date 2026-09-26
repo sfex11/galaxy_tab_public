@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-27)
+
+→ [[sources/2026-09-27-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

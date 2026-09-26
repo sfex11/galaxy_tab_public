@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-legibility-is-not-interpretability-comparing-judge.md|Legibility is Not Interpretability: Comparing Judged and Act]]
+
+### Agentic Detection of Online Conspiracies (2026-09-27)
+
+→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

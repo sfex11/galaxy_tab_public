@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
 
 잠재 채널이 동질적 가중치·아키텍처에 의존하는 것과 대조되는 이종 에이전트용 보편 채널로서 NLIP의 위치를 확정하며, 두 접근의 관계를 신뢰 도메인 크기의 함수로 재해석한다.
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
+
+잠재 계층이 에이전트 간 통신뿐 아니라 훈련 인프라로의 전송에서도 누출 채널이 됨을 확장한다. 잠재 계층의 독립적 보안 요구를 훈련-서빙 전 구간으로 일반화한다.
+
+→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

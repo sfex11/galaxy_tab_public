@@ -15,3 +15,7 @@ LLM의 코드 생성 능력을 활용하여 정적 하네스 구조를 대체하
 _자동 Wiki Query에서 추출됨_
 
 ### Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (2026-09-10)
+
+### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
+
+→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

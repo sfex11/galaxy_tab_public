@@ -22,3 +22,7 @@ _자동 Wiki Query에서 추출됨_
 ### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
 
 → [[sources/2026-09-24-beyond-repeated-sampling-learning-search-policies-.md|상세 보기]]
+
+### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
+
+→ [[sources/2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

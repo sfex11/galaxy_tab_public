@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|Temporal Gradient Inversion for Private Trajectory Reconstru]]
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
+
+→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### LLM Agents Can Easily Tamper With Their Own Traces (2026-09-27)
 
 → [[sources/2026-09-27-llm-agents-can-easily-tamper-with-their-own-traces.md|상세 보기]]
+
+### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-27)
+
+→ [[sources/2026-09-27-instrumental-monitor-evasion-emerges-under-ordinar.md|상세 보기]]

@@ -20,3 +20,9 @@ _Wiki 축적 중_
 LLM의 그래프 관련 역할이 위상 정제(임상 그래프의 위양성 엣지 제거)에서 구조 생성(원문 진술로부터 이벤트 그래프 구축)으로 확장됨을 보여준다. LLM-그래프 결합이 정제와 생성 양축으로 분화하고 있음을 시사한다.
 
 → [[sources/2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]
+
+### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-27)
+
+LLM의 그래프 관여가 생체신호 도메인의 '위상 정제'에서 법률 도메인의 '텍스트→그래프 생성'으로 확장됨을 보여준다. 두 사례가 함께 LLM이 그래프 지식 파이프라인의 구성 주체임을 확정한다.
+
+→ [[sources/2026-09-27-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

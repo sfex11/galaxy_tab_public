@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-04-25-a-multimodal-text--and-graph-based-approach-for-op.md|A Multimodal Text- and Graph-Based Approach for Open-Domain ]]
+
+### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-27)
+
+→ [[sources/2026-09-27-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-08-trust-aware-adaptive-disclosure-for-inference-priv.md|Trust-Aware Adaptive Disclosure for Inference Privacy Preser]]
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
+
+→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

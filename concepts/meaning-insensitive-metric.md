@@ -20,3 +20,7 @@ _Wiki 축적 중_
 ### When LLM Decompilers Recompile More and Preserve Less (2026-09-08)
 
 ### Nuha-Speech: Building General-Purpose Arabic Speech-LLMs (2026-09-13)
+
+### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+→ [[sources/2026-09-27-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
 
 → [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
+
+### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
+
+→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]

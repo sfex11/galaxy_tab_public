@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### The Implications of Linguistic Illegibility for LLM Security (2026-09-04)
 
 텍스트-내부 단절을 예외가 아닌 일반 원리로 보게 함으로써, KV 캐시 누출이 언어 판독불가능성의 자연스러운 발현이며 잠재 계층 자체의 독립적 보안이 필수적임을 시사한다.
+
+### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
+
+KV 캐시와 대비되는 제2의 잠재 상태 유출 경로 — 훈련 그래디언트 — 를 제공하여, 잠재 표현 누출이 추론 캐시에 국한된 문제가 아님을 확정한다.
+
+→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]
