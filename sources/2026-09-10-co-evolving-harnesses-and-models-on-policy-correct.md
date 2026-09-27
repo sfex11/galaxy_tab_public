@@ -79,3 +79,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/policy-constraint-hardening.md|policy constraint hardening]]
+
+---
+**관련**: [[concepts/social-level-harness.md|social level harness]]
+
+---
+**관련**: [[concepts/harness-institutional-layering.md|harness institutional layering]]

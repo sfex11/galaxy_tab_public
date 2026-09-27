@@ -94,3 +94,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/tool-lab-process-tracing.md|tool lab process tracing]]
+
+---
+**관련**: [[concepts/deliberate-memory-reencoding.md|deliberate memory reencoding]]
+
+---
+**관련**: [[concepts/memory-storage-interpretation-split.md|memory storage interpretation split]]
+
+---
+**관련**: [[concepts/storage-memory-persistence-divergence.md|storage memory persistence divergence]]

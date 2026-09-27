@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/quantization-induced-resurgence.md|quantization induced resurgence]]
+
+---
+**관련**: [[concepts/capacity-achievability-dichotomy.md|capacity achievability dichotomy]]

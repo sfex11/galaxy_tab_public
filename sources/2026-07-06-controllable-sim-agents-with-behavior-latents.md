@@ -49,3 +49,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/latent-goal-confidentiality.md|latent goal confidentiality]]
+
+---
+**관련**: [[concepts/statistics-only-guarantee-channel.md|statistics only guarantee channel]]
+
+---
+**관련**: [[concepts/surveillance-channel-triangulation.md|surveillance channel triangulation]]

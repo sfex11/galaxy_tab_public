@@ -164,3 +164,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/improvement-delegation.md|improvement delegation]]
+
+---
+**관련**: [[concepts/state-object-attached-ownership.md|state object attached ownership]]
+
+---
+**관련**: [[concepts/state-relative-contamination-rejudgment.md|state relative contamination rejudgment]]
+
+---
+**관련**: [[concepts/capability-improvement-headroom.md|capability improvement headroom]]
+
+---
+**관련**: [[concepts/interpretability-grounding-privilege.md|interpretability grounding privilege]]
+
+---
+**관련**: [[concepts/scalar-probability-selection-insufficiency.md|scalar probability selection insufficiency]]
+
+---
+**관련**: [[concepts/improvement-procedure-persistence.md|improvement procedure persistence]]
+
+---
+**관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]

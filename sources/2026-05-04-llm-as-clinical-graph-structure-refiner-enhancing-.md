@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/diagnosis-remedy-pairing.md|diagnosis remedy pairing]]
+
+---
+**관련**: [[concepts/llm-as-coach.md|llm as coach]]

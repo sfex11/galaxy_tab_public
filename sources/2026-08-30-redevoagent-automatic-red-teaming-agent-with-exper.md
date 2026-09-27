@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/drive-discharge-via-self-report.md|drive discharge via self report]]
+
+---
+**관련**: [[concepts/team-trajectory-equivalence.md|team trajectory equivalence]]

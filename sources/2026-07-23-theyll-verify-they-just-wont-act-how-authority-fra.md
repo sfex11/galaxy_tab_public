@@ -53,3 +53,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/free-security-observability.md|free security observability]]
+
+---
+**관련**: [[concepts/restore-laundered-tampering.md|restore laundered tampering]]
+
+---
+**관련**: [[concepts/same-provider-pairing.md|same provider pairing]]

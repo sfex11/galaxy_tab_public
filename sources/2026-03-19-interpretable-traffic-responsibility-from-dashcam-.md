@@ -357,3 +357,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/legal-domain-extraction.md|legal domain extraction]]
+
+---
+**관련**: [[concepts/reasoning-provenance.md|reasoning provenance]]
+
+---
+**관련**: [[concepts/multi-dimensional-revision-decision-space.md|multi dimensional revision decision space]]

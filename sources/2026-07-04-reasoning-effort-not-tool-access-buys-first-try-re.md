@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/regression-criterion-self-structuring.md|regression criterion self structuring]]
+
+---
+**관련**: [[concepts/heavy-tailed-relevance-matching.md|heavy tailed relevance matching]]

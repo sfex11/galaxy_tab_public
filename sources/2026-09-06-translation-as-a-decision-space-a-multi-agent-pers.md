@@ -63,3 +63,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/unrealized-branch-diversity-source.md|unrealized branch diversity source]]
+
+---
+**관련**: [[concepts/on-demand-resource-access.md|on demand resource access]]

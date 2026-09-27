@@ -49,3 +49,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/prior-informational-dependency-graph.md|prior informational dependency graph]]
+
+---
+**관련**: [[concepts/prior-weighted-bisection.md|prior weighted bisection]]
+
+---
+**관련**: [[concepts/proactive-help-seeking.md|proactive help seeking]]

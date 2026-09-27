@@ -151,3 +151,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/trajectory-level-objective.md|trajectory level objective]]
+
+---
+**관련**: [[concepts/population-level-defense.md|population level defense]]
+
+---
+**관련**: [[concepts/knowledge-integration-timing.md|knowledge integration timing]]
+
+---
+**관련**: [[concepts/meta-level-instrument-drift.md|meta level instrument drift]]
+
+---
+**관련**: [[concepts/exact-entropy-question-budget.md|exact entropy question budget]]
+
+---
+**관련**: [[concepts/terminal-reward-only-learning.md|terminal reward only learning]]
+
+---
+**관련**: [[concepts/localization-capability-axis.md|localization capability axis]]
+
+---
+**관련**: [[concepts/role-attributed-state-ownership.md|role attributed state ownership]]
+
+---
+**관련**: [[concepts/contaminated-knowledge-self-justification.md|contaminated knowledge self justification]]

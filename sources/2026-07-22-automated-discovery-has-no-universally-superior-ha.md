@@ -58,3 +58,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/recursive-meta-improvement.md|recursive meta improvement]]
+
+---
+**관련**: [[concepts/self-interpreter-improvement.md|self interpreter improvement]]
+
+---
+**관련**: [[concepts/time-independent-flow.md|time independent flow]]
+
+---
+**관련**: [[concepts/modality-budget-pair-unit.md|modality budget pair unit]]

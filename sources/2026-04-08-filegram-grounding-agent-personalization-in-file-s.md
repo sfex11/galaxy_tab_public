@@ -194,3 +194,30 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/behavior-defined-goal.md|behavior defined goal]]
+
+---
+**관련**: [[entities/trace-documentation-authorship.md|trace documentation authorship]]
+
+---
+**관련**: [[concepts/trace-integrity-faithfulness-divergence.md|trace integrity faithfulness divergence]]
+
+---
+**관련**: [[concepts/trace-tampering.md|trace tampering]]
+
+---
+**관련**: [[concepts/trace-immutability-assumption.md|trace immutability assumption]]
+
+---
+**관련**: [[concepts/revalidation-cost-behavioral-inertia.md|revalidation cost behavioral inertia]]
+
+---
+**관련**: [[concepts/trace-writer-subject-separation.md|trace writer subject separation]]
+
+---
+**관련**: [[concepts/append-only-trace-enforcement.md|append only trace enforcement]]
+
+---
+**관련**: [[concepts/triaxial-trace-threat-space.md|triaxial trace threat space]]
+
+---
+**관련**: [[concepts/gui-grounding.md|gui grounding]]

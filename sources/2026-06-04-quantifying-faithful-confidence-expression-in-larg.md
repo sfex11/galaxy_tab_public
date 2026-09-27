@@ -74,3 +74,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/readability-importance-divergence.md|readability importance divergence]]
+
+---
+**관련**: [[concepts/temperature-scaled-calibration.md|temperature scaled calibration]]

@@ -127,3 +127,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/relative-credit-assignment.md|relative credit assignment]]
+
+---
+**관련**: [[concepts/strategy-free-scaffold.md|strategy free scaffold]]
+
+---
+**관련**: [[concepts/conditional-decomposition-strategy.md|conditional decomposition strategy]]

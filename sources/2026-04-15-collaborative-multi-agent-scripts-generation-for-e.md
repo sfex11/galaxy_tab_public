@@ -352,3 +352,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/intent-execution-coupling-assumption.md|intent execution coupling assumption]]
+
+---
+**관련**: [[concepts/format-preserving-epistemic-demotion.md|format preserving epistemic demotion]]
+
+---
+**관련**: [[concepts/intent-execution-coupling-assumption.md|intent execution coupling assumption]]
+
+---
+**관련**: [[concepts/belief-layer-unification.md|belief layer unification]]
+
+---
+**관련**: [[concepts/execution-layer-safety-last-resort.md|execution layer safety last resort]]
+
+---
+**관련**: [[concepts/surface-intent-decoupling.md|surface intent decoupling]]

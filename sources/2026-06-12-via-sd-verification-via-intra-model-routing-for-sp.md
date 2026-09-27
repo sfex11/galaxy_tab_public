@@ -53,3 +53,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/turn-as-derived-unit.md|turn as derived unit]]
+
+---
+**관련**: [[concepts/lightweight-executor.md|lightweight executor]]

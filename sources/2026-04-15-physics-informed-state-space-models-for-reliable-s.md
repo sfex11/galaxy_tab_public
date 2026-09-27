@@ -62,3 +62,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/warp-divergence-free-dequantization.md|warp divergence free dequantization]]
+
+---
+**관련**: [[concepts/deliberate-manifold-excursion.md|deliberate manifold excursion]]

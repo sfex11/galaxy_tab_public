@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/equilibrium-instability-exploitation.md|equilibrium instability exploitation]]
+
+---
+**관련**: [[concepts/channel-capacity-bounded-refinement.md|channel capacity bounded refinement]]

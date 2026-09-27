@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/llm-falsifier.md|llm falsifier]]
+
+---
+**관련**: [[entities/falsifier-as-fourth-role.md|falsifier as fourth role]]
+
+---
+**관련**: [[concepts/llm-as-blackbox-optimizer.md|llm as blackbox optimizer]]

@@ -63,3 +63,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/incentive-compatible-alignment.md|incentive compatible alignment]]
+
+---
+**관련**: [[concepts/formal-falsification.md|formal falsification]]
+
+---
+**관련**: [[concepts/closed-loop-intervention.md|closed loop intervention]]

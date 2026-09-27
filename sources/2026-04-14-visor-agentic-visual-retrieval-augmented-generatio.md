@@ -45,3 +45,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/bottleneck-misattribution.md|bottleneck misattribution]]
+
+---
+**관련**: [[concepts/informationally-porous-isolation.md|informationally porous isolation]]

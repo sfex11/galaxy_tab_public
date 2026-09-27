@@ -171,3 +171,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-role-representation-coupling.md|dual role representation coupling]]
+
+---
+**관련**: [[concepts/vulnerability-localization.md|vulnerability localization]]
+
+---
+**관련**: [[concepts/representation-validity-reevaluation.md|representation validity reevaluation]]
+
+---
+**관련**: [[concepts/theorem-decomposition-representation.md|theorem decomposition representation]]

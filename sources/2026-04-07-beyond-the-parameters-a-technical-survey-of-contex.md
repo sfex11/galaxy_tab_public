@@ -418,3 +418,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/activation-steering-parameter-automation.md|activation steering parameter automation]]
+
+---
+**관련**: [[concepts/causal-load-verification.md|causal load verification]]
+
+---
+**관련**: [[concepts/causal-contribution-forgetting-criterion.md|causal contribution forgetting criterion]]
+
+---
+**관련**: [[concepts/openness-parameter-verification.md|openness parameter verification]]
+
+---
+**관련**: [[concepts/stateful-retrieval.md|stateful retrieval]]

@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/minimal-overlap-surround-view.md|minimal overlap surround view]]
+
+---
+**관련**: [[concepts/parseability-boundary.md|parseability boundary]]

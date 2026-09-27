@@ -209,3 +209,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/social-level-harness.md|social level harness]]
+
+---
+**관련**: [[concepts/interface-as-bias-generator.md|interface as bias generator]]
+
+---
+**관련**: [[concepts/geometric-selection-criterion.md|geometric selection criterion]]
+
+---
+**관련**: [[concepts/temperature-controlled-selection.md|temperature controlled selection]]
+
+---
+**관련**: [[concepts/harness-capability-boundary.md|harness capability boundary]]
+
+---
+**관련**: [[concepts/gui-failure-attribution-decomposition.md|gui failure attribution decomposition]]
+
+---
+**관련**: [[concepts/probability-as-proposer-not-adjudicator.md|probability as proposer not adjudicator]]
+
+---
+**관련**: [[concepts/skill-existence-blindness.md|skill existence blindness]]
+
+---
+**관련**: [[concepts/counterexample-search.md|counterexample search]]
+
+---
+**관련**: [[concepts/evolutionary-hypothesis-search.md|evolutionary hypothesis search]]
+
+---
+**관련**: [[concepts/harness-as-capability-translator.md|harness as capability translator]]
+
+---
+**관련**: [[concepts/harness-core-shell-stratification.md|harness core shell stratification]]
+
+---
+**관련**: [[concepts/skill-selection-functional-split.md|skill selection functional split]]

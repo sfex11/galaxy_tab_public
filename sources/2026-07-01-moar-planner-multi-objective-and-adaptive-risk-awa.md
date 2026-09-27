@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/proximity-trap.md|proximity trap]]
+
+---
+**관련**: [[concepts/proximity-trap.md|proximity trap]]

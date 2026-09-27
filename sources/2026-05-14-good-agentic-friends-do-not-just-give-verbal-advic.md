@@ -141,3 +141,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/self-communication-fidelity.md|self communication fidelity]]
+
+---
+**관련**: [[concepts/interface-contract-renegotiation.md|interface contract renegotiation]]
+
+---
+**관련**: [[concepts/self-communication-fidelity.md|self communication fidelity]]

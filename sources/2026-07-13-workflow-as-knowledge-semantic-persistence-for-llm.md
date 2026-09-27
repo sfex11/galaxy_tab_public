@@ -64,3 +64,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/implementation-faithfulness.md|implementation faithfulness]]
+
+---
+**관련**: [[concepts/thinking-acting-gap.md|thinking acting gap]]
+
+---
+**관련**: [[concepts/avatar-scientific-workflow-orchestration.md|avatar scientific workflow orchestration]]

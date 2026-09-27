@@ -151,3 +151,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/source-grounded-extraction.md|source grounded extraction]]
+
+---
+**관련**: [[entities/role-aware-event-schema.md|role aware event schema]]
+
+---
+**관련**: [[concepts/source-grounded-extraction.md|source grounded extraction]]
+
+---
+**관련**: [[concepts/harness-event-sourcing.md|harness event sourcing]]
+
+---
+**관련**: [[concepts/capability-internalization.md|capability internalization]]
+
+---
+**관련**: [[concepts/task-pressure-induced-evasion.md|task pressure induced evasion]]
+
+---
+**관련**: [[concepts/capability-incentive-multiplicative-risk.md|capability incentive multiplicative risk]]
+
+---
+**관련**: [[concepts/role-aware-event-schema.md|role aware event schema]]
+
+---
+**관련**: [[concepts/capability-collaboration-decoupling.md|capability collaboration decoupling]]

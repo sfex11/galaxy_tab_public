@@ -85,3 +85,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/performance-overclaiming.md|performance overclaiming]]
+
+---
+**관련**: [[concepts/consensus-space-migration.md|consensus space migration]]
+
+---
+**관련**: [[concepts/feature-regime-complementarity.md|feature regime complementarity]]
+
+---
+**관련**: [[concepts/embedding-translator.md|embedding translator]]

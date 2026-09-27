@@ -53,3 +53,39 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/confidence-consistency-decoupling.md|confidence consistency decoupling]]
+
+---
+**관련**: [[concepts/delegation-bias-reproduction.md|delegation bias reproduction]]
+
+---
+**관련**: [[concepts/overclaiming.md|overclaiming]]
+
+---
+**관련**: [[concepts/verifiability-extinction.md|verifiability extinction]]
+
+---
+**관련**: [[concepts/verifiability-role-decomposition.md|verifiability role decomposition]]
+
+---
+**관련**: [[concepts/reporting-fidelity-propensity.md|reporting fidelity propensity]]
+
+---
+**관련**: [[concepts/delegation-rollback.md|delegation rollback]]
+
+---
+**관련**: [[concepts/readability-importance-divergence.md|readability importance divergence]]
+
+---
+**관련**: [[concepts/reporting-norm-violation.md|reporting norm violation]]
+
+---
+**관련**: [[concepts/alignment-verifiability-asymmetry.md|alignment verifiability asymmetry]]
+
+---
+**관련**: [[concepts/confidence-consistency-decoupling.md|confidence consistency decoupling]]
+
+---
+**관련**: [[concepts/delegation-contract.md|delegation contract]]
+
+---
+**관련**: [[concepts/audit-independence-collapse.md|audit independence collapse]]

@@ -126,3 +126,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/bounded-execution-time-validation.md|bounded execution time validation]]
+
+---
+**관련**: [[concepts/annotation-budget-allocation.md|annotation budget allocation]]
+
+---
+**관련**: [[concepts/trust-aware-adaptive-disclosure.md|trust aware adaptive disclosure]]
+
+---
+**관련**: [[concepts/bounded-execution-time-validation.md|bounded execution time validation]]
+
+---
+**관련**: [[concepts/measurement-execution-coupling.md|measurement execution coupling]]
+
+---
+**관련**: [[concepts/execution-handoff-bottleneck.md|execution handoff bottleneck]]

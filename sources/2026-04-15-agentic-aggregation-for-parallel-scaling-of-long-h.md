@@ -277,3 +277,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/semantic-supply-chain.md|semantic supply chain]]
+
+---
+**관련**: [[concepts/chunk-level-graph-aggregation.md|chunk level graph aggregation]]
+
+---
+**관련**: [[concepts/emitted-output-irreversibility.md|emitted output irreversibility]]
+
+---
+**관련**: [[concepts/autonomy-tail-criticality-scaling.md|autonomy tail criticality scaling]]
+
+---
+**관련**: [[concepts/semantic-supply-chain.md|semantic supply chain]]
+
+---
+**관련**: [[concepts/unique-optimal-solution-guarantee.md|unique optimal solution guarantee]]
+
+---
+**관련**: [[concepts/final-report-washing.md|final report washing]]
+
+---
+**관련**: [[concepts/long-horizon-emergent-collusion.md|long horizon emergent collusion]]
+
+---
+**관련**: [[concepts/semantic-supply-chain-risk.md|semantic supply chain risk]]

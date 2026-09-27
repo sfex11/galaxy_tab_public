@@ -73,3 +73,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/probability-quality-coupling.md|probability quality coupling]]
+
+---
+**관련**: [[concepts/privacy-as-dynamic-resource.md|privacy as dynamic resource]]
+
+---
+**관련**: [[concepts/forgetting-as-accumulation-quality-management.md|forgetting as accumulation quality management]]
+
+---
+**관련**: [[concepts/overlap-window-interaction-atom.md|overlap window interaction atom]]

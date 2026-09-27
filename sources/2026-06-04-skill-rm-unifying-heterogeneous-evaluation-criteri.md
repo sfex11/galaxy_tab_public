@@ -452,3 +452,48 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/evaluation-target-substitution.md|evaluation target substitution]]
+
+---
+**관련**: [[concepts/compositional-continual-evaluation.md|compositional continual evaluation]]
+
+---
+**관련**: [[concepts/recurring-mechanism-reuse.md|recurring mechanism reuse]]
+
+---
+**관련**: [[concepts/audit-oracle-self-reference.md|audit oracle self reference]]
+
+---
+**관련**: [[concepts/completion-signal-checker.md|completion signal checker]]
+
+---
+**관련**: [[concepts/educational-outcome-evaluation.md|educational outcome evaluation]]
+
+---
+**관련**: [[concepts/monitor-reward-coupling-spectrum.md|monitor reward coupling spectrum]]
+
+---
+**관련**: [[concepts/evidence-channel-meta-monitoring.md|evidence channel meta monitoring]]
+
+---
+**관련**: [[concepts/dense-reward-topology-learning.md|dense reward topology learning]]
+
+---
+**관련**: [[concepts/domain-smoothing-evaluation.md|domain smoothing evaluation]]
+
+---
+**관련**: [[concepts/kl-regularized-reward-maximization.md|kl regularized reward maximization]]
+
+---
+**관련**: [[concepts/disaggregated-evaluation.md|disaggregated evaluation]]
+
+---
+**관련**: [[concepts/three-signal-complementarity.md|three signal complementarity]]
+
+---
+**관련**: [[concepts/reward-hacking-internal-signature.md|reward hacking internal signature]]
+
+---
+**관련**: [[concepts/closed-form-incremental-learning.md|closed form incremental learning]]
+
+---
+**관련**: [[concepts/learning-gain-measurement.md|learning gain measurement]]

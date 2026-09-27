@@ -67,3 +67,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/sample-wise-complementarity.md|sample wise complementarity]]
+
+---
+**관련**: [[concepts/visual-need-estimation-caching.md|visual need estimation caching]]

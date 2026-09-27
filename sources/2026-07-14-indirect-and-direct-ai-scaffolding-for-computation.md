@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/persuasion-openness.md|persuasion openness]]
+
+---
+**관련**: [[concepts/persuasion-openness.md|persuasion openness]]

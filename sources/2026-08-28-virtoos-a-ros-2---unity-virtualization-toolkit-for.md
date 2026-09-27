@@ -187,3 +187,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/selection-pressure-design.md|selection pressure design]]
+
+---
+**관련**: [[concepts/environment-supply-scaling.md|environment supply scaling]]
+
+---
+**관련**: [[concepts/product-over-process-environment-derivation.md|product over process environment derivation]]
+
+---
+**관련**: [[concepts/institution-as-design-unit.md|institution as design unit]]
+
+---
+**관련**: [[concepts/evidence-grounded-experiment-design.md|evidence grounded experiment design]]

@@ -115,3 +115,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modular-cognitive-extension.md|modular cognitive extension]]
+
+---
+**관련**: [[concepts/non-cognitive-oracle.md|non cognitive oracle]]

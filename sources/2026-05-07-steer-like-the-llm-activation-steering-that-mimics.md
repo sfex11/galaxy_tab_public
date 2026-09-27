@@ -171,3 +171,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/semantic-exploration-steering.md|semantic exploration steering]]
+
+---
+**관련**: [[concepts/success-criterion-redefinition.md|success criterion redefinition]]
+
+---
+**관련**: [[concepts/semantic-exploration-steering.md|semantic exploration steering]]

@@ -43,3 +43,15 @@ Wiki 관점에서 핵심 기여는 셋이다. 첫째, learning-forgetting-tradeo
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/tiered-forgetting-authority.md|tiered forgetting authority]]
+
+---
+**관련**: [[concepts/regeneration-paired-forgetting.md|regeneration paired forgetting]]
+
+---
+**관련**: [[concepts/uncontrolled-upgrade-forgetting.md|uncontrolled upgrade forgetting]]
+
+---
+**관련**: [[concepts/environmental-forgetting-absence.md|environmental forgetting absence]]

@@ -158,3 +158,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/symbolic-closure-analysis.md|symbolic closure analysis]]
+
+---
+**관련**: [[concepts/interface-to-policy-alignment-burden-shift.md|interface to policy alignment burden shift]]
+
+---
+**관련**: [[concepts/symbolic-closure-analysis.md|symbolic closure analysis]]
+
+---
+**관련**: [[concepts/physics-modeling-shift-vs-geometry-shift.md|physics modeling shift vs geometry shift]]
+
+---
+**관련**: [[concepts/orchestrator-bottleneck.md|orchestrator bottleneck]]

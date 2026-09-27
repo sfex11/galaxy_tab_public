@@ -179,3 +179,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trust-domain-capture-axis.md|trust domain capture axis]]
+
+---
+**관련**: [[concepts/trajectory-as-coaching-signal.md|trajectory as coaching signal]]

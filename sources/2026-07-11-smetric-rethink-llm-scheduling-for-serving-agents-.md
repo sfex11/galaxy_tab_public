@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/report-noisy-max-reuse.md|report noisy max reuse]]
+
+---
+**관련**: [[concepts/plan-trace-separation.md|plan trace separation]]
+
+---
+**관련**: [[concepts/report-noisy-max-reuse.md|report noisy max reuse]]

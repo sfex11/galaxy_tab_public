@@ -197,3 +197,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/average-metric-concealment.md|average metric concealment]]
+
+---
+**관련**: [[concepts/data-efficiency-as-transfer-metric.md|data efficiency as transfer metric]]
+
+---
+**관련**: [[concepts/saturated-baseline-metric.md|saturated baseline metric]]
+
+---
+**관련**: [[concepts/selection-metric-manipulation.md|selection metric manipulation]]

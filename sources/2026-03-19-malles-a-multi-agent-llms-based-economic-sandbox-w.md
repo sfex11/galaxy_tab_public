@@ -527,3 +527,27 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/dual-process-agent.md|dual process agent]]
+
+---
+**관련**: [[entities/dual-separated-agent.md|dual separated agent]]
+
+---
+**관련**: [[concepts/prompt-embedding-space-alignment.md|prompt embedding space alignment]]
+
+---
+**관련**: [[concepts/economic-mechanistic-bias-convergence.md|economic mechanistic bias convergence]]
+
+---
+**관련**: [[concepts/selection-as-agent-capability.md|selection as agent capability]]
+
+---
+**관련**: [[concepts/surrogate-consumer-agency.md|surrogate consumer agency]]
+
+---
+**관련**: [[concepts/consumer-gpu-deployment.md|consumer gpu deployment]]
+
+---
+**관련**: [[concepts/inference-time-alignment.md|inference time alignment]]
+
+---
+**관련**: [[concepts/multi-draft-speculative-sampling.md|multi draft speculative sampling]]

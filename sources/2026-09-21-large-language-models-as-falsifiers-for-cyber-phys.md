@@ -53,3 +53,6 @@ LLM-Falsifier는 STL 명세의 위반 반례 탐색(falsification)을 견고성 
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/llm-falsifier.md|llm falsifier]]

@@ -194,3 +194,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/avatar-scientific-workflow-orchestration.md|avatar scientific workflow orchestration]]
+
+---
+**관련**: [[concepts/delegation-structural-unverifiability.md|delegation structural unverifiability]]

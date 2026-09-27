@@ -27,3 +27,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/interface-complexity-ambiguity.md|interface complexity ambiguity]]
+
+---
+**관련**: [[concepts/substrate-as-interface.md|substrate as interface]]

@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/implicit-tool-invocation.md|implicit tool invocation]]
+
+---
+**관련**: [[concepts/retention-proxy-mismatch.md|retention proxy mismatch]]

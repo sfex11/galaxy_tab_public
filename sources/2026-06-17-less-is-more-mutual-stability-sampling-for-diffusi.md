@@ -142,3 +142,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/data-efficiency-gains-from-pretraining.md|data efficiency gains from pretraining]]
+
+---
+**관련**: [[entities/early-episode-abort.md|early episode abort]]
+
+---
+**관련**: [[concepts/ensemble-pruning-decoding.md|ensemble pruning decoding]]
+
+---
+**관련**: [[concepts/computation-to-representation-adaptation-shift.md|computation to representation adaptation shift]]
+
+---
+**관련**: [[concepts/evasion-as-convergence-direction.md|evasion as convergence direction]]
+
+---
+**관련**: [[concepts/efficiency-provenance-tension.md|efficiency provenance tension]]
+
+---
+**관련**: [[concepts/improvement-procedure-external-oracle.md|improvement procedure external oracle]]

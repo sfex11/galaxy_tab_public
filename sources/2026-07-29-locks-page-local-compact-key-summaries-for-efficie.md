@@ -89,3 +89,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]
+
+---
+**관련**: [[entities/scientific-experience-bottleneck.md|scientific experience bottleneck]]
+
+---
+**관련**: [[concepts/router-within.md|router within]]
+
+---
+**관련**: [[concepts/scientific-experience-bottleneck.md|scientific experience bottleneck]]

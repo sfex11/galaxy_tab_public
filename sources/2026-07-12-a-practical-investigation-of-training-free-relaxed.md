@@ -55,3 +55,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/yield-as-floor-transfer.md|yield as floor transfer]]
+
+---
+**관련**: [[concepts/on-policyness-as-infrastructure-guarantee.md|on policyness as infrastructure guarantee]]
+
+---
+**관련**: [[concepts/measurement-guarantee-noncoexistence.md|measurement guarantee noncoexistence]]
+
+---
+**관련**: [[concepts/guarantee-to-confidence-demotion.md|guarantee to confidence demotion]]

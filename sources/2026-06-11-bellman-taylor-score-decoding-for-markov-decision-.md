@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/implicit-curriculum.md|implicit curriculum]]
+
+---
+**관련**: [[concepts/bellman-equation-reformulation.md|bellman equation reformulation]]

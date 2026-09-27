@@ -57,3 +57,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/ast-citation-parsing.md|ast citation parsing]]
+
+---
+**관련**: [[concepts/positional-attribution-rejection.md|positional attribution rejection]]

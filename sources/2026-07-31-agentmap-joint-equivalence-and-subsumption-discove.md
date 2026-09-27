@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/slot-equivalence-fallacy.md|slot equivalence fallacy]]
+
+---
+**관련**: [[concepts/ai-tutoring-equivalence.md|ai tutoring equivalence]]

@@ -156,3 +156,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/any-color-control.md|any color control]]
+
+---
+**관련**: [[concepts/structural-safety-enforcement.md|structural safety enforcement]]
+
+---
+**관련**: [[concepts/dynamical-invariant-monitoring.md|dynamical invariant monitoring]]
+
+---
+**관련**: [[concepts/forgery-resistant-representation-monitoring.md|forgery resistant representation monitoring]]
+
+---
+**관련**: [[concepts/substrate-control-non-omnipotence.md|substrate control non omnipotence]]
+
+---
+**관련**: [[concepts/control-semantic-division.md|control semantic division]]

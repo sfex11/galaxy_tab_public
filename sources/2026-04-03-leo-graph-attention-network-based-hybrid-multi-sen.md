@@ -177,3 +177,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/tamp-teleoperation-hybrid-data-collection.md|tamp teleoperation hybrid data collection]]
+
+---
+**관련**: [[concepts/tamp-teleoperation-hybrid-data-collection.md|tamp teleoperation hybrid data collection]]

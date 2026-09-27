@@ -35,3 +35,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/theory-of-mind.md|theory of mind]]
+
+---
+**관련**: [[concepts/content-carrier-separation.md|content carrier separation]]
+
+---
+**관련**: [[concepts/probe-randomization-defense.md|probe randomization defense]]

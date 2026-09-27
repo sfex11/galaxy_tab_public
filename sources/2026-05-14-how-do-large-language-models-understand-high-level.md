@@ -179,3 +179,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/visual-need-estimation-caching.md|visual need estimation caching]]
+
+---
+**관련**: [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]

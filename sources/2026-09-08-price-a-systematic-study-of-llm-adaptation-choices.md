@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/low-rank-adaptation-subspace.md|low rank adaptation subspace]]
+
+---
+**관련**: [[concepts/in-turn-adaptation.md|in turn adaptation]]

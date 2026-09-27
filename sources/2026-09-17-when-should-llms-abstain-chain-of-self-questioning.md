@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/conditional-heterogeneity-maintenance.md|conditional heterogeneity maintenance]]
+
+---
+**관련**: [[concepts/commit-envelope-task-boundary.md|commit envelope task boundary]]

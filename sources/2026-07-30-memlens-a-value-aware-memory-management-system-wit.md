@@ -53,3 +53,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/speech-data-infrastructure.md|speech data infrastructure]]
+
+---
+**관련**: [[concepts/multiparty-floor-management.md|multiparty floor management]]

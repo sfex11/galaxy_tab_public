@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/metadata-preload-dispersal.md|metadata preload dispersal]]
+
+---
+**관련**: [[concepts/tool-metadata-poisoning.md|tool metadata poisoning]]

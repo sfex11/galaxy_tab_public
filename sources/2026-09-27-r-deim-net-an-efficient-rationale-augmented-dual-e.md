@@ -42,3 +42,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/drive-discharge-via-self-report.md|drive discharge via self report]]
+
+---
+**관련**: [[concepts/drive-discharge-via-self-report.md|drive discharge via self report]]
+
+---
+**관련**: [[concepts/mechanistic-swarm-interpretability.md|mechanistic swarm interpretability]]
+
+---
+**관련**: [[concepts/routing-rationale-internalization.md|routing rationale internalization]]

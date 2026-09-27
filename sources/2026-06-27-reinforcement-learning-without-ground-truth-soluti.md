@@ -133,3 +133,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/score-distributional-confidence.md|score distributional confidence]]
+
+---
+**관련**: [[concepts/score-distributional-confidence.md|score distributional confidence]]
+
+---
+**관련**: [[concepts/audit-feedback-closure.md|audit feedback closure]]

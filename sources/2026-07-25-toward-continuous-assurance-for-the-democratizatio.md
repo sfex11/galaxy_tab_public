@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/ai-productivity-rct.md|ai productivity rct]]
+
+---
+**관련**: [[concepts/ai-productivity-rct.md|ai productivity rct]]

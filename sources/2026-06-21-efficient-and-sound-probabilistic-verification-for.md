@@ -301,3 +301,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/task-state-contamination.md|task state contamination]]
+
+---
+**관련**: [[entities/structural-state-adaptation.md|structural state adaptation]]
+
+---
+**관련**: [[concepts/group-shared-state-tracking.md|group shared state tracking]]
+
+---
+**관련**: [[concepts/off-runtime-harm-execution.md|off runtime harm execution]]
+
+---
+**관련**: [[concepts/monitor-placement-conditionality.md|monitor placement conditionality]]
+
+---
+**관련**: [[concepts/low-frequency-transition-supervision.md|low frequency transition supervision]]
+
+---
+**관련**: [[concepts/verification-falsification-duality.md|verification falsification duality]]
+
+---
+**관련**: [[concepts/monitoring-as-terrain-physics.md|monitoring as terrain physics]]
+
+---
+**관련**: [[concepts/verifiable-state-judging.md|verifiable state judging]]
+
+---
+**관련**: [[concepts/cost-induced-ambiguity-retention.md|cost induced ambiguity retention]]
+
+---
+**관련**: [[concepts/task-state-contamination.md|task state contamination]]
+
+---
+**관련**: [[concepts/extra-probabilistic-adjudication.md|extra probabilistic adjudication]]
+
+---
+**관련**: [[concepts/monitoring-as-obstacle.md|monitoring as obstacle]]

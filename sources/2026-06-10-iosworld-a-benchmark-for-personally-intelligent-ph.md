@@ -184,3 +184,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/living-benchmark.md|living benchmark]]
+
+---
+**관련**: [[entities/efficiency-attack-surface-identity.md|efficiency attack surface identity]]
+
+---
+**관련**: [[concepts/speech-native-tool-calling.md|speech native tool calling]]
+
+---
+**관련**: [[concepts/first-order-accumulation-paradigm-bias.md|first order accumulation paradigm bias]]
+
+---
+**관련**: [[concepts/mt-instruction-following.md|mt instruction following]]
+
+---
+**관련**: [[concepts/benchmark-obsolescence.md|benchmark obsolescence]]
+
+---
+**관련**: [[concepts/living-benchmark.md|living benchmark]]
+
+---
+**관련**: [[concepts/disclosure-as-control-action.md|disclosure as control action]]
+
+---
+**관련**: [[concepts/benchmark-auto-renewal.md|benchmark auto renewal]]
+
+---
+**관련**: [[concepts/zeroth-order-preference-alignment.md|zeroth order preference alignment]]
