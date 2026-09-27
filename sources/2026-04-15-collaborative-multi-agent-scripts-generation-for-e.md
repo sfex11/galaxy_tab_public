@@ -346,3 +346,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/partial-reclassification.md|partial reclassification]]
+
+---
+**관련**: [[entities/surface-intent-decoupling.md|surface intent decoupling]]
+
+---
+**관련**: [[entities/intent-execution-coupling-assumption.md|intent execution coupling assumption]]

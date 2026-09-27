@@ -16,5 +16,3 @@ _Wiki 축적 중_
 ### CUA-Universe: A Scalable and Dynamic Environment for Hybrid GUI+CLI Ag (2026-09-08)
 
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
-
-→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]

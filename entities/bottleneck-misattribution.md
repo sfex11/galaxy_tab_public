@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### The Sirens' Song: When Proximal Background Context Overshadows Distant (2026-09-24)
 
 어텐션 내부 역학으로의 확장 사례를 제공한다 — '거리가 병목'이라는 표면 진단 대신 근접 무관 배경의 누적 경쟁이 실제 병목임을 실증하여, 병목 오귀인 패턴이 파이프라인·서빙을 넘어 어텐션 할당 계층까지 성립함을 보여준다.
-
-→ [[sources/2026-09-24-the-sirens-song-when-proximal-background-context-o.md|상세 보기]]

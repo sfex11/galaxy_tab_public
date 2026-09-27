@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-06-translation-as-a-decision-space-a-multi-agent-pers.md|Translation as a Decision Space: A Multi-Agent Perspective o]]
 
 ### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
-
-→ [[sources/2026-09-24-beyond-repeated-sampling-learning-search-policies-.md|상세 보기]]

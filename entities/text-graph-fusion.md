@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-26)
 
 텍스트-그래프 융합이 행위자-이벤트-객체 관계 모델링에서 참여자·시간·인과 엣지를 갖춘 문서 수준 EKG로 정교화되는 후속 사례를 제공하며, 청크 수준 그래프의 문서 수준 통합이라는 집합 축을 추가한다.
-
-→ [[sources/2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

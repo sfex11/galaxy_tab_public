@@ -42,5 +42,3 @@ _Wiki 축적 중_
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-21)
 
 모델의 안전 판단 한계를 하네스가 구조적으로 보정하는 로보틱스 구현 사례다. 장애물 정보를 하네스가 소유·검증함으로써 안전 책임이 모델 준수에서 인프라 보장으로 이전됨을 보여준다.
-
-→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

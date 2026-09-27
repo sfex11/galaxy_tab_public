@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-26)
 
 source-grounded 파이프라인이라는 구현 사례를 제공한다. 법률 도메인에서는 추출된 사실 진술이 원문에 추적 가능해야 그래프의 인식론적 신뢰성이 성립하며, 이것이 구조화 추출의 설계 전제임을 확인시킨다.
-
-→ [[sources/2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

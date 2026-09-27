@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 표면 완결성이 의도 오독을 유발하는 새 도메인 사례를 제공한다. 그럴듯한 표면 텍스트가 풍자나 조롱을 은폐할 수 있어, 표면 판독의 신뢰성이 콘텐츠 생성 맥락 검증에 의존함을 보여준다.
 
-→ [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]
-
 ### Agentic Detection of Online Conspiracies (2026-09-27)
 
 표면적으로 완결된 발화가 풍자·조롱일 수 있음을 보여, 표면 완결성에 기반한 의도 오독의 담화 버전을 제공한다. 판독자의 표면 의존이 의도 오판으로 직결되는 구조를 정립한다.
-
-→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

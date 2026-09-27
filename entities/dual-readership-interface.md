@@ -19,16 +19,10 @@ Affora가 GUI 인터페이스 계층에서 이중 독자 설계를 제시했다�
 
 v1 확정판은 이중 독자성이 '부가 인터페이스'가 아닌 스키마 내장 속성임을 공식화한다. 그라운딩용 표현과 감사용 표현이 분리될 필요가 없다는 점에서, Affora(GUI 계층)와 본 논문(표현 계층)이 이중 독자 설계의 양축을 형성한다.
 
-→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]
-
 ### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
 
 Reviewability가 6개 사용자 가치 그룹 중 하나로 출현하여, 이중 독자 설계가 인터페이스·표현 계층의 설계 원리를 넘어 사용자가 실제로 요구하는 1급 가치임을 사용자 연구 측에서 뒷받침한다.
 
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]
-
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 이중 독자 설계의 비용 효과를 입증한다. 접근성 트리가 VLM(계획)과 경량 실행기(실행) 양쪽에 판독 가능한 구조를 제공함으로써, 이중 독자성이 인간-AI뿐 아니라 고비용-저비용 연산 계층 간에도 확장됨을 보여준다.
-
-→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

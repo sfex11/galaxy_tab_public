@@ -23,10 +23,6 @@ Lifecycle-Aware 논문이 모바일 도메인의 연속학습·레이어별 망�
 
 연합 학습 프라이버시 논의를 방어 측(Component-Aware DP의 예산 배분)에서 공격 측으로 확장한다. 예산 산정이 시간적 상관에 의한 증폭 유출을 반영해야 함을 시사하며, 분산 학습 위협 모델에 embodied 도메인 사례를 추가한다.
 
-→ [[sources/2026-09-26-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]
-
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
 
 연합 학습의 프라이버시 전제(원시 데이터 국지 보관)가 시간적 구조 누출로 무력화될 수 있음을 보여, 연합 학습 위협 모델에 시간축 공격 차원을 추가한다.
-
-→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 선택 대상이 모델(SLM vs LLM)을 넘어 '상호작용 빈도 자체'로 확장된다. 저빈도 VLM 계획 + 고빈도 경량 실행이라는 주기 비대칭 배분은 연산 단위 선택이 시간 차원의 설계 변수임을 보여준다.
-
-→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

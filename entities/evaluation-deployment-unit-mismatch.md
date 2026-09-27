@@ -34,5 +34,3 @@ GUI 전용 평가 단위와 하이브리드 실제 작업 단위의 불일치를
 ### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
 
 평가 단위(모델 능력)와 배포 작동 단위(모델+서빙 스택)의 불일치에 서빙 계층이라는 구체적 차원을 추가한다. 로컬 배포에서는 서빙 구성이 능력의 실현 조건이므로, 평가 환경의 서빙 스택이 배포 환경과 일치하지 않으면 결과의 외면 타당성이 붕괴한다.
-
-→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

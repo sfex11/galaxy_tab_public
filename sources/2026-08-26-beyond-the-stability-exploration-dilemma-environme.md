@@ -55,3 +55,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/cumulative-drift.md|cumulative drift]]
+
+---
+**관련**: [[entities/policy-mirror-descent.md|policy mirror descent]]
+
+---
+**관련**: [[entities/one-hot-dilemma.md|one hot dilemma]]

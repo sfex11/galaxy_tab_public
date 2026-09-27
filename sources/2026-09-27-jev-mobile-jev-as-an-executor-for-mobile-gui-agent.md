@@ -13,9 +13,9 @@
 
 Jev-Mobile은 모바일 GUI 에이전트의 지배적 패러다임 — 모든 상호작용 단계에서 VLM이 계획과 액션 그라운딩을 동시 수행 — 을 저빈도 VLM 계획과 고빈도 경량 실행으로 분해한다. VLM이 국소 목표를 지정하면 접근성 트리가 구조화된 실행 가능 액션 공간을 제공하고, 경량 실행기 Jev가 고빈도로 이를 수행하여 지연과 서빙 비용을 대폭 절감한다.
 
-핵심 통찰은 인터페이스 구조가 아키텍처 경제성의 전제조건이라는 것이다. [[machine-interpretable-interface-compliance]] 관점에서, 접근성 트리라는 기계 판독 가능 명세 위에서는 그라운딩이 VLM의 시각 추론([[gui-grounding]])이 아닌 구조적 결정([[structured-action-grounding]])으로 대체 가능하다.
+핵심 통찰은 인터페이스 구조가 아키텍처 경제성의 전제조건이라는 것이다. [[concepts/machine-interpretable-interface-compliance.md|machine interpretable interface compliance]] 관점에서, 접근성 트리라는 기계 판독 가능 명세 위에서는 그라운딩이 VLM의 시각 추론([[concepts/gui-grounding.md|gui grounding]])이 아닌 구조적 결정([[concepts/structured-action-grounding.md|structured action grounding]])으로 대체 가능하다.
 
-[[thought-action-separation]]이 안전 아키텍처로 제안되던 것과 달리 본 논문은 동일한 분리가 지연·비용 절감이라는 경제적 필연으로도 실현됨을 보여주며, 이는 [[computation-unit-meta-selection]]의 정적 아키텍처 버전이다. [[affora]]가 에이전트 친화적 인터페이스의 설계 방법을 제시했다면, 본 논문은 그 설계가 실제 아키텍처 비용 절감으로 이어지는 인과 경로를 모바일 도메인에서 완성한다.
+[[concepts/thought-action-separation.md|thought action separation]]이 안전 아키텍처로 제안되던 것과 달리 본 논문은 동일한 분리가 지연·비용 절감이라는 경제적 필연으로도 실현됨을 보여주며, 이는 [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]의 정적 아키텍처 버전이다. [[concepts/affora.md|affora]]가 에이전트 친화적 인터페이스의 설계 방법을 제시했다면, 본 논문은 그 설계가 실제 아키텍처 비용 절감으로 이어지는 인과 경로를 모바일 도메인에서 완성한다.
 
 ## 🔗 관련 논문
 

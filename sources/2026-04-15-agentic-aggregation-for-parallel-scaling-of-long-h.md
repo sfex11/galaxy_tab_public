@@ -262,3 +262,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/agentic-drive.md|agentic drive]]
+
+---
+**관련**: [[entities/proof-planning-horizon.md|proof planning horizon]]
+
+---
+**관련**: [[entities/timeline-entry-chain.md|timeline entry chain]]
+
+---
+**관련**: [[entities/chunk-level-graph-aggregation.md|chunk level graph aggregation]]
+
+---
+**관련**: [[entities/belief-aggregation.md|belief aggregation]]
+
+---
+**관련**: [[entities/semantic-supply-chain.md|semantic supply chain]]

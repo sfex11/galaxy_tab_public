@@ -26,5 +26,3 @@ LOCUS 계열이 제시한 파라미터 축-신호 축 분해에 제3의 자동�
 ### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
 
 하드 최대화 vs 원분포 유지의 이분법을 소프트니스라는 연속 다이얼로 확장하며, n(계산량)과 소프트니스(분포 이동)가 독립 제어 축으로 분해됨을 보여준다.
-
-→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

@@ -475,3 +475,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/elicitation-as-harness-artifact.md|elicitation as harness artifact]]
+
+---
+**관련**: [[entities/confident-failure-predictability.md|confident failure predictability]]
+
+---
+**관련**: [[entities/salience-gated-episodic-memory.md|salience gated episodic memory]]
+
+---
+**관련**: [[entities/event-knowledge-graph.md|event knowledge graph]]
+
+---
+**관련**: [[entities/code-as-evolution-unit.md|code as evolution unit]]
+
+---
+**관련**: [[entities/trace-optimized-attack.md|trace optimized attack]]
+
+---
+**관련**: [[entities/temporal-gradient-inversion.md|temporal gradient inversion]]
+
+---
+**관련**: [[entities/fine-tuning-knowledge-erosion.md|fine tuning knowledge erosion]]
+
+---
+**관련**: [[entities/self-retiring-distillation.md|self retiring distillation]]
+
+---
+**관련**: [[entities/bayesian-update-cumulative-error.md|bayesian update cumulative error]]
+
+---
+**관련**: [[entities/internal-cognitive-state-responsive-memory.md|internal cognitive state responsive memory]]

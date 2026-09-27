@@ -22,5 +22,3 @@ AI 집단 행동 연구의 방법론 스펙트럼에 통제된 장난감 모델 
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 집단 수준 통제점을 추가한다. 소셜 시뮬레이션의 집단 의견 역학이 학습 사전분포의 은폐된 상속이 아니라 개별 에이전트의 κ 분포로 파라미터화되어, 집단 행동의 인과적 실험 조작이 가능해진다.
-
-→ [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]

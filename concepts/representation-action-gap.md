@@ -15,5 +15,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Where Should I Join? Robot Group Joining via Language-Guided Goal Pred (2026-09-25)
-
-→ [[sources/2026-09-25-where-should-i-join-robot-group-joining-via-langua.md|상세 보기]]

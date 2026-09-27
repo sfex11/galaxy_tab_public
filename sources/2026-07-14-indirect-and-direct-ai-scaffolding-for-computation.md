@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/openness-of-meta-loop.md|openness of meta loop]]
+
+---
+**관련**: [[entities/persuasion-openness.md|persuasion openness]]

@@ -17,6 +17,4 @@ _Wiki 축적 중_
 
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
 
-기존 노트의 '동적 필요성 예측' 축을 [[local-sufficiency]] 및 [[expected-value-of-information]]과 연결해 심화한다 — 필요성 판정이 학습된 EVI 추정기(recall head)로 구현될 때, 희소성은 건너뛰기 전략이 아니라 읽기의 기대 이익 관리 문제로 재정의된다.
-
-→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]
+기존 노트의 '동적 필요성 예측' 축을 [[concepts/local-sufficiency.md|local sufficiency]] 및 [[concepts/expected-value-of-information.md|expected value of information]]과 연결해 심화한다 — 필요성 판정이 학습된 EVI 추정기(recall head)로 구현될 때, 희소성은 건너뛰기 전략이 아니라 읽기의 기대 이익 관리 문제로 재정의된다.

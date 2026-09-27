@@ -17,9 +17,9 @@ LLM 기반 임상 어시스턴트가 EHR에 통합되는 가운데, 기존 수�
 
 ### 기존 Wiki와의 관계
 
-[[live-benchmark]]·[[claw-eval-live]] 계열의 신호 갱신 원리가 임상 도메인으로 확장된 사례다. Claw-Eval-Live가 실세계 워크플로우 수요에서 신호를 주기 갱신했다면, 본 논문은 환자 기록이라는 실제 데이터 원천에서 QA 쌍을 자동 생성하여 동일한 자가 교정 경로를 [[refreshable-signal-layer]]에 추가한다. 신호 갱신의 소스가 '실세계 수요'에서 '실세계 데이터'로 다양화된다.
+[[concepts/live-benchmark.md|live benchmark]]·[[entities/claw-eval-live.md|claw eval live]] 계열의 신호 갱신 원리가 임상 도메인으로 확장된 사례다. Claw-Eval-Live가 실세계 워크플로우 수요에서 신호를 주기 갱신했다면, 본 논문은 환자 기록이라는 실제 데이터 원천에서 QA 쌍을 자동 생성하여 동일한 자가 교정 경로를 [[concepts/refreshable-signal-layer.md|refreshable signal layer]]에 추가한다. 신호 갱신의 소스가 '실세계 수요'에서 '실세계 데이터'로 다양화된다.
 
-ArchEHR-QA 계열([[archehr-qa]], [[grounded-clinical-qa]], [[ehr-question-answering]])에 대해, 고정 큐레이션 벤치마크에서 자동 갱신 벤치마크로의 전환 경로를 제공한다. [[benchmark-domain-specialization]]의 수직 도메인 트렌드에 '임상 기록 라이브 벤치마크'라는 새 축을 추가하며, [[benchmark-format-blindspot]]이 지적한 수동 큐레이션의 시효성 문제에 대한 구조적 해법이 된다.
+ArchEHR-QA 계열([[entities/archehr-qa.md|archehr qa]], [[concepts/grounded-clinical-qa.md|grounded clinical qa]], [[concepts/ehr-question-answering.md|ehr question answering]])에 대해, 고정 큐레이션 벤치마크에서 자동 갱신 벤치마크로의 전환 경로를 제공한다. [[concepts/benchmark-domain-specialization.md|benchmark domain specialization]]의 수직 도메인 트렌드에 '임상 기록 라이브 벤치마크'라는 새 축을 추가하며, [[concepts/benchmark-format-blindspot.md|benchmark format blindspot]]이 지적한 수동 큐레이션의 시효성 문제에 대한 구조적 해법이 된다.
 
 ## 🔗 관련 논문
 

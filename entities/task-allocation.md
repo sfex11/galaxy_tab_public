@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
 
 태스크 할당의 결정 공간을 '어떤 에이전트에게 할당할까'에서 '어떤 입도의 참여 단위에게 할당할까'로 확장한다. 할당 대상 자체가 서브태스크별 선택 변수가 되며, 할당과 토폴로지 설계가 단일 점진적 구축 과정으로 통합됨을 실증한다.
-
-→ [[sources/2026-09-24-magic-mixed-granularity-agent-graphs-via-increment.md|상세 보기]]

@@ -26,5 +26,3 @@ ADEMA가 선언 지식 상태를 오케스트레이션했다면, 절차 그래�
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
 
 현재 문제 상태에 대한 명시적 추적이 검색의 조건 변수로 기능함을 보여주어, 지식 상태 추적과 검색 계층의 결합 가능성을 제시한다.
-
-→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

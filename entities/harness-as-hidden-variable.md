@@ -32,5 +32,3 @@ Claw-Anything은 벤치마크가 에이전이 접근 가능한 사용자 세계�
 ### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
 
 서빙 계층이 도구 호출 가능성의 은닉 변수로 작동하는 체계적 사례를 제공한다. 측정 대상(모델)과 측정 경로(서빙 스택)를 구분하지 않으면 도구 사용 점수의 귀속 자체가 불가능함을 보인다.
-
-→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

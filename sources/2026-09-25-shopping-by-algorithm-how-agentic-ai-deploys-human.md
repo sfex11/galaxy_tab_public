@@ -17,13 +17,13 @@ AI 위임은 인간 편향을 제거하지 않는다 — 상용 LLM이 대리 �
 
 ## 기존 Wiki와의 관계
 
-**[[value-sensitive-delegation]]**: OpenClaw 야생 데이터가 일상 위임의 가치 분포를 관찰했다면, 본 논문은 가장 밀도 높은 위임 도메인(구매)의 통제 실험 버전을 제공한다. 위임된 결정이 사용자 선호가 아닌 에이전트 내재 휴리스틱을 따를 수 있어 가치 침해의 인과적 메커니즘 후보를 추가한다.
+**[[concepts/value-sensitive-delegation.md|value sensitive delegation]]**: OpenClaw 야생 데이터가 일상 위임의 가치 분포를 관찰했다면, 본 논문은 가장 밀도 높은 위임 도메인(구매)의 통제 실험 버전을 제공한다. 위임된 결정이 사용자 선호가 아닌 에이전트 내재 휴리스틱을 따를 수 있어 가치 침해의 인과적 메커니즘 후보를 추가한다.
 
-**[[choice-architecture]]**: Mecha-nudges가 기계 대상 뉘지를 개념화했다면, 본 논문은 마케팅 큐라는 구체적 뉘지가 AI 쇼핑 에이전트에 실제로 작동함을 실증한다. 인간 소비자를 겨냥해 설계된 선택 아키텍처가 AI 매개 구매로 전이됨을 보여준다.
+**[[concepts/choice-architecture.md|choice architecture]]**: Mecha-nudges가 기계 대상 뉘지를 개념화했다면, 본 논문은 마케팅 큐라는 구체적 뉘지가 AI 쇼핑 에이전트에 실제로 작동함을 실증한다. 인간 소비자를 겨냥해 설계된 선택 아키텍처가 AI 매개 구매로 전이됨을 보여준다.
 
-**[[expected-value-of-information]]**: Tool-Lab은 정보 수집 판단에 명시적 비용 구조를 부여한 실험적 EVI 테스트베드다. 도구 호출 비용이 정보 획득 전략과 휴리스틱 의존도를 동시에 변화시켜, [[cost-aware-agent-evaluation]]의 비용 축이 능력 진단 도구로도 기능할 수 있음을 시사한다.
+**[[concepts/expected-value-of-information.md|expected value of information]]**: Tool-Lab은 정보 수집 판단에 명시적 비용 구조를 부여한 실험적 EVI 테스트베드다. 도구 호출 비용이 정보 획득 전략과 휴리스틱 의존도를 동시에 변화시켜, [[concepts/cost-aware-agent-evaluation.md|cost aware agent evaluation]]의 비용 축이 능력 진단 도구로도 기능할 수 있음을 시사한다.
 
-**새 축 — 인간 휴리스틱 계승**: LLM이 인간 생성 텍스트 학습의 산물로서 인간 의사결정 휴리스틱을 결정에 배치하면, [[autonomous-commerce]]에서 에이전트가 편향을 교정하지 않고 재생산할 수 있다. AI 위임 연구가 능력 문제에서 행동 경제학 문제로 확장되는 전환점이다.
+**새 축 — 인간 휴리스틱 계승**: LLM이 인간 생성 텍스트 학습의 산물로서 인간 의사결정 휴리스틱을 결정에 배치하면, [[concepts/autonomous-commerce.md|autonomous commerce]]에서 에이전트가 편향을 교정하지 않고 재생산할 수 있다. AI 위임 연구가 능력 문제에서 행동 경제학 문제로 확장되는 전환점이다.
 
 ## 🔗 관련 논문
 

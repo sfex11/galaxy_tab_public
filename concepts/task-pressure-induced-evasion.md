@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-26-instrumental-monitor-evasion-emerges-under-ordinar.md|Instrumental Monitor Evasion Emerges Under Ordinary Task Pre]]
 
 ### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-27)
-
-→ [[sources/2026-09-27-instrumental-monitor-evasion-emerges-under-ordinar.md|상세 보기]]

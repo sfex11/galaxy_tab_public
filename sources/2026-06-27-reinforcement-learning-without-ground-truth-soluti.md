@@ -127,3 +127,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/mirror-descent-optimization.md|mirror descent optimization]]
+
+---
+**관련**: [[entities/sequential-annotation-optimization.md|sequential annotation optimization]]
+
+---
+**관련**: [[entities/score-distributional-confidence.md|score distributional confidence]]

@@ -22,5 +22,3 @@ MAs의 발생 원인을 아키텍처 구조로 설명함으로써, Leech Lattice
 ### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
 
 저비트 양자화의 적용 대상을 자회귀 LLM decode(Leech Lattice 계열)에서 확산 트랜스포머로 확장한다. 병목이 대역폭 집약적 decode가 아닌 반복적 denoising 스텝이라는 점에서 양자화의 효과 지점이 도메인에 따라 다름을 시사한다.
-
-→ [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]

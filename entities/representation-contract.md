@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
 
 표현 계약의 당사자를 에이전트 간에서 에이전트-인간으로 확장한다. 노드·엣지 형식으로 체결된 계약은 사용자 측 검증 비용을 지불 가능하게 만들어, 계약의 실효성 판정 기준을 판독 가능성에서 검증 가능성으로 격상시킨다.
-
-→ [[sources/2026-09-21-semantic-action-graph-a-shared-representation-for-.md|상세 보기]]

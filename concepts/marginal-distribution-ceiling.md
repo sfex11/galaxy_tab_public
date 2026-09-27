@@ -24,5 +24,3 @@ _자동 Wiki Query에서 추출됨_
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
 
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
-
-→ [[sources/2026-09-27-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

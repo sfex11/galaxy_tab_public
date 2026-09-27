@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
 
 Reviewability가 사용자 가치로 정량 측정되어, 감사 가능성 요구가 엔지니어링·규제 요구사항을 넘어 사용자 수용의 실질 조건임을 입증한다. 감사 가능성의 수요자가 설계자·규제자에서 사용자로 확장됨을 시사한다.
-
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

@@ -22,7 +22,7 @@ Repeated execution of the target model during autoregressive decoding is a major
 
 ## 추출된 엔티티
 
-- [[Transformer]]
+- [[concepts/transformer.md|transformer]]
 
 ## 추출된 개념
 

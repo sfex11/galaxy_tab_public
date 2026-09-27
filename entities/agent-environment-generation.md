@@ -62,5 +62,3 @@ Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도�
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 환경 생성의 원천 스펙트럼에 '기존 코드베이스에서의 기능 추출'을 추가한다. Gym-Anything(소프트웨어→환경), Terminal-Universe(궤적→환경)에 이어 코드→환경 경로를 확정하며, 개발 아티팩트 의존의 한계를 진단하고 제품 중심 추출로 전환한다.
-
-→ [[sources/2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-26)
 
 이벤트 추출의 적용 지평을 개방 도메인에서 법률 판례라는 수직 도메인으로 확장한다. 사전 정의 유형 의존 대신 5W1H 기반 역할 인식 스키마가 고용차별 사건 시퀀스 같은 도메인 특화 이벤트 구조를 포착하는 경로를 제공한다.
-
-→ [[sources/2026-09-26-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-21)
 
 학습 신호 오염의 병인 대칭을 완성한다 — 음성 롤아웃 노이즈(모델-환경 상호작용의 우연적 오염, 처방: 배제)와 TIM drift(인프라 차이의 계통적 편향, 처방: 중심화)가 서로 다른 병인과 해법을 요구함을 구체화한다.
-
-→ [[sources/2026-09-21-score-centering-stabilizes-off-policy-reinforcemen.md|상세 보기]]

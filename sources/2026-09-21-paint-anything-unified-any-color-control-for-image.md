@@ -19,13 +19,13 @@
 
 ## Wiki 내 위치
 
-본 Wiki의 [[paint-anything]], [[multimodal-llm]], [[image-generation]], [[text-to-image]] 엔티티에 원천 정의를 제공한다.
+본 Wiki의 [[entities/paint-anything.md|paint anything]], [[concepts/multimodal-llm.md|multimodal llm]], [[concepts/image-generation.md|image generation]], [[concepts/text-to-image.md|text to image]] 엔티티에 원천 정의를 제공한다.
 
 ## 핵심 인사이트
 
-1. **전용 표현 계층의 불필요성**: 연속 속성 제어에 전용 표현을 설계하는 대신 LLM 공간에 이미 존재하는 기호-지각 바인딩을 프리미티브로 채택한다. [[representation-contract]]의 '계약 형식이 기존 의미 공간과 정렬되어야 실효적'이라는 원리의 시각 생성 도메인 실현이다.
+1. **전용 표현 계층의 불필요성**: 연속 속성 제어에 전용 표현을 설계하는 대신 LLM 공간에 이미 존재하는 기호-지각 바인딩을 프리미티브로 채택한다. [[concepts/representation-contract.md|representation contract]]의 '계약 형식이 기존 의미 공간과 정렬되어야 실효적'이라는 원리의 시각 생성 도메인 실현이다.
 
-2. **생성-편집 통합**: 동일 헥스 인터페이스가 [[unified-generation-editing]]을 실현한다. 제어 신호의 단일성이 태스크 경계를 소멸시킨다.
+2. **생성-편집 통합**: 동일 헥스 인터페이스가 [[concepts/unified-generation-editing.md|unified generation editing]]을 실현한다. 제어 신호의 단일성이 태스크 경계를 소멸시킨다.
 
 3. **LLM의 접지 프리미티브화**: 멀티모달 시스템에서 LLM의 역할을 '이해·생성'에서 '기호-지각 바인딩 제공자'로 확장한다.
 

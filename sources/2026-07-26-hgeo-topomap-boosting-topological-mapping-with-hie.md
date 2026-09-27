@@ -211,3 +211,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-adaptation-autonomy.md|environment adaptation autonomy]]
+
+---
+**관련**: [[entities/information-theoretic-capacity.md|information theoretic capacity]]
+
+---
+**관련**: [[entities/explicit-belief-layer.md|explicit belief layer]]
+
+---
+**관련**: [[entities/tandem-task-and-motion-planning-with-as-needed-dem.md|tandem task and motion planning with as needed dem]]
+
+---
+**관련**: [[entities/topological-guidance.md|topological guidance]]
+
+---
+**관련**: [[entities/rationale-augmented-detection.md|rationale augmented detection]]

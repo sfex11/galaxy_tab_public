@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evolutionary-agency-axis.md|evolutionary agency axis]]
+
+---
+**관련**: [[entities/evolutionary-agency-axis.md|evolutionary agency axis]]

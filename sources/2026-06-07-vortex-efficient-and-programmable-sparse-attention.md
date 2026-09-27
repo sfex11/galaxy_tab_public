@@ -446,3 +446,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evidence-grounded-experiment-design.md|evidence grounded experiment design]]
+
+---
+**관련**: [[entities/agent-native-serving.md|agent native serving]]
+
+---
+**관련**: [[entities/counterexample-search.md|counterexample search]]
+
+---
+**관련**: [[entities/prompt-to-design-workflow.md|prompt to design workflow]]
+
+---
+**관련**: [[entities/human-aware-training-supervision-gap.md|human aware training supervision gap]]
+
+---
+**관련**: [[entities/surrogate-consumer-agent.md|surrogate consumer agent]]
+
+---
+**관련**: [[entities/serving-layer-neutrality-premise.md|serving layer neutrality premise]]
+
+---
+**관련**: [[entities/bayesian-chronicle-agents.md|bayesian chronicle agents]]
+
+---
+**관련**: [[entities/model-merging.md|model merging]]
+
+---
+**관련**: [[entities/efficient-paraphrase-detection.md|efficient paraphrase detection]]
+
+---
+**관련**: [[entities/coding-agent-for-domain-engineering.md|coding agent for domain engineering]]
+
+---
+**관련**: [[entities/ai-artifact-design.md|ai artifact design]]

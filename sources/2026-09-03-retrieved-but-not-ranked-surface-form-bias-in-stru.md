@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/bootstrap-paradox.md|bootstrap paradox]]
+
+---
+**관련**: [[entities/cooperation-competition-spectrum.md|cooperation competition spectrum]]
+
+---
+**관련**: [[entities/turn-as-derived-unit.md|turn as derived unit]]

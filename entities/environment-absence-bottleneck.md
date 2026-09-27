@@ -34,5 +34,3 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 환경 공급 확장의 실용적 해법을 제공한다. 이슈·커밋 의존으로 제한되던 태스크 범위를 소스 코드 기능으로 넓혀, 환경 부재가 코드 부재가 아니라 추출 전략의 문제임을 시사한다.
-
-→ [[sources/2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md|상세 보기]]

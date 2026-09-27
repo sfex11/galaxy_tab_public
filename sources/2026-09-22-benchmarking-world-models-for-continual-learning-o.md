@@ -19,12 +19,12 @@
 
 ### Wiki 연결점
 
-- [[world-model-in-pieces]]가 규정한 '보편적 세계 모델 불가능성'에 대한 평가론적 대응 — 조각별 특수화가 불가피하다면 측정 대상은 범용성이 아니라 조각(메커니즘) 간 전이·보존 능력이다.
-- [[continual-compoundability]]의 '이득 복리성' 평가 철학을 세계 모델로 확장한다. 선행 메커니즘 재사용이 신규 적응 비용을 절감해 복리 효과를 내는지 측정 가능하게 한다.
-- [[cross-episode-reuse-failure]]가 진단한 재사용 불능 문제에 벤치마크 차원의 측정 도구를 부여한다.
-- [[learning-forgetting-tradeoff]]와 [[adaptive-forgetting]]의 안정성-가소성 구조를 세계 모델 층위로 격상한다.
-- [[model-based-rl]]의 세계 모델 컴포넌트에 수명주기 관리라는 새 요구를 부과한다.
-- [[persistent-world-model]]의 영속성을 설계 목표가 아닌 측정 가능한 능력으로 전환한다.
+- [[concepts/world-model-in-pieces.md|world model in pieces]]가 규정한 '보편적 세계 모델 불가능성'에 대한 평가론적 대응 — 조각별 특수화가 불가피하다면 측정 대상은 범용성이 아니라 조각(메커니즘) 간 전이·보존 능력이다.
+- [[concepts/continual-compoundability.md|continual compoundability]]의 '이득 복리성' 평가 철학을 세계 모델로 확장한다. 선행 메커니즘 재사용이 신규 적응 비용을 절감해 복리 효과를 내는지 측정 가능하게 한다.
+- [[concepts/cross-episode-reuse-failure.md|cross episode reuse failure]]가 진단한 재사용 불능 문제에 벤치마크 차원의 측정 도구를 부여한다.
+- [[concepts/learning-forgetting-tradeoff.md|learning forgetting tradeoff]]와 [[concepts/adaptive-forgetting.md|adaptive forgetting]]의 안정성-가소성 구조를 세계 모델 층위로 격상한다.
+- [[concepts/model-based-rl.md|model based rl]]의 세계 모델 컴포넌트에 수명주기 관리라는 새 요구를 부과한다.
+- [[entities/persistent-world-model.md|persistent world model]]의 영속성을 설계 목표가 아닌 측정 가능한 능력으로 전환한다.
 
 ## 🔗 관련 논문
 

@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 환경 유래 자원의 대칭축을 제공한다. Terminal-Universe가 에이전트 자신의 궤적(경험)을 환경으로 재질의했다면, CodeMidas는 외부 코드베이스(산출물)를 환경으로 변환하여, 환경 생성이 '경험 재활용'과 '제품 추출'이라는 두 자원 경로를 갖게 됨을 보여준다.
-
-→ [[sources/2026-09-22-codemidas-scaling-agentic-coding-rl-environments-f.md|상세 보기]]

@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 측정 연구에 아키텍처적 개입점을 제공한다. 설득 수용도가 κ라는 단일 파라미터로 지정·검증 가능해지면, sycophancy가 모델의 통제 불가능한 속성이 아니라 설계 가능한 속성임이 입증되어 측정-개입 스펙트럼이 연결된다.
-
-→ [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]

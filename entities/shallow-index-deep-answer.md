@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
 
 평행 구조를 확인시킨다 — 국소 창을 얕게 유지하되 필요 판정 시에만 전역으로 확장하는 구조가 비디오(캡션→프레임)와 디코딩(국소 읽기→전역 읽기) 양쪽에서 재현되어, '얕게 유지, 필요 시 깊게' 원리의 범용성을 입증한다.
-
-→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

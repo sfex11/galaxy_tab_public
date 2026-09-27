@@ -23,10 +23,10 @@
 
 ## 기존 Wiki와의 관계
 
-- [[latent-communication-channel]], [[kv-cache-information-leakage]]: 그래디언트는 KV 캐시에 이어 또 하나의 비텍스트 유출 채널이다. 중간 표현이 관측 채널이 되는 동형 패턴이 제3 사례로 확장된다.
-- [[differential-privacy]], [[federated-learning]]: Component-Aware DP가 방어 측 예산 배분이었다면 본 논문은 그 방어가 막아야 할 공격의 실재를 체화 RL에서 실증한다.
-- [[hidden-state-risk-space]]: 위험이 출력 표층이 아닌 전송물에 거주한다는 위치 논리의 확장.
-- [[efficiency-attack-surface-identity]]: 서버 조율을 위한 채널이 곧 공격 표면이 되는 이중성의 프라이버시 버전.
+- [[concepts/latent-communication-channel.md|latent communication channel]], [[concepts/kv-cache-information-leakage.md|kv cache information leakage]]: 그래디언트는 KV 캐시에 이어 또 하나의 비텍스트 유출 채널이다. 중간 표현이 관측 채널이 되는 동형 패턴이 제3 사례로 확장된다.
+- [[concepts/differential-privacy.md|differential privacy]], [[concepts/federated-learning.md|federated learning]]: Component-Aware DP가 방어 측 예산 배분이었다면 본 논문은 그 방어가 막아야 할 공격의 실재를 체화 RL에서 실증한다.
+- [[concepts/hidden-state-risk-space.md|hidden state risk space]]: 위험이 출력 표층이 아닌 전송물에 거주한다는 위치 논리의 확장.
+- [[concepts/efficiency-attack-surface-identity.md|efficiency attack surface identity]]: 서버 조율을 위한 채널이 곧 공격 표면이 되는 이중성의 프라이버시 버전.
 
 ## 🔗 관련 논문
 

@@ -14,5 +14,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)
 
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
-
-→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

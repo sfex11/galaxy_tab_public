@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 신념 상태의 접지 방식을 재정의한다. 통신 격리 하 자기 관측 의존 문제와 달리, BCA의 신념은 외부 발화라는 명시적 증거 스트림에 접지되어 상태의 근거 자체가 관찰 가능해진다.
-
-→ [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]

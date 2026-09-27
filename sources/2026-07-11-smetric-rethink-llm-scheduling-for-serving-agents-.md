@@ -76,3 +76,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/misattribution-over-fabrication-shift.md|misattribution over fabrication shift]]
+
+---
+**관련**: [[entities/report-noisy-max-reuse.md|report noisy max reuse]]

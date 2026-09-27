@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Benchmarking World Models for Continual Learning on Compositional Task (2026-09-22)
 
 모델 기반 RL에서 세계 모델 컴포넌트 자체의 수명주기 관리가 병목이 될 수 있음을 시사한다. 정책 학습에 앞서 세계 모델의 지속학습 능력이 장기 성능의 전제조건임을 보여준다.
-
-→ [[sources/2026-09-22-benchmarking-world-models-for-continual-learning-o.md|상세 보기]]

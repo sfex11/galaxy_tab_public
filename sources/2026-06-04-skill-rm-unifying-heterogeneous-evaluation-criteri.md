@@ -422,3 +422,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/coaching-reward.md|coaching reward]]
+
+---
+**관련**: [[entities/native-skill-routing.md|native skill routing]]
+
+---
+**관련**: [[entities/off-policy-evaluation.md|off policy evaluation]]
+
+---
+**관련**: [[entities/skill-termination-judgment.md|skill termination judgment]]
+
+---
+**관련**: [[entities/reward-hacking-internal-signature.md|reward hacking internal signature]]
+
+---
+**관련**: [[entities/monitor-reward-coupling-spectrum.md|monitor reward coupling spectrum]]
+
+---
+**관련**: [[entities/goal-safety-signal-asymmetry.md|goal safety signal asymmetry]]
+
+---
+**관련**: [[entities/on-demand-frame-fetch.md|on demand frame fetch]]
+
+---
+**관련**: [[entities/kl-regularized-reward-maximization.md|kl regularized reward maximization]]
+
+---
+**관련**: [[entities/internal-state-feedback-extraction.md|internal state feedback extraction]]
+
+---
+**관련**: [[entities/evaluation-target-substitution.md|evaluation target substitution]]

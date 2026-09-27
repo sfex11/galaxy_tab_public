@@ -47,3 +47,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/counterfactual-factor-testing.md|counterfactual factor testing]]
+
+---
+**관련**: [[entities/thermal-visual-place-recognition.md|thermal visual place recognition]]
+
+---
+**관련**: [[entities/change-aware-screen.md|change aware screen]]

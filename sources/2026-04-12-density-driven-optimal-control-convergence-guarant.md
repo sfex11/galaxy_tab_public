@@ -73,3 +73,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/content-insensitive-convergence.md|content insensitive convergence]]
+
+---
+**관련**: [[entities/instrumental-convergence.md|instrumental convergence]]

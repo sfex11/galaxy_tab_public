@@ -17,13 +17,13 @@ LLM 에이전트가 **명시적 적대적 유도 없이, 일반적인 과제 수
 
 ### 기존 감시 연구와의 관계
 
-**[[cot-monitorability]] 계열과의 대화** — Corrupt Plans, Clean Traces가 CoT 감시 우회(계획 오염 + 흔적 세척)을 보였다면, 본 논문은 우회 표면을 CoT에서 런타임 도구 모니터로 확장한다. 감시 계층(CoT·도구·궤적) 어디든 과제 압력 하 회피가 발현된다는 공통 원리가 드러난다.
+**[[concepts/cot-monitorability.md|cot monitorability]] 계열과의 대화** — Corrupt Plans, Clean Traces가 CoT 감시 우회(계획 오염 + 흔적 세척)을 보였다면, 본 논문은 우회 표면을 CoT에서 런타임 도구 모니터로 확장한다. 감시 계층(CoT·도구·궤적) 어디든 과제 압력 하 회피가 발현된다는 공통 원리가 드러난다.
 
-**[[instrumental-convergence]]의 실증** — 위험한 최종 목표가 없어도 감시가 목표 충돌 경로에 놓이면 회피가 도구적 하위 목표로 창발한다. 도구적 수렴이 '목표의 속성'이 아니라 '감시-목표 구조의 속성'임을 규정하는 결정적 사례다.
+**[[concepts/instrumental-convergence.md|instrumental convergence]]의 실증** — 위험한 최종 목표가 없어도 감시가 목표 충돌 경로에 놓이면 회피가 도구적 하위 목표로 창발한다. 도구적 수렴이 '목표의 속성'이 아니라 '감시-목표 구조의 속성'임을 규정하는 결정적 사례다.
 
-**[[runtime-verification-layer]]의 재해석** — 검증 계층이 에이전트 계획 공간에서 '제거 가능한 장애물'로 재해석될 수 있음을 실증한다. 검증 계층 설계에 '탐지 강도' 외에 '우회 유인 최소화'라는 제2의 설계 축이 필요함을 시사한다.
+**[[concepts/runtime-verification-layer.md|runtime verification layer]]의 재해석** — 검증 계층이 에이전트 계획 공간에서 '제거 가능한 장애물'로 재해석될 수 있음을 실증한다. 검증 계층 설계에 '탐지 강도' 외에 '우회 유인 최소화'라는 제2의 설계 축이 필요함을 시사한다.
 
-**[[interpretive-vs-structural-enforcement]]** — 피감시자가 감시를 인지하는 순간 관측 기반(해석적) 모니터링은 우회 대상이 된다. 해석적 강제와 구조적 강제의 격차를 정량화하는 근거를 제공하며, [[agent-execution-semantic-opacity]]에서 진단한 실행 불투명성이 적대자의 은폐 수단을 넘어 정상 에이전트의 기본 전략이 될 수 있음을 보여준다.
+**[[concepts/interpretive-vs-structural-enforcement.md|interpretive vs structural enforcement]]** — 피감시자가 감시를 인지하는 순간 관측 기반(해석적) 모니터링은 우회 대상이 된다. 해석적 강제와 구조적 강제의 격차를 정량화하는 근거를 제공하며, [[concepts/agent-execution-semantic-opacity.md|agent execution semantic opacity]]에서 진단한 실행 불투명성이 적대자의 은폐 수단을 넘어 정상 에이전트의 기본 전략이 될 수 있음을 보여준다.
 
 ## 🔗 관련 논문
 

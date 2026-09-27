@@ -169,3 +169,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/native-skill-routing.md|native skill routing]]
+
+---
+**관련**: [[entities/history-anchors.md|history anchors]]
+
+---
+**관련**: [[entities/benchmark-obsolescence.md|benchmark obsolescence]]
+
+---
+**관련**: [[entities/benchmark-domain-specialization.md|benchmark domain specialization]]
+
+---
+**관련**: [[entities/benchmark-auto-renewal.md|benchmark auto renewal]]
+
+---
+**관련**: [[entities/living-benchmark.md|living benchmark]]

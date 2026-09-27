@@ -19,34 +19,22 @@ _Wiki 축적 중_
 
 코드-하네스 패러다임의 평가 범위를 조작 성공률에서 안전 제약 준수로 확장하는 물리 도메인 사례를 제공한다. 컨트롤러 코드 생성이 기능적 성공과 물리적 안전을 동시에 담보해야 하며, 후자는 전자의 부산물로 자동 성립하지 않음을 실증한다.
 
-→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
-
 ### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
 
 하네스 코드의 기원을 확장한다 — 인간 작성 코드나 에이전트가 해석하는 계약(RunAgent)이 아니라 task feedback으로부터 학습되어 성장하는 코드임을 실증하여, 하네스를 구성하는 코드가 설계 시점 산출물이 아닌 훈련의 산출물이 됨을 보여준다.
-
-→ [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]
 
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-26)
 
 로봇 제어기 코드 생성의 명세 원천이 인간 프롬프트가 아닌 시각적 인간 시연이 됨을 보여준다. 코드-하네스 패러다임의 입력 인터페이스가 언어에서 비디오로 확장됨을 시사한다.
 
-→ [[sources/2026-09-26-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]
-
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-26)
 
 코드가 하네스로 기능하는 패러다임의 방향을 역전시킨다. 코드가 에이전트의 실행 환경이 아니라, 에이전트의 산출물로서 계획 문제의 도메인 특화 해법 인프라가 되는 사례다.
-
-→ [[sources/2026-09-26-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]
 
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
 
 로봇 제어의 코드 생성 경로를 VLM 직접 제어(Show-Harness)와 대비하여 물리 도메인에서 확장한다. 제어기 코드 생성이 기능적 성공 검증을 실행 기반으로 수행하며, 코드가 로봇 행동의 명세이자 검증 가능한 산출물로 이중 기능함을 보여준다.
 
-→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]
-
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
 
 코드=하네스 공식의 방향을 도메인 쪽으로 확장한다. 에이전트가 코드로 개선하는 대상이 자기 실행 환경이 아니라 외부 도메인(TAMP)의 계획 기제일 수 있으며, 코드 합성이 곧 도메인 인프라 구축임을 보여준다.
-
-→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

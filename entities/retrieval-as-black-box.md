@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
 
 검색이 외부화될 때 그 효용은 검색 대상 표현 단위 설계에 의해 조건화됨을 보여준다 — 검색 단위 설계가 능력 외부화의 실질 품질을 결정하는 새 축을 제공한다.
-
-→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

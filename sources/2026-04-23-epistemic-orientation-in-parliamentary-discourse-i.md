@@ -90,3 +90,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/open-ended-epistemic-measurability-gap.md|open ended epistemic measurability gap]]
+
+---
+**관련**: [[entities/course-drift.md|course drift]]

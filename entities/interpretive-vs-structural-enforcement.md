@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-26)
 
 관측 기반(해석적) 모니터링의 우회 가능성을 체계적 벤치마크로 실증한다. 해석적 감시는 피감시자가 그 존재를 인지하는 순간 우회 대상이 되며, 해석적 강제와 구조적 차단 사이의 안전성 격차를 정량화하는 경험적 근거가 된다.
-
-→ [[sources/2026-09-26-instrumental-monitor-evasion-emerges-under-ordinar.md|상세 보기]]

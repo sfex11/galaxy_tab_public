@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Claw-Eval-Live: A Live Agent Benchmark for Evolving Real-World Workflo (2026-05-03)
 
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-27)
-
-→ [[sources/2026-09-27-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

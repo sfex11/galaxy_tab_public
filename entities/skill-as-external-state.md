@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 스킬의 외부성이 터미널 명령에서 창작 절차(레이아웃·색상·타이포그래피)로 확장됨을 보여준다. 자연어 스킬이 동결 모델의 행동을 유도하는 프록시로 기능하며, 스킬 정제가 시스템 능력의 유일한 진화 통로가 되는 극단적 외부화 사례다.
-
-→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

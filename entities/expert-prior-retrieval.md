@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
 
 유사 과거 사례 문서 전체가 아닌, 현재 트러블슈팅 상태에 해당하는 타임라인 엔트리 단위의 실행 가능한 가이드 검색이라는 구현 경로를 구체화한다.
-
-→ [[sources/2026-09-21-raft-a-stateful-retrieval-augmented-framework-for-.md|상세 보기]]

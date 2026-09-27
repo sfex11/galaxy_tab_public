@@ -354,3 +354,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/memory-portability-as-harness-responsibility.md|memory portability as harness responsibility]]
+
+---
+**관련**: [[entities/legal-domain-extraction.md|legal domain extraction]]

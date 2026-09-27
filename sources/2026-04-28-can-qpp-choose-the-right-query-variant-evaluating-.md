@@ -316,3 +316,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hex-visual-semantic-binding.md|hex visual semantic binding]]
+
+---
+**관련**: [[entities/hex-visual-semantic-binding.md|hex visual semantic binding]]
+
+---
+**관련**: [[entities/semantic-interference-decoupling.md|semantic interference decoupling]]
+
+---
+**관련**: [[entities/trigger-driven-retrieval.md|trigger driven retrieval]]
+
+---
+**관련**: [[entities/conformal-prediction.md|conformal prediction]]

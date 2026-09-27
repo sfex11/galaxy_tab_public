@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
 
 순위 불가판별성의 발생 조건(도메인별 레이블 희소성)을 특정하고, 스무딩이 추정 분산을 줄여 불가판별 구간 자체를 축소하는 경로를 제시한다. 통계적 처치가 순위 비교 논쟁의 절차적 기준이 될 수 있음을 보여준다.
-
-→ [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

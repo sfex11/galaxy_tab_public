@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
 
 잠재 계층이 에이전트 간 통신뿐 아니라 훈련 인프라로의 전송에서도 누출 채널이 됨을 확장한다. 잠재 계층의 독립적 보안 요구를 훈련-서빙 전 구간으로 일반화한다.
-
-→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

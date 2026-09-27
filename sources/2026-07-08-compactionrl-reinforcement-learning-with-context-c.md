@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compactionrl.md|compactionrl]]
+
+---
+**관련**: [[entities/compactionrl.md|compactionrl]]

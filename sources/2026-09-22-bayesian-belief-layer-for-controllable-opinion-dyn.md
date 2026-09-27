@@ -13,7 +13,7 @@ LLM 에이전트의 신념 갱신을 컨텍스트 속 암묵적 현상에서 확
 
 이 논문은 소셜 시뮬레이션에서 LLM 에이전트의 의견 수정이 암묵적으로 컨텍스트 내에서 일어나는 문제를 진단한다 — 설득 수용도를 지정·검증할 수 없고, 집단 의견 역학이 모델 학습 사전분포를 은밀히 상속한다. Bayesian Chronicle Agents(BCA)는 '무엇을 믿는가'와 '어떻게 말하는가'를 분리하는 최소 신념 계층을 제시한다: 각 입장은 확률로 표현되고, 들은 발화마다 베이지안 한 스텝으로 갱신되며, 단일 사전강도 파라미터 κ가 완고함을 인코딩한다.
 
-Wiki 축적과의 관계: ① [[policy-constraint-hardening]]이 제안한 소프트 제약→하드 제약 전환의 신념 도메인 실현으로, [[context-delegation]]이 진단한 '암묵적 컨텍스트 위임'에 구조적 대안을 제공한다. ② [[bayesian-update-cumulative-error]]가 베이즈 규칙 위반의 누적 오차를 진단했다면, 본 논문은 발화당 정확히 한 스텝의 갱신 강제라는 처방 측을 완성한다. ③ [[sycophancy]]·[[agreement-pressure]] 측정 연구에 지정·검증 가능한 제어 변수 κ를 공급하여, 설득 수용성이 창발적 속성에서 설계 파라미터로 격상된다. ④ [[turn-driven-drift]]의 드리프트 원인(턴 수)이 실제 증거(발화)로 치환되고, [[machine-behavior]] 수준에서는 집단 의견 동역학의 사전 상속이 개별 κ 분포로 조정 가능해진다. 신념이 명시적 확률 객체가 되면 [[belief-aggregation]]과 [[collective-belief-formation]]이 전제하던 개체 수준 원시 연산이 처음으로 구현 가능해진다.
+Wiki 축적과의 관계: ① [[concepts/policy-constraint-hardening.md|policy constraint hardening]]이 제안한 소프트 제약→하드 제약 전환의 신념 도메인 실현으로, [[concepts/context-delegation.md|context delegation]]이 진단한 '암묵적 컨텍스트 위임'에 구조적 대안을 제공한다. ② [[concepts/bayesian-update-cumulative-error.md|bayesian update cumulative error]]가 베이즈 규칙 위반의 누적 오차를 진단했다면, 본 논문은 발화당 정확히 한 스텝의 갱신 강제라는 처방 측을 완성한다. ③ [[concepts/sycophancy.md|sycophancy]]·[[concepts/agreement-pressure.md|agreement pressure]] 측정 연구에 지정·검증 가능한 제어 변수 κ를 공급하여, 설득 수용성이 창발적 속성에서 설계 파라미터로 격상된다. ④ [[concepts/turn-driven-drift.md|turn driven drift]]의 드리프트 원인(턴 수)이 실제 증거(발화)로 치환되고, [[concepts/machine-behavior.md|machine behavior]] 수준에서는 집단 의견 동역학의 사전 상속이 개별 κ 분포로 조정 가능해진다. 신념이 명시적 확률 객체가 되면 [[concepts/belief-aggregation.md|belief aggregation]]과 [[concepts/collective-belief-formation.md|collective belief formation]]이 전제하던 개체 수준 원시 연산이 처음으로 구현 가능해진다.
 
 ## 🔗 관련 논문
 

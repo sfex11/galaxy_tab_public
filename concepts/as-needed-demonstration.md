@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|TANDEM: Task and Motion Planning with As-Needed Demonstratio]]
 
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
-
-→ [[sources/2026-09-27-rapid-robot-agentic-programming-from-demonstration.md|상세 보기]]

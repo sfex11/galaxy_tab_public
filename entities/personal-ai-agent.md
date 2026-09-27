@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
 
 일상적 위임 상황에서 사용자가 우선하는 가치 지형(21개 가치, 6개 그룹)을 제공하여, 개인 AI 에이전트의 설계 목표를 능력 달성에서 가치 충족으로 재정의한다.
-
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

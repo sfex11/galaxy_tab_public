@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/performance-overclaiming.md|performance overclaiming]]
+
+---
+**관련**: [[entities/feature-regime-complementarity.md|feature regime complementarity]]
+
+---
+**관련**: [[entities/performance-overclaiming.md|performance overclaiming]]

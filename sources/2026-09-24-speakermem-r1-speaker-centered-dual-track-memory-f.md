@@ -13,9 +13,9 @@
 
 ### SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dialogue (2026-09-24)
 
-다자 대화 장기 메모리의 요구를 5축으로 규정한다 — 누가 말했는가, 누구에 관한 것인가, 개인이 서로를 어떻게 지각하는가, 무엇이 집단에 공유되는가, 상태가 어떻게 변하는가. 범용 LLM 메모리 시스템이 인물·집단 관계를 잃거나 대화 전역에 분산된 단서를 통합하지 못한다는 진단은 [[memory-fragmentation-failure]]의 다자 확장이다 — 단일 화자 가정 위의 요약·벡터 검색이 사회적 속성을 구조적으로 소실시킨다는 병인을 제공한다.
+다자 대화 장기 메모리의 요구를 5축으로 규정한다 — 누가 말했는가, 누구에 관한 것인가, 개인이 서로를 어떻게 지각하는가, 무엇이 집단에 공유되는가, 상태가 어떻게 변하는가. 범용 LLM 메모리 시스템이 인물·집단 관계를 잃거나 대화 전역에 분산된 단서를 통합하지 못한다는 진단은 [[concepts/memory-fragmentation-failure.md|memory fragmentation failure]]의 다자 확장이다 — 단일 화자 가정 위의 요약·벡터 검색이 사회적 속성을 구조적으로 소실시킨다는 병인을 제공한다.
 
-AutoViewMem([[self-configuring-memory-schema]])이 정보 유형별 직교 뷰 분해를 제안한 지 이틀 뒤, 본 논문은 분해 축이 '정보 유형'에서 '사회 관계'로 확장됨을 보인다. 화자 트랙과 콘텐츠 트랙의 분리는 [[dual-trace-encoding]]의 관계적 버전으로, 화자 귀속을 사후 추론이 아닌 저장 계층의 1급 속성으로 격상시킨다. 대인 지각의 저장은 [[theory-of-mind]]가 추론 시점 능력에서 저장 데이터로 이동하는 전환점이며, 집단 공유 정보 추적은 [[collective-belief-formation]]의 메모리 측 구현, 상태 변화 추적은 [[knowledge-state-drift]]의 구조적 관리에 해당한다.
+AutoViewMem([[concepts/self-configuring-memory-schema.md|self configuring memory schema]])이 정보 유형별 직교 뷰 분해를 제안한 지 이틀 뒤, 본 논문은 분해 축이 '정보 유형'에서 '사회 관계'로 확장됨을 보인다. 화자 트랙과 콘텐츠 트랙의 분리는 [[concepts/dual-trace-encoding.md|dual trace encoding]]의 관계적 버전으로, 화자 귀속을 사후 추론이 아닌 저장 계층의 1급 속성으로 격상시킨다. 대인 지각의 저장은 [[concepts/theory-of-mind.md|theory of mind]]가 추론 시점 능력에서 저장 데이터로 이동하는 전환점이며, 집단 공유 정보 추적은 [[concepts/collective-belief-formation.md|collective belief formation]]의 메모리 측 구현, 상태 변화 추적은 [[concepts/knowledge-state-drift.md|knowledge state drift]]의 구조적 관리에 해당한다.
 
 → sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-mem.md
 

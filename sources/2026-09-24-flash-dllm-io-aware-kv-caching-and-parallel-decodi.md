@@ -13,11 +13,11 @@ dLLM 추론에서 KV 캐싱과 병렬 디코딩의 상호작용이 유발하는 
 
 Diffusion LLM(dLLM)의 실용 배포가 지연된 근본 원인은 유효한 KV 캐싱과 확장 가능한 병렬 디코딩의 부재다. Flash-dLLM은 두 문제를 I/O 병목 관점에서 통합하는 추론 인프라를 제시한다.
 
-핵심 통찰은 기존 가속 연구가 캐싱과 디코딩을 고립적으로 다룬 반면, 캐시 재사용과 대량 병렬 생성의 상호작용이 유발하는 I/O 병목은 어느 한쪽의 최적화로는 해소되지 않는다는 점이다. 이는 구성요소 독립 최적화 가정([[component-independence-assumption]])의 붕괴 사례이며, 계산 최적화가 메모리 이동 병목으로 이동하는 [[adaptive-bottleneck-migration]] 패턴의 추론 인프라 버전이다.
+핵심 통찰은 기존 가속 연구가 캐싱과 디코딩을 고립적으로 다룬 반면, 캐시 재사용과 대량 병렬 생성의 상호작용이 유발하는 I/O 병목은 어느 한쪽의 최적화로는 해소되지 않는다는 점이다. 이는 구성요소 독립 최적화 가정([[concepts/component-independence-assumption.md|component independence assumption]])의 붕괴 사례이며, 계산 최적화가 메모리 이동 병목으로 이동하는 [[concepts/adaptive-bottleneck-migration.md|adaptive bottleneck migration]] 패턴의 추론 인프라 버전이다.
 
-[[diffusion-llm]] 연구 축의 진화를 완성한다: 품질 경쟁력 확보([[cola-dlm]]), AR 분포의 병렬 샘플러 재사용([[discrete-diffusion]]), 그리고 이번의 배포 가능한 추론 인프라. 패러다임 채택의 병목이 알고리즘이 아니라 인프라 결손에 있음을 보여준다.
+[[concepts/diffusion-llm.md|diffusion llm]] 연구 축의 진화를 완성한다: 품질 경쟁력 확보([[entities/cola-dlm.md|cola dlm]]), AR 분포의 병렬 샘플러 재사용([[entities/discrete-diffusion.md|discrete diffusion]]), 그리고 이번의 배포 가능한 추론 인프라. 패러다임 채택의 병목이 알고리즘이 아니라 인프라 결손에 있음을 보여준다.
 
-[[parallel-decoding]]에는 병렬화가 캐싱과의 공동 설계 대상임을, [[kv-cache-optimization]]에는 dLLM이라는 새 적용 대상을 제공한다. 소비자 GPU 상 확산 모델 배포를 다룬 The Weight Is Over 계열과 함께 확산 생성의 실용화 축을 강화한다.
+[[concepts/parallel-decoding.md|parallel decoding]]에는 병렬화가 캐싱과의 공동 설계 대상임을, [[concepts/kv-cache-optimization.md|kv cache optimization]]에는 dLLM이라는 새 적용 대상을 제공한다. 소비자 GPU 상 확산 모델 배포를 다룬 The Weight Is Over 계열과 함께 확산 생성의 실용화 축을 강화한다.
 
 ## 🔗 관련 논문
 

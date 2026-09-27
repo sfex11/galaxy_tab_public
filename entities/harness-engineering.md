@@ -22,5 +22,3 @@ ClawGym은 관측 가능성 주도 자동 진화의 구체적 구현으로, 하�
 ### An Empirical Study of Harness Design for Coding Agents (2026-09-21)
 
 하네스 설계 연구에 최초의 구성요소 수준 절제 실험 체계를 제공한다. 관측성 기반 자동 진화가 하네스를 블랙박스 최적화 대상으로 다뤘다면, 본 논문은 실행 루프를 고정한 채 계획·행동 공간·컨텍스트 관리의 3축으로 탐색 공간을 명시화하여, 하네스 연구를 단일 시스템 평가에서 구성요소별 인과 추론의 과학으로 전환한다.
-
-→ [[sources/2026-09-21-an-empirical-study-of-harness-design-for-coding-ag.md|상세 보기]]

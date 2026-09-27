@@ -22,5 +22,3 @@ TeCoD는 text-to-sql의 실제 배포 병목(스키마 복잡도에 따른 정�
 ### Q&A on Any Spreadsheet Requires Interpreting Its Grid Structure (2026-09-21)
 
 스프레드시트 QA가 텍스트-투-SQL과 다른 병목 구조를 가짐을 드러낸다. TeCoD가 반복 질의를 출력 측 제약 디코딩으로 다루었다면 본 논문은 임의 질의를 입력 측 구조 인식 청킹으로 다루어, 구조화 데이터 이해의 병목이 쿼리 생성 능력이 아닌 입력 표현 설계에 있을 수 있음을 대비 구도로 제시한다.
-
-→ [[sources/2026-09-21-qa-on-any-spreadsheet-requires-interpreting-its-gr.md|상세 보기]]

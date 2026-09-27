@@ -17,15 +17,15 @@
 
 ## 기존 Wiki와의 관계
 
-- [[harness-engineering]]: 관측성 기반 자동 진화([[observability-driven-evolution]])가 하네스를 블랙박스 최적화 대상으로 다뤘다면, 본 논문은 그 탐색 공간을 3축으로 명시화하여 자동 진화 연구가 다뤄야 할 설계 축의 정의에 근거를 부여한다.
-- [[fixed-loop-component-ablation]]: 본 논문의 방법론적 핵심이다. 루프 고정 + 구성요소 변이 설계는 [[harness-as-hidden-variable]]의 혼동 효과를 통제하는 실험적 해법으로, 하네스 효과를 처음으로 구성요소 단위로 귀속 가능하게 한다.
-- [[component-independence-assumption]]: 구성요소 독립성을 가정이 아닌 측정 대상으로 전환한다. 변이 효과의 조건별 차이는 구성요소 간 상호작용을 관찰 가능하게 한다.
-- [[harness-design-combinatorics]]: 3축 조합 공간을 실증적으로 탐색하는 첫 사례로, 어떤 구성요소 조합도 지배적이지 않다는 조합적 폭발 진단의 검증 무대를 제공한다.
-- [[system-scaling]]: 4개 모델 반복 설계로 하네스 원칙이 모델 규모와 독립적인지(이식 가능한 원칙) 아니면 규모 조건부인지(구성별 최적화 필요)를 판별하는 토대를 마련한다.
+- [[entities/harness-engineering.md|harness engineering]]: 관측성 기반 자동 진화([[concepts/observability-driven-evolution.md|observability driven evolution]])가 하네스를 블랙박스 최적화 대상으로 다뤘다면, 본 논문은 그 탐색 공간을 3축으로 명시화하여 자동 진화 연구가 다뤄야 할 설계 축의 정의에 근거를 부여한다.
+- [[concepts/fixed-loop-component-ablation.md|fixed loop component ablation]]: 본 논문의 방법론적 핵심이다. 루프 고정 + 구성요소 변이 설계는 [[concepts/harness-as-hidden-variable.md|harness as hidden variable]]의 혼동 효과를 통제하는 실험적 해법으로, 하네스 효과를 처음으로 구성요소 단위로 귀속 가능하게 한다.
+- [[concepts/component-independence-assumption.md|component independence assumption]]: 구성요소 독립성을 가정이 아닌 측정 대상으로 전환한다. 변이 효과의 조건별 차이는 구성요소 간 상호작용을 관찰 가능하게 한다.
+- [[concepts/harness-design-combinatorics.md|harness design combinatorics]]: 3축 조합 공간을 실증적으로 탐색하는 첫 사례로, 어떤 구성요소 조합도 지배적이지 않다는 조합적 폭발 진단의 검증 무대를 제공한다.
+- [[entities/system-scaling.md|system scaling]]: 4개 모델 반복 설계로 하네스 원칙이 모델 규모와 독립적인지(이식 가능한 원칙) 아니면 규모 조건부인지(구성별 최적화 필요)를 판별하는 토대를 마련한다.
 
 ## 연결점
 
-[[agentic-harness-engineering]]의 자동 진화, [[clawgym]]의 진단적 평가, [[swe-chat]]의 실사용 세션 분석과 함께 하네스 연구의 측정→설계→검증 루프를 완성한다. 모델 능력이 동일해도 하네스 구성이 성능을 결정할 수 있다는 이 연구의 전제는 [[model-harness-decomposability]]의 실증적 기초가 된다.
+[[entities/agentic-harness-engineering.md|agentic harness engineering]]의 자동 진화, [[entities/clawgym.md|clawgym]]의 진단적 평가, [[entities/swe-chat.md|swe chat]]의 실사용 세션 분석과 함께 하네스 연구의 측정→설계→검증 루프를 완성한다. 모델 능력이 동일해도 하네스 구성이 성능을 결정할 수 있다는 이 연구의 전제는 [[concepts/model-harness-decomposability.md|model harness decomposability]]의 실증적 기초가 된다.
 
 ## 🔗 관련 논문
 

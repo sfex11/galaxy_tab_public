@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Watermarkable Multi-Draft Speculative Sampling via Poisson Processes (2026-09-22)
 
 서빙 최적화와 출처 증명의 결합 사례를 제공한다. 추측 샘플링(서빙 효율)과 워터마킹(검증 가능성)이 동일 디코딩 파이프라인에서 결합되어야 한다는 요구는, 서빙 계층의 가속 설계 결정이 검증 인프라 설계를 직접 구속함을 보여준다.
-
-→ [[sources/2026-09-22-watermarkable-multi-draft-speculative-sampling-via.md|상세 보기]]

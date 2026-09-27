@@ -76,3 +76,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/post-emission-revision-policy.md|post emission revision policy]]
+
+---
+**관련**: [[entities/policy-constraint-hardening.md|policy constraint hardening]]

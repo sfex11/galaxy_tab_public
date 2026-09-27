@@ -18,5 +18,3 @@ VLA Foundry는 로봇tics 파운데이션 모델의 실제 훈련 경로를 구�
 ### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
 
 파운데이션 모델 데이터 수집의 확장성 병목을 인간 텔레오퍼레이션 시간으로 특정하고 TAMP 자동화로 이를 완화하는 경로를 제시한다 — 데이터 규모 확장이 수집 인프라의 자동화 수준에 조건부임을 실증한다.
-
-→ [[sources/2026-09-25-tandem-task-and-motion-planning-with-as-needed-dem.md|상세 보기]]

@@ -147,3 +147,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]
+
+---
+**관련**: [[entities/gpu-kernel-optimization.md|gpu kernel optimization]]
+
+---
+**관련**: [[entities/utterance-stream-concurrency-control.md|utterance stream concurrency control]]
+
+---
+**관련**: [[entities/any-color-control.md|any color control]]

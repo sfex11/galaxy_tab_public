@@ -72,3 +72,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/capability-gap-self-diagnosis.md|capability gap self diagnosis]]
+
+---
+**관련**: [[entities/delegation-structural-unverifiability.md|delegation structural unverifiability]]

@@ -18,5 +18,3 @@ Nemotron-3-Nano-CC(30B-A3B)와 Nemotron-3-Ultra-CC(550B-A55B)라는 새로운 Mo
 ### NemotronLabs VoiceChat: An Open Full-duplex Speech-to-Speech Model wit (2026-09-22)
 
 Nemotron 계열이 텍스트 post-training(Nemotron-Cascade 2, 코딩 경쟁 특화)에서 풀듀플렉스 음성 에이전트로 확장됨을 보여준다. 단일 모델 패밀리가 아니라 에이전트 스택 전반(LLM→음성 에이전시)을 아우르는 인프라 전략임을 시사한다.
-
-→ [[sources/2026-09-22-nemotronlabs-voicechat-an-open-full-duplex-speech-.md|상세 보기]]

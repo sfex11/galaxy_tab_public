@@ -17,11 +17,11 @@ STL 견고성처럼 결정론적 오라클이 주어지면 LLM은 경사 없이 
 LLM-Falsifier는 STL 명세의 위반 반례 탐색(falsification)을 견고성 최적화 문제로 형식화하고, CMA-ES 같은 블랙박스 검색 대신 반복 프롬프팅으로 견고성 함수를 최적화하는 LLM을 배치한다. LLM은 시스템 동역학을 모른 채 평가 이력만으로 후보를 제안하며, STL 견고성이라는 결정론적 스칼라 오라클이 수렴 신호를 제공한다.
 
 ## 기존 Wiki와의 관계
-- [[formal-verification]]의 쌍대 축: 검증이 안전 증명이라면 falsification은 위반 탐색이며, LLM을 증명자가 아닌 반증자로 배치하는 역방향 활용이다.
-- [[verification-as-system-external-relation]]의 CPS 확장: STL 견고성은 모델 출력과 독립적인 외부 신호로, 검증 가능성이 시스템-외부 관계라는 명제가 물리 도메인에서도 성립함을 보여준다.
-- [[solver-poser-decoupling]] 이래 세분화된 역할 분리(출제자→검증자)에 반증자를 제4 역할로 추가한다([[falsifier-as-fourth-role]]).
-- [[adversarial-problem-generation]]의 CPS 버전: 반례 생성은 적대적 문제 생성과 동형 구조다.
-- [[iterative-prompting-optimization]]: 파인튜닝 없이 프롬프팅 루프만으로 최적화가 성립함을 입증하는 원천 사례다.
+- [[concepts/formal-verification.md|formal verification]]의 쌍대 축: 검증이 안전 증명이라면 falsification은 위반 탐색이며, LLM을 증명자가 아닌 반증자로 배치하는 역방향 활용이다.
+- [[concepts/verification-as-system-external-relation.md|verification as system external relation]]의 CPS 확장: STL 견고성은 모델 출력과 독립적인 외부 신호로, 검증 가능성이 시스템-외부 관계라는 명제가 물리 도메인에서도 성립함을 보여준다.
+- [[concepts/solver-poser-decoupling.md|solver poser decoupling]] 이래 세분화된 역할 분리(출제자→검증자)에 반증자를 제4 역할로 추가한다([[concepts/falsifier-as-fourth-role.md|falsifier as fourth role]]).
+- [[concepts/adversarial-problem-generation.md|adversarial problem generation]]의 CPS 버전: 반례 생성은 적대적 문제 생성과 동형 구조다.
+- [[concepts/iterative-prompting-optimization.md|iterative prompting optimization]]: 파인튜닝 없이 프롬프팅 루프만으로 최적화가 성립함을 입증하는 원천 사례다.
 
 ## 인사이트
 경사 정보 없이 목표의 언어적 기술만으로 LLM이 최적화 동력이 될 수 있다는 발견은, 최적화의 병목이 미분 가능성이 아니라 목표 기술 가능성일 수 있음을 시사한다.

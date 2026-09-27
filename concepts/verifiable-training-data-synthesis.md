@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-07)
 
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-27)
-
-→ [[sources/2026-09-27-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

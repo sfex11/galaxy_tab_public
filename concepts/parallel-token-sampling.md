@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Unlocking Lossless Speedups in LLMs via Discrete Diffusion (2026-09-07)
 
 ### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
-
-→ [[sources/2026-09-22-rheosampling-resolving-the-one-hot-dilemma-in-stoc.md|상세 보기]]

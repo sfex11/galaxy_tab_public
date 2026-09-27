@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
 
 '오류 복구 메커니즘의 내장 부재'가 회복 불가능성의 전제 조건임을 실증하고, 대화적 탈출 해치로 이를 해소한다. 회복 불가능성이 상태의 본질적 속성이 아니라 인터페이스 설계의 결핍일 수 있음을 시사한다.
-
-→ [[sources/2026-09-25-talk2escape-conversational-grounding-for-vision-an.md|상세 보기]]

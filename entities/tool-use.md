@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
 
 도구 사용 능력의 측정 가능성 조건을 규정한다. 유효한 도구 호출은 모델 단독 능력이 아니라 서빙 계층이 도구 정의를 전달하고 출력을 파싱하는 프로토콜 계약의 산물이며, Phi-3·Gemma-3 사례는 능력 부재가 아니라 접근 차단일 수 있음을 보여준다.
-
-→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]

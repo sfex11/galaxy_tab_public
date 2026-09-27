@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-beyond-the-parameters-a-technical-survey-of-contex.md|Beyond the Parameters: A Technical Survey of Contextual Enri]]
 
 ### ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimin (2026-09-27)
-
-→ [[sources/2026-09-27-argus-role-aware-event-knowledge-graphs-for-us-emp.md|상세 보기]]

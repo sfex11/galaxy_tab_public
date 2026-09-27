@@ -15,10 +15,6 @@ _Wiki 축적 중_
 
 담화 버전의 반증을 제공한다 — 동일 콘텐츠라도 사회적 맥락에 따라 서로 다른 판독(지지/풍자/조롱)이 유효하므로, '같은 요청-같은 판독' 전제가 사회적 담화에서는 구조적으로 성립하지 않음을 보여준다.
 
-→ [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|상세 보기]]
-
 ### Agentic Detection of Online Conspiracies (2026-09-27)
 
 판독 변이의 원인을 계측기 드리프트가 아닌 담화 자체의 구조로 재귀인한다 — 사회적 맥락에 따라 다른 판독이 모두 유효하므로, 판독의 비일관성이 측정 결함이 아니라 다의적 발화의 올바른 반영일 수 있음을 보여준다.
-
-→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

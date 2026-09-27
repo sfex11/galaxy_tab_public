@@ -283,3 +283,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/behavioral-transition-internalization.md|behavioral transition internalization]]
+
+---
+**관련**: [[entities/harness-monitoring-separation.md|harness monitoring separation]]
+
+---
+**관련**: [[entities/dynamical-invariant-monitoring.md|dynamical invariant monitoring]]
+
+---
+**관련**: [[entities/critic-free-optimization.md|critic free optimization]]
+
+---
+**관련**: [[entities/monitoring-as-obstacle.md|monitoring as obstacle]]
+
+---
+**관련**: [[entities/intent-free-verification-definition.md|intent free verification definition]]
+
+---
+**관련**: [[entities/task-state-contamination.md|task state contamination]]

@@ -152,3 +152,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/benchmark-contamination-audit.md|benchmark contamination audit]]
+
+---
+**관련**: [[entities/saescientist-bench.md|saescientist bench]]
+
+---
+**관련**: [[entities/symbolic-closure-analysis.md|symbolic closure analysis]]

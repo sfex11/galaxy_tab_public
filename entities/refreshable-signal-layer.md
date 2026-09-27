@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 신호 갱신 원리의 제3 구현 경로를 제공한다. Claw-Eval-Live(실세계 수요 갱신)와 이 논문(EHR 데이터에서 자동 생성)은 갱신 소스의 이원화를 형성하며, 갱신 가능 신호 계층이 평가 인프라의 범용 패턴임을 입증한다.
-
-→ [[sources/2026-09-26-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

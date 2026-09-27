@@ -13,9 +13,9 @@
 
 이산 결정과 기하·기동·동역학 제약의 긴밀한 결합으로 TAMP가 어려운 가운데, 일반화 TAMP의 기존 방법들은 인스턴스 간 정규성을 활용하는 스트림·샘플러·매크로를 전문가가 수공업으로 구축해야 한다는 병목을 안고 있다. 본 논문은 이 도메인 엔지니어링 자체를 코딩 에이전트가 소수 예시 인스턴스로부터 코드로 합성할 수 있음을 실증한다.
 
-Wiki 지형에서의 위치는 세 층위다. 첫째, [[coding-agent-for-domain-engineering]]·[[generalized-tamp]]의 원천 정의를 확립한다 — 에이전트의 산출물이 문제의 해(플랜)가 아니라 문제를 빨리 풀게 하는 인프라 코드라는 점에서, CodeMidas([[codebase-as-learning-environment]])의 코드→학습환경 변환과 병렬되는 '인스턴스→일반화 코드' 변환 경로를 연다. 둘째, [[harness-methodology-embodiment-migration]]에 제3의 착지점을 부여한다 — 코딩 에이전트 방법론이 물리 계획 도메인으로 이식되되, 이식 대상이 제어기 코드(RAPID)나 안전 하네스([[obstacle-aware-harness]])가 아닌 계획 기제 코드라는 점이 이식의 성격을 정교화한다. 셋째, [[domain-regularity-as-code]]의 원천 사례로서, 인스턴스 간 정규성이 암묵적 전문 지식이 아니라 합성·검증 가능한 명시적 코드로 현현할 수 있음을 보여준다.
+Wiki 지형에서의 위치는 세 층위다. 첫째, [[concepts/coding-agent-for-domain-engineering.md|coding agent for domain engineering]]·[[concepts/generalized-tamp.md|generalized tamp]]의 원천 정의를 확립한다 — 에이전트의 산출물이 문제의 해(플랜)가 아니라 문제를 빨리 풀게 하는 인프라 코드라는 점에서, CodeMidas([[concepts/codebase-as-learning-environment.md|codebase as learning environment]])의 코드→학습환경 변환과 병렬되는 '인스턴스→일반화 코드' 변환 경로를 연다. 둘째, [[concepts/harness-methodology-embodiment-migration.md|harness methodology embodiment migration]]에 제3의 착지점을 부여한다 — 코딩 에이전트 방법론이 물리 계획 도메인으로 이식되되, 이식 대상이 제어기 코드(RAPID)나 안전 하네스([[concepts/obstacle-aware-harness.md|obstacle aware harness]])가 아닌 계획 기제 코드라는 점이 이식의 성격을 정교화한다. 셋째, [[concepts/domain-regularity-as-code.md|domain regularity as code]]의 원천 사례로서, 인스턴스 간 정규성이 암묵적 전문 지식이 아니라 합성·검증 가능한 명시적 코드로 현현할 수 있음을 보여준다.
 
-TANDEM([[tamp-teleoperation-hybrid-data-collection]])이 시연 매개의 엔지니어링 경감이었다면 본 논문은 코드 합성 매개의 완전 자동화로, TAMP 특화 엔지니어링 부담 제거의 스펙트럼을 완성한다.
+TANDEM([[concepts/tamp-teleoperation-hybrid-data-collection.md|tamp teleoperation hybrid data collection]])이 시연 매개의 엔지니어링 경감이었다면 본 논문은 코드 합성 매개의 완전 자동화로, TAMP 특화 엔지니어링 부담 제거의 스펙트럼을 완성한다.
 
 ## 🔗 관련 논문
 

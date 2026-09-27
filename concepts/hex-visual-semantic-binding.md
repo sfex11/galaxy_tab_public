@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-19-paint-anything-unified-any-color-control-for-image.md|Paint-Anything: Unified Any-Color Control for Image Generati]]
 
 ### Paint-Anything: Unified Any-Color Control for Image Generation and Edi (2026-09-21)
-
-→ [[sources/2026-09-21-paint-anything-unified-any-color-control-for-image.md|상세 보기]]

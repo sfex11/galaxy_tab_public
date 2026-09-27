@@ -35,5 +35,3 @@ Cola DLM은 병렬 디코딩의 적용 대상을 자회귀 생성 내부(추측 
 ### Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory (2026-09-24)
 
 병렬 디코딩이 캐시 재사용과 결합할 때 메모리 대역폭 IO 병목을 형성함을 보여, 병렬화가 독립 기법이 아니라 캐싱과의 공동 설계 대상임을 확립한다. Cola DLM이 '패러다임 외부 병렬화'를 제시했다면 본 논문은 '패러다임 내부 인프라 공동 설계' 단계로 진전시킨다.
-
-→ [[sources/2026-09-24-flash-dllm-io-aware-kv-caching-and-parallel-decodi.md|상세 보기]]

@@ -117,3 +117,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/routing-rationale-internalization.md|routing rationale internalization]]
+
+---
+**관련**: [[entities/ehr-question-answering.md|ehr question answering]]
+
+---
+**관련**: [[entities/sft-rl-budget-allocation.md|sft rl budget allocation]]
+
+---
+**관련**: [[entities/bounded-execution-time-validation.md|bounded execution time validation]]

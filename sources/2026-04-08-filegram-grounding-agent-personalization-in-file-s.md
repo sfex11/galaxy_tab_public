@@ -182,3 +182,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trace-as-attack-surface.md|trace as attack surface]]
+
+---
+**관련**: [[entities/test-encoded-behavioral-target.md|test encoded behavioral target]]
+
+---
+**관련**: [[entities/trace-tampering.md|trace tampering]]
+
+---
+**관련**: [[entities/conversational-grounding.md|conversational grounding]]
+
+---
+**관련**: [[entities/behavior-defined-goal.md|behavior defined goal]]

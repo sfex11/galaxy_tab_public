@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-06-sentinel-rl-offloading-topological-reasoning-from-.md|SENTINEL-RL: Offloading Topological Reasoning from LLM Agent]]
 
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
-
-→ [[sources/2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

@@ -15,10 +15,6 @@ _Wiki 축적 중_
 
 본 논문의 원천 개념으로, 로봇 제어기 생성 하네스에 장애물을 일급 하드 제약으로 인코딩하는 설계를 확립한다. 안전 제약이 프롬프트 서술 수준에 머물면 모델이 이를 소프트 고려사항으로 강등시켜 대부분 충돌함을 실증하고, 하네스 계층의 구조적 강제가 안전 준수를 회복함을 보여준다.
 
-→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]
-
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
 
 대비 축을 제공한다 — obstacle-aware 하네스가 제어기 생성에 안전 제약을 인코딩했다면, 본 논문은 동일 코딩 에이전트 역량을 일반화 기제 합성에 투입하여 코딩 에이전트의 물리 도메인 활용이 안전과 일반화라는 독립 축으로 분화함을 보여준다.
-
-→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

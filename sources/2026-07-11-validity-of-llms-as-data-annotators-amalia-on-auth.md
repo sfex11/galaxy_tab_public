@@ -106,3 +106,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/privileged-reliability-decoupling.md|privileged reliability decoupling]]
+
+---
+**관련**: [[entities/state-value-estimation-avoidance.md|state value estimation avoidance]]
+
+---
+**관련**: [[entities/privileged-reliability-decoupling.md|privileged reliability decoupling]]
+
+---
+**관련**: [[entities/linguistic-illegibility.md|linguistic illegibility]]

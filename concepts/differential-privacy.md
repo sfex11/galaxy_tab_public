@@ -20,5 +20,3 @@ _Wiki 축적 중_
 - [[sources/2026-03-31-fl-pbm-pre-training-backdoor-mitigation-for-federa.md|FL-PBM: Pre-Training Backdoor Mitigation for Federated Learn]] (2026-03-31)
 
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
-
-→ [[sources/2026-09-27-temporal-gradient-inversion-for-private-trajectory.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
 
 변이의 축적 방향을 확장한다 — MOSS의 소스 재작성, Procedural Graphs의 궤적별 국소 변이와 달리, 반복 제어 결정이 실행 코드로 누적 컴파일되는 '성장' 패턴을 제시하여 변이 가능성이 일회성 수정이 아니라 누적적 학습으로 작동함을 보여준다.
-
-→ [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]

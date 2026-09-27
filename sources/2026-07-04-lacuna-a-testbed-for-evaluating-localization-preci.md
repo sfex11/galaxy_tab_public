@@ -145,3 +145,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/test-encoded-behavioral-target.md|test encoded behavioral target]]
+
+---
+**관련**: [[entities/vulnerability-localization.md|vulnerability localization]]
+
+---
+**관련**: [[entities/trajectory-level-objective.md|trajectory level objective]]

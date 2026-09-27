@@ -17,9 +17,9 @@
 
 ## Wiki 축적과의 관계
 
-[[structure-grounded-chunking]] 계열의 기억 도메인 확장이다 — 스프레드시트 QA가 격자 구조 해석을 요구하듯 장기 기억 QA는 뷰 분해를 요구하며, 평면적 표현이 검색에 필요한 구조 정보를 파괴한다는 공통 원리를 강화한다. [[memory-fragmentation-failure]]와의 역관계도 중요하다: 과분절과 과혼합 양쪽이 검색을 저해하며, 직교 뷰는 적정 분해점을 찾는 제3의 길이다. [[query-deferred-representation-contract]]의 연장선에서 뷰 선택이 질의 조건으로 위임되고, [[value-differential-memory-management]]의 차등 관리가 정보 유형별 직교 분해로 구체화된다. [[adaptive-forgetting]]의 시간 갱신도 전용 뷰에서 처리 가능해진다.
+[[concepts/structure-grounded-chunking.md|structure grounded chunking]] 계열의 기억 도메인 확장이다 — 스프레드시트 QA가 격자 구조 해석을 요구하듯 장기 기억 QA는 뷰 분해를 요구하며, 평면적 표현이 검색에 필요한 구조 정보를 파괴한다는 공통 원리를 강화한다. [[concepts/memory-fragmentation-failure.md|memory fragmentation failure]]와의 역관계도 중요하다: 과분절과 과혼합 양쪽이 검색을 저해하며, 직교 뷰는 적정 분해점을 찾는 제3의 길이다. [[concepts/query-deferred-representation-contract.md|query deferred representation contract]]의 연장선에서 뷰 선택이 질의 조건으로 위임되고, [[concepts/value-differential-memory-management.md|value differential memory management]]의 차등 관리가 정보 유형별 직교 분해로 구체화된다. [[concepts/adaptive-forgetting.md|adaptive forgetting]]의 시간 갱신도 전용 뷰에서 처리 가능해진다.
 
-핵심 기여는 기억 스키마 설계가 설계 시점 고정 선택이 아니라 런타임 적응 대상임을 보인 점이다 — [[adaptive-inference]] 패턴이 표현 계층까지 확장된 사례다.
+핵심 기여는 기억 스키마 설계가 설계 시점 고정 선택이 아니라 런타임 적응 대상임을 보인 점이다 — [[concepts/adaptive-inference.md|adaptive inference]] 패턴이 표현 계층까지 확장된 사례다.
 
 ## 🔗 관련 논문
 

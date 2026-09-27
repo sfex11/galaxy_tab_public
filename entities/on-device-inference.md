@@ -50,5 +50,3 @@ _Wiki 축적 중_
 ### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
 
 확산 모델의 소비자 GPU 배포 사례를 제공한다. LLM 추론 루프의 표준화와 대비되는 확산 파이프라인의 비표준 오케스트레이션(임베더·트랜스포머·디코더·후처리)이 배포 병목임을 보여, 온디바이스 확산은 인프라 표준화 없이는 확산되지 않음을 시사한다.
-
-→ [[sources/2026-09-22-the-weight-is-over---interactive-diffusion-on-cons.md|상세 보기]]

@@ -17,15 +17,15 @@
 
 ## 기존 Wiki와의 관계
 
-[[illocutionary-force-inference]] 엔티티의 원천 논문으로, Wiki 전반의 표면-의도 논의와 공명한다:
+[[concepts/illocutionary-force-inference.md|illocutionary force inference]] 엔티티의 원천 논문으로, Wiki 전반의 표면-의도 논의와 공명한다:
 
-- [[surface-intent-decoupling]]: 동일 표면이 5가지 의도로 실현 가능함을 실증 — 표면-의도 탈동조화가 담화의 기본 상태임을 확립
-- [[single-surface-signal-insufficiency]]: 어휘 마커라는 단일 표면 신호의 불충분성을 콘텐츠 조정 도메인에서 재확인
-- [[same-request-same-reading-assumption]]: '같은 요청-같은 판독' 전제의 담화 버전 반증 제공
+- [[concepts/surface-intent-decoupling.md|surface intent decoupling]]: 동일 표면이 5가지 의도로 실현 가능함을 실증 — 표면-의도 탈동조화가 담화의 기본 상태임을 확립
+- [[concepts/single-surface-signal-insufficiency.md|single surface signal insufficiency]]: 어휘 마커라는 단일 표면 신호의 불충분성을 콘텐츠 조정 도메인에서 재확인
+- [[concepts/same-request-same-reading-assumption.md|same request same reading assumption]]: '같은 요청-같은 판독' 전제의 담화 버전 반증 제공
 
 ## 새로운 통찰
 
-판독 변이의 원인을 '계측기의 결함'이 아니라 '담화의 구조'로 재귀인한다. 사회적 맥락에 따라 상이한 판독이 모두 유효하므로, 판독의 비일관성은 다의적 발화의 올바른 반영일 수 있다. 의도 판독은 문자적 내용 판독이 아니라 화자의 의사소통 의도 모델링, 즉 제3자 위치에서의 마음 이론 과제([[theory-of-mind]])이며, 이는 LLM judge의 판독 문제([[judge-instrument-reliability]])가 내용 도메인에서도 성립함을 시사한다.
+판독 변이의 원인을 '계측기의 결함'이 아니라 '담화의 구조'로 재귀인한다. 사회적 맥락에 따라 상이한 판독이 모두 유효하므로, 판독의 비일관성은 다의적 발화의 올바른 반영일 수 있다. 의도 판독은 문자적 내용 판독이 아니라 화자의 의사소통 의도 모델링, 즉 제3자 위치에서의 마음 이론 과제([[concepts/theory-of-mind.md|theory of mind]])이며, 이는 LLM judge의 판독 문제([[concepts/judge-instrument-reliability.md|judge instrument reliability]])가 내용 도메인에서도 성립함을 시사한다.
 
 ## 🔗 관련 논문
 

@@ -465,3 +465,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evaluation-horizon-dependence.md|evaluation horizon dependence]]
+
+---
+**관련**: [[entities/prewrite-validation.md|prewrite validation]]
+
+---
+**관련**: [[entities/value-sensitive-delegation.md|value sensitive delegation]]
+
+---
+**관련**: [[entities/long-document-qa.md|long document qa]]
+
+---
+**관련**: [[entities/document-trajectory-conflation.md|document trajectory conflation]]

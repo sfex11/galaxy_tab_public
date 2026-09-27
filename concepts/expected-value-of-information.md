@@ -18,5 +18,3 @@ _자동 Wiki Query에서 추출됨_
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
-
-→ [[sources/2026-09-21-on-demand-attention-language-models-know-when-to-r.md|상세 보기]]

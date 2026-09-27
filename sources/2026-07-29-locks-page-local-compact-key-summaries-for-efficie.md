@@ -86,3 +86,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/value-non-mixing.md|value non mixing]]
+
+---
+**관련**: [[entities/schema-accumulation-bottleneck.md|schema accumulation bottleneck]]

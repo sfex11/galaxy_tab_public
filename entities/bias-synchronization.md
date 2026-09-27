@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 편향 수렴의 원인 진단에 기여한다. 집단 의견이 학습 사전분포를 은밀히 상속한다는 발견은, 동의 압력 없이도 개체 편향이 공통 방향으로 수렴하는 메커니즘의 모델 내부적 원인을 시사한다.
-
-→ [[sources/2026-09-22-bayesian-belief-layer-for-controllable-opinion-dyn.md|상세 보기]]

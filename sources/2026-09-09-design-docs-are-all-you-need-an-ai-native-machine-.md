@@ -37,3 +37,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/unsupported-assumption.md|unsupported assumption]]
+
+---
+**관련**: [[entities/activation-patching.md|activation patching]]
+
+---
+**관련**: [[entities/mental-health-ai.md|mental health ai]]

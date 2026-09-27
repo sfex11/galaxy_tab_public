@@ -70,3 +70,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pre-submission-self-review.md|pre submission self review]]
+
+---
+**관련**: [[entities/probability-quality-coupling.md|probability quality coupling]]

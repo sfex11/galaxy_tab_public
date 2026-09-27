@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-26-coding-agents-for-generalized-task-and-motion-plan.md|Coding Agents for Generalized Task and Motion Planning Probl]]
 
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
-
-→ [[sources/2026-09-27-coding-agents-for-generalized-task-and-motion-plan.md|상세 보기]]

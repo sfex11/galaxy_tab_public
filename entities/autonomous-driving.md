@@ -43,22 +43,14 @@ LiDAR 지각 강건성(Toward Robust LiDAR Semantic Segmentation) 중심이던 �
 
 폐루프 안전 문제를 학습 문제로 재정의한다 — 배포 시 분포 이탈 위험을 폐루포스트트레이닝으로 사전 완화하는 경로를 제공하여, 자율주행 연구가 인지-계획 성능에서 훈련-배포 분포 정렬로 축을 이동 중임을 보여준다.
 
-→ [[sources/2026-09-21-opted-on-policy-fine-tuning-for-end-to-end-driving.md|상세 보기]]
-
 ### PRIME: Perception Feedback with Situational Memory Embeddings in VLA M (2026-09-22)
 
 자율주행 VLA 연구에 '지각 피드백' 설계 축을 추가한다. feedforward 추론이 표준이던 end-to-end 주행에서, 상황 기억을 통한 하류 조건부 지각이 새로운 설계 변수가 됨을 제시한다.
-
-→ [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|상세 보기]]
 
 ### TM-APR: Thermal Temporal-Memory Localization via Analytic Online Adapt (2026-09-24)
 
 위치 인식(VPR)이 자율 항행의 전제조건임을 명시하며, 열화상 센서라는 극단적 조건 도메인으로의 확장 사례를 추가한다. 기존 end-to-end 주행·플랫폼 논의가 정책 학습에 집중했다면, 본 논문은 그 하위 전제인 장소 인식의 배포 가능성을 다룬다.
 
-→ [[sources/2026-09-24-tm-apr-thermal-temporal-memory-localization-via-an.md|상세 보기]]
-
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
 
 하드웨어 인프라(미니어처 오픈 플랫폼)와 훈련 방법(OPTED, PRIME)에 이어 '장기 꼬리 시나리오용 근거 감독 데이터'라는 제3의 인프라 축을 제공한다. end-to-end 주행 연구의 병목이 훈련 루프·하드웨어에서 감독 데이터 설계로 이동하고 있음을 보여준다.
-
-→ [[sources/2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md|상세 보기]]

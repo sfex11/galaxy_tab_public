@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
 
 레딧 1인칭 게시물을 (가치, 에이전트 측면, 충족 여부, 결과)의 4차원 구조화 신호로 변환하는 파이프라인을 제공하여, LLM이 판독하지 못하던 사용자 피드백이 체계적 신호로 격상될 수 있는 경로를 실증한다.
-
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

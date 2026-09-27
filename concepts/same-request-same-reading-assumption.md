@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-07-clean-engineering-unstable-measurement-a-preregist.md|Clean Engineering, Unstable Measurement: A Preregistered Rel]]
 
 ### Agentic Detection of Online Conspiracies (2026-09-27)
-
-→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

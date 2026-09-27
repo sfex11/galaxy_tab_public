@@ -21,10 +21,10 @@
 
 ## 기존 Wiki와의 관계
 
-- [[knowledge-distillation]]·[[cross-architecture-distillation]]의 표현 공간 정렬 논의에 조건화 계층만을 증류 대상으로 삼는 사례를 추가한다. 전체 모델이 아닌 조건화 경계에서 이종 인코더 간 임베딩 공간을 경량 번역기로 잇는 경로다.
-- [[extreme-low-bit-quantization]]·[[leech-lattice-quantization]]이 LLM 디코딩 커널 최적화였다면, 본 논문은 동일한 저비트 원리를 반복 denoising이 병목인 확산 백본으로 확장한다.
-- [[carbon-taxed-compression]]의 탄소-정확도 트레이드오프에 '도달 가능 기기 수-품질'이라는 병행 축을 제공한다.
-- [[on-device-inference]] 논의에 인프라 성숙도 격차를 명시한다: LLM 추론 루프는 표준화되었으나 확산 파이프라인은 그렇지 않아, 모델 개선만으로는 배포 확산이 제한된다.
+- [[concepts/knowledge-distillation.md|knowledge distillation]]·[[concepts/cross-architecture-distillation.md|cross architecture distillation]]의 표현 공간 정렬 논의에 조건화 계층만을 증류 대상으로 삼는 사례를 추가한다. 전체 모델이 아닌 조건화 경계에서 이종 인코더 간 임베딩 공간을 경량 번역기로 잇는 경로다.
+- [[entities/extreme-low-bit-quantization.md|extreme low bit quantization]]·[[entities/leech-lattice-quantization.md|leech lattice quantization]]이 LLM 디코딩 커널 최적화였다면, 본 논문은 동일한 저비트 원리를 반복 denoising이 병목인 확산 백본으로 확장한다.
+- [[concepts/carbon-taxed-compression.md|carbon taxed compression]]의 탄소-정확도 트레이드오프에 '도달 가능 기기 수-품질'이라는 병행 축을 제공한다.
+- [[concepts/on-device-inference.md|on device inference]] 논의에 인프라 성숙도 격차를 명시한다: LLM 추론 루프는 표준화되었으나 확산 파이프라인은 그렇지 않아, 모델 개선만으로는 배포 확산이 제한된다.
 
 ## 🔗 관련 논문
 

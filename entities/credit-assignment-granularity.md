@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Man (2026-09-22)
 
 태스크와 행동 사이의 서브태스크 중간 입도를 가치 함수로 구현한 로보틱스 사례를 제공한다. 희소 태스크 보상 하 긴 크레딧 지평에 대해 입도 추가가 학습 신호 밀도를 회복함을 입증한다.
-
-→ [[sources/2026-09-22-seeq-training-generalist-value-functions-for-long-.md|상세 보기]]

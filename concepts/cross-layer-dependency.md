@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-04-large-language-models-llms-for-telecom-root-cause-.md|Large Language Models (LLMs) for Telecom Root Cause Analysis]]
 
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
-
-→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]

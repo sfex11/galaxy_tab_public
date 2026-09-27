@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Formation Matrix and Energy-based Control of Multi-Agent Systems (2026-09-07)
 
 ### Agensh: Scaling Organizational Intelligence to 1,024 Agents (2026-09-24)
-
-→ [[sources/2026-09-24-agensh-scaling-organizational-intelligence-to-1024.md|상세 보기]]

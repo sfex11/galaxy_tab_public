@@ -221,3 +221,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/schema-accumulation-as-composability-bottleneck.md|schema accumulation as composability bottleneck]]
+
+---
+**관련**: [[entities/rapid.md|rapid]]

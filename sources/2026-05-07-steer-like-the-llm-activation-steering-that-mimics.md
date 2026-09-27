@@ -165,3 +165,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/independent-success-adjudication.md|independent success adjudication]]
+
+---
+**관련**: [[entities/independent-success-adjudication.md|independent success adjudication]]
+
+---
+**관련**: [[entities/semantic-exploration-steering.md|semantic exploration steering]]

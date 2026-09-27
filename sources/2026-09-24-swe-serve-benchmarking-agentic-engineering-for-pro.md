@@ -17,13 +17,13 @@
 
 ### 기존 Wiki 지형과의 관계
 
-**평가 커버리지 공백의 실증**: [[benchmark-specification-gap]]이 다룬 벤치마크 명세의 부분집합성이 '도메인 전체가 측정 누락 상태'라는 형태로 구체화된다. [[vloc-bench]](보안 국소화)에 이은 에이전트 벤치마크의 수직 분화 트렌드를 확정하며, 이를 benchmark-domain-specialization으로 명명할 가치가 있다.
+**평가 커버리지 공백의 실증**: [[concepts/benchmark-specification-gap.md|benchmark specification gap]]이 다룬 벤치마크 명세의 부분집합성이 '도메인 전체가 측정 누락 상태'라는 형태로 구체화된다. [[entities/vloc-bench.md|vloc bench]](보안 국소화)에 이은 에이전트 벤치마크의 수직 분화 트렌드를 확정하며, 이를 benchmark-domain-specialization으로 명명할 가치가 있다.
 
-**서빙의 이중성 완성**: [[agent-native-serving]]([[pythia]])이 서빙을 에이전트의 실행 기반으로 다뤘다면, SWE-Serve는 역방향 — 에이전트가 서빙 시스템을 구축하는 엔지니어 — 을 연다. 서빙 스택이 에이전트의 대상이자 기반이 되는 이중 구조가 성립한다.
+**서빙의 이중성 완성**: [[concepts/agent-native-serving.md|agent native serving]]([[entities/pythia.md|pythia]])이 서빙을 에이전트의 실행 기반으로 다뤘다면, SWE-Serve는 역방향 — 에이전트가 서빙 시스템을 구축하는 엔지니어 — 을 연다. 서빙 스택이 에이전트의 대상이자 기반이 되는 이중 구조가 성립한다.
 
-**계층 간 변경 조율**: 스택 전반의 변경 요구는 [[cross-layer-dependency]]의 구조를 서빙 도메인에서 확인시키고, [[gpu-kernel-optimization]] 계열의 커널 수준 평가를 스택 전체로 상향한다.
+**계층 간 변경 조율**: 스택 전반의 변경 요구는 [[concepts/cross-layer-dependency.md|cross layer dependency]]의 구조를 서빙 도메인에서 확인시키고, [[concepts/gpu-kernel-optimization.md|gpu kernel optimization]] 계열의 커널 수준 평가를 스택 전체로 상향한다.
 
-**훈련 환경 경로**: [[codebase-as-learning-environment]] 흐름과 연결되어 서빙 코드베이스가 평가를 넘어 RL 환경으로 재질화될 근거를 제공한다. [[swe-gate]]가 리뷰 제약이라는 제2축을 추가했다면 SWE-Serve는 프로덕션 추론이라는 도메인 축을 추가한다.
+**훈련 환경 경로**: [[concepts/codebase-as-learning-environment.md|codebase as learning environment]] 흐름과 연결되어 서빙 코드베이스가 평가를 넘어 RL 환경으로 재질화될 근거를 제공한다. [[entities/swe-gate.md|swe gate]]가 리뷰 제약이라는 제2축을 추가했다면 SWE-Serve는 프로덕션 추론이라는 도메인 축을 추가한다.
 
 → sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md
 

@@ -64,5 +64,3 @@ _Wiki 축적 중_
 ### CliffCompaction: Cost-Efficient Compaction for Long-Horizon Coding Age (2026-09-24)
 
 50% 비용 절감 실증으로 세션 수준 컨텍스트 압축이 토큰 효율화의 제3 절감 계층(KV 캐시·스키마 축적과 별도)임을 확증하고, per-rollout 절감이 성능-비용 프론티어를 이동시킴을 보여준다.
-
-→ [[sources/2026-09-24-cliffcompaction-cost-efficient-compaction-for-long.md|상세 보기]]

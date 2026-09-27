@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Seeing Before Synthesizing: VLM-Guided Transition Event Discovery for  (2026-09-07)
 
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
-
-→ [[sources/2026-09-25-anchorreasoning-a-visual-grounding-and-causal-reas.md|상세 보기]]

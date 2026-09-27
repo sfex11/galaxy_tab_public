@@ -26,5 +26,3 @@ rebuttal이라는 실제 저자-리뷰어 상호작용 흔적이 post-training �
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 사용자 트래픽이 오라클 부재 도메인에서 개선 신호의 외부 앵커로 기능함을 보여준다. 자기 판단의 순환을 피하기 위해 인간 행동 흔적을 닻으로 사용하는 원리가 자기 개선 도메인으로 확장된 사례다.
-
-→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

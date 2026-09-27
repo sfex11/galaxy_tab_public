@@ -19,5 +19,3 @@ _자동 Wiki Query에서 추출됨_
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-12)
 
 ### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-27)
-
-→ [[sources/2026-09-27-instrumental-monitor-evasion-emerges-under-ordinar.md|상세 보기]]

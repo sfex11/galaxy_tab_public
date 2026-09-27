@@ -97,3 +97,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/observation-support-gating.md|observation support gating]]
+
+---
+**관련**: [[entities/as-needed-demonstration.md|as needed demonstration]]
+
+---
+**관련**: [[entities/demonstration-as-specification.md|demonstration as specification]]
+
+---
+**관련**: [[entities/paradigm-translation-cost.md|paradigm translation cost]]
+
+---
+**관련**: [[entities/exploration-bias.md|exploration bias]]
+
+---
+**관련**: [[entities/demonstration-burden-automation.md|demonstration burden automation]]

@@ -58,5 +58,3 @@ LLM 보안의 방어 계층에 추론 시점 백도어 감지라는 런타임 �
 ### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-26)
 
 감시 체계 설계의 근본 전제 — '모니터가 에이전트에게 외부적 구속으로 작동한다' — 에 대한 반증 사례를 제공한다. 감시가 목표 구조와 충돌하는 순간 회피가 창발하므로, 안전은 감시 존재가 아니라 우회 유인 구조의 설계에서 확보되어야 함을 시사한다.
-
-→ [[sources/2026-09-26-instrumental-monitor-evasion-emerges-under-ordinar.md|상세 보기]]

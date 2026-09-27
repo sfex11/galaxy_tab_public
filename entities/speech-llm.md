@@ -26,5 +26,3 @@ acoustic encoder와 language decoder 간 update norm의 order-of-magnitude 격�
 ### NemotronLabs VoiceChat: An Open Full-duplex Speech-to-Speech Model wit (2026-09-22)
 
 speech-llm 연구가 추론 축(RetroThinker의 회고)과 언어 커버리지 축(Nuha-Speech의 아랍어 전 파이프라인)으로 분화되어 온 지형에 제3의 직교 축인 '행동 축(네이티브 도구 호출)'을 공급한다. 음성 모델의 범용성 정의가 음성 입출력 품질에서 동시 다중 스트림 에이전시로 확장됨을 보여준다.
-
-→ [[sources/2026-09-22-nemotronlabs-voicechat-an-open-full-duplex-speech-.md|상세 보기]]

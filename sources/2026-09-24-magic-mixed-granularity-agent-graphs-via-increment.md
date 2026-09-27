@@ -17,11 +17,11 @@ LLM 다중 에이전트 시스템의 협업 토폴로지가 성능과 실행 비
 
 ## 기존 Wiki와의 관계
 
-- [[multi-agent-system]]·[[agent-coordination]]: 조율 단위를 개체에서 '입도 혼합'으로 확장하는 최신 사례
-- [[workflow-topology-conditional-optimization]]이 '최적화는 토폴로지에 조건부'라고 진단했다면, MAGIC는 토폴로지 자체를 학습 대상으로 격상시켜 조건-대상 구도를 반전시킨다
-- [[granularity-based-skill-organization]]이 스킬을 태스크/스텝 입도로 조직하는 것과 대응 — 입도 선택이 표현 설계의 범용 원리임을 입증
-- [[hierarchical-planning]]: 집단이 고정 위임 계층이 아니라 서브태스크별로 선택 가능한 중간 추상화로 재정의됨
-- [[reward-sparsity]]: 밀집 보상 설계가 초희소 최종 보상 문제를 회피하게 하는 전제 조건
+- [[concepts/multi-agent-system.md|multi agent system]]·[[concepts/agent-coordination.md|agent coordination]]: 조율 단위를 개체에서 '입도 혼합'으로 확장하는 최신 사례
+- [[concepts/workflow-topology-conditional-optimization.md|workflow topology conditional optimization]]이 '최적화는 토폴로지에 조건부'라고 진단했다면, MAGIC는 토폴로지 자체를 학습 대상으로 격상시켜 조건-대상 구도를 반전시킨다
+- [[concepts/granularity-based-skill-organization.md|granularity based skill organization]]이 스킬을 태스크/스텝 입도로 조직하는 것과 대응 — 입도 선택이 표현 설계의 범용 원리임을 입증
+- [[concepts/hierarchical-planning.md|hierarchical planning]]: 집단이 고정 위임 계층이 아니라 서브태스크별로 선택 가능한 중간 추상화로 재정의됨
+- [[concepts/reward-sparsity.md|reward sparsity]]: 밀집 보상 설계가 초희소 최종 보상 문제를 회피하게 하는 전제 조건
 
 ## 핵심 인사이트
 

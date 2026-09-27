@@ -19,14 +19,14 @@ AI 능력 평가의 관심사를 '모델이 무엇을 할 수 있는가'에서 '
 
 ## Wiki 내 위치
 
-### [[ai-productivity-rct]]과의 관계
+### [[concepts/ai-productivity-rct.md|ai productivity rct]]과의 관계
 측정 대상을 '시간 절감'에서 '학습 향상'으로 확장한다. 제품 디자인 RCT가 AI의 즉시 생산성 효과를 다뤘다면, 본 논문은 AI 개입의 지연된 인지적 효과(학습)를 측정하여, AI 효과 평가의 시간축과 결과 지표를 동시에 확장한다.
 
-### [[matched-condition-comparison]]과의 관계
+### [[concepts/matched-condition-comparison.md|matched condition comparison]]과의 관계
 동일 조건 비교 원리의 교육 도메인 확장. AI 교사 vs 인간 교사의 학습 향상 비교라는 새 축을 추가하며, 교육 성과라는 가치 차원이 성공 판정에 도입됨을 보여준다.
 
 ### 대규모 실사용 데이터
-[[in-the-wild-agent-dataset]] 계열과 병렬로, 실제 학습자의 사용 데이터를 평가 근거로 삼는다. 175k 메시지 규모는 AI 교육 연구의 실증 기반을 구축한다.
+[[concepts/in-the-wild-agent-dataset.md|in the wild agent dataset]] 계열과 병렬로, 실제 학습자의 사용 데이터를 평가 근거로 삼는다. 175k 메시지 규모는 AI 교육 연구의 실증 기반을 구축한다.
 
 ## 새로운 질문 열기
 

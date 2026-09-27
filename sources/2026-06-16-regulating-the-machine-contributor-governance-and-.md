@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/provenance-faithfulness-decoupling.md|provenance faithfulness decoupling]]
+
+---
+**관련**: [[entities/provenance-faithfulness-decoupling.md|provenance faithfulness decoupling]]

@@ -268,3 +268,39 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/structure-grounded-chunking.md|structure grounded chunking]]
+
+---
+**관련**: [[entities/causal-head-level-attribution.md|causal head level attribution]]
+
+---
+**관련**: [[entities/semantic-structure-flattening.md|semantic structure flattening]]
+
+---
+**관련**: [[entities/temporal-structure-amplified-leakage.md|temporal structure amplified leakage]]
+
+---
+**관련**: [[entities/self-induced-distribution-shift.md|self induced distribution shift]]
+
+---
+**관련**: [[entities/illocutionary-force-inference.md|illocutionary force inference]]
+
+---
+**관련**: [[entities/causal-load-verification.md|causal load verification]]
+
+---
+**관련**: [[entities/temporal-structure-loss-from-token-subsampling.md|temporal structure loss from token subsampling]]
+
+---
+**관련**: [[entities/stage-dependent-teacher-supervision.md|stage dependent teacher supervision]]
+
+---
+**관련**: [[entities/structure-grounded-chunking.md|structure grounded chunking]]
+
+---
+**관련**: [[entities/continuous-structure-discretization-ceiling.md|continuous structure discretization ceiling]]
+
+---
+**관련**: [[entities/speculative-decoding-losslessness-premise-collapse.md|speculative decoding losslessness premise collapse]]
+
+---
+**관련**: [[entities/flash-dllm.md|flash dllm]]

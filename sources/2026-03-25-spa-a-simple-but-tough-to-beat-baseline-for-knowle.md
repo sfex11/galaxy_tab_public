@@ -52,3 +52,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/eager-schema-injection.md|eager schema injection]]
+
+---
+**관련**: [[entities/plan-injection.md|plan injection]]

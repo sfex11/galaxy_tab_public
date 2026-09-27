@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-21)
 
 반복 측정 변동성을 측정 기기 개선이 아닌 추정량 설계 차원에서 줄이는 경로를 제공한다. 스무딩이 희소 도메인 추정치의 분산을 감소시켜 '같은 평가 재실행 시 같은 수치'라는 요구를 표본 설계로 부분 달성한다.
-
-→ [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|상세 보기]]

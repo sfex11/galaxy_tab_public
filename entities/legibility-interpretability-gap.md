@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 가독성-해석가능성 간극의 구조적 완화 후보를 제공한다. 근거 생성을 판단 전문가와 분리된 별도 전문가에 위임하면, 설명의 가독성이 판단 경로의 무결성과 독립적으로 최적화될 수 있으나, 근거의 충실성(faithfulness) 검증은 별도로 요구된다.
-
-→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

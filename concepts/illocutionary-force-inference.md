@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-26-agentic-detection-of-online-conspiracies.md|Agentic Detection of Online Conspiracies]]
 
 ### Agentic Detection of Online Conspiracies (2026-09-27)
-
-→ [[sources/2026-09-27-agentic-detection-of-online-conspiracies.md|상세 보기]]

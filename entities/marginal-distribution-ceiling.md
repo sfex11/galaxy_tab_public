@@ -62,5 +62,3 @@ Layer dropout이 사전학습 분포 P(y)의 형성 자체를 수정하면서도
 ### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
 
 KL 정규화가 주변 분포 천장을 암묵적 상한이 아닌 정규화 강도로 조율 가능한 명시적 목적 함수 항으로 만들어, 기존 천장 논의에 조작적 제어 변수를 부여한다.
-
-→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

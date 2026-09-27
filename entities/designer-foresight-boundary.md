@@ -30,5 +30,3 @@ HCI(Headroom-Closed Index)가 설계자 예견 경계를 정량 측정하는 최
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 모델 가중치를 동결하고 메모리만 진화시키는 설계가 설계자 예견 경계 문제를 부분 완화함을 보여준다 — 자연어 스킬의 진화는 가중치 변화보다 감사·롤백이 용이하다.
-
-→ [[sources/2026-09-22-designer-rsi-evolving-procedural-memory-from-user-.md|상세 보기]]

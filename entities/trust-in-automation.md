@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from Ope (2026-09-22)
 
 Dependable Operation이 사용자 가치 그룹으로 측정되어, 자동화 신뢰가 설문 기반 태도 측정 대상을 넘어 실제 위임 행동과 그 결과에서 관찰 가능한 구성 요소임을 야생 데이터로 입증한다.
-
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### A2M: Trace-Optimized Agent Hijacking in the MCP Ecosystem (2026-09-24)
 
 스키마 주입 전략이 부과하는 세금이 동시에 공격자에게 도구 메타데이터 최적화의 최적 벡터가 됨을 보여준다. 오버헤드 최적화(eager→lazy 전환)와 보안 최적화(신뢰 검증 도입)가 상충하는 제약을 따름을 시사한다.
-
-→ [[sources/2026-09-24-a2m-trace-optimized-agent-hijacking-in-the-mcp-eco.md|상세 보기]]

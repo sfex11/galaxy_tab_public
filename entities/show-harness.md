@@ -22,5 +22,3 @@ VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경�
 ### Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulati (2026-09-21)
 
 VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경로의 안전 병목을 특정한다. 실행 매체가 달라도 양 경로 모두 하네스 계층의 안전 인코딩을 요구하며, 안전 병목의 구조가 동형임을 시사한다.
-
-→ [[sources/2026-09-21-coding-agents-with-an-obstacle-aware-harness-for-s.md|상세 보기]]

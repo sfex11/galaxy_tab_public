@@ -194,3 +194,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/teacher-free-step-compression.md|teacher free step compression]]
+
+---
+**관련**: [[entities/average-metric-concealment.md|average metric concealment]]

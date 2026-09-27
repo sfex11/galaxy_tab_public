@@ -121,3 +121,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/device-heterogeneity-coordination.md|device heterogeneity coordination]]
+
+---
+**관련**: [[entities/claim-support-verification.md|claim support verification]]
+
+---
+**관련**: [[entities/relative-credit-assignment.md|relative credit assignment]]

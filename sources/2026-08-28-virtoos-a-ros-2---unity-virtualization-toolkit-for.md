@@ -169,3 +169,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/design-doc-primacy.md|design doc primacy]]
+
+---
+**관련**: [[entities/autonomous-laboratory-agent.md|autonomous laboratory agent]]
+
+---
+**관련**: [[entities/jev-mobile.md|jev mobile]]
+
+---
+**관련**: [[entities/autonomous-commerce.md|autonomous commerce]]
+
+---
+**관련**: [[entities/environment-diversity-layered-guarantee.md|environment diversity layered guarantee]]
+
+---
+**관련**: [[entities/latent-user-state-simulation.md|latent user state simulation]]
+
+---
+**관련**: [[entities/selection-pressure-design.md|selection pressure design]]

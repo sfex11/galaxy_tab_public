@@ -85,3 +85,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/alignment-verifiability-asymmetry.md|alignment verifiability asymmetry]]
+
+---
+**관련**: [[entities/lightweight-domain-schema.md|lightweight domain schema]]
+
+---
+**관련**: [[entities/domain-regularity-as-code.md|domain regularity as code]]

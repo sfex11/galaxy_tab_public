@@ -24,5 +24,3 @@ _Wiki 축적 중_
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
 
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
-
-→ [[sources/2026-09-27-sage-mitigating-long-horizon-reasoning-biases-via-.md|상세 보기]]

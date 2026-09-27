@@ -30,5 +30,3 @@ TeCoD가 템플릿 기반으로 출력 공간을 축소했다면, POPO는 암묵
 ### ExpBoN: Exponential-Noise Best-of-$n$ for Efficient Test-Time LLM Alig (2026-09-22)
 
 지지 집합을 유지한 채 확률 질량만 이동시키는 표본 재가중 경로를 추가한다. 구조적 출력 축소(TeCoD 계열)와 달리 재가중치만으로 분포 내부 최적화를 달성하는 상보적 극점을 형성한다.
-
-→ [[sources/2026-09-22-expbon-exponential-noise-best-of-n-for-efficient-t.md|상세 보기]]

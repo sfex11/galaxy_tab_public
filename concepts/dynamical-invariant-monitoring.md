@@ -17,5 +17,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-21)
-
-→ [[sources/2026-09-21-deep-noir-autonomous-steering-discovery-via-archit.md|상세 보기]]

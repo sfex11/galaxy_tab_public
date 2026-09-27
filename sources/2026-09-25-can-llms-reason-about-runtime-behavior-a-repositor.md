@@ -13,9 +13,9 @@
 
 SWE-Flux는 저장소 수준에서 정적 코드 이해가 아닌 동적 실행 추론을 평가하는 벤치마크로, 12개 실제 Python 저장소의 480개 실행 기반(execution-grounded) 인스턴스를 제공한다. 기존 저장소 수준 QA 벤치마크는 정적 이해와 LLM 판정 의존에 머물렀고, 실행 추론 벤치마크는 스니펫·함수 수준에 국한되어 있었다는 이중 간극을 채운다.
 
-Wiki 관점에서 이 논문은 두 축의 교차점을 확정한다. [[repository-level-code-understanding]] 축(저장소 규모)과 [[execution-verification]] 축(실행 오라클)의 결합으로, [[rlvr]]의 검증 가능성 원리가 저장소 규모의 런타임 동역학 평가로 확장됨을 보여준다. [[meaning-insensitive-metric]]과 [[judge-instrument-reliability]]가 지적한 LLM 판정 불안정성에 대해 실행 기반 판정이라는 구조적 해법을 제시한다.
+Wiki 관점에서 이 논문은 두 축의 교차점을 확정한다. [[concepts/repository-level-code-understanding.md|repository level code understanding]] 축(저장소 규모)과 [[concepts/execution-verification.md|execution verification]] 축(실행 오라클)의 결합으로, [[concepts/rlvr.md|rlvr]]의 검증 가능성 원리가 저장소 규모의 런타임 동역학 평가로 확장됨을 보여준다. [[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]과 [[concepts/judge-instrument-reliability.md|judge instrument reliability]]가 지적한 LLM 판정 불안정성에 대해 실행 기반 판정이라는 구조적 해법을 제시한다.
 
-[[swe-serve]](서빙), [[vloc-bench]](보안)에 이어 실행 추론이라는 새 수직 도메인을 추가해 [[benchmark-domain-specialization]] 흐름을 강화하며, 정적 이해가 런타임 추론을 담보하지 않는 정적-동적 간극을 저장소 규모에서 측정 가능하게 만든다. [[codebase-as-learning-environment]] 관점에서 저장소가 코딩 RL 환경과 서빙 평가에 이어 동적 실행 추론 평가 인프라로도 재질화됨을 입증한다.
+[[entities/swe-serve.md|swe serve]](서빙), [[entities/vloc-bench.md|vloc bench]](보안)에 이어 실행 추론이라는 새 수직 도메인을 추가해 [[concepts/benchmark-domain-specialization.md|benchmark domain specialization]] 흐름을 강화하며, 정적 이해가 런타임 추론을 담보하지 않는 정적-동적 간극을 저장소 규모에서 측정 가능하게 만든다. [[concepts/codebase-as-learning-environment.md|codebase as learning environment]] 관점에서 저장소가 코딩 RL 환경과 서빙 평가에 이어 동적 실행 추론 평가 인프라로도 재질화됨을 입증한다.
 
 ## 🔗 관련 논문
 

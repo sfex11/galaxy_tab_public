@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 소형 모델 추론 격차의 제3의 완화 경로를 제공한다. 능력 향상(Distill Globally)이나 추론 필요성 제거(TeCoD)와 달리, 판단과 설명을 분리하여 각 전문가의 요구 능력을 축소하는 아키텍처 분업 경로를 제시한다.
-
-→ [[sources/2026-09-26-r-deim-net-an-efficient-rationale-augmented-dual-e.md|상세 보기]]

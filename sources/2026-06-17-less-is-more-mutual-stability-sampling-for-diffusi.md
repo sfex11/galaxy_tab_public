@@ -130,3 +130,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/rollout-efficiency-exactness-tradeoff.md|rollout efficiency exactness tradeoff]]
+
+---
+**관련**: [[entities/mahalanobis-ensemble-decoding.md|mahalanobis ensemble decoding]]
+
+---
+**관련**: [[entities/evasion-as-convergence-direction.md|evasion as convergence direction]]
+
+---
+**관련**: [[entities/lm-fusion.md|lm fusion]]
+
+---
+**관련**: [[entities/data-efficiency-gains-from-pretraining.md|data efficiency gains from pretraining]]

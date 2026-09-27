@@ -18,5 +18,3 @@ Claw-Anything은 live-benchmark를 항상 켜 디지털 환경으로 확장한�
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 라이브 벤치마크 원리의 임상 도메인 확장 사례를 제공한다. Claw-Eval-Live가 워크플로우 신호를 실세계 수요에서 갱신했다면, 본 논문은 EHR 기록에서 QA 쌍을 자동 생성하여 '라이브'의 소스가 수요에서 데이터로 다양화됨을 보여준다.
-
-→ [[sources/2026-09-26-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

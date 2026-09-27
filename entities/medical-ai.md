@@ -38,5 +38,3 @@ EHR 데이터를 대화적 QA나 그래프 정제의 대상이 아닌 인과 추
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 의료 AI 평가가 '고정 벤치마크 점수'에서 '지속 갱신되는 평가 인프라'로 이동하는 트렌드의 임상 도메인 근거를 제공한다. 임상 어시스턴트의 안전성 평가가 배포 후에도 유효하려면 벤치마크 자체가 살아있어야 함을 시사한다.
-
-→ [[sources/2026-09-26-a-living-benchmark-for-information-retrieval-from-.md|상세 보기]]

@@ -268,3 +268,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/local-validity-system-validity-divergence.md|local validity system validity divergence]]
+
+---
+**관련**: [[entities/context-delegation.md|context delegation]]
+
+---
+**관련**: [[entities/non-selective-context-accumulation.md|non selective context accumulation]]
+
+---
+**관련**: [[entities/report-context-divergence.md|report context divergence]]
+
+---
+**관련**: [[entities/demonstration-as-context.md|demonstration as context]]
+
+---
+**관련**: [[entities/safety-constraint-context-legibility.md|safety constraint context legibility]]
+
+---
+**관련**: [[entities/cross-episode-reuse-failure.md|cross episode reuse failure]]
+
+---
+**관련**: [[entities/concept-conditioned-sampling.md|concept conditioned sampling]]
+
+---
+**관련**: [[entities/semantic-action-unit.md|semantic action unit]]
+
+---
+**관련**: [[entities/analytic-class-incremental-learning.md|analytic class incremental learning]]

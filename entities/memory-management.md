@@ -39,16 +39,10 @@ ADEMA가 메모리를 '지식 상태의 연속성 보장 매체'로 정의했다
 
 메모리 관리의 결정 축을 확장한다 — 저장·검색·망각에 이어 '수용 여부'라는 네 번째 결정(사용 시점 신뢰 판정)을 명시하고, 이 결정이 해석 가능한 컨트롤러로 구현 가능함을 보여준다.
 
-→ [[sources/2026-09-22-an-interpretable-memory-decision-controller-for-ll.md|상세 보기]]
-
 ### AutoViewMem: Self-Configuring Orthogonal Views for Conversational Long (2026-09-22)
 
 정적 스키마와 고정 입도의 실패 조건을 명시한다 — 이질적 정보 혼합 시 의미 간섭이 발생함을 보여, 기억 관리의 설계 공간에 '뷰 구성 자체의 적응'이라는 새 축을 추가한다.
 
-→ [[sources/2026-09-22-autoviewmem-self-configuring-orthogonal-views-for-.md|상세 보기]]
-
 ### SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dial (2026-09-24)
 
 메모리 관리의 요구사항을 콘텐츠 저장-검색 최적화에서 사회적 관계 구조의 유지보수로 확장한다. 다자 대화의 5축(화자·대상·대인 지각·집단 공유·상태 변화)은 대화 메모리 스키마 설계의 체크리스트가 된다.
-
-→ [[sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f.md|상세 보기]]

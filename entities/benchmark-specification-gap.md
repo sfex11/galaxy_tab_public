@@ -43,28 +43,18 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 
 평가 체계가 태스크 완성도를 측정하는 동안 사용자는 Bounded Reach·Reviewability 같은 가치를 우선한다는 발견으로, 명세 간극에 '사용자 가치의 명세 부재'라는 새 차원을 추가한다. 평가 대상이 이미 초기 명세 단계에서 사용자의 실제 관심사와 어긋남을 야생 데이터로 실증한다.
 
-→ [[sources/2026-09-22-value-sensitive-delegation-in-everyday-ai-agent-us.md|상세 보기]]
-
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
 
 레포 수준 SWE 벤치마크가 추론 서빙을 다루지 않는 커버리지 공백을 실증한다. 벤치마크 스펙 간극이 '기존 벤치마크의 미시 오차'가 아니라 '도메인 전체의 측정 부재'로 발현될 수 있음을 보여준다.
-
-→ [[sources/2026-09-24-swe-serve-benchmarking-agentic-engineering-for-pro.md|상세 보기]]
 
 ### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
 
 서빙 스택 구성이 벤치마크가 명세하지 않은 은닉 차원임을 보여준다. 동일 모델이라도 로컬 서빙 구성에 따라 측정되는 능력이 달라지므로, 평가 명세에 서빙 계층 고정·공개 조건이 포함되어야 함을 시사한다.
 
-→ [[sources/2026-09-24-measuring-the-serving-stack-instead-of-the-model-h.md|상세 보기]]
-
 ### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
 
 지표의 바닥선 포화라는 새 변형을 추가한다. 벤치마크가 명세한 지표(컴파일률)가 태스크의 초기 상태에 의해 이미 달성되어 측정 자체가 무정보가 되는 경우로, 명세 간극이 '누락된 차원'에서 '포화된 기준선'으로 확장됨을 보여준다.
 
-→ [[sources/2026-09-24-metrics-failure-in-llm-based-code-vulnerability-re.md|상세 보기]]
-
 ### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
 
 망각 완화 평가의 명세 간극 사례를 제공한다. '일반 벤치마크 유지율'이라는 표준 평가 관행이 실제 보존 목표(태스크 특화 지시 수행)를 명세하지 못하며, 명세의 누락이 완화 기법 연구의 결론 전환을 유발할 수 있음을 실증한다. SWE-Gate의 테스트-수용 단절과 동형인 '유지율-실보존' 간극이다.
-
-→ [[sources/2026-09-25-fine-tuning-llms-for-translation-general-forgettin.md|상세 보기]]

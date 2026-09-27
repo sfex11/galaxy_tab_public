@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 접근성의 구조화가 계획 접지 부담을 시각 추론에서 구조 조회로 전환함을 보여준다. 이 간극의 원인이 접근성 정보의 부재가 아니라 비구조화된 형태였을 수 있음을 시사하는 해법 사례다.
-
-→ [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|상세 보기]]

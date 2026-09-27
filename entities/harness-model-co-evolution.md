@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
 
 공진화 스펙트럼의 세 번째 사례를 제공한다 — SafeEvolve(안전 경험 기반), Co-Evolving Harnesses(온폴리시 정정)에 이어 하네스 진화가 실패 신호 기반 훈련 패러다임으로 체계화되어, 하네스 측이 모델과 별개의 독립적 학습 목표가 됨을 실증한다.
-
-→ [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|상세 보기]]

@@ -30,5 +30,3 @@ MDP 계획 이론에 '전이 전망(look-ahead)'이라는 관측 조건 축을 �
 ### SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Man (2026-09-22)
 
 MDP의 유효 시간 지평이 고정 속성이 아닌 설계 파라미터(서브태스크 분해)임을 실증한다. 벨만 백업 난이도가 문제 표현의 입도 선택으로 조절 가능함을 보여준다.
-
-→ [[sources/2026-09-22-seeq-training-generalist-value-functions-for-long-.md|상세 보기]]
