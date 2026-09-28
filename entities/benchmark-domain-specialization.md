@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 수직 도메인 벤치마크 트렌드에 '라이브화' 차원을 추가한다. 도메인 특화가 고정 데이터셋 구축에서 도메인 원천 데이터의 지속 활용으로 진화하고 있음을 보여준다.
+
+### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
+
+범용 벤치마크에서 multi-agent collaboration이라는 수직 도메인으로 특화되는 트렌드를 확정하며, SWE-Serve·EHR 라이브 벤치마크 계열과 병행되는 제3의 특화 방향(사회적 상호작용)을 연다.
+
+→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

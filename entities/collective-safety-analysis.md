@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
 
 집단 수준 분석에 기계론적 방법론 계층을 추가한다. 기존의 사회적 현상 관찰(협력 형성, 편향 동기화, 부정행위 전파)을 넘어, 그 기반이 되는 신념 형성 메커니즘의 내부 검증 경로를 제공한다.
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+집단 수준 분석의 유효 단위가 과제 구조에 의존함을 보여준다. 팀 크기의 효용·한계가 과제 택소노미에 따라 달라지므로, 집단 안전성 분석에도 과제 구조 명세가 분석 전제가 되어야 함을 시사한다.
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-19)
 
 게이팅의 지점을 확장한다 — The Router Within 계열이 스킬 '선택' 게이트를 다뤘다면, 본 논문은 스킬 '종료' 게이트라는 직교하는 게이트 지점을 공급하며, 양쪽 모두 학습된 판별기로 외부 규칙을 대체한다.
+
+### New LoRA Skills Should Read but Never Write (2026-09-29)
+
+어댑터 간 라우팅이 단일 모델 목표를 포기하는 대안임을 확인하면서, 게이팅의 판단 대상을 입력 조건부 스킬 선택에서 계산 경로별 읽기-쓰기 권한 제어로 일반화할 가능성을 연다.
+
+→ [[sources/2026-09-29-new-lora-skills-should-read-but-never-write.md|상세 보기]]

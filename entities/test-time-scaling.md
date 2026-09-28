@@ -18,3 +18,9 @@ bounded context 하 압축이 test-time scaling의 효율 지평을 확장함을
 ### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
 
 단순 반복 샘플링이 국소 디코딩 노이즈로만 탐색해 중복 시도를 양산한다는 구조적 한계를 진단하고, 테스트타임 스케일링의 진화 방향을 '더 많은 샘플'에서 '의미 수준 탐색 정책 학습'으로 이동시킨다.
+
+### Strategically Diverse Sampling for Self-Training (2026-09-29)
+
+반복 샘플링 기반 스케일링의 이득이 응답의 실질적 차이에 조건부임을 명시하며, 스케일링의 실질 제약이 샘플 수가 아니라 샘플 공간의 전략 커버리지임을 시사한다. n을 늘리는 것이 아니라 n이 덮는 전략 공간을 넓히는 제2의 스케일링 축을 연다.
+
+→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

@@ -26,3 +26,9 @@ Select to Think가 국소 충분성 판단을 학습시켜 토큰 선택을 개�
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
 
 적용 대상의 확장 사례를 제공한다 — 국소 충분성 판단이 토큰 선택(Select to Think)에서 어텐션 접근으로 이동한다. 국소 컨텍스트가 다음 예측에 충분한지의 판정이 곧 전역 읽기의 트리거 조건이 된다.
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+Select to Think의 국소 충분성 판단이 토큰 선택 계층이었다면, 본 논문의 내재적 검사는 과제 선택(배포 라우팅) 계층에서 같은 원리를 실현한다. '로컬 판단으로 충분한가'의 질문이 토큰에서 과제로 확장됨을 보여준다.
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

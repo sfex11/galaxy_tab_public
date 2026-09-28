@@ -26,3 +26,9 @@ MLP 어블레이션(슬라이딩 윈도우)을 해석 연구의 사후 검증 �
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-19)
 
 인과적 헤드 기여 분석이 해석 자체의 목적을 넘어 개입 파라미터 검색 공간을 축소하는 탐색 프리미티브로 재용도됨을 보여준다. '가능성 있는' 후보를 데이터로 좁히는 구조를 모델 내부 구조 개입 검증 체계에 추가한다.
+
+### User Model Extraction via Belief Self-Distillation (2026-09-29)
+
+선형 프로빙(상관적 판독)과 인과 프로빙(개입 검증)을 단일 자기 증류 프레임워크로 다리는 방법론적 경로를 제공한다. 해석가능성의 판독과 개입이 별도 기법이 아니라 하나의 학습된 표현의 두 사용 방식임을 보여준다.
+
+→ [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]

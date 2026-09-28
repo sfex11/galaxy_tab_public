@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
 
 조율의 참여 단위를 에이전트 개체에서 개체·집단의 혼합 입도로 확장한다. 집단을 조율의 원자적 참여 단위로 취급하면 서브태스크 복잡도에 맞는 추상화 수준 선택이 가능해지며, 통신 엣지 압축으로 조율 비용도 함께 관리됨을 보여준다.
+
+### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
+
+조율이 개별 능력의 합으로 환원되지 않음을 격리 측정하려는 평가 인프라를 제공하여, MeClear·MAGIC 등 조율 연구의 성과가 재검증될 수 있는 표준 기준선을 만든다.
+
+→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

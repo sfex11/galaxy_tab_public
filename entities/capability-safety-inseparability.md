@@ -30,3 +30,9 @@ Bounded Reach가 사용자 가치 그룹으로 측정되어, 능력-안전 불�
 ### A2M: Trace-Optimized Agent Hijacking in the MCP Ecosystem (2026-09-24)
 
 시맨틱 매칭 능력을 제거하면 에이전트 능력 자체가 소멸하므로, 방어는 능력 제거가 아닌 신뢰 검증 계층 추가(도구 출처 인증, 메타데이터 무결성 검증)로 이루어져야 함을 보여준다.
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+능력과 프라이버시의 결합 구조를 확인한다 — 원격 프론티어 위임은 능력을 얻지만 프라이버시를 희생하고 로컬 SLM은 그 반대이며, 검증 가능성만이 이 트레이드오프를 구성적으로 해소하는 제3 축이다.
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

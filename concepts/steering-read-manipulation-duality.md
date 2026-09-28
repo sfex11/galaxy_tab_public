@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Interpretabil (2026-09-10)
 
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-21)
+
+### User Model Extraction via Belief Self-Distillation (2026-09-29)
+
+→ [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]

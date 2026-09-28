@@ -18,3 +18,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### New LoRA Skills Should Read but Never Write (2026-09-29)
+
+→ [[sources/2026-09-29-new-lora-skills-should-read-but-never-write.md|상세 보기]]

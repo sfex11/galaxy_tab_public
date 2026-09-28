@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 측정 연구에 아키텍처적 개입점을 제공한다. 설득 수용도가 κ라는 단일 파라미터로 지정·검증 가능해지면, sycophancy가 모델의 통제 불가능한 속성이 아니라 설계 가능한 속성임이 입증되어 측정-개입 스펙트럼이 연결된다.
+
+### User Model Extraction via Belief Self-Distillation (2026-09-29)
+
+사용자 신념 표현의 인과적 조작이 sycophancy 연구에 실험 도구를 제공한다. 모델의 사용자에 대한 믿음을 직접 주입·변조하여 동조 행동의 인과 기제를 분리 검증할 수 있는 경로를 열며, 신념 조작이 sycophancy 증폭의 공격 벡터가 될 수 있음도 시사한다.
+
+→ [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]

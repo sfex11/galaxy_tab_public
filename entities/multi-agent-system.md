@@ -101,3 +101,15 @@ Agensh는 다중 에이전트 시스템의 확장 상한이 개별 에이전트 
 ### MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction wit (2026-09-24)
 
 협업 토폴로지를 수동 설계 대상에서 밀집 보상 RL로 학습 가능한 대상으로 전환한다. 서브태스크별 이질적 협업 요구가 단일 입도(개체 전용 또는 집단 전용) 생성기로는 포착 불가능함을 실증하여, 시스템 설계 공간에 '입도 혼합'이라는 새 축을 추가한다.
+
+### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
+
+기존 벤치마크가 경쟁 설정·단기 상호작용·개별 성능 집계로 구성되어 협력을 직접 측정하지 못했다는 구조적 한계를 진단하고, 50+ 라운드·3-20 에이전트·비대칭 역할의 MMORPG 환경으로 협력 평가의 표준 실험 무대를 제공한다.
+
+→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+다중 에이전트 시스템 평가에 '과제 구조 명세'라는 새 전제를 추가한다 — 팀 크기의 효용이 분리형/보상형 과제에 따라 달라지므로, 다중 에이전트 벤치마크 결과의 해석에도 과제 택소노미 정보가 필요함을 규정한다.
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

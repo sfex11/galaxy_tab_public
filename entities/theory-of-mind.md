@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Agentic Detection of Online Conspiracies (2026-09-27)
 
 화자 의도 판독이라는 제3자 관찰자 위치의 마음 이론 과제를 추가한다. ToM이 대화 참여자 간 신념 모델링에서 발화의 음성행위력 해석으로 확장되고 있음을 보여준다.
+
+### User Model Extraction via Belief Self-Distillation (2026-09-29)
+
+사용자 신념이 암묵적 ToM 능력의 불투명한 산물이 아니라, 선형적으로 디코딩 가능하고 인과적으로 주입 가능한 컴팩트 잠재 변수임을 실증한다. ToM이 '측정 불가능한 능력'에서 '조작 가능한 표현'으로 이동하는 전환점을 제공한다.
+
+→ [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]

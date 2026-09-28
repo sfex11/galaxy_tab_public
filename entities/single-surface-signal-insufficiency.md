@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Agentic Detection of Online Conspiracies (2026-09-27)
 
 어휘 마커라는 단일 표면 신호가 음모론 발화 검출에 불충분함을 보여, 이 원칙이 테스트 통과·캡션·CoT를 넘어 콘텐츠 조정 도메인으로 확장됨을 확정한다.
+
+### Compact Documentation for Coding Agents: A Benchmark, an Optimizer, an (2026-09-29)
+
+테스트 통과라는 단일 신호로 설명 충실도를 채점하는 설계의 한계를 노출한다 — 테스트가 명세하지 않는 코드 속성은 라운드트립 충실도에서도 측정되지 않으며, 이것이 전이 실패의 유력한 후보 원인이 된다.
+
+→ [[sources/2026-09-29-compact-documentation-for-coding-agents-a-benchmar.md|상세 보기]]

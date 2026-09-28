@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 2026-09-11 서베이가 정리한 추론 효율 메커니즘 지형에 '시각 필요성 기반 라우팅'이라는 새 축을 추가한다. 시각 토큰을 전면 처리·압축하는 대신 필요한 순간만 프레임을 검색하는 것이 장시간 비디오의 지배적 비용 절감 축임을 보여준다.
+
+### EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Langu (2026-09-29)
+
+모델 내부 최적화(토큰 프루닝, 캡션 라우팅)와 별개로 위상 수준 자원 분리가 인프라 수준 효율화 경로임을 보여준다. 서빙 자원 할당 관점의 새 축을 추가한다.
+
+→ [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]

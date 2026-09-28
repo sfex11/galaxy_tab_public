@@ -50,3 +50,9 @@ RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 신뢰할 수 있는 검증자를 갖춘 다양한 태스크 공급이라는 RLVR의 전제 조건을 코드베이스 자체에서 충족하는 경로를 제공한다. 검증 가능성이 외부 벤치마크의 속성이 아니라 코드의 실제 실행 가능성에서 유래함을 보여준다.
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+RLVR이 검증 가능성을 훈련 시 보상 신호의 성립 조건으로 사용했다면, 본 논문은 같은 속성을 배포 시점 추론 라우팅 결정 변수로 재사용하는 제2 경로를 연다. 검증자의 존재가 학습 가능성과 배포 파티셔닝 양쪽을 결정함을 보여준다.
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

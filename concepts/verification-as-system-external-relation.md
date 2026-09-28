@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

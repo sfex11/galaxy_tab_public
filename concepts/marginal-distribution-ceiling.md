@@ -24,3 +24,7 @@ _자동 Wiki Query에서 추출됨_
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
 
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

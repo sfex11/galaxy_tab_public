@@ -22,3 +22,15 @@ _Wiki 축적 중_
 ### HypoEvolve: Genetic Algorithms Enable Multi-Agent LLMs to Discover Sci (2026-09-16)
 
 역설의 진단적 반전을 제공한다. 역설이 능력-협력의 음의 상관을 보였다면, 본 논문은 능력을 통제한 채 협력 구조만 변이시켜 협력 위상의 독립 효과를 분리하는 방법론을 부여하여, 역설 논의가 '상관 관찰'에서 '인과 분해'로 진전될 수 있는 실험 설계를 확보한다.
+
+### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
+
+추론 능력과 협력의 역상관 가설을 통제된 장기 환경에서 시험할 수 있는 표준 벤치마크를 제공하여, 야생 관찰(Copying 논문)과 스웜 사례 연구 사이의 방법론적 간극을 메운다.
+
+→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+과제 구조 조건을 부여한다. 능력이 지배하는 분리형 과제에서는 협력적 구조가 무의미하고, 집계가 지배하는 보상형 과제에서만 협력적 구성의 이득이 성립하므로, 능력-협력 역설의 성립 범위를 과제 택소노미로 한정한다.
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

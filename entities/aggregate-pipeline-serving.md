@@ -36,3 +36,9 @@ Pythia는 파이프라인 서빙 최적화가 가능한 근본 원인을 제공�
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 파이프라인 병목에 대한 상류 해법을 제공한다. 스키마 축적·디코딩 최적화가 하류 접근이라면, VLM 호출 빈도 자체의 구조적 감소는 병목의 발생을 원천적으로 줄이는 상류 아키텍처 최적화다.
+
+### EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Langu (2026-09-29)
+
+파이프라인 구조가 서빙 성능을 결정하는 제2 차원(위상 이질성)을 제공한다. 스키마 축적이 단계 간 인터페이스 병목이었다면 본 논문은 위상 간 연산 특성 차이가 병목임을 보여 파이프라인 서빙 논의를 보완한다.
+
+→ [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]

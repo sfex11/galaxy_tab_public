@@ -30,3 +30,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-figures-as-interfaces-toward-llm-native-artifacts-.md|Figures as Interfaces: Toward LLM-Native Artifacts for Scien]] (2026-04-13)
 
 - [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-13)
+
+### EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Langu (2026-09-29)
+
+→ [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]

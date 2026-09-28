@@ -26,3 +26,15 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 소형 모델 추론 격차의 제3의 완화 경로를 제공한다. 능력 향상(Distill Globally)이나 추론 필요성 제거(TeCoD)와 달리, 판단과 설명을 분리하여 각 전문가의 요구 능력을 축소하는 아키텍처 분업 경로를 제시한다.
+
+### DeepEdu-v1: Efficient and Scalable Agentic LLMs for Vietnamese Educati (2026-09-29)
+
+자체 호스팅 소형 모델이 튜터링이라는 추론 집약 태스크를 수행해야 하는 요구를 추가한다. 에이전틱 스캐폴딩이 소형 모델의 추론 격차를 봉합하는 실전 배포 사례가 되며, 격차 해소가 '추론 능력 향상'이 아니라 '역량의 구성 방식' 문제임을 뒷받침한다.
+
+→ [[sources/2026-09-29-deepedu-v1-efficient-and-scalable-agentic-llms-for.md|상세 보기]]
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+SLM 격차 해소의 제3 경로를 제공한다 — 능력 향상이나 추론 제거가 아닌 '격차가 결과 품질을 훼손하지 않는 과제만 선별'하는 배포 파티셔닝. 검증 가능한 과제에서는 SLM 오류가 결정론적 검사로 포착·기각되어 격차의 실질 비용이 소멸한다.
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
 
 반증과의 쌍대 관계를 명확히 한다. 통계적 인증이 확률적 안전 보장(위반 확률이 임계치 이하)을 제공하는 반면, 반증은 명세 위반의 구체적 반례를 산출하여 결정론적 실패 증거를 제공한다. 두 접근은 안전 보장의 상보적 양면을 형성한다.
+
+### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+대비 축을 제공한다 — 통계적 인증이 확률적 경계로 안전을 증명한다면 내재적 검사는 결정론적 기각으로 품질을 보장하며, 두 보장 체계의 적용 경계가 과제의 검증 가능성에 의해 갈린다.
+
+→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

@@ -3728,3 +3728,15 @@
 ## [2026-09-28 08:38] ingest | ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimination Complaints
 
 ## [2026-09-28 08:38] ingest | R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction Model for Paraphrase Detection
+
+## [2026-09-29 02:36] llm-ingest | 10편 분석, 엔티티 1029개, 개념 2325개
+- 2026-09-29-user-model-extraction-via-belief-self-distillation.md
+- 2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md
+- 2026-09-29-compact-documentation-for-coding-agents-a-benchmar.md
+- 2026-09-29-strategically-diverse-sampling-for-self-training.md
+- 2026-09-29-deepedu-v1-efficient-and-scalable-agentic-llms-for.md
+- 2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md
+- 2026-09-29-hystar-anchored-hypergraphs-for-stable-credit-assi.md
+- 2026-09-29-new-lora-skills-should-read-but-never-write.md
+- 2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md
+- 2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md

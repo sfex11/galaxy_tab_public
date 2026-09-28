@@ -26,3 +26,9 @@ SkillOS 등이 보여준 스킬 큐레이션 중심 자기 개선을 넘어, 이
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 동결 모델 + 외부 절차적 메모리 구조로, 4개 자율성 축 중 경험 축만을 개선 대상으로 삼는 RSI의 최소 구성을 디자인 도메인에서 실현한다. 실행·전략 자율성을 0으로 유지하면서도 지속적 능력 향상이 가능함을 보여, 자율성 축이 독립적으로 조작 가능함을 강화한다.
+
+### Strategically Diverse Sampling for Self-Training (2026-09-29)
+
+셀프트레이닝의 병목이 샘플링 전략의 다양성에 있음을 진단한다 — 자기 개선 루프가 자기 선호 분포를 증폭하는 순환적 한계의 완화 경로를 데이터 큐레이션 차원에서 제시하며, 자기 개선의 질이 개선 절차가 아닌 개선 재료의 선택 기준에 의해 결정될 수 있음을 보여준다.
+
+→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

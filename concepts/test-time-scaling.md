@@ -24,3 +24,7 @@ _Wiki 축적 중_
 ### Efficient Test-Time Adaptation through Human-AI Interaction (2026-09-07)
 
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
+
+### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]
