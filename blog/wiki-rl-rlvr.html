@@ -1,0 +1,471 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>표지판을 더 세우기 전에, 지형을 다시 보라 — SAGE와 에이전트 RL 최적화 축의 재구성</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f7;
+    --ink:#2c2825;
+    --accent:#c2703e;
+    --blue:#5b7c99;
+    --green:#6b9e7a;
+    --card:rgba(255,255,255,0.7);
+    --card-border:rgba(194,112,62,0.12);
+    --muted:rgba(44,40,37,0.62);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:clamp(1rem,0.95rem + 0.35vw,1.1rem);
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .container{
+    max-width:800px;
+    margin:0 auto;
+    padding:0 20px 60px;
+  }
+  /* ---------- 헤더 ---------- */
+  .article-header{
+    position:relative;
+    padding:56px 0 32px;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    pointer-events:none;
+  }
+  .glow-1{width:280px;height:280px;background:rgba(194,112,62,0.09);top:-80px;right:-90px;}
+  .glow-2{width:220px;height:220px;background:rgba(91,124,153,0.08);top:60px;left:-80px;}
+  .badge-row{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .badge{
+    font-size:0.78rem;
+    font-weight:500;
+    padding:4px 12px;
+    border-radius:999px;
+    background:rgba(194,112,62,0.1);
+    color:var(--accent);
+    border:1px solid rgba(194,112,62,0.18);
+  }
+  .badge.blue{background:rgba(91,124,153,0.1);color:var(--blue);border-color:rgba(91,124,153,0.2);}
+  h1{
+    position:relative;
+    font-family:'Source Serif 4','Noto Sans KR',serif;
+    font-weight:700;
+    font-size:clamp(1.75rem,1.3rem + 2.4vw,2.6rem);
+    line-height:1.35;
+    letter-spacing:-0.01em;
+    margin-bottom:18px;
+  }
+  .subtitle{
+    position:relative;
+    font-size:clamp(0.98rem,0.92rem + 0.4vw,1.12rem);
+    color:var(--muted);
+    line-height:1.75;
+    margin-bottom:22px;
+  }
+  .meta{
+    position:relative;
+    font-size:0.85rem;
+    color:var(--muted);
+    border-top:1px solid rgba(44,40,37,0.08);
+    padding-top:16px;
+    line-height:1.7;
+  }
+  .meta strong{color:var(--ink);font-weight:500;}
+  /* ---------- 인용구 ---------- */
+  blockquote{
+    border-left:4px solid var(--accent);
+    max-width:800px;
+    margin:2.2rem auto;
+    padding:1.2rem 1.4rem;
+    background:var(--card);
+    border-radius:0 12px 12px 0;
+    box-shadow:0 2px 12px rgba(44,40,37,0.04);
+    font-size:0.98em;
+    line-height:1.9;
+  }
+  blockquote p+p{margin-top:0.7em;}
+  blockquote .q-mark{
+    font-family:'Source Serif 4',serif;
+    font-size:1.6em;
+    color:var(--accent);
+    line-height:1;
+    display:block;
+    margin-bottom:4px;
+  }
+  /* ---------- 섹션 ---------- */
+  section{margin:56px 0;}
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .sec-num{
+    font-family:'Source Serif 4',serif;
+    font-size:clamp(1.6rem,1.3rem + 1.2vw,2.1rem);
+    font-weight:700;
+    color:var(--accent);
+    opacity:0.55;
+    line-height:1;
+    flex-shrink:0;
+  }
+  h2{
+    font-family:'Source Serif 4','Noto Sans KR',serif;
+    font-weight:700;
+    font-size:clamp(1.35rem,1.15rem + 1vw,1.75rem);
+    line-height:1.45;
+    letter-spacing:-0.01em;
+  }
+  h3{
+    font-family:'Source Serif 4','Noto Sans KR',serif;
+    font-weight:600;
+    font-size:clamp(1.1rem,1rem + 0.5vw,1.25rem);
+    margin:28px 0 12px;
+  }
+  p{margin-bottom:1.1em;}
+  p.lead{
+    font-size:1.05em;
+    color:var(--ink);
+  }
+  .hl{
+    background:linear-gradient(transparent 62%,rgba(194,112,62,0.18) 62%);
+    font-weight:500;
+    padding:0 1px;
+  }
+  .em-accent{color:var(--accent);font-weight:500;}
+  .em-blue{color:var(--blue);font-weight:500;}
+  .em-green{color:var(--green);font-weight:500;}
+  /* ---------- 엔티티 태그 ---------- */
+  .entity{
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:0.82em;
+    font-weight:500;
+    background:rgba(91,124,153,0.1);
+    color:var(--blue);
+    padding:2px 8px;
+    border-radius:6px;
+    border:1px solid rgba(91,124,153,0.14);
+    white-space:normal;
+    word-break:keep-all;
+  }
+  /* ---------- 카드 ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:20px 22px;
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+    margin:18px 0;
+  }
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:14px;
+    margin:20px 0;
+  }
+  .card-grid .card{margin:0;}
+  .card-title{
+    font-weight:700;
+    font-size:0.95rem;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;flex-shrink:0;
+  }
+  .dot.orange{background:var(--accent);}
+  .dot.blue{background:var(--blue);}
+  .dot.green{background:var(--green);}
+  .card p{font-size:0.92rem;color:var(--muted);line-height:1.75;margin:0;}
+  /* ---------- 동의/단서 리스트 ---------- */
+  .stance{
+    border-radius:14px;
+    padding:22px 24px;
+    margin:20px 0;
+    background:var(--card);
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+  }
+  .stance.agree{border-top:4px solid var(--green);border:1px solid rgba(107,158,122,0.22);border-top:4px solid var(--green);}
+  .stance.caveat{border:1px solid rgba(194,112,62,0.2);border-top:4px solid var(--accent);}
+  .stance-label{
+    font-weight:700;
+    font-size:0.95rem;
+    margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .stance.agree .stance-label{color:var(--green);}
+  .stance.caveat .stance-label{color:var(--accent);}
+  .stance ol{
+    list-style:none;
+    counter-reset:item;
+  }
+  .stance li{
+    counter-increment:item;
+    position:relative;
+    padding-left:38px;
+    margin-bottom:16px;
+    font-size:0.95rem;
+    line-height:1.8;
+  }
+  .stance li:last-child{margin-bottom:0;}
+  .stance li::before{
+    content:counter(item);
+    position:absolute;
+    left:0;top:3px;
+    width:24px;height:24px;
+    border-radius:50%;
+    font-size:0.8rem;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .stance.agree li::before{background:rgba(107,158,122,0.14);color:var(--green);}
+  .stance.caveat li::before{background:rgba(194,112,62,0.12);color:var(--accent);}
+  .stance li strong{font-weight:700;}
+  /* ---------- 비교표 ---------- */
+  .table-wrap{
+    overflow-x:auto;
+    margin:24px 0;
+    border-radius:14px;
+    border:1px solid var(--card-border);
+    box-shadow:0 4px 16px rgba(44,40,37,0.05);
+    -webkit-overflow-scrolling:touch;
+  }
+  table{
+    width:100%;
+    min-width:560px;
+    border-collapse:collapse;
+    background:var(--card);
+    font-size:0.88rem;
+  }
+  th,td{
+    padding:12px 14px;
+    text-align:left;
+    border-bottom:1px solid rgba(44,40,37,0.06);
+    vertical-align:top;
+    line-height:1.65;
+  }
+  thead th{
+    font-family:'Source Serif 4','Noto Sans KR',serif;
+    background:rgba(194,112,62,0.07);
+    font-weight:700;
+    font-size:0.92rem;
+  }
+  thead th:first-child{color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-weight:500;}
+  tbody th{
+    font-weight:500;
+    color:var(--muted);
+    background:rgba(250,249,247,0.6);
+    white-space:nowrap;
+    font-size:0.84rem;
+  }
+  td:nth-child(2){color:var(--ink);}
+  td:nth-child(3){color:var(--ink);}
+  tbody tr:last-child td,tbody tr:last-child th{border-bottom:none;}
+  /* ---------- 결론 카드 ---------- */
+  .paradigm{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    padding:26px 26px 20px;
+    box-shadow:0 6px 22px rgba(44,40,37,0.06);
+    margin:24px 0;
+  }
+  .paradigm ol{list-style:none;counter-reset:pitem;}
+  .paradigm li{
+    counter-increment:pitem;
+    position:relative;
+    padding-left:46px;
+    padding-bottom:20px;
+    margin-bottom:0;
+    border-left:2px solid rgba(194,112,62,0.18);
+    margin-left:14px;
+  }
+  .paradigm li:last-child{border-left-color:transparent;padding-bottom:4px;}
+  .paradigm li::before{
+    content:counter(pitem);
+    position:absolute;
+    left:-15px;top:0;
+    width:30px;height:30px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#faf9f7;
+    font-family:'Source Serif 4',serif;
+    font-weight:700;
+    font-size:0.9rem;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(194,112,62,0.3);
+  }
+  .paradigm li strong{
+    display:block;
+    font-weight:700;
+    margin-bottom:4px;
+    font-size:1rem;
+  }
+  .paradigm li span{
+    font-size:0.92rem;
+    color:var(--muted);
+    line-height:1.75;
+    display:block;
+  }
+  /* ---------- 참조 카드 ---------- */
+  .refs{
+    margin-top:56px;
+    padding:24px 26px;
+    background:rgba(91,124,153,0.05);
+    border:1px solid rgba(91,124,153,0.14);
+    border-radius:16px;
+  }
+  .refs h4{
+    font-family:'Source Serif 4','Noto Sans KR',serif;
+    font-size:1rem;
+    margin-bottom:12px;
+    color:var(--blue);
+  }
+  .ref-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+  .ref-cloud span{
+    font-size:0.8rem;
+    background:rgba(255,255,255,0.75);
+    color:var(--blue);
+    border:1px solid rgba(91,124,153,0.16);
+    padding:3px 10px;
+    border-radius:999px;
+  }
+  /* ---------- 푸터 ---------- */
+  footer{
+    margin-top:48px;
+    padding-top:24px;
+    border-top:1px solid rgba(44,40,37,0.08);
+    font-size:0.84rem;
+    color:var(--muted);
+    text-align:center;
+    line-height:1.8;
+  }
+  footer .divider{color:rgba(194,112,62,0.4);margin:0 8px;}
+  @media (max-width:480px){
+    .container{padding:0 16px 48px;}
+    .card,.stance,.paradigm{padding:18px;}
+    .stance li{padding-left:34px;}
+    blockquote{padding:1rem 1.1rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
+  <a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
+  <a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
+  <a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
+  <a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
+  <a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
+  <a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
+  <a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
+  <a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
+  </nav>
+
+  <header class="article-header">
+    <div class="hero-glow glow-1"></div>
+    <div class="hero-glow glow-2"></div>
+    <div class="badge-row">
+      <span class="badge">🧠 심층 분석</span>
+      <span class="badge blue">에이전트 RL · 장기 추론</span>
+      <span class="badge">Wiki Query 기반</span>
+    </div>
+    <h1>표지판을 더 세우기 전에,<br>지형을 다시 보라</h1>
+    <p class="subtitle">SAGE가 진단한 '추론 공간의 위상 편향'과, 에이전트 RL 최적화의 중심축을 <strong>신호 정교화</strong>에서 <strong>기하학적 안내</strong>로 옮겨야 한다는 논거 — 그리고 그것이 '대체'가 아닌 '계층화'여야 하는 이유</p>
+    <p class="meta">
+      <strong>대상 논문</strong> · SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidance<br>
+      <strong>분석 범위</strong> · Wiki 엔티티 12편과의 교차 검증
+    </p>
+  </header>
+
+  <blockquote>
+    <span class="q-mark">"</span>
+    <p>장기 추론·에이전트 RL의 실패는 보상 신호의 설계와 활용(RLVR, 크레딧 할당, 샘플링 효율, 궤적 정렬)의 문제로 분석되어 왔다. 그런데 SAGE가 희소 보상 환경의 취약성을 <span class="em-accent">보상이 아니라 추론 공간 자체의 위상 구조</span>가 유발하는 탐색·활용 편향으로 진단한다면, 에이전트 RL 최적화의 중심 축은 '신호 정교화'에서 <span class="em-accent">'추론 공간의 기하학적 안내'</span>로 재구성되어야 하지 않는가?</p>
+  </blockquote>
+
+  <!-- ================= 섹션 1 ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>표지판 공학의 시대 — "좋은 신호가 있다"는 공통 전제</h2>
+    </div>
+
+    <p class="lead">안개가 자욱한 산을 오른다고 상상해 보자. 정상에는 깃발이 하나 꽂혀 있지만, 안개 때문에 그 깃발은 몇 걸음 앞에서도 보이지 않는다. 지금까지 에이전트 RL 커뮤니티가 이 상황을 다루는 방식은 대체로 <span class="hl">표지판 공학</span>이었다. 중간에 깃발을 더 세우고, 깃발의 해상도를 조정하고, 등산객의 걸음을 깃발 방향으로 부드럽게 끌어당기는 것.</p>
+
+    <p>현재 Wiki가 형성하고 있는 최적화 축도 정확히 이 표지판 공학의 세 갈래로 요약된다.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title"><span class="dot orange"></span>보상의 해상도</div>
+        <p><span class="entity">adaptive-credit-granularity</span> — 크레딧을 어떤 시간·공간 단위로 쪼개어 할당할 것인가. 골 장면을 몇 초 단위로 끊어 평가할지를 정는 문제다.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot blue"></span>신호의 주입</div>
+        <p><span class="entity">adaptive-trajectory-steering</span> — 궤적 수준에서의 정렬·조향. 정제된 신호를 실제 경로에 주입하는 문제다.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot green"></span>신호의 소비</div>
+        <p><span class="entity">adaptive-inference</span> — 신호·상태에 반응해 추론 자원을 적응 배분. SpecKV 사례가 보여주듯 신호를 '소비하는 측'의 최적화다.</p>
+      </div>
+    </div>
+
+    <p>세 축은 겉으로는 서로 다른 문제를 다루지만, 밑에 깔린 전제는 하나다. <span class="hl">"좋은 신호가 — 혹은 신호가 될 수 있는 것들이 — 존재하며, 문제는 그것을 정제하고, 할당하고, 정렬하는 방식이다."</span> 신호는 있으되 다듬기만 하면 된다는 낙관이다. 이 전제는 강력하고, 대부분의 환경에서 옳다.</p>
+
+    <p>그러나 정확히 이 전제가 설명하지 못하는 실패가 존재한다. 표지판을 아무리 촘촘히 세워도 등산객들이 <span class="em-accent">일정하게 같은 계곡으로 빠져나간다면</span>, 그 실패는 표지판의 밀도나 배치 때문이 아닐 수 있다. 걸음의 방향을 정하는 것은 표지판이 아니라, 발밑의 경사이기 때문이다.</p>
+  </section>
+
+  <!-- ================= 섹션 2 ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>SAGE의 진단 — 신호가 없어서가 아니라, 지형이 기울어 있어서</h2>
+    </div>
+
+    <p class="lead">SAGE의 핵심 발상은 희소 보상 환경에서의 장기 추론 취약성을 <span class="hl">보상의 결핍이 아니라, 복잡한 추론 공간이 유도하는 두 편향 — 탐색 편향과 활용 편향</span>으로 돌린다는 것이다.</p>
+
+    <p>비유를 하나 더하자. 물은 비가 와야 움직인다. 그러나 <span class="em-blue">어디로 흐를지는 경사가 정한다</span>. 아무리 세차게 비를 뿌려도 — 탐색 에너지를 아무리 증폭해도 — 물은 이미 파여 있는 골짜기를 따라 흘러간다. 희소 보상 환경에서 에이전트의 탐색이 특정 실패 지역으로 수렴하는 것은, 신호라는 비가 부족해서가 아니라 추론 공간의 위상 구조가 그쪽으로 기울어 있기 때문이라는 진단이다.</p>
+
+    <p>여기서 SAGE가 요구하는 것은 단순한 관점의 전환이다. 기존의 신호 중심 관점은 암묵적으로 이렇게 가정한다. <em>"신호가 없는 구간에서는 아무 일도 일어나지 않는다."</em> SAGE의 진단은 정반대다. <span class="hl">신호가 없는 구간에서야말로 공간의 구조가 신호 없이 행동을 결정하고 있다.</span> 보상이 침묵하는 동안 정책의 걸음을 끌고 가는 것은 표지판이 아니라 지형이라는 것이다.</p>
+
+    <p>이 진단이 실무적으로 중요한 이유는 처방이 완전히 달라지기 때문이다. 신호 결핍의 진단이 맞다면 답은 더 정교한 신호다. 그러나 위상 편향의 진단이 맞다면 답은 <span class="em-accent">topological guidance</span> — 개별 신호를 더 세밀하게 만드는 대신, 추론 공간 자체에 안내 구조를 심어 편향이 <em>발생하는 지점</em>을 제거하는 것이다. 표지판을 더 세우는 것이 아니라, 위험한 계곡 입구의 경사를 다듬고 능선길을 만드는 셈이다.</p>
+
+    <blockquote>
+      <p>질문은 이렇게 정리된다. <span class="em-accent">"어떤 신호를 줄 것인가"</span>에서 <span class="em-accent">"어떤 공간에서 탐색하게 할 것인가"</span>로, 에이전트 RL 최적화의 첫 번째 질문이 바뀌어야 하는가?</p>
+    </blockquote>
+  </section>
+
+  <!-- ================= 섹션 3 ================= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>이미 예고되어 있던 지형론 — Wiki 속 세 갈래 근거</h2>
+    </div>
+
+    <p class="lead">SAGE의 진단이 돌연변이처럼 느껴진다면, Wiki의 기록을 다시 훑어볼 필요가 있다. '기하학이 1급 시민'이던 계보가 이미 세 갈래로 축적되어 있었다.</p>
+
+    <h3>① 신호가 있어도 번역이 막히는 지점</h3>
+    <p><span class="entity">access-planning-gap</span>의 핵심 발견이 결정적이다. ℓ-스텝 예지 접근이 관측 데이터를 충분히 제공하더라도, <span class="hl">그 정보를 최적 결정으로 번역하는 것이 구조적으로 어려운 영역이 존재</span>한다는 것 — 즉 "더 정교한 신호 → 더 나은 정책"이라는 등식이 깨지는 지점이 이미 이론적으로 형식화되어 있었다. SAGE의 위상적 진단은 이 간극의 원인을 '신호 부재'가 아니라 '공간 위상' 쪽으로 한 발 더 밀어붙인 설명이다. 신호는 문을 열어 주었지만, 문 안쪽의 지형이 여전히 걸음을 정한다.</p>
+
+    <h3>② 공간 자체가 제약이던 계보</h3>
+    <p>Wiki에는 추론·행동 공간의 '기하학'을 직접 다룬 흐름이 이어져 왔다. <span class="entity">autoregressive-paradigm-confinement</span>는 생성 패러다임 자체가 탐색 가능한 공간을 제약한다는 문제의식을, <span class="entity">behavioral-manifold-confinement</span>는 행동을 다양체로 묶는 기하학적 제한 설계를 다룬다. 더 구체적으로 <span class="entity">action-tokenization</span>의 "Continuous Actions from Discrete Minds"는 VQ-VAE 기반 잔여 벡터 양자화를 통한 <span class="hl">연속 행동 공간 → 이산 토큰 어휘의 번역이 곧 물리 제약의 인코딩 방식을 결정</span>한다는 통찰을 남겼다. 신호 이전에 표현의 기하학이 최적화의 질을 규정한다는, 지형론의 선례다.</p>
+    <p>그리고 결정적인 실증적 토대가 <span class="entity">activation-steering</span>의 "Deep Noir"에서 나온다. 내부 표현 기하에 대한 개입 — 위치와 강도 — 이 수동 설계가 아니라 <span class="hl">자동 발견 가능한 대상</span>임을 9개 모델
+</body>
+</html>
