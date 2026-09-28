@@ -1,15 +1,15 @@
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-09-21  
+**생성일**: 2026-09-28  
 **관련 논문**: 8편  
-**최종 업데이트**: 2026-09-21
+**최종 업데이트**: 2026-09-28
 
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-07-27
+**생성일**: 2026-09-21
 **관련 논문**: 8편 등록 (고유 4편 — 중복 4편 정리)
-**최종 업데이트**: 2026-12-15
-**변경 사항**: 신규 논문 없음. 절단되었던 개념 섹션 완성, 포함 논문 요약 라인 추가
+**최종 업데이트**: 2027-01-15
+**변경 사항**: 신규 논문 없음(기존 4편 재확인). 개념 섹션을 6개 클러스터로 전면 정리, 논문 간 관계 분석 보강
 
 **포함 논문**: GP 기반 Continual MBRL (비정상 동역학 제어) · DRL 심볼릭 속성 검증 (시스템·네트워킹) · Android Coach (SSMA 에이전트 훈련) · 진화적 RL 사족보행 (CEM-DDPG/TD3)
 
@@ -33,7 +33,7 @@
 
 ## 연구 트렌드와 미해결 과제
 
-**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화로 이동한다. Android Coach는 [[concepts/computer-use-agent.md|computer-use agent]] 연구와의 접점을 제공하며, DRL 검증은 LLM 가드레일 연구(TraceSafe)와 신뢰성 담론을 공유한다.
+**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화로 이동한다. Android Coach는 [[concepts/computer-use-agent.md|computer-use agent]] 연구와 접점을 제공하고, DRL 검증은 LLM 가드레일 연구(TraceSafe)와 신뢰성 담론을 공유한다.
 
 **미해결 과제.** ① MB+진화적 RL 하이브리드 아키텍처의 부재 ② 고차원 상태 공간에서 심볼릭 검증의 계산 확장성 ③ 비가역 환경에서의 SSMA 대체 기법 ④ 세 차원 탐색을 아우르는 통합 이론.
 
@@ -41,13 +41,15 @@
 
 **핵심**: [[concepts/reinforcement-learning.md|reinforcement-learning]] · [[concepts/distribution-shift.md|distribution-shift]] · [[concepts/model-based-rl.md|model-based-rl]]
 
-**적응·모델링**: [[concepts/world-model.md|world-model]] · [[concepts/meta-learning.md|meta-learning]] · [[concepts/model-predictive-control.md|model-predictive-control]]
+**적응·모델링**: [[concepts/meta-learning.md|meta-learning]] · [[concepts/world-model.md|world-model]] · [[concepts/model-predictive-control.md|model-predictive-control]]
 
-**검증·안전**: [[concepts/formal-verification.md|formal-verification]] · [[concepts/ai-safety.md|ai-safety]] · [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
+**탐색·최적화**: [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]] · [[concepts/self-organizing-systems.md|self-organizing-systems]] · [[concepts/curriculum-learning.md|curriculum-learning]]
 
-**효율·탐색**: [[concepts/token-efficiency.md|token-efficiency]] · [[concepts/curriculum-learning.md|curriculum-learning]] · [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]] · [[concepts/self-organizing-systems.md|self-organizing-systems]]
+**신뢰성·검증**: [[concepts/formal-verification.md|formal-verification]] · [[concepts/ai-safety.md|ai-safety]] · [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
 
-**에이전트**: [[concepts/computer-use-agent.md|computer-use-agent]] · [[concepts/web-agent-evaluation.md|web-agent-evaluation]] · [[concepts/tool-use.md|tool-use]] · [[concepts/embodied-ai.md|embodied-ai]]
+**에이전트·효율**: [[concepts/computer-use-agent.md|computer-use-agent]] · [[concepts/web-agent-evaluation.md|web-agent-evaluation]] · [[concepts/tool-use.md|tool-use]] · [[concepts/token-efficiency.md|token-efficiency]]
+
+**응용 도메인**: [[concepts/embodied-ai.md|embodied-ai]] · [[concepts/autonomous-driving.md|autonomous-driving]] · [[concepts/closed-loop-evaluation.md|closed-loop-evaluation]]
 
 ---
 _LLM 분석으로 재생성됨_
