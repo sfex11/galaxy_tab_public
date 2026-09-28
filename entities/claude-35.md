@@ -47,3 +47,5 @@ _자동 생성됨_
 - [[sources/2026-07-29-efficient-llm-generated-shuttling-compilers-for-co.md]]
 
 - [[sources/2026-08-26-when-do-not-is-not-deny-security-rules-in-claudemd.md]]
+
+- [[sources/2026-09-28-llm-agents-can-easily-tamper-with-their-own-traces.md]]

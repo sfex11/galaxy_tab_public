@@ -3706,3 +3706,25 @@
 ## [2026-09-27 19:49] lint | Wiki 건전성 체크
 - Issues: 3416개
 - Orphans: 1046, Missing: 2370, Contradictions: 0
+
+## [2026-09-28 08:38] ingest | LLM Agents Can Easily Tamper With Their Own Traces
+
+## [2026-09-28 08:38] ingest | Temporal Gradient Inversion for Private Trajectory Reconstruction in Embodied Reinforcement Learning
+
+## [2026-09-28 08:38] ingest | Agentic Detection of Online Conspiracies
+
+## [2026-09-28 08:38] ingest | RAPID: Robot Agentic Programming from Demonstrations
+
+## [2026-09-28 08:38] ingest | Coding Agents for Generalized Task and Motion Planning Problems
+
+## [2026-09-28 08:38] ingest | Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure
+
+## [2026-09-28 08:38] ingest | A Living Benchmark for Information Retrieval from Electronic Health Records
+
+## [2026-09-28 08:38] ingest | SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidance
+
+## [2026-09-28 08:38] ingest | Jev-Mobile: Jev as an Executor for Mobile GUI Agents
+
+## [2026-09-28 08:38] ingest | ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimination Complaints
+
+## [2026-09-28 08:38] ingest | R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction Model for Paraphrase Detection

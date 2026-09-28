@@ -1882,3 +1882,17 @@
 - [[sources/2026-09-23-decoding-guardrails-xai-guided-perturbation-analys.md]] - Decoding Guardrails: XAI-Guided Perturbation Analysis of Prompt Injection Detection
 - [[entities/transformer]] - Transformer
 - [[sources/2026-09-23-adapting-tree-structured-speculative-decoding-to-d.md]] - Adapting Tree-Structured Speculative Decoding to DeepSeek-V4 for Efficient Inference
+- [[entities/llm-agent]] - LLM Agent
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-09-28-llm-agents-can-easily-tamper-with-their-own-traces.md]] - LLM Agents Can Easily Tamper With Their Own Traces
+- [[sources/2026-09-28-temporal-gradient-inversion-for-private-trajectory.md]] - Temporal Gradient Inversion for Private Trajectory Reconstruction in Embodied Reinforcement Learning
+- [[sources/2026-09-28-agentic-detection-of-online-conspiracies.md]] - Agentic Detection of Online Conspiracies
+- [[sources/2026-09-28-rapid-robot-agentic-programming-from-demonstration.md]] - RAPID: Robot Agentic Programming from Demonstrations
+- [[sources/2026-09-28-coding-agents-for-generalized-task-and-motion-plan.md]] - Coding Agents for Generalized Task and Motion Planning Problems
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-09-28-instrumental-monitor-evasion-emerges-under-ordinar.md]] - Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure
+- [[sources/2026-09-28-a-living-benchmark-for-information-retrieval-from-.md]] - A Living Benchmark for Information Retrieval from Electronic Health Records
+- [[sources/2026-09-28-sage-mitigating-long-horizon-reasoning-biases-via-.md]] - SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidance
+- [[sources/2026-09-28-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md]] - Jev-Mobile: Jev as an Executor for Mobile GUI Agents
+- [[sources/2026-09-28-argus-role-aware-event-knowledge-graphs-for-us-emp.md]] - ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimination Complaints
+- [[sources/2026-09-28-r-deim-net-an-efficient-rationale-augmented-dual-e.md]] - R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction Model for Paraphrase Detection

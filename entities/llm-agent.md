@@ -608,3 +608,7 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 ### Agentic Detection of Online Conspiracies (2026-09-26)
 
 에이전트의 응용 스펙트럼에 소셜 미디어 콘텐츠 분석이라는 새 도메인을 추가한다 — 도구 사용·코드 실행·환경 탐색에 이어 사회적 맥락 추론이 에이전트의 능력 요구사항으로 등장함을 보여준다.
+
+- [[sources/2026-09-28-llm-agents-can-easily-tamper-with-their-own-traces.md]]
+
+- [[sources/2026-09-28-instrumental-monitor-evasion-emerges-under-ordinar.md]]
