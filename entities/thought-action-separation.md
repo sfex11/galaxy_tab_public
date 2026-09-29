@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 사고-행동 분리 원리의 판단-설명 버전을 제공한다. 행동 실행이 아닌 판단 근거 생성을 별도 전문가에게 위임하는 구조는, 전문가 분리 패러다임이 인지적 산출물(설명) 영역으로도 확장될 수 있음을 보여준다.
+
+### Scaling Long-Form Story Generation via Narrative State Tracking (2026-09-30)
+
+추적기-생성기 분리가 사고-행동 분리의 창작 버전임을 보여준다. 저빈도 고수준 상태 갱신과 고빈도 저수준 문장 생성의 주파수 분리 구조가 Jev-Mobile·StageGuard 계열과 동일한 설계 원리임을 교차 도메인으로 확정한다.
+
+→ [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]

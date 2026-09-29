@@ -26,3 +26,9 @@ ADEMA가 선언 지식 상태를 오케스트레이션했다면, 절차 그래�
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
 
 현재 문제 상태에 대한 명시적 추적이 검색의 조건 변수로 기능함을 보여주어, 지식 상태 추적과 검색 계층의 결합 가능성을 제시한다.
+
+### Scaling Long-Form Story Generation via Narrative State Tracking (2026-09-30)
+
+ADEMA가 장기 태스크의 지식 상태를 오케스트레이션 계층으로 통합했다면, 본 논문은 창작 도메인에서 동일 원리가 작동함을 보여준다 — 등장인물·사건·설정의 서사 상태가 명시적 추적 대상이 될 때 1만 단어 한계가 소설 규모로 확장되며, 지식 상태 오케스트레이션이 도메인 불변 패턴임을 교차 검증한다.
+
+→ [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]

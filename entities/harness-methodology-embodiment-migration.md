@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
 
 코딩 에이전트 방법론의 물리 계획 도메인 이식에 세 번째 착지점을 추가한다. RAPID가 제어기 코드, obstacle-aware 하네스가 안전 계층이었다면 본 논문이 이식하는 것은 '계획을 빠르게 만드는 도메인 기제 코드'로, 이식 대상의 스펙트럼이 실행 계층에서 계획 인프라 계층까지 확장됨을 보여준다.
+
+### Scaling Long-Form Story Generation via Narrative State Tracking (2026-09-30)
+
+에이전틱 하네스 방법론의 세 번째 착지점을 제공한다. 코딩(명세→코드)과 로보틱스(시연→제어기)에 이어 창작(서사 상태→소설)으로 이동하며, 이식되는 공통 골격이 '상태 추적+생성+검증 루프'임을 교차 도메인으로 확정한다.
+
+→ [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]
