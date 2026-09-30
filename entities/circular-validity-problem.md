@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### ExecCritic: Learn to Test, Test to Improve for Coding Agents (2026-09-10)
 
 동일 궤적이 패치와 테스트를 함께 생성하면 두 오류가 정합하여 허위 신뢰가 발생하는 SWE 도메인의 구체적 메커니즘을 제공한다. 순환적 타당성 문제가 '검증자-피검증자 오류 상관'이라는 형태로 코드 도메인에서 현현함을 실증한다.
+
+### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
+
+자기 생성 설명을 자기 학습에 재사용하는 폐루프의 새로운 실현 사례를 제공한다. 설명이 환각이나 오류를 포함할 때 개선이 오염되는지 여부가 ROFT 타당성의 핵심 검증 지점이 되어, 순환 타당성 논의에 '개선 신호로서의 자기 서술' 차원을 부여한다.
+
+→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]

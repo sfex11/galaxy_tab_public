@@ -26,3 +26,7 @@ _Wiki 축적 중_
 ### LOCUS: Task-Aware Low-Rank Post-Training for Token-Efficient Language  (2026-09-13)
 
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
+
+→ [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]

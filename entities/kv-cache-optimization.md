@@ -46,3 +46,9 @@ KV 캐시 압축(LightKV 등)이 추측 디코딩의 γ 선택과 어떻게 상�
 ### Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory (2026-09-24)
 
 KV 캐싱의 적용 대상을 AR 모델에서 dLLM으로 확장한다. dLLM에서 KV 캐싱이 '효율화 기법'이 아니라 '존재하지 않는 기반 인프라'였음을 진단하고, 캐시 재사용-병렬 디코딩 상호작용이라는 새로운 병목 축을 캐시 최적화 논의에 추가한다.
+
+### KV-streams for Efficient Compaction in Agentic Reinforcement Learning (2026-09-30)
+
+KV 캐시 관리의 적용 범위를 서빙·추론 계층에서 RL 훈련 롤아웃 계층으로 확장한다. KV 캐시가 학습 처리량의 결정 변수이자 학습 인프라의 일급 대상이 됨을 규정하며, Flash-dLLM 계열의 서빙 측 최적화와 대응되는 훈련 측 최적화 축을 형성한다.
+
+→ [[sources/2026-09-30-kv-streams-for-efficient-compaction-in-agentic-rei.md|상세 보기]]

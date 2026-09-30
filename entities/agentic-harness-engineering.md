@@ -62,3 +62,9 @@ Crab이 실행 환경 계층(체크포인트/복원)의 하네스 구성요소�
 ### Grow the Harness, Not the Context: From Strategy-Free Scaffolds to Reu (2026-09-24)
 
 하네스 엔지니어링의 시점을 확장한다 — 관측가능성 주도 자동 진화가 진단·변이에 머물렀다면, 본 논문은 strategy-free scaffold에서의 실패 신호 기반 '성장'이라는 훈련 시점 최적화를 추가하여 하네스 설계가 학습 가능한 대상임을 제시한다.
+
+### Harness Learning Enables Generalizable Test-Time Adaptation (2026-09-30)
+
+하네스 개정의 자동화를 진화적 탐색에서 학습된 정책으로 격상시킨다. 관측 가능성 기반 자동 진화가 변이-선택 루프로 하네스를 개선했다면, 본 논문은 개정 정책 자체를 실행 피드백으로 훈련하여 하네스 엔지니어링이 태스크마다 재수행되는 작업이 아니라 전이 가능한 능력임을 실증한다.
+
+→ [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]

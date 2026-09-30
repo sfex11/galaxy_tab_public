@@ -42,3 +42,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
 
 해석가능성의 응용 대상을 환각·감정 추론에서 보상 해킹 감시로 확장한다. 평균 차이 벡터라는 최소 판독기로도 이상 행동 감시가 가능함을 보여, 해석가능성이 이론 연구를 넘어 실용적 안전 감사 계층으로 기능하는 경로를 입증한다.
+
+### Late Attention Layers Alone Can Copy Entity Tokens, but Not Without At (2026-09-30)
+
+기능(개체 복사)을 계층 단위로 분해하는 체계적 매핑 사례를 제공한다. 해석가능성 연구가 SAE 특징·회로 수준을 넘어 '기능별 계층 전문화'를 조작적으로 특정할 수 있음을 보여주며, 단일 기능의 층 수준 소재 규명이 표준 방법론이 될 수 있음을 시사한다.
+
+→ [[sources/2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md|상세 보기]]

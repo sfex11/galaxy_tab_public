@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
+
+→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]

@@ -56,3 +56,15 @@ RLVR 파이프라인에서 상태 가치 추정 계층이 이론적으로 불필
 RLVR이 검증 가능성을 훈련 시 보상 신호의 성립 조건으로 사용했다면, 본 논문은 같은 속성을 배포 시점 추론 라우팅 결정 변수로 재사용하는 제2 경로를 연다. 검증자의 존재가 학습 가능성과 배포 파티셔닝 양쪽을 결정함을 보여준다.
 
 → [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]
+
+### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
+
+검증 가능 보상 없이도 에이전트 행동이 개선될 수 있음을 보여주는 대조 사례를 제공한다. RLVR의 보상 설계 부담과 검증자 의존성이 아니라 설명 생성이라는 다른 학습 신호 체계의 존재 가능성을 연다.
+
+→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]
+
+### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
+
+RLVR가 검증 가능 보상을 전제하는 것과 대조적으로 본 논문은 RL을 검증 불가능한 우연적 탐색의 교정기로 전용하여, 강화학습의 적용 지평이 검증가능성 경계 너머로 확장 가능함을 시사한다.
+
+→ [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]

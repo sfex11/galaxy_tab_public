@@ -3740,3 +3740,15 @@
 - 2026-09-29-new-lora-skills-should-read-but-never-write.md
 - 2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md
 - 2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md
+
+## [2026-09-30 06:24] llm-ingest | 10편 분석, 엔티티 1049개, 개념 2353개
+- 2026-09-30-scaling-long-form-story-generation-via-narrative-s.md
+- 2026-09-30-tokencast-forecasting-token-consumption-during-llm.md
+- 2026-09-30-kv-streams-for-efficient-compaction-in-agentic-rei.md
+- 2026-09-30-towards-communication-efficient-social-intelligenc.md
+- 2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md
+- 2026-09-30-shockingly-simple-self-retrospection-improves-agen.md
+- 2026-09-30-harness-learning-enables-generalizable-test-time-a.md
+- 2026-09-30-failure-transparent-agents-benchmarking-post-failu.md
+- 2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md
+- 2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md

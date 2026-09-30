@@ -86,3 +86,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 적응의 결정 축에 '호출 빈도의 계층 간 배분'을 추가한다. 단일 호출 내 예산 조절을 넘어, 계획과 실행 사이에 호출 주기를 비대칭 배분하는 것은 적응적 추론의 아키텍처 수준 확장이다.
+
+### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
+
+적응의 트리거·근거로 '수정된 비용 예측치'라는 새 변수를 추가한다. 예측이 실행 중 갱신되는 구조는 적응이 외부 환경·내부 상태에 이어 비용 궤적에도 반응함을 시사한다.
+
+→ [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]

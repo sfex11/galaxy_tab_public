@@ -56,3 +56,9 @@ Avatar는 이 엔티티의 스코프를 '연구 질문→워크플로우의 의�
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 기존 정의가 '연구 질문→워크플로우 번역 자동화'였다면, 본 논문은 워크플로우가 실행 중 축적된 실험 증거에 따라 스스로 갱신되는 적응형 형태를 제시하여 범위를 '명세 실행'에서 '증거 기반 명세 재정의'로 확장한다.
+
+### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
+
+autoresearch 계열이 구조화된 워크플로우 실행에 집중해온 것과 대비되어, 본 논문은 그 직전 단계인 비구조적 아이디어 생성을 에이전틱 최적화의 대상으로 삼아 과학 워크플로우 에이전트의 전주기 커버리지를 확장한다.
+
+→ [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]

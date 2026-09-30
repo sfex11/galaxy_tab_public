@@ -22,3 +22,7 @@ _자동 Wiki Query에서 추출됨_
 ### Measurement-Driven Sub-Network Selection for On-Premise Retrieval-Augm (2026-09-04)
 
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
+
+### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
+
+→ [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]

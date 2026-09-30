@@ -58,3 +58,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 ### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
 
 망각 완화 평가의 명세 간극 사례를 제공한다. '일반 벤치마크 유지율'이라는 표준 평가 관행이 실제 보존 목표(태스크 특화 지시 수행)를 명세하지 못하며, 명세의 누락이 완화 기법 연구의 결론 전환을 유발할 수 있음을 실증한다. SWE-Gate의 테스트-수용 단절과 동형인 '유지율-실보존' 간극이다.
+
+### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
+
+측정 대상 혼재 문제의 구체적 진단을 추가한다. 기존 벤치마크가 보고 실패를 도구 선택·복구·환경 동역학과 혼합해 보고 능력 자체를 측정하지 못했음을 지적하고, 명세 분해(조건 고정)로 해소하는 경로를 제시한다.
+
+→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]

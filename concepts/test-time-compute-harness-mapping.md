@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Harness Learning Enables Generalizable Test-Time Adaptation (2026-09-30)
+
+→ [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]

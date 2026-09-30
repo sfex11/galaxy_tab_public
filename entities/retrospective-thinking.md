@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Cognitive Extensions for Dual-Process Language Agents: Memory and Self (2026-09-18)
 
 RetroThinker가 발화 후 회고로 사고의 재귀성을 확보했다면, SRM은 실행 중 bounded 검증이라는 다른 시간축 지점을 점유한다. 회고의 범위를 전체 궤적 재검토에서 현재 스텝 국소 검증으로 축소하는 비용 효율적 대안을 제시한다.
+
+### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
+
+회고의 시간축을 추론 시점(RetroThinker의 발화 중 회고)에서 훈련 시점(경험 후 회고가 훈련 데이터가 됨)으로 확장한다. 회고가 출력 수정의 메커니즘이 아니라 파라미터 개선의 매개가 됨을 보여주며, 회고 연구의 이중 위상을 확정한다.
+
+→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]

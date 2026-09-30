@@ -20,3 +20,9 @@ _Wiki 축적 중_
 범용 벤치마크에서 multi-agent collaboration이라는 수직 도메인으로 특화되는 트렌드를 확정하며, SWE-Serve·EHR 라이브 벤치마크 계열과 병행되는 제3의 특화 방향(사회적 상호작용)을 연다.
 
 → [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]
+
+### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
+
+수직 도메인 특화의 차원에 '기관별 표준'을 추가한다. 동일 금융 도메인 내에서도 평가 기준이 기관마다 달라야 한다는 요구는 도메인 특화를 도메인에서 기관 단위로 더 세분화시킨다.
+
+→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

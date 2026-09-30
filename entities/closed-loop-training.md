@@ -38,3 +38,9 @@ LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로
 ### OPTED: On-Policy Fine-Tuning for End-to-End Driving using a Render-Fre (2026-09-21)
 
 폐루프 훈련의 비용 조건을 명시하고 우회 경로를 제공한다 — Terminal-Universe 계열이 환경 공급으로 루프를 닫았다면, OPTED는 렌더 프리 교사 신호로 루프를 닫는 제2의 폐루프 경로를 제시한다.
+
+### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
+
+폐루프의 신호를 환경 피드백이 아닌 에이전트 자신의 설명으로 대체하는 경량화 변형을 제공한다. 수행→관찰→설명→훈련의 최소 온라인 절차로 루프가 닫힘을 실증하여, 폐루프 훈련의 최소 구성 요건을 정의한다.
+
+→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]

@@ -27,3 +27,7 @@ _자동 Wiki Query에서 추출됨_
 ### Metrics Failure in LLM-Based Code Vulnerability Repair: An Empirical S (2026-09-24)
 
 ### Agentic Detection of Online Conspiracies (2026-09-27)
+
+### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
+
+→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]

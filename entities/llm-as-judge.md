@@ -54,3 +54,9 @@ LLM judge의 평가 대상이 reasoning의 기능적 구조가 아닌 그 표면
 ### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
 
 judge의 역할을 출력 평가자에서 데이터 주석자(annotator)로 확장한다. 알 수 없는 편향의 저비용 주석자로서 LLM judge가 전문가 골드 스탠다드와 최적으로 결합되는 구조를 형식화하여, judge에 '보정 가능한 측정기'라는 새 지위를 부여한다.
+
+### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
+
+판단자 신뢰성의 교정 축으로 '전문가 가이던스의 이중 작용'을 추가한다. 판단 행위가 전문가가 명시한 기준으로 프롬프트(생성 전)와 루브릭(판정 시) 양면에서 사전 구속되어 judge 드리프트를 구조적으로 감소시킨다.
+
+→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

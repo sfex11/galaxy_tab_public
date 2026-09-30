@@ -42,3 +42,9 @@ LLM judge의 알 수 없는 편향을 계측기 결함이 아닌 통계적으로
 ### Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Ben (2026-09-25)
 
 LLM 판정기의 신뢰성 문제를 회피하는 설계 대안으로 실행 근거 평가를 제시한다. 판정기 자체의 불안정성을 보정하는 대신 판정 대상을 검증 가능한 실행 결과로 이동시키는 구조적 전환의 사례다.
+
+### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
+
+측정 기기로서의 judge에 '전문가 가이던스 기반 교정' 계층을 제공한다. 기기가 자체 판단 논리가 아닌 전문가 명시 표준으로 판독하도록 구속될 때 측정의 도메인 타당성이 확보됨을 보여준다.
+
+→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

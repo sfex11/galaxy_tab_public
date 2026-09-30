@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-13)
+
+### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
+
+→ [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]

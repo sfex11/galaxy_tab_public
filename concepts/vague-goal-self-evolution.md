@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
+
+→ [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]

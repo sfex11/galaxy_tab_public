@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### RAFT: A Stateful Retrieval-Augmented Framework for Troubleshooting Age (2026-09-21)
 
 궤적 소비의 제4 경로로 '검색 지식 단위화'를 추가한다. 과거 사례 궤적이 스킬·환경·코칭 신호 외에 상태 조건부 검색 체인으로 재질화됨을 보여준다.
+
+### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
+
+궤적 소비의 제4 경로로 '설명적 서술화'를 추가한다 — 궤적이 스킬(절차 지식), 환경(태스크 생성기), 코칭 신호(간접 보상)로 소비되던 스펙트럼에, 궤적을 설명 텍스트로 변환해 직접 학습 신호로 소비하는 가장 경량의 경로를 제시한다.
+
+→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]

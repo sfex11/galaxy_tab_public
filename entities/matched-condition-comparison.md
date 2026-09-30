@@ -18,3 +18,9 @@ PDE 서러게이트에서 도출된 동일 조건 비교 원리의 인간 피험
 ### StudentBench: AI and human tutoring yield equivalent GRE learning gain (2026-09-25)
 
 동일 조건 비교 원리의 교육 도메인 확장 사례를 제공한다. AI 교사 vs 인간 교사의 학습 향상 비교라는 새 축을 추가하며, 교육 성과라는 가치 차원이 성공 판정에 도입됨을 보여준다.
+
+### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
+
+동일 조건 비교 원리의 보고 측정 버전을 제공한다. 실패 관찰과 증거 요구를 모든 태스크에서 동일하게 고정하여 조건 변이 효과를 배제하고 보고 행동의 순수 기여도만을 분리한다.
+
+→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]

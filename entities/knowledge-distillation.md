@@ -46,3 +46,9 @@ _Wiki 축적 중_
 ### The Weight Is Over - Interactive Diffusion on Consumer GPUs (2026-09-22)
 
 교사 텍스트 인코더의 출력 분포를 학생 소형 인코더+번역기에 전달하는 '조건화 계층 증류'라는 새 축을 추가한다. TIDE가 전체 모델 간 전이를 다뤘다면 본 논문은 모델-조건화기 경계의 번역 네트워크로 증류 단위를 세분화한다.
+
+### Towards Communication-Efficient Social Intelligence in Language Agents (2026-09-30)
+
+teacher-student 증류의 전이 대상이 지식이나 추론이 아니라 '말하지 않을 판단'이라는 새 축을 추가한다. 증류가 침묵·간결성 같은 행동 정책의 전이로 확장될 수 있음을 시사한다.
+
+→ [[sources/2026-09-30-towards-communication-efficient-social-intelligenc.md|상세 보기]]

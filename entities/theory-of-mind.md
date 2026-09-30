@@ -32,3 +32,9 @@ _Wiki 축적 중_
 사용자 신념이 암묵적 ToM 능력의 불투명한 산물이 아니라, 선형적으로 디코딩 가능하고 인과적으로 주입 가능한 컴팩트 잠재 변수임을 실증한다. ToM이 '측정 불가능한 능력'에서 '조작 가능한 표현'으로 이동하는 전환점을 제공한다.
 
 → [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]
+
+### Towards Communication-Efficient Social Intelligence in Language Agents (2026-09-30)
+
+타자 모델링이 응답 품질 향상이 아니라 발화 억제(파트너의 시간·주의 존중)의 근거로 실현되는 형태를 제시한다. ToM이 생성 측 능력이 아닌 통신 경제성 판단의 전제임을 보여준다.
+
+→ [[sources/2026-09-30-towards-communication-efficient-social-intelligenc.md|상세 보기]]
