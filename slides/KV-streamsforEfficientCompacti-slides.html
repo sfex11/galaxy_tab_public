@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KV-streams for Efficient Compaction in Agentic Reinforcement — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top: 2rem;">
+      <span class="tag tag-amber">arXiv:2609.35750 · cs.LG</span>
+      <h1 style="font-size: clamp(2rem, 5vw, 3.6rem); margin: 1.2rem 0 0.5rem;">KV-streams</h1>
+      <h2 style="font-size: clamp(1.2rem, 3vw, 2rem); margin-bottom: 1.5rem;" class="accent">Agentic 강화학습에서 효율적인 컴팩션</h2>
+      <p style="font-size: clamp(1rem, 2vw, 1.35rem);" class="muted">KV 캐시를 flush하지 않고 스트리밍하여<br>컴팩션의 재프리필 비용을 제거하는 플러그 앤 플레이 전략</p>
+      <div class="hr"></div>
+      <p style="font-size: clamp(0.9rem, 1.6vw, 1.15rem);">Emiliano Penaloza, Dane Malenfant, Dheeraj Vattikonda, Roger Creus Castanyer <span class="muted">외 다수</span></p>
+      <p class="muted" style="font-size: clamp(0.8rem, 1.4vw, 1rem);">Mila · Microsoft · McGill University · Université de Montréal · Microsoft Research</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.5rem;">문제: 긴 에이전트 롤아웃이 <span class="accent">GPU 메모리를 병목</span>시킨다</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-memory"></i> 선형적으로 증가하는 KV 캐시</h3>
+        <p style="font-size: clamp(0.9rem, 1.7vw, 1.15rem);">장기(long-horizon) 에이전트 과제는 다수의 동시 롤아웃을 생성하며, 각 롤아웃의 KV 캐시는 길이에 비례해 선형 증가</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-triangle-exclamation"></i> 메모리 독점 현상</h3>
+        <p style="font-size: clamp(0.9rem, 1.7vw, 1.15rem);">고정된 GPU 메모리 예산 하에서 가장 오래 실행되는 롤아웃이 병목이 되어, 짧은 롤아웃이 쓸 수 있는 메모리를 독점</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-file-lines"></i> 환경 피드백의 가중</h3>
+        <p style="font-size: clamp(0.9rem, 1.7vw, 1.15rem);">소프트웨어 엔지니어링에서 파일 읽기/쓰기 한 번이 나중에 불필요한 컨텍스트를 대량으로 소비</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-gauge-high"></i> 처리량 감소</h3>
+        <p style="font-size: clamp(0.9rem, 1.7vw, 1.15rem);">메모리 압박은 학습 처리량을 제한하여 옵티마이저 스텝 수와 배치 크기를 모두 제약</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">기존 해법: 컨텍스트 컴팩션 (Context Compaction)</h2>
+    <p style="font-size: clamp(1rem, 1.9vw, 1.25rem); margin-bottom: 1.2rem;">토큰 예산 초과 시 컨텍스트 일부를 제거하여 <strong>메모리 사용량을 일정하게 유지</strong></p>
+    <div class="card" style="margin-bottom: 1.2rem;">
+      <h3 class="accent" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-scissors"></i> 컴팩션 연산자 κ = gen ∘ del</h3>
+      <ul class="check-list">
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>del (삭제):</strong> 최소 b ≥ 1개 토큰 스팬을 제거하여 컨텍스트가 항상 축소됨을 보장</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>gen (생성):</strong> 제거된 자리에 브리지 s (예: 요약)를 생성 — 비어 있을 수도 있음</li>
+        <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>트리거 T:</strong> 고정 토큰 예산 B 초과, 또는 모델 스스로의 컴팩션 결정</li>
+      </ul>
+    </div>
+    <div class="quote-block">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.2rem);">메모리 문제는 해결하지만, <strong class="accent">"남긴 컨텍스트를 매번 다시 prefill"</strong>해야 하는 새로운 계산 병목이 발생</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">재프리필(Re-prefill)의 숨은 비용</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-rotate-left"></i> 무엇이 초기화되는가?</h3>
+        <ul>
+          <li style="font-size: clamp(0.9rem, 1.6vw, 1.1rem); margin-bottom: 0.6rem;">컴팩션 후 <strong>새 트레이스</strong>에서 이어짐</li>
+          <li style="font-size: clamp(0.9rem, 1.6vw, 1.1rem); margin-bottom: 0.6rem;">보존된 토큰의 <strong>위치 인코딩 리셋</strong></li>
+          <li style="font-size: clamp(0.9rem, 1.6vw, 1.1rem); margin-bottom: 0.6rem;">캐시도 재계산됨: (k′ᵢ, v′ᵢ) ≠ (kᵢ, vᵢ)</li>
+          <li style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">이미 계산한 KV를 <strong>다시 prefill</strong>할 수밖에 없음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-calculator"></i> 추가 prefill 토큰 수</h3>
+        <div class="big-num" style="font-size: clamp(1.6rem, 4vw, 3rem);">Δ = N·r / (B−r)</div>
+        <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1.05rem);">N: 롤아웃 길이 · r: 컴팩션당 보존 토큰 · B: 예산</p>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">보존 토큰이 예산에 가까울수록 <strong>재처리 배수가 급격히 증가</strong></p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.2rem);">같은 토큰에 대해 모델이 <strong class="accent">반복적인 forward pass</strong>를 수행 → 학습 처리량 저하 (KV-streams는 재프리필 0)</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">핵심 아이디어: <span class="accent">KV-streams</span></h2>
+    <p style="font-size: clamp(1rem, 1.9vw, 1.25rem); margin-bottom: 1.2rem;">컴팩션 후 KV 캐시를 flush하는 대신 <strong>앞으로 스트리밍</strong>한다</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent3" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-server"></i> 추론 엔진 측</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>KV 항목을 추론 엔진 내부에서 <strong>직접 축출(evict)</strong></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>컴팩션의 메모리 절감 효과는 그대로 유지</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>하나의 연속적인 KV 스트림</strong> 유지 → 재프리필 비용 완전 제거</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size: clamp(1.05rem, 2vw, 1.4rem);"><i class="fas fa-mask"></i> 트레이너 측</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>커스텀 어텐션 마스크</strong>로 축출 패턴을 재현</li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>토큰을 <strong>전혀 재처리하지 않음</strong></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>하나의 연속 트레이스로 학습 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.2rem);">간단한 플러그인으로 <strong>모든 컴팩션 전략과 호환</strong> — 학습·추론 처리량 모두 대폭 향상</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.5rem;">KV-streams 작동 방식</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">예산 초과 감지</div>
+        <div class="step-desc">트리거 T 발동 — 토큰 예산 B 도달 또는 모델의 자발적 결정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">KV 직접 축출</div>
+        <div class="step-desc">삭제할 토큰의 KV를 추론 엔진에서 제거 (메모리 확보)</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">연속 스트림 유지</div>
+        <div class="step-desc">남은 KV와 위치 인코딩을 그대로 보존 — 새 트레이스 없음</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">어텐션 마스크 학습</div>
+        <div class="step-desc">트레이너가 마스크로 축출 패턴을 재현 — 재프리필 0</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size: clamp(0.95rem, 1.8vw, 1.2rem);"><i class="fas fa-lightbulb accent"></i> 재프리필 방식과 달리 각 토큰은 <strong class="accent3">정확히 한 번만</strong> 계산됩니다</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.5rem;">실험 설정</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-brain"></i> 모델</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">Qwen3-4B-Instruct-2507<br>Qwen3.5-4B</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-gamepad"></i> 텍스트 게임</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">TextWorld<br>ALFWorld</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-code"></i> 소프트웨어 엔지니어링</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">SWE-bench Verified<br>(3 시드 오차 막대)</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 1.2rem;">
+      <h3 class="accent" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-layer-group"></i> 비교 대상: 4가지 컴팩션 전략</h3>
+      <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">KV-streams(원) vs 재프리필 컴팩션(사각형) vs 전체 컨텍스트(기준선) — 4가지 컴팩션 전략 모두에 플러그 앤 플레이로 적용</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">결과 ① 텍스트 기반 게임: <span class="accent">최대 5× 가속</span></h2>
+    <div class="grid-2">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">5×</div>
+        <p style="font-size: clamp(0.95rem, 1.7vw, 1.15rem);"><strong>TextWorld</strong> 학습 wall-clock 가속</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">1.3×</div>
+        <p style="font-size: clamp(0.95rem, 1.7vw, 1.15rem);"><strong>ALFWorld</strong> 학습 wall-clock 가속</p>
+      </div>
+    </div>
+    <ul class="check-list" style="margin-top: 1.2rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>재프리필 컴팩션과 <strong>동일한 최종 점수</strong>를 훨씬 적은 연산으로 달성</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>학습 초기에는 컴팩션 계열이 전체 컨텍스트보다 열세 → 충분한 학습 후 <strong class="accent3">격차 해소 및 역전</strong></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>KV-streams로 학습한 모델이 <strong>미학습 텍스트 게임에서 더 잘 일반화</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">결과 ② SWE-bench Verified: <span class="accent">3× 빠른 도달</span></h2>
+    <div class="card" style="margin-bottom: 1.2rem;">
+      <div style="text-align:center;">
+        <div class="big-num accent" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">3×</div>
+        <p style="font-size: clamp(1rem, 1.9vw, 1.25rem);">전체 컨텍스트 대비 <strong>3× 빠르게 최고 성능 도달</strong>, 성능은 동등하게 유지</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-clock"></i> Wall-clock 절감</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">GPU 시간과 실제 경과 시간 모두에서 동일 점수를 훨씬 적은 비용으로 달성</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-scale-balanced"></i> 성능 보존</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">스트리밍이 성능을 해친다는 증거 없음 — 재프리필과 통계적으로 동등</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.2rem;">발견: <span class="accent">SFT 없이 RL만으로</span> 의사-순환(pseudo-recurrent) KV가 등장</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent2" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-book"></i> 선행 연구의 주장</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">컴팩션 간 KV를 보존하면 KV 캐시가 <strong>"의사-순환 상태"</strong>로 작동하지만, 이 동작에는 <strong>사전 SFT 단계가 필요</strong>하다고 보고</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size: clamp(1rem, 1.9vw, 1.3rem);"><i class="fas fa-bolt"></i> 본 논문의 발견</h3>
+        <p style="font-size: clamp(0.9rem, 1.6vw, 1.1rem);">스트리밍된 KV 캐시는 <strong>컨텍스트에서 오래전 사라진 정보까지 보존</strong>하며, <strong class="accent">RL만으로 이 행동이 충분히 발현</strong></p>
+      </div>
+    </div>
+    <ul class="check-list" style="margin-top: 1.2rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>SFT에 드는 추가 wall-clock 시간은 <strong>성능 향상으로 이어지지 않음</strong></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>통제된 합성 실험: <strong>초기에 전혀 노출되지 않은 객체(zero-support)도 회상</strong></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>컨텍스트가 달라져도 KV를 통한 정보 전달이 <strong>일반화</strong>됨</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.6rem); margin-bottom: 1.5rem;">핵심 기여 요약</h2>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>플러그 앤 플레이:</strong> 어떤 컴팩션 전략에도 추가되는 경량 모듈 — 4가지 전략에서 검증</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>2.6× ~ 5× 학습 가속:</strong> 재프리필 비용을 완전히 제거 (TextWorld 5×, SWE-bench 3× 조기 도달)</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>성능 무손실:</strong> 재프리필 컴팩션과 동등하거나 능가, 충분한 학습 시 전체 컨텍스트까지 상회</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>일반화 향상:</strong> 미학습 텍스트 게임에서 더 우수한 전이 성능</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><strong>SFT 불필요:</strong> 의사-순환 KV 동작이 RL 사후학습만으로 발현 — 사전학습 단계 절약</li>
+    </ul>
+    <div class="quote-block" style="margin-top: 1.2rem;">
+      <p style="font-size: clamp(0.95rem, 1.8vw, 1.2rem);">KV-streams는 <strong class="accent">어떤 사후학습 파이프라인에도</strong> 손쉽게 추가할 수 있는 효율적이고 가벼운 개선책입니다</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top: 2rem;">
+      <h2 style="font-size: clamp(1.6rem, 4vw, 3rem); margin-bottom: 1rem;">KV-streams for Efficient Compaction<br>in Agentic Reinforcement Learning</h2>
+      <p style="font-size: clamp(1rem, 2vw, 1.3rem);" class="muted">Emiliano Penaloza, Dane Malenfant, Dheeraj Vattikonda, Roger Creus Castanyer,<br>Siddarth Venkatraman, Abhay Puri 외 제3저자 및 지도저자 다수</p>
+      <p class="muted" style="font-size: clamp(0.85rem, 1.5vw, 1.05rem);">Mila · Microsoft · McGill University · Université de Montréal · Microsoft Research</p>
+      <div class="hr"></div>
+      <div class="grid-3">
+        <div class="card">
+          <i class="fas fa-file-pdf accent" style="font-size: clamp(1.2rem, 2.5vw, 1.8rem);"></i>
+          <p style="font-size: clamp(0.85rem, 1.5vw, 1.05rem);">arxiv.org/abs/2609.35750</p>
+        </div>
+        <div class="card">
+          <i class="fab fa-github accent2" style="font-size: clamp(1.2rem, 2.5vw, 1.8rem);"></i>
+          <p style="font-size: clamp(0.85rem, 1.5vw, 1.05rem);">github.com/Emilianopp/KV-streams</p>
+        </div>
+        <div class="card">
+          <i class="fas fa-server accent3" style="font-size: clamp(1.2rem, 2.5vw, 1.8rem);"></i>
+          <p style="font-size: clamp(0.85rem, 1.5vw, 1.05rem);">SGLang 포크 공개</p>
+        </div>
+      </div>
+      <p style="font-size: clamp(1rem, 2vw, 1.3rem); margin-top: 1.5rem;"><span class="accent"><strong>감사합니다</strong></span> <i class="fas fa-circle-question muted"></i> <span class="muted">Q & A</span></p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
