@@ -28,3 +28,9 @@ _Wiki 축적 중_
 에이전틱 하네스 방법론의 세 번째 착지점을 제공한다. 코딩(명세→코드)과 로보틱스(시연→제어기)에 이어 창작(서사 상태→소설)으로 이동하며, 이식되는 공통 골격이 '상태 추적+생성+검증 루프'임을 교차 도메인으로 확정한다.
 
 → [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]
+
+### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
+
+코딩 에이전트의 에이전틱 개선 루프가 물리 로봇 정책 개선으로 이식되는 추가 착지점을 제공하며, 이식 대상이 코드 생성에서 정책 환류로 확장됨을 보여준다.
+
+→ [[sources/2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md|상세 보기]]

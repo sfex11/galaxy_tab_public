@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 스킬의 외부성이 터미널 명령에서 창작 절차(레이아웃·색상·타이포그래피)로 확장됨을 보여준다. 자연어 스킬이 동결 모델의 행동을 유도하는 프록시로 기능하며, 스킬 정제가 시스템 능력의 유일한 진화 통로가 되는 극단적 외부화 사례다.
+
+### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
+
+스킬을 외부 조합 가능 아티팩트로 다뤄 과제를 완수해도 기저 정책은 변하지 않음을 보여, 외부 아티팩트의 개선과 내부 정책의 개선 사이에 명시적 환류 경로가 필요함을 실증한다.
+
+→ [[sources/2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md|상세 보기]]
