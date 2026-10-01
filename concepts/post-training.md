@@ -34,3 +34,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-understanding-the-role-of-hallucination-in-reinfor.md|Understanding the Role of Hallucination in Reinforcement Pos]] (2026-04-07)
 
 - [[sources/2026-04-12-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-12)
+
+### AdviSD: Learning to Advise Frontier LLMs via Targeted Multi-Turn Self- (2026-10-01)
+
+→ [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]

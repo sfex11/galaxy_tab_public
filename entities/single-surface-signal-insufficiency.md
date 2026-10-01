@@ -36,3 +36,15 @@ _Wiki 축적 중_
 테스트 통과라는 단일 신호로 설명 충실도를 채점하는 설계의 한계를 노출한다 — 테스트가 명세하지 않는 코드 속성은 라운드트립 충실도에서도 측정되지 않으며, 이것이 전이 실패의 유력한 후보 원인이 된다.
 
 → [[sources/2026-09-29-compact-documentation-for-coding-agents-a-benchmar.md|상세 보기]]
+
+### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
+
+단일 스칼라 신호의 불충분성에 이론적 정밀화를 부여한다. 왜곡 유형(순추가 vs 재배선)의 판별에 집계 거리 하나로는 원리적으로 불충분하며 최소 두 개의 에지 카운트 성분이 필요함이 sharp bound로부터 도출된다.
+
+→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]
+
+### Do LLM Agents Execute the Plans They Declare? From Planning-Mode Decla (2026-10-01)
+
+최종 태스크 성공이라는 단일 표면 신호가 계획 선택 실패와 실행 실패를 융합시켜 구별 불가능하게 만듦을 보여, 실패 유형 분해가 평가 설계의 전제조건임을 확증한다.
+
+→ [[sources/2026-10-01-do-llm-agents-execute-the-plans-they-declare-from-.md|상세 보기]]

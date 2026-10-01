@@ -22,3 +22,11 @@ _Wiki 축적 중_
 ### Nuha-Speech: Building General-Purpose Arabic Speech-LLMs (2026-09-13)
 
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
+
+→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

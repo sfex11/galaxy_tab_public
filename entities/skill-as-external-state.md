@@ -24,3 +24,9 @@ _Wiki 축적 중_
 스킬을 외부 조합 가능 아티팩트로 다뤄 과제를 완수해도 기저 정책은 변하지 않음을 보여, 외부 아티팩트의 개선과 내부 정책의 개선 사이에 명시적 환류 경로가 필요함을 실증한다.
 
 → [[sources/2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md|상세 보기]]
+
+### Learning Meta-Skills for Agent Harness Design in Test-Time AI4AI (2026-10-01)
+
+스킬의 외부성 대상을 실행 절차에서 환경 구축 원칙으로 확장한다. Meta-Skill은 스킬과 동일하게 외부 상태로 축적·재사용되는 지식이지만, 적용 대상이 태스크가 아닌 환경이라는 새 아티팩트 클래스를 만든다.
+
+→ [[sources/2026-10-01-learning-meta-skills-for-agent-harness-design-in-t.md|상세 보기]]

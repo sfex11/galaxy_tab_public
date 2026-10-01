@@ -52,3 +52,9 @@ _Wiki 축적 중_
 teacher-student 증류의 전이 대상이 지식이나 추론이 아니라 '말하지 않을 판단'이라는 새 축을 추가한다. 증류가 침묵·간결성 같은 행동 정책의 전이로 확장될 수 있음을 시사한다.
 
 → [[sources/2026-09-30-towards-communication-efficient-social-intelligenc.md|상세 보기]]
+
+### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
+
+증류의 대안 극점을 제공한다. 교사 지식을 가중치로 이전하는 대신 예시를 컨텍스트로 조건화하여 동일 목표(검색 품질)를 파라미터 업데이트 없이 달성하며, 지식 이전의 운반체가 가중치에서 컨텍스트로 이동할 수 있음을 시사한다.
+
+→ [[sources/2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md|상세 보기]]

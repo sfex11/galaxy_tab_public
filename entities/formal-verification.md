@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-21)
 
 증명의 쌍대 문제인 falsification에 LLM을 배치하는 방향을 추가한다. 형식적 안전 증명이 어려운 CPS에서 반례 탐색이 실용적 보완 경로가 됨을 보여준다.
+
+### Multi-Agent Flow Matching with Decoupled Generative Guidance (2026-10-01)
+
+생성 모델의 산출물에 형식적 보장을 도입하는 경로를 제공한다. '생성 모델은 표현력이 높아도 보장이 없다'는 명제에 대해, 유도 구조의 설계가 하드 제약 만족을 샘플링 계층에서 직접 다룰 수 있게 함을 보여준다.
+
+→ [[sources/2026-10-01-multi-agent-flow-matching-with-decoupled-generativ.md|상세 보기]]

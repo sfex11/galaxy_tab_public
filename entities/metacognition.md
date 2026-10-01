@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
 
 '길을 잃었음'의 자가 감지가 도움 요청 행동의 선행 조건임을 보여준다. 과제 복잡도 판단에서 상태 불확실성 판단으로 메타인지의 대상이 확장되며, 불확실성이 회복 행동을 유발하는 입력이 됨을 입증한다.
+
+### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
+
+실행 런(run) 수준 메타인지를 제공한다 — 개별 행동이나 도구 호출이 아닌 실행 궤적 전체에 대한 통합·계획·판단이 일급 추론 대상이 되어, 메타인지의 대상이 행동에서 실행으로 확장된다.
+
+→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-19-quantifying-overclaiming-propensity-in-frontier-ll.md|Quantifying Overclaiming Propensity in Frontier LLM Agents]]
 
 ### Quantifying Overclaiming Propensity in Frontier LLM Agents (2026-09-21)
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

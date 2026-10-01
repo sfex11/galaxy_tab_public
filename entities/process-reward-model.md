@@ -22,3 +22,9 @@ PRM의 핵심 전제 — reasoning step 텍스트가 기능적 역할 정보를 
 ### ActReview: Rebuttal-Guided Training Data and Rubric Rewards for Action (2026-09-10)
 
 리뷰 품질을 최종 산출물의 정답성이 아닌 진단-수정 연결의 과정적 타당성으로 평가하는 사례를 제공한다. 진단 주장과 수정 제안의 인과적 결합이 평가 단위가 된다는 점에서 과정 중심 보상의 피드백 생성 버전이다.
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+PRM 감독 데이터 품질 감사의 근거를 제공한다 — trace가 무효할 수 있으므로 trace에서 파생된 process 보상은 그 무효성을 상속하며, 합성 수학 도메인의 의존 노출이 process 감독 데이터 검증의 템플릿이 된다.
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

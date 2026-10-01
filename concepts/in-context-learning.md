@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### Diagnosing CFG Interpretation in LLMs (2026-04-24)
 
 ### In-Context Robot Learning with VLM Agents (2026-09-18)
+
+### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
+
+→ [[sources/2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md|상세 보기]]

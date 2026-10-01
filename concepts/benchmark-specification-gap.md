@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-07)
 
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
+
+→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]

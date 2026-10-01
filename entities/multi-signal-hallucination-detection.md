@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### An Interpretable Memory Decision Controller for LLM Agents Based on Th (2026-09-22)
 
 다중 신호 결합 원리의 위상 전환을 제공한다 — 환각을 사후 감지하는 분류·불확실성·보정 파이프라인과 달리, 본 논문은 동일 다중 신호 원리를 메모리 수용 판단에 배치하여 감지에서 예방으로 이동시킨다.
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+다중 신호(의미·확신·보정) 중 '확신' 신호의 실체를 재고하게 만든다. MC Dropout 불확실성 등 확률 유사 신호의 유효성이 확률의 인과적 기여에 의존한다면, 본 논문의 진단은 다중 신호 파이프라인 설계의 전제 점검 요구로 연결된다.
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

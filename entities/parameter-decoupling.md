@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
 
 보존 목표의 분해 가능성을 제시한다. LOCUS가 품질-비용 목표를 별도 파라미터 축으로 분해했다면, 본 논문은 '일반 능력 보존'과 'MT-IF 보존'이 분리 가능한 별도 축이며, 완화 기법의 앵커링(보조 데이터/모델 출력/교사 출력) 선택이 두 축 간 트레이드오프의 배분을 결정함을 보여준다. 파라미터화-행동 분리의 보존 목표 확장 사례다.
+
+### AdviSD: Learning to Advise Frontier LLMs via Targeted Multi-Turn Self- (2026-10-01)
+
+공유 파라미터 모델에서 교정 학습이 교정 타겟과 유용 조언의 정렬 조건에 따라 학습을 제한할 수 있음을 증명하여, 파라미터 분리가 품질-비용 목표 분리뿐 아니라 다중 학습 신호의 공존 조건이기도 함을 확장한다.
+
+→ [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]

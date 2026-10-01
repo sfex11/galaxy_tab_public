@@ -42,3 +42,15 @@ WER 비판과 동형인 구조가 코드 보안 도메인에서 재현됨을 확
 ### Can LLMs Reason About Runtime Behavior? A Repository-Level Dynamic Ben (2026-09-25)
 
 기존 저장소 QA 벤치마크의 LLM 기반 평가 의존이 가진 측정 불안정성에 대한 해법 측을 제공한다. LLM 판정을 실행 오라클로 대체하는 경로의 저장소 규모 실증 사례다.
+
+### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
+
+지표가 '어느 에지가 바뀌었는가'에 무감각해지는 조건을 형식화한다 — 브래킷 양끝이 일치하면 스펙트럴 거리는 바뀐 에지의 정체와 무관하게 카운트만 반영하며, 의미 무감각성이 경험적 관찰이 아닌 정리로 증명되는 사례를 제공한다.
+
+→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+정답 지표의 이중 무감각성을 확장한다 — 의미 형식뿐 아니라 추론 유효성에도 무감각하며, iGSM의 의존 노출이 평가를 응답 수준에서 trace 수준 측정으로 격상시키는 사례를 제공한다.
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

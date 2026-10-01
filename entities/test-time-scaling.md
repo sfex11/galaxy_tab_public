@@ -30,3 +30,9 @@ bounded context 하 압축이 test-time scaling의 효율 지평을 확장함을
 테스트타임 적응의 제3 매체를 연다. 컴퓨트 확장(토큰·샘플 예산 증대)과 테스트타임 훈련(가중치 갱신)에 이어 실행 프로그램 개정이라는 제어 계층 축을 추가하여, 스케일링의 실질 대상이 연산량에서 하네스 구조로 이동할 수 있음을 제안한다.
 
 → [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]
+
+### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
+
+태스크 컴퓨트(Worker)와 제어 컴퓨트(Controller)의 분리를 통한 에이전틱 추론 스케일링 축을 제공한다. 스케일링이 단일 궤적의 깊이 연장이 아니라 제어 추론의 구조화로도 달성됨을 보여준다.
+
+→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

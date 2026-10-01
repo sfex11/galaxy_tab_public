@@ -68,3 +68,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-11-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-11)
 
 ### A-MAR: Agent-based Multimodal Art Retrieval for Fine-Grained Artwork U (2026-04-23)
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

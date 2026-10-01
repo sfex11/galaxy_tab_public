@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-agentic-federated-learning-the-future-of-distribut.md|Agentic Federated Learning: The Future of Distributed Traini]] (2026-04-08)
 
 - [[sources/2026-04-09-paper-circle-an-open-source-multi-agent-research-d.md|Paper Circle: An Open-source Multi-agent Research Discovery ]] (2026-04-09)
+
+### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
+
+→ [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|상세 보기]]

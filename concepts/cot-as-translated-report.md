@@ -23,3 +23,11 @@ _자동 Wiki Query에서 추출됨_
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
 
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-27)
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

@@ -36,3 +36,9 @@ _Wiki 축적 중_
 추적기-생성기 분리가 사고-행동 분리의 창작 버전임을 보여준다. 저빈도 고수준 상태 갱신과 고빈도 저수준 문장 생성의 주파수 분리 구조가 Jev-Mobile·StageGuard 계열과 동일한 설계 원리임을 교차 도메인으로 확정한다.
 
 → [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]
+
+### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
+
+사고-행동 분리의 사고 계층 내부 재분할을 제공한다 — 사고가 태스크 사고(Worker)와 제어 사고(Controller)로 다시 나뉘며, '생각하기 전에 생각한다'는 2층 사고 구조로 분리의 계보가 확장된다.
+
+→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

@@ -30,3 +30,15 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 번역된 보고서 문제의 생성 측 구현 사례를 제공한다. 듀얼 익스퍼트 구조에서 근거 전문가가 산출하는 설명은 판단 전문가의 내부 계산과 별개로 생성되므로, '근거가 실제 이유인가'의 질문이 아키텍처 수준에서 명시적으로 분리되어 검증 대상이 된다.
+
+### Do LLM Agents Execute the Plans They Declare? From Planning-Mode Decla (2026-10-01)
+
+선언된 계획이 실행 계산의 번역된 보고서일 뿐임을 실증하여, '가독적 선언 ≠ 충실한 실행'의 근거 위계를 계획 도메인에서 확정한다.
+
+→ [[sources/2026-10-01-do-llm-agents-execute-the-plans-they-declare-from-.md|상세 보기]]
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+번역 보고서 논제에 최초의 기계적 감사 증거를 제공한다 — iGSM에서 trace와 ground-truth 의존 사슬의 대조가 가능해진 조건에서 정답-무효 trace 쌍이 관찰됨으로써, '가독성이 계산 실재를 전달한다'는 가정이 가장 유리한 조건에서도 실패함을 입증한다.
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

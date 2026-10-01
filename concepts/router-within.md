@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-19)
+
+### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
+
+→ [[sources/2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md|상세 보기]]

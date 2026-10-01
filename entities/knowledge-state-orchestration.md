@@ -32,3 +32,9 @@ ADEMA가 선언 지식 상태를 오케스트레이션했다면, 절차 그래�
 ADEMA가 장기 태스크의 지식 상태를 오케스트레이션 계층으로 통합했다면, 본 논문은 창작 도메인에서 동일 원리가 작동함을 보여준다 — 등장인물·사건·설정의 서사 상태가 명시적 추적 대상이 될 때 1만 단어 한계가 소설 규모로 확장되며, 지식 상태 오케스트레이션이 도메인 불변 패턴임을 교차 검증한다.
 
 → [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]
+
+### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
+
+Controller가 '실행이 확립한 것을 통합'하는 설계는 지식 상태 오케스트레이션의 추론 시점 구현 사례다. 상태 추적이 별도 인프라가 아니라 전용 추론 주체의 산출물이 될 수 있음을 보여준다.
+
+→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

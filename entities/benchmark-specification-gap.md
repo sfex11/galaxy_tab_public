@@ -64,3 +64,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 측정 대상 혼재 문제의 구체적 진단을 추가한다. 기존 벤치마크가 보고 실패를 도구 선택·복구·환경 동역학과 혼합해 보고 능력 자체를 측정하지 못했음을 지적하고, 명세 분해(조건 고정)로 해소하는 경로를 제시한다.
 
 → [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]
+
+### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
+
+그래프 재구성 벤치마크가 측정 대상을 명세하지 않으면 실제로는 에지 카운트 프록시를 측정하고 있을 수 있음을 보여주는 정량적 근거를 제공한다. 평가 명세에 왜곡 성분 분해 기준을 명시해야 할 필요성을 뒷받침한다.
+
+→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]

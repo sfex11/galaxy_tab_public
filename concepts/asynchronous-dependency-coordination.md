@@ -12,3 +12,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
+
+→ [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|상세 보기]]

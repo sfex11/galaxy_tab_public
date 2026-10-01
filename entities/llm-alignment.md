@@ -26,3 +26,9 @@ RLHF가 '정렬'을 수행한다는 명제의 규범적 전제를 해체하여, 
 ### A Zeroth-Order Paradigm for LLM Preference Alignment (2026-09-18)
 
 정렬 신호를 우도 경사가 아닌 비교 오라클에서 추출하는 제로스-오더 경로를 제공한다. 우도 이동을 1차 미분 기반 신호 추출의 구조적 취약성으로 진단하여, 정렬 최적화의 패러다임 스펙트럼에 '비교 기반'이라는 새 축을 추가한다.
+
+### Character Training for Risk-Averse Agents (2026-10-01)
+
+정렬과 안전의 분리 가능성을 실증하는 최초 사례군에 합류한다. misaligned-but-safe 에이전트라는 개념적 범주를 열어, 정렬 연구의 목표를 '목표 일치 달성'에서 '목표 일치 + 위험 선호의 이중 보장'으로 확장한다.
+
+→ [[sources/2026-10-01-character-training-for-risk-averse-agents.md|상세 보기]]

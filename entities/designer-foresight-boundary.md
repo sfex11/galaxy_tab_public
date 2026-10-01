@@ -30,3 +30,9 @@ HCI(Headroom-Closed Index)가 설계자 예견 경계를 정량 측정하는 최
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 모델 가중치를 동결하고 메모리만 진화시키는 설계가 설계자 예견 경계 문제를 부분 완화함을 보여준다 — 자연어 스킬의 진화는 가중치 변화보다 감사·롤백이 용이하다.
+
+### Learning Meta-Skills for Agent Harness Design in Test-Time AI4AI (2026-10-01)
+
+인간 설계자의 사전 예견이 Builder의 학습 가능 피드백(dev set 실행 결과)으로 대체될 수 있는 경로를 제시한다. 환경 설계 지식이 설계자의 내면이 아니라 실행 피드백에서 유도 가능한 학습 대상이 됨을 보여준다.
+
+→ [[sources/2026-10-01-learning-meta-skills-for-agent-harness-design-in-t.md|상세 보기]]

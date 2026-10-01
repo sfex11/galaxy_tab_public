@@ -22,3 +22,9 @@ AI 집단 행동 연구의 방법론 스펙트럼에 통제된 장난감 모델 
 ### Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents (2026-09-22)
 
 집단 수준 통제점을 추가한다. 소셜 시뮬레이션의 집단 의견 역학이 학습 사전분포의 은폐된 상속이 아니라 개별 에이전트의 κ 분포로 파라미터화되어, 집단 행동의 인과적 실험 조작이 가능해진다.
+
+### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
+
+시간 역방향의 응용 사례를 제공한다 — 기존 machine-behavior 연구가 현재 AI 에이전트의 행동을 관찰·분석했다면, IMPACT는 생성형 AI 에이전트를 계측 도구로 삼아 과거 인간의 집단 행동(폼페이 가옥의 이동 패턴)을 재구성·검증한다.
+
+→ [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|상세 보기]]

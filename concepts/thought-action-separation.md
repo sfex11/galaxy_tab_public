@@ -24,3 +24,7 @@ _자동 Wiki Query에서 추출됨_
 ### StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks vi (2026-09-21)
 
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-27)
+
+### AdviSD: Learning to Advise Frontier LLMs via Targeted Multi-Turn Self- (2026-10-01)
+
+→ [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]

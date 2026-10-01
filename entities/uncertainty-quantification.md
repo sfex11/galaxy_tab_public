@@ -34,3 +34,9 @@ LLM 추론이 아닌 제어 계층이라는 명확한 적용 대상을 지정하
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-13)
 
 MC Dropout이 출력 수준 환각 감지의 경량 UQ 구현 경로임을 실증한다. 별도 앙상블 학습 없이 단일 모델의 드롭아웃 샘플링만으로 인식론적 불확실성을 환각 판별 신호로 전환할 수 있음을 보여, UQ의 실용적 적용 범위를 확장한다.
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+불확실성 정량화의 대상을 답변 수준에서 추론 궤적 수준으로 확장한다. 핵심 토큰 확률 기반 신뢰도 추정의 작동 메커니즘이 불명확함을 개입 실험으로 드러내고, 발산 토큰 계수라는 구조적·계수적 신호로 정량화의 근거를 재정립한다.
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 가독성-해석가능성 간극의 구조적 완화 후보를 제공한다. 근거 생성을 판단 전문가와 분리된 별도 전문가에 위임하면, 설명의 가독성이 판단 경로의 무결성과 독립적으로 최적화될 수 있으나, 근거의 충실성(faithfulness) 검증은 별도로 요구된다.
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+간극의 가장 강한 형태를 실측한다 — 판독 가능하며 심지어 정답과 결합된 trace조차 기계 검증에서 무효로 판정되어, legibility가 검증을 대체할 수 없다는 명제에 인과적 근거를 부여한다.
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

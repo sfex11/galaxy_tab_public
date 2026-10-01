@@ -16,3 +16,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-21)
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

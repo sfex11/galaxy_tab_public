@@ -113,3 +113,15 @@ Agensh는 다중 에이전트 시스템의 확장 상한이 개별 에이전트 
 다중 에이전트 시스템 평가에 '과제 구조 명세'라는 새 전제를 추가한다 — 팀 크기의 효용이 분리형/보상형 과제에 따라 달라지므로, 다중 에이전트 벤치마크 결과의 해석에도 과제 택소노미 정보가 필요함을 규정한다.
 
 → [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]
+
+### Multi-Agent Flow Matching with Decoupled Generative Guidance (2026-10-01)
+
+다중 에이전트 협력의 단위를 행동·통신·계획이 아닌 '조인트 제약을 만족하는 객체의 분산 생성'으로 재정의한다. 유도 입력 간 순환 의존성이 협력 성립의 근본 장애물이며, 이를 제거하는 구조 설계가 에이전트 간 상호작용을 대체할 수 있음을 규정한다.
+
+→ [[sources/2026-10-01-multi-agent-flow-matching-with-decoupled-generativ.md|상세 보기]]
+
+### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
+
+다중 에이전트 시스템의 응용 영역을 태스크 완수에서 고고학적 사회 시뮬레이션으로 확장한다. 독립 계획 에이전트들이 사회적 이동 의존성을 놓친다는 발견은, 다중 에이전트의 가치가 능력 증대가 아니라 현실적 집단 행동의 재현에 있을 수 있음을 보여준다.
+
+→ [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|상세 보기]]

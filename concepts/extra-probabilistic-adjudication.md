@@ -22,3 +22,7 @@ _자동 Wiki Query에서 추출됨_
 ### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
 
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

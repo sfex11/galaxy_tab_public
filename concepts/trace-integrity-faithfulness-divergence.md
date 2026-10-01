@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

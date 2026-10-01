@@ -36,3 +36,9 @@ LongSeeker의 탄력적 컨텍스트 관리가 이 루프에 대한 직접적 �
 재시도×컨텍스트 누적에 의한 기하급수적 비용 폭주를 런타임 예측 갱신으로 조기 감지하는 경로를 제공한다. 비용 관리가 사후 정산에서 중도 개입으로 이동하는 구체적 계기가 된다.
 
 → [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]
+
+### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
+
+'어떤 부분 작업을 계승할까, 새로 시작할까' 선택의 명시화가 이 루프의 비용 폭주를 제어하는 구조적 해법을 제공한다. 재시도가 무분별한 컨텍스트 누적이 아니라 Controller 판단 하의 선택지가 된다.
+
+→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

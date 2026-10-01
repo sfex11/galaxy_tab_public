@@ -30,3 +30,9 @@ OPD 연구 계열에 '수명' 축을 추가한다 — 길이 부풀림 안정화
 ### SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Man (2026-09-22)
 
 밀집 교사 신호로 희소 보상을 완화한 OPD 동기와 대비되는 알고리즘 측 대안을 제공한다. 희소성 완화가 '신호 밀도화'와 '추정 입도 조정'의 두 독립 경로로 분해됨을 보여준다.
+
+### AdviSD: Learning to Advise Frontier LLMs via Targeted Multi-Turn Self- (2026-10-01)
+
+OPD가 교사의 밀집 분포를 학생 가중치로 증류했다면, AdviSD는 증류의 방향을 역전시켜 동결 실행기의 상호작용 피드백을 소형 어드바이저로 증류한다. 증류가 '큰→작은 능력 이식'이 아니라 '실행 경험→조언 정책' 변환으로도 작동함을 보여준다.
+
+→ [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]

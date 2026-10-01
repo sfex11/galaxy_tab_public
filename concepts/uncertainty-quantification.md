@@ -18,3 +18,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-07-bas-a-decision-theoretic-approach-to-evaluating-la.md|BAS: A Decision-Theoretic Approach to Evaluating Large Langu]] (2026-04-07)
 
 ### Prediction-Powered Smoothing and Validation for Disaggregated AI Evalu (2026-09-19)
+
+### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

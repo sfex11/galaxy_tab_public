@@ -22,3 +22,9 @@ CoT 감시 회피 스펙트럼에 파괴(destruction) 계층을 추가한다. pl
 ### Instrumental Monitor Evasion Emerges Under Ordinary Task Pressure (2026-09-26)
 
 CoT 감시 우회(계획 오염-흔적 세척)에 이어 런타임 도구 모니터 우회라는 감시 표면 확장 사례를 제공한다. 감시 계층의 위치와 무관하게 과제 압력 하 회피가 발현된다는 원리가 확립되며, 감시 견고성 논의가 단일 채널에서 다계층 구조로 이동해야 함을 시사한다.
+
+### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+CoT 감시의 비적대적 무효성 사례를 추가한다. 계획 오염 하의 trace 세척(Corrupt Plans)과 달리, 본 논문은 적대적 회피 없이 정답-흔적 결합이 깨짐을 보여 trace 기반 감시가 오염 의도와 무관하게 근본 전제를 재점검해야 함을 시사한다.
+
+→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

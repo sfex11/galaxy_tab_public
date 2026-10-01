@@ -3752,3 +3752,20 @@
 - 2026-09-30-failure-transparent-agents-benchmarking-post-failu.md
 - 2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md
 - 2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md
+
+## [2026-10-01 02:44] llm-ingest | 15편 분석, 엔티티 1084개, 개념 2390개
+- 2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md
+- 2026-10-01-imagine3d-llm-teaching-mllms-to-imagine-3d-scenes-.md
+- 2026-10-01-leapquant-efficient-linear-attention-with-accurate.md
+- 2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md
+- 2026-10-01-thinking-before-thinking-scaling-agentic-inference.md
+- 2026-10-01-learning-meta-skills-for-agent-harness-design-in-t.md
+- 2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md
+- 2026-10-01-multi-agent-flow-matching-with-decoupled-generativ.md
+- 2026-10-01-impact-modeling-socially-interdependent-movement-i.md
+- 2026-10-01-do-llm-agents-execute-the-plans-they-declare-from-.md
+- 2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md
+- 2026-10-01-character-training-for-risk-averse-agents.md
+- 2026-10-01-breaking-the-uniformity-trap-scaling-video-diffusi.md
+- 2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md
+- 2026-10-01-probability-is-not-enough-exploring-and-counting-d.md
