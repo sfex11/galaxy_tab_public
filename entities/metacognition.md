@@ -36,3 +36,9 @@ _Wiki 축적 중_
 실행 런(run) 수준 메타인지를 제공한다 — 개별 행동이나 도구 호출이 아닌 실행 궤적 전체에 대한 통합·계획·판단이 일급 추론 대상이 되어, 메타인지의 대상이 행동에서 실행으로 확장된다.
 
 → [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-29)
+
+복잡도 메타인지가 디코딩 계층까지 내려온 사례다. '얼마나 계산할까'의 판단이 확산 생성의 확정 시점과 길이 결정으로 조작화되어, 메타인지 제어가 생성 프리미티브 수준에서 실현 가능함을 입증한다.
+
+→ [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

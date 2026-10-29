@@ -28,3 +28,9 @@ _Wiki 축적 중_
 HySTAR는 협력적 MARL의 크레딧 할당을 '구조적 타깃 드리프트'라는 새 병리로 정식화하고, 글로벌 가치 압축(과소분해)과 동적 그룹핑 재구성(비일관성) 사이의 제3 경로로 고정 하이퍼그래프 위상을 제시한다. MARL의 안정성 문제가 알고리즘 선택에서 크레딧 구조 설계로 이동하고 있음을 보여준다.
 
 → [[sources/2026-09-29-hystar-anchored-hypergraphs-for-stable-credit-assi.md|상세 보기]]
+
+### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
+
+MARL 실패 분석의 축을 크레딧 할당 안정성(HySTAR)에서 '정보 조건 정합성'으로 확장한다. 중앙 비평자 기반 훈련이 분산 실행 정책에 구조적 정보 의존성을 심는다는 병인 진단을 제공하여, CTDE를 암묵적 가정이 아닌 검증 대상 설계 선택으로 격상시킨다.
+
+→ [[sources/2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

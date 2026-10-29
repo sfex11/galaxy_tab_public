@@ -24,3 +24,9 @@ PDE 서러게이트에서 도출된 동일 조건 비교 원리의 인간 피험
 동일 조건 비교 원리의 보고 측정 버전을 제공한다. 실패 관찰과 증거 요구를 모든 태스크에서 동일하게 고정하여 조건 변이 효과를 배제하고 보고 행동의 순수 기여도만을 분리한다.
 
 → [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]
+
+### Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions (2026-10-29)
+
+기억 선택 평가로의 확장 사례다. 소유권 분리는 희귀성-관련성 혼재를 설계 수준에서 끊어내는 동일 조건 비교의 진단적 버전이며, 혼재가 존재하는 한 자연 데이터 평가는 휴리스틱 실패를 식별할 수 없음을 보여준다.
+
+→ [[sources/2026-10-29-rare-relevant-and-still-wrong-how-memory-fails-llm.md|상세 보기]]

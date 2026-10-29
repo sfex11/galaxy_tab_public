@@ -92,3 +92,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 적응의 트리거·근거로 '수정된 비용 예측치'라는 새 변수를 추가한다. 예측이 실행 중 갱신되는 구조는 적응이 외부 환경·내부 상태에 이어 비용 궤적에도 반응함을 시사한다.
 
 → [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-29)
+
+확산 언어 모델에서 '토큰 확정 시점'과 '생성 길이'를 응답 요구와 환경 상호작용에 맞춰 적응적으로 결정하는 메타인지 컨트롤러를 제시한다. 자회귀 추측 길이(γ) 선택이 아닌 확산 쪽 적응 축으로, 적응의 적용 대상이 병렬 생성 패러다임까지 확장되었음을 보여준다.
+
+→ [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

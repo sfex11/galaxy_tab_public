@@ -34,3 +34,9 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 환경 공급 확장의 실용적 해법을 제공한다. 이슈·커밋 의존으로 제한되던 태스크 범위를 소스 코드 기능으로 넓혀, 환경 부재가 코드 부재가 아니라 추출 전략의 문제임을 시사한다.
+
+### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-29)
+
+병목의 제3 형태를 제공한다. 환경이 존재하고 도전성도 충분해도 환경 실행·검증 비용이 롤아웃 예산을 압도하면 학습 루프는 '환경 부재'나 '신호 피로'가 아니라 '환경 실행 병목'에 의해 차단됨을 보여준다.
+
+→ [[sources/2026-10-29-envsched-environment-aware-scheduling-for-rollout-.md|상세 보기]]

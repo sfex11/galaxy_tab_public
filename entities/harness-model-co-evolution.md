@@ -24,3 +24,9 @@ _Wiki 축적 중_
 공진화 스펙트럼의 분리 극점을 추가한다. 기존 논의가 하네스와 모델 정책을 결합 최적화했다면, 본 논문은 솔버를 동결하고 프로포저가 하네스만 적응시키는 분리 최적화 전략을 제시하여, 공진화가 언제 하네스 축으로 분해 가능한지를 묻는 새로운 설계 기준을 만든다.
 
 → [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]
+
+### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
+
+하네스 한계에서 비롯된 실패를 학습 대상에서 제외하는 근거를 제공한다. 하네스 결함을 프롬프트 최적화로 '수정'하려는 시도는 원인 오귀인이며, 공진화 설계에서 하네스-모델 경계의 원인 분리가 선행되어야 함을 보여준다.
+
+→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

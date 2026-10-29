@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 ### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
+
+### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
+
+→ [[sources/2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

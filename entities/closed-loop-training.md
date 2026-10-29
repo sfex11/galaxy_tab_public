@@ -44,3 +44,9 @@ LLM 생성 환경이 RL 훈련 루프의 환경 공급 경로를 온디맨드로
 폐루프의 신호를 환경 피드백이 아닌 에이전트 자신의 설명으로 대체하는 경량화 변형을 제공한다. 수행→관찰→설명→훈련의 최소 온라인 절차로 루프가 닫힘을 실증하여, 폐루프 훈련의 최소 구성 요건을 정의한다.
 
 → [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]
+
+### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-29)
+
+폐루프의 환경 공급 경로(궤적 재활용, 능력 대응 갱신)에 '환경 실행 예산 관리'라는 제3 요소를 추가한다. 루프가 닫히려면 환경의 갱신뿐 아니라 갱신된 환경을 어떤 순서로 소비할지도 관리되어야 함을 시사한다.
+
+→ [[sources/2026-10-29-envsched-environment-aware-scheduling-for-rollout-.md|상세 보기]]

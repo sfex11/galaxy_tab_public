@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Mind2Dialogue: Training Human-Aware Language Models by Simulating User (2026-09-16)
 
 합성 데이터의 인과적 원천성 논의를 '지식 재구성'에서 '사용자 정신 상태 재구성'으로 확장한다. 관찰 불가능한 변수의 시뮬레이션도 합성 재구성의 한 형태이며, 배치 크기 의존성 논의와 유사하게 옵티마이저 동역학과의 결합 조건이 남는 미해결 질문이 된다.
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-29)
+
+합성 데이터에서 구성 통제가 양적 확대보다 중요함을 도구 사용 에이전트 도메인에서 실증한다 — 합성 파이프라인이 단순한 생성기가 아니라 다양성의 제어판으로 기능할 수 있으며, 데이터 합성의 설계 공간에 '구성 축의 명시적 노출'이라는 새 차원을 추가한다.
+
+→ [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

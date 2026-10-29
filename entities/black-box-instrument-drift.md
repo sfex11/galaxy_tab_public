@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Optimal Sequential Annotations for Off-Policy Evaluation (2026-09-24)
 
 드리프트하는 측정기를 폐기하는 대안으로, 알 수 없는 편향의 측정기를 소량의 정답과 결합해 통계적으로 사용하는 경로를 제공한다. 측정기 결함이 측정 불가능성이 아니라 보정 비용의 문제로 환원될 수 있음을 시사한다.
+
+### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
+
+기기 드리프트(잡음 judge)가 산출하는 오류 판정을 학습에 투입하면 자기 개선 시스템 전체가 드리프트를 학습한다는 훈련 측 피해 경로를 추가한다. 측정 신뢰성 문제가 평가 왜곡을 넘어 정책 퇴행으로 발현됨을 보여준다.
+
+→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

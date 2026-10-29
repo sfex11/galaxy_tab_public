@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-26)
 
 희소 보상 체제의 실패를 신호 희소성 자체가 아니라 '편향 증폭' 구조로 재진단한다 — 희소 보상 하에서 탐색 편향과 누적 편향이 결합하면 희귀 보상 도달 확률이 구조적으로 차단되며, 병목이 보상 설계가 아닌 추론 공간 위상에 있음을 시사한다.
+
+### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-29)
+
+무엇을 조사할지 알려주지 않는 설정은 보상·가이던스 신호 부재의 극단 형태로, 희소 보상 환경의 자율 탐색 논의([[sage-topological-diagnosis]] 등)에 과학 발견 도메인의 정량적 측정 도구를 제공한다. 신호 부재가 탐색 실패의 병리가 아니라 발견 능력의 시험 조건이 될 수 있음을 보여준다.
+
+→ [[sources/2026-10-29-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]

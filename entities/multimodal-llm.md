@@ -20,3 +20,9 @@ LLM이 색상 접지의 의미론적 앵커로 재활용됨을 보여준다. 멀
 MLLM 배포의 인프라 계층 과제(3위상 서빙 분리)를 제시한다. 모델 능력 논의를 넘어 멀티모달 LLM의 실용성이 서빙 스택 구조 혁신에 의존함을 보여준다.
 
 → [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]
+
+### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
+
+MLLM 비디오 이해의 추론 축에 '잠재 공간 추론'이라는 새 경로를 추가한다. 시각 이해 → 텍스트 CoT → 잠재 추론으로 이어지는 진화 선상을 형성하며, 모달리티 이질성이 표현 계층 설계로 수렴하는 흐름에 합류한다.
+
+→ [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

@@ -30,3 +30,9 @@ Cola DLM은 확산 언어 모델이 아키텍처 간 지식 전이의 대상(TID
 ### Flash-dLLM: IO-Aware KV Caching and Parallel Decoding for Fast, Memory (2026-09-24)
 
 dLLM 연구의 축이 생성 품질 경쟁력(Cola DLM)과 AR 분포 재사용(이산 확산)을 거쳐 '배포 가능한 추론 인프라'로 확장됨을 보여준다. 패러다임 채택의 병목이 알고리즘 우위가 아니라 KV 캐싱·병렬 디코딩의 인프라 결손에 있음을 진단하며, 효율 배포가 패러다임 경쟁의 실질 판정 기준임을 시사한다.
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-29)
+
+확산 LM의 적용 범위를 텍스트 생성 효율에서 에이전트 추론으로 확장한다. Cola DLM(잠재 공간 비순차 생성), 이산 확산 샘플러(AR 분포 유지)에 이어 '확산 에이전트'라는 제3 위상을 추가하며, 병렬 생성이 에이전트 루프와 결합 가능함을 실증한다.
+
+→ [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

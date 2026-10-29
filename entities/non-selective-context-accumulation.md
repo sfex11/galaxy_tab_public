@@ -20,3 +20,9 @@ CliffCompaction 계열의 비선택적 축적 문제에 '세계 모델이 무엇
 소설 길이 생성에서 컨텍스트를 원문 그대로 축적하면 일관성이 붕괴하므로, 추적된 서사 상태가 선택적 구조 요약이라는 대안을 제시한다. CliffCompaction 계열의 압축 문제가 창작 도메인에서 '무엇을 상태로 승격할 것인가'의 문제로 재현됨을 보여준다.
 
 → [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]
+
+### Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions (2026-10-29)
+
+선택적 관리의 필요성 진단을 강화한다 — 무차별 축적뿐 아니라 잘못된 선택 기준(희귀성·관련성)도 결정 실패를 유발하므로, 선택 기준 자체의 타당성 검증이 별도의 과제가 됨을 보여준다.
+
+→ [[sources/2026-10-29-rare-relevant-and-still-wrong-how-memory-fails-llm.md|상세 보기]]

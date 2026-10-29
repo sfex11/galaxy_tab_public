@@ -36,3 +36,9 @@ _Wiki 축적 중_
 공유 파라미터 모델에서 교정 학습이 교정 타겟과 유용 조언의 정렬 조건에 따라 학습을 제한할 수 있음을 증명하여, 파라미터 분리가 품질-비용 목표 분리뿐 아니라 다중 학습 신호의 공존 조건이기도 함을 확장한다.
 
 → [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]
+
+### MuonGS: Pretraining LLMs with Relaxed Weight-Norm Control (2026-10-29)
+
+표면 파라미터(가중치 노름)와 실제 제어 변수(유효 학습률 $η/\|W\|_F$)의 분리를 사전학습 옵티마이저 도메인에서 입증한다. LOCUS가 사후학습에서 업데이트 부공간과 길이 제어를 분리했다면, 본 논문은 사전학습에서 노름 자체가 아닌 노름 대비 학습률 비율이 실제 업데이트 강도의 본체임을 보여, 파라미터화-행동 분리가 훈련 전 과정에 걸쳐 확장됨을 확인한다.
+
+→ [[sources/2026-10-29-muongs-pretraining-llms-with-relaxed-weight-norm-c.md|상세 보기]]

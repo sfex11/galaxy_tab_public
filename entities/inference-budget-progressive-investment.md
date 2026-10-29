@@ -26,3 +26,9 @@ _Wiki 축적 중_
 Controller가 대안 선택지 간 예산 배분을 수행하는 구현 사례를 제공한다. 예산 투입이 궤적 깊이 연장에서 제어 추론 하의 옵션 선택 문제로 재구성됨을 보여준다.
 
 → [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-29)
+
+예산 투입의 대상을 궤적 깊이에서 '응답 내 생성 범위'로 좁힌 구현 사례다. 환경 상호작용 상태가 생성 중단 판단의 입력이 되어, 예산 조절이 단일 응답 내부에서 환경 조건부로 이루어질 수 있음을 보여준다.
+
+→ [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

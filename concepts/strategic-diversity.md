@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
 
 → [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]
+
+### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
+
+→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

@@ -42,3 +42,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 번역 보고서 논제에 최초의 기계적 감사 증거를 제공한다 — iGSM에서 trace와 ground-truth 의존 사슬의 대조가 가능해진 조건에서 정답-무효 trace 쌍이 관찰됨으로써, '가독성이 계산 실재를 전달한다'는 가정이 가장 유리한 조건에서도 실패함을 입증한다.
 
 → [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]
+
+### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
+
+비디오 도메인 확장 사례다. 자연어 CoT가 번역된 보고서인 만큼 시각 증거는 번역에서 소실되어 visual forgetting이 발생하며, 잠재 추론은 이 번역 손실의 구조적 회피이자 동시에 CoT 감시 가능성과의 긴장원이 된다.
+
+→ [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

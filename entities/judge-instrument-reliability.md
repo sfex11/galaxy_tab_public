@@ -48,3 +48,9 @@ LLM 판정기의 신뢰성 문제를 회피하는 설계 대안으로 실행 근
 측정 기기로서의 judge에 '전문가 가이던스 기반 교정' 계층을 제공한다. 기기가 자체 판단 논리가 아닌 전문가 명시 표준으로 판독하도록 구속될 때 측정의 도메인 타당성이 확보됨을 보여준다.
 
 → [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]
+
+### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
+
+judge 신뢰성 문제의 피해 경로를 평가에서 훈련으로 확장한다. 잡음 judge가 내놓는 실패 판정을 학습에 투입하면 최적화가 잘못된 방향으로 수렴할 수 있어, 측정 기기 검증이 자기 개선 루프의 전제조건이 됨을 시사한다.
+
+→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

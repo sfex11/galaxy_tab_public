@@ -3769,3 +3769,16 @@
 - 2026-10-01-breaking-the-uniformity-trap-scaling-video-diffusi.md
 - 2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md
 - 2026-10-01-probability-is-not-enough-exploring-and-counting-d.md
+
+## [2026-10-29 08:24] llm-ingest | 11편 분석, 엔티티 1107개, 개념 2424개
+- 2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md
+- 2026-10-29-can-llms-uncover-hidden-physical-laws-through-free.md
+- 2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md
+- 2026-10-29-muongs-pretraining-llms-with-relaxed-weight-norm-c.md
+- 2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md
+- 2026-10-29-rare-relevant-and-still-wrong-how-memory-fails-llm.md
+- 2026-10-29-envsched-environment-aware-scheduling-for-rollout-.md
+- 2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md
+- 2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md
+- 2026-10-29-understanding-the-limits-of-latent-world-models.md
+- 2026-10-29-egothumb-a-vision-driven-supernumerary-robotic-thu.md

@@ -14,3 +14,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-agentic-federated-learning-the-future-of-distribut.md|Agentic Federated Learning: The Future of Distributed Traini]] (2026-04-08)
 
 - [[sources/2026-04-09-in-place-test-time-training.md|In-Place Test-Time Training]] (2026-04-09)
+
+### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
+
+→ [[sources/2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

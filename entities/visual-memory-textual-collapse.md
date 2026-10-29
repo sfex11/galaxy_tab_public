@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 붕괴의 구조적 해법을 제시한다 — 캡션화에 의한 텍스트 붕괴를 수용하되 프레임 온디맨드 회복 경로를 열어 붕괴 비용을 선택적으로 지불하는 설계로 전환한다. 시각 기억의 텍스트 붕괴가 제거 대상이 아니라 관리 대상임을 보여준다.
+
+### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
+
+VideoLVR은 붕괴가 메모리 저장뿐 아니라 추론 궤적 수준에서도 발생함을 보인다. 텍스트 좌표 참조라는 완화책이 재번역 병목을 유지하는 한계를 지적하며, 잠재 공간 추론이 붕괴를 추론 중에 원천적으로 회피하는 제2 경로(붕괴 관리 → 붕괴 회피)를 제시한다.
+
+→ [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

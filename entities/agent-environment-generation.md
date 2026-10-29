@@ -68,3 +68,15 @@ Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도�
 환경 생성이 고정 생성기의 일회성 산출이 아니라, Target 실행 피드백으로 생성기 자체가 개선되는 학습 루프임을 보여준다. 환경 생성기가 전문화된 학습 가능 에이전트로 격상된다.
 
 → [[sources/2026-10-01-learning-meta-skills-for-agent-harness-design-in-t.md|상세 보기]]
+
+### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-29)
+
+물리 법칙을 파라미터로 변형하는 세계 생성 방법을 제공한다. 무작위 변이가 아닌 특정 법칙의 체계적 변경을 통해 발견 능력을 격리 측정하는 환경 설계 패턴을 추가하며, 환경 생성이 훈련 자원뿐 아니라 능력 진단 기기로도 기능함을 보여준다.
+
+→ [[sources/2026-10-29-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-29)
+
+SynthAPI는 환경 생성을 '가능성'에서 '과학'으로 전환한다 — Gym-Anything의 소프트웨어→환경 변환이나 Terminal-Universe의 궤적→환경 재질화가 '무엇을 환경으로 만들 것인가'를 다뤘다면, 본 논문은 생성 구성 자체를 명시적 다양성 축(도구·태스크·데이터베이스)으로 제어 변수화하여, 환경 합성이 체계적 실험의 대상이 됨을 보여준다.
+
+→ [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

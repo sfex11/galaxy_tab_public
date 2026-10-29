@@ -58,3 +58,9 @@ _Wiki 축적 중_
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
 
 체화 에이전트의 프라이버시 경계가 센서 격리가 아니라 모든 파생 전송물의 반전 가능성으로 재정의되어야 함을 보여준다. 센서 데이터가 디바이스에 머물러도 정책 그래디언트라는 간접 채널을 통해 관찰-행동 궤적 전체가 외부로 유출될 수 있다.
+
+### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-29)
+
+기존 Wiki 논의가 자율 에이전트의 환경 조작에 집중했다면, 본 논문은 로봇이 인간 신체에 결합된 보조 계층으로 기능하는 새로운 위상을 추가한다. 장치의 자율성이 독립 목표 수행이 아닌 인간 과업 맥락의 추론에 있다는 점에서, 체화 AI에서 목표가 누구의 것인가라는 귀속 질문을 새로 제기한다.
+
+→ [[sources/2026-10-29-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]

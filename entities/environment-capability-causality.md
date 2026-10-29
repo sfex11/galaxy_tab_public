@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 환경 가용성이 능력 확장을 결정한다는 인과율의 과학 연구 도메인 실증이다. 과학 에이전트 능력의 병목이 모델 능력이 아니라 과학 코드의 환경 전환 가능성에 있음을 확정한다.
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-29)
+
+환경 가용성이 능력을 결정한다는 인과율에 구성 차원을 추가한다 — 환경의 존재 여부가 아니라 도구·태스크·데이터 축의 구체적 구성이 에이전트 능력의 상한을 규정함을 스케일링 법칙으로 형식화한다.
+
+→ [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]
