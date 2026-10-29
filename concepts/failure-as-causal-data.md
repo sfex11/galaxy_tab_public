@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
+
+→ [[sources/2026-10-30-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]
