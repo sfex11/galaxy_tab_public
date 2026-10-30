@@ -80,3 +80,9 @@ Gym-Anything의 범용 소프트웨어→환경 변환과 Nemobot Games의 도�
 SynthAPI는 환경 생성을 '가능성'에서 '과학'으로 전환한다 — Gym-Anything의 소프트웨어→환경 변환이나 Terminal-Universe의 궤적→환경 재질화가 '무엇을 환경으로 만들 것인가'를 다뤘다면, 본 논문은 생성 구성 자체를 명시적 다양성 축(도구·태스크·데이터베이스)으로 제어 변수화하여, 환경 합성이 체계적 실험의 대상이 됨을 보여준다.
 
 → [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
+
+환경 생성 계보(Gym-Anything의 범용 변환, Terminal-Universe의 궤적 재활용, CodeMidas의 코드 유래 환경)에 '구성의 체계적 제어' 단계를 추가한다. 환경을 만드는 것을 넘어 무엇을 어떤 비율로 만들지가 조작 변수가 되며, 환경 생성이 최적화 가능한 설계 공간임을 실증한다.
+
+→ [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

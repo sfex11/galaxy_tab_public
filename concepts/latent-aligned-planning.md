@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md|Continuous Actions from Discrete Minds: Latent-Aligned Plann]]
 
 ### PRIME: Perception Feedback with Situational Memory Embeddings in VLA M (2026-09-22)
+
+### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
+
+→ [[sources/2026-10-30-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]

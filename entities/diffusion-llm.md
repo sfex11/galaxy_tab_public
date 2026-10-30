@@ -36,3 +36,9 @@ dLLM 연구의 축이 생성 품질 경쟁력(Cola DLM)과 AR 분포 재사용(�
 확산 LM의 적용 범위를 텍스트 생성 효율에서 에이전트 추론으로 확장한다. Cola DLM(잠재 공간 비순차 생성), 이산 확산 샘플러(AR 분포 유지)에 이어 '확산 에이전트'라는 제3 위상을 추가하며, 병렬 생성이 에이전트 루프와 결합 가능함을 실증한다.
 
 → [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+확산 패러다임의 적용 범위를 텍스트 생성 효율에서 에이전트 상호작용 경제성으로 확장한다 — 병렬 생성의 확정 지연 가능성(finalization controllability)이 에이전트 추론 비용 절감의 구조적 원천임을 실증한다.
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

@@ -36,3 +36,9 @@ bounded context 하 압축이 test-time scaling의 효율 지평을 확장함을
 태스크 컴퓨트(Worker)와 제어 컴퓨트(Controller)의 분리를 통한 에이전틱 추론 스케일링 축을 제공한다. 스케일링이 단일 궤적의 깊이 연장이 아니라 제어 추론의 구조화로도 달성됨을 보여준다.
 
 → [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+테스트타임 스케일링의 효율 축을 확장한다 — '더 많이 생각하는 것'과 대칭되는 '덜 생성하는 것'이 학습 가능한 능력임을 확산 에이전트에서 실증한다.
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

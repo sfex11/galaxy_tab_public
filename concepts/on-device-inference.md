@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
+
+### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
+
+→ [[sources/2026-10-30-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]

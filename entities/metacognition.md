@@ -42,3 +42,9 @@ _Wiki 축적 중_
 복잡도 메타인지가 디코딩 계층까지 내려온 사례다. '얼마나 계산할까'의 판단이 확산 생성의 확정 시점과 길이 결정으로 조작화되어, 메타인지 제어가 생성 프리미티브 수준에서 실현 가능함을 입증한다.
 
 → [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+메타 판단의 입도를 행동 전이에서 토큰 최종화로 축소한다 — 궤적 수준의 '계속/정지' 판단이 토큰 수준의 '확정/추가 수정' 판단으로 세분화되며, 메타인지 제어의 해상도가 연산 단위까지 도달함을 보여준다.
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

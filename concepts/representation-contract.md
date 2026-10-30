@@ -21,3 +21,7 @@ _자동 Wiki Query에서 추출됨_
 ### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
 
 ### Paint-Anything: Unified Any-Color Control for Image Generation and Edi (2026-09-21)
+
+### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-30)
+
+→ [[sources/2026-10-30-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

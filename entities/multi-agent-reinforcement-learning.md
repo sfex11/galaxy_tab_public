@@ -34,3 +34,9 @@ HySTAR는 협력적 MARL의 크레딧 할당을 '구조적 타깃 드리프트'�
 MARL 실패 분석의 축을 크레딧 할당 안정성(HySTAR)에서 '정보 조건 정합성'으로 확장한다. 중앙 비평자 기반 훈련이 분산 실행 정책에 구조적 정보 의존성을 심는다는 병인 진단을 제공하여, CTDE를 암묵적 가정이 아닌 검증 대상 설계 선택으로 격상시킨다.
 
 → [[sources/2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]
+
+### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
+
+CTDE 패러다임의 정보 간극이라는 근본 한계를 정식화하고, 중앙-분산 비평자 하이브리드라는 설계 축을 MARL의 표준 문제 목록에 추가한다.
+
+→ [[sources/2026-10-30-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

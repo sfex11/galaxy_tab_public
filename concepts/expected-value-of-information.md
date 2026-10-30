@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
+
+### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
+
+→ [[sources/2026-10-30-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]

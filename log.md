@@ -3782,3 +3782,16 @@
 - 2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md
 - 2026-10-29-understanding-the-limits-of-latent-world-models.md
 - 2026-10-29-egothumb-a-vision-driven-supernumerary-robotic-thu.md
+
+## [2026-10-30 06:32] llm-ingest | 11편 분석, 엔티티 1132개, 개념 2441개
+- 2026-10-30-gepa-curator-curated-learning-for-self-improving-a.md
+- 2026-10-30-can-llms-uncover-hidden-physical-laws-through-free.md
+- 2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md
+- 2026-10-30-muongs-pretraining-llms-with-relaxed-weight-norm-c.md
+- 2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md
+- 2026-10-30-rare-relevant-and-still-wrong-how-memory-fails-llm.md
+- 2026-10-30-envsched-environment-aware-scheduling-for-rollout-.md
+- 2026-10-30-videolvr-latent-visual-reasoning-over-grounded-vid.md
+- 2026-10-30-tandem-balancing-centralized-and-decentralized-cri.md
+- 2026-10-30-understanding-the-limits-of-latent-world-models.md
+- 2026-10-30-egothumb-a-vision-driven-supernumerary-robotic-thu.md

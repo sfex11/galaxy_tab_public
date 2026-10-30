@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|Scaling Laws for Tool-Use Agents via Controllable Environmen]]
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
+
+→ [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

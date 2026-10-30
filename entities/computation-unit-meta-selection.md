@@ -24,3 +24,9 @@ _Wiki 축적 중_
 SLM vs LLM 연산 단위 선택에 '검증 가능성 × 데이터 민감도'라는 원리적 판정 기준을 부여한다. 기존 논의가 비용·능력 축으로 선택을 다뤘다면, 프라이버시가 결정 변수가 되는 조건을 최초로 규정한다.
 
 → [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+연산 단위 선택의 대상을 SLM/LLM 라우팅에서 토큰별 최종화로 확장한다 — '무엇을 실행할까'의 계층 선택이 '각 토큰에 얼마나 연산을 쓸까'의 입도 선택으로 미세화된다.
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

@@ -18,3 +18,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Measuring the Serving Stack Instead of the Model: Hidden Confounds in  (2026-09-24)
+
+### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-30)
+
+→ [[sources/2026-10-30-envsched-environment-aware-scheduling-for-rollout-.md|상세 보기]]

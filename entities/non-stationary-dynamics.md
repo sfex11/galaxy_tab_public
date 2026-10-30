@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### TM-APR: Thermal Temporal-Memory Localization via Analytic Online Adapt (2026-09-24)
 
 열화상 환경의 비정상성(조명·계절에 따른 열 특성 변화)이 관측 표현 자체를 변형하여 매핑된 환경과의 대응을 깨뜨리는 지각 도메인 사례를 제공한다. 기존 논의(화재 경계 추적 등)에서 환경 변화가 학습 목표를 재정의했다면, 본 논문은 인식의 근거 자체를 무너뜨리는 유형을 추가한다.
+
+### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
+
+개방성이라는 새 형태를 추가한다 — 환경 동역학이 아니라 참여 주체 집합 자체가 실행 중 변화할 때 학습된 정책의 정보 가정이 근본에서 무효화되는 극단적 비정상성.
+
+→ [[sources/2026-10-30-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Revisiting Non-Verbatim Memorization in Large Language Models: The Rol (2026-04-25)
 
 ### Knowledge Acquisition During Pre-training? Large Language Models Learn (2026-09-07)
+
+### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
+
+→ [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

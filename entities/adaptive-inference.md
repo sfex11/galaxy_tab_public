@@ -98,3 +98,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 확산 언어 모델에서 '토큰 확정 시점'과 '생성 길이'를 응답 요구와 환경 상호작용에 맞춰 적응적으로 결정하는 메타인지 컨트롤러를 제시한다. 자회귀 추측 길이(γ) 선택이 아닌 확산 쪽 적응 축으로, 적응의 적용 대상이 병렬 생성 패러다임까지 확장되었음을 보여준다.
 
 → [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+적응의 제3세대 실현 사례를 제공한다 — 제2세대(γ 선택)까지가 원시 연산 위의 자원 배분이었다면 본 논문은 토큰 확정 연산 자체를 적응 대상으로 삼아, 연산 배치와 텍스트 양이라는 이전까지 분리된 축을 단일 제어기의 공동 최적화로 통합한다.
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

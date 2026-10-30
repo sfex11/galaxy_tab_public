@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-29-muongs-pretraining-llms-with-relaxed-weight-norm-c.md|MuonGS: Pretraining LLMs with Relaxed Weight-Norm Control]]
+
+### MuonGS: Pretraining LLMs with Relaxed Weight-Norm Control (2026-10-30)
+
+→ [[sources/2026-10-30-muongs-pretraining-llms-with-relaxed-weight-norm-c.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-29-rare-relevant-and-still-wrong-how-memory-fails-llm.md|Rare, Relevant, and Still Wrong: How Memory Fails LLM Group ]]
+
+### Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions (2026-10-30)
+
+→ [[sources/2026-10-30-rare-relevant-and-still-wrong-how-memory-fails-llm.md|상세 보기]]

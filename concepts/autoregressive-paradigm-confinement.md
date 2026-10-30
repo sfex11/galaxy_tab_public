@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### ShallowStream: Index Shallow then Answer Deep for Streaming Video Unde (2026-09-04)
+
+### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
+
+→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

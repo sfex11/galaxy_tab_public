@@ -64,3 +64,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Measuring LLM Sycophancy under Sustained Multi-Turn Pressure (2026-09-10)
 
 평가 형식 자체가 실패 모드의 관찰 가능성을 결정한다는 명제의 sycophancy 도메인 실증을 제공한다 — 짧은 사전 지정 대화는 지속적 압력에서만 발현하는 붕괴를 구조적으로 놓친다는 반증 사례다.
+
+### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-30)
+
+기존 벤치마크가 질문을 사전에 고정한 것 자체가 평가자 가정의 산물임을 드러낸다 — 질문 형성을 평가에 포함함으로써 '사전 정의된 문제 공간' 가정을 근본적으로 완화한다.
+
+→ [[sources/2026-10-30-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]

@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Understanding the limits of latent world models (2026-10-30)
+
+→ [[sources/2026-10-30-understanding-the-limits-of-latent-world-models.md|상세 보기]]

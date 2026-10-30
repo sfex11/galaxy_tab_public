@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-30)
+
+→ [[sources/2026-10-30-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]
