@@ -30,3 +30,9 @@ PDE 서러게이트에서 도출된 동일 조건 비교 원리의 인간 피험
 기억 선택 평가로의 확장 사례다. 소유권 분리는 희귀성-관련성 혼재를 설계 수준에서 끊어내는 동일 조건 비교의 진단적 버전이며, 혼재가 존재하는 한 자연 데이터 평가는 휴리스틱 실패를 식별할 수 없음을 보여준다.
 
 → [[sources/2026-10-29-rare-relevant-and-still-wrong-how-memory-fails-llm.md|상세 보기]]
+
+### Elucidating the Design Space of LM Data Attribution (2026-10-31)
+
+귀속 평가 도메인으로의 확장 사례다. PDE 서러게이트에서 분포 이동 성분을 분해해 사전학습 이득을 격리했던 것과 동일하게, 데이터셋 속성을 단일 변수씩 변이시켜 귀속 실패의 인과적 원인을 격리하는 설계 원리를 공유한다.
+
+→ [[sources/2026-10-31-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]

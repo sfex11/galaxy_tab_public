@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 증거 기반 추론의 적용 축을 진단(관찰→원인 귀속)에서 설계(누적 증거→차기 실험 설계)로 확장한다. 구조화된 실험 증거가 LLM의 사전지식과 결합할 때 통계적 획득 함수의 대안이 될 수 있음을 시사한다.
+
+### From extreme weather to agricultural consequences with agentic AI (2026-10-31)
+
+환경·농업 도메인으로 진단 계보를 확장한다 — 텔레콤 RCA가 운영 데이터의 인과 귀인이었다면, WxCrop은 물리적으로 해석 가능한 기상 지수를 인과 분석으로 검증하여 위험을 판단함으로써, 진단의 근거가 도메인 해석 가능량에 접지되어야 한다는 원리의 예측 도메인 실현을 제공한다.
+
+→ [[sources/2026-10-31-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

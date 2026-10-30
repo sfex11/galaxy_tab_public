@@ -62,3 +62,9 @@ Avatar는 이 엔티티의 스코프를 '연구 질문→워크플로우의 의�
 autoresearch 계열이 구조화된 워크플로우 실행에 집중해온 것과 대비되어, 본 논문은 그 직전 단계인 비구조적 아이디어 생성을 에이전틱 최적화의 대상으로 삼아 과학 워크플로우 에이전트의 전주기 커버리지를 확장한다.
 
 → [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]
+
+### From extreme weather to agricultural consequences with agentic AI (2026-10-31)
+
+워크플로우 에이전트의 적용 범위를 연구 자동화에서 운영 의사결정 지원(작물 손실 예측)으로 확장한다. 기상 예보와 농업 기록이라는 이기종 원천을 단일 예측 파이프라인으로 통합하되, 산출물이 보고서가 아닌 위험·손실 수량이라는 점에서 워크플로우의 최종 산출 형태도 다양화됨을 보여준다.
+
+→ [[sources/2026-10-31-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]
