@@ -40,3 +40,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-openvlthinkerv2-a-generalist-multimodal-reasoning-.md|OpenVLThinkerV2: A Generalist Multimodal Reasoning Model for]] (2026-04-13)
 
 - [[sources/2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-13)
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

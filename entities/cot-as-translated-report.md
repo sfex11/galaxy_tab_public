@@ -48,3 +48,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 비디오 도메인 확장 사례다. 자연어 CoT가 번역된 보고서인 만큼 시각 증거는 번역에서 소실되어 visual forgetting이 발생하며, 잠재 추론은 이 번역 손실의 구조적 회피이자 동시에 CoT 감시 가능성과의 긴장원이 된다.
 
 → [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]
+
+### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
+
+번역된 보고서 감시의 불충분성을 안전 정렬로 확장한다 — 응답 서사의 표면 감독이 안전을 보장하지 않으며, 모델에 명시적 안전 결정을 학습시켜야 한다는 처방을 제공한다.
+
+→ [[sources/2026-10-31-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

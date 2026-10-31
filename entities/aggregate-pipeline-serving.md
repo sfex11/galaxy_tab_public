@@ -42,3 +42,9 @@ Pythia는 파이프라인 서빙 최적화가 가능한 근본 원인을 제공�
 파이프라인 구조가 서빙 성능을 결정하는 제2 차원(위상 이질성)을 제공한다. 스키마 축적이 단계 간 인터페이스 병목이었다면 본 논문은 위상 간 연산 특성 차이가 병목임을 보여 파이프라인 서빙 논의를 보완한다.
 
 → [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+길이 예측 기반 스케줄링(배치·캐시 할당)의 타당성 조건을 공급한다 — 예측기가 학습된 구성과 운용 구성이 일치할 때만 스케줄링 결정이 유효하며, 구성 불일치는 스케줄링 오류의 은폐된 원천이 된다.
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

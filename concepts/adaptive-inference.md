@@ -22,3 +22,7 @@ _Wiki 축적 중_
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
 
 → [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

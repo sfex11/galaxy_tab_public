@@ -24,3 +24,9 @@ _Wiki 축적 중_
 도구 사용 에이전트의 능력이 모델 스케일뿐 아니라 훈련 환경의 도구·태스크·데이터 구성에 체계적으로 의존함을 실증한다 — 도구 사용 능력의 데이터 의존성 논의를 환경 구성 차원으로 정교화한다.
 
 → [[sources/2026-10-29-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]
+
+### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-10-31)
+
+도구 사용의 물리 도메인 실현을 제공한다. 소프트웨어 도구 호출과 대응되는 물리 원시 연산이 하드웨어 어댑터 교체이며, 도구 선택이 에이전트의 스킬 라우팅과 동형인 조합 판단임을 보여준다.
+
+→ [[sources/2026-10-31-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]

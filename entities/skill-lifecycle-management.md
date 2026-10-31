@@ -20,3 +20,9 @@ Designer-RSI의 '사용자 트래픽 → 절차적 메모리' 진화와 대응�
 스킬 추가 단계에 '쓰기 권한 심사'라는 새 검증 항목을 부여한다 — 스킬 라이프사이클 관리가 콘텐츠 품질을 넘어 파라미터 공간 내 위치(다른 스킬의 의존 경로와의 교차 여부)까지 다뤄야 함을 보여준다.
 
 → [[sources/2026-09-29-new-lora-skills-should-read-but-never-write.md|상세 보기]]
+
+### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
+
+스킬의 생성→큐레이션→검색→조합→실행 라이프사이클 중 큐레이션·검색·조합 단계의 임상 도메인 구현을 제공한다. 가이드라인 변화에 따른 스킬 갱신이 라이프사이클의 상시 요구사항임을 드러낸다.
+
+→ [[sources/2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

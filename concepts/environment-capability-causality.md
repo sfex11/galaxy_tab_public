@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

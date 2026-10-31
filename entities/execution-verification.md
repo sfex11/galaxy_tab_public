@@ -42,3 +42,9 @@ _Wiki 축적 중_
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-26)
 
 로봇 실행 검증이 액션 프리미티브 위의 반복 정제 루프로 실현됨을 보여준다. 검증이 정적 분석이 아닌 실행 가능 명세 기반의 동적 확인임을 물리 도메인에서 강화한다.
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
+
+검증의 관측 모델을 확장한다 — 정적 스냅샷 검사나 프로그램적 상태 접근에 머물던 실행 검증이, 검증기가 환경을 직접 탐색해 증거를 수집하는 능동적 검증으로 이동함을 실증한다.
+
+→ [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

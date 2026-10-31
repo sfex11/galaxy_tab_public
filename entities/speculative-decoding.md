@@ -60,3 +60,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
 
 동적 트리 구축(EAGLE-3식 top-K 확장·전역 프루닝)이 탐욕 디코딩에서는 최적이지만 T>0에서는 드래프트 분포를 원핫으로 붕괴시켜 수용률이 급락하는 실패 모드를 체계화한다. 추측 디코딩 가속이 샘플링 체제에 구조적으로 조건부임을 규명한다.
+
+### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-10-31)
+
+수용률과 지연을 변화시키지 않는 워터마크 결합이 가능함을 실증하여, 가속 기법이 출력 계층 증명 메커니즘과 공존할 수 있는 호환성 설계 공간을 제시한다. 효율-증명 긴장이 구조적으로 필연적이지 않음을 입증한다.
+
+→ [[sources/2026-10-31-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

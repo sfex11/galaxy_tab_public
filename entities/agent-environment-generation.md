@@ -86,3 +86,9 @@ SynthAPI는 환경 생성을 '가능성'에서 '과학'으로 전환한다 — G
 환경 생성 계보(Gym-Anything의 범용 변환, Terminal-Universe의 궤적 재활용, CodeMidas의 코드 유래 환경)에 '구성의 체계적 제어' 단계를 추가한다. 환경을 만드는 것을 넘어 무엇을 어떤 비율로 만들지가 조작 변수가 되며, 환경 생성이 최적화 가능한 설계 공간임을 실증한다.
 
 → [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+Gym-Anything 계열의 물리 시뮬레이션 확장을 제공한다. 원래 Gym-Anything이 소프트웨어를 환경으로 변환했다면 본 논문은 코딩 에이전트가 시뮬레이션 코드를 생성하여 로보틱스 도메인의 환경 공급 병목을 해소함을 보여, 환경 생성 원리가 디지털 환경을 넘어 물리 시뮬레이션에까지 확장됨을 입증한다.
+
+→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

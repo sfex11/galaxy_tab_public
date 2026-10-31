@@ -48,3 +48,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 기능(개체 복사)을 계층 단위로 분해하는 체계적 매핑 사례를 제공한다. 해석가능성 연구가 SAE 특징·회로 수준을 넘어 '기능별 계층 전문화'를 조작적으로 특정할 수 있음을 보여주며, 단일 기능의 층 수준 소재 규명이 표준 방법론이 될 수 있음을 시사한다.
 
 → [[sources/2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md|상세 보기]]
+
+### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
+
+선형 프로브의 응용 범위를 안전 감시 영역으로 확장한다 — 정렬 위반 직전의 내부 상태가 선형 판독 가능하다는 발견은 해석가능성 도구가 행동 예측에 실용적으로 기능할 수 있음을 보여준다.
+
+→ [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

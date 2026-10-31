@@ -28,3 +28,9 @@ _Wiki 축적 중_
 무엇을 조사할지 알려주지 않는 설정은 보상·가이던스 신호 부재의 극단 형태로, 희소 보상 환경의 자율 탐색 논의([[sage-topological-diagnosis]] 등)에 과학 발견 도메인의 정량적 측정 도구를 제공한다. 신호 부재가 탐색 실패의 병리가 아니라 발견 능력의 시험 조건이 될 수 있음을 보여준다.
 
 → [[sources/2026-10-29-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
+
+단일 스칼라 보상을 밀집 감독으로 완화하는 OPD 동기에서, 밀집 감독 자체의 배분이 균일하지 않고 토큰 입도에서 적응적으로 조절되어야 함을 보여 희소 보상 완화의 정밀화 축을 추가한다.
+
+→ [[sources/2026-10-31-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

@@ -20,3 +20,7 @@ _Wiki 축적 중_
 ### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
 
 → [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

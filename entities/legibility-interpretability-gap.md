@@ -36,3 +36,9 @@ _Wiki 축적 중_
 간극의 가장 강한 형태를 실측한다 — 판독 가능하며 심지어 정답과 결합된 trace조차 기계 검증에서 무효로 판정되어, legibility가 검증을 대체할 수 없다는 명제에 인과적 근거를 부여한다.
 
 → [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]
+
+### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
+
+가독성-해석가능성 간극의 안전 도메인 버전을 제공한다 — 거부 서사가 읽기 쉽다고 안전 행동의 근거가 되지 않으며, 안전 결정의 학습 가능한 대상화가 별도로 요구됨을 실증한다.
+
+→ [[sources/2026-10-31-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

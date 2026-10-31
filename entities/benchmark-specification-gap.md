@@ -76,3 +76,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 명세 간극의 새 하위 구조를 제공한다 — 여러 데이터셋 속성의 동시 변이가 원인 진단을 구조적으로 불가능하게 하는 '교란 변수 미통제' 문제. 벤치마크 품질의 조건에 변수 통제 가능성을 추가하는 근거가 된다.
 
 → [[sources/2026-10-31-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+예측 평가 버전의 명세 간극을 제공한다 — 정확도 수치가 타겟 모델·데이터셋·샘플링 구성에 조건부임을 벤치마크가 명세하지 않아 예측기 품질과 태스크 난이도가 혼동되며, 조건부 유효 범위의 명시가 예측 평가의 전제조건임을 규정한다.
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

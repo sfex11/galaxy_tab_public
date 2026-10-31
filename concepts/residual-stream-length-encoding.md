@@ -12,3 +12,7 @@ LLM이 잔류 스트림에 자신의 잔여 출력 길이를 선형적으로 인
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

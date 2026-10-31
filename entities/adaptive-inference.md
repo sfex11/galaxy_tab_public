@@ -104,3 +104,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 적응의 제3세대 실현 사례를 제공한다 — 제2세대(γ 선택)까지가 원시 연산 위의 자원 배분이었다면 본 논문은 토큰 확정 연산 자체를 적응 대상으로 삼아, 연산 배치와 텍스트 양이라는 이전까지 분리된 축을 단일 제어기의 공동 최적화로 통합한다.
 
 → [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+적응 판단의 입력 조건을 명시한다 — 감마 선택 등 적응 결정이 의존하는 길이 추정치 자체가 엔트로피 바닥을 가지므로, 적응 정책은 예측 불확실성 하에서 견고하게 설계되어야 함을 보여준다.
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

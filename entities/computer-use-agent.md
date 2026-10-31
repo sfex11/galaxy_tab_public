@@ -66,3 +66,9 @@ Affora는 이 엔티티의 문제 공간을 '인간용 UI를 읽어내는 에이
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 모바일 GUI 도메인에서 매 단계 VLM 의존의 지연·비용 문제를 진단하고 저빈도 계획-고빈도 실행 대안을 제시하여, 컴퓨터 사용 에이전트의 실용화 병목이 능력이 아닌 아키텍처에 있을 수 있음을 시사한다.
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
+
+CUA 확장의 병목이 실행 능력이 아니라 검증 계층임을 규명한다. 실행 환경(CUA-Universe 계열)과 검증(VeriCUA)이 분리 공급되며, CUA 인프라가 환경-검증 양축으로 구조화됨을 보여준다.
+
+→ [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

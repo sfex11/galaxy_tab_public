@@ -17,3 +17,7 @@ _자동 Wiki Query에서 추출됨_
 ### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-29)
 
 → [[sources/2026-10-29-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
+
+→ [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

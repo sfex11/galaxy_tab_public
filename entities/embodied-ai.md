@@ -64,3 +64,15 @@ _Wiki 축적 중_
 기존 Wiki 논의가 자율 에이전트의 환경 조작에 집중했다면, 본 논문은 로봇이 인간 신체에 결합된 보조 계층으로 기능하는 새로운 위상을 추가한다. 장치의 자율성이 독립 목표 수행이 아닌 인간 과업 맥락의 추론에 있다는 점에서, 체화 AI에서 목표가 누구의 것인가라는 귀속 질문을 새로 제기한다.
 
 → [[sources/2026-10-29-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+체화 AI 훈련의 근본 병목을 시뮬레이션 커버리지 협소성으로 규정하고 디지털 에이전트가 물리 시뮬레이션을 생성하는 부트스트랩 구조로 해결 경로를 제시한다. embodied-ai 연구의 병목이 모델 능력에서 환경 인프라로 이동하고 있음을 시사한다.
+
+→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
+
+### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-10-31)
+
+접촉 밀집 조작에서 촉각이 시각을 보완하는 감각 구조를 실증한다. 단일 감각 중심의 체화 AI 논의에 다중 감각 통합이 물리 제약 만족의 전제조건임을 시사한다.
+
+→ [[sources/2026-10-31-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]

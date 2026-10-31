@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Agentic Detection of Online Conspiracies (2026-09-26)
 
 판독 타당성의 맥락 조건부성을 담화 도메인에서 확인한다 — 진술의 '올바름'(지지인가 우려인가)이 콘텐츠 자체가 아니라 사회적 맥락 상태에 조건부임을 실증한다.
+
+### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
+
+임상 가이드라인·데이터베이스의 지속 갱신은 스킬의 타당성을 시간 조건부로 만든다. '어떤 스킬이 여전히 유효한가'의 상시 재평가가 스킬 라이브러리 관리의 1급 과제임을 임상 도메인에서 구체화한다.
+
+→ [[sources/2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

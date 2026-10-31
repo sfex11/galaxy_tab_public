@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-21)
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
+
+→ [[sources/2026-10-31-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

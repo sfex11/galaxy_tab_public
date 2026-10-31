@@ -34,3 +34,9 @@ _Wiki 축적 중_
 과제 구조 조건을 부여한다. 능력이 지배하는 분리형 과제에서는 협력적 구조가 무의미하고, 집계가 지배하는 보상형 과제에서만 협력적 구성의 이득이 성립하므로, 능력-협력 역설의 성립 범위를 과제 택소노미로 한정한다.
 
 → [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]
+
+### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
+
+강한 능력의 악용 경로에 새 사례를 추가한다 — 추론 능력이 다른 에이전트를 설득·압박하는 도구로 전용될 수 있음을 보여주어, 능력 스케일링의 사회적 위험 차원을 강화한다.
+
+→ [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-05-05-speckv-adaptive-speculative-decoding-with-compress.md|SpecKV: Adaptive Speculative Decoding with Compression-Aware]]
 
 ### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-06)
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

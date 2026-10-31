@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-19)
 
 잔류 스트림 판독이 상태 진단에서 개입 스케줄링 신호로 기능하는 구조적 확장을 제공한다. Logit Lens의 수렴 시점이라는 시간적 특징(temporal feature)이 내부 상태 관측의 새 판독 차원임을 보여준다.
+
+### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
+
+판독 대상을 현재 상태에서 미래 행동으로 확장한다 — 활성화의 선형 판독이 에이전트가 규칙을 위반하기 직전의 상태를 예측할 수 있음을 다중 에이전트 압박 설정에서 실증하여, 잔류 스트림 모니터링이 진단 도구를 넘어 선제 개입의 근거가 됨을 보여준다.
+
+→ [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

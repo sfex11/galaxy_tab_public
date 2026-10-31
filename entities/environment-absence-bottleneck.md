@@ -40,3 +40,9 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 병목의 제3 형태를 제공한다. 환경이 존재하고 도전성도 충분해도 환경 실행·검증 비용이 롤아웃 예산을 압도하면 학습 루프는 '환경 부재'나 '신호 피로'가 아니라 '환경 실행 병목'에 의해 차단됨을 보여준다.
 
 → [[sources/2026-10-29-envsched-environment-aware-scheduling-for-rollout-.md|상세 보기]]
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+병목의 병인을 전문가 노력 의존성이라는 제작 비용 구조로 특정한다. 시뮬레이션 부재가 도구 결여가 아니라 제작 확장 불가능성의 문제임을 진단하고, 코딩 에이전트 기반 생성이라는 확장 가능한 공급 경로를 제시하여 병목 해소의 실현 경로를 구체화한다.
+
+→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

@@ -36,3 +36,9 @@ OPD 연구 계열에 '수명' 축을 추가한다 — 길이 부풀림 안정화
 OPD가 교사의 밀집 분포를 학생 가중치로 증류했다면, AdviSD는 증류의 방향을 역전시켜 동결 실행기의 상호작용 피드백을 소형 어드바이저로 증류한다. 증류가 '큰→작은 능력 이식'이 아니라 '실행 경험→조언 정책' 변환으로도 작동함을 보여준다.
 
 → [[sources/2026-10-01-advisd-learning-to-advise-frontier-llms-via-target.md|상세 보기]]
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
+
+OPSD의 교사 구성 축을 응답 수준에서 토큰 수준으로 세분화한다. 참조 노출이 학습 전체 고정 → 응답별 적응을 넘어 토큰별 적응에 도달함을 보여, 온폴리시 증류의 감독 입도 정교화 계층(전체/응답/토큰)을 확정한다.
+
+→ [[sources/2026-10-31-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

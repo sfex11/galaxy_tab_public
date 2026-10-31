@@ -12,3 +12,7 @@ RLHF 등 외부 피드백이 표면적 규준 준수만 달성하고 내부 편�
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
+
+→ [[sources/2026-10-31-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]
