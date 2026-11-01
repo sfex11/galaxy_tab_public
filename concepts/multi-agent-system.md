@@ -327,3 +327,5 @@ _자동 생성됨_
 - [[sources/2026-09-17-decomposition-buys-integrity-not-yield.md]]
 
 - [[sources/2026-09-23-emergent-collusion-in-long-horizon-llm-agent-inter.md]]
+
+- [[sources/2026-11-01-pre-crime-for-agents-at-the-last-second-probing-wh.md]]

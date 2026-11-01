@@ -365,3 +365,5 @@ _자동 생성됨_
 - [[sources/2026-09-20-retireopd-self-retiring-on-policy-distillation-for.md]]
 
 - [[sources/2026-09-20-score-centering-stabilizes-off-policy-reinforcemen.md]]
+
+- [[sources/2026-11-01-vericua-verification-as-agentic-exploration-for-co.md]]

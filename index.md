@@ -1896,3 +1896,19 @@
 - [[sources/2026-09-28-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md]] - Jev-Mobile: Jev as an Executor for Mobile GUI Agents
 - [[sources/2026-09-28-argus-role-aware-event-knowledge-graphs-for-us-emp.md]] - ARGUS: Role-Aware Event Knowledge Graphs for U.S. Employment-Discrimination Complaints
 - [[sources/2026-09-28-r-deim-net-an-efficient-rationale-augmented-dual-e.md]] - R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction Model for Paraphrase Detection
+- [[sources/2026-11-01-elucidating-the-design-space-of-lm-data-attributio.md]] - Elucidating the Design Space of LM Data Attribution
+- [[sources/2026-11-01-from-extreme-weather-to-agricultural-consequences-.md]] - From extreme weather to agricultural consequences with agentic AI
+- [[sources/2026-11-01-shallowdefend-harnessing-shallow-safety-alignment-.md]] - ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defender
+- [[sources/2026-11-01-textseal2-distortion-free-llm-watermarking-with-co.md]] - TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Memoryless Races
+- [[sources/2026-11-01-collaborative-ai-agents-for-autonomous-experimenta.md]] - Collaborative AI agents for autonomous experimental research with solid-state quantum spins
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-11-01-pre-crime-for-agents-at-the-last-second-probing-wh.md]] - Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-11-01-vericua-verification-as-agentic-exploration-for-co.md]] - VeriCUA: Verification as Agentic Exploration for Computer-Using Agents
+- [[sources/2026-11-01-gym-anything-for-robotics-scaling-physical-simulat.md]] - Gym-Anything for Robotics: Scaling physical simulations with digital agents
+- [[sources/2026-11-01-comparing-human-role-players-and-llm-simulated-cli.md]] - Comparing Human Role-Players and LLM-Simulated Clients in Online Counselling Training: An Analysis of Counselling Patterns
+- [[sources/2026-11-01-swapbot-tool-centric-robot-manipulation-via-interc.md]] - SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effectors and Tactile Sensing
+- [[sources/2026-11-01-advancing-clinical-genomic-analysis-with-a-skill-c.md]] - Advancing Clinical Genomic Analysis with a Skill-Centred Agent
+- [[sources/2026-11-01-every-token-needs-its-own-teacher-multi-teacher-ad.md]] - Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Self-distillation
+- [[sources/2026-11-01-on-the-fundamental-limits-of-prefill-based-decodin.md]] - On the Fundamental Limits of Prefill-Based Decoding Length Prediction

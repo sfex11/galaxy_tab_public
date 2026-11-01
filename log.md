@@ -3810,3 +3810,29 @@
 - 2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md
 - 2026-10-31-every-token-needs-its-own-teacher-multi-teacher-ad.md
 - 2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md
+
+## [2026-11-01 08:31] ingest | Elucidating the Design Space of LM Data Attribution
+
+## [2026-11-01 08:31] ingest | From extreme weather to agricultural consequences with agentic AI
+
+## [2026-11-01 08:31] ingest | ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defender
+
+## [2026-11-01 08:31] ingest | TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Memoryless Races
+
+## [2026-11-01 08:31] ingest | Collaborative AI agents for autonomous experimental research with solid-state quantum spins
+
+## [2026-11-01 08:31] ingest | Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In
+
+## [2026-11-01 08:31] ingest | VeriCUA: Verification as Agentic Exploration for Computer-Using Agents
+
+## [2026-11-01 08:31] ingest | Gym-Anything for Robotics: Scaling physical simulations with digital agents
+
+## [2026-11-01 08:31] ingest | Comparing Human Role-Players and LLM-Simulated Clients in Online Counselling Training: An Analysis of Counselling Patterns
+
+## [2026-11-01 08:31] ingest | SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effectors and Tactile Sensing
+
+## [2026-11-01 08:31] ingest | Advancing Clinical Genomic Analysis with a Skill-Centred Agent
+
+## [2026-11-01 08:31] ingest | Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Self-distillation
+
+## [2026-11-01 08:31] ingest | On the Fundamental Limits of Prefill-Based Decoding Length Prediction
