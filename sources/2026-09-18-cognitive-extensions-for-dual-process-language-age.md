@@ -106,3 +106,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/non-cognitive-oracle.md|non cognitive oracle]]
+
+---
+**관련**: [[entities/adaptive-credit-granularity.md|adaptive credit granularity]]

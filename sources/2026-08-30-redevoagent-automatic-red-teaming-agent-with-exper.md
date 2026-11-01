@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/team-trajectory-equivalence.md|team trajectory equivalence]]
+
+---
+**관련**: [[concepts/self-emission-adaptive-trigger.md|self emission adaptive trigger]]

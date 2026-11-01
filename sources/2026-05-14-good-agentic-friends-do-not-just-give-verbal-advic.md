@@ -147,3 +147,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-communication-fidelity.md|self communication fidelity]]
+
+---
+**관련**: [[concepts/interface-as-bias-generator.md|interface as bias generator]]

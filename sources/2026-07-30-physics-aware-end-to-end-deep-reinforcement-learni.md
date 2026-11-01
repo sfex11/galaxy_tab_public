@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/fidelity-surrogate-severance.md|fidelity surrogate severance]]
+
+---
+**관련**: [[concepts/declaration-fidelity-axis-independence.md|declaration fidelity axis independence]]

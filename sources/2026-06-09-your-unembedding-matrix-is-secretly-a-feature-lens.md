@@ -97,3 +97,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/text-embedding.md|text embedding]]
+
+---
+**관련**: [[concepts/observation-artifact.md|observation artifact]]

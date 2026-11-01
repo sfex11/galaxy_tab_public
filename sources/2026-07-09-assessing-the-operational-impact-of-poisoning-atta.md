@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/likelihood-displacement.md|likelihood displacement]]
+
+---
+**관련**: [[concepts/tool-metadata-poisoning.md|tool metadata poisoning]]

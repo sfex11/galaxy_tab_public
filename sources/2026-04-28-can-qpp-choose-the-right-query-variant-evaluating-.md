@@ -355,3 +355,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/query-deferred-representation-contract.md|query deferred representation contract]]
+
+---
+**관련**: [[entities/semantic-supply-chain.md|semantic supply chain]]
+
+---
+**관련**: [[concepts/low-entropy-structural-prediction.md|low entropy structural prediction]]
+
+---
+**관련**: [[concepts/semantic-supply-chain.md|semantic supply chain]]
+
+---
+**관련**: [[concepts/semantic-supply-chain-risk.md|semantic supply chain risk]]

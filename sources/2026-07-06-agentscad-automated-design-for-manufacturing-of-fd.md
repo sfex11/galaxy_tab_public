@@ -40,3 +40,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/reporting-integrity-axis.md|reporting integrity axis]]
+
+---
+**관련**: [[concepts/parseability-boundary.md|parseability boundary]]
+
+---
+**관련**: [[concepts/serendipity-targeted-rl.md|serendipity targeted rl]]

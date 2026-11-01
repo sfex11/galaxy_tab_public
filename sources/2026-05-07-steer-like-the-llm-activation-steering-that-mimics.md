@@ -177,3 +177,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-exploration-steering.md|semantic exploration steering]]
+
+---
+**관련**: [[concepts/symbolic-closure-analysis.md|symbolic closure analysis]]
+
+---
+**관련**: [[concepts/temperament-as-decelerator-not-steering.md|temperament as decelerator not steering]]

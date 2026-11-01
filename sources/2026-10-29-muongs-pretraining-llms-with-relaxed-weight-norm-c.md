@@ -39,3 +39,6 @@ Muon 옵티마이저의 노름 제어(norm control)를 훈련 궤적 전체에 �
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/muongs.md|muongs]]

@@ -77,3 +77,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temperature-scaled-calibration.md|temperature scaled calibration]]
+
+---
+**관련**: [[entities/linguistic-illegibility.md|linguistic illegibility]]
+
+---
+**관련**: [[concepts/cost-conditioned-heuristic-expression.md|cost conditioned heuristic expression]]
+
+---
+**관련**: [[concepts/guarantee-to-confidence-demotion.md|guarantee to confidence demotion]]

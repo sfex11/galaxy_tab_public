@@ -54,3 +54,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/stochastic-depth.md|stochastic depth]]
+
+---
+**관련**: [[concepts/visual-need-estimation-caching.md|visual need estimation caching]]

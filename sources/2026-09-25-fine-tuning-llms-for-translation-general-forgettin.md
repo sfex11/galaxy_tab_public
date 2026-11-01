@@ -58,3 +58,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/visual-forgetting.md|visual forgetting]]
+
+---
+**관련**: [[concepts/visual-forgetting.md|visual forgetting]]

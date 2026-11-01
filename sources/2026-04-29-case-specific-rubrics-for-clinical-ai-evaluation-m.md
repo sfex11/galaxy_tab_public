@@ -513,3 +513,33 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/sim-to-real-validation-infrastructure.md|sim to real validation infrastructure]]
+
+---
+**관련**: [[concepts/compositional-continual-evaluation.md|compositional continual evaluation]]
+
+---
+**관련**: [[concepts/semantic-expert-organization.md|semantic expert organization]]
+
+---
+**관련**: [[concepts/self-rewriting-static-review-collapse.md|self rewriting static review collapse]]
+
+---
+**관련**: [[concepts/economic-mechanistic-bias-convergence.md|economic mechanistic bias convergence]]
+
+---
+**관련**: [[concepts/deployment-time-verifiability.md|deployment time verifiability]]
+
+---
+**관련**: [[concepts/educational-outcome-evaluation.md|educational outcome evaluation]]
+
+---
+**관련**: [[concepts/consumer-gpu-deployment.md|consumer gpu deployment]]
+
+---
+**관련**: [[concepts/domain-smoothing-evaluation.md|domain smoothing evaluation]]
+
+---
+**관련**: [[concepts/pre-deployment-boundary-leakage.md|pre deployment boundary leakage]]
+
+---
+**관련**: [[concepts/pattern-specific-execution.md|pattern specific execution]]

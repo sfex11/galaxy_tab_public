@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/predictor-hardness-conflation.md|predictor hardness conflation]]
+
+---
+**관련**: [[entities/decoder-primitive-redefinition.md|decoder primitive redefinition]]
+
+---
+**관련**: [[concepts/predictor-hardness-conflation.md|predictor hardness conflation]]

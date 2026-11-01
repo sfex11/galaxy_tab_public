@@ -41,3 +41,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/episode-reset-concealment.md|episode reset concealment]]
+
+---
+**관련**: [[concepts/heavy-tailed-relevance-matching.md|heavy tailed relevance matching]]

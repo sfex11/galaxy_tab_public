@@ -79,3 +79,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/comparison-oracle.md|comparison oracle]]
+
+---
+**관련**: [[concepts/topological-guidance.md|topological guidance]]

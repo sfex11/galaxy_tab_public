@@ -307,3 +307,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/long-horizon-emergent-collusion.md|long horizon emergent collusion]]
+
+---
+**관련**: [[concepts/strategy-coverage-scaling.md|strategy coverage scaling]]

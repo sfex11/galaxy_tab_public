@@ -59,3 +59,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchy-as-navigation.md|hierarchy as navigation]]
+
+---
+**관련**: [[concepts/representation-validity-reevaluation.md|representation validity reevaluation]]

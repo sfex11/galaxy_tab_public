@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/capacity-achievability-dichotomy.md|capacity achievability dichotomy]]
+
+---
+**관련**: [[concepts/proximal-background-competition.md|proximal background competition]]

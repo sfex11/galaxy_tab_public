@@ -52,3 +52,21 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/autonomous-commerce.md|autonomous commerce]]
+
+---
+**관련**: [[entities/agentic-drive.md|agentic drive]]
+
+---
+**관련**: [[entities/predictability-driven-serving.md|predictability driven serving]]
+
+---
+**관련**: [[concepts/sovereignty-driven-deployment.md|sovereignty driven deployment]]
+
+---
+**관련**: [[concepts/privacy-driven-inference-partitioning.md|privacy driven inference partitioning]]
+
+---
+**관련**: [[concepts/drive-discharge-via-self-report.md|drive discharge via self report]]
+
+---
+**관련**: [[concepts/robot-skill-as-code.md|robot skill as code]]

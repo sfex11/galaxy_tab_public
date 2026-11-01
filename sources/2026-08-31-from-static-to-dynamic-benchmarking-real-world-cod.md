@@ -85,3 +85,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/tool-lab-process-tracing.md|tool lab process tracing]]
+
+---
+**관련**: [[concepts/stl-robustness-as-decision-oracle.md|stl robustness as decision oracle]]
+
+---
+**관련**: [[concepts/decision-boundary-misalignment.md|decision boundary misalignment]]

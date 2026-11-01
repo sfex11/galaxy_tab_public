@@ -88,3 +88,15 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/harness-scaling-axis.md|harness scaling axis]]
+
+---
+**관련**: [[concepts/bias-correction-with-gold-standard.md|bias correction with gold standard]]
+
+---
+**관련**: [[concepts/harness-event-sourcing.md|harness event sourcing]]
+
+---
+**관련**: [[concepts/systematic-divergence-as-policy-signature.md|systematic divergence as policy signature]]
+
+---
+**관련**: [[concepts/harness-core-shell-stratification.md|harness core shell stratification]]

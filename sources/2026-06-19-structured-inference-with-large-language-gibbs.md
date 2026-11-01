@@ -44,3 +44,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/conditional-heterogeneity-maintenance.md|conditional heterogeneity maintenance]]
+
+---
+**관련**: [[entities/llm-as-coach.md|llm as coach]]
+
+---
+**관련**: [[concepts/llm-as-blackbox-optimizer.md|llm as blackbox optimizer]]

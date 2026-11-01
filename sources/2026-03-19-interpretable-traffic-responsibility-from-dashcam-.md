@@ -369,3 +369,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/static-dynamic-reasoning-gap.md|static dynamic reasoning gap]]
+
+---
+**관련**: [[concepts/static-dynamic-reasoning-gap.md|static dynamic reasoning gap]]
+
+---
+**관련**: [[concepts/interpretable-hazard-index.md|interpretable hazard index]]
+
+---
+**관련**: [[concepts/dynamic-execution-reasoning.md|dynamic execution reasoning]]

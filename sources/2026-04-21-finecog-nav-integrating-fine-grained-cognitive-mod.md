@@ -118,3 +118,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/non-cognitive-oracle.md|non cognitive oracle]]
+
+---
+**관련**: [[concepts/hierarchy-as-navigation.md|hierarchy as navigation]]

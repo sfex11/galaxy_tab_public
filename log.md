@@ -3840,3 +3840,7 @@
 ## [2026-11-01 17:04] lint | Wiki 건전성 체크
 - Issues: 3543개
 - Orphans: 1143, Missing: 2400, Contradictions: 0
+
+## [2026-11-01 21:30] lint | Wiki 건전성 체크
+- Issues: 3478개
+- Orphans: 1078, Missing: 2400, Contradictions: 0

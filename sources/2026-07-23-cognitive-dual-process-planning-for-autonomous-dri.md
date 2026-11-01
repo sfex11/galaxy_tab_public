@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modular-cognitive-extension.md|modular cognitive extension]]
+
+---
+**관련**: [[entities/confidence-consistency-decoupling.md|confidence consistency decoupling]]

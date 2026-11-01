@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/distortion-free-watermarking.md|distortion free watermarking]]
+
+---
+**관련**: [[concepts/restore-laundered-tampering.md|restore laundered tampering]]

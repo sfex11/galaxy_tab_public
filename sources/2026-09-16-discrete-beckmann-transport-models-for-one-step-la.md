@@ -46,3 +46,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/translation-stakes-domain-asymmetry.md|translation stakes domain asymmetry]]
+
+---
+**관련**: [[concepts/contaminated-knowledge-self-justification.md|contaminated knowledge self justification]]

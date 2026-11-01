@@ -257,3 +257,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/behavior-defined-goal.md|behavior defined goal]]
+
+---
+**관련**: [[entities/interpretive-harness.md|interpretive harness]]
+
+---
+**관련**: [[concepts/show-harness.md|show harness]]
+
+---
+**관련**: [[concepts/interface-to-policy-alignment-burden-shift.md|interface to policy alignment burden shift]]
+
+---
+**관련**: [[concepts/collaboration-granularity-selection.md|collaboration granularity selection]]
+
+---
+**관련**: [[concepts/plan-as-divergence-baseline.md|plan as divergence baseline]]
+
+---
+**관련**: [[concepts/harness-distillation.md|harness distillation]]
+
+---
+**관련**: [[concepts/harness-as-nonparametric-policy-layer.md|harness as nonparametric policy layer]]

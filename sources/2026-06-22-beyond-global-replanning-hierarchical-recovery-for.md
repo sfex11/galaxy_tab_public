@@ -133,3 +133,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/conditional-decomposition-strategy.md|conditional decomposition strategy]]
+
+---
+**관련**: [[concepts/hierarchical-yield-decay.md|hierarchical yield decay]]

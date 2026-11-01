@@ -74,3 +74,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/long-document-qa.md|long document qa]]
+
+---
+**관련**: [[concepts/revalidation-cost-behavioral-inertia.md|revalidation cost behavioral inertia]]
+
+---
+**관련**: [[concepts/acyclic-oracle-existence.md|acyclic oracle existence]]
+
+---
+**관련**: [[concepts/long-document-qa.md|long document qa]]

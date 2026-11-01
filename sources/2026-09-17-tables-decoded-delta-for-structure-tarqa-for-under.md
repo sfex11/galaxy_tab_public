@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/organizational-intelligence.md|organizational intelligence]]
+
+---
+**관련**: [[concepts/text-encoder-substitution.md|text encoder substitution]]

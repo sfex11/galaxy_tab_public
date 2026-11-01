@@ -91,3 +91,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/retraining-free-adaptation.md|retraining free adaptation]]
+
+---
+**관련**: [[entities/dual-expert-judgment-explanation-split.md|dual expert judgment explanation split]]

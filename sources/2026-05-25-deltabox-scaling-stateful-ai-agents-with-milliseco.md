@@ -30,6 +30,7 @@ DeltaBox는 에이전트 샌드박스 상태를 세 가지 유형으로 분해�
 이 분해는 OS 수준의 전체 스냅샷이 에이전트의 의미론적 의존 구조를 무시하고 불필요한 I/O를 포함한다는 병목을 정확히 진단한다.
 
 ## 관련 논문
+- [[concepts/delegation-rollback.md|delegation rollback]]
 - [[concepts/second-order-opacity.md|second order opacity]]
 - sources/2026-05-25-deltabox-scaling-stateful-ai-agents-with-millisecon.md
 

@@ -183,3 +183,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/vulnerability-localization.md|vulnerability localization]]
+
+---
+**관련**: [[concepts/adversarial-fidelity-probing.md|adversarial fidelity probing]]
+
+---
+**관련**: [[concepts/forgery-resistant-representation-monitoring.md|forgery resistant representation monitoring]]
+
+---
+**관련**: [[concepts/domain-invariant-representation.md|domain invariant representation]]

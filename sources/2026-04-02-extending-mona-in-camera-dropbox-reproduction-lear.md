@@ -104,3 +104,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/learned-safety-revocability.md|learned safety revocability]]
+
+---
+**관련**: [[concepts/delegation-bias-reproduction.md|delegation bias reproduction]]

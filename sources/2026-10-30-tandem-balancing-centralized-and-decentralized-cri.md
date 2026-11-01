@@ -44,3 +44,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/persuasion-openness.md|persuasion openness]]
+
+---
+**관련**: [[concepts/openness-of-meta-loop.md|openness of meta loop]]
+
+---
+**관련**: [[concepts/persuasion-openness.md|persuasion openness]]

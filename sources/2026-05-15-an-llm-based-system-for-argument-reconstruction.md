@@ -64,3 +64,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-directed-choice-architecture.md|self directed choice architecture]]
+
+---
+**관련**: [[concepts/irreducible-reconstruction-loss.md|irreducible reconstruction loss]]
+
+---
+**관련**: [[concepts/incremental-topology-construction.md|incremental topology construction]]

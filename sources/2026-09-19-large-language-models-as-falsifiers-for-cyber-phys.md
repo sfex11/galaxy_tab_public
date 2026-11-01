@@ -49,3 +49,6 @@ LLM-Falsifier는 CPS의 STL 명세 위반 반례를 탐색하는 반증(falsific
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/falsifier-as-fourth-role.md|falsifier as fourth role]]

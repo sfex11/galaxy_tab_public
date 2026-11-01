@@ -212,3 +212,24 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/efficient-paraphrase-detection.md|efficient paraphrase detection]]
+
+---
+**관련**: [[concepts/validity-provenance-compression.md|validity provenance compression]]
+
+---
+**관련**: [[concepts/compression-last-gate-veto.md|compression last gate veto]]
+
+---
+**관련**: [[concepts/central-compression-decentralization-justification.md|central compression decentralization justification]]
+
+---
+**관련**: [[concepts/compression-emergence-demotion.md|compression emergence demotion]]
+
+---
+**관련**: [[concepts/compression-as-invisible-voting.md|compression as invisible voting]]
+
+---
+**관련**: [[concepts/efficient-paraphrase-detection.md|efficient paraphrase detection]]
+
+---
+**관련**: [[concepts/metric-informativeness-gap.md|metric informativeness gap]]

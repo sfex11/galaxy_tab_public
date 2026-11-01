@@ -160,3 +160,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/value-sensitive-delegation.md|value sensitive delegation]]
+
+---
+**관련**: [[entities/activation-steering-parameter-automation.md|activation steering parameter automation]]
+
+---
+**관련**: [[entities/router-within.md|router within]]
+
+---
+**관련**: [[concepts/performance-process-validity-dissociation.md|performance process validity dissociation]]
+
+---
+**관련**: [[concepts/past-forecast-dual-validity.md|past forecast dual validity]]
+
+---
+**관련**: [[concepts/openness-parameter-verification.md|openness parameter verification]]
+
+---
+**관련**: [[concepts/value-sensitive-delegation.md|value sensitive delegation]]

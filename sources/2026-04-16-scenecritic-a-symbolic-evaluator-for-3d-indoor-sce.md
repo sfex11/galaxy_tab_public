@@ -65,3 +65,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/spatial-coreference-resolution.md|spatial coreference resolution]]
+
+---
+**관련**: [[concepts/spatial-coreference-resolution.md|spatial coreference resolution]]

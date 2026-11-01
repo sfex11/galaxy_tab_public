@@ -200,3 +200,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/delegation-structural-unverifiability.md|delegation structural unverifiability]]
+
+---
+**관련**: [[concepts/edit-artifact-auditability.md|edit artifact auditability]]

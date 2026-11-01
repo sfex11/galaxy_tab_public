@@ -340,3 +340,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/extra-probabilistic-adjudication.md|extra probabilistic adjudication]]
+
+---
+**관련**: [[concepts/verification-bottleneck-shift.md|verification bottleneck shift]]
+
+---
+**관련**: [[concepts/verification-as-agentic-exploration.md|verification as agentic exploration]]
+
+---
+**관련**: [[concepts/surface-policy-monitoring.md|surface policy monitoring]]
+
+---
+**관련**: [[concepts/environment-side-adaptation-stratification.md|environment side adaptation stratification]]

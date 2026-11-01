@@ -214,3 +214,54 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/ai-artifact-design.md|ai artifact design]]
+
+---
+**관련**: [[entities/environment-composition-control.md|environment composition control]]
+
+---
+**관련**: [[entities/environment-execution-cost-bottleneck.md|environment execution cost bottleneck]]
+
+---
+**관련**: [[concepts/evaluation-training-environment-convergence.md|evaluation training environment convergence]]
+
+---
+**관련**: [[concepts/environment-synthesis-as-data-curation.md|environment synthesis as data curation]]
+
+---
+**관련**: [[concepts/io-aware-inference-co-design.md|io aware inference co design]]
+
+---
+**관련**: [[concepts/delegated-environment-adaptation.md|delegated environment adaptation]]
+
+---
+**관련**: [[concepts/generative-archaeological-simulation.md|generative archaeological simulation]]
+
+---
+**관련**: [[concepts/environment-composition-scaling-law.md|environment composition scaling law]]
+
+---
+**관련**: [[concepts/environment-execution-cost-bottleneck.md|environment execution cost bottleneck]]
+
+---
+**관련**: [[concepts/environment-as-curriculum.md|environment as curriculum]]
+
+---
+**관련**: [[concepts/environment-budget-allocation.md|environment budget allocation]]
+
+---
+**관련**: [[concepts/design-expertise-heterogeneity.md|design expertise heterogeneity]]
+
+---
+**관련**: [[concepts/environment-scheduling.md|environment scheduling]]
+
+---
+**관련**: [[concepts/rollout-environment-coupling.md|rollout environment coupling]]
+
+---
+**관련**: [[concepts/prompt-to-design-workflow.md|prompt to design workflow]]
+
+---
+**관련**: [[concepts/designed-peer-oversight.md|designed peer oversight]]
+
+---
+**관련**: [[concepts/environment-scaling-law.md|environment scaling law]]

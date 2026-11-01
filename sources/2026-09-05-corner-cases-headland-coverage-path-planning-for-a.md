@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/parseability-boundary.md|parseability boundary]]
+
+---
+**관련**: [[entities/checkability-boundary.md|checkability boundary]]

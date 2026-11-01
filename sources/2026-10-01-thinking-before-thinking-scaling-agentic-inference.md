@@ -41,3 +41,6 @@ Wiki 축적 논의와의 세 접점이 핵심이다. 첫째, [[concepts/artifici
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/adjudication-victim-separation.md|adjudication victim separation]]

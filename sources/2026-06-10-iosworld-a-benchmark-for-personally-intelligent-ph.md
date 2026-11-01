@@ -217,3 +217,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/crossprofile-benchmark.md|crossprofile benchmark]]
+
+---
+**관련**: [[concepts/interactive-diffusion.md|interactive diffusion]]
+
+---
+**관련**: [[concepts/roundtrip-benchmark.md|roundtrip benchmark]]

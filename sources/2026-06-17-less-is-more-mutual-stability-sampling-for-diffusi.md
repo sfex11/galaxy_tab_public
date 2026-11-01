@@ -166,3 +166,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/bayesian-update-cumulative-error.md|bayesian update cumulative error]]
+
+---
+**관련**: [[entities/speculative-decoding-losslessness-premise-collapse.md|speculative decoding losslessness premise collapse]]
+
+---
+**관련**: [[entities/efficiency-attack-surface-identity.md|efficiency attack surface identity]]
+
+---
+**관련**: [[concepts/speech-native-tool-calling.md|speech native tool calling]]
+
+---
+**관련**: [[concepts/fixed-granularity-limitation.md|fixed granularity limitation]]
+
+---
+**관련**: [[concepts/mismatch-algorithm-bidirectional-absorption.md|mismatch algorithm bidirectional absorption]]
+
+---
+**관련**: [[concepts/me-decoding.md|me decoding]]
+
+---
+**관련**: [[concepts/cache-decoding-coupling.md|cache decoding coupling]]
+
+---
+**관련**: [[concepts/iterative-unalignment.md|iterative unalignment]]
+
+---
+**관련**: [[concepts/belief-update-governance.md|belief update governance]]
+
+---
+**관련**: [[concepts/bayesian-update-per-utterance.md|bayesian update per utterance]]
+
+---
+**관련**: [[concepts/belief-content-update-gap.md|belief content update gap]]

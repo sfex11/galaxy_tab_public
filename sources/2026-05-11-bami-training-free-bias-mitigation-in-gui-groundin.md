@@ -50,3 +50,6 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/correlated-error-summation.md|correlated error summation]]
+
+---
+**관련**: [[concepts/cost-induced-ambiguity-retention.md|cost induced ambiguity retention]]

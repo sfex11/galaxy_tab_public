@@ -398,3 +398,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/kl-regularized-reward-maximization.md|kl regularized reward maximization]]
+
+---
+**관련**: [[entities/data-efficiency-gains-from-pretraining.md|data efficiency gains from pretraining]]
+
+---
+**관련**: [[concepts/completion-signal-checker.md|completion signal checker]]
+
+---
+**관련**: [[concepts/iid-correctness-filter-bias.md|iid correctness filter bias]]
+
+---
+**관련**: [[concepts/relevance-filter-majority-collapse.md|relevance filter majority collapse]]
+
+---
+**관련**: [[concepts/success-criterion-redefinition.md|success criterion redefinition]]
+
+---
+**관련**: [[concepts/probability-as-proposer-not-adjudicator.md|probability as proposer not adjudicator]]
+
+---
+**관련**: [[concepts/stateful-retrieval.md|stateful retrieval]]

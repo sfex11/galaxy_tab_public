@@ -47,3 +47,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/tandem-critics.md|tandem critics]]
+
+---
+**관련**: [[concepts/tandem-critics.md|tandem critics]]

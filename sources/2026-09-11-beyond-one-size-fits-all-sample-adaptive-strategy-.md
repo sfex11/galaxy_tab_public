@@ -69,3 +69,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/self-emission-adaptive-trigger.md|self emission adaptive trigger]]
+
+---
+**관련**: [[concepts/strategy-free-scaffold.md|strategy free scaffold]]
+
+---
+**관련**: [[concepts/conditional-decomposition-strategy.md|conditional decomposition strategy]]
+
+---
+**관련**: [[concepts/routing-rationale-internalization.md|routing rationale internalization]]

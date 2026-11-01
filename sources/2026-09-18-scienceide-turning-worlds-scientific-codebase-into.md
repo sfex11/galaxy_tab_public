@@ -75,3 +75,12 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/delegation-structural-unverifiability.md|delegation structural unverifiability]]
+
+---
+**관련**: [[concepts/day-night-science-spectrum.md|day night science spectrum]]
+
+---
+**관련**: [[concepts/capability-improvement-headroom.md|capability improvement headroom]]
+
+---
+**관련**: [[concepts/capability-incentive-multiplicative-risk.md|capability incentive multiplicative risk]]

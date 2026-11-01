@@ -45,3 +45,24 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/serving-layer-neutrality-premise.md|serving layer neutrality premise]]
+
+---
+**관련**: [[concepts/serving-layer-confound.md|serving layer confound]]
+
+---
+**관련**: [[concepts/prefill-bottleneck.md|prefill bottleneck]]
+
+---
+**관련**: [[concepts/serving-stack-tool-gating.md|serving stack tool gating]]
+
+---
+**관련**: [[concepts/serving-stack-instrument-target-duality.md|serving stack instrument target duality]]
+
+---
+**관련**: [[concepts/serving-stack-comparison-validity.md|serving stack comparison validity]]
+
+---
+**관련**: [[concepts/checkability-gated-routing.md|checkability gated routing]]
+
+---
+**관련**: [[concepts/disaggregated-evaluation.md|disaggregated evaluation]]

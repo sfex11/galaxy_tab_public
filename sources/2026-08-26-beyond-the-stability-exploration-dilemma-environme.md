@@ -70,3 +70,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/course-drift.md|course drift]]
+
+---
+**관련**: [[concepts/load-balancing-regularization.md|load balancing regularization]]
+
+---
+**관련**: [[concepts/modality-budget-pair-unit.md|modality budget pair unit]]

@@ -59,3 +59,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/same-provider-pairing.md|same provider pairing]]
+
+---
+**관련**: [[concepts/tiered-forgetting-authority.md|tiered forgetting authority]]

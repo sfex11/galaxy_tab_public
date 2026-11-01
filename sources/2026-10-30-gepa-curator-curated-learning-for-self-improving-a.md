@@ -59,3 +59,6 @@ GEPA 계열 반사적(reflective) 프롬프트 최적화기는 실패 롤아웃�
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/curator-as-justifier.md|curator as justifier]]

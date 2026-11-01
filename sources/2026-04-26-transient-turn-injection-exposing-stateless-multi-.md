@@ -65,3 +65,6 @@ LLM 기반 자동화 공격 에이전트가 반복적으로 턴 분할 전략을
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/stateless-moderation.md|stateless moderation]]

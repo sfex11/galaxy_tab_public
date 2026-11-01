@@ -66,3 +66,15 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/on-demand-resource-access.md|on demand resource access]]
+
+---
+**관련**: [[entities/source-grounded-extraction.md|source grounded extraction]]
+
+---
+**관련**: [[concepts/source-grounded-extraction.md|source grounded extraction]]
+
+---
+**관련**: [[concepts/consensus-space-migration.md|consensus space migration]]
+
+---
+**관련**: [[concepts/translation-stakes-domain-asymmetry.md|translation stakes domain asymmetry]]

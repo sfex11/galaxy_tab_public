@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/artificial-id.md|artificial id]]
+
+---
+**관련**: [[concepts/tactile-contact-sensing.md|tactile contact sensing]]

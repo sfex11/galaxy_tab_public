@@ -188,3 +188,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/semantic-interference-decoupling.md|semantic interference decoupling]]
+
+---
+**관련**: [[concepts/semantic-boundary-protocol.md|semantic boundary protocol]]
+
+---
+**관련**: [[concepts/semantic-cell-annotation.md|semantic cell annotation]]

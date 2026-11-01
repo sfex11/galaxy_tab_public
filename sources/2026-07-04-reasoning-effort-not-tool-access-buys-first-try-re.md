@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/heavy-tailed-relevance-matching.md|heavy tailed relevance matching]]
+
+---
+**관련**: [[concepts/yield-as-floor-transfer.md|yield as floor transfer]]

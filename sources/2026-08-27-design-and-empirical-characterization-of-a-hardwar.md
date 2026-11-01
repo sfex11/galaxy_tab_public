@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/operator-acceptance-assessment.md|operator acceptance assessment]]
+
+---
+**관련**: [[concepts/prior-weighted-bisection.md|prior weighted bisection]]

@@ -53,3 +53,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/decoupled-generative-guidance.md|decoupled generative guidance]]
+
+---
+**관련**: [[concepts/decoupled-generative-guidance.md|decoupled generative guidance]]
+
+---
+**관련**: [[concepts/guidance-induced-bias-substitution.md|guidance induced bias substitution]]

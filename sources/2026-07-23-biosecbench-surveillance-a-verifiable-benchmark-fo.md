@@ -185,3 +185,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/continuous-structure-discretization-ceiling.md|continuous structure discretization ceiling]]
+
+---
+**관련**: [[entities/benchmark-auto-renewal.md|benchmark auto renewal]]
+
+---
+**관련**: [[entities/living-benchmark.md|living benchmark]]
+
+---
+**관련**: [[concepts/computation-to-representation-adaptation-shift.md|computation to representation adaptation shift]]
+
+---
+**관련**: [[concepts/threat-classification-defense-divergence.md|threat classification defense divergence]]
+
+---
+**관련**: [[concepts/benchmark-obsolescence.md|benchmark obsolescence]]
+
+---
+**관련**: [[concepts/certification-target-shift-to-elicitability.md|certification target shift to elicitability]]
+
+---
+**관련**: [[concepts/living-benchmark.md|living benchmark]]
+
+---
+**관련**: [[concepts/spreadsheet-grid-structure.md|spreadsheet grid structure]]
+
+---
+**관련**: [[concepts/benchmark-auto-renewal.md|benchmark auto renewal]]
+
+---
+**관련**: [[concepts/distribution-shift-component-conditional-pretraini.md|distribution shift component conditional pretraini]]
+
+---
+**관련**: [[concepts/phase-to-substrate-axis-shift.md|phase to substrate axis shift]]

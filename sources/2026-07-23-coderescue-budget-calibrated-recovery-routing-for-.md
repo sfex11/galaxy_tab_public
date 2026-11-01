@@ -147,3 +147,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/execution-visibility-misalignment.md|execution visibility misalignment]]
+
+---
+**관련**: [[concepts/plan-declaration-execution-gap.md|plan declaration execution gap]]
+
+---
+**관련**: [[concepts/first-order-accumulation-paradigm-bias.md|first order accumulation paradigm bias]]
+
+---
+**관련**: [[concepts/dialogue-as-recovery-primitive.md|dialogue as recovery primitive]]
+
+---
+**관련**: [[concepts/off-runtime-harm-execution.md|off runtime harm execution]]
+
+---
+**관련**: [[concepts/gui-failure-attribution-decomposition.md|gui failure attribution decomposition]]
+
+---
+**관련**: [[concepts/execution-observation-property-discovery.md|execution observation property discovery]]
+
+---
+**관련**: [[concepts/code-qa-execution-measurement-gap.md|code qa execution measurement gap]]

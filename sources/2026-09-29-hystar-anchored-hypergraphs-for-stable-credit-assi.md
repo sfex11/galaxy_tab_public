@@ -40,3 +40,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/hystar.md|hystar]]
+
+---
+**관련**: [[concepts/edit-as-falsifiable-hypothesis.md|edit as falsifiable hypothesis]]

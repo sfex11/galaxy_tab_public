@@ -45,3 +45,6 @@ DAO 거버넌스의 이진 의사결정에서 선형 의견 풀과 스마트 컨
 
 ---
 _LLM 분석으로 재생성됨_
+
+---
+**관련**: [[concepts/user-belief-representability.md|user belief representability]]

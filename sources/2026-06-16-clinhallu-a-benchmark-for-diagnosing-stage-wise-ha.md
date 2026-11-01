@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/tamp-teleoperation-hybrid-data-collection.md|tamp teleoperation hybrid data collection]]
+
+---
+**관련**: [[concepts/quantization-error-accumulation.md|quantization error accumulation]]

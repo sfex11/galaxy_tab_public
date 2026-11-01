@@ -49,3 +49,6 @@ speech-llm 연구가 추론 축([[concepts/retrospective-thinking.md|retrospecti
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/tool-call-validity.md|tool call validity]]

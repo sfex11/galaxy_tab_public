@@ -181,3 +181,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/builder-target-separation.md|builder target separation]]
+
+---
+**관련**: [[concepts/credit-decomposition-target-erasure.md|credit decomposition target erasure]]
+
+---
+**관련**: [[concepts/mt-instruction-following.md|mt instruction following]]
+
+---
+**관련**: [[concepts/knowledge-bounded-planability.md|knowledge bounded planability]]
+
+---
+**관련**: [[concepts/structural-target-drift.md|structural target drift]]
+
+---
+**관련**: [[concepts/dense-reward-topology-learning.md|dense reward topology learning]]
+
+---
+**관련**: [[concepts/external-artifact-selective-unlearning.md|external artifact selective unlearning]]
+
+---
+**관련**: [[concepts/closed-form-incremental-learning.md|closed form incremental learning]]
+
+---
+**관련**: [[concepts/builder-target-separation.md|builder target separation]]
+
+---
+**관련**: [[concepts/learning-gain-measurement.md|learning gain measurement]]

@@ -48,3 +48,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/hybrid-gui-cli-coordination.md|hybrid gui cli coordination]]
+
+---
+**관련**: [[concepts/on-demand-resource-access.md|on demand resource access]]
+
+---
+**관련**: [[concepts/self-interpreter-improvement.md|self interpreter improvement]]

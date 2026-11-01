@@ -194,3 +194,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/history-anchors.md|history anchors]]
+
+---
+**관련**: [[concepts/temperature-controlled-selection.md|temperature controlled selection]]
+
+---
+**관련**: [[concepts/skill-existence-blindness.md|skill existence blindness]]
+
+---
+**관련**: [[concepts/improvement-procedure-external-oracle.md|improvement procedure external oracle]]
+
+---
+**관련**: [[concepts/skill-selection-functional-split.md|skill selection functional split]]
+
+---
+**관련**: [[concepts/measurement-execution-coupling.md|measurement execution coupling]]
+
+---
+**관련**: [[concepts/harness-institutional-layering.md|harness institutional layering]]
+
+---
+**관련**: [[concepts/gui-grounding.md|gui grounding]]
