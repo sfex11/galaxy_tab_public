@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-elucidating-the-design-space-of-lm-data-attributio.md|Elucidating the Design Space of LM Data Attribution]]
+
+### Elucidating the Design Space of LM Data Attribution (2026-11-02)
+
+→ [[sources/2026-11-02-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]

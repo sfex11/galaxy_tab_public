@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Elucidating the Design Space of LM Data Attribution (2026-10-31)
 
 기억 존재 감사에서 기억 근원 감사로 확장한다. 자릿수 수준 검색이 '기억되었는가'를 물었다면, 사실 추적 벤치마크는 '무엇으로부터 기억되는가'를 측정 가능하게 하여 기억 연구의 질문을 훈련 데이터 원천으로 소급한다.
+
+### Elucidating the Design Space of LM Data Attribution (2026-11-02)
+
+기억의 존재 감사에서 귀속 감사로의 확장을 제공한다. 미세조정된 엔티티 문서에서 유래한 팩트를 귀속 알고리즘이 추적할 수 있는지 측정함으로써, 기억이 '있는가'를 넘어 '어디에서 왔는가'를 진단하는 제2의 감사 축을 연다.
+
+→ [[sources/2026-11-02-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]

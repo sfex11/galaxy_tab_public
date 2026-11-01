@@ -17,3 +17,7 @@ _자동 Wiki Query에서 추출됨_
 ### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-29)
 
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
+
+### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
+
+→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

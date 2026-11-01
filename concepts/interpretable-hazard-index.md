@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-from-extreme-weather-to-agricultural-consequences-.md|From extreme weather to agricultural consequences with agent]]
+
+### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
+
+→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]
