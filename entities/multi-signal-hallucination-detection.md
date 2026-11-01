@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
 
 다중 신호(의미·확신·보정) 중 '확신' 신호의 실체를 재고하게 만든다. MC Dropout 불확실성 등 확률 유사 신호의 유효성이 확률의 인과적 기여에 의존한다면, 본 논문의 진단은 다중 신호 파이프라인 설계의 전제 점검 요구로 연결된다.
-
-→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/proactive-help-seeking.md|proactive help seeking]]
+
+---
+**관련**: [[entities/as-needed-demonstration.md|as needed demonstration]]

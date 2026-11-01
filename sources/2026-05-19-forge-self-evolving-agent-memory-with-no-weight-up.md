@@ -568,3 +568,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/decision-boundary-misalignment.md|decision boundary misalignment]]
+
+---
+**관련**: [[entities/failure-guided-harness-growth.md|failure guided harness growth]]
+
+---
+**관련**: [[entities/belief-self-distillation.md|belief self distillation]]
+
+---
+**관련**: [[entities/failure-transparency.md|failure transparency]]
+
+---
+**관련**: [[entities/memory-trust-adjudication.md|memory trust adjudication]]
+
+---
+**관련**: [[entities/task-conditioned-memory-clearance.md|task conditioned memory clearance]]

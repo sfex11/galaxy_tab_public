@@ -50,3 +50,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/compounding-bias.md|compounding bias]]
+
+---
+**관련**: [[entities/decoupled-generative-guidance.md|decoupled generative guidance]]

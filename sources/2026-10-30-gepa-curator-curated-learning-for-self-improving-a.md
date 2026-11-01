@@ -19,16 +19,16 @@ GEPA 계열 반사적(reflective) 프롬프트 최적화기는 실패 롤아웃�
 
 ## Wiki 통합 관점
 
-- [[learning-task-curation]] — 학습 데이터 구성의 축이 '추출 방식'에서 '태스크 선택'으로 상류 이동
-- [[failure-source-attribution]] — 실패의 원인 귀속 가능성이 데이터 채택 판정 기준으로 격상
-- [[training-process-gaming]] — Exploration Hacking(모델 측 훈련 저항)과 대비되는 데이터 측 방어
-- [[skill-curation-as-learning]] — 큐레이션 대상을 스킬(산출물)에서 태스크(입력)로 확장
-- [[self-improving-agent]] — 자기 개선의 성립 조건으로 실패 학습 가능성 판별 명시
+- [[concepts/learning-task-curation.md|learning task curation]] — 학습 데이터 구성의 축이 '추출 방식'에서 '태스크 선택'으로 상류 이동
+- [[concepts/failure-source-attribution.md|failure source attribution]] — 실패의 원인 귀속 가능성이 데이터 채택 판정 기준으로 격상
+- [[concepts/training-process-gaming.md|training process gaming]] — Exploration Hacking(모델 측 훈련 저항)과 대비되는 데이터 측 방어
+- [[concepts/skill-curation-as-learning.md|skill curation as learning]] — 큐레이션 대상을 스킬(산출물)에서 태스크(입력)로 확장
+- [[concepts/self-improving-agent.md|self improving agent]] — 자기 개선의 성립 조건으로 실패 학습 가능성 판별 명시
 
 ## 연결점
 
-- [[evaluation-regimes-information-bottleneck]]: 극단적 패스율 태스크는 신호 엔트로피가 붕괴하므로, 태스크 선별은 학습 신호의 정보량 확보 문제이기도 하다
-- [[judge-instrument-reliability]]: judge 잡음이 프롬프트 결함으로 오귀인되면 큐레이션 판정 자체가 오염 — 측정 신뢰성이 큐레이션의 입력 변수가 된다
+- [[concepts/evaluation-regimes-information-bottleneck.md|evaluation regimes information bottleneck]]: 극단적 패스율 태스크는 신호 엔트로피가 붕괴하므로, 태스크 선별은 학습 신호의 정보량 확보 문제이기도 하다
+- [[concepts/judge-instrument-reliability.md|judge instrument reliability]]: judge 잡음이 프롬프트 결함으로 오귀인되면 큐레이션 판정 자체가 오염 — 측정 신뢰성이 큐레이션의 입력 변수가 된다
 - EarlyEval과 상보: 평가 비용 절감(조기 예측)과 학습 신호 품질 보장(태스크 선별)의 두 축
 
 ## 핵심 인사이트

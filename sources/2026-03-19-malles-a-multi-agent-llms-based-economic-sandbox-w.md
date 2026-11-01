@@ -551,3 +551,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/multi-draft-speculative-sampling.md|multi draft speculative sampling]]
+
+---
+**관련**: [[entities/asymmetric-alignment-fragility.md|asymmetric alignment fragility]]
+
+---
+**관련**: [[entities/surrogate-consumer-agent.md|surrogate consumer agent]]
+
+---
+**관련**: [[entities/coding-agent-for-domain-engineering.md|coding agent for domain engineering]]

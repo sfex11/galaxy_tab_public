@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Strategically Diverse Sampling for Self-Training (2026-09-29)
 
 '무엇을 뺄 것인가'에서 '무엇으로 채울 것인가'로의 축 전환에 '정답 중 서로 다른 전략의 정답'이라는 제3의 채움 기준을 추가한다. 정확도 필터와 다양성 필터의 결합이 고정 예산 데이터 구성의 새 표준 후보가 됨을 시사한다.
-
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

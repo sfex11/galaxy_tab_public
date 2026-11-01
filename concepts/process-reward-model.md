@@ -26,5 +26,3 @@ _자동 Wiki Query에서 추출됨_
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
 
 ### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
-
-→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-베트남 교육을 위한 효율적·확장 가능한 에이전틱 LLM을 제안하며, 개발도상국 AI 튜터링의 3중 제약 구조를 규정한다. 클라우드 어시스턴트는 학생 민감 데이터를 외국 서버로 전송해 베트남 Decree 53 같은 데이터 주권법을 위반하고([[data-sovereignty]]), 서구 중심 코퍼스로 사전학습되어 국가 교과과정과 어긋나는 비체계적 지식·환각을 낸다. 자체 호스팅은 주권과 접지를 해결하지만 프론티어 모델 비용이 감당 불가능하다. 따라서 설계 공간은 '교과과정에 접지된 효율적 에이전틱 소형 모델'로 수렴한다 — 에이전틱 역량의 효율화([[agentic-distillation]])와 소형 모델 추론 보완([[slm-reasoning-gap]])이 자체 호스팅 가능성의 전제가 된다. 이는 Nuha-Speech(아랍어 speech-LLM)와 대칭을 이룬다: 비영어권 AI가 프론티어 모델의 번역이 아니라 언어·도메인별 전 파이프라인 투자의 산물이라는 명제([[multilingual-coverage-gap]])를 텍스트 교육 도메인으로 확장한다. StudentBench가 AI-인간 튜터링 동등성([[ai-tutoring-equivalence]])을 보였다면, 본 논문은 그 전제를 배포 조건 문제로 전환해 주권·커리큘럼·비용의 동시 충족을 교육 AI의 설계 요구사항으로 격상시킨다.
+베트남 교육을 위한 효율적·확장 가능한 에이전틱 LLM을 제안하며, 개발도상국 AI 튜터링의 3중 제약 구조를 규정한다. 클라우드 어시스턴트는 학생 민감 데이터를 외국 서버로 전송해 베트남 Decree 53 같은 데이터 주권법을 위반하고([[concepts/data-sovereignty.md|data sovereignty]]), 서구 중심 코퍼스로 사전학습되어 국가 교과과정과 어긋나는 비체계적 지식·환각을 낸다. 자체 호스팅은 주권과 접지를 해결하지만 프론티어 모델 비용이 감당 불가능하다. 따라서 설계 공간은 '교과과정에 접지된 효율적 에이전틱 소형 모델'로 수렴한다 — 에이전틱 역량의 효율화([[concepts/agentic-distillation.md|agentic distillation]])와 소형 모델 추론 보완([[concepts/slm-reasoning-gap.md|slm reasoning gap]])이 자체 호스팅 가능성의 전제가 된다. 이는 Nuha-Speech(아랍어 speech-LLM)와 대칭을 이룬다: 비영어권 AI가 프론티어 모델의 번역이 아니라 언어·도메인별 전 파이프라인 투자의 산물이라는 명제([[concepts/multilingual-coverage-gap.md|multilingual coverage gap]])를 텍스트 교육 도메인으로 확장한다. StudentBench가 AI-인간 튜터링 동등성([[concepts/ai-tutoring-equivalence.md|ai tutoring equivalence]])을 보였다면, 본 논문은 그 전제를 배포 조건 문제로 전환해 주권·커리큘럼·비용의 동시 충족을 교육 AI의 설계 요구사항으로 격상시킨다.
 
 ## 🔗 관련 논문
 

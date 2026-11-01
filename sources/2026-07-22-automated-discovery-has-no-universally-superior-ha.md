@@ -67,3 +67,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modality-budget-pair-unit.md|modality budget pair unit]]
+
+---
+**관련**: [[entities/sft-rl-budget-allocation.md|sft rl budget allocation]]
+
+---
+**관련**: [[entities/credit-allocation-degree-of-freedom.md|credit allocation degree of freedom]]

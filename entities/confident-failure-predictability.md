@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 실패 예측의 시간축을 확장한다 — 스코어 분포나 근접 배경 밀도 같은 실행 전 관측 변수에 이어, 에이전트 내부 활성화라는 실행 중 관측 변수가 규범 위반을 행동 발생 이전에 예측함을 보여준다.
-
-→ [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

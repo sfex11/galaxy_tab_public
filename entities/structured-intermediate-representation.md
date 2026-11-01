@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Scaling Long-Form Story Generation via Narrative State Tracking (2026-09-30)
 
 서사 상태가 생성 파이프라인의 중간 표현으로 기능하는 창작 도메인 사례를 제공한다. RAPID의 시연→명세, SAG의 공유 그래프에 이어 서사 상태라는 제3의 IR 유형이 등장하며, 구조화된 중간 표현이 계획·번역을 넘어 생성 품질 유지의 필수 구성요소임을 시사한다.
-
-→ [[sources/2026-09-30-scaling-long-form-story-generation-via-narrative-s.md|상세 보기]]

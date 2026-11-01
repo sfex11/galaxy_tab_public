@@ -26,5 +26,3 @@ PRM의 핵심 전제 — reasoning step 텍스트가 기능적 역할 정보를 
 ### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
 
 PRM 감독 데이터 품질 감사의 근거를 제공한다 — trace가 무효할 수 있으므로 trace에서 파생된 process 보상은 그 무효성을 상속하며, 합성 수학 도메인의 의존 노출이 process 감독 데이터 검증의 템플릿이 된다.
-
-→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]

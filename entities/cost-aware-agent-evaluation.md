@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
 
 비용을 평가 지표에 편입하려면 비용이 먼저 예측·감사 가능해야 한다는 전제 조건을 공급한다. TokenCast는 비용을 실행 후 정산이 아닌 실행 전 예측과 중도 갱신의 대상으로 격상시켜, 비용 인식 평가의 측정 가능성을 확보한다.
-
-→ [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]

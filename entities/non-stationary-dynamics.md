@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
 
 개방성이라는 새 형태를 추가한다 — 환경 동역학이 아니라 참여 주체 집합 자체가 실행 중 변화할 때 학습된 정책의 정보 가정이 근본에서 무효화되는 극단적 비정상성.
-
-→ [[sources/2026-10-30-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

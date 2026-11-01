@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Late Attention Layers Alone Can Copy Entity Tokens, but Not Without At (2026-09-30)
 
 개체 토큰의 접근(복사)이 맥락 어텐션 없이는 성립하지 않음을 층 수준에서 실증한다. 접근이 저장과 분리된다는 명제를 넘어, 접근 자체가 맥락과 결합된 관계적 연산이며 원자적 검색으로 환원 불가능함을 기계론적으로 뒷받침한다.
-
-→ [[sources/2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md|상세 보기]]

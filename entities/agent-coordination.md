@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
 
 조율이 개별 능력의 합으로 환원되지 않음을 격리 측정하려는 평가 인프라를 제공하여, MeClear·MAGIC 등 조율 연구의 성과가 재검증될 수 있는 표준 기준선을 만든다.
-
-→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

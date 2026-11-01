@@ -17,11 +17,11 @@ EnvSched는 실행 가능 환경의 스케일 확대에 따라 롤아웃 생성�
 
 ## 기존 Wiki와의 관계
 
-- [[environment-as-training-primitive]]: 기존 흐름(Terminal-Universe의 궤적→환경, CodeMidas의 코드→환경, ScienceIDE)이 환경 **합성**에 집중했다면, 본 논문은 고정 환경 풀 위의 **스케줄링**이라는 제2 축을 연다. 환경이 훈련 원시자원이라면 원시자원의 소비 순서 관리도 훈련 효율의 대상이 된다.
-- [[training-grade-serving-class]]·[[agent-native-serving]]: 추론 서빙 최적화(Pythia, TokenCast, EAServe)의 훈련 롤아웃 대응물로, 서빙 계층 최적화가 훈련 인프라로 확장되는 흐름의 훈련 측을 완성한다.
-- [[rollout-budget-convergence-efficiency]]: 유한 예산 하 수렴 효율을 환경 선택·순서 문제로 재정식화한다. 예산이 고정되면 개선 지점이 정책이 아닌 데이터 관리로 이동한다.
-- [[closed-loop-training]]: 폐루프의 환경 공급(궤적 재활용, 갱신)에 '환경 실행 예산 관리'라는 제3 요소를 추가한다.
-- [[environment-absence-bottleneck]]·[[environment-supply-scaling]]: 병목이 환경 부재/공급량에서 환경 실행·검증 비용으로 이동함을 규명한다.
+- [[concepts/environment-as-training-primitive.md|environment as training primitive]]: 기존 흐름(Terminal-Universe의 궤적→환경, CodeMidas의 코드→환경, ScienceIDE)이 환경 **합성**에 집중했다면, 본 논문은 고정 환경 풀 위의 **스케줄링**이라는 제2 축을 연다. 환경이 훈련 원시자원이라면 원시자원의 소비 순서 관리도 훈련 효율의 대상이 된다.
+- [[concepts/training-grade-serving-class.md|training grade serving class]]·[[concepts/agent-native-serving.md|agent native serving]]: 추론 서빙 최적화(Pythia, TokenCast, EAServe)의 훈련 롤아웃 대응물로, 서빙 계층 최적화가 훈련 인프라로 확장되는 흐름의 훈련 측을 완성한다.
+- [[concepts/rollout-budget-convergence-efficiency.md|rollout budget convergence efficiency]]: 유한 예산 하 수렴 효율을 환경 선택·순서 문제로 재정식화한다. 예산이 고정되면 개선 지점이 정책이 아닌 데이터 관리로 이동한다.
+- [[concepts/closed-loop-training.md|closed loop training]]: 폐루프의 환경 공급(궤적 재활용, 갱신)에 '환경 실행 예산 관리'라는 제3 요소를 추가한다.
+- [[concepts/environment-absence-bottleneck.md|environment absence bottleneck]]·[[concepts/environment-supply-scaling.md|environment supply scaling]]: 병목이 환경 부재/공급량에서 환경 실행·검증 비용으로 이동함을 규명한다.
 
 ## 🔗 관련 논문
 

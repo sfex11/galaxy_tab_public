@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
 
 유해 학습 신호의 데이터 측 방어 축을 추가한다. Exploration Hacking이 모델이 훈련에 저항하는 문제였다면, 본 논문은 훈련 데이터 자체가 유해할 수 있음을 규정하고 최적화기에 데이터 수입 전 필터링을 요구한다.
-
-→ [[sources/2026-10-30-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

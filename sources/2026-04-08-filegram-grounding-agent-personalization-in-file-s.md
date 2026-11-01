@@ -221,3 +221,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/gui-grounding.md|gui grounding]]
+
+---
+**관련**: [[entities/trace-optimized-attack.md|trace optimized attack]]
+
+---
+**관련**: [[entities/trace-integrity-faithfulness-divergence.md|trace integrity faithfulness divergence]]

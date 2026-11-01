@@ -13,13 +13,13 @@
 
 **Compact Documentation for Coding Agents (2026-09-29)**
 
-자연어 문서화가 코딩 에이전트의 소프트웨어 이슈 해결에 실제로 도움이 되는지 검증하는 연구. 핵심 도구는 **라운드트립 벤치마크**다 — 코드 설명으로부터 코드를 재생성하고, 재생성 코드가 원본 테스트를 통과하는지로 설명의 충실도를 채점한다. 실행 기반 검증이 문서라는 텍스트 산출물의 품질 측정에도 적용됨을 보여준다([[executable-benchmark]], [[verification-as-system-external-relation]]).
+자연어 문서화가 코딩 에이전트의 소프트웨어 이슈 해결에 실제로 도움이 되는지 검증하는 연구. 핵심 도구는 **라운드트립 벤치마크**다 — 코드 설명으로부터 코드를 재생성하고, 재생성 코드가 원본 테스트를 통과하는지로 설명의 충실도를 채점한다. 실행 기반 검증이 문서라는 텍스트 산출물의 품질 측정에도 적용됨을 보여준다([[concepts/executable-benchmark.md|executable benchmark]], [[concepts/verification-as-system-external-relation.md|verification as system external relation]]).
 
 두 가지 발견:
-1. **완전성 > 길이**: 설명 충실도를 결정하는 것은 길이가 아니라 완전성이다. '압축 문서화' 전제(짧을수록 충분하다)가 기각되며, 토큰 절감과 정보 충실도가 직교함을 시사한다([[token-efficiency]], [[compression-forgetting-isomorphism]]).
+1. **완전성 > 길이**: 설명 충실도를 결정하는 것은 길이가 아니라 완전성이다. '압축 문서화' 전제(짧을수록 충분하다)가 기각되며, 토큰 절감과 정보 충실도가 직교함을 시사한다([[concepts/token-efficiency.md|token efficiency]], [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]).
 2. **전이 실패**: 벤치마크를 최적화 신호로 삼아 설명 작성 프롬프트를 자동 발견하면 완전 충실도에 도달하고 미개지 파일로 일반화되지만, 그 이득은 실제 에이전트의 이슈 해결 성능으로 전이되지 않는다.
 
-2번이 핵심이다. 재생성 충실도(프록시)와 에이전트 수행 지원(실제 목표)의 단절은 [[evaluation-target-substitution]]·[[one-shot-gain-fallacy]]의 문서화 도메인 발현이며, [[swe-gate]]의 '테스트 통과 ≠ 수용 가능' 진단과 동형이다. Design Docs 계열의 전제 — 문서가 재생성의 단일 진실원이라는([[design-doc-primacy]]) — 명제를 [[ideaambig]]·[[reproducible-specification-generation]]의 축에서 정량 검증한다: 명세는 재생성 가능해질 수 있으나, 에이전트 하네스([[interpretive-harness]])로 기능하는 것은 별개의 속성이다.
+2번이 핵심이다. 재생성 충실도(프록시)와 에이전트 수행 지원(실제 목표)의 단절은 [[concepts/evaluation-target-substitution.md|evaluation target substitution]]·[[concepts/one-shot-gain-fallacy.md|one shot gain fallacy]]의 문서화 도메인 발현이며, [[entities/swe-gate.md|swe gate]]의 '테스트 통과 ≠ 수용 가능' 진단과 동형이다. Design Docs 계열의 전제 — 문서가 재생성의 단일 진실원이라는([[concepts/design-doc-primacy.md|design doc primacy]]) — 명제를 [[entities/ideaambig.md|ideaambig]]·[[concepts/reproducible-specification-generation.md|reproducible specification generation]]의 축에서 정량 검증한다: 명세는 재생성 가능해질 수 있으나, 에이전트 하네스([[concepts/interpretive-harness.md|interpretive harness]])로 기능하는 것은 별개의 속성이다.
 
 ## 🔗 관련 논문
 

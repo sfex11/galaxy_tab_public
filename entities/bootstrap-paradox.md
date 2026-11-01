@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
 
 자기 경험 → 자기 설명 → 자기 훈련의 폐쇄 루프가 실제 개선을 낳는 최소 사례를 제공한다. Terminal-Universe의 환경 합성이 아니라 서술 합성으로 루프를 닫는 변형으로, 폐쇄 루프의 원료가 될 수 있는 산출물의 스펙트럼을 확장한다.
-
-→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]

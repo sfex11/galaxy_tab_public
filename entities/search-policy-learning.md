@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Strategically Diverse Sampling for Self-Training (2026-09-29)
 
 Beyond Repeated Sampling이 추론 시점의 의미 수준 조향으로 반복 샘플링의 근접 중복 한계를 다뤘다면, 본 논문은 동일한 진단을 훈련 데이터 구축 단계로 확장한다. 노이즈 주입→의미 조향→전략적 다양성으로 이어지는 다양성 확보 계층이 테스트타임 탐색과 훈련타임 데이터 구축 양축으로 공유됨을 보여준다.
-
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

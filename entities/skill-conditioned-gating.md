@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### New LoRA Skills Should Read but Never Write (2026-09-29)
 
 어댑터 간 라우팅이 단일 모델 목표를 포기하는 대안임을 확인하면서, 게이팅의 판단 대상을 입력 조건부 스킬 선택에서 계산 경로별 읽기-쓰기 권한 제어로 일반화할 가능성을 연다.
-
-→ [[sources/2026-09-29-new-lora-skills-should-read-but-never-write.md|상세 보기]]

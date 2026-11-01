@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Multi-Agent Flow Matching with Decoupled Generative Guidance (2026-10-01)
 
 생성 모델의 산출물에 형식적 보장을 도입하는 경로를 제공한다. '생성 모델은 표현력이 높아도 보장이 없다'는 명제에 대해, 유도 구조의 설계가 하드 제약 만족을 샘플링 계층에서 직접 다룰 수 있게 함을 보여준다.
-
-→ [[sources/2026-10-01-multi-agent-flow-matching-with-decoupled-generativ.md|상세 보기]]

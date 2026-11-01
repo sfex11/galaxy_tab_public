@@ -85,3 +85,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/harness-institutional-layering.md|harness institutional layering]]
+
+---
+**관련**: [[entities/harness-scaling-axis.md|harness scaling axis]]

@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|GEPA-Curator: Curated Learning for Self Improving Agents]]
 
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
-
-→ [[sources/2026-10-30-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

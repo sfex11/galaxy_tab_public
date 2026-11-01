@@ -364,3 +364,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/benefit-predictive-decoding-state.md|benefit predictive decoding state]]
+
+---
+**관련**: [[entities/equivariance-condition.md|equivariance condition]]
+
+---
+**관련**: [[entities/conditional-heterogeneity-maintenance.md|conditional heterogeneity maintenance]]
+
+---
+**관련**: [[entities/inference-privacy.md|inference privacy]]
+
+---
+**관련**: [[entities/coach-actor-decoupling.md|coach actor decoupling]]
+
+---
+**관련**: [[entities/task-structure-fidelity-gap.md|task structure fidelity gap]]
+
+---
+**관련**: [[entities/metacognitive-decoding.md|metacognitive decoding]]

@@ -13,7 +13,7 @@
 
 네트워크 자동화 입력(운영 설정·토폴로지·로그)을 제3자 프론티어 LLM에 보내면 민감 아티팩트가 유출되고, 로컬 SLM은 오류가 잦다는 딜레마에서 출발해 **검증 가능성(checkability)**을 로컬 추론 적용 가능 과제를 결정하는 기준으로 제시한다. 과제가 위반 출력을 기각하는 저비용·결정론적 내재적 검사를 노출하면, SLM 출력을 검사로 게이팅하여 프라이버시와 품질을 동시에 담보할 수 있다.
 
-기존 Wiki와의 관계: [[rlvr]]이 검증 가능성을 훈련 보상 신호로 사용했다면 본 논문은 같은 속성을 배포 시점 추론 라우팅 판단 기준으로 전용하며, 검증 가능성이 모델 출력과 독립적인 시스템-외부 관계라는 [[verification-as-system-external-relation]] 명제를 네트워크 도메인에서 재확인한다. [[computation-unit-meta-selection]]의 SLM vs LLM 선택에 '검증 가능성 × 데이터 민감도'라는 원리적 판정 기준을 부여하고, [[non-cognitive-oracle]]의 환경 인과 사실 기반 검증과 동형을 이룬다. [[slm-reasoning-gap]]에는 능력 향상이나 추론 제거가 아닌 '격차가 품질을 훼손하지 않는 과제의 선별'이라는 제3 경로([[local-sufficiency]] 계열)를 제공하며, [[on-device-inference]]의 적용 범위를 '검증 가능한 과제에서 품질 손실 없는 대안'으로 재정의한다. 프라이버시 접근으로서는 통계적 난독화([[differential-privacy]])가 아닌 데이터 신뢰 경계 내 유지라는 구조적 격리 계열에 속한다.
+기존 Wiki와의 관계: [[concepts/rlvr.md|rlvr]]이 검증 가능성을 훈련 보상 신호로 사용했다면 본 논문은 같은 속성을 배포 시점 추론 라우팅 판단 기준으로 전용하며, 검증 가능성이 모델 출력과 독립적인 시스템-외부 관계라는 [[concepts/verification-as-system-external-relation.md|verification as system external relation]] 명제를 네트워크 도메인에서 재확인한다. [[concepts/computation-unit-meta-selection.md|computation unit meta selection]]의 SLM vs LLM 선택에 '검증 가능성 × 데이터 민감도'라는 원리적 판정 기준을 부여하고, [[concepts/non-cognitive-oracle.md|non cognitive oracle]]의 환경 인과 사실 기반 검증과 동형을 이룬다. [[concepts/slm-reasoning-gap.md|slm reasoning gap]]에는 능력 향상이나 추론 제거가 아닌 '격차가 품질을 훼손하지 않는 과제의 선별'이라는 제3 경로([[concepts/local-sufficiency.md|local sufficiency]] 계열)를 제공하며, [[concepts/on-device-inference.md|on device inference]]의 적용 범위를 '검증 가능한 과제에서 품질 손실 없는 대안'으로 재정의한다. 프라이버시 접근으로서는 통계적 난독화([[concepts/differential-privacy.md|differential privacy]])가 아닌 데이터 신뢰 경계 내 유지라는 구조적 격리 계열에 속한다.
 
 ## 🔗 관련 논문
 

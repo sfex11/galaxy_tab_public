@@ -268,3 +268,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/perception-feedback.md|perception feedback]]
+
+---
+**관련**: [[entities/imperfect-perception.md|imperfect perception]]

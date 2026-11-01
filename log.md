@@ -3836,3 +3836,7 @@
 ## [2026-11-01 08:31] ingest | Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Self-distillation
 
 ## [2026-11-01 08:31] ingest | On the Fundamental Limits of Prefill-Based Decoding Length Prediction
+
+## [2026-11-01 17:04] lint | Wiki 건전성 체크
+- Issues: 3543개
+- Orphans: 1143, Missing: 2400, Contradictions: 0

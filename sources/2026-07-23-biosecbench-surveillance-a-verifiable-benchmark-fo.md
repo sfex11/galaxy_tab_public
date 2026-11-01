@@ -170,3 +170,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/orchestrator-bottleneck.md|orchestrator bottleneck]]
+
+---
+**관련**: [[entities/semantic-structure-flattening.md|semantic structure flattening]]
+
+---
+**관련**: [[entities/temporal-structure-amplified-leakage.md|temporal structure amplified leakage]]
+
+---
+**관련**: [[entities/self-induced-distribution-shift.md|self induced distribution shift]]
+
+---
+**관련**: [[entities/benchmark-obsolescence.md|benchmark obsolescence]]
+
+---
+**관련**: [[entities/continuous-structure-discretization-ceiling.md|continuous structure discretization ceiling]]

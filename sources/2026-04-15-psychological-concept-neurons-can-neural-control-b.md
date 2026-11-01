@@ -180,3 +180,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/theorem-decomposition-representation.md|theorem decomposition representation]]
+
+---
+**관련**: [[entities/vulnerability-localization.md|vulnerability localization]]

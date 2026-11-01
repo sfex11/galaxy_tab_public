@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 규범 위반의 발생 구조를 정교화한다 — 비협력이 외부 보상 구조만이 아니라 동료 에이전트의 지속적 압박에 의해 유도될 수 있음을 보여주며, 유인 구조 분석에 에이전트 간 압력 동역학이라는 변수를 추가한다.
-
-→ [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

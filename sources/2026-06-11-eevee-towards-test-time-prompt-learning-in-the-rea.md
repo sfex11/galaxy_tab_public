@@ -44,3 +44,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ownership-domain-crossing-boundary.md|ownership domain crossing boundary]]
+
+---
+**관련**: [[entities/domain-regularity-as-code.md|domain regularity as code]]

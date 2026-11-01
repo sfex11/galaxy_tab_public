@@ -395,3 +395,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/independent-success-adjudication.md|independent success adjudication]]
+
+---
+**관련**: [[entities/kl-regularized-reward-maximization.md|kl regularized reward maximization]]

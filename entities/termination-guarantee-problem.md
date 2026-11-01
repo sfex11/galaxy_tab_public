@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
 
 '언제 멈출까'가 Controller의 명시적 추론 대상이 됨을 보여준다. 종료 판단이 설계 속성이나 내부 구동의 산물이 아닌, 실행 중 추론의 산출물로 재위치한다.
-
-→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]

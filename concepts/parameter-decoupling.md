@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### Merging the Knowledge of LLMs for Automatic Speech Recognition (2026-09-16)
 
 ### New LoRA Skills Should Read but Never Write (2026-09-29)
-
-→ [[sources/2026-09-29-new-lora-skills-should-read-but-never-write.md|상세 보기]]

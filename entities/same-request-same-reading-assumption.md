@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 측정 불안정성의 원천 분해에 제2 축을 추가한다 — 기존 논의가 계측기(LLM judge) 측 드리프트를 다뤘다면, 본 논문은 측정 대상(디코딩 출력) 자체의 확률성이 정확도를 불안정화함을 보여, 측정 불안정성의 원인이 도구와 대상 양쪽에 분산됨을 확정한다.
-
-→ [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

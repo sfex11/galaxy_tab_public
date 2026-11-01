@@ -497,3 +497,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/learning-gain-measurement.md|learning gain measurement]]
+
+---
+**관련**: [[entities/meta-skill.md|meta skill]]
+
+---
+**관련**: [[entities/read-to-manipulate-pipeline.md|read to manipulate pipeline]]
+
+---
+**관련**: [[entities/skill-selection-functional-split.md|skill selection functional split]]
+
+---
+**관련**: [[entities/trajectory-as-coaching-signal.md|trajectory as coaching signal]]
+
+---
+**관련**: [[entities/self-training-data-construction.md|self training data construction]]
+
+---
+**관련**: [[entities/lora-skill-composition.md|lora skill composition]]
+
+---
+**관련**: [[entities/simulated-training-interlocutor.md|simulated training interlocutor]]
+
+---
+**관련**: [[entities/training-trajectory-analysis.md|training trajectory analysis]]
+
+---
+**관련**: [[entities/fine-tuning-knowledge-erosion.md|fine tuning knowledge erosion]]

@@ -206,3 +206,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/selection-metric-manipulation.md|selection metric manipulation]]
+
+---
+**관련**: [[entities/future-query-agnostic-compression.md|future query agnostic compression]]
+
+---
+**관련**: [[entities/efficient-paraphrase-detection.md|efficient paraphrase detection]]

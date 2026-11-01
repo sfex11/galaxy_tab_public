@@ -30,5 +30,3 @@ TRACE는 이 불투명성을 사후에 해독하려 하지 않고, 실행 시점
 ### Do LLM Agents Execute the Plans They Declare? From Planning-Mode Decla (2026-10-01)
 
 실행 불투명성에 '실행이 선언을 무음으로 대체할 수 있다'는 진단 가능한 양상을 추가하며, 계획 선언의 표면 완결성이 실행 실재를 은폐하는 경로를 실증한다.
-
-→ [[sources/2026-10-01-do-llm-agents-execute-the-plans-they-declare-from-.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
 
 합성 환경이 검증 가능한 태스크·검증자 쌍을 제공하는 경로를 제시한다 — 도구가 데이터베이스 위에서 작동하는 구조 덕에 생성된 태스크의 실행·검증이 구조적으로 가능하며, 검증 가능성이 환경 구성 설계의 산물임을 보여준다.
-
-→ [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

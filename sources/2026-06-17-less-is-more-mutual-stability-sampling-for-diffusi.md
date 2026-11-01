@@ -160,3 +160,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/improvement-procedure-external-oracle.md|improvement procedure external oracle]]
+
+---
+**관련**: [[entities/rollout-budget-convergence-efficiency.md|rollout budget convergence efficiency]]
+
+---
+**관련**: [[entities/bayesian-update-cumulative-error.md|bayesian update cumulative error]]

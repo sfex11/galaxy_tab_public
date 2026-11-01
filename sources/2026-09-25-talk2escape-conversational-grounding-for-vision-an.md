@@ -43,3 +43,6 @@ Three-Step Nav가 제로샷 VLN의 경로 이탈·조기 정지라는 구조적 
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/compounding-bias.md|compounding bias]]

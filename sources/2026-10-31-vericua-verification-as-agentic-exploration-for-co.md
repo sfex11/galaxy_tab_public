@@ -13,9 +13,9 @@
 
 VeriCUA는 컴퓨터 사용 에이전트(CUA)의 태스크 완료 검증을 '수동 판단'에서 '능동 탐색'으로 전환하는 프레임워크다. 기존 자동 검증은 두 종류의 부분 관측에 의존했다 — VLM judge는 제공된 궤적·관찰만 보고 판정하고, 생성된 프로그램은 접근 가능한 애플리케이션 상태만 검사한다. VeriCUA는 검증기 자체가 에이전트처럼 디지털 환경을 탐색하며 완전한 증거를 수집하도록 검증을 재정의한다.
 
-이는 [[single-surface-signal-insufficiency]]의 검증 도메인 실현이다 — 궤적 스냅샷이든 프로그램적 상태 접근이든, 어떤 단일 표면 신호도 실제 완료의 증거로 충분하지 않다. 동시에 [[non-cognitive-oracle]]과 [[environment-grounded-validity]]의 방향을 심화한다: 검증 근거가 모델의 판단이 아니라 탐색으로 획득한 실제 환경 상태에 위치한다.
+이는 [[concepts/single-surface-signal-insufficiency.md|single surface signal insufficiency]]의 검증 도메인 실현이다 — 궤적 스냅샷이든 프로그램적 상태 접근이든, 어떤 단일 표면 신호도 실제 완료의 증거로 충분하지 않다. 동시에 [[concepts/non-cognitive-oracle.md|non cognitive oracle]]과 [[concepts/environment-grounded-validity.md|environment grounded validity]]의 방향을 심화한다: 검증 근거가 모델의 판단이 아니라 탐색으로 획득한 실제 환경 상태에 위치한다.
 
-CUA 생태계 차원에서 실행 환경(CUA-Universe 계열)과 검증 계층이 분리 공급되어, CUA 인프라가 환경-검증 양축으로 구조화됨을 보여준다. 검증 품질이 [[environment-synthesis-as-data-curation]]과 [[rlvr]]의 보상 신호 품질을 상류에서 결정한다는 점에서, 검증은 RL 파이프라인의 전제조건으로 격상된다. 다만 검증기가 에이전트가 됨으로써 [[audit-oracle-self-reference]]의 긴장이 새 층위로 이동한다 — 탐색 기반 검증의 독립성이 검증자 에이전트 자체의 신뢰성 문제로 환원된다.
+CUA 생태계 차원에서 실행 환경(CUA-Universe 계열)과 검증 계층이 분리 공급되어, CUA 인프라가 환경-검증 양축으로 구조화됨을 보여준다. 검증 품질이 [[concepts/environment-synthesis-as-data-curation.md|environment synthesis as data curation]]과 [[concepts/rlvr.md|rlvr]]의 보상 신호 품질을 상류에서 결정한다는 점에서, 검증은 RL 파이프라인의 전제조건으로 격상된다. 다만 검증기가 에이전트가 됨으로써 [[concepts/audit-oracle-self-reference.md|audit oracle self reference]]의 긴장이 새 층위로 이동한다 — 탐색 기반 검증의 독립성이 검증자 에이전트 자체의 신뢰성 문제로 환원된다.
 
 ## 🔗 관련 논문
 

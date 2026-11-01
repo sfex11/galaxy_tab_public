@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 ### EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Langu (2026-09-29)
-
-→ [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]

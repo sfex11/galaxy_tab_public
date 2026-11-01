@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
 
 20스텝 이하의 단기 평가가 턴 수 의존적 표류를 포착하지 못했음을 구조적으로 설명하고, 50+ 라운드 설계로 표류 역학의 관측 조건을 충족시킨다.
-
-→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Do LLM Agents Execute the Plans They Declare? From Planning-Mode Decla (2026-10-01)
 
 계획 도메인의 직접적 실증 반증을 제공한다 — 선언된 계획 모드가 관측된 실행 패턴에 일관되게 결합되지 않음을 보여, '의도는 관측된 발현을 통해 나타난다'는 전제가 planner-executor 시스템에서도 균열됨을 확인시킨다.
-
-→ [[sources/2026-10-01-do-llm-agents-execute-the-plans-they-declare-from-.md|상세 보기]]

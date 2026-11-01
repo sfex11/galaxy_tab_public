@@ -23,22 +23,14 @@ bounded context 하 압축이 test-time scaling의 효율 지평을 확장함을
 
 반복 샘플링 기반 스케일링의 이득이 응답의 실질적 차이에 조건부임을 명시하며, 스케일링의 실질 제약이 샘플 수가 아니라 샘플 공간의 전략 커버리지임을 시사한다. n을 늘리는 것이 아니라 n이 덮는 전략 공간을 넓히는 제2의 스케일링 축을 연다.
 
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]
-
 ### Harness Learning Enables Generalizable Test-Time Adaptation (2026-09-30)
 
 테스트타임 적응의 제3 매체를 연다. 컴퓨트 확장(토큰·샘플 예산 증대)과 테스트타임 훈련(가중치 갱신)에 이어 실행 프로그램 개정이라는 제어 계층 축을 추가하여, 스케일링의 실질 대상이 연산량에서 하네스 구조로 이동할 수 있음을 제안한다.
-
-→ [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]
 
 ### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
 
 태스크 컴퓨트(Worker)와 제어 컴퓨트(Controller)의 분리를 통한 에이전틱 추론 스케일링 축을 제공한다. 스케일링이 단일 궤적의 깊이 연장이 아니라 제어 추론의 구조화로도 달성됨을 보여준다.
 
-→ [[sources/2026-10-01-thinking-before-thinking-scaling-agentic-inference.md|상세 보기]]
-
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
 
 테스트타임 스케일링의 효율 축을 확장한다 — '더 많이 생각하는 것'과 대칭되는 '덜 생성하는 것'이 학습 가능한 능력임을 확산 에이전트에서 실증한다.
-
-→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

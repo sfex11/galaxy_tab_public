@@ -175,3 +175,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/capability-collaboration-decoupling.md|capability collaboration decoupling]]
+
+---
+**관련**: [[entities/data-exfiltration-prevention.md|data exfiltration prevention]]
+
+---
+**관련**: [[entities/evasion-as-convergence-direction.md|evasion as convergence direction]]
+
+---
+**관련**: [[entities/controller-worker-architecture.md|controller worker architecture]]
+
+---
+**관련**: [[entities/surface-intent-decoupling.md|surface intent decoupling]]

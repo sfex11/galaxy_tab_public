@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Knowledge Acquisition During Pre-training? Large Language Models Learn (2026-09-07)
 
 ### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
-
-→ [[sources/2026-10-30-scaling-laws-for-tool-use-agents-via-controllable-.md|상세 보기]]

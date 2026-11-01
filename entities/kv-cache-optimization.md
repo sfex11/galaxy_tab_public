@@ -50,5 +50,3 @@ KV 캐싱의 적용 대상을 AR 모델에서 dLLM으로 확장한다. dLLM에�
 ### KV-streams for Efficient Compaction in Agentic Reinforcement Learning (2026-09-30)
 
 KV 캐시 관리의 적용 범위를 서빙·추론 계층에서 RL 훈련 롤아웃 계층으로 확장한다. KV 캐시가 학습 처리량의 결정 변수이자 학습 인프라의 일급 대상이 됨을 규정하며, Flash-dLLM 계열의 서빙 측 최적화와 대응되는 훈련 측 최적화 축을 형성한다.
-
-→ [[sources/2026-09-30-kv-streams-for-efficient-compaction-in-agentic-rei.md|상세 보기]]

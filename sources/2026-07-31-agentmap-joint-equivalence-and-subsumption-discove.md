@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/ai-tutoring-equivalence.md|ai tutoring equivalence]]
+
+---
+**관련**: [[entities/ai-tutoring-equivalence.md|ai tutoring equivalence]]

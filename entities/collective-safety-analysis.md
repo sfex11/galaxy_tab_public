@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
 
 집단 수준 분석의 유효 단위가 과제 구조에 의존함을 보여준다. 팀 크기의 효용·한계가 과제 택소노미에 따라 달라지므로, 집단 안전성 분석에도 과제 구조 명세가 분석 전제가 되어야 함을 시사한다.
-
-→ [[sources/2026-09-29-multi-agent-scaling-across-disjunctive-and-compens.md|상세 보기]]

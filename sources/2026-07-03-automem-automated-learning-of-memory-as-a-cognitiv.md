@@ -56,3 +56,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/lightweight-domain-schema.md|lightweight domain schema]]
+
+---
+**관련**: [[entities/lightweight-domain-schema.md|lightweight domain schema]]

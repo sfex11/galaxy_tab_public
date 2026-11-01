@@ -69,3 +69,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/closed-loop-intervention.md|closed loop intervention]]
+
+---
+**관련**: [[entities/thermal-visual-place-recognition.md|thermal visual place recognition]]

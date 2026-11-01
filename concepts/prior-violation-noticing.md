@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-can-llms-uncover-hidden-physical-laws-through-free.md|Can LLMs Uncover Hidden Physical Laws through Free Explorati]]
 
 ### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-30)
-
-→ [[sources/2026-10-30-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]

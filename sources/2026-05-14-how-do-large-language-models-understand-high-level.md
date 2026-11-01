@@ -182,3 +182,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]
+
+---
+**관련**: [[entities/hex-visual-semantic-binding.md|hex visual semantic binding]]
+
+---
+**관련**: [[entities/semantic-interference-decoupling.md|semantic interference decoupling]]

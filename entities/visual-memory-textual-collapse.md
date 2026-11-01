@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
 
 VideoLVR은 붕괴가 메모리 저장뿐 아니라 추론 궤적 수준에서도 발생함을 보인다. 텍스트 좌표 참조라는 완화책이 재번역 병목을 유지하는 한계를 지적하며, 잠재 공간 추론이 붕괴를 추론 중에 원천적으로 회피하는 제2 경로(붕괴 관리 → 붕괴 회피)를 제시한다.
-
-→ [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

@@ -18,5 +18,3 @@ Design Docs가 설계 문서를 재생성의 단일 진실원으로 채택한 �
 ### Compact Documentation for Coding Agents: A Benchmark, an Optimizer, an (2026-09-29)
 
 명세의 구현 충분성을 '재생성 코드의 테스트 통과'로 조작화한다. Design Docs가 명세를 재생성 진실원으로 채택한 전제에 측정 방법을 부여하고, 완전 충분 명세도 에이전트 수행을 담보하지 않음을 밝혀 전제의 상한선을 명시한다.
-
-→ [[sources/2026-09-29-compact-documentation-for-coding-agents-a-benchmar.md|상세 보기]]

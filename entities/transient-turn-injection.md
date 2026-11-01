@@ -22,5 +22,3 @@ TTI가 단일 턴 내 정책 준수를 유지하면서 다중 터에 걸쳐 적�
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
 
 다중 턴 취약성의 기계론적 병인을 제공한다 — 턴 경계에서의 방어 실패가 인프라의 상태 손실뿐 아니라 정렬이 첫 출력 토큰에 국소화된 '얕은 정렬' 구조에서 비롯됨을 보여, 턴 분산 공격의 성공 조건을 표현 위치 차원으로 정교화한다.
-
-→ [[sources/2026-10-31-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

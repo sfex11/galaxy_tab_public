@@ -19,13 +19,13 @@ GEPA 계열 반사형 프롬프트 최적화기는 실패 롤아웃에서 학습
 ## 기존 Wiki와의 관계
 
 ### failure-as-causal-data의 정교화
-[[failure-as-causal-data]]가 실패를 인과 지식의 원료로 취급하는 패러다임을 제시했다면, 본 논문은 그 전제에 근본 단서를 단다 — 실패가 인과 데이터가 되려면 원인이 에이전트 측 학습 가능 요인에 귀속되어야 하며, 실패 원인 귀속(failure provenance)이 학습 가치의 판정 기준이 된다. [[forgetting-as-accumulation-quality-management]]가 축적 후 품질 관리를 다룬다면 본 논문은 유입 전 큐레이션을 다뤄, 경험 품질 관리의 양단을 완성한다.
+[[concepts/failure-as-causal-data.md|failure as causal data]]가 실패를 인과 지식의 원료로 취급하는 패러다임을 제시했다면, 본 논문은 그 전제에 근본 단서를 단다 — 실패가 인과 데이터가 되려면 원인이 에이전트 측 학습 가능 요인에 귀속되어야 하며, 실패 원인 귀속(failure provenance)이 학습 가치의 판정 기준이 된다. [[concepts/forgetting-as-accumulation-quality-management.md|forgetting as accumulation quality management]]가 축적 후 품질 관리를 다룬다면 본 논문은 유입 전 큐레이션을 다뤄, 경험 품질 관리의 양단을 완성한다.
 
 ### 평가 결함의 훈련 역류
-잡음 judge를 유해 학습 요인으로 명시한 것은 [[black-box-instrument-drift]]·[[judge-instrument-reliability]] 계열의 평가 신뢰성 문제가 훈련 루프로 역류하는 경로를 확정한다. 하네스 한계를 실패 원인으로 꼽은 것은 [[harness-model-co-evolution]]에 '학습 전 하네스-모델 원인 분리'라는 새 전제를 부여한다.
+잡음 judge를 유해 학습 요인으로 명시한 것은 [[concepts/black-box-instrument-drift.md|black box instrument drift]]·[[concepts/judge-instrument-reliability.md|judge instrument reliability]] 계열의 평가 신뢰성 문제가 훈련 루프로 역류하는 경로를 확정한다. 하네스 한계를 실패 원인으로 꼽은 것은 [[concepts/harness-model-co-evolution.md|harness model co evolution]]에 '학습 전 하네스-모델 원인 분리'라는 새 전제를 부여한다.
 
 ### 자기 훈련 샘플링의 제3축
-[[self-training-data-construction]]의 상류에 태스크 선택 계층을 추가한다. [[strategic-diversity]]가 다양성으로 샘플을 골랐다면 본 논문은 원인 귀속 가능성으로 골라, 자기 훈련 샘플링이 다양성·품질·귀속 가능성의 삼축으로 분화함을 보여준다. [[skill-curation-as-learning]]과의 병렬도 주목할 만하다 — 큐레이션의 대상이 스킬(축적물)에서 태스크(입력)로 이동한다.
+[[concepts/self-training-data-construction.md|self training data construction]]의 상류에 태스크 선택 계층을 추가한다. [[concepts/strategic-diversity.md|strategic diversity]]가 다양성으로 샘플을 골랐다면 본 논문은 원인 귀속 가능성으로 골라, 자기 훈련 샘플링이 다양성·품질·귀속 가능성의 삼축으로 분화함을 보여준다. [[concepts/skill-curation-as-learning.md|skill curation as learning]]과의 병렬도 주목할 만하다 — 큐레이션의 대상이 스킬(축적물)에서 태스크(입력)로 이동한다.
 
 ## 🔗 관련 논문
 

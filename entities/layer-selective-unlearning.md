@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Elucidating the Design Space of LM Data Attribution (2026-10-31)
 
 선택적 제거의 전제 조건을 공급한다. 표적 언러닝이 '어느 데이터가 유해 출력에 기여했는가'의 귀속 지식을 요구한다면, 본 논문은 그 귀속 능력 자체의 신뢰성을 진단 가능하게 만들어 언러닝 파이프라인의 기반을 강화한다.
-
-→ [[sources/2026-10-31-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]

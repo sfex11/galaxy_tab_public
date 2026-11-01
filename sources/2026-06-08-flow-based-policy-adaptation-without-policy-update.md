@@ -88,3 +88,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/adaptation-retention-entanglement.md|adaptation retention entanglement]]
+
+---
+**관련**: [[entities/retraining-free-adaptation.md|retraining free adaptation]]

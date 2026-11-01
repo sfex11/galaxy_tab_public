@@ -23,10 +23,6 @@ CPS 도메인 사례를 추가한다. STL 견고성은 LLM이 조작할 수 없�
 
 원본 테스트가 모델 출력과 독립적인 외부 검증자로 기능하여, 문서 품질 판정에서도 검증 가능성이 시스템-외부 관계의 속성임을 강화한다.
 
-→ [[sources/2026-09-29-compact-documentation-for-coding-agents-a-benchmar.md|상세 보기]]
-
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 검증 가능성이 모델 출력과 독립적인 시스템-외부 관계 속성이라는 명제를 네트워크 자동화 도메인에서 확인한다. 네트워크 검증 테스트는 모델이 조작할 수 없는 외부 오라클이므로, 언어 태스크(RLVR)를 넘어서도 성립함을 강화한다.
-
-→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

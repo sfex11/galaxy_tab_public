@@ -11,7 +11,7 @@
 
 ## 📖 분석
 
-본 논문은 RL·테스트타임 스케일링·셀프트레이닝이 공유하는 'IID 반복 샘플링 + 정답 필터링' 파이프라인의 구조적 한계를 진단한다: 정답만 걸러내면 모델이 이미 선호하는 전략이 과대표현되어, 정답의 양은 늘어도 접근 방식의 공간은 확장되지 않는다. 이는 [[search-policy-learning]] 계열(ExpBoN의 노이즈 주입, Beyond Repeated Sampling의 의미 조향)이 추론 단계에서 밝힌 근접 중복 문제의 훈련 데이터 구축 단계 발현이며, [[concept-conditioned-sampling]]과 함께 다양성 확보가 테스트타임과 훈련타임 양축으로 분화·확장되는 계층 구조를 완성한다. 제안된 전략적 다양성은 출력의 표면 변이가 아닌 문제 접근 방식의 실질적 변이로, [[training-data-pruning]]의 '고정 예산 내 무엇으로 채울 것인가' 질문에 '서로 다른 방식의 정답으로 채운다'는 응답을 제공하며, [[auxiliary-views]]의 사전학습 통찰(보조 뷰의 인과적 지식 습득 효과)을 셀프트레이닝 영역으로 확장한다. 번역 결정 공간([[alternative-decision-trajectory]])이 입력당 다중 유효 실현의 존재를 진단했다면 본 논문은 그것을 훈련 신호로 수확하는 경로를 열고, [[exploration-absorption-decoupling]] 관점에서 흡수(SFT) 단계가 탐색 분포의 편향을 무비판적 상속하지 않도록 데이터 큐레이션을 독립적 설계 대상으로 격상시킨다.
+본 논문은 RL·테스트타임 스케일링·셀프트레이닝이 공유하는 'IID 반복 샘플링 + 정답 필터링' 파이프라인의 구조적 한계를 진단한다: 정답만 걸러내면 모델이 이미 선호하는 전략이 과대표현되어, 정답의 양은 늘어도 접근 방식의 공간은 확장되지 않는다. 이는 [[concepts/search-policy-learning.md|search policy learning]] 계열(ExpBoN의 노이즈 주입, Beyond Repeated Sampling의 의미 조향)이 추론 단계에서 밝힌 근접 중복 문제의 훈련 데이터 구축 단계 발현이며, [[entities/concept-conditioned-sampling.md|concept conditioned sampling]]과 함께 다양성 확보가 테스트타임과 훈련타임 양축으로 분화·확장되는 계층 구조를 완성한다. 제안된 전략적 다양성은 출력의 표면 변이가 아닌 문제 접근 방식의 실질적 변이로, [[concepts/training-data-pruning.md|training data pruning]]의 '고정 예산 내 무엇으로 채울 것인가' 질문에 '서로 다른 방식의 정답으로 채운다'는 응답을 제공하며, [[entities/auxiliary-views.md|auxiliary views]]의 사전학습 통찰(보조 뷰의 인과적 지식 습득 효과)을 셀프트레이닝 영역으로 확장한다. 번역 결정 공간([[concepts/alternative-decision-trajectory.md|alternative decision trajectory]])이 입력당 다중 유효 실현의 존재를 진단했다면 본 논문은 그것을 훈련 신호로 수확하는 경로를 열고, [[concepts/exploration-absorption-decoupling.md|exploration absorption decoupling]] 관점에서 흡수(SFT) 단계가 탐색 분포의 편향을 무비판적 상속하지 않도록 데이터 큐레이션을 독립적 설계 대상으로 격상시킨다.
 
 ## 🔗 관련 논문
 

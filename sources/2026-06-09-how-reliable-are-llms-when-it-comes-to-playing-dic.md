@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/cost-conditioned-heuristic-expression.md|cost conditioned heuristic expression]]
+
+---
+**관련**: [[entities/timeline-entry-chain.md|timeline entry chain]]

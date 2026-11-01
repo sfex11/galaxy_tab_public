@@ -17,9 +17,9 @@
 
 ### 기존 Wiki 논의와의 관계
 
-- [[compactionrl]]: CliffCompaction 계열이 과제 완료 보상으로 압축 정책을 RL 최적화하는 접근을 제시했다면, 본 논문은 그 정책 훈련을 막던 프리필 반복 병목을 제거하는 전제조건을 공급한다. 압축 정책 학습이 이론적 제안에서 실용 경로로 전환되는 계기다.
-- CliffCompaction·[[cross-session-compaction]]: 추론 시점 압축이 교차 에피소드 지식 재사용을 담당했다면, 본 논문은 훈련 시점 압축이라는 대응 축을 연다. 압축이 평가·배포(추론)와 롤아웃(훈련) 양축의 공통 인프라가 됨을 보여준다.
-- [[kv-cache-optimization]]: KV 캐시 최적화의 범위를 서빙·추론 계층에서 RL 훈련 계층으로 확장하며, 캐시 관리가 학습 처리량의 구성요소임을 규정한다.
+- [[concepts/compactionrl.md|compactionrl]]: CliffCompaction 계열이 과제 완료 보상으로 압축 정책을 RL 최적화하는 접근을 제시했다면, 본 논문은 그 정책 훈련을 막던 프리필 반복 병목을 제거하는 전제조건을 공급한다. 압축 정책 학습이 이론적 제안에서 실용 경로로 전환되는 계기다.
+- CliffCompaction·[[concepts/cross-session-compaction.md|cross session compaction]]: 추론 시점 압축이 교차 에피소드 지식 재사용을 담당했다면, 본 논문은 훈련 시점 압축이라는 대응 축을 연다. 압축이 평가·배포(추론)와 롤아웃(훈련) 양축의 공통 인프라가 됨을 보여준다.
+- [[concepts/kv-cache-optimization.md|kv cache optimization]]: KV 캐시 최적화의 범위를 서빙·추론 계층에서 RL 훈련 계층으로 확장하며, 캐시 관리가 학습 처리량의 구성요소임을 규정한다.
 
 ### 새 인사이트
 

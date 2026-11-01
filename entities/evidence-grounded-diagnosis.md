@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### From extreme weather to agricultural consequences with agentic AI (2026-10-31)
 
 환경·농업 도메인으로 진단 계보를 확장한다 — 텔레콤 RCA가 운영 데이터의 인과 귀인이었다면, WxCrop은 물리적으로 해석 가능한 기상 지수를 인과 분석으로 검증하여 위험을 판단함으로써, 진단의 근거가 도메인 해석 가능량에 접지되어야 한다는 원리의 예측 도메인 실현을 제공한다.
-
-→ [[sources/2026-10-31-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

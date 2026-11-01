@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement (2026-09-13)
 
 ### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
-
-→ [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|상세 보기]]

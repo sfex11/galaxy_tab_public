@@ -18,5 +18,3 @@ ARGUS가 이 엔티티의 원천 정의를 확립한다: 어휘·임베딩 표�
 ### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
 
 ARGUS 계열의 텍스트→사건 그래프 구축에서 재구성 충실도 평가의 이론적 기준을 제공한다. 사건 서열 그래프의 품질 판정이 에지 변화의 유형 분해(신규 추가 vs 재연결) 없이는 성립하지 않음을 시사한다.
-
-→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]

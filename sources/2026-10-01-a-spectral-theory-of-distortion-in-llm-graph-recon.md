@@ -17,10 +17,10 @@ LLM 그래프 재구성 평가가 통상 단일 집계 거리를 보고하는 �
 
 ### 기존 Wiki와의 관계
 
-- [[meaning-insensitive-metric]]·[[average-metric-concealment]]: 단일 지표의 구조적 은폐 비판에 '지표가 언제 의미 없는 상태로 붕괴하는가'의 형식적 조건을 부여한다.
-- [[single-surface-signal-insufficiency]]: 왜곡 유형(순추가 vs 재배선) 판별에 단일 스칼라가 원리적으로 불충분함을 sharp bound에서 도출한다.
-- [[benchmark-specification-gap]]: 재구성 벤치마크가 측정 대상을 명세하지 않으면 에지 카운트 프록시를 측정하고 있을 수 있음을 정량화한다.
-- [[graph-topology-refinement]]·[[event-knowledge-graph]]: LLM 그래프 구축·정제 연구에 '브래킷 성분 분해 보고'라는 방법론적 요구를 제시한다.
+- [[concepts/meaning-insensitive-metric.md|meaning insensitive metric]]·[[concepts/average-metric-concealment.md|average metric concealment]]: 단일 지표의 구조적 은폐 비판에 '지표가 언제 의미 없는 상태로 붕괴하는가'의 형식적 조건을 부여한다.
+- [[concepts/single-surface-signal-insufficiency.md|single surface signal insufficiency]]: 왜곡 유형(순추가 vs 재배선) 판별에 단일 스칼라가 원리적으로 불충분함을 sharp bound에서 도출한다.
+- [[concepts/benchmark-specification-gap.md|benchmark specification gap]]: 재구성 벤치마크가 측정 대상을 명세하지 않으면 에지 카운트 프록시를 측정하고 있을 수 있음을 정량화한다.
+- [[concepts/graph-topology-refinement.md|graph topology refinement]]·[[concepts/event-knowledge-graph.md|event knowledge graph]]: LLM 그래프 구축·정제 연구에 '브래킷 성분 분해 보고'라는 방법론적 요구를 제시한다.
 
 ### 새 인사이트
 

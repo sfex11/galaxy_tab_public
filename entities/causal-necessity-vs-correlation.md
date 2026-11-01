@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### From extreme weather to agricultural consequences with agentic AI (2026-10-31)
 
 기상 지수-작물 피해 관계를 상관이 아닌 인과 분석으로 검토하는 구체적 사례를 제공한다. 예측 에이전트가 물리 해석 가능량을 인과 감사의 대상으로 삼으면 위험 판단이 검증 가능한 인과 구조 위에서 성립함을 환경 도메인에서 실증한다.
-
-→ [[sources/2026-10-31-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

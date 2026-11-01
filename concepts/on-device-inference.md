@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### Caption-once, Frames-on-Demand: Visual-Need Routing for Budget-Aware A (2026-09-13)
 
 ### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
-
-→ [[sources/2026-10-30-egothumb-a-vision-driven-supernumerary-robotic-thu.md|상세 보기]]

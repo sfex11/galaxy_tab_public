@@ -18,5 +18,3 @@ EEG 잡음이 그래프 구축의 근본적 장애물이라는 문제 진단을 
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 임상 LLM 응용이 EEG 그래프 위상 정제(데이터 구조 정제)에서 유전체 분석 워크플로우(전문가 절차 실행)로 확장됨을 보여준다. 임상 도메인에서 LLM이 지원하는 대상이 구조에서 절차로 이동하는 경향을 강화한다.
-
-→ [[sources/2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

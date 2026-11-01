@@ -139,3 +139,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/audit-feedback-closure.md|audit feedback closure]]
+
+---
+**관련**: [[entities/gpu-kernel-optimization.md|gpu kernel optimization]]

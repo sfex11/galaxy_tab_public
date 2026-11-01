@@ -13,11 +13,11 @@
 
 # Harness Learning Enables Generalizable Test-Time Adaptation
 
-에이전트는 모델과 하네스(모델 호출·도구 사용·정보 흐름을 조직하는 실행 프로그램)의 결합체다. 본 논문은 프로포저 모델이 실행 피드백으로 솔버의 하네스를 개정하도록 훈련하는 **하네스 학습**을 도입하고, 이를 실행 가능 프로그램 위의 [[meta-learning]]으로 형식화한다.
+에이전트는 모델과 하네스(모델 호출·도구 사용·정보 흐름을 조직하는 실행 프로그램)의 결합체다. 본 논문은 프로포저 모델이 실행 피드백으로 솔버의 하네스를 개정하도록 훈련하는 **하네스 학습**을 도입하고, 이를 실행 가능 프로그램 위의 [[concepts/meta-learning.md|meta learning]]으로 형식화한다.
 
-Wiki의 하네스 계열 연구는 3단계로 축적되어 왔다: 하네스 설계 선택이 성능을 좌우함을 실증한 진단 단계([[harness-engineering]], [[agentic-harness-engineering]]), 실패 피드백으로 하네스를 성장시킨 휴리스틱 단계([[growing-harness]], [[failure-guided-harness-growth]]), 하네스-모델 결합 최적화 단계([[harness-model-co-evolution]]). 본 논문은 제4단계를 연다 — 하네스 개정 정책 자체를 학습하는 단계다.
+Wiki의 하네스 계열 연구는 3단계로 축적되어 왔다: 하네스 설계 선택이 성능을 좌우함을 실증한 진단 단계([[entities/harness-engineering.md|harness engineering]], [[entities/agentic-harness-engineering.md|agentic harness engineering]]), 실패 피드백으로 하네스를 성장시킨 휴리스틱 단계([[entities/growing-harness.md|growing harness]], [[concepts/failure-guided-harness-growth.md|failure guided harness growth]]), 하네스-모델 결합 최적화 단계([[concepts/harness-model-co-evolution.md|harness model co evolution]]). 본 논문은 제4단계를 연다 — 하네스 개정 정책 자체를 학습하는 단계다.
 
-핵심은 테스트타임 적응의 매체 전환이다. 추론 컴퓨트 확장([[test-time-scaling]])이나 가중치 훈련이 아닌 제어 계층 프로그램의 개정으로 적응이 일어난다. 솔버를 동결한 채 하네스만 개정하므로 능력 번역자([[harness-as-capability-translator]])가 학습 대상이 되며, 파라미터 업데이트 없는 적응([[retraining-free-adaptation]])의 하네스 버전을 제공한다. 프로포저-솔버 분리는 문제 출제자-해결자 분리([[solver-poser-decoupling]])의 시스템 자기개정 확장이기도 하다.
+핵심은 테스트타임 적응의 매체 전환이다. 추론 컴퓨트 확장([[concepts/test-time-scaling.md|test time scaling]])이나 가중치 훈련이 아닌 제어 계층 프로그램의 개정으로 적응이 일어난다. 솔버를 동결한 채 하네스만 개정하므로 능력 번역자([[concepts/harness-as-capability-translator.md|harness as capability translator]])가 학습 대상이 되며, 파라미터 업데이트 없는 적응([[concepts/retraining-free-adaptation.md|retraining free adaptation]])의 하네스 버전을 제공한다. 프로포저-솔버 분리는 문제 출제자-해결자 분리([[concepts/solver-poser-decoupling.md|solver poser decoupling]])의 시스템 자기개정 확장이기도 하다.
 
 ## 🔗 관련 논문
 

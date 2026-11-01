@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 근거 인용 중심의 임상 QA에서 가이드라인·데이터베이스·계산 증거를 절차로 통합하는 실행 가능한 임상 추론으로 확장한다. 임상 grounding의 대상이 '근거 제시'에서 '증거 통합 실행'으로 이동함을 보여준다.
-
-→ [[sources/2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

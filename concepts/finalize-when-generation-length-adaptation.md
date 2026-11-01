@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|Metacognitive Decoding: Efficient Inference for Diffusion La]]
 
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
-
-→ [[sources/2026-10-30-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

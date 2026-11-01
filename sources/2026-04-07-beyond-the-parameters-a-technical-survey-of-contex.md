@@ -430,3 +430,15 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/stateful-retrieval.md|stateful retrieval]]
+
+---
+**관련**: [[entities/context-delegation.md|context delegation]]
+
+---
+**관련**: [[entities/textual-coordinate-grounding.md|textual coordinate grounding]]
+
+---
+**관련**: [[entities/demonstration-as-context.md|demonstration as context]]
+
+---
+**관련**: [[entities/safety-constraint-context-legibility.md|safety constraint context legibility]]

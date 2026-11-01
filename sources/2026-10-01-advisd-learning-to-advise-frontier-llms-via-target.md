@@ -15,7 +15,7 @@ AdviSD는 동결된 프론티어 LLM 실행기를 자연어 조언으로 조종�
 
 세 가지 통찰이 Wiki에 추가된다. 첫째, 그럴듯한 교정이 당장의 실행을 바꾸지 않아도 그 교정으로부터의 학습은 다른 맥락의 어드바이저 결정을 변화시킨다 — 교정의 행동 중립성이 학습 중립성을 의미하지 않는다는 명제로, 학습 신호가 개별 인스턴스가 아닌 분포 수준에서 작동함을 정식화한다. 둘째, 공유 파라미터 모델에서 교정 타겟이 유용한 조언을 선호하면 학습이 오히려 제한될 수 있음을 증명하여, 다중 학습 신호 공존의 조건으로 파라미터 분리를 제기한다. 셋째, 학습되지 않는 하네스와 동결 가중치 사이에 '학습되는 조언 계층'이라는 제3 구간을 연다.
 
-[[elicitation-as-harness-artifact]]가 유도 프롬프트를 인간이 설계한 하네스 아티팩트로 보았다면, AdviSD는 그 유도 메커니즘 자체를 학습하는 후속 경로다. [[llm-as-coach]]·[[coach-actor-decoupling]]의 코칭 패러다임에 '동결 실행기+학습 코치'의 단측 학습 구성을 추가하며, [[self-retiring-distillation]]의 교사 은퇴와 대비되는 지속 조언 구조를 제시한다.
+[[concepts/elicitation-as-harness-artifact.md|elicitation as harness artifact]]가 유도 프롬프트를 인간이 설계한 하네스 아티팩트로 보았다면, AdviSD는 그 유도 메커니즘 자체를 학습하는 후속 경로다. [[concepts/llm-as-coach.md|llm as coach]]·[[concepts/coach-actor-decoupling.md|coach actor decoupling]]의 코칭 패러다임에 '동결 실행기+학습 코치'의 단측 학습 구성을 추가하며, [[concepts/self-retiring-distillation.md|self retiring distillation]]의 교사 은퇴와 대비되는 지속 조언 구조를 제시한다.
 
 ## 🔗 관련 논문
 

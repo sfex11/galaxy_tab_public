@@ -13,7 +13,7 @@
 
 생성 모델의 표현력이 생성물의 하드 제약 만족에 대한 형식적 보장을 수반하지 않는다는 간극을 다중 에이전트 설정으로 확장해 다룬다. 난제는 구조적이다: 조인트 하드 제약이 여러 에이전트에 걸쳐 있어 각 에이전트의 유도(guidance)가 타 에이전트의 유도에 의존하는데, 유도들은 동시에 계산되므로 순환 의존성이 발생한다. 본 논문은 각 에이전트가 타 에이전트의 동시 계산 결과 없이 자기 유도 입력을 결정하는 **분리형 생성 유도(decoupled generative guidance)**로 이 순환을 끊는다.
 
-Wiki 지형에서의 위치: [[compositional-incoherence]]와 [[compositional-safety]]가 '개별 유효성의 합성이 조인트 유효성을 보장하지 않는다'는 진단을 제공했다면, 본 논문은 그 생성 측 쌍대 문제 — 조인트 제약을 만족하는 객체의 분산적 생산 — 를 flow matching 계층에서 공략한다. [[communication-free-coordination]]의 생성 공간 확장으로, 통신 없는 조율 원리가 물리·행동 공간에서 분포 수준 생성으로 이동함을 보여준다. [[flow-matching]]의 위상도 확장된다: Flow-OPD가 flow matching 모델의 증류 훈련이었다면 본 논문은 flow matching을 제약 만족 생성의 프리미티브로 격상시킨다.
+Wiki 지형에서의 위치: [[concepts/compositional-incoherence.md|compositional incoherence]]와 [[concepts/compositional-safety.md|compositional safety]]가 '개별 유효성의 합성이 조인트 유효성을 보장하지 않는다'는 진단을 제공했다면, 본 논문은 그 생성 측 쌍대 문제 — 조인트 제약을 만족하는 객체의 분산적 생산 — 를 flow matching 계층에서 공략한다. [[concepts/communication-free-coordination.md|communication free coordination]]의 생성 공간 확장으로, 통신 없는 조율 원리가 물리·행동 공간에서 분포 수준 생성으로 이동함을 보여준다. [[entities/flow-matching.md|flow matching]]의 위상도 확장된다: Flow-OPD가 flow matching 모델의 증류 훈련이었다면 본 논문은 flow matching을 제약 만족 생성의 프리미티브로 격상시킨다.
 
 ## 🔗 관련 논문
 

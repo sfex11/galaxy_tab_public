@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
 
 유도 아티팩트의 최소 단위를 확정한다. 학습된 어댑터나 훈련 데이터 없이 소수 예시만으로 검색 능력이 유도되므로, 유도 설계의 비용과 소유권 논의가 프롬프트 템플릿에서 '예시 집합의 큐레이션'으로 이동한다. 예시 선택 자체가 하네스가 소유한 설계 변수임을 강화한다.
-
-→ [[sources/2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md|상세 보기]]

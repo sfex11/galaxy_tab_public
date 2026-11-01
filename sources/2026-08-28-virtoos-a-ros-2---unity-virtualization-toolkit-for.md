@@ -199,3 +199,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/evidence-grounded-experiment-design.md|evidence grounded experiment design]]
+
+---
+**관련**: [[entities/prompt-to-design-workflow.md|prompt to design workflow]]
+
+---
+**관련**: [[entities/environment-scheduling.md|environment scheduling]]
+
+---
+**관련**: [[entities/environment-scaling-law.md|environment scaling law]]
+
+---
+**관련**: [[entities/rollout-environment-coupling.md|rollout environment coupling]]
+
+---
+**관련**: [[entities/ai-artifact-design.md|ai artifact design]]

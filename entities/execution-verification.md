@@ -46,5 +46,3 @@ _Wiki 축적 중_
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
 
 검증의 관측 모델을 확장한다 — 정적 스냅샷 검사나 프로그램적 상태 접근에 머물던 실행 검증이, 검증기가 환경을 직접 탐색해 증거를 수집하는 능동적 검증으로 이동함을 실증한다.
-
-→ [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

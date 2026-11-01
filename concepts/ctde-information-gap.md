@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-tandem-balancing-centralized-and-decentralized-cri.md|TANDEM: Balancing Centralized and Decentralized Critics to A]]
 
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
-
-→ [[sources/2026-10-30-tandem-balancing-centralized-and-decentralized-cri.md|상세 보기]]

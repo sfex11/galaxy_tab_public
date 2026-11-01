@@ -349,3 +349,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/query-deferred-representation-contract.md|query deferred representation contract]]
+
+---
+**관련**: [[entities/performance-overclaiming.md|performance overclaiming]]
+
+---
+**관련**: [[entities/query-deferred-representation-contract.md|query deferred representation contract]]

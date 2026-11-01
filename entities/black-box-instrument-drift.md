@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
 
 기기 드리프트(잡음 judge)가 산출하는 오류 판정을 학습에 투입하면 자기 개선 시스템 전체가 드리프트를 학습한다는 훈련 측 피해 경로를 추가한다. 측정 신뢰성 문제가 평가 왜곡을 넘어 정책 퇴행으로 발현됨을 보여준다.
-
-→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

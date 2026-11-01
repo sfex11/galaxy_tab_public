@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
 
 확률-품질 결합 전제가 신뢰도 추정에서도 균열됨을 실증한다. 선택된 토큰 확률을 조악한 대체물로 교체하는 개입에서도 결과가 크게 달라질 수 있다는 관찰은, 높은 확률이 올바름이나 확신을 담보하지 않는다는 명제의 계측 도메인 근거가 된다.
-
-→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

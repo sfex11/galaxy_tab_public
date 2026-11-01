@@ -18,5 +18,3 @@ ExpBoN이 노이즈 주입으로 best-of-n의 탐색 품질을 개선하려 한 
 ### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
 
 테스트타임 샘플링의 용도를 품질 향상에서 신뢰도 추정으로 확장한다. 샘플 간 발산을 노이즈 주입으로 활용하는 개선 대상이 아니라 측정 대상으로 삼는 방향은, 샘플링이 개선과 계측의 양면으로 분화하고 있음을 보여준다.
-
-→ [[sources/2026-10-01-probability-is-not-enough-exploring-and-counting-d.md|상세 보기]]

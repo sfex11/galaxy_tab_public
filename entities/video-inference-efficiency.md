@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### EAServe: Encode-Aware Disaggregated Serving for Multimodal Large Langu (2026-09-29)
 
 모델 내부 최적화(토큰 프루닝, 캡션 라우팅)와 별개로 위상 수준 자원 분리가 인프라 수준 효율화 경로임을 보여준다. 서빙 자원 할당 관점의 새 축을 추가한다.
-
-→ [[sources/2026-09-29-easerve-encode-aware-disaggregated-serving-for-mul.md|상세 보기]]

@@ -54,5 +54,3 @@ _Wiki 축적 중_
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 온디바이스 추론을 '품질 손실을 수반하는 타협'에서 '검증 가능한 과제에서는 품질 손실 없는 대안'으로 재정의한다. 데이터 유출 회피가 검사 기반 품질 담보와 결합 가능함을 보여준다.
-
-→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

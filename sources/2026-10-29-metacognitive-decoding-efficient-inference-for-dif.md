@@ -17,13 +17,13 @@
 
 ### 기존 Wiki와의 관계
 
-적응적 추론 계열에 확산 패러다임의 새 축을 추가한다. CADENCE(외부 환경 반응형 적응), SpecKV(내부 압축 상태 반응형) 이후 본 논문은 확산 디코딩의 확정 시점과 길이 자체를 적응 대상으로 삼는다. [[decoder-primitive-redefinition]]의 3세대 적응(선택 연산 재설계)에 확산 쪽 구현 사례를 공급한다. 병렬 토큰 샘플링 논의도 Cola DLM·이산 확산 계열과 연결되며, 생성 길이 조절은 [[inference-budget-progressive-investment]]의 환경 상태 조건부 버전이 된다.
+적응적 추론 계열에 확산 패러다임의 새 축을 추가한다. CADENCE(외부 환경 반응형 적응), SpecKV(내부 압축 상태 반응형) 이후 본 논문은 확산 디코딩의 확정 시점과 길이 자체를 적응 대상으로 삼는다. [[concepts/decoder-primitive-redefinition.md|decoder primitive redefinition]]의 3세대 적응(선택 연산 재설계)에 확산 쪽 구현 사례를 공급한다. 병렬 토큰 샘플링 논의도 Cola DLM·이산 확산 계열과 연결되며, 생성 길이 조절은 [[concepts/inference-budget-progressive-investment.md|inference budget progressive investment]]의 환경 상태 조건부 버전이 된다.
 
-주목할 점은 '메타인지' 명명 — 복잡도 메타인지(얼마나 계산할까)의 확산 도메인 실현으로, [[metacognition]] 논의가 디코딩 계층까지 확장됨을 보여준다.
+주목할 점은 '메타인지' 명명 — 복잡도 메타인지(얼마나 계산할까)의 확산 도메인 실현으로, [[concepts/metacognition.md|metacognition]] 논의가 디코딩 계층까지 확장됨을 보여준다.
 
 ### 열린 질문
 
-에이전트 상호작용 조건부 적응이라는 점에서, 확산 생성의 중간 상태가 컨텍스트/압축 상태 신호로 재해석될 수 있는지(C[[compression-relevance-isomorphism]] 연결)는 후속 검증 과제다.
+에이전트 상호작용 조건부 적응이라는 점에서, 확산 생성의 중간 상태가 컨텍스트/압축 상태 신호로 재해석될 수 있는지(C[[concepts/compression-relevance-isomorphism.md|compression relevance isomorphism]] 연결)는 후속 검증 과제다.
 
 ## 🔗 관련 논문
 

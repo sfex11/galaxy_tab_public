@@ -245,3 +245,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/skill-selection-functional-split.md|skill selection functional split]]
+
+---
+**관련**: [[entities/harness-as-nonparametric-policy-layer.md|harness as nonparametric policy layer]]
+
+---
+**관련**: [[entities/code-as-evolution-unit.md|code as evolution unit]]
+
+---
+**관련**: [[entities/meta-harness-policy.md|meta harness policy]]
+
+---
+**관련**: [[entities/behavior-defined-goal.md|behavior defined goal]]

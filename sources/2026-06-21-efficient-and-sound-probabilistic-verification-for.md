@@ -337,3 +337,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/monitoring-as-obstacle.md|monitoring as obstacle]]
+
+---
+**관련**: [[entities/extra-probabilistic-adjudication.md|extra probabilistic adjudication]]

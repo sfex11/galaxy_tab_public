@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
 
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
-
-→ [[sources/2026-10-31-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

@@ -16,5 +16,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions (2026-10-30)
-
-→ [[sources/2026-10-30-rare-relevant-and-still-wrong-how-memory-fails-llm.md|상세 보기]]

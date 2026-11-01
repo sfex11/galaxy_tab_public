@@ -31,22 +31,14 @@ SkillOS 등이 보여준 스킬 큐레이션 중심 자기 개선을 넘어, 이
 
 셀프트레이닝의 병목이 샘플링 전략의 다양성에 있음을 진단한다 — 자기 개선 루프가 자기 선호 분포를 증폭하는 순환적 한계의 완화 경로를 데이터 큐레이션 차원에서 제시하며, 자기 개선의 질이 개선 절차가 아닌 개선 재료의 선택 기준에 의해 결정될 수 있음을 보여준다.
 
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]
-
 ### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
 
 외부 보상이나 검증자 없이 자기 경험의 설명만으로 개선하는 최소 경로를 추가한다. RL 기반 자기 개선과 검증자 기반 개선 사이에 '서술 기반 개선'이라는 제3의 축을 확립하여, 자기 개선의 최소 성립 조건이 외부 신호가 아니라 자기 서술일 수 있음을 시사한다.
-
-→ [[sources/2026-09-30-shockingly-simple-self-retrospection-improves-agen.md|상세 보기]]
 
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
 
 자기 개선 루프에 '어떤 태스크를 학습 재료로 제공할 것인가'라는 입력 큐레이션 단계를 추가한다. 모든 실패가 개선 소재가 된다는 암묵적 전제를 겨누어, 개선 루프의 병목이 학습 방법이 아니라 학습 재료 선별에 있을 수 있음을 보여준다.
 
-→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]
-
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
 
 자기 개선 루프의 성립 전제를 명시한다 — 개선은 학습 신호가 유효할 때만 성립하며, 실패의 학습 가능성 판별이 개선 절차의 선행 단계가 된다. SkillOS의 산출물(스킬) 큐레이션과 짝을 이루는 입력(태스크) 큐레이션 축을 제공한다.
-
-→ [[sources/2026-10-30-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

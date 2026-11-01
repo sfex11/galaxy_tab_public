@@ -18,5 +18,3 @@ CodeMidas는 코드베이스의 구현된 기능을 실행 가능한 RL 환경�
 ### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-29)
 
 환경의 '합성'(Terminal-Universe의 궤적→환경, CodeMidas의 코드→환경)에서 '스케줄링'으로 확장한다. 환경이 훈련 원시자원이라는 원리가 성립하려면 원시자원의 소비 순서와 배분까지 관리 대상이 되어야 함을 보여, 환경 원시자원화 논의의 인프라 계층을 완성한다.
-
-→ [[sources/2026-10-29-envsched-environment-aware-scheduling-for-rollout-.md|상세 보기]]

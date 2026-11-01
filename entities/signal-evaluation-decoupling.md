@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
 
 재사용 가능한 전문가 가이던스 계층(신호 계층)과 질의별 루브릭 인스턴스(평가 계층)의 분리가 금융 평가에서 실현되는 사례를 제공한다. 가이던스의 주기 갱신 없이도 질의별 인스턴스 재생성으로 실세계 정합성이 유지됨을 시사한다.
-
-→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

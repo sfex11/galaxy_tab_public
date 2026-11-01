@@ -17,7 +17,7 @@ iGSM에서 정답이 옳아도 사고 흔적(CoT trace)이 무효할 수 있음�
 
 이는 cot-as-translated-report 논제에 최초의 기계적 감사 증거를 제공한다 — 결과 신호(정답)와 과정 신호(trace)가 분리 가능하며(신규 개념 answer-trace-decoupling), 가장 유리한 조건(검증 가능한 수학·작은 탐색 공간)에서조차 실제로 분리됨이 관찰된다.
 
-[[cot-monitorability]] 관점에서 이는 비적대적 무효성 문제다. Corrupt Plans, Clean Traces가 계획 오염 하의 흔적 세척을 보였다면 본 논문은 회피 의도 없이 정답-흔적 결합이 깨짐을 보여, trace 감시의 기본 전제가 적대성과 무관하게 재점검되어야 함을 시사한다. [[trace-integrity-faithfulness-divergence]]의 무결성-충실성 분리에 결과 수준 대응물(정답 유효성 ≠ 과정 유효성, 그 역도 비성립)을 추가한다.
+[[concepts/cot-monitorability.md|cot monitorability]] 관점에서 이는 비적대적 무효성 문제다. Corrupt Plans, Clean Traces가 계획 오염 하의 흔적 세척을 보였다면 본 논문은 회피 의도 없이 정답-흔적 결합이 깨짐을 보여, trace 감시의 기본 전제가 적대성과 무관하게 재점검되어야 함을 시사한다. [[concepts/trace-integrity-faithfulness-divergence.md|trace integrity faithfulness divergence]]의 무결성-충실성 분리에 결과 수준 대응물(정답 유효성 ≠ 과정 유효성, 그 역도 비성립)을 추가한다.
 
 방법론적으로는 verified-reasoning-trace의 실현 조건을 규정한다 — 합성 도메인 + 정확한 의존 노출이라는 최소 설계가 trace 수준 기계 검증을 가능하게 한다. legibility-interpretability-gap의 강한 형태(판독 가능하고 정답과 결합된 trace조차 무효)의 실측이며, process-reward-model 감독 데이터 품질 감사와 meaning-insensitive-metric 비판의 trace 수준 확장으로 이어진다.
 

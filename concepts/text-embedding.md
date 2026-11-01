@@ -30,5 +30,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-09-mmemb-r1-reasoning-enhanced-multimodal-embedding-w.md|MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-]] (2026-04-09)
 
 ### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
-
-→ [[sources/2026-10-01-effective-dense-retrieval-using-only-in-context-ex.md|상세 보기]]

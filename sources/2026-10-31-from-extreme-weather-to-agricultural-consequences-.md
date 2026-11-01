@@ -13,9 +13,9 @@
 
 WxCrop는 폭풍 예보가 '어디를 칠지'만 말할 뿐 '어떤 작물이 얼마나 피해를 입을지'는 말하지 않는다는 예보-피해 간극을 진단하고, 이 간극을 에이전트로 봉합하는 최초의 시도다. 에이전트가 물리적으로 해석 가능한 기상 지수를 인과 분석으로 검증하여 농업 위험을 판단하고, 흩어진 다원천 기록을 결합해 과거와 예보 조건 모두에서 작물 손실을 예측한다.
 
-이 논문은 세 지점에서 기존 Wiki와 연결된다. 첫째, [[evidence-grounded-diagnosis]] 계보(Large Language Models (LLMs) for Telecom Root Cause Analysis (RCA))가 운영 진단 도메인에서 환경·농업 예측 도메인으로 확장된다 — 지수를 인과 분석으로 검토하는 것은 [[causal-necessity-vs-correlation]] 원리의 물리 hazard 도메인 실현이며, 예측의 근거가 블랙박스 상관에서 검증 가능한 해석 가능 지수로 이동함을 보여준다. 둘째, 여러 원천에 흩어진 기상·농업 기록의 결합은 [[structured-knowledge-extraction]]과 [[evidence-fusion]]의 이기종 데이터 버전이다. 셋째, 과거 기록에 대한 백테스팅과 예보 조건에 대한 전방 예측을 동시에 다루는 점에서 [[environment-grounded-validity]]의 예측 도메인 확장을 시사한다.
+이 논문은 세 지점에서 기존 Wiki와 연결된다. 첫째, [[concepts/evidence-grounded-diagnosis.md|evidence grounded diagnosis]] 계보(Large Language Models (LLMs) for Telecom Root Cause Analysis (RCA))가 운영 진단 도메인에서 환경·농업 예측 도메인으로 확장된다 — 지수를 인과 분석으로 검토하는 것은 [[concepts/causal-necessity-vs-correlation.md|causal necessity vs correlation]] 원리의 물리 hazard 도메인 실현이며, 예측의 근거가 블랙박스 상관에서 검증 가능한 해석 가능 지수로 이동함을 보여준다. 둘째, 여러 원천에 흩어진 기상·농업 기록의 결합은 [[concepts/structured-knowledge-extraction.md|structured knowledge extraction]]과 [[concepts/evidence-fusion.md|evidence fusion]]의 이기종 데이터 버전이다. 셋째, 과거 기록에 대한 백테스팅과 예보 조건에 대한 전방 예측을 동시에 다루는 점에서 [[concepts/environment-grounded-validity.md|environment grounded validity]]의 예측 도메인 확장을 시사한다.
 
-자유 탐색으로 물리 법칙을 발견하려는 [[longchang]] 계열과 달리 WxCrop은 명세된 예측 목표 하에서 해석 가능한 물리량을 감사 기반으로 사용하므로, 과학 에이전트가 '탐색형(법칙 발견)'과 '예측형(결과 예측)'으로 분화하는 흐름을 확정한다.
+자유 탐색으로 물리 법칙을 발견하려는 [[entities/longchang.md|longchang]] 계열과 달리 WxCrop은 명세된 예측 목표 하에서 해석 가능한 물리량을 감사 기반으로 사용하므로, 과학 에이전트가 '탐색형(법칙 발견)'과 '예측형(결과 예측)'으로 분화하는 흐름을 확정한다.
 
 ## 🔗 관련 논문
 

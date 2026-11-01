@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-10-31)
 
 기존 정의(어시스턴트 모델을 프로브하는 사용자 턴 생성)에 역할 역전 버전을 추가한다 — LLM이 클라이언트를 연기하고 인간이 응답자가 되면, 사용자 턴 생성의 소비처가 모델 정렬 평가에서 인간 전문가 훈련으로 확장됨을 보여준다.
-
-→ [[sources/2026-10-31-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

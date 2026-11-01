@@ -19,5 +19,3 @@ _자동 Wiki Query에서 추출됨_
 ### Beyond Repeated Sampling: Learning Search Policies for LLM Reasoning (2026-09-24)
 
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
-
-→ [[sources/2026-09-30-tokencast-forecasting-token-consumption-during-llm.md|상세 보기]]

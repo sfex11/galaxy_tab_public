@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/role-as-relational-property.md|role as relational property]]
+
+---
+**관련**: [[entities/role-as-relational-property.md|role as relational property]]

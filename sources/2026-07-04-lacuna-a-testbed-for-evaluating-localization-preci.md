@@ -175,3 +175,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/contaminated-knowledge-self-justification.md|contaminated knowledge self justification]]
+
+---
+**관련**: [[entities/structural-target-drift.md|structural target drift]]
+
+---
+**관련**: [[entities/builder-target-separation.md|builder target separation]]

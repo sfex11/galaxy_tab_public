@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Agent-Editing World Model: Rethinking World Modeling for LLM Agents (2026-09-25)
 
 ### Understanding the limits of latent world models (2026-10-30)
-
-→ [[sources/2026-10-30-understanding-the-limits-of-latent-world-models.md|상세 보기]]

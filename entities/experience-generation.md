@@ -22,5 +22,3 @@ TAMP가 자율 실행 가능 행동의 훈련 궤적을 인간 개입 없이 생
 ### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
 
 실제 과제 수행 중 스킬 조합으로 경험이 생성되고 그것이 정책 개선의 훈련 자원으로 재사용되는 이중 목적 구조를 확정한다.
-
-→ [[sources/2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md|상세 보기]]

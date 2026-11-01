@@ -30,5 +30,3 @@ MLP 어블레이션(슬라이딩 윈도우)을 해석 연구의 사후 검증 �
 ### User Model Extraction via Belief Self-Distillation (2026-09-29)
 
 선형 프로빙(상관적 판독)과 인과 프로빙(개입 검증)을 단일 자기 증류 프레임워크로 다리는 방법론적 경로를 제공한다. 해석가능성의 판독과 개입이 별도 기법이 아니라 하나의 학습된 표현의 두 사용 방식임을 보여준다.
-
-→ [[sources/2026-09-29-user-model-extraction-via-belief-self-distillation.md|상세 보기]]

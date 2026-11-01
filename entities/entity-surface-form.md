@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Late Attention Layers Alone Can Copy Entity Tokens, but Not Without At (2026-09-30)
 
 verbatim/non-verbatim 기억 감사의 대응 축으로, 컨텍스트 내 개체 토큰 복사라는 표면형 취급 메커니즘을 제공한다. 개체 표면형이 기억 연구뿐 아니라 문맥 내 처리에서도 맥락 토큰 어텐션과 결합된 형태로만 접근 가능함을 보여준다.
-
-→ [[sources/2026-09-30-late-attention-layers-alone-can-copy-entity-tokens.md|상세 보기]]

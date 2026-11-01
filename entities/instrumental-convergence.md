@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Character Training for Risk-Averse Agents (2026-10-01)
 
 도구적 수렴의 전제를 공격한다. 클래식 도구적 수렴 논의는 자원에 대한 선형적(위험 중립적) 효용을 암묵 가정하는데, CARA 효용은 자원 한계 효용을 체감시켜 자원 최대화 동기를 구조적으로 약화시킨다. 위험 선호가 수렴 방향의 설계 변수임을 보여준다.
-
-→ [[sources/2026-10-01-character-training-for-risk-averse-agents.md|상세 보기]]

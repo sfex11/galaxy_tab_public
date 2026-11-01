@@ -11,3 +11,15 @@ Reasoning about the 3D world from multi-view images remains a fundamental challe
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/chunk-level-graph-aggregation.md|chunk level graph aggregation]]
+
+---
+**관련**: [[entities/effective-learning-rate.md|effective learning rate]]
+
+---
+**관련**: [[entities/feature-regime-complementarity.md|feature regime complementarity]]
+
+---
+**관련**: [[entities/decision-critical-evidence.md|decision critical evidence]]

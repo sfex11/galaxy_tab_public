@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Safe Meta-Reinforcement Learning via Information Space Reachability (2026-09-16)
 
 ### Harness Learning Enables Generalizable Test-Time Adaptation (2026-09-30)
-
-→ [[sources/2026-09-30-harness-learning-enables-generalizable-test-time-a.md|상세 보기]]

@@ -58,5 +58,3 @@ judge의 역할을 출력 평가자에서 데이터 주석자(annotator)로 확�
 ### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
 
 판단자 신뢰성의 교정 축으로 '전문가 가이던스의 이중 작용'을 추가한다. 판단 행위가 전문가가 명시한 기준으로 프롬프트(생성 전)와 루브릭(판정 시) 양면에서 사전 구속되어 judge 드리프트를 구조적으로 감소시킨다.
-
-→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

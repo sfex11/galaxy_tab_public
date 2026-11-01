@@ -38,5 +38,3 @@ _Wiki 축적 중_
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
 
 추론 표현 계약의 재협상 사례를 제공한다. CoT가 반드시 인간 가독 텍스트일 필요가 없다는 전제 전환을 통해, 계약의 형식 요건(가독성)과 실질 요건(증거 충실도)의 분리가 시각 도메인에서 명시적으로 드러난다.
-
-→ [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|상세 보기]]

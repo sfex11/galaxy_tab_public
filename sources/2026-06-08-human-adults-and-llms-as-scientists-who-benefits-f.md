@@ -136,3 +136,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/observation-artifact.md|observation artifact]]
+
+---
+**관련**: [[entities/semantic-exploration-steering.md|semantic exploration steering]]
+
+---
+**관련**: [[entities/ai-night-scientist.md|ai night scientist]]

@@ -109,3 +109,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/domain-regularity-as-code.md|domain regularity as code]]
+
+---
+**관련**: [[entities/sequential-annotation-optimization.md|sequential annotation optimization]]

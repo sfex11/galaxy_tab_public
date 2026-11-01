@@ -34,5 +34,3 @@ Bounded Reach가 사용자 가치 그룹으로 측정되어, 능력-안전 불�
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 능력과 프라이버시의 결합 구조를 확인한다 — 원격 프론티어 위임은 능력을 얻지만 프라이버시를 희생하고 로컬 SLM은 그 반대이며, 검증 가능성만이 이 트레이드오프를 구성적으로 해소하는 제3 축이다.
-
-→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

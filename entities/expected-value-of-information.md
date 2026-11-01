@@ -38,5 +38,3 @@ Tool-Lab은 정보 수집 판단에 명시적 비용을 부여한 EVI의 실험 
 ### Towards Communication-Efficient Social Intelligence in Language Agents (2026-09-30)
 
 EVI가 도구 호출 판단에서 정의되던 범위를 넘어, 사회적 발화의 가치 판단('이 말이 상호작용에 기여하는가')으로 확장되는 사례를 제공한다. 기여 없는 발화는 기대 가치가 음수인 정보 행동으로 재해석되며, 이 판단이 학습 가능함을 보여준다.
-
-→ [[sources/2026-09-30-towards-communication-efficient-social-intelligenc.md|상세 보기]]

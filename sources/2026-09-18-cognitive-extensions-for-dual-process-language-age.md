@@ -103,3 +103,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/storage-memory-persistence-divergence.md|storage memory persistence divergence]]
+
+---
+**관련**: [[entities/non-cognitive-oracle.md|non cognitive oracle]]

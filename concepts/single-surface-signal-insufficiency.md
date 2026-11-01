@@ -30,16 +30,8 @@ _자동 Wiki Query에서 추출됨_
 
 ### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
 
-→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]
-
 ### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
-
-→ [[sources/2026-10-01-a-spectral-theory-of-distortion-in-llm-graph-recon.md|상세 보기]]
 
 ### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
 
-→ [[sources/2026-10-01-correct-answers-invalid-traces-what-verifiable-gra.md|상세 보기]]
-
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
-
-→ [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

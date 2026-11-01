@@ -62,5 +62,3 @@ LLM 보안의 방어 계층에 추론 시점 백도어 감지라는 런타임 �
 ### Character Training for Risk-Averse Agents (2026-10-01)
 
 안전 메커니즘의 제3 축을 추가한다 — 출력 필터링(행동 제어)과 정렬(목표 교정)에 이어 위험 성향 훈련(선호 교정)을 독립 방어선으로 제시. 정렬 실패를 전제로 해도 CARA 위험 회피가 치명적 전략(반란) 대신 안전 전략(거래)으로 수렴시켜, 방어 깊이 설계의 경험적 근거가 된다.
-
-→ [[sources/2026-10-01-character-training-for-risk-averse-agents.md|상세 보기]]

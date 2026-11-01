@@ -17,21 +17,21 @@ LLM이 대화에서 암묵적으로 형성하는 사용자 신념을, 동결 모
 
 ## 기존 Wiki 논의와의 관계
 
-**판독-기록 통합의 실증**: [[steering-read-manipulation-duality]]와 [[read-write-symmetry]]가 예측한 대칭성의 사용자 신념 버전이다. 동일한 표현이 디코딩(판독)과 재주입(조작) 양쪽에 작동하며, 판독 가능성이 곧 조작 가능성임을 확정한다.
+**판독-기록 통합의 실증**: [[concepts/steering-read-manipulation-duality.md|steering read manipulation duality]]와 [[concepts/read-write-symmetry.md|read write symmetry]]가 예측한 대칭성의 사용자 신념 버전이다. 동일한 표현이 디코딩(판독)과 재주입(조작) 양쪽에 작동하며, 판독 가능성이 곧 조작 가능성임을 확정한다.
 
-**신념 계층의 제2 경로**: [[explicit-belief-layer]]가 신념을 외부 아키텍처 구성요소로 승격했다면, BSD는 신념을 모델 내부 표현에서 추출해 조작 가능한 형태로 격상시키는 내재적 경로를 연다.
+**신념 계층의 제2 경로**: [[concepts/explicit-belief-layer.md|explicit belief layer]]가 신념을 외부 아키텍처 구성요소로 승격했다면, BSD는 신념을 모델 내부 표현에서 추출해 조작 가능한 형태로 격상시키는 내재적 경로를 연다.
 
-**ToM의 연산화 심화**: [[theory-of-mind]] 흐름에 이어 사용자 모델이 선형 디코딩 가능·인과 주입 가능한 잠재 변수임을 실증한다.
+**ToM의 연산화 심화**: [[concepts/theory-of-mind.md|theory of mind]] 흐름에 이어 사용자 모델이 선형 디코딩 가능·인과 주입 가능한 잠재 변수임을 실증한다.
 
-**동결 모델 유도의 확장**: [[router-within]]의 스킬 라우팅, [[frozen-model-external-memory-contradiction]]의 지식에 이어 '모델이 사용자에 대해 믿는 것'까지 자기 증류로 추출 가능함을 확장한다.
+**동결 모델 유도의 확장**: [[concepts/router-within.md|router within]]의 스킬 라우팅, [[concepts/frozen-model-external-memory-contradiction.md|frozen model external memory contradiction]]의 지식에 이어 '모델이 사용자에 대해 믿는 것'까지 자기 증류로 추출 가능함을 확장한다.
 
 ## 보안 시사점
 
-사용자 신념의 판독 가능성은 악의적 쓰기(신념 조작)의 표면이기도 하다. 개인화 시스템에서 신념 벡터 조작은 [[sycophancy]] 증폭·사용자 인식 왜곡의 새 공격 벡터가 될 수 있다.
+사용자 신념의 판독 가능성은 악의적 쓰기(신념 조작)의 표면이기도 하다. 개인화 시스템에서 신념 벡터 조작은 [[concepts/sycophancy.md|sycophancy]] 증폭·사용자 인식 왜곡의 새 공격 벡터가 될 수 있다.
 
 ## 방법론적 기여
 
-선형 프로빙(상관)과 인과 프로빙(개입)을 단일 자기 증류 프레임워크로 다리며, [[causal-mechanistic-interpretability]]의 판독-개입 통합 방향에 구체적 경로를 제공한다.
+선형 프로빙(상관)과 인과 프로빙(개입)을 단일 자기 증류 프레임워크로 다리며, [[concepts/causal-mechanistic-interpretability.md|causal mechanistic interpretability]]의 판독-개입 통합 방향에 구체적 경로를 제공한다.
 
 ## 🔗 관련 논문
 

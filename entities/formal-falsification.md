@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-30)
 
 법칙 가설을 실험으로 반증하는 루프가 발견의 엔진으로 작동함을 보여준다 — CPS 반증 프레임워크가 안전 검증의 역방향 방법론이었다면 본 논문은 동일 반증 루프가 지식 생성의 정방향 엔진임을 입증한다.
-
-→ [[sources/2026-10-30-can-llms-uncover-hidden-physical-laws-through-free.md|상세 보기]]

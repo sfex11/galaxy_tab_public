@@ -363,3 +363,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/multi-dimensional-revision-decision-space.md|multi dimensional revision decision space]]
+
+---
+**관련**: [[entities/dynamic-execution-reasoning.md|dynamic execution reasoning]]
+
+---
+**관련**: [[entities/static-dynamic-reasoning-gap.md|static dynamic reasoning gap]]

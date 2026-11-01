@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
 
 자동 생성의 대상을 평가 데이터에서 평가 기준(루브릭)으로 확장한다. 전문가 가이던스가 생성 파이프라인 전체를 지배하므로, 생성 기반 평가의 순환적 타당성 위험이 전문가 접지로 완화되는 조건을 금융 도메인에서 제시한다.
-
-→ [[sources/2026-09-30-finautorubric-expert-guided-automatic-rubric-gener.md|상세 보기]]

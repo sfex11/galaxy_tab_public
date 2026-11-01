@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/data-sovereignty.md|data sovereignty]]
+
+---
+**관련**: [[entities/data-sovereignty.md|data sovereignty]]

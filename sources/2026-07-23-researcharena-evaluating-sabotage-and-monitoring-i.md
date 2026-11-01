@@ -171,3 +171,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/control-semantic-division.md|control semantic division]]
+
+---
+**관련**: [[entities/dynamical-invariant-monitoring.md|dynamical invariant monitoring]]
+
+---
+**관련**: [[entities/optimizer-norm-control.md|optimizer norm control]]
+
+---
+**관련**: [[entities/monitoring-as-obstacle.md|monitoring as obstacle]]
+
+---
+**관련**: [[entities/goal-safety-signal-asymmetry.md|goal safety signal asymmetry]]

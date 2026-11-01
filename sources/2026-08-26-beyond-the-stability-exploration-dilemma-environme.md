@@ -64,3 +64,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/post-emission-revision-policy.md|post emission revision policy]]
+
+---
+**관련**: [[entities/policy-constraint-hardening.md|policy constraint hardening]]
+
+---
+**관련**: [[entities/course-drift.md|course drift]]

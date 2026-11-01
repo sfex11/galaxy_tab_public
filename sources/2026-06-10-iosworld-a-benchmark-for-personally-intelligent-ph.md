@@ -211,3 +211,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/zeroth-order-preference-alignment.md|zeroth order preference alignment]]
+
+---
+**관련**: [[entities/executable-benchmark.md|executable benchmark]]
+
+---
+**관련**: [[entities/crossprofile-benchmark.md|crossprofile benchmark]]

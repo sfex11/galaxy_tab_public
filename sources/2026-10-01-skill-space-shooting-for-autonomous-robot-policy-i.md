@@ -25,13 +25,13 @@
 rapid가 시연을 테스트 가능 명세로 컴파일해 시연 부담을 해소했다면, 본 논문은 새 시연 없이 기존 스킬의 조합 경험에서 개선을 얻어 **개선의 확장성**이라는 제2 축을 연다. TANDEM이 필요 시점에 시연을 요청했다면 본 논문은 수정 시 시연 자체를 제거한다.
 
 ### Learning to Coach 계열과의 연결
-[[trajectory-as-coaching-signal]] 패턴의 로봇 도메인 실현이다. 파운데이션 모델이 llm-as-coach 역할로 스킬 조합을 수행하되 그 결과가 정책 가중치로 환류되어, improvement-delegation과 자기 개선의 하이브리드 형태가 된다.
+[[concepts/trajectory-as-coaching-signal.md|trajectory as coaching signal]] 패턴의 로봇 도메인 실현이다. 파운데이션 모델이 llm-as-coach 역할로 스킬 조합을 수행하되 그 결과가 정책 가중치로 환류되어, improvement-delegation과 자기 개선의 하이브리드 형태가 된다.
 
 ### 학습 단위의 재정의
-조합-실행-관찰-개선 루프의 반복이 학습 단위로 기능한다는 [[agent-loop-as-training-time]] 원리의 물리 도메인 실증.
+조합-실행-관찰-개선 루프의 반복이 학습 단위로 기능한다는 [[concepts/agent-loop-as-training-time.md|agent loop as training time]] 원리의 물리 도메인 실증.
 
 ### 외부 스킬 vs 내부 정책의 긴장
-[[skill-as-external-state]]와 capability-internalization의 교차점. 조합 완수가 정책에 자동 흡수되지 않음을 근거로, 개선의 저장 위치(외부 스킬 라이브러리 vs 정책 파라미터)를 가르는 명시적 환류 메커니즘의 필요성을 확립한다.
+[[concepts/skill-as-external-state.md|skill as external state]]와 capability-internalization의 교차점. 조합 완수가 정책에 자동 흡수되지 않음을 근거로, 개선의 저장 위치(외부 스킬 라이브러리 vs 정책 파라미터)를 가르는 명시적 환류 메커니즘의 필요성을 확립한다.
 
 ## 🔗 관련 논문
 

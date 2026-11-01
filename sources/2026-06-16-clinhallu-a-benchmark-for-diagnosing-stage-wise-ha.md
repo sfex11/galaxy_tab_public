@@ -70,3 +70,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/visual-need-estimation-caching.md|visual need estimation caching]]
+
+---
+**관련**: [[entities/tamp-teleoperation-hybrid-data-collection.md|tamp teleoperation hybrid data collection]]

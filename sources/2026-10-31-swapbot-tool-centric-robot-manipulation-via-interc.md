@@ -17,16 +17,16 @@ SwapBot은 교체 가능한 엔드이펙터와 촉각 감지를 결합하여 도
 
 ### Wiki와의 관계
 
-이 논문은 [[tool-use]] 개념을 소프트웨어 에이전트에서 물리 로봇으로 확장한다. 디지털 에이전트의 API 호출에 대응하는 물리적 원시 연산이 하드웨어 어댑터를 통한 엔드이펙터 교체이며, 태스크 요구에 따른 도구 선택이 에이전트의 스킬 라우팅([[skill-space-shooting]])과 구조적으로 동형인 조합 판단임을 시사한다.
+이 논문은 [[concepts/tool-use.md|tool use]] 개념을 소프트웨어 에이전트에서 물리 로봇으로 확장한다. 디지털 에이전트의 API 호출에 대응하는 물리적 원시 연산이 하드웨어 어댑터를 통한 엔드이펙터 교체이며, 태스크 요구에 따른 도구 선택이 에이전트의 스킬 라우팅([[concepts/skill-space-shooting.md|skill space shooting]])과 구조적으로 동형인 조합 판단임을 시사한다.
 
-절단→브러싱→배치의 서브태스크 전이 시점에 도구 교체가 발생하므로, [[stage-transition-learning]]의 전이 판단이 하드웨어 교체 트리거로 물리화되는 새 축을 제공한다.
+절단→브러싱→배치의 서브태스크 전이 시점에 도구 교체가 발생하므로, [[concepts/stage-transition-learning.md|stage transition learning]]의 전이 판단이 하드웨어 교체 트리거로 물리화되는 새 축을 제공한다.
 
-[[representation-action-gap]] 관점에서 촉각 감지는 시각 계획과 접촉 실행 사이의 간극을 접촉 역학 수준에서 봉합하는 감각 채널을 추가한다. 간극 해소가 표현 변환뿐 아니라 감각 다중화로도 달성될 수 있음을 보여준다.
+[[concepts/representation-action-gap.md|representation action gap]] 관점에서 촉각 감지는 시각 계획과 접촉 실행 사이의 간극을 접촉 역학 수준에서 봉합하는 감각 채널을 추가한다. 간극 해소가 표현 변환뿐 아니라 감각 다중화로도 달성될 수 있음을 보여준다.
 
 ### 연결점
 
-- [[supernumerary-robotic-limb]](EgoThumb): 로봇 능력의 하드웨어 증강이라는 공통 축. 초과지 추가(SwapBot은 도구 교체 능력 추가)라는 점에서 하드웨어 모듈성이 능력 확장의 매체임을 상호 강화한다.
-- [[latent-aligned-planning]]: 도구-태스크 매칭이 잠재 공간 정렬 문제로 재해석될 가능성을 연다.
+- [[entities/supernumerary-robotic-limb.md|supernumerary robotic limb]](EgoThumb): 로봇 능력의 하드웨어 증강이라는 공통 축. 초과지 추가(SwapBot은 도구 교체 능력 추가)라는 점에서 하드웨어 모듈성이 능력 확장의 매체임을 상호 강화한다.
+- [[concepts/latent-aligned-planning.md|latent aligned planning]]: 도구-태스크 매칭이 잠재 공간 정렬 문제로 재해석될 가능성을 연다.
 
 새 인사이트: 물리적 도구 사용의 병목은 도구 인지 능력이 아니라 교체 가능한 하드웨어 모듈성과 접촉 피드백의 결합에 있을 수 있다.
 

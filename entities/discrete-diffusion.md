@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-29)
 
 이산 확산이 AR 분포의 보조 샘플러(무손실 가속)를 넘어 에이전트의 적응적 생성 제어 프리미티브로 쓰일 수 있음을 보여준다. 확산의 위상이 '가속 수단'에서 '상호작용 조건부 생성 제어'로 이동하는 후속 사례다.
-
-→ [[sources/2026-10-29-metacognitive-decoding-efficient-inference-for-dif.md|상세 보기]]

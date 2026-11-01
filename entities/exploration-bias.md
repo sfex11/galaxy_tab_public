@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
 
 SAGE의 위상적 진단(국소 그럴득함+구조 불안정)에 이어 본 논문이 분포적 진단(저엔트로피 집중)을 추가하여, 탐색 실패의 병인이 구조 축과 분포 축의 직교 진단으로 분화함을 확정한다.
-
-→ [[sources/2026-09-30-reinforcing-agentic-creativity-in-scientific-ideat.md|상세 보기]]

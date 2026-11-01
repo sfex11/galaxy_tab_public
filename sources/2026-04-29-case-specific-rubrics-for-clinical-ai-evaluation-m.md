@@ -501,3 +501,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/long-document-qa.md|long document qa]]
+
+---
+**관련**: [[entities/pattern-specific-execution.md|pattern specific execution]]
+
+---
+**관련**: [[entities/iterative-prompting-optimization.md|iterative prompting optimization]]
+
+---
+**관련**: [[entities/off-policy-evaluation.md|off policy evaluation]]
+
+---
+**관련**: [[entities/sim-to-real-validation-infrastructure.md|sim to real validation infrastructure]]

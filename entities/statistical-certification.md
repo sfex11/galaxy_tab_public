@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 대비 축을 제공한다 — 통계적 인증이 확률적 경계로 안전을 증명한다면 내재적 검사는 결정론적 기각으로 품질을 보장하며, 두 보장 체계의 적용 경계가 과제의 검증 가능성에 의해 갈린다.
-
-→ [[sources/2026-09-29-can-you-check-that-the-checkability-boundary-for-l.md|상세 보기]]

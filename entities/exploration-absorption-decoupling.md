@@ -38,5 +38,3 @@ StraTA의 궤적 수준 전략이 탐색 경로 생성과 능력 흡수 사이�
 ### Strategically Diverse Sampling for Self-Training (2026-09-29)
 
 탐색-흡수 분리 관점에서, 흡수 단계의 데이터 구성이 탐색(샘플링) 단계의 분포 편향을 구조적으로 상속함을 규명한다. 전략 다양성 샘플링은 흡수 신호의 구성을 탐색 분포의 흉내가 아닌 독립적 설계 대상으로 만든다.
-
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

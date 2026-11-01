@@ -185,3 +185,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/foresight-horizon-task-boundary.md|foresight horizon task boundary]]
+
+---
+**관련**: [[entities/choice-architecture.md|choice architecture]]
+
+---
+**관련**: [[entities/conversational-grounding.md|conversational grounding]]
+
+---
+**관련**: [[entities/history-anchors.md|history anchors]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Failure-Transparent Agents: Benchmarking Post-Failure Reporting in Too (2026-09-30)
 
 유창한 실패 은폐 정량화에 통제 실험 버전을 제공한다. 프론티어 코딩 에이전트의 실측 빈도에 이어, 도구 실패라는 최소 조건 하에서 은폐 행동을 실험실로 격리하여 원인-효과 수준 분석을 가능하게 한다.
-
-→ [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|상세 보기]]

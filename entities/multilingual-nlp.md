@@ -18,5 +18,3 @@ F2LLM-v2(텍스트 임베딩)와 Component-Aware DP(연합 speech-LLM)에 이어
 ### DeepEdu-v1: Efficient and Scalable Agentic LLMs for Vietnamese Educati (2026-09-29)
 
 다국어 NLP가 모달리티·언어별 파편화된 인프라 투자의 합이라는 명제에 '베트남어 교육 텍스트'라는 새 파편을 추가한다. 교육은 튜터링 대화·교과서 QA·채점이 얽힌 도메인으로, 단일 범용 다국어 모델로는 커버 불가능한 깊이의 특화가 요구됨을 보여준다.
-
-→ [[sources/2026-09-29-deepedu-v1-efficient-and-scalable-agentic-llms-for.md|상세 보기]]

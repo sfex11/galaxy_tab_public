@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic (2026-09-22)
 
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
-
-→ [[sources/2026-10-29-gepa-curator-curated-learning-for-self-improving-a.md|상세 보기]]

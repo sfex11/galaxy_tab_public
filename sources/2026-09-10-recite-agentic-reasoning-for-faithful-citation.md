@@ -60,3 +60,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/positional-attribution-rejection.md|positional attribution rejection]]
+
+---
+**관련**: [[entities/data-attribution.md|data attribution]]

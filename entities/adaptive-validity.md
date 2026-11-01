@@ -38,5 +38,3 @@ _Wiki 축적 중_
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 임상 가이드라인·데이터베이스의 지속 갱신은 스킬의 타당성을 시간 조건부로 만든다. '어떤 스킬이 여전히 유효한가'의 상시 재평가가 스킬 라이브러리 관리의 1급 과제임을 임상 도메인에서 구체화한다.
-
-→ [[sources/2026-10-31-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

@@ -20,5 +20,3 @@ _자동 Wiki Query에서 추출됨_
 ### Skill-Conditioned Gated Self-Distillation for LLM Reasoning (2026-05-29)
 
 ### Strategically Diverse Sampling for Self-Training (2026-09-29)
-
-→ [[sources/2026-09-29-strategically-diverse-sampling-for-self-training.md|상세 보기]]

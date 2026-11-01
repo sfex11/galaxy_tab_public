@@ -301,3 +301,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-supply-chain-risk.md|semantic supply chain risk]]
+
+---
+**관련**: [[entities/disjunctive-compensatory-task-scaling.md|disjunctive compensatory task scaling]]
+
+---
+**관련**: [[entities/long-horizon-emergent-collusion.md|long horizon emergent collusion]]

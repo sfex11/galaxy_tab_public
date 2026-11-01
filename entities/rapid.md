@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
 
 RAPID가 시연→명세 컴파일로 시연 부담을 다뤘다면 본 논문은 새 시연 없이 기존 스킬 조합 경험에서 정책 개선을 얻어, RAPID 계열 로봇 에이전틱 개선 연구에 '개선 확장성'이라는 직교 축을 추가한다.
-
-→ [[sources/2026-10-01-skill-space-shooting-for-autonomous-robot-policy-i.md|상세 보기]]

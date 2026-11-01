@@ -56,5 +56,3 @@ DV-World는 '코드 샌드박스 격리→단일 언어 생성 전용→완전 �
 ### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
 
 고정 태스크 평가가 협력 상호작용 평가로 확장되는 사례를 제공한다. 인간 주석 100개 + 자동 증강 100개의 이중 구성은 수동 큐레이션의 타당성과 자동 생성의 확장성을 결합한 벤치마크 구축 패턴을 보여준다.
-
-→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

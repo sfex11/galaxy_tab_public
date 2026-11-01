@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### AgentWorld: Benchmarking Long-Horizon Collaboration of Multi-agent LLM (2026-09-29)
 
 MathDuels의 도전자-수비자 경쟁 구도, Sycophancy 측정의 능동적 반박 구도에 이어 비대칭 역할 협력이라는 제3의 역할 분배를 추가하여, self-play 평가의 스펙트럼을 경쟁·적대에서 협력으로 확장한다.
-
-→ [[sources/2026-09-29-agentworld-benchmarking-long-horizon-collaboration.md|상세 보기]]

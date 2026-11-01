@@ -367,3 +367,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/surface-intent-decoupling.md|surface intent decoupling]]
+
+---
+**관련**: [[entities/vision-driven-assistive-triggering.md|vision driven assistive triggering]]
+
+---
+**관련**: [[entities/intent-free-verification-definition.md|intent free verification definition]]
+
+---
+**관련**: [[entities/partial-reclassification.md|partial reclassification]]

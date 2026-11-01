@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/prewrite-validation.md|prewrite validation]]
+
+---
+**관련**: [[entities/prewrite-validation.md|prewrite validation]]

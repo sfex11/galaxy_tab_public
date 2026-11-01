@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-10-emo-pretraining-mixture-of-experts-for-emergent-mo.md|EMO: Pretraining Mixture of Experts for Emergent Modularity]]
 
 ### Breaking the Uniformity Trap: Scaling Video Diffusion Model via SplitM (2026-10-01)
-
-→ [[sources/2026-10-01-breaking-the-uniformity-trap-scaling-video-diffusi.md|상세 보기]]
