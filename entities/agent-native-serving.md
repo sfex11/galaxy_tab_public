@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
 
 에이전트 네이티브 서빙이 워크로드의 의미적 이질성(Pythia)과 위상 이질성(EAServe)에 이어 '예측 가능한 총비용'이라는 계획 입력을 획득한다. 비용 예측이 스케줄링·리소스 예약의 1급 신호가 되는 경로를 연다.
+
+### Flide: Accelerating Decision Inference with Exact State Forking (2026-11-03)
+
+결정 모델이라는 새 워크로드 클래스를 서빙 설계 공간에 추가하고, '논리 트리-물리 배치 분리'라는 새 설계 요구를 제시한다. 에이전트 워크로드 특성이 서빙 인프라 아키텍처를 결정하는 인과 방향을 강화한다.
+
+→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]
