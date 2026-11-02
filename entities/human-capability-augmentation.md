@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-10-31)
 
 증강의 대상에 전문직 교육(상담사 양성)을 추가하고, 4-bit 양자화 소형 모델로도 훈련용 상호작용 상대가 구성 가능함을 보여 증강의 비용 하한을 낮춘다.
+
+### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-11-02)
+
+4-bit 양자화 Mixtral 8x7b가 상담사 양성 훈련의 상호작용 상대로 구성 가능함을 보여 증강의 비용 하한을 추가로 낮춘다. 증강의 품질 판정 기준이 모델 규모에서 시뮬레이션이 유도하는 상호작용 패턴의 적합성으로 이동함을 시사한다.
+
+→ [[sources/2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

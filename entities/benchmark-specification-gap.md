@@ -74,3 +74,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 예측 평가 버전의 명세 간극을 제공한다 — 정확도 수치가 타겟 모델·데이터셋·샘플링 구성에 조건부임을 벤치마크가 명세하지 않아 예측기 품질과 태스크 난이도가 혼동되며, 조건부 유효 범위의 명시가 예측 평가의 전제조건임을 규정한다.
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
+
+측정 대상(예측기)과 교란 변수(태스크 난이도·타겟 구성)의 혼동이라는 새 변형을 제공한다. 벤치마크가 타겟 구성을 명세하지 않으면 점수가 예측기 품질을 대변하지 못한다는 점에서, 명세 간극이 추론 인프라 평가 영역으로 확장되는 사례다.
+
+→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

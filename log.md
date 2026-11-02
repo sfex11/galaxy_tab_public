@@ -3844,3 +3844,18 @@
 ## [2026-11-01 21:30] lint | Wiki 건전성 체크
 - Issues: 3478개
 - Orphans: 1078, Missing: 2400, Contradictions: 0
+
+## [2026-11-02 02:28] llm-ingest | 13편 분석, 엔티티 1173개, 개념 2518개
+- 2026-11-02-elucidating-the-design-space-of-lm-data-attributio.md
+- 2026-11-02-from-extreme-weather-to-agricultural-consequences-.md
+- 2026-11-02-shallowdefend-harnessing-shallow-safety-alignment-.md
+- 2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md
+- 2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md
+- 2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md
+- 2026-11-02-vericua-verification-as-agentic-exploration-for-co.md
+- 2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md
+- 2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md
+- 2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md
+- 2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md
+- 2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md
+- 2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md

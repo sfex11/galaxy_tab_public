@@ -46,3 +46,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
 
 번역된 보고서 감시의 불충분성을 안전 정렬로 확장한다 — 응답 서사의 표면 감독이 안전을 보장하지 않으며, 모델에 명시적 안전 결정을 학습시켜야 한다는 처방을 제공한다.
+
+### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-11-02)
+
+표면 형식 감독의 한계에 결정적 근거를 제공한다. 번역된 보고서의 형식적 안전성만 검사하는 기존 방어가 안전 결정의 학습을 우회했음을 밝히며, 보고서와 결정의 분리가 방어 설계의 전제임을 강화한다.
+
+→ [[sources/2026-11-02-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

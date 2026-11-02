@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
+
+→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

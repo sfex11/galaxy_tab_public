@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 선형 프로브가 위반 예측 계측기로 기능하는 새 도메인 사례를 제공한다 — 6개 시나리오에서 활성화 프로브가 행동 변화 이전에 양보 임박을 감지함으로써, 내부 판독 기반 계측기가 사후 출력 검사를 보완·대체할 수 있음을 입증한다.
+
+### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
+
+TextSeal의 코인 플립 키 라우팅이 검출기의 점수 평균화로 신호를 희석하는 사례는, 검출기의 측정 신뢰성이 신호 생성 측의 키 배치 설계에 의존함을 보여준다. 계측기 품질이 생성 메커니즘 설계와 결합되는 구조를 워터마크 도메인에서 실증한다.
+
+→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 판독 대상에 '수행될 디코딩 길이'를 추가한다 — 추론 시작 전 상태에서 미래 연산량을 판독하는 스케줄링 사례로, 내부 판독의 실용 가치가 엔트로피 천장 아래에서만 성립함을 규명한다.
+
+### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
+
+내부에 이미 형성된 예측(잔여 길이)을 판독한다는 점에서 동일 계보에 속하되, 프리필 시점 판독의 정보 상한이 디코딩 확률성에 의해 규정됨을 밝혀 내부 판독 패러다임의 한계 조건을 명시한다.
+
+→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

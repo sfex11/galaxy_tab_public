@@ -22,3 +22,7 @@ _Wiki 축적 중_
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
 
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
+
+→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

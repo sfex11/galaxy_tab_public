@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-22-watermarkable-multi-draft-speculative-sampling-via.md|Watermarkable Multi-Draft Speculative Sampling via Poisson P]]
 
 ### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-10-31)
+
+### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
+
+→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

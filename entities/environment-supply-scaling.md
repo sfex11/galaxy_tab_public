@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-30)
 
 공급 확대의 후속 병목을 규명한다. 환경 공급량이 늘어나면 실행·검증 비용이 새 병목이 되며, 공급(생성)과 실행(스케줄링)이 함께 최적화되어야 학습 효율이 보장됨을 보여준다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+환경 공급 병목 해소의 물리 도메인 경로를 제공한다 — 전문가 노력 대신 코딩 에이전트 저작으로 시뮬레이션 공급량을 확장하여, 공급 병목의 해소 주체가 인적 자원에서 에이전트 능력으로 이동함을 보여준다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

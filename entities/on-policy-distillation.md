@@ -38,3 +38,9 @@ OPD가 교사의 밀집 분포를 학생 가중치로 증류했다면, AdviSD는
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
 
 OPSD의 교사 구성 축을 응답 수준에서 토큰 수준으로 세분화한다. 참조 노출이 학습 전체 고정 → 응답별 적응을 넘어 토큰별 적응에 도달함을 보여, 온폴리시 증류의 감독 입도 정교화 계층(전체/응답/토큰)을 확정한다.
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
+
+OPSD 계열의 확장으로, 교사를 정적 특권 참조 조건화 대상에서 학습 신호에 맞춰 적응하는 동적 구성요소로 격상시킨다. 밀집 감독의 유지와 그 감독 자체의 적응적 조율을 결합하는 제2 단계로 OPD를 진전시킨다.
+
+→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

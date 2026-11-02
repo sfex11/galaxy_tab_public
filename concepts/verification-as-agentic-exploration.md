@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-vericua-verification-as-agentic-exploration-for-co.md|VeriCUA: Verification as Agentic Exploration for Computer-Us]]
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
+
+→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

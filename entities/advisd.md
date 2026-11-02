@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
 
 AdviSD의 동결 실행기-학습 어드바이저 영구 역할 분리와 대비되어, 교사가 학습 전체에 걸쳐 토큰별로 동적으로 재구성되는 제3의 교사-학생 구조를 제시한다.
+
+### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
+
+AdviSD의 동결 실행기-학습 어드바이저 영구 역할 분리와 대비되어, 교사가 토큰별로 동적으로 재구성되는 제3의 교사-학생 구조를 제시한다. 교사의 고정성-적응성 스펙트럼에서 적응 극점을 형성한다.
+
+→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-textseal2-distortion-free-llm-watermarking-with-co.md|TextSeal2: Distortion-Free LLM Watermarking with Copula Mixi]]
+
+### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
+
+→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

@@ -18,3 +18,9 @@ CodeMidas는 코드베이스의 구현된 기능을 실행 가능한 RL 환경�
 ### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-29)
 
 환경의 '합성'(Terminal-Universe의 궤적→환경, CodeMidas의 코드→환경)에서 '스케줄링'으로 확장한다. 환경이 훈련 원시자원이라는 원리가 성립하려면 원시자원의 소비 순서와 배분까지 관리 대상이 되어야 함을 보여, 환경 원시자원화 논의의 인프라 계층을 완성한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+물리 시뮬레이션이 에이전트 훈련의 일급 원시자원으로 격상되는 사례를 제공한다. 환경이 훈련의 부산물이 아니라 훈련 가능성 자체를 규정하는 원자 단위임을 체화 도메인에서 확인시킨다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

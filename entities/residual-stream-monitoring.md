@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 판독 대상을 현재 상태에서 미래 행동으로 확장한다 — 활성화의 선형 판독이 에이전트가 규칙을 위반하기 직전의 상태를 예측할 수 있음을 다중 에이전트 압박 설정에서 실증하여, 잔류 스트림 모니터링이 진단 도구를 넘어 선제 개입의 근거가 됨을 보여준다.
+
+### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
+
+내부 표현 판독의 응용을 안전 감시·거부 감지에서 사회적 강압 하 준수 상태 예측으로 확장한다 — 선형 프로브라는 최소 판독기로 미발화 규칙 준수 붕괴를 예측할 수 있음을 입증한다.
+
+→ [[sources/2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

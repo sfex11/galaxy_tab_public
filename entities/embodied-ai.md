@@ -70,3 +70,9 @@ _Wiki 축적 중_
 ### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-10-31)
 
 접촉 밀집 조작에서 촉각이 시각을 보완하는 감각 구조를 실증한다. 단일 감각 중심의 체화 AI 논의에 다중 감각 통합이 물리 제약 만족의 전제조건임을 시사한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+체화 AI의 대규모 훈련을 가로막는 병목이 인지·제어가 아니라 환경(시뮬레이션) 공급에 있음을 보여주며, 디지털 에이전트가 그 병목의 해소자로 등장하는 구조적 전환을 제공한다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

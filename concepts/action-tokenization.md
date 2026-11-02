@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-continuous-actions-from-discrete-minds-latent-alig.md|Continuous Actions from Discrete Minds: Latent-Aligned Plann]]
+
+### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
+
+→ [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]

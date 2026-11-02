@@ -70,3 +70,9 @@ Affora는 이 엔티티의 문제 공간을 '인간용 UI를 읽어내는 에이
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-10-31)
 
 CUA 확장의 병목이 실행 능력이 아니라 검증 계층임을 규명한다. 실행 환경(CUA-Universe 계열)과 검증(VeriCUA)이 분리 공급되며, CUA 인프라가 환경-검증 양축으로 구조화됨을 보여준다.
+
+### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
+
+CUA 생태계의 스케일링 병목이 태스크 수행 능력이 아니라 완수 검증 인프라에 있음을 규정하고, 데이터 큐레이션·평가·RL 전 과정에 공통으로 요구되는 검증 계층의 설계 원리를 제공한다.
+
+→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

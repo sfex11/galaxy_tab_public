@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
+
+→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

@@ -42,3 +42,9 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
 
 병목의 병인을 전문가 노력 의존성이라는 제작 비용 구조로 특정한다. 시뮬레이션 부재가 도구 결여가 아니라 제작 확장 불가능성의 문제임을 진단하고, 코딩 에이전트 기반 생성이라는 확장 가능한 공급 경로를 제시하여 병목 해소의 실현 경로를 구체화한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+병목의 물리 도메인 발현 사례를 제공한다 — 시뮬레이션 커버리지의 좁은 범위가 체화 AI 대규모 훈련을 차단하며, 그 근원이 전문가 노력의 확장 불가능성에 있음을 진단하여 환경 부재가 노력 경제의 문제임을 명확히 한다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

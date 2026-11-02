@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### RheoSampling: Resolving the One-Hot Dilemma in Stochastic Dynamic-Tree (2026-09-22)
 
 가속 기법의 분포 보존 원칙이 인프라 구조 선택에 의해 위반되는 구체적 사례를 제공한다. 트리 구축이 드래프트 분포를 은밀히 변형하는 '구조 유발 분포 붕괴'라는 새로운 위반 유형을 추가한다.
+
+### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
+
+왜곡 없는 워터마킹이 타겟 분포 무변경 원칙을 준수해야 수용률 무변경과 추측 디코딩 호환성이 성립함을 보여준다. 분포 보존이 가속뿐 아니라 provenance 신호 유지의 전제조건임으로 확장된다.
+
+→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

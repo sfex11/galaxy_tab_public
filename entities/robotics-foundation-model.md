@@ -18,3 +18,9 @@ VLA Foundry는 로봇tics 파운데이션 모델의 실제 훈련 경로를 구�
 ### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
 
 파운데이션 모델 데이터 수집의 확장성 병목을 인간 텔레오퍼레이션 시간으로 특정하고 TAMP 자동화로 이를 완화하는 경로를 제시한다 — 데이터 규모 확장이 수집 인프라의 자동화 수준에 조건부임을 실증한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+로보틱스 파운데이션 모델의 스케일업 전제 조건을 명시한다 — 실세계 전이 가능한 대규모 훈련은 다양한 물리 현상을 커버하는 시뮬레이션 인프라에 의존하며, 이 인프라를 코딩 에이전트가 공급할 수 있음을 제시한다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

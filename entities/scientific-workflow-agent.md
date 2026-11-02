@@ -64,3 +64,9 @@ autoresearch 계열이 구조화된 워크플로우 실행에 집중해온 것�
 ### From extreme weather to agricultural consequences with agentic AI (2026-10-31)
 
 워크플로우 에이전트의 적용 범위를 연구 자동화에서 운영 의사결정 지원(작물 손실 예측)으로 확장한다. 기상 예보와 농업 기록이라는 이기종 원천을 단일 예측 파이프라인으로 통합하되, 산출물이 보고서가 아닌 위험·손실 수량이라는 점에서 워크플로우의 최종 산출 형태도 다양화됨을 보여준다.
+
+### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
+
+연구 질문→실험 설계→실행→원고의 의미론적 번역 사슬이 다중 에이전트 분업과 상호 검증으로 구현되는 실측 사례를 제공한다. '의미론적 번역 자동화'라는 기존 정의에 상호 평가 계층이 추가된다.
+
+→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

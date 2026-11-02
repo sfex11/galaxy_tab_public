@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
 
 코딩 에이전트의 에이전틱 개선 루프가 물리 로봇 정책 개선으로 이식되는 추가 착지점을 제공하며, 이식 대상이 코드 생성에서 정책 환류로 확장됨을 보여준다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+코딩 에이전트의 코드 저작 방법론이 물리 시뮬레이션 저작이라는 체화 인프라 작업으로 이식되는 사례를 제공한다. 이식되는 것이 제어기 코드가 아닌 '환경 그 자체'라는 점에서 이식의 성격을 확장한다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

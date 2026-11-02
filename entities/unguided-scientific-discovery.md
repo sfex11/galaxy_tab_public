@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Collaborative AI agents for autonomous experimental research with soli (2026-10-31)
 
 자유 탐색의 자기 정정 조건을 추가한다. 질문 생성 능력에 질문 거부(폐기) 능력이 결합되어야 개방형 탐색이 검증 불가능한 확장으로 전락하지 않음을 보여준다.
+
+### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
+
+목표 형성이 능력 대상에 포함되는 개방형 발견에 상호 검증을 결합하여, 자유 탐색의 위험(증거 불충분 결론)을 통제하는 아키텍처를 제시한다. 개방성과 검증 가능성이 상호 평가 구조로 공존 가능함을 보여준다.
+
+→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

@@ -82,3 +82,9 @@ SynthAPI는 환경 생성을 '가능성'에서 '과학'으로 전환한다 — G
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
 
 Gym-Anything 계열의 물리 시뮬레이션 확장을 제공한다. 원래 Gym-Anything이 소프트웨어를 환경으로 변환했다면 본 논문은 코딩 에이전트가 시뮬레이션 코드를 생성하여 로보틱스 도메인의 환경 공급 병목을 해소함을 보여, 환경 생성 원리가 디지털 환경을 넘어 물리 시뮬레이션에까지 확장됨을 입증한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+Gym-Anything의 범용 소프트웨어→환경 변환 경로가 물리 시뮬레이션으로 확장되어, 코딩 에이전트가 로봇 시뮬레이션을 저작하는 새 축을 추가한다. 환경 생성이 디지털 에이전트 생태계 내부 문제에서 체화 AI 훈련 인프라의 공급자로 위상이 확대됨을 보여준다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

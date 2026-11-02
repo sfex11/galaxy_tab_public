@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 큐레이션·검증 주체를 자동 파이프라인(시연→코드 컴파일 검증)에서 임상 전문가로 이동시킨 사례다. 스킬 라이브러리가 도메인 지식의 관리 단위일 때 검증 권한이 도메인 전문성에 귀속해야 함을 시사한다.
+
+### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-11-02)
+
+검증 주체의 도메인 의존성을 추가한다. 컴파일 검증 가능한 범용 스킬과 달리 임상 스킬의 정확성 검증은 전문가 판단을 요구하며, 라이브러리의 검증 계약이 도메인 위험 수준에 따라 달라짐을 보여준다.
+
+→ [[sources/2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

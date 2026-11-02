@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-collaborative-ai-agents-for-autonomous-experimenta.md|Collaborative AI agents for autonomous experimental research]]
+
+### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
+
+→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

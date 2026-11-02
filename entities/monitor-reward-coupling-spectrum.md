@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 감시 계층의 새로운 능력 차원을 제공한다 — 감시가 에이전트 출력만 검사하는 사후 모드에서 활성화를 판독하여 임박한 위반을 선제 포착하는 사전 모드로 확장될 수 있음을 실증한다.
+
+### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
+
+감시의 사전 모드 실현 사례를 v1으로 확정한다 — 에이전트 출력만 검사하는 사후 모드에서 활성화 판독으로 임박한 위반을 선제 포착하는 감시 계층의 새로운 능력 차원이 6개 시나리오에서 재현 가능함을 보여준다.
+
+→ [[sources/2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

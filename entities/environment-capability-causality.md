@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-29)
 
 환경 가용성이 능력을 결정한다는 인과율에 구성 차원을 추가한다 — 환경의 존재 여부가 아니라 도구·태스크·데이터 축의 구체적 구성이 에이전트 능력의 상한을 규정함을 스케일링 법칙으로 형식화한다.
+
+### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
+
+환경 가용성이 능력 확장을 결정하는 인과율의 물리 도메인 확장이다 — 사실적·고속 시뮬레이션의 공급이 체화 모델의 실세계 전이 능력의 선행 조건임을 규정한다.
+
+→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

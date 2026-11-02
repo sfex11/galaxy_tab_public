@@ -23,3 +23,7 @@ _자동 Wiki Query에서 추출됨_
 ### Paint-Anything: Unified Any-Color Control for Image Generation and Edi (2026-09-21)
 
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-30)
+
+### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
+
+→ [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]

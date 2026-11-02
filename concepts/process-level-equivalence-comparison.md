@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-comparing-human-role-players-and-llm-simulated-cli.md|Comparing Human Role-Players and LLM-Simulated Clients in On]]
+
+### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-11-02)
+
+→ [[sources/2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

@@ -42,3 +42,9 @@ EHR 데이터를 대화적 QA나 그래프 정제의 대상이 아닌 인과 추
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 EHR QA·대화적 평가 계열을 넘어 유전체 분석이라는 전문 절차 자동화 축을 추가한다. 임상 의사결정의 병목이 지식 접근이 아니라 다원적 증거(가이드라인·DB·계산 결과)의 통합 노동임을 규정한다.
+
+### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-11-02)
+
+스코프를 근거 생성·대화 평가에서 '전문 지식의 실행 가능 스킬화'로 확장한다. 진화하는 임상 지식을 105개 감사 가능 스킬로 축적하는 구조가 medical-ai의 지식 관리 차원을 연다.
+
+→ [[sources/2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]
