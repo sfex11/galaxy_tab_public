@@ -1,23 +1,23 @@
 # Reinforcement Learning: 합성 분석
 
-**생성일**: 2026-09-28  
+**생성일**: 2026-11-02  
 **관련 논문**: 8편  
-**최종 업데이트**: 2026-09-28
+**최종 업데이트**: 2026-11-02
 
 # Reinforcement Learning: 합성 분석
 
 **생성일**: 2026-09-21
 **관련 논문**: 8편 등록 (고유 4편 — 중복 4편 정리)
 **최종 업데이트**: 2027-01-15
-**변경 사항**: 신규 논문 없음(기존 4편 재확인). 개념 섹션을 6개 클러스터로 전면 정리, 논문 간 관계 분석 보강
+**변경 사항**: 신규 논문 없음(기존 4편 재확인). 이중 헤더 제거, 개념 섹션 클러스터 재구성
 
-**포함 논문**: GP 기반 Continual MBRL (비정상 동역학 제어) · DRL 심볼릭 속성 검증 (시스템·네트워킹) · Android Coach (SSMA 에이전트 훈련) · 진화적 RL 사족보행 (CEM-DDPG/TD3)
+**포함 논문**: GP 기반 Continual MBRL(비정상 동역학 제어) · DRL 심볼릭 속성 검증(시스템·네트워킹) · Android Coach(SSMA 온라인 훈련) · 진화적 RL 사족보행(CEM-DDPG/TD3)
 
 ## 공통 주제: 배포 가능한 RL의 세 가지 근원적 난제
 
 고유 4편은 "벤치마크 점수를 넘어선 신뢰성"이라는 메타 주제로 수렴한다.
 
-**비정상성.** GP 기반 Continual MBRL은 드리프트·마모로 에피소드마다 동역학이 진화하는 환경을, 진화적 RL은 sim-to-real 간극을 다룬다. 둘 다 정상성(stationarity) 가정의 붕괴라는 동일 근원을 분포 이동의 변주로 규정한다.
+**비정상성.** GP 기반 Continual MBRL은 드리프트·마모로 에피소드마다 동역학이 진화하는 환경을, 진화적 RL은 sim-to-real 간극을 다룬다. 두 연구 모두 정상성(stationarity) 가정의 붕괴라는 동일 근원을 [[concepts/distribution-shift.md|distribution-shift]]의 변주로 규정한다.
 
 **검증의 부재.** 심볼릭 속성 분석은 고정 입력의 점 속성(point properties) 검증으로는 전체 상태 공간에서의 DRL 행동을 보장할 수 없다는 진단에서 출발한다. 적응형 비디오 스트리밍·혼잡 제어 등 임계 인프라 적용이 이 병목의 실무적 무게를 보여준다.
 
@@ -25,15 +25,15 @@
 
 ## 논문 간 관계: 긴장, 통합, 상충
 
-**MB vs. MF 로버스트니스 긴장.** GP-MBRL은 동역학의 명시적 모델링으로 적응하고, CEM-DDPG/TD3는 집단 탐색으로 암묵적 강건성을 확보한다. 같은 문제에 정반대 경로를 택하며, 명시적 모델의 추정 오류 vs. 암묵적 탐색의 샘플 비용이라는 트레이드오프는 미해결이다.
+**MB vs. MF 로버스트니스의 긴장.** GP-MBRL은 동역학의 명시적 모델링([[concepts/world-model.md|world-model]])으로 적응하고, CEM-DDPG/TD3는 집단 탐색으로 암묵적 강건성을 확보한다. 같은 문제에 정반대 경로를 택하며, 명시적 모델의 추정 오류 vs. 암묵적 탐색의 샘플 비용이라는 트레이드오프는 미해결이다.
 
 **탐색의 3차원 통합 가능성.** CEM(정책 파라미터 공간), SSMA(상태-행동 공간 분기), GP 불확실성(동역학 공간)이 서로 다른 차원에서 탐색을 공격한다. 불확실성이 높은 상태에서 SSMA 분기 샘플을 CEM 집단 적합도 평가에 주입하는 통합 아키텍처가 단일 차원 탐색의 한계를 넘을 후보다.
 
-**세팅 상충과 수명 주기.** SSMA의 스냅샷 분기는 환경 가역성을 전제로 하므로, 가역성 없는 물리 환경의 MBRL·ERL과 직접 결합되지 않는다. 그럼에도 효율적 훈련(Android Coach) → 전역 검증(심볼릭 분석) → 운영 중 적응(GP-MBRL) → 재강건화(진화적 RL)로 이어지는 수명 주기 파이프라인 관점이 성립한다.
+**세팅 상충과 수명 주기.** SSMA의 스냅샷 분기는 환경 가역성을 전제하므로, 가역성 없는 물리 환경의 MBRL·ERL과 직접 결합되지 않는다. 그럼에도 효율적 훈련(Android Coach) → 전역 검증(심볼릭 분석) → 운영 중 적응(GP-MBRL) → 재강건화(진화적 RL)로 이어지는 수명 주기 파이프라인 관점이 성립한다.
 
 ## 연구 트렌드와 미해결 과제
 
-**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화로 이동한다. Android Coach는 [[concepts/computer-use-agent.md|computer-use agent]] 연구와 접점을 제공하고, DRL 검증은 LLM 가드레일 연구(TraceSafe)와 신뢰성 담론을 공유한다.
+**시스템 중심 RL로의 이동.** 에뮬레이터 지연·스냅샷, 네트워크 인프라, 비정상 동역학 등 도메인 제약이 RL 파이프라인에 역주입되며, 범용 알고리즘에서 파라다임 특화 설계로 이동한다. Android Coach는 [[concepts/computer-use-agent.md|computer-use-agent]] 연구와 접점을 제공하고, DRL 검증은 LLM 가드레일 연구(TraceSafe)와 신뢰성 담론을 공유한다.
 
 **미해결 과제.** ① MB+진화적 RL 하이브리드 아키텍처의 부재 ② 고차원 상태 공간에서 심볼릭 검증의 계산 확장성 ③ 비가역 환경에서의 SSMA 대체 기법 ④ 세 차원 탐색을 아우르는 통합 이론.
 
@@ -41,15 +41,10 @@
 
 **핵심**: [[concepts/reinforcement-learning.md|reinforcement-learning]] · [[concepts/distribution-shift.md|distribution-shift]] · [[concepts/model-based-rl.md|model-based-rl]]
 
-**적응·모델링**: [[concepts/meta-learning.md|meta-learning]] · [[concepts/world-model.md|world-model]] · [[concepts/model-predictive-control.md|model-predictive-control]]
+**적응·일반화**: [[concepts/meta-learning.md|meta-learning]] · [[concepts/world-model.md|world-model]] · [[concepts/model-predictive-control.md|model-predictive-control]]
 
-**탐색·최적화**: [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]] · [[concepts/self-organizing-systems.md|self-organizing-systems]] · [[concepts/curriculum-learning.md|curriculum-learning]]
+**검증·안전**: [[concepts/formal-verification.md|formal-verification]] · [[concepts/ai-safety.md|ai-safety]] · [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
 
-**신뢰성·검증**: [[concepts/formal-verification.md|formal-verification]] · [[concepts/ai-safety.md|ai-safety]] · [[concepts/agent-reliability-auditing.md|agent-reliability-auditing]]
+**에이전트·효율**: [[concepts/computer-use-agent.md|computer-use-agent]] · [[concepts/token-efficiency.md|token-efficiency]] · [[concepts/tool-use.md|tool-use]]
 
-**에이전트·효율**: [[concepts/computer-use-agent.md|computer-use-agent]] · [[concepts/web-agent-evaluation.md|web-agent-evaluation]] · [[concepts/tool-use.md|tool-use]] · [[concepts/token-efficiency.md|token-efficiency]]
-
-**응용 도메인**: [[concepts/embodied-ai.md|embodied-ai]] · [[concepts/autonomous-driving.md|autonomous-driving]] · [[concepts/closed-loop-evaluation.md|closed-loop-evaluation]]
-
----
-_LLM 분석으로 재생성됨_
+**로보틱스·탐색**: [[concepts/embodied-ai.md|embodied-ai]] · [[concepts/metaheuristic-optimization.md|metaheuristic-optimization]] · [[concepts/self-organizing-systems.md|self-organizing-systems]]
