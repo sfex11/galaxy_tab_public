@@ -18,3 +18,9 @@ TIM의 불안정성 유발 원인을 drift로 분해한다 — 수치 불일치 
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
 
 정책-정보 수준의 동형 사례를 제공한다. TIM이 수치 정합성의 누적 편향이었다면 CTDE 정보 간극은 학습 조건(전역 상태 접근)과 실행 조건의 구조적 불일치이며, 정합화라는 공통 처방이 양쪽에 작동함을 시사한다.
+
+### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
+
+훈련 불안정의 이중 층위 구조를 완성한다. TIM이 수치적 일치 문제라면 플라스티시티 손실은 표상 학습 가능성 문제로, 두 병리가 서로 다른 원인(엔진 불일치 vs 환경 확률성)과 처방(수치 교정 vs 적응력 보존)을 가짐을 보여준다.
+
+→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

@@ -16,3 +16,7 @@ KV 캐시 등 잠재 통신의 효율성 이점이 동질적 에이전트 구성
 _자동 Wiki Query에서 추출됨_
 
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
+
+### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
+
+→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

@@ -44,3 +44,9 @@ OPSD의 교사 구성 축을 응답 수준에서 토큰 수준으로 세분화�
 OPSD 계열의 확장으로, 교사를 정적 특권 참조 조건화 대상에서 학습 신호에 맞춰 적응하는 동적 구성요소로 격상시킨다. 밀집 감독의 유지와 그 감독 자체의 적응적 조율을 결합하는 제2 단계로 OPD를 진전시킨다.
 
 → [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]
+
+### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
+
+증류의 적용 공간을 토큰 분포에서 아이템(랭킹 후보) 공간으로 확장한다. 교사와 학생의 출력 패러다임이 다른 조건(생성형 순위 목록 vs 결정형 스코어)에서도 온폴리시 증류가 성립함을 보여주어, OPD가 토큰 표현 형식에 종속되지 않는 학습 원리임을 시사한다.
+
+→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

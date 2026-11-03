@@ -26,3 +26,9 @@ SLM vs LLM 연산 단위 선택에 '검증 가능성 × 데이터 민감도'라�
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
 
 연산 단위 선택의 대상을 SLM/LLM 라우팅에서 토큰별 최종화로 확장한다 — '무엇을 실행할까'의 계층 선택이 '각 토큰에 얼마나 연산을 쓸까'의 입도 선택으로 미세화된다.
+
+### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
+
+메타-선택의 경제성 제약을 해소한다. SLM↔LLM 전환마다 컨텍스트 재처리가 요구되던 구조에서 캐시 전이는 연산 단위 교체의 비용 항을 사실상 상수로 만들어, 연산 단위 메타-선택의 자유도를 회복시킨다.
+
+→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

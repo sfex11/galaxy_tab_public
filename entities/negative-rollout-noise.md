@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Score Centering Stabilizes Off-policy Reinforcement Learning (2026-09-21)
 
 학습 신호 오염의 병인 대칭을 완성한다 — 음성 롤아웃 노이즈(모델-환경 상호작용의 우연적 오염, 처방: 배제)와 TIM drift(인프라 차이의 계통적 편향, 처방: 중심화)가 서로 다른 병인과 해법을 요구함을 구체화한다.
+
+### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
+
+학습 신호 오염의 원천 분류에 환경 노이즈(외부 기인)를 추가한다. 음성 롤아웃 노이즈가 모델-환경 상호작용에서 발생하는 우연적 오염이라면, 관측·보상 노이즈는 환경 자체의 속성에서 기인하는 오염으로, 오염 경로별 처방 분리의 근거를 강화한다.
+
+→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

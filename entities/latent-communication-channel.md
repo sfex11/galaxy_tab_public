@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-27)
 
 잠재 계층이 에이전트 간 통신뿐 아니라 훈련 인프라로의 전송에서도 누출 채널이 됨을 확장한다. 잠재 계층의 독립적 보안 요구를 훈련-서빙 전 구간으로 일반화한다.
+
+### Latent-Lens: Visual Perception in Small Language Models Through Latent (2026-11-03)
+
+채널이 운반하는 내용의 범주를 KV 공유(자연어 상태)에서 시각 잠재 표현으로 확장한다. 모달리티 밀도가 높은 정보일수록 잠재 채널의 정보 이득이 커짐을 SLM 도메인에서 실증한다.
+
+→ [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]

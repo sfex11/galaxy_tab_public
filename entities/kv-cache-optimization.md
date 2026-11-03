@@ -56,3 +56,15 @@ KV 캐시 관리의 적용 범위를 서빙·추론 계층에서 RL 훈련 롤�
 KV 캐시 배치가 논리적 실행 트리와 결합(conflate)될 때 재계산 비용과 확률 왜곡이라는 이지선다가 발생함을 진단한다. 캐시 최적화의 설계 축에 물리 배치를 논리 위상에서 탈결합하는 제3 경로를 추가한다.
 
 → [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]
+
+### Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Atten (2026-11-03)
+
+KV 캐시 최적화의 대상이 '캐시의 무엇을 버릴까'에서 '캐시를 어떤 표현으로 재조직할까'로 확장됨을 보여준다. 잠재 투영을 통한 subquadratic 검색은 [[compression-forgetting-isomorphism]]과 동혁적인 선택적 유지 연산이 모델 아키텍처에 내재화된 사례다.
+
+→ [[sources/2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md|상세 보기]]
+
+### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
+
+KV 캐시 최적화의 대상을 단일 모델 서빙 내부에서 모델 경계 간 이식 자산으로 확장한다. 캐시의 가치가 모델 스위치 시점에 소멸하지 않고 보존·번역될 수 있음을 제시하여, 캐시 관리의 단위가 세션 내부에서 모델 생태계 전체로 이동함을 시사한다.
+
+→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

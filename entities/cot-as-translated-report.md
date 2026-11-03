@@ -52,3 +52,9 @@ CoT가 내부 계산의 번역이라는 규정 너머의 제3 상태 — 외부 
 표면 형식 감독의 한계에 결정적 근거를 제공한다. 번역된 보고서의 형식적 안전성만 검사하는 기존 방어가 안전 결정의 학습을 우회했음을 밝히며, 보고서와 결정의 분리가 방어 설계의 전제임을 강화한다.
 
 → [[sources/2026-11-02-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+번역 비용이 수신자의 표현 공간에 조건부임을 실증한다 — 텍스트 작업에서 관용적이었던 이산 CoT가, 연속 공간에서 작동하는 이미지 생성 수신자 앞에서는 구조적 병목(모달리티 불일치)으로 격상된다.
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

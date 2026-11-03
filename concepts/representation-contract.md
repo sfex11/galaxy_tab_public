@@ -27,3 +27,7 @@ _자동 Wiki Query에서 추출됨_
 ### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
 
 → [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]
+
+### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
+
+→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

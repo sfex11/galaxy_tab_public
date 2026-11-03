@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### TANDEM: Task and Motion Planning with As-Needed Demonstrations for Eff (2026-09-25)
 
 TAMP의 고정 계획 도메인이 장기 조작 태스크의 모든 단계를 지원하지 못한다는 발견은 계획의 커버리지 한계를 명시한다 — 계획의 실패 지점이 논리 오류가 아니라 도메인 표현 범위일 수 있음을 시사하며, 인간 시연이 계획 도메인 밖 구간의 폴백 메커니즘이 된다.
+
+### Hierarchical World Models with Implicit Dynamics (2026-11-03)
+
+StageGuard가 전이 판정을, SeeQ가 [[subtask-level-value-function|서브태스크 가치]]를 계층화의 해법으로 제시했다면, ID-WM은 상위 계층의 담당 내용 자체를 동역학 예측이 아닌 도달가능성으로 재정의한다. 매크로 액션의 경직성 진단은 계층 경계를 어디에 둘 것인가가 표현 계약 문제임을 명확히 한다.
+
+→ [[sources/2026-11-03-hierarchical-world-models-with-implicit-dynamics.md|상세 보기]]

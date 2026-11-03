@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
 
 → [[sources/2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

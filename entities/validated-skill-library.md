@@ -24,3 +24,9 @@ _Wiki 축적 중_
 검증 주체의 도메인 의존성을 추가한다. 컴파일 검증 가능한 범용 스킬과 달리 임상 스킬의 정확성 검증은 전문가 판단을 요구하며, 라이브러리의 검증 계약이 도메인 위험 수준에 따라 달라짐을 보여준다.
 
 → [[sources/2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]
+
+### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
+
+검증된 하네스 설계가 재사용 가능 자산으로 축적되는 로봇 도메인 실현 사례를 제공한다. 능력이 로봇마다 재설계되지 않고 설계 지식의 복리 축적으로 확장됨을 보여준다.
+
+→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### The Sirens' Song: When Proximal Background Context Overshadows Distant (2026-09-24)
 
 recall head가 전역 읽기 이익을 추정하는 판단이 극복해야 할 실패 모드의 정체를 명확히 한다 — 전역 어텐션이 호출되어도 원거리 증거가 아니라 근접 노이즈에 사로잡히면 회수는 실패하며, 호출 판단과 호출 성공이 분리된다는 점을 시사한다.
+
+### Subquadratic Attention with a Hierarchical Tree-Structured Indexer (2026-11-03)
+
+EVI 기반 판단의 비용 측을 근본적으로 개선한다. recall head의 '언제 읽을까' 판단 구조는 유지하되 전역 읽기 자체가 subquadratic이 되면 지역 우선 디코딩의 비용-편익 균형이 재편되어, 판단 축과 비용 축이 분해 가능함을 시사한다.
+
+→ [[sources/2026-11-03-subquadratic-attention-with-a-hierarchical-tree-st.md|상세 보기]]

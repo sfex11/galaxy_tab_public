@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|VideoLVR: Latent Visual Reasoning over Grounded Video Eviden]]
 
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-30)
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

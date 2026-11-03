@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-05-25-lcguard-latent-communication-guard-for-safe-kv-sha.md|LCGuard: Latent Communication Guard for Safe KV Sharing in M]]
 
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
+
+### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
+
+→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

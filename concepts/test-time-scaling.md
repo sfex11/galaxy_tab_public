@@ -26,3 +26,7 @@ _Wiki 축적 중_
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
 
 ### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

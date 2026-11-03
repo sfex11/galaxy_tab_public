@@ -3859,3 +3859,17 @@
 - 2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md
 - 2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md
 - 2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md
+
+## [2026-11-03 06:26] llm-ingest | 12편 분석, 엔티티 1198개, 개념 2562개
+- 2026-11-03-flide-accelerating-decision-inference-with-exact-s.md
+- 2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md
+- 2026-11-03-hierarchical-world-models-with-implicit-dynamics.md
+- 2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md
+- 2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md
+- 2026-11-03-acct-asymmetric-cross-llm-context-transfer.md
+- 2026-11-03-subquadratic-attention-with-a-hierarchical-tree-st.md
+- 2026-11-03-strategic-tanking-in-stable-matching-markets.md
+- 2026-11-03-towards-understanding-the-impact-of-plasticity-los.md
+- 2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md
+- 2026-11-03-peeling-the-matryoshka-extracting-ontological-stru.md
+- 2026-11-03-latent-lens-visual-perception-in-small-language-mo.md

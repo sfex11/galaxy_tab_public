@@ -30,3 +30,9 @@ LLM의 사전학습된 세계 모델과 실제 환경의 괴리가 이상 현상
 ### Understanding the limits of latent world models (2026-10-30)
 
 세계 모델의 올바름 기준을 태스크 성능에서 환경 전이 구조와의 등변성으로 재정의한다. 예측적 잠재 동역학의 구조적 충실성이 태스크 성공과 분리되어 있음을 보여, 세계 모델 평가 방법론 자체의 재설계를 요구한다.
+
+### Hierarchical World Models with Implicit Dynamics (2026-11-03)
+
+세계 모델 설계 공간에 '기능 분해' 축을 추가한다 — 도달가능성 구조와 동역학 예측을 별도 계층으로 분리함으로써, 빅월드 체제에서 단일 잠재 동역학이 직면하는 충실성 한계([[world-model-in-pieces]] 논의)에 대한 아키텍처적 응답을 제공한다. 세계 모델이 통합 예측기가 아니라 이질적 기능의 조합일 수 있음을 시사한다.
+
+→ [[sources/2026-11-03-hierarchical-world-models-with-implicit-dynamics.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-29)
 
 VideoLVR은 붕괴가 메모리 저장뿐 아니라 추론 궤적 수준에서도 발생함을 보인다. 텍스트 좌표 참조라는 완화책이 재번역 병목을 유지하는 한계를 지적하며, 잠재 공간 추론이 붕괴를 추론 중에 원천적으로 회피하는 제2 경로(붕괴 관리 → 붕괴 회피)를 제시한다.
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+붕괴 진단의 생성 방향 확장을 제공한다 — 시각 정보가 텍스트로 손실 압축되는 문제가 메모리(이해) 도메인뿐 아니라 추론→생성 경로에서도 발생하며, 연속 공간 추론이 이 붕괴의 생성 측 해법이 됨을 시사한다.
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

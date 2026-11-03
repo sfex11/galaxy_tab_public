@@ -34,3 +34,15 @@ bounded context 하 압축이 test-time scaling의 효율 지평을 확장함을
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
 
 테스트타임 스케일링의 효율 축을 확장한다 — '더 많이 생각하는 것'과 대칭되는 '덜 생성하는 것'이 학습 가능한 능력임을 확산 에이전트에서 실증한다.
+
+### Hierarchical World Models with Implicit Dynamics (2026-11-03)
+
+세계 모델 플래닝이 테스트타임 적응의 체화 도메인 실현 경로임을 재확인하고, 계층화가 긴 지평 탐색 복잡도를 절감하는 구체적 메커니즘을 제공하여 test-time-scaling 논의에 계층 구조 축을 부여한다.
+
+→ [[sources/2026-11-03-hierarchical-world-models-with-implicit-dynamics.md|상세 보기]]
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+스케일링 상속의 표현 호환 조건을 명시한다 — 추론과 생성이 동일(연속) 공간에서 이루어질 때만 LLM의 테스트타임 스케일링이 이미지 생성으로 이전 가능하며, 상속 실패의 원인이 능력 부족이 아닌 표현 공간 불일치임을 시사한다.
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### MuonGS: Pretraining LLMs with Relaxed Weight-Norm Control (2026-10-30)
 
 스코어 센터링이 오프폴리시 RL의 스텝별 누적 편향(drift)을 제거하는 것과 방법론적으로 동형이다. 두 논문 모두 즉시 상태가 아닌 궤적 누적 수량의 경계를 제어하는 알고리즘 측 개입으로 안정성을 확보하며, 누적 수량 분석 원리가 사전학습과 RL 훈련 양축에서 독립 수렴했음을 확정한다.
+
+### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
+
+안정성 위협의 층위 분해에 제3 요소를 추가한다. 스코어 센터링이 엔진 간 계통적 편향을 알고리즘 층에서 제거하는 처방이었다면, 본 논문은 환경 확률적 노이즈가 알고리즘 교정으로는 회복 불가능한 표상 층 침식(플라스티시티 손실)을 유발함을 보여, bias-noise 구분이 네트워크 적응성 차원으로 확장된다.
+
+→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

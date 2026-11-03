@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 105개 전문가 큐레이션 실행 스킬을 과제별 검색·의존성 인식 조합으로 운용하는 구조는, 스킬이 외부 상태로 존재하고 모델이 조합 지식만 갖는 분업의 임상 도메인 최대 규모 실현이다. 능력 내면화 대신 외부화가 급변하는 고위험 도메인의 설계 기본값이 될 수 있음을 보여준다.
+
+### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
+
+하네스 설계 지식이 모델 가중치 밖 영구 메모리에 외부 상태로 축적되는 사례를 추가하며, 동결 정책이 하네스 상태만으로 신규 환경에 적응함을 실증한다.
+
+→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

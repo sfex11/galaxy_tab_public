@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-24-grow-the-harness-not-the-context-from-strategy-fre.md|Grow the Harness, Not the Context: From Strategy-Free Scaffo]]
 
 ### Harness Learning Enables Generalizable Test-Time Adaptation (2026-09-30)
+
+### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
+
+→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

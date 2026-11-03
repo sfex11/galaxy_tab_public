@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### AdviSD: Learning to Advise Frontier LLMs via Targeted Multi-Turn Self- (2026-10-01)
+
+### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
+
+→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Show-Harness: Just a VLM Agent Can Play Robots (2026-09-11)
 
 행동 토큰화의 대상을 저수준 모터 명령이 아닌 의도 수준의 이산적 의미 행동 단위로 격상시킨다. VLM이 자연스럽게 추론할 수 있는 추상화 수준에서 행동 어휘를 정의하는 것이 핵심 설계 변수임을 보여준다.
+
+### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
+
+이산 선택 공간을 스코어로 직접 예측하는 표현 계약의 랭킹 도메인 구현 사례를 제공한다. 선택 공간의 토큰화가 추론이 아닌 스코어 산출로 실현되는 변형이다.
+
+→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

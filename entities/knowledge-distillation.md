@@ -54,3 +54,9 @@ teacher-student 증류의 전이 대상이 지식이나 추론이 아니라 '말
 ### Effective Dense Retrieval using Only In-Context Examples (2026-10-01)
 
 증류의 대안 극점을 제공한다. 교사 지식을 가중치로 이전하는 대신 예시를 컨텍스트로 조건화하여 동일 목표(검색 품질)를 파라미터 업데이트 없이 달성하며, 지식 이전의 운반체가 가중치에서 컨텍스트로 이동할 수 있음을 시사한다.
+
+### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
+
+증류 대상이 텍스트 지식이 아닌 선호(랭킹) 구조일 때 발생하는 교사-학생 표현 형식 변환 문제를 추가한다. 지식 전이의 병목이 지식 자체가 아니라 교사·학생의 발화 형식 차이에 있을 수 있음을 보여준다.
+
+→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

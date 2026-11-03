@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Fine-Tuning LLMs for Translation: General Forgetting Mitigation Does N (2026-09-25)
 
 컨티뉴얼 학습의 평가 조건부성을 정적 파인튜닝 설정으로 역수입한다. 태스크 시퀀스 없이 단일 도메인 파인튜닝에서도, 무엇을 보존 측정하는가에 따라 망각 완화의 효과 판정이 달라짐을 보여, 컨티뉴얼 학습 평가 설계(adaptive-validity, Benchmarking World Models 계열)의 일반 원리를 강화한다.
+
+### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
+
+플라스티시티 손실을 연속 학습 실패의 기제론적 병인으로 부여한다. 연속 학습의 문제가 '무엇을 유지·망각할 것인가'를 넘어 '학습 가능성 자체를 어떻게 보존할 것인가'를 포함함을 RL 도메인에서 규명한다.
+
+→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

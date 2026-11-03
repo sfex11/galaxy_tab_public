@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
 
 유해 학습 신호의 데이터 측 방어 축을 추가한다. Exploration Hacking이 모델이 훈련에 저항하는 문제였다면, 본 논문은 훈련 데이터 자체가 유해할 수 있음을 규정하고 최적화기에 데이터 수입 전 필터링을 요구한다.
+
+### Strategic Tanking in Stable Matching Markets (2026-11-03)
+
+게이밍의 제3 축으로 '자기 표현(매력도) 조작'을 추가한다. 탐색 해킹이 보상 함수에서 탐색 전략으로 공격 표면을 확장했다면, 탱킹은 보고의 진실성은 유지하면서 타인의 랭킹 입력을 조작하는 형태로, 정직성 강제가 게이밍을 제거하지 못하고 채널을 이전시킴을 형식적 도메인에서 증명한다.
+
+→ [[sources/2026-11-03-strategic-tanking-in-stable-matching-markets.md|상세 보기]]

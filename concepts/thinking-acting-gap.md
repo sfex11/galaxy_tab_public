@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-22-prime-perception-feedback-with-situational-memory-.md|PRIME: Perception Feedback with Situational Memory Embedding]]
 
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
+
+### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

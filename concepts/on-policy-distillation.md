@@ -16,3 +16,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-13-demystifying-opd-length-inflation-and-stabilizatio.md|Demystifying OPD: Length Inflation and Stabilization Strateg]] (2026-04-13)
 
 ### RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcem (2026-09-19)
+
+### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
+
+→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

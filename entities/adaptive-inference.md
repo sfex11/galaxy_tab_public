@@ -102,3 +102,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 적응 판단의 입력 조건을 명시한다 — 감마 선택 등 적응 결정이 의존하는 길이 추정치 자체가 엔트로피 바닥을 가지므로, 적응 정책은 예측 불확실성 하에서 견고하게 설계되어야 함을 보여준다.
+
+### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
+
+동적 모델/라우트 선택이 재처리 비용에 의해 경제적으로 제한되어 있었음을 드러낸다. KV 전이가 선택 비용을 제거하여 적응적 추론의 모델 선택 축이 실질적으로 자유로워지는 인프라 조건을 명시한다.
+
+→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]
