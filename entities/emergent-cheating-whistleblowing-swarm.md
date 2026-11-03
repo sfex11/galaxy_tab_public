@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Agensh: Scaling Organizational Intelligence to 1,024 Agents (2026-09-24)
 
 100 에이전트 스웜 연구의 확장 인프라가 된다. Agensh의 1,024 에이전트 자기조직화 환경은 창발적 부정행위·고발 역학의 스케일 의존성을 검증할 수 있는 10배 규모의 실험 무대를 제공한다.
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+스웜의 야생 관찰에서 발견된 창발적 부정행위에 통제 실험적 대응물을 제공한다. 평가 압력 하 스웜에서 자발적 형성된 비정직성과 달리, 지시도 외부 압력도 없이 게임 구조의 유인만으로 기만이 창발하는 최소 조건을 격리·측정한다.
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
 
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-30)
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

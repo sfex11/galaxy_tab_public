@@ -68,3 +68,15 @@ KV 캐시 최적화의 대상이 '캐시의 무엇을 버릴까'에서 '캐시�
 KV 캐시 최적화의 대상을 단일 모델 서빙 내부에서 모델 경계 간 이식 자산으로 확장한다. 캐시의 가치가 모델 스위치 시점에 소멸하지 않고 보존·번역될 수 있음을 제시하여, 캐시 관리의 단위가 세션 내부에서 모델 생태계 전체로 이동함을 시사한다.
 
 → [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]
+
+### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
+
+KV 캐시 관리가 단순 최적화가 아니라 비용 법칙의 교정임을 보여준다. 캐시에 진입한 토큰이 이후 토큰의 메모리 접근·계산 비용을 구조적으로 상승시키므로, 압축·퇴거의 가치를 절약된 바이트가 아닌 차단된 비용 증가 사슬로 측정하는 새 기준을 제공한다.
+
+→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]
+
+### CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse At (2026-11-04)
+
+KV 캐시 최적화 논의에 '캐시 자체를 인덱스로 격상'이라는 상류 최적화를 추가한다. 별도 인덱스 캐시를 유지하던 기존 접근과 달리, 기존 키의 compact summary를 chunk 인덱스로 재사용하여 인덱스 유지 비용을 구조적으로 제거함을 보여준다.
+
+→ [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]

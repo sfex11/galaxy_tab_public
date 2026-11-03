@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### A2M: Trace-Optimized Agent Hijacking in the MCP Ecosystem (2026-09-24)
 
 스키마 주입 전략이 부과하는 세금이 동시에 공격자에게 도구 메타데이터 최적화의 최적 벡터가 됨을 보여준다. 오버헤드 최적화(eager→lazy 전환)와 보안 최적화(신뢰 검증 도입)가 상충하는 제약을 따름을 시사한다.
+
+### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
+
+MCP Tax의 에너지 비용 측면을 폐쇄형 법칙으로 정량화하는 근거를 제공한다. 스키마 오버헤드 토큰이 캐시에 영구 점유되어 이후 턴 전체의 한계 비용을 상승시키므로, 지연 스키마 로딩의 절감 효과가 토큰 수가 아닌 비용 증가 사슬 차단으로 재정의된다.
+
+→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

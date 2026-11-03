@@ -38,3 +38,9 @@ LongSeeker의 탄력적 컨텍스트 관리가 이 루프에 대한 직접적 �
 ### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
 
 '어떤 부분 작업을 계승할까, 새로 시작할까' 선택의 명시화가 이 루프의 비용 폭주를 제어하는 구조적 해법을 제공한다. 재시도가 무분별한 컨텍스트 누적이 아니라 Controller 판단 하의 선택지가 된다.
+
+### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
+
+재시도 컨텍스트 누적의 비용 폭주가 휴리스틱 관찰이 아니라 법칙적 귀결임을 확정한다. 각 재시도가 캐시에 토큰을 추가하고 그것이 이후 모든 토큰의 비용을 상승시키므로, O(1) 상한화 전략(Crab 계열)의 에너지 절감 가치가 구조적으로 근거화된다.
+
+→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

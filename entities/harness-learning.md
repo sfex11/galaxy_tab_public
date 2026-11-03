@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Learning Meta-Skills for Agent Harness Design in Test-Time AI4AI (2026-10-01)
 
 하네스 학습의 주체를 수행 에이전트 자신에서 별도의 Builder로 분리하는 구조를 제공한다. 학습 대상이 하네스 적응 자체가 아니라 '환경을 어떻게 구축할 것인가'의 원칙(Meta-Skill)이라는 2차 학습층을 추가하여, 하네스 학습이 일회성 적응에서 축적 가능한 전문 지능으로 승격됨을 보여준다.
+
+### Strategist: Evolving Reasoning with Agents (2026-11-04)
+
+하네스 학습에 '전략 = 실행 코드 블루프린트'라는 재사용 단위를 부여한다. 기존 하네스 학습이 성장 결과물을 암묵적 상태로 두었다면 본 논문은 번역 규칙 자체를 명시적 코드 아티팩트로 외부화하여, 학습된 하네스가 다른 전략의 구성요소로 재사용 가능함을 실증한다.
+
+→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]

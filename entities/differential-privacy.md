@@ -34,3 +34,9 @@ DP의 적용을 통계적 보장 형식화에서 연합 미세조정의 gradient
 ### Temporal Gradient Inversion for Private Trajectory Reconstruction in E (2026-09-26)
 
 그래디언트에 노이즈를 주는 DP 방어의 위협 모델 근거를 체화 RL에서 제공한다. 그래디언트가 사적 궤적의 완전한 복원 경로가 될 수 있음을 보여, '원시 데이터 미전송 = 프라이버시'라는 아키텍처 전제가 노이즈 주입 없이는 무방비함을 실증한다.
+
+### Should We Combine Our Data? Algorithms and Limits for Privately Assess (2026-11-04)
+
+DP의 적용 대상을 훈련 보호에서 공유 사전 평가 보호로 확장한다. 평가 자체가 민감 데이터에 접근하므로, 프라이버시 예산이 '학습 과정 보호'에서 '공유 결정 보호'로 이동하는 새 응용 축을 제공한다.
+
+→ [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md|상세 보기]]

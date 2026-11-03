@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Towards Communication-Efficient Social Intelligence in Language Agents (2026-09-30)
 
 타자 모델링이 응답 품질 향상이 아니라 발화 억제(파트너의 시간·주의 존중)의 근거로 실현되는 형태를 제시한다. ToM이 생성 측 능력이 아닌 통신 경제성 판단의 전제임을 보여준다.
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+상대 에이전트의 무지를 전제로 하는 정보 은폐가 게임 성패를 좌우하므로, 마음 이론이 기만 실행의 기계적 전제조건으로 연산화된다. log(N)-Questions 게임이 질문-응답 구도에서 ToM을 연산화한 것과 병렬로, 기만 구도에서의 ToM 요구도 측정 가능한 대상이 된다.
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

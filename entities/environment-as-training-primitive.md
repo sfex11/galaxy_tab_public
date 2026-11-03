@@ -24,3 +24,9 @@ CodeMidas는 코드베이스의 구현된 기능을 실행 가능한 RL 환경�
 물리 시뮬레이션이 에이전트 훈련의 일급 원시자원으로 격상되는 사례를 제공한다. 환경이 훈련의 부산물이 아니라 훈련 가능성 자체를 규정하는 원자 단위임을 체화 도메인에서 확인시킨다.
 
 → [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
+
+### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
+
+평가와 훈련이 동일한 도킹 환경 위에서 수행됨을 보여, 환경이 양축을 지원하는 훈련 원시자원임을 웹 도메인에서 확인시킨다. 환경의 시각·기능 충실도가 훈련 신호의 질을 직접 결정하는 구조를 드러낸다.
+
+→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]

@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Where Should I Join? Robot Group Joining via Language-Guided Goal Pred (2026-09-25)
 
 ### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

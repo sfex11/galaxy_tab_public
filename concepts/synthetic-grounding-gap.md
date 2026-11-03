@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-06-seeing-before-synthesizing-vlm-guided-transition-e.md|Seeing Before Synthesizing: VLM-Guided Transition Event Disc]]
+
+### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
+
+→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]

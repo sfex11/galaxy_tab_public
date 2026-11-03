@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-16-mind2dialogue-training-human-aware-language-models.md|Mind2Dialogue: Training Human-Aware Language Models by Simul]]
 
 ### Flag Game: A Toy Model for Mechanistic Swarm Interpretability (2026-09-18)
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

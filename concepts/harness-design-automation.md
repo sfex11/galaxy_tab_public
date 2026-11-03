@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|RoboArchitect: Automating the Design of Robotic Agents with ]]
+
+### FedReady: Bounded Agents for Federation Formation (2026-11-04)
+
+→ [[sources/2026-11-04-fedready-bounded-agents-for-federation-formation.md|상세 보기]]

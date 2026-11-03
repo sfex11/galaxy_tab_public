@@ -46,3 +46,9 @@ VLM 에이전트의 역할을 '전 과제 수행'에서 '스테이지 전이 판
 ### Talk2Escape: Conversational Grounding for Vision-and-Language Navigati (2026-09-25)
 
 Three-Step Nav가 진단한 VLN 구조적 실패(경로 이탈·조기 정지)에 대한 대화 기반 처방을 제공한다. MLLM 내비게이션 에이전트의 치명적 실패가 능력 부족이 아니라 개방형 루프 구조의 산물임을 밝히고, 통신 채널 추가로 실패를 회복 가능한 사건으로 전환하는 경로를 연다.
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+LVLM 에이전트가 직접 도구 호출 방식으로 물리 환경에서 실패하는 구체적 병인(기하학적 불확실성 처리 실패)을 규명하고, 이를 '완전 관측 테이블톱'이라는 능력 상한으로 특정한다. 신념 공간 계획+TAMP 위임 아키텍처가 이 상한을 부분 관측 모바일 매니퓰레이션으로 확장한다.
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

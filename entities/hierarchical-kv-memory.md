@@ -22,3 +22,9 @@ KV 캐시의 구조화 대상이 토큰 단위에서 압축된 잠재 상태 단
 계층 구조의 효용을 KV 캐시 저장 압축이 아닌 인덱서 조회 복잡도 감소로 재배치한다. 계층화가 저장 측 최적화 수단을 넘어 조회 측 점근 복잡도를 결정하는 구조적 변수임을 보여준다.
 
 → [[sources/2026-11-03-subquadratic-attention-with-a-hierarchical-tree-st.md|상세 보기]]
+
+### CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse At (2026-11-04)
+
+KV 캐시 조직화 입도 질문에 '고정 크기 chunk'라는 제3의 답을 제공한다. 토큰 단위와 학습된 잠재 단위 사이의 중간 입도로, chunk 선택이 기존 키 요약에 의해 이루어져 캐시 입도 설계와 선택 기준이 분리됨을 보여준다.
+
+→ [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]

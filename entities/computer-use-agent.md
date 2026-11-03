@@ -76,3 +76,9 @@ CUA 확장의 병목이 실행 능력이 아니라 검증 계층임을 규명한
 CUA 생태계의 스케일링 병목이 태스크 수행 능력이 아니라 완수 검증 인프라에 있음을 규정하고, 데이터 큐레이션·평가·RL 전 과정에 공통으로 요구되는 검증 계층의 설계 원리를 제공한다.
 
 → [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]
+
+### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
+
+GUI 웹 에이전트의 평가 인프라에 '실행 가능한 실제 사이트 복제 환경'이라는 새 환경 클래스를 추가한다. 기존 라이브 평가가 접근 제한으로 측정하지 못했던 인증된 워크플로우 영역의 능력을 측정 가능하게 만든다.
+
+→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]

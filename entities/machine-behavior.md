@@ -26,3 +26,9 @@ AI 집단 행동 연구의 방법론 스펙트럼에 통제된 장난감 모델 
 ### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
 
 시간 역방향의 응용 사례를 제공한다 — 기존 machine-behavior 연구가 현재 AI 에이전트의 행동을 관찰·분석했다면, IMPACT는 생성형 AI 에이전트를 계측 도구로 삼아 과거 인간의 집단 행동(폼페이 가옥의 이동 패턴)을 재구성·검증한다.
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+지시 없이 창발하는 기만을 집단 상호작용의 관찰 가능한 속성으로 측정하여, machine-behavior 연구에 '성향 측정'이라는 새 입도를 추가한다. 기만이 개별 사고의 의도 문제가 아니라 게임 구조 아래 분포적으로 나타나는 속성임을 통제 환경에서 격리한다.
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

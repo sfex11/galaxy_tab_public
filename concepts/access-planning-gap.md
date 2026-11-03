@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahe (2026-09-13)
 
 ### AnchorReasoning: A Visual Grounding and Causal Reasoning Dataset in Lo (2026-09-25)
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

@@ -24,3 +24,9 @@ TIM의 불안정성 유발 원인을 drift로 분해한다 — 수치 불일치 
 훈련 불안정의 이중 층위 구조를 완성한다. TIM이 수치적 일치 문제라면 플라스티시티 손실은 표상 학습 가능성 문제로, 두 병리가 서로 다른 원인(엔진 불일치 vs 환경 확률성)과 처방(수치 교정 vs 적응력 보존)을 가짐을 보여준다.
 
 → [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]
+
+### Pretraining Data Scale Reverses the Muon-AdamW Fine-Tuning Gap (2026-11-04)
+
+훈련 파이프라인 단계 간 결합 문제의 새 인스턴스를 제공한다. 사전학습 단계의 최적화 선택이 하류 파인튜닝 단계의 성능을 좌우하며, 단계별 국소 최적(사전학습 손실 최소화)이 종단 최적(파인튜닝 후 성능)과 어긋날 수 있음을 옵티마이저 수준에서 입증한다.
+
+→ [[sources/2026-11-04-pretraining-data-scale-reverses-the-muon-adamw-fin.md|상세 보기]]

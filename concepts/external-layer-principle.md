@@ -14,3 +14,7 @@ LLM을 시스템의 외부 계층으로 위치시켜, 내부 계층(형식적 �
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
+
+→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

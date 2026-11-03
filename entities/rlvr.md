@@ -62,3 +62,9 @@ RLVR이 검증 가능성을 훈련 시 보상 신호의 성립 조건으로 사�
 ### Reinforcing Agentic Creativity in Scientific Ideation with Night Scien (2026-09-30)
 
 RLVR가 검증 가능 보상을 전제하는 것과 대조적으로 본 논문은 RL을 검증 불가능한 우연적 탐색의 교정기로 전용하여, 강화학습의 적용 지평이 검증가능성 경계 너머로 확장 가능함을 시사한다.
+
+### Not All Reasoning Generalizes: A Case Study on Learning Generalizable  (2026-11-04)
+
+RLVR의 일반화 효과에 조건부성을 부여한다 — RLVR로 획득한 추론이 모두 easy-to-hard OOD로 전이되지 않으며, 어떤 추론 전략이 학습되었는가가 일반화 성패를 결정한다. RLVR 연구의 목표를 '검증 가능 보상 하 학습 성공'에서 '일반화 가능 전략의 선별적 유도'로 이동시킨다.
+
+→ [[sources/2026-11-04-not-all-reasoning-generalizes-a-case-study-on-lear.md|상세 보기]]

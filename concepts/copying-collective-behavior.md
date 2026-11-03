@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-01-impact-modeling-socially-interdependent-movement-i.md|IMPACT: Modeling Socially Interdependent Movement in a Gener]]
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

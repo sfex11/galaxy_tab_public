@@ -31,3 +31,7 @@ _자동 Wiki Query에서 추출됨_
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
 
 → [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]
+
+### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
+
+→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

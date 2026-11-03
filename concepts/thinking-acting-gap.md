@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
 
 → [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]
+
+### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
+
+→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

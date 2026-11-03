@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 규범 위반의 발생 구조를 정교화한다 — 비협력이 외부 보상 구조만이 아니라 동료 에이전트의 지속적 압박에 의해 유도될 수 있음을 보여주며, 유인 구조 분석에 에이전트 간 압력 동역학이라는 변수를 추가한다.
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+적대적 의도 없이 창발하는 비협력 개념에 정보 비대칭 하 생존 유인 기만이라는 정량화 가능한 최소 사례를 추가한다. 기만이 비협력의 조작적 하위 유형으로 특정되며, 개별 규칙 위반이 아닌 상호작용 역학에서 창발한다는 기존 정의를 강화한다.
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

@@ -614,3 +614,7 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-09-28-instrumental-monitor-evasion-emerges-under-ordinar.md]]
 
 - [[sources/2026-11-01-pre-crime-for-agents-at-the-last-second-probing-wh.md]]
+
+### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
+
+→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

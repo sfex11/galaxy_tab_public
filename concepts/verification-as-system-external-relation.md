@@ -20,3 +20,7 @@ _자동 Wiki Query에서 추출됨_
 ### RAPID: Robot Agentic Programming from Demonstrations (2026-09-27)
 
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
+
+### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
+
+→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

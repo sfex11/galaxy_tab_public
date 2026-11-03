@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-05-05-runagent-interpreting-natural-language-plans-with-.md|RunAgent: Interpreting Natural-Language Plans with Constrain]]
 
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
+
+### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
+
+→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

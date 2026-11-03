@@ -80,3 +80,9 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 측정 대상(예측기)과 교란 변수(태스크 난이도·타겟 구성)의 혼동이라는 새 변형을 제공한다. 벤치마크가 타겟 구성을 명세하지 않으면 점수가 예측기 품질을 대변하지 못한다는 점에서, 명세 간극이 추론 인프라 평가 영역으로 확장되는 사례다.
 
 → [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]
+
+### VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifia (2026-11-04)
+
+표준 코딩 벤치마크가 성공은 명세하되 부작용 제약은 명세하지 않는 간극을 규명한다. 명세 간극이 '측정 누락'에서 '유해성 은폐'로 확장됨을 보여준다.
+
+→ [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
 
 모델에서 시스템으로의 스케일링 논의에 '프로덕션 추론 시스템의 기능 구현'이라는 구체적 스케일링 태스크를 제공한다. 시스템 스케일링의 주체가 에이전트일 수 있음을 평가 가능한 형태로 만든다.
+
+### Strategist: Evolving Reasoning with Agents (2026-11-04)
+
+'모델이 절반이고 나머지 절반이 추론 전략'이라는 이분법의 직접적 선언을 제공한다. 시스템 스케일링의 실천 경로가 하네스 성장에서 전략 진화로 정교화되며, 전략 라이브러리가 시스템 축의 자산 구조가 됨을 시사한다.
+
+→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]

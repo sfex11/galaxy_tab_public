@@ -3873,3 +3873,20 @@
 - 2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md
 - 2026-11-03-peeling-the-matryoshka-extracting-ontological-stru.md
 - 2026-11-03-latent-lens-visual-perception-in-small-language-mo.md
+
+## [2026-11-04 06:35] llm-ingest | 15편 분석, 엔티티 1222개, 개념 2605개
+- 2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md
+- 2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md
+- 2026-11-04-not-all-reasoning-generalizes-a-case-study-on-lear.md
+- 2026-11-04-strategist-evolving-reasoning-with-agents.md
+- 2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md
+- 2026-11-04-diabagent-toward-agentic-physiological-control.md
+- 2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md
+- 2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md
+- 2026-11-04-spacetime-emergence-in-the-memory-of-a-learning-ag.md
+- 2026-11-04-fedready-bounded-agents-for-federation-formation.md
+- 2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md
+- 2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md
+- 2026-11-04-pretraining-data-scale-reverses-the-muon-adamw-fin.md
+- 2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md
+- 2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md

@@ -20,3 +20,9 @@ _Wiki 축적 중_
 에이전트 실행 수준 토큰 소비 예측(TokenCast)에 단일 디코딩 수준의 근본 한계 차원을 추가한다. 미시(디코딩 길이)와 거시(실행 전체) 예측이 동일한 AR 확률성 근원에서 서로 다른 불확실성 계층을 상속하므로, 실행 수준 예측의 정확도 보장도 이 하한의 복합 함수임을 시사한다.
 
 → [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]
+
+### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
+
+TokenCast의 토큰 소비 예측에 결정론적 비용 변환 계층의 필요성을 부과한다. 토큰 수가 곧 비용이 아니라 시퀀스 위치 의존적 한계 비용의 적분이므로, 소비 예측은 토큰 수 예측과 별개의 법칙 기반 변환을 요구한다.
+
+→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

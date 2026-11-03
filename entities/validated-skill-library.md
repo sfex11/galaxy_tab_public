@@ -30,3 +30,9 @@ _Wiki 축적 중_
 검증된 하네스 설계가 재사용 가능 자산으로 축적되는 로봇 도메인 실현 사례를 제공한다. 능력이 로봇마다 재설계되지 않고 설계 지식의 복리 축적으로 확장됨을 보여준다.
 
 → [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]
+
+### Strategist: Evolving Reasoning with Agents (2026-11-04)
+
+검증된 스킬 라이브러리의 후보 공간 논리가 전략 도메인으로 확장된 사례다. 라이브러리가 조합 탐색의 재료가 되는 구조는 동일하되, 재사용 단위가 태스크 스킬에서 '모델 호출을 조직하는 전략'으로 상향됨을 보여준다.
+
+→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]
