@@ -1912,3 +1912,13 @@
 - [[sources/2026-11-01-advancing-clinical-genomic-analysis-with-a-skill-c.md]] - Advancing Clinical Genomic Analysis with a Skill-Centred Agent
 - [[sources/2026-11-01-every-token-needs-its-own-teacher-multi-teacher-ad.md]] - Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Self-distillation
 - [[sources/2026-11-01-on-the-fundamental-limits-of-prefill-based-decodin.md]] - On the Fundamental Limits of Prefill-Based Decoding Length Prediction
+- [[sources/2026-11-05-from-autonomous-agents-to-cognitive-symbionts-towa.md]] - From Autonomous Agents to Cognitive Symbionts: Toward AI-Augmented Human Intelligence
+- [[sources/2026-11-05-aligning-language-models-with-general-preferences-.md]] - Aligning Language Models with General Preferences: An Empirical Study of Direct Nash Optimization
+- [[sources/2026-11-05-whose-guardrail-user-identity-shapes-the-effective.md]] - Whose Guardrail? User Identity Shapes the Effectiveness of Model Disclaimers in Mitigating LLM Political Persuasion
+- [[sources/2026-11-05-adversarial-speculative-reasoning-improves-long-ho.md]] - Adversarial Speculative Reasoning Improves Long Horizon Agents
+- [[sources/2026-11-05-pyrua-datafarm-llm-agent-as-a-cost-efficient-teleo.md]] - PyRUA-DataFarm: LLM Agent as a Cost-Efficient Teleoperator for Real-Ready Robot Data
+- [[sources/2026-11-05-harp-training-free-dual-profile-agentic-communicat.md]] - HARP: Training-Free Dual-Profile Agentic Communication for LLM-Based Recommendation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-11-05-mdskill-learning-to-internalize-skill-memory-throu.md]] - MDSKILL: Learning to Internalize Skill Memory through Multi-View Distillation for Efficient Dynamic Agent Self-Evolution
+- [[sources/2026-11-05-you-dont-need-long-context.md]] - You don't need long context
+- [[sources/2026-11-05-stabilizing-on-policy-targeted-guidance-in-agentic.md]] - Stabilizing On-Policy Targeted Guidance in Agentic Reinforcement Learning

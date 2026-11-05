@@ -3890,3 +3890,21 @@
 - 2026-11-04-pretraining-data-scale-reverses-the-muon-adamw-fin.md
 - 2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md
 - 2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md
+
+## [2026-11-05 08:33] ingest | From Autonomous Agents to Cognitive Symbionts: Toward AI-Augmented Human Intelligence
+
+## [2026-11-05 08:33] ingest | Aligning Language Models with General Preferences: An Empirical Study of Direct Nash Optimization
+
+## [2026-11-05 08:33] ingest | Whose Guardrail? User Identity Shapes the Effectiveness of Model Disclaimers in Mitigating LLM Political Persuasion
+
+## [2026-11-05 08:33] ingest | Adversarial Speculative Reasoning Improves Long Horizon Agents
+
+## [2026-11-05 08:33] ingest | PyRUA-DataFarm: LLM Agent as a Cost-Efficient Teleoperator for Real-Ready Robot Data
+
+## [2026-11-05 08:33] ingest | HARP: Training-Free Dual-Profile Agentic Communication for LLM-Based Recommendation
+
+## [2026-11-05 08:33] ingest | MDSKILL: Learning to Internalize Skill Memory through Multi-View Distillation for Efficient Dynamic Agent Self-Evolution
+
+## [2026-11-05 08:33] ingest | You don't need long context
+
+## [2026-11-05 08:33] ingest | Stabilizing On-Policy Targeted Guidance in Agentic Reinforcement Learning
