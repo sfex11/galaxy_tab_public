@@ -31,3 +31,9 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-rethinking-self-repair-in-code-as-policy-agents-wh]]: 재시도 성공의 원인이 실패별 피드백인지 단순 추가 샘플링인지 분해하는 질문과, 턴 단계 best-of-N 샘플링이 각각 에이전트의 샘플링 기반 개선 문제를 다룬다.
+- → [[sources/2026-11-05-adversarial-speculative-reasoning-improves-long-ho]]: 장기 과제 에이전트에서 추론 시점 확장을 드래프트-검증 추측 구조와 생성자-선택자 best-of-N 구조로 각각 구현한다.
+- → [[sources/2026-11-06-context--answer-metamodels-forecasting-llm-activat]]: 확률적 디코딩으로 답변 다양성을 얻는 비용 문제를 공유하며, 메타모델은 롤아웃 전 활성화 예측으로 best-of-N 샘플링의 비용을 우회할 가능성을 연다.

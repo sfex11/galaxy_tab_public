@@ -44,3 +44,7 @@ Wiki 논의에 대한 두 가지 기여가 있다. 첫째, [[belief-state-ground
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-vabar-a-variational-automation-benchmark-for-agent]]: LVLM+TAMP 결합이 겨냥하는 부분 관측 하 agentic 로봇 조작 과제를 VABAR가 변동 자동화라는 벤치마크 틀로 형식화하여 평가 지점을 제공한다.

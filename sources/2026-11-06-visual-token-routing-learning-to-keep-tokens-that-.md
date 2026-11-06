@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-05-you-dont-need-long-context]]: 장기 과제 에이전트의 컨텍스트 비용 문제를 텍스트 컴팩션과 비주얼 토큰 선택이라는 상호 보완적 경로로 축소한다.
+- → [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a]]: GUI 웹 에이전트의 실용화 병목을 각각 스크린샷 토큰 비용 절감과 실제 웹사이트 기반 평가 환경 구축으로 해결하는 상보적 연구다.

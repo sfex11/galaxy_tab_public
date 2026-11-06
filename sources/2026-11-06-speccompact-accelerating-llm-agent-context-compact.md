@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-05-you-dont-need-long-context]]: 둘 다 LLM 에이전트의 컨텍스트 압축을 다루며, SpecCompact는 '짧은 컨텍스트 유지로도 충분하다'는 전략의 핵심 병목인 컴팩션 지연을 슬롯 병렬 추측 검증으로 가속한다.
+- → [[sources/2026-11-05-adversarial-speculative-reasoning-improves-long-ho]]: 속도 최적화 도구로 여겨지던 추측(speculation) 기법을 에이전트 추론 행동의 개선과 컴팩션 검증의 병렬화로 각각 재해석해 활용한다.

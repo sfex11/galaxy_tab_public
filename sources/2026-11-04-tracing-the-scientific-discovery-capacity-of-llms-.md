@@ -45,3 +45,7 @@ Wiki 관점에서 이 논문은 세 축을 확장한다. 첫째, [[data-attribut
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f]]: 모델의 능력과 가치를 아키텍처가 아닌 훈련 데이터의 구성 — 라벨링 규범·선택 편향과 monofact 비율 — 에서 설명하는 데이터 중심 귀속 연구다.

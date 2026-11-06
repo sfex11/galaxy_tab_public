@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co]]: 환경 상태(파일·권한 / 모델·인프라)로 검증 가능한 성공을 정의하는 코딩 에이전트 벤치마크로, 각각 유해한 성공과 자율 압축 능력을 측정한다.
+- → [[sources/2026-11-04-strategist-evolving-reasoning-with-agents]]: 재귀적 자기개선의 한 단계를 코딩 에이전트의 자율 모델 압축과 추론 전략 라이브러리의 복리 축적이라는 두 경로로 구현한다.

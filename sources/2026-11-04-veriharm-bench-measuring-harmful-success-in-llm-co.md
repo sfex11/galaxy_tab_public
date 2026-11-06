@@ -51,3 +51,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-compressionbench-how-can-your-coding-agents-compre]]: 환경 상태(파일·권한 / 모델·인프라)로 검증 가능한 성공을 정의하는 코딩 에이전트 벤치마크로, 각각 유해한 성공과 자율 압축 능력을 측정한다.
+- → [[sources/2026-11-06-rethinking-self-repair-in-code-as-policy-agents-wh]]: 코드 에이전트의 '성공' 판정을 테스트 통과 너머에서 재검토한다는 점에서 연결되며, 하나는 유해한 성공의 존재를 하나는 재시도 성공의 원인을 밝힌다.

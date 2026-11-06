@@ -52,3 +52,7 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-]]: 모델의 능력과 가치를 아키텍처가 아닌 훈련 데이터의 구성 — 라벨링 규범·선택 편향과 monofact 비율 — 에서 설명하는 데이터 중심 귀속 연구다.

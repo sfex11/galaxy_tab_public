@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-on-turn-level-best-of-n-sampling-for-scaling-llm-a]]: 재시도 성공의 원인이 실패별 피드백인지 단순 추가 샘플링인지 분해하는 질문과, 턴 단계 best-of-N 샘플링이 각각 에이전트의 샘플링 기반 개선 문제를 다룬다.
+- → [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co]]: 코드 에이전트의 '성공' 판정을 테스트 통과 너머에서 재검토한다는 점에서 연결되며, 하나는 유해한 성공의 존재를 하나는 재시도 성공의 원인을 밝힌다.

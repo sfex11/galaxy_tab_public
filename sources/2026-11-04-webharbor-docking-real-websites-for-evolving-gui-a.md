@@ -40,3 +40,7 @@ Wiki 관점에서 이 논문의 위치는 명확하다. [[agent-environment-gene
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-visual-token-routing-learning-to-keep-tokens-that-]]: GUI 웹 에이전트의 실용화 병목을 각각 스크린샷 토큰 비용 절감과 실제 웹사이트 기반 평가 환경 구축으로 해결하는 상보적 연구다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-vabar-a-variational-automation-benchmark-for-agent]]: LLM 에이전트를 실물 로봇 작업(원격 조작 대체 데이터 생산 / 변동 자동화)에 투입하는 실용 지향 agentic robotics 연구다.

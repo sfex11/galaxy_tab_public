@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-on-turn-level-best-of-n-sampling-for-scaling-llm-a]]: 장기 과제 에이전트에서 추론 시점 확장을 드래프트-검증 추측 구조와 생성자-선택자 best-of-N 구조로 각각 구현한다.
+- → [[sources/2026-11-06-speccompact-accelerating-llm-agent-context-compact]]: 속도 최적화 도구로 여겨지던 추측(speculation) 기법을 에이전트 추론 행동의 개선과 컴팩션 검증의 병렬화로 각각 재해석해 활용한다.

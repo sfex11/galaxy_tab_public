@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile]]: LVLM+TAMP 결합이 겨냥하는 부분 관측 하 agentic 로봇 조작 과제를 VABAR가 변동 자동화라는 벤치마크 틀로 형식화하여 평가 지점을 제공한다.
+- → [[sources/2026-11-05-pyrua-datafarm-llm-agent-as-a-cost-efficient-teleo]]: LLM 에이전트를 실물 로봇 작업(원격 조작 대체 데이터 생산 / 변동 자동화)에 투입하는 실용 지향 agentic robotics 연구다.

@@ -44,3 +44,8 @@
 
 ---
 _LLM 분석으로 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-05-mdskill-learning-to-internalize-skill-memory-throu]]: 태스크 경험의 축적·재사용이라는 공통 목표를 외부 전략 블루프린트 라이브러리(외재화)와 스킬 메모리의 증류적 내재화(내재화)라는 반대 방향의 경로로 추구한다.
+- → [[sources/2026-11-06-compressionbench-how-can-your-coding-agents-compre]]: 재귀적 자기개선의 한 단계를 코딩 에이전트의 자율 모델 압축과 추론 전략 라이브러리의 복리 축적이라는 두 경로로 구현한다.

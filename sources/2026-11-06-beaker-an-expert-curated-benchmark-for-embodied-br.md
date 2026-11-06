@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-06-frontierphysics-evaluating-agents-for-end-to-end-p]]: 고정 문제 풀이를 넘어 연구 품질까지 검증하는 전문가 큐레이션 엔드투엔드 과학 연구 에이전트 벤치마크(자율 화학 실험실 / 물리 연구)다.
+- → [[sources/2026-11-06-longbanana-an-expert-verified-benchmark-for-long-c]]: 전문가가 설계·검증한 벤치마크라는 공통 방법론으로 각기 자율 실험실의 신체화 인지와 장컨텍스트 다중 참조 이미지 합성을 평가한다.

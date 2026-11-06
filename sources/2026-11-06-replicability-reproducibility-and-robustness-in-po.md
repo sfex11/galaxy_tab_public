@@ -31,3 +31,8 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-05-whose-guardrail-user-identity-shapes-the-effective]]: LLM의 정치적 영향 연구를 실증(디스클레이머 효과와 사용자 특성 실험)과 방법론(재현성·강건성 확보 지침) 양면에서 다룬다.
+- → [[sources/2026-11-06-a-framework-for-context-enrichment-and-selective-r]]: LLM 사회과학 연구의 타당성 위협 — 의미 보존 프롬프트 변동에 따른 행동 요동과 확률적 출력 — 을 검증 가능성·강건성 관점에서 공동으로 다룬다.

@@ -31,3 +31,7 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+## 🔗 교차 참조
+
+- → [[sources/2026-11-05-aligning-language-models-with-general-preferences-]]: 온폴리시 샘플링과 판별 모델(LLM 레이터·저지) 기반 보상을 활용하는 포스트트레이닝 정렬 기법으로, 학습 안정화가 공통 과제다.
