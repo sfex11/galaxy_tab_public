@@ -618,3 +618,9 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
 
 → [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]
+
+- [[sources/2026-11-06-a-framework-for-context-enrichment-and-selective-r.md]]
+
+- [[sources/2026-11-06-frontierphysics-evaluating-agents-for-end-to-end-p.md]]
+
+- [[sources/2026-11-06-speccompact-accelerating-llm-agent-context-compact.md]]

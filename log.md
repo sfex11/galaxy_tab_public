@@ -3908,3 +3908,29 @@
 ## [2026-11-05 08:33] ingest | You don't need long context
 
 ## [2026-11-05 08:33] ingest | Stabilizing On-Policy Targeted Guidance in Agentic Reinforcement Learning
+
+## [2026-11-06 08:34] ingest | A Framework for Context Enrichment and Selective Robustness in LLM Social Agents
+
+## [2026-11-06 08:34] ingest | FrontierPhysics: Evaluating Agents for End-to-End Physics Research
+
+## [2026-11-06 08:34] ingest | Dull, Dirty, Dangerous? Working Conditions and the Limits of Occupational AI Exposure
+
+## [2026-11-06 08:34] ingest | VABAR: A Variational Automation Benchmark for Agentic Robotics
+
+## [2026-11-06 08:34] ingest | SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification
+
+## [2026-11-06 08:34] ingest | On Turn-Level Best-of-N Sampling for Scaling LLM Agents
+
+## [2026-11-06 08:34] ingest | Rethinking Self-Repair in Code-as-Policy Agents: What Drives Retry Success?
+
+## [2026-11-06 08:34] ingest | CompressionBench: How can your coding agents compress LLMs?
+
+## [2026-11-06 08:34] ingest | BEAKER: An Expert-Curated Benchmark for Embodied Brains in Self-Driving Chemical Laboratories
+
+## [2026-11-06 08:34] ingest | LongBanana: An Expert-Verified Benchmark for Long-Context Multi-Reference Image Synthesis
+
+## [2026-11-06 08:34] ingest | Context--Answer Metamodels: Forecasting LLM Activations Before the First Answer Token
+
+## [2026-11-06 08:34] ingest | Replicability, Reproducibility, and Robustness in Political and Social Science Research with Large Language Models
+
+## [2026-11-06 08:34] ingest | Visual Token Routing: Learning to keep tokens that matter

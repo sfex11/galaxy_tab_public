@@ -1922,3 +1922,19 @@
 - [[sources/2026-11-05-mdskill-learning-to-internalize-skill-memory-throu.md]] - MDSKILL: Learning to Internalize Skill Memory through Multi-View Distillation for Efficient Dynamic Agent Self-Evolution
 - [[sources/2026-11-05-you-dont-need-long-context.md]] - You don't need long context
 - [[sources/2026-11-05-stabilizing-on-policy-targeted-guidance-in-agentic.md]] - Stabilizing On-Policy Targeted Guidance in Agentic Reinforcement Learning
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-06-a-framework-for-context-enrichment-and-selective-r.md]] - A Framework for Context Enrichment and Selective Robustness in LLM Social Agents
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-06-frontierphysics-evaluating-agents-for-end-to-end-p.md]] - FrontierPhysics: Evaluating Agents for End-to-End Physics Research
+- [[sources/2026-11-06-dull-dirty-dangerous-working-conditions-and-the-li.md]] - Dull, Dirty, Dangerous? Working Conditions and the Limits of Occupational AI Exposure
+- [[sources/2026-11-06-vabar-a-variational-automation-benchmark-for-agent.md]] - VABAR: A Variational Automation Benchmark for Agentic Robotics
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-06-speccompact-accelerating-llm-agent-context-compact.md]] - SpecCompact: Accelerating LLM Agent Context Compaction with Slot-Parallel Semantic Speculative Verification
+- [[sources/2026-11-06-on-turn-level-best-of-n-sampling-for-scaling-llm-a.md]] - On Turn-Level Best-of-N Sampling for Scaling LLM Agents
+- [[sources/2026-11-06-rethinking-self-repair-in-code-as-policy-agents-wh.md]] - Rethinking Self-Repair in Code-as-Policy Agents: What Drives Retry Success?
+- [[sources/2026-11-06-compressionbench-how-can-your-coding-agents-compre.md]] - CompressionBench: How can your coding agents compress LLMs?
+- [[sources/2026-11-06-beaker-an-expert-curated-benchmark-for-embodied-br.md]] - BEAKER: An Expert-Curated Benchmark for Embodied Brains in Self-Driving Chemical Laboratories
+- [[sources/2026-11-06-longbanana-an-expert-verified-benchmark-for-long-c.md]] - LongBanana: An Expert-Verified Benchmark for Long-Context Multi-Reference Image Synthesis
+- [[sources/2026-11-06-context--answer-metamodels-forecasting-llm-activat.md]] - Context--Answer Metamodels: Forecasting LLM Activations Before the First Answer Token
+- [[sources/2026-11-06-replicability-reproducibility-and-robustness-in-po.md]] - Replicability, Reproducibility, and Robustness in Political and Social Science Research with Large Language Models
+- [[sources/2026-11-06-visual-token-routing-learning-to-keep-tokens-that-.md]] - Visual Token Routing: Learning to keep tokens that matter
