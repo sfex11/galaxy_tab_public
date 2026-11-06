@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReproBridge: Building Reproducibility into ML Research Artif — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="text-align:center;">
+    <p class="muted" style="font-size:clamp(0.85rem,1.4vw,1.05rem);">arXiv:2611.08452v1 · cs.AI</p>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.8rem); margin:0.4em 0;">ReproBridge</h1>
+    <h2 class="accent" style="font-size:clamp(1.2rem,2.6vw,1.9rem); font-weight:500;">ML 연구 아티팩트에 재현성을 내재화하기</h2>
+    <div class="hr"></div>
+    <p class="muted" style="font-size:clamp(0.95rem,1.8vw,1.2rem);">ReproBridge: Building Reproducibility into ML Research Artifacts</p>
+    <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1.05rem); margin-top:1.2em;">Yubo Wang (University of Waterloo) · Rui Meng · Jaehyun Nam · Tomas Pfister · Jinsung Yoon (Google)</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">문제: ML 실험 재현은 왜 어려운가?</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(1rem,1.8vw,1.2rem);">재현에는 <span class="accent">논문·공개 코드·부속 아티팩트에 흩어진 정보</span>를 다시 조립하는 작업이 필요합니다.</p>
+    <ul class="check-list" style="font-size:clamp(0.9rem,1.6vw,1.1rem); margin-top:1em;">
+      <li><span class="check-icon"><i class="fas fa-unlink"></i></span>호환되지 않는 의존성 해결, 의도된 구성 식별, 데이터 로더 수리</li>
+      <li><span class="check-icon"><i class="fas fa-question"></i></span>실행 출력이 보고된 점수로 어떻게 변하는지 스스로 알아내야 함</li>
+      <li><span class="check-icon"><i class="fas fa-history"></i></span>성공한 시도조차 결정들이 대화·셸 히스토리에 묻혀 <span class="accent2">다음 재현자가 같은 조사를 반복</span></li>
+    </ul>
+    <div class="card" style="margin-top:1.2em;">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);"><i class="fas fa-robot accent"></i> 코딩 에이전트 벤치마크에서도 의존성 미해결, 구현 세부사항 누락, 완료되지 않는 실험 계획이 반복적으로 관찰됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">연구 질문과 가설</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="font-size:clamp(1.05rem,2vw,1.35rem);">
+      재현 성공은 <span class="accent">공개된 아티팩트</span>에 의존하는가, 아니면 재현자가 <span class="accent2">빠진 세부사항을 채우는 능력</span>에 의존하는가?
+    </div>
+    <p style="font-size:clamp(1rem,1.8vw,1.2rem); margin-top:1.2em;"><strong>가설:</strong> 재현 과정에서 회복된 <span class="accent3">절차와 결정을 보존</span>하면 계산 재현성이 향상된다.</p>
+    <div class="grid-3" style="margin-top:1.2em;">
+      <div class="card"><p style="font-size:clamp(0.85rem,1.4vw,1rem);"><i class="fas fa-cogs accent"></i> 의존성 해결 → <strong>설치 절차</strong>로</p></div>
+      <div class="card"><p style="font-size:clamp(0.85rem,1.4vw,1rem);"><i class="fas fa-rocket accent2"></i> 실험 탐색 → <strong>전용 런처</strong>로</p></div>
+      <div class="card"><p style="font-size:clamp(0.85rem,1.4vw,1rem);"><i class="fas fa-wrench accent3"></i> 임시 수정 → <strong>문서화된 선택과 근거</strong>로</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">세 가지 기여</h2>
+    <div class="hr"></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-box-open"></i> 아티팩트 설계</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">정제된 코드베이스, 환경 설정, 실험 런처, 재현 가이드의 <strong>4요소 표준 설계</strong></p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-project-diagram"></i> 구축 워크플로우</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">논문+공식 저장소에서 정제 아티팩트를 만드는 <strong>ReproBridge 에이전트 워크플로우</strong></p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-clipboard-check"></i> 벤치마크·평가</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">인간 검증 참조 점수 기반의 <strong>ReproBridge-Bench</strong>와 무결성 감사(Auditor)</p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.9rem,1.5vw,1.05rem); margin-top:1.2em;">각 구성요소 제거 실험과 "일반 출력" 대조군으로 기여도를 분리 검증</p>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">ReproBridge-Bench 규모</h2>
+    <div class="hr"></div>
+    <div class="grid-3">
+      <div style="text-align:center;">
+        <div class="big-num accent">1,029</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">재현 태스크</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-num accent2">387</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">실험</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-num accent3">36</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">논문</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1em;">
+      <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);"><i class="fas fa-user-check accent"></i> 태스크당 <strong>인간 검증 참조 점수 5개</strong>로 수치 호환성 판정 — 관측된 실행과 그 변동성을 함께 고려</p>
+    </div>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.05rem); margin-top:0.8em;">논문에 명시된 설정이 충돌하는 코드보다 우선하며, 태스크는 연구 분야별로 배정됩니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">오류 모델: 측정을 어떻게 해석하는가</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="font-size:clamp(1.3rem,2.6vw,1.8rem); text-align:center;">
+      <strong>Y = μ + D + ε</strong>
+    </div>
+    <div class="grid-3" style="margin-top:1em;">
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);"><span class="accent"><strong>μ</strong></span><br>명시된 실험을 충실하게 실행했을 때의 기댓값</p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);"><span class="accent2"><strong>D</strong></span><br>실행 선택이 사양에서 이탈한 <strong>체계적 편차</strong></p>
+      </div>
+      <div class="card">
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);"><span class="accent3"><strong>ε</strong></span><br>조건부 <strong>무작위 변동</strong> (확률적 학습의 실행 간 차이)</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.1rem); margin-top:1em;"><i class="fas fa-lightbulb accent"></i> 발표 점수는 오류 없는 μ가 아니라 <strong>하나의 관측값</strong> — 5개 참조 관측으로 참조 분포를 추정</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">정제 아티팩트의 4가지 구성요소</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-code"></i> 정제된 코드베이스</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">버그 수정과 명확화가 반영된 코드, 수정 이유와 영향받는 태스크 문서화</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-cube"></i> 환경 설정</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">의존성 해결 절차가 고정된, 세션 간 이식 가능한 실행 환경</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-play-circle"></i> 실험 런처</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">실험 발견·실행 절차를 전용 진입점으로 표준화</p>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-book"></i> 재현 가이드</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">측정 사양 병합, 설정, 결과를 점수로 집계하는 방법까지 안내</p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.9rem,1.5vw,1.05rem); margin-top:1em;">실행 가능한 절차와 그 설정·수리의 <strong>이유까지 함께 보존</strong></p>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">ReproBridge 구축 워크플로우</h2>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.7vw,1.15rem);">인간은 표준·프로토콜을 정의하고, 에이전트가 실험 명세→실행→보존을 수행합니다.</p>
+    <div class="pipeline" style="margin-top:1em;">
+      <div class="pipeline-step"><div class="step-num">1</div><div class="step-label">Planner</div><div class="step-desc">실험 명세화</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">2</div><div class="step-label">Builder</div><div class="step-desc">준비·실행</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">3</div><div class="step-label">Reproducer</div><div class="step-desc">재현 검증</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">4</div><div class="step-label">Distiller</div><div class="step-desc">절차 정제</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">5</div><div class="step-label">Packager</div><div class="step-desc">4요소 패키징</div></div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step"><div class="step-num">6</div><div class="step-label">Reviewer</div><div class="step-desc">독립 검토</div></div>
+    </div>
+    <div class="card" style="margin-top:1em;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);"><i class="fas fa-link accent2"></i> 단계 간 <strong>영속적 증거</strong>로 지식을 연결하고, 독립 리뷰가 증거와 인계(handoff)를 검증</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">평가 프로토콜</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-redo"></i> 신규 Reproducer 세션</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">원본 코드 또는 정제 아티팩트를 받은 <strong>독립 세션</strong>에서 재현 시도</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(1rem,1.8vw,1.2rem);"><i class="fas fa-search"></i> 별도 Auditor</h3>
+        <p style="font-size:clamp(0.85rem,1.4vw,1rem);">실행 증거를 감사 — <strong>숫자 일치만으로는 대체된 측정이 숨겨질 수 있음</strong></p>
+      </div>
+    </div>
+    <ul class="check-list" style="font-size:clamp(0.9rem,1.5vw,1.05rem); margin-top:1em;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>실행 무결성 감사: 보고된 수치가 실제 실행에서 나왔는지 검증</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>무효화 기준: 참조 분포와의 수치 호환성 + 절차 정당성</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>4개 코딩 에이전트 대상, 인간 검증으로 감사 판정 교차 확인</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">주요 결과: 성공률과 비용</h2>
+    <div class="hr"></div>
+    <table class="compare-table">
+      <thead>
+        <tr><th>지표</th><th>원본 코드</th><th>정제 아티팩트</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>평균 재현 성공률 (4개 모델)</td><td>76.4%</td><td><strong class="accent">92.6%</strong></td></tr>
+        <tr><td>모델별 개선폭</td><td>—</td><td><strong class="accent">+5.5 ~ +23.2 pp</strong></td></tr>
+        <tr><td>다운스트림 API 비용</td><td>기준</td><td><strong class="accent3">평균 19.7% 절감</strong></td></tr>
+        <tr><td>모델별 비용 절감</td><td>—</td><td><strong class="accent3">16.8% ~ 23.7%</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(0.95rem,1.6vw,1.1rem); margin-top:1em;"><i class="fas fa-chart-line accent"></i> 더 나은 아티팩트는 <strong>성공률과 비용 효율을 동시에</strong> 개선</p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">일관성과 견고성</h2>
+    <div class="hr"></div>
+    <div class="grid-2">
+      <div style="text-align:center;">
+        <div class="big-num accent2" style="font-size:clamp(2.2rem,5vw,3.6rem);">21.6 → 3.9</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">모델 간 성공률 편차(pp) 축소</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-num accent3" style="font-size:clamp(2.2rem,5vw,3.6rem);">&gt; 90%</div>
+        <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);">4개 모델 전부 평균 성공률 달성</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1em;">
+      <p style="font-size:clamp(0.9rem,1.6vw,1.1rem);"><i class="fas fa-layer-group accent"></i> <strong>컴포넌트 제거 실험:</strong> 어떤 요소를 빼도 성공률 하락 — 특히 <span class="tag tag-red">코드 제거</span>와 <span class="tag tag-red">환경 제거</span>에서 손실 최대</p>
+    </div>
+    <p style="font-size:clamp(0.9rem,1.5vw,1.05rem); margin-top:0.8em;">논문별 이질성, 더 엄격한 수치 호환성 기준, 참조 변동성 계층에서도 개선이 지속됩니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">시사점과 한계</h2>
+    <div class="hr"></div>
+    <ul class="check-list" style="font-size:clamp(0.95rem,1.7vw,1.15rem);">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>실행 지식 보존은 <strong>원본 코드 성공률이 낮은 모델</strong>일수록 상대적으로 큰 도움 — 재현을 더 신뢰성 있고 저비용으로</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>구축 비용은 아티팩트의 <strong>반복 재사용으로 상쇄 가능</strong></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>회수된 구성이 실행 가능해짐: 누락 설정 복원(HELIX), 세션 간 환경 이전(WBMM), 코드 버그 수정 등</li>
+    </ul>
+    <div class="card" style="margin-top:1em;">
+      <p style="font-size:clamp(0.9rem,1.5vw,1.05rem);"><i class="fas fa-exclamation-triangle accent2"></i> <strong>한계:</strong> 논문-코드 불일치가 존재하는 태스크, 유한 예산에서의 수치적 취약성, 일부 잔여 수치 불일치는 여전히 남음</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner" style="text-align:center;">
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);">결론</h2>
+    <div class="hr"></div>
+    <div class="quote-block" style="font-size:clamp(1.05rem,2vw,1.35rem); text-align:left;">
+      재현 과정에서 회복한 절차와 결정을 아티팩트에 담아 전달하면, <span class="accent">재현 성공률은 76.4% → 92.6%</span>로, <span class="accent3">API 비용은 평균 19.7%</span> 절감됩니다. 실행 지식의 보존은 재현성의 핵심입니다.
+    </div>
+    <p class="muted" style="font-size:clamp(0.95rem,1.7vw,1.15rem); margin-top:1.5em;">ReproBridge: Building Reproducibility into ML Research Artifacts</p>
+    <p class="muted" style="font-size:clamp(0.85rem,1.5vw,1.05rem);">Yubo Wang · Rui Meng · Jaehyun Nam · Tomas Pfister · Jinsung Yoon</p>
+    <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); margin-top:0.8em;"><i class="fas fa-link accent"></i> <a href="http://arxiv.org/abs/2611.08452v1">arxiv.org/abs/2611.08452v1</a></p>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
