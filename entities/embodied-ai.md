@@ -76,3 +76,9 @@ _Wiki 축적 중_
 체화 AI의 대규모 훈련을 가로막는 병목이 인지·제어가 아니라 환경(시뮬레이션) 공급에 있음을 보여주며, 디지털 에이전트가 그 병목의 해소자로 등장하는 구조적 전환을 제공한다.
 
 → [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
+
+### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
+
+휴머노이드를 단독 과제 수행자가 아닌 사회적 상호작용 참여자로 재정의하여, 체화 AI 설계 축에 '파트너 모션 조건화된 전신 모션 생성'이라는 새 차원을 추가한다.
+
+→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

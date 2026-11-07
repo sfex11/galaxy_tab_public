@@ -24,3 +24,9 @@ _Wiki 축적 중_
 목표 형성이 능력 대상에 포함되는 개방형 발견에 상호 검증을 결합하여, 자유 탐색의 위험(증거 불충분 결론)을 통제하는 아키텍처를 제시한다. 개방성과 검증 가능성이 상호 평가 구조로 공존 가능함을 보여준다.
 
 → [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+자유 탐색의 목표 형성 부담을 문헌에서 공급하는 경로를 제공한다. LongChang이 무지 속에서 질문을 창발시켰다면 본 논문은 축적된 문헌의 개방형 질문을 추출하여 탐색 출발점을 인류의 미해결 문제 공간에 접지한다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

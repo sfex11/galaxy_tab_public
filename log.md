@@ -3934,3 +3934,16 @@
 ## [2026-11-06 08:34] ingest | Replicability, Reproducibility, and Robustness in Political and Social Science Research with Large Language Models
 
 ## [2026-11-06 08:34] ingest | Visual Token Routing: Learning to keep tokens that matter
+
+## [2026-11-07 04:26] llm-ingest | 11편 분석, 엔티티 1246개, 개념 2676개
+- 2026-11-07-swarmevolve-latent-agent-swarms-for-evolutionary-d.md
+- 2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md
+- 2026-11-07-medgraph-maintaining-patient-state-with-graph-memo.md
+- 2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md
+- 2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md
+- 2026-11-07-social-humanoid-socially-responsive-human-humanoid.md
+- 2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md
+- 2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md
+- 2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md
+- 2026-11-07-vflash-fast-accurate-visual-planning-via-flash-pri.md
+- 2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md

@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
 
 가독성-해석가능성 간극의 안전 도메인 버전을 제공한다 — 거부 서사가 읽기 쉽다고 안전 행동의 근거가 되지 않으며, 안전 결정의 학습 가능한 대상화가 별도로 요구됨을 실증한다.
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
+
+서베이가 주장하는 기계론적 '이해'가 CoT 가독성 기반 판단과 어떻게 구별되는지를 검증해야 할 명시적 과제로 남긴다 — 이해 프레임의 타당성 조건을 선명하게 한다.
+
+→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

@@ -74,3 +74,9 @@ autoresearch의 스코프를 '연구 단계 간 파이프라인 자동화'에서
 ### Evidence-Grounded Agentic Formulation Development in an Autonomous Lab (2026-09-18)
 
 오토리서치가 문헌·계산 도메인에 머물던 것과 달리 물리 실험 루프(설계-실행-측정-재설계)까지 감싸는 극단적 확장 사례를 제공한다. 자동 실험실이 환경 검증자 역할을 수행하는 폐루프 연구 자동화의 물리 세계 버전이다.
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+autoresearch가 연구 수행 자동화에 집중하는 동안 그 전제인 '연구 세계의 존재'를 문제화한다. 인간 과학자가 무의식적으로 활용하는 문헌의 개방형 문제·공유 아이디어가 AI에게는 실행 불가능한 텍스트이므로, autoresearch의 실질 진전에는 문헌 환경화라는 인프라 계층이 선행해야 함을 규정한다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

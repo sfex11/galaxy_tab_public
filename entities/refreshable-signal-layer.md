@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 신호 갱신 원리의 제3 구현 경로를 제공한다. Claw-Eval-Live(실세계 수요 갱신)와 이 논문(EHR 데이터에서 자동 생성)은 갱신 소스의 이원화를 형성하며, 갱신 가능 신호 계층이 평가 인프라의 범용 패턴임을 입증한다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
+
+Claw-Eval-Live의 '신호 계층 주기 갱신' 원리를 벤치마크 전체(태스크·테스트·검증자·인프라)로 일반화한다. 신호 갱신이 실세계 수요 추적이라면 본 논문의 유지보수는 내부 결함 관리를 추가하여 갱신의 대상을 외부 정합성에서 내부 무결성까지 확장한다.
+
+→ [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Coding Agents for Generalized Task and Motion Planning Problems (2026-09-27)
 
 변환 원료의 대칭 축을 제공한다 — CodeMidas가 코드베이스의 구현된 기능을 학습 환경으로 변환했다면, 본 논문은 예시 문제 인스턴스들을 일반화 기제 코드로 변환하여 '코드→환경'에 '인스턴스→코드'라는 역방향 변환을 추가한다.
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+환경 재질의의 원료 축을 코드에서 과학 문헌으로 확장한다. CodeMidas가 구현된 코드의 실행 의미론을 환경으로 삼았다면 본 논문은 아직 실행되지 않은 연구 제안까지 환경화하여, '무엇이 환경이 될 수 있는가'의 후보 공간을 문헌 전체로 넓힌다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

@@ -30,3 +30,9 @@ CodeMidas는 코드베이스의 구현된 기능을 실행 가능한 RL 환경�
 평가와 훈련이 동일한 도킹 환경 위에서 수행됨을 보여, 환경이 양축을 지원하는 훈련 원시자원임을 웹 도메인에서 확인시킨다. 환경의 시각·기능 충실도가 훈련 신호의 질을 직접 결정하는 구조를 드러낸다.
 
 → [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+훈련·연구 환경의 원시자원으로서 문헌의 지위를 확립한다. 환경이 코드나 궤적뿐 아니라 인류의 지식 기록에서 파생될 수 있음을 보여, 환경-능력 인과율의 원료 축이 지식 인프라와 결합됨을 시사한다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

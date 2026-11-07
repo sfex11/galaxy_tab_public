@@ -40,3 +40,9 @@ _Wiki 축적 중_
 ### R-DEIM Net: An Efficient Rationale-Augmented Dual-Expert Interaction M (2026-09-26)
 
 압축의 목표 축에 '설명 가능성 보존'을 추가한다. 파라미터 축소가 성능뿐 아니라 투명성을 함께 감소시키는 경향에 대해, 근거 생성 전문가를 유지하는 구조적 설계로 트레이드오프를 관리하는 사례를 제공한다.
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
+
+압축의 정확도 비용이 영구적 손실이 아니라 '데이터가 어느 계층에 위치하는가'에 따라 스케줄 가능하고 회복 가능한 속성임을 보여준다. 압축과 오프로딩을 경쟁 전략이 아닌 단일 메모리 계층 설계의 상보적 층위로 재정의한다.
+
+→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

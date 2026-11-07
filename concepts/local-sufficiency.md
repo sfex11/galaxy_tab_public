@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-01-select-to-think-unlocking-slm-potential-with-local.md|Select to Think: Unlocking SLM Potential with Local Sufficie]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
+
+→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

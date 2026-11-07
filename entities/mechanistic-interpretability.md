@@ -50,3 +50,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-10-31)
 
 선형 프로브의 응용 범위를 안전 감시 영역으로 확장한다 — 정렬 위반 직전의 내부 상태가 선형 판독 가능하다는 발견은 해석가능성 도구가 행동 예측에 실용적으로 기능할 수 있음을 보여준다.
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
+
+분야 전체 서베이로서 산발적 기법 연구를 '이해 없이는 제어 없다'는 안전론 명제 아래 통합하고, 해석가능성을 호기심 연구가 아닌 안전 인프라의 전제조건으로 포지션 확립한다.
+
+→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

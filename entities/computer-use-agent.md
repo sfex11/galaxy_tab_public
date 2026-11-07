@@ -82,3 +82,9 @@ CUA 생태계의 스케일링 병목이 태스크 수행 능력이 아니라 완
 GUI 웹 에이전트의 평가 인프라에 '실행 가능한 실제 사이트 복제 환경'이라는 새 환경 클래스를 추가한다. 기존 라이브 평가가 접근 제한으로 측정하지 못했던 인증된 워크플로우 영역의 능력을 측정 가능하게 만든다.
 
 → [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
+
+CUA의 시각 그라운딩 경로에 대한 대안 축을 제공한다. 화면을 보고 조작하는 대신 인터페이스의 구조적 메타 뷰를 직접 접근함으로써, 픽셀→의미 번역 비용을 제거하는 경로가 존재함을 보여준다. CUA 평가에서 '시각 필요도'가 태스크별로 다르다는 [[visual-need-routing]]의 발견과 결합하면, 일부 태스크는 메타 접근으로, 일부는 그라운딩으로 분업화될 수 있음을 시사한다.
+
+→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

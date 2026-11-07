@@ -26,3 +26,9 @@ Reviewability가 6개 사용자 가치 그룹 중 하나로 출현하여, 이중
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 이중 독자 설계의 비용 효과를 입증한다. 접근성 트리가 VLM(계획)과 경량 실행기(실행) 양쪽에 판독 가능한 구조를 제공함으로써, 이중 독자성이 인간-AI뿐 아니라 고비용-저비용 연산 계층 간에도 확장됨을 보여준다.
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
+
+본 논문은 이중 독자 설계의 상보 극점을 제공한다 — Affora가 인터페이스 자체를 에이전트 친화적으로 재설계하는 설계 시점 경로라면, 메타 접근은 기존 인터페이스 위에 권한 기반 구조화 뷰를 얹는 런타임 경로다. 두 경로가 같은 문제(인터페이스-에이전트 간극)의 서로 다른 해법 층위임을 확정한다.
+
+→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

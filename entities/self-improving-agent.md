@@ -42,3 +42,9 @@ SkillOS 등이 보여준 스킬 큐레이션 중심 자기 개선을 넘어, 이
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
 
 자기 개선 루프의 성립 전제를 명시한다 — 개선은 학습 신호가 유효할 때만 성립하며, 실패의 학습 가능성 판별이 개선 절차의 선행 단계가 된다. SkillOS의 산출물(스킬) 큐레이션과 짝을 이루는 입력(태스크) 큐레이션 축을 제공한다.
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+자기 개선 에이전트에게 '자라날 세계'라는 환경 측 조건을 부여한다. 자기 개선이 에이전트 내부 루프만이 아니라 문헌 규모의 연구 환경과의 상호작용을 통한 성장으로 위치지어지며, 환경 자율성 축의 대규모 실현 경로가 된다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

@@ -22,3 +22,9 @@ _Wiki 축적 중_
 삭제된 파일·약화된 권한 같은 유해성은 모델의 언어 판단 없이 환경 상태 검사로 검증 가능함을 보여, 비인지적 오라클의 대표 적용 도메인이 된다.
 
 → [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md|상세 보기]]
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
+
+확인된 변이(confirmed mutation) 단계가 인간 확인이라는 외부 오라클을 변이 승인 게이트로 채택한 사례를 제공한다. 언어 판단이 아닌 사용자 승인 행위 자체가 판정 신호이므로, 비인지적 오라클의 인간-인-더-루프 변형을 확장한다.
+
+→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

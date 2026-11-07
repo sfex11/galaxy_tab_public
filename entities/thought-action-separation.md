@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### Thinking Before Thinking: Scaling Agentic Inference Through Meta-Reaso (2026-10-01)
 
 사고-행동 분리의 사고 계층 내부 재분할을 제공한다 — 사고가 태스크 사고(Worker)와 제어 사고(Controller)로 다시 나뉘며, '생각하기 전에 생각한다'는 2층 사고 구조로 분리의 계보가 확장된다.
+
+### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
+
+고수준 사회적 모션 시퀀스 모델링과 저수준 29-DoF 전신 제어의 계층 분리가 사회적 반응성과 운동 정밀도라는 이중 요구의 해법으로 작동함을 실증한다.
+
+→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

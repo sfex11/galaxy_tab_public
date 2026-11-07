@@ -54,3 +54,9 @@ _Wiki 축적 중_
 ### Can You Check That? The Checkability Boundary for Local LLM Network Au (2026-09-29)
 
 온디바이스 추론을 '품질 손실을 수반하는 타협'에서 '검증 가능한 과제에서는 품질 손실 없는 대안'으로 재정의한다. 데이터 유출 회피가 검사 기반 품질 담보와 결합 가능함을 보여준다.
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
+
+호스트 RAM과 SSD를 온디바이스 추론의 일급 연산 자원으로 재정의한다. 메모리 제약 환경에서 저비트 속도 이득과 고정밀 정확도를 동시에 달성하는 경로를 제공하여, 온디바이스 프론티어의 결정 변수가 모델 크기·양자화 형식에서 메모리 계층 배치로 이동함을 시사한다.
+
+→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

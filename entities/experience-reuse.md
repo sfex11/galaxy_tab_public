@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
 
 궤적 소비의 제4 경로로 '설명적 서술화'를 추가한다 — 궤적이 스킬(절차 지식), 환경(태스크 생성기), 코칭 신호(간접 보상)로 소비되던 스펙트럼에, 궤적을 설명 텍스트로 변환해 직접 학습 신호로 소비하는 가장 경량의 경로를 제시한다.
+
+### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-07)
+
+궤적(코칭 신호)·스킬·환경에 이어 '복구된 절차와 결정'이 제4의 재사용 경로로 추가된다. 한 에이전트의 재현 경험이 아티팩트를 매개로 다른 에이전트의 성공률로 환류되는 간접 재사용 구조를 확립한다.
+
+→ [[sources/2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

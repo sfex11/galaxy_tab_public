@@ -80,3 +80,9 @@ KV 캐시 관리가 단순 최적화가 아니라 비용 법칙의 교정임을 
 KV 캐시 최적화 논의에 '캐시 자체를 인덱스로 격상'이라는 상류 최적화를 추가한다. 별도 인덱스 캐시를 유지하던 기존 접근과 달리, 기존 키의 compact summary를 chunk 인덱스로 재사용하여 인덱스 유지 비용을 구조적으로 제거함을 보여준다.
 
 → [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
+
+KV 캐시 최적화의 설계 공간을 압축·폐기·재사용에서 정밀도 티어링으로 확장한다 — KV 엔트리가 GPU에는 저정밀로, 호스트 RAM/SSD에는 고정밀 원본으로 공존하는 이중 계층 구조를 제시하여 캐시 관리가 정확도 예산 관리로 재정의될 수 있음을 시사한다.
+
+→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

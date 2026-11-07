@@ -34,3 +34,7 @@ _Wiki 축적 중_
 ### Exploring Language-Agnosticity in Function Vectors: A Case Study in Ma (2026-04-23)
 
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
+
+→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

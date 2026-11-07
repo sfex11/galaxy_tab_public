@@ -36,3 +36,9 @@ _Wiki 축적 중_
 에이전트 네이티브 서빙의 설계 공간에 '크로스 모델 캐시 이식성'이라는 새 프리미티브를 추가한다. KV-streams가 훈련 루프 내 반복 프리필 병목을 제거했다면 본 논문은 배포 시 이종 모델 호출의 동일 병목을 제거하여, 반복 프리필 제거 패턴이 훈련·배포 양축으로 확장됨을 보여준다.
 
 → [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
+
+서빙 인프라의 메모리 계층 설계가 모델 정확도(능력)를 직접 결정하는 구조적 사례를 추가한다. 서빙 계층이 품질에 중립적이라는 전제가 정밀도 차원에서도 기각됨을 보여준다.
+
+→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

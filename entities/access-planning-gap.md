@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-26)
 
 접근성의 구조화가 계획 접지 부담을 시각 추론에서 구조 조회로 전환함을 보여준다. 이 간극의 원인이 접근성 정보의 부재가 아니라 비구조화된 형태였을 수 있음을 시사하는 해법 사례다.
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
+
+접근-기획 간극의 인터페이스 도메인 변형을 제공한다. 대화 컨텍스트에 접근하는 것만으로는 충분하지 않고, 워크스페이스 상태에 대한 접근이 별도의 계층으로 필요함을 보여준다. 접근의 대상이 환경·증거에서 UI 상태로 확장됨을 시사한다.
+
+→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

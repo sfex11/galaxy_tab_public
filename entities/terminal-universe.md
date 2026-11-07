@@ -34,3 +34,15 @@ _Wiki 축적 중_
 ### CodeMidas: Scaling Agentic Coding RL Environments from Code Itself (2026-09-22)
 
 환경 유래 자원의 대칭축을 제공한다. Terminal-Universe가 에이전트 자신의 궤적(경험)을 환경으로 재질의했다면, CodeMidas는 외부 코드베이스(산출물)를 환경으로 변환하여, 환경 생성이 '경험 재활용'과 '제품 추출'이라는 두 자원 경로를 갖게 됨을 보여준다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
+
+터미널/코딩 에이전트 환경 계열에 평가 인프라 수명주기 관점을 추가한다. Terminal-Bench가 환경의 공급 문제 옆에서 환경의 '유지' 문제를 다룸으로써, 에이전트 환경이 생성(공급)과 유지보수(존속)의 이중 수명주기를 갖음을 시사한다.
+
+→ [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
+
+'축적된 산출물 → 환경' 변환의 문헌 도메인 평행 사례를 제공한다. 궤적이 환경으로 재질의되는 것과 동일 논리로 논문이 연구 환경으로 재질의되어, 기존 지식의 환경화가 도메인 불변 패턴임을 강화한다.
+
+→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

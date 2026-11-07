@@ -24,3 +24,15 @@ _Wiki 축적 중_
 잠재 통신의 적용 대상을 언어 모델 간에서 시각-언어 이종 모델 간으로 확장한다. 이종 잠재 정렬이 학습 가능한 문제임을 보여, 잠재 통신의 수축 전망을 뒤집는 사례가 된다.
 
 → [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]
+
+### SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimi (2026-11-07)
+
+수백 개 에이전트가 디코딩 없이 잠재 공간에서 병렬 작동하는 스웜 구조를 제공한다. 잠재 채널의 용도가 대화형 협업을 넘어 진화 탐색의 개체군 조율(다양성 유지, 고득점 방법 결합)로 확장될 수 있는 경로를 연다.
+
+→ [[sources/2026-11-07-swarmevolve-latent-agent-swarms-for-evolutionary-d.md|상세 보기]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-07)
+
+LLM 중심 잠재 통신에 대역폭 예산과 태스크 데드라인이라는 실시간 제약 변수를 추가한다. 잠재 통신의 평가 기준이 정보 이득 최대화에서 '데드라인 내 필수 정보 전달'로 이동하는 경로를 제시한다.
+
+→ [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

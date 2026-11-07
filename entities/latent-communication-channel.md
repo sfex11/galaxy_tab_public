@@ -28,3 +28,9 @@ _Wiki 축적 중_
 채널이 운반하는 내용의 범주를 KV 공유(자연어 상태)에서 시각 잠재 표현으로 확장한다. 모달리티 밀도가 높은 정보일수록 잠재 채널의 정보 이득이 커짐을 SLM 도메인에서 실증한다.
 
 → [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-07)
+
+잠재 통신 채널의 적용 도메인을 동질적 LLM 간 KV 캐시·중간 표현 공유에서 이기종 물리 플랫폼 간 실시간 표현 교환으로 확장한다. 채널 효율성의 근거가 모델 동질성에서 물리 환경의 시공간 구조로 다변화됨을 시사한다.
+
+→ [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

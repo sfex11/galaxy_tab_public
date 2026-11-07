@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### SpecGuard: Inference-Time Backdoor Detection For Free (2026-09-13)
 
 단절의 실용적 완화 경로를 제공한다. 런타임 감시 비용이 0에 수렴하면 잦은 업데이트 모델에 대한 지속 감시가 경제적으로 성립하여, 인증 유효기간 문제의 완화 조건이 명시된다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
+
+인증-감시 단절의 벤치마크 도메인 정식화를 제공한다. 출시 시 검증된 벤치마크의 유효기간이 보장되지 않는다는 발견은 인증의 시효성이 평가 도구 자체에도 적용됨을 보여, 단절 문제의 적용 범위를 피평가자에서 측정 기기로 확장한다.
+
+→ [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

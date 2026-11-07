@@ -10,3 +10,9 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-10-saescientist-bench-can-ai-agents-conduct-autonomou.md|SAEScientist-Bench: Can AI Agents Conduct Autonomous SAE Int]]
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
+
+해석가능성 연구의 자동화가 서베이의 확장 요구에 부합하는 방향임과 동시에, 감사 행위 자체의 자율화라는 재귀적 감사 문제를 수반함을 명확히 한다.
+
+→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

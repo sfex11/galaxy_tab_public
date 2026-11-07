@@ -68,3 +68,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Can LLMs Uncover Hidden Physical Laws through Free Exploration? (2026-10-30)
 
 기존 벤치마크가 질문을 사전에 고정한 것 자체가 평가자 가정의 산물임을 드러낸다 — 질문 형성을 평가에 포함함으로써 '사전 정의된 문제 공간' 가정을 근본적으로 완화한다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
+
+평가 인프라의 변경이 태스크·테스트에 내장된 암묵적 가정을 무효화하는 경로를 부채의 제2 병인으로 제시한다. 평가자의 가정이 설계 시점에 고정된 속성이 아니라 인프라 상태에 조건부임을 보여준다.
+
+→ [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]
