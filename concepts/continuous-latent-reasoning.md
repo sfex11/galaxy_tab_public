@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|Latent Reasoning in Continuous Space for Unified Multimodal ]]
+
+### SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimi (2026-11-08)
+
+→ [[sources/2026-11-08-swarmevolve-latent-agent-swarms-for-evolutionary-d.md|상세 보기]]
