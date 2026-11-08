@@ -115,3 +115,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/cognitive-coupling-safety-transfer.md|cognitive coupling safety transfer]]
+
+---
+**관련**: [[concepts/cognitive-symbiont.md|cognitive symbiont]]

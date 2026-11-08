@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/ontology-construction.md|ontology construction]]
+
+---
+**관련**: [[concepts/acyclic-oracle-existence.md|acyclic oracle existence]]

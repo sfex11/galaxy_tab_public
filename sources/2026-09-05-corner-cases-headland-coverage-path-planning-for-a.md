@@ -55,3 +55,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/checkability-boundary.md|checkability boundary]]
+
+---
+**관련**: [[concepts/sufficiency-silence-boundary.md|sufficiency silence boundary]]

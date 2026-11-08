@@ -803,3 +803,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/user-model-belief-layer-acceptance.md|user model belief layer acceptance]]
+
+---
+**관련**: [[concepts/model-constitution.md|model constitution]]
+
+---
+**관련**: [[concepts/user-model-attribution-vacuum.md|user model attribution vacuum]]
+
+---
+**관련**: [[concepts/capability-forming-serving.md|capability forming serving]]

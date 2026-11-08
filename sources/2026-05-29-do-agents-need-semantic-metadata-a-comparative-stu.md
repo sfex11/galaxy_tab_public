@@ -19,3 +19,6 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/anchored-hypergraph.md|anchored hypergraph]]
+
+---
+**관련**: [[concepts/anchored-hypergraph.md|anchored hypergraph]]

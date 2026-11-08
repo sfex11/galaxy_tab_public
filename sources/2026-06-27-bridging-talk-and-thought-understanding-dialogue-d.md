@@ -421,3 +421,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/implicit-dynamics.md|implicit dynamics]]
+
+---
+**관련**: [[concepts/oracle-plurality-concept-distinction.md|oracle plurality concept distinction]]
+
+---
+**관련**: [[concepts/safety-understanding-gap.md|safety understanding gap]]

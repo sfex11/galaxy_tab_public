@@ -115,3 +115,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/extra-probabilistic-adjudication.md|extra probabilistic adjudication]]
+
+---
+**관련**: [[concepts/translation-stakes-domain-asymmetry.md|translation stakes domain asymmetry]]

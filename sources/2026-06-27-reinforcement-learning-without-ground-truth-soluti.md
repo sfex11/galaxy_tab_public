@@ -148,3 +148,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/value-harm-traceability.md|value harm traceability]]
+
+---
+**관련**: [[concepts/measurement-execution-coupling.md|measurement execution coupling]]
+
+---
+**관련**: [[concepts/value-coherence-reevaluation.md|value coherence reevaluation]]

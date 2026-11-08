@@ -658,3 +658,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/dual-governance-prompt-and-rubric.md|dual governance prompt and rubric]]
+
+---
+**관련**: [[concepts/shared-failure-mode-nonidentity.md|shared failure mode nonidentity]]
+
+---
+**관련**: [[concepts/attribution-failure-isolation.md|attribution failure isolation]]

@@ -233,3 +233,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/indexer-quadratic-bottleneck.md|indexer quadratic bottleneck]]
+
+---
+**관련**: [[concepts/encoding-faithfulness-bottleneck.md|encoding faithfulness bottleneck]]
+
+---
+**관련**: [[concepts/roundtrip-benchmark.md|roundtrip benchmark]]

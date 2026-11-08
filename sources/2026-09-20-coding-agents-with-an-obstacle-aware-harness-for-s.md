@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/developing-region-ai-constraint-triangle.md|developing region ai constraint triangle]]
+
+---
+**관련**: [[concepts/self-ranking-manipulation.md|self ranking manipulation]]

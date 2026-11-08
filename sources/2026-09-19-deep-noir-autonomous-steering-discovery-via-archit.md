@@ -45,3 +45,6 @@ Deep Noir는 활성화 스티어링의 고질적 수동 병목 — 어느 레이
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/elicitable-gameable-duality.md|elicitable gameable duality]]

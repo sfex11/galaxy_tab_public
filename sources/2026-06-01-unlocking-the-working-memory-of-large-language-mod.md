@@ -1117,3 +1117,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/primitive-level-generation.md|primitive level generation]]
+
+---
+**관련**: [[concepts/snapshot-internal-comparative-measurement.md|snapshot internal comparative measurement]]
+
+---
+**관련**: [[concepts/latent-manifestation-min-ceiling.md|latent manifestation min ceiling]]
+
+---
+**관련**: [[concepts/latent-projected-sparse-retrieval.md|latent projected sparse retrieval]]
+
+---
+**관련**: [[concepts/patient-state-memory.md|patient state memory]]
+
+---
+**관련**: [[concepts/internal-state-responsive-environment-selection.md|internal state responsive environment selection]]
+
+---
+**관련**: [[concepts/memory-world-environment-triangle.md|memory world environment triangle]]
+
+---
+**관련**: [[concepts/reasoning-strategy-generalization.md|reasoning strategy generalization]]
+
+---
+**관련**: [[concepts/two-level-boundary-drawing.md|two level boundary drawing]]
+
+---
+**관련**: [[concepts/decision-model-serving.md|decision model serving]]
+
+---
+**관련**: [[concepts/human-cognition-interface-contract.md|human cognition interface contract]]
+
+---
+**관련**: [[concepts/token-localized-safety-behavior.md|token localized safety behavior]]

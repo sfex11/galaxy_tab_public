@@ -454,3 +454,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/kv-cache-marginal-cost.md|kv cache marginal cost]]
+
+---
+**관련**: [[concepts/state-dependent-planability.md|state dependent planability]]
+
+---
+**관련**: [[concepts/structure-informed-decoding.md|structure informed decoding]]
+
+---
+**관련**: [[concepts/video-inference-efficiency.md|video inference efficiency]]
+
+---
+**관련**: [[concepts/entity-token-copying.md|entity token copying]]
+
+---
+**관련**: [[concepts/first-token-safety-localization.md|first token safety localization]]

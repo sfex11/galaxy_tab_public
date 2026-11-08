@@ -81,3 +81,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/resource-axis-allocation-grammar-asymmetry.md|resource axis allocation grammar asymmetry]]
+
+---
+**관련**: [[concepts/phase-heterogeneous-resource-allocation.md|phase heterogeneous resource allocation]]

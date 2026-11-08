@@ -94,3 +94,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explanation-only-training.md|explanation only training]]
+
+---
+**관련**: [[concepts/self-narration-as-training-signal.md|self narration as training signal]]
+
+---
+**관련**: [[concepts/cross-query-chunk-sharing.md|cross query chunk sharing]]
+
+---
+**관련**: [[concepts/verifier-environment-participant-exposure.md|verifier environment participant exposure]]

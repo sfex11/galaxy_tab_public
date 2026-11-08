@@ -122,3 +122,9 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/answer-trace-decoupling.md|answer trace decoupling]]
+
+---
+**관련**: [[concepts/chunk-level-kv-selection.md|chunk level kv selection]]
+
+---
+**관련**: [[concepts/input-signal-quality-dependence.md|input signal quality dependence]]

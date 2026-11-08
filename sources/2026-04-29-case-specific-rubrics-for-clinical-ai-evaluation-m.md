@@ -564,3 +564,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/coupled-performance-objective.md|coupled performance objective]]
+
+---
+**관련**: [[concepts/divergence-profile-evaluation.md|divergence profile evaluation]]
+
+---
+**관련**: [[concepts/performance-bound-preservation-objective.md|performance bound preservation objective]]

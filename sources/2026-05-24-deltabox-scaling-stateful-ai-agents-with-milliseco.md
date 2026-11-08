@@ -227,3 +227,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/autonomy-tail-criticality-scaling.md|autonomy tail criticality scaling]]
+
+---
+**관련**: [[concepts/intrinsic-check.md|intrinsic check]]

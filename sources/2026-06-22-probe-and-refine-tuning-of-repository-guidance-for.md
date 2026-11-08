@@ -31,3 +31,6 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[concepts/guidance-induced-bias-substitution.md|guidance induced bias substitution]]

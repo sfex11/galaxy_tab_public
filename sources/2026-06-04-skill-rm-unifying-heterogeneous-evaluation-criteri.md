@@ -680,3 +680,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/procedural-reproducibility.md|procedural reproducibility]]
+
+---
+**관련**: [[concepts/feedback-as-allocation-signal.md|feedback as allocation signal]]
+
+---
+**관련**: [[concepts/feedback-repair-elicitation-null-result.md|feedback repair elicitation null result]]
+
+---
+**관련**: [[concepts/verifier-staleness.md|verifier staleness]]
+
+---
+**관련**: [[concepts/verifier-false-negative-rejection.md|verifier false negative rejection]]
+
+---
+**관련**: [[concepts/verifier-trajectory-coupled-reward.md|verifier trajectory coupled reward]]
+
+---
+**관련**: [[concepts/harness-learning.md|harness learning]]

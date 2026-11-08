@@ -422,3 +422,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/signal-existence-premise.md|signal existence premise]]
+
+---
+**관련**: [[concepts/substrate-control-non-omnipotence.md|substrate control non omnipotence]]
+
+---
+**관련**: [[concepts/temperament-as-decelerator-not-steering.md|temperament as decelerator not steering]]
+
+---
+**관련**: [[concepts/missing-probability-mass.md|missing probability mass]]

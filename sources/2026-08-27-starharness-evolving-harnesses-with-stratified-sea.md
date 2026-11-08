@@ -305,3 +305,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/permissioned-interface-view.md|permissioned interface view]]
+
+---
+**관련**: [[concepts/failure-transparency.md|failure transparency]]
+
+---
+**관련**: [[concepts/read-only-skill-addition.md|read only skill addition]]
+
+---
+**관련**: [[concepts/transitive-safety-guarantee-failure.md|transitive safety guarantee failure]]
+
+---
+**관련**: [[concepts/pattern-specific-execution.md|pattern specific execution]]

@@ -46,3 +46,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/llm-as-blackbox-optimizer.md|llm as blackbox optimizer]]
+
+---
+**관련**: [[concepts/task-coupled-speculation.md|task coupled speculation]]

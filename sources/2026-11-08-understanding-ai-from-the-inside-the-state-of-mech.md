@@ -66,3 +66,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/disposition-anchored-safety.md|disposition anchored safety]]
+
+---
+**관련**: [[concepts/non-catastrophicity-safety-gap.md|non catastrophicity safety gap]]

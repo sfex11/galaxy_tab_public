@@ -175,3 +175,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/disjunctive-compensatory-task-scaling.md|disjunctive compensatory task scaling]]
+
+---
+**관련**: [[concepts/optimizer-norm-control.md|optimizer norm control]]

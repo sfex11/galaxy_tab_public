@@ -79,3 +79,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/symbiosis-dependence-drift.md|symbiosis dependence drift]]
+
+---
+**관련**: [[concepts/explicit-prior-initialization.md|explicit prior initialization]]
+
+---
+**관련**: [[concepts/environmental-stochasticity.md|environmental stochasticity]]

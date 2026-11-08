@@ -145,3 +145,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategy-blueprint-library.md|strategy blueprint library]]
+
+---
+**관련**: [[concepts/depth-persistence-timing-coordinate.md|depth persistence timing coordinate]]

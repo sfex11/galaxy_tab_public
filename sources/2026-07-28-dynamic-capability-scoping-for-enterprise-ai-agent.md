@@ -217,3 +217,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/joint-dataset-incompatibility.md|joint dataset incompatibility]]
+
+---
+**관련**: [[concepts/fidelity-capability-decoupling.md|fidelity capability decoupling]]

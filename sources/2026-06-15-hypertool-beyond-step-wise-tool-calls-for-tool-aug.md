@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/retention-proxy-mismatch.md|retention proxy mismatch]]
+
+---
+**관련**: [[concepts/tool-call-validity.md|tool call validity]]

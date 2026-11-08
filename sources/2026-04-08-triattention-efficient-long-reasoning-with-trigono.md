@@ -236,3 +236,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/progress-metric-reframing.md|progress metric reframing]]
+
+---
+**관련**: [[concepts/linear-attention-recurrent-state.md|linear attention recurrent state]]

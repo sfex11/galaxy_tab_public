@@ -216,3 +216,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/deployment-time-verifiability.md|deployment time verifiability]]
+
+---
+**관련**: [[concepts/pre-deployment-boundary-leakage.md|pre deployment boundary leakage]]
+
+---
+**관련**: [[concepts/fork-then-evaluate-speculation.md|fork then evaluate speculation]]

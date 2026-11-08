@@ -52,3 +52,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/producer-nonadversariality-assumption.md|producer nonadversariality assumption]]
+
+---
+**관련**: [[concepts/complexity-as-compilability-criterion.md|complexity as compilability criterion]]

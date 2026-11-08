@@ -63,3 +63,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/meta-access.md|meta access]]
+
+---
+**관련**: [[concepts/pretraining-finetuning-gap-reversal.md|pretraining finetuning gap reversal]]

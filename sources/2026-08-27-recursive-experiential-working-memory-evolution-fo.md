@@ -233,3 +233,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/curriculum-grounding.md|curriculum grounding]]
+
+---
+**관련**: [[concepts/harness-core-shell-stratification.md|harness core shell stratification]]
+
+---
+**관련**: [[concepts/execution-observation-property-discovery.md|execution observation property discovery]]
+
+---
+**관련**: [[concepts/code-qa-execution-measurement-gap.md|code qa execution measurement gap]]

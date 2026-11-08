@@ -367,3 +367,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/probe-trace-monitoring-dualization.md|probe trace monitoring dualization]]
+
+---
+**관련**: [[concepts/openness-parameter-verification.md|openness parameter verification]]
+
+---
+**관련**: [[concepts/equivalence-drift-monitoring.md|equivalence drift monitoring]]
+
+---
+**관련**: [[concepts/narrative-state-tracking.md|narrative state tracking]]
+
+---
+**관련**: [[concepts/runtime-boundary-as-categorical-prediction.md|runtime boundary as categorical prediction]]
+
+---
+**관련**: [[concepts/signal-as-verification-layer.md|signal as verification layer]]

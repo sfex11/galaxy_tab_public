@@ -210,3 +210,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/intervention-verifiability.md|intervention verifiability]]
+
+---
+**관련**: [[concepts/harmful-success.md|harmful success]]

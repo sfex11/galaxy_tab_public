@@ -283,3 +283,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-headroom-reevaluation.md|environment headroom reevaluation]]
+
+---
+**관련**: [[concepts/cooperation-isolating-benchmark-design.md|cooperation isolating benchmark design]]
+
+---
+**관련**: [[concepts/cumulative-environment-accounting.md|cumulative environment accounting]]
+
+---
+**관련**: [[concepts/accumulation-budget-design.md|accumulation budget design]]
+
+---
+**관련**: [[concepts/robot-skill-as-code.md|robot skill as code]]
+
+---
+**관련**: [[concepts/checkability-by-design.md|checkability by design]]

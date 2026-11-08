@@ -250,3 +250,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/user-identity-conditioned-guardrail-efficacy.md|user identity conditioned guardrail efficacy]]
+
+---
+**관련**: [[concepts/benchmark-snapshot-pinning.md|benchmark snapshot pinning]]
+
+---
+**관련**: [[concepts/controlled-attribution-benchmark.md|controlled attribution benchmark]]
+
+---
+**관련**: [[concepts/benchmark-absence-permanentization.md|benchmark absence permanentization]]

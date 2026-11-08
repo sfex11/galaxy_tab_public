@@ -109,3 +109,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/downstream-inversion-of-pretraining-advantage.md|downstream inversion of pretraining advantage]]
+
+---
+**관련**: [[concepts/preservation-performance-decoupling.md|preservation performance decoupling]]

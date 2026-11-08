@@ -81,3 +81,15 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/surface-policy-monitoring.md|surface policy monitoring]]
+
+---
+**관련**: [[concepts/telemetry-serving-decision-gap.md|telemetry serving decision gap]]
+
+---
+**관련**: [[concepts/safety-decision-supervision.md|safety decision supervision]]
+
+---
+**관련**: [[concepts/explicit-safety-decision-learning.md|explicit safety decision learning]]
+
+---
+**관련**: [[concepts/triaxial-trace-threat-space.md|triaxial trace threat space]]

@@ -361,3 +361,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-tree-indexer.md|hierarchical tree indexer]]
+
+---
+**관련**: [[concepts/information-cutoff-anchoring.md|information cutoff anchoring]]
+
+---
+**관련**: [[concepts/independent-planning-limitation.md|independent planning limitation]]
+
+---
+**관련**: [[concepts/capability-formation-path-bifurcation.md|capability formation path bifurcation]]
+
+---
+**관련**: [[concepts/metric-informativeness-gap.md|metric informativeness gap]]
+
+---
+**관련**: [[concepts/environment-scaling-law.md|environment scaling law]]

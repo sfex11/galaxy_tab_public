@@ -130,3 +130,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/agentic-physiological-control.md|agentic physiological control]]
+
+---
+**관련**: [[concepts/western-centric-corpus-hallucination.md|western centric corpus hallucination]]
+
+---
+**관련**: [[concepts/phase-to-substrate-axis-shift.md|phase to substrate axis shift]]

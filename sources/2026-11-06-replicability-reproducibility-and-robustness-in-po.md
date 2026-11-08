@@ -57,3 +57,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/social-responsiveness.md|social responsiveness]]
+
+---
+**관련**: [[concepts/encode-prefill-decode-disaggregation.md|encode prefill decode disaggregation]]

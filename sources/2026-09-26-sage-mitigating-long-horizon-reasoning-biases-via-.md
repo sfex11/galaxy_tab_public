@@ -59,3 +59,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/guidance-induced-bias-substitution.md|guidance induced bias substitution]]
+
+---
+**관련**: [[concepts/sage-topological-diagnosis.md|sage topological diagnosis]]
