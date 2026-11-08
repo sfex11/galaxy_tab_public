@@ -53,3 +53,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/change-aware-screen.md|change aware screen]]
+
+---
+**관련**: [[concepts/pre-share-private-assessment.md|pre share private assessment]]

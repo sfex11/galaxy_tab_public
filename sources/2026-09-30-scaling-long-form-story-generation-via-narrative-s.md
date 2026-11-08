@@ -48,3 +48,6 @@ LLM 장편 소설 생성의 병목을 컨텍스트 용량이 아닌 명시적 �
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/autonomy-tail-criticality-scaling.md|autonomy tail criticality scaling]]

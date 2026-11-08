@@ -63,3 +63,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/overlap-window-interaction-atom.md|overlap window interaction atom]]
+
+---
+**관련**: [[concepts/semantic-expert-organization.md|semantic expert organization]]

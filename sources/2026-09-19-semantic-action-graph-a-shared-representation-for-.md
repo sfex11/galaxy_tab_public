@@ -36,3 +36,6 @@ Semantic Action Graph(SAG)는 스포츠 경기를 행위자·행동·수신자·
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/parseability-boundary.md|parseability boundary]]

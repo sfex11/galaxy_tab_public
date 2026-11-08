@@ -382,3 +382,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/imperfect-perception.md|imperfect perception]]
+
+---
+**관련**: [[concepts/observation-intent-causal-separation.md|observation intent causal separation]]

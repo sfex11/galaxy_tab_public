@@ -337,3 +337,27 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/rollout-environment-coupling.md|rollout environment coupling]]
+
+---
+**관련**: [[entities/environment-execution-cost-bottleneck.md|environment execution cost bottleneck]]
+
+---
+**관련**: [[concepts/visual-planning.md|visual planning]]
+
+---
+**관련**: [[concepts/delegated-environment-adaptation.md|delegated environment adaptation]]
+
+---
+**관련**: [[concepts/benchmark-validity-as-maintenance-output.md|benchmark validity as maintenance output]]
+
+---
+**관련**: [[concepts/environment-as-curriculum.md|environment as curriculum]]
+
+---
+**관련**: [[concepts/environment-budget-allocation.md|environment budget allocation]]
+
+---
+**관련**: [[concepts/measurement-validity-as-maintenance-output.md|measurement validity as maintenance output]]
+
+---
+**관련**: [[concepts/hierarchical-tree-indexer.md|hierarchical tree indexer]]

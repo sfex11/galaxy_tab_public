@@ -38,3 +38,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/unsupported-extrapolation-distortion.md|unsupported extrapolation distortion]]
+
+---
+**관련**: [[concepts/call-frugality-cue-dependence.md|call frugality cue dependence]]

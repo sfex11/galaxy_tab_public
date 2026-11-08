@@ -45,3 +45,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/role-as-relational-property.md|role as relational property]]
+
+---
+**관련**: [[concepts/factorization-underdetermination.md|factorization underdetermination]]

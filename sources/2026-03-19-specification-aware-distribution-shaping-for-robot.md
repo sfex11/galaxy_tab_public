@@ -142,3 +142,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/specification-incompleteness-propagation.md|specification incompleteness propagation]]
+
+---
+**관련**: [[concepts/specification-bounded-judge-observability.md|specification bounded judge observability]]

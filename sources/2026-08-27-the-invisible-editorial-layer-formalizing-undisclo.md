@@ -87,3 +87,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/improvement-procedure-persistence.md|improvement procedure persistence]]
+
+---
+**관련**: [[concepts/monitor-placement-conditionality.md|monitor placement conditionality]]
+
+---
+**관련**: [[concepts/probability-as-proposer-not-adjudicator.md|probability as proposer not adjudicator]]
+
+---
+**관련**: [[concepts/layer-wise-functional-specialization.md|layer wise functional specialization]]
+
+---
+**관련**: [[concepts/compression-as-invisible-voting.md|compression as invisible voting]]

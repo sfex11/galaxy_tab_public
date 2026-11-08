@@ -101,3 +101,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/measurement-guarantee-noncoexistence.md|measurement guarantee noncoexistence]]
+
+---
+**관련**: [[entities/parasitic-measurement-fixation.md|parasitic measurement fixation]]
+
+---
+**관련**: [[concepts/governance-constrained-adaptation.md|governance constrained adaptation]]

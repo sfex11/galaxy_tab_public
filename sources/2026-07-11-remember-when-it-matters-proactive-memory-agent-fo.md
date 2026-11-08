@@ -61,3 +61,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/explicit-prior-initialization.md|explicit prior initialization]]
+
+---
+**관련**: [[entities/prior-violation-noticing.md|prior violation noticing]]

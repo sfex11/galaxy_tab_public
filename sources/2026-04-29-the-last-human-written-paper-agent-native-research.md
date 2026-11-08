@@ -203,3 +203,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/edit-artifact-auditability.md|edit artifact auditability]]
+
+---
+**관련**: [[concepts/narrative-consistency.md|narrative consistency]]
+
+---
+**관련**: [[concepts/demonstration-to-code-compilation.md|demonstration to code compilation]]
+
+---
+**관련**: [[concepts/compilation-as-offline-commitment.md|compilation as offline commitment]]

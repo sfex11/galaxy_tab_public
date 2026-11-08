@@ -50,3 +50,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/set-theory.md|set theory]]
+
+---
+**관련**: [[concepts/user-belief-representability.md|user belief representability]]

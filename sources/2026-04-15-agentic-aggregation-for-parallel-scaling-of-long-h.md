@@ -310,3 +310,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/strategy-coverage-scaling.md|strategy coverage scaling]]
+
+---
+**관련**: [[concepts/long-horizon-collaboration.md|long horizon collaboration]]
+
+---
+**관련**: [[concepts/checkability-gated-routing.md|checkability gated routing]]

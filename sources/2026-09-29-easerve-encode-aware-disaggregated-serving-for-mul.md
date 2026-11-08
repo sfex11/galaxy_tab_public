@@ -66,3 +66,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/disaggregated-evaluation.md|disaggregated evaluation]]
+
+---
+**관련**: [[entities/prefill-bottleneck.md|prefill bottleneck]]
+
+---
+**관련**: [[concepts/plurality-voting-modal-convergence.md|plurality voting modal convergence]]

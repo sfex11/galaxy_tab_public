@@ -45,3 +45,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/social-humanoid.md|social humanoid]]
+
+---
+**관련**: [[concepts/day-night-science-spectrum.md|day night science spectrum]]
+
+---
+**관련**: [[concepts/anticipatory-social-coordination.md|anticipatory social coordination]]
+
+---
+**관련**: [[concepts/central-compression-decentralization-justification.md|central compression decentralization justification]]
+
+---
+**관련**: [[concepts/social-responsiveness.md|social responsiveness]]

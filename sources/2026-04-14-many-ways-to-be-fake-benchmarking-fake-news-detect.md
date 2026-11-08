@@ -109,3 +109,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/strategic-diversity.md|strategic diversity]]
+
+---
+**관련**: [[concepts/content-carrier-separation.md|content carrier separation]]

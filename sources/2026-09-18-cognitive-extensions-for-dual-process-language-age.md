@@ -109,3 +109,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/adaptive-credit-granularity.md|adaptive credit granularity]]
+
+---
+**관련**: [[concepts/performance-process-validity-dissociation.md|performance process validity dissociation]]
+
+---
+**관련**: [[concepts/cognitive-coupling-safety-transfer.md|cognitive coupling safety transfer]]

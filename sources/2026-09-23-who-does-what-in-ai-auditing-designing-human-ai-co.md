@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/reporting-norm-violation.md|reporting norm violation]]
+
+---
+**관련**: [[concepts/asymmetric-role-collaboration.md|asymmetric role collaboration]]

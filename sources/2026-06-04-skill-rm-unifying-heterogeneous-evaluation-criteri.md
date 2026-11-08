@@ -647,3 +647,36 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/verifier-false-negative-rejection.md|verifier false negative rejection]]
+
+---
+**관련**: [[entities/evaluation-confound-isolation.md|evaluation confound isolation]]
+
+---
+**관련**: [[concepts/exploration-bounded-verifier-judgment.md|exploration bounded verifier judgment]]
+
+---
+**관련**: [[concepts/evaluation-risk-elicitation-blindspot.md|evaluation risk elicitation blindspot]]
+
+---
+**관련**: [[concepts/interpretability-control-pipeline.md|interpretability control pipeline]]
+
+---
+**관련**: [[concepts/signal-to-geometry-axis-shift.md|signal to geometry axis shift]]
+
+---
+**관련**: [[concepts/mechanism-governance-axis-separation.md|mechanism governance axis separation]]
+
+---
+**관련**: [[concepts/accumulated-effective-learning-rate.md|accumulated effective learning rate]]
+
+---
+**관련**: [[concepts/verifier-exploration-judgment-decoupling.md|verifier exploration judgment decoupling]]
+
+---
+**관련**: [[concepts/instrument-drift-in-evaluation-infrastructure.md|instrument drift in evaluation infrastructure]]
+
+---
+**관련**: [[concepts/verifier-regression-bank.md|verifier regression bank]]
+
+---
+**관련**: [[concepts/procedural-reproducibility.md|procedural reproducibility]]

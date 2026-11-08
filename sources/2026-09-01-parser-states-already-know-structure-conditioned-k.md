@@ -34,3 +34,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/edit-validity.md|edit validity]]
+
+---
+**관련**: [[concepts/validity-guarantee-stratification.md|validity guarantee stratification]]

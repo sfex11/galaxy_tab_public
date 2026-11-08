@@ -35,3 +35,9 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-11-06-replicability-reproducibility-and-robustness-in-po]]: LLM 사회과학 연구의 타당성 위협 — 의미 보존 프롬프트 변동에 따른 행동 요동과 확률적 출력 — 을 검증 가능성·강건성 관점에서 공동으로 다룬다.
+
+---
+**관련**: [[concepts/rl-brittleness.md|rl brittleness]]
+
+---
+**관련**: [[concepts/edit-as-falsifiable-hypothesis.md|edit as falsifiable hypothesis]]

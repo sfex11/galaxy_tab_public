@@ -90,3 +90,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/scientific-discovery-capacity.md|scientific discovery capacity]]
+
+---
+**관련**: [[concepts/authenticated-workflow-coverage.md|authenticated workflow coverage]]

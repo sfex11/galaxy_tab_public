@@ -296,3 +296,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/interface-contract-renegotiation.md|interface contract renegotiation]]
+
+---
+**관련**: [[concepts/interface-as-orchestration-surface.md|interface as orchestration surface]]
+
+---
+**관련**: [[concepts/proxy-transfer-failure.md|proxy transfer failure]]
+
+---
+**관련**: [[concepts/permissioned-interface-view.md|permissioned interface view]]

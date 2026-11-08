@@ -213,3 +213,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/exact-cover-reduction.md|exact cover reduction]]
+
+---
+**관련**: [[concepts/deployment-time-verifiability.md|deployment time verifiability]]

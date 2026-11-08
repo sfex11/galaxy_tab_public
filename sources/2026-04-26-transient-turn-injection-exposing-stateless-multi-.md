@@ -68,3 +68,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/stateless-moderation.md|stateless moderation]]
+
+---
+**관련**: [[concepts/stateless-posthoc-dual-blindspot.md|stateless posthoc dual blindspot]]

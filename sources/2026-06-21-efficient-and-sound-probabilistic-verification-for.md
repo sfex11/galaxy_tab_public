@@ -361,3 +361,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/verification-as-agentic-exploration.md|verification as agentic exploration]]
+
+---
+**관련**: [[concepts/verification-guarantee-boundary.md|verification guarantee boundary]]
+
+---
+**관련**: [[concepts/probe-trace-monitoring-dualization.md|probe trace monitoring dualization]]

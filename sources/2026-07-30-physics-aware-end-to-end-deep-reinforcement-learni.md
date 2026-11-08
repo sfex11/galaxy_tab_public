@@ -53,3 +53,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/credit-allocation-degree-of-freedom.md|credit allocation degree of freedom]]
+
+---
+**관련**: [[concepts/adversarial-fidelity-probing.md|adversarial fidelity probing]]

@@ -116,3 +116,24 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/structural-target-drift.md|structural target drift]]
+
+---
+**관련**: [[concepts/iid-correctness-filter-bias.md|iid correctness filter bias]]
+
+---
+**관련**: [[concepts/threat-classification-defense-divergence.md|threat classification defense divergence]]
+
+---
+**관련**: [[concepts/low-entropy-structural-prediction.md|low entropy structural prediction]]
+
+---
+**관련**: [[concepts/social-pressure-threat-surface.md|social pressure threat surface]]
+
+---
+**관련**: [[concepts/plan-as-divergence-baseline.md|plan as divergence baseline]]
+
+---
+**관련**: [[concepts/structural-target-drift.md|structural target drift]]
+
+---
+**관련**: [[concepts/deception-propensity.md|deception propensity]]

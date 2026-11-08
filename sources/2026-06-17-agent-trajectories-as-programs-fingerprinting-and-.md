@@ -67,3 +67,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/probe-evasive-pressure-reconstitution.md|probe evasive pressure reconstitution]]
+
+---
+**관련**: [[concepts/revalidation-cost-behavioral-inertia.md|revalidation cost behavioral inertia]]

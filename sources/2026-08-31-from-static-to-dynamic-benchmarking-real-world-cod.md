@@ -91,3 +91,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/decision-boundary-misalignment.md|decision boundary misalignment]]
+
+---
+**관련**: [[concepts/iterative-unalignment.md|iterative unalignment]]

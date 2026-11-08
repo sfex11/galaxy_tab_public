@@ -652,3 +652,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/observation-artifact.md|observation artifact]]
+
+---
+**관련**: [[concepts/item-space-distillation.md|item space distillation]]
+
+---
+**관련**: [[concepts/dual-governance-prompt-and-rubric.md|dual governance prompt and rubric]]

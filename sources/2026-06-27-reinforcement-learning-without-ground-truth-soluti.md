@@ -145,3 +145,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/low-frequency-transition-supervision.md|low frequency transition supervision]]
+
+---
+**관련**: [[concepts/value-harm-traceability.md|value harm traceability]]

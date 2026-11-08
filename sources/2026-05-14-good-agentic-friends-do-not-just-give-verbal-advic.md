@@ -150,3 +150,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interface-as-bias-generator.md|interface as bias generator]]
+
+---
+**관련**: [[concepts/belief-update-governance.md|belief update governance]]
+
+---
+**관련**: [[concepts/belief-content-update-gap.md|belief content update gap]]

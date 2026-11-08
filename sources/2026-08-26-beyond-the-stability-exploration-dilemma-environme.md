@@ -76,3 +76,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/modality-budget-pair-unit.md|modality budget pair unit]]
+
+---
+**관련**: [[concepts/symbiosis-dependence-drift.md|symbiosis dependence drift]]

@@ -208,3 +208,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/learning-gain-measurement.md|learning gain measurement]]
+
+---
+**관련**: [[concepts/definition-renewal-over-merge.md|definition renewal over merge]]
+
+---
+**관련**: [[concepts/last-second-endpoint-paradox.md|last second endpoint paradox]]
+
+---
+**관련**: [[concepts/coalition-level-credit-assignment.md|coalition level credit assignment]]

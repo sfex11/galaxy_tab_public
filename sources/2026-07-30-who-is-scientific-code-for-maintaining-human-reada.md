@@ -36,3 +36,9 @@ _자동 생성됨_
 
 - → [[sources/2026-07-29-looping-is-not-reliability-state-bound-evidence-an]]: 둘 다 에이전트가 작성한 코드의 신뢰성과 유지보수성 문제를 다루며, 각각 코드 수리 루프의 한계와 과학 코드의 가독성 저하를 지적한다.
 - → [[sources/2026-07-31-can-ai-agents-conduct-open-ended-ai-research-early]]: 둘 다 과학 연구 맥락에서 AI 에이전트의 역할을 다루며, 각각 개방형 연구 수행 가능성과 에이전트 작성 코드의 가독성 문제를 검토한다.
+
+---
+**관련**: [[entities/readable-but-not-runnable.md|readable but not runnable]]
+
+---
+**관련**: [[concepts/readable-but-not-runnable.md|readable but not runnable]]

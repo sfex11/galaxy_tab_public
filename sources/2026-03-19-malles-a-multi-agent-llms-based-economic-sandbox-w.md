@@ -596,3 +596,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[entities/agent-homogeneity-bias-amplification.md|agent homogeneity bias amplification]]
+
+---
+**관련**: [[concepts/multi-turn-safety-brittleness.md|multi turn safety brittleness]]
+
+---
+**관련**: [[concepts/agent-idiom-convergence.md|agent idiom convergence]]

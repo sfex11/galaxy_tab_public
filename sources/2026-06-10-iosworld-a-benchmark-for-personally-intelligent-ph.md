@@ -232,3 +232,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/continuous-benchmark.md|continuous benchmark]]
+
+---
+**관련**: [[entities/veriharm-bench.md|veriharm bench]]
+
+---
+**관련**: [[concepts/continuous-benchmark.md|continuous benchmark]]
+
+---
+**관련**: [[concepts/benchmark-debt-decomposition.md|benchmark debt decomposition]]
+
+---
+**관련**: [[concepts/benchmark-as-software.md|benchmark as software]]
+
+---
+**관련**: [[concepts/benchmark-maintenance-debt.md|benchmark maintenance debt]]
+
+---
+**관련**: [[concepts/user-identity-conditioned-guardrail-efficacy.md|user identity conditioned guardrail efficacy]]

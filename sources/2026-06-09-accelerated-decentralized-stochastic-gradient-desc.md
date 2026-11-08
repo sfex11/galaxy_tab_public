@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/call-frugality-cue-dependence.md|call frugality cue dependence]]
+
+---
+**관련**: [[entities/spectral-distortion-bracketing.md|spectral distortion bracketing]]
+
+---
+**관련**: [[concepts/spectral-distortion-bracketing.md|spectral distortion bracketing]]

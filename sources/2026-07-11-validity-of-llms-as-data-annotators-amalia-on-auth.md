@@ -187,3 +187,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/post-completion-value-harm.md|post completion value harm]]
+
+---
+**관련**: [[concepts/infrastructure-as-self-measuring-instrument.md|infrastructure as self measuring instrument]]
+
+---
+**관련**: [[concepts/validity-provenance-compression.md|validity provenance compression]]
+
+---
+**관련**: [[concepts/non-additive-data-value.md|non additive data value]]
+
+---
+**관련**: [[concepts/serving-stack-instrument-target-duality.md|serving stack instrument target duality]]
+
+---
+**관련**: [[concepts/observation-point-relocation.md|observation point relocation]]
+
+---
+**관련**: [[concepts/serving-stack-comparison-validity.md|serving stack comparison validity]]

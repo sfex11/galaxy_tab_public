@@ -54,3 +54,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tool-calling-harmfulness.md|tool calling harmfulness]]
+
+---
+**관련**: [[concepts/serendipity-targeted-rl.md|serendipity targeted rl]]

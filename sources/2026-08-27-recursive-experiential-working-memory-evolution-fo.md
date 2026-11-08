@@ -224,3 +224,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/controller-worker-architecture.md|controller worker architecture]]
+
+---
+**관련**: [[concepts/plan-declaration-execution-gap.md|plan declaration execution gap]]
+
+---
+**관련**: [[concepts/off-runtime-harm-execution.md|off runtime harm execution]]
+
+---
+**관련**: [[concepts/curriculum-grounding.md|curriculum grounding]]

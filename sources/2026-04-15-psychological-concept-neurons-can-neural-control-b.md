@@ -192,3 +192,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/domain-invariant-representation.md|domain invariant representation]]
+
+---
+**관련**: [[concepts/representation-intrinsic-ontology.md|representation intrinsic ontology]]

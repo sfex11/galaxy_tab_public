@@ -224,3 +224,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/indexer-quadratic-bottleneck.md|indexer quadratic bottleneck]]
+
+---
+**관련**: [[concepts/prefill-bottleneck.md|prefill bottleneck]]
+
+---
+**관련**: [[concepts/verification-bottleneck-shift.md|verification bottleneck shift]]
+
+---
+**관련**: [[concepts/indexer-quadratic-bottleneck.md|indexer quadratic bottleneck]]

@@ -73,3 +73,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/validity-guarantee-stratification.md|validity guarantee stratification]]
+
+---
+**관련**: [[concepts/auxiliary-views.md|auxiliary views]]

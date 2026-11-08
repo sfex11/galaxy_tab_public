@@ -57,3 +57,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/meta-access-ladder.md|meta access ladder]]
+
+---
+**관련**: [[concepts/ladder-of-access-levels.md|ladder of access levels]]
+
+---
+**관련**: [[concepts/meta-access.md|meta access]]

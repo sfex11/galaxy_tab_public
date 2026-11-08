@@ -233,3 +233,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/metric-informativeness-gap.md|metric informativeness gap]]
+
+---
+**관련**: [[concepts/progress-metric-reframing.md|progress metric reframing]]

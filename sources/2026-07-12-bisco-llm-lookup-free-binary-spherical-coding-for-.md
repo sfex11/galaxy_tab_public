@@ -52,3 +52,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/capacity-achievability-dichotomy.md|capacity achievability dichotomy]]
+
+---
+**관련**: [[concepts/compression-last-gate-veto.md|compression last gate veto]]
+
+---
+**관련**: [[concepts/compression-emergence-demotion.md|compression emergence demotion]]
+
+---
+**관련**: [[concepts/quantization-offloading-tradeoff-dissolution.md|quantization offloading tradeoff dissolution]]

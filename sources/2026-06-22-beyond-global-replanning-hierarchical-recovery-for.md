@@ -136,3 +136,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/hierarchical-yield-decay.md|hierarchical yield decay]]
+
+---
+**관련**: [[concepts/credit-decomposition-target-erasure.md|credit decomposition target erasure]]
+
+---
+**관련**: [[concepts/strategy-coverage-scaling.md|strategy coverage scaling]]
+
+---
+**관련**: [[concepts/strategy-blueprint-library.md|strategy blueprint library]]

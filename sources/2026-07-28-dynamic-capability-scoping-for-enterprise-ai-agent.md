@@ -202,3 +202,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/delegation-scope-dynamic-governance.md|delegation scope dynamic governance]]
+
+---
+**관련**: [[concepts/discarding-judgment-as-capability.md|discarding judgment as capability]]
+
+---
+**관련**: [[concepts/goal-path-underdetermination-as-harm-source.md|goal path underdetermination as harm source]]
+
+---
+**관련**: [[concepts/source-level-auditability.md|source level auditability]]
+
+---
+**관련**: [[concepts/self-rewriting-static-review-collapse.md|self rewriting static review collapse]]
+
+---
+**관련**: [[concepts/joint-dataset-incompatibility.md|joint dataset incompatibility]]

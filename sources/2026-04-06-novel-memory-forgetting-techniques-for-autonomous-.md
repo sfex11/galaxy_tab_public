@@ -52,3 +52,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/uncontrolled-upgrade-forgetting.md|uncontrolled upgrade forgetting]]
+
+---
+**관련**: [[concepts/load-balancing-regularization.md|load balancing regularization]]

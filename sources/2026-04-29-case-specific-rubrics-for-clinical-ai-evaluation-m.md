@@ -546,3 +546,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/expert-guided-rubric-synthesis.md|expert guided rubric synthesis]]
+
+---
+**관련**: [[entities/graph-reconstruction-evaluation.md|graph reconstruction evaluation]]
+
+---
+**관련**: [[concepts/graph-reconstruction-evaluation.md|graph reconstruction evaluation]]
+
+---
+**관련**: [[concepts/documentation-completeness-over-length.md|documentation completeness over length]]
+
+---
+**관련**: [[concepts/institution-specific-evaluation-standard.md|institution specific evaluation standard]]
+
+---
+**관련**: [[concepts/sovereignty-driven-deployment.md|sovereignty driven deployment]]
+
+---
+**관련**: [[concepts/coupled-performance-objective.md|coupled performance objective]]

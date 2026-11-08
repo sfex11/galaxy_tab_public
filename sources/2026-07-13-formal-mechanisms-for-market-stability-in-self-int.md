@@ -64,3 +64,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/one-hot-dilemma.md|one hot dilemma]]
+
+---
+**관련**: [[concepts/belief-layer-unification.md|belief layer unification]]

@@ -113,3 +113,12 @@ _자동 생성될_
 
 ---
 **관련**: [[entities/modal-answer-asymptote.md|modal answer asymptote]]
+
+---
+**관련**: [[entities/answer-trace-decoupling.md|answer trace decoupling]]
+
+---
+**관련**: [[concepts/benign-input-harmful-side-effect.md|benign input harmful side effect]]
+
+---
+**관련**: [[concepts/answer-trace-decoupling.md|answer trace decoupling]]

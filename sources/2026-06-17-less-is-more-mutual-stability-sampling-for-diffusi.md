@@ -202,3 +202,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/metacognitive-decoding.md|metacognitive decoding]]
+
+---
+**관련**: [[concepts/recovered-procedure-preservation.md|recovered procedure preservation]]
+
+---
+**관련**: [[concepts/expressiveness-efficiency-dilemma.md|expressiveness efficiency dilemma]]
+
+---
+**관련**: [[concepts/fork-evaluate-commit-harness-api.md|fork evaluate commit harness api]]

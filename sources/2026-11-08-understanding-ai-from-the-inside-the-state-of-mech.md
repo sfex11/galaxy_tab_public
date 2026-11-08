@@ -51,3 +51,18 @@ Wiki의 해석가능성 축과의 정합성: Legibility is Not Interpretability�
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[concepts/alignment-safety-decoupling.md|alignment safety decoupling]]
+
+---
+**관련**: [[concepts/economic-mechanistic-bias-convergence.md|economic mechanistic bias convergence]]
+
+---
+**관련**: [[concepts/execution-layer-safety-last-resort.md|execution layer safety last resort]]
+
+---
+**관련**: [[concepts/safety-fact-omission.md|safety fact omission]]
+
+---
+**관련**: [[concepts/disposition-anchored-safety.md|disposition anchored safety]]

@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/decoder-primitive-redefinition.md|decoder primitive redefinition]]
+
+---
+**관련**: [[entities/decoder-primitive-redefinition.md|decoder primitive redefinition]]

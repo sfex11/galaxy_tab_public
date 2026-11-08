@@ -64,3 +64,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/experience-acquisition-autonomy.md|experience acquisition autonomy]]
+
+---
+**관련**: [[concepts/website-docking.md|website docking]]

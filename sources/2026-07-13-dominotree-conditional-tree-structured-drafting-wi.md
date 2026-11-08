@@ -427,3 +427,30 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/entity-token-copying.md|entity token copying]]
+
+---
+**관련**: [[entities/compact-documentation-coding-agents.md|compact documentation coding agents]]
+
+---
+**관련**: [[concepts/inference-strategy-evolution.md|inference strategy evolution]]
+
+---
+**관련**: [[concepts/tree-structured-trace-audit.md|tree structured trace audit]]
+
+---
+**관련**: [[concepts/optimizer-dependent-scaling-crossover.md|optimizer dependent scaling crossover]]
+
+---
+**관련**: [[concepts/privacy-driven-inference-partitioning.md|privacy driven inference partitioning]]
+
+---
+**관련**: [[concepts/draft-policy-role-entanglement.md|draft policy role entanglement]]
+
+---
+**관련**: [[concepts/latent-space-inference.md|latent space inference]]
+
+---
+**관련**: [[concepts/token-level-teacher-adaptation.md|token level teacher adaptation]]
+
+---
+**관련**: [[concepts/kv-cache-marginal-cost.md|kv cache marginal cost]]

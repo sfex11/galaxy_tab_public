@@ -47,3 +47,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/interpretation-continuity-prerequisite.md|interpretation continuity prerequisite]]
+
+---
+**관련**: [[concepts/confirmed-mutation.md|confirmed mutation]]

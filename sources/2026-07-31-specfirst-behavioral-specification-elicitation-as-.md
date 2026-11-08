@@ -83,3 +83,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/long-document-qa.md|long document qa]]
+
+---
+**관련**: [[concepts/conditional-independence-given-item.md|conditional independence given item]]

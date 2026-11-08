@@ -53,3 +53,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/plasticity-loss.md|plasticity loss]]
+
+---
+**관련**: [[concepts/plasticity-loss.md|plasticity loss]]
+
+---
+**관련**: [[concepts/cost-induced-ambiguity-retention.md|cost induced ambiguity retention]]

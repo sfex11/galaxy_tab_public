@@ -400,3 +400,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/value-context-dependence.md|value context dependence]]
+
+---
+**관련**: [[entities/strategic-tanking.md|strategic tanking]]
+
+---
+**관련**: [[concepts/strategic-tanking.md|strategic tanking]]
+
+---
+**관련**: [[concepts/context-as-cost-function.md|context as cost function]]
+
+---
+**관련**: [[concepts/context-dependent-copying.md|context dependent copying]]
+
+---
+**관련**: [[concepts/text-artifact-limitation.md|text artifact limitation]]
+
+---
+**관련**: [[concepts/reachability-dynamics-decoupling.md|reachability dynamics decoupling]]
+
+---
+**관련**: [[concepts/implicit-dynamics.md|implicit dynamics]]

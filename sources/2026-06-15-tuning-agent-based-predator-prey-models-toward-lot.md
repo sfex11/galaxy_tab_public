@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/tactile-contact-sensing.md|tactile contact sensing]]
+
+---
+**관련**: [[entities/tactile-contact-sensing.md|tactile contact sensing]]

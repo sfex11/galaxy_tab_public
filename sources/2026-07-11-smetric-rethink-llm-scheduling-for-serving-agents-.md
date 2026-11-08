@@ -115,3 +115,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/trace-integrity-faithfulness-divergence.md|trace integrity faithfulness divergence]]
+
+---
+**관련**: [[entities/agentic-drive.md|agentic drive]]
+
+---
+**관련**: [[concepts/serving-layer-confound.md|serving layer confound]]
+
+---
+**관련**: [[concepts/deliberate-trace-decoupling-architecture.md|deliberate trace decoupling architecture]]
+
+---
+**관련**: [[concepts/certification-target-shift-to-elicitability.md|certification target shift to elicitability]]
+
+---
+**관련**: [[concepts/agentic-physiological-control.md|agentic physiological control]]

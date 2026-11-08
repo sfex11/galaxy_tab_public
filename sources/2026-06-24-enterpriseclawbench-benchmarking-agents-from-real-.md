@@ -34,3 +34,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/regeneration-paired-forgetting.md|regeneration paired forgetting]]
+
+---
+**관련**: [[concepts/edit-artifact-auditability.md|edit artifact auditability]]
+
+---
+**관련**: [[concepts/chat-as-workspace-blindspot.md|chat as workspace blindspot]]

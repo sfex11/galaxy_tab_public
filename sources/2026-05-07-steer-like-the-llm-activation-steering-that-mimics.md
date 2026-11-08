@@ -195,3 +195,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/success-criterion-redefinition.md|success criterion redefinition]]
+
+---
+**관련**: [[concepts/success-harm-axis-coupling.md|success harm axis coupling]]
+
+---
+**관련**: [[concepts/success-harm-reevaluation-gap.md|success harm reevaluation gap]]
+
+---
+**관련**: [[concepts/success-harm-nonguarantee.md|success harm nonguarantee]]
+
+---
+**관련**: [[concepts/simple-law.md|simple law]]
+
+---
+**관련**: [[concepts/intervention-verifiability.md|intervention verifiability]]

@@ -49,3 +49,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/contaminated-knowledge-self-justification.md|contaminated knowledge self justification]]
+
+---
+**관련**: [[concepts/access-verdict-translation-gap.md|access verdict translation gap]]
+
+---
+**관련**: [[concepts/knowledge-bounded-planability.md|knowledge bounded planability]]

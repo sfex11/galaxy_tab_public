@@ -268,3 +268,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/paper-as-executable-environment.md|paper as executable environment]]
+
+---
+**관련**: [[concepts/curriculum-as-environment-portfolio-allocation.md|curriculum as environment portfolio allocation]]
+
+---
+**관련**: [[concepts/environment-as-primary-bottleneck-resource.md|environment as primary bottleneck resource]]
+
+---
+**관련**: [[concepts/paper-as-executable-environment.md|paper as executable environment]]
+
+---
+**관련**: [[concepts/shared-environment-agreement-fragility.md|shared environment agreement fragility]]
+
+---
+**관련**: [[concepts/environment-headroom-reevaluation.md|environment headroom reevaluation]]

@@ -78,3 +78,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/audit-independence-collapse.md|audit independence collapse]]
+
+---
+**관련**: [[concepts/relevance-filter-majority-collapse.md|relevance filter majority collapse]]

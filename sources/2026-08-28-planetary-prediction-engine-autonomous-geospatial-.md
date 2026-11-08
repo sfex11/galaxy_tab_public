@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/code-vulnerability-repair.md|code vulnerability repair]]
+
+---
+**관련**: [[concepts/fidelity-surrogate-severance.md|fidelity surrogate severance]]
