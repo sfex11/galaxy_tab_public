@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;gap:1.1rem;">
+    <div>
+      <span class="tag tag-amber"><i class="fas fa-scroll"></i> arXiv:2611.08363v1</span>
+      <span class="tag tag-green"><i class="fas fa-layer-group"></i> Systems · LLM Inference</span>
+    </div>
+    <h1 style="font-size:clamp(2.6rem,7vw,4.6rem);margin:0;line-height:1.05;">StrataFlux</h1>
+    <h2 class="accent2" style="font-size:clamp(1.15rem,2.8vw,1.9rem);margin:0;font-weight:600;">Memory-Hierarchy-Native Low-Bit LLM Inference</h2>
+    <p class="muted" style="font-size:clamp(1rem,2.2vw,1.35rem);margin:0;">메모리 계층 전체를 네이티브하게 활용해 <span class="accent">정확도</span>와 <span class="accent3">속도</span>를 동시에 잡는 저비트 LLM 추론 프레임워크</p>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.9rem,1.8vw,1.05rem);margin:0;"><i class="fas fa-microchip accent"></i> 저비트 양자화 × 선택적 고정밀 복원 × 지연 시간 은닉</p>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 0.5rem;">배경 — LLM 추론의 진짜 병목은 <span class="accent">메모리</span>다</h2>
+    <p class="muted" style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin:0 0 1.2rem;">자동회귀 디코딩 특성상, 연산보다 데이터 이동이 지배하는 워크로드</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-sync-alt accent"></i> 매 토큰마다 가중치 로드</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">토큰 하나를 생성할 때마다 수십 GB 규모의 모델 가중치를 반복해서 읽어야 함</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-tachometer-alt accent2"></i> 대역폭 제약</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">디코딩 단계는 연산 유닛을 충분히 쓰지 못하고 메모리 접근에 대기하는 memory-bound 구간</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-expand-arrows-alt accent3"></i> 커지는 모델 크기</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">파라미터 수 급증으로 단일 메모리 계층의 용량과 대역폭 모두 한계에 도달</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">기존 해법의 딜레마 — <span class="accent">정확도</span> 아니면 <span class="accent2">속도</span>?</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-red">경로 A · 저비트 양자화</span>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.6rem 0;"><i class="fas fa-compress-alt"></i> 가중치를 낮은 비트로 압축</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>메모리 용량·대역폭 수요를 크게 절감 → 빠른 생성</li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>정밀도 손실로 <b>정확도 저하</b> 발생</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">경로 B · 고정밀 데이터 오프로딩</span>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.6rem 0;"><i class="fas fa-cloud-download-alt"></i> 느린 계층에서 고정밀 데이터 확보</h3>
+        <ul class="check-list">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span>필요한 순간 고정밀 데이터를 가져와 <b>정확도 유지</b></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span>느린 계층 접근이 병목 → <b>생성 정체(stall)</b> 발생</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:1.2rem;">
+      <p style="font-size:clamp(1rem,2.2vw,1.3rem);margin:0;">"정확도를 지키면 느려지고, 빠르게 하면 성능이 무너진다" — 양자화 연구의 오랜 트레이드오프</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 0.8rem;">핵심 인사이트 — 메모리 계층을 <span class="accent3">하나의 자원</span>으로</h2>
+    <div class="quote-block">
+      <p style="font-size:clamp(1.05rem,2.3vw,1.35rem);margin:0;">"메모리 계층은 '빠른 계층 vs 느린 계층'의 경쟁이 아니라, 함께 설계할 수 있는 하나의 추론 자원이다"</p>
+    </div>
+    <ul class="check-list" style="margin-top:1.2rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>계층 전체 용량의 총합은 크다</b> — HBM·DRAM·NVMe를 묶으면 단일 계층보다 훨씬 큰 저장 공간 확보</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>정확도에 민감한 데이터는 소수</b> — 대부분의 가중치는 저비트로 충분하고, 일부만 고정밀이 필요</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>접근 패턴은 예측 가능</b> — 레이어 실행 순서가 정해져 있어 느린 계층 접근을 미리 준비할 수 있음</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 0.5rem;">StrataFlux — 트레이드오프를 넘어서는 프레임워크</h2>
+    <p class="muted" style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin:0 0 1.2rem;">저비트 양자화의 속도 이점을 유지하면서, 잃어버린 정확도를 메모리 계층 전반에서 회수</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-layer-group accent"></i> 계층 네이티브 설계</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">각 계층의 용량·대역폭·지연을 설계 변수로 명시적으로 활용</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-crosshairs accent2"></i> 선택적 고정밀 복원</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">정확도 손실의 대부분을 만드는 소수의 민감 데이터만 고정밀로 유지·회수</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0 0 0.5rem;"><i class="fas fa-bolt accent3"></i> 정체 없는 생성</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">느린 계층 접근을 연산과 겹쳐(overlap) 토큰 생성이 멈추지 않도록 보장</p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <p style="font-size:clamp(0.95rem,1.9vw,1.15rem);margin:0;"><i class="fas fa-question-circle accent"></i> 핵심 질문: <b>"어떤 데이터를 어느 계층에 두고, 언제 옮길 것인가?"</b></p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">StrataFlux의 동작 흐름</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">민감도 분석</div>
+        <div class="step-desc">어느 레이어·텐서가 저비트에서 정확도를 크게 잃는지 측정</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">계층별 배치</div>
+        <div class="step-desc">민감 데이터는 고정밀로 상위 계층, 나머지는 저비트로 하위 계층</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">프리페치·오버랩</div>
+        <div class="step-desc">현재 레이어 연산 중 다음에 필요한 데이터를 미리 이동</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">혼합 정밀도 연산</div>
+        <div class="step-desc">커널이 필요한 시점에 필요한 정밀도의 데이터를 읽어 연산</div>
+      </div>
+    </div>
+    <p class="muted" style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin-top:1rem;"><i class="fas fa-redo accent2"></i> 추론 중 3~4 단계가 반복되며, 느린 계층 접근은 항상 연산 뒤에 숨겨짐</p>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 0.5rem;">핵심 기법 ① — <span class="accent">민감도 기반</span> 데이터 계층화</h2>
+    <p class="muted" style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin:0 0 1rem;">모든 가중치가 똑같이 중요하지 않다는 관찰에서 출발</p>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">저비트 유지 · 다수</span>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.6rem 0;">민감도가 낮은 가중치</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">전체의 대부분을 2~4비트 수준으로 압축해 용량·대역폭 수요를 최소화</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">고정밀 보관 · 소수</span>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.6rem 0;">정확도를 지배하는 민감 구성 요소</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">고정밀 사본을 메모리 계층에 전략적으로 배치해 양자화 오차를 상쇄</p>
+      </div>
+    </div>
+    <ul class="check-list" style="margin-top:1.1rem;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>정확도 손실의 상당 부분이 소수의 레이어·채널(예: outlier)에 집중됨</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span>계층 배치는 정적 분석과 실행 중 접근 패턴을 함께 고려해 결정</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">핵심 기법 ② — <span class="accent2">지연 시간 은닉</span>으로 정체 제거</h2>
+    <div class="flow-item">
+      <div class="flow-icon">1</div>
+      <div style="font-size:clamp(0.9rem,1.8vw,1.1rem);"><b>미리 가져오기(prefetch)</b> — 현재 레이어를 계산하는 동안 다음 레이어가 필요로 하는 고정밀 데이터를 느린 계층에서 선제 이동</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">2</div>
+      <div style="font-size:clamp(0.9rem,1.8vw,1.1rem);"><b>연산·전송 중첩(overlap)</b> — 데이터 이동이 완료될 때까지 가속기가 놀지 않도록 스트림·스케줄로 두 작업을 겹침</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">3</div>
+      <div style="font-size:clamp(0.9rem,1.8vw,1.1rem);"><b>계층 간 대역폭 분산</b> — 여러 계층 경로를 동시에 활용해 단일 병목 지점을 해소</div>
+    </div>
+    <div class="quote-block" style="margin-top:1.1rem;">
+      <p style="font-size:clamp(1rem,2.2vw,1.3rem);margin:0;">결과적으로 느린 계층에 데이터가 있어도 토큰 생성은 멈추지 않음 — "오프로딩 정체" 문제의 직접적 해법</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">기존 접근법과의 비교</h2>
+    <table class="compare-table" style="font-size:clamp(0.85rem,1.7vw,1.05rem);">
+      <thead>
+        <tr><th>접근법</th><th>메모리 절감</th><th>정확도</th><th>생성 지속성</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>저비트 양자화</td><td>큼 (비트 수에 비례)</td><td>저하</td><td>원활</td></tr>
+        <tr><td>고정밀 오프로딩</td><td>제한적</td><td>유지</td><td>정체 발생</td></tr>
+        <tr><td><b>StrataFlux</b></td><td>큼 (저비트 유지)</td><td>복원</td><td>원활 (지연 은닉)</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="font-size:clamp(0.9rem,1.8vw,1.1rem);margin-top:1rem;">두 접근의 장점만을 결합 — <span class="accent3">양자화의 속도</span> + <span class="accent2">고정밀 데이터의 정확도</span></p>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">StrataFlux가 목표하는 세 가지 성과</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="big-num accent">1</div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.4rem 0;">정확도 복원</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">저비트 가중치(및 활성·KV 데이터)로 손실된 정확도를 고정밀 데이터로 회수</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent2">2</div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.4rem 0;">정체 없는 처리량</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">오프로딩으로 인한 생성 중단 없이 토큰 생성을 지속</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent3">3</div>
+        <h3 style="font-size:clamp(1rem,2vw,1.3rem);margin:0.4rem 0;">계층 자원 활용 극대화</h3>
+        <p style="font-size:clamp(0.85rem,1.7vw,1.05rem);margin:0;">HBM·DRAM·NVMe 전체의 용량과 대역폭을 추론에 직접 동원</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 1rem;">의의와 향후 전망</h2>
+    <ul class="check-list">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>패러다임 전환</b> — 양자화 vs 오프로딩의 이분법을 넘어, 메모리 계층을 추론 시스템의 일급 자원으로 재정의</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>확장성</b> — 모델이 커져도 계층 전체 용량으로 대응 가능, 단일 가속기 메모리 한계 완화</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>응용 범위</b> — 엣지 디바이스부터 데이터센터까지 다양한 하드웨어 구성에 적용 가능한 범용 프레임워크</li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><b>후속 연구 방향</b> — 활성·KV 캐시의 계층화, 적응적 스케줄링, 민감도 분석 자동화로 확장</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(1.6rem,3.5vw,2.5rem);margin:0 0 0.8rem;">결론</h2>
+    <div class="quote-block">
+      <p style="font-size:clamp(1.05rem,2.3vw,1.35rem);margin:0;">StrataFlux는 메모리 계층 전체를 네이티브하게 활용해, 저비트 양자화의 속도 이점을 유지하면서도 잃어버린 정확도를 되찾는다</p>
+    </div>
+    <div class="card" style="margin-top:1.2rem;">
+      <h3 style="font-size:clamp(1.05rem,2.2vw,1.4rem);margin:0 0 0.6rem;"><i class="fas fa-book accent"></i> 논문 정보</h3>
+      <p style="font-size:clamp(0.95rem,1.9vw,1.15rem);margin:0 0 0.3rem;"><b>StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference</b></p>
+      <p class="muted" style="font-size:clamp(0.85rem,1.7vw,1rem);margin:0 0 0.3rem;">저자 정보 및 전문은 arXiv 원문을 참조하세요.</p>
+      <p style="font-size:clamp(0.9rem,1.8vw,1.05rem);margin:0;"><i class="fas fa-link accent2"></i> <a href="http://arxiv.org/abs/2611.08363v1">arxiv.org/abs/2611.08363v1</a></p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>
