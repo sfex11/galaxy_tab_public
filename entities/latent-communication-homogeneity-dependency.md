@@ -22,3 +22,9 @@ _Wiki 축적 중_
 센서 이종성이 강한 CPS 도메인은 잠재 통신의 동질성 전제가 가장 취약한 검증 무대다. 본 논문의 성립 조건은 이 개념의 유효 경계(동질성 요구가 모델 수준인지 표현 수준인지)를 판별할 반증 실험 후보가 된다.
 
 → [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
+
+물리 신호의 자연적 접지가 가중치 동질성 없이도 잠재 통신을 성립시킬 수 있는 제2 경로를 시사한다.
+
+→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

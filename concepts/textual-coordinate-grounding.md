@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-10-29-videolvr-latent-visual-reasoning-over-grounded-vid.md|VideoLVR: Latent Visual Reasoning over Grounded Video Eviden]]
 
 ### VideoLVR: Latent Visual Reasoning over Grounded Video Evidence (2026-10-30)
+
+### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
+
+→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

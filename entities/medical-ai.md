@@ -54,3 +54,7 @@ EHR QA·대화적 평가 계열을 넘어 유전체 분석이라는 전문 절�
 의료 AI의 스코프를 '대화적 동정심·가독성(QA 평가)' → '문서 기반 근거 생성'에 이어 '지속 개입에 의한 생리학적 제어'로 3단계 확장한다. 임상 QA 벤치마크 상위 성능이 용량 조정 능력을 담보하지 않음을 보여, 의료 AI 평가의 배포 단위 문제를 규정한다.
 
 → [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]
+
+### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
+
+→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

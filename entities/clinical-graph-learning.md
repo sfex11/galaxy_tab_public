@@ -18,3 +18,9 @@ EEG 잡음이 그래프 구축의 근본적 장애물이라는 문제 진단을 
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 임상 LLM 응용이 EEG 그래프 위상 정제(데이터 구조 정제)에서 유전체 분석 워크플로우(전문가 절차 실행)로 확장됨을 보여준다. 임상 도메인에서 LLM이 지원하는 대상이 구조에서 절차로 이동하는 경향을 강화한다.
+
+### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
+
+임상 그래프의 데이터 원료 축을 확장한다. EEG 신호에서 그래프를 정제하던 기존 경로에 대응하여, 대화에서 날짜가 붙은 임상 사실을 추출해 환자 상태 그래프를 구축하는 쌍대 경로를 제공하며, 임상 그래프 학습의 원료가 신호에서 대화 사실로 확장됨을 보여준다.
+
+→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

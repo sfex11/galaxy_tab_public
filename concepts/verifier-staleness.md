@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|Benchmarks as Software: Terminal-Bench and the Case for Cont]]
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
+
+→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

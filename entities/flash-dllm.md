@@ -26,3 +26,9 @@ IO 인지 캐싱·병렬 디코딩이 공략하는 메모리 접근 병목에 �
 IO 인지 최적화의 목표 차원을 확장한다. Flash-dLLm이 IO를 은닉해 처리량을 지키는 결합이었다면 StrataFlux는 IO 자체를 정확도 회복의 통로로 사용하여, 서빙 인프라가 품질 결정에 직접 개입하는 [[capability-forming-serving]]의 정밀도 차원 사례를 추가한다.
 
 → [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+Flash-dLLM의 IO 인지 캐싱-디코딩 최적화가 HBM 내부에 머물렀다면, StrataFlux는 최적화 대상을 호스트 RAM·SSD까지 포괄하는 메모리 계층 전체로 확장한다. IO 인지 설계가 칩 경계를 넘어 계층 간 데이터 흐름으로 일반화됨을 보여준다.
+
+→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

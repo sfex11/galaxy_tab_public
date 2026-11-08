@@ -74,3 +74,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 평가 인프라의 변경이 태스크·테스트에 내장된 암묵적 가정을 무효화하는 경로를 부채의 제2 병인으로 제시한다. 평가자의 가정이 설계 시점에 고정된 속성이 아니라 인프라 상태에 조건부임을 보여준다.
 
 → [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
+
+평가자의 가정이 시간에 따라 무효화되는 경로를 명시한다 — 태스크에 내장된 암묵적 가정이 인프라 변화와 함께 무너지며, 가정의 명시적 문서화와 재검토가 유지보수의 일부가 됨을 요구한다.
+
+→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

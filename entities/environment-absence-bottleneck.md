@@ -48,3 +48,9 @@ GUI+CLI 하이브리드 환경의 희소성이 CUA 연구의 구체적 병목임
 병목의 물리 도메인 발현 사례를 제공한다 — 시뮬레이션 커버리지의 좁은 범위가 체화 AI 대규모 훈련을 차단하며, 그 근원이 전문가 노력의 확장 불가능성에 있음을 진단하여 환경 부재가 노력 경제의 문제임을 명확히 한다.
 
 → [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+'AI-Scientists는 왔지만 세계는 없었다'는 진단으로 병목의 최첨단 형태를 제공한다 — 능력 자체는 존재해도 그 능력이 성장할 환경이 부재하면 학습 루프는 닫히지 않으며, 논문의 환경화가 이 병목의 해소 경로다.
+
+→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

@@ -24,3 +24,9 @@ Design Docs가 설계 문서를 재생성의 단일 진실원으로 채택한 �
 명세의 사전 생성에서 사후 복구·보존으로 축이 확장된다. ReproBridge가 보존하는 '복구된 절차와 결정'은 명세를 런타임에 재구성한 산물이므로, 명세 중심 재현성이 복구 루프를 전제함을 시사한다.
 
 → [[sources/2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]
+
+### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-08)
+
+명세를 재생성의 단일 진실원으로 삼는 Design Docs 전제의 재현 도메인 확장이다 — 복구된 절차·결정이 표준 아티팩트로 고정되면 재현도 명세 주도로 수행 가능해져, 명세 중심 개발이 연구 재현 계열로 이식됨을 보여준다.
+
+→ [[sources/2026-11-08-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

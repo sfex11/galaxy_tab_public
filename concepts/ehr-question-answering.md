@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-05-01-healthnlp_retrievers-at-archehr-qa-2026-cascaded-l.md|HealthNLP_Retrievers at ArchEHR-QA 2026: Cascaded LLM Pipeli]]
+
+### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
+
+→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

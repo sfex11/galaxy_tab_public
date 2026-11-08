@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
 
 → [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]
+
+### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
+
+→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

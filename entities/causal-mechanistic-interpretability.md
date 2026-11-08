@@ -36,3 +36,9 @@ MLP 어블레이션(슬라이딩 윈도우)을 해석 연구의 사후 검증 �
 개입(activation patching 등) 기반 검증이 해석의 인과적 근거 확보의 표준 방법임을 서베이 수준에서 재확인하며, 접지 특권의 반증 가능성 논리와 연결된다.
 
 → [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
+
+서베이가 산발적 인과 해석 연구(Legibility is Not Interpretability의 판독-기능 발산, MoRFI의 단조 특징 식별, activation patching)를 '개입적 검증이 필수'라는 단일 원칙으로 체계화한다. 가독적 표현 판독이 아닌 기능적 구조의 개입적 검증이 표준 방법론임을 서베이 차원에서 규정한다.
+
+→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

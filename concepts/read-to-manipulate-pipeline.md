@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
 
 → [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
+
+→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

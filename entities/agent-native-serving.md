@@ -42,3 +42,9 @@ _Wiki 축적 중_
 서빙 인프라의 메모리 계층 설계가 모델 정확도(능력)를 직접 결정하는 구조적 사례를 추가한다. 서빙 계층이 품질에 중립적이라는 전제가 정밀도 차원에서도 기각됨을 보여준다.
 
 → [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+에이전트 워크로드의 장기 컨텍스트 KV 캐시가 HBM을 초과하는 상황에서 계층 네이티브 추론이 실용 조건을 강화한다. 에이전트 네이티브 서빙의 비용·용량 논의에 메모리 계층 설계라는 새 축을 추가한다.
+
+→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

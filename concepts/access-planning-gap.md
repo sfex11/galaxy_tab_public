@@ -22,3 +22,7 @@ _자동 Wiki Query에서 추출됨_
 ### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
 
 → [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
+
+→ [[sources/2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

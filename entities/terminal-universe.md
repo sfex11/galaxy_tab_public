@@ -46,3 +46,9 @@ _Wiki 축적 중_
 '축적된 산출물 → 환경' 변환의 문헌 도메인 평행 사례를 제공한다. 궤적이 환경으로 재질의되는 것과 동일 논리로 논문이 연구 환경으로 재질의되어, 기존 지식의 환경화가 도메인 불변 패턴임을 강화한다.
 
 → [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+Terminal-Universe가 에이전트 자기 궤적을 환경으로 변환했다면 본 논문은 인류의 과학 문헌을 환경으로 변환한다. 자기 궤적 재활용과 외부 지식 자산 활용이라는 환경 원료의 양극이 확정되며, 환경 변환의 대상이 에이전트 산출물을 넘어 인간 산출물까지 확장됨을 보여준다.
+
+→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

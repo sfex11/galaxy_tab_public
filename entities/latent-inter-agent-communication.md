@@ -36,3 +36,9 @@ _Wiki 축적 중_
 LLM 중심 잠재 통신에 대역폭 예산과 태스크 데드라인이라는 실시간 제약 변수를 추가한다. 잠재 통신의 평가 기준이 정보 이득 최대화에서 '데드라인 내 필수 정보 전달'로 이동하는 경로를 제시한다.
 
 → [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
+
+잠재 통신의 적용 도메인을 LLM 에이전트에서 CPS 에이전트로 확장한다. 대역폭·데드라인 제약 하의 표현 교환이 기존 LLM 설정과 다른 설계 공간임을 보여준다.
+
+→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

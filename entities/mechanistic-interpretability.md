@@ -56,3 +56,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 분야 전체 서베이로서 산발적 기법 연구를 '이해 없이는 제어 없다'는 안전론 명제 아래 통합하고, 해석가능성을 호기심 연구가 아닌 안전 인프라의 전제조건으로 포지션 확립한다.
 
 → [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
+
+본 서베이가 분야 전체 현황을 안전 관점에서 종합한다. Wiki에 흩어져 축적된 MoRFI·Deep Noir·SAE·activation patching 연구를 '이해가 제어의 전제 조건'이라는 단일 방법론적 위상 아래 묶어, 해석가능성이 진단 도구를 넘어 안전 개입 파이프라인의 상류 계층임을 규정한다.
+
+→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

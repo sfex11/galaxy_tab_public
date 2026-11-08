@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### SWE-Serve: Benchmarking Agentic Engineering For Production Inference S (2026-09-24)
 
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

@@ -30,3 +30,7 @@ _Wiki 축적 중_
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-07)
 
 → [[sources/2026-11-07-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]
+
+### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
+
+→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

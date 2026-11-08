@@ -38,3 +38,9 @@ _Wiki 축적 중_
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-10-31)
 
 임상 가이드라인·데이터베이스의 지속 갱신은 스킬의 타당성을 시간 조건부로 만든다. '어떤 스킬이 여전히 유효한가'의 상시 재평가가 스킬 라이브러리 관리의 1급 과제임을 임상 도메인에서 구체화한다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
+
+적응적 타당성 문법을 벤치마크 자신에게 되돌려 적용한 사례다 — '이 벤치마크는 여전히 유효한가'의 지속 재평가가 필요하며, 타당성이 정적 속성이 아니라 유지보수 절차의 산물임을 확정한다.
+
+→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

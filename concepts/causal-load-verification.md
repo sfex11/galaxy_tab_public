@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Deep Noir: Autonomous Steering Discovery via Architectural Chronometry (2026-09-21)
 
 ### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
+
+→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

@@ -18,3 +18,7 @@ _자동 Wiki Query에서 추출됨_
 ### Environment Evolution for Terminal Agents (2026-09-07)
 
 ### PlayTrain: An Efficient Reinforcement Learning Framework for LLM-Gener (2026-09-10)
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

@@ -3947,3 +3947,16 @@
 - 2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md
 - 2026-11-07-vflash-fast-accurate-visual-planning-via-flash-pri.md
 - 2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md
+
+## [2026-11-08 02:22] llm-ingest | 11편 분석, 엔티티 1264개, 개념 2690개
+- 2026-11-08-swarmevolve-latent-agent-swarms-for-evolutionary-d.md
+- 2026-11-08-reprobridge-building-reproducibility-into-ml-resea.md
+- 2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md
+- 2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md
+- 2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md
+- 2026-11-08-social-humanoid-socially-responsive-human-humanoid.md
+- 2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md
+- 2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md
+- 2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md
+- 2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md
+- 2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md

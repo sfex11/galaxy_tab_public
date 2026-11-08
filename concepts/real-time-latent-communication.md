@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|SCALE: Real-Time Latent Communication for Cyber-Physical Age]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
+
+→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

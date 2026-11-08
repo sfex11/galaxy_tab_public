@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
 
 기기 드리프트(잡음 judge)가 산출하는 오류 판정을 학습에 투입하면 자기 개선 시스템 전체가 드리프트를 학습한다는 훈련 측 피해 경로를 추가한다. 측정 신뢰성 문제가 평가 왜곡을 넘어 정책 퇴행으로 발현됨을 보여준다.
+
+### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
+
+드리프트의 원천이 모델 출력뿐 아니라 검증자와 평가 인프라의 노후화로 확장됨을 보여준다. 계측기 자체가 시간에 따라 변화하는 코드라는 점에서 드리프트 논의의 벤치마크 버전이다.
+
+→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

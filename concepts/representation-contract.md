@@ -35,3 +35,7 @@ _자동 Wiki Query에서 추출됨_
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
 → [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]
+
+### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
+
+→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

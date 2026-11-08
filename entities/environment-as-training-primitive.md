@@ -36,3 +36,9 @@ CodeMidas는 코드베이스의 구현된 기능을 실행 가능한 RL 환경�
 훈련·연구 환경의 원시자원으로서 문헌의 지위를 확립한다. 환경이 코드나 궤적뿐 아니라 인류의 지식 기록에서 파생될 수 있음을 보여, 환경-능력 인과율의 원료 축이 지식 인프라와 결합됨을 시사한다.
 
 → [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]
+
+### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+환경 원료의 후보 공간을 궤적(trajectory→environment), 코드(code→environment)에 이어 '출판된 논문'까지 확장한다. 인류가 축적한 지식 자산 전체가 에이전트 훈련 환경의 원시자원이 될 수 있음을 보여준다.
+
+→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

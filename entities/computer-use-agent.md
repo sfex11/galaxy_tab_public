@@ -88,3 +88,9 @@ GUI 웹 에이전트의 평가 인프라에 '실행 가능한 실제 사이트 �
 CUA의 시각 그라운딩 경로에 대한 대안 축을 제공한다. 화면을 보고 조작하는 대신 인터페이스의 구조적 메타 뷰를 직접 접근함으로써, 픽셀→의미 번역 비용을 제거하는 경로가 존재함을 보여준다. CUA 평가에서 '시각 필요도'가 태스크별로 다르다는 [[visual-need-routing]]의 발견과 결합하면, 일부 태스크는 메타 접근으로, 일부는 그라운딩으로 분업화될 수 있음을 시사한다.
 
 → [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]
+
+### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
+
+스크린샷 그라운딩 경로에 대한 대안 축을 제공한다 — 픽셀 판독 대신 권한화된 구조 뷰로 인터페이스 상태를 전달하면 관측 인공물과 인코딩 손실 성분을 원천적으로 축소할 수 있음을 시사한다.
+
+→ [[sources/2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

@@ -18,3 +18,7 @@ _Wiki 축적 중_
 ### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
 
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
+
+### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-08)
+
+→ [[sources/2026-11-08-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

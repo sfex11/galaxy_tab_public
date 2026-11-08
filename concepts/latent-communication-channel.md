@@ -16,3 +16,7 @@ _Wiki 축적 중_
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
 
 → [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]
+
+### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
+
+→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

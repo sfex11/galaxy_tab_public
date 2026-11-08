@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-04-unfolding-the-leech-lattice-fused-multi-shell-deco.md|Unfolding the Leech Lattice: Fused Multi-Shell Decoding and ]]
 
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

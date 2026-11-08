@@ -24,3 +24,9 @@ _Wiki 축적 중_
 이해(판독)가 제어(조작)로 이어지는 연쇄가 서베이의 안전론 논증과 일치함을 확인하며, 판독-조작 이중성이 해석가능성의 실용적 가치의 근거임을 강화한다.
 
 → [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]
+
+### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
+
+서베이 차원에서 판독-조작 이중성이 기계론적 해석의 방법론적 본질임을 재확인한다. Deep Noir·BSD가 개별 실증한 read-to-manipulate 연쇄가 분야 전반의 일반 구조이며, 해석 감시가 안전 개입으로 자연 연결되는 근거임을 명문화한다.
+
+→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

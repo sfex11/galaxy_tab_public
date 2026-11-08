@@ -86,3 +86,9 @@ KV 캐시 최적화 논의에 '캐시 자체를 인덱스로 격상'이라는 �
 KV 캐시 최적화의 설계 공간을 압축·폐기·재사용에서 정밀도 티어링으로 확장한다 — KV 엔트리가 GPU에는 저정밀로, 호스트 RAM/SSD에는 고정밀 원본으로 공존하는 이중 계층 구조를 제시하여 캐시 관리가 정확도 예산 관리로 재정의될 수 있음을 시사한다.
 
 → [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
+
+### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+KV 캐시 저비트 양자화의 정확도 손실을 오프로딩된 고정밀 데이터의 선택적 정밀도 상승으로 회복하는 경로를 제공한다. 관리 질문이 '무엇을 압축할까'에서 '무엇을 어느 계층에 어떤 정밀도로 둘까'로 확장됨을 보여준다.
+
+→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
