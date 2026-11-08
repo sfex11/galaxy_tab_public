@@ -17,5 +17,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimi (2026-11-08)
-
-→ [[sources/2026-11-08-swarmevolve-latent-agent-swarms-for-evolutionary-d.md|상세 보기]]

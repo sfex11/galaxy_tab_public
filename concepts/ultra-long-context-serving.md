@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md|Latent Sparse Attention: Towards Subquadratic Ultra-Long Con]]
 
 ### CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse At (2026-11-04)
-
-→ [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]

@@ -79,10 +79,6 @@ autoresearch의 스코프를 '연구 단계 간 파이프라인 자동화'에서
 
 autoresearch가 연구 수행 자동화에 집중하는 동안 그 전제인 '연구 세계의 존재'를 문제화한다. 인간 과학자가 무의식적으로 활용하는 문헌의 개방형 문제·공유 아이디어가 AI에게는 실행 불가능한 텍스트이므로, autoresearch의 실질 진전에는 문헌 환경화라는 인프라 계층이 선행해야 함을 규정한다.
 
-→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]
-
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
 
 autoresearch의 스코프를 '연구 수행 자동화'에서 '연구 세계 구축 자동화'로 확장한다. 개별 연구 에이전트의 능력 문제가 아니라 에이전트 전체가 성장할 환경 인프라의 부재가 병목임을 보여준다.
-
-→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

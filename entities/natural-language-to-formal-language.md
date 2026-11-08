@@ -34,5 +34,3 @@ LTL 등 논리 언어뿐 아니라 공간 술어·CRS 메타데이터·위상 �
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
 번역의 어려움을 측정하는 진단 전통에 구조적 해법을 추가한다. 번역(LLM)과 추론(기호 솔버)을 계층 분리하여 의미 번역 오류가 추론 정확도를 좌우하지 않는 아키텍처를 Zebra 퍼즐 도메인에서 실증하며, 번역 대상이 LTL에서 정확 커버로 확장됨을 보여준다.
-
-→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-07)
 
 대역폭 제약이 명시적 설계 변수가 되면 '무엇을 보낼지'의 계획 문제가 인코딩 정책 설계로 구체화됨을 보여준다. 접근-계획 간극 논의에 물리 도메인 실증 무대를 제공한다.
-
-→ [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

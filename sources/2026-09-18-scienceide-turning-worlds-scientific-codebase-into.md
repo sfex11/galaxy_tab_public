@@ -84,3 +84,9 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/capability-incentive-multiplicative-risk.md|capability incentive multiplicative risk]]
+
+---
+**관련**: [[entities/ai-night-scientist.md|ai night scientist]]
+
+---
+**관련**: [[entities/scientific-discovery-capacity.md|scientific discovery capacity]]

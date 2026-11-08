@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Latent-Lens: Visual Perception in Small Language Models Through Latent (2026-11-03)
 
 신뢰 도메인 스펙트럼에 '학습된 정렬 계약으로 연결된 이종 쌍'이라는 새 층위를 추가한다. 동일 가중치도 표준 NL도 아닌 제3의 신뢰 구성이 등장함을 보여준다.
-
-→ [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]

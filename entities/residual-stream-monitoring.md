@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
 
 내부 표현 판독의 응용을 안전 감시·거부 감지에서 사회적 강압 하 준수 상태 예측으로 확장한다 — 선형 프로브라는 최소 판독기로 미발화 규칙 준수 붕괴를 예측할 수 있음을 입증한다.
-
-→ [[sources/2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

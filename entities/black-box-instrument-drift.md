@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
 
 드리프트의 원천이 모델 출력뿐 아니라 검증자와 평가 인프라의 노후화로 확장됨을 보여준다. 계측기 자체가 시간에 따라 변화하는 코드라는 점에서 드리프트 논의의 벤치마크 버전이다.
-
-→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

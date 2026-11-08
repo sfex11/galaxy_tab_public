@@ -70,3 +70,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/incremental-topology-construction.md|incremental topology construction]]
+
+---
+**관련**: [[entities/ontology-construction.md|ontology construction]]

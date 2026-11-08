@@ -69,10 +69,6 @@ autoresearch 계열이 구조화된 워크플로우 실행에 집중해온 것�
 
 연구 질문→실험 설계→실행→원고의 의미론적 번역 사슬이 다중 에이전트 분업과 상호 검증으로 구현되는 실측 사례를 제공한다. '의미론적 번역 자동화'라는 기존 정의에 상호 평가 계층이 추가된다.
 
-→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]
-
 ### FedReady: Bounded Agents for Federation Formation (2026-11-04)
 
 연구 워크플로우 자동화에 '다기관 ML 연구의 물리적 전제 구축(사이트·데이터·코드 준비)'을 추가한다. From Research Question 계열이 질문→명세 번역을 다뤘다면 본 논문은 명세 이후의 인프라 준비를 자동화하여 파이프라인의 하류를 채운다.
-
-→ [[sources/2026-11-04-fedready-bounded-agents-for-federation-formation.md|상세 보기]]

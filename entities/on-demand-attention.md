@@ -22,5 +22,3 @@ recall head가 전역 읽기 이익을 추정하는 판단이 극복해야 할 �
 ### Subquadratic Attention with a Hierarchical Tree-Structured Indexer (2026-11-03)
 
 EVI 기반 판단의 비용 측을 근본적으로 개선한다. recall head의 '언제 읽을까' 판단 구조는 유지하되 전역 읽기 자체가 subquadratic이 되면 지역 우선 디코딩의 비용-편익 균형이 재편되어, 판단 축과 비용 축이 분해 가능함을 시사한다.
-
-→ [[sources/2026-11-03-subquadratic-attention-with-a-hierarchical-tree-st.md|상세 보기]]

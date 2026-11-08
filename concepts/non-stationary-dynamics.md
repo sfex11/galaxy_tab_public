@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### TANDEM: Balancing Centralized and Decentralized Critics to Address the (2026-10-29)
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

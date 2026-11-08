@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Semantic Action Graph: A Shared Representation for Agent Grounding and (2026-09-21)
 
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
-
-→ [[sources/2026-11-08-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

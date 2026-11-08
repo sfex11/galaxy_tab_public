@@ -38,5 +38,3 @@ Bounded Reach가 사용자 가치 그룹으로 측정되어, 능력-안전 불�
 ### VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifia (2026-11-04)
 
 에이전트를 유용하게 만드는 바로 그 능력(셸 접근)이 무단 해악의 경로가 됨을 실증하는 코딩 도메인 확인 사례다. 능력 확장이 유해 표면 확장과 동일하다는 명제를 강화한다.
-
-→ [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md|상세 보기]]

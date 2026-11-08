@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
 
 MCP Tax의 에너지 비용 측면을 폐쇄형 법칙으로 정량화하는 근거를 제공한다. 스키마 오버헤드 토큰이 캐시에 영구 점유되어 이후 턴 전체의 한계 비용을 상승시키므로, 지연 스키마 로딩의 절감 효과가 토큰 수가 아닌 비용 증가 사슬 차단으로 재정의된다.
-
-→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

@@ -17,20 +17,20 @@ Chat은 여전히 LLM 태스크의 기본 서피스지만, 모델은 현재 대�
 
 ### 기존 Wiki와의 관계
 
-이 논문은 인프라 축과 능력 축의 경계를 **인터페이스 계층**에서 다시 문제화한다. [[interface-complexity-ambiguity]]와 [[machine-interpretable-interface-compliance]]가 인터페이스의 기계 판독 가능성을 에이전트 성공의 전제로 다뤘다면, 본 논문은 인터페이스를 *에이전트가 접근·조작하는 대상 자체*로 격상시킨다. 이는 [[dual-readership-interface]]의 이중 독자 설계와 상보적이다 — Affora가 인터페이스를 에이전트 친화적으로 *설계*했다면, 메타 접근은 기존 인터페이스 위에 *권한 기반 메타 뷰*를 얹는다.
+이 논문은 인프라 축과 능력 축의 경계를 **인터페이스 계층**에서 다시 문제화한다. [[concepts/interface-complexity-ambiguity.md|interface complexity ambiguity]]와 [[concepts/machine-interpretable-interface-compliance.md|machine interpretable interface compliance]]가 인터페이스의 기계 판독 가능성을 에이전트 성공의 전제로 다뤘다면, 본 논문은 인터페이스를 *에이전트가 접근·조작하는 대상 자체*로 격상시킨다. 이는 [[concepts/dual-readership-interface.md|dual readership interface]]의 이중 독자 설계와 상보적이다 — Affora가 인터페이스를 에이전트 친화적으로 *설계*했다면, 메타 접근은 기존 인터페이스 위에 *권한 기반 메타 뷰*를 얹는다.
 
-특히 사다리의 각 단계는 [[constrainability-over-predictability]]의 구속 문법과 정확히 대응한다. 하위 단계(튜터링, 메타데이터 접근)는 읽기 전용 접근이고, 상위 단계(confirmed mutation, 오케스트레이션)는 쓰기 권한을 부여하되 확인 절차로 구속한다. 이는 [[authority-delegation-topology]]에서 논의된 위임 범위의 동적 조정을 UI 도메인에 구체화한 사례다.
+특히 사다리의 각 단계는 [[concepts/constrainability-over-predictability.md|constrainability over predictability]]의 구속 문법과 정확히 대응한다. 하위 단계(튜터링, 메타데이터 접근)는 읽기 전용 접근이고, 상위 단계(confirmed mutation, 오케스트레이션)는 쓰기 권한을 부여하되 확인 절차로 구속한다. 이는 [[concepts/authority-delegation-topology.md|authority delegation topology]]에서 논의된 위임 범위의 동적 조정을 UI 도메인에 구체화한 사례다.
 
 ### 새로운 인사이트
 
-핵심은 **인터페이스 가시성이 능력의 일부**라는 재정의다. [[observation-artifact]]가 관측 채널의 손실이 실패 성분을 만든다고 진단했다면, 메타 접근은 그 진단의 처방 측이다 — 인터페이스 상태를 모델 컨텍스트에 구조적으로 노출함으로써 관측 인공물을 제거한다. 동시에 이는 [[gui-grounding]] 계열의 '화면을 보고 조작하는' 접근과 구별되는 경로다: 시각적 그라운딩이 픽셀→의미 번역을 요구한다면, 메타 접근은 번역 없이 구조화된 상태를 직접 제공한다. 픽셀 대신 명시적 상태라는 점에서 [[access-planning-gap]]의 접근 축을 인터페이스 도메인으로 이동시킨다.
+핵심은 **인터페이스 가시성이 능력의 일부**라는 재정의다. [[concepts/observation-artifact.md|observation artifact]]가 관측 채널의 손실이 실패 성분을 만든다고 진단했다면, 메타 접근은 그 진단의 처방 측이다 — 인터페이스 상태를 모델 컨텍스트에 구조적으로 노출함으로써 관측 인공물을 제거한다. 동시에 이는 [[concepts/gui-grounding.md|gui grounding]] 계열의 '화면을 보고 조작하는' 접근과 구별되는 경로다: 시각적 그라운딩이 픽셀→의미 번역을 요구한다면, 메타 접근은 번역 없이 구조화된 상태를 직접 제공한다. 픽셀 대신 명시적 상태라는 점에서 [[concepts/access-planning-gap.md|access planning gap]]의 접근 축을 인터페이스 도메인으로 이동시킨다.
 
 ### 연결점
 
-- [[affora]]: 인터페이스 설계 시점 해법 vs 런타임 메타 뷰라는 상보적 극점
-- [[computer-use-agent]]: CUA가 화면 상호작용의 일반 프레임이라면, 메타 접근은 그 하위의 구조화 경로
-- [[non-cognitive-oracle]]: confirmed mutation 단계는 사용자 확인이라는 외부 오라클을 변이 게이트로 내장
-- [[constrained-tool-access]]: 권한이 관리된 접근이라는 공통 설계 원칙
+- [[concepts/affora.md|affora]]: 인터페이스 설계 시점 해법 vs 런타임 메타 뷰라는 상보적 극점
+- [[concepts/computer-use-agent.md|computer use agent]]: CUA가 화면 상호작용의 일반 프레임이라면, 메타 접근은 그 하위의 구조화 경로
+- [[concepts/non-cognitive-oracle.md|non cognitive oracle]]: confirmed mutation 단계는 사용자 확인이라는 외부 오라클을 변이 게이트로 내장
+- [[concepts/constrained-tool-access.md|constrained tool access]]: 권한이 관리된 접근이라는 공통 설계 원칙
 
 ## 🔗 관련 논문
 

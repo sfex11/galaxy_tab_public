@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-30-failure-transparent-agents-benchmarking-post-failu.md|Failure-Transparent Agents: Benchmarking Post-Failure Report]]
 
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

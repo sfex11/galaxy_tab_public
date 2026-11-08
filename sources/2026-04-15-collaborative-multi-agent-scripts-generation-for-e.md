@@ -379,3 +379,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/layer-wise-functional-specialization.md|layer wise functional specialization]]
+
+---
+**관련**: [[entities/imperfect-perception.md|imperfect perception]]

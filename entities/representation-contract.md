@@ -42,5 +42,3 @@ _Wiki 축적 중_
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
 
 교사(순위 목록)와 학생(첫 토큰 스코어) 간 표현 계약 불일치의 실증 사례를 제공하며, 증류 단위의 이동(토큰→아이템)이 계약 재협상의 메커니즘으로 기능함을 보여준다.
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

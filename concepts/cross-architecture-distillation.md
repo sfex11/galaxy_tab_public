@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-01-turning-the-tide-cross-architecture-distillation-f.md|Turning the TIDE: Cross-Architecture Distillation for Diffus]]
 
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

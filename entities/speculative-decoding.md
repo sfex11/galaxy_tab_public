@@ -68,5 +68,3 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
 
 추측 디코딩이 타겟 분포를 보존하더라도 워터마크 같은 출력층 부가 신호는 거절-재샘플링 경계에서 소멸할 수 있음을 보여준다. 가속 기법과 출력 계보 신호의 상호작용이 '수용률 무변경'이라는 새 평가 조건을 부과한다.
-
-→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]

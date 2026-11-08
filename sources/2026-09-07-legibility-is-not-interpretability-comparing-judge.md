@@ -56,3 +56,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/mechanistic-swarm-interpretability.md|mechanistic swarm interpretability]]
+
+---
+**관련**: [[entities/decoupled-generative-guidance.md|decoupled generative guidance]]

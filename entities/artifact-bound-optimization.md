@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-07)
 
 아티팩트가 최적화 대상을 넘어 재현 노동의 축적 단위가 되는 제3의 위상을 제공한다 — 아티팩트의 경계가 성능 목표가 아니라 후속 독립 재현의 성공률을 결정하는 자산 경계로 재정의된다.
-
-→ [[sources/2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

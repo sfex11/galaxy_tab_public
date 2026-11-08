@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Should We Combine Our Data? Algorithms and Limits for Privately Assess (2026-11-04)
 
 가중치 공간 병합 간섭 논의에 데이터 공간 병합 간섭이라는 제2 축을 추가한다. 병합 간섭이 파라미터와 데이터 양쪽에서 독립적으로 관찰됨을 보여, 병합의 비가산성이 모델-데이터 양축에 걸친 일반 속성임을 시사한다.
-
-→ [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md|상세 보기]]

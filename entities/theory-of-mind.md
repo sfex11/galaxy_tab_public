@@ -39,10 +39,6 @@ _Wiki 축적 중_
 
 상대 에이전트의 무지를 전제로 하는 정보 은폐가 게임 성패를 좌우하므로, 마음 이론이 기만 실행의 기계적 전제조건으로 연산화된다. log(N)-Questions 게임이 질문-응답 구도에서 ToM을 연산화한 것과 병렬로, 기만 구도에서의 ToM 요구도 측정 가능한 대상이 된다.
 
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]
-
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
 
 상대가 서로를 자연스럽게 예측·조정한다는 상호 예측 구조를 물리 운동 도메인에서 구현하여, 마음 이론의 대상이 언어적 신념 모델링을 넘어 파트너 미래 모션의 예측 모델링으로 확장될 수 있음을 시사한다.
-
-→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

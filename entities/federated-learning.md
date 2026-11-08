@@ -31,10 +31,6 @@ Lifecycle-Aware 논문이 모바일 도메인의 연속학습·레이어별 망�
 
 연합 학습의 참여 결정 문제를 공식화한다. 데이터를 통합할지 자체가 참여 전 사전 평가 대상이며, 연합의 이득이 데이터 이질성에 조건부임을 이론적으로 정립하여 참여 최적화의 이론적 기반을 제공한다.
 
-→ [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md|상세 보기]]
-
 ### FedReady: Bounded Agents for Federation Formation (2026-11-04)
 
 기존 Wiki의 FL 논의(Lifecycle-Aware의 연속학습, Component-Aware DP의 훈련 중 프라이버시)가 학습 과정 내부에 집중했다면, 본 논문은 학습 이전의 준비 단계가 표준화 공백임을 진단하여 FL 연구의 스코프를 훈련에서 준비로 확장한다.
-
-→ [[sources/2026-11-04-fedready-bounded-agents-for-federation-formation.md|상세 보기]]

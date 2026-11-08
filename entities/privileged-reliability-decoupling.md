@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 특권 참조가 교사를 구성하는 정보원임을 OPSD 맥락에서 재확인하고, 특권 정보의 노출 관리가 응답 단위 제어를 넘어 토큰 단위 세밀 제어의 대상으로 확장됨을 보여준다.
 
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]
-
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
 
 교사가 문서들의 순차 비교라는 특권 참조로 선호를 산출하는 구조를, 학생이 단일 순전파 스코어로 내면화하는 경로를 제시한다. 특권 정보가 증류를 통해 학생 파라미터로 흡수되는 사례다.
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

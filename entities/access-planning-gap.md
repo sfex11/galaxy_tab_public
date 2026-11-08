@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
 
 접근-기획 간극의 인터페이스 도메인 변형을 제공한다. 대화 컨텍스트에 접근하는 것만으로는 충분하지 않고, 워크스페이스 상태에 대한 접근이 별도의 계층으로 필요함을 보여준다. 접근의 대상이 환경·증거에서 UI 상태로 확장됨을 시사한다.
-
-→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
 
 스테이지 수준 교사 감독 적응의 다음 단계인 토큰 수준 적응을 실현하여, 감독 적응 입도 정교화 논의가 최소 입도에 도달했음을 확정한다. 입도 정교화 축의 하한 사례가 된다.
-
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

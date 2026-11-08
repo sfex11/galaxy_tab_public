@@ -25,8 +25,4 @@ _Wiki 축적 중_
 
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
 
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]
-
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
-
-→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

@@ -245,3 +245,9 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/trace-optimized-attack.md|trace optimized attack]]
+
+---
+**관련**: [[entities/visual-grounding.md|visual grounding]]
+
+---
+**관련**: [[entities/interpretability-grounding-privilege.md|interpretability grounding privilege]]

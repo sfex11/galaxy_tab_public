@@ -20,5 +20,3 @@ _자동 Wiki Query에서 추출됨_
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
 
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
-
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

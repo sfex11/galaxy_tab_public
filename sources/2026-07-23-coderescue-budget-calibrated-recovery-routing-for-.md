@@ -168,3 +168,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/code-qa-execution-measurement-gap.md|code qa execution measurement gap]]
+
+---
+**관련**: [[entities/execution-topology-invariance.md|execution topology invariance]]

@@ -21,11 +21,11 @@ FedReady는 정보 접근이 제한된(bounded) LLM 에이전트들로 이 준�
 
 ## 기존 Wiki와의 관계
 
-- [[federated-learning]]: 기존 논의가 훈련 중 문제(연속학습·DP 예산)에 집중했다면, 본 논문은 학습 이전 준비 단계가 표준화 공백임을 진단한다.
-- [[structural-isolation]]: 메시지 수준 정보 배제는 DP와 대비되는 구조적 격리로, 에이전트 자동화가 그 안에서 성립함을 보여준다.
-- [[infrastructure-function-as-agent-action]]: 수동 준비 작업의 에이전트 액션 격상 사례. [[roboarchitect]](하네스 설계 자동화)·Gym-Anything(환경 저작)과 함께 '에이전트 = 인프라 준비자' 패턴의 FL 도메인 착지점.
-- [[data-sovereignty]]: 데이터가 사이트에 머무는 전제 하의 교차 사이트 자동화 방법을 제시한다.
-- [[scientific-workflow-agent]]: 다기관 연구의 물리적 전제 구축을 워크플로우 자동화 대상에 편입한다.
+- [[concepts/federated-learning.md|federated learning]]: 기존 논의가 훈련 중 문제(연속학습·DP 예산)에 집중했다면, 본 논문은 학습 이전 준비 단계가 표준화 공백임을 진단한다.
+- [[concepts/structural-isolation.md|structural isolation]]: 메시지 수준 정보 배제는 DP와 대비되는 구조적 격리로, 에이전트 자동화가 그 안에서 성립함을 보여준다.
+- [[concepts/infrastructure-function-as-agent-action.md|infrastructure function as agent action]]: 수동 준비 작업의 에이전트 액션 격상 사례. [[entities/roboarchitect.md|roboarchitect]](하네스 설계 자동화)·Gym-Anything(환경 저작)과 함께 '에이전트 = 인프라 준비자' 패턴의 FL 도메인 착지점.
+- [[concepts/data-sovereignty.md|data sovereignty]]: 데이터가 사이트에 머무는 전제 하의 교차 사이트 자동화 방법을 제시한다.
+- [[entities/scientific-workflow-agent.md|scientific workflow agent]]: 다기관 연구의 물리적 전제 구축을 워크플로우 자동화 대상에 편입한다.
 
 ## 인사이트
 

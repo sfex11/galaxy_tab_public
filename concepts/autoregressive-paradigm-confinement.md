@@ -19,5 +19,3 @@ _자동 Wiki Query에서 추출됨_
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
 
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
-
-→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

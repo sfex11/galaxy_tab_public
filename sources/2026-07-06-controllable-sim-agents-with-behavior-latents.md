@@ -58,3 +58,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/controllable-opinion-dynamics.md|controllable opinion dynamics]]
+
+---
+**관련**: [[entities/lossy-serialization-channel.md|lossy serialization channel]]

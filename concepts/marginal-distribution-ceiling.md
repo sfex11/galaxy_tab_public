@@ -28,5 +28,3 @@ _자동 Wiki Query에서 추출됨_
 ### Multi-agent Scaling Across Disjunctive and Compensatory Tasks (2026-09-29)
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

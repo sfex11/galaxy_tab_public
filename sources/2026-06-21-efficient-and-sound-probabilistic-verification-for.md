@@ -352,3 +352,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-side-adaptation-stratification.md|environment side adaptation stratification]]
+
+---
+**관련**: [[entities/narrative-state-tracking.md|narrative state tracking]]
+
+---
+**관련**: [[entities/recurrent-state-quantization.md|recurrent state quantization]]
+
+---
+**관련**: [[entities/verification-as-agentic-exploration.md|verification as agentic exploration]]

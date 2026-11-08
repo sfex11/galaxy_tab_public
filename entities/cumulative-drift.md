@@ -18,5 +18,3 @@ drift가 매 학습 스텝마다 누적되며 안정성을 침식하는 동역�
 ### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
 
 드리프트 누적 동역학의 네트워크 층 대응물을 제공한다. 엔진 드리프트가 스텝마다 누적되어 수치 안정성을 침식하듯, 확률적 환경 노이즈의 지속 노출이 네트워크의 학습 가능성을 점진적으로 침식하는 병렬 구조를 제시한다.
-
-→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

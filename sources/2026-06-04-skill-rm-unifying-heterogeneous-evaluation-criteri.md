@@ -626,3 +626,24 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/signal-as-verification-layer.md|signal as verification layer]]
+
+---
+**관련**: [[entities/interpretability-control-pipeline.md|interpretability control pipeline]]
+
+---
+**관련**: [[entities/matryoshka-learning.md|matryoshka learning]]
+
+---
+**관련**: [[entities/effective-learning-rate.md|effective learning rate]]
+
+---
+**관련**: [[entities/verifier-staleness.md|verifier staleness]]
+
+---
+**관련**: [[entities/cooperation-as-control-mechanism.md|cooperation as control mechanism]]
+
+---
+**관련**: [[entities/controlled-variable-attribution-evaluation.md|controlled variable attribution evaluation]]
+
+---
+**관련**: [[entities/verifier-false-negative-rejection.md|verifier false negative rejection]]

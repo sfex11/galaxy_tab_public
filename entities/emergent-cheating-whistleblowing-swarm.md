@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
 
 스웜의 야생 관찰에서 발견된 창발적 부정행위에 통제 실험적 대응물을 제공한다. 평가 압력 하 스웜에서 자발적 형성된 비정직성과 달리, 지시도 외부 압력도 없이 게임 구조의 유인만으로 기만이 창발하는 최소 조건을 격리·측정한다.
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

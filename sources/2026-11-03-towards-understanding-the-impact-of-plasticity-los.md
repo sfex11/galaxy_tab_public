@@ -17,14 +17,14 @@
 
 ## Wiki 내 위치: 안정성 논의의 표상 층위 확장
 
-기존 wiki의 RL 안정성 논의는 알고리즘-인프라 층에 집중했다. [[score-centering]]이 훈련-추론 엔진 간 계통적 편향(drift)을 제거했고 [[cumulative-drift]]가 그 누적 동역학을 규명했다. 본 논문은 이 구도에 **표상 층**의 제3 축을 추가한다 — 확률적 노이즈가 엔진 드리프트와 별개로 네트워크의 적응 능력 자체를 침식하는 plasticity-loss를 유발함. [[bias-noise-decoupling]]의 노이즈-편향 구분이 알고리즘 층을 넘어 네트워크 층까지 확장된다.
+기존 wiki의 RL 안정성 논의는 알고리즘-인프라 층에 집중했다. [[entities/score-centering.md|score centering]]이 훈련-추론 엔진 간 계통적 편향(drift)을 제거했고 [[concepts/cumulative-drift.md|cumulative drift]]가 그 누적 동역학을 규명했다. 본 논문은 이 구도에 **표상 층**의 제3 축을 추가한다 — 확률적 노이즈가 엔진 드리프트와 별개로 네트워크의 적응 능력 자체를 침식하는 plasticity-loss를 유발함. [[concepts/bias-noise-decoupling.md|bias noise decoupling]]의 노이즈-편향 구분이 알고리즘 층을 넘어 네트워크 층까지 확장된다.
 
 ## 연결점
 
-- [[continual-learning]]: 플라스티시티 손실은 연속 학습 실패의 기제론적 병인이다. 문제가 '망각 관리'에서 '학습 가능성 보존'으로 확장됨을 RL 도메인에서 확정한다.
-- [[false-positive-convergence]]: 낮은 수준의 안정적 보상에 정착한 상태가 환경 이해의 성과가 아니라 플라스티시티 붕괴의 발현일 수 있어, 수렴 판정에 학습 가능성 진단이 전제된다.
-- [[training-inference-mismatch]]: TIM(수치 층)과 플라스티시티 손실(표상 층)은 상이한 원인과 처방을 가지는 병렬 병리로, 훈련 불안정의 이중 층위 구조를 완성한다.
-- [[negative-rollout-noise]]: 환경 노이즈(외부 기인)와 롤아웃 노이즈(상호작용 기인)는 서로 다른 오염 경로이지만 학습 신호 품질을 침식한다는 공통점을 공유한다.
+- [[concepts/continual-learning.md|continual learning]]: 플라스티시티 손실은 연속 학습 실패의 기제론적 병인이다. 문제가 '망각 관리'에서 '학습 가능성 보존'으로 확장됨을 RL 도메인에서 확정한다.
+- [[concepts/false-positive-convergence.md|false positive convergence]]: 낮은 수준의 안정적 보상에 정착한 상태가 환경 이해의 성과가 아니라 플라스티시티 붕괴의 발현일 수 있어, 수렴 판정에 학습 가능성 진단이 전제된다.
+- [[concepts/training-inference-mismatch.md|training inference mismatch]]: TIM(수치 층)과 플라스티시티 손실(표상 층)은 상이한 원인과 처방을 가지는 병렬 병리로, 훈련 불안정의 이중 층위 구조를 완성한다.
+- [[concepts/negative-rollout-noise.md|negative rollout noise]]: 환경 노이즈(외부 기인)와 롤아웃 노이즈(상호작용 기인)는 서로 다른 오염 경로이지만 학습 신호 품질을 침식한다는 공통점을 공유한다.
 
 ## 🔗 관련 논문
 

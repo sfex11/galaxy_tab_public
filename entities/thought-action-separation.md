@@ -42,5 +42,3 @@ _Wiki 축적 중_
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
 
 고수준 사회적 모션 시퀀스 모델링과 저수준 29-DoF 전신 제어의 계층 분리가 사회적 반응성과 운동 정밀도라는 이중 요구의 해법으로 작동함을 실증한다.
-
-→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

@@ -17,14 +17,14 @@
 
 ## 아키텍처와 Wiki 연결
 
-- **고수준 정책**: 인간·휴머노이드 모션을 공유 토큰 표현으로 유연하게 시퀀스 모델링 ([[shared-motion-token-space]])
-- **저수준**: 전신 물리 제어 — [[low-frequency-planning-high-frequency-execution]]의 주파수 분리가 휴머노이드 도메인에서 구현된 사례
+- **고수준 정책**: 인간·휴머노이드 모션을 공유 토큰 표현으로 유연하게 시퀀스 모델링 ([[concepts/shared-motion-token-space.md|shared motion token space]])
+- **저수준**: 전신 물리 제어 — [[concepts/low-frequency-planning-high-frequency-execution.md|low frequency planning high frequency execution]]의 주파수 분리가 휴머노이드 도메인에서 구현된 사례
 
 ## Wiki 내 위치
 
-1. [[anticipatory-social-coordination]]의 원천: 사회적 조율을 반응적 추종이 아닌 '상대 미래 동작의 예측적 생성'으로 정의한다.
-2. [[communication-free-coordination]] 확장: 명시적 통신 채널 없이 파트너 모션 관찰만으로 전신 조율이 성립하는 인간-휴머노이드 쌍을 무통신 조율 스펙트럼에 추가한다 (Formation Matrix의 에너지 기반 무통신 형성 제어와 병렬).
-3. [[partner-conditioned-motion-generation]]: 모션 생성의 조건 변수가 텍스트 목표에서 상대의 실시간 모션 스트림으로 이동함을 실증한다.
+1. [[concepts/anticipatory-social-coordination.md|anticipatory social coordination]]의 원천: 사회적 조율을 반응적 추종이 아닌 '상대 미래 동작의 예측적 생성'으로 정의한다.
+2. [[concepts/communication-free-coordination.md|communication free coordination]] 확장: 명시적 통신 채널 없이 파트너 모션 관찰만으로 전신 조율이 성립하는 인간-휴머노이드 쌍을 무통신 조율 스펙트럼에 추가한다 (Formation Matrix의 에너지 기반 무통신 형성 제어와 병렬).
+3. [[concepts/partner-conditioned-motion-generation.md|partner conditioned motion generation]]: 모션 생성의 조건 변수가 텍스트 목표에서 상대의 실시간 모션 스트림으로 이동함을 실증한다.
 
 ## 연결점
 

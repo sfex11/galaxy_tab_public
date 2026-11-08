@@ -36,5 +36,3 @@ _Wiki 축적 중_
 ### Understanding the limits of latent world models (2026-10-30)
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

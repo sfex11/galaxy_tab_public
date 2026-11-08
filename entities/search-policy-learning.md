@@ -26,5 +26,3 @@ Beyond Repeated Sampling이 추론 시점의 의미 수준 조향으로 반복 �
 ### Not All Reasoning Generalizes: A Case Study on Learning Generalizable  (2026-11-04)
 
 훈련 시점 전략 학습과 테스트타임 탐색 정책 학습의 연속성을 제공한다. RLVR 훈련이 일반화 가능한 전략을 선별 유도하는 표적이 된다면, 탐색 정책 학습은 그 전략의 런타임 활용 경로가 되어 훈련-추론이 동일 전략 단위로 정렬되어야 함을 시사한다.
-
-→ [[sources/2026-11-04-not-all-reasoning-generalizes-a-case-study-on-lear.md|상세 보기]]

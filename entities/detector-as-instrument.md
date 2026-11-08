@@ -35,10 +35,6 @@ _Wiki 축적 중_
 
 TextSeal의 코인 플립 키 라우팅이 검출기의 점수 평균화로 신호를 희석하는 사례는, 검출기의 측정 신뢰성이 신호 생성 측의 키 배치 설계에 의존함을 보여준다. 계측기 품질이 생성 메커니즘 설계와 결합되는 구조를 워터마크 도메인에서 실증한다.
 
-→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]
-
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
 
 내부 표현을 계측기로 삼는 감시 축이 서베이의 핵심 안전 응용으로 명시되어, 판독이 개입으로 연결되는 이해-제어 파이프라인의 구성요소임이 확정된다.
-
-→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

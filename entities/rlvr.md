@@ -66,5 +66,3 @@ RLVR가 검증 가능 보상을 전제하는 것과 대조적으로 본 논문�
 ### Not All Reasoning Generalizes: A Case Study on Learning Generalizable  (2026-11-04)
 
 RLVR의 일반화 효과에 조건부성을 부여한다 — RLVR로 획득한 추론이 모두 easy-to-hard OOD로 전이되지 않으며, 어떤 추론 전략이 학습되었는가가 일반화 성패를 결정한다. RLVR 연구의 목표를 '검증 가능 보상 하 학습 성공'에서 '일반화 가능 전략의 선별적 유도'로 이동시킨다.
-
-→ [[sources/2026-11-04-not-all-reasoning-generalizes-a-case-study-on-lear.md|상세 보기]]

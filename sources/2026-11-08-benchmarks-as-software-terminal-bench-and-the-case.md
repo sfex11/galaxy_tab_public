@@ -18,10 +18,10 @@
 핵심 발견: 개선된 모델이 기존 검증자가 거부하는 '유효한 해'를 발견하는 **verifier-staleness**는 포화·과적합과 다른 기기 자체의 판정 오류다. 고정 벤치마크 전제의 '두 번째 균열'로, verifier-false-negative-rejection과 직결된다.
 
 기존 Wiki와의 연결:
-- [[benchmark-obsolescence]]: 측정 대상 이동 vs 측정기기 고정의 **parasitic-measurement-fixation** 구조를 공유
-- [[adaptive-validity]]: 벤치마크 타당성 자체를 '유지보수 루프의 출력'으로 보는 benchmark-validity-as-maintenance-output 논리를 확장
-- [[black-box-instrument-drift]]: 측정 도구의 시간적 드리프트라는 공통 위상
-- [[agentic-harness-engineering]]: '평가 계약으로서의 하네스'가 측정-실행 인프라 결합하에 진부화하는 양상
+- [[concepts/benchmark-obsolescence.md|benchmark obsolescence]]: 측정 대상 이동 vs 측정기기 고정의 **parasitic-measurement-fixation** 구조를 공유
+- [[concepts/adaptive-validity.md|adaptive validity]]: 벤치마크 타당성 자체를 '유지보수 루프의 출력'으로 보는 benchmark-validity-as-maintenance-output 논리를 확장
+- [[concepts/black-box-instrument-drift.md|black box instrument drift]]: 측정 도구의 시간적 드리프트라는 공통 위상
+- [[entities/agentic-harness-engineering.md|agentic harness engineering]]: '평가 계약으로서의 하네스'가 측정-실행 인프라 결합하에 진부화하는 양상
 
 의미: '지속 벤치마크'는 단순 자동 갱신이 아니라, 갱신·버저닝·재현 절차가 소프트웨어처럼 정식화되어야 한다는 요구다. 이는 dynamic-evaluation-landscape와 evaluator-assumption 비판 계열의 후속 정교화다.
 

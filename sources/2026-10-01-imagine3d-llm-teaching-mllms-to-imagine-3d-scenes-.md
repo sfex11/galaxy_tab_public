@@ -95,3 +95,21 @@ _자동 생성될_
 
 ---
 **관련**: [[concepts/evidence-channel-meta-monitoring.md|evidence channel meta monitoring]]
+
+---
+**관련**: [[entities/scientist-world.md|scientist world]]
+
+---
+**관련**: [[entities/dependency-aware-skill-orchestration.md|dependency aware skill orchestration]]
+
+---
+**관련**: [[entities/tool-call-side-effect-spectrum.md|tool call side effect spectrum]]
+
+---
+**관련**: [[entities/process-level-equivalence-comparison.md|process level equivalence comparison]]
+
+---
+**관련**: [[entities/meta-level-instrument-drift.md|meta level instrument drift]]
+
+---
+**관련**: [[entities/modal-answer-asymptote.md|modal answer asymptote]]

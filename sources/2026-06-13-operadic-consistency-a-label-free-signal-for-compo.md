@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/compositional-harm.md|compositional harm]]
+
+---
+**관련**: [[entities/compositional-incoherence.md|compositional incoherence]]

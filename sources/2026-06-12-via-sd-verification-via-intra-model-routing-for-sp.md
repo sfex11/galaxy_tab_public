@@ -56,3 +56,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/lightweight-executor.md|lightweight executor]]
+
+---
+**관련**: [[entities/lightweight-executor.md|lightweight executor]]

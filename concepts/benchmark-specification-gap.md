@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

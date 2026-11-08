@@ -22,5 +22,3 @@ same-instance vs cross-instance 보상의 대비가 코칭 지식의 전이 가�
 ### Not All Reasoning Generalizes: A Case Study on Learning Generalizable  (2026-11-04)
 
 일반화 논의에 난이도 축(easy-to-hard OOD) 차원을 추가한다. 도메인·배포 축의 일반화 간극과 별개로, 동일 분포 구조 내 난이도 상승에 대한 추론 전략의 전이 가능성이 독립 측정 변수임을 통제 실험으로 실증한다.
-
-→ [[sources/2026-11-04-not-all-reasoning-generalizes-a-case-study-on-lear.md|상세 보기]]

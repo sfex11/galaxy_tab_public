@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Should We Combine Our Data? Algorithms and Limits for Privately Assess (2026-11-04)
 
 개별 데이터셋이 독립적으로 완벽 분류 가능해도 결합 시 호환되지 않을 수 있음을 이론적으로 증명하여, 독립성 가정 붕괴의 데이터 축 사례를 제공한다. 구성요소의 개별 품질이 결합 품질과 구조적으로 분리됨을 데이터 공유 도메인에서 확정한다.
-
-→ [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md|상세 보기]]

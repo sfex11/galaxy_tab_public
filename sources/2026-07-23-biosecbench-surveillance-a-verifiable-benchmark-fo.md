@@ -218,3 +218,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/phase-to-substrate-axis-shift.md|phase to substrate axis shift]]
+
+---
+**관련**: [[entities/task-structure-fidelity-gap.md|task structure fidelity gap]]
+
+---
+**관련**: [[entities/indexer-quadratic-bottleneck.md|indexer quadratic bottleneck]]

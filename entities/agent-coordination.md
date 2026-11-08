@@ -27,10 +27,6 @@ _Wiki 축적 중_
 
 조정의 대상을 에이전트 간 통신에서 인간-휴머노이드 이형 쌍의 물리 조율로 확장하며, 상호 예측 기반 무통신 조정이라는 새로운 조정 양식을 추가한다.
 
-→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]
-
 ### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-07)
 
 물리 다중 에이전트 조율에서 원시 센서 데이터 교환 대신 중간 표현 교환으로 통신 비용을 절감하는 경로를 제공한다. 데이터 수준 조율과 대비되는 표현 수준 조율이라는 제2 축을 연다.
-
-→ [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

@@ -87,16 +87,10 @@ Gym-Anything 계열의 물리 시뮬레이션 확장을 제공한다. 원래 Gym
 
 Gym-Anything의 범용 소프트웨어→환경 변환 경로가 물리 시뮬레이션으로 확장되어, 코딩 에이전트가 로봇 시뮬레이션을 저작하는 새 축을 추가한다. 환경 생성이 디지털 에이전트 생태계 내부 문제에서 체화 AI 훈련 인프라의 공급자로 위상이 확대됨을 보여준다.
 
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
-
 ### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
 
 환경 생성의 원료 축에 '실제 웹사이트'라는 외부 실세계 아티팩트를 추가한다. Terminal-Universe가 자체 궤적에서, Gym-Anything이 소프트웨어에서 환경을 유도했다면, WebHarbor는 실제 사이트의 구조를 도킹하여 재구성함으로써 합성이 실세계 접지를 획득하는 제3의 원료 경로를 제시한다.
 
-→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]
-
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
 
 환경 합성의 원료 클래스에 '과학 문헌'을 추가한다. 소프트웨어(Gym-Anything), 코드(CodeMidas), 궤적(Terminal-Universe)에 이어 문헌이 원시자원이 되며, 베이스라인 재현이라는 검증 계층이 합성 환경의 타당성을 접지한다.
-
-→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

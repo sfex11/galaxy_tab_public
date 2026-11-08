@@ -35,10 +35,6 @@ _Wiki 축적 중_
 
 코딩 에이전트의 코드 저작 방법론이 물리 시뮬레이션 저작이라는 체화 인프라 작업으로 이식되는 사례를 제공한다. 이식되는 것이 제어기 코드가 아닌 '환경 그 자체'라는 점에서 이식의 성격을 확장한다.
 
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
-
 ### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
 
 관찰 기반 하네스 개정(롤아웃 진단→코드 수정) 방법론의 물리 도메인 이식 사례를 제공하여, 코딩 에이전트 방법론과 로봇공학의 이동 축을 강화한다.
-
-→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

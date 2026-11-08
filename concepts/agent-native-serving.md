@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-30-pythia-toward-predictability-driven-agent-native-l.md|Pythia: Toward Predictability-Driven Agent-Native LLM Servin]]
 
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
-
-→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

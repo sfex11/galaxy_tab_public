@@ -35,10 +35,6 @@ _Wiki 축적 중_
 
 1M+ 토큰 규모에서 full attention이 불가능하다는 전제를 실증적 배경으로 제공한다. 장기 컨텍스트 논의가 '더 긴 컨텍스트 윈도우'에서 'subquadratic 어텐션 아키텍처'로 이동하고 있으며, 특히 agentic workflow가 이 전환의 주요 동기임을 명시한다.
 
-→ [[sources/2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md|상세 보기]]
-
 ### Subquadratic Attention with a Hierarchical Tree-Structured Indexer (2026-11-03)
 
 2차 어텐션이 '근본적 병목'이라는 전제에 대한 점근적 반증을 제공한다. 장기 컨텍스트의 스케일링 장벽이 아키텍처 불변량이 아니라 인덱싱 구조의 설계 문제일 수 있음을 규정한다.
-
-→ [[sources/2026-11-03-subquadratic-attention-with-a-hierarchical-tree-st.md|상세 보기]]

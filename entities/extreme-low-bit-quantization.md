@@ -27,10 +27,6 @@ MAs의 발생 원인을 아키텍처 구조로 설명함으로써, Leech Lattice
 
 Leech Lattice 계열이 융합 커널로 저비트 형식 자체를 최적화했다면, StrataFlux는 저비트의 정확도 손실을 메모리 계층 상위의 고정밀 정제로 회복하는 보완 축을 제공한다. 양자화 품질의 귀속이 표현 형식 설계에서 계층 배치 설계로 확장됨을 보여준다.
 
-→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
-
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
 
 Leech Lattice 계열이 커널·디코딩 수준에서 저비트 양자화 오차를 다뤘다면, StrataFlux는 메모리 계층 수준에서 정밀 데이터의 선택적 전달로 동일 문제를 공략한다. 저비트 양자화의 실용화가 단일 계층 기법이 아니라 커널-시스템 협업 설계의 산물임을 보여준다.
-
-→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-19-how-does-distribution-shift-shape-pretraining-gain.md|How Does Distribution Shift Shape Pretraining Gains in Neura]]
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

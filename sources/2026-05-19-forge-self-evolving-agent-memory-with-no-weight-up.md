@@ -637,3 +637,18 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/use-time-memory-validation.md|use time memory validation]]
+
+---
+**관련**: [[entities/exogenous-evolution.md|exogenous evolution]]
+
+---
+**관련**: [[entities/swarm-evolve.md|swarm evolve]]
+
+---
+**관련**: [[entities/item-space-distillation.md|item space distillation]]
+
+---
+**관련**: [[entities/hidden-profile-memory-failure.md|hidden profile memory failure]]
+
+---
+**관련**: [[entities/observation-artifact.md|observation artifact]]

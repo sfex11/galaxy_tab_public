@@ -54,3 +54,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/self-interpreter-improvement.md|self interpreter improvement]]
+
+---
+**관련**: [[entities/meta-access-ladder.md|meta access ladder]]

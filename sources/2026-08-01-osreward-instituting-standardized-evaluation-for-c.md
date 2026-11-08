@@ -40,3 +40,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/llm-as-annotator.md|llm as annotator]]
+
+---
+**관련**: [[entities/kradle-platform.md|kradle platform]]

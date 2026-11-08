@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
 신경-기호 결합의 역할 반전 사례를 제공한다. CPS 반증에서 LLM이 형식 오라클을 구동하는 최적화기였다면, 본 논문은 LLM을 의미 번역자로 격하하고 기호 솔버를 추론 주체로 승격하여 역할 배분이 설계 자유 변수임을 확정한다.
-
-→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

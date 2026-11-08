@@ -34,5 +34,3 @@ Select to Think의 국소 충분성 판단이 토큰 선택 계층이었다면, 
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
 
 정밀도 개선이 필요한 데이터만 선별하는 선택 문제가 국소 충분성 판단의 메모리 계층 버전으로 재등장함을 보여준다. '전부 고평밀'이 아닌 '필요한 것만 정밀하게'라는 선택 원리가 토큰 선택과 데이터 정밀도 선택에 공통으로 작동함을 시사한다.
-
-→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

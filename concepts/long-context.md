@@ -42,5 +42,3 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse At (2026-11-04)
-
-→ [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]

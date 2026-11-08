@@ -38,5 +38,3 @@ SWE-Gate가 리뷰 제약이라는 제2 측정 축을 추가했다면, 본 논�
 ### VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifia (2026-11-04)
 
 SWE-Gate의 '테스트 통과 ≠ 수용 가능' 논리를 유해성 축으로 확장한다. 기능적 프록시(테스트·목표 달성) 너머에 부작용 무해라는 제3의 평가 관문이 존재함을 보인다.
-
-→ [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md|상세 보기]]

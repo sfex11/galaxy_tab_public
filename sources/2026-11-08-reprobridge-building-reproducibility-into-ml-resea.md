@@ -17,11 +17,11 @@ ML 실험 재현은 논문·코드·부속 아티팩트에 흩어진 정보에�
 
 ## Wiki 관계
 
-- [[scientific-finding-reproducibility]]: 재현성의 질문을 "에이전트가 재현할 수 있는가"에서 "복구 지식이 어떻게 지속 가능한가"로 이동시킨다. 재현 성패가 에이전트 능력이 아니라 복구 산출물의 보존 여부에 조건부임을 확정한다.
-- [[document-centric-research-infrastructure]]: [[intern-atlas]]가 방법론 관계 그래프를 제공했다면 본 논문은 아티팩트가 복구된 재현 절차의 운반체로 기능함을 추가하고, 인프라 소비자에 '재현 에이전트'를 명시한다.
-- [[specification-incompleteness-propagation]]: 불완결 명세가 하류로 전파되는 병리에 복구 결정의 아티팩트 역주입이라는 차단 경로를 제공한다.
-- [[ideaambig]]: IdeaAMBIG이 아이디어→명세 간극을 측정 진단한다면, 본 논문은 방출 아티팩트→재현 간극을 복구 아티팩트로 메우는 해법 축이다.
-- [[rapid]]·[[reproducible-specification-generation]]: 시연→테스트 명세 컴파일(RAPID)과 설계 문서→재생성 원천(Design Docs)과 동형으로, 암묵적 복구 노동을 표준화·재사용 가능한 아티팩트로 컴파일하는 패턴을 재현 도메인에서 확정한다.
+- [[concepts/scientific-finding-reproducibility.md|scientific finding reproducibility]]: 재현성의 질문을 "에이전트가 재현할 수 있는가"에서 "복구 지식이 어떻게 지속 가능한가"로 이동시킨다. 재현 성패가 에이전트 능력이 아니라 복구 산출물의 보존 여부에 조건부임을 확정한다.
+- [[concepts/document-centric-research-infrastructure.md|document centric research infrastructure]]: [[entities/intern-atlas.md|intern atlas]]가 방법론 관계 그래프를 제공했다면 본 논문은 아티팩트가 복구된 재현 절차의 운반체로 기능함을 추가하고, 인프라 소비자에 '재현 에이전트'를 명시한다.
+- [[concepts/specification-incompleteness-propagation.md|specification incompleteness propagation]]: 불완결 명세가 하류로 전파되는 병리에 복구 결정의 아티팩트 역주입이라는 차단 경로를 제공한다.
+- [[entities/ideaambig.md|ideaambig]]: IdeaAMBIG이 아이디어→명세 간극을 측정 진단한다면, 본 논문은 방출 아티팩트→재현 간극을 복구 아티팩트로 메우는 해법 축이다.
+- [[entities/rapid.md|rapid]]·[[concepts/reproducible-specification-generation.md|reproducible specification generation]]: 시연→테스트 명세 컴파일(RAPID)과 설계 문서→재생성 원천(Design Docs)과 동형으로, 암묵적 복구 노동을 표준화·재사용 가능한 아티팩트로 컴파일하는 패턴을 재현 도메인에서 확정한다.
 
 ## 🔗 관련 논문
 

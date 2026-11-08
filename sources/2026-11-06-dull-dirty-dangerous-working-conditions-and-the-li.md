@@ -31,3 +31,18 @@ _없음_
 ## 메모
 
 _자동 생성됨_
+
+---
+**관련**: [[entities/equivariance-condition.md|equivariance condition]]
+
+---
+**관련**: [[entities/cross-session-compaction.md|cross session compaction]]
+
+---
+**관련**: [[entities/tool-use-agent-training-data.md|tool use agent training data]]
+
+---
+**관련**: [[entities/cross-llm-kv-cache-transfer.md|cross llm kv cache transfer]]
+
+---
+**관련**: [[entities/training-trajectory-analysis.md|training trajectory analysis]]

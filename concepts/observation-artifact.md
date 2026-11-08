@@ -18,5 +18,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
-
-→ [[sources/2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

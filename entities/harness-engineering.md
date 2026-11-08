@@ -26,5 +26,3 @@ ClawGym은 관측 가능성 주도 자동 진화의 구체적 구현으로, 하�
 ### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
 
 하네스 엔지니어링의 주체가 인간 엔지니어에서 코딩 에이전트로 이동하는 사례를 체화 도메인에서 제공하며, 하네스 설계가 반복 가능한 자동화 파이프라인의 대상임을 확정한다.
-
-→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

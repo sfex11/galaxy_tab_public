@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
 
 감시가 관찰에 그치지 않고 조사 중단·방향전환이라는 개입 권한까지 수반하는 형태로 확장됨을 보여준다. 창발 감시(스웜 사례)가 관찰·고발에 머문 것과 달리, 설계된 감시는 실행 권한을 갖는 다음 단계다.
-
-→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

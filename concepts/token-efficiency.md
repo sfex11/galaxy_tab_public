@@ -25,12 +25,6 @@ _Wiki 축적 중_
 
 ### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
 
-→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]
-
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-07)
 
-→ [[sources/2026-11-07-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]
-
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
-
-→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

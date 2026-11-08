@@ -319,3 +319,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/planning-mode-declaration.md|planning mode declaration]]
+
+---
+**관련**: [[entities/low-frequency-planning-high-frequency-execution.md|low frequency planning high frequency execution]]
+
+---
+**관련**: [[entities/ctde-information-gap.md|ctde information gap]]
+
+---
+**관련**: [[entities/environment-scheduling.md|environment scheduling]]
+
+---
+**관련**: [[entities/environment-scaling-law.md|environment scaling law]]
+
+---
+**관련**: [[entities/benchmark-validity-as-maintenance-output.md|benchmark validity as maintenance output]]
+
+---
+**관련**: [[entities/rollout-environment-coupling.md|rollout environment coupling]]

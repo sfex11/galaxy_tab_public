@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Flide: Accelerating Decision Inference with Exact State Forking (2026-11-03)
 
 MobileGym이 훈련 시뮬레이션 계층에서 확립한 상태 포킹 원리가 Flide에 의해 추론 서빙 계층으로 이식된다. 상태 포킹이 훈련-추론 양축을 관통하는 일급 인프라 프리미티브로 승격됨을 확정한다.
-
-→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]

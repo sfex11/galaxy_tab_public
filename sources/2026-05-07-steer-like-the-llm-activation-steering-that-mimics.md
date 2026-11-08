@@ -183,3 +183,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/temperament-as-decelerator-not-steering.md|temperament as decelerator not steering]]
+
+---
+**관련**: [[entities/inference-privacy.md|inference privacy]]
+
+---
+**관련**: [[entities/simple-law.md|simple law]]
+
+---
+**관련**: [[entities/harmful-success.md|harmful success]]
+
+---
+**관련**: [[entities/success-criterion-redefinition.md|success criterion redefinition]]

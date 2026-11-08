@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
 
 기상·작물·손실 기록 등 이질적 출처의 정보를 인과 분석 가능한 물리 지수로 통합하는 구체적 파이프라인을 제공한다.
-
-→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

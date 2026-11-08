@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|Pre-Crime for Agents, at the Last Second: Probing When a Rec]]
 
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
-
-→ [[sources/2026-11-02-pre-crime-for-agents-at-the-last-second-probing-wh.md|상세 보기]]

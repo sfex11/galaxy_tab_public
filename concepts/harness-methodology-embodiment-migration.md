@@ -18,5 +18,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
-
-→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

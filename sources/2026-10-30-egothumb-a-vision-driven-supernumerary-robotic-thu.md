@@ -70,3 +70,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/robot-skill-as-code.md|robot skill as code]]
+
+---
+**관련**: [[entities/robot-skill-as-code.md|robot skill as code]]

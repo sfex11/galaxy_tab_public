@@ -31,10 +31,6 @@ _Wiki 축적 중_
 
 왜곡 없는 워터마킹이 타겟 분포 무변경 원칙을 준수해야 수용률 무변경과 추측 디코딩 호환성이 성립함을 보여준다. 분포 보존이 가속뿐 아니라 provenance 신호 유지의 전제조건임으로 확장된다.
 
-→ [[sources/2026-11-02-textseal2-distortion-free-llm-watermarking-with-co.md|상세 보기]]
-
 ### Flide: Accelerating Decision Inference with Exact State Forking (2026-11-03)
 
 가속-무손실성의 적용 범위를 토큰 생성과 샘플러 교체에서 트리 구조 결정 추론으로 확장한다. 정확성(exactness)이 출력 확률 보존과 분기 시 접두사 상태 충실도라는 이중 조건을 포괄함을 규정한다.
-
-→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]

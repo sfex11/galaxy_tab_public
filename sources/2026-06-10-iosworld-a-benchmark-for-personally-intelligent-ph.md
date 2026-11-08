@@ -223,3 +223,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/roundtrip-benchmark.md|roundtrip benchmark]]
+
+---
+**관련**: [[entities/benchmark-maintenance-debt.md|benchmark maintenance debt]]
+
+---
+**관련**: [[entities/benchmark-as-software.md|benchmark as software]]
+
+---
+**관련**: [[entities/continuous-benchmark.md|continuous benchmark]]

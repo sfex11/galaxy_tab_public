@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
 
 환경 공급 병목 해소의 물리 도메인 경로를 제공한다 — 전문가 노력 대신 코딩 에이전트 저작으로 시뮬레이션 공급량을 확장하여, 공급 병목의 해소 주체가 인적 자원에서 에이전트 능력으로 이동함을 보여준다.
-
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

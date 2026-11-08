@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Collaborative AI agents for autonomous experimental research with soli (2026-11-02)
 
 명세된 목표 하 제형 개발(화학)과 자유 탐색 기반 법칙 발견(시뮬레이션)에 이어, 질문 수립부터 원고 작성까지 전 주기를 상호 검증 에이전트로 수행하는 실측 물리 도메인(고체 상태 양자 스핀) 사례를 추가한다. 자율 실험실 에이전트의 요구 능력이 목표 형성·동료 검증·문서화까지 포괄하는 전 주기 스펙트럼임을 확정한다.
-
-→ [[sources/2026-11-02-collaborative-ai-agents-for-autonomous-experimenta.md|상세 보기]]

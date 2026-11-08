@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-11-02)
 
 합성 환경의 구성 제어 축에 물리 현상·태스크 유형이라는 새 제어 변수를 추가한다. 코딩 에이전트를 통한 시뮬레이션 저작이 환경 구성을 명시적 매개변수 공간으로 만들어 다양성 설계를 조작 가능하게 함을 시사한다.
-
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]

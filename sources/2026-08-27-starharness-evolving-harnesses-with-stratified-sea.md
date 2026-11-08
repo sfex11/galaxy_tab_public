@@ -278,3 +278,21 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/harness-as-nonparametric-policy-layer.md|harness as nonparametric policy layer]]
+
+---
+**관련**: [[entities/embodied-harness.md|embodied harness]]
+
+---
+**관련**: [[entities/failure-guided-harness-growth.md|failure guided harness growth]]
+
+---
+**관련**: [[entities/pattern-specific-execution.md|pattern specific execution]]
+
+---
+**관련**: [[entities/failure-transparency.md|failure transparency]]
+
+---
+**관련**: [[entities/lora-skill-composition.md|lora skill composition]]
+
+---
+**관련**: [[entities/interface-contract-renegotiation.md|interface contract renegotiation]]

@@ -18,5 +18,3 @@ Mind2Dialogue가 시뮬레이터로 모델 쪽 인간 인식 능력을 훈련했
 ### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-11-02)
 
 쌍대 경로의 실증적 완성 사례다. Mind2Dialogue가 시뮬레이터로 모델의 인간 인식 능력을 훈련했다면, 본 논문은 동일 시뮬레이터로 인간 훈련생(초심 상담사)을 훈련시켜 사용자 상태 시뮬레이션의 활용이 모델→인간 방향으로도 확장됨을 보여준다.
-
-→ [[sources/2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

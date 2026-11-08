@@ -543,3 +543,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/pattern-specific-execution.md|pattern specific execution]]
+
+---
+**관련**: [[entities/expert-guided-rubric-synthesis.md|expert guided rubric synthesis]]

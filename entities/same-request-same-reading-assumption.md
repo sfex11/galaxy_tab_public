@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
 
 샘플링 구성이 다르면 동일 프롬프트·동일 예측기라도 판독값(디코딩 길이)이 달라진다는 디코딩 수준의 반증을 제공한다. '같은 요청-같은 판독' 전제가 생성 확률성 앞에서 무너지는 구조를 엔트로피 하한으로 정량화한다.
-
-→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

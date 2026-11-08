@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|The Power of Meta Access in the Software of the Future --- D]]
 
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
-
-→ [[sources/2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

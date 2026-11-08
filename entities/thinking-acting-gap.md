@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
 
 동일 진단의 이미지 생성 발현 사례를 추가한다. 자율주행(Continuous Actions from Discrete Minds)에서 특정된 '이산 토큰 추론 vs 연속 동역학' 구조가 시각 생성에서도 재현됨을 보여, 표현 형식 차이라는 간극 근원 규정의 도메인 불변성을 강화한다.
-
-→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

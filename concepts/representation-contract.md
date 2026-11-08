@@ -26,16 +26,8 @@ _자동 Wiki Query에서 추출됨_
 
 ### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
 
-→ [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]
-
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]
 
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
-→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]
-
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
-
-→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

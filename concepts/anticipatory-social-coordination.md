@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|Social Humanoid: Socially Responsive Human-Humanoid Interact]]
 
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-08)
-
-→ [[sources/2026-11-08-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

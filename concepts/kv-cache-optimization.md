@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
-
-→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-04-30-adema-a-knowledge-state-orchestration-architecture.md|ADEMA: A Knowledge-State Orchestration Architecture for Long]]
 
 ### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
-
-→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

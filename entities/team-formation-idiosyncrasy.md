@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Strategic Tanking in Stable Matching Markets (2026-11-03)
 
 팀 구성이 성과의 독립 변수라는 기존 발견에 에이전트의 전략적 차원을 부여한다 — 배정이 매칭 메커니즘을 거칠 때 에이전트가 원치 않는 파트너에 대한 매력도를 탱킹하여 구성을 자기 유리하게 조작할 수 있으므로, 관찰되는 팀 구성은 메커니즘 설계와 에이전트 전략의 결합 산물이 된다.
-
-→ [[sources/2026-11-03-strategic-tanking-in-stable-matching-markets.md|상세 보기]]

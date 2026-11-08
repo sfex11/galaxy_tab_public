@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Strategist: Evolving Reasoning with Agents (2026-11-04)
 
 하네스 학습에 '전략 = 실행 코드 블루프린트'라는 재사용 단위를 부여한다. 기존 하네스 학습이 성장 결과물을 암묵적 상태로 두었다면 본 논문은 번역 규칙 자체를 명시적 코드 아티팩트로 외부화하여, 학습된 하네스가 다른 전략의 구성요소로 재사용 가능함을 실증한다.
-
-→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]

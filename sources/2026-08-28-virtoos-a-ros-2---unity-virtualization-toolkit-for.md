@@ -265,3 +265,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/environment-scaling-law.md|environment scaling law]]
+
+---
+**관련**: [[entities/paper-as-executable-environment.md|paper as executable environment]]

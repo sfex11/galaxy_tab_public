@@ -20,5 +20,3 @@ _Wiki 축적 중_
 취약한 시각적 그라운딩에 대한 의존을 컴포넌트 내장 기계 판독 단서로 구조적으로 우회하는 경로를 제시한다. BAMI의 에이전트 측 편향 완화와 짝을 이루는 인터페이스 측 모호성 제거로, 그라운딩 문제의 양측 해법 구도를 완성한다.
 
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
-
-→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

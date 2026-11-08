@@ -70,5 +70,3 @@ Crab이 실행 환경 계층(체크포인트/복원)의 하네스 구성요소�
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
 
 평가 하네스(벤치마크)도 소프트웨어처럼 유지보수되어야 한다는 제2의 하네스 공학 축을 연다. 실행 하네스 공진화 논의와 평가 하네스 유지보수 논의가 결합할 지점을 제공한다.
-
-→ [[sources/2026-11-08-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

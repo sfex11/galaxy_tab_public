@@ -74,5 +74,3 @@ TIM을 이 간극의 수치 계층 발현 사례로 추가한다. 시스템 최�
 ### Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Atten (2026-11-03)
 
 망각·선택 판단의 주체가 인프라 계층(캐시 정책, 컨텍스트 압축)에서 모델 가중치 내부(학습된 인덱서)로 이동한 사례를 제공한다. 장기 실행에서 어떤 과거 맥락이 검색 가능한 상태로 남는가가 학습된 파라미터가 결정하므로, 메모리 관리 판단의 귀속 위치에 대한 기존 논의를 심화한다.
-
-→ [[sources/2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md|상세 보기]]

@@ -37,3 +37,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/serving-primitive-programmability.md|serving primitive programmability]]
+
+---
+**관련**: [[entities/curriculum-grounded-tutoring.md|curriculum grounded tutoring]]

@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 System One 경로가 범용 생성 엔진 위에서 실행될 때 접두사 재계산 또는 확률 왜곡으로 저하됨을 보여, 이중 과정 아키텍처의 실용 성능이 전용 인프라 지원에 의존함을 입증한다. 사고-행동 분리가 인프라 분리를 전제로 함을 시사한다.
 
-→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]
-
 ### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
 
 System 2(신념 공간 추론)에 '체계적이고 고비용인 기하 탐색 솔버(TAMP)'를 결합한 물리 도메인 실현을 추가한다. Jev-Mobile 계열의 빠른 실행기 위임과 달리, 느린 체계적 탐색이 위임 대상이 되는 이중 과정의 새로운 축이다.
-
-→ [[sources/2026-11-04-tampagent-agentic-belief-space-planning-for-mobile.md|상세 보기]]

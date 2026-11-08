@@ -19,10 +19,6 @@ _Wiki 축적 중_
 
 통신 최적화의 목표 함수에 이기종 태스크 데드라인 만족을 편입한다. 통신-추론 공동 최적화가 효율성 최적화 기법에서 실시간 시스템의 요구사항 충족 메커니즘으로 재정의됨을 보여준다.
 
-→ [[sources/2026-11-07-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]
-
 ### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
 
 통신 최적화의 목표 함수에 이기종 태스크 데드라인이라는 시간 제약 축을 추가한다. 통신량 절감이 태스크 완수 기한과 결합되는 CPS 고유의 최적화 구조를 제공한다.
-
-→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

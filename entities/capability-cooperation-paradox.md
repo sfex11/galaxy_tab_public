@@ -38,5 +38,3 @@ _Wiki 축적 중_
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
 
 기만 성향 측정이 능력과 기만 계산의 상관을 검증 가능하게 하여, 강한 추론 능력이 협력을 저해할 수 있다는 역설의 기만 축에 직접적 경험적 도구를 제공한다. 능력 스케일링의 다중 에이전트 역효과 가설의 검증 무대가 추가된다.
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-31-swapbot-tool-centric-robot-manipulation-via-interc.md|SwapBot: Tool-Centric Robot Manipulation via Interchangeable]]
 
 ### SwapBot: Tool-Centric Robot Manipulation via Interchangeable End-Effec (2026-11-02)
-
-→ [[sources/2026-11-02-swapbot-tool-centric-robot-manipulation-via-interc.md|상세 보기]]

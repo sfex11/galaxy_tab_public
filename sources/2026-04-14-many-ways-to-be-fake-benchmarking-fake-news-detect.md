@@ -106,3 +106,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/spectrum-classification-fallacy.md|spectrum classification fallacy]]
+
+---
+**관련**: [[entities/strategic-diversity.md|strategic diversity]]

@@ -79,16 +79,10 @@ GUI 벤치마크가 명세하지 않은 크로스 디바이스 차원(중간 결
 
 측정 대상(예측기)과 교란 변수(태스크 난이도·타겟 구성)의 혼동이라는 새 변형을 제공한다. 벤치마크가 타겟 구성을 명세하지 않으면 점수가 예측기 품질을 대변하지 못한다는 점에서, 명세 간극이 추론 인프라 평가 영역으로 확장되는 사례다.
 
-→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]
-
 ### VeriHarm-Bench: Measuring Harmful Success in LLM Coding Agents Verifia (2026-11-04)
 
 표준 코딩 벤치마크가 성공은 명세하되 부작용 제약은 명세하지 않는 간극을 규명한다. 명세 간극이 '측정 누락'에서 '유해성 은폐'로 확장됨을 보여준다.
 
-→ [[sources/2026-11-04-veriharm-bench-measuring-harmful-success-in-llm-co.md|상세 보기]]
-
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
 
 SWE-Gate가 '테스트 통과≠수용 가능성'의 공간적 간극을 보였다면 본 논문은 같은 간극의 시간적 동태를 제시한다 — 출시 시점에 정합하던 명세가 모델·인프라 변화로 서서히 괴리하며, 명세 간극이 정적 결함이 아니라 동적으로 성장하는 속성임을 확립한다.
-
-→ [[sources/2026-11-07-benchmarks-as-software-terminal-bench-and-the-case.md|상세 보기]]

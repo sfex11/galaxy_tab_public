@@ -194,3 +194,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-cell-annotation.md|semantic cell annotation]]
+
+---
+**관련**: [[entities/visual-forgetting.md|visual forgetting]]

@@ -11,3 +11,6 @@ LLM-based medical assistants that follow a patient across visits need a memory t
 
 ---
 _자동 생성될_
+
+---
+**관련**: [[entities/medgraph.md|medgraph]]

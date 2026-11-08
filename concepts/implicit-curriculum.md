@@ -20,5 +20,3 @@ _Wiki 축적 중_
 ### Scaling Laws for Tool-Use Agents via Controllable Environment Synthesi (2026-10-30)
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

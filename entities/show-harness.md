@@ -26,5 +26,3 @@ VLM 에이전트 직접 제어 경로와 대비되는 코드 생성 제어 경�
 ### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
 
 Show-Harness가 VLM 에이전트+로봇 하네스의 실행 가능성을 보였다면, 본 논문은 그 설계의 자동화라는 후속 축을 연다. 수작업 하네스 구축의 한계를 자동 설계로 극복하는 경로를 제시한다.
-
-→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]

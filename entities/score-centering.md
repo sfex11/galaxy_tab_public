@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
 
 안정성 위협의 층위 분해에 제3 요소를 추가한다. 스코어 센터링이 엔진 간 계통적 편향을 알고리즘 층에서 제거하는 처방이었다면, 본 논문은 환경 확률적 노이즈가 알고리즘 교정으로는 회복 불가능한 표상 층 침식(플라스티시티 손실)을 유발함을 보여, bias-noise 구분이 네트워크 적응성 차원으로 확장된다.
-
-→ [[sources/2026-11-03-towards-understanding-the-impact-of-plasticity-los.md|상세 보기]]

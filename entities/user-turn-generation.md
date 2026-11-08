@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-11-02)
 
 사용자 턴 생성의 훈련 활용 버전을 제공한다. LLM 프록시가 타겟 모델의 정렬 실패를 능동적으로 유도하던 기존 프로브 용법과 달리, 시뮬레이션 클라이언트는 인간 훈련생의 역량 발현을 이끄는 상대로 기능하는 제2 용법을 확립한다.
-
-→ [[sources/2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

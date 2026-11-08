@@ -52,5 +52,3 @@ CBF 기반 접근과 POMDP 기반 확률적 쉴딩에 이어, 환경 기하학�
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
 
 인슐린 과투여의 저혈당은 지연·부분 비가역적 결과를 갖는 생리학 버전 안전 제약을 제공한다. 디지털 환경과 달리 롤백 불가능한 체화 제어 도메인에서 에이전트 결정의 안전 마진을 정량 평가해야 함을 요구한다.
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

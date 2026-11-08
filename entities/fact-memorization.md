@@ -23,10 +23,6 @@ _Wiki 축적 중_
 
 기억의 존재 감사에서 귀속 감사로의 확장을 제공한다. 미세조정된 엔티티 문서에서 유래한 팩트를 귀속 알고리즘이 추적할 수 있는지 측정함으로써, 기억이 '있는가'를 넘어 '어디에서 왔는가'를 진단하는 제2의 감사 축을 연다.
 
-→ [[sources/2026-11-02-elucidating-the-design-space-of-lm-data-attributio.md|상세 보기]]
-
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
 
 기억의 존재·제거 논의에 '단일 노출 사실(monofact)이 발견 능력의 병목'이라는 기능적 차원을 추가한다. Molecular Déjà Vu가 희귀 사실의 검색 가능성을 오염·기억 위험으로 다뤘다면 본 논문은 그 부재가 발견 실패로 현현하는 정반대 방향을 정량화하여, 기억과 능력의 연결을 양방향으로 완성한다.
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

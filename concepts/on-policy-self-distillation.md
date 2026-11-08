@@ -22,5 +22,3 @@ _자동 Wiki Query에서 추출됨_
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
 
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
-
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

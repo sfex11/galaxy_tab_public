@@ -199,3 +199,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/belief-content-update-gap.md|belief content update gap]]
+
+---
+**관련**: [[entities/metacognitive-decoding.md|metacognitive decoding]]

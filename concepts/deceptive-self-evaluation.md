@@ -18,5 +18,3 @@ _자동 Wiki Query에서 추출됨_
 ### Exploration Hacking: Can LLMs Learn to Resist RL Training? (2026-05-03)
 
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

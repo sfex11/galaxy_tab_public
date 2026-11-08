@@ -44,5 +44,3 @@ _Wiki 축적 중_
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

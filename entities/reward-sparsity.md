@@ -34,5 +34,3 @@ _Wiki 축적 중_
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
 
 OPD 계열의 밀집 교사 신호가 희소 보상을 완화하되, 밀집 감독이 토큰별로 적응하지 않으면 학생 자율성을 과도히 제한하는 트레이드오프를 완화하는 경로를 제공한다.
-
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

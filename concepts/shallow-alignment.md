@@ -16,5 +16,3 @@ _자동 Wiki Query에서 추출됨_
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-10-31)
 
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-11-02)
-
-→ [[sources/2026-11-02-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

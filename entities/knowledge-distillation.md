@@ -58,5 +58,3 @@ teacher-student 증류의 전이 대상이 지식이나 추론이 아니라 '말
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
 
 증류 대상이 텍스트 지식이 아닌 선호(랭킹) 구조일 때 발생하는 교사-학생 표현 형식 변환 문제를 추가한다. 지식 전이의 병목이 지식 자체가 아니라 교사·학생의 발화 형식 차이에 있을 수 있음을 보여준다.
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

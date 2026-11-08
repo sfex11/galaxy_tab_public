@@ -20,12 +20,6 @@ _자동 Wiki Query에서 추출됨_
 
 ### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
 
-→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]
-
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
 
-→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]
-
 ### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
-
-→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]

@@ -35,10 +35,6 @@ _Wiki 축적 중_
 
 하네스 설계 지식이 모델 가중치 밖 영구 메모리에 외부 상태로 축적되는 사례를 추가하며, 동결 정책이 하네스 상태만으로 신규 환경에 적응함을 실증한다.
 
-→ [[sources/2026-11-03-roboarchitect-automating-the-design-of-robotic-age.md|상세 보기]]
-
 ### Strategist: Evolving Reasoning with Agents (2026-11-04)
 
 스킬의 외부성 논리를 추론 전략 도메인으로 확장한다. 전략이 블루프린트(실행 코드)로 외부 상태에 존재하고 다른 전략이 이를 재사용하면, 스킬-하네스 경계의 논쟁이 '전략 코드의 소유와 합성' 문제로 재정의됨을 보여준다.
-
-→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]

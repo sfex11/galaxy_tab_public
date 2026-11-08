@@ -58,5 +58,3 @@ _Wiki 축적 중_
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
 
 호스트 RAM과 SSD를 온디바이스 추론의 일급 연산 자원으로 재정의한다. 메모리 제약 환경에서 저비트 속도 이득과 고정밀 정확도를 동시에 달성하는 경로를 제공하여, 온디바이스 프론티어의 결정 변수가 모델 크기·양자화 형식에서 메모리 계층 배치로 이동함을 시사한다.
-
-→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

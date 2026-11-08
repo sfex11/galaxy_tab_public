@@ -38,5 +38,3 @@ DP의 적용을 통계적 보장 형식화에서 연합 미세조정의 gradient
 ### Should We Combine Our Data? Algorithms and Limits for Privately Assess (2026-11-04)
 
 DP의 적용 대상을 훈련 보호에서 공유 사전 평가 보호로 확장한다. 평가 자체가 민감 데이터에 접근하므로, 프라이버시 예산이 '학습 과정 보호'에서 '공유 결정 보호'로 이동하는 새 응용 축을 제공한다.
-
-→ [[sources/2026-11-04-should-we-combine-our-data-algorithms-and-limits-f.md|상세 보기]]

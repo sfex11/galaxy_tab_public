@@ -36,5 +36,3 @@ _Wiki 축적 중_
 ### Monitoring and Discovering Reward Hacking with Internal Representation (2026-09-18)
 
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
-
-→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

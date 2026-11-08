@@ -112,3 +112,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/triaxial-trace-threat-space.md|triaxial trace threat space]]
+
+---
+**관련**: [[entities/trace-integrity-faithfulness-divergence.md|trace integrity faithfulness divergence]]

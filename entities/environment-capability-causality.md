@@ -31,10 +31,6 @@ _Wiki 축적 중_
 
 환경 가용성이 능력 확장을 결정하는 인과율의 물리 도메인 확장이다 — 사실적·고속 시뮬레이션의 공급이 체화 모델의 실세계 전이 능력의 선행 조건임을 규정한다.
 
-→ [[sources/2026-11-02-gym-anything-for-robotics-scaling-physical-simulat.md|상세 보기]]
-
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
 
 AI 과학이라는 최상위 능력 도메인에서 환경 가용성이 능력 성장을 결정하는 인과율을 확인한다 — 세계 부재가 AI 과학 능력 확장의 선행 병목이며, 환경 구축이 능력 개발에 앞서야 함을 보여준다.
-
-→ [[sources/2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

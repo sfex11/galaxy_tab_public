@@ -3960,3 +3960,7 @@
 - 2026-11-08-scientist-world-grow-a-research-world-for-ai-scien.md
 - 2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md
 - 2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md
+
+## [2026-11-08 17:12] lint | Wiki 건전성 체크
+- Issues: 3597개
+- Orphans: 1177, Missing: 2420, Contradictions: 0

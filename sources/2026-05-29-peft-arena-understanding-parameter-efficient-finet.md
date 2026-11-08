@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/uncontrolled-upgrade-forgetting.md|uncontrolled upgrade forgetting]]
+
+---
+**관련**: [[entities/plasticity-loss.md|plasticity loss]]

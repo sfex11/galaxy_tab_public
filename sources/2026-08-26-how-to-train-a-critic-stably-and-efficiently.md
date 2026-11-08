@@ -43,3 +43,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[entities/conformal-prediction.md|conformal prediction]]
+
+---
+**관련**: [[entities/builder-target-separation.md|builder target separation]]

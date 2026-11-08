@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### FedReady: Bounded Agents for Federation Formation (2026-11-04)
 
 타겟 태스크 변경 시 연합 구성이 반복되어야 한다는 관찰을 제공한다. 연속 적응의 대상이 모델 파라미터에서 연합 인프라 설정으로 확장될 수 있는 경로를 시사한다.
-
-→ [[sources/2026-11-04-fedready-bounded-agents-for-federation-formation.md|상세 보기]]

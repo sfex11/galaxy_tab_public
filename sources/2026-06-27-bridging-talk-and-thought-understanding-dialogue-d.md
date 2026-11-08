@@ -388,3 +388,15 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/independent-planning-limitation.md|independent planning limitation]]
+
+---
+**관련**: [[entities/safety-understanding-gap.md|safety understanding gap]]
+
+---
+**관련**: [[entities/partial-view-verification-limitation.md|partial view verification limitation]]
+
+---
+**관련**: [[entities/neuro-symbolic-division-of-labor.md|neuro symbolic division of labor]]
+
+---
+**관련**: [[entities/value-context-dependence.md|value context dependence]]

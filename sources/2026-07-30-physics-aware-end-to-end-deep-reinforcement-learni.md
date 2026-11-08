@@ -50,3 +50,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/declaration-fidelity-axis-independence.md|declaration fidelity axis independence]]
+
+---
+**관련**: [[entities/credit-allocation-degree-of-freedom.md|credit allocation degree of freedom]]

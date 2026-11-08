@@ -55,40 +55,26 @@ KV 캐시 관리의 적용 범위를 서빙·추론 계층에서 RL 훈련 롤�
 
 KV 캐시 배치가 논리적 실행 트리와 결합(conflate)될 때 재계산 비용과 확률 왜곡이라는 이지선다가 발생함을 진단한다. 캐시 최적화의 설계 축에 물리 배치를 논리 위상에서 탈결합하는 제3 경로를 추가한다.
 
-→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]
-
 ### Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Atten (2026-11-03)
 
-KV 캐시 최적화의 대상이 '캐시의 무엇을 버릴까'에서 '캐시를 어떤 표현으로 재조직할까'로 확장됨을 보여준다. 잠재 투영을 통한 subquadratic 검색은 [[compression-forgetting-isomorphism]]과 동혁적인 선택적 유지 연산이 모델 아키텍처에 내재화된 사례다.
-
-→ [[sources/2026-11-03-latent-sparse-attention-towards-subquadratic-ultra.md|상세 보기]]
+KV 캐시 최적화의 대상이 '캐시의 무엇을 버릴까'에서 '캐시를 어떤 표현으로 재조직할까'로 확장됨을 보여준다. 잠재 투영을 통한 subquadratic 검색은 [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]과 동혁적인 선택적 유지 연산이 모델 아키텍처에 내재화된 사례다.
 
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
 
 KV 캐시 최적화의 대상을 단일 모델 서빙 내부에서 모델 경계 간 이식 자산으로 확장한다. 캐시의 가치가 모델 스위치 시점에 소멸하지 않고 보존·번역될 수 있음을 제시하여, 캐시 관리의 단위가 세션 내부에서 모델 생태계 전체로 이동함을 시사한다.
 
-→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]
-
 ### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
 
 KV 캐시 관리가 단순 최적화가 아니라 비용 법칙의 교정임을 보여준다. 캐시에 진입한 토큰이 이후 토큰의 메모리 접근·계산 비용을 구조적으로 상승시키므로, 압축·퇴거의 가치를 절약된 바이트가 아닌 차단된 비용 증가 사슬로 측정하는 새 기준을 제공한다.
-
-→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]
 
 ### CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse At (2026-11-04)
 
 KV 캐시 최적화 논의에 '캐시 자체를 인덱스로 격상'이라는 상류 최적화를 추가한다. 별도 인덱스 캐시를 유지하던 기존 접근과 달리, 기존 키의 compact summary를 chunk 인덱스로 재사용하여 인덱스 유지 비용을 구조적으로 제거함을 보여준다.
 
-→ [[sources/2026-11-04-cisa-retrofitting-dense-attention-models-with-chun.md|상세 보기]]
-
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
 
 KV 캐시 최적화의 설계 공간을 압축·폐기·재사용에서 정밀도 티어링으로 확장한다 — KV 엔트리가 GPU에는 저정밀로, 호스트 RAM/SSD에는 고정밀 원본으로 공존하는 이중 계층 구조를 제시하여 캐시 관리가 정확도 예산 관리로 재정의될 수 있음을 시사한다.
 
-→ [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]
-
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
 
 KV 캐시 저비트 양자화의 정확도 손실을 오프로딩된 고정밀 데이터의 선택적 정밀도 상승으로 회복하는 경로를 제공한다. 관리 질문이 '무엇을 압축할까'에서 '무엇을 어느 계층에 어떤 정밀도로 둘까'로 확장됨을 보여준다.
-
-→ [[sources/2026-11-08-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|상세 보기]]

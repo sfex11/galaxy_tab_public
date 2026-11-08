@@ -21,5 +21,3 @@ _자동 Wiki Query에서 추출됨_
 ### Agent-Editing World Model: Rethinking World Modeling for LLM Agents (2026-09-25)
 
 ### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
-
-→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

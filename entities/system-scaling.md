@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Strategist: Evolving Reasoning with Agents (2026-11-04)
 
 '모델이 절반이고 나머지 절반이 추론 전략'이라는 이분법의 직접적 선언을 제공한다. 시스템 스케일링의 실천 경로가 하네스 성장에서 전략 진화로 정교화되며, 전략 라이브러리가 시스템 축의 자산 구조가 됨을 시사한다.
-
-→ [[sources/2026-11-04-strategist-evolving-reasoning-with-agents.md|상세 보기]]

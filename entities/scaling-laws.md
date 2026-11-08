@@ -22,5 +22,3 @@ agent RL 스케일링 법칙의 효율 측 보완을 제공한다. 환경 구성
 ### Pretraining Data Scale Reverses the Muon-AdamW Fine-Tuning Gap (2026-11-04)
 
 데이터 규모 스케일링에 옵티마이저 선택이 상호작용 변수로 개입함을 보여준다. 모델 크기·데이터 양·옵티마이저의 삼원 조합이 하류 성능의 역전 지점을 결정하며, 스케일링 법칙 논의가 단일 변수 스케일링에서 다변수 상호작용으로 정교화됨을 시사한다.
-
-→ [[sources/2026-11-04-pretraining-data-scale-reverses-the-muon-adamw-fin.md|상세 보기]]

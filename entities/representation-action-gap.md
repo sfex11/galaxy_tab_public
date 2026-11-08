@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
 
 인간 모션 관찰을 신체 구조가 다른 휴머노이드의 전신 행동으로 번역하는 문제를 제시하여, 표현-행동 간극이 관찰자-실행자 신체 이질성에서도 발생함을 보여준다.
-
-→ [[sources/2026-11-07-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

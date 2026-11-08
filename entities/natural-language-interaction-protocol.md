@@ -18,5 +18,3 @@ NLIP가 이 엔티티의 제도적 실체로 자리매김한다. 이질적 프�
 ### Latent-Lens: Visual Perception in Small Language Models Through Latent (2026-11-03)
 
 '자연어 = 보편 교량' 전제에 조건부 반례를 제공한다. 모달리티 밀도가 결정적인 시각 정보 전달에서는 표준화된 자연어가 아니라 학습된 잠재 채널이 전달 상한을 결정할 수 있음을 보여준다.
-
-→ [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]

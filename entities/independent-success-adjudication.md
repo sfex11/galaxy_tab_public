@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
 
 자기 보고가 아닌 독립적 검증자의 판정으로 성공을 계측하는 자동화 사례를 제공하며, adjudication의 상한이 검증자의 탐색 능력에 의해 결정된다는 새로운 조건을 추가한다.
-
-→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

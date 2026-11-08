@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-01-turning-the-tide-cross-architecture-distillation-f.md|Turning the TIDE: Cross-Architecture Distillation for Diffus]]
 
 ### VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding (2026-11-08)
-
-→ [[sources/2026-11-08-vflash-fast-accurate-visual-planning-via-flash-pri.md|상세 보기]]

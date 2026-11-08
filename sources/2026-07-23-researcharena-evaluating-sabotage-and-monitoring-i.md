@@ -207,3 +207,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/optimizer-norm-control.md|optimizer norm control]]
+
+---
+**관련**: [[entities/long-horizon-emergent-collusion.md|long horizon emergent collusion]]
+
+---
+**관련**: [[entities/exact-cover-reduction.md|exact cover reduction]]

@@ -17,13 +17,13 @@ Latent Sparse Attention(LSA)은 1M+ 토큰 규모의 초장기 컨텍스트에�
 
 ## 기존 Wiki와의 관계
 
-이 논문은 [[sparse-attention-unification]]이 제시한 계층적 메모리 구조와 병렬되는 대안 축을 제공한다. Unifying Sparse Attention이 정적 계층 메모리로 희소성을 확보했다면, LSA는 잠재 투영이라는 학습 가능한 압축 계층을 희소 인덱서 앞에 추가한다. 또한 [[hierarchical-kv-memory]]의 KV 캐시 구조화 논의에 '잠재 상태 단위 캐시 조직화'라는 새로운 설계 공간을 추가한다.
+이 논문은 [[concepts/sparse-attention-unification.md|sparse attention unification]]이 제시한 계층적 메모리 구조와 병렬되는 대안 축을 제공한다. Unifying Sparse Attention이 정적 계층 메모리로 희소성을 확보했다면, LSA는 잠재 투영이라는 학습 가능한 압축 계층을 희소 인덱서 앞에 추가한다. 또한 [[concepts/hierarchical-kv-memory.md|hierarchical kv memory]]의 KV 캐시 구조화 논의에 '잠재 상태 단위 캐시 조직화'라는 새로운 설계 공간을 추가한다.
 
-주목할 점은 이 방법이 agentic workflow의 장기 태스크를 명시적 동기로 삼는다는 것이다. [[agent-native-serving]]의 관점에서, 에이전트 실행이 스키마 축적과 다단계 상호작용으로 KV 캐시를 폭발시키는 구조적 문제([[schema-accumulation-bottleneck]], [[long-context]])에 대해 모델 아키텍처 층의 직접적 해법을 제시한다. 세션 전체 궤적을 컨텍스트로 유지해야 하는 에이전트에게 [[kv-cache-optimization]]의 캐시 관리를 넘어서는 '캐시 구조 자체의 재설계'에 해당한다.
+주목할 점은 이 방법이 agentic workflow의 장기 태스크를 명시적 동기로 삼는다는 것이다. [[concepts/agent-native-serving.md|agent native serving]]의 관점에서, 에이전트 실행이 스키마 축적과 다단계 상호작용으로 KV 캐시를 폭발시키는 구조적 문제([[concepts/schema-accumulation-bottleneck.md|schema accumulation bottleneck]], [[concepts/long-context.md|long context]])에 대해 모델 아키텍처 층의 직접적 해법을 제시한다. 세션 전체 궤적을 컨텍스트로 유지해야 하는 에이전트에게 [[concepts/kv-cache-optimization.md|kv cache optimization]]의 캐시 관리를 넘어서는 '캐시 구조 자체의 재설계'에 해당한다.
 
 ## 인사이트
 
-희소 어텐션의 선택 단위가 토큰에서 잠재 상태로 이동하면, [[compression-forgetting-isomorphism]]이 예고한 '압축=선택적 망각' 원리가 어텐션 아키텍처 내부로 내재화된다. 인덱서가 어떤 잠재 상태를 검색할지 결정하는 것은 곧 어떤 과거 맥락이 현재 추론에 '존재'할지를 결정하는 것이므로, 장기 에이전트 실행에서 LSA의 인덱서는 사실상 런타임 메모리 관리자의 역할을 수행하게 된다. 이는 [[algorithm-system-translation-gap]]의 관점에서 주목할 지점이다 — 망각·선택 판단이 인프라 계층(서빙·캐시 정책)이 아닌 모델 가중치 내부(학습된 인덱서)로 이동한 사례다.
+희소 어텐션의 선택 단위가 토큰에서 잠재 상태로 이동하면, [[concepts/compression-forgetting-isomorphism.md|compression forgetting isomorphism]]이 예고한 '압축=선택적 망각' 원리가 어텐션 아키텍처 내부로 내재화된다. 인덱서가 어떤 잠재 상태를 검색할지 결정하는 것은 곧 어떤 과거 맥락이 현재 추론에 '존재'할지를 결정하는 것이므로, 장기 에이전트 실행에서 LSA의 인덱서는 사실상 런타임 메모리 관리자의 역할을 수행하게 된다. 이는 [[concepts/algorithm-system-translation-gap.md|algorithm system translation gap]]의 관점에서 주목할 지점이다 — 망각·선택 판단이 인프라 계층(서빙·캐시 정책)이 아닌 모델 가중치 내부(학습된 인덱서)로 이동한 사례다.
 
 ## 🏷️ 엔티티
 

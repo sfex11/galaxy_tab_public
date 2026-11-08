@@ -16,5 +16,3 @@ _Wiki 축적 중_
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-29)
 
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-11-02)
-
-→ [[sources/2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

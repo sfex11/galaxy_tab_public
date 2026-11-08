@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-24-speakermem-r1-speaker-centered-dual-track-memory-f.md|SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-]]
 
 ### MedGraph: Maintaining Patient State with Graph Memory for Long-Term Me (2026-11-08)
-
-→ [[sources/2026-11-08-medgraph-maintaining-patient-state-with-graph-memo.md|상세 보기]]

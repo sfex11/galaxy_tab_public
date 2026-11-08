@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-27)
 
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-08)
-
-→ [[sources/2026-11-08-social-humanoid-socially-responsive-human-humanoid.md|상세 보기]]

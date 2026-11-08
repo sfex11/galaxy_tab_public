@@ -17,13 +17,13 @@
 
 ## 기존 Wiki와의 관계
 
-**[[latent-aligned-planning]]의 대상 확장**: Continuous Actions from Discrete Minds가 이산 추론-연속 제어 간 공유 잠재 인터페이스를 제시했다면, 본 논문은 공유 토큰화 표현 위에서 인간 모션과 휴머노이드 모션을 함께 시퀀스 모델링하여 잠재 정렬의 대상을 에이전트 내부 계층에서 에이전트-인간 이종 궤적 쌍으로 확장한다.
+**[[concepts/latent-aligned-planning.md|latent aligned planning]]의 대상 확장**: Continuous Actions from Discrete Minds가 이산 추론-연속 제어 간 공유 잠재 인터페이스를 제시했다면, 본 논문은 공유 토큰화 표현 위에서 인간 모션과 휴머노이드 모션을 함께 시퀀스 모델링하여 잠재 정렬의 대상을 에이전트 내부 계층에서 에이전트-인간 이종 궤적 쌍으로 확장한다.
 
-**[[communication-free-coordination]]의 체화 실현**: 명시적 통신 없이 파트너 모션 관찰만으로 물리 조율이 성립한다. 다만 단순 모방([[copying-collective-behavior]])과 달리 상대의 미래 동작 예측을 전제하므로 [[theory-of-mind]]의 운동 도메인 버전을 요구한다.
+**[[concepts/communication-free-coordination.md|communication free coordination]]의 체화 실현**: 명시적 통신 없이 파트너 모션 관찰만으로 물리 조율이 성립한다. 다만 단순 모방([[concepts/copying-collective-behavior.md|copying collective behavior]])과 달리 상대의 미래 동작 예측을 전제하므로 [[concepts/theory-of-mind.md|theory of mind]]의 운동 도메인 버전을 요구한다.
 
-**[[thought-action-separation]]**: 고수준 사회적 시퀀스 모델링과 저수준 전신 제어의 계층 분리가 사회적 반응성과 운동 정밀도의 이중 요구 해법으로 작동함을 실증한다.
+**[[concepts/thought-action-separation.md|thought action separation]]**: 고수준 사회적 시퀀스 모델링과 저수준 전신 제어의 계층 분리가 사회적 반응성과 운동 정밀도의 이중 요구 해법으로 작동함을 실증한다.
 
-**[[representation-action-gap]]**: 인간 모션 관찰을 29-DoF 휴머노이드 신체로 번역하는 문제는 관찰자-실행자 신체 이질성에서 발생하는 표현-행동 간극의 새 발현면이다.
+**[[concepts/representation-action-gap.md|representation action gap]]**: 인간 모션 관찰을 29-DoF 휴머노이드 신체로 번역하는 문제는 관찰자-실행자 신체 이질성에서 발생하는 표현-행동 간극의 새 발현면이다.
 
 ## 새 개념 제안
 

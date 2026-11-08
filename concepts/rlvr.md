@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-10-beyond-negative-rollouts-positive-only-policy-opti.md|Beyond Negative Rollouts: Positive-Only Policy Optimization ]]
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

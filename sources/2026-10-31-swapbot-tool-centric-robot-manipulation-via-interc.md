@@ -53,3 +53,6 @@ SwapBot은 교체 가능한 엔드이펙터와 촉각 감지를 결합하여 도
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/interchangeable-end-effector.md|interchangeable end effector]]

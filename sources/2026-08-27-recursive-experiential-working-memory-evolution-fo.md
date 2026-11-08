@@ -215,3 +215,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/gui-grounding.md|gui grounding]]
+
+---
+**관련**: [[entities/plan-declaration-execution-gap.md|plan declaration execution gap]]
+
+---
+**관련**: [[entities/execution-visibility-misalignment.md|execution visibility misalignment]]
+
+---
+**관련**: [[entities/controller-worker-architecture.md|controller worker architecture]]

@@ -172,3 +172,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/semantic-exploration-steering.md|semantic exploration steering]]
+
+---
+**관련**: [[entities/disjunctive-compensatory-task-scaling.md|disjunctive compensatory task scaling]]

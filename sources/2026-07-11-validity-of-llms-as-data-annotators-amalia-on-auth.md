@@ -178,3 +178,12 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/value-sensitive-delegation.md|value sensitive delegation]]
+
+---
+**관련**: [[entities/completion-value-decomposed-measurement.md|completion value decomposed measurement]]
+
+---
+**관련**: [[entities/authority-delegation-topology.md|authority delegation topology]]
+
+---
+**관련**: [[entities/post-completion-value-harm.md|post completion value harm]]

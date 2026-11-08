@@ -19,12 +19,12 @@
 
 ## 기존 Wiki와의 관계
 
-- [[benchmark-obsolescence]]: EHR 라이브 벤치마크가 데이터 갱신으로 진부화를 다뤘다면, 본 논문은 검증자·인프라·가정의 3축으로 병인을 확장하고 진부화를 '부채'라는 관리 대상으로 격상시킨다.
-- [[benchmark-specification-gap]]: SWE-Gate의 '테스트 통과≠수용' 간극의 시간축 버전 — 출시 시 정합하던 명세가 모델·인프라 변화로 동적으로 괴리함을 보여 명세 간극이 정적 결함이 아니라 성장하는 속성임을 확립한다.
-- [[living-benchmark]] / continuous-benchmark: living benchmark가 실세계 데이터 축의 갱신이라면, 지속 벤치마크는 CI·회귀테스트·버전관리라는 유지보수 체계의 이식이다.
-- [[certification-monitoring-discontinuity]]: 출시 검증 이후 유효기간 미보장 문제가 피평가자에서 측정 기기 자체로 확장되는 사례.
-- [[refreshable-signal-layer]]: Claw-Eval-Live의 신호 주기 갱신 원리를 벤치마크 전 수명주기 유지보수로 일반화한다.
-- [[terminal-universe]]: 터미널/코딩 에이전트 환경이 생성(공급)과 유지(존속)의 이중 수명주기를 갖음을 시사한다.
+- [[concepts/benchmark-obsolescence.md|benchmark obsolescence]]: EHR 라이브 벤치마크가 데이터 갱신으로 진부화를 다뤘다면, 본 논문은 검증자·인프라·가정의 3축으로 병인을 확장하고 진부화를 '부채'라는 관리 대상으로 격상시킨다.
+- [[concepts/benchmark-specification-gap.md|benchmark specification gap]]: SWE-Gate의 '테스트 통과≠수용' 간극의 시간축 버전 — 출시 시 정합하던 명세가 모델·인프라 변화로 동적으로 괴리함을 보여 명세 간극이 정적 결함이 아니라 성장하는 속성임을 확립한다.
+- [[concepts/living-benchmark.md|living benchmark]] / continuous-benchmark: living benchmark가 실세계 데이터 축의 갱신이라면, 지속 벤치마크는 CI·회귀테스트·버전관리라는 유지보수 체계의 이식이다.
+- [[concepts/certification-monitoring-discontinuity.md|certification monitoring discontinuity]]: 출시 검증 이후 유효기간 미보장 문제가 피평가자에서 측정 기기 자체로 확장되는 사례.
+- [[concepts/refreshable-signal-layer.md|refreshable signal layer]]: Claw-Eval-Live의 신호 주기 갱신 원리를 벤치마크 전 수명주기 유지보수로 일반화한다.
+- [[entities/terminal-universe.md|terminal universe]]: 터미널/코딩 에이전트 환경이 생성(공급)과 유지(존속)의 이중 수명주기를 갖음을 시사한다.
 
 ## 핵심 통찰
 

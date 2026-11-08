@@ -475,3 +475,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/matched-condition-causal-isolation.md|matched condition causal isolation]]
+
+---
+**관련**: [[entities/task-specific-skill-retrieval.md|task specific skill retrieval]]

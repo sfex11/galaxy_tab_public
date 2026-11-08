@@ -35,3 +35,6 @@ _자동 생성됨_
 ## 🔗 교차 참조
 
 - → [[sources/2026-11-06-beaker-an-expert-curated-benchmark-for-embodied-br]]: 전문가가 설계·검증한 벤치마크라는 공통 방법론으로 각기 자율 실험실의 신체화 인지와 장컨텍스트 다중 참조 이미지 합성을 평가한다.
+
+---
+**관련**: [[entities/steiner-task-taxonomy.md|steiner task taxonomy]]

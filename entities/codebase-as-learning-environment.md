@@ -26,5 +26,3 @@ _Wiki 축적 중_
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
 
 환경 재질의의 원료 축을 코드에서 과학 문헌으로 확장한다. CodeMidas가 구현된 코드의 실행 의미론을 환경으로 삼았다면 본 논문은 아직 실행되지 않은 연구 제안까지 환경화하여, '무엇이 환경이 될 수 있는가'의 후보 공간을 문헌 전체로 넓힌다.
-
-→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

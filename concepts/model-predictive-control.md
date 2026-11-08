@@ -24,5 +24,3 @@ _Wiki 축적 중_
 ### Learning Agent-based Model Predictive Control for Holistic Vehicle Per (2026-09-13)
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

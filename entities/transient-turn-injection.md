@@ -26,5 +26,3 @@ TTI가 단일 턴 내 정책 준수를 유지하면서 다중 터에 걸쳐 적�
 ### ShallowDefend: Harnessing Shallow Safety Alignment for Multi-Turn Defe (2026-11-02)
 
 다중 턴 공격이 성공하는 이유의 기계론적 설명을 제공한다. 요청을 여러 턴에 분산하면 각 턴의 첫 토큰 판단이 전체 의도를 포착하지 못하므로, 상태 없는 얕은 안전이 우회됨을 정합적으로 설명한다.
-
-→ [[sources/2026-11-02-shallowdefend-harnessing-shallow-safety-alignment-.md|상세 보기]]

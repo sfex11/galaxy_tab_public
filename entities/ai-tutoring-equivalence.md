@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Comparing Human Role-Players and LLM-Simulated Clients in Online Couns (2026-11-02)
 
 등가성 비교의 도메인(튜터링→상담 훈련)과 지표(학습 이득→커뮤니케이션 패턴)를 확장하는 세 번째 실현 사례다. 특히 등가성 질문이 결과 차원에서 과정 차원으로 세분화되며, 과정 패턴의 차이가 결과 등가성을 무효화할 수 있는 구조를 문장 수준 분석으로 정량화한다.
-
-→ [[sources/2026-11-02-comparing-human-role-players-and-llm-simulated-cli.md|상세 보기]]

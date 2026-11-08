@@ -20,5 +20,3 @@ _자동 Wiki Query에서 추출됨_
 ### The Natural Language Interaction Protocol and Standard for AI Agents (2026-09-07)
 
 ### SCALE: Real-Time Latent Communication for Cyber-Physical Agents (2026-11-08)
-
-→ [[sources/2026-11-08-scale-real-time-latent-communication-for-cyber-phy.md|상세 보기]]

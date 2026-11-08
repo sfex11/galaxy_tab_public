@@ -22,5 +22,3 @@ VideoLVR은 붕괴가 메모리 저장뿐 아니라 추론 궤적 수준에서�
 ### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
 
 붕괴 진단의 생성 방향 확장을 제공한다 — 시각 정보가 텍스트로 손실 압축되는 문제가 메모리(이해) 도메인뿐 아니라 추론→생성 경로에서도 발생하며, 연속 공간 추론이 이 붕괴의 생성 측 해법이 됨을 시사한다.
-
-→ [[sources/2026-11-03-latent-reasoning-in-continuous-space-for-unified-m.md|상세 보기]]

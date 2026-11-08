@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-07)
 
 궤적(코칭 신호)·스킬·환경에 이어 '복구된 절차와 결정'이 제4의 재사용 경로로 추가된다. 한 에이전트의 재현 경험이 아티팩트를 매개로 다른 에이전트의 성공률로 환류되는 간접 재사용 구조를 확립한다.
-
-→ [[sources/2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

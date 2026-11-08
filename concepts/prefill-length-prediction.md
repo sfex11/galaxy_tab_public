@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-31-on-the-fundamental-limits-of-prefill-based-decodin.md|On the Fundamental Limits of Prefill-Based Decoding Length P]]
 
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
-
-→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

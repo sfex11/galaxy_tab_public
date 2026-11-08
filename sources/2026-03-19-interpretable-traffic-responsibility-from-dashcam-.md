@@ -378,3 +378,12 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/dynamic-execution-reasoning.md|dynamic execution reasoning]]
+
+---
+**관련**: [[entities/agentic-meta-reasoning.md|agentic meta reasoning]]
+
+---
+**관련**: [[entities/verified-reasoning-trace.md|verified reasoning trace]]
+
+---
+**관련**: [[entities/video-diffusion.md|video diffusion]]

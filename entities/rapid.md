@@ -22,5 +22,3 @@ RAPID가 시연→명세 컴파일로 시연 부담을 다뤘다면 본 논문�
 ### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-08)
 
 암묵 지식의 아티팩트 컴파일 패턴 동형성을 제공한다 — RAPID가 시연을 테스트 가능 태스크 명세로 컴파일했다면, ReproBridge는 복구 노동을 표준화 아티팩트로 컴파일하여 후속 독립 실행이 반복 정제 없이 성립 가능하게 한다.
-
-→ [[sources/2026-11-08-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

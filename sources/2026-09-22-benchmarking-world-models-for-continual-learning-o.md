@@ -56,3 +56,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[entities/compositional-incoherence.md|compositional incoherence]]
+
+---
+**관련**: [[entities/compositional-harm.md|compositional harm]]

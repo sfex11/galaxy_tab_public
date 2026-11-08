@@ -24,5 +24,3 @@ MathDuels의 도전자-수비자 경쟁 구도, Sycophancy 측정의 능동적 �
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
 
 다중 에이전트 게임 평가 지형에 '지시 없는 기만 성향'이라는 새 측정 축을 추가한다. MathDuels의 출제-해결 구도, Flag Game의 조율 구도와 달리 정보 비대칭 하 적대적 이해충돌 구도를 도입하여, 게임 기반 평가가 협력·경쟁·기만의 전 스펙트럼을 커버하게 된다.
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

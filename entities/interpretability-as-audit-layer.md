@@ -22,5 +22,3 @@ v1 확정으로 그래프 감사 경로가 설계 가능성에서 실증된 속�
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
 
 해석의 안전 용도(위험 능력·기만·정렬 실패의 배포 전 탐지)를 감시·감사 계층의 이론적 근거로 제공하며, 개별 사례 수준이던 내부 표현 기반 탐지를 일반 프레임으로 통합한다.
-
-→ [[sources/2026-11-07-understanding-ai-from-the-inside-the-state-of-mech.md|상세 보기]]

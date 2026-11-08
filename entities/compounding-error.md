@@ -22,5 +22,3 @@ OPTED·Talk2Escape가 물리 궤적에서의 누적 오류를 다뤘다면, 본 
 ### Hierarchical World Models with Implicit Dynamics (2026-11-03)
 
 장기 과제의 누적 오차를 세계 모델 플래닝의 구조적 병목으로 확인하고, 이를 정확도 개선이 아닌 도달가능성-동역학 분리라는 아키텍처 설계로 완화하는 경로를 제시한다. 오차 누적의 원인이 예측 실패와 탐색 비용의 결합에 있을 수 있음을 시사한다.
-
-→ [[sources/2026-11-03-hierarchical-world-models-with-implicit-dynamics.md|상세 보기]]

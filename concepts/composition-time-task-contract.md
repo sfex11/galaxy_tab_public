@@ -17,5 +17,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### FedReady: Bounded Agents for Federation Formation (2026-11-04)
-
-→ [[sources/2026-11-04-fedready-bounded-agents-for-federation-formation.md|상세 보기]]

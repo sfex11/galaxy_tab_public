@@ -46,5 +46,3 @@ SkillOS 등이 보여준 스킬 큐레이션 중심 자기 개선을 넘어, 이
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
 
 자기 개선 에이전트에게 '자라날 세계'라는 환경 측 조건을 부여한다. 자기 개선이 에이전트 내부 루프만이 아니라 문헌 규모의 연구 환경과의 상호작용을 통한 성장으로 위치지어지며, 환경 자율성 축의 대규모 실현 경로가 된다.
-
-→ [[sources/2026-11-07-scientist-world-grow-a-research-world-for-ai-scien.md|상세 보기]]

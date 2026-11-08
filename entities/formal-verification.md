@@ -38,5 +38,3 @@ _Wiki 축적 중_
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
 형식적 보장이 블랙박스 모델에 의존하지 않는 하이브리드 구성 사례를 논리 추론 도메인에 추가한다. LLM에 형식 추론을 요구하는 대신 정확 커버 솔버에 위임함으로써 결정론성·건전성이 실현되는 조건을 명시한다.
-
-→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

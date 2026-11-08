@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### Four Bridges: Measuring Deception Propensity in a Multi-Agent Game (2026-11-04)
 
 적대적 의도 없이 창발하는 비협력 개념에 정보 비대칭 하 생존 유인 기만이라는 정량화 가능한 최소 사례를 추가한다. 기만이 비협력의 조작적 하위 유형으로 특정되며, 개별 규칙 위반이 아닌 상호작용 역학에서 창발한다는 기존 정의를 강화한다.
-
-→ [[sources/2026-11-04-four-bridges-measuring-deception-propensity-in-a-m.md|상세 보기]]

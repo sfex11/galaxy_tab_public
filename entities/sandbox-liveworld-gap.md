@@ -42,5 +42,3 @@ DiscoverPhysics가 이 간극에 대한 하나의 해결책을 제시한다—�
 ### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
 
 도킹이라는 구조적 해법을 제공한다. 실제 웹사이트를 실행 가능한 복제본으로 동결시켜 라이브 평가의 실세계 충실도와 샌드박스 평가의 안정성을 동시 확보하며, 콘텐츠 변동과 접근 제한 없이 인증 워크플로우까지 재현한다.
-
-→ [[sources/2026-11-04-webharbor-docking-real-websites-for-evolving-gui-a.md|상세 보기]]

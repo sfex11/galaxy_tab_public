@@ -49,3 +49,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/producer-nonadversariality-assumption.md|producer nonadversariality assumption]]
+
+---
+**관련**: [[entities/coach-actor-decoupling.md|coach actor decoupling]]

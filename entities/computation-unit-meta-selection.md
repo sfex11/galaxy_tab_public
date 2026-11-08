@@ -30,5 +30,3 @@ SLM vs LLM 연산 단위 선택에 '검증 가능성 × 데이터 민감도'라�
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
 
 메타-선택의 경제성 제약을 해소한다. SLM↔LLM 전환마다 컨텍스트 재처리가 요구되던 구조에서 캐시 전이는 연산 단위 교체의 비용 항을 사실상 상수로 만들어, 연산 단위 메타-선택의 자유도를 회복시킨다.
-
-→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

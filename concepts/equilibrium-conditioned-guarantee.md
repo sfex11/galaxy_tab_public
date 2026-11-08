@@ -17,5 +17,3 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Strategic Tanking in Stable Matching Markets (2026-11-03)
-
-→ [[sources/2026-11-03-strategic-tanking-in-stable-matching-markets.md|상세 보기]]

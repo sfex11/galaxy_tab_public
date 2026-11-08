@@ -106,5 +106,3 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
 
 동적 모델/라우트 선택이 재처리 비용에 의해 경제적으로 제한되어 있었음을 드러낸다. KV 전이가 선택 비용을 제거하여 적응적 추론의 모델 선택 축이 실질적으로 자유로워지는 인프라 조건을 명시한다.
-
-→ [[sources/2026-11-03-acct-asymmetric-cross-llm-context-transfer.md|상세 보기]]

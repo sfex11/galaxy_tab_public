@@ -76,5 +76,3 @@ _Wiki 축적 중_
 ### The SIMPLE Law for Energy Cost of LLM Inference (2026-11-04)
 
 토큰 절약의 이득이 선형이 아니라 후속 토큰 비용 감쇠의 누적임을 해석적으로 정량화한다. 동일해 보이는 토큰의 비용이 시퀀스 위치의 함수이므로, 효율화 설계는 토큰 수 감소가 아니라 위치별 한계 비용 곡선의 이동으로 평가되어야 함을 시사한다.
-
-→ [[sources/2026-11-04-the-simple-law-for-energy-cost-of-llm-inference.md|상세 보기]]

@@ -15,13 +15,13 @@
 
 통합 멀티모달 모델(UMM)이 이미지 생성에서 언어 CoT를 활용하지 못하는 원인을 **모달리티 불일치**로 진단한다 — 추론은 이산 토큰 공간, 생성은 연속 잠재 공간에서 이루어지므로 번역 경계에서 스케일링 이득과 정밀 제어가 소실된다. 해법으로 추론 자체를 연속 공간에서 수행하는 패러다임을 제시한다.
 
-이 진단은 [[thinking-acting-gap]]과 동형이다. Continuous Actions from Discrete Minds가 자율주행에서 '이산 토큰 추론 vs 연속 물리 동역학'의 표현 형식 차이를 간극의 근원으로 특정했다면, 본 논문은 이미지 생성에서 동일 구조를 확인해 간극의 도메인 불변성을 강화한다.
+이 진단은 [[concepts/thinking-acting-gap.md|thinking acting gap]]과 동형이다. Continuous Actions from Discrete Minds가 자율주행에서 '이산 토큰 추론 vs 연속 물리 동역학'의 표현 형식 차이를 간극의 근원으로 특정했다면, 본 논문은 이미지 생성에서 동일 구조를 확인해 간극의 도메인 불변성을 강화한다.
 
-[[latent-visual-reasoning]]과 쌍을 이룬다 — VideoLVR이 시각 증거의 잠재 주입으로 '지각→추론' 방향 텍스트 번역 우회를 열었다면, 본 논문은 '추론→생성' 역방향을 열어 우회 원리가 이해 입력과 생성 출력 양단 모두에서 성립함을 완성한다.
+[[concepts/latent-visual-reasoning.md|latent visual reasoning]]과 쌍을 이룬다 — VideoLVR이 시각 증거의 잠재 주입으로 '지각→추론' 방향 텍스트 번역 우회를 열었다면, 본 논문은 '추론→생성' 역방향을 열어 우회 원리가 이해 입력과 생성 출력 양단 모두에서 성립함을 완성한다.
 
-[[cot-as-translated-report]] 관점에서 번역 비용의 조건을 명시한다. 이산 CoT가 텍스트 작업에서 관용적이었다면, 수신자가 연속 공간에서 작동할 때는 번역 자체가 구조적 병목이 된다.
+[[concepts/cot-as-translated-report.md|cot as translated report]] 관점에서 번역 비용의 조건을 명시한다. 이산 CoT가 텍스트 작업에서 관용적이었다면, 수신자가 연속 공간에서 작동할 때는 번역 자체가 구조적 병목이 된다.
 
-함의: [[test-time-scaling]]이 표현 호환 조건 하에 이미지 생성으로 상속 가능해진다. 동시에 연속 공간 추론의 채택은 [[unwritten-reasoning-surveillance-exclusion]]과 [[credit-decomposition-target-erasure]]를 생성 도메인으로 확대시킨다.
+함의: [[concepts/test-time-scaling.md|test time scaling]]이 표현 호환 조건 하에 이미지 생성으로 상속 가능해진다. 동시에 연속 공간 추론의 채택은 [[concepts/unwritten-reasoning-surveillance-exclusion.md|unwritten reasoning surveillance exclusion]]과 [[concepts/credit-decomposition-target-erasure.md|credit decomposition target erasure]]를 생성 도메인으로 확대시킨다.
 
 ## 🔗 관련 논문
 

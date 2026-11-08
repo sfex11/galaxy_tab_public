@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-10-31-elucidating-the-design-space-of-lm-data-attributio.md|Elucidating the Design Space of LM Data Attribution]]
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

@@ -16,5 +16,3 @@ _Wiki 축적 중_
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-27)
 
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
-
-→ [[sources/2026-11-08-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

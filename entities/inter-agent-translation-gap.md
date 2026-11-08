@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Latent-Lens: Visual Perception in Small Language Models Through Latent (2026-11-03)
 
 번역 손실의 피해가 수신자 용량에 반비례함을 보여준다 — SLM일수록 번역 간극의 영향이 커지므로, 이종 에이전트 설계에서 소형 수신자 인터페이스가 우선 설계 변수가 됨을 시사한다.
-
-→ [[sources/2026-11-03-latent-lens-visual-perception-in-small-language-mo.md|상세 보기]]

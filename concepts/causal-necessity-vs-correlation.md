@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-05-10-crafting-reversible-sft-behaviors-in-large-languag.md|Crafting Reversible SFT Behaviors in Large Language Models]]
 
 ### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
-
-→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

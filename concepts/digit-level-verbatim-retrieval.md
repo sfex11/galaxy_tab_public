@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-09-08-molecular-déjà-vu-digit-level-retrieval-of-publish.md|Molecular Déjà Vu: Digit-Level Retrieval of Published Values]]
 
 ### Tracing the Scientific Discovery Capacity of LLMs to Their Training Da (2026-11-04)
-
-→ [[sources/2026-11-04-tracing-the-scientific-discovery-capacity-of-llms-.md|상세 보기]]

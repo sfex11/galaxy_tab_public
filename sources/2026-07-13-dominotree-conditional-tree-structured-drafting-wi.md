@@ -421,3 +421,9 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/task-structure-fidelity-gap.md|task structure fidelity gap]]
+
+---
+**관련**: [[entities/divergent-token-counting.md|divergent token counting]]
+
+---
+**관련**: [[entities/entity-token-copying.md|entity token copying]]

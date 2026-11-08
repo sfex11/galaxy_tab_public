@@ -30,5 +30,3 @@ Reviewability가 6개 사용자 가치 그룹 중 하나로 출현하여, 이중
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-07)
 
 본 논문은 이중 독자 설계의 상보 극점을 제공한다 — Affora가 인터페이스 자체를 에이전트 친화적으로 재설계하는 설계 시점 경로라면, 메타 접근은 기존 인터페이스 위에 권한 기반 구조화 뷰를 얹는 런타임 경로다. 두 경로가 같은 문제(인터페이스-에이전트 간극)의 서로 다른 해법 층위임을 확정한다.
-
-→ [[sources/2026-11-07-the-power-of-meta-access-in-the-software-of-the-fu.md|상세 보기]]

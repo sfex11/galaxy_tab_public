@@ -113,3 +113,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/sufficiency-silence-boundary.md|sufficiency silence boundary]]
+
+---
+**관련**: [[entities/structural-target-drift.md|structural target drift]]

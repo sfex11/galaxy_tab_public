@@ -139,3 +139,6 @@ _LLM 분석으로 재생성됨_
 
 ---
 **관련**: [[concepts/idea-to-specification-interface.md|idea to specification interface]]
+
+---
+**관련**: [[entities/specification-incompleteness-propagation.md|specification incompleteness propagation]]

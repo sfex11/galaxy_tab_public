@@ -18,5 +18,3 @@ SkillOS가 학습된 스킬 큐레이션으로 자기 개선 에이전트를 다
 ### Advancing Clinical Genomic Analysis with a Skill-Centred Agent (2026-11-02)
 
 상보 극점이 실증적으로 확정된다. SkillOS의 학습된 큐레이션 대비 ClinGeX가 임상 도메인에서 전문가 위임 큐레이션을 채택한 것은, 큐레이션 주체 선택이 보편 원칙이 아니라 도메인 위험의 함수임을 보여준다.
-
-→ [[sources/2026-11-02-advancing-clinical-genomic-analysis-with-a-skill-c.md|상세 보기]]

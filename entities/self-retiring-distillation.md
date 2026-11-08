@@ -22,5 +22,3 @@ RetireOPD의 교사 은퇴가 학습 시간축의 교사 역학이었다면, 본
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
 
 RetireOPD의 교사 은퇴가 '언제 물러나는가'의 시간축을 다룬다면 본 논문은 '얼마나 세밀하게 개입하는가'의 입도축을 다룬다. 두 축이 직교하는 교사 생애주기 설계 공간의 2차원 구조를 확정한다.
-
-→ [[sources/2026-11-02-every-token-needs-its-own-teacher-multi-teacher-ad.md|상세 보기]]

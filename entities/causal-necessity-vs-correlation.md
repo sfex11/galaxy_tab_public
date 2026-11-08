@@ -22,5 +22,3 @@ _Wiki 축적 중_
 ### From extreme weather to agricultural consequences with agentic AI (2026-11-02)
 
 상관된 기상 지표가 아닌 인과적으로 검토된 지수만을 예측에 사용하는 설계를 제공하여, 상관-인과 구분이 농업 리스크 예측의 전제 조건임을 실증한다.
-
-→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]

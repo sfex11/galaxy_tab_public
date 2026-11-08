@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### SENTINEL-RL: Offloading Topological Reasoning from LLM Agents in the S (2026-09-06)
 
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
-
-→ [[sources/2026-11-04-from-natural-language-to-exact-cover-a-neuro-symbo.md|상세 보기]]

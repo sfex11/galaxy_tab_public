@@ -100,3 +100,6 @@ _LLM 분석으로 생성됨_
 
 ---
 **관련**: [[concepts/harness-core-shell-stratification.md|harness core shell stratification]]
+
+---
+**관련**: [[entities/interpretive-harness.md|interpretive harness]]

@@ -115,3 +115,6 @@ _자동 생성됨_
 
 ---
 **관련**: [[concepts/governance-constrained-adaptation.md|governance constrained adaptation]]
+
+---
+**관련**: [[entities/constrained-tool-access.md|constrained tool access]]

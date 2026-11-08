@@ -14,5 +14,3 @@ _Wiki 축적 중_
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-10-31)
 
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
-
-→ [[sources/2026-11-03-decisionrank-on-policy-distillation-for-decision-m.md|상세 보기]]

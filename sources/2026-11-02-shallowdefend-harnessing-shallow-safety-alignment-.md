@@ -42,3 +42,6 @@ stateless-moderation 관점에서도 중요하다. 얕은 안전이 단일 턴�
 
 ---
 _LLM 분석으로 생성됨_
+
+---
+**관련**: [[entities/role-as-relational-property.md|role as relational property]]

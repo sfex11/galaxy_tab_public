@@ -18,5 +18,3 @@ _Wiki 축적 중_
 ### Flide: Accelerating Decision Inference with Exact State Forking (2026-11-03)
 
 Flide가 Jev를 '결정 모델'의 대표 워크로드로 공식 명명하며, 경량 실행기 패러다임의 수요 측이 전용 추론 엔진 연구라는 공급 측 혁신을 유발함을 보여준다. Jev의 System One 고속 실행이 이제 인프라 계층의 포킹 지원 여부에 의해 한정됨을 규정한다.
-
-→ [[sources/2026-11-03-flide-accelerating-decision-inference-with-exact-s.md|상세 보기]]

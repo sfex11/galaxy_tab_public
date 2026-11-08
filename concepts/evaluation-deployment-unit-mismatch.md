@@ -22,5 +22,3 @@ _자동 Wiki Query에서 추출됨_
 ### Testing Interchangeability in LLM Agent Teams (2026-09-08)
 
 ### DiabAgent: Toward Agentic Physiological Control (2026-11-04)
-
-→ [[sources/2026-11-04-diabagent-toward-agentic-physiological-control.md|상세 보기]]

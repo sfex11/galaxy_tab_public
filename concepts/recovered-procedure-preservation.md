@@ -12,5 +12,3 @@ _Wiki 축적 중_
 - [[sources/2026-11-07-reprobridge-building-reproducibility-into-ml-resea.md|ReproBridge: Building Reproducibility into ML Research Artif]]
 
 ### ReproBridge: Building Reproducibility into ML Research Artifacts (2026-11-08)
-
-→ [[sources/2026-11-08-reprobridge-building-reproducibility-into-ml-resea.md|상세 보기]]

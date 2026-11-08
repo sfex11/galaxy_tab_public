@@ -30,5 +30,3 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
 
 내부에 이미 형성된 예측(잔여 길이)을 판독한다는 점에서 동일 계보에 속하되, 프리필 시점 판독의 정보 상한이 디코딩 확률성에 의해 규정됨을 밝혀 내부 판독 패러다임의 한계 조건을 명시한다.
-
-→ [[sources/2026-11-02-on-the-fundamental-limits-of-prefill-based-decodin.md|상세 보기]]

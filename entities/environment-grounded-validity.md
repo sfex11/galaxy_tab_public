@@ -23,10 +23,6 @@ _Wiki 축적 중_
 
 과거 조건 예측을 실제 작물 손실 기록으로 백테스팅하는 것이 환경 접지 타당성의 예측 도메인 형태임을 보여준다 — 에이전트의 내부 판단이 아닌 실제 발생한 피해 기록이 판별 기준으로 작동한다.
 
-→ [[sources/2026-11-02-from-extreme-weather-to-agricultural-consequences-.md|상세 보기]]
-
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
 
 검증 판정의 근거가 모델 출력이나 제공된 관측이 아닌 환경 상태에 대한 능동적 탐색에 접지됨을 CUA 도메인에서 실증한다. 환경 근거 타당성이 자동 검증 파이프라인으로 구현되는 사례다.
-
-→ [[sources/2026-11-02-vericua-verification-as-agentic-exploration-for-co.md|상세 보기]]

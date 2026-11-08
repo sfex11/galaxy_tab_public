@@ -17,16 +17,16 @@
 
 ## Wiki에서의 위치
 
-하네스 설계 주체의 인간→에이전트 전환([[harness-subject-internalization]])의 체화 도메인 실현이다. 동결 정책+자동 설계 하네스가 파인튜닝의 강력한 대안이라는 결과는 정책 가중치와 하네스가 분리 가능한 최적화 축임([[model-harness-decomposability]])을 실증하며, 하네스가 능력 번역자([[harness-as-capability-translator]])라면 번역 규칙 자체가 생성 가능한 대상임을 확정한다. 관찰→진단→개정 루프는 [[failure-guided-harness-growth]]의 로봇 버전이고, 실패는 하네스 개정의 인과 데이터([[failure-as-causal-data]])로 소비된다.
+하네스 설계 주체의 인간→에이전트 전환([[concepts/harness-subject-internalization.md|harness subject internalization]])의 체화 도메인 실현이다. 동결 정책+자동 설계 하네스가 파인튜닝의 강력한 대안이라는 결과는 정책 가중치와 하네스가 분리 가능한 최적화 축임([[concepts/model-harness-decomposability.md|model harness decomposability]])을 실증하며, 하네스가 능력 번역자([[concepts/harness-as-capability-translator.md|harness as capability translator]])라면 번역 규칙 자체가 생성 가능한 대상임을 확정한다. 관찰→진단→개정 루프는 [[concepts/failure-guided-harness-growth.md|failure guided harness growth]]의 로봇 버전이고, 실패는 하네스 개정의 인과 데이터([[concepts/failure-as-causal-data.md|failure as causal data]])로 소비된다.
 
 ## 연결점
 
-- [[show-harness]]·[[embodied-harness]]: 수작업 로봇 하네스 구축에 이은 설계 자동화 축
-- [[robot-skill-as-code]]: 하네스 코드가 감사 가능한 로봇 능력 아티팩트로 영구 메모리에 축적
-- [[validated-skill-library]]·[[skill-as-external-state]]: 설계 지식의 재사용 가능 외부 상태화
-- [[coding-agent-domain-deboundarying]]: 코딩 에이전트가 로봇 에이전트 설계의 저자가 되는 경계 확장
-- [[harness-task-matching-bottleneck]]: 로봇별 하네스 매칭 병목에 대한 자동 매칭 해법
-- [[scale-conditional-training-strategy]]: 적응 수단 스펙트럼에 파인튜닝 대안 경로 추가
+- [[concepts/show-harness.md|show harness]]·[[concepts/embodied-harness.md|embodied harness]]: 수작업 로봇 하네스 구축에 이은 설계 자동화 축
+- [[concepts/robot-skill-as-code.md|robot skill as code]]: 하네스 코드가 감사 가능한 로봇 능력 아티팩트로 영구 메모리에 축적
+- [[concepts/validated-skill-library.md|validated skill library]]·[[concepts/skill-as-external-state.md|skill as external state]]: 설계 지식의 재사용 가능 외부 상태화
+- [[concepts/coding-agent-domain-deboundarying.md|coding agent domain deboundarying]]: 코딩 에이전트가 로봇 에이전트 설계의 저자가 되는 경계 확장
+- [[concepts/harness-task-matching-bottleneck.md|harness task matching bottleneck]]: 로봇별 하네스 매칭 병목에 대한 자동 매칭 해법
+- [[concepts/scale-conditional-training-strategy.md|scale conditional training strategy]]: 적응 수단 스펙트럼에 파인튜닝 대안 경로 추가
 
 ## 🔗 관련 논문
 
