@@ -1938,3 +1938,16 @@
 - [[sources/2026-11-06-context--answer-metamodels-forecasting-llm-activat.md]] - Context--Answer Metamodels: Forecasting LLM Activations Before the First Answer Token
 - [[sources/2026-11-06-replicability-reproducibility-and-robustness-in-po.md]] - Replicability, Reproducibility, and Robustness in Political and Social Science Research with Large Language Models
 - [[sources/2026-11-06-visual-token-routing-learning-to-keep-tokens-that-.md]] - Visual Token Routing: Learning to keep tokens that matter
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-09-swarmevolve-latent-agent-swarms-for-evolutionary-d.md]] - SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization
+- [[sources/2026-11-09-reprobridge-building-reproducibility-into-ml-resea.md]] - ReproBridge: Building Reproducibility into ML Research Artifacts
+- [[sources/2026-11-09-medgraph-maintaining-patient-state-with-graph-memo.md]] - MedGraph: Maintaining Patient State with Graph Memory for Long-Term Medical Dialogue
+- [[sources/2026-11-09-the-power-of-meta-access-in-the-software-of-the-fu.md]] - The Power of Meta Access in the Software of the Future --- Demonstrated on LLM Chat UIs and Chat AI
+- [[sources/2026-11-09-benchmarks-as-software-terminal-bench-and-the-case.md]] - Benchmarks as Software: Terminal-Bench and the Case for Continuous Benchmarks
+- [[sources/2026-11-09-social-humanoid-socially-responsive-human-humanoid.md]] - Social Humanoid: Socially Responsive Human-Humanoid Interaction
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-09-scale-real-time-latent-communication-for-cyber-phy.md]] - SCALE: Real-Time Latent Communication for Cyber-Physical Agents
+- [[sources/2026-11-09-understanding-ai-from-the-inside-the-state-of-mech.md]] - Understanding AI from the Inside: The State of Mechanistic Interpretability for AI Safety
+- [[sources/2026-11-09-scientist-world-grow-a-research-world-for-ai-scien.md]] - Scientist World: Grow a Research World for AI-Scientists
+- [[sources/2026-11-09-vflash-fast-accurate-visual-planning-via-flash-pri.md]] - VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding
+- [[sources/2026-11-09-strataflux-memory-hierarchy-native-low-bit-llm-inf.md]] - StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference

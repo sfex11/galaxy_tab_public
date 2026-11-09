@@ -3968,3 +3968,25 @@
 ## [2026-11-08 21:13] lint | Wiki 건전성 체크
 - Issues: 3524개
 - Orphans: 1104, Missing: 2420, Contradictions: 0
+
+## [2026-11-09 08:30] ingest | SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization
+
+## [2026-11-09 08:30] ingest | ReproBridge: Building Reproducibility into ML Research Artifacts
+
+## [2026-11-09 08:30] ingest | MedGraph: Maintaining Patient State with Graph Memory for Long-Term Medical Dialogue
+
+## [2026-11-09 08:30] ingest | The Power of Meta Access in the Software of the Future --- Demonstrated on LLM Chat UIs and Chat AI
+
+## [2026-11-09 08:30] ingest | Benchmarks as Software: Terminal-Bench and the Case for Continuous Benchmarks
+
+## [2026-11-09 08:30] ingest | Social Humanoid: Socially Responsive Human-Humanoid Interaction
+
+## [2026-11-09 08:30] ingest | SCALE: Real-Time Latent Communication for Cyber-Physical Agents
+
+## [2026-11-09 08:30] ingest | Understanding AI from the Inside: The State of Mechanistic Interpretability for AI Safety
+
+## [2026-11-09 08:30] ingest | Scientist World: Grow a Research World for AI-Scientists
+
+## [2026-11-09 08:30] ingest | VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding
+
+## [2026-11-09 08:30] ingest | StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference
