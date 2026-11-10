@@ -3990,3 +3990,33 @@
 ## [2026-11-09 08:30] ingest | VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding
 
 ## [2026-11-09 08:30] ingest | StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference
+
+## [2026-11-10 08:33] ingest | On Agentic Manipulation Policies
+
+## [2026-11-10 08:33] ingest | CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse
+
+## [2026-11-10 08:33] ingest | FlowMoP: Stochastic Multi-Person Motion Prediction
+
+## [2026-11-10 08:33] ingest | Computer-Use Agents Are Embodied Generalists
+
+## [2026-11-10 08:33] ingest | Ensemble Methodology for Reference-Free Confidence Estimation in LLM-based Code Summarization
+
+## [2026-11-10 08:33] ingest | GroundWork: Bridging Human and LLM Reasoning Through a Structured Argumentation Model
+
+## [2026-11-10 08:33] ingest | Can Agentic Systems Close the Gap in Radiology with Production AI Tools?
+
+## [2026-11-10 08:33] ingest | Scenario Orchestration for Closed-loop Policy Evaluation of Autonomous Driving
+
+## [2026-11-10 08:33] ingest | Discovering formally verified quantum programs with AI
+
+## [2026-11-10 08:33] ingest | Compaction, decay and reinforcement in a two-tier conversational memory: a paired evaluation against retrieval-augmented generation
+
+## [2026-11-10 08:33] ingest | BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design
+
+## [2026-11-10 08:33] ingest | When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents
+
+## [2026-11-10 08:33] ingest | Test-Time Compute Scales Better with Parallel Agent Teams
+
+## [2026-11-10 08:33] ingest | Knowing When to Intervene: Causal Evaluation of AI Agents
+
+## [2026-11-10 08:33] ingest | Assessing the Impact of Retrieval-Augmented Generation on Algorithmic Problem-Solving

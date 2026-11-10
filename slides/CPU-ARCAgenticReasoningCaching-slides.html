@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reus — 논문 시각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#faf9f7;--bg2:#f0eeeb;--fg:#2c2825;--muted:#8a8580;--accent:#c2703e;--accent2:#5b7c99;--accent3:#6b9e7a;--card:rgba(255,255,255,0.7);--border:rgba(194,112,62,0.12);--glass:rgba(194,112,62,0.04);--shadow:0 2px 20px rgba(44,40,37,0.06)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-layer::before{content:'';position:absolute;top:-20%;left:-15%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(194,112,62,0.05) 0%,transparent 70%);border-radius:50%;animation:floatBlob 30s ease-in-out infinite}
+.bg-layer::after{content:'';position:absolute;bottom:-15%;right:-10%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(91,124,153,0.04) 0%,transparent 70%);border-radius:50%;animation:floatBlob 35s ease-in-out infinite reverse}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-5%) scale(1.03)}66%{transform:translate(-2%,3%) scale(0.97)}}
+.slides-container{position:relative;z-index:1;width:100%}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:clamp(24px,5vw,60px) clamp(20px,5vw,40px);position:relative;border-bottom:1px solid rgba(44,40,37,0.06)}
+.slide-inner{width:100%;max-width:860px}
+.slide-title{font-family:'Source Serif 4',serif;font-size:clamp(22px,4.5vw,42px);font-weight:700;line-height:1.3;margin-bottom:clamp(16px,3vw,32px);letter-spacing:-0.01em;color:var(--fg)}
+.slide-subtitle{font-size:clamp(14px,2vw,18px);font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:clamp(16px,3vw,32px)}
+.accent{color:var(--accent)}.accent2{color:var(--accent2)}.accent3{color:var(--accent3)}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,20px)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,16px)}
+.tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:clamp(11px,1.4vw,13px);font-weight:500;letter-spacing:0.03em}
+.tag-amber{background:rgba(194,112,62,0.1);color:var(--accent)}
+.tag-red{background:rgba(91,124,153,0.1);color:var(--accent2)}
+.tag-green{background:rgba(107,158,122,0.1);color:var(--accent3)}
+.big-num{font-family:'Source Serif 4',serif;font-size:clamp(32px,7vw,60px);font-weight:700;line-height:1;color:var(--accent)}
+.quote-block{border-left:3px solid var(--accent);padding:clamp(14px,2.5vw,24px) clamp(16px,3vw,32px);background:var(--glass);border-radius:0 12px 12px 0;margin:clamp(16px,3vw,28px) 0;font-style:italic;color:var(--muted);font-size:clamp(13px,1.7vw,16px);line-height:1.85}
+.check-list{list-style:none}.check-list li{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid rgba(44,40,37,0.06);font-size:clamp(13px,1.6vw,15px);line-height:1.7}
+.check-list li:last-child{border-bottom:none}
+.check-icon{width:20px;height:20px;border-radius:50%;background:rgba(107,158,122,0.12);color:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:3px}
+.flow-item{display:flex;align-items:flex-start;gap:clamp(12px,2vw,20px);margin-bottom:clamp(16px,3vw,28px)}
+.flow-icon{width:clamp(40px,6vw,52px);height:clamp(40px,6vw,52px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.5vw,20px);flex-shrink:0}
+.flow-connector{width:2px;height:clamp(12px,2vw,20px);margin-left:clamp(19px,3vw,25px);background:linear-gradient(to bottom,var(--accent),transparent);opacity:0.2}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(12px,1.5vw,14px)}
+.compare-table th{padding:clamp(10px,2vw,16px);text-align:left;font-weight:500;border-bottom:2px solid var(--border);color:var(--muted);font-size:clamp(11px,1.3vw,13px);letter-spacing:0.03em}
+.compare-table td{padding:clamp(10px,2vw,16px);border-bottom:1px solid rgba(44,40,37,0.06);line-height:1.6}
+.compare-table tr:last-child td{border-bottom:none}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.pipeline-step{flex-shrink:0;padding:clamp(12px,2vw,20px);border-radius:12px;text-align:center;min-width:clamp(100px,22vw,160px);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.pipeline-arrow{flex-shrink:0;color:var(--accent);font-size:clamp(14px,2vw,18px);padding:0 clamp(4px,1vw,10px);opacity:0.4}
+.step-num{font-family:'Source Serif 4',serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--accent);margin-bottom:4px}
+.step-label{font-size:clamp(11px,1.4vw,14px);font-weight:500;margin-bottom:2px}
+.step-desc{font-size:clamp(10px,1.3vw,12px);color:var(--muted);line-height:1.5}
+.hr{width:50px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px;margin:clamp(12px,2vw,24px) 0}
+.glow-amber{text-shadow:none}
+/* 스크롤 네비게이션 - 상단 sticky */
+.nav-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(44,40,37,0.06)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:0.25;padding:0;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.3s ease}
+.nav-dot.active{opacity:0.9;background:var(--accent);width:18px;border-radius:4px}
+.slide-counter{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pipeline::-webkit-scrollbar{display:none}.pipeline{-ms-overflow-style:none;scrollbar-width:none}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:stretch}.pipeline-arrow{transform:rotate(90deg);padding:6px 0;text-align:center}.pipeline-step{min-width:100%}}
+@media(max-width:320px){.big-num{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<nav class="nav-bar" id="navBar">
+<span class="slide-counter" id="slideCounter">1 / N</span>
+</nav>
+<div class="slides-container" id="slidesContainer">
+<section class="slide" data-index="0">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:8vh;">
+      <span class="tag tag-amber" style="font-size:clamp(12px,1.4vw,16px);">arXiv:2611.09891v1 · cs.AI</span>
+      <h1 style="font-size:clamp(28px,4.5vw,54px); margin-top:24px; line-height:1.25;">CPU-ARC<br><span class="accent">Agentic Reasoning Caching</span><br>for on-CPU Reasoning Reuse</h1>
+      <div class="hr" style="max-width:240px; margin:32px auto;"></div>
+      <p class="muted" style="font-size:clamp(15px,1.8vw,22px);">Peter Belcak · Greg Heinrich · Saurav Muralidharan · Shizhe Diao · Pavlo Molchanov</p>
+      <p class="accent2" style="font-size:clamp(14px,1.6vw,20px); margin-top:16px;"><i class="fas fa-microchip"></i>&nbsp; Project Moonshot: Local Frontier Intelligence</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="1">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">문제 제기: LLM은 <span class="accent">매번 처음부터</span> 풉니다</h2>
+    <div class="quote-block" style="margin-top:24px;">
+      <p style="font-size:clamp(16px,2vw,26px);">"Large language models <b>re-invent the wheel</b> all the time."</p>
+    </div>
+    <div class="grid-2" style="margin-top:28px;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(16px,1.9vw,24px);"><i class="fas fa-link-slash"></i>&nbsp; 과제 해결과 실행의 혼동</h3>
+        <p style="font-size:clamp(14px,1.6vw,19px);">LLM은 문제를 푸는 것(task-solving)과 푼 해답을 실행하는 것(execution)을 하나로 섞어 처리합니다.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(16px,1.9vw,24px);"><i class="fas fa-repeat"></i>&nbsp; 반복되는 쿼리의 낭비</h3>
+        <p style="font-size:clamp(14px,1.6vw,19px);">AI 에이전트는 같은 지시·계획에 페이로드만 다른 쿼리를 반복 호출하며, 매 인스턴스마다 동일한 추론을 처음부터 수행합니다.</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(15px,1.8vw,22px); margin-top:28px;"><i class="fas fa-lightbulb accent3"></i>&nbsp; <b>핵심 질문:</b> 한 번 추론해 낸 해답을, <span class="accent">새 문제 인스턴스에 최소한의 LLM 개입으로 재사용</span>할 수 있을까?</p>
+  </div>
+</section>
+
+<section class="slide" data-index="2">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">핵심 통찰: 추론 단계는 <span class="accent">그대로</span> 재사용된다</h2>
+    <p class="muted" style="font-size:clamp(14px,1.7vw,20px);">MATH-500 예제 — "196의 양의 약수는 몇 개인가?"</p>
+    <table class="compare-table" style="margin-top:20px;">
+      <thead>
+        <tr><th style="font-size:clamp(13px,1.5vw,18px);">변형</th><th style="font-size:clamp(13px,1.5vw,18px);">질문</th><th style="font-size:clamp(13px,1.5vw,18px);">추론 변화</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-size:clamp(13px,1.5vw,18px);"><b>원본</b></td>
+          <td style="font-size:clamp(13px,1.5vw,18px);">196의 양의 정수 약수 개수는?</td>
+          <td style="font-size:clamp(13px,1.5vw,18px);">—</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(13px,1.5vw,18px);"><b>재구문</b><br><span class="tag tag-green">파라미터 동일</span></td>
+          <td style="font-size:clamp(13px,1.5vw,18px);">196을 균등하게 나누는 양의 정수 개수는?</td>
+          <td style="font-size:clamp(13px,1.5vw,18px);"><i class="fas fa-check accent3"></i> 한 단어도 변하지 않음</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(13px,1.5vw,18px);"><b>재파라미터화</b><br><span class="tag tag-amber">표현 동일</span></td>
+          <td style="font-size:clamp(13px,1.5vw,18px);">144의 양의 정수 약수 개수는?</td>
+          <td style="font-size:clamp(13px,1.5vw,18px);"><i class="fas fa-check accent3"></i> 산술값만 조정, 절차 동일</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:clamp(15px,1.8vw,22px); margin-top:24px;"><b>196 = 2²×7² → (2+1)(2+1) = 9</b> &nbsp;vs.&nbsp; <b>144 = 2⁴×3² → (4+1)(2+1) = 15</b></p>
+    <p class="accent2" style="font-size:clamp(15px,1.8vw,22px); margin-top:12px;"><i class="fas fa-arrow-right"></i>&nbsp; 같은 추론으로 풀리는 문제들의 집합 = <b>equirational (등추론) 문제 클래스</b></p>
+  </div>
+</section>
+
+<section class="slide" data-index="3">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">두 가지 관찰 (Observations)</h2>
+    <div class="grid-2" style="margin-top:32px;">
+      <div class="card">
+        <div class="big-num accent">O1</div>
+        <h3 style="font-size:clamp(17px,2vw,25px); margin-top:12px;">해답 탐색과 실행의 분리</h3>
+        <p style="font-size:clamp(14px,1.6vw,19px);">문제를 한 번 추론해 해답을 찾았다면, 그 <b>해답의 실행</b>(계산·데이터 조작)은 LLM의 개입 없이도 수행할 수 있습니다.</p>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:12px;"><i class="fas fa-code accent"></i> 전략: 대화 기록을 <b>코드로 변환</b> — 유사도 검색·값 추출 등 소규모 작업에만 소형 LM 사용</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent2">O2</div>
+        <h3 style="font-size:clamp(17px,2vw,25px); margin-top:12px;">추론의 클래스 단위 재사용</h3>
+        <p style="font-size:clamp(14px,1.6vw,19px);">특정 문제 인스턴스에 대한 추론 대부분은, 그 인스턴스 하나를 넘어 <b>동일 추론으로 풀리는 문제 집합</b>에 재사용 가능합니다.</p>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:12px;"><i class="fas fa-code-branch accent2"></i> 전략: 고정된 변수명이 아닌 <b>자연어 매개변수 인식</b>으로 코드를 파라미터화</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="4">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">기존 연구: 시스템 레벨 캐싱 (SLC)의 두 계열</h2>
+    <div class="grid-2" style="margin-top:28px;">
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(17px,2vw,25px);"><i class="fas fa-cube"></i>&nbsp; 모놀리식 캐싱</h3>
+        <ul class="check-list" style="margin-top:16px;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">프리픽스 캐싱, 대화 ID, 의미 유사도 매칭</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">전체 대화·생성 상태(KV 캐시 등)를 통째로 저장</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">검토 가능, 계산 비용 저렴</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(13px,1.5vw,18px);"><b>약점:</b> 사소한 입력 변화에도 불안정, 메모리·대역폭 비쌈</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(17px,2vw,25px);"><i class="fas fa-puzzle-piece"></i>&nbsp; 모듈러 캐싱</h3>
+        <ul class="check-list" style="margin-top:16px;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">컨텍스트를 기계적 분해하거나 핵심 논리 단계로 증류</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">분해 결과를 LM에 재공급해 추론 가속</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">파라미터 변화에 강건, 메모리 효율적</span></li>
+          <li><span class="check-icon"><i class="fas fa-times"></i></span><span style="font-size:clamp(13px,1.5vw,18px);"><b>약점:</b> 히트 시에도 재생성 필요, 정답 보증 불가</span></li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:clamp(15px,1.8vw,22px); margin-top:24px;"><span class="accent3"><b>CPU-ARC는 이 둘의 하이브리드</b></span> — 커버리지는 강건하고, 비동기 검증으로 정답 보장이 가능하며, 완전한 설명 가능성과 저렴한 비용을 모두 갖춥니다.</p>
+  </div>
+</section>
+
+<section class="slide" data-index="5">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">Agentic Reasoning Cache (ARC)란?</h2>
+    <p style="font-size:clamp(15px,1.9vw,24px); margin-top:20px;">LLM 추론 기록에서 만들어지는, <span class="accent">CPU에서 실행 가능한</span> 소형 <b>전문 분할 에이전트(fractional agents)</b>들의 캐시</p>
+    <div class="grid-3" style="margin-top:32px;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(16px,1.8vw,22px);"><i class="fas fa-bullseye"></i>&nbsp; 강건한 커버리지</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">재구문·재파라미터화된 입력에도 안정적으로 캐시 히트</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(16px,1.8vw,22px);"><i class="fas fa-user-check"></i>&nbsp; 검증 가능한 정답</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">사람이나 심판 에이전트가 비동기적으로 캐시 항목의 정답을 보장</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(16px,1.8vw,22px);"><i class="fas fa-search"></i>&nbsp; 완전한 설명 가능성</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">코드 형태로 누구나 추론 과정을 검사·감사 가능</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(16px,1.8vw,22px);"><i class="fas fa-graduation-cap"></i>&nbsp; 지속적 학습 가능</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">캐시를 계속 훈련·개선할 수 있음</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(16px,1.8vw,22px);"><i class="fas fa-coins"></i>&nbsp; 극도로 저렴한 호출</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">원본 모델 대비 <b>16–291배</b> 저렴한 호출 비용</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="6">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">ARC 구축: <span class="accent">5단계 파이프라인</span></h2>
+    <p class="muted" style="font-size:clamp(14px,1.7vw,20px);">LLM 대화 기록 → CPU 실행 코드로의 변환 과정</p>
+    <div class="pipeline" style="margin-top:36px;">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-label">입출력 격리</div>
+        <div class="step-desc">입력-출력 분리</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-label">분해</div>
+        <div class="step-desc">문제를 하위 작업으로 분해</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-label">파라미터 인식</div>
+        <div class="step-desc">자연어 매개변수 식별</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-label">계획</div>
+        <div class="step-desc">실행 계획 수립</div>
+      </div>
+      <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-label">구현</div>
+        <div class="step-desc">코드로 구현·컴파일</div>
+      </div>
+    </div>
+    <ul class="check-list" style="margin-top:36px;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.6vw,19px);">결과물은 <b>시맨틱 함수(semantic functions)</b>의 집합 — 고정된 변수·함수명이 아닌 <b>자연어 매개변수</b>에 의존</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.6vw,19px);">동일 추론으로 풀리는 모든 문제(equirational)에 대해 재사용 가능하도록 파라미터화</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-index="7">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">시맨틱 함수와 ARC 실행</h2>
+    <div class="grid-2" style="margin-top:24px;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(16px,1.9vw,24px);"><i class="fas fa-cogs"></i>&nbsp; 런타임 프리미티브</h3>
+        <ul class="check-list" style="margin-top:14px;">
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);"><b>do</b>: 의미 기반 매칭으로 서브태스크 실행</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);"><b>load</b>: 캐시된 함수 적재·재사용</span></li>
+          <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(13px,1.5vw,18px);">타입 안전성(type safety) 보장</span></li>
+        </ul>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:14px;">소형 LM이 담당: 유사도 검색, 값 추출, 형식 변환, 분류, 요약</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(16px,1.9vw,24px);"><i class="fas fa-memory"></i>&nbsp; 컨텍스트·메모리 모델</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">캐시 항목은 입력 파라미터를 바인딩받아 <b>독립적으로 호출</b>됩니다.</p>
+        <div class="hr"></div>
+        <h3 class="accent2" style="font-size:clamp(16px,1.9vw,24px);"><i class="fas fa-hammer"></i>&nbsp; 컴파일</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">구축된 코드는 <b>CPU에서 직접 실행</b> — 대형 GPU 추론 없이도 프론티어급 성능 재현</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:24px;">
+      <p style="font-size:clamp(14px,1.7vw,21px);">캐시 요소 = <b>새로운 파라미터에 재사용되는 소형·전문 분할 에이전트</b> — 그래서 "agentic" reasoning cache</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="8">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">평가 설계: 세 가지 측정 속성</h2>
+    <div class="grid-3" style="margin-top:28px;">
+      <div class="card">
+        <div class="big-num accent">1</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);">정확도 (Correctness)</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">어려운 수학·과학 벤치마크에서 프론티어 LLM과 동등한 성능인가?</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent2">2</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);">섭동 강건성 (Robustness)</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">표현이 바뀌거나 파라미터가 바뀐 입력에도 올바르게 동작하는가?</p>
+      </div>
+      <div class="card">
+        <div class="big-num accent3">3</div>
+        <h3 style="font-size:clamp(15px,1.8vw,22px);">비용 (Cost)</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">구축·유지·호출 비용이 원본 모델 대비 얼마나 저렴한가?</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:28px;">
+      <div class="card">
+        <span class="tag tag-green">구문 섭동</span>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:12px;">파라미터 동일, 표현만 변경 (equiparametric)</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-amber">파라미터 섭동</span>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:12px;">표현 동일, 수치만 대체 (equiphrasal)</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-red">복합 섭동</span>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:12px;">표현과 파라미터 모두 변경 (equisubstantive)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-index="9">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">주요 결과</h2>
+    <div class="grid-2" style="margin-top:32px;">
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent">16–291×</div>
+        <p style="font-size:clamp(14px,1.7vw,21px);">호출 비용 절감</p>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px);">소스 모델 대비</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="big-num accent2">On-Par</div>
+        <p style="font-size:clamp(14px,1.7vw,21px);">프론티어 LLM과 동등한 성능</p>
+        <p class="muted" style="font-size:clamp(13px,1.5vw,18px);">어려운 수학·과학 태스크 전반</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:24px;">
+      <div class="card">
+        <h3 class="accent" style="font-size:clamp(15px,1.8vw,21px);"><i class="fas fa-check-circle"></i>&nbsp; 정확도</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">프론티어 LLM 성능을 그대로 캐시에서 재현</p>
+      </div>
+      <div class="card">
+        <h3 class="accent2" style="font-size:clamp(15px,1.8vw,21px);"><i class="fas fa-shield-halved"></i>&nbsp; 강건성</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">구문·파라미터·복합 섭동 모두에서 안정적 동작</p>
+      </div>
+      <div class="card">
+        <h3 class="accent3" style="font-size:clamp(15px,1.8vw,21px);"><i class="fas fa-bolt"></i>&nbsp; 비용</h3>
+        <p style="font-size:clamp(13px,1.5vw,18px);">CPU 실행 + 소형 LM만 사용 → GPU 추론 불필요</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(15px,1.8vw,22px); margin-top:24px;"><i class="fas fa-microchip accent"></i>&nbsp; <b>on-CPU</b>: 전체 추론 재사용이 CPU 위에서 동작 — 로컬 환경에서의 프론티어 지능 실현</p>
+  </div>
+</section>
+
+<section class="slide" data-index="10">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">캐싱 방식 비교 요약</h2>
+    <table class="compare-table" style="margin-top:28px;">
+      <thead>
+        <tr>
+          <th style="font-size:clamp(13px,1.6vw,19px);">기준</th>
+          <th style="font-size:clamp(13px,1.6vw,19px);">모놀리식 캐싱</th>
+          <th style="font-size:clamp(13px,1.6vw,19px);">모듈러 캐싱</th>
+          <th style="font-size:clamp(13px,1.6vw,19px);"><span class="accent"><b>ARC (본 논문)</b></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><b>로컬 강건성</b></td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">매우 약함</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">파라미터 변화에 강함</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><i class="fas fa-check accent3"></i> 구문·파라미터 모두 강건</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><b>히트 시 정답</b></td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">검토로 보장 가능</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">보장 불가 (재생성)</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><i class="fas fa-check accent3"></i> 비동기 검증으로 보장</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><b>설명 가능성</b></td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">응답 검사 가능</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">부분적 해석 가능</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><i class="fas fa-check accent3"></i> 코드 기반 완전한 설명</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><b>비용</b></td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">계산 저렴, 메모리 비쌈</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">계산 비쌈, 메모리 효율</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><i class="fas fa-check accent3"></i> 구축·유지·호출 모두 저렴 (16–291×)</td>
+        </tr>
+        <tr>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><b>실행 하드웨어</b></td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">시스템 레벨</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);">LLM 재호출 필요</td>
+          <td style="font-size:clamp(12px,1.4vw,17px);"><i class="fas fa-check accent3"></i> CPU + 소형 LM</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-index="11">
+  <div class="slide-inner">
+    <h2 style="font-size:clamp(24px,3.2vw,40px);">의의와 배치 (Placement)</h2>
+    <ul class="check-list" style="margin-top:24px;">
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.7vw,21px);">LLM의 역할을 <b>해답 탐색</b>으로 한정하고, <b>실행</b>은 CPU 캐시에 위임하는 새로운 추론 아키텍처</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.7vw,21px);">반복 질의가 많은 <b>AI 에이전트·에이전트 기반 소프트웨어</b>에 즉시 적용 가능한 시스템 레벨 최적화</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.7vw,21px);">캐시 항목이 코드이므로 <b>감사(audit), 규제 검토, 지속적 개선</b>이 모두 가능</span></li>
+      <li><span class="check-icon"><i class="fas fa-check"></i></span><span style="font-size:clamp(14px,1.7vw,21px);">목표 모델은 <b>합성 데이터 증강 + supervised fine-tuning</b>으로 제작되어 자체 완결적 구축 가능</span></li>
+    </ul>
+    <div class="quote-block" style="margin-top:32px;">
+      <p style="font-size:clamp(16px,2vw,25px);">"한 번 추론한 문제의 해답 실행은, 언어 모델의 도움을 거의 받지 않고도 매우 효율적으로 수행될 수 있다."</p>
+    </div>
+    <p class="muted" style="font-size:clamp(14px,1.7vw,21px); margin-top:24px;"><i class="fas fa-flag accent"></i>&nbsp; Project Moonshot의 비전: <b>Local Frontier Intelligence</b> — 로컬에서 프론티어급 지능을</p>
+  </div>
+</section>
+
+<section class="slide" data-index="12">
+  <div class="slide-inner">
+    <div style="text-align:center; padding-top:6vh;">
+      <h2 style="font-size:clamp(26px,3.6vw,46px);">결론</h2>
+      <p style="font-size:clamp(15px,1.9vw,24px); margin-top:20px;">LLM 추론 기록 → <span class="accent">CPU 실행형 에이전틱 캐시</span>로 변환하여<br>프론티어급 성능을 <span class="accent2">16–291배 저렴하게</span> 재사용</p>
+      <div class="hr" style="max-width:200px; margin:28px auto;"></div>
+      <h3 style="font-size:clamp(20px,2.6vw,34px);">CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse</h3>
+      <p class="muted" style="font-size:clamp(14px,1.7vw,20px); margin-top:16px;">Peter Belcak · Greg Heinrich · Saurav Muralidharan · Shizhe Diao · Pavlo Molchanov</p>
+      <p style="font-size:clamp(14px,1.7vw,20px); margin-top:16px;">
+        <i class="fas fa-link accent3"></i>&nbsp;
+        <a href="http://arxiv.org/abs/2611.09891v1">arxiv.org/abs/2611.09891v1</a>
+      </p>
+      <div class="grid-3" style="margin-top:36px;">
+        <div class="card"><p style="font-size:clamp(13px,1.5vw,18px);"><i class="fas fa-bolt accent"></i>&nbsp; <b>16–291×</b><br>저렴한 호출</p></div>
+        <div class="card"><p style="font-size:clamp(13px,1.5vw,18px);"><i class="fas fa-microchip accent2"></i>&nbsp; <b>on-CPU</b><br>GPU 불필요 실행</p></div>
+        <div class="card"><p style="font-size:clamp(13px,1.5vw,18px);"><i class="fas fa-eye accent3"></i>&nbsp; <b>100% 설명가능</b><br>코드 기반 감사</p></div>
+      </div>
+      <p class="muted" style="font-size:clamp(13px,1.5vw,18px); margin-top:32px;">감사합니다 · Q&amp;A</p>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+(function(){
+var slides=document.querySelectorAll('.slide'),total=slides.length,bar=document.getElementById('navBar'),counter=document.getElementById('slideCounter');
+counter.textContent='1 / '+total;
+for(var i=0;i<total;i++){var d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('data-i',i);bar.insertBefore(d,counter);d.addEventListener('click',function(){slides[+this.dataset.i].scrollIntoView({behavior:'smooth'})})}
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=Array.prototype.indexOf.call(slides,e.target);var dots=bar.querySelectorAll('.nav-dot');for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',i===idx);counter.textContent=(idx+1)+' / '+total}})},{threshold:0.4});
+slides.forEach(function(s){observer.observe(s)});
+})();
+</script>
+</body>
+</html>

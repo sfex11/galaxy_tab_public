@@ -1951,3 +1951,20 @@
 - [[sources/2026-11-09-scientist-world-grow-a-research-world-for-ai-scien.md]] - Scientist World: Grow a Research World for AI-Scientists
 - [[sources/2026-11-09-vflash-fast-accurate-visual-planning-via-flash-pri.md]] - VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding
 - [[sources/2026-11-09-strataflux-memory-hierarchy-native-low-bit-llm-inf.md]] - StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference
+- [[sources/2026-11-10-on-agentic-manipulation-policies.md]] - On Agentic Manipulation Policies
+- [[sources/2026-11-10-cpu-arc-agentic-reasoning-caching-for-on-cpu-reaso.md]] - CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse
+- [[sources/2026-11-10-flowmop-stochastic-multi-person-motion-prediction.md]] - FlowMoP: Stochastic Multi-Person Motion Prediction
+- [[sources/2026-11-10-computer-use-agents-are-embodied-generalists.md]] - Computer-Use Agents Are Embodied Generalists
+- [[sources/2026-11-10-ensemble-methodology-for-reference-free-confidence.md]] - Ensemble Methodology for Reference-Free Confidence Estimation in LLM-based Code Summarization
+- [[sources/2026-11-10-groundwork-bridging-human-and-llm-reasoning-throug.md]] - GroundWork: Bridging Human and LLM Reasoning Through a Structured Argumentation Model
+- [[sources/2026-11-10-can-agentic-systems-close-the-gap-in-radiology-wit.md]] - Can Agentic Systems Close the Gap in Radiology with Production AI Tools?
+- [[sources/2026-11-10-scenario-orchestration-for-closed-loop-policy-eval.md]] - Scenario Orchestration for Closed-loop Policy Evaluation of Autonomous Driving
+- [[sources/2026-11-10-discovering-formally-verified-quantum-programs-wit.md]] - Discovering formally verified quantum programs with AI
+- [[sources/2026-11-10-compaction-decay-and-reinforcement-in-a-two-tier-c.md]] - Compaction, decay and reinforcement in a two-tier conversational memory: a paired evaluation against retrieval-augmented generation
+- [[entities/transformer]] - Transformer
+- [[sources/2026-11-10-bitdecoding-fp4-native-fp4-kv-cache-decoding-via-a.md]] - BitDecoding-FP4: Native FP4 KV Cache Decoding via Algorithm-System Co-Design
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-11-10-when-instruction-files-go-stale-documentation-debt.md]] - When Instruction Files Go Stale: Documentation Debt and Hidden Cost in Coding Agents
+- [[sources/2026-11-10-test-time-compute-scales-better-with-parallel-agen.md]] - Test-Time Compute Scales Better with Parallel Agent Teams
+- [[sources/2026-11-10-knowing-when-to-intervene-causal-evaluation-of-ai-.md]] - Knowing When to Intervene: Causal Evaluation of AI Agents
+- [[sources/2026-11-10-assessing-the-impact-of-retrieval-augmented-genera.md]] - Assessing the Impact of Retrieval-Augmented Generation on Algorithmic Problem-Solving
