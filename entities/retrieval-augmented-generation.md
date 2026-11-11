@@ -54,3 +54,9 @@ RAG의 맹목 주입 문제에 대한 결정적 진단을 제공한다 — 충�
 ### A Living Benchmark for Information Retrieval from Electronic Health Re (2026-09-26)
 
 EHR 기반 RAG 시스템의 평가가 자동 생성된 QA 쌍으로 지속 검증될 수 있는 경로를 제공한다. RAG 시스템 평가의 근거 문서가 실제 환자 기록으로 유지됨을 의미한다.
+
+### FERN: Cross-Benchmark Table Retrieval for Text-to-SQL with Frozen Retr (2026-11-12)
+
+RAG 검색 계층의 구성 원리를 '단일 검색기'에서 '다중 동결 검색기 융합 + 학습된 재정렬 계층'의 2단 구조로 확장한다. 검색 품질의 학습 가능성이 후보 생성이 아닌 후보 정렬 계층에 있음을 시사한다.
+
+→ [[sources/2026-11-12-fern-cross-benchmark-table-retrieval-for-text-to-s.md|상세 보기]]

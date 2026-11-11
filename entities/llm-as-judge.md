@@ -58,3 +58,15 @@ judge의 역할을 출력 평가자에서 데이터 주석자(annotator)로 확�
 ### FinAutoRubric: Expert-Guided Automatic Rubric Generation for Evaluatin (2026-09-30)
 
 판단자 신뢰성의 교정 축으로 '전문가 가이던스의 이중 작용'을 추가한다. 판단 행위가 전문가가 명시한 기준으로 프롬프트(생성 전)와 루브릭(판정 시) 양면에서 사전 구속되어 judge 드리프트를 구조적으로 감소시킨다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+LLM 판정이 트레이스 접근 수준(전체 트레이스 vs 텍스트 전용)에 따라 탐지 능력과 안정성이 달라짐을 보여, 'LLM-as-judge' 단일 범주 내부에 접근 계층별 변이가 존재함을 밝힌다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]
+
+### Pterodactyl: Pushing the Limits of Efficient Automated Translation Eva (2026-11-12)
+
+judge를 절대 채점자가 아닌 이진 트리아지 필터로 강등하는 새 용법을 제공한다. 정밀 점수 대신 '오류 유무' 판정으로 judge의 비일관성이 실무 결정에 미치는 영향을 축소하면서, 초저비용으로 대규모 데이터 큐레이션 평가를 실현 가능하게 하는 설계를 확립한다.
+
+→ [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]

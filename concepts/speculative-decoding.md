@@ -32,3 +32,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-08-triattention-efficient-long-reasoning-with-trigono.md|TriAttention: Efficient Long Reasoning with Trigonometric KV]] (2026-04-08)
 
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
+
+### Earlybird: Predictive Streaming Speech Recognition in 29M Parameters (2026-11-12)
+
+→ [[sources/2026-11-12-earlybird-predictive-streaming-speech-recognition-.md|상세 보기]]

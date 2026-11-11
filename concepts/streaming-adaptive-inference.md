@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mech (2026-09-11)
 
 ### RetroThinker: Enabling Retrospective Thinking in Speech LLMs (2026-09-13)
+
+### Earlybird: Predictive Streaming Speech Recognition in 29M Parameters (2026-11-12)
+
+→ [[sources/2026-11-12-earlybird-predictive-streaming-speech-recognition-.md|상세 보기]]

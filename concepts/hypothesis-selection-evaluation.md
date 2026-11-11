@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-04-26-evaluation-of-automatic-speech-recognition-using-g.md|Evaluation of Automatic Speech Recognition Using Generative ]]
 
 ### Evaluation of Automatic Speech Recognition Using Generative Large Lang (2026-04-27)
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]

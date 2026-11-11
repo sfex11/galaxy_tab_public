@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### REAL Loss: Optimizing Real Expected Acceptance Length for Speculative  (2026-11-12)
+
+→ [[sources/2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md|상세 보기]]

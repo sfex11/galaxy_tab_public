@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Towards Understanding the Impact of Plasticity Loss on Reinforcement L (2026-11-03)
 
 플라스티시티 손실을 연속 학습 실패의 기제론적 병인으로 부여한다. 연속 학습의 문제가 '무엇을 유지·망각할 것인가'를 넘어 '학습 가능성 자체를 어떻게 보존할 것인가'를 포함함을 RL 도메인에서 규명한다.
+
+### Continual-ARC: Measuring Skill Acquisition over a Working Lifetime (2026-11-12)
+
+에이전트 하네스를 파라메트릭 학습과 병렬되는 지속학습 메커니즘으로 명시적으로 위치시키며, 세계 모델 지속학습 벤치마크가 개별 학습자 계열 내에서 다룬 것과 달리 학습 기판 간 비교라는 제2의 평가 축을 연다.
+
+→ [[sources/2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md|상세 보기]]

@@ -34,3 +34,9 @@ LLM의 사전학습된 세계 모델과 실제 환경의 괴리가 이상 현상
 ### Hierarchical World Models with Implicit Dynamics (2026-11-03)
 
 세계 모델 설계 공간에 '기능 분해' 축을 추가한다 — 도달가능성 구조와 동역학 예측을 별도 계층으로 분리함으로써, 빅월드 체제에서 단일 잠재 동역학이 직면하는 충실성 한계([[concepts/world-model-in-pieces.md|world model in pieces]] 논의)에 대한 아키텍처적 응답을 제공한다. 세계 모델이 통합 예측기가 아니라 이질적 기능의 조합일 수 있음을 시사한다.
+
+### Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning (2026-11-12)
+
+세계 모델의 생성 주체·소비 목적의 확장을 제공한다 — LLM이 자연어 상황에서 POSG 형식의 형식적 세계 모델을 생성하고, 그 소비자가 에이전트 자신이 아닌 계획·검증·안전 추론임을 보여준다. 예측형(잠재), 편집형(태스크 상태)에 이어 '형식 생성형(검증 기반)'이라는 제3 위상이 추가되며, 세계 모델 평가 기준이 예측 충실도가 아닌 '의도된 문제에 대한 충실성'임을 재확인한다.
+
+→ [[sources/2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md|상세 보기]]

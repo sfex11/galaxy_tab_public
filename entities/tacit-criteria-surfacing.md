@@ -26,3 +26,9 @@ rebuttal 데이터가 암묵적 리뷰 기준(유효 진단의 조건, 수용 �
 ### ScienceIDE: Turning World's Scientific Codebase into Agent Learnable E (2026-09-18)
 
 전문가의 암묵적 도메인 관례와 특수 정확성 기준이 환경 정의·유도 과정을 통해 명시적 사양으로 외면화되는 구조적 경로를 제공한다. 코드 리뷰·테스트 적합성에서 관찰된 암묵 기준의 형식화가 과학 코드 환경화에서도 재현됨을 보여준다.
+
+### Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents (2026-11-12)
+
+기준 외면화 전략의 한계 조건을 제공한다 — 전문 화학자조차 포즈 품질 기준을 신뢰 가능한 형식으로 추출하지 못하므로, 암묵적 기준의 표면화가 전문가 지식의 존재와 접근 가능성을 전제로 함이 실증된다. SWE-Gate가 리뷰 기준 외면화의 성공 사례였다면 본 논문은 그 실패 조건을 규정한다.
+
+→ [[sources/2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md|상세 보기]]

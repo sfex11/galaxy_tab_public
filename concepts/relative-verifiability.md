@@ -22,3 +22,11 @@ _자동 Wiki Query에서 추출됨_
 ### Translation as a Decision Space: A Multi-Agent Perspective on Low-Reso (2026-09-07)
 
 ### Domain-Specific Hallucination Detection in Large Language Models (2026-09-12)
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]
+
+### Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents (2026-11-12)
+
+→ [[sources/2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md|상세 보기]]

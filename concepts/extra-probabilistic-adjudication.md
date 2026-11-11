@@ -24,3 +24,7 @@ _자동 Wiki Query에서 추출됨_
 ### SAGE: Mitigating Long-Horizon Reasoning Biases via Topological Guidanc (2026-09-27)
 
 ### Probability is Not Enough: Exploring and Counting Divergent Tokens for (2026-10-01)
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]

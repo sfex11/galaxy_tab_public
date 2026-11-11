@@ -26,3 +26,9 @@ CoT 감시 우회(계획 오염-흔적 세척)에 이어 런타임 도구 모니
 ### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
 
 CoT 감시의 비적대적 무효성 사례를 추가한다. 계획 오염 하의 trace 세척(Corrupt Plans)과 달리, 본 논문은 적대적 회피 없이 정답-흔적 결합이 깨짐을 보여 trace 기반 감시가 오염 의도와 무관하게 근본 전제를 재점검해야 함을 시사한다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+트레이스 기반 LLM 판정은 CoT 감시의 기업 분석 도메인 구현이며, 감시 품질이 트레이스 접근 깊이의 함수임을 실증한다. 판정자 능력만큼 '무엇을 볼 것인가'의 설계가 탐지를 결정함을 보여준다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]

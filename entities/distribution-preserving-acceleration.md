@@ -34,3 +34,9 @@ _Wiki 축적 중_
 ### Flide: Accelerating Decision Inference with Exact State Forking (2026-11-03)
 
 가속-무손실성의 적용 범위를 토큰 생성과 샘플러 교체에서 트리 구조 결정 추론으로 확장한다. 정확성(exactness)이 출력 확률 보존과 분기 시 접두사 상태 충실도라는 이중 조건을 포괄함을 규정한다.
+
+### REAL Loss: Optimizing Real Expected Acceptance Length for Speculative  (2026-11-12)
+
+무손실 원칙 하 가속 최적화의 축이 샘플러 교체·드래프트 구조를 넘어 드래프트 훈련 목적 함수로 확장됨을 보여준다. 검증·기각 메커니즘이 타겟 분포를 보존하는 한 드래프트는 자유롭게 수용 최적화 목적으로 재훈련 가능함을 시사한다.
+
+→ [[sources/2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md|상세 보기]]

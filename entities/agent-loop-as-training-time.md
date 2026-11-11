@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Skill-Space Shooting for Autonomous Robot Policy Improvement (2026-10-01)
 
 조합-실행-관찰-개선 에이전트 루프의 반복이 로봇 정책 개선의 실질 학습 단위로 기능함을 실증하며, 그래디언트 스텝을 루프 반복으로 대체한다는 원리의 물리 도메인 근거를 제공한다.
+
+### Continual-ARC: Measuring Skill Acquisition over a Working Lifetime (2026-11-12)
+
+에이전트 루프 반복이 가중치 학습과 비교 가능한 학습 단위임을 작업 수명 스케일에서 측정하는 틀을 제공한다. 종생 스트림에서의 누적 스킬 획득이 루프=학습시간 동등성의 벤치마크 근거가 된다.
+
+→ [[sources/2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md|상세 보기]]

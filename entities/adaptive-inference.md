@@ -106,3 +106,9 @@ RAO는 기존 적응적 추론이 주로 계산 자원 축소(하향식)에 집�
 ### ACCT: Asymmetric Cross-LLM Context Transfer (2026-11-03)
 
 동적 모델/라우트 선택이 재처리 비용에 의해 경제적으로 제한되어 있었음을 드러낸다. KV 전이가 선택 비용을 제거하여 적응적 추론의 모델 선택 축이 실질적으로 자유로워지는 인프라 조건을 명시한다.
+
+### REAL Loss: Optimizing Real Expected Acceptance Length for Speculative  (2026-11-12)
+
+수용 길이 논의의 양축을 완성한다 — 런타임 γ 적응이 '얼마나 밀 것인가'를 다룬다면 REAL loss는 훈련으로 '얼마나 잘 받아들여질 것인가'를 다루어, 추측 디코딩의 적응이 추론 시점과 훈련 시점으로 분할됨을 보여준다.
+
+→ [[sources/2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md|상세 보기]]

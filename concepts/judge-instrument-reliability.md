@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-09-21-prediction-powered-smoothing-and-validation-for-di.md|Prediction-Powered Smoothing and Validation for Disaggregate]]
+
+### Pterodactyl: Pushing the Limits of Efficient Automated Translation Eva (2026-11-12)
+
+→ [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]

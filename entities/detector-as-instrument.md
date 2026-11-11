@@ -38,3 +38,9 @@ TextSeal의 코인 플립 키 라우팅이 검출기의 점수 평균화로 신�
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-07)
 
 내부 표현을 계측기로 삼는 감시 축이 서베이의 핵심 안전 응용으로 명시되어, 판독이 개입으로 연결되는 이해-제어 파이프라인의 구성요소임이 확정된다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+평가 프레임워크를 실패 탐지기로 보고 탐지율·재현성·발견 능력을 기기별 프로파일로 측정하는 방법론을 제공한다. 기기 프로파일이 실패 유형에 따라 이질적임을 보여준다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]

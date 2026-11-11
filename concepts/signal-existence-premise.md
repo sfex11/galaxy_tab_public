@@ -17,3 +17,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### Every Token Needs Its Own Teacher: Multi-teacher Adaptive On-policy Se (2026-11-02)
+
+### Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents (2026-11-12)
+
+→ [[sources/2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md|상세 보기]]

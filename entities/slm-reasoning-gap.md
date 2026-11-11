@@ -38,3 +38,9 @@ SLM 격차 해소의 제3 경로를 제공한다 — 능력 향상이나 추론 
 ### Latent-Lens: Visual Perception in Small Language Models Through Latent (2026-11-03)
 
 SLM 격차의 병인을 입력 신호 품질 의존성으로 재정의한다. 추론 능력 향상과 추론 필요성 제거 외에 '더 나은 입력 표현의 공급'이라는 제3 해법 축을 추가한다.
+
+### FERN: Cross-Benchmark Table Retrieval for Text-to-SQL with Frozen Retr (2026-11-12)
+
+Distill Globally가 교사의 추론을 증류된 결정으로 대체했다면, FERN은 Claude 3.5의 키워드 추출·선택을 피처 엔지니어링 + LightGBM으로 대체한다. '추론 능력 향상'이 아닌 '추론 필요성 제거'라는 대안 경로가 검색 도메인에서도 성립함을 실증한다.
+
+→ [[sources/2026-11-12-fern-cross-benchmark-table-retrieval-for-text-to-s.md|상세 보기]]

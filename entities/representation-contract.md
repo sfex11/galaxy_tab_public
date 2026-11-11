@@ -42,3 +42,9 @@ _Wiki 축적 중_
 ### DecisionRank: On-Policy Distillation for Decision-Model Rerankers (2026-11-03)
 
 교사(순위 목록)와 학생(첫 토큰 스코어) 간 표현 계약 불일치의 실증 사례를 제공하며, 증류 단위의 이동(토큰→아이템)이 계약 재협상의 메커니즘으로 기능함을 보여준다.
+
+### Demonstration of MANA: Multi-perspective Alignment of NPC Agents (2026-11-12)
+
+개발자-NPC 간 표현 계약이 자연어·코드가 아닌 '동일 POV의 체화 행동'으로 체결됨을 보여준다 — 계약의 형식이 시연 대상 캐릭터의 지각·행동 공간과 일치할 때 번역 손실이 최소화됨을 게임 도메인에서 실증한다.
+
+→ [[sources/2026-11-12-demonstration-of-mana-multi-perspective-alignment-.md|상세 보기]]

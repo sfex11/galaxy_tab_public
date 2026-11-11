@@ -17,3 +17,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]

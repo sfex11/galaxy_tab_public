@@ -34,3 +34,9 @@ LTL 등 논리 언어뿐 아니라 공간 술어·CRS 메타데이터·위상 �
 ### From Natural Language to Exact Cover: A Neuro-Symbolic Approach to Zeb (2026-11-04)
 
 번역의 어려움을 측정하는 진단 전통에 구조적 해법을 추가한다. 번역(LLM)과 추론(기호 솔버)을 계층 분리하여 의미 번역 오류가 추론 정확도를 좌우하지 않는 아키텍처를 Zebra 퍼즐 도메인에서 실증하며, 번역 대상이 LTL에서 정확 커버로 확장됨을 보여준다.
+
+### Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning (2026-11-12)
+
+'구문은 쉽고 의미는 어렵다' 진단의 세계 모델 생성 재현 사례다 — 기계적 유효성(구문)의 달성이 의미론적 충실성(의도된 결정 문제의 표현)의 달성과 분리됨을 POSG 도메인에서 실증하며, LTL 번역 평가에서 시작된 논의가 다자간 게임 형식화로 확장됨을 보여준다.
+
+→ [[sources/2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md|상세 보기]]

@@ -70,3 +70,9 @@ Crab이 실행 환경 계층(체크포인트/복원)의 하네스 구성요소�
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
 
 평가 하네스(벤치마크)도 소프트웨어처럼 유지보수되어야 한다는 제2의 하네스 공학 축을 연다. 실행 하네스 공진화 논의와 평가 하네스 유지보수 논의가 결합할 지점을 제공한다.
+
+### Continual-ARC: Measuring Skill Acquisition over a Working Lifetime (2026-11-12)
+
+하네스를 성능 번역자를 넘어 지속학습의 1급 메커니즘으로 격상시키는 평가 근거를 제공한다. 하네스 설계의 가치가 단일 태스크 성능이 아니라 수명 누적 스킬 획득률로 재정의될 수 있음을 시사한다.
+
+→ [[sources/2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md|상세 보기]]

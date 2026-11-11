@@ -26,3 +26,9 @@ _Wiki 축적 중_
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-07)
 
 자유 탐색의 목표 형성 부담을 문헌에서 공급하는 경로를 제공한다. LongChang이 무지 속에서 질문을 창발시켰다면 본 논문은 축적된 문헌의 개방형 질문을 추출하여 탐색 출발점을 인류의 미해결 문제 공간에 접지한다.
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+자유 탐색 발견 루프의 다음 개선 축을 제공한다. 자유 탐색 환경이 관찰→가설→실험→법칙 전 과정의 자동 평가를 확립했다면, 본 논문은 그 루프에서 실험당 정보 획득을 좌우하는 가설-증거 인터페이스 병목을 국소화하여 루프 개선이 과정 커버리지에서 정보 구조로 정교화되고 있음을 보여준다.
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]

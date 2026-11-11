@@ -26,3 +26,7 @@ _Wiki 축적 중_
 ### A Spectral Theory of Distortion in LLM Graph Reconstruction: Sharp Bou (2026-10-01)
 
 ### Correct Answers, Invalid Traces: What Verifiable Grade-School Math Rev (2026-10-01)
+
+### Pterodactyl: Pushing the Limits of Efficient Automated Translation Eva (2026-11-12)
+
+→ [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]

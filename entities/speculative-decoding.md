@@ -68,3 +68,9 @@ TeCoD를 '제약원의 위치' 차원에서 위치시킨다: speculative-decodin
 ### TextSeal2: Distortion-Free LLM Watermarking with Copula Mixing and Mem (2026-11-02)
 
 추측 디코딩이 타겟 분포를 보존하더라도 워터마크 같은 출력층 부가 신호는 거절-재샘플링 경계에서 소멸할 수 있음을 보여준다. 가속 기법과 출력 계보 신호의 상호작용이 '수용률 무변경'이라는 새 평가 조건을 부과한다.
+
+### REAL Loss: Optimizing Real Expected Acceptance Length for Speculative  (2026-11-12)
+
+EAL이 가속 이득의 지배 변수임을 명시하고, CE/KL/TV와 블록 수준 목적이 모두 EAL의 서로게이트였다는 훈련 축 진단을 제공한다. 추측 디코딩 연구가 런타임 적응·드래프트 구조 설계에서 훈련 목적 함수 설계로 확장되는 계기가 된다.
+
+→ [[sources/2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md|상세 보기]]

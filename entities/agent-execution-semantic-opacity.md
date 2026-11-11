@@ -30,3 +30,9 @@ TRACE는 이 불투명성을 사후에 해독하려 하지 않고, 실행 시점
 ### Do LLM Agents Execute the Plans They Declare? From Planning-Mode Decla (2026-10-01)
 
 실행 불투명성에 '실행이 선언을 무음으로 대체할 수 있다'는 진단 가능한 양상을 추가하며, 계획 선언의 표면 완결성이 실행 실재를 은폐하는 경로를 실증한다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+텍스트 전용 판정과 트레이스 기반 판정의 성능 차이가 실행 의미론 접근성의 차이로 환원됨을 실증한다. 실행 불투명성이 평가기기 측 탐지 한계로 직결됨을 보여준다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]

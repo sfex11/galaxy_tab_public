@@ -4040,3 +4040,17 @@
 ## [2026-11-11 08:32] ingest | PORT: Preference Optimization via Robust Token-Level Reweighting
 
 ## [2026-11-11 08:32] ingest | Inference Validation for Regulated AI: Building a Decision Pipeline on NVIDIA AIPerf
+
+## [2026-11-12 04:24] llm-ingest | 12편 분석, 엔티티 1290개, 개념 2761개
+- 2026-11-12-contrastive-discovery-open-ended-scientific-discov.md
+- 2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md
+- 2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md
+- 2026-11-12-comparative-analysis-of-agent-evaluation-framework.md
+- 2026-11-12-retrace-distilling-tool-using-agents-into-planner-.md
+- 2026-11-12-re-search-dissecting-llm-ideation-through-a-two-pl.md
+- 2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md
+- 2026-11-12-fern-cross-benchmark-table-retrieval-for-text-to-s.md
+- 2026-11-12-demonstration-of-mana-multi-perspective-alignment-.md
+- 2026-11-12-earlybird-predictive-streaming-speech-recognition-.md
+- 2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md
+- 2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md

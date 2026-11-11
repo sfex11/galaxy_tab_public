@@ -13,3 +13,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Earlybird: Predictive Streaming Speech Recognition in 29M Parameters (2026-11-12)
+
+→ [[sources/2026-11-12-earlybird-predictive-streaming-speech-recognition-.md|상세 보기]]

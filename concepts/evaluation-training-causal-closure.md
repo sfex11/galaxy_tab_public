@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Pterodactyl: Pushing the Limits of Efficient Automated Translation Eva (2026-11-12)
+
+→ [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]

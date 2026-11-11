@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### TokenCast: Forecasting Token Consumption During LLM Agent Execution (2026-09-30)
 
 비용을 평가 지표에 편입하려면 비용이 먼저 예측·감사 가능해야 한다는 전제 조건을 공급한다. TokenCast는 비용을 실행 후 정산이 아닌 실행 전 예측과 중도 갱신의 대상으로 격상시켜, 비용 인식 평가의 측정 가능성을 확보한다.
+
+### Pterodactyl: Pushing the Limits of Efficient Automated Translation Eva (2026-11-12)
+
+비용을 평가 시스템 설계의 1급 제약으로 채택한 실무 사례를 제공한다. 초저비용 judge 시스템이 평가의 적용 범위를 데이터 큐레이션 규모까지 확장함을 보여, 비용 최적화가 평가의 실용 가치를 결정하는 조건을 구체화한다.
+
+→ [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]

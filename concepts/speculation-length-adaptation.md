@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### SpecKV: Adaptive Speculative Decoding with Compression-Aware Gamma Sel (2026-05-06)
 
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
+
+### REAL Loss: Optimizing Real Expected Acceptance Length for Speculative  (2026-11-12)
+
+→ [[sources/2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md|상세 보기]]

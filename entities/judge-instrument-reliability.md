@@ -54,3 +54,9 @@ judge 신뢰성 문제의 피해 경로를 평가에서 훈련으로 확장한�
 ### GEPA-Curator: Curated Learning for Self Improving Agents (2026-10-30)
 
 judge 잡음이 학습 신호 오염의 독립적 원인임을 규정한다. judge의 측정 오류가 프롬프트 결함으로 오귀인되면 최적화기가 존재하지 않는 문제를 '해결'하려 시도하므로, judge 신뢰도가 큐레이션 판정의 입력 변수가 된다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+세 평가 패러다임을 측정기기로 취급해 안정성·탐지·발견을 분리 측정하는 체계적 비교를 제공한다. LLM 판정기의 계측 프로파일을 결정론적 휴리스틱과의 동일 조건 비교로 정량화하여, 기기 선택이 측정 목적(재현 vs 탐지 vs 발견)의 함수임을 실증한다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]

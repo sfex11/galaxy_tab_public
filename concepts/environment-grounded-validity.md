@@ -23,3 +23,7 @@ _자동 Wiki Query에서 추출됨_
 ### VeriCUA: Verification as Agentic Exploration for Computer-Using Agents (2026-11-02)
 
 ### WebHarbor: Docking Real Websites for Evolving GUI Agent Environments (2026-11-04)
+
+### Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents (2026-11-12)
+
+→ [[sources/2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md|상세 보기]]

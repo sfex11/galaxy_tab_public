@@ -38,3 +38,9 @@ PDE 서러게이트에서 도출된 동일 조건 비교 원리의 인간 피험
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 예측기 평가 도메인의 실증 사례를 제공한다 — 동일 예측기의 정확도가 타겟 구성 변경만으로 붕괴하므로, 예측기 품질 비교는 타겟 모델·데이터셋·샘플링 구성이 일치하는 조건에서만 유효함을 보여준다.
+
+### Comparative Analysis of Agent Evaluation Frameworks: Stability, Detect (2026-11-12)
+
+동결 실행 트레이스로 에이전트 행동 분산을 통제하여 평가 프레임워크 간 순수 차이만 격리하는, 평가기기 비교 버전의 동일 조건 비교를 실현한다.
+
+→ [[sources/2026-11-12-comparative-analysis-of-agent-evaluation-framework.md|상세 보기]]

@@ -76,3 +76,9 @@ Claw-Eval-Live는 '사전 정의된 문제 공간'이라는 가정을 신호-평
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
 
 평가자의 가정이 시간에 따라 무효화되는 경로를 명시한다 — 태스크에 내장된 암묵적 가정이 인프라 변화와 함께 무너지며, 가정의 명시적 문서화와 재검토가 유지보수의 일부가 됨을 요구한다.
+
+### Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning (2026-11-12)
+
+'형식적으로 유효하면 의도된 문제를 표현한다'는 평가자의 암묵적 가정을 직접 공격한다 — 기계적 유효성만 측정하면 충실성 결함이 은폐되므로, 벤치마크가 유효성과 충실성을 분리 측정해야 함을 보여준다.
+
+→ [[sources/2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md|상세 보기]]

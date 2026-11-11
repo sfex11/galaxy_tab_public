@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-06-efficient-test-time-adaptation-through-human-ai-in.md|Efficient Test-Time Adaptation through Human-AI Interaction]]
 
 ### SWE-Gate: Passing Functional Tests Is Not Enough for Software Engineer (2026-09-07)
+
+### Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents (2026-11-12)
+
+→ [[sources/2026-11-12-pyrite-building-and-benchmarking-protein-ligand-po.md|상세 보기]]

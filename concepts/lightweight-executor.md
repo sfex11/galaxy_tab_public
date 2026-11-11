@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-09-26-jev-mobile-jev-as-an-executor-for-mobile-gui-agent.md|Jev-Mobile: Jev as an Executor for Mobile GUI Agents]]
 
 ### Jev-Mobile: Jev as an Executor for Mobile GUI Agents (2026-09-27)
+
+### Earlybird: Predictive Streaming Speech Recognition in 29M Parameters (2026-11-12)
+
+→ [[sources/2026-11-12-earlybird-predictive-streaming-speech-recognition-.md|상세 보기]]

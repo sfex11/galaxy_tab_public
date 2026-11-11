@@ -117,3 +117,9 @@ Agensh는 다중 에이전트 시스템의 확장 상한이 개별 에이전트 
 ### IMPACT: Modeling Socially Interdependent Movement in a Generative Mult (2026-10-01)
 
 다중 에이전트 시스템의 응용 영역을 태스크 완수에서 고고학적 사회 시뮬레이션으로 확장한다. 독립 계획 에이전트들이 사회적 이동 의존성을 놓친다는 발견은, 다중 에이전트의 가치가 능력 증대가 아니라 현실적 집단 행동의 재현에 있을 수 있음을 보여준다.
+
+### Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning (2026-11-12)
+
+다중 에이전트 설정에서 형식화 다원성이 심화됨을 규정한다 — 여러 에이전트의 목표·정보·전이가 얽힌 상황은 그럴듯한 POSG 형식화가 복수로 존재할 가능성이 높아, 단일 에이전트보다 형식화 선택의 임의성이 구조적으로 커짐을 시사한다.
+
+→ [[sources/2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md|상세 보기]]

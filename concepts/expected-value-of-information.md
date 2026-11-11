@@ -20,3 +20,7 @@ _자동 Wiki Query에서 추출됨_
 ### On-Demand Attention: Language Models Know When to Recall (2026-09-21)
 
 ### EgoThumb: A Vision-Driven Supernumerary Robotic Thumb for Autonomous G (2026-10-30)
+
+### Contrastive Discovery: Open-Ended Scientific Discovery over Competing  (2026-11-12)
+
+→ [[sources/2026-11-12-contrastive-discovery-open-ended-scientific-discov.md|상세 보기]]

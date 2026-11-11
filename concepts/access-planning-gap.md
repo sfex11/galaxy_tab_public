@@ -22,3 +22,7 @@ _자동 Wiki Query에서 추출됨_
 ### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
 
 ### The Power of Meta Access in the Software of the Future --- Demonstrate (2026-11-08)
+
+### Earlybird: Predictive Streaming Speech Recognition in 29M Parameters (2026-11-12)
+
+→ [[sources/2026-11-12-earlybird-predictive-streaming-speech-recognition-.md|상세 보기]]

@@ -15,3 +15,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Continual-ARC: Measuring Skill Acquisition over a Working Lifetime (2026-11-12)
+
+→ [[sources/2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md|상세 보기]]
