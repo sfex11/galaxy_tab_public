@@ -369,3 +369,9 @@ _자동 생성됨_
 - [[sources/2026-11-01-vericua-verification-as-agentic-exploration-for-co.md]]
 
 - [[sources/2026-11-05-mdskill-learning-to-internalize-skill-memory-throu.md]]
+
+- [[sources/2026-11-11-adaptive-quantization-preserves-fast-rates-for-td-.md]]
+
+- [[sources/2026-11-11-shortcuts-and-boundaries-verifiable-rl-misalignmen.md]]
+
+- [[sources/2026-11-11-agentic-opd-recovering-forgotten-agent-capabilitie.md]]

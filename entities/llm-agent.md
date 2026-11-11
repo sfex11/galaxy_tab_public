@@ -626,3 +626,5 @@ AHE는 LLM 에이전트의 성능 결정 요인을 모델 자체에서 모델-�
 - [[sources/2026-11-09-swarmevolve-latent-agent-swarms-for-evolutionary-d.md]]
 
 - [[sources/2026-11-09-scale-real-time-latent-communication-for-cyber-phy.md]]
+
+- [[sources/2026-11-11-agentic-opd-recovering-forgotten-agent-capabilitie.md]]

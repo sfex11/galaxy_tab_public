@@ -1968,3 +1968,18 @@
 - [[sources/2026-11-10-test-time-compute-scales-better-with-parallel-agen.md]] - Test-Time Compute Scales Better with Parallel Agent Teams
 - [[sources/2026-11-10-knowing-when-to-intervene-causal-evaluation-of-ai-.md]] - Knowing When to Intervene: Causal Evaluation of AI Agents
 - [[sources/2026-11-10-assessing-the-impact-of-retrieval-augmented-genera.md]] - Assessing the Impact of Retrieval-Augmented Generation on Algorithmic Problem-Solving
+- [[sources/2026-11-11-world-in-context-learning-for-agentic-robot-manipu.md]] - World In-Context Learning for Agentic Robot Manipulation
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-11-11-adaptive-quantization-preserves-fast-rates-for-td-.md]] - Adaptive Quantization Preserves Fast Rates for TD Learning over Rate-Limited Channels
+- [[sources/2026-11-11-hive-mem-interleaving-horizontal-memory-expansion-.md]] - HiVe-Mem: Interleaving Horizontal Memory Expansion and Vertical Evidence Composition for Multimodal Agents
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-11-11-shortcuts-and-boundaries-verifiable-rl-misalignmen.md]] - Shortcuts and Boundaries: Verifiable RL Misalignment and Contextual Safety Learning
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-11-11-workflowarena-benchmarking-executable-workflow-orc.md]] - WorkflowArena: Benchmarking Executable Workflow Orchestration in LLM-Based Multi-Agent Systems
+- [[sources/2026-11-11-mitigating-agentic-deception-via-evaluation-side-p.md]] - Mitigating Agentic Deception via Evaluation-Side Partially Observable Games
+- [[entities/llm-agent]] - LLM Agent
+- [[concepts/reinforcement-learning]] - Reinforcement Learning
+- [[sources/2026-11-11-agentic-opd-recovering-forgotten-agent-capabilitie.md]] - Agentic-OPD: Recovering Forgotten Agent Capabilities via On-Policy Distillation for Agentic Tasks
+- [[sources/2026-11-11-large-language-models-as-a-universal-searcher-for-.md]] - Large Language Models as a Universal Searcher for Open-World Automated Machine Learning
+- [[sources/2026-11-11-port-preference-optimization-via-robust-token-leve.md]] - PORT: Preference Optimization via Robust Token-Level Reweighting
+- [[sources/2026-11-11-inference-validation-for-regulated-ai-building-a-d.md]] - Inference Validation for Regulated AI: Building a Decision Pipeline on NVIDIA AIPerf

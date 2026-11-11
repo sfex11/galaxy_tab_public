@@ -4020,3 +4020,23 @@
 ## [2026-11-10 08:33] ingest | Knowing When to Intervene: Causal Evaluation of AI Agents
 
 ## [2026-11-10 08:33] ingest | Assessing the Impact of Retrieval-Augmented Generation on Algorithmic Problem-Solving
+
+## [2026-11-11 08:32] ingest | World In-Context Learning for Agentic Robot Manipulation
+
+## [2026-11-11 08:32] ingest | Adaptive Quantization Preserves Fast Rates for TD Learning over Rate-Limited Channels
+
+## [2026-11-11 08:32] ingest | HiVe-Mem: Interleaving Horizontal Memory Expansion and Vertical Evidence Composition for Multimodal Agents
+
+## [2026-11-11 08:32] ingest | Shortcuts and Boundaries: Verifiable RL Misalignment and Contextual Safety Learning
+
+## [2026-11-11 08:32] ingest | WorkflowArena: Benchmarking Executable Workflow Orchestration in LLM-Based Multi-Agent Systems
+
+## [2026-11-11 08:32] ingest | Mitigating Agentic Deception via Evaluation-Side Partially Observable Games
+
+## [2026-11-11 08:32] ingest | Agentic-OPD: Recovering Forgotten Agent Capabilities via On-Policy Distillation for Agentic Tasks
+
+## [2026-11-11 08:32] ingest | Large Language Models as a Universal Searcher for Open-World Automated Machine Learning
+
+## [2026-11-11 08:32] ingest | PORT: Preference Optimization via Robust Token-Level Reweighting
+
+## [2026-11-11 08:32] ingest | Inference Validation for Regulated AI: Building a Decision Pipeline on NVIDIA AIPerf
