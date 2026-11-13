@@ -1983,3 +1983,18 @@
 - [[sources/2026-11-11-large-language-models-as-a-universal-searcher-for-.md]] - Large Language Models as a Universal Searcher for Open-World Automated Machine Learning
 - [[sources/2026-11-11-port-preference-optimization-via-robust-token-leve.md]] - PORT: Preference Optimization via Robust Token-Level Reweighting
 - [[sources/2026-11-11-inference-validation-for-regulated-ai-building-a-d.md]] - Inference Validation for Regulated AI: Building a Decision Pipeline on NVIDIA AIPerf
+- [[entities/llm-agent]] - LLM Agent
+- [[sources/2026-11-13-contrastive-discovery-open-ended-scientific-discov.md]] - Contrastive Discovery: Open-Ended Scientific Discovery over Competing Explanations
+- [[sources/2026-11-13-pyrite-building-and-benchmarking-protein-ligand-po.md]] - Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents
+- [[sources/2026-11-13-continual-arc-measuring-skill-acquisition-over-a-w.md]] - Continual-ARC: Measuring Skill Acquisition over a Working Lifetime
+- [[sources/2026-11-13-comparative-analysis-of-agent-evaluation-framework.md]] - Comparative Analysis of Agent Evaluation Frameworks: Stability, Detection, and Discovery in Enterprise Analytics Agents
+- [[sources/2026-11-13-retrace-distilling-tool-using-agents-into-planner-.md]] - ReTrace: Distilling Tool-Using Agents into Planner-Free Workflows
+- [[sources/2026-11-13-re-search-dissecting-llm-ideation-through-a-two-pl.md]] - Re-Search: Dissecting LLM Ideation Through a Two-Player Questioning Game
+- [[sources/2026-11-13-pterodactyl-pushing-the-limits-of-efficient-automa.md]] - Pterodactyl: Pushing the Limits of Efficient Automated Translation Evaluation
+- [[entities/claude-35]] - Claude 3.5
+- [[sources/2026-11-13-fern-cross-benchmark-table-retrieval-for-text-to-s.md]] - FERN: Cross-Benchmark Table Retrieval for Text-to-SQL with Frozen Retrievers and Learned Ranking
+- [[sources/2026-11-13-demonstration-of-mana-multi-perspective-alignment-.md]] - Demonstration of MANA: Multi-perspective Alignment of NPC Agents
+- [[sources/2026-11-13-earlybird-predictive-streaming-speech-recognition-.md]] - Earlybird: Predictive Streaming Speech Recognition in 29M Parameters
+- [[concepts/multi-agent-system]] - Multi-Agent System
+- [[sources/2026-11-13-evaluating-llm-generated-world-models-for-neuro-sy.md]] - Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning
+- [[sources/2026-11-13-real-loss-optimizing-real-expected-acceptance-leng.md]] - REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding

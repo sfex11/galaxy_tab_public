@@ -51,3 +51,5 @@ _자동 생성됨_
 - [[sources/2026-09-28-llm-agents-can-easily-tamper-with-their-own-traces.md]]
 
 - [[sources/2026-11-10-when-instruction-files-go-stale-documentation-debt.md]]
+
+- [[sources/2026-11-13-fern-cross-benchmark-table-retrieval-for-text-to-s.md]]

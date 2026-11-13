@@ -4054,3 +4054,27 @@
 - 2026-11-12-earlybird-predictive-streaming-speech-recognition-.md
 - 2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md
 - 2026-11-12-real-loss-optimizing-real-expected-acceptance-leng.md
+
+## [2026-11-13 08:35] ingest | Contrastive Discovery: Open-Ended Scientific Discovery over Competing Explanations
+
+## [2026-11-13 08:35] ingest | Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents
+
+## [2026-11-13 08:35] ingest | Continual-ARC: Measuring Skill Acquisition over a Working Lifetime
+
+## [2026-11-13 08:35] ingest | Comparative Analysis of Agent Evaluation Frameworks: Stability, Detection, and Discovery in Enterprise Analytics Agents
+
+## [2026-11-13 08:35] ingest | ReTrace: Distilling Tool-Using Agents into Planner-Free Workflows
+
+## [2026-11-13 08:35] ingest | Re-Search: Dissecting LLM Ideation Through a Two-Player Questioning Game
+
+## [2026-11-13 08:35] ingest | Pterodactyl: Pushing the Limits of Efficient Automated Translation Evaluation
+
+## [2026-11-13 08:35] ingest | FERN: Cross-Benchmark Table Retrieval for Text-to-SQL with Frozen Retrievers and Learned Ranking
+
+## [2026-11-13 08:35] ingest | Demonstration of MANA: Multi-perspective Alignment of NPC Agents
+
+## [2026-11-13 08:35] ingest | Earlybird: Predictive Streaming Speech Recognition in 29M Parameters
+
+## [2026-11-13 08:35] ingest | Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning
+
+## [2026-11-13 08:35] ingest | REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding

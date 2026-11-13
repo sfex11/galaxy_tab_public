@@ -331,3 +331,5 @@ _자동 생성됨_
 - [[sources/2026-11-01-pre-crime-for-agents-at-the-last-second-probing-wh.md]]
 
 - [[sources/2026-11-11-workflowarena-benchmarking-executable-workflow-orc.md]]
+
+- [[sources/2026-11-13-evaluating-llm-generated-world-models-for-neuro-sy.md]]
