@@ -82,3 +82,9 @@ autoresearch가 연구 수행 자동화에 집중하는 동안 그 전제인 '�
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
 
 autoresearch의 스코프를 '연구 수행 자동화'에서 '연구 세계 구축 자동화'로 확장한다. 개별 연구 에이전트의 능력 문제가 아니라 에이전트 전체가 성장할 환경 인프라의 부재가 병목임을 보여준다.
+
+### ArchSpace: Recording, Reviewing, and Referencing LLM Architecture Rese (2026-11-14)
+
+자율 연구 에이전트가 아키텍처 연구를 수행할 때 참조할 구조화된 선행 결정 기반(어떤 아이디어가 왜 포기되었는가)의 필요성을 제시하여, 자율 연구의 전제 조건으로 공동체 지식 인프라를 추가한다.
+
+→ [[sources/2026-11-14-archspace-recording-reviewing-and-referencing-llm-.md|상세 보기]]

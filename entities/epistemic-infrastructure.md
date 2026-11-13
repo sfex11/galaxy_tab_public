@@ -26,3 +26,9 @@ ADEMA는 인식론적 인프라의 4계층(거버넌스·동기화·신뢰·인�
 ### Intern-Atlas: A Methodological Evolution Graph as Research Infrastruct (2026-05-02)
 
 인식론적 인프라가 단순한 지식 저장 구조가 아니라 방법론 간 발전 관계를 명시적으로 인코딩하는 그래프 구조를 필요로 함을 실증하며, 기존 4계층 모델에 '방법론적 진화 추적'이라는 새로운 기능적 요구를 추가한다.
+
+### ArchSpace: Recording, Reviewing, and Referencing LLM Architecture Rese (2026-11-14)
+
+ArchSpace는 인식론적 인프라의 적용 범위를 개별 에이전트의 지식 상태 관리에서 연구 공동체의 집단 지식(아키텍처 결정의 성공·실패·포기 이력) 추적으로 확장하는 사례를 제공한다.
+
+→ [[sources/2026-11-14-archspace-recording-reviewing-and-referencing-llm-.md|상세 보기]]
