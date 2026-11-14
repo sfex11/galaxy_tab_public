@@ -42,3 +42,9 @@ _Wiki 축적 중_
 ### Social Humanoid: Socially Responsive Human-Humanoid Interaction (2026-11-07)
 
 고수준 사회적 모션 시퀀스 모델링과 저수준 29-DoF 전신 제어의 계층 분리가 사회적 반응성과 운동 정밀도라는 이중 요구의 해법으로 작동함을 실증한다.
+
+### Goal Encoding in LLMs (2026-11-14)
+
+목표가 행동에 선행하는 별개 내부 상태로 존재함을 기계론적으로 입증한다. 사고-행동 분리가 외부 아키텍처 설계 원칙이 아니라 LLM 내부에 이미 존재하는 구조이며, 내부 판독으로 접근 가능함을 시사한다.
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]

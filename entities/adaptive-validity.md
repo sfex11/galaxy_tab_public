@@ -42,3 +42,9 @@ _Wiki 축적 중_
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-08)
 
 적응적 타당성 문법을 벤치마크 자신에게 되돌려 적용한 사례다 — '이 벤치마크는 여전히 유효한가'의 지속 재평가가 필요하며, 타당성이 정적 속성이 아니라 유지보수 절차의 산물임을 확정한다.
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+행동 시점 타당성 재평가에 '가용 메모리에 행동하는 것이 노력을 절약하는가'라는 활용 차원을 추가한다. 저장 타당성에서 활용 타당성으로의 확장 사례다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

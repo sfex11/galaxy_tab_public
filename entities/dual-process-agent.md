@@ -22,3 +22,9 @@ System One 경로가 범용 생성 엔진 위에서 실행될 때 접두사 재�
 ### TAMPAgent: Agentic Belief-Space Planning for Mobile Manipulation (2026-11-04)
 
 System 2(신념 공간 추론)에 '체계적이고 고비용인 기하 탐색 솔버(TAMP)'를 결합한 물리 도메인 실현을 추가한다. Jev-Mobile 계열의 빠른 실행기 위임과 달리, 느린 체계적 탐색이 위임 대상이 되는 이중 과정의 새로운 축이다.
+
+### S1-Evo: Experience-Guided Evidence Competition Attacks on Typed System (2026-11-14)
+
+System 1/System 2 구분이 능력-비용 최적화 축을 넘어 보안 축에서도 의미를 갖는다는 것을 보여준다. S1 경량 결정 계층 도입이 추론 비용만 절감하는 것이 아니라 S2와 질적으로 다른 공격 표면을 수반함을 시사한다.
+
+→ [[sources/2026-11-14-s1-evo-experience-guided-evidence-competition-atta.md|상세 보기]]

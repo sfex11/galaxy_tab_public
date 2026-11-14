@@ -42,3 +42,9 @@ _Wiki 축적 중_
 ### Metacognitive Decoding: Efficient Inference for Diffusion Language Age (2026-10-30)
 
 메타 판단의 입도를 행동 전이에서 토큰 최종화로 축소한다 — 궤적 수준의 '계속/정지' 판단이 토큰 수준의 '확정/추가 수정' 판단으로 세분화되며, 메타인지 제어의 해상도가 연산 단위까지 도달함을 보여준다.
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+가용 메모리를 활용할 시점을 판단하는 결정을 메타인지의 새 차원으로 추가한다. 복잡도·도구 호출 판단에 이어 메모리 활용 판단으로 확장된다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

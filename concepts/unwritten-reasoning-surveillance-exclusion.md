@@ -19,3 +19,7 @@ _자동 Wiki Query에서 추출됨_
 ### Pre-Crime for Agents, at the Last Second: Probing When a Recruited Age (2026-11-02)
 
 ### Latent Reasoning in Continuous Space for Unified Multimodal Models (2026-11-03)
+
+### Goal Encoding in LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]

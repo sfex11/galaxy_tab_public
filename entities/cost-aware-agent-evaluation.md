@@ -28,3 +28,9 @@ _Wiki 축적 중_
 비용을 평가 시스템 설계의 1급 제약으로 채택한 실무 사례를 제공한다. 초저비용 judge 시스템이 평가의 적용 범위를 데이터 큐레이션 규모까지 확장함을 보여, 비용 최적화가 평가의 실용 가치를 결정하는 조건을 구체화한다.
 
 → [[sources/2026-11-12-pterodactyl-pushing-the-limits-of-efficient-automa.md|상세 보기]]
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+메모리 쓰기·읽기 비용을 평가 지표로 측정·편입하는 구체적 프레임을 제공한다. 비용 인식 에이전트 평가의 메모리 축 실현이다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

@@ -46,3 +46,9 @@ ADEMA가 메모리를 '지식 상태의 연속성 보장 매체'로 정의했다
 ### SpeakerMem-R1: Speaker-Centered Dual-Track Memory for Multi-Party Dial (2026-09-24)
 
 메모리 관리의 요구사항을 콘텐츠 저장-검색 최적화에서 사회적 관계 구조의 유지보수로 확장한다. 다자 대화의 5축(화자·대상·대인 지각·집단 공유·상태 변화)은 대화 메모리 스키마 설계의 체크리스트가 된다.
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+메모리 설계 목적함수에 쓰기·읽기 비용을 내재화하는 비용 인지 패러다임을 추가한다. 저장이 무료라는 암묵적 전제를 해체하며, 메모리 관리를 비용-가치 최적화 문제로 재정의한다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

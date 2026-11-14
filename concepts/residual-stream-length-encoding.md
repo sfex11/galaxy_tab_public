@@ -16,3 +16,7 @@ _자동 Wiki Query에서 추출됨_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-11-02)
+
+### Goal Encoding in LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]

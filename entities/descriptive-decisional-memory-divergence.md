@@ -14,3 +14,9 @@ _Wiki 축적 중_
 ### Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions (2026-10-30)
 
 묘사적 보존 지표(희귀성·관련성)와 결정적 가치의 발산을 60개 템플릿의 자동 검증 정답으로 정량화하는 경험적 구현체를 제공한다. 유한 메모리 예산 하의 묘사적 충실도 집중이 결정 누락을 낳는 이론적 역설이 측정 가능한 벤치마크 결과로 현현함을 확정한다.
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+결정적 가치 중심 메모리 선택의 코딩 도메인 구현 사례를 제공한다. 사전적 평가가 묘사적 충실도 집중으로 인한 결정 누락을 사전에 방지하는 경로다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

@@ -15,3 +15,7 @@
 _자동 Wiki Query에서 추출됨_
 
 ### EnvSched: Environment-Aware Scheduling for Rollout-Efficient Agent Rei (2026-10-30)
+
+### Metal Sandbox: Isolated Execution and Command Scheduling for GPU Codin (2026-11-14)
+
+→ [[sources/2026-11-14-metal-sandbox-isolated-execution-and-command-sched.md|상세 보기]]

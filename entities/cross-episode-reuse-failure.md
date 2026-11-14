@@ -20,3 +20,9 @@ _Wiki 축적 중_
 교차 에피소드 스킬 재사용 능력을 종생 스트림에서 정량 측정 가능하게 만든다. 각 인스턴스 일회성 제시는 재사용 능력이 암기로 대체되지 않도록 강제한다.
 
 → [[sources/2026-11-12-continual-arc-measuring-skill-acquisition-over-a-w.md|상세 보기]]
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+교차 에피소드 재사용 문제에 비용 인지 선택 경로를 제공한다. 재사용 실패가 능력 부족이 아니라 비용 미고려 선택의 결과일 수 있음을 시사한다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

@@ -30,3 +30,9 @@ _Wiki 축적 중_
 ### Benchmarks as Software: Terminal-Bench and the Case for Continuous Ben (2026-11-07)
 
 Claw-Eval-Live의 '신호 계층 주기 갱신' 원리를 벤치마크 전체(태스크·테스트·검증자·인프라)로 일반화한다. 신호 갱신이 실세계 수요 추적이라면 본 논문의 유지보수는 내부 결함 관리를 추가하여 갱신의 대상을 외부 정합성에서 내부 무결성까지 확장한다.
+
+### LiveGeo: Benchmarking Geographic Agents in Continuously Evolving World (2026-11-14)
+
+신호 계층 갱신의 주체와 방식에 새 변형을 제공한다. 기존 갱신이 벤치마크 설계자의 주기적 수작업이나 실세계 수요 반영이었다면, LiveGeo는 외부 세계의 내재적 시간 프로세스 자체를 갱신 원천으로 삼아, 갱신이 평가 인프라의 통제 밖에서 자동 발생하는 자연스러운 형태를 지리 도메인에서 실증한다.
+
+→ [[sources/2026-11-14-livegeo-benchmarking-geographic-agents-in-continuo.md|상세 보기]]

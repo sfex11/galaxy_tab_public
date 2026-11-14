@@ -38,3 +38,9 @@ Tool-Lab은 정보 수집 판단에 명시적 비용을 부여한 EVI의 실험 
 ### Towards Communication-Efficient Social Intelligence in Language Agents (2026-09-30)
 
 EVI가 도구 호출 판단에서 정의되던 범위를 넘어, 사회적 발화의 가치 판단('이 말이 상호작용에 기여하는가')으로 확장되는 사례를 제공한다. 기여 없는 발화는 기대 가치가 음수인 정보 행동으로 재해석되며, 이 판단이 학습 가능함을 보여준다.
+
+### CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Pr (2026-11-14)
+
+EVI의 평가 대상을 도구 호출·전역 읽기에서 메모리 쓰기로 확장한다. '지금 써둘 것인가'라는 쓰기 결정이 미래 불확실성 하 EVI 계산의 새 적용점이 된다.
+
+→ [[sources/2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md|상세 보기]]

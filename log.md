@@ -4078,3 +4078,19 @@
 ## [2026-11-13 08:35] ingest | Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning
 
 ## [2026-11-13 08:35] ingest | REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding
+
+## [2026-11-14 08:22] llm-ingest | 10편 분석, 엔티티 1315개, 개념 2807개
+- 2026-11-14-archspace-recording-reviewing-and-referencing-llm-.md
+- 2026-11-14-agentssl-can-mle-agents-leverage-unlabeled-data.md
+- 2026-11-14-coremem-cost-internalizing-memory-for-successive-c.md
+- 2026-11-14-goal-encoding-in-llms.md
+- 2026-11-14-metal-sandbox-isolated-execution-and-command-sched.md
+- 2026-11-14-synthesis-smuggling-maliciously-hiding-inferred-pe.md
+- 2026-11-14-livegeo-benchmarking-geographic-agents-in-continuo.md
+- 2026-11-14-al-ghasali-a-computational-framework-for-simulatin.md
+- 2026-11-14-lazyweights-decode-on-demand-edge-llms.md
+- 2026-11-14-s1-evo-experience-guided-evidence-competition-atta.md
+
+## [2026-11-14 08:30] ingest | Scalable Conversational Assessment: Chat-Based Exams with a Two-Agent LLM Pipeline
+
+## [2026-11-14 08:30] ingest | Cortex-FL: Agent-Mediated Collaboration for Federated Learning

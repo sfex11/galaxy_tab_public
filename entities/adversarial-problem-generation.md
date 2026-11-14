@@ -26,3 +26,9 @@ VHG는 적대적 문제 생성의 실패 모드를 구체화한다 — 적대적
 ### Large Language Models as Falsifiers for Cyber-Physical Systems (2026-09-19)
 
 적대적 생성의 대상을 '훈련/평가용 난제 생성'에서 '기존 시스템의 명세 위반 반례 탐색'으로 확장한다. 난제 생성이 새로운 문제를 만드는 생성적 적대성이라면, 반증은 기존 시스템의 취약점을 찾는 조사적 적대성이다.
+
+### S1-Evo: Experience-Guided Evidence Competition Attacks on Typed System (2026-11-14)
+
+적대적 생성이 문제 출제(수학)를 넘어 결정 모델 공격 입력 생성으로 확장되는 사례. S1-Evo는 자기 진화적으로 방어 변화에 대응하는 컨텍스트를 생성하여, 적대적 생성 루프의 도메인 불변성을 강화한다.
+
+→ [[sources/2026-11-14-s1-evo-experience-guided-evidence-competition-atta.md|상세 보기]]

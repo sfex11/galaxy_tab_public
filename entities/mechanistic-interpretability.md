@@ -58,3 +58,9 @@ MoRFI는 해석가능성의 목표를 '이해'에서 '개입 가능한 인과 �
 ### Understanding AI from the Inside: The State of Mechanistic Interpretab (2026-11-08)
 
 본 서베이가 분야 전체 현황을 안전 관점에서 종합한다. Wiki에 흩어져 축적된 MoRFI·Deep Noir·SAE·activation patching 연구를 '이해가 제어의 전제 조건'이라는 단일 방법론적 위상 아래 묶어, 해석가능성이 진단 도구를 넘어 안전 개입 파이프라인의 상류 계층임을 규정한다.
+
+### Goal Encoding in LLMs (2026-11-14)
+
+해석 연구의 분석 대상이 피처·회로 수준에서 '목표'라는 상위 인지 구조 수준으로 확장됨을 보여준다. 헤드 국소화 + 미래 행동 디코딩이라는 방법론 조합으로 인지 구조의 기계론적 동정이 가능함을 입증한다.
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]

@@ -20,3 +20,7 @@ _Wiki 축적 중_
 ### Gym-Anything for Robotics: Scaling physical simulations with digital a (2026-10-31)
 
 ### Scientist World: Grow a Research World for AI-Scientists (2026-11-08)
+
+### Metal Sandbox: Isolated Execution and Command Scheduling for GPU Codin (2026-11-14)
+
+→ [[sources/2026-11-14-metal-sandbox-isolated-execution-and-command-sched.md|상세 보기]]

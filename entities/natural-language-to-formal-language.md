@@ -40,3 +40,9 @@ LTL 등 논리 언어뿐 아니라 공간 술어·CRS 메타데이터·위상 �
 '구문은 쉽고 의미는 어렵다' 진단의 세계 모델 생성 재현 사례다 — 기계적 유효성(구문)의 달성이 의미론적 충실성(의도된 결정 문제의 표현)의 달성과 분리됨을 POSG 도메인에서 실증하며, LTL 번역 평가에서 시작된 논의가 다자간 게임 형식화로 확장됨을 보여준다.
 
 → [[sources/2026-11-12-evaluating-llm-generated-world-models-for-neuro-sy.md|상세 보기]]
+
+### Al-Ghasali: A Computational Framework for Simulating Islamic Jurisprud (2026-11-14)
+
+형식화가 어려운 것으로 통용되던 법·종교 텍스트에서, 규칙 집합의 폐쇄성 조건 하에 NL→Horn 절→FSA 번역이 완결됨을 보여준다. 번역의 어려움이 보편 속성이 아니라 도메인 개방성에 조건부임을 시사한다.
+
+→ [[sources/2026-11-14-al-ghasali-a-computational-framework-for-simulatin.md|상세 보기]]

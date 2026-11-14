@@ -1998,3 +1998,5 @@
 - [[concepts/multi-agent-system]] - Multi-Agent System
 - [[sources/2026-11-13-evaluating-llm-generated-world-models-for-neuro-sy.md]] - Evaluating LLM-Generated World Models for Neuro-Symbolic Reasoning
 - [[sources/2026-11-13-real-loss-optimizing-real-expected-acceptance-leng.md]] - REAL Loss: Optimizing Real Expected Acceptance Length for Speculative Decoding
+- [[sources/2026-11-14-scalable-conversational-assessment-chat-based-exam.md]] - Scalable Conversational Assessment: Chat-Based Exams with a Two-Agent LLM Pipeline
+- [[sources/2026-11-14-cortex-fl-agent-mediated-collaboration-for-federat.md]] - Cortex-FL: Agent-Mediated Collaboration for Federated Learning

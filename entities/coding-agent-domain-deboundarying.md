@@ -18,3 +18,9 @@ _Wiki 축적 중_
 ### RoboArchitect: Automating the Design of Robotic Agents with Persistent (2026-11-03)
 
 코딩 에이전트의 저작 대상이 물리 시뮬레이션 코드를 넘어 로봇 에이전트 하네스로 확장됨을 보여준다. 코드 저작 능력이 로봇 에이전트 설계 능력으로 전이되는 새 착지점을 제공한다.
+
+### Metal Sandbox: Isolated Execution and Command Scheduling for GPU Codin (2026-11-14)
+
+코딩 에이전트의 도메인 확장에 '하드웨어 커널 저자' 축을 추가한다. 물리 시뮬레이션 코드 저작(Gym-Anything)에 이어 Metal 셰이더 생성이 실증되어, 코딩 에이전트=소프트웨어 전용 구획의 붕괴가 소프트웨어 스택 아래의 하드웨어 계층까지 도달했음을 보여준다.
+
+→ [[sources/2026-11-14-metal-sandbox-isolated-execution-and-command-sched.md|상세 보기]]

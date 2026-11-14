@@ -10,3 +10,7 @@ _Wiki 축적 중_
 ## 관련 논문
 
 - [[sources/2026-10-31-pre-crime-for-agents-at-the-last-second-probing-wh.md|Pre-Crime for Agents, at the Last Second: Probing When a Rec]]
+
+### Goal Encoding in LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]

@@ -58,3 +58,15 @@ _Wiki 축적 중_
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
 
 호스트 RAM과 SSD를 온디바이스 추론의 일급 연산 자원으로 재정의한다. 메모리 제약 환경에서 저비트 속도 이득과 고정밀 정확도를 동시에 달성하는 경로를 제공하여, 온디바이스 프론티어의 결정 변수가 모델 크기·양자화 형식에서 메모리 계층 배치로 이동함을 시사한다.
+
+### Metal Sandbox: Isolated Execution and Command Scheduling for GPU Codin (2026-11-14)
+
+온디바이스 추론의 실질 전제를 '로컬 가속기를 활용하는 커널의 존재'로 재정의한다. 온디바이스 배포의 병목이 모델 경량화만이 아니라 하드웨어별 커널 생성 능력의 지속 공급에 있으며, 이 능력이 에이전트 훈련으로 획득 가능함을 제시한다.
+
+→ [[sources/2026-11-14-metal-sandbox-isolated-execution-and-command-sched.md|상세 보기]]
+
+### LazyWeights: Decode-on-Demand Edge LLMs (2026-11-14)
+
+엣지 제약의 해결 축을 토큰 선택 전략(Select to Think)이나 녹색 압축(Carbon-Taxed Transformers)에서 가중치 표현 자체의 비트 경제학으로 확장한다. 4GB Nano의 용량 병목과 Orin의 대역폭 병목이 모델 교체가 아닌 표현 계층·메모리 계층 설계로 완화 가능함을 보여준다.
+
+→ [[sources/2026-11-14-lazyweights-decode-on-demand-edge-llms.md|상세 보기]]

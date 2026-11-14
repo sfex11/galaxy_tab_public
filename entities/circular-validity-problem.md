@@ -22,3 +22,9 @@ _Wiki 축적 중_
 ### Shockingly Simple Self-retrospection Improves Agentic Models Without R (2026-09-30)
 
 자기 생성 설명을 자기 학습에 재사용하는 폐루프의 새로운 실현 사례를 제공한다. 설명이 환각이나 오류를 포함할 때 개선이 오염되는지 여부가 ROFT 타당성의 핵심 검증 지점이 되어, 순환 타당성 논의에 '개선 신호로서의 자기 서술' 차원을 부여한다.
+
+### LiveGeo: Benchmarking Geographic Agents in Continuously Evolving World (2026-11-14)
+
+순환 타당성의 구조적 완화 사례를 제공한다. 세계 상태가 에이전트의 산출물이 아닌 외부 프로세스의 함수로 진화하므로, 자가 생성 환경으로 자가 평가하는 닫힌 고리가 원천적으로 형성되지 않음을 보여준다.
+
+→ [[sources/2026-11-14-livegeo-benchmarking-geographic-agents-in-continuo.md|상세 보기]]

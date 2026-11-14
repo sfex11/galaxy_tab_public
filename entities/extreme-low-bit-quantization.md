@@ -30,3 +30,9 @@ Leech Lattice 계열이 융합 커널로 저비트 형식 자체를 최적화했
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
 
 Leech Lattice 계열이 커널·디코딩 수준에서 저비트 양자화 오차를 다뤘다면, StrataFlux는 메모리 계층 수준에서 정밀 데이터의 선택적 전달로 동일 문제를 공략한다. 저비트 양자화의 실용화가 단일 계층 기법이 아니라 커널-시스템 협업 설계의 산물임을 보여준다.
+
+### LazyWeights: Decode-on-Demand Edge LLMs (2026-11-14)
+
+표면 코드 비트와 실측 메모리 비트의 분리를 제공한다. GPTQ 4비트 코드가 Huffman 엔트로피 수준의 유효 비트로 수렴 가능함을 보여, 저비트 양자화의 평가 기준이 코드 비트 수에서 실제 메모리 풋프린트·유효 대역폭으로 이동해야 함을 시사한다.
+
+→ [[sources/2026-11-14-lazyweights-decode-on-demand-edge-llms.md|상세 보기]]

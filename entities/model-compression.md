@@ -44,3 +44,9 @@ _Wiki 축적 중_
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-07)
 
 압축의 정확도 비용이 영구적 손실이 아니라 '데이터가 어느 계층에 위치하는가'에 따라 스케줄 가능하고 회복 가능한 속성임을 보여준다. 압축과 오프로딩을 경쟁 전략이 아닌 단일 메모리 계층 설계의 상보적 층위로 재정의한다.
+
+### LazyWeights: Decode-on-Demand Edge LLMs (2026-11-14)
+
+손실 양자화와 무손실 엔트로피 코딩의 직교 합성이라는 제3 경로를 제공한다. 기존 논의가 양자화·프루닝·증류 같은 손실 기법의 단독 적용이었다면, 본 논문은 GPTQ의 코드 배치를 의도적으로 비균등하게 왜곡해 Huffman 압축률을 극대화하는 파이프라인 설계를 보여준다 — 압축의 두 축이 독립이 아니라 협력적으로 설계되어야 함을 실증한다.
+
+→ [[sources/2026-11-14-lazyweights-decode-on-demand-edge-llms.md|상세 보기]]

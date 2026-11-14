@@ -12,3 +12,7 @@ _Wiki 축적 중_
 - [[sources/2026-11-07-strataflux-memory-hierarchy-native-low-bit-llm-inf.md|StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference]]
 
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+### LazyWeights: Decode-on-Demand Edge LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-lazyweights-decode-on-demand-edge-llms.md|상세 보기]]

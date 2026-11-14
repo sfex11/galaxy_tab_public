@@ -14,3 +14,7 @@ _Wiki 축적 중_
 ### On the Fundamental Limits of Prefill-Based Decoding Length Prediction (2026-10-31)
 
 ### StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference (2026-11-08)
+
+### LazyWeights: Decode-on-Demand Edge LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-lazyweights-decode-on-demand-edge-llms.md|상세 보기]]

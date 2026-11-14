@@ -14,3 +14,7 @@
 
 ---
 _자동 Wiki Query에서 추출됨_
+
+### Goal Encoding in LLMs (2026-11-14)
+
+→ [[sources/2026-11-14-goal-encoding-in-llms.md|상세 보기]]
