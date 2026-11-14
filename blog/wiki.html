@@ -1,466 +1,196 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>턴의 승리는 에피소드의 승리가 아니다 — 추론 스케일링의 최적화 단위를 다시 묻다</title>
+<title>목적지는 하나, 경로는 무한 — LLM의 목표는 궤적에 새겨져 있지 않다</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#faf9f7;
-    --ink:#2c2825;
-    --accent:#c2703e;
-    --blue:#5b7c99;
-    --green:#6b9e7a;
-    --card:rgba(255,255,255,0.7);
-    --card-border:rgba(194,112,62,0.12);
-    --soft-ink:rgba(44,40,37,0.72);
-    --soft-line:rgba(44,40,37,0.08);
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Noto Sans KR',sans-serif;
-    font-size:clamp(1rem,0.6vw + 0.85rem,1.125rem);
-    line-height:1.9;
-    -webkit-font-smoothing:antialiased;
-    word-break:keep-all;
-    overflow-wrap:break-word;
-  }
-  .container{max-width:860px;margin:0 auto;padding:16px clamp(16px,4vw,32px) 64px;}
+:root{
+  --bg:#faf9f7;
+  --ink:#2c2825;
+  --accent:#c2703e;
+  --accent-deep:#a4591f;
+  --blue:#5b7c99;
+  --blue-deep:#45678a;
+  --green:#6b9e7a;
+  --green-deep:#4e7d5d;
+  --card:rgba(255,255,255,0.7);
+  --card-border:rgba(194,112,62,0.12);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:clamp(15px,1.05rem + 0.2vw,17.5px);
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--green));
+  z-index:99;transition:width .1s linear;
+}
+.container{max-width:860px;margin:0 auto;padding:0 clamp(16px,4.5vw,30px);}
+h1,h2,h3,.serif{font-family:'Source Serif 4','Noto Sans KR',serif;}
 
-  /* ── Hero ─────────────────────── */
-  .hero{text-align:center;padding:clamp(36px,8vw,72px) 0 clamp(24px,5vw,40px);}
-  .hero .overline{
-    font-size:clamp(0.72rem,2vw,0.82rem);
-    letter-spacing:0.22em;
-    font-weight:700;
-    color:var(--accent);
-    text-transform:uppercase;
-    margin-bottom:18px;
-  }
-  .hero h1{
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.8rem,5.6vw,3rem);
-    font-weight:700;
-    line-height:1.35;
-    letter-spacing:-0.01em;
-    margin-bottom:20px;
-  }
-  .hero .subtitle{
-    font-size:clamp(0.98rem,2.6vw,1.15rem);
-    color:var(--soft-ink);
-    font-weight:400;
-    max-width:640px;
-    margin:0 auto 28px;
-  }
-  .paper-tag{
-    display:inline-block;
-    background:var(--card);
-    border:1px solid var(--card-border);
-    box-shadow:0 2px 10px rgba(194,112,62,0.06);
-    border-radius:999px;
-    padding:8px 18px;
-    font-size:clamp(0.8rem,2.2vw,0.9rem);
-    color:var(--soft-ink);
-  }
-  .paper-tag em{font-family:'Source Serif 4',serif;color:var(--accent);font-weight:600;}
-  .hero .divider{
-    width:min(160px,40vw);height:3px;margin:30px auto 0;border-radius:2px;
-    background:linear-gradient(90deg,var(--accent),var(--blue),var(--green));
-  }
-  .hero .date{margin-top:16px;font-size:0.85rem;color:var(--soft-ink);}
+/* ── hero ── */
+.hero{padding:clamp(30px,6vw,56px) 0 8px;}
+.chip{
+  display:inline-block;font-size:clamp(11px,0.8rem,13px);font-weight:700;
+  color:var(--accent-deep);background:rgba(194,112,62,0.1);
+  border:1px solid rgba(194,112,62,0.22);
+  padding:5px 14px;border-radius:999px;letter-spacing:0.03em;
+}
+.hero h1{
+  font-size:clamp(1.7rem,4.5vw + 0.5rem,2.75rem);
+  font-weight:700;line-height:1.35;margin:18px 0 14px;
+}
+.hero h1 em{font-style:normal;color:var(--accent-deep);}
+.subtitle{
+  font-size:clamp(14.5px,1rem + 0.15vw,17px);color:#5c544e;
+  margin:0 0 18px;line-height:1.8;
+}
+.meta{
+  font-size:clamp(12px,0.85rem,13.5px);color:#7a7069;
+  border-top:1px dashed rgba(44,40,37,0.14);
+  padding-top:14px;display:flex;flex-wrap:wrap;gap:6px 18px;
+}
+.meta b{color:var(--ink);font-weight:700;}
 
-  /* ── 인용구 ─────────────────────── */
-  blockquote{
-    border-left:4px solid var(--accent);
-    max-width:800px;
-    margin:32px auto;
-    padding:18px 22px;
-    background:rgba(255,255,255,0.55);
-    border-radius:0 12px 12px 0;
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-style:italic;
-    font-size:clamp(0.98rem,2.5vw,1.08rem);
-    color:var(--ink);
-    line-height:1.85;
-  }
-  blockquote cite{
-    display:block;margin-top:12px;font-style:normal;
-    font-family:'Noto Sans KR',sans-serif;
-    font-size:0.82rem;color:var(--soft-ink);font-weight:500;
-  }
+/* ── cards ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:16px;
+  box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  padding:clamp(18px,3vw,28px);
+}
 
-  /* ── 카드/박스 ─────────────────────── */
-  .card{
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:16px;
-    box-shadow:0 4px 18px rgba(44,40,37,0.05);
-    padding:clamp(20px,4vw,32px);
-    margin:28px 0;
-  }
-  .key-box{border-left:4px solid var(--blue);}
-  .key-box h4,.green-box h4,.turn-box h4{
-    font-size:clamp(0.92rem,2.4vw,1.02rem);font-weight:700;margin-bottom:12px;
-    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  }
-  .key-box h4{color:var(--blue);}
-  .green-box{border-left:4px solid var(--green);}
-  .green-box h4{color:var(--green);}
-  .turn-box{border-left:4px solid var(--accent);}
-  .turn-box h4{color:var(--accent);}
+/* ── blockquote ── */
+blockquote{
+  border-left:4px solid var(--accent);
+  max-width:800px;margin:30px auto;
+  padding:16px 24px;
+  background:var(--card);
+  border-radius:0 14px 14px 0;
+  box-shadow:0 3px 12px rgba(44,40,37,0.04);
+}
+blockquote p{margin:0 0 8px;}
+blockquote .src{font-size:0.85em;color:#7a7069;margin:0;}
+.q-lead{font-family:'Source Serif 4','Noto Sans KR',serif;font-weight:600;font-size:1.02em;}
 
-  .wiki-chip{
-    display:inline-block;
-    font-size:0.76em;
-    font-weight:500;
-    background:rgba(91,124,153,0.1);
-    color:var(--blue);
-    border:1px solid rgba(91,124,153,0.22);
-    border-radius:6px;
-    padding:1px 8px;
-    margin:0 2px;
-    vertical-align:middle;
-    white-space:nowrap;
-  }
+/* ── answer box ── */
+.answer{
+  background:var(--card);border:1px solid rgba(107,158,122,0.28);
+  border-radius:16px;box-shadow:0 4px 18px rgba(44,40,37,0.05);
+  padding:clamp(18px,3vw,26px);margin:26px 0;
+}
+.answer .tag{
+  display:inline-block;font-size:0.8em;font-weight:700;
+  color:var(--green-deep);background:rgba(107,158,122,0.13);
+  padding:3px 12px;border-radius:999px;margin-bottom:10px;
+}
+.answer p{margin:0;}
 
-  /* ── 섹션 헤더 ─────────────────────── */
-  section{margin:clamp(40px,8vw,64px) 0;}
-  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;}
-  .sec-num{
-    font-family:'Source Serif 4',serif;
-    font-size:clamp(2rem,6vw,2.8rem);
-    font-weight:700;
-    color:var(--accent);
-    opacity:0.35;
-    line-height:1;
-  }
-  .sec-title{
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.35rem,4.2vw,1.9rem);
-    font-weight:700;
-    line-height:1.4;
-  }
-  .sec-sub{
-    font-size:clamp(0.9rem,2.4vw,1rem);
-    color:var(--soft-ink);
-    margin:6px 0 20px;
-    padding-left:2px;
-  }
-  h3{
-    font-size:clamp(1.08rem,3.2vw,1.3rem);
-    font-weight:700;
-    margin:34px 0 12px;
-    color:var(--ink);
-    padding-left:12px;
-    border-left:3px solid var(--blue);
-    line-height:1.5;
-  }
-  p{margin-bottom:18px;color:var(--ink);}
-  p.muted{color:var(--soft-ink);font-size:0.92em;}
-  strong{font-weight:700;color:#a5562c;}
-  .kw-blue{color:var(--blue);font-weight:700;}
-  .kw-green{color:var(--green);font-weight:700;}
-  mark{
-    background:rgba(194,112,62,0.14);
-    color:inherit;
-    padding:1px 5px;border-radius:4px;
-  }
+/* ── toc ── */
+.toc{margin:30px 0;}
+.toc-title{font-weight:700;color:var(--accent-deep);margin-bottom:12px;font-size:1.02em;}
+.toc ol{margin:0;padding-left:1.6em;}
+.toc li{margin:7px 0;font-size:0.95em;}
+.toc li::marker{color:var(--accent);font-weight:700;}
 
-  /* ── 목차 ─────────────────────── */
-  .toc{list-style:none;counter-reset:toc;}
-  .toc li{
-    counter-increment:toc;
-    padding:10px 0;
-    border-bottom:1px dashed var(--soft-line);
-  }
-  .toc li:last-child{border-bottom:none;}
-  .toc a{color:var(--ink);text-decoration:none;font-weight:500;transition:color .15s;}
-  .toc a:hover{color:var(--accent);}
-  .toc a::before{
-    content:counter(toc)"";
-    font-family:'Source Serif 4',serif;
-    color:var(--accent);font-weight:700;
-    margin-right:12px;
-  }
+/* ── sections ── */
+section{margin:clamp(44px,7vw,68px) 0;}
+.sec-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px;}
+.sec-num{
+  flex:0 0 auto;width:2.2em;height:2.2em;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:clamp(15px,1.1rem,18px);margin-top:4px;
+}
+.tone-a .sec-num{background:rgba(194,112,62,0.13);color:var(--accent-deep);}
+.tone-b .sec-num{background:rgba(91,124,153,0.14);color:var(--blue-deep);}
+.tone-c .sec-num{background:rgba(107,158,122,0.14);color:var(--green-deep);}
+h2{
+  font-size:clamp(1.28rem,2.6vw + 0.5rem,1.72rem);
+  font-weight:700;line-height:1.45;margin:0;
+}
+.tone-a h2{color:#8a4a1c;}
+.tone-b h2{color:#3e5d7d;}
+.tone-c h2{color:#41694f;}
+.kicker{
+  font-size:clamp(12px,0.85rem,13.5px);font-weight:700;letter-spacing:0.06em;
+  margin:0 0 4px;
+}
+.tone-a .kicker{color:var(--accent-deep);}
+.tone-b .kicker{color:var(--blue-deep);}
+.tone-c .kicker{color:var(--green-deep);}
+h3{
+  font-size:clamp(1.05rem,1.6vw + 0.4rem,1.25rem);
+  margin:2.2em 0 0.4em;color:#3d362f;
+}
+h3 .hbar{display:inline-block;width:6px;height:0.95em;border-radius:3px;margin-right:9px;vertical-align:-0.12em;}
+.tone-a h3 .hbar{background:var(--accent);}
+.tone-b h3 .hbar{background:var(--blue);}
+.tone-c h3 .hbar{background:var(--green);}
+p{margin:0.9em 0;}
+strong{font-weight:700;}
+.hl-a{color:var(--accent-deep);font-weight:700;}
+.hl-b{color:var(--blue-deep);font-weight:700;}
+.hl-c{color:var(--green-deep);font-weight:700;}
 
-  /* ── 타임라인 ─────────────────────── */
-  .timeline{list-style:none;margin:20px 0;}
-  .timeline li{
-    position:relative;
-    padding:4px 0 16px 30px;
-    border-left:2px solid rgba(194,112,62,0.25);
-    margin-left:10px;
-  }
-  .timeline li::before{
-    content:"";position:absolute;left:-7px;top:14px;
-    width:12px;height:12px;border-radius:50%;
-    background:var(--accent);border:2px solid var(--bg);
-    box-shadow:0 0 0 2px rgba(194,112,62,0.3);
-  }
-  .timeline li.dim::before{background:var(--soft-line);box-shadow:none;}
-  .timeline .t-date{font-size:0.78rem;color:var(--accent);font-weight:700;letter-spacing:0.06em;}
-  .timeline .t-title{font-weight:700;font-size:1rem;margin:2px 0;}
-  .timeline .t-desc{font-size:0.9rem;color:var(--soft-ink);}
-  .timeline .t-empty{color:var(--soft-ink);font-style:italic;}
+/* ── wiki entity tags ── */
+.ent{
+  display:inline-block;font-size:0.76em;line-height:1.5;
+  padding:1.5px 9px;margin:0 1px;vertical-align:0.1em;
+  border-radius:999px;white-space:nowrap;
+  font-family:ui-monospace,'SF Mono',Consolas,monospace;
+  background:rgba(194,112,62,0.08);
+  border:1px solid rgba(194,112,62,0.2);
+  color:var(--accent-deep);
+}
+.tone-b .ent{background:rgba(91,124,153,0.09);border-color:rgba(91,124,153,0.24);color:var(--blue-deep);}
+.tone-c .ent{background:rgba(107,158,122,0.1);border-color:rgba(107,158,122,0.26);color:var(--green-deep);}
 
-  /* ── 표 ─────────────────────── */
-  .table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;border:1px solid var(--card-border);box-shadow:0 3px 14px rgba(44,40,37,0.05);-webkit-overflow-scrolling:touch;}
-  table{width:100%;min-width:640px;border-collapse:collapse;background:var(--card);font-size:clamp(0.82rem,2.2vw,0.95rem);}
-  th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--soft-line);line-height:1.7;}
-  thead th{
-    background:rgba(194,112,62,0.08);
-    font-weight:700;font-size:0.88em;letter-spacing:0.02em;
-  }
-  thead th:first-child{color:var(--ink);}
-  thead th.turn-col{color:var(--green);}
-  thead th.epi-col{color:var(--accent);}
-  tbody tr:last-child td{border-bottom:none;}
-  td.dim-name{font-weight:700;white-space:nowrap;color:var(--blue);}
+/* ── analogy box ── */
+.analogy{
+  margin:1.8em 0;padding:clamp(16px,2.6vw,24px);
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:16px;box-shadow:0 4px 18px rgba(44,40,37,0.05);
+}
+.analogy-head{font-weight:700;margin-bottom:8px;font-size:0.98em;}
+.tone-a .analogy-head{color:var(--accent-deep);}
+.tone-b .analogy-head{color:var(--blue-deep);}
+.tone-c .analogy-head{color:var(--green-deep);}
+.analogy p{margin:0.5em 0 0;}
 
-  /* ── 패러다임 전환 박스 ─────────────────────── */
-  .paradigm{
-    display:flex;gap:16px;align-items:flex-start;
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:14px;
-    box-shadow:0 3px 12px rgba(44,40,37,0.05);
-    padding:18px 20px;
-    margin:14px 0;
-  }
-  .paradigm .p-num{
-    flex:0 0 auto;
-    font-family:'Source Serif 4',serif;
-    font-size:1.6rem;font-weight:700;color:var(--accent);
-    line-height:1;opacity:0.6;margin-top:2px;
-  }
-  .paradigm .p-body h5{font-size:1rem;font-weight:700;margin-bottom:6px;}
-  .paradigm .p-body p{font-size:0.92em;margin-bottom:0;color:var(--soft-ink);}
-  .paradigm .p-body p strong{color:#a5562c;}
+/* ── keypoint ── */
+.keypoint{
+  margin:2em 0;padding:14px 20px;border-radius:12px;
+  font-weight:500;font-size:0.97em;
+}
+.tone-a .keypoint{background:rgba(194,112,62,0.08);border-left:4px solid var(--accent);}
+.tone-b .keypoint{background:rgba(91,124,153,0.08);border-left:4px solid var(--blue);}
+.tone-c .keypoint{background:rgba(107,158,122,0.09);border-left:4px solid var(--green);}
 
-  .formula{
-    text-align:center;
-    font-family:'Source Serif 4',serif;
-    font-size:clamp(1rem,3vw,1.2rem);
-    background:rgba(91,124,153,0.07);
-    border:1px dashed rgba(91,124,153,0.35);
-    border-radius:12px;
-    padding:20px 16px;
-    margin:24px auto;
-    max-width:720px;
-    line-height:2;
-    font-weight:600;
-  }
-  .formula .op{color:var(--accent);padding:0 6px;}
+/* ── entity cloud ── */
+.ent-cloud{
+  margin-top:1.8em;padding:13px 18px;border-radius:12px;
+  background:rgba(44,40,37,0.03);border:1px dashed rgba(44,40,37,0.14);
+  font-size:0.88em;color:#6e655e;
+}
+.ent-cloud .lbl{font-weight:700;margin-right:6px;}
 
-  .final-quote{
-    text-align:center;
-    font-family:'Source Serif 4','Noto Sans KR',serif;
-    font-size:clamp(1.15rem,3.6vw,1.45rem);
-    font-weight:600;
-    line-height:1.8;
-    max-width:800px;
-    margin:48px auto 0;
-    padding-top:28px;
-    border-top:1px solid var(--soft-line);
-  }
-  .final-quote span{color:var(--accent);}
-
-  footer{
-    text-align:center;
-    margin-top:56px;padding-top:24px;
-    border-top:1px solid var(--soft-line);
-    font-size:0.82rem;color:var(--soft-ink);line-height:2;
-  }
-  footer .fw{color:var(--accent);font-weight:600;}
-
-  a.inline-link{color:var(--blue);text-decoration:none;border-bottom:1px dotted rgba(91,124,153,0.5);}
-  a.inline-link:hover{color:var(--accent);border-bottom-color:var(--accent);}
-
-  @media (max-width:480px){
-    .paradigm{gap:12px;padding:16px;}
-    blockquote{padding:16px 16px;}
-    .sec-head{gap:10px;}
-  }
-</style>
-</head>
-<body>
-<div class="container">
-
-<nav style="background:rgba(250,249,247,0.92);backdrop-filter:blur(8px);padding:12px;border-radius:12px;text-align:center;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;border:1px solid rgba(44,40,37,0.06);">
-<a href="../index.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📚 홈</a>
-<a href="../sources.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">논문</a>
-<a href="../slides.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🎨 슬라이드</a>
-<a href="../daily.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📝 요약</a>
-<a href="../reports.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">📊 보고서</a>
-<a href="blog.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">🧠 분석</a>
-<a href="../patent/README.html" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;"> patents</a>
-<a href="https://github.com/sfex11/galaxy_tab_public" style="color:#c2703e;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:500;">GitHub</a>
-</nav>
-
-<header class="hero">
-  <div class="overline">Deep Dive · Adaptive Inference</div>
-  <h1>턴의 승리는<br>에피소드의 승리가 아니다</h1>
-  <p class="subtitle">— 추론 시간 스케일링의 최적화 단위를 다시 묻다. 매 턴마다 최선의 샘플을 골라도 장기 에이전트는 왜 길을 잃는가?</p>
-  <div class="paper-tag">대상 논문 · <em>On Turn-Level Best-of-N Sampling for Scaling LLM Agents</em></div>
-  <div class="divider"></div>
-  <div class="date">적응적 추론 위키 심층 분석 · 단일 호출에서 에피소드로, 결정의 시간 범위 문제</div>
-</header>
-
-<div class="card key-box">
-  <h4>🔑 결론 먼저</h4>
-  <p style="margin-bottom:8px;"><strong>"매 턴의 국소 최적 선택이 에피소드 수준 성공으로 합성된다"</strong>는 전제는 일반적으로 성립하지 않으며, 위키의 근거들은 오히려 그 불성립을 <span class="kw-blue">구조적으로</span> 뒷받침한다.</p>
-  <p style="margin-bottom:0;">최적화 단위는 '터냐, 에피소드냐'의 이분법이 아니라, <span class="kw-blue">선택 신호의 신뢰 가능 시간 스케일</span> <span style="color:#c2703e;font-weight:700;">×</span> <span class="kw-blue">행동의 상태 파울 효과</span> <span style="color:#c2703e;font-weight:700;">×</span> <span class="kw-blue">회복 가능성</span>에 따라 결정되는 <strong>계층적·과제 의존적 단위</strong>여야 한다.</p>
-</div>
-
-<p class="muted">여행 내비게이션이 모든 교차로마다 <em>"지금 우회전하면 30초 빠릅니다"</em>라고 알려준다고 상상해 보자. 신호등 앞에서의 판단은 항상 최선이다. 그런데 도착 시점의 기록계를 보면, 한 시간을 더 돌고 있었다. 매 순간의 최적이 전체의 최적이 되리라는 약속은, 길이 단순할 때만 지켜진다. 턴 수준 Best-of-N(Best-of-N, 이하 BoN) 샘플링을 장기 에이전트에 이식하려는 시도는 바로 이 약속을 다시 묻는 일이다.</p>
-
-<section id="sec1">
-  <div class="sec-head"><span class="sec-num">1</span><h2 class="sec-title">질문이 서 있는 자리 — 적응적 추론의 빈 축</h2></div>
-  <p class="sec-sub">위키의 적응적 추론은 '단일 호출 안의 예산'에만 정밀해져 있었다</p>
-
-  <p>위키에서 <span class="wiki-chip">adaptive-inference</span> 축이 발전해 온 궤적을 보면, 질문이 왜 정확한 곳을 겨냥하는지 알 수 있다. 지금까지의 적응적 추론은 <strong>하나의 모델 호출 내부에서 계산 예산을 어떻게 배분할 것인가</strong>의 차원으로 좁혀져 왔다.</p>
-
-  <ul class="timeline">
-    <li>
-      <div class="t-date">STEP 1 · 2026-05-05</div>
-      <div class="t-title">To Call or Not to Call</div>
-      <div class="t-desc">외부 환경에 대한 반응 — 모델과 라우트를 선택한다. "이 질문을 어느 모델로 보낼까?"</div>
-    </li>
-    <li>
-      <div class="t-date">STEP 2 · 2026-05-05</div>
-      <div class="t-title">SpecKV</div>
-      <div class="t-desc">내부 시스템 상태에 대한 반응 — "적응적 추론의 결정 차원을 모델/라우트 선택에서 <mark>추측 길이(γ) 선택</mark>으로 확장"하며, 압축이라는 내부 상태에 반응한다. "이 호출 안에서 얼마나 미리 계산할까?"</div>
-    </li>
-    <li class="dim">
-      <div class="t-date">STEP ? · 아직 비어 있음</div>
-      <div class="t-title">결정의 시간 범위 축</div>
-      <div class="t-desc">call → turn → trajectory → episode. <span class="t-empty">"어디서부터 어디까지를 한 번의 결정으로 볼까?" — 이 축은 아직 형성되지 않았다.</span></div>
-    </li>
-  </ul>
-
-  <p>비유하자면 여행 예산 관리가 정교해졌다. <span class="kw-blue">항공권 한 장 안에서 좌석 등급을 정하는 능력</span>(모델 라우팅, 추측 길이)은 점점 좋아졌는데, <span class="kw-green">'이번 여행 전체에서 어느 도시에 얼마나 머물지'</span>를 정하는 능력은 아직 없다. 턴 수준 BoN 샘플링 논문은 바로 이 빈 축에 첫 벽돌을 놓으려는 시도다.</p>
-
-  <p>그 구조는 단순하다. 매 턴마다 N개의 후보 행동을 <strong>생성(generator)</strong>하고, 그중 하나를 <strong>선택(selector)</strong>한다. 그리고 여기에 숨은 전제가 있다 — <mark>매 턴의 국소 최적 선택이 쌓여서, 에피소드 전체의 성공이 된다</mark>. 이 글 전체는 이 한 문장을 심문하는 것이다. 턴과 에피소드 사이에는 최적화의 최소 단위라는 근본적인 선택이 놓여 있으며, 그 선택은 설계자의 몫이지 우연의 몫이 아니어야 한다.</p>
-</section>
-
-<section id="sec2">
-  <div class="sec-head"><span class="sec-num">2</span><h2 class="sec-title">붕괴하는 전제 — 세 가지 구조적 근거</h2></div>
-  <p class="sec-sub">샘플은 많이 줬지만, 그것이 에피소드로 번역되지 않는 이유</p>
-
-  <h3>2.1 · 지도는 많이 줬지만, 운전은 따로 놓는다 — 접근-계획 간극</h3>
-
-  <p>첫 번째 균열은 가장 직접적인 형식적 근거에서 온다. <span class="wiki-chip">access-planning-gap</span> 엔트리가 인용하는 <em>Near-Optimal Reinforcement Learning with Multi-Step Transition Lookahead</em>(2026-09-13)는 이 문제를 계산 복잡도의 언어로 증명해 보였다.</p>
-
-  <blockquote>
-    "정보 접근(전망 관찰)과 계획 능력(최적 행동 산출) 사이의 간극을 계산 복잡도 언어로 형식화… ℓ-스텝 예지 접근은 관측 데이터를 제공하지만 이를 최적 결정으로 번역하는 것이 <strong>구조적으로 어려운 영역이 존재</strong>한다."
-    <cite>— Near-Optimal RL with Multi-Step Transition Lookahead, via access-planning-gap</cite>
-  </blockquote>
-
-  <p>이를 BoN의 언어로 번역하면 이렇다. <strong>N개의 샘플은 '정보 접근'일 뿐, '계획'이 아니다.</strong> 매 턴마다 N개의 갈림길 사진을 보여주는 것과, 그중 어느 길이 결국 목적지에 가장 빠른지 아는 것은 전혀 다른 능력이다. 그리고 치명적인 사실 하나 — <mark>전망 깊이 ℓ=1, 즉 턴 수준 예지에서 이 간극이 가장 크다</mark>. 샘플이 많아질수록 정보는 풍부해지지만, 정보를 에피소드 수준 최적으로 번역하는 선택기의 능력은 별개의 자원이며, 그 번역이 불가능한 영역의 존재가 이론적으로 증명되어 있다.</p>
-
-  <p>다시 말해, "일단 샘플을 많이 뽑으면 어떻게든 최선이 보인다"는 직관은 ℓ=1의 세계에서 구조적으로 거짓이다. 지도를 백 장 준다고 운전이 잘해지는 것은 아니다.</p>
-
-  <h3>2.2 · 지금 맛을 본 간은, 최종 요리의 간이 아니다 — 지연 보상</h3>
-
-  <p>두 번째 균열은 보상의 시차에서 온다. <span class="wiki-chip">adaptive-credit-granularity</span> 엔트리의 <em>HySTAR</em>(2026-09-29)가 결정적이다. 다중 스텝 설정에서 신용 배분(credit assignment)이 불안정하자, 연구자들은 <strong>앵커드 하이퍼그래프</strong>라는 특수한 구조까지 발명해야 했다.</p>
-
-  <p>이 사실 자체가 함의를 품고 있다. <mark>전문가들이 턴 국소 보상을 신뢰하지 못해 특수 구조를 발명했다면</mark>, "턴별 국소 평가로 턴을 고르는" BoN 선택기는 그 특수 구조 없이 같은 늪에 발을 들이는 셈이다. 사실 BoN의 선택기는 <span class="kw-blue">암묵적인 턴 단위 신용 배분기</span>다. 각 샘플에 점수를 매기는 순간, "이 행동의 가치는 이 턴 안에서 결정된다"는 신용 모델을 이미 가정한 것이다. 그런데 그 신용 모델의 타당성은 검증된 적이 없다.</p>
-
-  <p>요리에 비유하자. 반죽 단계에서 매 순간 <em>"지금 이 반죽이 가장 맛있다"</em>는 방향으로 간을 맞추는 요리사가 있다. 문제는 반죽이 맛있던 시점의 간이, 오븐을 지나고 아이싱을 얹은 뒤의 최종 케이크의 간과 다르다는 것이다. 지연 보상 체제에서는 <strong>맛을 볼 수 있는 시점과 간을 정해야 하는 시점이 어긋나 있다</strong>. 턴 단위 선택은 이 어긋남을 구조적으로 무시한다.</p>
-
-  <h3>2.3 · 지워지지 않는 수 — 상태 종속성과 지연 관측성</h3>
-
-  <p>세 번째, 그리고 가장 '구현 수준의' 균열은 상태다. LLM 에이전트에서 과거 턴의 선택은 삭제되지 않는다. <span class="wiki-chip">attention-carried-conversational-state</span>와 <span class="wiki-chip">autocompaction</span>이 보여주듯, 선택 결과는 대화 컨텍스트라는 형태로 <strong>물리적으로 누적</strong>되며, 그 누적이 이후 턴의 후보 분포 자체를 변형시킨다. 체스에서 두었던 수를 둘 수 없는 것과 같다. <mark>턴 독립성 가정은 수학적 편의가 아니라, 구현상으로 이미 깨져 있는 가정</mark>이다.</p>
-
-  <p>여기에 유효성의 시간 축이 겹친다. <span class="wiki-chip">adaptive-validity</span> 엔트리의 <em>Artificial Id</em>(2026-09-12)는 "'현재 행동이 여전히 타당한가'를 지속적으로 재평가"하는 판단을 요구한다. 그런데 턴 시점에 국소 최적으로 골라진 행동은, 상태가 드리프트하면서 유효성이 조용히 감쇠한다. 턴 단위 선택은 이 재평가를 <strong>구조적으로 생략</strong>한다. 교차로에서 표지판을 직접 세우고 지나간 여행자는, 세워둔 표지판이 다음 풍경을 바꿔놓았다는 사실을 보지 못한 채 다음 갈림길에 선다.</p>
-
-  <p>착시의 문제도 있다. <span class="wiki-chip">attractor-state-evaluation-confound</span>가 경고하듯, 착상(attractor) 상태에서의 턴별 승리는 일시적 이점일 수 있다 — 국소 평가는 종종 <em>그 순간의 잘 됨</em>을 <em>전체의 잘 됨</em>으로 착각하게 만든다. 마지막으로 <span class="wiki-chip">adaptive-forgetting</span>의 <em>Benchmarking World Models for Continual Learning</em>(2026-09-22)은 비용의 관측 시점 문제를 보여준다. 망각의 대가는 "구성적 태스크 재방문 시점"에야 나타난다. <strong>턴 선택의 대가 역시 에피소드 후반에야 관측되는 지연 관측성</strong>이다. 영수증이 나오기 훨씬 전에 이미 지불은 시작되어 있다.</p>
-</section>
-
-<section id="sec3">
-  <div class="sec-head"><span class="sec-num">3</span><h2 class="sec-title">사막과 도심 — 전제가 살아나는 경계</h2></div>
-  <p class="sec-sub">턴 단위가 옹호받는 조건을 정확히 특정하면, 실패도 예측 가능해진다</p>
-
-  <p>그러나 이 논의의 요점은 "턴 단위는 틀렸다"가 아니다. 요점은 <strong>턴 단위가 맞는 세계와 틀린 세계를 구분하는 차원</strong>이 존재한다는 것이다. 위키는 그 차원들을 질적으로 특정해 준다.</p>
-
-  <p>도심에서 운전한다고 하자. 신호등과 표지판이 밀집하고, 잘못 들어간 길은 두 블록 뒤 유턴으로 만회된다. 이 세계에서 <span class="kw-green">매 교차로의 국소 최적은 합리적인 전략</span>이다. 반면 사막 횡단에서는 서비스에이리어가 수백 킬로미터마다 하나이고, 잘못된 차로 선택의 대가는 다음 날에야 고갈된 연료 탱크로 나타난다. 이 세계에서 국소 최적은 <span style="color:#a5562c;font-weight:700;">우아하게 쌓이는 재앙</span>이다. LLM 에이전트의 과제들은 이 스펙트럼 위의 어딘가에 있으며, BoN의 턴 단위 전제는 그중 도심 끝에서만 참이다.</p>
-
-  <div class="card green-box">
-    <h4>✅ 턴 단위가 옹호되는 조건 — 위키가 짚어준 완충 장치들</h4>
-    <p style="margin-bottom:10px;"><span class="kw-green">① 밀집된 검증 가능 보상</span> — 턴별로 검증 가능한 보상이 촘촘하고, 행동의 미래 상태 효과가 약할 때. 도심의 신호등에 해당한다.</p>
-    <p style="margin-bottom:10px;"><span class="kw-green">② 합동의 신뢰성</span> — <span class="wiki-chip">agreement-based-reliability</span>: N개 샘플 간 합동이 정답과 상관될 때, 선택 신호가 턴 수준에서 신뢰 가능해진다. 여러 현지인이 모두 같은 길을 가리킬 때만, 그 길을 믿어도 된다.</p>
-    <p style="margin-bottom:10px;"><span class="kw-green">③ 불일관의 압력</span> — <span class="wiki-chip">adaptive-disagreement-pressure</span>: 샘플 간 불일관이 크면 그 자체가 "턴 신호를 불신하라"는 압력 신호로 작동한다. 내비 음성들이 서로 다른 길을 말한다면, 지도가 틀렸다는 뜻이다.</p>
-    <p style="margin-bottom:10px;"><span class="kw-green">④ 롤백의 존재</span> — <span class="wiki-chip">absence-based-rollback</span>: 롤백이 가능하면 합성 실패는 에피소드 실패가 아니라 <strong>재시도 비용</strong>으로 전환된다. 게임의 세이브 포인트는 무모한 시도를 합리적으로 만든다.</p>
-    <p style="margin-bottom:0;"><span class="kw-green">⑤ 단위 자체가 설계 변수</span> — <span class="wiki-chip">action-level-speculation</span>: 최적화 단위를 액션 수준까지 내리는 시도가 이미 존재한다. 단위는 주어진 것이 아니라 고르는 것임을 보여준다.</p>
-  </div>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>판단 차원</th>
-          <th class="turn-col">턴 단위 최적화가 유리한 세계</th>
-          <th class="epi-col">상위(에피소드급) 단위가 필요한 세계</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="dim-name">보상 구조</td>
-          <td>턴별 검증 가능 보상이 밀집</td>
-          <td>지연 보상이 지배 — 신용 배분 불안정 (HySTAR의 앵커드 하이퍼그래프가 필요했던 환경)</td>
-        </tr>
-        <tr>
-          <td class="dim-name">상태 효과</td>
-          <td>행동의 미래 상태 파울 효과가 약음</td>
-          <td>선택이 컨텍스트에 누적되어 후보 분포를 변형 (attention-carried-state, autocompaction)</td>
-        </tr>
-        <tr>
-          <td class="dim-name">회복 가능성</td>
-          <td>롤백·재시도 가능 — 실패가 재시도 비용으로 흡수 (absence-based-rollback)</td>
-          <td>되돌릴 수 없는 상태 전이 — 대가가 에피소드 후반에야 관측 (지연 관측성)</td>
-        </tr>
-        <tr>
-          <td class="dim-name">선택 신호</td>
-          <td>샘플 간 합동이 정답과 상관 (agreement-based-reliability)</td>
-          <td>자기 참조 선택기, 국소 평가의 착시 (audit-oracle-self-reference, attractor-state-confound)</td>
-        </tr>
-        <tr>
-          <td class="dim-name">비용 감당력</td>
-          <td>매 턴 ×N 샘플링 비용을 감당 가능</td>
-          <td>턴당 비용이 실행 자체를 제약 (Visual Token Routing이 보인 CUA의 현실)</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p>이 표가 말해 주는 것은 하나다. <mark>"최적화 단위"는 과제의 속성에 대한 함수지, 아키텍처의 상수가 아니다.</mark> 같은 에이전트가 도심에서는 턴 단위로, 사막에서는 에피소드 단위로 생각해야 한다면, 문제는 "어느 쪽이 옳은가"가 아니라 "에이전트가 어느 세계에 있는지 어떻게 알아내는가"로 바뀐다.</p>
-</section>
-
-<section id="sec4">
-  <div class="sec-head"><span class="sec-num">4</span><h2 class="sec-title">자기 답안지를 채점하는 선택기 — Generator-Selector 결합의 함정</h2></div>
-  <p class="sec-sub">샘플을 만드는 손과 고르는 손이 같다면, 무엇이 심판인가</p>
-
-  <p>턴 수준 BoN의 전제를 더 안쪽에서 파고들면, <strong>선택기 자체의 정당성</strong>이라는 문제에 닿는다. 앞서 2.1에서 봤듯 샘플이 있어도 선택 능력은 별개인데, 그렇다면 그 선택 능력을 어디서 빌려 오는가?</p>
-
-  <h3>4.1 · 자기 참조 검증의 붕괴</h3>
-
-  <p><span class="wiki-chip">audit-oracle-self-reference</span>는 날카로운 지적을 한다. 선택기가 생성기와 동일 모델이라면, 이것은 <span class="kw-blue">자기 참조 검증 문제</span>다. 시험을 치른 수험생이 자기 답안지를 채점하는 구조에서, 채점의 신뢰성은 수험생의 실력이 아니라 <em>채점 기준의 독립성</em>에 의존한다. BoN의 선택 신호가 독립 오라클이 아닐 때 — 즉 "가장 그럴듯해 보이는 답"을 "최선의 답"으로 대체하는 순간 — 선택기의 신뢰성은 생성기의 편향과 정확히 같은 방식으로 붕괴한다. N을 늘려도 후보의 <em>다양성</em>이 늘어날 뿐, 채점자의 편향은 줄지 않는다.</p>
-
-  <h3>4.2 · 다수결은 진실의 오라클이 아니다</h3>
-
-  <p><span class="wiki-chip">agent-voting</span>의 관점에서 보면, 턴 수준 BoN은 사실상 샘플 간 투표다. 그런데 투표의 정당성은 "많은 의견"이 아니라 "의견들이 독립적이고, 공동의 진실과 상관될 때"만 성립한다. <mark>다수결이 에피소드 최적과 일치한다는 보장은 어디에도 없다.</mark> 지도 자체가 틀린 지역에서 여러 내비 앱의 음성 다수결은, 틀린 길을 다수파로 확정할 뿐이다. 2.3에서 본 상태 누적과 결합하면 더 위험하다 — 투표로 정해진 선택이 다시 컨텍스트에 쌓여, 다음 턴의 유권자들(샘플들)의 사고방식 자체를 바꿔놓기 때문이다.</p>
-
-  <h3>4.3 · 비용의 정치학 — 매 교차로에서 풀코스를 시식하는 경제</h3>
-
-  <p>마지막으로 돈 이야기. 매 턴 ×N 샘플링은 균일하고, 균일한 것은 낭비적이다. 이는 <span class="wiki-chip">adaptive-inference</span>의 SpecKV 철학 — <strong>"필요할 때만 할당한다"</strong> — 와 정면으로 충돌한다. 매 식사마다 풀코스를 시식해서 그중 하나를 먹는 식당 손님을 상상해 보라. 특별한 날에는 합리적이지만, 매일이면 지갑이 먼저 죽는다.</p>
-
-  <p>흥미롭게도 위키는 탈출구의 단서까지 갖고 있다. 최근 논문 <em>Context–Answer Metamodels</em>는 단일 컨텍스트에서 답변의 변동을 <strong>첫 토큰이 나오기 전에 예측</strong>한다. 이는 "샘플링 전에 선택 결과를 예측"하는 방향으로, 균일 BoN의 낭비를 깎아낼
+/* ── table ── */
+.table-wrap{overflow-x:auto;margin:1.8em 0;border-radius:14px;border:1px solid var(--card-border);box-shadow:0 4px 18px rgba(44,40,37,0.05);}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--card);}
+th
 </body>
 </html>
